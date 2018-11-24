@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "repository": {
-    "url": "wesbos.com"
+    "url": "mikhailkochkin.com"
   },
   "babel": {
     "presets": [
@@ -34,3 +34,4 @@
     ]
   }
 }
+ 

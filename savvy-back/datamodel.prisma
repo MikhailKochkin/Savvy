@@ -1,4 +1,16 @@
 type User {
   id: ID! @unique
   name: String!
+  email: String! @unique
+}
+
+type Case {
+  id: ID! @unique
+  title: String!
+  description: String!
+  mainText: String!
+  image: String!
+  largeImage: String!
+  price: Int!
+  # user: User!
 }
