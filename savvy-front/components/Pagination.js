@@ -32,8 +32,8 @@ const Pagination = props => (
             const count = data.casesConnection.aggregate.count
             const pages = Math.ceil(count / perPage)
             const page = props.page
-            console.log(page)
-            console.log(pages)
+            // console.log(page)
+            // console.log(pages)
             return (
             <PaginationStyles>
                 <Head>
@@ -48,7 +48,7 @@ const Pagination = props => (
                     query: { page: page - 1 }
                 
                 }}>
-                <a aria-disabled={page <= 1}> 
+                <a disabled={page <= 1}> 
                     Prev
                 </a>
                 </Link>
@@ -60,7 +60,7 @@ const Pagination = props => (
                     query: { page: page + 1 }
                 
                 }}>
-                <a className='prev' >
+                <a disabled={page >= pages}>
                     Next
                 </a>
                 </Link>

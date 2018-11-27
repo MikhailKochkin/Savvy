@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
+import User from './User';
+import Signout from './Signout';
 
 const linkStyle = {
   marginRight: 15
@@ -32,20 +34,33 @@ const StyledHeader = styled.header`
 `;
 
 const Nav = () => (
-    <StyledHeader>
-        <Link href="/">
-          <a style={linkStyle}>Home</a>
-        </Link>
-        <Link href="/create">
-          <a style={linkStyle}>Create</a>
-        </Link>
-        <Link href="/about">
-          <a style={linkStyle}>About</a>
-        </Link>
-        <Link href="/about">
-          <a style={linkStyle}>SignIn</a>
-        </Link>
-    </StyledHeader>     
+   
+      <User>
+        {({data: {me}}) => (     
+          <StyledHeader>
+            {me ? <p>{me.name}</p> : null}
+              <Link href="/">
+                <a style={linkStyle}>Home</a>
+              </Link>
+              <Link href="/about">
+                <a style={linkStyle}>About</a>
+              </Link>
+            {me && (
+              <>
+                <Link href="/create">
+                  <a style={linkStyle}>Create</a>
+                </Link>
+                <Signout/>
+              </>
+              )}
+            {!me && (
+              <Link href="/signup">
+                <a style={linkStyle}>SignUp</a>
+              </Link>
+            )}
+          </StyledHeader> 
+        )}
+    </User>    
 ) 
 
 export default Nav;
