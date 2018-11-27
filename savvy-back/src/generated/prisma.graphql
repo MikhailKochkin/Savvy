@@ -1,5 +1,5 @@
 # source: https://us1.prisma.sh/mikhail-kochkin/savvvy/dev
-# timestamp: Wed Nov 21 2018 20:02:54 GMT+0300 (MSK)
+# timestamp: Sat Nov 24 2018 14:12:52 GMT+0300 (MSK)
 
 type AggregateCase {
   count: Int!
@@ -18,7 +18,11 @@ type Case implements Node {
   id: ID!
   title: String!
   description: String!
-  mainText: String!
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
   image: String!
   largeImage: String!
   price: Int!
@@ -37,7 +41,11 @@ type CaseConnection {
 input CaseCreateInput {
   title: String!
   description: String!
-  mainText: String!
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
   image: String!
   largeImage: String!
   price: Int!
@@ -61,6 +69,14 @@ enum CaseOrderByInput {
   description_DESC
   mainText_ASC
   mainText_DESC
+  issue_ASC
+  issue_DESC
+  rule_ASC
+  rule_DESC
+  analysis_ASC
+  analysis_DESC
+  conclusion_ASC
+  conclusion_DESC
   image_ASC
   image_DESC
   largeImage_ASC
@@ -77,7 +93,11 @@ type CasePreviousValues {
   id: ID!
   title: String!
   description: String!
-  mainText: String!
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
   image: String!
   largeImage: String!
   price: Int!
@@ -126,6 +146,10 @@ input CaseUpdateInput {
   title: String
   description: String
   mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
   image: String
   largeImage: String
   price: Int
@@ -135,6 +159,10 @@ input CaseUpdateManyMutationInput {
   title: String
   description: String
   mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
   image: String
   largeImage: String
   price: Int
@@ -309,6 +337,166 @@ input CaseWhereInput {
 
   """All values not ending with the given string."""
   mainText_not_ends_with: String
+  issue: String
+
+  """All values that are not equal to given value."""
+  issue_not: String
+
+  """All values that are contained in given list."""
+  issue_in: [String!]
+
+  """All values that are not contained in given list."""
+  issue_not_in: [String!]
+
+  """All values less than the given value."""
+  issue_lt: String
+
+  """All values less than or equal the given value."""
+  issue_lte: String
+
+  """All values greater than the given value."""
+  issue_gt: String
+
+  """All values greater than or equal the given value."""
+  issue_gte: String
+
+  """All values containing the given string."""
+  issue_contains: String
+
+  """All values not containing the given string."""
+  issue_not_contains: String
+
+  """All values starting with the given string."""
+  issue_starts_with: String
+
+  """All values not starting with the given string."""
+  issue_not_starts_with: String
+
+  """All values ending with the given string."""
+  issue_ends_with: String
+
+  """All values not ending with the given string."""
+  issue_not_ends_with: String
+  rule: String
+
+  """All values that are not equal to given value."""
+  rule_not: String
+
+  """All values that are contained in given list."""
+  rule_in: [String!]
+
+  """All values that are not contained in given list."""
+  rule_not_in: [String!]
+
+  """All values less than the given value."""
+  rule_lt: String
+
+  """All values less than or equal the given value."""
+  rule_lte: String
+
+  """All values greater than the given value."""
+  rule_gt: String
+
+  """All values greater than or equal the given value."""
+  rule_gte: String
+
+  """All values containing the given string."""
+  rule_contains: String
+
+  """All values not containing the given string."""
+  rule_not_contains: String
+
+  """All values starting with the given string."""
+  rule_starts_with: String
+
+  """All values not starting with the given string."""
+  rule_not_starts_with: String
+
+  """All values ending with the given string."""
+  rule_ends_with: String
+
+  """All values not ending with the given string."""
+  rule_not_ends_with: String
+  analysis: String
+
+  """All values that are not equal to given value."""
+  analysis_not: String
+
+  """All values that are contained in given list."""
+  analysis_in: [String!]
+
+  """All values that are not contained in given list."""
+  analysis_not_in: [String!]
+
+  """All values less than the given value."""
+  analysis_lt: String
+
+  """All values less than or equal the given value."""
+  analysis_lte: String
+
+  """All values greater than the given value."""
+  analysis_gt: String
+
+  """All values greater than or equal the given value."""
+  analysis_gte: String
+
+  """All values containing the given string."""
+  analysis_contains: String
+
+  """All values not containing the given string."""
+  analysis_not_contains: String
+
+  """All values starting with the given string."""
+  analysis_starts_with: String
+
+  """All values not starting with the given string."""
+  analysis_not_starts_with: String
+
+  """All values ending with the given string."""
+  analysis_ends_with: String
+
+  """All values not ending with the given string."""
+  analysis_not_ends_with: String
+  conclusion: String
+
+  """All values that are not equal to given value."""
+  conclusion_not: String
+
+  """All values that are contained in given list."""
+  conclusion_in: [String!]
+
+  """All values that are not contained in given list."""
+  conclusion_not_in: [String!]
+
+  """All values less than the given value."""
+  conclusion_lt: String
+
+  """All values less than or equal the given value."""
+  conclusion_lte: String
+
+  """All values greater than the given value."""
+  conclusion_gt: String
+
+  """All values greater than or equal the given value."""
+  conclusion_gte: String
+
+  """All values containing the given string."""
+  conclusion_contains: String
+
+  """All values not containing the given string."""
+  conclusion_not_contains: String
+
+  """All values starting with the given string."""
+  conclusion_starts_with: String
+
+  """All values not starting with the given string."""
+  conclusion_not_starts_with: String
+
+  """All values ending with the given string."""
+  conclusion_ends_with: String
+
+  """All values not ending with the given string."""
+  conclusion_not_ends_with: String
   image: String
 
   """All values that are not equal to given value."""

@@ -9,6 +9,10 @@ const SINGLE_CASE_QUERY = gql`
         title
         description
         mainText
+        issue 
+        rule
+        analysis
+        conclusion
     }
   }
 `;
@@ -32,6 +36,10 @@ class SingleCase extends Component {
                 <h1>{eDcase.title}</h1>
                 <h2>{eDcase.description}</h2>
                 <p>{eDcase.mainText}</p>
+                <p>{eDcase.issue}</p>
+                <p>{eDcase.rule}</p>
+                <p>{eDcase.analysis}</p>
+                <p>{eDcase.conclusion}</p>
               </>
             );
           }}

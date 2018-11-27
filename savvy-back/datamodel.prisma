@@ -8,7 +8,11 @@ type Case {
   id: ID! @unique
   title: String!
   description: String!
-  mainText: String!
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
   image: String!
   largeImage: String!
   price: Int!

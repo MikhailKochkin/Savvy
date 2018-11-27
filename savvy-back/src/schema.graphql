@@ -2,13 +2,19 @@
 
 type Mutation {
     # in future you can make a custom object not to write this everytime
-    createCase(title: String!, description: String!, 
-    mainText: String, image: String, largeImage: String, 
-    price: Int): Case!
+    createCase(title: String!, description: String!,  
+        mainText: String, image: String, largeImage: String, 
+        price: Int, issue: String, rule: String, analysis: String, 
+        conclusion: String): Case!
+    updateCase(id: ID!, title: String, description: String,  
+        mainText: String, price: Int, issue: String, rule: String, 
+        analysis: String, conclusion: String): Case!
+    deleteCase(id:ID!): Case
 
 }
 
 type Query {
-    cases: [Case]!
+    cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, first: Int): [Case]!
     case(where: CaseWhereUniqueInput!): Case
+    casesConnection(where: CaseWhereInput): CaseConnection
 }

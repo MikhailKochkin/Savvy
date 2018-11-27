@@ -3,6 +3,9 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Case from './Case';
+import Pagination from './Pagination';
+import { perPage } from '../config';
+
 
 const Center = styled.div`
     text-align: center;
@@ -17,15 +20,15 @@ const CasesStyles = styled.div`
 `;
 
 const ALL_CASES_QUERY = gql`
-  query ALL_CASES_QUERY {
-    cases {
+  query ALL_CASES_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
+    cases(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
       description
       mainText
       image
       largeImage
-      price 
+      price
     }
   }
 `;
@@ -34,9 +37,17 @@ class Cases extends Component {
     render() {
         return (
             <Center>
+                <Pagination page={this.props.page} />
                 <h1>Cases</h1>
                 
-                    <Query query={ALL_CASES_QUERY}>
+                    <Query 
+                    query={ALL_CASES_QUERY} 
+                    // fetchPolicy="network-only"
+                    
+                    variables={{
+                        skip: this.props.page * perPage - perPage,
+                        // first: 4,
+                    }}>
                     {({ data, error, loading }) => {
                         if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error: {error.message}</p>;
@@ -45,13 +56,11 @@ class Cases extends Component {
                             </CasesStyles>
                     }}
                    </Query>
+                <Pagination page={this.props.page}/>
             </Center>
         );
     }
 }
 
 export default Cases;
-
-                    {/* // return <ItemsList>
-                    // {data.items.map(item => <Item item={item} key={item.id}/>)}
-                    // </ItemsList> */}
+export {ALL_CASES_QUERY};
