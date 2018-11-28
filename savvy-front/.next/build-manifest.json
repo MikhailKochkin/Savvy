@@ -11,11 +11,11 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/cases": [
+    "/index": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/case": [
+    "/": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

@@ -35,7 +35,9 @@ class DeleteCase extends Component {
             {(deleteCase, { error }) => (
                 <button onClick={() => {
                   if (confirm('Are you sure?')) {
-                    deleteCase();
+                    deleteCase().catch(error => {
+                        alert(error.message)
+                    });
                 }
                 }}>{this.props.children}</button>    
             )}

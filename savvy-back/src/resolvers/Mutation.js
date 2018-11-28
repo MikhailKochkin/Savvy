@@ -1,13 +1,22 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { hasPermission } = require("../utils");
 
 const Mutations = {
     async createCase(parent, args, ctx, info) {
         // TODO: Check if they are logged in
+        if (!ctx.request.userId) {
+          throw new Error('You must be logged in to do that!')
+        }
 
         const edCase = await ctx.db.mutation.createCase(
             {
             data: {
+                user: {
+                  connect: {
+                    id: ctx.request.userId,
+                  }
+                },
                 ...args
             },
         }, 
@@ -32,11 +41,21 @@ const Mutations = {
     );
   },
   async deleteCase(parent, args, ctx, info) {
+    throw new Error('You are not allowed!')
     const where = { id: args.id };
-    //1. find the item
-    const edCase = await ctx.db.query.case({ where }, `{ id title}`);
-    //2. check if they own the itemor have the permissions
+    //1. find the case
+    const edCase = await ctx.db.query.case({ where }, `{ id title user { id }}`);
+    //2. check if they own the case or have the permissions
     //TODO
+    const createdEdCase = edCase.user.id === ctx.request.usedId;
+    const hasPermissions = ctx.request.user.permission.some
+    (permission => 
+      ['ADMIN', 'CASEDELETE'].includes(permission)
+    );
+    if (!ownsItem && !hasPermissions) {
+        throw new Error("You don't have permission to that!")
+    }
+
     //3. Delete it
     return ctx.db.mutation.deleteCase({ where }, info);
   },
@@ -90,6 +109,35 @@ const Mutations = {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye!' };
   },
+  async updatePermissions(parent, args, ctx, info) {
+    // 1. check if they are logged in
+    if(!ctx.request.userId) {
+      throw new Error("Please log in!")
+    }
+    // 2. Query the current user
+    const currentUser  = await ctx.db.query.user({
+      where: {
+        id: ctx.request.userId
+        },
+      }, info
+    )
+    // 3.Check if they have permissions to do it
+    hasPermission(currentUser, ['ADMIN', 
+    'PERMISSIONUPDATE']);
+    // 4. Update the permissions
+    return ctx.db.mutation.updateUser({
+      data: {
+        permissions: {
+          //special prisma sytax for enum
+          set: args.permissions,
+        }
+      },
+      where: {
+        id: args.userId
+      }
+    }, 
+    info);
+  }
 };
 
 

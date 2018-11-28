@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Case from './Case';
 import Pagination from './Pagination';
 import { perPage } from '../config';
+import {CURRENT_USER_QUERY} from './User'
 
 
 const Center = styled.div`
@@ -29,6 +30,9 @@ const ALL_CASES_QUERY = gql`
       image
       largeImage
       price
+      user {
+          id
+      }
     }
   }
 `;
@@ -39,7 +43,6 @@ class Cases extends Component {
             <Center>
                 <Pagination page={this.props.page} />
                 <h1>Cases</h1>
-                
                     <Query 
                     query={ALL_CASES_QUERY} 
                     // fetchPolicy="network-only"

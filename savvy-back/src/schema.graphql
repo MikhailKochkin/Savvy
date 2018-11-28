@@ -17,8 +17,8 @@ type Mutation {
     signup(email: String!, password: String!, name: String!): User!
     signin(email: String!, password: String!): User!
     signout: SuccessMessage
+    updatePermissions(permissions: [Permission], userId: ID!) : User
     
-
 
 }
 
@@ -27,4 +27,12 @@ type Query {
     case(where: CaseWhereUniqueInput!): Case
     casesConnection(where: CaseWhereInput): CaseConnection!
     me: User
+    users: [User]!
+}
+
+type User{
+    id: ID!
+    name: String!
+    email: String!
+    permissions: [Permission!]!
 }

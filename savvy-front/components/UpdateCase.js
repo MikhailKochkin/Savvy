@@ -92,9 +92,9 @@ export default class UpdateCase extends Component {
       };
       updateCase = async (e, updateCaseMutation) => {
           e.preventDefault();
-          console.log('Updating case!!');
-          console.log(this.state);
-          console.log(this.props.id);
+        //   console.log('Updating case!!');
+        //   console.log(this.state);
+        //   console.log(this.props.id);
           const res = await updateCaseMutation({
               variables: {
                   id: this.props.id,

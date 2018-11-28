@@ -1,9 +1,9 @@
 enum Permission {
   ADMIN
   USER
-  ITEMCREATE
-  ITEMUPDATE
-  ITEMDELETE
+  CASECREATE
+  CASEUPDATE
+  CASEDELETE
   PERMISSIONUPDATE
 }
 
@@ -29,5 +29,5 @@ type Case {
   image: String!
   largeImage: String!
   price: Int!
-  # user: User!
+  user: User!
 }

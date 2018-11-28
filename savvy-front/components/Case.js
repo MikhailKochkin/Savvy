@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import styled from 'styled-components';
 import DeleteCase from './DeleteCase';
+import User from './User';
 
 const CaseCard = styled.div`
     border: 1px lightgrey solid;
@@ -53,37 +54,46 @@ export default class Case extends Component {
     render() {
         const { edCase } = this.props;
         return (
-            <CaseCard>
-                <Title>
-                <Link href={{
-                        pathname: '/case',
-                        query: {id: edCase.id }
-                    }}>
-                    <a>
-                        <p>{edCase.title}</p>
-                    </a>
-                </Link>
-                </Title>
-                <Description>Course description: {edCase.description}</Description>
-                <Price>{edCase.price} in Roubles</Price>
-                <Link href={{
-                        pathname: '/case',
-                        query: {id: edCase.id }
-                    }}>
-                    <a>
-                    <Button>Go to course!</Button>
-                    </a>
-                </Link>
-                <Link href={{
-                        pathname: '/update',
-                        query: {id: edCase.id }
-                    }}>
-                    <a>
-                    <Button>Go update this course!</Button>
-                    </a>
-                </Link>
-                    <DeleteCase id={edCase.id}>Delete this Case!</DeleteCase>
-            </CaseCard>
-        );
-    }
+        <User>
+            {({data: {me}}) => ( 
+                <CaseCard>
+                    <Title>
+                    <Link href={{
+                            pathname: '/case',
+                            query: {id: edCase.id }
+                        }}>
+                        <a>
+                            <p>{edCase.title}</p>
+                        </a>
+                    </Link>
+                    </Title>
+                    <Description>Course description: {edCase.description}</Description>
+                    <Price>{edCase.price} in Roubles</Price>
+                    <Link href={{
+                            pathname: '/case',
+                            query: {id: edCase.id }
+                        }}>
+                        <a>
+                        <Button>Go to course!</Button>
+                        </a>
+                    </Link>
+                    {me !== null && me.id === edCase.user.id &&
+                    <Link href={{
+                            pathname: '/update',
+                            query: {id: edCase.id }
+                        }}>
+                        <a>
+                        <Button>Go update this course!</Button>
+                        </a>
+                    </Link>}
+                        {me !== null && me.id === edCase.user.id &&
+                        <DeleteCase 
+                            id={edCase.id}
+                        >
+                            Delete this Case!
+                        </DeleteCase>}   
+                </CaseCard>
+            )}
+        </User>
+    )}
 }

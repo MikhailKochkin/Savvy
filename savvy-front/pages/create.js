@@ -1,8 +1,11 @@
 import CreateCase from '../components/CreateCase';
+import PleaseSignIn from '../components/PleaseSignIn';
 
 const Create = props => (
   <div>
-      <CreateCase/>
+    <PleaseSignIn>
+       <CreateCase/>
+    </PleaseSignIn>
   </div>
 );
 
