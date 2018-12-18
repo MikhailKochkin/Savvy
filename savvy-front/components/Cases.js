@@ -5,11 +5,14 @@ import styled from 'styled-components';
 import Case from './Case';
 import Pagination from './Pagination';
 import { perPage } from '../config';
-import {CURRENT_USER_QUERY} from './User'
+import {CURRENT_USER_QUERY} from './User';
 
 
 const Center = styled.div`
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     
 `;
 
@@ -17,19 +20,16 @@ const CasesStyles = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
 `;
 
-const ALL_CASES_QUERY = gql`
-  query ALL_CASES_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
-    cases(first: $first, skip: $skip, orderBy: createdAt_DESC) {
+const ALL_COURSE_PAGES_QUERY = gql`
+  query ALL_COURSE_PAGES_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
+    coursePages(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
       description
-      mainText
       image
-      largeImage
-      price
       user {
           id
       }
@@ -42,10 +42,11 @@ class Cases extends Component {
         return (
             <Center>
                 <Pagination page={this.props.page} />
-                <h1>Cases</h1>
+                <h1>Курсы</h1>
+                
                     <Query 
-                    query={ALL_CASES_QUERY} 
-                    // fetchPolicy="network-only"
+                    query={ALL_COURSE_PAGES_QUERY} 
+                    // fetchPolicy="cache-and-network"
                     
                     variables={{
                         skip: this.props.page * perPage - perPage,
@@ -55,8 +56,8 @@ class Cases extends Component {
                         if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error: {error.message}</p>;
                         return <CasesStyles>
-                            {data.cases.map(edCase => <Case key={edCase.id} edCase={edCase}/>)}
-                            </CasesStyles>
+                            {data.coursePages.map(coursePage => <Case key={coursePage.id} coursePage={coursePage}/>)}
+                            </CasesStyles>  
                     }}
                    </Query>
                 <Pagination page={this.props.page}/>
@@ -66,4 +67,4 @@ class Cases extends Component {
 }
 
 export default Cases;
-export {ALL_CASES_QUERY};
+export {ALL_COURSE_PAGES_QUERY};

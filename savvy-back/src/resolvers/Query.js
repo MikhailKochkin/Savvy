@@ -2,9 +2,42 @@ const {forwardTo} = require("prisma-binding");
 const { hasPermission } = require("../utils");
 
 const Query = {
-    cases: forwardTo('db'),
+    coursePages: forwardTo('db'),
+    coursePage: forwardTo('db'),
+    sandboxPages: forwardTo('db'),
+    sandboxPage: forwardTo('db'),
     case:forwardTo('db'),
+    test:forwardTo('db'),
+    sandbox:forwardTo('db'),
     casesConnection: forwardTo('db'),
+    coursePagesConnection: forwardTo('db'),
+    cases(parent, args, ctx, info){
+      const pageId = args.where.coursePageID;
+      return ctx.db.query.cases(
+        {
+          where: {coursePageID: pageId}
+        },
+        info
+      );
+    },
+    sandboxes(parent, args, ctx, info){
+      const pageId = args.where.sandboxPageID;
+      return ctx.db.query.sandboxes(
+        {
+          where: {sandboxPageID: pageId}
+        },
+        info
+      );
+    },
+    tests(parent, args, ctx, info){
+      const pageId = args.where.coursePageID;
+      return ctx.db.query.tests(
+        {
+          where: {coursePageID: pageId}
+        },
+        info
+      );
+    },
     me(parent, args, ctx, info) {
         // check if there is a current user ID
         if (!ctx.request.userId) {

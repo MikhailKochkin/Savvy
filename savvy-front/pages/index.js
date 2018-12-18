@@ -1,10 +1,9 @@
-import Cases from '../components/Cases';
-import Banner from '../components/Banner';
+import LandingPage from '../components/Landing';
+
 
 const Home = props => (
       <div>
-          <Banner/>
-          <Cases page={parseFloat(props.query.page) || 1}/>
+        <LandingPage />
       </div>
 )
 

@@ -48,49 +48,50 @@ const Button = styled.button`
 
 export default class Case extends Component {
     static propTypes = {
-        edCase: PropTypes.object.isRequired,
+        coursePage: PropTypes.object.isRequired,
     };
 
     render() {
-        const { edCase } = this.props;
+        const { coursePage, key } = this.props;
+        // console.log(coursePage)
         return (
         <User>
             {({data: {me}}) => ( 
                 <CaseCard>
                     <Title>
                     <Link href={{
-                            pathname: '/case',
-                            query: {id: edCase.id }
+                            pathname: '/coursePage',
+                            query: {id: coursePage.id }
                         }}>
                         <a>
-                            <p>{edCase.title}</p>
+                            <p>{coursePage.title}</p>
                         </a>
                     </Link>
                     </Title>
-                    <Description>Course description: {edCase.description}</Description>
-                    <Price>{edCase.price} in Roubles</Price>
+                    <Description>Описание курса:{coursePage.description}</Description>
+                    {/* <Price>{edCase.price} in Roubles</Price> */}
                     <Link href={{
-                            pathname: '/case',
-                            query: {id: edCase.id }
+                            pathname: '/coursePage',
+                            query: {id: coursePage.id }
                         }}>
                         <a>
-                        <Button>Go to course!</Button>
+                        <Button>Перейти на страницу курса!</Button>
                         </a>
                     </Link>
-                    {me !== null && me.id === edCase.user.id &&
+                    {me !== null && me.id === coursePage.user.id &&
                     <Link href={{
                             pathname: '/update',
-                            query: {id: edCase.id }
+                            query: {id: coursePage.id }
                         }}>
                         <a>
-                        <Button>Go update this course!</Button>
+                        <Button>Внести изменения в курс!</Button>
                         </a>
                     </Link>}
-                        {me !== null && me.id === edCase.user.id &&
+                        {me !== null && me.id === coursePage.user.id &&
                         <DeleteCase 
-                            id={edCase.id}
+                            id={coursePage.id}
                         >
-                            Delete this Case!
+                            Удалить курс!
                         </DeleteCase>}   
                 </CaseCard>
             )}

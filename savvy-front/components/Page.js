@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import styled, {ThemeProvider, injectGlobal } from 'styled-components';
-import Header from './Header';
+import { withRouter } from 'next/router'
+import Nav from './Nav';
 import Meta from './Meta';
+import LandingPage from './Landing';
+import Footer from './Footer';
 
 
 const theme = {
@@ -11,7 +14,6 @@ const theme = {
     offWhite: '#EDEDED',
     lightGrey: '#E1E1E1',
 };
-
 
 const StyledPage = styled.div`
     background: ${props => props.theme.lightgrey};
@@ -29,6 +31,7 @@ injectGlobal`
         box-sizing: border-box;
         font-size: 10px;
         font-family: "Gill Sans", serif;
+        height:100%;
     }
     *, *:after, *:after {
         box-sizing: inherit;
@@ -38,6 +41,7 @@ injectGlobal`
         margin: 0;
         font-size:1.5rem;
         line-height: 2;
+        height:100%;
     }
     a {
         text-decoration: none;
@@ -45,18 +49,22 @@ injectGlobal`
     }
 `
 
-class Page extends Component {
-    render() {
+const Page = ({ children, router }) => {
         return (
             <ThemeProvider theme={theme}>
               <StyledPage>
                 <Meta/>
-                <Header/>
-                <Inner>{this.props.children}</Inner>
+                {router.pathname === '/' ? <LandingPage/> 
+                :
+                <>
+                    <Nav/>
+                    <Inner>{children}</Inner>
+                </>
+                }
+                {router.pathname !== '/' ? <Footer/> : null}
               </StyledPage>
             </ThemeProvider>
         );
-    }
 }
 
-export default Page;
+export default withRouter(Page);

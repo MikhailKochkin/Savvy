@@ -6,8 +6,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { perPage } from '../config';
 
-
-
 const PAGINATION_QUERY = gql`
     query PAGINATION_QUERY {
         casesConnection {
@@ -19,10 +17,17 @@ const PAGINATION_QUERY = gql`
 `;
 
 const PaginationStyles = styled.div`
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
     border: 1px solid grey;
     font-weight: bold;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
     margin-top: 3%;
+    a {
+        margin: 4%;
+    }
 `;
 
 const Pagination = props => (
@@ -32,13 +37,11 @@ const Pagination = props => (
             const count = data.casesConnection.aggregate.count
             const pages = Math.ceil(count / perPage)
             const page = props.page
-            // console.log(page)
-            // console.log(pages)
             return (
             <PaginationStyles>
                 <Head>
                   <title>
-                      Savvy! – Page {page} of {pages}
+                      Savvy! – Страница {page} из {pages}
                   </title>
                 </Head>
                 <Link 
@@ -49,10 +52,10 @@ const Pagination = props => (
                 
                 }}>
                 <a disabled={page <= 1}> 
-                    Prev
+                    ⬅️ Пред
                 </a>
                 </Link>
-                <p>Page {props.page} of {pages}</p>
+                <p>Страница {props.page} из {pages}</p>
                 <Link 
                     prefetch
                     href={{
@@ -61,7 +64,7 @@ const Pagination = props => (
                 
                 }}>
                 <a disabled={page >= pages}>
-                    Next
+                    След ➡️
                 </a>
                 </Link>
             </PaginationStyles>

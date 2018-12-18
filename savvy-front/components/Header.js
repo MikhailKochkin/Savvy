@@ -34,9 +34,9 @@ const Logo = styled.h1`
 const Header = () => (
     <div>
         <Logo>
-          <Link href='/'>
+          {/* <Link href='/'>
             <a>Savvy 2.0</a>
-          </Link>
+          </Link> */}
         </Logo>
         <Nav/>
     </div>

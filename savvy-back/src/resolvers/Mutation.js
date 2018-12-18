@@ -3,8 +3,52 @@ const jwt = require('jsonwebtoken');
 const { hasPermission } = require("../utils");
 
 const Mutations = {
+  async createCoursePage(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+    const coursePage = await ctx.db.mutation.createCoursePage(
+        {
+        data: {
+            user: {
+              connect: {
+                id: ctx.request.userId,
+              }
+            },
+            ...args
+        },
+    }, 
+    info
+  );
+    return coursePage;
+  },
+  async createSandboxPage(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+    const sandboxPage = await ctx.db.mutation.createSandboxPage(
+        {
+        data: {
+            user: {
+              connect: {
+                id: ctx.request.userId,
+              }
+            },
+            ...args
+        },
+    }, 
+    info
+  );
+    return sandboxPage;
+  },
     async createCase(parent, args, ctx, info) {
         // TODO: Check if they are logged in
+        const coursePageID = args.coursePageID
+        delete args.id
+        // console.log(ctx.request.userId)
+        // console.log(coursePagedID)
         if (!ctx.request.userId) {
           throw new Error('You must be logged in to do that!')
         }
@@ -13,9 +57,10 @@ const Mutations = {
             {
             data: {
                 user: {
-                  connect: {
-                    id: ctx.request.userId,
-                  }
+                  connect: { id: ctx.request.userId }
+                  },
+                coursePage: {
+                  connect: { id: coursePageID }
                 },
                 ...args
             },
@@ -23,6 +68,58 @@ const Mutations = {
         info
       );
         return edCase;
+    },
+    async createTest(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const coursePageID = args.coursePageID
+      delete args.id
+      // console.log(ctx.request.userId)
+      // console.log(coursePagedID)
+      if (!ctx.request.userId) {
+        throw new Error('You must be logged in to do that!')
+      }
+
+      const test = await ctx.db.mutation.createTest(
+            {
+            data: {
+                user: {
+                  connect: { id: ctx.request.userId }
+                  },
+                coursePage: {
+                  connect: { id: coursePageID }
+                },
+                ...args
+            },
+        }, 
+        info
+      );
+        return test;
+    },
+    async createSandbox(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const sandboxPageID = args.sandboxPageID
+      delete args.id
+      console.log(ctx.request.userId)
+      console.log(sandboxPageID)
+      if (!ctx.request.userId) {
+        throw new Error('You must be logged in to do that!')
+      }
+
+      const sandbox = await ctx.db.mutation.createSandbox(
+          {
+          data: {
+              user: {
+                connect: { id: ctx.request.userId }
+                },
+              sandboxPage: {
+                connect: { id: sandboxPageID }
+              },
+              ...args
+          },
+      }, 
+      info
+    );
+      return sandbox;
     },
     updateCase(parent, args, ctx, info) {
       //first take a copy of the updates
@@ -40,24 +137,27 @@ const Mutations = {
       info
     );
   },
-  async deleteCase(parent, args, ctx, info) {
-    throw new Error('You are not allowed!')
+  async deleteCoursePage(parent, args, ctx, info) {
     const where = { id: args.id };
+    // console.log(where)
     //1. find the case
-    const edCase = await ctx.db.query.case({ where }, `{ id title user { id }}`);
+    const coursePage = await ctx.db.query.coursePage({ where }, `{ id title user { id }}`);
+    // console.log(coursePage)
+    // console.log(ctx.request.userId)
+    // console.log(ctx.request.userId)
+    // console.log(ctx.request.user.id)
     //2. check if they own the case or have the permissions
     //TODO
-    const createdEdCase = edCase.user.id === ctx.request.usedId;
-    const hasPermissions = ctx.request.user.permission.some
+    const ownsCoursePage = coursePage.user.id === ctx.request.userId;
+    const hasPermissions = ctx.request.user.permissions.some
     (permission => 
       ['ADMIN', 'CASEDELETE'].includes(permission)
     );
-    if (!ownsItem && !hasPermissions) {
+    if (!ownsCoursePage && !hasPermissions) {
         throw new Error("You don't have permission to that!")
     }
-
     //3. Delete it
-    return ctx.db.mutation.deleteCase({ where }, info);
+    return ctx.db.mutation.deleteCoursePage({ where }, info);
   },
   async signup(parent, args, ctx, info) {
     // lower the email

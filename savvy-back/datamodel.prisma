@@ -15,6 +15,30 @@ type User {
   resetToken: String
   resetTokenExpiry: Float
   permissions: [Permission]
+  coursePages: [CoursePage]
+  sandboxPages: [SandboxPage]
+  cases: [Case]!
+  tests: [Test]!
+
+}
+
+type CoursePage {
+  id: ID! @unique
+  title: String!
+  description: String!
+  image: String!
+  user: User!
+  cases: [Case]! @relation(name: "CasesonCasePage" onDelete: CASCADE)
+  tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
+}
+
+type SandboxPage {
+  id: ID! @unique
+  title: String!
+  description: String!
+  image: String!
+  user: User!
+  sandboxes: [Sandbox]! @relation(name: "SandboxesOnSandboxPage" onDelete: CASCADE)
 }
 
 type Case {
@@ -26,8 +50,34 @@ type Case {
   rule: String
   analysis: String
   conclusion: String
-  image: String!
-  largeImage: String!
-  price: Int!
+  image: String
+  largeImage: String
+  price: Int
   user: User!
+  coursePage: CoursePage! @relation(name: "CasesonCasePage")
+  coursePageID: ID!
+}
+
+type Sandbox {
+  id: ID! @unique
+  text: String!
+  user: User!
+  sandboxPage: SandboxPage! @relation(name: "SandboxesOnSandboxPage")
+  sandboxPageID: ID!
+}
+
+type Test {
+  id: ID! @unique
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String 
+  answer4: String
+  answer4Correct: String
+  user: User!
+  coursePage: CoursePage! @relation(name: "TestsOnCoursePage")
+  coursePageID: ID!
 }

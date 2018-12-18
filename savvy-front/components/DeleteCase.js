@@ -1,41 +1,43 @@
 import React, { Component } from 'react';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import {ALL_CASES_QUERY} from './Cases';
+import {ALL_COURSE_PAGES_QUERY} from './Cases';
 
-const DELETE_CASE_MUTATION =gql`
-    mutation DELETE_CASE_MUTATION($id: ID!){
-        deleteCase(id: $id) {
+const DELETE_COURSEPAGE_MUTATION =gql`
+    mutation DELETE_COURSEPAGE_MUTATION($id: ID!){
+        deleteCoursePage(id: $id) {
             id
         }
     }
 `
 
-class DeleteCase extends Component {
+class DeleteCoursePage extends Component {
     update = (cache, payload) => {
         //manually update the cache on the client, 
         //so it matches the server
         //1. Read the cache for the cases we want
-        const data = cache.readQuery({ query: ALL_CASES_QUERY})
-        console.log(data, payload);
+        const data = cache.readQuery({ query: ALL_COURSE_PAGES_QUERY})
+        console.log(data);
+        console.log(payload);
         //2. filter the deleted item out of the page
-        data.cases = data.cases.filter(edCase => edCase.id !== 
-            payload.data.deleteCase.id)
+        data.coursePages = data.coursePages.filter(coursePage => coursePage.id !== 
+            payload.data.deleteCoursePage.id)
+            // data.items = data.items.filter(item => item.id !== payload.data.deleteItem.id);
         //3. Put the cases back!
-        cache.writeQuery({ query: ALL_CASES_QUERY, data})
+        cache.writeQuery({ query: ALL_COURSE_PAGES_QUERY, data})
 
     }
     render() {
         return (
             <Mutation 
-                mutation={DELETE_CASE_MUTATION}
+                mutation={DELETE_COURSEPAGE_MUTATION}
                 variables={{id: this.props.id}}
                 update={this.update}
             >
-            {(deleteCase, { error }) => (
+            {(DeleteCoursePage, { error }) => (
                 <button onClick={() => {
                   if (confirm('Are you sure?')) {
-                    deleteCase().catch(error => {
+                    DeleteCoursePage().catch(error => {
                         alert(error.message)
                     });
                 }
@@ -46,4 +48,4 @@ class DeleteCase extends Component {
     }
 }
 
-export default DeleteCase;
+export default DeleteCoursePage;

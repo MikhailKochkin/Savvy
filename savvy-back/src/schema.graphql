@@ -6,14 +6,21 @@ type SuccessMessage {
 
 type Mutation {
     # in future you can make a custom object not to write this everytime
+    createCoursePage(title: String!, description: String!, image: String): CoursePage!
+    createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     createCase(title: String!, description: String!,  
         mainText: String, image: String, largeImage: String, 
         price: Int, issue: String, rule: String, analysis: String, 
-        conclusion: String): Case!
+        conclusion: String, coursePageID: ID!): Case!
+    createTest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
+        answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
+        answer4Correct: String, coursePageID: ID!): Test!
+    createSandbox(text: String!, sandboxPageID: ID!): Sandbox!
     updateCase(id: ID!, title: String, description: String,  
         mainText: String, price: Int, issue: String, rule: String, 
         analysis: String, conclusion: String): Case!
     deleteCase(id:ID!): Case
+    deleteCoursePage(id:ID!): CoursePage
     signup(email: String!, password: String!, name: String!): User!
     signin(email: String!, password: String!): User!
     signout: SuccessMessage
@@ -23,9 +30,18 @@ type Mutation {
 }
 
 type Query {
+    coursePages(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, first: Int): [CoursePage]!
+    coursePage(where: CoursePageWhereUniqueInput!): CoursePage
+    sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, first: Int): [SandboxPage]!
+    sandboxPage(where: SandboxPageWhereUniqueInput!): SandboxPage
+    sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, first: Int): [Sandbox]!
+    sandbox(where: SandboxWhereUniqueInput!): Sandbox
     cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, first: Int): [Case]!
     case(where: CaseWhereUniqueInput!): Case
     casesConnection(where: CaseWhereInput): CaseConnection!
+    coursePagesConnection(where: CoursePageWhereInput): CoursePageConnection!
+    tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, first: Int): [Test]!
+    test(where: TestWhereUniqueInput!): Test
     me: User
     users: [User]!
 }

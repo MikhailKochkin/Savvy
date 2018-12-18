@@ -1,7 +1,23 @@
 # source: https://us1.prisma.sh/mikhail-kochkin/savvvy/dev
-# timestamp: Wed Nov 28 2018 17:11:54 GMT+0300 (MSK)
+# timestamp: Tue Dec 18 2018 11:35:58 GMT+0300 (MSK)
 
 type AggregateCase {
+  count: Int!
+}
+
+type AggregateCoursePage {
+  count: Int!
+}
+
+type AggregateSandbox {
+  count: Int!
+}
+
+type AggregateSandboxPage {
+  count: Int!
+}
+
+type AggregateTest {
   count: Int!
 }
 
@@ -23,10 +39,12 @@ type Case implements Node {
   rule: String
   analysis: String
   conclusion: String
-  image: String!
-  largeImage: String!
-  price: Int!
+  image: String
+  largeImage: String
+  price: Int
   user: User!
+  coursePage: CoursePage!
+  coursePageID: ID!
 }
 
 """A connection to a list of items."""
@@ -47,10 +65,52 @@ input CaseCreateInput {
   rule: String
   analysis: String
   conclusion: String
-  image: String!
-  largeImage: String!
-  price: Int!
-  user: UserCreateOneInput!
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID!
+  user: UserCreateOneWithoutCasesInput!
+  coursePage: CoursePageCreateOneWithoutCasesInput!
+}
+
+input CaseCreateManyWithoutCoursePageInput {
+  create: [CaseCreateWithoutCoursePageInput!]
+  connect: [CaseWhereUniqueInput!]
+}
+
+input CaseCreateManyWithoutUserInput {
+  create: [CaseCreateWithoutUserInput!]
+  connect: [CaseWhereUniqueInput!]
+}
+
+input CaseCreateWithoutCoursePageInput {
+  title: String!
+  description: String!
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID!
+  user: UserCreateOneWithoutCasesInput!
+}
+
+input CaseCreateWithoutUserInput {
+  title: String!
+  description: String!
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID!
+  coursePage: CoursePageCreateOneWithoutCasesInput!
 }
 
 """An edge in a connection."""
@@ -85,6 +145,8 @@ enum CaseOrderByInput {
   largeImage_DESC
   price_ASC
   price_DESC
+  coursePageID_ASC
+  coursePageID_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -100,9 +162,483 @@ type CasePreviousValues {
   rule: String
   analysis: String
   conclusion: String
-  image: String!
-  largeImage: String!
-  price: Int!
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID!
+}
+
+input CaseScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CaseScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CaseScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CaseScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  mainText: String
+
+  """All values that are not equal to given value."""
+  mainText_not: String
+
+  """All values that are contained in given list."""
+  mainText_in: [String!]
+
+  """All values that are not contained in given list."""
+  mainText_not_in: [String!]
+
+  """All values less than the given value."""
+  mainText_lt: String
+
+  """All values less than or equal the given value."""
+  mainText_lte: String
+
+  """All values greater than the given value."""
+  mainText_gt: String
+
+  """All values greater than or equal the given value."""
+  mainText_gte: String
+
+  """All values containing the given string."""
+  mainText_contains: String
+
+  """All values not containing the given string."""
+  mainText_not_contains: String
+
+  """All values starting with the given string."""
+  mainText_starts_with: String
+
+  """All values not starting with the given string."""
+  mainText_not_starts_with: String
+
+  """All values ending with the given string."""
+  mainText_ends_with: String
+
+  """All values not ending with the given string."""
+  mainText_not_ends_with: String
+  issue: String
+
+  """All values that are not equal to given value."""
+  issue_not: String
+
+  """All values that are contained in given list."""
+  issue_in: [String!]
+
+  """All values that are not contained in given list."""
+  issue_not_in: [String!]
+
+  """All values less than the given value."""
+  issue_lt: String
+
+  """All values less than or equal the given value."""
+  issue_lte: String
+
+  """All values greater than the given value."""
+  issue_gt: String
+
+  """All values greater than or equal the given value."""
+  issue_gte: String
+
+  """All values containing the given string."""
+  issue_contains: String
+
+  """All values not containing the given string."""
+  issue_not_contains: String
+
+  """All values starting with the given string."""
+  issue_starts_with: String
+
+  """All values not starting with the given string."""
+  issue_not_starts_with: String
+
+  """All values ending with the given string."""
+  issue_ends_with: String
+
+  """All values not ending with the given string."""
+  issue_not_ends_with: String
+  rule: String
+
+  """All values that are not equal to given value."""
+  rule_not: String
+
+  """All values that are contained in given list."""
+  rule_in: [String!]
+
+  """All values that are not contained in given list."""
+  rule_not_in: [String!]
+
+  """All values less than the given value."""
+  rule_lt: String
+
+  """All values less than or equal the given value."""
+  rule_lte: String
+
+  """All values greater than the given value."""
+  rule_gt: String
+
+  """All values greater than or equal the given value."""
+  rule_gte: String
+
+  """All values containing the given string."""
+  rule_contains: String
+
+  """All values not containing the given string."""
+  rule_not_contains: String
+
+  """All values starting with the given string."""
+  rule_starts_with: String
+
+  """All values not starting with the given string."""
+  rule_not_starts_with: String
+
+  """All values ending with the given string."""
+  rule_ends_with: String
+
+  """All values not ending with the given string."""
+  rule_not_ends_with: String
+  analysis: String
+
+  """All values that are not equal to given value."""
+  analysis_not: String
+
+  """All values that are contained in given list."""
+  analysis_in: [String!]
+
+  """All values that are not contained in given list."""
+  analysis_not_in: [String!]
+
+  """All values less than the given value."""
+  analysis_lt: String
+
+  """All values less than or equal the given value."""
+  analysis_lte: String
+
+  """All values greater than the given value."""
+  analysis_gt: String
+
+  """All values greater than or equal the given value."""
+  analysis_gte: String
+
+  """All values containing the given string."""
+  analysis_contains: String
+
+  """All values not containing the given string."""
+  analysis_not_contains: String
+
+  """All values starting with the given string."""
+  analysis_starts_with: String
+
+  """All values not starting with the given string."""
+  analysis_not_starts_with: String
+
+  """All values ending with the given string."""
+  analysis_ends_with: String
+
+  """All values not ending with the given string."""
+  analysis_not_ends_with: String
+  conclusion: String
+
+  """All values that are not equal to given value."""
+  conclusion_not: String
+
+  """All values that are contained in given list."""
+  conclusion_in: [String!]
+
+  """All values that are not contained in given list."""
+  conclusion_not_in: [String!]
+
+  """All values less than the given value."""
+  conclusion_lt: String
+
+  """All values less than or equal the given value."""
+  conclusion_lte: String
+
+  """All values greater than the given value."""
+  conclusion_gt: String
+
+  """All values greater than or equal the given value."""
+  conclusion_gte: String
+
+  """All values containing the given string."""
+  conclusion_contains: String
+
+  """All values not containing the given string."""
+  conclusion_not_contains: String
+
+  """All values starting with the given string."""
+  conclusion_starts_with: String
+
+  """All values not starting with the given string."""
+  conclusion_not_starts_with: String
+
+  """All values ending with the given string."""
+  conclusion_ends_with: String
+
+  """All values not ending with the given string."""
+  conclusion_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+  largeImage: String
+
+  """All values that are not equal to given value."""
+  largeImage_not: String
+
+  """All values that are contained in given list."""
+  largeImage_in: [String!]
+
+  """All values that are not contained in given list."""
+  largeImage_not_in: [String!]
+
+  """All values less than the given value."""
+  largeImage_lt: String
+
+  """All values less than or equal the given value."""
+  largeImage_lte: String
+
+  """All values greater than the given value."""
+  largeImage_gt: String
+
+  """All values greater than or equal the given value."""
+  largeImage_gte: String
+
+  """All values containing the given string."""
+  largeImage_contains: String
+
+  """All values not containing the given string."""
+  largeImage_not_contains: String
+
+  """All values starting with the given string."""
+  largeImage_starts_with: String
+
+  """All values not starting with the given string."""
+  largeImage_not_starts_with: String
+
+  """All values ending with the given string."""
+  largeImage_ends_with: String
+
+  """All values not ending with the given string."""
+  largeImage_not_ends_with: String
+  price: Int
+
+  """All values that are not equal to given value."""
+  price_not: Int
+
+  """All values that are contained in given list."""
+  price_in: [Int!]
+
+  """All values that are not contained in given list."""
+  price_not_in: [Int!]
+
+  """All values less than the given value."""
+  price_lt: Int
+
+  """All values less than or equal the given value."""
+  price_lte: Int
+
+  """All values greater than the given value."""
+  price_gt: Int
+
+  """All values greater than or equal the given value."""
+  price_gte: Int
+  coursePageID: ID
+
+  """All values that are not equal to given value."""
+  coursePageID_not: ID
+
+  """All values that are contained in given list."""
+  coursePageID_in: [ID!]
+
+  """All values that are not contained in given list."""
+  coursePageID_not_in: [ID!]
+
+  """All values less than the given value."""
+  coursePageID_lt: ID
+
+  """All values less than or equal the given value."""
+  coursePageID_lte: ID
+
+  """All values greater than the given value."""
+  coursePageID_gt: ID
+
+  """All values greater than or equal the given value."""
+  coursePageID_gte: ID
+
+  """All values containing the given string."""
+  coursePageID_contains: ID
+
+  """All values not containing the given string."""
+  coursePageID_not_contains: ID
+
+  """All values starting with the given string."""
+  coursePageID_starts_with: ID
+
+  """All values not starting with the given string."""
+  coursePageID_not_starts_with: ID
+
+  """All values ending with the given string."""
+  coursePageID_ends_with: ID
+
+  """All values not ending with the given string."""
+  coursePageID_not_ends_with: ID
 }
 
 type CaseSubscriptionPayload {
@@ -155,7 +691,23 @@ input CaseUpdateInput {
   image: String
   largeImage: String
   price: Int
-  user: UserUpdateOneRequiredInput
+  coursePageID: ID
+  user: UserUpdateOneRequiredWithoutCasesInput
+  coursePage: CoursePageUpdateOneRequiredWithoutCasesInput
+}
+
+input CaseUpdateManyDataInput {
+  title: String
+  description: String
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID
 }
 
 input CaseUpdateManyMutationInput {
@@ -169,6 +721,86 @@ input CaseUpdateManyMutationInput {
   image: String
   largeImage: String
   price: Int
+  coursePageID: ID
+}
+
+input CaseUpdateManyWithoutCoursePageInput {
+  create: [CaseCreateWithoutCoursePageInput!]
+  connect: [CaseWhereUniqueInput!]
+  disconnect: [CaseWhereUniqueInput!]
+  delete: [CaseWhereUniqueInput!]
+  update: [CaseUpdateWithWhereUniqueWithoutCoursePageInput!]
+  updateMany: [CaseUpdateManyWithWhereNestedInput!]
+  deleteMany: [CaseScalarWhereInput!]
+  upsert: [CaseUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input CaseUpdateManyWithoutUserInput {
+  create: [CaseCreateWithoutUserInput!]
+  connect: [CaseWhereUniqueInput!]
+  disconnect: [CaseWhereUniqueInput!]
+  delete: [CaseWhereUniqueInput!]
+  update: [CaseUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [CaseUpdateManyWithWhereNestedInput!]
+  deleteMany: [CaseScalarWhereInput!]
+  upsert: [CaseUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input CaseUpdateManyWithWhereNestedInput {
+  where: CaseScalarWhereInput!
+  data: CaseUpdateManyDataInput!
+}
+
+input CaseUpdateWithoutCoursePageDataInput {
+  title: String
+  description: String
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID
+  user: UserUpdateOneRequiredWithoutCasesInput
+}
+
+input CaseUpdateWithoutUserDataInput {
+  title: String
+  description: String
+  mainText: String
+  issue: String
+  rule: String
+  analysis: String
+  conclusion: String
+  image: String
+  largeImage: String
+  price: Int
+  coursePageID: ID
+  coursePage: CoursePageUpdateOneRequiredWithoutCasesInput
+}
+
+input CaseUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: CaseWhereUniqueInput!
+  data: CaseUpdateWithoutCoursePageDataInput!
+}
+
+input CaseUpdateWithWhereUniqueWithoutUserInput {
+  where: CaseWhereUniqueInput!
+  data: CaseUpdateWithoutUserDataInput!
+}
+
+input CaseUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: CaseWhereUniqueInput!
+  update: CaseUpdateWithoutCoursePageDataInput!
+  create: CaseCreateWithoutCoursePageInput!
+}
+
+input CaseUpsertWithWhereUniqueWithoutUserInput {
+  where: CaseWhereUniqueInput!
+  update: CaseUpdateWithoutUserDataInput!
+  create: CaseCreateWithoutUserInput!
 }
 
 input CaseWhereInput {
@@ -602,10 +1234,638 @@ input CaseWhereInput {
 
   """All values greater than or equal the given value."""
   price_gte: Int
+  coursePageID: ID
+
+  """All values that are not equal to given value."""
+  coursePageID_not: ID
+
+  """All values that are contained in given list."""
+  coursePageID_in: [ID!]
+
+  """All values that are not contained in given list."""
+  coursePageID_not_in: [ID!]
+
+  """All values less than the given value."""
+  coursePageID_lt: ID
+
+  """All values less than or equal the given value."""
+  coursePageID_lte: ID
+
+  """All values greater than the given value."""
+  coursePageID_gt: ID
+
+  """All values greater than or equal the given value."""
+  coursePageID_gte: ID
+
+  """All values containing the given string."""
+  coursePageID_contains: ID
+
+  """All values not containing the given string."""
+  coursePageID_not_contains: ID
+
+  """All values starting with the given string."""
+  coursePageID_starts_with: ID
+
+  """All values not starting with the given string."""
+  coursePageID_not_starts_with: ID
+
+  """All values ending with the given string."""
+  coursePageID_ends_with: ID
+
+  """All values not ending with the given string."""
+  coursePageID_not_ends_with: ID
   user: UserWhereInput
+  coursePage: CoursePageWhereInput
 }
 
 input CaseWhereUniqueInput {
+  id: ID
+}
+
+type CoursePage implements Node {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+  user: User!
+  cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Case!]
+  tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
+}
+
+"""A connection to a list of items."""
+type CoursePageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CoursePageEdge]!
+  aggregate: AggregateCoursePage!
+}
+
+input CoursePageCreateInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  cases: CaseCreateManyWithoutCoursePageInput
+  tests: TestCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateManyWithoutUserInput {
+  create: [CoursePageCreateWithoutUserInput!]
+  connect: [CoursePageWhereUniqueInput!]
+}
+
+input CoursePageCreateOneWithoutCasesInput {
+  create: CoursePageCreateWithoutCasesInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreateOneWithoutTestsInput {
+  create: CoursePageCreateWithoutTestsInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreateWithoutCasesInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  tests: TestCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutTestsInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  cases: CaseCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutUserInput {
+  title: String!
+  description: String!
+  image: String!
+  cases: CaseCreateManyWithoutCoursePageInput
+  tests: TestCreateManyWithoutCoursePageInput
+}
+
+"""An edge in a connection."""
+type CoursePageEdge {
+  """The item at the end of the edge."""
+  node: CoursePage!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum CoursePageOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  image_ASC
+  image_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type CoursePagePreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+}
+
+input CoursePageScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CoursePageScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CoursePageScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CoursePageScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+}
+
+type CoursePageSubscriptionPayload {
+  mutation: MutationType!
+  node: CoursePage
+  updatedFields: [String!]
+  previousValues: CoursePagePreviousValues
+}
+
+input CoursePageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CoursePageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CoursePageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CoursePageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CoursePageWhereInput
+}
+
+input CoursePageUpdateInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  cases: CaseUpdateManyWithoutCoursePageInput
+  tests: TestUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateManyDataInput {
+  title: String
+  description: String
+  image: String
+}
+
+input CoursePageUpdateManyMutationInput {
+  title: String
+  description: String
+  image: String
+}
+
+input CoursePageUpdateManyWithoutUserInput {
+  create: [CoursePageCreateWithoutUserInput!]
+  connect: [CoursePageWhereUniqueInput!]
+  disconnect: [CoursePageWhereUniqueInput!]
+  delete: [CoursePageWhereUniqueInput!]
+  update: [CoursePageUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
+  deleteMany: [CoursePageScalarWhereInput!]
+  upsert: [CoursePageUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input CoursePageUpdateManyWithWhereNestedInput {
+  where: CoursePageScalarWhereInput!
+  data: CoursePageUpdateManyDataInput!
+}
+
+input CoursePageUpdateOneRequiredWithoutCasesInput {
+  create: CoursePageCreateWithoutCasesInput
+  connect: CoursePageWhereUniqueInput
+  update: CoursePageUpdateWithoutCasesDataInput
+  upsert: CoursePageUpsertWithoutCasesInput
+}
+
+input CoursePageUpdateOneRequiredWithoutTestsInput {
+  create: CoursePageCreateWithoutTestsInput
+  connect: CoursePageWhereUniqueInput
+  update: CoursePageUpdateWithoutTestsDataInput
+  upsert: CoursePageUpsertWithoutTestsInput
+}
+
+input CoursePageUpdateWithoutCasesDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  tests: TestUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutTestsDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  cases: CaseUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutUserDataInput {
+  title: String
+  description: String
+  image: String
+  cases: CaseUpdateManyWithoutCoursePageInput
+  tests: TestUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithWhereUniqueWithoutUserInput {
+  where: CoursePageWhereUniqueInput!
+  data: CoursePageUpdateWithoutUserDataInput!
+}
+
+input CoursePageUpsertWithoutCasesInput {
+  update: CoursePageUpdateWithoutCasesDataInput!
+  create: CoursePageCreateWithoutCasesInput!
+}
+
+input CoursePageUpsertWithoutTestsInput {
+  update: CoursePageUpdateWithoutTestsDataInput!
+  create: CoursePageCreateWithoutTestsInput!
+}
+
+input CoursePageUpsertWithWhereUniqueWithoutUserInput {
+  where: CoursePageWhereUniqueInput!
+  update: CoursePageUpdateWithoutUserDataInput!
+  create: CoursePageCreateWithoutUserInput!
+}
+
+input CoursePageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CoursePageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CoursePageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CoursePageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+  user: UserWhereInput
+  cases_every: CaseWhereInput
+  cases_some: CaseWhereInput
+  cases_none: CaseWhereInput
+  tests_every: TestWhereInput
+  tests_some: TestWhereInput
+  tests_none: TestWhereInput
+}
+
+input CoursePageWhereUniqueInput {
   id: ID
 }
 
@@ -616,17 +1876,41 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
+  createCoursePage(data: CoursePageCreateInput!): CoursePage!
+  createSandboxPage(data: SandboxPageCreateInput!): SandboxPage!
   createCase(data: CaseCreateInput!): Case!
+  createSandbox(data: SandboxCreateInput!): Sandbox!
+  createTest(data: TestCreateInput!): Test!
   createUser(data: UserCreateInput!): User!
+  updateCoursePage(data: CoursePageUpdateInput!, where: CoursePageWhereUniqueInput!): CoursePage
+  updateSandboxPage(data: SandboxPageUpdateInput!, where: SandboxPageWhereUniqueInput!): SandboxPage
   updateCase(data: CaseUpdateInput!, where: CaseWhereUniqueInput!): Case
+  updateSandbox(data: SandboxUpdateInput!, where: SandboxWhereUniqueInput!): Sandbox
+  updateTest(data: TestUpdateInput!, where: TestWhereUniqueInput!): Test
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  deleteCoursePage(where: CoursePageWhereUniqueInput!): CoursePage
+  deleteSandboxPage(where: SandboxPageWhereUniqueInput!): SandboxPage
   deleteCase(where: CaseWhereUniqueInput!): Case
+  deleteSandbox(where: SandboxWhereUniqueInput!): Sandbox
+  deleteTest(where: TestWhereUniqueInput!): Test
   deleteUser(where: UserWhereUniqueInput!): User
+  upsertCoursePage(where: CoursePageWhereUniqueInput!, create: CoursePageCreateInput!, update: CoursePageUpdateInput!): CoursePage!
+  upsertSandboxPage(where: SandboxPageWhereUniqueInput!, create: SandboxPageCreateInput!, update: SandboxPageUpdateInput!): SandboxPage!
   upsertCase(where: CaseWhereUniqueInput!, create: CaseCreateInput!, update: CaseUpdateInput!): Case!
+  upsertSandbox(where: SandboxWhereUniqueInput!, create: SandboxCreateInput!, update: SandboxUpdateInput!): Sandbox!
+  upsertTest(where: TestWhereUniqueInput!, create: TestCreateInput!, update: TestUpdateInput!): Test!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  updateManyCoursePages(data: CoursePageUpdateManyMutationInput!, where: CoursePageWhereInput): BatchPayload!
+  updateManySandboxPages(data: SandboxPageUpdateManyMutationInput!, where: SandboxPageWhereInput): BatchPayload!
   updateManyCases(data: CaseUpdateManyMutationInput!, where: CaseWhereInput): BatchPayload!
+  updateManySandboxes(data: SandboxUpdateManyMutationInput!, where: SandboxWhereInput): BatchPayload!
+  updateManyTests(data: TestUpdateManyMutationInput!, where: TestWhereInput): BatchPayload!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  deleteManyCoursePages(where: CoursePageWhereInput): BatchPayload!
+  deleteManySandboxPages(where: SandboxPageWhereInput): BatchPayload!
   deleteManyCases(where: CaseWhereInput): BatchPayload!
+  deleteManySandboxes(where: SandboxWhereInput): BatchPayload!
+  deleteManyTests(where: TestWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
@@ -667,11 +1951,23 @@ enum Permission {
 }
 
 type Query {
+  coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage]!
+  sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage]!
   cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Case]!
+  sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sandbox]!
+  tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test]!
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  coursePage(where: CoursePageWhereUniqueInput!): CoursePage
+  sandboxPage(where: SandboxPageWhereUniqueInput!): SandboxPage
   case(where: CaseWhereUniqueInput!): Case
+  sandbox(where: SandboxWhereUniqueInput!): Sandbox
+  test(where: TestWhereUniqueInput!): Test
   user(where: UserWhereUniqueInput!): User
+  coursePagesConnection(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CoursePageConnection!
+  sandboxPagesConnection(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxPageConnection!
   casesConnection(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CaseConnection!
+  sandboxesConnection(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxConnection!
+  testsConnection(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TestConnection!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
 
   """Fetches an object given its ID"""
@@ -681,9 +1977,2174 @@ type Query {
   ): Node
 }
 
+type Sandbox implements Node {
+  id: ID!
+  text: String!
+  user: User!
+  sandboxPage: SandboxPage!
+  sandboxPageID: ID!
+}
+
+"""A connection to a list of items."""
+type SandboxConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SandboxEdge]!
+  aggregate: AggregateSandbox!
+}
+
+input SandboxCreateInput {
+  text: String!
+  sandboxPageID: ID!
+  user: UserCreateOneInput!
+  sandboxPage: SandboxPageCreateOneWithoutSandboxesInput!
+}
+
+input SandboxCreateManyWithoutSandboxPageInput {
+  create: [SandboxCreateWithoutSandboxPageInput!]
+  connect: [SandboxWhereUniqueInput!]
+}
+
+input SandboxCreateWithoutSandboxPageInput {
+  text: String!
+  sandboxPageID: ID!
+  user: UserCreateOneInput!
+}
+
+"""An edge in a connection."""
+type SandboxEdge {
+  """The item at the end of the edge."""
+  node: Sandbox!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum SandboxOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  sandboxPageID_ASC
+  sandboxPageID_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SandboxPage implements Node {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+  user: User!
+  sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sandbox!]
+}
+
+"""A connection to a list of items."""
+type SandboxPageConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [SandboxPageEdge]!
+  aggregate: AggregateSandboxPage!
+}
+
+input SandboxPageCreateInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutSandboxPagesInput!
+  sandboxes: SandboxCreateManyWithoutSandboxPageInput
+}
+
+input SandboxPageCreateManyWithoutUserInput {
+  create: [SandboxPageCreateWithoutUserInput!]
+  connect: [SandboxPageWhereUniqueInput!]
+}
+
+input SandboxPageCreateOneWithoutSandboxesInput {
+  create: SandboxPageCreateWithoutSandboxesInput
+  connect: SandboxPageWhereUniqueInput
+}
+
+input SandboxPageCreateWithoutSandboxesInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutSandboxPagesInput!
+}
+
+input SandboxPageCreateWithoutUserInput {
+  title: String!
+  description: String!
+  image: String!
+  sandboxes: SandboxCreateManyWithoutSandboxPageInput
+}
+
+"""An edge in a connection."""
+type SandboxPageEdge {
+  """The item at the end of the edge."""
+  node: SandboxPage!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum SandboxPageOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  image_ASC
+  image_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type SandboxPagePreviousValues {
+  id: ID!
+  title: String!
+  description: String!
+  image: String!
+}
+
+input SandboxPageScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SandboxPageScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SandboxPageScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SandboxPageScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+}
+
+type SandboxPageSubscriptionPayload {
+  mutation: MutationType!
+  node: SandboxPage
+  updatedFields: [String!]
+  previousValues: SandboxPagePreviousValues
+}
+
+input SandboxPageSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SandboxPageSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SandboxPageSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SandboxPageSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SandboxPageWhereInput
+}
+
+input SandboxPageUpdateInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutSandboxPagesInput
+  sandboxes: SandboxUpdateManyWithoutSandboxPageInput
+}
+
+input SandboxPageUpdateManyDataInput {
+  title: String
+  description: String
+  image: String
+}
+
+input SandboxPageUpdateManyMutationInput {
+  title: String
+  description: String
+  image: String
+}
+
+input SandboxPageUpdateManyWithoutUserInput {
+  create: [SandboxPageCreateWithoutUserInput!]
+  connect: [SandboxPageWhereUniqueInput!]
+  disconnect: [SandboxPageWhereUniqueInput!]
+  delete: [SandboxPageWhereUniqueInput!]
+  update: [SandboxPageUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [SandboxPageUpdateManyWithWhereNestedInput!]
+  deleteMany: [SandboxPageScalarWhereInput!]
+  upsert: [SandboxPageUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input SandboxPageUpdateManyWithWhereNestedInput {
+  where: SandboxPageScalarWhereInput!
+  data: SandboxPageUpdateManyDataInput!
+}
+
+input SandboxPageUpdateOneRequiredWithoutSandboxesInput {
+  create: SandboxPageCreateWithoutSandboxesInput
+  connect: SandboxPageWhereUniqueInput
+  update: SandboxPageUpdateWithoutSandboxesDataInput
+  upsert: SandboxPageUpsertWithoutSandboxesInput
+}
+
+input SandboxPageUpdateWithoutSandboxesDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutSandboxPagesInput
+}
+
+input SandboxPageUpdateWithoutUserDataInput {
+  title: String
+  description: String
+  image: String
+  sandboxes: SandboxUpdateManyWithoutSandboxPageInput
+}
+
+input SandboxPageUpdateWithWhereUniqueWithoutUserInput {
+  where: SandboxPageWhereUniqueInput!
+  data: SandboxPageUpdateWithoutUserDataInput!
+}
+
+input SandboxPageUpsertWithoutSandboxesInput {
+  update: SandboxPageUpdateWithoutSandboxesDataInput!
+  create: SandboxPageCreateWithoutSandboxesInput!
+}
+
+input SandboxPageUpsertWithWhereUniqueWithoutUserInput {
+  where: SandboxPageWhereUniqueInput!
+  update: SandboxPageUpdateWithoutUserDataInput!
+  create: SandboxPageCreateWithoutUserInput!
+}
+
+input SandboxPageWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SandboxPageWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SandboxPageWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SandboxPageWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  image: String
+
+  """All values that are not equal to given value."""
+  image_not: String
+
+  """All values that are contained in given list."""
+  image_in: [String!]
+
+  """All values that are not contained in given list."""
+  image_not_in: [String!]
+
+  """All values less than the given value."""
+  image_lt: String
+
+  """All values less than or equal the given value."""
+  image_lte: String
+
+  """All values greater than the given value."""
+  image_gt: String
+
+  """All values greater than or equal the given value."""
+  image_gte: String
+
+  """All values containing the given string."""
+  image_contains: String
+
+  """All values not containing the given string."""
+  image_not_contains: String
+
+  """All values starting with the given string."""
+  image_starts_with: String
+
+  """All values not starting with the given string."""
+  image_not_starts_with: String
+
+  """All values ending with the given string."""
+  image_ends_with: String
+
+  """All values not ending with the given string."""
+  image_not_ends_with: String
+  user: UserWhereInput
+  sandboxes_every: SandboxWhereInput
+  sandboxes_some: SandboxWhereInput
+  sandboxes_none: SandboxWhereInput
+}
+
+input SandboxPageWhereUniqueInput {
+  id: ID
+}
+
+type SandboxPreviousValues {
+  id: ID!
+  text: String!
+  sandboxPageID: ID!
+}
+
+input SandboxScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SandboxScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SandboxScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SandboxScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  sandboxPageID: ID
+
+  """All values that are not equal to given value."""
+  sandboxPageID_not: ID
+
+  """All values that are contained in given list."""
+  sandboxPageID_in: [ID!]
+
+  """All values that are not contained in given list."""
+  sandboxPageID_not_in: [ID!]
+
+  """All values less than the given value."""
+  sandboxPageID_lt: ID
+
+  """All values less than or equal the given value."""
+  sandboxPageID_lte: ID
+
+  """All values greater than the given value."""
+  sandboxPageID_gt: ID
+
+  """All values greater than or equal the given value."""
+  sandboxPageID_gte: ID
+
+  """All values containing the given string."""
+  sandboxPageID_contains: ID
+
+  """All values not containing the given string."""
+  sandboxPageID_not_contains: ID
+
+  """All values starting with the given string."""
+  sandboxPageID_starts_with: ID
+
+  """All values not starting with the given string."""
+  sandboxPageID_not_starts_with: ID
+
+  """All values ending with the given string."""
+  sandboxPageID_ends_with: ID
+
+  """All values not ending with the given string."""
+  sandboxPageID_not_ends_with: ID
+}
+
+type SandboxSubscriptionPayload {
+  mutation: MutationType!
+  node: Sandbox
+  updatedFields: [String!]
+  previousValues: SandboxPreviousValues
+}
+
+input SandboxSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SandboxSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SandboxSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SandboxSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: SandboxWhereInput
+}
+
+input SandboxUpdateInput {
+  text: String
+  sandboxPageID: ID
+  user: UserUpdateOneRequiredInput
+  sandboxPage: SandboxPageUpdateOneRequiredWithoutSandboxesInput
+}
+
+input SandboxUpdateManyDataInput {
+  text: String
+  sandboxPageID: ID
+}
+
+input SandboxUpdateManyMutationInput {
+  text: String
+  sandboxPageID: ID
+}
+
+input SandboxUpdateManyWithoutSandboxPageInput {
+  create: [SandboxCreateWithoutSandboxPageInput!]
+  connect: [SandboxWhereUniqueInput!]
+  disconnect: [SandboxWhereUniqueInput!]
+  delete: [SandboxWhereUniqueInput!]
+  update: [SandboxUpdateWithWhereUniqueWithoutSandboxPageInput!]
+  updateMany: [SandboxUpdateManyWithWhereNestedInput!]
+  deleteMany: [SandboxScalarWhereInput!]
+  upsert: [SandboxUpsertWithWhereUniqueWithoutSandboxPageInput!]
+}
+
+input SandboxUpdateManyWithWhereNestedInput {
+  where: SandboxScalarWhereInput!
+  data: SandboxUpdateManyDataInput!
+}
+
+input SandboxUpdateWithoutSandboxPageDataInput {
+  text: String
+  sandboxPageID: ID
+  user: UserUpdateOneRequiredInput
+}
+
+input SandboxUpdateWithWhereUniqueWithoutSandboxPageInput {
+  where: SandboxWhereUniqueInput!
+  data: SandboxUpdateWithoutSandboxPageDataInput!
+}
+
+input SandboxUpsertWithWhereUniqueWithoutSandboxPageInput {
+  where: SandboxWhereUniqueInput!
+  update: SandboxUpdateWithoutSandboxPageDataInput!
+  create: SandboxCreateWithoutSandboxPageInput!
+}
+
+input SandboxWhereInput {
+  """Logical AND on all given filters."""
+  AND: [SandboxWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [SandboxWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [SandboxWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  text: String
+
+  """All values that are not equal to given value."""
+  text_not: String
+
+  """All values that are contained in given list."""
+  text_in: [String!]
+
+  """All values that are not contained in given list."""
+  text_not_in: [String!]
+
+  """All values less than the given value."""
+  text_lt: String
+
+  """All values less than or equal the given value."""
+  text_lte: String
+
+  """All values greater than the given value."""
+  text_gt: String
+
+  """All values greater than or equal the given value."""
+  text_gte: String
+
+  """All values containing the given string."""
+  text_contains: String
+
+  """All values not containing the given string."""
+  text_not_contains: String
+
+  """All values starting with the given string."""
+  text_starts_with: String
+
+  """All values not starting with the given string."""
+  text_not_starts_with: String
+
+  """All values ending with the given string."""
+  text_ends_with: String
+
+  """All values not ending with the given string."""
+  text_not_ends_with: String
+  sandboxPageID: ID
+
+  """All values that are not equal to given value."""
+  sandboxPageID_not: ID
+
+  """All values that are contained in given list."""
+  sandboxPageID_in: [ID!]
+
+  """All values that are not contained in given list."""
+  sandboxPageID_not_in: [ID!]
+
+  """All values less than the given value."""
+  sandboxPageID_lt: ID
+
+  """All values less than or equal the given value."""
+  sandboxPageID_lte: ID
+
+  """All values greater than the given value."""
+  sandboxPageID_gt: ID
+
+  """All values greater than or equal the given value."""
+  sandboxPageID_gte: ID
+
+  """All values containing the given string."""
+  sandboxPageID_contains: ID
+
+  """All values not containing the given string."""
+  sandboxPageID_not_contains: ID
+
+  """All values starting with the given string."""
+  sandboxPageID_starts_with: ID
+
+  """All values not starting with the given string."""
+  sandboxPageID_not_starts_with: ID
+
+  """All values ending with the given string."""
+  sandboxPageID_ends_with: ID
+
+  """All values not ending with the given string."""
+  sandboxPageID_not_ends_with: ID
+  user: UserWhereInput
+  sandboxPage: SandboxPageWhereInput
+}
+
+input SandboxWhereUniqueInput {
+  id: ID
+}
+
 type Subscription {
+  coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
+  sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload
   case(where: CaseSubscriptionWhereInput): CaseSubscriptionPayload
+  sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
+  test(where: TestSubscriptionWhereInput): TestSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+type Test implements Node {
+  id: ID!
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: User!
+  coursePage: CoursePage!
+  coursePageID: ID!
+}
+
+"""A connection to a list of items."""
+type TestConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TestEdge]!
+  aggregate: AggregateTest!
+}
+
+input TestCreateInput {
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID!
+  user: UserCreateOneWithoutTestsInput!
+  coursePage: CoursePageCreateOneWithoutTestsInput!
+}
+
+input TestCreateManyWithoutCoursePageInput {
+  create: [TestCreateWithoutCoursePageInput!]
+  connect: [TestWhereUniqueInput!]
+}
+
+input TestCreateManyWithoutUserInput {
+  create: [TestCreateWithoutUserInput!]
+  connect: [TestWhereUniqueInput!]
+}
+
+input TestCreateWithoutCoursePageInput {
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID!
+  user: UserCreateOneWithoutTestsInput!
+}
+
+input TestCreateWithoutUserInput {
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID!
+  coursePage: CoursePageCreateOneWithoutTestsInput!
+}
+
+"""An edge in a connection."""
+type TestEdge {
+  """The item at the end of the edge."""
+  node: Test!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum TestOrderByInput {
+  id_ASC
+  id_DESC
+  question_ASC
+  question_DESC
+  answer1_ASC
+  answer1_DESC
+  answer1Correct_ASC
+  answer1Correct_DESC
+  answer2_ASC
+  answer2_DESC
+  answer2Correct_ASC
+  answer2Correct_DESC
+  answer3_ASC
+  answer3_DESC
+  answer3Correct_ASC
+  answer3Correct_DESC
+  answer4_ASC
+  answer4_DESC
+  answer4Correct_ASC
+  answer4Correct_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
+
+type TestPreviousValues {
+  id: ID!
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID!
+}
+
+input TestScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TestScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TestScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TestScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  question: String
+
+  """All values that are not equal to given value."""
+  question_not: String
+
+  """All values that are contained in given list."""
+  question_in: [String!]
+
+  """All values that are not contained in given list."""
+  question_not_in: [String!]
+
+  """All values less than the given value."""
+  question_lt: String
+
+  """All values less than or equal the given value."""
+  question_lte: String
+
+  """All values greater than the given value."""
+  question_gt: String
+
+  """All values greater than or equal the given value."""
+  question_gte: String
+
+  """All values containing the given string."""
+  question_contains: String
+
+  """All values not containing the given string."""
+  question_not_contains: String
+
+  """All values starting with the given string."""
+  question_starts_with: String
+
+  """All values not starting with the given string."""
+  question_not_starts_with: String
+
+  """All values ending with the given string."""
+  question_ends_with: String
+
+  """All values not ending with the given string."""
+  question_not_ends_with: String
+  answer1: String
+
+  """All values that are not equal to given value."""
+  answer1_not: String
+
+  """All values that are contained in given list."""
+  answer1_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer1_not_in: [String!]
+
+  """All values less than the given value."""
+  answer1_lt: String
+
+  """All values less than or equal the given value."""
+  answer1_lte: String
+
+  """All values greater than the given value."""
+  answer1_gt: String
+
+  """All values greater than or equal the given value."""
+  answer1_gte: String
+
+  """All values containing the given string."""
+  answer1_contains: String
+
+  """All values not containing the given string."""
+  answer1_not_contains: String
+
+  """All values starting with the given string."""
+  answer1_starts_with: String
+
+  """All values not starting with the given string."""
+  answer1_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer1_ends_with: String
+
+  """All values not ending with the given string."""
+  answer1_not_ends_with: String
+  answer1Correct: String
+
+  """All values that are not equal to given value."""
+  answer1Correct_not: String
+
+  """All values that are contained in given list."""
+  answer1Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer1Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer1Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer1Correct_lte: String
+
+  """All values greater than the given value."""
+  answer1Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer1Correct_gte: String
+
+  """All values containing the given string."""
+  answer1Correct_contains: String
+
+  """All values not containing the given string."""
+  answer1Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer1Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer1Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer1Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer1Correct_not_ends_with: String
+  answer2: String
+
+  """All values that are not equal to given value."""
+  answer2_not: String
+
+  """All values that are contained in given list."""
+  answer2_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer2_not_in: [String!]
+
+  """All values less than the given value."""
+  answer2_lt: String
+
+  """All values less than or equal the given value."""
+  answer2_lte: String
+
+  """All values greater than the given value."""
+  answer2_gt: String
+
+  """All values greater than or equal the given value."""
+  answer2_gte: String
+
+  """All values containing the given string."""
+  answer2_contains: String
+
+  """All values not containing the given string."""
+  answer2_not_contains: String
+
+  """All values starting with the given string."""
+  answer2_starts_with: String
+
+  """All values not starting with the given string."""
+  answer2_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer2_ends_with: String
+
+  """All values not ending with the given string."""
+  answer2_not_ends_with: String
+  answer2Correct: String
+
+  """All values that are not equal to given value."""
+  answer2Correct_not: String
+
+  """All values that are contained in given list."""
+  answer2Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer2Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer2Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer2Correct_lte: String
+
+  """All values greater than the given value."""
+  answer2Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer2Correct_gte: String
+
+  """All values containing the given string."""
+  answer2Correct_contains: String
+
+  """All values not containing the given string."""
+  answer2Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer2Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer2Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer2Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer2Correct_not_ends_with: String
+  answer3: String
+
+  """All values that are not equal to given value."""
+  answer3_not: String
+
+  """All values that are contained in given list."""
+  answer3_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer3_not_in: [String!]
+
+  """All values less than the given value."""
+  answer3_lt: String
+
+  """All values less than or equal the given value."""
+  answer3_lte: String
+
+  """All values greater than the given value."""
+  answer3_gt: String
+
+  """All values greater than or equal the given value."""
+  answer3_gte: String
+
+  """All values containing the given string."""
+  answer3_contains: String
+
+  """All values not containing the given string."""
+  answer3_not_contains: String
+
+  """All values starting with the given string."""
+  answer3_starts_with: String
+
+  """All values not starting with the given string."""
+  answer3_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer3_ends_with: String
+
+  """All values not ending with the given string."""
+  answer3_not_ends_with: String
+  answer3Correct: String
+
+  """All values that are not equal to given value."""
+  answer3Correct_not: String
+
+  """All values that are contained in given list."""
+  answer3Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer3Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer3Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer3Correct_lte: String
+
+  """All values greater than the given value."""
+  answer3Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer3Correct_gte: String
+
+  """All values containing the given string."""
+  answer3Correct_contains: String
+
+  """All values not containing the given string."""
+  answer3Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer3Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer3Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer3Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer3Correct_not_ends_with: String
+  answer4: String
+
+  """All values that are not equal to given value."""
+  answer4_not: String
+
+  """All values that are contained in given list."""
+  answer4_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer4_not_in: [String!]
+
+  """All values less than the given value."""
+  answer4_lt: String
+
+  """All values less than or equal the given value."""
+  answer4_lte: String
+
+  """All values greater than the given value."""
+  answer4_gt: String
+
+  """All values greater than or equal the given value."""
+  answer4_gte: String
+
+  """All values containing the given string."""
+  answer4_contains: String
+
+  """All values not containing the given string."""
+  answer4_not_contains: String
+
+  """All values starting with the given string."""
+  answer4_starts_with: String
+
+  """All values not starting with the given string."""
+  answer4_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer4_ends_with: String
+
+  """All values not ending with the given string."""
+  answer4_not_ends_with: String
+  answer4Correct: String
+
+  """All values that are not equal to given value."""
+  answer4Correct_not: String
+
+  """All values that are contained in given list."""
+  answer4Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer4Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer4Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer4Correct_lte: String
+
+  """All values greater than the given value."""
+  answer4Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer4Correct_gte: String
+
+  """All values containing the given string."""
+  answer4Correct_contains: String
+
+  """All values not containing the given string."""
+  answer4Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer4Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer4Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer4Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer4Correct_not_ends_with: String
+  coursePageID: ID
+
+  """All values that are not equal to given value."""
+  coursePageID_not: ID
+
+  """All values that are contained in given list."""
+  coursePageID_in: [ID!]
+
+  """All values that are not contained in given list."""
+  coursePageID_not_in: [ID!]
+
+  """All values less than the given value."""
+  coursePageID_lt: ID
+
+  """All values less than or equal the given value."""
+  coursePageID_lte: ID
+
+  """All values greater than the given value."""
+  coursePageID_gt: ID
+
+  """All values greater than or equal the given value."""
+  coursePageID_gte: ID
+
+  """All values containing the given string."""
+  coursePageID_contains: ID
+
+  """All values not containing the given string."""
+  coursePageID_not_contains: ID
+
+  """All values starting with the given string."""
+  coursePageID_starts_with: ID
+
+  """All values not starting with the given string."""
+  coursePageID_not_starts_with: ID
+
+  """All values ending with the given string."""
+  coursePageID_ends_with: ID
+
+  """All values not ending with the given string."""
+  coursePageID_not_ends_with: ID
+}
+
+type TestSubscriptionPayload {
+  mutation: MutationType!
+  node: Test
+  updatedFields: [String!]
+  previousValues: TestPreviousValues
+}
+
+input TestSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TestSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TestSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TestSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TestWhereInput
+}
+
+input TestUpdateInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID
+  user: UserUpdateOneRequiredWithoutTestsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutTestsInput
+}
+
+input TestUpdateManyDataInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID
+}
+
+input TestUpdateManyMutationInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID
+}
+
+input TestUpdateManyWithoutCoursePageInput {
+  create: [TestCreateWithoutCoursePageInput!]
+  connect: [TestWhereUniqueInput!]
+  disconnect: [TestWhereUniqueInput!]
+  delete: [TestWhereUniqueInput!]
+  update: [TestUpdateWithWhereUniqueWithoutCoursePageInput!]
+  updateMany: [TestUpdateManyWithWhereNestedInput!]
+  deleteMany: [TestScalarWhereInput!]
+  upsert: [TestUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input TestUpdateManyWithoutUserInput {
+  create: [TestCreateWithoutUserInput!]
+  connect: [TestWhereUniqueInput!]
+  disconnect: [TestWhereUniqueInput!]
+  delete: [TestWhereUniqueInput!]
+  update: [TestUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [TestUpdateManyWithWhereNestedInput!]
+  deleteMany: [TestScalarWhereInput!]
+  upsert: [TestUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TestUpdateManyWithWhereNestedInput {
+  where: TestScalarWhereInput!
+  data: TestUpdateManyDataInput!
+}
+
+input TestUpdateWithoutCoursePageDataInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID
+  user: UserUpdateOneRequiredWithoutTestsInput
+}
+
+input TestUpdateWithoutUserDataInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID
+  coursePage: CoursePageUpdateOneRequiredWithoutTestsInput
+}
+
+input TestUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: TestWhereUniqueInput!
+  data: TestUpdateWithoutCoursePageDataInput!
+}
+
+input TestUpdateWithWhereUniqueWithoutUserInput {
+  where: TestWhereUniqueInput!
+  data: TestUpdateWithoutUserDataInput!
+}
+
+input TestUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: TestWhereUniqueInput!
+  update: TestUpdateWithoutCoursePageDataInput!
+  create: TestCreateWithoutCoursePageInput!
+}
+
+input TestUpsertWithWhereUniqueWithoutUserInput {
+  where: TestWhereUniqueInput!
+  update: TestUpdateWithoutUserDataInput!
+  create: TestCreateWithoutUserInput!
+}
+
+input TestWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TestWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TestWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TestWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  question: String
+
+  """All values that are not equal to given value."""
+  question_not: String
+
+  """All values that are contained in given list."""
+  question_in: [String!]
+
+  """All values that are not contained in given list."""
+  question_not_in: [String!]
+
+  """All values less than the given value."""
+  question_lt: String
+
+  """All values less than or equal the given value."""
+  question_lte: String
+
+  """All values greater than the given value."""
+  question_gt: String
+
+  """All values greater than or equal the given value."""
+  question_gte: String
+
+  """All values containing the given string."""
+  question_contains: String
+
+  """All values not containing the given string."""
+  question_not_contains: String
+
+  """All values starting with the given string."""
+  question_starts_with: String
+
+  """All values not starting with the given string."""
+  question_not_starts_with: String
+
+  """All values ending with the given string."""
+  question_ends_with: String
+
+  """All values not ending with the given string."""
+  question_not_ends_with: String
+  answer1: String
+
+  """All values that are not equal to given value."""
+  answer1_not: String
+
+  """All values that are contained in given list."""
+  answer1_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer1_not_in: [String!]
+
+  """All values less than the given value."""
+  answer1_lt: String
+
+  """All values less than or equal the given value."""
+  answer1_lte: String
+
+  """All values greater than the given value."""
+  answer1_gt: String
+
+  """All values greater than or equal the given value."""
+  answer1_gte: String
+
+  """All values containing the given string."""
+  answer1_contains: String
+
+  """All values not containing the given string."""
+  answer1_not_contains: String
+
+  """All values starting with the given string."""
+  answer1_starts_with: String
+
+  """All values not starting with the given string."""
+  answer1_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer1_ends_with: String
+
+  """All values not ending with the given string."""
+  answer1_not_ends_with: String
+  answer1Correct: String
+
+  """All values that are not equal to given value."""
+  answer1Correct_not: String
+
+  """All values that are contained in given list."""
+  answer1Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer1Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer1Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer1Correct_lte: String
+
+  """All values greater than the given value."""
+  answer1Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer1Correct_gte: String
+
+  """All values containing the given string."""
+  answer1Correct_contains: String
+
+  """All values not containing the given string."""
+  answer1Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer1Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer1Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer1Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer1Correct_not_ends_with: String
+  answer2: String
+
+  """All values that are not equal to given value."""
+  answer2_not: String
+
+  """All values that are contained in given list."""
+  answer2_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer2_not_in: [String!]
+
+  """All values less than the given value."""
+  answer2_lt: String
+
+  """All values less than or equal the given value."""
+  answer2_lte: String
+
+  """All values greater than the given value."""
+  answer2_gt: String
+
+  """All values greater than or equal the given value."""
+  answer2_gte: String
+
+  """All values containing the given string."""
+  answer2_contains: String
+
+  """All values not containing the given string."""
+  answer2_not_contains: String
+
+  """All values starting with the given string."""
+  answer2_starts_with: String
+
+  """All values not starting with the given string."""
+  answer2_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer2_ends_with: String
+
+  """All values not ending with the given string."""
+  answer2_not_ends_with: String
+  answer2Correct: String
+
+  """All values that are not equal to given value."""
+  answer2Correct_not: String
+
+  """All values that are contained in given list."""
+  answer2Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer2Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer2Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer2Correct_lte: String
+
+  """All values greater than the given value."""
+  answer2Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer2Correct_gte: String
+
+  """All values containing the given string."""
+  answer2Correct_contains: String
+
+  """All values not containing the given string."""
+  answer2Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer2Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer2Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer2Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer2Correct_not_ends_with: String
+  answer3: String
+
+  """All values that are not equal to given value."""
+  answer3_not: String
+
+  """All values that are contained in given list."""
+  answer3_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer3_not_in: [String!]
+
+  """All values less than the given value."""
+  answer3_lt: String
+
+  """All values less than or equal the given value."""
+  answer3_lte: String
+
+  """All values greater than the given value."""
+  answer3_gt: String
+
+  """All values greater than or equal the given value."""
+  answer3_gte: String
+
+  """All values containing the given string."""
+  answer3_contains: String
+
+  """All values not containing the given string."""
+  answer3_not_contains: String
+
+  """All values starting with the given string."""
+  answer3_starts_with: String
+
+  """All values not starting with the given string."""
+  answer3_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer3_ends_with: String
+
+  """All values not ending with the given string."""
+  answer3_not_ends_with: String
+  answer3Correct: String
+
+  """All values that are not equal to given value."""
+  answer3Correct_not: String
+
+  """All values that are contained in given list."""
+  answer3Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer3Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer3Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer3Correct_lte: String
+
+  """All values greater than the given value."""
+  answer3Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer3Correct_gte: String
+
+  """All values containing the given string."""
+  answer3Correct_contains: String
+
+  """All values not containing the given string."""
+  answer3Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer3Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer3Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer3Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer3Correct_not_ends_with: String
+  answer4: String
+
+  """All values that are not equal to given value."""
+  answer4_not: String
+
+  """All values that are contained in given list."""
+  answer4_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer4_not_in: [String!]
+
+  """All values less than the given value."""
+  answer4_lt: String
+
+  """All values less than or equal the given value."""
+  answer4_lte: String
+
+  """All values greater than the given value."""
+  answer4_gt: String
+
+  """All values greater than or equal the given value."""
+  answer4_gte: String
+
+  """All values containing the given string."""
+  answer4_contains: String
+
+  """All values not containing the given string."""
+  answer4_not_contains: String
+
+  """All values starting with the given string."""
+  answer4_starts_with: String
+
+  """All values not starting with the given string."""
+  answer4_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer4_ends_with: String
+
+  """All values not ending with the given string."""
+  answer4_not_ends_with: String
+  answer4Correct: String
+
+  """All values that are not equal to given value."""
+  answer4Correct_not: String
+
+  """All values that are contained in given list."""
+  answer4Correct_in: [String!]
+
+  """All values that are not contained in given list."""
+  answer4Correct_not_in: [String!]
+
+  """All values less than the given value."""
+  answer4Correct_lt: String
+
+  """All values less than or equal the given value."""
+  answer4Correct_lte: String
+
+  """All values greater than the given value."""
+  answer4Correct_gt: String
+
+  """All values greater than or equal the given value."""
+  answer4Correct_gte: String
+
+  """All values containing the given string."""
+  answer4Correct_contains: String
+
+  """All values not containing the given string."""
+  answer4Correct_not_contains: String
+
+  """All values starting with the given string."""
+  answer4Correct_starts_with: String
+
+  """All values not starting with the given string."""
+  answer4Correct_not_starts_with: String
+
+  """All values ending with the given string."""
+  answer4Correct_ends_with: String
+
+  """All values not ending with the given string."""
+  answer4Correct_not_ends_with: String
+  coursePageID: ID
+
+  """All values that are not equal to given value."""
+  coursePageID_not: ID
+
+  """All values that are contained in given list."""
+  coursePageID_in: [ID!]
+
+  """All values that are not contained in given list."""
+  coursePageID_not_in: [ID!]
+
+  """All values less than the given value."""
+  coursePageID_lt: ID
+
+  """All values less than or equal the given value."""
+  coursePageID_lte: ID
+
+  """All values greater than the given value."""
+  coursePageID_gt: ID
+
+  """All values greater than or equal the given value."""
+  coursePageID_gte: ID
+
+  """All values containing the given string."""
+  coursePageID_contains: ID
+
+  """All values not containing the given string."""
+  coursePageID_not_contains: ID
+
+  """All values starting with the given string."""
+  coursePageID_starts_with: ID
+
+  """All values not starting with the given string."""
+  coursePageID_not_starts_with: ID
+
+  """All values ending with the given string."""
+  coursePageID_ends_with: ID
+
+  """All values not ending with the given string."""
+  coursePageID_not_ends_with: ID
+  user: UserWhereInput
+  coursePage: CoursePageWhereInput
+}
+
+input TestWhereUniqueInput {
+  id: ID
 }
 
 type User implements Node {
@@ -694,6 +4155,10 @@ type User implements Node {
   resetToken: String
   resetTokenExpiry: Float
   permissions: [Permission!]!
+  coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
+  sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage!]
+  cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Case!]
+  tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
 }
 
 """A connection to a list of items."""
@@ -713,6 +4178,10 @@ input UserCreateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  cases: CaseCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
 }
 
 input UserCreateOneInput {
@@ -720,8 +4189,76 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutCasesInput {
+  create: UserCreateWithoutCasesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutCoursePagesInput {
+  create: UserCreateWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutSandboxPagesInput {
+  create: UserCreateWithoutSandboxPagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutTestsInput {
+  create: UserCreateWithoutTestsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
+}
+
+input UserCreateWithoutCasesInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutCoursePagesInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  cases: CaseCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutSandboxPagesInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  cases: CaseCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutTestsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  cases: CaseCreateManyWithoutUserInput
 }
 
 """An edge in a connection."""
@@ -808,6 +4345,10 @@ input UserUpdateDataInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  cases: CaseUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -817,6 +4358,10 @@ input UserUpdateInput {
   resetToken: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  cases: CaseUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
@@ -835,13 +4380,109 @@ input UserUpdateOneRequiredInput {
   upsert: UserUpsertNestedInput
 }
 
+input UserUpdateOneRequiredWithoutCasesInput {
+  create: UserCreateWithoutCasesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutCasesDataInput
+  upsert: UserUpsertWithoutCasesInput
+}
+
+input UserUpdateOneRequiredWithoutCoursePagesInput {
+  create: UserCreateWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutCoursePagesDataInput
+  upsert: UserUpsertWithoutCoursePagesInput
+}
+
+input UserUpdateOneRequiredWithoutSandboxPagesInput {
+  create: UserCreateWithoutSandboxPagesInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutSandboxPagesDataInput
+  upsert: UserUpsertWithoutSandboxPagesInput
+}
+
+input UserUpdateOneRequiredWithoutTestsInput {
+  create: UserCreateWithoutTestsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutTestsDataInput
+  upsert: UserUpsertWithoutTestsInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
+}
+
+input UserUpdateWithoutCasesDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutCoursePagesDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  cases: CaseUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutSandboxPagesDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  cases: CaseUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutTestsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  cases: CaseUpdateManyWithoutUserInput
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutCasesInput {
+  update: UserUpdateWithoutCasesDataInput!
+  create: UserCreateWithoutCasesInput!
+}
+
+input UserUpsertWithoutCoursePagesInput {
+  update: UserUpdateWithoutCoursePagesDataInput!
+  create: UserCreateWithoutCoursePagesInput!
+}
+
+input UserUpsertWithoutSandboxPagesInput {
+  update: UserUpdateWithoutSandboxPagesDataInput!
+  create: UserCreateWithoutSandboxPagesInput!
+}
+
+input UserUpsertWithoutTestsInput {
+  update: UserUpdateWithoutTestsDataInput!
+  create: UserCreateWithoutTestsInput!
 }
 
 input UserWhereInput {
@@ -1075,6 +4716,18 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   resetTokenExpiry_gte: Float
+  coursePages_every: CoursePageWhereInput
+  coursePages_some: CoursePageWhereInput
+  coursePages_none: CoursePageWhereInput
+  sandboxPages_every: SandboxPageWhereInput
+  sandboxPages_some: SandboxPageWhereInput
+  sandboxPages_none: SandboxPageWhereInput
+  cases_every: CaseWhereInput
+  cases_some: CaseWhereInput
+  cases_none: CaseWhereInput
+  tests_every: TestWhereInput
+  tests_some: TestWhereInput
+  tests_none: TestWhereInput
 }
 
 input UserWhereUniqueInput {
