@@ -124,7 +124,7 @@ class CreateQuiz extends Component {
                             console.log(arr)
                             document.getElementById("Message").textContent ='Вы создали новый тестовый вопрос!';
                             setTimeout(function(){
-                                document.getElementById("Message").textContent ='';
+                                document.getElementById("Message") ? document.getElementById("Message").textContent ='' : null;
                                 }, 3000);
                             const res = await createTest();
                             // console.log(paragraph);

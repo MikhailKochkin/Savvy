@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
 import Cases from '../components/Cases';
 import Banner from '../components/Banner';
+import User from '../components/User';
 import Sandboxes from '../components/Sandboxes';
-import Search from '../components/Search';
+import styled from 'styled-components';
+
+const HomeStyles = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
 class Home extends Component {
     state = {
         page: 'course',
@@ -29,27 +37,34 @@ class Home extends Component {
       }
     render() {
         return (
-            <div>
-                <Banner/>
-                <button
-                    style = {{background: '#' + 122557, color:'white'}}
-                    id = "CourseButton"
-                    onClick = {this.onCourse}
-                >
-                    <h1>Курсы</h1>
-                </button>
-                <button
-                    id = "SandboxButton"
-                    onClick = {this.onSandBox}
-                >
-                    <h1>Песочницы</h1>
-                </button>
-                {this.state.page === 'course' ? 
-                    <Cases page={parseFloat(this.props.query.page) || 1}/>
-                :
-                    <Sandboxes page={parseFloat(this.props.query.page) || 1}/>
-                }
-            </div>
+            <HomeStyles>
+              <User>
+                {({data: {me}}) => (  
+                    <> 
+                        {!me ? <Banner/> : null}
+                        <button
+                            style = {{background: '#' + 122557, color:'white'}}
+                            id = "CourseButton"
+                            onClick = {this.onCourse}
+                        >
+                            <h1>Курсы</h1>
+                        </button>
+                        <button
+                            id = "SandboxButton"
+                            onClick = {this.onSandBox}
+                        >
+                            <h1>Песочницы</h1>
+                        </button>
+                        {this.state.page === 'course' ? 
+                            <Cases page={parseFloat(this.props.query.page) || 1}/>
+                        :
+                            <Sandboxes page={parseFloat(this.props.query.page) || 1}/>
+                        }
+
+                    </>
+                )}
+            </User>
+          </HomeStyles>
         )
     }
 }

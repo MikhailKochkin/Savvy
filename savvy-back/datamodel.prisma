@@ -15,11 +15,11 @@ type User {
   resetToken: String
   resetTokenExpiry: Float
   permissions: [Permission]
-  coursePages: [CoursePage]
-  sandboxPages: [SandboxPage]
+  coursePages: [CoursePage] @relation(name: "UserCoursePage" onDelete: CASCADE)
+  sandboxPages: [SandboxPage] @relation(name: "UserSandboxPage" onDelete: CASCADE)
   cases: [Case]!
-  tests: [Test]!
-
+  tests: [Test]! 
+  isFamiliar: Boolean! @default(value: "false")
 }
 
 type CoursePage {
@@ -27,7 +27,7 @@ type CoursePage {
   title: String!
   description: String!
   image: String!
-  user: User!
+  user: User! @relation(name: "UserCoursePage")
   cases: [Case]! @relation(name: "CasesonCasePage" onDelete: CASCADE)
   tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
 }
@@ -37,7 +37,7 @@ type SandboxPage {
   title: String!
   description: String!
   image: String!
-  user: User!
+  user: User! @relation(name: "UserSandboxPage")
   sandboxes: [Sandbox]! @relation(name: "SandboxesOnSandboxPage" onDelete: CASCADE)
 }
 

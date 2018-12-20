@@ -7,15 +7,14 @@ const BannerStyle = styled.div`
     display: flex;
     justify-content: center;
     padding: 3.5%;
-
+    margin: 2% 0;
 `;
 
 const Banner = props => (
       <BannerStyle>
-          Savvy is a platfrom where you can share your
-              legal knowledge and skills, create teams to
-              explore new ideas and study new information 
-              to gain the skills modern lawyers needs.
+          Savvy - платформа, на которой можно делиться юридическими знаниями и навыками,
+          создавать команды для исследования юридических вопросов и изучать все то, что
+          так необходимо современным юристам. Давайте расскажу, как ей пользоваться...
       </BannerStyle>
 )
 
