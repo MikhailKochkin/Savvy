@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 const possiblePermissions = [
   'ADMIN',
   'USER',
-  'ITEMCREATE',
-  'ITEMUPDATE',
-  'ITEMDELETE',
+  'CASECREATE',
+  'CASEUPDATE',
+  'CASEDELETE',
   'PERMISSIONUPDATE',
 ];
 
@@ -87,6 +87,7 @@ class UserPermissions extends React.Component {
     } else {
       updatedPermissions = updatedPermissions.filter(permission => permission !== checkbox.value);
     }
+    console.log(updatedPermissions);
     this.setState({ permissions: updatedPermissions });
   };
   render() {
@@ -111,7 +112,7 @@ class UserPermissions extends React.Component {
                     <input
                       id={`${user.id}-permission-${permission}`}
                       type="checkbox"
-                      checked={this.state.permissions.includes(permission)}
+                      // checked={this.state.permissions.includes(permission)}
                       value={permission}
                       onChange={this.handlePermissionChange}
                     />

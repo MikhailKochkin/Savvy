@@ -8,6 +8,8 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error('You must be logged in to do that!')
     }
+    const tags = args.tags
+    delete args.tags
     const coursePage = await ctx.db.mutation.createCoursePage(
         {
         data: {
@@ -15,6 +17,9 @@ const Mutations = {
               connect: {
                 id: ctx.request.userId,
               }
+            },
+            tags: {
+              set: [...tags]
             },
             ...args
         },
@@ -43,7 +48,63 @@ const Mutations = {
   );
     return sandboxPage;
   },
-    async createCase(parent, args, ctx, info) {
+    updateSandboxPage(parent, args, ctx, info) {
+      //first take a copy of the updates
+      const updates = { ...args };
+      //remove the ID from updates
+      delete updates.id;
+      //run the update method
+      return ctx.db.mutation.updateSandboxPage(
+        {
+          data: updates,
+          where: {
+            id: args.id
+        },
+      }, 
+      info
+    );
+  },
+  updateCoursePage(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateCoursePage(
+      {
+        data: updates,
+        where: {
+          id: args.id
+      },
+    }, 
+    info
+  );
+},
+  async deleteSandboxPage(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the case
+    const sandboxPage = await ctx.db.query.sandboxPage({ where }, `{ id title user { id }}`);
+    //2. check if they own the case or have the permissions
+    const ownsSandboxPage = sandboxPage.user.id === ctx.request.userId;
+    if (!ownsSandboxPage) {
+        throw new Error("К сожалению, у вас нет полномочий на это.")
+    }
+    //3. Delete it
+    return ctx.db.mutation.deleteSandboxPage({ where }, info);
+  },
+  async deleteCoursePage(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the case
+    const coursePage = await ctx.db.query.coursePage({ where }, `{ id title user { id }}`);
+    //2. check if they own the case or have the permissions
+    const ownscoursePage = coursePage.user.id === ctx.request.userId;
+    if (!ownscoursePage) {
+        throw new Error("К сожалению, у вас нет полномочий на это.")
+    }
+    //3. Delete it
+    return ctx.db.mutation.deleteCoursePage({ where }, info);
+  },
+    async createLesson(parent, args, ctx, info) {
         // TODO: Check if they are logged in
         const coursePageID = args.coursePageID
         delete args.id
@@ -53,7 +114,7 @@ const Mutations = {
           throw new Error('You must be logged in to do that!')
         }
 
-        const edCase = await ctx.db.mutation.createCase(
+        const Lesson = await ctx.db.mutation.createLesson(
             {
             data: {
                 user: {
@@ -67,7 +128,7 @@ const Mutations = {
         }, 
         info
       );
-        return edCase;
+        return Lesson;
     },
     async createTest(parent, args, ctx, info) {
       // TODO: Check if they are logged in
@@ -95,6 +156,31 @@ const Mutations = {
       );
         return test;
     },
+    async createProblem(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const coursePageID = args.coursePageID
+      delete args.id
+      // console.log(ctx.request.userId)
+      // console.log(coursePagedID)
+      if (!ctx.request.userId) {
+        throw new Error('You must be logged in to do that!')
+      }
+      const problem = await ctx.db.mutation.createProblem(
+            {
+            data: {
+                user: {
+                  connect: { id: ctx.request.userId }
+                  },
+                coursePage: {
+                  connect: { id: coursePageID }
+                },
+                ...args
+            },
+        }, 
+        info
+      );
+        return problem;
+    },
     async createSandbox(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const sandboxPageID = args.sandboxPageID
@@ -121,21 +207,82 @@ const Mutations = {
     );
       return sandbox;
     },
-    updateCase(parent, args, ctx, info) {
-      //first take a copy of the updates
-      const updates = { ...args };
-      //remove the ID from updates
-      delete updates.id;
-      //run the update method
-      return ctx.db.mutation.updateCase(
-        {
-          data: updates,
-          where: {
-            id: args.id
-        },
+    async deleteSandbox(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the case
+      console.log(where)
+      const sandbox = await ctx.db.query.sandbox({ where }, `{ id user { id }}`);
+      console.log(sandbox)
+      //2. check if they own the case or have the permissions
+      const ownsSandbox = sandbox.user.id === ctx.request.userId;
+      console.log(ownsSandbox)
+      if (!ownsSandbox) {
+          throw new Error("К сожалению, у вас нет полномочий на это.")
+      }
+      //3. Delete it
+      return ctx.db.mutation.deleteSandbox({ where }, info);
+    },
+    async createSandboxPageGoal(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const sandboxPageID = args.sandboxPageID
+      delete args.id
+      console.log(ctx.request.userId)
+      console.log(sandboxPageID)
+      if (!ctx.request.userId) {
+        throw new Error('You must be logged in to do that!')
+      }
+      const sandboxPageGoal = await ctx.db.mutation.createSandboxPageGoal(
+          {
+          data: {
+              user: {
+                connect: { id: ctx.request.userId }
+                },
+              sandboxPage: {
+                connect: { id: sandboxPageID }
+              },
+              ...args
+          },
       }, 
       info
     );
+      return sandboxPageGoal;
+    },
+  async likePost(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    console.log(args)
+    //run the update method
+    const like = await ctx.db.mutation.updateSandbox(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        },
+      },
+    info
+    );
+    console.log("Updated Post!")
+    return like; 
+  },
+  async addToFavourites(parent, args, ctx, info) {
+    //run the update method
+    console.log(args.favourites)
+    console.log(args.id)
+    const updatedUser = await ctx.db.mutation.updateUser(
+      {
+        data: {
+          favourites: {
+            set: [...args.favourites]
+          },
+        },
+        where: {
+          id: args.id
+        },
+      },
+      info
+    );
+    console.log("Updated User!")
+    return updatedUser; 
   },
   async deleteCoursePage(parent, args, ctx, info) {
     const where = { id: args.id };

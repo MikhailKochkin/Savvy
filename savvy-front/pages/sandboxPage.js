@@ -1,4 +1,4 @@
-import SandboxPage from '../components/SandboxPage';
+import SandboxPage from '../components/sandbox/SandboxPage';
 
 const SandboxPagePage = props => (
   <div>

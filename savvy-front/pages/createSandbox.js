@@ -1,4 +1,4 @@
-import CreateSandboxForm from '../components/CreateSandboxForm';
+import CreateSandboxForm from '../components/sandbox/CreateSandboxForm';
 
 const CreateSandboxFormPage  = props => (
   <div>

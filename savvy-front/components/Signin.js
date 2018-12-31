@@ -39,29 +39,29 @@ class Signin extends Component {
                    }}
                 >
                 <fieldset disabled={loading} aria-busy={loading}>
-                    <h2>Sign In</h2>
+                    <h2>Войти на сайт</h2>
                     <Error error={error} />
                     <label htmlFor="email">
-                        Email
+                        Электрооная почта
                         <input 
                             type="email"
                             name="email"
-                            placeholder="email"
+                            placeholder="Почта"
                             value={this.state.email}
                             onChange={this.saveToState}
                         />
                     </label>
                     <label htmlFor="password">
-                        Password
+                        Пароль
                         <input
                             type="password"
                             name="password"
-                            placeholder="password"
+                            placeholder="Пароль"
                             value={this.state.password}
                             onChange={this.saveToState}
                         />
                     </label>
-                    <button type="submit">Sign{loading ? "ing" : ""} in!</button>
+                    <button type="submit">{loading ? "Вхожу" : "Войти"}!</button>
                 </fieldset>
               </form>
             )}

@@ -1,12 +1,14 @@
-import CreateCase from '../components/CreateCase';
+import CreateCourse from '../components/course/CreateCourse';
+import CreateSandbox from '../components/sandbox/CreateSandbox';
 import PleaseSignIn from '../components/PleaseSignIn';
 
-const Create = props => (
+const CreateCoursePage = props => (
   <div>
     <PleaseSignIn>
-       <CreateCase/>
+       <CreateCourse/>
+       <CreateSandbox/>
     </PleaseSignIn>
   </div>
 );
 
-export default Create;
+export default CreateCoursePage;

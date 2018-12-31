@@ -6,13 +6,14 @@ import { KeyUtils } from 'slate';
 import { Value } from 'slate'
 import Icon from 'react-icons-kit';
 import BoldMark from './BoldMark';
+import HeaderMark from './HeaderMark';
 import ItalicMark from './ItalicMark';
 import FormatToolBar from './FormatToolbar';
-// import SpoilerText from './SpoilerText';
-import {bold} from 'react-icons-kit/icomoon/bold';
-import {italic} from 'react-icons-kit/iconic/italic';
-import {userSecret} from 'react-icons-kit/fa/userSecret';
-import dynamic from 'next/dynamic';
+
+import {bold} from 'react-icons-kit/fa/bold'
+import {italic} from 'react-icons-kit/fa/italic'
+import {header} from 'react-icons-kit/fa/header'
+import { FiBold } from "react-icons/fi";
 
 const ButtonStyle = {
   padding: '7px',
@@ -35,7 +36,7 @@ const AppStyles = {
 	padding: '40px',
 	margin: '25px auto 45px',
   borderRadius: '4.5px',
-  fontSize: '2rem'
+  fontSize: '1.8rem'
 }
 
 const BLOCK_TAGS = {
@@ -46,6 +47,7 @@ const BLOCK_TAGS = {
 const MARK_TAGS = {
   i: 'italic',
   strong: 'bold',
+  header: 'header',
 }
 
 const rules = [
@@ -91,6 +93,8 @@ const rules = [
             return <strong>{children}</strong>
           case 'italic':
             return <i>{children}</i>
+          case 'header':
+            return <h2>{children}</h2>
         }
       }
     },
@@ -101,10 +105,7 @@ const html = new Html({
   rules,
 });
 
-const initialValue = `
-  <p>Привет!</p><p>Ты собираешься написать предложение для этой песочницы. Это круто, спасибо, что помогаешь проекту развиваться</p><p>У нас есть только одно предложение. Можешь написать свое предложение по модели IRAC? Мы даже дадим для тебя примерный план</p><p><strong>1. Опиши проблему </strong></p><p><strong>2. Перечисли применимые нормы права </strong></p><p><strong>3. Проанализируй проблему и опиши ее решение </strong></p><p><strong>4. Дай выводы </strong></p>
-
-`
+const initialValue = `<p>Привет!</p><p>Ты собираешься написать предложение для этой песочницы. Это круто, спасибо, что помогаешь проекту развиваться</p><p>У нас есть только одно предложение. Можешь написать свое предложение по модели IRAC? Вот ссылка на <a src="https://en.wikipedia.org/wiki/IRAC"target="_blank">википедию:</a> Мы даже дадим для тебя примерный план</p><p><strong>1. Опиши проблему </strong></p><p><strong>2. Перечисли применимые нормы права </strong></p><p><strong>3. Проанализируй проблему и опиши ее решение </strong></p><p><strong>4. Дай выводы </strong></p>`
 
 class App extends React.Component {
   constructor (props) {
@@ -124,26 +125,14 @@ class App extends React.Component {
     }  
   }
 
-  passText = () => {
-    this.props.getEditorText(html.serialize(this.state.value));
-  }
-
   render () {
-    var parser = new DOMParser();
-    function toDom(string) {
-      return new DOMParser().parseFromString(string, "text/html")
-    }
-    const bring = '<h1>Mikhail Kochkin</h1>'
-    const el = ( domstring ) => {
-      const html = new DOMParser().parseFromString( domstring , 'text/html');
-      return html.body.firstChild;
-    };
+   
     return (
       <>
         <FormatToolBar>
           {this.renderMarkButton('bold', bold)}
           {this.renderMarkButton('italic', italic)}
-          {/* {this.renderNodeButton('spoiler', userSecret)} */}
+          {this.renderMarkButton('header', header)}
         </FormatToolBar>
         <Editor
           style = {AppStyles}
@@ -156,14 +145,8 @@ class App extends React.Component {
           renderMark={this.renderMark}
           // renderNode={this.renderNode}
         />
-        <br/>
-        <h1>The text you will get: </h1>
-        <p>{parser.parseFromString(html.serialize(this.state.value), "text/html").firstChild.innerHTML}</p>
-        {/* {console.log(toDom(html.serialize(this.state.value)).innerHTML)} */}
-
-    
-       
-
+        {/* <h1>The text you will get: </h1>
+        <p>{parser.parseFromString(html.serialize(this.state.value), "text/html").firstChild.innerHTML}</p> */}
       </>
     )
   }
@@ -219,6 +202,12 @@ class App extends React.Component {
           .toggleMark('italic');
           break
       }
+      case 'h': {
+        event.preventDefault()
+        editor
+          .toggleMark('header');
+          break
+      }
       // case 's': {
       //   event.preventDefault()
       //   editor
@@ -238,10 +227,6 @@ class App extends React.Component {
     this.props.getEditorText(html.serialize(this.state.value));
   }
 
-  // onSubmit = ({}) => {
-    
-  // }
-
   renderMark = (props, editor, next) => {
     const { mark } = props
     switch (mark.type) {
@@ -249,6 +234,8 @@ class App extends React.Component {
         return <BoldMark {...props} />
       case 'italic':
         return <ItalicMark {...props} />
+      case 'header':
+        return <HeaderMark {...props} />
       default:
         return next()
     }

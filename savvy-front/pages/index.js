@@ -1,9 +1,9 @@
-import LandingPage from '../components/Landing';
+import Courses from './courses';
 
 
 const Home = props => (
       <div>
-        <LandingPage />
+        <Courses />
       </div>
 )
 

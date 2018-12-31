@@ -10,7 +10,7 @@ import Footer from './Footer';
 const theme = {
     blue: '#6DAAE1',
     black: '#393939',
-    maxWidth: '1000px',
+    maxWidth: '1200px',
     offWhite: '#EDEDED',
     lightGrey: '#E1E1E1',
 };

@@ -54,17 +54,17 @@ const Nav = () => (
         {({data: {me}}) => (     
           <StyledHeader>
             <CourseMenu>
-              <Link href="/cases">
-                  <a style={linkStyle}>Курсы</a>
+              <Link prefetch href="/courses">
+                  <a style={linkStyle}>Курсы / песочницы</a>
               </Link>
               {me && (
-                <Link href="/createCourse">
+                <Link prefetch href="/create">
                   <a style={linkStyle}>Создать</a>
                 </Link>
               )}
               <Search/>
             </CourseMenu>
-            <Link href="/">
+            <Link prefetch href="/">
               <a style={linkStyle}><h2>Savvy 2.0</h2></a>
             </Link>
             <UserData>
@@ -72,8 +72,8 @@ const Nav = () => (
                   <Signout/>
               )}
               {!me && (
-                <Link href="/signup">
-                  <a style={linkStyle}>SignUp</a>
+                <Link prefetch href="/signup">
+                  <a style={linkStyle}>Войти</a>
                   </Link>
                 )}
               {me ? <p>{me.name}</p> : null}

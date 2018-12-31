@@ -115,7 +115,7 @@ const Footer = props => (
                 </a>
             </Link>
             <div className="VK">
-                <a href='https://vk.com/savvy_university'>
+                <a target="_blank" href='https://vk.com/savvy_university'>
                   <Icon size={40} icon={vk}/>  
                 </a>
             </div>

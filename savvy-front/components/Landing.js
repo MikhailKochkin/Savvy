@@ -59,7 +59,7 @@ const LandingPage = () => (
                     <h1>Welcome to the Savvy website!</h1>
                     <p> Savvy (derivative from Savigny, a famous German lawyer) is an online platform 
                     for efficient sharing of legal information.</p>
-                    <Link prefetch href="/cases">
+                    <Link prefetch href="/courses">
                         <button><a>Start the journey</a></button>
                     </Link>
                 </Hello>

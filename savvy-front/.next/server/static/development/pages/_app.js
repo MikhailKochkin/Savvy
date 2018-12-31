@@ -261,6 +261,7 @@ var Footer = function Footer(props) {
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    target: "_blank",
     href: "https://vk.com/savvy_university",
     __source: {
       fileName: _jsxFileName,
@@ -411,7 +412,7 @@ var LandingPage = function LandingPage() {
     __self: this
   }, " Savvy (derivative from Savigny, a famous German lawyer) is an online platform for efficient sharing of legal information."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
     prefetch: true,
-    href: "/cases",
+    href: "/courses",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 62
@@ -572,7 +573,8 @@ var Nav = function Nav() {
       },
       __self: this
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-      href: "/cases",
+      prefetch: true,
+      href: "/courses",
       __source: {
         fileName: _jsxFileName,
         lineNumber: 57
@@ -585,8 +587,9 @@ var Nav = function Nav() {
         lineNumber: 58
       },
       __self: this
-    }, "\u041A\u0443\u0440\u0441\u044B")), me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-      href: "/createCourse",
+    }, "\u041A\u0443\u0440\u0441\u044B / \u043F\u0435\u0441\u043E\u0447\u043D\u0438\u0446\u044B")), me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      prefetch: true,
+      href: "/create",
       __source: {
         fileName: _jsxFileName,
         lineNumber: 61
@@ -606,6 +609,7 @@ var Nav = function Nav() {
       },
       __self: this
     })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      prefetch: true,
       href: "/",
       __source: {
         fileName: _jsxFileName,
@@ -638,6 +642,7 @@ var Nav = function Nav() {
       },
       __self: this
     }), !me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      prefetch: true,
       href: "/signup",
       __source: {
         fileName: _jsxFileName,
@@ -651,7 +656,7 @@ var Nav = function Nav() {
         lineNumber: 76
       },
       __self: this
-    }, "SignUp")), me ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    }, "\u0412\u043E\u0439\u0442\u0438")), me ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
       __source: {
         fileName: _jsxFileName,
         lineNumber: 79
@@ -708,7 +713,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 var theme = {
   blue: '#6DAAE1',
   black: '#393939',
-  maxWidth: '1000px',
+  maxWidth: '1200px',
   offWhite: '#EDEDED',
   lightGrey: '#E1E1E1'
 };
@@ -1085,7 +1090,7 @@ var Signout = function Signout(props) {
         lineNumber: 19
       },
       __self: this
-    }, "Sign Out");
+    }, "\u0412\u044B\u0439\u0442\u0438");
   });
 };
 
@@ -1117,7 +1122,7 @@ var _jsxFileName = "/Users/mihailkockin/Desktop/Savvy/savvy-next/savvy-front/com
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  query {\n    me {\n      id\n      email\n      name\n      permissions\n      isFamiliar\n    }\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  query {\n    me {\n      id\n      email\n      name\n      permissions\n      favourites\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -1200,16 +1205,18 @@ var SearchStyles = styled_components__WEBPACK_IMPORTED_MODULE_0___default.a.div.
 /*!*******************!*\
   !*** ./config.js ***!
   \*******************/
-/*! exports provided: endpoint, perPage */
+/*! exports provided: endpoint, perPage, Tags */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "endpoint", function() { return endpoint; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "perPage", function() { return perPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Tags", function() { return Tags; });
 var endpoint = "http://localhost:4444"; // export const prodEndpoint = `https://sif-yoga-rod.herokuapp.com/`;
 
 var perPage = 4;
+var Tags = ['Собеседование', 'Гражданское право', 'Корпоративное право', 'МКА', 'Ответы на билеты', 'Юридический английский'];
 
 /***/ }),
 

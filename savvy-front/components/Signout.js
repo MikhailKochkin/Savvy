@@ -16,7 +16,7 @@ const Signout= props => (
         mutation={SIGN_OUT_MUTATION}
         refetchQueries={[{ query: CURRENT_USER_QUERY}]}>
             {signout => 
-                <button onClick={signout}>Sign Out</button>
+                <button onClick={signout}>Выйти</button>
             }
     </Mutation>
     

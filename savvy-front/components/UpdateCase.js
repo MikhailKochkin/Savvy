@@ -21,6 +21,10 @@ const SINGLE_CASE_QUERY = gql`
     }
 `;
 
+// updateCase(id: ID!, title: String, description: String,  
+//     mainText: String, price: Int, issue: String, rule: String, 
+//     analysis: String, conclusion: String): Case!
+
 const UPDATE_CASE_MUTATION = gql`
   mutation UPDATE_CASE_MUTATION(
     $id: ID!,
@@ -217,7 +221,7 @@ export default class UpdateCase extends Component {
                             />
                         </label>
                         <br/>
-                        <Button type="submit">Sav{loading ? "ing" : "e"} Chanhes</Button>
+                        <Button type="submit">Sav{loading ? "ing" : "e"} Changes</Button>
                     </fieldset>
                     </Form>
                     )}

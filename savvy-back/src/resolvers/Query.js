@@ -6,14 +6,33 @@ const Query = {
     coursePage: forwardTo('db'),
     sandboxPages: forwardTo('db'),
     sandboxPage: forwardTo('db'),
-    case:forwardTo('db'),
+    lesson:forwardTo('db'),
     test:forwardTo('db'),
+    problem:forwardTo('db'),
     sandbox:forwardTo('db'),
-    casesConnection: forwardTo('db'),
+    // casesConnection: forwardTo('db'),
     coursePagesConnection: forwardTo('db'),
-    cases(parent, args, ctx, info){
+    lessons(parent, args, ctx, info){
       const pageId = args.where.coursePageID;
-      return ctx.db.query.cases(
+      return ctx.db.query.lessons(
+        {
+          where: {coursePageID: pageId}
+        },
+        info
+      );
+    },
+    tests(parent, args, ctx, info){
+      const pageId = args.where.coursePageID;
+      return ctx.db.query.tests(
+        {
+          where: {coursePageID: pageId}
+        },
+        info
+      );
+    },
+    problems(parent, args, ctx, info){
+      const pageId = args.where.coursePageID;
+      return ctx.db.query.problems(
         {
           where: {coursePageID: pageId}
         },
@@ -29,11 +48,11 @@ const Query = {
         info
       );
     },
-    tests(parent, args, ctx, info){
-      const pageId = args.where.coursePageID;
-      return ctx.db.query.tests(
+    sandboxPageGoals(parent, args, ctx, info){
+      const pageId = args.where.sandboxPageID;
+      return ctx.db.query.sandboxPageGoals(
         {
-          where: {coursePageID: pageId}
+          where: {sandboxPageID: pageId}
         },
         info
       );

@@ -17,9 +17,13 @@ type User {
   permissions: [Permission]
   coursePages: [CoursePage] @relation(name: "UserCoursePage" onDelete: CASCADE)
   sandboxPages: [SandboxPage] @relation(name: "UserSandboxPage" onDelete: CASCADE)
-  cases: [Case]!
-  tests: [Test]! 
+  sandboxPageGoals: [SandboxPageGoal] @relation(name: "UserSandboxPageGoals")
+  lessons: [Lesson]!
+  tests: [Test]!
+  problems: [Problem]!
   isFamiliar: Boolean! @default(value: "false")
+  createdAt: DateTime!
+  favourites: [ID]
 }
 
 type CoursePage {
@@ -28,8 +32,12 @@ type CoursePage {
   description: String!
   image: String!
   user: User! @relation(name: "UserCoursePage")
-  cases: [Case]! @relation(name: "CasesonCasePage" onDelete: CASCADE)
+  lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
   tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
+  problems: [Problem]! @relation(name: "ProblemsOnCoursePage" onDelete: CASCADE)
+  tags: [String]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type SandboxPage {
@@ -39,31 +47,43 @@ type SandboxPage {
   image: String!
   user: User! @relation(name: "UserSandboxPage")
   sandboxes: [Sandbox]! @relation(name: "SandboxesOnSandboxPage" onDelete: CASCADE)
+  sandboxPageGoals: [SandboxPageGoal] @relation(name: "GoalsOnSandboxPage" onDelete: CASCADE)
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-type Case {
+type SandboxPageGoal {
   id: ID! @unique
-  title: String!
-  description: String!
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
+  goal: String!
+  user: User! @relation(name: "UserSandboxPageGoals")
+  completed: Boolean! @default(value: "false")
+  sandboxPage: SandboxPage @relation(name: "GoalsOnSandboxPage")
+  sandboxPageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Lesson {
+  id: ID! @unique
+  text: String!
+  video: String
   user: User!
-  coursePage: CoursePage! @relation(name: "CasesonCasePage")
+  coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
   coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Sandbox {
   id: ID! @unique
   text: String!
+  video: String
   user: User!
   sandboxPage: SandboxPage! @relation(name: "SandboxesOnSandboxPage")
   sandboxPageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  likes: Int @default(value: "0")
 }
 
 type Test {
@@ -80,4 +100,19 @@ type Test {
   user: User!
   coursePage: CoursePage! @relation(name: "TestsOnCoursePage")
   coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Problem {
+  id: ID! @unique
+  text: String!
+  hints: String
+  solution: String
+  answer: String!
+  user: User!
+  coursePage: CoursePage! @relation(name: "ProblemsOnCoursePage")
+  coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

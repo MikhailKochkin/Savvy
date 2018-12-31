@@ -1,8 +1,12 @@
-type AggregateCase {
+type AggregateCoursePage {
   count: Int!
 }
 
-type AggregateCoursePage {
+type AggregateLesson {
+  count: Int!
+}
+
+type AggregateProblem {
   count: Int!
 }
 
@@ -11,6 +15,10 @@ type AggregateSandbox {
 }
 
 type AggregateSandboxPage {
+  count: Int!
+}
+
+type AggregateSandboxPageGoal {
   count: Int!
 }
 
@@ -26,422 +34,18 @@ type BatchPayload {
   count: Long!
 }
 
-type Case {
-  id: ID!
-  title: String!
-  description: String!
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  user: User!
-  coursePage: CoursePage!
-  coursePageID: ID!
-}
-
-type CaseConnection {
-  pageInfo: PageInfo!
-  edges: [CaseEdge]!
-  aggregate: AggregateCase!
-}
-
-input CaseCreateInput {
-  title: String!
-  description: String!
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  user: UserCreateOneWithoutCasesInput!
-  coursePage: CoursePageCreateOneWithoutCasesInput!
-  coursePageID: ID!
-}
-
-input CaseCreateManyWithoutCoursePageInput {
-  create: [CaseCreateWithoutCoursePageInput!]
-  connect: [CaseWhereUniqueInput!]
-}
-
-input CaseCreateManyWithoutUserInput {
-  create: [CaseCreateWithoutUserInput!]
-  connect: [CaseWhereUniqueInput!]
-}
-
-input CaseCreateWithoutCoursePageInput {
-  title: String!
-  description: String!
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  user: UserCreateOneWithoutCasesInput!
-  coursePageID: ID!
-}
-
-input CaseCreateWithoutUserInput {
-  title: String!
-  description: String!
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  coursePage: CoursePageCreateOneWithoutCasesInput!
-  coursePageID: ID!
-}
-
-type CaseEdge {
-  node: Case!
-  cursor: String!
-}
-
-enum CaseOrderByInput {
-  id_ASC
-  id_DESC
-  title_ASC
-  title_DESC
-  description_ASC
-  description_DESC
-  mainText_ASC
-  mainText_DESC
-  issue_ASC
-  issue_DESC
-  rule_ASC
-  rule_DESC
-  analysis_ASC
-  analysis_DESC
-  conclusion_ASC
-  conclusion_DESC
-  image_ASC
-  image_DESC
-  largeImage_ASC
-  largeImage_DESC
-  price_ASC
-  price_DESC
-  coursePageID_ASC
-  coursePageID_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type CasePreviousValues {
-  id: ID!
-  title: String!
-  description: String!
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  coursePageID: ID!
-}
-
-type CaseSubscriptionPayload {
-  mutation: MutationType!
-  node: Case
-  updatedFields: [String!]
-  previousValues: CasePreviousValues
-}
-
-input CaseSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: CaseWhereInput
-  AND: [CaseSubscriptionWhereInput!]
-  OR: [CaseSubscriptionWhereInput!]
-  NOT: [CaseSubscriptionWhereInput!]
-}
-
-input CaseUpdateInput {
-  title: String
-  description: String
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  user: UserUpdateOneRequiredWithoutCasesInput
-  coursePage: CoursePageUpdateOneRequiredWithoutCasesInput
-  coursePageID: ID
-}
-
-input CaseUpdateManyWithoutCoursePageInput {
-  create: [CaseCreateWithoutCoursePageInput!]
-  delete: [CaseWhereUniqueInput!]
-  connect: [CaseWhereUniqueInput!]
-  disconnect: [CaseWhereUniqueInput!]
-  update: [CaseUpdateWithWhereUniqueWithoutCoursePageInput!]
-  upsert: [CaseUpsertWithWhereUniqueWithoutCoursePageInput!]
-}
-
-input CaseUpdateManyWithoutUserInput {
-  create: [CaseCreateWithoutUserInput!]
-  delete: [CaseWhereUniqueInput!]
-  connect: [CaseWhereUniqueInput!]
-  disconnect: [CaseWhereUniqueInput!]
-  update: [CaseUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [CaseUpsertWithWhereUniqueWithoutUserInput!]
-}
-
-input CaseUpdateWithoutCoursePageDataInput {
-  title: String
-  description: String
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  user: UserUpdateOneRequiredWithoutCasesInput
-  coursePageID: ID
-}
-
-input CaseUpdateWithoutUserDataInput {
-  title: String
-  description: String
-  mainText: String
-  issue: String
-  rule: String
-  analysis: String
-  conclusion: String
-  image: String
-  largeImage: String
-  price: Int
-  coursePage: CoursePageUpdateOneRequiredWithoutCasesInput
-  coursePageID: ID
-}
-
-input CaseUpdateWithWhereUniqueWithoutCoursePageInput {
-  where: CaseWhereUniqueInput!
-  data: CaseUpdateWithoutCoursePageDataInput!
-}
-
-input CaseUpdateWithWhereUniqueWithoutUserInput {
-  where: CaseWhereUniqueInput!
-  data: CaseUpdateWithoutUserDataInput!
-}
-
-input CaseUpsertWithWhereUniqueWithoutCoursePageInput {
-  where: CaseWhereUniqueInput!
-  update: CaseUpdateWithoutCoursePageDataInput!
-  create: CaseCreateWithoutCoursePageInput!
-}
-
-input CaseUpsertWithWhereUniqueWithoutUserInput {
-  where: CaseWhereUniqueInput!
-  update: CaseUpdateWithoutUserDataInput!
-  create: CaseCreateWithoutUserInput!
-}
-
-input CaseWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  mainText: String
-  mainText_not: String
-  mainText_in: [String!]
-  mainText_not_in: [String!]
-  mainText_lt: String
-  mainText_lte: String
-  mainText_gt: String
-  mainText_gte: String
-  mainText_contains: String
-  mainText_not_contains: String
-  mainText_starts_with: String
-  mainText_not_starts_with: String
-  mainText_ends_with: String
-  mainText_not_ends_with: String
-  issue: String
-  issue_not: String
-  issue_in: [String!]
-  issue_not_in: [String!]
-  issue_lt: String
-  issue_lte: String
-  issue_gt: String
-  issue_gte: String
-  issue_contains: String
-  issue_not_contains: String
-  issue_starts_with: String
-  issue_not_starts_with: String
-  issue_ends_with: String
-  issue_not_ends_with: String
-  rule: String
-  rule_not: String
-  rule_in: [String!]
-  rule_not_in: [String!]
-  rule_lt: String
-  rule_lte: String
-  rule_gt: String
-  rule_gte: String
-  rule_contains: String
-  rule_not_contains: String
-  rule_starts_with: String
-  rule_not_starts_with: String
-  rule_ends_with: String
-  rule_not_ends_with: String
-  analysis: String
-  analysis_not: String
-  analysis_in: [String!]
-  analysis_not_in: [String!]
-  analysis_lt: String
-  analysis_lte: String
-  analysis_gt: String
-  analysis_gte: String
-  analysis_contains: String
-  analysis_not_contains: String
-  analysis_starts_with: String
-  analysis_not_starts_with: String
-  analysis_ends_with: String
-  analysis_not_ends_with: String
-  conclusion: String
-  conclusion_not: String
-  conclusion_in: [String!]
-  conclusion_not_in: [String!]
-  conclusion_lt: String
-  conclusion_lte: String
-  conclusion_gt: String
-  conclusion_gte: String
-  conclusion_contains: String
-  conclusion_not_contains: String
-  conclusion_starts_with: String
-  conclusion_not_starts_with: String
-  conclusion_ends_with: String
-  conclusion_not_ends_with: String
-  image: String
-  image_not: String
-  image_in: [String!]
-  image_not_in: [String!]
-  image_lt: String
-  image_lte: String
-  image_gt: String
-  image_gte: String
-  image_contains: String
-  image_not_contains: String
-  image_starts_with: String
-  image_not_starts_with: String
-  image_ends_with: String
-  image_not_ends_with: String
-  largeImage: String
-  largeImage_not: String
-  largeImage_in: [String!]
-  largeImage_not_in: [String!]
-  largeImage_lt: String
-  largeImage_lte: String
-  largeImage_gt: String
-  largeImage_gte: String
-  largeImage_contains: String
-  largeImage_not_contains: String
-  largeImage_starts_with: String
-  largeImage_not_starts_with: String
-  largeImage_ends_with: String
-  largeImage_not_ends_with: String
-  price: Int
-  price_not: Int
-  price_in: [Int!]
-  price_not_in: [Int!]
-  price_lt: Int
-  price_lte: Int
-  price_gt: Int
-  price_gte: Int
-  user: UserWhereInput
-  coursePage: CoursePageWhereInput
-  coursePageID: ID
-  coursePageID_not: ID
-  coursePageID_in: [ID!]
-  coursePageID_not_in: [ID!]
-  coursePageID_lt: ID
-  coursePageID_lte: ID
-  coursePageID_gt: ID
-  coursePageID_gte: ID
-  coursePageID_contains: ID
-  coursePageID_not_contains: ID
-  coursePageID_starts_with: ID
-  coursePageID_not_starts_with: ID
-  coursePageID_ends_with: ID
-  coursePageID_not_ends_with: ID
-  AND: [CaseWhereInput!]
-  OR: [CaseWhereInput!]
-  NOT: [CaseWhereInput!]
-}
-
-input CaseWhereUniqueInput {
-  id: ID
-}
-
 type CoursePage {
   id: ID!
   title: String!
   description: String!
   image: String!
   user: User!
-  cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Case!]
+  lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
+  problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
+  tags: [String!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type CoursePageConnection {
@@ -455,8 +59,10 @@ input CoursePageCreateInput {
   description: String!
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
-  cases: CaseCreateManyWithoutCoursePageInput
+  lessons: LessonCreateManyWithoutCoursePageInput
   tests: TestCreateManyWithoutCoursePageInput
+  problems: ProblemCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
 }
 
 input CoursePageCreateManyWithoutUserInput {
@@ -464,8 +70,13 @@ input CoursePageCreateManyWithoutUserInput {
   connect: [CoursePageWhereUniqueInput!]
 }
 
-input CoursePageCreateOneWithoutCasesInput {
-  create: CoursePageCreateWithoutCasesInput
+input CoursePageCreateOneWithoutLessonsInput {
+  create: CoursePageCreateWithoutLessonsInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreateOneWithoutProblemsInput {
+  create: CoursePageCreateWithoutProblemsInput
   connect: CoursePageWhereUniqueInput
 }
 
@@ -474,12 +85,28 @@ input CoursePageCreateOneWithoutTestsInput {
   connect: CoursePageWhereUniqueInput
 }
 
-input CoursePageCreateWithoutCasesInput {
+input CoursePageCreatetagsInput {
+  set: [String!]
+}
+
+input CoursePageCreateWithoutLessonsInput {
   title: String!
   description: String!
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
   tests: TestCreateManyWithoutCoursePageInput
+  problems: ProblemCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
+}
+
+input CoursePageCreateWithoutProblemsInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  tests: TestCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
 }
 
 input CoursePageCreateWithoutTestsInput {
@@ -487,15 +114,19 @@ input CoursePageCreateWithoutTestsInput {
   description: String!
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
-  cases: CaseCreateManyWithoutCoursePageInput
+  lessons: LessonCreateManyWithoutCoursePageInput
+  problems: ProblemCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
 }
 
 input CoursePageCreateWithoutUserInput {
   title: String!
   description: String!
   image: String!
-  cases: CaseCreateManyWithoutCoursePageInput
+  lessons: LessonCreateManyWithoutCoursePageInput
   tests: TestCreateManyWithoutCoursePageInput
+  problems: ProblemCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
 }
 
 type CoursePageEdge {
@@ -523,6 +154,9 @@ type CoursePagePreviousValues {
   title: String!
   description: String!
   image: String!
+  tags: [String!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type CoursePageSubscriptionPayload {
@@ -548,8 +182,10 @@ input CoursePageUpdateInput {
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
-  cases: CaseUpdateManyWithoutCoursePageInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
   tests: TestUpdateManyWithoutCoursePageInput
+  problems: ProblemUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
 }
 
 input CoursePageUpdateManyWithoutUserInput {
@@ -561,10 +197,17 @@ input CoursePageUpdateManyWithoutUserInput {
   upsert: [CoursePageUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input CoursePageUpdateOneRequiredWithoutCasesInput {
-  create: CoursePageCreateWithoutCasesInput
-  update: CoursePageUpdateWithoutCasesDataInput
-  upsert: CoursePageUpsertWithoutCasesInput
+input CoursePageUpdateOneRequiredWithoutLessonsInput {
+  create: CoursePageCreateWithoutLessonsInput
+  update: CoursePageUpdateWithoutLessonsDataInput
+  upsert: CoursePageUpsertWithoutLessonsInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageUpdateOneRequiredWithoutProblemsInput {
+  create: CoursePageCreateWithoutProblemsInput
+  update: CoursePageUpdateWithoutProblemsDataInput
+  upsert: CoursePageUpsertWithoutProblemsInput
   connect: CoursePageWhereUniqueInput
 }
 
@@ -575,12 +218,28 @@ input CoursePageUpdateOneRequiredWithoutTestsInput {
   connect: CoursePageWhereUniqueInput
 }
 
-input CoursePageUpdateWithoutCasesDataInput {
+input CoursePageUpdatetagsInput {
+  set: [String!]
+}
+
+input CoursePageUpdateWithoutLessonsDataInput {
   title: String
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   tests: TestUpdateManyWithoutCoursePageInput
+  problems: ProblemUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
+}
+
+input CoursePageUpdateWithoutProblemsDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  tests: TestUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
 }
 
 input CoursePageUpdateWithoutTestsDataInput {
@@ -588,15 +247,19 @@ input CoursePageUpdateWithoutTestsDataInput {
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
-  cases: CaseUpdateManyWithoutCoursePageInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  problems: ProblemUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
 }
 
 input CoursePageUpdateWithoutUserDataInput {
   title: String
   description: String
   image: String
-  cases: CaseUpdateManyWithoutCoursePageInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
   tests: TestUpdateManyWithoutCoursePageInput
+  problems: ProblemUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutUserInput {
@@ -604,9 +267,14 @@ input CoursePageUpdateWithWhereUniqueWithoutUserInput {
   data: CoursePageUpdateWithoutUserDataInput!
 }
 
-input CoursePageUpsertWithoutCasesInput {
-  update: CoursePageUpdateWithoutCasesDataInput!
-  create: CoursePageCreateWithoutCasesInput!
+input CoursePageUpsertWithoutLessonsInput {
+  update: CoursePageUpdateWithoutLessonsDataInput!
+  create: CoursePageCreateWithoutLessonsInput!
+}
+
+input CoursePageUpsertWithoutProblemsInput {
+  update: CoursePageUpdateWithoutProblemsDataInput!
+  create: CoursePageCreateWithoutProblemsInput!
 }
 
 input CoursePageUpsertWithoutTestsInput {
@@ -678,12 +346,31 @@ input CoursePageWhereInput {
   image_ends_with: String
   image_not_ends_with: String
   user: UserWhereInput
-  cases_every: CaseWhereInput
-  cases_some: CaseWhereInput
-  cases_none: CaseWhereInput
+  lessons_every: LessonWhereInput
+  lessons_some: LessonWhereInput
+  lessons_none: LessonWhereInput
   tests_every: TestWhereInput
   tests_some: TestWhereInput
   tests_none: TestWhereInput
+  problems_every: ProblemWhereInput
+  problems_some: ProblemWhereInput
+  problems_none: ProblemWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [CoursePageWhereInput!]
   OR: [CoursePageWhereInput!]
   NOT: [CoursePageWhereInput!]
@@ -693,21 +380,271 @@ input CoursePageWhereUniqueInput {
   id: ID
 }
 
+scalar DateTime
+
+type Lesson {
+  id: ID!
+  text: String!
+  video: String
+  user: User!
+  coursePage: CoursePage!
+  coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type LessonConnection {
+  pageInfo: PageInfo!
+  edges: [LessonEdge]!
+  aggregate: AggregateLesson!
+}
+
+input LessonCreateInput {
+  text: String!
+  video: String
+  user: UserCreateOneWithoutLessonsInput!
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  coursePageID: ID!
+}
+
+input LessonCreateManyWithoutCoursePageInput {
+  create: [LessonCreateWithoutCoursePageInput!]
+  connect: [LessonWhereUniqueInput!]
+}
+
+input LessonCreateManyWithoutUserInput {
+  create: [LessonCreateWithoutUserInput!]
+  connect: [LessonWhereUniqueInput!]
+}
+
+input LessonCreateWithoutCoursePageInput {
+  text: String!
+  video: String
+  user: UserCreateOneWithoutLessonsInput!
+  coursePageID: ID!
+}
+
+input LessonCreateWithoutUserInput {
+  text: String!
+  video: String
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  coursePageID: ID!
+}
+
+type LessonEdge {
+  node: Lesson!
+  cursor: String!
+}
+
+enum LessonOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  video_ASC
+  video_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type LessonPreviousValues {
+  id: ID!
+  text: String!
+  video: String
+  coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type LessonSubscriptionPayload {
+  mutation: MutationType!
+  node: Lesson
+  updatedFields: [String!]
+  previousValues: LessonPreviousValues
+}
+
+input LessonSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LessonWhereInput
+  AND: [LessonSubscriptionWhereInput!]
+  OR: [LessonSubscriptionWhereInput!]
+  NOT: [LessonSubscriptionWhereInput!]
+}
+
+input LessonUpdateInput {
+  text: String
+  video: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  coursePageID: ID
+}
+
+input LessonUpdateManyWithoutCoursePageInput {
+  create: [LessonCreateWithoutCoursePageInput!]
+  delete: [LessonWhereUniqueInput!]
+  connect: [LessonWhereUniqueInput!]
+  disconnect: [LessonWhereUniqueInput!]
+  update: [LessonUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [LessonUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input LessonUpdateManyWithoutUserInput {
+  create: [LessonCreateWithoutUserInput!]
+  delete: [LessonWhereUniqueInput!]
+  connect: [LessonWhereUniqueInput!]
+  disconnect: [LessonWhereUniqueInput!]
+  update: [LessonUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [LessonUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input LessonUpdateWithoutCoursePageDataInput {
+  text: String
+  video: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePageID: ID
+}
+
+input LessonUpdateWithoutUserDataInput {
+  text: String
+  video: String
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  coursePageID: ID
+}
+
+input LessonUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: LessonWhereUniqueInput!
+  data: LessonUpdateWithoutCoursePageDataInput!
+}
+
+input LessonUpdateWithWhereUniqueWithoutUserInput {
+  where: LessonWhereUniqueInput!
+  data: LessonUpdateWithoutUserDataInput!
+}
+
+input LessonUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: LessonWhereUniqueInput!
+  update: LessonUpdateWithoutCoursePageDataInput!
+  create: LessonCreateWithoutCoursePageInput!
+}
+
+input LessonUpsertWithWhereUniqueWithoutUserInput {
+  where: LessonWhereUniqueInput!
+  update: LessonUpdateWithoutUserDataInput!
+  create: LessonCreateWithoutUserInput!
+}
+
+input LessonWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  video: String
+  video_not: String
+  video_in: [String!]
+  video_not_in: [String!]
+  video_lt: String
+  video_lte: String
+  video_gt: String
+  video_gte: String
+  video_contains: String
+  video_not_contains: String
+  video_starts_with: String
+  video_not_starts_with: String
+  video_ends_with: String
+  video_not_ends_with: String
+  user: UserWhereInput
+  coursePage: CoursePageWhereInput
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [LessonWhereInput!]
+  OR: [LessonWhereInput!]
+  NOT: [LessonWhereInput!]
+}
+
+input LessonWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
-  createCase(data: CaseCreateInput!): Case!
-  updateCase(data: CaseUpdateInput!, where: CaseWhereUniqueInput!): Case
-  updateManyCases(data: CaseUpdateInput!, where: CaseWhereInput): BatchPayload!
-  upsertCase(where: CaseWhereUniqueInput!, create: CaseCreateInput!, update: CaseUpdateInput!): Case!
-  deleteCase(where: CaseWhereUniqueInput!): Case
-  deleteManyCases(where: CaseWhereInput): BatchPayload!
   createCoursePage(data: CoursePageCreateInput!): CoursePage!
   updateCoursePage(data: CoursePageUpdateInput!, where: CoursePageWhereUniqueInput!): CoursePage
   updateManyCoursePages(data: CoursePageUpdateInput!, where: CoursePageWhereInput): BatchPayload!
   upsertCoursePage(where: CoursePageWhereUniqueInput!, create: CoursePageCreateInput!, update: CoursePageUpdateInput!): CoursePage!
   deleteCoursePage(where: CoursePageWhereUniqueInput!): CoursePage
   deleteManyCoursePages(where: CoursePageWhereInput): BatchPayload!
+  createLesson(data: LessonCreateInput!): Lesson!
+  updateLesson(data: LessonUpdateInput!, where: LessonWhereUniqueInput!): Lesson
+  updateManyLessons(data: LessonUpdateInput!, where: LessonWhereInput): BatchPayload!
+  upsertLesson(where: LessonWhereUniqueInput!, create: LessonCreateInput!, update: LessonUpdateInput!): Lesson!
+  deleteLesson(where: LessonWhereUniqueInput!): Lesson
+  deleteManyLessons(where: LessonWhereInput): BatchPayload!
+  createProblem(data: ProblemCreateInput!): Problem!
+  updateProblem(data: ProblemUpdateInput!, where: ProblemWhereUniqueInput!): Problem
+  updateManyProblems(data: ProblemUpdateInput!, where: ProblemWhereInput): BatchPayload!
+  upsertProblem(where: ProblemWhereUniqueInput!, create: ProblemCreateInput!, update: ProblemUpdateInput!): Problem!
+  deleteProblem(where: ProblemWhereUniqueInput!): Problem
+  deleteManyProblems(where: ProblemWhereInput): BatchPayload!
   createSandbox(data: SandboxCreateInput!): Sandbox!
   updateSandbox(data: SandboxUpdateInput!, where: SandboxWhereUniqueInput!): Sandbox
   updateManySandboxes(data: SandboxUpdateInput!, where: SandboxWhereInput): BatchPayload!
@@ -720,6 +657,12 @@ type Mutation {
   upsertSandboxPage(where: SandboxPageWhereUniqueInput!, create: SandboxPageCreateInput!, update: SandboxPageUpdateInput!): SandboxPage!
   deleteSandboxPage(where: SandboxPageWhereUniqueInput!): SandboxPage
   deleteManySandboxPages(where: SandboxPageWhereInput): BatchPayload!
+  createSandboxPageGoal(data: SandboxPageGoalCreateInput!): SandboxPageGoal!
+  updateSandboxPageGoal(data: SandboxPageGoalUpdateInput!, where: SandboxPageGoalWhereUniqueInput!): SandboxPageGoal
+  updateManySandboxPageGoals(data: SandboxPageGoalUpdateInput!, where: SandboxPageGoalWhereInput): BatchPayload!
+  upsertSandboxPageGoal(where: SandboxPageGoalWhereUniqueInput!, create: SandboxPageGoalCreateInput!, update: SandboxPageGoalUpdateInput!): SandboxPageGoal!
+  deleteSandboxPageGoal(where: SandboxPageGoalWhereUniqueInput!): SandboxPageGoal
+  deleteManySandboxPageGoals(where: SandboxPageGoalWhereInput): BatchPayload!
   createTest(data: TestCreateInput!): Test!
   updateTest(data: TestUpdateInput!, where: TestWhereUniqueInput!): Test
   updateManyTests(data: TestUpdateInput!, where: TestWhereInput): BatchPayload!
@@ -760,19 +703,315 @@ enum Permission {
   PERMISSIONUPDATE
 }
 
+type Problem {
+  id: ID!
+  text: String!
+  hints: String
+  solution: String
+  answer: String!
+  user: User!
+  coursePage: CoursePage!
+  coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProblemConnection {
+  pageInfo: PageInfo!
+  edges: [ProblemEdge]!
+  aggregate: AggregateProblem!
+}
+
+input ProblemCreateInput {
+  text: String!
+  hints: String
+  solution: String
+  answer: String!
+  user: UserCreateOneWithoutProblemsInput!
+  coursePage: CoursePageCreateOneWithoutProblemsInput!
+  coursePageID: ID!
+}
+
+input ProblemCreateManyWithoutCoursePageInput {
+  create: [ProblemCreateWithoutCoursePageInput!]
+  connect: [ProblemWhereUniqueInput!]
+}
+
+input ProblemCreateManyWithoutUserInput {
+  create: [ProblemCreateWithoutUserInput!]
+  connect: [ProblemWhereUniqueInput!]
+}
+
+input ProblemCreateWithoutCoursePageInput {
+  text: String!
+  hints: String
+  solution: String
+  answer: String!
+  user: UserCreateOneWithoutProblemsInput!
+  coursePageID: ID!
+}
+
+input ProblemCreateWithoutUserInput {
+  text: String!
+  hints: String
+  solution: String
+  answer: String!
+  coursePage: CoursePageCreateOneWithoutProblemsInput!
+  coursePageID: ID!
+}
+
+type ProblemEdge {
+  node: Problem!
+  cursor: String!
+}
+
+enum ProblemOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  hints_ASC
+  hints_DESC
+  solution_ASC
+  solution_DESC
+  answer_ASC
+  answer_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProblemPreviousValues {
+  id: ID!
+  text: String!
+  hints: String
+  solution: String
+  answer: String!
+  coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProblemSubscriptionPayload {
+  mutation: MutationType!
+  node: Problem
+  updatedFields: [String!]
+  previousValues: ProblemPreviousValues
+}
+
+input ProblemSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProblemWhereInput
+  AND: [ProblemSubscriptionWhereInput!]
+  OR: [ProblemSubscriptionWhereInput!]
+  NOT: [ProblemSubscriptionWhereInput!]
+}
+
+input ProblemUpdateInput {
+  text: String
+  hints: String
+  solution: String
+  answer: String
+  user: UserUpdateOneRequiredWithoutProblemsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutProblemsInput
+  coursePageID: ID
+}
+
+input ProblemUpdateManyWithoutCoursePageInput {
+  create: [ProblemCreateWithoutCoursePageInput!]
+  delete: [ProblemWhereUniqueInput!]
+  connect: [ProblemWhereUniqueInput!]
+  disconnect: [ProblemWhereUniqueInput!]
+  update: [ProblemUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [ProblemUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input ProblemUpdateManyWithoutUserInput {
+  create: [ProblemCreateWithoutUserInput!]
+  delete: [ProblemWhereUniqueInput!]
+  connect: [ProblemWhereUniqueInput!]
+  disconnect: [ProblemWhereUniqueInput!]
+  update: [ProblemUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ProblemUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input ProblemUpdateWithoutCoursePageDataInput {
+  text: String
+  hints: String
+  solution: String
+  answer: String
+  user: UserUpdateOneRequiredWithoutProblemsInput
+  coursePageID: ID
+}
+
+input ProblemUpdateWithoutUserDataInput {
+  text: String
+  hints: String
+  solution: String
+  answer: String
+  coursePage: CoursePageUpdateOneRequiredWithoutProblemsInput
+  coursePageID: ID
+}
+
+input ProblemUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: ProblemWhereUniqueInput!
+  data: ProblemUpdateWithoutCoursePageDataInput!
+}
+
+input ProblemUpdateWithWhereUniqueWithoutUserInput {
+  where: ProblemWhereUniqueInput!
+  data: ProblemUpdateWithoutUserDataInput!
+}
+
+input ProblemUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: ProblemWhereUniqueInput!
+  update: ProblemUpdateWithoutCoursePageDataInput!
+  create: ProblemCreateWithoutCoursePageInput!
+}
+
+input ProblemUpsertWithWhereUniqueWithoutUserInput {
+  where: ProblemWhereUniqueInput!
+  update: ProblemUpdateWithoutUserDataInput!
+  create: ProblemCreateWithoutUserInput!
+}
+
+input ProblemWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  hints: String
+  hints_not: String
+  hints_in: [String!]
+  hints_not_in: [String!]
+  hints_lt: String
+  hints_lte: String
+  hints_gt: String
+  hints_gte: String
+  hints_contains: String
+  hints_not_contains: String
+  hints_starts_with: String
+  hints_not_starts_with: String
+  hints_ends_with: String
+  hints_not_ends_with: String
+  solution: String
+  solution_not: String
+  solution_in: [String!]
+  solution_not_in: [String!]
+  solution_lt: String
+  solution_lte: String
+  solution_gt: String
+  solution_gte: String
+  solution_contains: String
+  solution_not_contains: String
+  solution_starts_with: String
+  solution_not_starts_with: String
+  solution_ends_with: String
+  solution_not_ends_with: String
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  user: UserWhereInput
+  coursePage: CoursePageWhereInput
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ProblemWhereInput!]
+  OR: [ProblemWhereInput!]
+  NOT: [ProblemWhereInput!]
+}
+
+input ProblemWhereUniqueInput {
+  id: ID
+}
+
 type Query {
-  case(where: CaseWhereUniqueInput!): Case
-  cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Case]!
-  casesConnection(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CaseConnection!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage]!
   coursePagesConnection(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CoursePageConnection!
+  lesson(where: LessonWhereUniqueInput!): Lesson
+  lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson]!
+  lessonsConnection(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LessonConnection!
+  problem(where: ProblemWhereUniqueInput!): Problem
+  problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem]!
+  problemsConnection(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProblemConnection!
   sandbox(where: SandboxWhereUniqueInput!): Sandbox
   sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sandbox]!
   sandboxesConnection(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxConnection!
   sandboxPage(where: SandboxPageWhereUniqueInput!): SandboxPage
   sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage]!
   sandboxPagesConnection(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxPageConnection!
+  sandboxPageGoal(where: SandboxPageGoalWhereUniqueInput!): SandboxPageGoal
+  sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal]!
+  sandboxPageGoalsConnection(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxPageGoalConnection!
   test(where: TestWhereUniqueInput!): Test
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test]!
   testsConnection(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TestConnection!
@@ -785,9 +1024,13 @@ type Query {
 type Sandbox {
   id: ID!
   text: String!
+  video: String
   user: User!
   sandboxPage: SandboxPage!
   sandboxPageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  likes: Int
 }
 
 type SandboxConnection {
@@ -798,9 +1041,11 @@ type SandboxConnection {
 
 input SandboxCreateInput {
   text: String!
+  video: String
   user: UserCreateOneInput!
   sandboxPage: SandboxPageCreateOneWithoutSandboxesInput!
   sandboxPageID: ID!
+  likes: Int
 }
 
 input SandboxCreateManyWithoutSandboxPageInput {
@@ -810,8 +1055,10 @@ input SandboxCreateManyWithoutSandboxPageInput {
 
 input SandboxCreateWithoutSandboxPageInput {
   text: String!
+  video: String
   user: UserCreateOneInput!
   sandboxPageID: ID!
+  likes: Int
 }
 
 type SandboxEdge {
@@ -824,12 +1071,16 @@ enum SandboxOrderByInput {
   id_DESC
   text_ASC
   text_DESC
+  video_ASC
+  video_DESC
   sandboxPageID_ASC
   sandboxPageID_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  likes_ASC
+  likes_DESC
 }
 
 type SandboxPage {
@@ -839,6 +1090,9 @@ type SandboxPage {
   image: String!
   user: User!
   sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sandbox!]
+  sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type SandboxPageConnection {
@@ -853,6 +1107,7 @@ input SandboxPageCreateInput {
   image: String!
   user: UserCreateOneWithoutSandboxPagesInput!
   sandboxes: SandboxCreateManyWithoutSandboxPageInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutSandboxPageInput
 }
 
 input SandboxPageCreateManyWithoutUserInput {
@@ -865,11 +1120,25 @@ input SandboxPageCreateOneWithoutSandboxesInput {
   connect: SandboxPageWhereUniqueInput
 }
 
+input SandboxPageCreateOneWithoutSandboxPageGoalsInput {
+  create: SandboxPageCreateWithoutSandboxPageGoalsInput
+  connect: SandboxPageWhereUniqueInput
+}
+
 input SandboxPageCreateWithoutSandboxesInput {
   title: String!
   description: String!
   image: String!
   user: UserCreateOneWithoutSandboxPagesInput!
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutSandboxPageInput
+}
+
+input SandboxPageCreateWithoutSandboxPageGoalsInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutSandboxPagesInput!
+  sandboxes: SandboxCreateManyWithoutSandboxPageInput
 }
 
 input SandboxPageCreateWithoutUserInput {
@@ -877,11 +1146,242 @@ input SandboxPageCreateWithoutUserInput {
   description: String!
   image: String!
   sandboxes: SandboxCreateManyWithoutSandboxPageInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutSandboxPageInput
 }
 
 type SandboxPageEdge {
   node: SandboxPage!
   cursor: String!
+}
+
+type SandboxPageGoal {
+  id: ID!
+  goal: String!
+  user: User!
+  completed: Boolean!
+  sandboxPage: SandboxPage
+  sandboxPageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SandboxPageGoalConnection {
+  pageInfo: PageInfo!
+  edges: [SandboxPageGoalEdge]!
+  aggregate: AggregateSandboxPageGoal!
+}
+
+input SandboxPageGoalCreateInput {
+  goal: String!
+  user: UserCreateOneWithoutSandboxPageGoalsInput!
+  completed: Boolean
+  sandboxPage: SandboxPageCreateOneWithoutSandboxPageGoalsInput
+  sandboxPageID: ID!
+}
+
+input SandboxPageGoalCreateManyWithoutSandboxPageInput {
+  create: [SandboxPageGoalCreateWithoutSandboxPageInput!]
+  connect: [SandboxPageGoalWhereUniqueInput!]
+}
+
+input SandboxPageGoalCreateManyWithoutUserInput {
+  create: [SandboxPageGoalCreateWithoutUserInput!]
+  connect: [SandboxPageGoalWhereUniqueInput!]
+}
+
+input SandboxPageGoalCreateWithoutSandboxPageInput {
+  goal: String!
+  user: UserCreateOneWithoutSandboxPageGoalsInput!
+  completed: Boolean
+  sandboxPageID: ID!
+}
+
+input SandboxPageGoalCreateWithoutUserInput {
+  goal: String!
+  completed: Boolean
+  sandboxPage: SandboxPageCreateOneWithoutSandboxPageGoalsInput
+  sandboxPageID: ID!
+}
+
+type SandboxPageGoalEdge {
+  node: SandboxPageGoal!
+  cursor: String!
+}
+
+enum SandboxPageGoalOrderByInput {
+  id_ASC
+  id_DESC
+  goal_ASC
+  goal_DESC
+  completed_ASC
+  completed_DESC
+  sandboxPageID_ASC
+  sandboxPageID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type SandboxPageGoalPreviousValues {
+  id: ID!
+  goal: String!
+  completed: Boolean!
+  sandboxPageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SandboxPageGoalSubscriptionPayload {
+  mutation: MutationType!
+  node: SandboxPageGoal
+  updatedFields: [String!]
+  previousValues: SandboxPageGoalPreviousValues
+}
+
+input SandboxPageGoalSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: SandboxPageGoalWhereInput
+  AND: [SandboxPageGoalSubscriptionWhereInput!]
+  OR: [SandboxPageGoalSubscriptionWhereInput!]
+  NOT: [SandboxPageGoalSubscriptionWhereInput!]
+}
+
+input SandboxPageGoalUpdateInput {
+  goal: String
+  user: UserUpdateOneRequiredWithoutSandboxPageGoalsInput
+  completed: Boolean
+  sandboxPage: SandboxPageUpdateOneWithoutSandboxPageGoalsInput
+  sandboxPageID: ID
+}
+
+input SandboxPageGoalUpdateManyWithoutSandboxPageInput {
+  create: [SandboxPageGoalCreateWithoutSandboxPageInput!]
+  delete: [SandboxPageGoalWhereUniqueInput!]
+  connect: [SandboxPageGoalWhereUniqueInput!]
+  disconnect: [SandboxPageGoalWhereUniqueInput!]
+  update: [SandboxPageGoalUpdateWithWhereUniqueWithoutSandboxPageInput!]
+  upsert: [SandboxPageGoalUpsertWithWhereUniqueWithoutSandboxPageInput!]
+}
+
+input SandboxPageGoalUpdateManyWithoutUserInput {
+  create: [SandboxPageGoalCreateWithoutUserInput!]
+  delete: [SandboxPageGoalWhereUniqueInput!]
+  connect: [SandboxPageGoalWhereUniqueInput!]
+  disconnect: [SandboxPageGoalWhereUniqueInput!]
+  update: [SandboxPageGoalUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [SandboxPageGoalUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input SandboxPageGoalUpdateWithoutSandboxPageDataInput {
+  goal: String
+  user: UserUpdateOneRequiredWithoutSandboxPageGoalsInput
+  completed: Boolean
+  sandboxPageID: ID
+}
+
+input SandboxPageGoalUpdateWithoutUserDataInput {
+  goal: String
+  completed: Boolean
+  sandboxPage: SandboxPageUpdateOneWithoutSandboxPageGoalsInput
+  sandboxPageID: ID
+}
+
+input SandboxPageGoalUpdateWithWhereUniqueWithoutSandboxPageInput {
+  where: SandboxPageGoalWhereUniqueInput!
+  data: SandboxPageGoalUpdateWithoutSandboxPageDataInput!
+}
+
+input SandboxPageGoalUpdateWithWhereUniqueWithoutUserInput {
+  where: SandboxPageGoalWhereUniqueInput!
+  data: SandboxPageGoalUpdateWithoutUserDataInput!
+}
+
+input SandboxPageGoalUpsertWithWhereUniqueWithoutSandboxPageInput {
+  where: SandboxPageGoalWhereUniqueInput!
+  update: SandboxPageGoalUpdateWithoutSandboxPageDataInput!
+  create: SandboxPageGoalCreateWithoutSandboxPageInput!
+}
+
+input SandboxPageGoalUpsertWithWhereUniqueWithoutUserInput {
+  where: SandboxPageGoalWhereUniqueInput!
+  update: SandboxPageGoalUpdateWithoutUserDataInput!
+  create: SandboxPageGoalCreateWithoutUserInput!
+}
+
+input SandboxPageGoalWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  goal: String
+  goal_not: String
+  goal_in: [String!]
+  goal_not_in: [String!]
+  goal_lt: String
+  goal_lte: String
+  goal_gt: String
+  goal_gte: String
+  goal_contains: String
+  goal_not_contains: String
+  goal_starts_with: String
+  goal_not_starts_with: String
+  goal_ends_with: String
+  goal_not_ends_with: String
+  user: UserWhereInput
+  completed: Boolean
+  completed_not: Boolean
+  sandboxPage: SandboxPageWhereInput
+  sandboxPageID: ID
+  sandboxPageID_not: ID
+  sandboxPageID_in: [ID!]
+  sandboxPageID_not_in: [ID!]
+  sandboxPageID_lt: ID
+  sandboxPageID_lte: ID
+  sandboxPageID_gt: ID
+  sandboxPageID_gte: ID
+  sandboxPageID_contains: ID
+  sandboxPageID_not_contains: ID
+  sandboxPageID_starts_with: ID
+  sandboxPageID_not_starts_with: ID
+  sandboxPageID_ends_with: ID
+  sandboxPageID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [SandboxPageGoalWhereInput!]
+  OR: [SandboxPageGoalWhereInput!]
+  NOT: [SandboxPageGoalWhereInput!]
+}
+
+input SandboxPageGoalWhereUniqueInput {
+  id: ID
 }
 
 enum SandboxPageOrderByInput {
@@ -904,6 +1404,8 @@ type SandboxPagePreviousValues {
   title: String!
   description: String!
   image: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type SandboxPageSubscriptionPayload {
@@ -930,6 +1432,7 @@ input SandboxPageUpdateInput {
   image: String
   user: UserUpdateOneRequiredWithoutSandboxPagesInput
   sandboxes: SandboxUpdateManyWithoutSandboxPageInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutSandboxPageInput
 }
 
 input SandboxPageUpdateManyWithoutUserInput {
@@ -948,11 +1451,29 @@ input SandboxPageUpdateOneRequiredWithoutSandboxesInput {
   connect: SandboxPageWhereUniqueInput
 }
 
+input SandboxPageUpdateOneWithoutSandboxPageGoalsInput {
+  create: SandboxPageCreateWithoutSandboxPageGoalsInput
+  update: SandboxPageUpdateWithoutSandboxPageGoalsDataInput
+  upsert: SandboxPageUpsertWithoutSandboxPageGoalsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: SandboxPageWhereUniqueInput
+}
+
 input SandboxPageUpdateWithoutSandboxesDataInput {
   title: String
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutSandboxPagesInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutSandboxPageInput
+}
+
+input SandboxPageUpdateWithoutSandboxPageGoalsDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutSandboxPagesInput
+  sandboxes: SandboxUpdateManyWithoutSandboxPageInput
 }
 
 input SandboxPageUpdateWithoutUserDataInput {
@@ -960,6 +1481,7 @@ input SandboxPageUpdateWithoutUserDataInput {
   description: String
   image: String
   sandboxes: SandboxUpdateManyWithoutSandboxPageInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutSandboxPageInput
 }
 
 input SandboxPageUpdateWithWhereUniqueWithoutUserInput {
@@ -970,6 +1492,11 @@ input SandboxPageUpdateWithWhereUniqueWithoutUserInput {
 input SandboxPageUpsertWithoutSandboxesInput {
   update: SandboxPageUpdateWithoutSandboxesDataInput!
   create: SandboxPageCreateWithoutSandboxesInput!
+}
+
+input SandboxPageUpsertWithoutSandboxPageGoalsInput {
+  update: SandboxPageUpdateWithoutSandboxPageGoalsDataInput!
+  create: SandboxPageCreateWithoutSandboxPageGoalsInput!
 }
 
 input SandboxPageUpsertWithWhereUniqueWithoutUserInput {
@@ -1039,6 +1566,25 @@ input SandboxPageWhereInput {
   sandboxes_every: SandboxWhereInput
   sandboxes_some: SandboxWhereInput
   sandboxes_none: SandboxWhereInput
+  sandboxPageGoals_every: SandboxPageGoalWhereInput
+  sandboxPageGoals_some: SandboxPageGoalWhereInput
+  sandboxPageGoals_none: SandboxPageGoalWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [SandboxPageWhereInput!]
   OR: [SandboxPageWhereInput!]
   NOT: [SandboxPageWhereInput!]
@@ -1051,7 +1597,11 @@ input SandboxPageWhereUniqueInput {
 type SandboxPreviousValues {
   id: ID!
   text: String!
+  video: String
   sandboxPageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  likes: Int
 }
 
 type SandboxSubscriptionPayload {
@@ -1074,9 +1624,11 @@ input SandboxSubscriptionWhereInput {
 
 input SandboxUpdateInput {
   text: String
+  video: String
   user: UserUpdateOneRequiredInput
   sandboxPage: SandboxPageUpdateOneRequiredWithoutSandboxesInput
   sandboxPageID: ID
+  likes: Int
 }
 
 input SandboxUpdateManyWithoutSandboxPageInput {
@@ -1090,8 +1642,10 @@ input SandboxUpdateManyWithoutSandboxPageInput {
 
 input SandboxUpdateWithoutSandboxPageDataInput {
   text: String
+  video: String
   user: UserUpdateOneRequiredInput
   sandboxPageID: ID
+  likes: Int
 }
 
 input SandboxUpdateWithWhereUniqueWithoutSandboxPageInput {
@@ -1134,6 +1688,20 @@ input SandboxWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
+  video: String
+  video_not: String
+  video_in: [String!]
+  video_not_in: [String!]
+  video_lt: String
+  video_lte: String
+  video_gt: String
+  video_gte: String
+  video_contains: String
+  video_not_contains: String
+  video_starts_with: String
+  video_not_starts_with: String
+  video_ends_with: String
+  video_not_ends_with: String
   user: UserWhereInput
   sandboxPage: SandboxPageWhereInput
   sandboxPageID: ID
@@ -1150,6 +1718,30 @@ input SandboxWhereInput {
   sandboxPageID_not_starts_with: ID
   sandboxPageID_ends_with: ID
   sandboxPageID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  likes: Int
+  likes_not: Int
+  likes_in: [Int!]
+  likes_not_in: [Int!]
+  likes_lt: Int
+  likes_lte: Int
+  likes_gt: Int
+  likes_gte: Int
   AND: [SandboxWhereInput!]
   OR: [SandboxWhereInput!]
   NOT: [SandboxWhereInput!]
@@ -1160,10 +1752,12 @@ input SandboxWhereUniqueInput {
 }
 
 type Subscription {
-  case(where: CaseSubscriptionWhereInput): CaseSubscriptionPayload
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
+  lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
+  problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
   sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
   sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload
+  sandboxPageGoal(where: SandboxPageGoalSubscriptionWhereInput): SandboxPageGoalSubscriptionPayload
   test(where: TestSubscriptionWhereInput): TestSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -1182,6 +1776,8 @@ type Test {
   user: User!
   coursePage: CoursePage!
   coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TestConnection {
@@ -1289,6 +1885,8 @@ type TestPreviousValues {
   answer4: String
   answer4Correct: String
   coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type TestSubscriptionPayload {
@@ -1549,6 +2147,22 @@ input TestWhereInput {
   coursePageID_not_starts_with: ID
   coursePageID_ends_with: ID
   coursePageID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
   AND: [TestWhereInput!]
   OR: [TestWhereInput!]
   NOT: [TestWhereInput!]
@@ -1568,15 +2182,23 @@ type User {
   permissions: [Permission!]!
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage!]
-  cases(where: CaseWhereInput, orderBy: CaseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Case!]
+  sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal!]
+  lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
+  problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   isFamiliar: Boolean!
+  createdAt: DateTime!
+  favourites: [ID!]!
 }
 
 type UserConnection {
   pageInfo: PageInfo!
   edges: [UserEdge]!
   aggregate: AggregateUser!
+}
+
+input UserCreatefavouritesInput {
+  set: [ID!]
 }
 
 input UserCreateInput {
@@ -1588,9 +2210,12 @@ input UserCreateInput {
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
-  cases: CaseCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateOneInput {
@@ -1598,13 +2223,23 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutCasesInput {
-  create: UserCreateWithoutCasesInput
+input UserCreateOneWithoutCoursePagesInput {
+  create: UserCreateWithoutCoursePagesInput
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutCoursePagesInput {
-  create: UserCreateWithoutCoursePagesInput
+input UserCreateOneWithoutLessonsInput {
+  create: UserCreateWithoutLessonsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutProblemsInput {
+  create: UserCreateWithoutProblemsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutSandboxPageGoalsInput {
+  create: UserCreateWithoutSandboxPageGoalsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1622,19 +2257,6 @@ input UserCreatepermissionsInput {
   set: [Permission!]
 }
 
-input UserCreateWithoutCasesInput {
-  name: String!
-  email: String!
-  password: String!
-  resetToken: String
-  resetTokenExpiry: Float
-  permissions: UserCreatepermissionsInput
-  coursePages: CoursePageCreateManyWithoutUserInput
-  sandboxPages: SandboxPageCreateManyWithoutUserInput
-  tests: TestCreateManyWithoutUserInput
-  isFamiliar: Boolean
-}
-
 input UserCreateWithoutCoursePagesInput {
   name: String!
   email: String!
@@ -1643,9 +2265,60 @@ input UserCreateWithoutCoursePagesInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
-  cases: CaseCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
+}
+
+input UserCreateWithoutLessonsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
+}
+
+input UserCreateWithoutProblemsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
+}
+
+input UserCreateWithoutSandboxPageGoalsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -1656,9 +2329,12 @@ input UserCreateWithoutSandboxPagesInput {
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
-  cases: CaseCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -1670,8 +2346,11 @@ input UserCreateWithoutTestsInput {
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
-  cases: CaseCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserCreatefavouritesInput
 }
 
 type UserEdge {
@@ -1709,6 +2388,8 @@ type UserPreviousValues {
   resetTokenExpiry: Float
   permissions: [Permission!]!
   isFamiliar: Boolean!
+  createdAt: DateTime!
+  favourites: [ID!]!
 }
 
 type UserSubscriptionPayload {
@@ -1738,9 +2419,16 @@ input UserUpdateDataInput {
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  cases: CaseUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
+}
+
+input UserUpdatefavouritesInput {
+  set: [ID!]
 }
 
 input UserUpdateInput {
@@ -1752,9 +2440,12 @@ input UserUpdateInput {
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  cases: CaseUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateOneRequiredInput {
@@ -1764,17 +2455,31 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutCasesInput {
-  create: UserCreateWithoutCasesInput
-  update: UserUpdateWithoutCasesDataInput
-  upsert: UserUpsertWithoutCasesInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateOneRequiredWithoutCoursePagesInput {
   create: UserCreateWithoutCoursePagesInput
   update: UserUpdateWithoutCoursePagesDataInput
   upsert: UserUpsertWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutLessonsInput {
+  create: UserCreateWithoutLessonsInput
+  update: UserUpdateWithoutLessonsDataInput
+  upsert: UserUpsertWithoutLessonsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutProblemsInput {
+  create: UserCreateWithoutProblemsInput
+  update: UserUpdateWithoutProblemsDataInput
+  upsert: UserUpsertWithoutProblemsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutSandboxPageGoalsInput {
+  create: UserCreateWithoutSandboxPageGoalsInput
+  update: UserUpdateWithoutSandboxPageGoalsDataInput
+  upsert: UserUpsertWithoutSandboxPageGoalsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1796,19 +2501,6 @@ input UserUpdatepermissionsInput {
   set: [Permission!]
 }
 
-input UserUpdateWithoutCasesDataInput {
-  name: String
-  email: String
-  password: String
-  resetToken: String
-  resetTokenExpiry: Float
-  permissions: UserUpdatepermissionsInput
-  coursePages: CoursePageUpdateManyWithoutUserInput
-  sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  tests: TestUpdateManyWithoutUserInput
-  isFamiliar: Boolean
-}
-
 input UserUpdateWithoutCoursePagesDataInput {
   name: String
   email: String
@@ -1817,9 +2509,60 @@ input UserUpdateWithoutCoursePagesDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  cases: CaseUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
+}
+
+input UserUpdateWithoutLessonsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
+}
+
+input UserUpdateWithoutProblemsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
+}
+
+input UserUpdateWithoutSandboxPageGoalsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -1830,9 +2573,12 @@ input UserUpdateWithoutSandboxPagesDataInput {
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
-  cases: CaseUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -1844,8 +2590,11 @@ input UserUpdateWithoutTestsDataInput {
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  cases: CaseUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpsertNestedInput {
@@ -1853,14 +2602,24 @@ input UserUpsertNestedInput {
   create: UserCreateInput!
 }
 
-input UserUpsertWithoutCasesInput {
-  update: UserUpdateWithoutCasesDataInput!
-  create: UserCreateWithoutCasesInput!
-}
-
 input UserUpsertWithoutCoursePagesInput {
   update: UserUpdateWithoutCoursePagesDataInput!
   create: UserCreateWithoutCoursePagesInput!
+}
+
+input UserUpsertWithoutLessonsInput {
+  update: UserUpdateWithoutLessonsDataInput!
+  create: UserCreateWithoutLessonsInput!
+}
+
+input UserUpsertWithoutProblemsInput {
+  update: UserUpdateWithoutProblemsDataInput!
+  create: UserCreateWithoutProblemsInput!
+}
+
+input UserUpsertWithoutSandboxPageGoalsInput {
+  update: UserUpdateWithoutSandboxPageGoalsDataInput!
+  create: UserCreateWithoutSandboxPageGoalsInput!
 }
 
 input UserUpsertWithoutSandboxPagesInput {
@@ -1958,14 +2717,28 @@ input UserWhereInput {
   sandboxPages_every: SandboxPageWhereInput
   sandboxPages_some: SandboxPageWhereInput
   sandboxPages_none: SandboxPageWhereInput
-  cases_every: CaseWhereInput
-  cases_some: CaseWhereInput
-  cases_none: CaseWhereInput
+  sandboxPageGoals_every: SandboxPageGoalWhereInput
+  sandboxPageGoals_some: SandboxPageGoalWhereInput
+  sandboxPageGoals_none: SandboxPageGoalWhereInput
+  lessons_every: LessonWhereInput
+  lessons_some: LessonWhereInput
+  lessons_none: LessonWhereInput
   tests_every: TestWhereInput
   tests_some: TestWhereInput
   tests_none: TestWhereInput
+  problems_every: ProblemWhereInput
+  problems_some: ProblemWhereInput
+  problems_none: ProblemWhereInput
   isFamiliar: Boolean
   isFamiliar_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
