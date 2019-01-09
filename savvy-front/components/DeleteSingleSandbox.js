@@ -63,36 +63,15 @@ class DeleteSandbox extends Component {
         // cache.writeQuery({ query: PAGE_SANDBOXES_QUERY, data: { sandboxes: filteredSandboxes } })
     // }
     render() {
+        const {id} = this.props
         return (
             <Mutation 
                 mutation={DELETE_SANDBOX_MUTATION}
-                variables={{id: this.props.id}}
-                // update={this.update}
-                // optimisticResponse={{
-                //     __typename: 'Mutation',
-                //     deleteSandbox: {
-                //         __typename: 'Sandbox',
-                //         id: this.props.id
-                //     },
-                // }}
-                refetchQueries={[{ 
-                    query: gql`
-                      query PAGE_SANDBOXES_QUERY($id: ID!) {
-                        sandboxes(where: {sandboxPageID: $id}) {
-                          id
-                          text
-                          video
-                          likes
-                          user {
-                            id
-                          }
-                        }
-                      }
-                    `,
-                    variables: {
-                      id: this.props.sandboxPageId
-                    },
-                  }]}
+                variables={{id}}
+                refetchQueries={() =>[{  
+                    query: PAGE_SANDBOXES_QUERY,
+                    variables: { id},
+                }]}
             >
             {(DeleteSandbox, { error }) => (
                 <Button onClick={() => {

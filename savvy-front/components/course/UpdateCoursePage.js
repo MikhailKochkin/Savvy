@@ -114,9 +114,13 @@ class UpdateCoursePage extends Component {
                 <>
                 {me !== null && me.id === data.coursePage.user.id ?
                 <Mutation 
-                mutation={UPDATE_COURSEPAGE_MUTATION} variables={this.state}>
+                  mutation={UPDATE_COURSEPAGE_MUTATION} 
+                  variables={this.state}
+                >
                   {(updateCoursePage, { loading, error }) => (
-                    <Form onSubmit={e => this.updateCoursePage(e, updateCoursePage)}>
+                    <Form 
+                      onSubmit={e => this.updateCoursePage(e, updateCoursePage)}
+                    >
                       {/* <Error error={error} /> */}
                       <fieldset disabled={loading} aria-busy={loading}>
                         <label htmlFor="title">

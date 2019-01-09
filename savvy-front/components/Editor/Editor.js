@@ -9,11 +9,10 @@ import BoldMark from './BoldMark';
 import HeaderMark from './HeaderMark';
 import ItalicMark from './ItalicMark';
 import FormatToolBar from './FormatToolbar';
-
 import {bold} from 'react-icons-kit/fa/bold'
 import {italic} from 'react-icons-kit/fa/italic'
 import {header} from 'react-icons-kit/fa/header'
-import { FiBold } from "react-icons/fi";
+
 
 const ButtonStyle = {
   padding: '7px',

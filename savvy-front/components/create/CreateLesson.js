@@ -73,7 +73,7 @@ export default class CreateLesson extends Component {
                   query: { id }
                 }}>
                 <a>
-                    <NavButton>Вернуться на страницу курса!</NavButton>
+                    <NavButton>Вернуться на страницу курса</NavButton>
                 </a>
               </Link>
               <DynamicLoadedEditor getEditorText={this.myCallback}/>
@@ -83,10 +83,10 @@ export default class CreateLesson extends Component {
                   coursePageID: id,
                   ...this.state
                 }}
-                refetchQueries={() =>[{  
+                refetchQueries={() =>[{
                   query: PAGE_LESSONS_QUERY,
                   variables: { id},
-              }]}
+                }]}
               >
               {(createLesson, {loading, error}) => (
               <ButtonDiv>
@@ -96,11 +96,10 @@ export default class CreateLesson extends Component {
                     // call the mutation
                     const res = await createLesson();
                     // change the page to the single case page
-              
-                    Router.push({
-                      pathname: '/coursePage',
-                      query: {id: id}
-                    })
+                    // Router.push({
+                    //   pathname: '/coursePage',
+                    //   query: {id: id}
+                    // })
                   }}
                 >
                   Создать

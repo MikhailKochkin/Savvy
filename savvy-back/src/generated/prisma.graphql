@@ -1,3 +1,7 @@
+type AggregateApplication {
+  count: Int!
+}
+
 type AggregateCoursePage {
   count: Int!
 }
@@ -30,6 +34,205 @@ type AggregateUser {
   count: Int!
 }
 
+type Application {
+  id: ID!
+  applicantId: ID!
+  applicantName: String!
+  message: String
+  coursePage: CoursePage!
+  coursePageID: ID!
+}
+
+type ApplicationConnection {
+  pageInfo: PageInfo!
+  edges: [ApplicationEdge]!
+  aggregate: AggregateApplication!
+}
+
+input ApplicationCreateInput {
+  applicantId: ID!
+  applicantName: String!
+  message: String
+  coursePage: CoursePageCreateOneWithoutApplicationsInput!
+  coursePageID: ID!
+}
+
+input ApplicationCreateManyWithoutCoursePageInput {
+  create: [ApplicationCreateWithoutCoursePageInput!]
+  connect: [ApplicationWhereUniqueInput!]
+}
+
+input ApplicationCreateWithoutCoursePageInput {
+  applicantId: ID!
+  applicantName: String!
+  message: String
+  coursePageID: ID!
+}
+
+type ApplicationEdge {
+  node: Application!
+  cursor: String!
+}
+
+enum ApplicationOrderByInput {
+  id_ASC
+  id_DESC
+  applicantId_ASC
+  applicantId_DESC
+  applicantName_ASC
+  applicantName_DESC
+  message_ASC
+  message_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ApplicationPreviousValues {
+  id: ID!
+  applicantId: ID!
+  applicantName: String!
+  message: String
+  coursePageID: ID!
+}
+
+type ApplicationSubscriptionPayload {
+  mutation: MutationType!
+  node: Application
+  updatedFields: [String!]
+  previousValues: ApplicationPreviousValues
+}
+
+input ApplicationSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ApplicationWhereInput
+  AND: [ApplicationSubscriptionWhereInput!]
+  OR: [ApplicationSubscriptionWhereInput!]
+  NOT: [ApplicationSubscriptionWhereInput!]
+}
+
+input ApplicationUpdateInput {
+  applicantId: ID
+  applicantName: String
+  message: String
+  coursePage: CoursePageUpdateOneRequiredWithoutApplicationsInput
+  coursePageID: ID
+}
+
+input ApplicationUpdateManyWithoutCoursePageInput {
+  create: [ApplicationCreateWithoutCoursePageInput!]
+  delete: [ApplicationWhereUniqueInput!]
+  connect: [ApplicationWhereUniqueInput!]
+  disconnect: [ApplicationWhereUniqueInput!]
+  update: [ApplicationUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [ApplicationUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input ApplicationUpdateWithoutCoursePageDataInput {
+  applicantId: ID
+  applicantName: String
+  message: String
+  coursePageID: ID
+}
+
+input ApplicationUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: ApplicationWhereUniqueInput!
+  data: ApplicationUpdateWithoutCoursePageDataInput!
+}
+
+input ApplicationUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: ApplicationWhereUniqueInput!
+  update: ApplicationUpdateWithoutCoursePageDataInput!
+  create: ApplicationCreateWithoutCoursePageInput!
+}
+
+input ApplicationWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  applicantId: ID
+  applicantId_not: ID
+  applicantId_in: [ID!]
+  applicantId_not_in: [ID!]
+  applicantId_lt: ID
+  applicantId_lte: ID
+  applicantId_gt: ID
+  applicantId_gte: ID
+  applicantId_contains: ID
+  applicantId_not_contains: ID
+  applicantId_starts_with: ID
+  applicantId_not_starts_with: ID
+  applicantId_ends_with: ID
+  applicantId_not_ends_with: ID
+  applicantName: String
+  applicantName_not: String
+  applicantName_in: [String!]
+  applicantName_not_in: [String!]
+  applicantName_lt: String
+  applicantName_lte: String
+  applicantName_gt: String
+  applicantName_gte: String
+  applicantName_contains: String
+  applicantName_not_contains: String
+  applicantName_starts_with: String
+  applicantName_not_starts_with: String
+  applicantName_ends_with: String
+  applicantName_not_ends_with: String
+  message: String
+  message_not: String
+  message_in: [String!]
+  message_not_in: [String!]
+  message_lt: String
+  message_lte: String
+  message_gt: String
+  message_gte: String
+  message_contains: String
+  message_not_contains: String
+  message_starts_with: String
+  message_not_starts_with: String
+  message_ends_with: String
+  message_not_ends_with: String
+  coursePage: CoursePageWhereInput
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  AND: [ApplicationWhereInput!]
+  OR: [ApplicationWhereInput!]
+  NOT: [ApplicationWhereInput!]
+}
+
+input ApplicationWhereUniqueInput {
+  id: ID
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -43,7 +246,10 @@ type CoursePage {
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
+  applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application!]
   tags: [String!]!
+  courseType: CourseType
+  students: [ID!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -62,12 +268,20 @@ input CoursePageCreateInput {
   lessons: LessonCreateManyWithoutCoursePageInput
   tests: TestCreateManyWithoutCoursePageInput
   problems: ProblemCreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
 }
 
 input CoursePageCreateManyWithoutUserInput {
   create: [CoursePageCreateWithoutUserInput!]
   connect: [CoursePageWhereUniqueInput!]
+}
+
+input CoursePageCreateOneWithoutApplicationsInput {
+  create: CoursePageCreateWithoutApplicationsInput
+  connect: CoursePageWhereUniqueInput
 }
 
 input CoursePageCreateOneWithoutLessonsInput {
@@ -85,8 +299,25 @@ input CoursePageCreateOneWithoutTestsInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageCreatestudentsInput {
+  set: [ID!]
+}
+
 input CoursePageCreatetagsInput {
   set: [String!]
+}
+
+input CoursePageCreateWithoutApplicationsInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  tests: TestCreateManyWithoutCoursePageInput
+  problems: ProblemCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
 }
 
 input CoursePageCreateWithoutLessonsInput {
@@ -96,7 +327,10 @@ input CoursePageCreateWithoutLessonsInput {
   user: UserCreateOneWithoutCoursePagesInput!
   tests: TestCreateManyWithoutCoursePageInput
   problems: ProblemCreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
 }
 
 input CoursePageCreateWithoutProblemsInput {
@@ -106,7 +340,10 @@ input CoursePageCreateWithoutProblemsInput {
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   tests: TestCreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
 }
 
 input CoursePageCreateWithoutTestsInput {
@@ -116,7 +353,10 @@ input CoursePageCreateWithoutTestsInput {
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   problems: ProblemCreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
 }
 
 input CoursePageCreateWithoutUserInput {
@@ -126,7 +366,10 @@ input CoursePageCreateWithoutUserInput {
   lessons: LessonCreateManyWithoutCoursePageInput
   tests: TestCreateManyWithoutCoursePageInput
   problems: ProblemCreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
 }
 
 type CoursePageEdge {
@@ -143,6 +386,8 @@ enum CoursePageOrderByInput {
   description_DESC
   image_ASC
   image_DESC
+  courseType_ASC
+  courseType_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -155,6 +400,8 @@ type CoursePagePreviousValues {
   description: String!
   image: String!
   tags: [String!]!
+  courseType: CourseType
+  students: [ID!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -185,7 +432,10 @@ input CoursePageUpdateInput {
   lessons: LessonUpdateManyWithoutCoursePageInput
   tests: TestUpdateManyWithoutCoursePageInput
   problems: ProblemUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
 }
 
 input CoursePageUpdateManyWithoutUserInput {
@@ -195,6 +445,13 @@ input CoursePageUpdateManyWithoutUserInput {
   disconnect: [CoursePageWhereUniqueInput!]
   update: [CoursePageUpdateWithWhereUniqueWithoutUserInput!]
   upsert: [CoursePageUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input CoursePageUpdateOneRequiredWithoutApplicationsInput {
+  create: CoursePageCreateWithoutApplicationsInput
+  update: CoursePageUpdateWithoutApplicationsDataInput
+  upsert: CoursePageUpsertWithoutApplicationsInput
+  connect: CoursePageWhereUniqueInput
 }
 
 input CoursePageUpdateOneRequiredWithoutLessonsInput {
@@ -218,8 +475,25 @@ input CoursePageUpdateOneRequiredWithoutTestsInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageUpdatestudentsInput {
+  set: [ID!]
+}
+
 input CoursePageUpdatetagsInput {
   set: [String!]
+}
+
+input CoursePageUpdateWithoutApplicationsDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  tests: TestUpdateManyWithoutCoursePageInput
+  problems: ProblemUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
 }
 
 input CoursePageUpdateWithoutLessonsDataInput {
@@ -229,7 +503,10 @@ input CoursePageUpdateWithoutLessonsDataInput {
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   tests: TestUpdateManyWithoutCoursePageInput
   problems: ProblemUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
 }
 
 input CoursePageUpdateWithoutProblemsDataInput {
@@ -239,7 +516,10 @@ input CoursePageUpdateWithoutProblemsDataInput {
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   tests: TestUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
 }
 
 input CoursePageUpdateWithoutTestsDataInput {
@@ -249,7 +529,10 @@ input CoursePageUpdateWithoutTestsDataInput {
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   problems: ProblemUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
 }
 
 input CoursePageUpdateWithoutUserDataInput {
@@ -259,12 +542,20 @@ input CoursePageUpdateWithoutUserDataInput {
   lessons: LessonUpdateManyWithoutCoursePageInput
   tests: TestUpdateManyWithoutCoursePageInput
   problems: ProblemUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutUserInput {
   where: CoursePageWhereUniqueInput!
   data: CoursePageUpdateWithoutUserDataInput!
+}
+
+input CoursePageUpsertWithoutApplicationsInput {
+  update: CoursePageUpdateWithoutApplicationsDataInput!
+  create: CoursePageCreateWithoutApplicationsInput!
 }
 
 input CoursePageUpsertWithoutLessonsInput {
@@ -355,6 +646,13 @@ input CoursePageWhereInput {
   problems_every: ProblemWhereInput
   problems_some: ProblemWhereInput
   problems_none: ProblemWhereInput
+  applications_every: ApplicationWhereInput
+  applications_some: ApplicationWhereInput
+  applications_none: ApplicationWhereInput
+  courseType: CourseType
+  courseType_not: CourseType
+  courseType_in: [CourseType!]
+  courseType_not_in: [CourseType!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -378,6 +676,11 @@ input CoursePageWhereInput {
 
 input CoursePageWhereUniqueInput {
   id: ID
+}
+
+enum CourseType {
+  PUBLIC
+  PRIVATE
 }
 
 scalar DateTime
@@ -627,6 +930,12 @@ input LessonWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createApplication(data: ApplicationCreateInput!): Application!
+  updateApplication(data: ApplicationUpdateInput!, where: ApplicationWhereUniqueInput!): Application
+  updateManyApplications(data: ApplicationUpdateInput!, where: ApplicationWhereInput): BatchPayload!
+  upsertApplication(where: ApplicationWhereUniqueInput!, create: ApplicationCreateInput!, update: ApplicationUpdateInput!): Application!
+  deleteApplication(where: ApplicationWhereUniqueInput!): Application
+  deleteManyApplications(where: ApplicationWhereInput): BatchPayload!
   createCoursePage(data: CoursePageCreateInput!): CoursePage!
   updateCoursePage(data: CoursePageUpdateInput!, where: CoursePageWhereUniqueInput!): CoursePage
   updateManyCoursePages(data: CoursePageUpdateInput!, where: CoursePageWhereInput): BatchPayload!
@@ -994,6 +1303,9 @@ input ProblemWhereUniqueInput {
 }
 
 type Query {
+  application(where: ApplicationWhereUniqueInput!): Application
+  applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application]!
+  applicationsConnection(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ApplicationConnection!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage]!
   coursePagesConnection(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CoursePageConnection!
@@ -1752,6 +2064,7 @@ input SandboxWhereUniqueInput {
 }
 
 type Subscription {
+  application(where: ApplicationSubscriptionWhereInput): ApplicationSubscriptionPayload
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
@@ -2179,6 +2492,8 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: [ID!]!
+  subjects: [ID!]!
   permissions: [Permission!]!
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage!]
@@ -2188,7 +2503,6 @@ type User {
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   isFamiliar: Boolean!
   createdAt: DateTime!
-  favourites: [ID!]!
 }
 
 type UserConnection {
@@ -2207,6 +2521,8 @@ input UserCreateInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2215,7 +2531,6 @@ input UserCreateInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateOneInput {
@@ -2257,12 +2572,18 @@ input UserCreatepermissionsInput {
   set: [Permission!]
 }
 
+input UserCreatesubjectsInput {
+  set: [ID!]
+}
+
 input UserCreateWithoutCoursePagesInput {
   name: String!
   email: String!
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
@@ -2270,7 +2591,6 @@ input UserCreateWithoutCoursePagesInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutLessonsInput {
@@ -2279,6 +2599,8 @@ input UserCreateWithoutLessonsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2286,7 +2608,6 @@ input UserCreateWithoutLessonsInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutProblemsInput {
@@ -2295,6 +2616,8 @@ input UserCreateWithoutProblemsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2302,7 +2625,6 @@ input UserCreateWithoutProblemsInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutSandboxPageGoalsInput {
@@ -2311,6 +2633,8 @@ input UserCreateWithoutSandboxPageGoalsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2318,7 +2642,6 @@ input UserCreateWithoutSandboxPageGoalsInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -2327,6 +2650,8 @@ input UserCreateWithoutSandboxPagesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
@@ -2334,7 +2659,6 @@ input UserCreateWithoutSandboxPagesInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -2343,6 +2667,8 @@ input UserCreateWithoutTestsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2350,7 +2676,6 @@ input UserCreateWithoutTestsInput {
   lessons: LessonCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserCreatefavouritesInput
 }
 
 type UserEdge {
@@ -2386,10 +2711,11 @@ type UserPreviousValues {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: [ID!]!
+  subjects: [ID!]!
   permissions: [Permission!]!
   isFamiliar: Boolean!
   createdAt: DateTime!
-  favourites: [ID!]!
 }
 
 type UserSubscriptionPayload {
@@ -2416,6 +2742,8 @@ input UserUpdateDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2424,7 +2752,6 @@ input UserUpdateDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdatefavouritesInput {
@@ -2437,6 +2764,8 @@ input UserUpdateInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2445,7 +2774,6 @@ input UserUpdateInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateOneRequiredInput {
@@ -2501,12 +2829,18 @@ input UserUpdatepermissionsInput {
   set: [Permission!]
 }
 
+input UserUpdatesubjectsInput {
+  set: [ID!]
+}
+
 input UserUpdateWithoutCoursePagesDataInput {
   name: String
   email: String
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
@@ -2514,7 +2848,6 @@ input UserUpdateWithoutCoursePagesDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutLessonsDataInput {
@@ -2523,6 +2856,8 @@ input UserUpdateWithoutLessonsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2530,7 +2865,6 @@ input UserUpdateWithoutLessonsDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutProblemsDataInput {
@@ -2539,6 +2873,8 @@ input UserUpdateWithoutProblemsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2546,7 +2882,6 @@ input UserUpdateWithoutProblemsDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutSandboxPageGoalsDataInput {
@@ -2555,6 +2890,8 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2562,7 +2899,6 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -2571,6 +2907,8 @@ input UserUpdateWithoutSandboxPagesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
@@ -2578,7 +2916,6 @@ input UserUpdateWithoutSandboxPagesDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -2587,6 +2924,8 @@ input UserUpdateWithoutTestsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2594,7 +2933,6 @@ input UserUpdateWithoutTestsDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  favourites: UserUpdatefavouritesInput
 }
 
 input UserUpsertNestedInput {

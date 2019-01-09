@@ -142,6 +142,15 @@ export default class CoursePageNav extends Component {
                                     <Button>Составить задачу </Button>
                                 </a>
                                 </Link>
+                                <br/>
+                                <Link href={{
+                                    pathname: '/applications',
+                                    query: {id: this.props.id}
+                                }}>
+                                <a>
+                                    <Button>Рассмотреть заявки </Button>
+                                </a>
+                                </Link>
                               </Buttons>
                             </RightHeadStyles> 
                             :

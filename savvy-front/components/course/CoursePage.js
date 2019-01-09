@@ -7,12 +7,13 @@ import SingleLesson from './SingleLesson';
 import SingleTest from './SingleTest';
 import SingleProblem from './SingleProblem';
 import CoursePageNav from './CoursePageNav';
-
-SingleProblem
+import { MaterialPerPage } from '../../config';
+import LessonPagination from '../pagination/LessonPagination';
+import PleaseSignIn from '../PleaseSignIn';
 
 const PAGE_LESSONS_QUERY = gql`
-  query PAGE_LESSONS_QUERY($id: ID!) {
-    lessons(where: {coursePageID: $id}) {
+  query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
+    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
       id
       text
       user {
@@ -23,8 +24,8 @@ const PAGE_LESSONS_QUERY = gql`
 `;
 
 const PAGE_TESTS_QUERY = gql`
-  query PAGE_TESTS_QUERY($id: ID!) {
-    tests(where: {coursePageID: $id}) {
+  query PAGE_TESTS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
+    tests(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
       id
       user {
           id
@@ -34,8 +35,8 @@ const PAGE_TESTS_QUERY = gql`
 `;
 
 const PAGE_PROBLEMS_QUERY = gql`
-  query PAGE_PROBLEMS_QUERY($id: ID!) {
-    problems(where: {coursePageID: $id}) {
+  query PAGE_PROBLEMS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
+    problems(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
       id
       user {
           id
@@ -91,16 +92,38 @@ class CoursePage extends Component {
     onTest = () => {this.setState({page: "test", button1: false, button2: true, button3: false})}
     onProblem = () => {this.setState({page: "problem", button1: false, button2: false, button3: true})}
 
+    onFetchMore = () => {
+        console.log("G`et")
+        // console.log(fetchMore)
+        // const { data: { matches, fetchMore } } = this.props;
+    
+        // fetchMore({
+        //   variables: { date: matches[matches.length - 1].date },
+        //   updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
+        //     return {
+        //       ...previousResult,
+        //       // Add the new matches data to the end of the old matches data.
+        //       matches: [
+        //         ...previousResult.matches,
+        //         ...fetchMoreResult.matches,
+        //       ],
+        //     };
+        //   },
+        // });
+      }
+
     render() {
         switch(this.state.page) {
             case "lesson":
             this.pageView = 
                 <Query
                     query={PAGE_LESSONS_QUERY} 
+                    fetchPolicy="cache-first"
                     variables={{
                             id: this.props.id,
+                            skip: this.props.page * MaterialPerPage - MaterialPerPage
                         }}
-                    fetchPolicy="cache-first"
+
                     >
                     {({ data, error, loading}) => {
                         if (loading) return <p>Loading...</p>;
@@ -109,8 +132,10 @@ class CoursePage extends Component {
                         return (
                         <>
                             <div>
-                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} id={lesson}/>)}
+                                {/* <LessonPagination/> */}
+                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} lesson={lesson} coursePageId={this.props.id}/>)}
                             </div>
+                        <button onClick={this.onFetchMore}>Fetch More</button>
                         </>
                         )
                     }}
@@ -133,7 +158,8 @@ class CoursePage extends Component {
                         return (
                         <>
                         <div>
-                            {data.tests.map(test => <SingleTest key={test.id} id={test.id} ></SingleTest>)}
+                            
+                            {data.tests.map(test => <SingleTest key={test.id} test={test} coursePageId={this.props.id} ></SingleTest>)}
                         </div>
                         </>
                             )
@@ -144,11 +170,10 @@ class CoursePage extends Component {
                 this.pageView = 
                 <Query
                     query={PAGE_PROBLEMS_QUERY} 
-                    // fetchPolicy="network-only"
+                    fetchPolicy="cache-first"
                     variables={{
                         id: this.props.id,
                     }}
-                    fetchPolicy="cache-first"
                 >
                     {({ data, error, loading }) => {
                         if (loading) return <p>Loading...</p>;
@@ -157,7 +182,7 @@ class CoursePage extends Component {
                         return (
                             <>
                                 <div>
-                                    {data.problems.map(problem => <SingleProblem key={problem.id} problem={problem}/>)}
+                                    {data.problems.map(problem => <SingleProblem key={problem.id} problem={problem} coursePageId={this.props.id}/>)}
                                 </div>
                             </>
                         )
@@ -168,11 +193,10 @@ class CoursePage extends Component {
                 this.pageView = 
                 <Query
                     query={PAGE_LESSONS_QUERY} 
-                    // fetchPolicy="network-only"
+                    fetchPolicy="cache-first"
                     variables={{
                         id: this.props.id,
                     }}
-                    fetchPolicy="cache-first" 
                 >
                     {({ data, error, loading}) => {
                         if (loading) return <p>Loading...</p>;
@@ -181,7 +205,7 @@ class CoursePage extends Component {
                         return (
                         <>
                             <div>
-                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} id={lesson.id} >{lesson.id}</SingleLesson>)}
+                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} id={lesson.id} coursePageId={this.props.id} >{lesson.id}</SingleLesson>)}
                             </div>
                         </>
                         )
@@ -190,7 +214,7 @@ class CoursePage extends Component {
                 break;
             }
         return (
-            <>
+            <PleaseSignIn>
                 <CoursePageNav id={this.props.id}/>
                 <br/>
                 <Nav>
@@ -217,7 +241,7 @@ class CoursePage extends Component {
                 </Nav>
                 {this.pageView}
             
-        </>
+        </PleaseSignIn>
     )}
 }
 

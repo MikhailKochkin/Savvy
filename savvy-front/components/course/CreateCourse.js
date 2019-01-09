@@ -12,62 +12,128 @@ const CREATE_COURSE_MUTATION = gql`
     $description: String! 
     $image: String
     $tags: [String!]!
+    $courseType: CourseType
   ) {
     createCoursePage(
       title: $title 
       description: $description
       image: $image
       tags: $tags
+      courseType: $courseType
     ) {
       id
     }
   }
 `;
 
-const Form = styled.form`
-  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background: rgba(0, 0, 0, 0.02);
-  border: 5px solid white;
-  padding: 20px;
-  font-size: 1.5rem;
-  line-height: 1.5;
-  font-weight: 600;
-  textarea, input {
-    font-size: 1.7rem;
-    width: 100%;
-    font-family: "Gill Sans", serif;
-  }
-  #Bike {
-    width: 25%;
-  }
-  input{
-    margin: 0.4% 0;
-  }
-`;
-
-const Button = styled.button`
+const SubmitButton = styled.button`
     background-color: #008CBA;
     border: none;
+    border-radius: 6px;
     color: white;
-    padding: 15px 32px;
+    padding: 1%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-`
-
-const Grid = styled.label`
-  display: grid;
-  grid-template-columns: 50px 10px;
-  grid-template-rows: repeat(5, 20px);
+    font-size: 1.4rem;
+    font-weight: 600;
+    width: 30%;
+    cursor: pointer;
+    &:hover {
+        background: #0B3954;
+    }
 `;
+
+const Form = styled.form`
+    width: 85%;
+    margin: 50%;
+    margin: 0 auto;
+    font-size: 1.6rem;
+    @media (max-width: 800px) {
+        width: 80%;
+    }
+`;
+
+const Fieldset = styled.fieldset`
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #F0F0F0;
+    border-radius: 5px;
+    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
+                0 5px 15px 0 rgba(0,0,0,0.08);
+    /* min-height: 400px; */
+    select {
+      width: 30%;
+      font-size: 1.6rem;
+    }
+`;
+
+const Container = styled.div`
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3 70px);
+    .title {
+        grid-area: first;
+    }
+    .description {
+        grid-area: second;
+    }
+    .type {
+        grid-area: third;
+    }
+    .file {
+        grid-area: fourth;
+    }
+    grid-template-areas:
+        "first   "
+        "second   "
+        "third   "
+        "fourth   ";
+`;
+
+const Label = styled.label`
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 100%;
+    justify-items: center;
+    align-items: center;
+    input {
+        height: 60%;
+        width: 100%;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+        border-radius: 3.5px;
+        padding: 1%;
+        font-size: 1.4rem;       
+    }
+    @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+    }
+`;
+
+const Buttons = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    margin-top: 2%;
+    padding: 3%;
+    border-top: solid 1px #F0F0F0;
+`;
+
+const P = styled.p`
+  font-size: 1.8rem;
+  font-weight: 600;
+`;
+
 
 export default class CreateCourse extends Component {
     state = {
       title: '',
       description: '',
       image: '',
-      tags: ''
+      tags: '',
+      courseType: 'PUBLIC'
     };
     handleChange = e => {
       const { name, value } = e.target;
@@ -130,9 +196,12 @@ export default class CreateCourse extends Component {
                   }}
                 >
                 <Error error={error}/>
-                <fieldset disabled={loading} aria-busy={loading}>
-                  <label htmlFor="title">
+                <Fieldset disabled={loading} aria-busy={loading}>
+                <Container>
+                  <Label className="title" htmlFor="title">
+                        <P className="first">Название курса</P>
                         <input
+                          className="second"
                           type="text"
                           id="title"
                           name="title"
@@ -141,10 +210,11 @@ export default class CreateCourse extends Component {
                           required
                           onChange={this.handleChange}
                         />
-                  </label>
-                  <br/>
-                  <label htmlFor="description">
+                  </Label>
+                  <Label className="description" htmlFor="description">
+                        <P className="first">Описание курса</P>
                         <input
+                          className="second"
                           type="text"
                           id="description"
                           name="description"
@@ -153,10 +223,18 @@ export default class CreateCourse extends Component {
                           value={this.state.description}
                           onChange={this.handleChange}
                         />
-                  </label>
-                  <br/>
-                  <label htmlFor="file">
+                  </Label>
+                  <Label className="type" htmlFor="CourseType">
+                      <P className="first">Тип курса</P>
+                      <select name="courseType" value={this.state.CourseType} onChange={this.handleChange}>
+                        <option value="PUBLIC">Открытый</option>
+                        <option value="PRIVATE">Закрытый</option>
+                      </select>
+                  </Label>
+                  <Label className="file" htmlFor="file">
+                    <P className="first">Логотип курса</P>
                     <input
+                      className="second"
                       type="file"
                       id="file"
                       name="file"
@@ -164,12 +242,13 @@ export default class CreateCourse extends Component {
                       onChange={this.uploadFile}
                     />
                     {this.state.image && (
-                      <img width="300" height="auto" src={this.state.image} alt="Upload Preview" />
+                      <img width="30%" height="200px" src={this.state.image} alt="Upload Preview" />
                     )}
-                  </label>
-                  <br/>
+                    </Label>
+                  </Container>
+                  <P>Выберите тэги, которые наиболее точно описывают ваш курс:</P>
                   {Tags.map(tag => (
-                      <label key={tag + "label"} htmlFor="label">
+                      <Label key={tag + "label"} htmlFor="label">
                         <p>{tag}</p>
                         <input
                           key={tag}
@@ -179,11 +258,12 @@ export default class CreateCourse extends Component {
                           value={tag}
                           onChange={this.handleTagChange}
                         />
-                      </label>
+                      </Label>
                     ))}
-                  <br/>
-                  <Button type="submit">Submit</Button>
-                </fieldset>
+                  <Buttons>
+                    <SubmitButton type="submit">Создать</SubmitButton>
+                  </Buttons>
+                </Fieldset>
               </Form>
               )}
             </Mutation>

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import { Query } from 'react-apollo';
-import AnswerOption from './AnswerOption'
+import AnswerOption from './AnswerOption';
+import DeleteSingleTest from '../DeleteSingleTest';
+import User from '../User';
 
 const AnswerComment = styled.p`
   background-color: #90EE90;
@@ -24,6 +26,41 @@ const TestQuestion = styled.div`
   }
 `;
 
+const ProblemBox = styled.div`
+  border: none;
+  border-radius:5px;
+  margin: 2%;
+  padding: 2%;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    text-align: center;
+  }
+  button {
+      width: 20%;
+  }
+`;
+
+const TextBar = styled.div`
+  width: 90%;
+  font-size: 1.8rem;
+  border: 1px solid #112A62;
+  padding: 0 2%;
+  border-radius: 5px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const SideBar = styled.div`
+  margin-left: 2%;
+  @media (max-width: 800px) {
+    margin-bottom: 5%;
+  }
+`;
+
 const SINGLE_TEST_QUERY = gql`
   query SINGLE_TEST_QUERY($id: ID!) {
     test(where: { id: $id }) {
@@ -37,6 +74,9 @@ const SINGLE_TEST_QUERY = gql`
         answer4
         answer4Correct
         question
+        user {
+          id
+        }
     }
   }
 `;
@@ -62,7 +102,7 @@ class SingleTest extends Component {
         <Query
           query={SINGLE_TEST_QUERY}
           variables={{
-            id: this.props.id,
+            id: this.props.test.id,
           }}
         >
           {({ error, loading, data }) => {
@@ -95,16 +135,28 @@ class SingleTest extends Component {
               }
             }
             return (
-              <TestQuestion>
-                <AnswerComment id="AnswerComment"></AnswerComment>
-                <h1>{test.question}</h1>
-                {answers2.map((answer) => 
-                  <AnswerOption 
-                    key={answer.answer} 
-                    id={answer}
-                    onAnswerSelected={this.handleAnswerSelected}>
-                  </AnswerOption>)}
-              </TestQuestion>
+              <ProblemBox>
+                <TextBar>
+                  <AnswerComment id="AnswerComment"></AnswerComment>
+                  <h3>{test.question}</h3>
+                  {answers2.map((answer) => 
+                    <AnswerOption 
+                      key={answer.answer} 
+                      id={answer}
+                      onAnswerSelected={this.handleAnswerSelected}>
+                    </AnswerOption>)}
+                </TextBar>
+                <SideBar>
+                { me && me.id === test.user.id ?
+                    <DeleteSingleTest
+                      id={test.id}
+                      coursePageId={this.props.coursePageId}
+                    /> 
+                    :
+                    null
+                }
+                </SideBar>
+              </ProblemBox>
             );
           }}
         </Query>

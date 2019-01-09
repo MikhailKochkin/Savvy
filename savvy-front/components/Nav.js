@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import User from './User';
-import Header from './Header';
 import Search from './Search';
 import Signout from './Signout';
 
@@ -16,7 +15,6 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   /* border-top: 1px solid #6DAAE1; */
   border-bottom: 4px solid #152A5E;
-  text-transform: uppercase;
   cursor: pointer;
   a, button, input {
     text-decoration: none;
@@ -49,7 +47,9 @@ const UserData = styled.div`
   padding: 1% 10% 0.5% 0%;
 `;
 
-const Nav = () => (
+class Nav extends Component {
+    render() {
+      return (
       <User>
         {({data: {me}}) => (     
           <StyledHeader>
@@ -77,10 +77,19 @@ const Nav = () => (
                   </Link>
                 )}
               {me ? <p>{me.name}</p> : null}
+              {me ?
+              <Link href={{
+                pathname: '/account',
+                query: {id: me.id}
+              }}>
+                <a style={linkStyle}>Аккаунт</a>
+              </Link>
+              : null}
             </UserData>
           </StyledHeader> 
         )}
-    </User>    
-) 
+    </User>  
+  )}  
+}
 
 export default Nav;

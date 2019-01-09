@@ -3,6 +3,8 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import moment from 'moment';
+import DeleteSingleLesson from '../DeleteSingleLesson';
+import User from '../User';
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -11,6 +13,9 @@ const SINGLE_LESSON_QUERY = gql`
         text
         video
         createdAt
+        user {
+          id
+        }
     }
   }
 `;
@@ -29,14 +34,8 @@ const ProposalBox = styled.div`
 
 const SideBar = styled.div`
   margin-left: 2%;
-  .like {
-    color: red;
-  }
   @media (max-width: 800px) {
     margin-bottom: 5%;
-  }
-  Like:hover {
-    color: red;
   }
 `;
 
@@ -59,10 +58,12 @@ class SingleLesson extends Component {
     render() {
       return (
         <>
+        <User>
+          {({data: {me}}) => (
           <Query
             query={SINGLE_LESSON_QUERY}
             variables={{
-              id: this.props.id.id,
+              id: this.props.lesson.id,
             }}
           >
             {({ data, error, loading }) => {
@@ -88,12 +89,21 @@ class SingleLesson extends Component {
                     {/* <h4>{me && me.favourites}</h4> */}
                     <Date>{moment(lesson.createdAt).format('D MMM YYYY')}</Date>
                     <br/>
+                    { me && me.id === lesson.user.id ?
+                    <DeleteSingleLesson 
+                      id={this.props.lesson.id}
+                      coursePageId={this.props.coursePageId}/>
+                      :
+                      null
+                    }
                   </SideBar>
                 </ProposalBox>
                 </>
               );
             }}
           </Query>
+          )}
+          </User>
         </>
       );
     }

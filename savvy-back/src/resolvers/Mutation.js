@@ -1,12 +1,97 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { randomBytes } = require('crypto');
+const { promisify } = require('util');
+const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require("../utils");
 
 const Mutations = {
+  async updateUser(parent, args, ctx, info) {
+    //run the update method
+    const updates = { ...args };
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    const updatedUser = await ctx.db.mutation.updateUser(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        },
+      },
+      info
+    );
+    console.log("Updated User!")
+    return updatedUser; 
+  },
+  async requestReset(parent, args, ctx, info) {
+    // 1. Check if this is a real user
+    const user = await ctx.db.query.user({ where: { email: args.email } });
+    if (!user) {
+      throw new Error(`No such user found for email ${args.email}`);
+    }
+    // 2. Set a reset token and expiry on that user
+    const randomBytesPromiseified = promisify(randomBytes);
+    const resetToken = (await randomBytesPromiseified(20)).toString('hex');
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+    const res = await ctx.db.mutation.updateUser({
+      where: { email: args.email },
+      data: { resetToken, resetTokenExpiry },
+    });
+    // 3. Email them that reset token
+    const mailRes = await transport.sendMail({
+      from: 'mikhailvkochkin@gmail.com',
+      to: user.email,
+      subject: 'Your Password Reset Token',
+      html: makeANiceEmail(`Вот твой токен для смены пароля
+      \n\n
+      <a href="${process.env
+        .FRONTEND_URL}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
+    });
+    // 4. Return the message
+    return { message: 'Thanks!' };
+  },
+  async resetPassword(parent, args, ctx, info) {
+    // 1. check if the passwords match
+    if (args.password !== args.confirmPassword) {
+      throw new Error("Пароли не совпадают!");
+    }
+    // 2. check if its a legit reset token
+    // 3. Check if its expired
+    const [user] = await ctx.db.query.users({
+      where: {
+        resetToken: args.resetToken,
+        resetTokenExpiry_gte: Date.now() - 3600000,
+      },
+    });
+    if (!user) {
+      throw new Error('Это неправильный или устаревший токен!');
+    }
+    // 4. Hash their new password
+    const password = await bcrypt.hash(args.password, 10);
+    // 5. Save the new password to the user and remove old resetToken fields
+    const updatedUser = await ctx.db.mutation.updateUser({
+      where: { email: user.email },
+      data: {
+        password,
+        resetToken: null,
+        resetTokenExpiry: null,
+      },
+    });
+    // 6. Generate JWT
+    const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
+    // 7. Set the JWT cookie
+    ctx.response.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+    });
+    // 8. return the new user
+    return updatedUser;
+  },
   async createCoursePage(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!')
+      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }
     const tags = args.tags
     delete args.tags
@@ -31,7 +116,7 @@ const Mutations = {
   async createSandboxPage(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!')
+      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }
     const sandboxPage = await ctx.db.mutation.createSandboxPage(
         {
@@ -111,7 +196,7 @@ const Mutations = {
         // console.log(ctx.request.userId)
         // console.log(coursePagedID)
         if (!ctx.request.userId) {
-          throw new Error('You must be logged in to do that!')
+          throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
         }
 
         const Lesson = await ctx.db.mutation.createLesson(
@@ -130,6 +215,15 @@ const Mutations = {
       );
         return Lesson;
     },
+    async deleteLesson(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the lesson
+      console.log(where)
+      const lesson = await ctx.db.query.lesson({ where }, `{ id }`);
+      console.log(lesson)
+      //3. Delete it
+      return ctx.db.mutation.deleteLesson({ where }, info);
+    },
     async createTest(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const coursePageID = args.coursePageID
@@ -137,7 +231,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('You must be logged in to do that!')
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
       }
 
       const test = await ctx.db.mutation.createTest(
@@ -156,6 +250,15 @@ const Mutations = {
       );
         return test;
     },
+    async deleteTest(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the lesson
+      console.log(where)
+      const test = await ctx.db.query.test({ where }, `{ id }`);
+      console.log(test)
+      //3. Delete it
+      return ctx.db.mutation.deleteTest({ where }, info);
+    },
     async createProblem(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const coursePageID = args.coursePageID
@@ -163,7 +266,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('You must be logged in to do that!')
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
       }
       const problem = await ctx.db.mutation.createProblem(
             {
@@ -181,6 +284,45 @@ const Mutations = {
       );
         return problem;
     },
+    async deleteProblem(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the lesson
+      console.log(where)
+      const problem = await ctx.db.query.problem({ where }, `{ id }`);
+      console.log(problem)
+      //3. Delete it
+      return ctx.db.mutation.deleteProblem({ where }, info);
+    },
+    async createApplication(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const coursePageID = args.coursePageID
+      delete args.id
+      if (!ctx.request.userId) {
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      }
+      const application = await ctx.db.mutation.createApplication(
+            {
+            data: {
+                coursePage: {
+                  connect: { id: coursePageID }
+                },
+                ...args
+            },
+        }, 
+        info
+      );
+      console.log("Подали заявку!")
+      return application;
+    },
+    async deleteApplication(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the case
+      console.log(where)
+      const application = await ctx.db.query.application({ where }, `{ id }`);
+      console.log(application)
+      //3. Delete it
+      return ctx.db.mutation.deleteApplication({ where }, info);
+    },
     async createSandbox(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const sandboxPageID = args.sandboxPageID
@@ -188,7 +330,7 @@ const Mutations = {
       console.log(ctx.request.userId)
       console.log(sandboxPageID)
       if (!ctx.request.userId) {
-        throw new Error('You must be logged in to do that!')
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
       }
 
       const sandbox = await ctx.db.mutation.createSandbox(
@@ -229,7 +371,7 @@ const Mutations = {
       console.log(ctx.request.userId)
       console.log(sandboxPageID)
       if (!ctx.request.userId) {
-        throw new Error('You must be logged in to do that!')
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
       }
       const sandboxPageGoal = await ctx.db.mutation.createSandboxPageGoal(
           {
@@ -284,6 +426,40 @@ const Mutations = {
     console.log("Updated User!")
     return updatedUser; 
   },
+  async enrollOnCourse(parent, args, ctx, info) {
+    //run the update method
+    const enrolledUser = await ctx.db.mutation.updateUser(
+      {
+        data: {
+          subjects: {
+            set: [...args.subjects]
+          },
+        },
+        where: {
+          id: args.id
+        },
+      },
+      info
+    );
+    return enrolledUser; 
+  },
+  async addUserToCoursePage(parent, args, ctx, info) {
+    //run the update method
+    const updatedCoursePage= await ctx.db.mutation.updateCoursePage(
+      {
+        data: {
+          students: {
+            set: [...args.students]
+          },
+        },
+        where: {
+          id: args.id
+        },
+      },
+      info
+    );
+    return updatedCoursePage; 
+  },
   async deleteCoursePage(parent, args, ctx, info) {
     const where = { id: args.id };
     // console.log(where)
@@ -301,7 +477,7 @@ const Mutations = {
       ['ADMIN', 'CASEDELETE'].includes(permission)
     );
     if (!ownsCoursePage && !hasPermissions) {
-        throw new Error("You don't have permission to that!")
+        throw new Error("Вы должны быть зарегестрированы на сайте, чтобы делать это!")
     }
     //3. Delete it
     return ctx.db.mutation.deleteCoursePage({ where }, info);

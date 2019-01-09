@@ -3,6 +3,9 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import moment from 'moment';
+import DeleteSingleProblem from '../DeleteSingleProblem';
+import User from '../User';
+import { userInfo } from 'os';
 
 const SINGLE_PROBLEM_QUERY = gql`
   query SINGLE_PROBLEM_QUERY($id: ID!) {
@@ -12,25 +15,46 @@ const SINGLE_PROBLEM_QUERY = gql`
         hints
         solution
         answer
+        user {
+          id
+        }
         createdAt
     }
   }
 `;
 
 const ProblemBox = styled.div`
-  border: 1px solid black;
+  border: none;
   border-radius:5px;
   margin: 2%;
   padding: 2%;
   width: 90%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
     text-align: center;
   }
   button {
       width: 20%;
+  }
+`;
+
+const SideBar = styled.div`
+  margin-left: 2%;
+  @media (max-width: 800px) {
+    margin-bottom: 5%;
+  }
+`;
+
+const TextBar = styled.div`
+  width: 800px;
+  font-size: 1.8rem;
+  border: 1px solid #112A62;
+  padding: 0 2%;
+  border-radius: 5px;
+  @media (max-width: 800px) {
+    width: 100%;
   }
 `;
 
@@ -73,6 +97,8 @@ class SingleProblem extends Component {
     render() {
       return (
         <>
+        <User>
+          {({data: {me}}) => (
           <Query
             query={SINGLE_PROBLEM_QUERY}
             variables={{
@@ -87,6 +113,7 @@ class SingleProblem extends Component {
               moment.locale('ru');
               return (
                 <ProblemBox>
+                  <TextBar>
                     <p><strong>Текст задачи:</strong> {problem.text}</p>
                     
                     <p><strong>Подсказки:</strong> </p> 
@@ -112,10 +139,23 @@ class SingleProblem extends Component {
                     <Answer display={this.state.revealAnswer}>
                         {problem.answer}
                     </Answer>
+                  </TextBar>
+                  <SideBar>
+                  { me && me.id === problem.user.id ?
+                    <DeleteSingleProblem
+                      id={this.props.problem.id}
+                      coursePageId={this.props.coursePageId}
+                    />
+                    :
+                    null
+                  }  
+                  </SideBar>
                 </ProblemBox>
-              );
-            }}
-          </Query>
+                  );
+                }}
+              </Query>
+            )}
+          </User>
         </>
       );
     }

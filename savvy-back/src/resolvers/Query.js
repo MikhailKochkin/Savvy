@@ -10,8 +10,12 @@ const Query = {
     test:forwardTo('db'),
     problem:forwardTo('db'),
     sandbox:forwardTo('db'),
-    // casesConnection: forwardTo('db'),
     coursePagesConnection: forwardTo('db'),
+    sandboxPagesConnection: forwardTo('db'),
+    sandboxesConnection: forwardTo('db'),
+    lessonsConnection: forwardTo('db'),
+    problemsConnection: forwardTo('db'),
+    testsConnection: forwardTo('db'),
     lessons(parent, args, ctx, info){
       const pageId = args.where.coursePageID;
       return ctx.db.query.lessons(
@@ -33,6 +37,15 @@ const Query = {
     problems(parent, args, ctx, info){
       const pageId = args.where.coursePageID;
       return ctx.db.query.problems(
+        {
+          where: {coursePageID: pageId}
+        },
+        info
+      );
+    },
+    applications(parent, args, ctx, info){
+      const pageId = args.where.coursePageID;
+      return ctx.db.query.applications(
         {
           where: {coursePageID: pageId}
         },
@@ -76,8 +89,8 @@ const Query = {
       }
       // 2. Check if the user has permissions to query
       // all the users
-      hasPermission(ctx.request.user, ['ADMIN', 
-      'PERMISSIONUPDATE']);
+      // hasPermission(ctx.request.user, ['ADMIN', 
+      // 'PERMISSIONUPDATE']);
 
       // 3. if they do, query all the users!
       return ctx.db.query.users({}, info);

@@ -3,19 +3,15 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Course from './Course';
-import Pagination from '../Pagination';
-import { perPage } from '../../config';
-import {CURRENT_USER_QUERY} from '../User';
+import Pagination from '../pagination/CoursesPagination';
+import { CoursePerPage } from '../../config';
 import { Tags } from '../../config';
-
-
 
 const Center = styled.div`
     text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
 `;
 
 const CasesStyles = styled.div`
@@ -40,13 +36,19 @@ const ChooseTag = styled.div`
 `;
 
 const ALL_COURSE_PAGES_QUERY = gql`
-  query ALL_COURSE_PAGES_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
+  query ALL_COURSE_PAGES_QUERY($skip: Int = 0, $first: Int = ${CoursePerPage}) {
     coursePages(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
       description
       image
       tags
+      courseType
+      students
+      applications {
+          id
+          applicantId
+      }
       user {
           id
           name
@@ -63,6 +65,12 @@ const ALL_COURSEBYTAGS_PAGES_QUERY = gql`
       description
       image
       tags
+      courseType
+      students
+      applications {
+          id
+          applicantId
+      }
       user {
           id
           name
@@ -87,10 +95,8 @@ class Courses extends Component {
                     <h1>Курсы</h1>
                     <Query 
                     query={ALL_COURSE_PAGES_QUERY} 
-                    // fetchPolicy="cache-and-network"
                     variables={{
-                        skip: this.props.page * perPage - perPage,
-                        // first: 4,
+                        skip: this.props.page * CoursePerPage - CoursePerPage
                     }}>
                     {({ data, error, loading }) => {
                         if (loading) return <p>Loading...</p>;
@@ -103,24 +109,34 @@ class Courses extends Component {
                    <ChooseTag>
                     <h2> Рекомендуем для тех, кто хочет изучить: {this.state.tag} </h2>
                     <select name="tag" value={this.state.tag} onChange={this.handleChange}>
-                            {Tags.map(tag => <option value={tag}>{tag}</option>)}
+                            {Tags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
                         </select>
                    </ChooseTag>
                    <Query 
                     query={ALL_COURSEBYTAGS_PAGES_QUERY} 
-                    // fetchPolicy="cache-and-network"
-                    
+                    fetchPolicy="cache-first"
                     variables={{
-                        skip: this.props.page * perPage - perPage,
+                        skip: this.props.page * CoursePerPage - CoursePerPage,
                         // first: 4,
                     }}>
                     {({ data, error, loading }) => {
                         if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error: {error.message}</p>;
                         const tagged = data.coursePages.filter(course => course.tags.includes(this.state.tag))
+                        tagged.length === 0
                         return (
                             <CasesStyles>
-                                {tagged.map(coursePage => <Course key={coursePage.id} coursePage={coursePage}/>)}
+                                {tagged.length === 0 ? 
+                                <p>По этому тэгу пока еще нет курсов. Но мы это скоро исправим. Напишиите нам, 
+                                если у вас есть предложение по тому, как это сделать.</p>
+                                :
+                                tagged.map(coursePage => 
+                                    <Course 
+                                        key={coursePage.id}
+                                        id={coursePage.id} 
+                                        coursePage={coursePage}
+                                />)
+                                }
                             </CasesStyles>
                         )
                     }}

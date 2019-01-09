@@ -3,8 +3,8 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Sandbox from './Sandbox';
-import Pagination from '../Pagination';
-import { perPage } from '../../config';
+import SandboxesPagination from '../pagination/SandboxesPagination';
+import { SandboxPerPage } from '../../config';
 
 
 const Center = styled.div`
@@ -27,7 +27,7 @@ const SandboxesStyles = styled.div`
 `;
 
 const ALL_SANDBOX_PAGES_QUERY = gql`
-  query ALL_SANDBOX_PAGES_QUERY($skip: Int = 0, $first: Int = ${perPage}) {
+  query ALL_SANDBOX_PAGES_QUERY($skip: Int = 0, $first: Int = ${SandboxPerPage}) {
     sandboxPages(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
@@ -45,13 +45,13 @@ class Sandboxes extends Component {
     render() {
         return (
             <Center>
-                {/* <Pagination page={this.props.page} /> */}
+                <SandboxesPagination page={this.props.page} />
                     <h1>Песочницы</h1>
                     <Query 
                         query={ALL_SANDBOX_PAGES_QUERY} 
                         // fetchPolicy="cache-and-network"
                         variables={{
-                            skip: this.props.page * perPage - perPage,
+                            skip: this.props.page * SandboxPerPage - SandboxPerPage,
                             // first: 4,
                         }}>
                         {({ data, error, loading }) => {

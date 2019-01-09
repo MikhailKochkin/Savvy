@@ -14,7 +14,7 @@ const HomeStyles = styled.div`
 const Button = styled.button`
     background-color: ${props => props.active ? "#122557" : "white"};
     color: ${props => props.active ? "white" : "black"};
-
+    cursor: pointer;
 `;
 
 const Buttons = styled.div`
@@ -24,6 +24,16 @@ const Buttons = styled.div`
     justify-content: center;
     Button {
         width: 25%;
+    }
+    @media (max-width: 800px) {
+        Button {
+            font-size: 1rem;
+        }
+    }
+    @media (max-width: 500px) {
+        Button {
+            font-size: 0.7rem;
+        }
     }
 `;
 
@@ -42,7 +52,7 @@ class Home extends Component {
               <User>
                 {({data: {me}}) => (  
                     <> 
-                        {!me ? <Banner/> : null}
+                        <Banner/>
                         <Buttons>
                             <Button
                                 onClick = {this.onCourse}

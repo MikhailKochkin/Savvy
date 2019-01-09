@@ -5,18 +5,20 @@ type SuccessMessage {
 }
 
 type Mutation {
-    # in future you can make a custom object not to write this everytime
-    createCoursePage(title: String!, description: String!, image: String, tags: [String] ): CoursePage!
-    updateCoursePage(id: ID!, title: String, description: String, image: String): CoursePage
+    createCoursePage(title: String!, description: String!, image: String, tags: [String], courseType: CourseType): CoursePage!
+    updateCoursePage(id: ID!, title: String, description: String, image: String, courseType: CourseType): CoursePage
     createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     updateSandboxPage(id: ID!, title: String, description: String, image: String): SandboxPage
     deleteSandboxPage(id:ID!): SandboxPage
     createLesson(text: String!, video: String, coursePageID: ID!): Lesson!
+    deleteLesson(id:ID!): Lesson
     createTest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
         answer4Correct: String, coursePageID: ID!): Test!
+    deleteTest(id:ID!): Test
     createProblem(text: String!, hints: String, solution: String, answer: String!,
         coursePageID: ID!): Test!
+    deleteProblem(id:ID!): Problem
     createSandbox(text: String!, video: String, sandboxPageID: ID!): Sandbox!
     deleteSandbox(id:ID!): Sandbox
     createSandboxPageGoal(goal: String!, sandboxPageID: ID!): SandboxPageGoal!
@@ -25,6 +27,8 @@ type Mutation {
     #     analysis: String, conclusion: String): Case!
     # deleteLesson(id:ID!): Case
     deleteCoursePage(id:ID!): CoursePage
+    createApplication(applicantId: ID!, applicantName: String!, message: String, coursePageID: ID!): Application!
+    deleteApplication(id:ID!): Application
     signup(email: String!, password: String!, name: String!): User!
     signin(email: String!, password: String!): User!
     signout: SuccessMessage
@@ -32,26 +36,37 @@ type Mutation {
     familiarize(id:ID!): User
     likePost(id:ID!, likes: Int): Sandbox
     addToFavourites(id: ID!, favourites: [ID]): User
+    enrollOnCourse(id: ID! , subjects: [ID]): User
+    addUserToCoursePage(id:ID!, students: [ID]): CoursePage
+    updateUser(id: ID!, name: String, email: String): User
+    requestReset(email: String!): SuccessMessage
+    resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
 }
 
 type Query {
     coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, first: Int): [CoursePage]!
     coursePage(where: CoursePageWhereUniqueInput!): CoursePage
     sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, first: Int): [SandboxPage]!
+    sandboxPagesConnection(where: SandboxPageWhereInput): SandboxPageConnection!
     sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, first: Int): [SandboxPageGoal]!
     sandboxPage(where: SandboxPageWhereUniqueInput!): SandboxPage
     sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, first: Int): [Sandbox]!
     sandbox(where: SandboxWhereUniqueInput!): Sandbox
+    sandboxesConnection(where: SandboxWhereInput): SandboxConnection!
     lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, first: Int): [Lesson]!
     lesson(where: LessonWhereUniqueInput!): Lesson
-    # casesConnection(where: CaseWhereInput): CaseConnection!
+    applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, first: Int,): [Application]!
     coursePagesConnection(where: CoursePageWhereInput): CoursePageConnection!
+    lessonsConnection(where: LessonWhereInput): LessonConnection!
+    problemsConnection(where: ProblemWhereInput): ProblemConnection!
+    testsConnection(where: TestWhereInput): TestConnection!
     tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, first: Int): [Test]!
     test(where: TestWhereUniqueInput!): Test
     problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, first: Int): [Problem]!
     problem(where: ProblemWhereUniqueInput!): Problem
     me: User
-    users: [User]!
+    user(where: UserWhereUniqueInput!): User
+    users(where: UserWhereInput!): [User]!
 }
 
 type User{
@@ -61,4 +76,7 @@ type User{
     permissions: [Permission!]!
     isFamiliar: Boolean!
     favourites: [ID]
+    subjects: [ID]
 }
+
+

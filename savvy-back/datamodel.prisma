@@ -7,6 +7,11 @@ enum Permission {
   PERMISSIONUPDATE
 }
 
+enum CourseType {
+  PUBLIC
+  PRIVATE
+}
+
 type User {
   id: ID! @unique
   name: String!
@@ -14,6 +19,8 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  favourites: [ID]
+  subjects: [ID]
   permissions: [Permission]
   coursePages: [CoursePage] @relation(name: "UserCoursePage" onDelete: CASCADE)
   sandboxPages: [SandboxPage] @relation(name: "UserSandboxPage" onDelete: CASCADE)
@@ -23,8 +30,8 @@ type User {
   problems: [Problem]!
   isFamiliar: Boolean! @default(value: "false")
   createdAt: DateTime!
-  favourites: [ID]
 }
+
 
 type CoursePage {
   id: ID! @unique
@@ -35,7 +42,10 @@ type CoursePage {
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
   tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
   problems: [Problem]! @relation(name: "ProblemsOnCoursePage" onDelete: CASCADE)
+  applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
   tags: [String]
+  courseType: CourseType
+  students: [ID]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -115,4 +125,13 @@ type Problem {
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type Application {
+  id: ID! @unique
+  applicantId: ID!
+  applicantName: String!
+  message: String
+  coursePage: CoursePage! @relation(name: "ApplicationOnCoursePage")
+  coursePageID: ID!
 }

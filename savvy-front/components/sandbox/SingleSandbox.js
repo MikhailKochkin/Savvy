@@ -182,7 +182,7 @@ class SingleSandbox extends Component {
                     <h4>{sandbox.user.name}</h4>
                     {/* <h4>{me && me.favourites}</h4> */}
                     <Date>{moment(sandbox.createdAt).format('D MMM YYYY')}</Date>
-                      <Mutation 
+                    <Mutation 
                       mutation={LIKE_MUTATION}>
                         {(likePost) => (
                           <Mutation 
@@ -203,7 +203,8 @@ class SingleSandbox extends Component {
                     <br/>
                     <DeleteSingleSandbox 
                       id={this.props.id}
-                      sandboxPageId={this.props.sandboxPageId}/>
+                      sandboxPageId={this.props.sandboxPageId}
+                    />
                   </SideBar>
                 </ProposalBox>
               );

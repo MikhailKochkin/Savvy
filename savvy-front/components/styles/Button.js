@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 
 const NavButton = styled.button`
     color: white; 
-    background: #0B78C6; 
+    background-color: ${props => props.red ? "red" : "#0B78C6"};
     border: none;
     border-radius: 6px;
     padding: 1%;
@@ -18,7 +18,7 @@ const NavButton = styled.button`
 `;
 
 const SubmitButton = styled.button`
-    background-color: #008CBA;
+    background-color: ${props => props.red ? "#DC143C" : "#008CBA"};
     border: none;
     border-radius: 6px;
     color: white;
@@ -30,7 +30,7 @@ const SubmitButton = styled.button`
     font-weight: 600;
     cursor: pointer;
     &:hover {
-        background: #0B3954;
+        background-color: ${props => props.red ? "#8B0000" : "#0B3954"};
     }
 `;
 

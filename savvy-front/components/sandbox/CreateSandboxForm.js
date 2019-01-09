@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import styled from 'styled-components';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -22,35 +21,6 @@ const CREATE_SANDBOX_MUTATION = gql`
     }
   }
 `;
-
-const Form = styled.form`
-  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background: rgba(0, 0, 0, 0.02);
-  border: 5px solid white;
-  padding: 20px;
-  font-size: 1.5rem;
-  line-height: 1.5;
-  font-weight: 600;
-  textarea, input {
-    font-size: 1.7rem;
-    width: 100%;
-    font-family: "Gill Sans", serif;
-  }
-  input{
-    margin: 0.4% 0;
-  }
-`;
-
-const Button = styled.button`
-    background-color: #008CBA;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-`
 
 const DynamicLoadedEditor = dynamic(
   import('../editor/Editor'),
@@ -88,20 +58,20 @@ export default class CreateSandboxForm extends Component {
                 query: { id }
               }}>
               <a>
-                  <button>Вернуться на страницу песочницы!</button>
+                  <button>Вернуться на страницу песочницы</button>
               </a>
             </Link>
             <DynamicLoadedEditor getEditorText={this.myCallback}/>
             <label htmlFor="video">
-                      <input
-                        type="text"
-                        id="video"
-                        name="video"
-                        placeholder="Вставьте ссылку на видео..."
-                        value={this.state.video}
-                        onChange={this.handleChange}
-                      />
-                </label>
+              <input
+                type="text"
+                id="video"
+                name="video"
+                placeholder="Вставьте ссылку на видео..."
+                value={this.state.video}
+                onChange={this.handleChange}
+              />
+            </label>
                 <h4>Обратите внимание. Добавить видо на сайт с Youtube, можно только со специальной ссылкой. 
                   О том, как ее получить, смотрите здесь: <a>https://support.google.com/youtube/answer/171780?hl=ru</a> </h4>
             <Mutation 
@@ -122,7 +92,6 @@ export default class CreateSandboxForm extends Component {
                     // call the mutation
                     const res = await createSandbox();
                     // change the page to the single case page
-                    // console.log(res);
                     Router.push({
                       pathname: '/sandboxPage',
                       query: {id: id}

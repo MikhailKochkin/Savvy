@@ -23,6 +23,18 @@ const MissionContactStyles = styled.div`
     div {
         font-size: 2.2rem;
     }
+    @media (max-width: 900px) {
+        flex-direction: column;
+        div {
+          font-size: 1.6rem; 
+        }
+        .motto {
+            padding-bottom: 2%;
+            border-bottom: 1px solid white;
+            width: 105%;
+        }
+       
+    }
 `;
 
 const LinksStyles = styled.div`
@@ -44,7 +56,7 @@ const LegalAndSocial = styled.div`
     width: 70%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding: 1% 2%;
     padding-bottom: 2%;
     font-size: 1.8rem;
@@ -52,7 +64,7 @@ const LegalAndSocial = styled.div`
         color: white;
     }
     div {
-        padding: 0% 10%;
+        padding: 0% 0%;
     }
     div > a {
         color: white;
@@ -60,20 +72,22 @@ const LegalAndSocial = styled.div`
     a:hover, div > a:hover {
         color: #005987;
     }
-    /*
-    align-items: flex-end;
-
-    padding: 1% 4%; */
-    /* .VK {
-        align-self: flex-end;
-    } */
+    @media (max-width: 900px) {
+        .year {
+            font-size: 1.2rem;;
+        }
+        a {
+            font-size: 1.2rem;
+        }
+       
+    }
 `;
 
 
-const Footer = props => (
+const Footer = () => (
     <FooterStyles>
         <MissionContactStyles>
-            <div>Наша задача – создавать новые инструменты для эффективного обучения <br/> и поиска нужной правовой информации</div>
+            <div className="motto">Наша задача – создавать новые инструменты для эффективного обучения <br/> и поиска нужной правовой информации</div>
             <LinksStyles>
                 <Link href={{
                         pathname: '/about',
@@ -106,7 +120,7 @@ const Footer = props => (
             </LinksStyles> 
         </MissionContactStyles>
         <LegalAndSocial>
-            <div>© 2019 – Savvy</div>
+            <div className="year">© 2019 – Savvy</div>
             <Link href={{
                     pathname: '/pd',
                 }}>

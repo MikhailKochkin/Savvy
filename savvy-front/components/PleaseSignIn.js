@@ -9,7 +9,7 @@ const PleaseSignIn = props => (
         if(!data.me) {
             return (
                 <div>
-                    <p>Please Sign In before Continuing</p>
+                    <p>Пожалуйста, зарегестрируйтесь или войдите в свой аккаунт перед тем, как работать с этой страницей.</p>
                     <Signin />
                 </div>
             );
