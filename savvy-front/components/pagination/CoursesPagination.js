@@ -6,10 +6,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { CoursePerPage } from '../../config';
 
-const A = styled.a`
-     pointer-events: ${props => props.disabled ? "none" : null};
-`;
-
 const PAGINATION_QUERY = gql`
     query PAGINATION_QUERY {
         coursePagesConnection {
@@ -21,17 +17,43 @@ const PAGINATION_QUERY = gql`
 `;
 
 const PaginationStyles = styled.div`
-    width: 50%;
+    width: 25%;
+    background-color: #13214D;
+    color: white;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    border: 1px solid grey;
+    border-radius: 10px;
     font-weight: bold;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     margin-top: 3%;
     a {
         margin: 4%;
     }
+    @media (max-width: 1000px) {
+        width: 45%;
+        a {
+            margin: 4%;
+        }
+        
+    }
+    @media (max-width: 600px) {
+        width: 80%;
+        font-size: 1.4rem;
+        a {
+            margin: 5%;
+        }
+        margin-top: 6%;
+    }
+`;
+
+const A = styled.a`
+     pointer-events: ${props => props.disabled ? "none" : null};
+     padding: 1% 2%;
+     border-radius: 5px;
+     &:hover {
+         background: #E8E8E8;
+     }
+     cursor: pointer;
 `;
 
 const Pagination = props => (
@@ -56,7 +78,7 @@ const Pagination = props => (
                 
                 }}>
                 <A disabled={ page <= 1 }> 
-                    ⬅️ Пред
+                    ◀️
                 </A>
                 </Link>
                 <p>Страница {props.page} из {pages}</p>
@@ -68,7 +90,7 @@ const Pagination = props => (
                 
                 }}>
                 <A disabled={ page >= pages }>
-                    След ➡️
+                    ▶️
                 </A>
                 </Link>
             </PaginationStyles>

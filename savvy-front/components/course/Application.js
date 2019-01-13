@@ -40,7 +40,6 @@ class Application extends Component {
         this.setState({ [name]: value });
     };
     concealApplication = () => {
-        console.log("Application sent!")
         alert("Ваша заявка отправлена. В ближайшее время преподаватель рассмотрит ее и предоставит вам доступ к курсу.")
         this.props.getInputReveal(false);
     }

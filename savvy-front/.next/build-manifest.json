@@ -11,11 +11,23 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/account": [
+    "/courses": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/courses": [
+    "/index": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/training": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/sandboxPage": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

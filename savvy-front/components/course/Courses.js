@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
 import Course from './Course';
 import Pagination from '../pagination/CoursesPagination';
 import { CoursePerPage } from '../../config';
@@ -12,6 +13,15 @@ const Center = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+`;
+
+const PaginationCenter = styled.div`
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 const CasesStyles = styled.div`
@@ -25,13 +35,43 @@ const CasesStyles = styled.div`
     }
 `;
 
+const CustomSelect = styled.div`
+
+`;
+
 const ChooseTag = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     select {
-        width: 15%;
+        width: 30%;
+        font-size: 1.4rem;
+        margin-top: 5%;
+        margin: 3%;
+    }
+    ${CustomSelect} {
+        width: 30%;
+        border-radius: 3px;
+    }
+    ${CustomSelect} select {
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        background: #0878C6;
+        color: white;
+    }
+    ${CustomSelect} select:focus {
+        outline: none;
+    }
+    @media (max-width: 800px) {
+        select {
+            width: 100%;
+        }
+        ${CustomSelect} {
+            width: 70%;
+            border-radius: 3px;
+        }
     }
 `;
 
@@ -91,26 +131,33 @@ class Courses extends Component {
     render() {
         return (
             <Center>
-                {/* <Pagination page={this.props.page} /> */}
+                <PaginationCenter>
+                    <Pagination page={this.props.page} />
+                </PaginationCenter>
                     <h1>Курсы</h1>
                     <Query 
-                    query={ALL_COURSE_PAGES_QUERY} 
-                    variables={{
-                        skip: this.props.page * CoursePerPage - CoursePerPage
+                        query={ALL_COURSE_PAGES_QUERY} 
+                        fetchPolicy="cache-first"
+                        variables={{
+                            skip: this.props.page * CoursePerPage - CoursePerPage
                     }}>
                     {({ data, error, loading }) => {
-                        if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error: {error.message}</p>;
                         return <CasesStyles>
-                            {data.coursePages.map(coursePage => <Course key={coursePage.id} id={coursePage.id} coursePage={coursePage}/>)}
+                            {loading ? 
+                            <ReactLoading type={'spin'} color={'#13214D'} height={60} width={60} />
+                            :
+                            data.coursePages.map(coursePage => <Course key={coursePage.id} id={coursePage.id} coursePage={coursePage}/>)}
                             </CasesStyles>  
                     }}
                    </Query>
                    <ChooseTag>
-                    <h2> Рекомендуем для тех, кто хочет изучить: {this.state.tag} </h2>
-                    <select name="tag" value={this.state.tag} onChange={this.handleChange}>
-                            {Tags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
+                    <h2> Рекомендуем для тех, кого интересует: {this.state.tag} </h2>
+                    <CustomSelect>
+                        <select name="tag" value={this.state.tag} onChange={this.handleChange}>
+                                {Tags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
                         </select>
+                    </CustomSelect>
                    </ChooseTag>
                    <Query 
                     query={ALL_COURSEBYTAGS_PAGES_QUERY} 

@@ -49,8 +49,7 @@ class ApplicationBox extends Component {
                             {({ data: courseData, loading: courseLoading, }) => {
                                 if (courseLoading) return <p>Loading...</p>;
                                 // if (error1) return <p>Error: {error1.message}</p>;
-                                const arr2 = []
-                                console.log(courseData.coursePages[0].students)
+                                const arr2 = [];
                                 courseData.coursePages.map(course => arr2.push(course.students))
                                 const students = courseData.coursePages[0].students
                                 return (

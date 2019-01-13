@@ -12,6 +12,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
     coursePage(where: { id: $id }) {
         title
         image
+        courseType
         user {
             id
             name
@@ -22,7 +23,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 
 const HeadStyles = styled.div`
     display: flex;
-    margin-top: -2%;
+    margin-top: 0%;
     flex-direction: row;
     background-color: #0A2342;
     /* #0B3954; */
@@ -32,6 +33,9 @@ const HeadStyles = styled.div`
     }
     @media (max-width: 800px) {
         flex-direction: column;
+        Img {
+            width: 95%;
+        }
     }
 `;
 
@@ -47,10 +51,13 @@ const RightHeadStyles = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1 50%;
-    padding-top: 5%;
+    padding-top: 4%;
     font-size: 1.8rem;
     @media (max-width: 800px) {
         padding: 5%;
+        h2 {
+            margin-left: 8%;
+        }
     }
 `;
 
@@ -58,16 +65,20 @@ const Button = styled.button`
     padding: 2%;
     font-size: 1.4rem;
     font-weight: 600;
+    margin-bottom: 3%;
     text-transform: uppercase;
     color: #FFFDF7;
     background-color: #84BC9C;
+    border: solid 1px white;
+    cursor: pointer;
+    &:hover{
+        background-color: #294D4A;
+    }
 `;
-
 
 const Buttons = styled.div`
     display: flex;
     flex-direction: column;
-
 `;
 
 const Img = styled.img`
@@ -83,7 +94,6 @@ const Author = styled.p`
 const Header = styled.p`
     margin-top: 0;
     padding-top: 0;
-
 `;
 
 export default class CoursePageNav extends Component {
@@ -108,7 +118,12 @@ export default class CoursePageNav extends Component {
                             <LeftHeadStyles>
                                 {coursePage.image && <Img src={coursePage.image} alt={coursePage.title}/>}
                                 <Author>{coursePage.title} </Author>
-                                <Author>{coursePage.user.name} </Author> 
+                                <Author>{coursePage.user.name} </Author>
+                                { me !== null && coursePage.user.id === me.id ?
+                                    <p>Если после создания или удаления материала он не появился сразу на странице, перезагрузите страницу и все будет в порядке.</p>
+                                    :
+                                    null
+                                }
                                 <br/>
                             </LeftHeadStyles>
 
@@ -124,16 +139,16 @@ export default class CoursePageNav extends Component {
                                     <Button>Составить урок</Button>
                                 </a>
                                 </Link>
-                                <br/>
+                                
                                 <Link href={{
                                     pathname: '/createTest',
                                     query: {id: this.props.id }
                                 }}>
                                 <a>
-                                    <Button>Составить Тест</Button>
+                                    <Button>Составить тест</Button>
                                 </a>
                                 </Link>
-                                <br/>
+                                
                                 <Link href={{
                                     pathname: '/createProblem',
                                     query: {id: this.props.id}
@@ -142,7 +157,8 @@ export default class CoursePageNav extends Component {
                                     <Button>Составить задачу </Button>
                                 </a>
                                 </Link>
-                                <br/>
+                               
+                                {coursePage.courseType === "PRIVATE" &&
                                 <Link href={{
                                     pathname: '/applications',
                                     query: {id: this.props.id}
@@ -151,6 +167,7 @@ export default class CoursePageNav extends Component {
                                     <Button>Рассмотреть заявки </Button>
                                 </a>
                                 </Link>
+                                }
                               </Buttons>
                             </RightHeadStyles> 
                             :

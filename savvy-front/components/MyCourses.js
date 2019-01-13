@@ -10,6 +10,7 @@ const MY_COURSES_QUERY = gql`
       id
       title
       user  {
+          id
           name
       }
       description
@@ -33,7 +34,6 @@ const CoursesStyles = styled.div`
 
 class MyCourses extends Component {
     render() {
-        console.log(this.props.meData.subjects)
         return (
             <div>
                 <Query

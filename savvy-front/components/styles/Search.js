@@ -31,10 +31,11 @@ const glow = keyframes`
 `;
 
 const SearchStyles = styled.div`
+  margin-left: 2%;
   position: relative;
   input {
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border: 0;
     font-size: 2rem;
     &.loading {

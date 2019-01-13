@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import moment from 'moment';
 import DeleteSingleProblem from '../DeleteSingleProblem';
 import User from '../User';
-import { userInfo } from 'os';
 
 const SINGLE_PROBLEM_QUERY = gql`
   query SINGLE_PROBLEM_QUERY($id: ID!) {

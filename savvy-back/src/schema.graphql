@@ -22,10 +22,6 @@ type Mutation {
     createSandbox(text: String!, video: String, sandboxPageID: ID!): Sandbox!
     deleteSandbox(id:ID!): Sandbox
     createSandboxPageGoal(goal: String!, sandboxPageID: ID!): SandboxPageGoal!
-    # updateLesson(id: ID!, title: String, description: String,  
-    #     mainText: String, price: Int, issue: String, rule: String, 
-    #     analysis: String, conclusion: String): Case!
-    # deleteLesson(id:ID!): Case
     deleteCoursePage(id:ID!): CoursePage
     createApplication(applicantId: ID!, applicantName: String!, message: String, coursePageID: ID!): Application!
     deleteApplication(id:ID!): Application
@@ -37,7 +33,9 @@ type Mutation {
     likePost(id:ID!, likes: Int): Sandbox
     addToFavourites(id: ID!, favourites: [ID]): User
     enrollOnCourse(id: ID! , subjects: [ID]): User
+    # enrollOnSandbox(id: ID! , sandboxes: [ID]): User
     addUserToCoursePage(id:ID!, students: [ID]): CoursePage
+    # addUserToSandboxPage(id:ID!, students: [ID]): CoursePage
     updateUser(id: ID!, name: String, email: String): User
     requestReset(email: String!): SuccessMessage
     resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
@@ -58,12 +56,12 @@ type Query {
     applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, first: Int,): [Application]!
     coursePagesConnection(where: CoursePageWhereInput): CoursePageConnection!
     lessonsConnection(where: LessonWhereInput): LessonConnection!
-    problemsConnection(where: ProblemWhereInput): ProblemConnection!
     testsConnection(where: TestWhereInput): TestConnection!
     tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, first: Int): [Test]!
     test(where: TestWhereUniqueInput!): Test
     problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, first: Int): [Problem]!
     problem(where: ProblemWhereUniqueInput!): Problem
+    problemsConnection(where: ProblemWhereInput): ProblemConnection!
     me: User
     user(where: UserWhereUniqueInput!): User
     users(where: UserWhereInput!): [User]!

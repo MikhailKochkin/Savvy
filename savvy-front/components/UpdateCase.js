@@ -105,7 +105,6 @@ export default class UpdateCase extends Component {
                   ...this.state,
               }
           })
-          console.log("Updated!!");
       }
   
     render() {

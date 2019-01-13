@@ -29,33 +29,51 @@ const Goals = styled.div`
     display: flex;
     flex: 2 60%;
     flex-direction: column;
+    background-color: #0A2342;
+    color: white;
+    h2 {
+        margin-top: 6%;
+    }
+    @media (max-width: 800px) {
+        padding: 5%;
+        h2 {
+            margin-left: 8%;
+            margin-top: 0;
+        }
+    }
 `;
 
 const Form = styled.form`
-  /* box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05); */
   background: rgba(0, 0, 0, 0.02);
-  /* border: 5px solid white; */
-  font-size: 1.5rem;
-  /* line-height: 1.5; */
-  /* font-weight: 600; */
+  font-size: 1.6rem;
+  margin-top: 2%;
+  fieldset {
+    border: none;
+  }
   textarea, input {
     font-size: 1.7rem;
-    width: 90%;
+    width: 80%;
     font-family: "Gill Sans", serif;
+    border-radius: 5px;
+    padding:8px; 
   }
-  input{
-    margin: 0.2% 0;
-  }
+  
 `;
 
 const Button = styled.button`
     border: none;
     color: white;
     padding: 5px 11px;
+    border-radius: 5px;
+    margin-left: 2%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    cursor: pointer;
+    &:hover {
+        background-color: #B8C5D6;
+    }
 `
 
 export default class CreateSandboxPageGoal extends Component {
@@ -71,7 +89,6 @@ export default class CreateSandboxPageGoal extends Component {
 
     }
     update = (cache, payload) => {
-        console.log('Running the function!')
         const data = cache.readQuery({ 
             query: gql`
                 query SANDBOXPAGEGOALS_QUERY($id: ID!) {
@@ -85,7 +102,6 @@ export default class CreateSandboxPageGoal extends Component {
                 id: this.props.id,
             },
         });
-        console.log(data);
     }
     render() {
         const {id} = this.props
@@ -103,9 +119,9 @@ export default class CreateSandboxPageGoal extends Component {
                         return (
                             <>
                                 <h2>Задачи песочницы</h2>
-                                {sandboxPageGoals.map(goal => 
-                                    <p key={goal.id}>{goal.goal}</p>
-                                )}
+                                <ol>
+                                {sandboxPageGoals.map(goal => <li key={goal.id}>{goal.goal}</li>)}
+                                </ol>
                                     <Mutation 
                                         mutation={CREATE_SANDBOXPAGEGOALS_MUTATION}
                                         variables={{
@@ -116,21 +132,16 @@ export default class CreateSandboxPageGoal extends Component {
                                     >
                                         {(createSandboxPageGoal, {loading, error}) => (
                                         <Form onSubmit={ async e => {
-                                            // Stop the form from submitting
                                             e.preventDefault();
-                                            // call the mutation
                                             const res = await createSandboxPageGoal();
-                                            // change the page to the single item page
-                                            console.log(res);
                                             this.setState({goal: ""})
                                             }}
                                         >
-                                            <Error error={error}/>
                                             <User>
                                                 {({data: {me}}) => (
                                                     <>
-                                                    { me !== null && sandboxPageGoals[0] &&
-                                                    sandboxPageGoals[0].user.id === me.id &&
+                                                    {/* { me !== null && sandboxPageGoals[0] && 
+                                                    me.sandboxPages.includes(this.props.id) === me.id && */}
                                                     <fieldset disabled={loading} aria-busy={loading}>
                                                         <label htmlFor="goal">
                                                             <input
@@ -145,15 +156,13 @@ export default class CreateSandboxPageGoal extends Component {
                                                         </label>
                                                         <Button type="submit">✏️</Button>
                                                     </fieldset>
-                                                    }
+                                                    {/* } */}
                                                   </>
                                                 )}
                                             </User>
                                         </Form>
                                         )}
                                     </Mutation>
-                                {/* :
-                                null } */}
                             </>
                     )
                }}

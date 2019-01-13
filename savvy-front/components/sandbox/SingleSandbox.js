@@ -16,6 +16,7 @@ const ProposalBox = styled.div`
   @media (max-width: 800px) {
     flex-direction: column;
     text-align: center;
+    
   }
 `;
 
@@ -30,6 +31,9 @@ const SideBar = styled.div`
   Like:hover {
     color: red;
   }
+  button {
+    border: none;
+  }
 `;
 
 const TextBar = styled.div`
@@ -38,6 +42,9 @@ const TextBar = styled.div`
   border: 1px solid #112A62;
   padding: 0 2%;
   border-radius: 5px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Date = styled.h4`
@@ -45,7 +52,10 @@ const Date = styled.h4`
 `;
 
 const Like = styled.div`
-  color: red;
+  color: #DC143C;
+  &:hover {
+    color: #A52A2A;
+  }
 `;
 
 const SINGLE_SANDBOX_QUERY = gql`
@@ -177,8 +187,7 @@ class SingleSandbox extends Component {
                     null } 
                   </TextBar>
                   <SideBar>
-                    
-                    <h2>Место для фотографии</h2>
+                    {/* <h2>Место для фотографии</h2> */}
                     <h4>{sandbox.user.name}</h4>
                     {/* <h4>{me && me.favourites}</h4> */}
                     <Date>{moment(sandbox.createdAt).format('D MMM YYYY')}</Date>
@@ -198,10 +207,8 @@ class SingleSandbox extends Component {
                         </Mutation>
                       )}
                     </Mutation>
-                    <br/>
-                    <h2>{this.state.likes}</h2>
-                    <br/>
-                    <DeleteSingleSandbox 
+                    <p>{this.state.likes}</p>
+                      <DeleteSingleSandbox 
                       id={this.props.id}
                       sandboxPageId={this.props.sandboxPageId}
                     />

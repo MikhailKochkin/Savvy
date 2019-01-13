@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Link from 'next/link';
-import { PAGE_TESTS_QUERY } from '../course/CoursePage';
+// import { PAGE_TESTS_QUERY } from '../course/CoursePage';
+import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton, Message } from '../styles/Button';
 
 const CREATE_TEST_MUTATION = gql`
@@ -32,6 +33,17 @@ const CREATE_TEST_MUTATION = gql`
       coursePageID: $coursePageID
     ) {
       id
+    }
+  }
+`;
+
+const PAGE_TESTS_QUERY = gql`
+  query PAGE_TESTS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
+    tests(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
+      id
+      user {
+          id
+      }
     }
   }
 `;
@@ -173,7 +185,7 @@ class CreateQuiz extends Component {
                             // document.getElementById("Message").textContent ='Вы создали новый тестовый вопрос!';
                             document.getElementById("Message").style.display ='block'
                             setTimeout(function(){
-                                document.getElementById("Message").style.display ='none'
+                                document.getElementById("Message") ? document.getElementById("Message").style.display ='none' : none
                                 }, 4000);
                             
                             const res = await createTest();
@@ -182,8 +194,7 @@ class CreateQuiz extends Component {
                     >   
                             <p>Создайте новый тестовый вопрос. Введите сам вопрос, 
                                 2-4 варианта ответа, из которых только один 
-                                должен быть правильным.</p> 
-                                <Message id="Message">Вы создали новый тестовый вопрос!</Message>  
+                                должен быть правильным.</p>  
                             <fieldset>          
                             <label htmlFor="question">
                             Вопрос
@@ -293,6 +304,7 @@ class CreateQuiz extends Component {
                                 </label>
                             </Answers>
                             <SubmitButton type="submit">Создать</SubmitButton>
+                            <Message id="Message">Вы создали новый тестовый вопрос!</Message> 
                         </fieldset>
                     </Form>
                 )}

@@ -5,29 +5,32 @@ import User from './User';
 import Search from './Search';
 import Signout from './Signout';
 
-const linkStyle = {
-  marginRight: 15
-}
-
 const StyledHeader = styled.header`
   background-color: #F2F2F2;
-  display: flex;
-  justify-content: space-between;
-  /* border-top: 1px solid #6DAAE1; */
+  display: grid;
+  grid-template-areas: "CourseMenu Logo UserData";
+  grid-template-columns: 1fr 1.5fr 1fr;
   border-bottom: 4px solid #152A5E;
   cursor: pointer;
-  a, button, input {
+  line-height: 0%;
+  a, button, input, p {
     text-decoration: none;
-    color: ${props => props.theme.black};
+    color: #13214D;
     font-size: 1.8rem;
     font-weight: 700;
-    /* border-left: 1px solid #6DAAE1; */
     padding-left: 2%;
-    
   }
-  @media (max-width: 600px) {
-    flex-direction: column;
-    text-align: center;
+  @media (max-width: 1000px) {
+    grid-template-columns: 1fr 0.5fr 1fr;
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: 
+    "Logo"
+    "CourseMenu"
+    "UserData";
+    justify-content: center;
   }
   a:hover {
     color: #6DAAE1;
@@ -35,16 +38,30 @@ const StyledHeader = styled.header`
 `;
 
 const CourseMenu = styled.div`
+  grid-area: CourseMenu;
   display: flex;
-  flex-direction: column;
-  padding: 0.5% 0% 0.5% 10%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+  @media (max-width: 600px) {
+    flex-direction: row;
+  }
+`;
+
+const Logo = styled.div`
+  grid-area: Logo;
+  h2 {
+    text-align: center;
+  }
 `;
 
 const UserData = styled.div`
-  
+  grid-area: UserData;
   display: flex;
-  flex-direction: column;
-  padding: 1% 10% 0.5% 0%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 class Nav extends Component {
@@ -54,37 +71,42 @@ class Nav extends Component {
         {({data: {me}}) => (     
           <StyledHeader>
             <CourseMenu>
-              <Link prefetch href="/courses">
-                  <a style={linkStyle}>Курсы / песочницы</a>
-              </Link>
-              {me && (
-                <Link prefetch href="/create">
-                  <a style={linkStyle}>Создать</a>
+                <Link 
+                  prefetch 
+                  href="/courses">
+                    <a>Меню</a>
                 </Link>
-              )}
-              <Search/>
-            </CourseMenu>
-            <Link prefetch href="/">
-              <a style={linkStyle}><h2>Savvy 2.0</h2></a>
-            </Link>
-            <UserData>
-              {me && (
-                  <Signout/>
-              )}
-              {!me && (
-                <Link prefetch href="/signup">
-                  <a style={linkStyle}>Войти</a>
+                {me && (
+                  <Link 
+                    prefetch 
+                    href="/create">
+                    <a>Создать</a>
                   </Link>
                 )}
-              {me ? <p>{me.name}</p> : null}
-              {me ?
-              <Link href={{
-                pathname: '/account',
-                query: {id: me.id}
-              }}>
-                <a style={linkStyle}>Аккаунт</a>
-              </Link>
-              : null}
+                <Search/>
+            </CourseMenu>
+            <Logo>
+                <Link prefetch href="/">
+                  <a ><h2>Savvy</h2></a>
+                </Link>
+            </Logo>
+            <UserData>
+                {me ?
+                <Link href={{
+                  pathname: '/account',
+                  query: {id: me.id}
+                }}>
+                  <a className="name">{me.name}</a>
+                </Link>
+                : null}
+                {me && (
+                    <Signout/>
+                )}
+                {!me && (
+                  <Link prefetch href="/signup">
+                    <a>Войти</a>
+                    </Link>
+                  )}
             </UserData>
           </StyledHeader> 
         )}

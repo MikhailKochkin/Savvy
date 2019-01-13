@@ -3,30 +3,30 @@ import styled from 'styled-components';
 
 const StyledButton = styled.div`
   input {
-    width: 30px;
+    width: 5%;
   }
 `;
 
   function AnswerOption(props) {
     return (
-      <li className="answerOption">
-        <StyledButton>
+      <StyledButton>
+        <li className="answerOption">
           <input
             type="radio"
             className="radioCustomButton"
             name="radioGroup"
-            checked={props.id.type === props.id.answer}
+            // checked={props.id.type === props.id.answer}
             id={props.id.type}
             value={props.id.type}
             disabled={false}
             onChange={props.onAnswerSelected}
           />
-          <span class="checkmark"></span>
+          <span className="checkmark"></span>
           <label className="radioCustomLabel">
             {props.id.answer}
           </label> 
-        </StyledButton>
-      </li>
+        </li>
+      </StyledButton>
     );
   }
 

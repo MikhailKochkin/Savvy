@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
+import ReactLoading from 'react-loading';
 import SingleLesson from './SingleLesson';
 import SingleTest from './SingleTest';
 import SingleProblem from './SingleProblem';
 import CoursePageNav from './CoursePageNav';
 import { MaterialPerPage } from '../../config';
-import LessonPagination from '../pagination/LessonPagination';
 import PleaseSignIn from '../PleaseSignIn';
+import FetchMore from '../FetchMore';
 
 const PAGE_LESSONS_QUERY = gql`
   query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
@@ -45,6 +46,36 @@ const PAGE_PROBLEMS_QUERY = gql`
   }
 `;
 
+const AGGREGATE_PAGE_LESSONS_QUERY = gql`
+  query AGGREGATE_PAGE_LESSONS_QUERY($id: ID!) {
+    lessonsConnection(where: {coursePageID: $id}) {
+        aggregate {
+            count
+        }
+    }
+  }
+`;
+
+const AGGREGATE_PAGE_TESTS_QUERY = gql`
+  query AGGREGATE_PAGE_TESTS_QUERY($id: ID!) {
+    testsConnection(where: {coursePageID: $id}) {
+        aggregate {
+            count
+        }
+    }
+  }
+`;
+
+const AGGREGATE_PAGE_PROBLEMS_QUERY = gql`
+  query AGGREGATE_PAGE_PROBLEMS_QUERY($id: ID!) {
+    problemsConnection(where: {coursePageID: $id}) {
+        aggregate {
+            count
+        }
+    }
+  }
+`;
+
 const ChooseButtons = styled.div`
     display: flex;
     flex-direction: row;
@@ -61,6 +92,7 @@ const ChooseButton = styled.button`
     background-color: ${props => props.active ? "white" : "#008CBA"};
     margin: 0 0.5%;
     width: 150px;
+    cursor: pointer;
     @media (max-width: 800px) {
         margin: 1% 0;
         padding: 2% 1%;
@@ -87,30 +119,9 @@ class CoursePage extends Component {
     }
     this.pageView = ''
 }
-
     onLesson = () => {this.setState({page: "lesson", button1: true, button2: false, button3: false})}
     onTest = () => {this.setState({page: "test", button1: false, button2: true, button3: false})}
     onProblem = () => {this.setState({page: "problem", button1: false, button2: false, button3: true})}
-
-    onFetchMore = () => {
-        console.log("G`et")
-        // console.log(fetchMore)
-        // const { data: { matches, fetchMore } } = this.props;
-    
-        // fetchMore({
-        //   variables: { date: matches[matches.length - 1].date },
-        //   updateQuery: (previousResult, { fetchMoreResult, queryVariables }) => {
-        //     return {
-        //       ...previousResult,
-        //       // Add the new matches data to the end of the old matches data.
-        //       matches: [
-        //         ...previousResult.matches,
-        //         ...fetchMoreResult.matches,
-        //       ],
-        //     };
-        //   },
-        // });
-      }
 
     render() {
         switch(this.state.page) {
@@ -121,23 +132,55 @@ class CoursePage extends Component {
                     fetchPolicy="cache-first"
                     variables={{
                             id: this.props.id,
-                            skip: this.props.page * MaterialPerPage - MaterialPerPage
-                        }}
+                    }}
 
                     >
-                    {({ data, error, loading}) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>Error: {error.message}</p>;
-                        if(data.lessons == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
+                    {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
+                        if (loading1) return <p>Загрузка...</p>
+                        if (error1) return <p>Error: {error1.message}</p>;
+                        if(data1.lessons == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
                         return (
-                        <>
-                            <div>
-                                {/* <LessonPagination/> */}
-                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} lesson={lesson} coursePageId={this.props.id}/>)}
-                            </div>
-                        <button onClick={this.onFetchMore}>Fetch More</button>
+                            <>
+                            <Query
+                                    query={AGGREGATE_PAGE_LESSONS_QUERY} 
+                                    fetchPolicy="cache-first"
+                                    variables={{
+                                        id: this.props.id,
+                                    }}
+                            >
+                            {({ data: data2, error: error2, loading: loading2 }) => {
+                                if (loading2) return <p>Loading...</p>;
+                                if (error2) return <p>Error: {error2.message}</p>;
+                                return (
+                                    <div>
+                                        <h4>Всего уроков: {data2.lessonsConnection.aggregate.count}</h4>
+                                        {data1.lessons.map(lesson => <SingleLesson key={lesson.id} lesson={lesson} coursePageId={this.props.id}/>)}
+                                            <>
+                                            {data2.lessonsConnection.aggregate.count > data1.lessons.length ?
+                                            <FetchMore
+                                                onLoadMore={() =>
+                                                    fetchMore({
+                                                    variables: {
+                                                        skip: data1.lessons.length  
+                                                    },
+                                                    updateQuery: (prev, { fetchMoreResult }) => {
+                                                        if (!fetchMoreResult) return prev;
+                                                        return Object.assign({}, prev, {
+                                                            lessons: [...prev.lessons, ...fetchMoreResult.lessons]
+                                                        });
+                                                    }
+                                                    })
+                                                }
+                                              />
+                                            :
+                                          null}
+                                        </> 
+                                </div>
+                              )
+                            }}
+                         </Query> 
                         </>
-                        )
+                      )
                     }}
                 </Query>
                 break;
@@ -145,24 +188,58 @@ class CoursePage extends Component {
                 this.pageView = 
                 <Query
                     query={PAGE_TESTS_QUERY} 
-                    // fetchPolicy="network-only"
-                    variables={{
-                        id: this.props.id,
-                    }}
                     fetchPolicy="cache-first"
-                >
-                    {({ data, error, loading }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>Error: {error.message}</p>;
-                        if(data.tests == 0) return <p>По этому курсу, к сожалению,тесты пока еще не были созданы.</p>
+                    variables={{
+                            id: this.props.id,
+                        }}
+
+                    >
+                    {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
+                        if (loading1) return <p>Загрузка...</p>
+                        if (error1) return <p>Error: {error1.message}</p>;
+                        if(data1.tests == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
                         return (
-                        <>
-                        <div>
-                            
-                            {data.tests.map(test => <SingleTest key={test.id} test={test} coursePageId={this.props.id} ></SingleTest>)}
-                        </div>
+                            <>
+                            <Query
+                                    query={AGGREGATE_PAGE_TESTS_QUERY} 
+                                    fetchPolicy="cache-first"
+                                    variables={{
+                                        id: this.props.id,
+                                    }}
+                            >
+                            {({ data: data2, error: error2, loading: loading2 }) => {
+                                if (loading2) return <p>Loading...</p>;
+                                if (error2) return <p>Error: {error2.message}</p>;
+                                return (
+                                    <div>
+                                        <h4>Всего тестов: {data2.testsConnection.aggregate.count}</h4>
+                                        {data1.tests.map(test => <SingleTest key={test.id} test={test} coursePageId={this.props.id}/>)}
+                                            <>
+                                            {data2.testsConnection.aggregate.count > data1.tests.length ?
+                                            <FetchMore
+                                                onLoadMore={() =>
+                                                    fetchMore({
+                                                    variables: {
+                                                        skip: data1.tests.length  
+                                                    },
+                                                    updateQuery: (prev, { fetchMoreResult }) => {
+                                                        if (!fetchMoreResult) return prev;
+                                                        return Object.assign({}, prev, {
+                                                            tests: [...prev.tests, ...fetchMoreResult.tests]
+                                                        });
+                                                    }
+                                                    })
+                                                }
+                                              />
+                                            :
+                                          null}
+                                        </> 
+                                </div>
+                              )
+                            }}
+                         </Query> 
                         </>
-                            )
+                      )
                     }}
                 </Query>
                 break;
@@ -172,20 +249,56 @@ class CoursePage extends Component {
                     query={PAGE_PROBLEMS_QUERY} 
                     fetchPolicy="cache-first"
                     variables={{
-                        id: this.props.id,
-                    }}
-                >
-                    {({ data, error, loading }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>Error: {error.message}</p>;
-                        if(data.problems == 0) return <p>По этому курсу, к сожалению, задачи пока еще не были созданы.</p>
+                            id: this.props.id,
+                        }}
+
+                    >
+                    {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
+                        if (loading1) return <p>Загрузка...</p>
+                        if (error1) return <p>Error: {error1.message}</p>;
+                        if(data1.problems == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
                         return (
                             <>
-                                <div>
-                                    {data.problems.map(problem => <SingleProblem key={problem.id} problem={problem} coursePageId={this.props.id}/>)}
+                            <Query
+                                    query={AGGREGATE_PAGE_PROBLEMS_QUERY} 
+                                    fetchPolicy="cache-first"
+                                    variables={{
+                                        id: this.props.id,
+                                    }}
+                            >
+                            {({ data: data2, error: error2, loading: loading2 }) => {
+                                if (loading2) return <p>Loading...</p>;
+                                if (error2) return <p>Error: {error2.message}</p>;
+                                return (
+                                    <div>
+                                        <h4>Всего задач: {data2.problemsConnection.aggregate.count}</h4>
+                                        {data1.problems.map(problem => <SingleProblem key={problem.id} problem={problem} coursePageId={this.props.id}/>)}
+                                            <>
+                                            {data2.problemsConnection.aggregate.count > data1.problems.length ?
+                                            <FetchMore
+                                                onLoadMore={() =>
+                                                    fetchMore({
+                                                    variables: {
+                                                        skip: data1.problems.length  
+                                                    },
+                                                    updateQuery: (prev, { fetchMoreResult }) => {
+                                                        if (!fetchMoreResult) return prev;
+                                                        return Object.assign({}, prev, {
+                                                            problems: [...prev.problems, ...fetchMoreResult.problems]
+                                                        });
+                                                    }
+                                                    })
+                                                }
+                                              />
+                                            :
+                                          null}
+                                        </> 
                                 </div>
-                            </>
-                        )
+                              )
+                            }}
+                         </Query> 
+                        </>
+                      )
                     }}
                 </Query>
                 break;
@@ -195,17 +308,35 @@ class CoursePage extends Component {
                     query={PAGE_LESSONS_QUERY} 
                     fetchPolicy="cache-first"
                     variables={{
-                        id: this.props.id,
-                    }}
-                >
-                    {({ data, error, loading}) => {
-                        if (loading) return <p>Loading...</p>;
+                            id: this.props.id,
+                        }}
+
+                    >
+                    {({ data, error, loading, fetchMore}) => {
+                        if (loading) return <ReactLoading type={'spin'} color={'#13214D'} height={60} width={60} />
+                    
                         if (error) return <p>Error: {error.message}</p>;
                         if(data.lessons == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
                         return (
+                            // {data2.sandboxesConnection.aggregate.count > data1.sandboxes.length ?
                         <>
                             <div>
-                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} id={lesson.id} coursePageId={this.props.id} >{lesson.id}</SingleLesson>)}
+                                {data.lessons.map(lesson => <SingleLesson key={lesson.id} lesson={lesson} coursePageId={this.props.id}/>)}
+                                <FetchMore
+                                    onLoadMore={() =>
+                                        fetchMore({
+                                        variables: {
+                                            skip: data.lessons.length  
+                                        },
+                                        updateQuery: (prev, { fetchMoreResult }) => {
+                                            if (!fetchMoreResult) return prev;
+                                            return Object.assign({}, prev, {
+                                                lessons: [...prev.lessons, ...fetchMoreResult.lessons]
+                                            });
+                                        }
+                                        })
+                                    }
+                                />
                             </div>
                         </>
                         )

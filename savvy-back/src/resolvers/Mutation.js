@@ -21,7 +21,7 @@ const Mutations = {
       },
       info
     );
-    console.log("Updated User!")
+    // console.log("Updated User!")
     return updatedUser; 
   },
   async requestReset(parent, args, ctx, info) {
@@ -218,9 +218,7 @@ const Mutations = {
     async deleteLesson(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson
-      console.log(where)
       const lesson = await ctx.db.query.lesson({ where }, `{ id }`);
-      console.log(lesson)
       //3. Delete it
       return ctx.db.mutation.deleteLesson({ where }, info);
     },
@@ -253,9 +251,7 @@ const Mutations = {
     async deleteTest(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson
-      console.log(where)
       const test = await ctx.db.query.test({ where }, `{ id }`);
-      console.log(test)
       //3. Delete it
       return ctx.db.mutation.deleteTest({ where }, info);
     },
@@ -287,9 +283,7 @@ const Mutations = {
     async deleteProblem(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson
-      console.log(where)
       const problem = await ctx.db.query.problem({ where }, `{ id }`);
-      console.log(problem)
       //3. Delete it
       return ctx.db.mutation.deleteProblem({ where }, info);
     },
@@ -311,15 +305,12 @@ const Mutations = {
         }, 
         info
       );
-      console.log("Подали заявку!")
       return application;
     },
     async deleteApplication(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the case
-      console.log(where)
       const application = await ctx.db.query.application({ where }, `{ id }`);
-      console.log(application)
       //3. Delete it
       return ctx.db.mutation.deleteApplication({ where }, info);
     },
@@ -327,8 +318,8 @@ const Mutations = {
       // TODO: Check if they are logged in
       const sandboxPageID = args.sandboxPageID
       delete args.id
-      console.log(ctx.request.userId)
-      console.log(sandboxPageID)
+      // console.log(ctx.request.userId)
+      // console.log(sandboxPageID)
       if (!ctx.request.userId) {
         throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
       }
@@ -408,8 +399,6 @@ const Mutations = {
   },
   async addToFavourites(parent, args, ctx, info) {
     //run the update method
-    console.log(args.favourites)
-    console.log(args.id)
     const updatedUser = await ctx.db.mutation.updateUser(
       {
         data: {
@@ -423,7 +412,6 @@ const Mutations = {
       },
       info
     );
-    console.log("Updated User!")
     return updatedUser; 
   },
   async enrollOnCourse(parent, args, ctx, info) {

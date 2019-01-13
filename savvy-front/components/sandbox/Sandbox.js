@@ -23,13 +23,13 @@ const Img = styled.img`
 `;
 
 const Title = styled.h1`
-    font-size:3rem;
+    font-size:2.4rem;
     font-weight: bold;
     margin-top: -5%;
 `;
 
 const Description = styled.p`
-    font-size:2rem;
+    font-size:1.8rem;
     margin-top: -5%;
 `;
 
@@ -37,10 +37,6 @@ const Author = styled.p`
     font-size:1.6rem;
     color: #686868	;
 `;
-
-// const Price = styled.p`
-//     font-size:3rem;
-// `;
 
 const Button = styled.button`
     background-color: #008CBA;
@@ -65,13 +61,8 @@ const Buttons = styled.div`
 `;
 
 export default class SandboxPage extends Component {
-    // static propTypes = {
-    //     coursePage: PropTypes.object.isRequired,
-    // };
-
     render() {
         const { sandboxPage, key } = this.props;
-        // console.log(sandboxPage)
         return (
         <User>
             {({data: {me}}) => ( 
@@ -87,9 +78,8 @@ export default class SandboxPage extends Component {
                             </a>
                         </Link>
                     </Title>
-                    <Description>Описание песочницы: {sandboxPage.description}</Description>
+                    <Description>{sandboxPage.description}</Description>
                     <Author>{sandboxPage.user.name}</Author>
-                    {/* <Price>{edCase.price} in Roubles</Price> */}
                     <Buttons>
                         <Link href={{
                                 pathname: '/sandboxPage',
@@ -108,13 +98,13 @@ export default class SandboxPage extends Component {
                             <Button>Изменить</Button>
                             </a>
                         </Link>}
-                            {me !== null && me.id === sandboxPage.user.id &&
-                            <DeleteSandboxPage
-                                id={sandboxPage.id}
-                            >
-                                Удалить
-                            </DeleteSandboxPage>} 
-                        </Buttons>  
+                        {me !== null && me.id === sandboxPage.user.id &&
+                        <DeleteSandboxPage
+                            id={sandboxPage.id}
+                        >
+                            Удалить
+                        </DeleteSandboxPage>} 
+                    </Buttons>  
                 </CaseCard>
             )}
         </User>

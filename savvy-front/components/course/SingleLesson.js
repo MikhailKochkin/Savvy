@@ -54,6 +54,15 @@ const Date = styled.h4`
   color: #A8A8A8;
 `;
 
+const Iframe = styled.iframe`
+  width: 620px;
+  height: 400px;
+  @media (max-width: 800px) {
+        width: 100%;
+        height: auto;
+    }
+`;
+
 class SingleLesson extends Component {
     render() {
       return (
@@ -78,14 +87,14 @@ class SingleLesson extends Component {
                   <TextBar>
                     <div dangerouslySetInnerHTML={{ __html: lesson.text }}></div>
                     {lesson.video ?
-                      <iframe width="620" height="400" src={lesson.video} allowFullScreen>
-                      </iframe>
+                      <Iframe src={lesson.video} allowFullScreen>
+                      </Iframe>
                     :
                     null } 
                   </TextBar>
                   <SideBar>
                     
-                    <h2>Место для фотографии</h2>
+                    {/* <h2>Место для фотографии</h2> */}
                     {/* <h4>{me && me.favourites}</h4> */}
                     <Date>{moment(lesson.createdAt).format('D MMM YYYY')}</Date>
                     <br/>

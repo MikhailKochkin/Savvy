@@ -24,6 +24,19 @@ const Buttons = styled.div`
     Button {
         width: 25%;
     }
+    @media (max-width: 800px) {
+        Button {
+            font-size: 1rem;
+            width: 45%;
+        }
+    }
+    @media (max-width: 500px) {
+        Button {
+            font-size: 0.7rem;
+            display: inline-block;
+            /* width: 100%; */
+        }
+    }
 `;
 
 class CreateCoursePage extends Component {

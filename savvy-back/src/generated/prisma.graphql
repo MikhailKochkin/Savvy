@@ -1403,6 +1403,7 @@ type SandboxPage {
   user: User!
   sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sandbox!]
   sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal!]
+  students: [ID!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1420,6 +1421,7 @@ input SandboxPageCreateInput {
   user: UserCreateOneWithoutSandboxPagesInput!
   sandboxes: SandboxCreateManyWithoutSandboxPageInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutSandboxPageInput
+  students: SandboxPageCreatestudentsInput
 }
 
 input SandboxPageCreateManyWithoutUserInput {
@@ -1437,12 +1439,17 @@ input SandboxPageCreateOneWithoutSandboxPageGoalsInput {
   connect: SandboxPageWhereUniqueInput
 }
 
+input SandboxPageCreatestudentsInput {
+  set: [ID!]
+}
+
 input SandboxPageCreateWithoutSandboxesInput {
   title: String!
   description: String!
   image: String!
   user: UserCreateOneWithoutSandboxPagesInput!
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutSandboxPageInput
+  students: SandboxPageCreatestudentsInput
 }
 
 input SandboxPageCreateWithoutSandboxPageGoalsInput {
@@ -1451,6 +1458,7 @@ input SandboxPageCreateWithoutSandboxPageGoalsInput {
   image: String!
   user: UserCreateOneWithoutSandboxPagesInput!
   sandboxes: SandboxCreateManyWithoutSandboxPageInput
+  students: SandboxPageCreatestudentsInput
 }
 
 input SandboxPageCreateWithoutUserInput {
@@ -1459,6 +1467,7 @@ input SandboxPageCreateWithoutUserInput {
   image: String!
   sandboxes: SandboxCreateManyWithoutSandboxPageInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutSandboxPageInput
+  students: SandboxPageCreatestudentsInput
 }
 
 type SandboxPageEdge {
@@ -1716,6 +1725,7 @@ type SandboxPagePreviousValues {
   title: String!
   description: String!
   image: String!
+  students: [ID!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1745,6 +1755,7 @@ input SandboxPageUpdateInput {
   user: UserUpdateOneRequiredWithoutSandboxPagesInput
   sandboxes: SandboxUpdateManyWithoutSandboxPageInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutSandboxPageInput
+  students: SandboxPageUpdatestudentsInput
 }
 
 input SandboxPageUpdateManyWithoutUserInput {
@@ -1772,12 +1783,17 @@ input SandboxPageUpdateOneWithoutSandboxPageGoalsInput {
   connect: SandboxPageWhereUniqueInput
 }
 
+input SandboxPageUpdatestudentsInput {
+  set: [ID!]
+}
+
 input SandboxPageUpdateWithoutSandboxesDataInput {
   title: String
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutSandboxPagesInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutSandboxPageInput
+  students: SandboxPageUpdatestudentsInput
 }
 
 input SandboxPageUpdateWithoutSandboxPageGoalsDataInput {
@@ -1786,6 +1802,7 @@ input SandboxPageUpdateWithoutSandboxPageGoalsDataInput {
   image: String
   user: UserUpdateOneRequiredWithoutSandboxPagesInput
   sandboxes: SandboxUpdateManyWithoutSandboxPageInput
+  students: SandboxPageUpdatestudentsInput
 }
 
 input SandboxPageUpdateWithoutUserDataInput {
@@ -1794,6 +1811,7 @@ input SandboxPageUpdateWithoutUserDataInput {
   image: String
   sandboxes: SandboxUpdateManyWithoutSandboxPageInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutSandboxPageInput
+  students: SandboxPageUpdatestudentsInput
 }
 
 input SandboxPageUpdateWithWhereUniqueWithoutUserInput {
@@ -2494,6 +2512,7 @@ type User {
   resetTokenExpiry: Float
   favourites: [ID!]!
   subjects: [ID!]!
+  sandboxes: [ID!]!
   permissions: [Permission!]!
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage!]
@@ -2523,6 +2542,7 @@ input UserCreateInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2572,6 +2592,10 @@ input UserCreatepermissionsInput {
   set: [Permission!]
 }
 
+input UserCreatesandboxesInput {
+  set: [ID!]
+}
+
 input UserCreatesubjectsInput {
   set: [ID!]
 }
@@ -2584,6 +2608,7 @@ input UserCreateWithoutCoursePagesInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
@@ -2601,6 +2626,7 @@ input UserCreateWithoutLessonsInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2618,6 +2644,7 @@ input UserCreateWithoutProblemsInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2635,6 +2662,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2652,6 +2680,7 @@ input UserCreateWithoutSandboxPagesInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
@@ -2669,6 +2698,7 @@ input UserCreateWithoutTestsInput {
   resetTokenExpiry: Float
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
@@ -2713,6 +2743,7 @@ type UserPreviousValues {
   resetTokenExpiry: Float
   favourites: [ID!]!
   subjects: [ID!]!
+  sandboxes: [ID!]!
   permissions: [Permission!]!
   isFamiliar: Boolean!
   createdAt: DateTime!
@@ -2744,6 +2775,7 @@ input UserUpdateDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2766,6 +2798,7 @@ input UserUpdateInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2829,6 +2862,10 @@ input UserUpdatepermissionsInput {
   set: [Permission!]
 }
 
+input UserUpdatesandboxesInput {
+  set: [ID!]
+}
+
 input UserUpdatesubjectsInput {
   set: [ID!]
 }
@@ -2841,6 +2878,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
@@ -2858,6 +2896,7 @@ input UserUpdateWithoutLessonsDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2875,6 +2914,7 @@ input UserUpdateWithoutProblemsDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2892,6 +2932,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
@@ -2909,6 +2950,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
@@ -2926,6 +2968,7 @@ input UserUpdateWithoutTestsDataInput {
   resetTokenExpiry: Float
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput

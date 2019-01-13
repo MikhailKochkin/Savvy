@@ -85,7 +85,6 @@ class SingleSandbox extends Component {
               if (!data.sandbox) return <p>No Item Found for {this.props.id}</p>;
               moment.locale('ru');
               const sandbox = data.sandbox;
-              console.log(sandbox)
               return (
                 <ProposalBox>
                   <TextBar>

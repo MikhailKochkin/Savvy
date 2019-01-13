@@ -104,7 +104,7 @@ const html = new Html({
   rules,
 });
 
-const initialValue = `<p>Привет!</p><p>Ты собираешься написать предложение для этой песочницы. Это круто, спасибо, что помогаешь проекту развиваться</p><p>У нас есть только одно предложение. Можешь написать свое предложение по модели IRAC? Вот ссылка на <a src="https://en.wikipedia.org/wiki/IRAC"target="_blank">википедию:</a> Мы даже дадим для тебя примерный план</p><p><strong>1. Опиши проблему </strong></p><p><strong>2. Перечисли применимые нормы права </strong></p><p><strong>3. Проанализируй проблему и опиши ее решение </strong></p><p><strong>4. Дай выводы </strong></p>`
+const initialValue = `<p>Привет!</p><p>Ты собираешься добавить какой-то материал на Savvy. Это круто, спасибо, что помогаешь проекту развиваться</p><p>У нас есть только одно предложение. Если это возможно, можешь написать свой текст по модели IRAC? Мы даже дадим для тебя примерный план, как это сделать.</p><p><strong>1. Опиши проблему </strong></p><p><strong>2. Перечисли применимые нормы права </strong></p><p><strong>3. Проанализируй проблему и опиши ее решение </strong></p><p><strong>4. Дай выводы </strong></p>`
 
 class App extends React.Component {
   constructor (props) {
@@ -136,7 +136,7 @@ class App extends React.Component {
         <Editor
           style = {AppStyles}
           autoCorrect={true}
-          placeholder='Enter some plain text...'
+          placeholder='Начните писать...'
           ref={this.ref}
           value={this.state.value}
           onChange={this.onChange}

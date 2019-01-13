@@ -47,6 +47,9 @@ const Button = styled.button`
     margin: 0%;
     font-size:1.4rem;
     cursor: pointer;
+    &:hover {
+        background-color: #003D5B;
+    }
 `
 
 class EnrollCoursePage extends Component {
@@ -58,7 +61,7 @@ class EnrollCoursePage extends Component {
         e.preventDefault();
         if(this.props.coursePage.courseType === "PUBLIC") {
             if(this.state.subjects.includes(this.props.coursePage.id)) {
-                console.log("You are already enrolled!")
+                // console.log("You are already enrolled!")
                 Router.push({
                     pathname: '/coursePage',
                     query: {id: this.props.coursePage.id}
@@ -66,12 +69,12 @@ class EnrollCoursePage extends Component {
             } else if(!this.state.subjects.includes(this.props.coursePage.id)) {
                 const newSubjects = this.state.subjects.concat(this.props.coursePage.id)
                 const newStudents = this.state.students.concat(this.props.meData.id)
-                console.log("Approach setState")
+                // console.log("Approach setState")
                 const res = await this.setState({
                     subjects: newSubjects,
                     students: newStudents
                 })
-                console.log("Approach mutation")
+                // console.log("Approach mutation")
                 enrollOnCourse({
                     variables: {
                         id: this.props.meData.id,
@@ -91,8 +94,16 @@ class EnrollCoursePage extends Component {
                 })
             }
         } else if (this.props.coursePage.courseType === "PRIVATE") {
-            console.log("This is a private Course!")
-            this.props.getInputReveal(true);
+            // console.log("This is a private Course!")
+            if(this.state.subjects.includes(this.props.coursePage.id)) {
+                // console.log("You are already enrolled!")
+                Router.push({
+                    pathname: '/coursePage',
+                    query: {id: this.props.coursePage.id}
+                })
+            } else if(!this.state.subjects.includes(this.props.coursePage.id)) {
+                return this.props.getInputReveal(true);
+            }
         }
         
 

@@ -21,6 +21,7 @@ type User {
   resetTokenExpiry: Float
   favourites: [ID]
   subjects: [ID]
+  sandboxes: [ID]
   permissions: [Permission]
   coursePages: [CoursePage] @relation(name: "UserCoursePage" onDelete: CASCADE)
   sandboxPages: [SandboxPage] @relation(name: "UserSandboxPage" onDelete: CASCADE)
@@ -31,7 +32,6 @@ type User {
   isFamiliar: Boolean! @default(value: "false")
   createdAt: DateTime!
 }
-
 
 type CoursePage {
   id: ID! @unique
@@ -58,6 +58,7 @@ type SandboxPage {
   user: User! @relation(name: "UserSandboxPage")
   sandboxes: [Sandbox]! @relation(name: "SandboxesOnSandboxPage" onDelete: CASCADE)
   sandboxPageGoals: [SandboxPageGoal] @relation(name: "GoalsOnSandboxPage" onDelete: CASCADE)
+  students: [ID]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Error from '../ErrorMessage';
 import Router from 'next/router';
 import { Tags } from '../../config';
+import { ALL_COURSE_PAGES_QUERY } from './Courses';
 
 const CREATE_COURSE_MUTATION = gql`
   mutation CREATE_COURSE_MUTATION(
@@ -50,7 +51,7 @@ const Form = styled.form`
     margin: 0 auto;
     font-size: 1.6rem;
     @media (max-width: 800px) {
-        width: 80%;
+        width: 100%;
     }
 `;
 
@@ -61,7 +62,6 @@ const Fieldset = styled.fieldset`
     border-radius: 5px;
     box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
                 0 5px 15px 0 rgba(0,0,0,0.08);
-    /* min-height: 400px; */
     select {
       width: 30%;
       font-size: 1.6rem;
@@ -91,9 +91,31 @@ const Container = styled.div`
         "fourth   ";
 `;
 
+const Container2 = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+    }
+  
+`;
+
+const TagLabel = styled.label`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 70% 30%;
+  justify-items: center;
+  align-items: center; 
+  /* @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+    } */
+`;
+
 const Label = styled.label`
     display: grid;
-    grid-template-columns: 25% 75%;
+    grid-template-columns: 35% 65%;
     grid-template-rows: 100%;
     justify-items: center;
     align-items: center;
@@ -104,7 +126,7 @@ const Label = styled.label`
         box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
         border-radius: 3.5px;
         padding: 1%;
-        font-size: 1.4rem;       
+        font-size: 1.4rem;  
     }
     @media (max-width: 600px) {
         display: flex;
@@ -133,7 +155,8 @@ export default class CreateCourse extends Component {
       description: '',
       image: '',
       tags: '',
-      courseType: 'PUBLIC'
+      courseType: 'PUBLIC',
+      upload: false
     };
     handleChange = e => {
       const { name, value } = e.target;
@@ -154,24 +177,22 @@ export default class CreateCourse extends Component {
       this.setState({ tags: updatedTags });
     };
     uploadFile = async e => {
-      console.log("uploading files...")
+      this.setState({
+        upload: true,
+        image: ''
+      })
       const files = e.target.files;
       const data = new FormData();
-      console.log(files[0]);
       data.append('file', files[0]);
       data.append('upload_preset', 'savvy-app');
-      console.log(data);
-  
       const res = await fetch('https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload', {
         method: 'POST',
         body: data,
       });
       const file = await res.json();
-      console.log(file.secure_url)
-      console.log(file.secure_url)
       this.setState({
         image: file.secure_url,
-        // largeImage: file.eager[0].secure_url,
+        upload: false
       })
     };
 
@@ -179,8 +200,13 @@ export default class CreateCourse extends Component {
         return (
           <>
             <h1>Создайте страницу нового курса!</h1>
-            <Mutation mutation={CREATE_COURSE_MUTATION} 
-              variables={this.state}>
+            <Mutation 
+              mutation={CREATE_COURSE_MUTATION} 
+              variables={this.state}
+              refetchQueries={() => [{
+                query: ALL_COURSE_PAGES_QUERY,
+              }]}
+              >
               {(createCoursePage, {loading, error}) => (
                 <Form onSubmit={ async e => {
                     // Stop the form from submitting
@@ -241,14 +267,19 @@ export default class CreateCourse extends Component {
                       placeholder="Загрузите логотип курса..."
                       onChange={this.uploadFile}
                     />
-                    {this.state.image && (
-                      <img width="30%" height="200px" src={this.state.image} alt="Upload Preview" />
-                    )}
                     </Label>
                   </Container>
+                  {this.state.upload && <p>Идет загрузка изображения...</p> }
+                  {this.state.image && (
+                    <>
+                      <img width="200" height="auto" src={this.state.image} alt="Upload Preview" />
+                      <p>Загрузка прошла успешно!</p>
+                    </>
+                  )}
                   <P>Выберите тэги, которые наиболее точно описывают ваш курс:</P>
-                  {Tags.map(tag => (
-                      <Label key={tag + "label"} htmlFor="label">
+                    <Container2>
+                    {Tags.map(tag => (
+                      <TagLabel key={tag + "label"} htmlFor="label">
                         <p>{tag}</p>
                         <input
                           key={tag}
@@ -258,8 +289,9 @@ export default class CreateCourse extends Component {
                           value={tag}
                           onChange={this.handleTagChange}
                         />
-                      </Label>
-                    ))}
+                      </TagLabel>
+                      ))}
+                    </Container2>
                   <Buttons>
                     <SubmitButton type="submit">Создать</SubmitButton>
                   </Buttons>

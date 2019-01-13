@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { NavButton, SubmitButton } from './styles/Button';
 
 class FetchMore extends Component {
     render() {
         return (
             <>
-               <button onClick={this.props.onLoadMore}>Загрузить</button> 
+               <NavButton onClick={this.props.onLoadMore}>Загрузить еще</NavButton> 
             </>
         );
     }

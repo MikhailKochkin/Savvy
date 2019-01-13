@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Link from 'next/link';
 import User from '../User';
+import { NavButton, SubmitButton } from '../styles/Button';
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
@@ -30,25 +31,68 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
 `;
 
 const Form = styled.form`
-  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background: rgba(0, 0, 0, 0.02);
-  border: 5px solid white;
-  padding: 20px;
-  font-size: 1.5rem;
-  line-height: 1.5;
-  font-weight: 600;
-  textarea, input {
-    font-size: 1.7rem;
-    width: 100%;
-    font-family: "Gill Sans", serif;
-  }
-  input{
-    margin: 0.4% 0;
-  }
+    width: 85%;
+    margin: 50%;
+    margin: 0 auto;
+    font-size: 1.6rem;
+    @media (max-width: 800px) {
+        width: 100%;
+    }
 `;
 
+const Fieldset = styled.fieldset`
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #F0F0F0;
+    border-radius: 5px;
+    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
+                0 5px 15px 0 rgba(0,0,0,0.08);
+    select {
+      width: 30%;
+      font-size: 1.6rem;
+    }
+`;
+
+const Label = styled.label`
+    display: grid;
+    grid-template-columns: 35% 65%;
+    grid-template-rows: 100%;
+    justify-items: center;
+    align-items: center;
+    input, textarea {
+        height: 60%;
+        width: 100%;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+        border-radius: 3.5px;
+        padding: 1%;
+        font-size: 1.4rem;  
+    }
+    @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+    }
+`;
+
+const Buttons = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    padding: 4%;
+    border-top: solid 1px #F0F0F0;
+`;
+
+const P = styled.p`
+  font-size: 1.8rem;
+  font-weight: 600;
+`;
+
+
+
 class UpdateCoursePage extends Component {
-  state = {};
+  state = {
+    upload: false
+  };
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -56,35 +100,31 @@ class UpdateCoursePage extends Component {
 
   updateCoursePage = async (e, updateCoursePage) => {
     e.preventDefault();
-    console.log('Updating Course Page!!');
-    console.log(this.state);
     const res = await updateCoursePage({
       variables: {
         id: this.props.id,
         ...this.state,
       },
     });
-    console.log('Updated!!');
   };
 
   uploadFile = async e => {
-    console.log("uploading files...")
+    this.setState({
+      upload: true,
+      image: ''
+    })
     const files = e.target.files;
     const data = new FormData();
-    console.log(files[0]);
     data.append('file', files[0]);
     data.append('upload_preset', 'savvy-app');
-    console.log(data);
-
     const res = await fetch('https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload', {
       method: 'POST',
       body: data,
     });
     const file = await res.json();
-    console.log(file.secure_url)
     this.setState({
       image: file.secure_url,
-      // largeImage: file.eager[0].secure_url,
+      upload: false
     })
   };
 
@@ -96,7 +136,7 @@ class UpdateCoursePage extends Component {
                 query: { id: this.props.id }
               }}>
               <a>
-                  <button>Вернуться на страницу курса!</button>
+                  <NavButton>Вернуться на страницу курса!</NavButton>
               </a>
           </Link>
           <Query
@@ -122,9 +162,9 @@ class UpdateCoursePage extends Component {
                       onSubmit={e => this.updateCoursePage(e, updateCoursePage)}
                     >
                       {/* <Error error={error} /> */}
-                      <fieldset disabled={loading} aria-busy={loading}>
-                        <label htmlFor="title">
-                          Наименование курса
+                      <Fieldset disabled={loading} aria-busy={loading}>
+                        <Label htmlFor="title">
+                          <P className="first">Название курса</P>
                           <input
                             type="text"
                             id="title"
@@ -134,10 +174,10 @@ class UpdateCoursePage extends Component {
                             defaultValue={data.coursePage.title}
                             onChange={this.handleChange}
                           />
-                        </label>
+                        </Label>
                         <br/>
-                        <label htmlFor="description">
-                          Описание курса
+                        <Label htmlFor="description">
+                          <P className="first">Описание курса</P>
                           <textarea
                             id="description"
                             name="description"
@@ -146,10 +186,10 @@ class UpdateCoursePage extends Component {
                             defaultValue={data.coursePage.description}
                             onChange={this.handleChange}
                           />
-                        </label>
+                        </Label>
                         <br/>
-                        <label htmlFor="file">
-                          Логотип курса
+                        <Label htmlFor="file">
+                          <P className="first">Логотип курса</P>
                           <input
                             type="file"
                             id="file"
@@ -157,12 +197,18 @@ class UpdateCoursePage extends Component {
                             placeholder="Загрузите новый логотип песочницы..."
                             onChange={this.uploadFile}
                           />
-                          {this.state.image && (
-                            <img width="300" height="auto" src={this.state.image} alt="Upload Preview" />
-                          )}
-                        </label>
-                        <button type="submit">{loading ? 'Вносим' : 'Внесите'} изменения</button>
-                      </fieldset>
+                        </Label>
+                      </Fieldset>
+                      {this.state.upload && <p>Идет загрузка изображения...</p> }
+                      {this.state.image && (
+                        <>
+                          <img width="200" height="auto" src={this.state.image} alt="Upload Preview" />
+                          <p>Загрузка прошла успешно!</p>
+                        </>
+                      )}
+                      <Buttons>
+                         <SubmitButton type="submit">{loading ? 'Вносим' : 'Внесите'} изменения</SubmitButton>
+                      </Buttons>
                     </Form>
                   )}
                 </Mutation>

@@ -34,7 +34,7 @@ class DeleteSingleProblem extends Component {
                 variables={{id}}
                 refetchQueries={() =>[{
                     query: PAGE_PROBLEMS_QUERY,
-                    variables: { id},
+                    variables: { id: this.props.coursePageId},
                   }]}
             >
                 {(deleteProblem, { error }) => (

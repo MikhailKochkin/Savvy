@@ -35,21 +35,9 @@ class DeleteSingleLesson extends Component {
                 mutation={DELETE_LESSON_MUTATION}
                 variables={{id: this.props.id}}
                 update={this.update}
-                refetchQueries={() => [{ 
-                    query: gql`
-                      query PAGE_LESSONS_QUERY($id: ID!) {
-                        lessons(where: {coursePageID: $id}) {
-                          id
-                          text
-                          user {
-                            id
-                          }
-                        }
-                      }
-                    `,
-                    variables: {
-                      id: this.props.coursePageId
-                    },
+                refetchQueries={() => [{
+                    query: PAGE_LESSONS_QUERY,
+                    variables: { id: this.props.coursePageId },
                   }]}
             >
                 {(DeleteSandbox, { error }) => (

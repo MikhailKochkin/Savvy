@@ -14,6 +14,7 @@ const HomeStyles = styled.div`
 const Button = styled.button`
     background-color: ${props => props.active ? "#122557" : "white"};
     color: ${props => props.active ? "white" : "black"};
+    border: ${props => props.active ? "none" : "1px solid #122557 "};
     cursor: pointer;
 `;
 
@@ -23,19 +24,23 @@ const Buttons = styled.div`
     flex-direction: row;
     justify-content: center;
     Button {
-        width: 25%;
+        width: 20%;
     }
     @media (max-width: 800px) {
         Button {
             font-size: 1rem;
+            width: 45%;
         }
     }
     @media (max-width: 500px) {
         Button {
             font-size: 0.7rem;
+            display: inline-block;
+            /* width: 100%; */
         }
     }
 `;
+
 
 class Home extends Component {
     state = {

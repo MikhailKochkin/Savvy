@@ -20,7 +20,10 @@ const Button = styled.button`
 `
 
 const Delete = styled.div`
-  color: black;
+  color: grey;
+  &:hover {
+    color: black;
+  }
 `;
 
 

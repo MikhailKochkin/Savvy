@@ -75,7 +75,7 @@ var Footer = function Footer() {
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
     href: {
-      pathname: '/about'
+      pathname: '/training'
     },
     __source: {
       fileName: _jsxFileName,
@@ -88,9 +88,9 @@ var Footer = function Footer() {
       lineNumber: 95
     },
     __self: this
-  }, "\u041E \u043D\u0430\u0441")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
+  }, "\u041F\u0440\u043E Savvy")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
     href: {
-      pathname: '/about'
+      pathname: '/courses'
     },
     __source: {
       fileName: _jsxFileName,
@@ -103,47 +103,17 @@ var Footer = function Footer() {
       lineNumber: 102
     },
     __self: this
-  }, "\u041A\u043E\u043D\u0442\u0430\u043A\u0442\u043D\u0430\u044F \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044F")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    href: {
-      pathname: '/cases'
-    },
+  }, "\u041A\u0443\u0440\u0441\u044B \u0438 \u043F\u0435\u0441\u043E\u0447\u043D\u0438\u0446\u044B")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(LegalAndSocial, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 106
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 109
-    },
-    __self: this
-  }, "\u041A\u0443\u0440\u0441\u044B")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
-    href: {
-      pathname: '/cases'
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 113
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 116
-    },
-    __self: this
-  }, "\u041F\u0435\u0441\u043E\u0447\u043D\u0438\u0446\u044B")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(LegalAndSocial, {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 122
+      lineNumber: 108
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "year",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 123
+      lineNumber: 109
     },
     __self: this
   }, "\xA9 2019 \u2013 Savvy"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_2___default.a, {
@@ -152,20 +122,20 @@ var Footer = function Footer() {
     },
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 124
+      lineNumber: 110
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 127
+      lineNumber: 113
     },
     __self: this
   }, "\u041F\u043E\u043B\u0438\u0442\u0438\u043A\u0430 \u043E\u0431\u0440\u0430\u0431\u043E\u0442\u043A\u0438 \u043F\u0435\u0440\u0441\u043E\u043D\u0430\u043B\u044C\u043D\u044B\u0445 \u0434\u0430\u043D\u043D\u044B\u0445")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "VK",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 131
+      lineNumber: 117
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -173,7 +143,7 @@ var Footer = function Footer() {
     href: "https://vk.com/savvy_university",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 132
+      lineNumber: 118
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_icons_kit__WEBPACK_IMPORTED_MODULE_3___default.a, {
@@ -181,7 +151,7 @@ var Footer = function Footer() {
     icon: react_icons_kit_icomoon_vk__WEBPACK_IMPORTED_MODULE_4__["vk"],
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 133
+      lineNumber: 119
     },
     __self: this
   })))));
@@ -379,6 +349,14 @@ var Meta = function Meta() {
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("link", {
+    rel: "shortcut icon",
+    href: "/static/favicon.png",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 8
+    },
+    __self: this
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("link", {
     rel: "stylesheet",
     type: "text/css",
     href: "/static/nprogress.css",
@@ -443,23 +421,22 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var linkStyle = {
-  marginRight: 15
-};
 var StyledHeader = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].header.withConfig({
   displayName: "Nav__StyledHeader",
   componentId: "sc-1edxlcq-0"
-})(["background-color:#F2F2F2;display:flex;justify-content:space-between;border-bottom:4px solid #152A5E;cursor:pointer;a,button,input{text-decoration:none;color:", ";font-size:1.8rem;font-weight:700;padding-left:2%;}@media (max-width:600px){flex-direction:column;text-align:center;}a:hover{color:#6DAAE1;}"], function (props) {
-  return props.theme.black;
-});
+})(["background-color:#F2F2F2;display:grid;grid-template-areas:\"CourseMenu Logo UserData\";grid-template-columns:1fr 1.5fr 1fr;border-bottom:4px solid #152A5E;cursor:pointer;line-height:0%;a,button,input,p{text-decoration:none;color:#13214D;font-size:1.8rem;font-weight:700;padding-left:2%;}@media (max-width:1000px){grid-template-columns:1fr 0.5fr 1fr;}@media (max-width:500px){grid-template-columns:1fr;grid-template-rows:1fr 1fr 1fr;grid-template-areas:\"Logo\" \"CourseMenu\" \"UserData\";justify-content:center;}a:hover{color:#6DAAE1;}"]);
 var CourseMenu = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div.withConfig({
   displayName: "Nav__CourseMenu",
   componentId: "sc-1edxlcq-1"
-})(["display:flex;flex-direction:column;padding:0.5% 0% 0.5% 10%;"]);
+})(["grid-area:CourseMenu;display:flex;flex-direction:row;align-items:center;justify-content:center;line-height:20px;@media (max-width:600px){flex-direction:row;}"]);
+var Logo = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div.withConfig({
+  displayName: "Nav__Logo",
+  componentId: "sc-1edxlcq-2"
+})(["grid-area:Logo;h2{text-align:center;}"]);
 var UserData = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div.withConfig({
   displayName: "Nav__UserData",
-  componentId: "sc-1edxlcq-2"
-})(["display:flex;flex-direction:column;padding:1% 10% 0.5% 0%;"]);
+  componentId: "sc-1edxlcq-3"
+})(["grid-area:UserData;display:flex;flex-direction:row;align-items:center;justify-content:center;"]);
 
 var Nav =
 /*#__PURE__*/
@@ -478,7 +455,7 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_User__WEBPACK_IMPORTED_MODULE_3__["default"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 53
+          lineNumber: 70
         },
         __self: this
       }, function (_ref) {
@@ -486,13 +463,13 @@ function (_Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StyledHeader, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 55
+            lineNumber: 72
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CourseMenu, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 56
+            lineNumber: 73
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
@@ -500,92 +477,68 @@ function (_Component) {
           href: "/courses",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 57
+            lineNumber: 74
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          style: linkStyle,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 58
+            lineNumber: 77
           },
           __self: this
-        }, "\u041A\u0443\u0440\u0441\u044B / \u043F\u0435\u0441\u043E\u0447\u043D\u0438\u0446\u044B")), me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+        }, "\u041C\u0435\u043D\u044E")), me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
           prefetch: true,
           href: "/create",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 61
+            lineNumber: 80
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          style: linkStyle,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 62
+            lineNumber: 83
           },
           __self: this
         }, "\u0421\u043E\u0437\u0434\u0430\u0442\u044C")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_4__["default"], {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 65
+            lineNumber: 86
           },
           __self: this
-        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Logo, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 88
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
           prefetch: true,
           href: "/",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 67
+            lineNumber: 89
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          style: linkStyle,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 68
+            lineNumber: 90
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 68
+            lineNumber: 90
           },
           __self: this
-        }, "Savvy 2.0"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserData, {
+        }, "Savvy")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserData, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 70
+            lineNumber: 93
           },
           __self: this
-        }, me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Signout__WEBPACK_IMPORTED_MODULE_5__["default"], {
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 72
-          },
-          __self: this
-        }), !me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
-          prefetch: true,
-          href: "/signup",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 75
-          },
-          __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          style: linkStyle,
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 76
-          },
-          __self: this
-        }, "\u0412\u043E\u0439\u0442\u0438")), me ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 79
-          },
-          __self: this
-        }, me.name) : null, me ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+        }, me ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
           href: {
             pathname: '/account',
             query: {
@@ -594,17 +547,37 @@ function (_Component) {
           },
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 81
+            lineNumber: 95
           },
           __self: this
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-          style: linkStyle,
+          className: "name",
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 85
+            lineNumber: 99
           },
           __self: this
-        }, "\u0410\u043A\u043A\u0430\u0443\u043D\u0442")) : null));
+        }, me.name)) : null, me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Signout__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 103
+          },
+          __self: this
+        }), !me && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
+          prefetch: true,
+          href: "/signup",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 106
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 107
+          },
+          __self: this
+        }, "\u0412\u043E\u0439\u0442\u0438"))));
       });
     }
   }]);
@@ -996,7 +969,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! graphql-tag */ "./node_modules/graphql-tag/src/index.js");
 /* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./User */ "./components/User.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./User */ "./components/User.js");
 var _jsxFileName = "/Users/mihailkockin/Desktop/Savvy/savvy-next/savvy-front/components/Signout.js";
 
 function _templateObject() {
@@ -1015,25 +989,30 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
+
 var SIGN_OUT_MUTATION = graphql_tag__WEBPACK_IMPORTED_MODULE_2___default()(_templateObject());
+var Button = styled_components__WEBPACK_IMPORTED_MODULE_3__["default"].button.withConfig({
+  displayName: "Signout__Button",
+  componentId: "sc-1o7z4g7-0"
+})(["border:none;text-decoration:none;color:#13214D;font-family:\"Gill Sans\",serif;font-size:1.8rem;font-weight:700;cursor:pointer;background-color:#F0F0F0;&:hover{color:#6DAAE1;}"]);
 
 var Signout = function Signout(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_apollo__WEBPACK_IMPORTED_MODULE_1__["Mutation"], {
     mutation: SIGN_OUT_MUTATION,
     refetchQueries: [{
-      query: _User__WEBPACK_IMPORTED_MODULE_3__["CURRENT_USER_QUERY"]
+      query: _User__WEBPACK_IMPORTED_MODULE_4__["CURRENT_USER_QUERY"]
     }],
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15
+      lineNumber: 32
     },
     __self: this
   }, function (signout) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Button, {
       onClick: signout,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 19
+        lineNumber: 36
       },
       __self: this
     }, "\u0412\u044B\u0439\u0442\u0438");
@@ -1141,7 +1120,7 @@ var glow = Object(styled_components__WEBPACK_IMPORTED_MODULE_0__["keyframes"])([
 var SearchStyles = styled_components__WEBPACK_IMPORTED_MODULE_0__["default"].div.withConfig({
   displayName: "Search__SearchStyles",
   componentId: "fv4r9e-2"
-})(["position:relative;input{width:100%;padding:10px;border:0;font-size:2rem;&.loading{animation:", " 0.5s ease-in-out infinite alternate;}}"], glow);
+})(["margin-left:2%;position:relative;input{width:100%;padding:5px;border:0;font-size:2rem;&.loading{animation:", " 0.5s ease-in-out infinite alternate;}}"], glow);
 
 
 /***/ }),
@@ -1164,8 +1143,8 @@ var endpoint = "http://localhost:4444"; // export const prodEndpoint = `https://
 
 var CoursePerPage = 6;
 var SandboxPerPage = 6;
-var MaterialPerPage = 5;
-var Tags = ['Собеседование', 'Гражданское право', 'Корпоративное право', 'МКА', 'Ответы на билеты', 'Юридический английский'];
+var MaterialPerPage = 6;
+var Tags = ['Собеседование', 'Гражданское право', 'Корпоративное право', 'МКА', 'Процессуальное право', 'Экзаменационные билеты', 'Юридический английский', 'Иное'];
 
 /***/ }),
 

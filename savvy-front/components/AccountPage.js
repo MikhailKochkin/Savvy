@@ -59,7 +59,7 @@ const Fieldset = styled.fieldset`
     border-radius: 5px;
     box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
                 0 5px 15px 0 rgba(0,0,0,0.08);
-    /* min-height: 400px; */
+
 `;
 
 const Container = styled.div`
@@ -110,7 +110,6 @@ const Label = styled.label`
         flex-direction: column;
     }
 `;
-
 
 const Buttons = styled.div`
     display: flex;

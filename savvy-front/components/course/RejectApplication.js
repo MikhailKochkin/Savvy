@@ -11,7 +11,7 @@ class RejectApplication extends Component {
                 id: this.props.applicationId
             }
         })
-        console.log("Отклонено!")
+        // console.log("Отклонено!")
     }
     render() {
         return (

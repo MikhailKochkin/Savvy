@@ -9,15 +9,18 @@ import SandBoxPageGoals from './SandBoxPageGoals'
 import styled from 'styled-components';
 import User from '../User';
 import FetchMore from '../FetchMore';
+import { MaterialPerPage } from '../../config';
 
 const HeaderStyles = styled.div`
     display:flex;
     flex-direction: row;
+    @media (max-width: 800px) {
+        flex-direction: column;
+    }
 `;
 
-
 const PAGE_SANDBOXES_QUERY = gql`
-  query PAGE_SANDBOXES_QUERY($id: ID!, $first: Int, $skip: Int) {
+  query PAGE_SANDBOXES_QUERY($id: ID!, $first: Int = ${MaterialPerPage}, $skip: Int = 0) {
     sandboxes(where: {sandboxPageID: $id}, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
       id
       text
@@ -49,7 +52,7 @@ class CoursePage extends Component {
                 fetchPolicy="cache-first"
                 variables={{
                     id: this.props.id,
-                    first: 2,
+                    first: MaterialPerPage,
                     skip: 0,
                 }}>
                 {({ data: data1, error: error1, loading: loading1, fetchMore }) => {
@@ -59,7 +62,8 @@ class CoursePage extends Component {
                         <>  
                             <HeaderStyles>
                                 <SandboxPageNav id={this.props.id}/>
-                                <SandBoxPageGoals id={this.props.id}/>
+                                <SandBoxPageGoals 
+                                    id={this.props.id}/>
                             </HeaderStyles>
                             <div>
                                 {data1.sandboxes.map(sandbox => 
@@ -90,8 +94,6 @@ class CoursePage extends Component {
                                 {({ data: data2, error: error2, loading: loading2 }) => {
                                     if (loading2) return <p>Loading...</p>;
                                     if (error2) return <p>Error: {error2.message}</p>;
-                                    console.log(data2.sandboxesConnection.aggregate.count);
-                                    console.log(data1.sandboxes.length);
                                     return (
                                         <>
                                             {data2.sandboxesConnection.aggregate.count > data1.sandboxes.length ?

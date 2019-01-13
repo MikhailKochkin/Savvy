@@ -27,8 +27,12 @@ const CREATE_PROBLEM_MUTATION = gql`
 `;
 
 const Message = styled.p`
-    background-color: #90EE90;
+    background-color: #00FF7F;
     font-size: 1.8rem;
+    padding: 1% 2%;
+    border-radius: 10px;
+    width: 30%;
+    display: none;
 `;
 
 const Textarea = styled.textarea`
@@ -225,7 +229,7 @@ class CreateProblem extends Component {
                     </a>
                 </Link>
                 <h1>Создайте новую задачу для вашего курса</h1>
-                <Message id="Message"></Message>  
+                <Message id="Message">Вы создали новую задачу!</Message>  
                 <ChooseButtons>
                     <ChooseButton onClick={this.onText} active={this.state.button1}>
                         Шаг 1. Условия
@@ -256,10 +260,10 @@ class CreateProblem extends Component {
                     <SubmitButton onClick={ async e => {
                         e.preventDefault()
                         const res = await createProblem()
-                        document.getElementById("Message").textContent ='Вы создали новую задачу!';
-                            setTimeout(function(){
-                                document.getElementById("Message") ? document.getElementById("Message").textContent ='' : null;
-                                }, 3000);
+                        document.getElementById("Message").style.display ='block'
+                        setTimeout(function(){
+                            document.getElementById("Message") ? document.getElementById("Message").style.display ='none' : none
+                        }, 3000);
                         localStorage.removeItem('text')
                         localStorage.removeItem('hints')
                         localStorage.removeItem('solution')

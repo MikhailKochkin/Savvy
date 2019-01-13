@@ -90,31 +90,17 @@ const Footer = () => (
             <div className="motto">Наша задача – создавать новые инструменты для эффективного обучения <br/> и поиска нужной правовой информации</div>
             <LinksStyles>
                 <Link href={{
-                        pathname: '/about',
+                        pathname: '/training',
                     }}>
                     <a>
-                        О нас
+                        Про Savvy
                     </a>
                 </Link>
                 <Link href={{
-                        pathname: '/about',
+                        pathname: '/courses',
                     }}>
                     <a>
-                        Контактная информация
-                    </a>
-                </Link>
-                <Link href={{
-                        pathname: '/cases',
-                    }}>
-                    <a>
-                        Курсы
-                    </a>
-                </Link>
-                <Link href={{
-                        pathname: '/cases',
-                    }}>
-                    <a>
-                        Песочницы
+                        Курсы и песочницы
                     </a>
                 </Link>
             </LinksStyles> 

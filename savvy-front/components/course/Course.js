@@ -17,8 +17,14 @@ const CaseCard = styled.div`
     margin: 2%;
     width: 300px;
     line-height: 1.2;
-    
+    @media (max-width: 800px) {
+        padding: 2%;
+        Button {
+            padding: 4px 6px;
+        }
+    }
 `;
+
 
 const Img = styled.img`
     width: 100%;
@@ -51,16 +57,17 @@ const Button = styled.button`
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    width: 97%;
-    margin: 0%;
+    width: 100px;
+    margin: 0% 2px;
     cursor: pointer;
-    Button:hover {
-        width: 10%;
+    &:hover {
+       background-color: #003D5B;
     }
 `
 const Buttons = styled.div`
     display: flex;
     flex-direction: row;
+    align-items: space-between;
     margin-bottom: 0.5%;
 `;
 
@@ -97,31 +104,13 @@ export default class Course extends Component {
                 return ( 
                 <CaseCard>
                     {coursePage.image && <Img src={coursePage.image} alt={coursePage.title}/>}
-                    <Title>
-                    {coursePage !== null && 
-                    <Link href={{
-                            pathname: '/coursePage',
-                            query: {id }
-                        }}>
-                        <a>{coursePage.title}</a>
-                    </Link>}
-                    </Title>
+                    <Title><a>{coursePage.title}</a></Title>
                     <Description>{coursePage.description}</Description>
                     <Author>{coursePage.user.name}</Author>
                     <p>Количество участников: {studentsArray.length}</p>
                     <p>Тип курса: {courseType}</p>
-                    {/* <Price>{edCase.price} in Roubles</Price> */}
                     <Buttons>
-                    {me === null && coursePage.courseType !== "PRIVATE" &&
-                    <Link href={{
-                            pathname: '/coursePage',
-                            query: {id }
-                        }}>
-                        <a>
-                            <Button>Просмотреть</Button>
-                        </a>
-                    </Link>}
-                    {me !== null && coursePage.courseType === "PRIVATE" && coursePage.students.includes(me.id) &&
+                    {me === null && courseType === "Открытый" &&
                     <Link href={{
                             pathname: '/coursePage',
                             query: {id }
@@ -130,18 +119,8 @@ export default class Course extends Component {
                             <Button>Войти</Button>
                         </a>
                     </Link>}
-                    {me !== null && me.id === coursePage.user.id &&
-                    <Link href={{
-                            pathname: '/updateCoursePage',
-                            query: {id }
-                        }}>
-                        <a>
-                        <Button>Изменить</Button>
-                        </a>
-                    </Link>}
-
                     {me !== null && me.id !== coursePage.user.id 
-                    && !this.state.revealApplication && !applicationsList.includes(me.id) && !coursePage.students.includes(me.id) &&
+                    && !this.state.revealApplication && !applicationsList.includes(me.id) &&
                     <EnrollCoursePage
                         coursePage = {coursePage}
                         studentsArray = {studentsArray}
@@ -149,20 +128,36 @@ export default class Course extends Component {
                         meData={me}
                         getInputReveal={this.myCallback}
 
-                    />}
-                    {me && applicationsList.includes(me.id) ?
+                    />} 
+                    {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
-                        :
-                        null
                     }
                     {me !== null && me.id === coursePage.user.id &&
-                    <DeleteCoursePage
-                        id={id}
-                    >
-                        Удалить
-                    </DeleteCoursePage>}  
+                    <>
+                        <Link href={{
+                                pathname: '/coursePage',
+                                query: {id }
+                            }}>
+                            <a>
+                                <Button>Войти</Button>
+                            </a>
+                        </Link>
+                        <Link href={{
+                                pathname: '/updateCoursePage',
+                                query: {id }
+                            }}>
+                            <a>
+                            <Button>Изменить</Button>
+                            </a>
+                        </Link>
+                        <DeleteCoursePage
+                            id={id}
+                        >
+                            Удалить
+                        </DeleteCoursePage> 
+                    </>}
                     </Buttons>
-                    {this.state.revealApplication && 
+                    {me && this.state.revealApplication && 
                     <Application
                         getInputReveal={this.myCallback}
                         meData={me}

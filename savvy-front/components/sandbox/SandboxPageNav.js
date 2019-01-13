@@ -9,11 +9,37 @@ const NavStyles = styled.div`
     display: flex;
     flex: 1 40%;
     flex-direction: column;
+    background-color: #0A2342;
+    color: white;
+    padding: 5%;
 `;
 
 const Img = styled.img`
-    width: 75%;
-    height: 300px;
+    width: 350px;
+    height: 200px;
+    @media (max-width: 800px) {
+        width: 100%;
+    }
+`;
+
+const Author = styled.p`
+    font-size: 1.8rem;
+    margin: -0.1%;
+`;
+
+const Button = styled.button`
+    margin-top: 5%;
+    padding: 2%;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #FFFDF7;
+    background-color: #84BC9C;
+    border: solid 1px white;
+    cursor: pointer;
+    &:hover{
+        background-color: #294D4A;
+    }
 `;
 
 const SINGLE_SANDBOXPAGE_QUERY = gql`
@@ -47,12 +73,8 @@ export default class SandboxPageNav extends Component {
                 <User>
                     {({data: {me}}) => (
                         <NavStyles>  
-                            {/* {console.log(me.id)} */}
-                            {/* <p>ID автора курса: {data.coursePage.user.id} </p>
-                            
-                            <p>Номер страницы с курсом: {this.props.id}</p> */}
                             {sandboxPage.image && <Img src={sandboxPage.image} alt={sandboxPage.title}/>}
-                            <h1>{sandboxPage.title}</h1>
+                            <Author>{sandboxPage.title}</Author>
                             { me !== null ? 
                             <>
                                 <Link href={{
@@ -60,17 +82,9 @@ export default class SandboxPageNav extends Component {
                                     query: {id: this.props.id}
                                 }}>
                                 <a>
-                                    <button>Написать Текст</button>
+                                    <Button>Написать Текст</Button>
                                 </a>
                                 </Link>
-                                {/* <Link
-                                    href={{
-                                        pathname: 'updateSandboxPage',
-                                        query: { id: this.props.id },
-                                    }}
-                                >
-                                    <button>Изменить песочницу ✏️</button>
-                                </Link> */}
                             </> 
                             :
                             null

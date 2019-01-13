@@ -32,7 +32,7 @@ class DeleteSandboxPage extends Component {
         //1. Read the cache for the cases we want
         const data = cache.readQuery({ query: ALL_SANDBOX_PAGES_QUERY})
         //2. filter the deleted item out of the page
-        console.log(payload);
+        // console.log(payload);
         data.sandboxPages = data.sandboxPages.filter(sandboxPage => sandboxPage.id !== 
             payload.data.deleteSandboxPage.id)
             // data.items = data.items.filter(item => item.id !== payload.data.deleteItem.id);

@@ -68,20 +68,15 @@ class UpdateSandboxPage extends Component {
   };
 
   uploadFile = async e => {
-    console.log("uploading files...")
     const files = e.target.files;
     const data = new FormData();
-    console.log(files[0]);
     data.append('file', files[0]);
     data.append('upload_preset', 'savvy-app');
-    console.log(data);
-
     const res = await fetch('https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload', {
       method: 'POST',
       body: data,
     });
     const file = await res.json();
-    console.log(file.secure_url)
     this.setState({
       image: file.secure_url,
       // largeImage: file.eager[0].secure_url,

@@ -23,62 +23,121 @@ const CREATE_SANDBOXPAGE_MUTATION = gql`
 `;
 
 const Form = styled.form`
-  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.05);
-  background: rgba(0, 0, 0, 0.02);
-  border: 5px solid white;
-  padding: 20px;
-  font-size: 1.5rem;
-  line-height: 1.5;
-  font-weight: 600;
-  textarea, input {
-    font-size: 1.7rem;
-    width: 100%;
-    font-family: "Gill Sans", serif;
-  }
-  input{
-    margin: 0.4% 0;
-  }
+    width: 85%;
+    margin: 50%;
+    margin: 0 auto;
+    font-size: 1.6rem;
+    @media (max-width: 800px) {
+        width: 80%;
+    }
 `;
 
-const Button = styled.button`
+const Fieldset = styled.fieldset`
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #F0F0F0;
+    border-radius: 5px;
+    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
+                0 5px 15px 0 rgba(0,0,0,0.08);
+    /* min-height: 400px; */
+    select {
+      width: 30%;
+      font-size: 1.6rem;
+    }
+`;
+
+const Container = styled.div`
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(3 70px);
+    .title {
+        grid-area: first;
+    }
+    .description {
+        grid-area: second;
+    }
+    .file {
+        grid-area: fourth;
+    }
+    grid-template-areas:
+        "first   "
+        "second   "
+        "third   ";
+`;
+
+const Label = styled.label`
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 100%;
+    justify-items: center;
+    align-items: center;
+    input {
+        height: 60%;
+        width: 100%;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+        border-radius: 3.5px;
+        padding: 1%;
+        font-size: 1.4rem;       
+    }
+    @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+    }
+`;
+
+const P = styled.p`
+  font-size: 1.8rem;
+  font-weight: 600;
+`;
+
+const SubmitButton = styled.button`
     background-color: #008CBA;
     border: none;
+    border-radius: 6px;
     color: white;
-    padding: 15px 32px;
+    padding: 1%;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
-`
+    font-size: 1.4rem;
+    font-weight: 600;
+    width: 30%;
+    margin-top: 3%;
+    cursor: pointer;
+    &:hover {
+        background: #0B3954;
+    }
+`;
 
 export default class CreateSandbox extends Component {
     state = {
         title: '',
         description: '',
         image: '',
+        upload: false,
       };
     handleChange = e => {
         const { name, value } = e.target;
         this.setState({[name]: value});
       };
     uploadFile = async e => {
-      console.log("uploading files...")
+      this.setState({
+        upload: true,
+        image: ''
+      })
       const files = e.target.files;
       const data = new FormData();
-      console.log(files[0]);
       data.append('file', files[0]);
       data.append('upload_preset', 'savvy-app');
-      console.log(data);
-  
       const res = await fetch('https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload', {
         method: 'POST',
         body: data,
       });
       const file = await res.json();
-      console.log(file)
       this.setState({
         image: file.secure_url,
-        // largeImage: file.eager[0].secure_url,
+        upload: false
       })
     };
     render() {
@@ -96,7 +155,6 @@ export default class CreateSandbox extends Component {
                   // call the mutation
                   const res = await createSandboxPage();
                   // change the page to the single item page
-                  console.log(res);
                   Router.push({
                     pathname: '/sandboxPage',
                     query: {id: res.data.createSandboxPage.id}
@@ -104,8 +162,10 @@ export default class CreateSandbox extends Component {
                 }}
               >
               <Error error={error}/>
-              <fieldset disabled={loading} aria-busy={loading}>
-                <label htmlFor="title">
+              <Fieldset disabled={loading} aria-busy={loading}>
+                <Container>
+                <Label htmlFor="title">
+                  <P className="first">Название песочницы</P>
                       <input
                         type="text"
                         id="title"
@@ -115,9 +175,9 @@ export default class CreateSandbox extends Component {
                         required
                         onChange={this.handleChange}
                       />
-                </label>
-                <br/>
-                <label htmlFor="description">
+                </Label>
+                <Label htmlFor="description">
+                  <P className="first">Описание песочницы</P>
                       <input
                         type="text"
                         id="description"
@@ -127,9 +187,9 @@ export default class CreateSandbox extends Component {
                         value={this.state.description}
                         onChange={this.handleChange}
                       />
-                </label>
-                <br/>
-                <label htmlFor="file">
+                </Label>
+                <Label htmlFor="file">
+                  <P className="first">Логотип песочницы</P>
                       <input
                         type="file"
                         id="file"
@@ -137,13 +197,17 @@ export default class CreateSandbox extends Component {
                         placeholder="Загрузите логотип песочницы..."
                         onChange={this.uploadFile}
                       />
-                      {this.state.image && (
-                        <img width="300" height="auto" src={this.state.image} alt="Upload Preview" />
-                      )}
-                </label>
-                <br/>
-                  <Button type="submit">Создать</Button>
-                </fieldset>
+                </Label>
+                {this.state.upload && <p>Идет загрузка изображения...</p> }
+                {this.state.image && (
+                  <>
+                    <img width="200" height="auto" src={this.state.image} alt="Upload Preview" />
+                    <p>Загрузка прошла успешно!</p>
+                  </>
+                )}
+                </Container>
+                  <SubmitButton type="submit">Создать</SubmitButton>
+                </Fieldset>
               </Form>
             )}
           </Mutation>
