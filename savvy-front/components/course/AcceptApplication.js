@@ -23,13 +23,10 @@ class AcceptApplication extends Component {
         e.preventDefault();
         const newSubjects = this.state.subjects.concat(this.props.coursePageId)
         const newStudents = this.state.students.concat(this.props.applicantId)
-        console.log("Approach setState")
-        console.log(newSubjects, newStudents)
         const res = await this.setState({
             subjects: newSubjects,
             students: newStudents
         })
-        console.log("Approach mutation")
         enrollOnCourse({
             variables: {
                 id: this.props.applicantId,
@@ -47,7 +44,6 @@ class AcceptApplication extends Component {
                 id: this.props.applicationId
             }
         })
-        console.log("Вроде бы все??")
         }
     render() {
         return (

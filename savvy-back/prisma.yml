@@ -1,4 +1,5 @@
-endpoint: ${env:PRISMA_ENDPOINT}
+#endpoint: ${env:PRISMA_ENDPOINT}
+endpoint: https://savvy-prod-c66f8716b5.herokuapp.com/savvy-prod/prod
 datamodel: datamodel.prisma
 secret: ${env:PRISMA_SECRET}
 
