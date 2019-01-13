@@ -343,12 +343,9 @@ const Mutations = {
     async deleteSandbox(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the case
-      console.log(where)
       const sandbox = await ctx.db.query.sandbox({ where }, `{ id user { id }}`);
-      console.log(sandbox)
       //2. check if they own the case or have the permissions
       const ownsSandbox = sandbox.user.id === ctx.request.userId;
-      console.log(ownsSandbox)
       if (!ownsSandbox) {
           throw new Error("К сожалению, у вас нет полномочий на это.")
       }
@@ -359,8 +356,8 @@ const Mutations = {
       // TODO: Check if they are logged in
       const sandboxPageID = args.sandboxPageID
       delete args.id
-      console.log(ctx.request.userId)
-      console.log(sandboxPageID)
+      // console.log(ctx.request.userId)
+      // console.log(sandboxPageID)
       if (!ctx.request.userId) {
         throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
       }
@@ -383,7 +380,6 @@ const Mutations = {
   async likePost(parent, args, ctx, info) {
     const updates = { ...args };
     delete updates.id;
-    console.log(args)
     //run the update method
     const like = await ctx.db.mutation.updateSandbox(
       {
@@ -394,7 +390,6 @@ const Mutations = {
       },
     info
     );
-    console.log("Updated Post!")
     return like; 
   },
   async addToFavourites(parent, args, ctx, info) {
