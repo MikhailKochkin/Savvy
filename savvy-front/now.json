@@ -1,0 +1,11 @@
+{
+    "name": "savvy-front",
+    "version": 2,
+    "alias": ["savvvy.app", "www.savvvy.app"],
+    "builds": [
+        { "src": "package.json", "use": "@now/next" }
+    ],
+    "routes": [
+        { "src": "/pages", "dest": "/index.js" }
+    ]
+}
