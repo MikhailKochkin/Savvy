@@ -106,7 +106,7 @@ const Label = styled.label`
 `;
 
 const DynamicLoadedEditor = dynamic(
-  import('../editor/Editor'),
+  import('../editor/Editor.js'),
   {
     loading: () => (<p>loading...</p>),
     ssr: false
