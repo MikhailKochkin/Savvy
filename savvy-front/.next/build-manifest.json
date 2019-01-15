@@ -1,35 +1,110 @@
 {
-  "devFiles": [
-    "static/development/dll/dll_86d7de3159d32d38a4d2.js"
-  ],
+  "devFiles": [],
   "pages": {
     "/_app": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ],
-    "/_error": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+    "/about": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/account": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/applications": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/coursePage": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ],
     "/courses": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/create": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/createLesson": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/createProblem": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/createSandbox": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/createTest": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ],
     "/index": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ],
-    "/training": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+    "/permissions": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/reset": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ],
     "/sandboxPage": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/signup": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/training": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/updateCoursePage": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/updateSandboxPage": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
+    ],
+    "/_error": [
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ],
     "/": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
+      "static/runtime/webpack-0f145a74e05f20b2959e.js",
+      "static/chunks/commons.17b087cc4c4ed77fe660.js",
+      "static/runtime/main-1083618284b0b9cf5255.js"
     ]
   }
 }
