@@ -7,8 +7,8 @@
     "dev": "next -p 7777",
     "build": "next build",
     "start": "next start -p $PORT",
-    "test": "NODE_ENV=test jest --watch",
-    "heroku-postbuild": "next build"
+    "heroku-postbuild": "npm run build",
+    "test": "NODE_ENV=test jest --watch"
   },
   "author": "M.Kochkin",
   "license": "ISC",
