@@ -19,7 +19,7 @@ server.express.use((req, res, next) => {
   next();
 });
 
-// 2. Create a middleware that populates the user on each request
+// 2. Create a middleware that populates the user on very each request
 
 server.express.use(async (req, res, next) => {
   // if they aren't logged in, skip this
