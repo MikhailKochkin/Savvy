@@ -1,13 +1,13 @@
 {
   "name": "savvy-front",
   "version": "1.0.0",
-  "description": "",
+  "description": "Savvvy-App",
   "main": "index.js",
   "scripts": {
     "dev": "next -p 7777",
     "build": "next build",
     "start": "next start",
-    "heroku-postbuild": "npm run build",
+    "heroku-postbuild": "next build",
     "test": "NODE_ENV=test jest --watch"
   },
   "author": "M.Kochkin",
