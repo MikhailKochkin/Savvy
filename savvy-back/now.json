@@ -3,7 +3,7 @@
     "version": 1,
     "alias": ["savvvy.app", "www.savvvy.app"],
     "env": {
-        "FRONTEND_URL":"https://savvy-front-46pfhpzop.now.sh/",
+        "FRONTEND_URL":"https://savvy-next-production.herokuapp.com",
         "PRISMA_ENDPOINT":"https://savvy-prod-c66f8716b5.herokuapp.com/",
         "PRISMA_SECRET": "23ldfjsnpjkbn7rdf7",
         "APP_SECRET": "Bushhhhmishhhhhvuffff928363245",
