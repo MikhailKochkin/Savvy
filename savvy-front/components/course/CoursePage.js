@@ -5,8 +5,8 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
 import SingleLesson from './SingleLesson';
-import SingleTest from './SingleTest';
-import SingleProblem from './SingleProblem';
+import ProblemGroup from './ProblemGroup';
+import TestGroup from './TestGroup';
 import CoursePageNav from './CoursePageNav';
 import { MaterialPerPage } from '../../config';
 import PleaseSignIn from '../PleaseSignIn';
@@ -14,8 +14,9 @@ import FetchMore from '../FetchMore';
 
 const PAGE_LESSONS_QUERY = gql`
   query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
+    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_ASC, first: $first) {
       id
+      name
       text
       user {
           id
@@ -26,7 +27,7 @@ const PAGE_LESSONS_QUERY = gql`
 
 const PAGE_TESTS_QUERY = gql`
   query PAGE_TESTS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    tests(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
+    tests(where: {lessonID: $id}, skip: $skip, orderBy: createdAt_ASC, first: $first) {
       id
       user {
           id
@@ -37,7 +38,7 @@ const PAGE_TESTS_QUERY = gql`
 
 const PAGE_PROBLEMS_QUERY = gql`
   query PAGE_PROBLEMS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    problems(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
+    problems(where: {lessonID: $id}, skip: $skip, orderBy: createdAt_ASC, first: $first) {
       id
       user {
           id
@@ -58,7 +59,7 @@ const AGGREGATE_PAGE_LESSONS_QUERY = gql`
 
 const AGGREGATE_PAGE_TESTS_QUERY = gql`
   query AGGREGATE_PAGE_TESTS_QUERY($id: ID!) {
-    testsConnection(where: {coursePageID: $id}) {
+    testsConnection(where: {lessonID: $id}) {
         aggregate {
             count
         }
@@ -68,7 +69,7 @@ const AGGREGATE_PAGE_TESTS_QUERY = gql`
 
 const AGGREGATE_PAGE_PROBLEMS_QUERY = gql`
   query AGGREGATE_PAGE_PROBLEMS_QUERY($id: ID!) {
-    problemsConnection(where: {coursePageID: $id}) {
+    problemsConnection(where: {lessonID: $id}) {
         aggregate {
             count
         }
@@ -154,7 +155,7 @@ class CoursePage extends Component {
                                 return (
                                     <div>
                                         <h4>Всего уроков: {data2.lessonsConnection.aggregate.count}</h4>
-                                        {data1.lessons.map(lesson => <SingleLesson key={lesson.id} lesson={lesson} coursePageId={this.props.id}/>)}
+                                        {data1.lessons.map(lesson => <SingleLesson key={lesson.id} name={lesson.name} lesson={lesson} coursePageId={this.props.id}/>)}
                                             <>
                                             {data2.lessonsConnection.aggregate.count > data1.lessons.length ?
                                             <FetchMore
@@ -187,7 +188,7 @@ class CoursePage extends Component {
             case "test":
                 this.pageView = 
                 <Query
-                    query={PAGE_TESTS_QUERY} 
+                    query={PAGE_LESSONS_QUERY} 
                     fetchPolicy="cache-first"
                     variables={{
                             id: this.props.id,
@@ -197,47 +198,49 @@ class CoursePage extends Component {
                     {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
                         if (loading1) return <p>Загрузка...</p>
                         if (error1) return <p>Error: {error1.message}</p>;
-                        if(data1.tests == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
+                        if (data1.tests == 0) return <p>По этому курсу, к сожалению,тесты пока еще не были созданы.</p>
+                        console.log(data1);
                         return (
                             <>
+                            {data1.lessons.map(lesson => 
                             <Query
-                                    query={AGGREGATE_PAGE_TESTS_QUERY} 
+                                    query={PAGE_TESTS_QUERY} 
                                     fetchPolicy="cache-first"
                                     variables={{
-                                        id: this.props.id,
+                                        id: lesson.id,
                                     }}
                             >
                             {({ data: data2, error: error2, loading: loading2 }) => {
-                                if (loading2) return <p>Loading...</p>;
+                                if (loading2) return <p>Загрузка...</p>;
                                 if (error2) return <p>Error: {error2.message}</p>;
+                                if(data2.lessons == 0) return <p>По этому уроку тесты пока еще не были созданы.</p>
+                                console.log(data2);
                                 return (
-                                    <div>
-                                        <h4>Всего тестов: {data2.testsConnection.aggregate.count}</h4>
-                                        {data1.tests.map(test => <SingleTest key={test.id} test={test} coursePageId={this.props.id}/>)}
-                                            <>
-                                            {data2.testsConnection.aggregate.count > data1.tests.length ?
-                                            <FetchMore
-                                                onLoadMore={() =>
-                                                    fetchMore({
-                                                    variables: {
-                                                        skip: data1.tests.length  
-                                                    },
-                                                    updateQuery: (prev, { fetchMoreResult }) => {
-                                                        if (!fetchMoreResult) return prev;
-                                                        return Object.assign({}, prev, {
-                                                            tests: [...prev.tests, ...fetchMoreResult.tests]
-                                                        });
-                                                    }
-                                                    })
-                                                }
-                                              />
-                                            :
-                                          null}
-                                        </> 
-                                </div>
-                              )
-                            }}
-                         </Query> 
+                                    <>
+                                     <Query
+                                        query={AGGREGATE_PAGE_TESTS_QUERY} 
+                                        fetchPolicy="cache-first"
+                                        variables={{
+                                            id: lesson.id,
+                                        }}
+                                      >
+                                        {({ data: data3, error: error3, loading: loading3 }) => {
+                                            if (loading3) return <p>Loading...</p>;
+                                            if (error3) return <p>Error: {error3.message}</p>;
+                                            return (
+                                                <>
+                                                    <h4>Название урока: {lesson.name}</h4>
+                                                    <h4>Всего тестов: {data3.testsConnection.aggregate.count}</h4>
+                                                    <TestGroup tests={data2.tests} lessonID={lesson.id}></TestGroup>
+                                                </>
+                                            )
+                                        }}
+                                    </Query>
+                                  </>
+                                )
+                              }}
+                            </Query>
+                          )}
                         </>
                       )
                     }}
@@ -246,63 +249,64 @@ class CoursePage extends Component {
             case "problem":
                 this.pageView = 
                 <Query
-                    query={PAGE_PROBLEMS_QUERY} 
+                    query={PAGE_LESSONS_QUERY} 
                     fetchPolicy="cache-first"
                     variables={{
                             id: this.props.id,
-                        }}
-
-                    >
-                    {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
-                        if (loading1) return <p>Загрузка...</p>
-                        if (error1) return <p>Error: {error1.message}</p>;
-                        if(data1.problems == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
-                        return (
-                            <>
-                            <Query
-                                    query={AGGREGATE_PAGE_PROBLEMS_QUERY} 
-                                    fetchPolicy="cache-first"
-                                    variables={{
-                                        id: this.props.id,
-                                    }}
-                            >
-                            {({ data: data2, error: error2, loading: loading2 }) => {
-                                if (loading2) return <p>Loading...</p>;
-                                if (error2) return <p>Error: {error2.message}</p>;
-                                return (
-                                    <div>
-                                        <h4>Всего задач: {data2.problemsConnection.aggregate.count}</h4>
-                                        {data1.problems.map(problem => <SingleProblem key={problem.id} problem={problem} coursePageId={this.props.id}/>)}
-                                            <>
-                                            {data2.problemsConnection.aggregate.count > data1.problems.length ?
-                                            <FetchMore
-                                                onLoadMore={() =>
-                                                    fetchMore({
-                                                    variables: {
-                                                        skip: data1.problems.length  
-                                                    },
-                                                    updateQuery: (prev, { fetchMoreResult }) => {
-                                                        if (!fetchMoreResult) return prev;
-                                                        return Object.assign({}, prev, {
-                                                            problems: [...prev.problems, ...fetchMoreResult.problems]
-                                                        });
-                                                    }
-                                                    })
-                                                }
-                                              />
-                                            :
-                                          null}
-                                        </> 
-                                </div>
-                              )
-                            }}
-                         </Query> 
-                        </>
-                      )
                     }}
+                >
+                    {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
+                            if (loading1) return <p>Загрузка...</p>
+                            if (error1) return <p>Error: {error1.message}</p>;
+                            if(data1.lessons == 0) return <p>По этому курсу, к сожалению,задачи пока еще не были созданы.</p>
+                            console.log(data1);
+                            return (
+                                <>
+                                {data1.lessons.map(lesson => 
+                                    <Query
+                                        query={PAGE_PROBLEMS_QUERY} 
+                                        fetchPolicy="cache-first"
+                                        variables={{
+                                            id: lesson.id,
+                                         }}
+                                    >
+                                    {({ data: data1, error: error1, loading: loading1, fetchMore}) => {
+                                        if (loading1) return <p>Загрузка...</p>
+                                        if (error1) return <p>Error: {error1.message}</p>;
+                                        if(data1.lessons == 0) return <p>По этому курсу, к сожалению,уроки пока еще не были созданы.</p>
+                                        return (
+                                            <>  
+                                                <Query
+                                                    query={AGGREGATE_PAGE_PROBLEMS_QUERY} 
+                                                    fetchPolicy="cache-first"
+                                                    variables={{
+                                                        id: lesson.id,
+                                                    }}
+                                                >
+                                                {({ data: data2, error: error2, loading: loading2 }) => {
+                                                    if (loading2) return <p>Loading...</p>;
+                                                    if (error2) return <p>Error: {error2.message}</p>;
+                                                    return (
+                                                        <>
+                                                            <h4>Название урока: {lesson.name}</h4>
+                                                            <h4>Всего задач: {data2.problemsConnection.aggregate.count}</h4>
+                                                            <ProblemGroup problems={data1.problems} lessonID={lesson.id}></ProblemGroup>
+                                                        </>
+                                                    )
+                                                }}
+                                              </Query>
+                                            </>
+                                         )
+                                        }}
+                                    </Query>
+                                )}
+                            </>
+                            )
+                        }}
                 </Query>
+                    
                 break;
-            default:
+                default:
                 this.pageView = 
                 <Query
                     query={PAGE_LESSONS_QUERY} 

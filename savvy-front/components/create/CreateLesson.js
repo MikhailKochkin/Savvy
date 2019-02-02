@@ -11,11 +11,13 @@ import { NavButton, SubmitButton } from '../styles/Button';
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(
+    $name: String!
     $text: String!
     $video: String
     $coursePageID: ID!
   ) {
     createLesson(
+      name: $name
       text: $text 
       video: $video
       coursePageID: $coursePageID
@@ -29,6 +31,7 @@ const PAGE_LESSONS_QUERY = gql`
   query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
     lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
       id
+      name
       text
       user {
           id
@@ -42,6 +45,7 @@ const Width = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin-bottom: 3%;
   ${SubmitButton} {
     margin-top: 3%;
   }
@@ -117,9 +121,15 @@ export default class CreateLesson extends Component {
     constructor(props) {
       super(props)
       this.state = {
+        name: '',
         text: '',
         video: ''
       };
+      this.handleName = e => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        this.setState({[name]: value});
+      }
       this.handleChange = e => {
         const { name, type, value } = e.target;
         if(value.includes('embed')) {
@@ -152,6 +162,22 @@ export default class CreateLesson extends Component {
               </Link>
               <DynamicLoadedEditor getEditorText={this.myCallback}/>
             <Width>
+              <Container>
+              <h4 className="explain"> Напишите название урока</h4>
+              <Label className="name" htmlFor="name">
+                  <p className="first">Название урока</p>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="Название урока"
+                      value={this.state.name}
+                      onChange={this.handleName}
+                    />
+                </Label>
+              </Container>
+              </Width>
+              <Width>
               <Container>
                 <h4 className="explain"> Добавьте видео, если в этом есть необходимость:</h4>
                 <Label className="video" htmlFor="video">

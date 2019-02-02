@@ -18,7 +18,7 @@ const CREATE_TEST_MUTATION = gql`
     $answer3Correct: String 
     $answer4: String
     $answer4Correct: String
-    $coursePageID: ID!
+    $lessonID: ID!
   ) {
     createTest(
       question: $question 
@@ -30,7 +30,7 @@ const CREATE_TEST_MUTATION = gql`
       answer3Correct: $answer3Correct
       answer4: $answer4 
       answer4Correct: $answer4Correct
-      coursePageID: $coursePageID
+      lessonID: $lessonID
     ) {
       id
     }
@@ -39,7 +39,7 @@ const CREATE_TEST_MUTATION = gql`
 
 const PAGE_TESTS_QUERY = gql`
   query PAGE_TESTS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    tests(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
+    tests(where: {lessonID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
       id
       user {
           id
@@ -116,18 +116,18 @@ class CreateQuiz extends Component {
         const {id} = this.props
         return (
             <>
-                <Link href={{
+                {/* <Link href={{
                         pathname: '/coursePage',
                         query: { id }
                     }}>
                     <a>
                         <NavButton>На страницу курса</NavButton>
                     </a>
-                </Link>
+                </Link> */}
                 <Mutation 
                     mutation={CREATE_TEST_MUTATION} 
                     variables={{
-                        coursePageID: id,
+                        lessonID: id,
                         ...this.state
                     }}
                     refetchQueries={() =>[{  
@@ -185,7 +185,7 @@ class CreateQuiz extends Component {
                             // document.getElementById("Message").textContent ='Вы создали новый тестовый вопрос!';
                             document.getElementById("Message").style.display ='block'
                             setTimeout(function(){
-                                document.getElementById("Message") ? document.getElementById("Message").style.display ='none' : none
+                                document.getElementById("Message") ? document.getElementById("Message").style.display ='none' : 'none'
                                 }, 4000);
                             
                             const res = await createTest();

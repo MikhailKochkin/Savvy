@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
+import Link from 'next/link';
 import moment from 'moment';
 import DeleteSingleLesson from '../DeleteSingleLesson';
 import User from '../User';
@@ -63,6 +64,21 @@ const Iframe = styled.iframe`
     }
 `;
 
+const Button = styled.button`
+    padding: 1.5%;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 1%;
+    text-transform: uppercase;
+    color: #FFFDF7;
+    background-color: #84BC9C;
+    border: solid 1px white;
+    cursor: pointer;
+    &:hover{
+        background-color: #294D4A;
+    }
+`;
+
 class SingleLesson extends Component {
     render() {
       return (
@@ -85,6 +101,7 @@ class SingleLesson extends Component {
                 <>
                 <ProposalBox>
                   <TextBar>
+                    <h4>{this.props.name}</h4>
                     <div dangerouslySetInnerHTML={{ __html: lesson.text }}></div>
                     {lesson.video ?
                       <Iframe src={lesson.video} allowFullScreen>
@@ -107,6 +124,29 @@ class SingleLesson extends Component {
                     }
                   </SideBar>
                 </ProposalBox>
+                { me && me.id === lesson.user.id ?
+                <>
+                  <Link href={{
+                      pathname: '/createProblem',
+                      query: {id: this.props.lesson.id}
+                    }}>
+                    <a>
+                      <Button>Составить задачу</Button>
+                    </a>
+                  </Link>
+                  
+                  <Link href={{
+                      pathname: '/createTest',
+                      query: {id: this.props.lesson.id}
+                  }}>
+                    <a>
+                        <Button>Составить тест </Button>
+                    </a>
+                  </Link>
+                </>
+                :
+                null
+              }
                 </>
               );
             }}

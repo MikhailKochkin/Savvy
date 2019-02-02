@@ -40,8 +40,8 @@ type CoursePage {
   image: String!
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
-  tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
-  problems: [Problem]! @relation(name: "ProblemsOnCoursePage" onDelete: CASCADE)
+  # tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
+  # problems: [Problem]! @relation(name: "ProblemsOnCoursePage" onDelete: CASCADE)
   applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
   tags: [String]
   courseType: CourseType
@@ -76,10 +76,13 @@ type SandboxPageGoal {
 
 type Lesson {
   id: ID! @unique
+  name: String!
   text: String!
   video: String
   user: User!
   coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
+  tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
+  problems: [Problem] @relation(name: "LessonProblems" onDelete: CASCADE)
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -109,8 +112,8 @@ type Test {
   answer4: String
   answer4Correct: String
   user: User!
-  coursePage: CoursePage! @relation(name: "TestsOnCoursePage")
-  coursePageID: ID!
+  lesson: Lesson! @relation(name: "LessonTests")
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -122,8 +125,8 @@ type Problem {
   solution: String
   answer: String!
   user: User!
-  coursePage: CoursePage! @relation(name: "ProblemsOnCoursePage")
-  coursePageID: ID!
+  lesson: Lesson! @relation(name: "LessonProblems")
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

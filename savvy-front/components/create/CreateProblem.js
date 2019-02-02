@@ -12,14 +12,14 @@ const CREATE_PROBLEM_MUTATION = gql`
     $hints: String
     $solution: String
     $answer: String!
-    $coursePageID: ID!
+    $lessonID: ID!
   ) {
     createProblem(
         text: $text
         hints: $hints
         solution: $solution
         answer: $answer
-        coursePageID: $coursePageID
+        lessonID: $lessonID
     ) {
       id
     }
@@ -220,15 +220,15 @@ class CreateProblem extends Component {
 
         return (
             <>
-                <Link href={{
+                {/* <Link href={{
                         pathname: '/coursePage',
                         query: { id }
                     }}>
                     <a>
                         <NavButton>Вернуться на страницу курса!</NavButton>
                     </a>
-                </Link>
-                <h1>Создайте новую задачу для вашего курса</h1>
+                </Link> */}
+                <h1>Создайте новую задачу для вашего урока</h1>
                 <Message id="Message">Вы создали новую задачу!</Message>  
                 <ChooseButtons>
                     <ChooseButton onClick={this.onText} active={this.state.button1}>
@@ -248,7 +248,7 @@ class CreateProblem extends Component {
                 <Mutation 
                     mutation={CREATE_PROBLEM_MUTATION} 
                     variables={{
-                        coursePageID: id,
+                        lessonID: id,
                         ...this.state
                     }}
                     refetchQueries={() =>[{  
@@ -262,7 +262,7 @@ class CreateProblem extends Component {
                         const res = await createProblem()
                         document.getElementById("Message").style.display ='block'
                         setTimeout(function(){
-                            document.getElementById("Message") ? document.getElementById("Message").style.display ='none' : none
+                            document.getElementById("Message") ? document.getElementById("Message").style.display = 'none' : none
                         }, 3000);
                         localStorage.removeItem('text')
                         localStorage.removeItem('hints')

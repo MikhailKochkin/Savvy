@@ -224,7 +224,7 @@ const Mutations = {
     },
     async createTest(parent, args, ctx, info) {
       // TODO: Check if they are logged in
-      const coursePageID = args.coursePageID
+      const lessonID = args.lessonID
       delete args.id
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
@@ -238,8 +238,8 @@ const Mutations = {
                 user: {
                   connect: { id: ctx.request.userId }
                   },
-                coursePage: {
-                  connect: { id: coursePageID }
+                lesson: {
+                  connect: { id: lessonID }
                 },
                 ...args
             },
@@ -257,7 +257,7 @@ const Mutations = {
     },
     async createProblem(parent, args, ctx, info) {
       // TODO: Check if they are logged in
-      const coursePageID = args.coursePageID
+      const lessonID = args.lessonID
       delete args.id
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
@@ -270,8 +270,8 @@ const Mutations = {
                 user: {
                   connect: { id: ctx.request.userId }
                   },
-                coursePage: {
-                  connect: { id: coursePageID }
+                lesson: {
+                  connect: { id: lessonID }
                 },
                 ...args
             },

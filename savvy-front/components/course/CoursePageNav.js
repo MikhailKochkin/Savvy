@@ -140,7 +140,7 @@ export default class CoursePageNav extends Component {
                                 </a>
                                 </Link>
                                 
-                                <Link href={{
+                                {/* <Link href={{
                                     pathname: '/createTest',
                                     query: {id: this.props.id }
                                 }}>
@@ -156,7 +156,7 @@ export default class CoursePageNav extends Component {
                                 <a>
                                     <Button>Составить задачу </Button>
                                 </a>
-                                </Link>
+                                </Link> */}
                                
                                 {coursePage.courseType === "PRIVATE" &&
                                 <Link href={{

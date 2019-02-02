@@ -32,7 +32,7 @@ const ProblemBox = styled.div`
   flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
   }
   button {
       width: 20%;
@@ -143,7 +143,7 @@ class SingleProblem extends Component {
                   { me && me.id === problem.user.id ?
                     <DeleteSingleProblem
                       id={this.props.problem.id}
-                      coursePageId={this.props.coursePageId}
+                      lessonID={this.props.lessonID}
                     />
                     :
                     null

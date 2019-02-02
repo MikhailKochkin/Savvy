@@ -10,14 +10,14 @@ type Mutation {
     createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     updateSandboxPage(id: ID!, title: String, description: String, image: String): SandboxPage
     deleteSandboxPage(id:ID!): SandboxPage
-    createLesson(text: String!, video: String, coursePageID: ID!): Lesson!
+    createLesson(name: String!, text: String!, video: String, coursePageID: ID!): Lesson!
     deleteLesson(id:ID!): Lesson
     createTest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
-        answer4Correct: String, coursePageID: ID!): Test!
+        answer4Correct: String, lessonID: ID!): Test!
     deleteTest(id:ID!): Test
     createProblem(text: String!, hints: String, solution: String, answer: String!,
-        coursePageID: ID!): Test!
+        lessonID: ID!): Test!
     deleteProblem(id:ID!): Problem
     createSandbox(text: String!, video: String, sandboxPageID: ID!): Sandbox!
     deleteSandbox(id:ID!): Sandbox

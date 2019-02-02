@@ -244,8 +244,6 @@ type CoursePage {
   image: String!
   user: User!
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
-  tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
-  problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application!]
   tags: [String!]!
   courseType: CourseType
@@ -266,8 +264,6 @@ input CoursePageCreateInput {
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
-  tests: TestCreateManyWithoutCoursePageInput
-  problems: ProblemCreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
@@ -289,16 +285,6 @@ input CoursePageCreateOneWithoutLessonsInput {
   connect: CoursePageWhereUniqueInput
 }
 
-input CoursePageCreateOneWithoutProblemsInput {
-  create: CoursePageCreateWithoutProblemsInput
-  connect: CoursePageWhereUniqueInput
-}
-
-input CoursePageCreateOneWithoutTestsInput {
-  create: CoursePageCreateWithoutTestsInput
-  connect: CoursePageWhereUniqueInput
-}
-
 input CoursePageCreatestudentsInput {
   set: [ID!]
 }
@@ -313,8 +299,6 @@ input CoursePageCreateWithoutApplicationsInput {
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
-  tests: TestCreateManyWithoutCoursePageInput
-  problems: ProblemCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -325,34 +309,6 @@ input CoursePageCreateWithoutLessonsInput {
   description: String!
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
-  tests: TestCreateManyWithoutCoursePageInput
-  problems: ProblemCreateManyWithoutCoursePageInput
-  applications: ApplicationCreateManyWithoutCoursePageInput
-  tags: CoursePageCreatetagsInput
-  courseType: CourseType
-  students: CoursePageCreatestudentsInput
-}
-
-input CoursePageCreateWithoutProblemsInput {
-  title: String!
-  description: String!
-  image: String!
-  user: UserCreateOneWithoutCoursePagesInput!
-  lessons: LessonCreateManyWithoutCoursePageInput
-  tests: TestCreateManyWithoutCoursePageInput
-  applications: ApplicationCreateManyWithoutCoursePageInput
-  tags: CoursePageCreatetagsInput
-  courseType: CourseType
-  students: CoursePageCreatestudentsInput
-}
-
-input CoursePageCreateWithoutTestsInput {
-  title: String!
-  description: String!
-  image: String!
-  user: UserCreateOneWithoutCoursePagesInput!
-  lessons: LessonCreateManyWithoutCoursePageInput
-  problems: ProblemCreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
@@ -364,8 +320,6 @@ input CoursePageCreateWithoutUserInput {
   description: String!
   image: String!
   lessons: LessonCreateManyWithoutCoursePageInput
-  tests: TestCreateManyWithoutCoursePageInput
-  problems: ProblemCreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
@@ -430,8 +384,6 @@ input CoursePageUpdateInput {
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
-  tests: TestUpdateManyWithoutCoursePageInput
-  problems: ProblemUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
@@ -461,20 +413,6 @@ input CoursePageUpdateOneRequiredWithoutLessonsInput {
   connect: CoursePageWhereUniqueInput
 }
 
-input CoursePageUpdateOneRequiredWithoutProblemsInput {
-  create: CoursePageCreateWithoutProblemsInput
-  update: CoursePageUpdateWithoutProblemsDataInput
-  upsert: CoursePageUpsertWithoutProblemsInput
-  connect: CoursePageWhereUniqueInput
-}
-
-input CoursePageUpdateOneRequiredWithoutTestsInput {
-  create: CoursePageCreateWithoutTestsInput
-  update: CoursePageUpdateWithoutTestsDataInput
-  upsert: CoursePageUpsertWithoutTestsInput
-  connect: CoursePageWhereUniqueInput
-}
-
 input CoursePageUpdatestudentsInput {
   set: [ID!]
 }
@@ -489,8 +427,6 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
-  tests: TestUpdateManyWithoutCoursePageInput
-  problems: ProblemUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -501,34 +437,6 @@ input CoursePageUpdateWithoutLessonsDataInput {
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
-  tests: TestUpdateManyWithoutCoursePageInput
-  problems: ProblemUpdateManyWithoutCoursePageInput
-  applications: ApplicationUpdateManyWithoutCoursePageInput
-  tags: CoursePageUpdatetagsInput
-  courseType: CourseType
-  students: CoursePageUpdatestudentsInput
-}
-
-input CoursePageUpdateWithoutProblemsDataInput {
-  title: String
-  description: String
-  image: String
-  user: UserUpdateOneRequiredWithoutCoursePagesInput
-  lessons: LessonUpdateManyWithoutCoursePageInput
-  tests: TestUpdateManyWithoutCoursePageInput
-  applications: ApplicationUpdateManyWithoutCoursePageInput
-  tags: CoursePageUpdatetagsInput
-  courseType: CourseType
-  students: CoursePageUpdatestudentsInput
-}
-
-input CoursePageUpdateWithoutTestsDataInput {
-  title: String
-  description: String
-  image: String
-  user: UserUpdateOneRequiredWithoutCoursePagesInput
-  lessons: LessonUpdateManyWithoutCoursePageInput
-  problems: ProblemUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
@@ -540,8 +448,6 @@ input CoursePageUpdateWithoutUserDataInput {
   description: String
   image: String
   lessons: LessonUpdateManyWithoutCoursePageInput
-  tests: TestUpdateManyWithoutCoursePageInput
-  problems: ProblemUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
@@ -561,16 +467,6 @@ input CoursePageUpsertWithoutApplicationsInput {
 input CoursePageUpsertWithoutLessonsInput {
   update: CoursePageUpdateWithoutLessonsDataInput!
   create: CoursePageCreateWithoutLessonsInput!
-}
-
-input CoursePageUpsertWithoutProblemsInput {
-  update: CoursePageUpdateWithoutProblemsDataInput!
-  create: CoursePageCreateWithoutProblemsInput!
-}
-
-input CoursePageUpsertWithoutTestsInput {
-  update: CoursePageUpdateWithoutTestsDataInput!
-  create: CoursePageCreateWithoutTestsInput!
 }
 
 input CoursePageUpsertWithWhereUniqueWithoutUserInput {
@@ -640,12 +536,6 @@ input CoursePageWhereInput {
   lessons_every: LessonWhereInput
   lessons_some: LessonWhereInput
   lessons_none: LessonWhereInput
-  tests_every: TestWhereInput
-  tests_some: TestWhereInput
-  tests_none: TestWhereInput
-  problems_every: ProblemWhereInput
-  problems_some: ProblemWhereInput
-  problems_none: ProblemWhereInput
   applications_every: ApplicationWhereInput
   applications_some: ApplicationWhereInput
   applications_none: ApplicationWhereInput
@@ -687,10 +577,13 @@ scalar DateTime
 
 type Lesson {
   id: ID!
+  name: String!
   text: String!
   video: String
   user: User!
   coursePage: CoursePage!
+  tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
+  problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -703,10 +596,13 @@ type LessonConnection {
 }
 
 input LessonCreateInput {
+  name: String!
   text: String!
   video: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -720,17 +616,53 @@ input LessonCreateManyWithoutUserInput {
   connect: [LessonWhereUniqueInput!]
 }
 
+input LessonCreateOneWithoutProblemsInput {
+  create: LessonCreateWithoutProblemsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonCreateOneWithoutTestsInput {
+  create: LessonCreateWithoutTestsInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonCreateWithoutCoursePageInput {
+  name: String!
   text: String!
   video: String
   user: UserCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  coursePageID: ID!
+}
+
+input LessonCreateWithoutProblemsInput {
+  name: String!
+  text: String!
+  video: String
+  user: UserCreateOneWithoutLessonsInput!
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  coursePageID: ID!
+}
+
+input LessonCreateWithoutTestsInput {
+  name: String!
+  text: String!
+  video: String
+  user: UserCreateOneWithoutLessonsInput!
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  problems: ProblemCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
 input LessonCreateWithoutUserInput {
+  name: String!
   text: String!
   video: String
   coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -742,6 +674,8 @@ type LessonEdge {
 enum LessonOrderByInput {
   id_ASC
   id_DESC
+  name_ASC
+  name_DESC
   text_ASC
   text_DESC
   video_ASC
@@ -756,6 +690,7 @@ enum LessonOrderByInput {
 
 type LessonPreviousValues {
   id: ID!
+  name: String!
   text: String!
   video: String
   coursePageID: ID!
@@ -782,10 +717,13 @@ input LessonSubscriptionWhereInput {
 }
 
 input LessonUpdateInput {
+  name: String
   text: String
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -807,17 +745,57 @@ input LessonUpdateManyWithoutUserInput {
   upsert: [LessonUpsertWithWhereUniqueWithoutUserInput!]
 }
 
+input LessonUpdateOneRequiredWithoutProblemsInput {
+  create: LessonCreateWithoutProblemsInput
+  update: LessonUpdateWithoutProblemsDataInput
+  upsert: LessonUpsertWithoutProblemsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonUpdateOneRequiredWithoutTestsInput {
+  create: LessonCreateWithoutTestsInput
+  update: LessonUpdateWithoutTestsDataInput
+  upsert: LessonUpsertWithoutTestsInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonUpdateWithoutCoursePageDataInput {
+  name: String
   text: String
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  coursePageID: ID
+}
+
+input LessonUpdateWithoutProblemsDataInput {
+  name: String
+  text: String
+  video: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  coursePageID: ID
+}
+
+input LessonUpdateWithoutTestsDataInput {
+  name: String
+  text: String
+  video: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  problems: ProblemUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
 input LessonUpdateWithoutUserDataInput {
+  name: String
   text: String
   video: String
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -829,6 +807,16 @@ input LessonUpdateWithWhereUniqueWithoutCoursePageInput {
 input LessonUpdateWithWhereUniqueWithoutUserInput {
   where: LessonWhereUniqueInput!
   data: LessonUpdateWithoutUserDataInput!
+}
+
+input LessonUpsertWithoutProblemsInput {
+  update: LessonUpdateWithoutProblemsDataInput!
+  create: LessonCreateWithoutProblemsInput!
+}
+
+input LessonUpsertWithoutTestsInput {
+  update: LessonUpdateWithoutTestsDataInput!
+  create: LessonCreateWithoutTestsInput!
 }
 
 input LessonUpsertWithWhereUniqueWithoutCoursePageInput {
@@ -858,6 +846,20 @@ input LessonWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   text: String
   text_not: String
   text_in: [String!]
@@ -888,6 +890,12 @@ input LessonWhereInput {
   video_not_ends_with: String
   user: UserWhereInput
   coursePage: CoursePageWhereInput
+  tests_every: TestWhereInput
+  tests_some: TestWhereInput
+  tests_none: TestWhereInput
+  problems_every: ProblemWhereInput
+  problems_some: ProblemWhereInput
+  problems_none: ProblemWhereInput
   coursePageID: ID
   coursePageID_not: ID
   coursePageID_in: [ID!]
@@ -1019,8 +1027,8 @@ type Problem {
   solution: String
   answer: String!
   user: User!
-  coursePage: CoursePage!
-  coursePageID: ID!
+  lesson: Lesson!
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1037,12 +1045,12 @@ input ProblemCreateInput {
   solution: String
   answer: String!
   user: UserCreateOneWithoutProblemsInput!
-  coursePage: CoursePageCreateOneWithoutProblemsInput!
-  coursePageID: ID!
+  lesson: LessonCreateOneWithoutProblemsInput!
+  lessonID: ID!
 }
 
-input ProblemCreateManyWithoutCoursePageInput {
-  create: [ProblemCreateWithoutCoursePageInput!]
+input ProblemCreateManyWithoutLessonInput {
+  create: [ProblemCreateWithoutLessonInput!]
   connect: [ProblemWhereUniqueInput!]
 }
 
@@ -1051,13 +1059,13 @@ input ProblemCreateManyWithoutUserInput {
   connect: [ProblemWhereUniqueInput!]
 }
 
-input ProblemCreateWithoutCoursePageInput {
+input ProblemCreateWithoutLessonInput {
   text: String!
   hints: String
   solution: String
   answer: String!
   user: UserCreateOneWithoutProblemsInput!
-  coursePageID: ID!
+  lessonID: ID!
 }
 
 input ProblemCreateWithoutUserInput {
@@ -1065,8 +1073,8 @@ input ProblemCreateWithoutUserInput {
   hints: String
   solution: String
   answer: String!
-  coursePage: CoursePageCreateOneWithoutProblemsInput!
-  coursePageID: ID!
+  lesson: LessonCreateOneWithoutProblemsInput!
+  lessonID: ID!
 }
 
 type ProblemEdge {
@@ -1085,8 +1093,8 @@ enum ProblemOrderByInput {
   solution_DESC
   answer_ASC
   answer_DESC
-  coursePageID_ASC
-  coursePageID_DESC
+  lessonID_ASC
+  lessonID_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1099,7 +1107,7 @@ type ProblemPreviousValues {
   hints: String
   solution: String
   answer: String!
-  coursePageID: ID!
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1128,17 +1136,17 @@ input ProblemUpdateInput {
   solution: String
   answer: String
   user: UserUpdateOneRequiredWithoutProblemsInput
-  coursePage: CoursePageUpdateOneRequiredWithoutProblemsInput
-  coursePageID: ID
+  lesson: LessonUpdateOneRequiredWithoutProblemsInput
+  lessonID: ID
 }
 
-input ProblemUpdateManyWithoutCoursePageInput {
-  create: [ProblemCreateWithoutCoursePageInput!]
+input ProblemUpdateManyWithoutLessonInput {
+  create: [ProblemCreateWithoutLessonInput!]
   delete: [ProblemWhereUniqueInput!]
   connect: [ProblemWhereUniqueInput!]
   disconnect: [ProblemWhereUniqueInput!]
-  update: [ProblemUpdateWithWhereUniqueWithoutCoursePageInput!]
-  upsert: [ProblemUpsertWithWhereUniqueWithoutCoursePageInput!]
+  update: [ProblemUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [ProblemUpsertWithWhereUniqueWithoutLessonInput!]
 }
 
 input ProblemUpdateManyWithoutUserInput {
@@ -1150,13 +1158,13 @@ input ProblemUpdateManyWithoutUserInput {
   upsert: [ProblemUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input ProblemUpdateWithoutCoursePageDataInput {
+input ProblemUpdateWithoutLessonDataInput {
   text: String
   hints: String
   solution: String
   answer: String
   user: UserUpdateOneRequiredWithoutProblemsInput
-  coursePageID: ID
+  lessonID: ID
 }
 
 input ProblemUpdateWithoutUserDataInput {
@@ -1164,13 +1172,13 @@ input ProblemUpdateWithoutUserDataInput {
   hints: String
   solution: String
   answer: String
-  coursePage: CoursePageUpdateOneRequiredWithoutProblemsInput
-  coursePageID: ID
+  lesson: LessonUpdateOneRequiredWithoutProblemsInput
+  lessonID: ID
 }
 
-input ProblemUpdateWithWhereUniqueWithoutCoursePageInput {
+input ProblemUpdateWithWhereUniqueWithoutLessonInput {
   where: ProblemWhereUniqueInput!
-  data: ProblemUpdateWithoutCoursePageDataInput!
+  data: ProblemUpdateWithoutLessonDataInput!
 }
 
 input ProblemUpdateWithWhereUniqueWithoutUserInput {
@@ -1178,10 +1186,10 @@ input ProblemUpdateWithWhereUniqueWithoutUserInput {
   data: ProblemUpdateWithoutUserDataInput!
 }
 
-input ProblemUpsertWithWhereUniqueWithoutCoursePageInput {
+input ProblemUpsertWithWhereUniqueWithoutLessonInput {
   where: ProblemWhereUniqueInput!
-  update: ProblemUpdateWithoutCoursePageDataInput!
-  create: ProblemCreateWithoutCoursePageInput!
+  update: ProblemUpdateWithoutLessonDataInput!
+  create: ProblemCreateWithoutLessonInput!
 }
 
 input ProblemUpsertWithWhereUniqueWithoutUserInput {
@@ -1262,21 +1270,21 @@ input ProblemWhereInput {
   answer_ends_with: String
   answer_not_ends_with: String
   user: UserWhereInput
-  coursePage: CoursePageWhereInput
-  coursePageID: ID
-  coursePageID_not: ID
-  coursePageID_in: [ID!]
-  coursePageID_not_in: [ID!]
-  coursePageID_lt: ID
-  coursePageID_lte: ID
-  coursePageID_gt: ID
-  coursePageID_gte: ID
-  coursePageID_contains: ID
-  coursePageID_not_contains: ID
-  coursePageID_starts_with: ID
-  coursePageID_not_starts_with: ID
-  coursePageID_ends_with: ID
-  coursePageID_not_ends_with: ID
+  lesson: LessonWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2105,8 +2113,8 @@ type Test {
   answer4: String
   answer4Correct: String
   user: User!
-  coursePage: CoursePage!
-  coursePageID: ID!
+  lesson: Lesson!
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2128,12 +2136,12 @@ input TestCreateInput {
   answer4: String
   answer4Correct: String
   user: UserCreateOneWithoutTestsInput!
-  coursePage: CoursePageCreateOneWithoutTestsInput!
-  coursePageID: ID!
+  lesson: LessonCreateOneWithoutTestsInput!
+  lessonID: ID!
 }
 
-input TestCreateManyWithoutCoursePageInput {
-  create: [TestCreateWithoutCoursePageInput!]
+input TestCreateManyWithoutLessonInput {
+  create: [TestCreateWithoutLessonInput!]
   connect: [TestWhereUniqueInput!]
 }
 
@@ -2142,7 +2150,7 @@ input TestCreateManyWithoutUserInput {
   connect: [TestWhereUniqueInput!]
 }
 
-input TestCreateWithoutCoursePageInput {
+input TestCreateWithoutLessonInput {
   question: String!
   answer1: String!
   answer1Correct: String!
@@ -2153,7 +2161,7 @@ input TestCreateWithoutCoursePageInput {
   answer4: String
   answer4Correct: String
   user: UserCreateOneWithoutTestsInput!
-  coursePageID: ID!
+  lessonID: ID!
 }
 
 input TestCreateWithoutUserInput {
@@ -2166,8 +2174,8 @@ input TestCreateWithoutUserInput {
   answer3Correct: String
   answer4: String
   answer4Correct: String
-  coursePage: CoursePageCreateOneWithoutTestsInput!
-  coursePageID: ID!
+  lesson: LessonCreateOneWithoutTestsInput!
+  lessonID: ID!
 }
 
 type TestEdge {
@@ -2196,8 +2204,8 @@ enum TestOrderByInput {
   answer4_DESC
   answer4Correct_ASC
   answer4Correct_DESC
-  coursePageID_ASC
-  coursePageID_DESC
+  lessonID_ASC
+  lessonID_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -2215,7 +2223,7 @@ type TestPreviousValues {
   answer3Correct: String
   answer4: String
   answer4Correct: String
-  coursePageID: ID!
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2249,17 +2257,17 @@ input TestUpdateInput {
   answer4: String
   answer4Correct: String
   user: UserUpdateOneRequiredWithoutTestsInput
-  coursePage: CoursePageUpdateOneRequiredWithoutTestsInput
-  coursePageID: ID
+  lesson: LessonUpdateOneRequiredWithoutTestsInput
+  lessonID: ID
 }
 
-input TestUpdateManyWithoutCoursePageInput {
-  create: [TestCreateWithoutCoursePageInput!]
+input TestUpdateManyWithoutLessonInput {
+  create: [TestCreateWithoutLessonInput!]
   delete: [TestWhereUniqueInput!]
   connect: [TestWhereUniqueInput!]
   disconnect: [TestWhereUniqueInput!]
-  update: [TestUpdateWithWhereUniqueWithoutCoursePageInput!]
-  upsert: [TestUpsertWithWhereUniqueWithoutCoursePageInput!]
+  update: [TestUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [TestUpsertWithWhereUniqueWithoutLessonInput!]
 }
 
 input TestUpdateManyWithoutUserInput {
@@ -2271,7 +2279,7 @@ input TestUpdateManyWithoutUserInput {
   upsert: [TestUpsertWithWhereUniqueWithoutUserInput!]
 }
 
-input TestUpdateWithoutCoursePageDataInput {
+input TestUpdateWithoutLessonDataInput {
   question: String
   answer1: String
   answer1Correct: String
@@ -2282,7 +2290,7 @@ input TestUpdateWithoutCoursePageDataInput {
   answer4: String
   answer4Correct: String
   user: UserUpdateOneRequiredWithoutTestsInput
-  coursePageID: ID
+  lessonID: ID
 }
 
 input TestUpdateWithoutUserDataInput {
@@ -2295,13 +2303,13 @@ input TestUpdateWithoutUserDataInput {
   answer3Correct: String
   answer4: String
   answer4Correct: String
-  coursePage: CoursePageUpdateOneRequiredWithoutTestsInput
-  coursePageID: ID
+  lesson: LessonUpdateOneRequiredWithoutTestsInput
+  lessonID: ID
 }
 
-input TestUpdateWithWhereUniqueWithoutCoursePageInput {
+input TestUpdateWithWhereUniqueWithoutLessonInput {
   where: TestWhereUniqueInput!
-  data: TestUpdateWithoutCoursePageDataInput!
+  data: TestUpdateWithoutLessonDataInput!
 }
 
 input TestUpdateWithWhereUniqueWithoutUserInput {
@@ -2309,10 +2317,10 @@ input TestUpdateWithWhereUniqueWithoutUserInput {
   data: TestUpdateWithoutUserDataInput!
 }
 
-input TestUpsertWithWhereUniqueWithoutCoursePageInput {
+input TestUpsertWithWhereUniqueWithoutLessonInput {
   where: TestWhereUniqueInput!
-  update: TestUpdateWithoutCoursePageDataInput!
-  create: TestCreateWithoutCoursePageInput!
+  update: TestUpdateWithoutLessonDataInput!
+  create: TestCreateWithoutLessonInput!
 }
 
 input TestUpsertWithWhereUniqueWithoutUserInput {
@@ -2463,21 +2471,21 @@ input TestWhereInput {
   answer4Correct_ends_with: String
   answer4Correct_not_ends_with: String
   user: UserWhereInput
-  coursePage: CoursePageWhereInput
-  coursePageID: ID
-  coursePageID_not: ID
-  coursePageID_in: [ID!]
-  coursePageID_not_in: [ID!]
-  coursePageID_lt: ID
-  coursePageID_lte: ID
-  coursePageID_gt: ID
-  coursePageID_gte: ID
-  coursePageID_contains: ID
-  coursePageID_not_contains: ID
-  coursePageID_starts_with: ID
-  coursePageID_not_starts_with: ID
-  coursePageID_ends_with: ID
-  coursePageID_not_ends_with: ID
+  lesson: LessonWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

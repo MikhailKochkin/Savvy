@@ -26,19 +26,19 @@ const Query = {
       );
     },
     tests(parent, args, ctx, info){
-      const pageId = args.where.coursePageID;
+      const lesID = args.where.lessonID;
       return ctx.db.query.tests(
         {
-          where: {coursePageID: pageId}
+          where: {lessonID: lesID}
         },
         info
       );
     },
     problems(parent, args, ctx, info){
-      const pageId = args.where.coursePageID;
+      const lesID = args.where.lessonID;
       return ctx.db.query.problems(
         {
-          where: {coursePageID: pageId}
+          where: {lessonID: lesID}
         },
         info
       );
