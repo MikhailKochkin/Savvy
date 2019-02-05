@@ -22,7 +22,6 @@ server.express.use((req, res, next) => {
 // 2. Create a middleware that populates the user on very each request
 
 server.express.use(async (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
   // if they aren't logged in, skip this
   if (!req.userId) return next();
   const user = await db.query.user(
