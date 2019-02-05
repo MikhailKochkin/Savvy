@@ -8,7 +8,7 @@ function createClient({ headers }) {
     request: operation => {
       operation.setContext({
         fetchOptions: {
-          credentials: 'omit',
+          credentials: 'include',
         },
         headers,
       });
