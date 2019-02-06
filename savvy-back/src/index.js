@@ -22,6 +22,7 @@ server.express.use((req, res, next) => {
 // 2. Create a middleware that populates the user on very each request
 
 server.express.use(async (req, res, next) => {
+
   // if they aren't logged in, skip this
   if (!req.userId) return next();
   const user = await db.query.user(
@@ -37,7 +38,7 @@ server.start(
   {
     cors: {
       credentials: true,
-      origin: false
+      origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL2]
     },
   },
   deets => {
