@@ -8,7 +8,7 @@ function createClient({ headers }) {
     request: operation => {
       operation.setContext({
         fetchOptions: {
-          credentials: 'same-origin',
+          credentials: 'include',
         },
         headers,
       });
