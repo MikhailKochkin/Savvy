@@ -5,7 +5,8 @@ import Nav from './Nav';
 import Meta from './Meta';
 import LandingPage from './Landing';
 import Footer from './Footer';
-import Header from './Header'
+import Header from './Header';
+import Layout from '../components/Layout'
 
 const theme = {
     blue: '#6DAAE1',
@@ -54,10 +55,13 @@ const Page = ({ children, router }) => {
             <ThemeProvider theme={theme}>
               <StyledPage>
                 <Meta/>
-                <Header/>
-                <Nav/>
-                <Inner>{children}</Inner>
-                <Footer/> 
+                <Layout>
+                  <Header/>
+                  <Nav/>
+                  <Inner>{children}</Inner>
+                  <Footer/>   
+                </Layout>
+                
                 {/* {router.pathname !== '/' ? <Footer/> : null} */}
               </StyledPage>
             </ThemeProvider>
