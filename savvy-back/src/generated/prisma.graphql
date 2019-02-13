@@ -1348,6 +1348,7 @@ type Sandbox {
   user: User!
   sandboxPage: SandboxPage!
   sandboxPageID: ID!
+  link: String
   createdAt: DateTime!
   updatedAt: DateTime!
   likes: Int
@@ -1365,6 +1366,7 @@ input SandboxCreateInput {
   user: UserCreateOneInput!
   sandboxPage: SandboxPageCreateOneWithoutSandboxesInput!
   sandboxPageID: ID!
+  link: String
   likes: Int
 }
 
@@ -1378,6 +1380,7 @@ input SandboxCreateWithoutSandboxPageInput {
   video: String
   user: UserCreateOneInput!
   sandboxPageID: ID!
+  link: String
   likes: Int
 }
 
@@ -1395,6 +1398,8 @@ enum SandboxOrderByInput {
   video_DESC
   sandboxPageID_ASC
   sandboxPageID_DESC
+  link_ASC
+  link_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1937,6 +1942,7 @@ type SandboxPreviousValues {
   text: String!
   video: String
   sandboxPageID: ID!
+  link: String
   createdAt: DateTime!
   updatedAt: DateTime!
   likes: Int
@@ -1966,6 +1972,7 @@ input SandboxUpdateInput {
   user: UserUpdateOneRequiredInput
   sandboxPage: SandboxPageUpdateOneRequiredWithoutSandboxesInput
   sandboxPageID: ID
+  link: String
   likes: Int
 }
 
@@ -1983,6 +1990,7 @@ input SandboxUpdateWithoutSandboxPageDataInput {
   video: String
   user: UserUpdateOneRequiredInput
   sandboxPageID: ID
+  link: String
   likes: Int
 }
 
@@ -2056,6 +2064,20 @@ input SandboxWhereInput {
   sandboxPageID_not_starts_with: ID
   sandboxPageID_ends_with: ID
   sandboxPageID_not_ends_with: ID
+  link: String
+  link_not: String
+  link_in: [String!]
+  link_not_in: [String!]
+  link_lt: String
+  link_lte: String
+  link_gt: String
+  link_gte: String
+  link_contains: String
+  link_not_contains: String
+  link_starts_with: String
+  link_not_starts_with: String
+  link_ends_with: String
+  link_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

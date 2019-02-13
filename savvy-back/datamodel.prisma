@@ -95,6 +95,7 @@ type Sandbox {
   user: User!
   sandboxPage: SandboxPage! @relation(name: "SandboxesOnSandboxPage")
   sandboxPageID: ID!
+  link: String
   createdAt: DateTime!
   updatedAt: DateTime!
   likes: Int @default(value: "0")

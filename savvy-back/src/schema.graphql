@@ -19,7 +19,7 @@ type Mutation {
     createProblem(text: String!, hints: String, solution: String, answer: String!,
         lessonID: ID!): Test!
     deleteProblem(id:ID!): Problem
-    createSandbox(text: String!, video: String, sandboxPageID: ID!): Sandbox!
+    createSandbox(text: String!, video: String, link: String, sandboxPageID: ID!): Sandbox!
     deleteSandbox(id:ID!): Sandbox
     createSandboxPageGoal(goal: String!, sandboxPageID: ID!): SandboxPageGoal!
     deleteCoursePage(id:ID!): CoursePage
@@ -76,5 +76,3 @@ type User{
     favourites: [ID]
     subjects: [ID]
 }
-
-

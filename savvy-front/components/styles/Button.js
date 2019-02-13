@@ -15,6 +15,9 @@ const NavButton = styled.button`
     &:hover {
         background: #112A62;
     }
+    a {
+        color: white;
+    }
 `;
 
 const SubmitButton = styled.button`

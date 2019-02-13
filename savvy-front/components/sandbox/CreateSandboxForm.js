@@ -12,11 +12,13 @@ const CREATE_SANDBOX_MUTATION = gql`
   mutation CREATE_SANDBOX_MUTATION(
     $text: String!
     $video: String
+    $link: String
     $sandboxPageID: ID!
   ) {
     createSandbox(
       text: $text
       video: $video
+      link: $link
       sandboxPageID: $sandboxPageID
     ) {
       id
@@ -105,7 +107,8 @@ export default class CreateSandboxForm extends Component {
       super(props)
       this.state = {
         text: '',
-        video: ''
+        video: '',
+        link: '',
       };
       this.handleChange = e => {
         const { value } = e.target;
@@ -115,6 +118,10 @@ export default class CreateSandboxForm extends Component {
           const newUrl = 'https://www.youtube.com/embed/' + value.slice(value.indexOf("=") + 1)
           this.setState({video: newUrl});
         }
+      };
+      this.handleLink = e => {
+        const { name, value } = e.target;
+        this.setState({ [name]: value });
       };
     }
 
@@ -139,7 +146,18 @@ export default class CreateSandboxForm extends Component {
             <DynamicLoadedEditor getEditorText={this.myCallback}/>
             <Width>
             <Container>
-              <h4 className="explain"> Добавьте видео, если в этом есть необходимость:</h4>
+              <h4 className="explain"> Добавьте ссылки на дополнительные материалы, если в этом есть необходимость:</h4>
+              <Label className="link" htmlFor="link">
+              <p className="first">Книга</p>
+                <input
+                  type="text"
+                  id="link"
+                  name="link"
+                  placeholder="Вставьте ссылку на текст..."
+                  value={this.state.link}
+                  onChange={this.handleLink}
+                />
+              </Label>
               <Label className="video" htmlFor="video">
               <p className="first">Видео</p>
                 <input
@@ -151,20 +169,10 @@ export default class CreateSandboxForm extends Component {
                   onChange={this.handleChange}
                 />
               </Label>
-              {/* <Label className="image" htmlFor="image">
-              <p className="first">Изображение</p>
-                <input
-                  type="text"
-                  id="image"
-                  name="image"
-                  placeholder="Вставьте изображение..."
-                  value={this.state.image}
-                  onChange={this.handleChange}
-                />
-              </Label> */}
-                <p>Обратите внимание. Пока на сайт можно добавлять только видео с Youtube. 
-                  Для этого скопируйте ссылку в пустое поле выше. Она автоматически преобразуется в тот вид, который может отображаться на сайте.
-                  Пожалуйста, не пытайтесь исправить ссылку после преобразования.</p>
+              <p>Обратите внимание. Пока на сайт можно добавлять только видео с Youtube. 
+                Для этого скопируйте ссылку в пустое поле выше. Она автоматически преобразуется в тот вид, который может отображаться на сайте.
+                Пожалуйста, не пытайтесь исправить ссылку после преобразования.
+              </p>
             </Container>
             <Mutation 
               mutation={CREATE_SANDBOX_MUTATION} 

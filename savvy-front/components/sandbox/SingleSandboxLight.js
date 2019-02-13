@@ -4,10 +4,9 @@ import  { Mutation, Query, withApollo } from 'react-apollo';
 import styled, { consolidateStreamedStyles } from 'styled-components';
 import Icon from 'react-icons-kit';
 import {heart} from 'react-icons-kit/ikons/heart'
-import {ic_do_not_disturb_on} from 'react-icons-kit/md/ic_do_not_disturb_on'
 import {ic_remove_circle_outline} from 'react-icons-kit/md/ic_remove_circle_outline'
 import moment from 'moment';
-import debounce from 'lodash.debounce';
+import { NavButton } from '../styles/Button';
 
 
 const ProposalBox = styled.div`
@@ -18,7 +17,7 @@ const ProposalBox = styled.div`
   flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
   }
 `;
 
@@ -51,11 +50,26 @@ const Like = styled.div`
   color: grey;
 `;
 
+const Iframe = styled.iframe`
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const ButtonBox = styled.div`
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: row;
+    margin-top: -5%;
+  }
+`;
+
 const SINGLE_SANDBOX_QUERY = gql`
   query SINGLE_SANDBOX_QUERY($id: ID!) {
     sandbox(where: { id: $id }) {
         id
         text
+        link
         createdAt
         likes
         user {
@@ -90,19 +104,36 @@ class SingleSandbox extends Component {
                   <TextBar>
                     <p>Предложение</p>
                     <div dangerouslySetInnerHTML={{ __html: sandbox.text }}></div>
+                    {sandbox.video ?
+                      <Iframe width="620" height="400" src={sandbox.video} allowFullScreen>
+                      </Iframe>
+                    :
+                    null } 
+                    {sandbox.link &&
+                    <>
+                      <h4>Перейти к материалу для более подробного обзора</h4>
+                      <NavButton type="submit">
+                        <a target="_blank" href={sandbox.link}>
+                          Перейти
+                        </a>
+                      </NavButton>
+                    </>
+                    }
                   </TextBar>
                   <SideBar>
-                    <h2>Место для фотографии</h2>
                     <h4>{sandbox.user.name}</h4>
                     <Date>{moment(sandbox.createdAt).format('D MMM YYYY')}</Date>
-                    <Like id="like">
-                        <Icon size={20} icon={heart}/> 
-                    </Like>
-                    <h2>DB: {sandbox.likes} </h2>
-                    <h2>STATE: {this.state.likes}</h2>
-                    <Like id="dislike">
-                      <Icon size={20} icon={ic_remove_circle_outline}/> 
-                    </Like>
+                    <ButtonBox>
+                      <p>{this.state.likes}</p>
+                      <Like id="like">
+                          <Icon size={20} icon={heart}/> 
+                      </Like>
+                      {/* <h2>DB: {sandbox.likes} </h2>
+                      <h2>STATE: {this.state.likes}</h2> */}
+                      {/* <Like id="dislike">
+                        <Icon size={20} icon={ic_remove_circle_outline}/> 
+                      </Like> */}
+                    </ButtonBox>
                   </SideBar>
                 </ProposalBox>
               );

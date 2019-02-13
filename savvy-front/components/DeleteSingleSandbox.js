@@ -17,7 +17,8 @@ const DELETE_SANDBOX_MUTATION =gql`
 const Button = styled.button`
     border: none;
     cursor: pointer;
-`
+    background: none;
+`;
 
 const Delete = styled.div`
   color: grey;
