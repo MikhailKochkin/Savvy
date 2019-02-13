@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import YM from './YM';
-import ym from 'react-yandex-metrika';
+// import YM from './YM';
+// import ym from 'react-yandex-metrika';
 
 const Meta = () => (
     <>
@@ -12,9 +12,9 @@ const Meta = () => (
         <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
         <title>Savvy 2.0</title>
     </Head>
-    <YM/>
+    {/* <YM/>
     {ym('hit', '/cart')}
-    {ym('reachGoal', 'whateverGoal', {awesomeParameter: 42})}
+    {ym('reachGoal', 'whateverGoal', {awesomeParameter: 42})} */}
     </>
 )
 
