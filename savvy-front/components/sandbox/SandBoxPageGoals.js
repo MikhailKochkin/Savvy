@@ -163,7 +163,6 @@ export default class CreateSandboxPageGoal extends Component {
                                         </Form>
                                         )}
                                     </Mutation>
-                                }
                             </>
                     )
                }}
