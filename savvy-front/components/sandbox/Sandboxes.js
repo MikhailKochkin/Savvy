@@ -36,7 +36,7 @@ const SandboxesStyles = styled.div`
 
 const ALL_SANDBOX_PAGES_QUERY = gql`
   query ALL_SANDBOX_PAGES_QUERY($skip: Int = 0, $first: Int = ${SandboxPerPage}) {
-    sandboxPages(first: $first, skip: $skip, orderBy: createdAt_DESC) {
+    sandboxPages(first: $first, skip: $skip, orderBy: createdAt_ASC) {
       id
       title
       description
