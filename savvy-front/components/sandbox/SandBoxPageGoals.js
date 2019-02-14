@@ -122,7 +122,7 @@ export default class CreateSandboxPageGoal extends Component {
                                 <ol>
                                 {sandboxPageGoals.map(goal => <li key={goal.id}>{goal.goal}</li>)}
                                 </ol>
-                                    {this.props.me === this.props.author &&
+                                    {this.props.me !== null && this.props.me === this.props.author &&
                                     <Mutation 
                                         mutation={CREATE_SANDBOXPAGEGOALS_MUTATION}
                                         variables={{
