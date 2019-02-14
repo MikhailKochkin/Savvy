@@ -62,8 +62,7 @@ class CoursePage extends Component {
                         <>  
                             <HeaderStyles>
                                 <SandboxPageNav id={this.props.id}/>
-                                {me !== null && me.id === sandbox.user && 
-                                <SandBoxPageGoals id={this.props.id}/>}
+                                <SandBoxPageGoals me={me.id} author={sandbox.user}id={this.props.id}/>
                             </HeaderStyles>
                             <div>
                                 {data1.sandboxes.map(sandbox => 
