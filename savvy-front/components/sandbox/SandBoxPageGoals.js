@@ -157,7 +157,6 @@ export default class CreateSandboxPageGoal extends Component {
                                                         </label>
                                                         <Button type="submit">✏️</Button>
                                                     </fieldset>
-                                                    {/* } */}
                                                   </>
                                                 )}
                                             </User>
