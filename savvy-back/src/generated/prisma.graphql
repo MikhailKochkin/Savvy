@@ -578,6 +578,7 @@ scalar DateTime
 type Lesson {
   id: ID!
   name: String!
+  number: Int
   text: String!
   video: String
   user: User!
@@ -597,6 +598,7 @@ type LessonConnection {
 
 input LessonCreateInput {
   name: String!
+  number: Int
   text: String!
   video: String
   user: UserCreateOneWithoutLessonsInput!
@@ -628,6 +630,7 @@ input LessonCreateOneWithoutTestsInput {
 
 input LessonCreateWithoutCoursePageInput {
   name: String!
+  number: Int
   text: String!
   video: String
   user: UserCreateOneWithoutLessonsInput!
@@ -638,6 +641,7 @@ input LessonCreateWithoutCoursePageInput {
 
 input LessonCreateWithoutProblemsInput {
   name: String!
+  number: Int
   text: String!
   video: String
   user: UserCreateOneWithoutLessonsInput!
@@ -648,6 +652,7 @@ input LessonCreateWithoutProblemsInput {
 
 input LessonCreateWithoutTestsInput {
   name: String!
+  number: Int
   text: String!
   video: String
   user: UserCreateOneWithoutLessonsInput!
@@ -658,6 +663,7 @@ input LessonCreateWithoutTestsInput {
 
 input LessonCreateWithoutUserInput {
   name: String!
+  number: Int
   text: String!
   video: String
   coursePage: CoursePageCreateOneWithoutLessonsInput!
@@ -676,6 +682,8 @@ enum LessonOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  number_ASC
+  number_DESC
   text_ASC
   text_DESC
   video_ASC
@@ -691,6 +699,7 @@ enum LessonOrderByInput {
 type LessonPreviousValues {
   id: ID!
   name: String!
+  number: Int
   text: String!
   video: String
   coursePageID: ID!
@@ -718,6 +727,7 @@ input LessonSubscriptionWhereInput {
 
 input LessonUpdateInput {
   name: String
+  number: Int
   text: String
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
@@ -761,6 +771,7 @@ input LessonUpdateOneRequiredWithoutTestsInput {
 
 input LessonUpdateWithoutCoursePageDataInput {
   name: String
+  number: Int
   text: String
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
@@ -771,6 +782,7 @@ input LessonUpdateWithoutCoursePageDataInput {
 
 input LessonUpdateWithoutProblemsDataInput {
   name: String
+  number: Int
   text: String
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
@@ -781,6 +793,7 @@ input LessonUpdateWithoutProblemsDataInput {
 
 input LessonUpdateWithoutTestsDataInput {
   name: String
+  number: Int
   text: String
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
@@ -791,6 +804,7 @@ input LessonUpdateWithoutTestsDataInput {
 
 input LessonUpdateWithoutUserDataInput {
   name: String
+  number: Int
   text: String
   video: String
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
@@ -860,6 +874,14 @@ input LessonWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  number: Int
+  number_not: Int
+  number_in: [Int!]
+  number_not_in: [Int!]
+  number_lt: Int
+  number_lte: Int
+  number_gt: Int
+  number_gte: Int
   text: String
   text_not: String
   text_in: [String!]

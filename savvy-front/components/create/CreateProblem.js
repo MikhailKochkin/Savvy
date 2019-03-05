@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Link from 'next/link';
-import { PAGE_PROBLEMS_QUERY } from '../course/CoursePage';
 import { NavButton, SubmitButton } from '../styles/Button';
+
+const MaterialPerPage = 5;
 
 const CREATE_PROBLEM_MUTATION = gql`
   mutation CREATE_PROBLEM_MUTATION(
@@ -22,6 +23,17 @@ const CREATE_PROBLEM_MUTATION = gql`
         lessonID: $lessonID
     ) {
       id
+    }
+  }
+`;
+
+const PAGE_PROBLEMS_QUERY = gql`
+  query PAGE_PROBLEMS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
+    problems(where: {lessonID: $id}, skip: $skip, orderBy: createdAt_ASC, first: $first) {
+      id
+      user {
+          id
+      }
     }
   }
 `;

@@ -1,44 +1,32 @@
 import React, {Component} from 'react';
-import  { Mutation } from 'react-apollo';
+import  { Mutation, Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-// import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
-import { MaterialPerPage } from '../../config';
+import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
 import { NavButton, SubmitButton } from '../styles/Button';
 
-const CREATE_LESSON_MUTATION = gql`
-  mutation CREATE_LESSON_MUTATION(
-    $name: String!
-    $number: Int
-    $text: String!
-    $video: String
-    $coursePageID: ID!
-  ) {
-    createLesson(
-      name: $name
-      number: $number
-      text: $text 
-      video: $video
-      coursePageID: $coursePageID
-    ) {
-      id
+const SINGLE_LESSON_QUERY = gql`
+  query SINGLE_LESSON_QUERY($id: ID!) {
+    lesson(where: { id: $id }) {
+      name
+      number
+      text
+      video
     }
   }
 `;
 
-const PAGE_LESSONS_QUERY = gql`
-  query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
+const UPDATE_LESSON_MUTATION = gql`
+  mutation UPDATE_LESSON_MUTATION($id: ID!, $number: Int, $name: String, $text: String, $video: String) {
+    updateLesson(id: $id, number: $number, name: $name, text: $text, video: $video) {
       id
-      name
       number
+      name
       text
-      user {
-          id
-      }
+      video
     }
   }
 `;
@@ -120,15 +108,10 @@ const DynamicLoadedEditor = dynamic(
   }
 )
 
-export default class CreateLesson extends Component {
+export default class UpdateLesson extends Component {
     constructor(props) {
       super(props)
-      this.state = {
-        name: '',
-        text: '',
-        video: '',
-        number: 0
-      };
+      this.state = {};
       this.handleName = e => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -161,16 +144,29 @@ export default class CreateLesson extends Component {
     render() {
         const {id} = this.props
         return (
-            <>
+            <Query
+                query={SINGLE_LESSON_QUERY}
+                variables={{
+                    id: this.props.id,
+            }}
+            >
+            {({ data, loading }) => {
+              if (loading) return <p>Loading...</p>;
+              if (!data.lesson) return <p>No Course Page Found for ID {this.props.id}</p>;
+              return (
+                <>
               <Link href={{
-                  pathname: '/coursePage',
+                  pathname: '/lesson',
                   query: { id }
                 }}>
                 <a>
-                    <NavButton>Вернуться на страницу курса</NavButton>
+                    <NavButton>Вернуться к уроку</NavButton>
                 </a>
               </Link>
-              <DynamicLoadedEditor getEditorText={this.myCallback}/>
+              <DynamicLoadedEditor 
+                getEditorText={this.myCallback}
+                previousText={data.lesson.text}
+                />
             <Width>
               <Container>
               <h4 className="explain"> Напишите название и номер урока</h4>
@@ -181,7 +177,7 @@ export default class CreateLesson extends Component {
                       id="name"
                       name="name"
                       placeholder="Название урока"
-                      value={this.state.name}
+                      defaultValue={data.lesson.name}
                       onChange={this.handleName}
                     />
                 </Label>
@@ -192,7 +188,7 @@ export default class CreateLesson extends Component {
                       id="number"
                       name="number"
                       placeholder="Номер урока"
-                      value={this.state.number}
+                      defaultValue={data.lesson.number}
                       onChange={this.handleNumber}
                     />
                 </Label>
@@ -208,7 +204,7 @@ export default class CreateLesson extends Component {
                       id="video"
                       name="video"
                       placeholder="Вставьте ссылку на видео..."
-                      value={this.state.video}
+                      defaultValue={data.lesson.video}
                       onChange={this.handleChange}
                     />
                 </Label>
@@ -217,9 +213,9 @@ export default class CreateLesson extends Component {
                     Пожалуйста, не пытайтесь исправить ссылку после преобразования.</p>
               </Container>
               <Mutation 
-                mutation={CREATE_LESSON_MUTATION} 
+                mutation={UPDATE_LESSON_MUTATION} 
                 variables={{
-                      coursePageID: id,
+                      id,
                       ...this.state
                 }}
                 refetchQueries={() => [{
@@ -227,15 +223,15 @@ export default class CreateLesson extends Component {
                   variables: { id},
                 }]}
               >
-                {(createLesson, {loading, error}) => (
+                {(updateLesson, {loading, error}) => (
                   <SubmitButton onClick={ async e => {
                       // Stop the form from submitting
                       e.preventDefault();
                       // call the mutation
-                      const res = await createLesson();
+                      const res = await updateLesson();
                       // change the page to the single case page
                       Router.push({
-                        pathname: '/coursePage',
+                        pathname: '/lesson',
                         query: {id: id}
                       })
                     }}
@@ -246,6 +242,8 @@ export default class CreateLesson extends Component {
               </Mutation>
             </Width>
             </>
+            )}}
+        </Query>
         )
     }
 }

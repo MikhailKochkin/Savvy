@@ -15,7 +15,7 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/sandboxPage": [
+    "/lesson": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

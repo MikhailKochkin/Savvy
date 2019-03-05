@@ -36,7 +36,6 @@ const Buttons = styled.div`
         Button {
             font-size: 0.7rem;
             display: inline-block;
-            /* width: 100%; */
         }
     }
 `;

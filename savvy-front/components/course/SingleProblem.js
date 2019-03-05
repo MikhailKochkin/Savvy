@@ -6,55 +6,23 @@ import moment from 'moment';
 import DeleteSingleProblem from '../DeleteSingleProblem';
 import User from '../User';
 
-const SINGLE_PROBLEM_QUERY = gql`
-  query SINGLE_PROBLEM_QUERY($id: ID!) {
-    problem(where: { id: $id }) {
-        id
-        text
-        hints
-        solution
-        answer
-        user {
-          id
-        }
-        createdAt
-    }
-  }
-`;
-
-const ProblemBox = styled.div`
-  border: none;
-  border-radius:5px;
-  margin: 2%;
-  padding: 2%;
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  @media (max-width: 800px) {
-    flex-direction: column;
-    text-align: left;
-  }
-  button {
-      width: 20%;
-  }
-`;
-
-const SideBar = styled.div`
-  margin-left: 2%;
-  @media (max-width: 800px) {
-    margin-bottom: 5%;
-  }
-`;
-
 const TextBar = styled.div`
-  width: 800px;
+  width: 50%;
   font-size: 1.8rem;
-  border: 1px solid #112A62;
+  border: 1px solid #C0D6DF;
   padding: 0 2%;
   border-radius: 5px;
   @media (max-width: 800px) {
     width: 100%;
   }
+`;
+
+const Center = styled.div`
+    padding-top: 1%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Solution = styled.p`
@@ -94,24 +62,11 @@ class SingleProblem extends Component {
     }
 
     render() {
-      return (
-        <>
-        <User>
-          {({data: {me}}) => (
-          <Query
-            query={SINGLE_PROBLEM_QUERY}
-            variables={{
-              id: this.props.problem.id,
-            }}
-          >
-            {({ data, error, loading }) => {
-              // if (error) return <Error error={error} />;
-              if (loading) return <p>Loading...</p>;
-              // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
-              const problem = data.problem;
-              moment.locale('ru');
-              return (
-                <ProblemBox>
+      moment.locale('ru');
+      const problem = this.props.data;
+      const me = this.props.me;
+        return (
+                <Center>
                   <TextBar>
                     <p><strong>Текст задачи:</strong> {problem.text}</p>
                     
@@ -139,26 +94,18 @@ class SingleProblem extends Component {
                         {problem.answer}
                     </Answer>
                   </TextBar>
-                  <SideBar>
                   { me && me.id === problem.user.id ?
                     <DeleteSingleProblem
-                      id={this.props.problem.id}
-                      lessonID={this.props.lessonID}
+                      id={this.props.data.id}
+                      lessonId={this.props.lessonID}
                     />
                     :
                     null
                   }  
-                  </SideBar>
-                </ProblemBox>
-                  );
-                }}
-              </Query>
-            )}
-          </User>
-        </>
-      );
-    }
-  }
+                </Center>
+                );
+              }
+            }
   
   export default SingleProblem;
   export { SINGLE_CASE_QUERY };

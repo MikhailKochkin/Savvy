@@ -4,59 +4,71 @@ import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import Link from 'next/link';
 import moment from 'moment';
-import DeleteSingleLesson from '../DeleteSingleLesson';
+import SingleTest from './SingleTest';
+import SingleProblem from './SingleProblem';
+import PleaseSignIn from '../PleaseSignIn';
 import User from '../User';
+import { NavButton } from '../styles/Button';
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
     lesson(where: { id: $id }) {
         id
         text
+        name
+        number
         video
         createdAt
         user {
+          id
+        }
+        tests {
+          id
+          answer1
+          answer1Correct
+          answer2
+          answer2Correct
+          answer3
+          answer3Correct
+          answer4
+          answer4Correct
+          question
+          user {
+            id
+          }
+        }
+        problems {
+          id
+          text
+          hints
+          solution
+          answer
+          user {
+            id
+          }
+          createdAt
+        }
+        coursePage {
           id
         }
     }
   }
 `;
 
-const ProposalBox = styled.div`
-  margin: 2%;
-  padding: 2%;
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  @media (max-width: 800px) {
-    flex-direction: column;
-    text-align: left;
-  }
-`;
-
-const SideBar = styled.div`
-  margin-left: 2%;
-  @media (max-width: 800px) {
-    margin-bottom: 5%;
-  }
-`;
-
 const TextBar = styled.div`
-  width: 800px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;;
   font-size: 1.8rem;
-  border: 1px solid #112A62;
   padding: 0 2%;
-  border-radius: 5px;
   @media (max-width: 800px) {
     width: 100%;
   }
 `;
 
-const Date = styled.h4`
-  color: #A8A8A8;
-`;
-
 const Iframe = styled.iframe`
-  width: 620px;
+  width: auto;
   height: 400px;
   @media (max-width: 800px) {
         width: 100%;
@@ -64,13 +76,53 @@ const Iframe = styled.iframe`
     }
 `;
 
+const ChooseButtons = styled.div`
+    display: flex;
+    flex-direction: row;
+    @media (max-width: 800px) {
+        flex-direction: column;
+        align-items: center;
+    }
+`;
+
+const ChooseButton = styled.button`
+    font-size: 0.8rem;
+    border: ${props => props.active ? "2px solid #0E78C6" : "2px solid #fff"};
+    color: ${props => props.active ? "#008CBA" : "white"};
+    background-color: ${props => props.active ? "white" : "#008CBA"};
+    margin: 0 0.5%;
+    width: 150px;
+    cursor: pointer;
+    @media (max-width: 800px) {
+        margin: 1% 0;
+        padding: 2% 1%;
+    }
+`;
+
+const Nav = styled.div`
+    /* border-top: 1px solid #0A2342; */
+    padding-top: 1%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`;
+
+const Center = styled.div`
+    /* border-top: 1px solid #0A2342; */
+    padding-top: 1%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
 const Button = styled.button`
-    padding: 1.5%;
     font-size: 1.4rem;
     font-weight: 600;
-    margin: 0 1%;
-    text-transform: uppercase;
+    padding: 2% ;
+    /* margin: 2%; */
     color: #FFFDF7;
+    border-radius: 10px;
     background-color: #84BC9C;
     border: solid 1px white;
     cursor: pointer;
@@ -79,85 +131,187 @@ const Button = styled.button`
     }
 `;
 
+// const Button = styled.button`
+//     /* padding: 1%; */
+//     font-size: 1.4rem;
+//     font-weight: 600;
+//     height: 50%;
+//     margin: 2%;
+//     /* text-transform: uppercase; */
+//     color: #FFFDF7;
+//     background-color: #84BC9C;
+//     border: solid 1px white;
+//     cursor: pointer;
+//     &:hover{
+//         background-color: #294D4A;
+//     }
+// `;
+
 class SingleLesson extends Component {
+  state = {
+      page: 'test',
+      button1: true,
+      button2: false,
+  }
+
+  pageView = ''
+
+  onTest = () => {this.setState({page: "test", button1: true, button2: false})}
+  onProblem = () => {this.setState({page: "problem", button1: false, button2: true})}
+
     render() {
       return (
-        <>
-        <User>
-          {({data: {me}}) => (
-          <Query
-            query={SINGLE_LESSON_QUERY}
-            variables={{
-              id: this.props.lesson.id,
-            }}
-          >
-            {({ data, error, loading }) => {
-              // if (error) return <Error error={error} />;
-              if (loading) return <p>Loading...</p>;
-              // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
-              const lesson = data.lesson;
-              moment.locale('ru');
-              return (
-                <>
-                <ProposalBox>
-                  <TextBar>
-                    <h4>{this.props.name}</h4>
-                    <div dangerouslySetInnerHTML={{ __html: lesson.text }}></div>
-                    {lesson.video ?
-                      <Iframe src={lesson.video} allowFullScreen>
-                      </Iframe>
-                    :
-                    null } 
-                  </TextBar>
-                  <SideBar>
-                    
-                    {/* <h2>Место для фотографии</h2> */}
-                    {/* <h4>{me && me.favourites}</h4> */}
-                    <Date>{moment(lesson.createdAt).format('D MMM YYYY')}</Date>
-                    <br/>
+        <PleaseSignIn>
+          <User>
+            {({data: {me}}) => (
+            <Query
+              query={SINGLE_LESSON_QUERY}
+              variables={{
+                id: this.props.id,
+              }}
+            >
+              {({ data, error, loading }) => {
+                // if (error) return <Error error={error} />;
+                if (loading) return <p>Loading...</p>;
+                // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
+                const lesson = data.lesson;
+                moment.locale('ru');
+                return (
+                  <>
+                    <Center>
+                      <Link href={{
+                        pathname: '/coursePage',
+                        query: { id: lesson.coursePage.id }
+                      }}>
+                        <a>
+                          <NavButton>К списку уроков</NavButton>
+                        </a>
+                      </Link>
+                      <TextBar>
+                        <h4>Урок {lesson.number}. {lesson.name}</h4>
+                        { me && me.id === lesson.user.id ?
+                        <Link href={{
+                                  pathname: '/updateLesson',
+                                  query: {id: lesson.id}
+                              }}>
+                              <a>
+                              <Button>Изменить текст урока</Button>
+                              </a>
+                        </Link>
+                        :
+                        null
+                        }
+                        {lesson.video ?
+                        <Iframe src={lesson.video} allowFullScreen></Iframe>
+                        :
+                        null } 
+                        <div dangerouslySetInnerHTML={{ __html: lesson.text }}></div>
+                      </TextBar>
+                    </Center>
+                    <Nav>
+                      <ChooseButtons>
+                          <ChooseButton
+                              onClick = {this.onTest}
+                              active={this.state.button1}
+                          >
+                              <h1>Тесты</h1>
+                          </ChooseButton>
+                          <ChooseButton
+                              onClick = {this.onProblem}
+                              active={this.state.button2}
+                          >
+                              <h1>Задачи</h1>
+                          </ChooseButton>
+                      </ChooseButtons>
+                  </Nav>
+                  {/* <Center> */}
+                  { this.state.button1 &&
+                  <>
                     { me && me.id === lesson.user.id ?
-                    <DeleteSingleLesson 
-                      id={this.props.lesson.id}
-                      coursePageId={this.props.coursePageId}/>
+                    <Center>
+                    <Link href={{
+                          pathname: '/createTest',
+                          query: {id: lesson.id}
+                          }}>
+                          <a>
+                          <Button>Составить тест</Button>
+                          </a>
+                    </Link>
+                    </Center>
+                    :
+                    null }
+                    {lesson.tests.length > 0 ?
+                      <>
+                        {lesson.tests.map(test => 
+                          <SingleTest 
+                            key={test.id} 
+                            lessonId={lesson.id} 
+                            data={test}
+                            me={me}
+                          />
+                        )}
+                      </>
                       :
-                      null
+                      <Center>
+                        <h2>Тестов пока нет</h2>
+                      </Center>
                     }
-                  </SideBar>
-                </ProposalBox>
-                { me && me.id === lesson.user.id ?
-                <>
-                  <Link href={{
-                      pathname: '/createProblem',
-                      query: {id: this.props.lesson.id}
-                    }}>
-                    <a>
-                      <Button>Составить задачу</Button>
-                    </a>
-                  </Link>
+                  </>
+                  }
                   
-                  <Link href={{
-                      pathname: '/createTest',
-                      query: {id: this.props.lesson.id}
-                  }}>
-                    <a>
-                        <Button>Составить тест </Button>
-                    </a>
-                  </Link>
+                  { this.state.button2 &&
+                  <>
+                    { me && me.id === lesson.user.id ?
+                    <Center>
+                    <Link href={{
+                          pathname: '/createProblem',
+                          query: {id: lesson.id}
+                          }}>
+                          <a>
+                          <Button>Составить задачу</Button>
+                          </a>
+                    </Link>
+                    </Center>
+                    :
+                    null}
+                    {lesson.problems.length > 0 ?
+                      <>
+                        {lesson.problems.map(problem => 
+                          <SingleProblem 
+                            key={problem.id}
+                            lessonId={lesson.id}
+                            data={problem}
+                            me={me}
+                          />
+                        )}
+                      </>
+                      :
+                      <Center>
+                        <h2>Задач пока нет</h2>
+                      </Center>
+                    }
+                  </>
+                  }
+                  <Center>
+                    <Link href={{
+                          pathname: '/coursePage',
+                          query: { id: lesson.coursePage.id }
+                        }}>
+                          <a>
+                            <NavButton>К списку уроков</NavButton>
+                          </a>
+                    </Link>
+                  </Center>
                 </>
-                :
-                null
-              }
-                </>
-              );
-            }}
-          </Query>
-          )}
-          </User>
-        </>
+                );
+              }}
+            </Query>
+            )}
+            </User>
+        </PleaseSignIn>
       );
     }
   }
   
   export default SingleLesson;
-  export { SINGLE_CASE_QUERY };
-
+  export { SINGLE_LESSON_QUERY };

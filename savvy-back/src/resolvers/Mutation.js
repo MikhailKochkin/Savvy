@@ -215,6 +215,22 @@ const Mutations = {
       );
         return Lesson;
     },
+    async updateLesson(parent, args, ctx, info) {
+      //first take a copy of the updates
+      const updates = { ...args };
+      //remove the ID from updates
+      delete updates.id;
+      //run the update method
+      return ctx.db.mutation.updateLesson(
+        {
+          data: updates,
+          where: {
+            id: args.id
+        },
+      }, 
+      info
+    );
+  },
     async deleteLesson(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson

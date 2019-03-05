@@ -116,7 +116,7 @@ class App extends React.Component {
 
     // Deserialize the initial editor value.
     this.state = {
-      value: html.deserialize(initialValue)
+      value: this.props.previousText ? html.deserialize(this.props.previousText) : html.deserialize(initialValue)
     }
 
     this.ref = editor => {

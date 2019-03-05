@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 const DynamicLoadedEditor = dynamic(
     import('../components/create/CreateProblem'),
     {
-      loading: () => (<p>loading...</p>),
+      loading: () => (<p>Загрузка...</p>),
       ssr: false
     }
   )
