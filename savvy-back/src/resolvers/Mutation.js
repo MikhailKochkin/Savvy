@@ -303,6 +303,38 @@ const Mutations = {
       //3. Delete it
       return ctx.db.mutation.deleteProblem({ where }, info);
     },
+    async createConstruction(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const lessonID = args.lessonID
+      delete args.id
+      // console.log(ctx.request.userId)
+      // console.log(coursePagedID)
+      if (!ctx.request.userId) {
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      }
+      const construction = await ctx.db.mutation.createConstruction(
+            {
+            data: {
+                user: {
+                  connect: { id: ctx.request.userId }
+                  },
+                lesson: {
+                  connect: { id: lessonID }
+                },
+                ...args
+            },
+        }, 
+        info
+      );
+        return construction;
+    },
+    async deleteConstruction(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the lesson
+      const construction = await ctx.db.query.construction({ where }, `{ id }`);
+      //3. Delete it
+      return ctx.db.mutation.deleteConstruction({ where }, info);
+    },
     async createApplication(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const coursePageID = args.coursePageID

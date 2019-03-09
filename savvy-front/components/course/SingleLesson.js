@@ -6,9 +6,9 @@ import Link from 'next/link';
 import moment from 'moment';
 import SingleTest from './SingleTest';
 import SingleProblem from './SingleProblem';
+import SingleConstructor from './SingleConstructor';
 import PleaseSignIn from '../PleaseSignIn';
 import User from '../User';
-import { NavButton } from '../styles/Button';
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -48,8 +48,20 @@ const SINGLE_LESSON_QUERY = gql`
           }
           createdAt
         }
-        coursePage {
+        constructions {
           id
+          name
+          dbPart1
+          dbPart2
+          dbPart3
+          dbPart4
+          dbPart5
+          dbPart6
+          dbPart7
+          dbPart8
+          user {
+            id
+          }
         }
     }
   }
@@ -131,33 +143,20 @@ const Button = styled.button`
     }
 `;
 
-// const Button = styled.button`
-//     /* padding: 1%; */
-//     font-size: 1.4rem;
-//     font-weight: 600;
-//     height: 50%;
-//     margin: 2%;
-//     /* text-transform: uppercase; */
-//     color: #FFFDF7;
-//     background-color: #84BC9C;
-//     border: solid 1px white;
-//     cursor: pointer;
-//     &:hover{
-//         background-color: #294D4A;
-//     }
-// `;
 
 class SingleLesson extends Component {
   state = {
       page: 'test',
       button1: true,
       button2: false,
+      button3: false,
   }
 
   pageView = ''
 
-  onTest = () => {this.setState({page: "test", button1: true, button2: false})}
-  onProblem = () => {this.setState({page: "problem", button1: false, button2: true})}
+  onTest = () => {this.setState({page: "test", button1: true, button2: false, button3: false })}
+  onProblem = () => {this.setState({page: "problem", button1: false, button2: true, button3: false })}
+  onConstructor = () => {this.setState({page: "constructor", button1: false, button2: false, button3: true })}
 
     render() {
       return (
@@ -179,14 +178,6 @@ class SingleLesson extends Component {
                 return (
                   <>
                     <Center>
-                      <Link href={{
-                        pathname: '/coursePage',
-                        query: { id: lesson.coursePage.id }
-                      }}>
-                        <a>
-                          <NavButton>К списку уроков</NavButton>
-                        </a>
-                      </Link>
                       <TextBar>
                         <h4>Урок {lesson.number}. {lesson.name}</h4>
                         { me && me.id === lesson.user.id ?
@@ -221,6 +212,12 @@ class SingleLesson extends Component {
                               active={this.state.button2}
                           >
                               <h1>Задачи</h1>
+                          </ChooseButton>
+                          <ChooseButton
+                              onClick = {this.onConstructor}
+                              active={this.state.button3}
+                          >
+                              <h1>Конструкторы документов</h1>
                           </ChooseButton>
                       </ChooseButtons>
                   </Nav>
@@ -292,16 +289,44 @@ class SingleLesson extends Component {
                     }
                   </>
                   }
-                  <Center>
-                    <Link href={{
-                          pathname: '/coursePage',
-                          query: { id: lesson.coursePage.id }
-                        }}>
-                          <a>
-                            <NavButton>К списку уроков</NavButton>
-                          </a>
-                    </Link>
-                  </Center>
+                  { this.state.button3 &&
+                  <>
+                    { me && me.id === lesson.user.id ?
+                    <Center>
+                      <Link href={{
+                            pathname: '/createConstructor',
+                            query: {id: lesson.id}
+                            }}>
+                            <a>
+                            <Button>Составить конструктор документа</Button>
+                            </a>
+                      </Link>
+                    </Center>
+                    :
+                    null}
+                    <h3>В данном задании вам предстоит составить текст документа. Для каждого пункта 
+                      выберите вариант формулировки и мышкой перенесите его в правую часть. Если вы выбрали правильно, то пункт перетащится и встроится в документ. 
+                      Если нет, то вы увидите подсказку над вариантами положений договора.</h3>
+                    <h3>Обратие внимание: данное задание работает только на компьютерах в Chrome и Safari. 
+                      В мобильных браузерах и Firefox оно работать не будет!</h3>
+                    {lesson.constructions.length > 0 ?
+                      <>
+                        {lesson.constructions.map(constructor => 
+                          <SingleConstructor 
+                            key={constructor.id}
+                            lessonId={lesson.id}
+                            data={constructor}
+                            me={me}
+                          />
+                        )}
+                      </>
+                      :
+                      <Center>
+                        <h2>Конструкторов документов пока нет</h2>
+                      </Center>
+                    }
+                  </>
+                  }
                 </>
                 );
               }}

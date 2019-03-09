@@ -20,6 +20,9 @@ type Mutation {
     createProblem(text: String!, hints: String, solution: String, answer: String!,
         lessonID: ID!): Test!
     deleteProblem(id:ID!): Problem
+    createConstruction(name: String!, dbPart1: Json!, dbPart2: Json!, dbPart3: Json!, dbPart4: Json!,
+    dbPart5: Json, dbPart6: Json, dbPart7: Json, dbPart8: Json, lessonID: ID!): Construction!
+    deleteConstruction(id:ID!): Construction
     createSandbox(text: String!, video: String, link: String, sandboxPageID: ID!): Sandbox!
     deleteSandbox(id:ID!): Sandbox
     createSandboxPageGoal(goal: String!, sandboxPageID: ID!): SandboxPageGoal!
@@ -60,6 +63,8 @@ type Query {
     testsConnection(where: TestWhereInput): TestConnection!
     tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, first: Int): [Test]!
     test(where: TestWhereUniqueInput!): Test
+    construction(where: ConstructionWhereUniqueInput!): Construction
+    constructions(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, first: Int): [Construction]!
     problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, first: Int): [Problem]!
     problem(where: ProblemWhereUniqueInput!): Problem
     problemsConnection(where: ProblemWhereInput): ProblemConnection!
@@ -67,7 +72,6 @@ type Query {
     user(where: UserWhereUniqueInput!): User
     users(where: UserWhereInput!): [User]!
 }
-
 type User{
     id: ID!
     name: String!
@@ -77,5 +81,3 @@ type User{
     favourites: [ID]
     subjects: [ID]
 }
-
-

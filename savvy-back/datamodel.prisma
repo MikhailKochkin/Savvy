@@ -29,6 +29,7 @@ type User {
   lessons: [Lesson]!
   tests: [Test]!
   problems: [Problem]!
+  construction: [Construction]!
   isFamiliar: Boolean! @default(value: "false")
   createdAt: DateTime!
 }
@@ -84,7 +85,26 @@ type Lesson {
   coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
   tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
   problems: [Problem] @relation(name: "LessonProblems" onDelete: CASCADE)
+  constructions: [Construction] @relation(name: "LessonConstructions" onDelete: CASCADE)
   coursePageID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Construction {
+  id: ID! @unique
+  name: String!
+  dbPart1: Json!
+  dbPart2: Json!
+  dbPart3: Json!
+  dbPart4: Json!
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  user: User!
+  lesson: Lesson! @relation(name: "LessonConstructions")
+  lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
 }

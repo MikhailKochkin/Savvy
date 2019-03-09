@@ -15,23 +15,6 @@ const Question = styled.p`
   font-weight: 700;
 `;
 
-// const ProblemBox = styled.div`
-//   border: none;
-//   border-radius:5px;
-//   margin: 2%;
-//   padding: 2%;
-//   width: 90%;
-//   display: flex;
-//   flex-direction: row;
-//   @media (max-width: 800px) {
-//     flex-direction: column;
-//     text-align: left;
-//   }
-//   button {
-//       width: 20%;
-//   }
-// `;
-
 const TextBar = styled.div`
   width: 50%;
   font-size: 1.8rem;
@@ -64,7 +47,6 @@ class SingleTest extends Component {
 
     this.answerState = ''
     }
-    // onLesson = () => {this.setState({page: "lesson", button1: true, button2: false, button3: false})}
     handleAnswerSelected = (event) => {
       if(event.currentTarget.value === 'true') {
         this.setState({answerState: "right"})

@@ -2,6 +2,10 @@ type AggregateApplication {
   count: Int!
 }
 
+type AggregateConstruction {
+  count: Int!
+}
+
 type AggregateCoursePage {
   count: Int!
 }
@@ -235,6 +239,304 @@ input ApplicationWhereUniqueInput {
 
 type BatchPayload {
   count: Long!
+}
+
+type Construction {
+  id: ID!
+  name: String!
+  dbPart1: Json!
+  dbPart2: Json!
+  dbPart3: Json!
+  dbPart4: Json!
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  user: User!
+  lesson: Lesson!
+  lessonID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ConstructionConnection {
+  pageInfo: PageInfo!
+  edges: [ConstructionEdge]!
+  aggregate: AggregateConstruction!
+}
+
+input ConstructionCreateInput {
+  name: String!
+  dbPart1: Json!
+  dbPart2: Json!
+  dbPart3: Json!
+  dbPart4: Json!
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  user: UserCreateOneWithoutConstructionInput!
+  lesson: LessonCreateOneWithoutConstructionsInput!
+  lessonID: ID!
+}
+
+input ConstructionCreateManyWithoutLessonInput {
+  create: [ConstructionCreateWithoutLessonInput!]
+  connect: [ConstructionWhereUniqueInput!]
+}
+
+input ConstructionCreateManyWithoutUserInput {
+  create: [ConstructionCreateWithoutUserInput!]
+  connect: [ConstructionWhereUniqueInput!]
+}
+
+input ConstructionCreateWithoutLessonInput {
+  name: String!
+  dbPart1: Json!
+  dbPart2: Json!
+  dbPart3: Json!
+  dbPart4: Json!
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  user: UserCreateOneWithoutConstructionInput!
+  lessonID: ID!
+}
+
+input ConstructionCreateWithoutUserInput {
+  name: String!
+  dbPart1: Json!
+  dbPart2: Json!
+  dbPart3: Json!
+  dbPart4: Json!
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  lesson: LessonCreateOneWithoutConstructionsInput!
+  lessonID: ID!
+}
+
+type ConstructionEdge {
+  node: Construction!
+  cursor: String!
+}
+
+enum ConstructionOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  dbPart1_ASC
+  dbPart1_DESC
+  dbPart2_ASC
+  dbPart2_DESC
+  dbPart3_ASC
+  dbPart3_DESC
+  dbPart4_ASC
+  dbPart4_DESC
+  dbPart5_ASC
+  dbPart5_DESC
+  dbPart6_ASC
+  dbPart6_DESC
+  dbPart7_ASC
+  dbPart7_DESC
+  dbPart8_ASC
+  dbPart8_DESC
+  lessonID_ASC
+  lessonID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ConstructionPreviousValues {
+  id: ID!
+  name: String!
+  dbPart1: Json!
+  dbPart2: Json!
+  dbPart3: Json!
+  dbPart4: Json!
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  lessonID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ConstructionSubscriptionPayload {
+  mutation: MutationType!
+  node: Construction
+  updatedFields: [String!]
+  previousValues: ConstructionPreviousValues
+}
+
+input ConstructionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ConstructionWhereInput
+  AND: [ConstructionSubscriptionWhereInput!]
+  OR: [ConstructionSubscriptionWhereInput!]
+  NOT: [ConstructionSubscriptionWhereInput!]
+}
+
+input ConstructionUpdateInput {
+  name: String
+  dbPart1: Json
+  dbPart2: Json
+  dbPart3: Json
+  dbPart4: Json
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  user: UserUpdateOneRequiredWithoutConstructionInput
+  lesson: LessonUpdateOneRequiredWithoutConstructionsInput
+  lessonID: ID
+}
+
+input ConstructionUpdateManyWithoutLessonInput {
+  create: [ConstructionCreateWithoutLessonInput!]
+  delete: [ConstructionWhereUniqueInput!]
+  connect: [ConstructionWhereUniqueInput!]
+  disconnect: [ConstructionWhereUniqueInput!]
+  update: [ConstructionUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [ConstructionUpsertWithWhereUniqueWithoutLessonInput!]
+}
+
+input ConstructionUpdateManyWithoutUserInput {
+  create: [ConstructionCreateWithoutUserInput!]
+  delete: [ConstructionWhereUniqueInput!]
+  connect: [ConstructionWhereUniqueInput!]
+  disconnect: [ConstructionWhereUniqueInput!]
+  update: [ConstructionUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ConstructionUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input ConstructionUpdateWithoutLessonDataInput {
+  name: String
+  dbPart1: Json
+  dbPart2: Json
+  dbPart3: Json
+  dbPart4: Json
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  user: UserUpdateOneRequiredWithoutConstructionInput
+  lessonID: ID
+}
+
+input ConstructionUpdateWithoutUserDataInput {
+  name: String
+  dbPart1: Json
+  dbPart2: Json
+  dbPart3: Json
+  dbPart4: Json
+  dbPart5: Json
+  dbPart6: Json
+  dbPart7: Json
+  dbPart8: Json
+  lesson: LessonUpdateOneRequiredWithoutConstructionsInput
+  lessonID: ID
+}
+
+input ConstructionUpdateWithWhereUniqueWithoutLessonInput {
+  where: ConstructionWhereUniqueInput!
+  data: ConstructionUpdateWithoutLessonDataInput!
+}
+
+input ConstructionUpdateWithWhereUniqueWithoutUserInput {
+  where: ConstructionWhereUniqueInput!
+  data: ConstructionUpdateWithoutUserDataInput!
+}
+
+input ConstructionUpsertWithWhereUniqueWithoutLessonInput {
+  where: ConstructionWhereUniqueInput!
+  update: ConstructionUpdateWithoutLessonDataInput!
+  create: ConstructionCreateWithoutLessonInput!
+}
+
+input ConstructionUpsertWithWhereUniqueWithoutUserInput {
+  where: ConstructionWhereUniqueInput!
+  update: ConstructionUpdateWithoutUserDataInput!
+  create: ConstructionCreateWithoutUserInput!
+}
+
+input ConstructionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  user: UserWhereInput
+  lesson: LessonWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ConstructionWhereInput!]
+  OR: [ConstructionWhereInput!]
+  NOT: [ConstructionWhereInput!]
+}
+
+input ConstructionWhereUniqueInput {
+  id: ID
 }
 
 type CoursePage {
@@ -575,6 +877,8 @@ enum CourseType {
 
 scalar DateTime
 
+scalar Json
+
 type Lesson {
   id: ID!
   name: String!
@@ -585,6 +889,7 @@ type Lesson {
   coursePage: CoursePage!
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
+  constructions(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction!]
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -605,6 +910,7 @@ input LessonCreateInput {
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -618,6 +924,11 @@ input LessonCreateManyWithoutUserInput {
   connect: [LessonWhereUniqueInput!]
 }
 
+input LessonCreateOneWithoutConstructionsInput {
+  create: LessonCreateWithoutConstructionsInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonCreateOneWithoutProblemsInput {
   create: LessonCreateWithoutProblemsInput
   connect: LessonWhereUniqueInput
@@ -628,6 +939,18 @@ input LessonCreateOneWithoutTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonCreateWithoutConstructionsInput {
+  name: String!
+  number: Int
+  text: String!
+  video: String
+  user: UserCreateOneWithoutLessonsInput!
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  coursePageID: ID!
+}
+
 input LessonCreateWithoutCoursePageInput {
   name: String!
   number: Int
@@ -636,6 +959,7 @@ input LessonCreateWithoutCoursePageInput {
   user: UserCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -647,6 +971,7 @@ input LessonCreateWithoutProblemsInput {
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -658,6 +983,7 @@ input LessonCreateWithoutTestsInput {
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -669,6 +995,7 @@ input LessonCreateWithoutUserInput {
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -734,6 +1061,7 @@ input LessonUpdateInput {
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -755,6 +1083,13 @@ input LessonUpdateManyWithoutUserInput {
   upsert: [LessonUpsertWithWhereUniqueWithoutUserInput!]
 }
 
+input LessonUpdateOneRequiredWithoutConstructionsInput {
+  create: LessonCreateWithoutConstructionsInput
+  update: LessonUpdateWithoutConstructionsDataInput
+  upsert: LessonUpsertWithoutConstructionsInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonUpdateOneRequiredWithoutProblemsInput {
   create: LessonCreateWithoutProblemsInput
   update: LessonUpdateWithoutProblemsDataInput
@@ -769,6 +1104,18 @@ input LessonUpdateOneRequiredWithoutTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonUpdateWithoutConstructionsDataInput {
+  name: String
+  number: Int
+  text: String
+  video: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  coursePageID: ID
+}
+
 input LessonUpdateWithoutCoursePageDataInput {
   name: String
   number: Int
@@ -777,6 +1124,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -788,6 +1136,7 @@ input LessonUpdateWithoutProblemsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -799,6 +1148,7 @@ input LessonUpdateWithoutTestsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -810,6 +1160,7 @@ input LessonUpdateWithoutUserDataInput {
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -821,6 +1172,11 @@ input LessonUpdateWithWhereUniqueWithoutCoursePageInput {
 input LessonUpdateWithWhereUniqueWithoutUserInput {
   where: LessonWhereUniqueInput!
   data: LessonUpdateWithoutUserDataInput!
+}
+
+input LessonUpsertWithoutConstructionsInput {
+  update: LessonUpdateWithoutConstructionsDataInput!
+  create: LessonCreateWithoutConstructionsInput!
 }
 
 input LessonUpsertWithoutProblemsInput {
@@ -918,6 +1274,9 @@ input LessonWhereInput {
   problems_every: ProblemWhereInput
   problems_some: ProblemWhereInput
   problems_none: ProblemWhereInput
+  constructions_every: ConstructionWhereInput
+  constructions_some: ConstructionWhereInput
+  constructions_none: ConstructionWhereInput
   coursePageID: ID
   coursePageID_not: ID
   coursePageID_in: [ID!]
@@ -966,6 +1325,12 @@ type Mutation {
   upsertApplication(where: ApplicationWhereUniqueInput!, create: ApplicationCreateInput!, update: ApplicationUpdateInput!): Application!
   deleteApplication(where: ApplicationWhereUniqueInput!): Application
   deleteManyApplications(where: ApplicationWhereInput): BatchPayload!
+  createConstruction(data: ConstructionCreateInput!): Construction!
+  updateConstruction(data: ConstructionUpdateInput!, where: ConstructionWhereUniqueInput!): Construction
+  updateManyConstructions(data: ConstructionUpdateInput!, where: ConstructionWhereInput): BatchPayload!
+  upsertConstruction(where: ConstructionWhereUniqueInput!, create: ConstructionCreateInput!, update: ConstructionUpdateInput!): Construction!
+  deleteConstruction(where: ConstructionWhereUniqueInput!): Construction
+  deleteManyConstructions(where: ConstructionWhereInput): BatchPayload!
   createCoursePage(data: CoursePageCreateInput!): CoursePage!
   updateCoursePage(data: CoursePageUpdateInput!, where: CoursePageWhereUniqueInput!): CoursePage
   updateManyCoursePages(data: CoursePageUpdateInput!, where: CoursePageWhereInput): BatchPayload!
@@ -1336,6 +1701,9 @@ type Query {
   application(where: ApplicationWhereUniqueInput!): Application
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application]!
   applicationsConnection(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ApplicationConnection!
+  construction(where: ConstructionWhereUniqueInput!): Construction
+  constructions(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction]!
+  constructionsConnection(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConstructionConnection!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage]!
   coursePagesConnection(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CoursePageConnection!
@@ -2135,6 +2503,7 @@ input SandboxWhereUniqueInput {
 
 type Subscription {
   application(where: ApplicationSubscriptionWhereInput): ApplicationSubscriptionPayload
+  construction(where: ConstructionSubscriptionWhereInput): ConstructionSubscriptionPayload
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
@@ -2572,6 +2941,7 @@ type User {
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
+  construction(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction!]
   isFamiliar: Boolean!
   createdAt: DateTime!
 }
@@ -2602,11 +2972,17 @@ input UserCreateInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutConstructionInput {
+  create: UserCreateWithoutConstructionInput
   connect: UserWhereUniqueInput
 }
 
@@ -2652,6 +3028,25 @@ input UserCreatesubjectsInput {
   set: [ID!]
 }
 
+input UserCreateWithoutConstructionInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
 input UserCreateWithoutCoursePagesInput {
   name: String!
   email: String!
@@ -2667,6 +3062,7 @@ input UserCreateWithoutCoursePagesInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2685,6 +3081,7 @@ input UserCreateWithoutLessonsInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2703,6 +3100,7 @@ input UserCreateWithoutProblemsInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2721,6 +3119,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2739,6 +3138,7 @@ input UserCreateWithoutSandboxPagesInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2757,6 +3157,7 @@ input UserCreateWithoutTestsInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2835,6 +3236,7 @@ input UserUpdateDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2858,6 +3260,7 @@ input UserUpdateInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2865,6 +3268,13 @@ input UserUpdateOneRequiredInput {
   create: UserCreateInput
   update: UserUpdateDataInput
   upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutConstructionInput {
+  create: UserCreateWithoutConstructionInput
+  update: UserUpdateWithoutConstructionDataInput
+  upsert: UserUpsertWithoutConstructionInput
   connect: UserWhereUniqueInput
 }
 
@@ -2922,6 +3332,25 @@ input UserUpdatesubjectsInput {
   set: [ID!]
 }
 
+input UserUpdateWithoutConstructionDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
 input UserUpdateWithoutCoursePagesDataInput {
   name: String
   email: String
@@ -2937,6 +3366,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2955,6 +3385,7 @@ input UserUpdateWithoutLessonsDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2973,6 +3404,7 @@ input UserUpdateWithoutProblemsDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -2991,6 +3423,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3009,6 +3442,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3027,12 +3461,18 @@ input UserUpdateWithoutTestsDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutConstructionInput {
+  update: UserUpdateWithoutConstructionDataInput!
+  create: UserCreateWithoutConstructionInput!
 }
 
 input UserUpsertWithoutCoursePagesInput {
@@ -3162,6 +3602,9 @@ input UserWhereInput {
   problems_every: ProblemWhereInput
   problems_some: ProblemWhereInput
   problems_none: ProblemWhereInput
+  construction_every: ConstructionWhereInput
+  construction_some: ConstructionWhereInput
+  construction_none: ConstructionWhereInput
   isFamiliar: Boolean
   isFamiliar_not: Boolean
   createdAt: DateTime
