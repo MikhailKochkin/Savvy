@@ -11,11 +11,11 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/createConstructor": [
+    "/coursePage": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/lesson": [
+    "/signup": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

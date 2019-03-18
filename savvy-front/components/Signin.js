@@ -108,10 +108,20 @@ const Buttons = styled.div`
     border-top: solid 1px #F0F0F0;
 `;
 
+const LoggedIn = styled.p`
+    background-color: #00FF7F;
+    font-size: 1.8rem;
+    padding: 1% 2%;
+    border-radius: 10px;
+    width: 45%;
+    text-align: center;
+`;
+
 class Signin extends Component {
     state = {
         password: '',
         email: '',
+        loggedIn: false
     }
     saveToState = e => {
         this.setState({ [e.target.name] : e.target.value}); 
@@ -129,12 +139,13 @@ class Signin extends Component {
                   onSubmit={ async e => {
                    e.preventDefault();
                    await signin();
-                   this.setState({email: '', password: ''});
+                   this.setState({email: '', password: '', loggedIn: true});
                    }}
                 >
                 <Fieldset disabled={loading} aria-busy={loading}>
                     <h2>Войдите на Savvy</h2>
                     <Error error={error} />
+                    {this.state.loggedIn && <LoggedIn>Вы вошли в аккаунт!</LoggedIn>}
                     <Container>
                         <Label className="email"htmlFor="email">
                             <p className="first">Электронная почта</p>

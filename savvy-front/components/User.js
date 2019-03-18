@@ -11,6 +11,12 @@ const CURRENT_USER_QUERY = gql`
       permissions
       subjects
       favourites
+      coursePages {
+        id
+      }
+      lessons {
+        id
+      }
     }
   }
 `;

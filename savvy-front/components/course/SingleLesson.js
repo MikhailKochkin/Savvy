@@ -8,7 +8,9 @@ import SingleTest from './SingleTest';
 import SingleProblem from './SingleProblem';
 import SingleConstructor from './SingleConstructor';
 import PleaseSignIn from '../PleaseSignIn';
+import AreYouEnrolled from '../AreYouEnrolled';
 import User from '../User';
+
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -20,6 +22,9 @@ const SINGLE_LESSON_QUERY = gql`
         video
         createdAt
         user {
+          id
+        }
+        coursePage {
           id
         }
         tests {
@@ -176,7 +181,9 @@ class SingleLesson extends Component {
                 const lesson = data.lesson;
                 moment.locale('ru');
                 return (
-                  <>
+                  <AreYouEnrolled 
+                    subject={lesson.coursePage.id}
+                  >
                     <Center>
                       <TextBar>
                         <h4>Урок {lesson.number}. {lesson.name}</h4>
@@ -304,11 +311,6 @@ class SingleLesson extends Component {
                     </Center>
                     :
                     null}
-                    <h3>В данном задании вам предстоит составить текст документа. Для каждого пункта 
-                      выберите вариант формулировки и мышкой перенесите его в правую часть. Если вы выбрали правильно, то пункт перетащится и встроится в документ. 
-                      Если нет, то вы увидите подсказку над вариантами положений договора.</h3>
-                    <h3>Обратие внимание: данное задание работает только на компьютерах в Chrome и Safari. 
-                      В мобильных браузерах и Firefox оно работать не будет!</h3>
                     {lesson.constructions.length > 0 ?
                       <>
                         {lesson.constructions.map(constructor => 
@@ -327,7 +329,7 @@ class SingleLesson extends Component {
                     }
                   </>
                   }
-                </>
+                </AreYouEnrolled>
                 );
               }}
             </Query>

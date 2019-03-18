@@ -80,4 +80,6 @@ type User{
     isFamiliar: Boolean!
     favourites: [ID]
     subjects: [ID]
+    coursePages: [CoursePage]
+    lessons: [Lesson]!
 }
