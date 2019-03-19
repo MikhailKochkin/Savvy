@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-import { NavButton, SubmitButton } from '../styles/Button';
-import { CURRENT_USER_QUERY } from '../User';
-import { ALL_COURSE_PAGES_QUERY } from './Courses';
 import ApplicationBox from './ApplicationBox';
-
+import AreYouATeacher from '../AreYouATeacher';
+import PleaseSignIn from '../PleaseSignIn';
 
 const App = styled.div`
     border: 2px solid black;
@@ -32,7 +30,10 @@ const PAGE_APPLICATIONS_QUERY = gql`
 class Applications extends Component {
     render() {
         return (
-            <div>
+            <PleaseSignIn>
+            <AreYouATeacher
+                subject={this.props.id}
+            >
                 <Query
                     query={PAGE_APPLICATIONS_QUERY} 
                     variables={{
@@ -76,7 +77,8 @@ class Applications extends Component {
                         )
                     }}
                 </Query>
-            </div>
+            </AreYouATeacher>
+            </PleaseSignIn>
         );
     }
 }

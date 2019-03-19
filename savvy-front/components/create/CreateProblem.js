@@ -4,6 +4,8 @@ import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Link from 'next/link';
 import { NavButton, SubmitButton } from '../styles/Button';
+import AreYouATeacher from '../AreYouATeacher';
+import PleaseSignIn from '../PleaseSignIn';
 
 const MaterialPerPage = 5;
 
@@ -231,7 +233,10 @@ class CreateProblem extends Component {
             }
 
         return (
-            <>
+            <PleaseSignIn>
+                <AreYouATeacher
+                    subject={id}
+                >
                 {/* <Link href={{
                         pathname: '/coursePage',
                         query: { id }
@@ -312,8 +317,9 @@ class CreateProblem extends Component {
                 <Answer display={this.state.revealAnswer}>
                     {this.state.answer}
                 </Answer>
-            </>
-        );
+            </AreYouATeacher>
+        </PleaseSignIn>
+      );
     }
 }
 

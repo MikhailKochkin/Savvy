@@ -7,6 +7,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
 import { NavButton, SubmitButton } from '../styles/Button';
+import AreYouATeacher from '../AreYouATeacher';
+import PleaseSignIn from '../PleaseSignIn';
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -144,6 +146,10 @@ export default class UpdateLesson extends Component {
     render() {
         const {id} = this.props
         return (
+          <PleaseSignIn>
+          <AreYouATeacher
+              subject={this.props.id}
+          >
             <Query
                 query={SINGLE_LESSON_QUERY}
                 variables={{
@@ -243,7 +249,9 @@ export default class UpdateLesson extends Component {
             </Width>
             </>
             )}}
-        </Query>
-        )
-    }
+          </Query>
+        </AreYouATeacher>
+      </PleaseSignIn>
+    )
+  }
 }

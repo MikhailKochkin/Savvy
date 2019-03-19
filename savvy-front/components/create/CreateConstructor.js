@@ -5,6 +5,8 @@ import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Router from 'next/router';
 import { NavButton, SubmitButton } from '../styles/Button';
+import AreYouATeacher from '../AreYouATeacher';
+import PleaseSignIn from '../PleaseSignIn';
 
 const CREATE_CONSTRUCTION_MUTATION = gql`
   mutation CREATE_CONSTRUCION_MUTATION(
@@ -219,7 +221,10 @@ class CreateConstructor extends Component {
     render() {
         const {id} = this.props
         return (
-            <>
+            <PleaseSignIn>
+                <AreYouATeacher
+                    subject={id}
+                >
             <Center>
                 <h2>Создаем конструктор!</h2>
                     <Label1 className="name" htmlFor="name">
@@ -656,7 +661,8 @@ class CreateConstructor extends Component {
                         null
                       }
                     </Center>
-                </>
+                </AreYouATeacher>
+            </PleaseSignIn>
         );
     }
 }

@@ -58,6 +58,15 @@ const Nav = styled.div`
     justify-content: center;
 `;
 
+const Nav2 = styled.div`
+    border-top: 2px solid #0A2342;
+    margin-top: 1%;
+    padding-top: 1%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+`;
+
 class Training extends Component {
     constructor(props) {
         super(props);
@@ -185,6 +194,34 @@ class Training extends Component {
                     </ChooseButtons>
                   </Nav>
                   {this.pageView}
+                <Nav2>
+                    <ChooseButtons>
+                        <ChooseButton
+                            onClick = {this.onStep1}
+                            active={this.state.step1}
+                        >
+                            <h1>Шаг 1</h1>
+                        </ChooseButton>
+                        <ChooseButton
+                            onClick = {this.onStep2}
+                            active={this.state.step2}
+                        >
+                            <h1>Шаг 2</h1>
+                        </ChooseButton>
+                        <ChooseButton
+                            onClick = {this.onStep3}
+                            active={this.state.step3}
+                        >
+                            <h1>Шаг 3</h1>
+                        </ChooseButton>
+                        <ChooseButton
+                            onClick = {this.onStep4}
+                            active={this.state.step4}
+                        >
+                            <h1>Шаг 4</h1>
+                        </ChooseButton>
+                    </ChooseButtons>
+                  </Nav2>
             </div>
         );
     }
