@@ -30,6 +30,7 @@ type User {
   tests: [Test]!
   problems: [Problem]!
   construction: [Construction]!
+  textEditor: [TextEditor]!
   isFamiliar: Boolean! @default(value: "false")
   createdAt: DateTime!
 }
@@ -41,8 +42,6 @@ type CoursePage {
   image: String!
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
-  # tests: [Test]! @relation(name: "TestsOnCoursePage" onDelete: CASCADE)
-  # problems: [Problem]! @relation(name: "ProblemsOnCoursePage" onDelete: CASCADE)
   applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
   tags: [String]
   courseType: CourseType
@@ -86,6 +85,7 @@ type Lesson {
   tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
   problems: [Problem] @relation(name: "LessonProblems" onDelete: CASCADE)
   constructions: [Construction] @relation(name: "LessonConstructions" onDelete: CASCADE)
+  texteditors: [TextEditor] @relation(name: "LessonTextEditors" onDelete: CASCADE)
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -148,6 +148,18 @@ type Problem {
   answer: String!
   user: User!
   lesson: Lesson! @relation(name: "LessonProblems")
+  lessonID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TextEditor {
+  id: ID! @unique
+  name: String!
+  text: String!
+  totalMistakes: String
+  user: User!
+  lesson: Lesson! @relation(name: "LessonTextEditors")
   lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!

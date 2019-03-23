@@ -34,6 +34,10 @@ type AggregateTest {
   count: Int!
 }
 
+type AggregateTextEditor {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -890,6 +894,7 @@ type Lesson {
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   constructions(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction!]
+  texteditors(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor!]
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -911,6 +916,7 @@ input LessonCreateInput {
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
   constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -939,6 +945,11 @@ input LessonCreateOneWithoutTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonCreateOneWithoutTexteditorsInput {
+  create: LessonCreateWithoutTexteditorsInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonCreateWithoutConstructionsInput {
   name: String!
   number: Int
@@ -948,6 +959,7 @@ input LessonCreateWithoutConstructionsInput {
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -960,6 +972,7 @@ input LessonCreateWithoutCoursePageInput {
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
   constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -972,6 +985,7 @@ input LessonCreateWithoutProblemsInput {
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -982,6 +996,20 @@ input LessonCreateWithoutTestsInput {
   video: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  coursePageID: ID!
+}
+
+input LessonCreateWithoutTexteditorsInput {
+  name: String!
+  number: Int
+  text: String!
+  video: String
+  user: UserCreateOneWithoutLessonsInput!
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
   constructions: ConstructionCreateManyWithoutLessonInput
   coursePageID: ID!
@@ -996,6 +1024,7 @@ input LessonCreateWithoutUserInput {
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
   constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
   coursePageID: ID!
 }
 
@@ -1062,6 +1091,7 @@ input LessonUpdateInput {
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
   constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -1104,6 +1134,13 @@ input LessonUpdateOneRequiredWithoutTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonUpdateOneRequiredWithoutTexteditorsInput {
+  create: LessonCreateWithoutTexteditorsInput
+  update: LessonUpdateWithoutTexteditorsDataInput
+  upsert: LessonUpsertWithoutTexteditorsInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonUpdateWithoutConstructionsDataInput {
   name: String
   number: Int
@@ -1113,6 +1150,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -1125,6 +1163,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
   constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -1137,6 +1176,7 @@ input LessonUpdateWithoutProblemsDataInput {
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -1147,6 +1187,20 @@ input LessonUpdateWithoutTestsDataInput {
   video: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  coursePageID: ID
+}
+
+input LessonUpdateWithoutTexteditorsDataInput {
+  name: String
+  number: Int
+  text: String
+  video: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
   constructions: ConstructionUpdateManyWithoutLessonInput
   coursePageID: ID
@@ -1161,6 +1215,7 @@ input LessonUpdateWithoutUserDataInput {
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
   constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
   coursePageID: ID
 }
 
@@ -1187,6 +1242,11 @@ input LessonUpsertWithoutProblemsInput {
 input LessonUpsertWithoutTestsInput {
   update: LessonUpdateWithoutTestsDataInput!
   create: LessonCreateWithoutTestsInput!
+}
+
+input LessonUpsertWithoutTexteditorsInput {
+  update: LessonUpdateWithoutTexteditorsDataInput!
+  create: LessonCreateWithoutTexteditorsInput!
 }
 
 input LessonUpsertWithWhereUniqueWithoutCoursePageInput {
@@ -1277,6 +1337,9 @@ input LessonWhereInput {
   constructions_every: ConstructionWhereInput
   constructions_some: ConstructionWhereInput
   constructions_none: ConstructionWhereInput
+  texteditors_every: TextEditorWhereInput
+  texteditors_some: TextEditorWhereInput
+  texteditors_none: TextEditorWhereInput
   coursePageID: ID
   coursePageID_not: ID
   coursePageID_in: [ID!]
@@ -1373,6 +1436,12 @@ type Mutation {
   upsertTest(where: TestWhereUniqueInput!, create: TestCreateInput!, update: TestUpdateInput!): Test!
   deleteTest(where: TestWhereUniqueInput!): Test
   deleteManyTests(where: TestWhereInput): BatchPayload!
+  createTextEditor(data: TextEditorCreateInput!): TextEditor!
+  updateTextEditor(data: TextEditorUpdateInput!, where: TextEditorWhereUniqueInput!): TextEditor
+  updateManyTextEditors(data: TextEditorUpdateInput!, where: TextEditorWhereInput): BatchPayload!
+  upsertTextEditor(where: TextEditorWhereUniqueInput!, create: TextEditorCreateInput!, update: TextEditorUpdateInput!): TextEditor!
+  deleteTextEditor(where: TextEditorWhereUniqueInput!): TextEditor
+  deleteManyTextEditors(where: TextEditorWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
@@ -1725,6 +1794,9 @@ type Query {
   test(where: TestWhereUniqueInput!): Test
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test]!
   testsConnection(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TestConnection!
+  textEditor(where: TextEditorWhereUniqueInput!): TextEditor
+  textEditors(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor]!
+  textEditorsConnection(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TextEditorConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -2511,6 +2583,7 @@ type Subscription {
   sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload
   sandboxPageGoal(where: SandboxPageGoalSubscriptionWhereInput): SandboxPageGoalSubscriptionPayload
   test(where: TestSubscriptionWhereInput): TestSubscriptionPayload
+  textEditor(where: TextEditorSubscriptionWhereInput): TextEditorSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -2924,6 +2997,272 @@ input TestWhereUniqueInput {
   id: ID
 }
 
+type TextEditor {
+  id: ID!
+  name: String!
+  text: String!
+  totalMistakes: String
+  user: User!
+  lesson: Lesson!
+  lessonID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TextEditorConnection {
+  pageInfo: PageInfo!
+  edges: [TextEditorEdge]!
+  aggregate: AggregateTextEditor!
+}
+
+input TextEditorCreateInput {
+  name: String!
+  text: String!
+  totalMistakes: String
+  user: UserCreateOneWithoutTextEditorInput!
+  lesson: LessonCreateOneWithoutTexteditorsInput!
+  lessonID: ID!
+}
+
+input TextEditorCreateManyWithoutLessonInput {
+  create: [TextEditorCreateWithoutLessonInput!]
+  connect: [TextEditorWhereUniqueInput!]
+}
+
+input TextEditorCreateManyWithoutUserInput {
+  create: [TextEditorCreateWithoutUserInput!]
+  connect: [TextEditorWhereUniqueInput!]
+}
+
+input TextEditorCreateWithoutLessonInput {
+  name: String!
+  text: String!
+  totalMistakes: String
+  user: UserCreateOneWithoutTextEditorInput!
+  lessonID: ID!
+}
+
+input TextEditorCreateWithoutUserInput {
+  name: String!
+  text: String!
+  totalMistakes: String
+  lesson: LessonCreateOneWithoutTexteditorsInput!
+  lessonID: ID!
+}
+
+type TextEditorEdge {
+  node: TextEditor!
+  cursor: String!
+}
+
+enum TextEditorOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  text_ASC
+  text_DESC
+  totalMistakes_ASC
+  totalMistakes_DESC
+  lessonID_ASC
+  lessonID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TextEditorPreviousValues {
+  id: ID!
+  name: String!
+  text: String!
+  totalMistakes: String
+  lessonID: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TextEditorSubscriptionPayload {
+  mutation: MutationType!
+  node: TextEditor
+  updatedFields: [String!]
+  previousValues: TextEditorPreviousValues
+}
+
+input TextEditorSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TextEditorWhereInput
+  AND: [TextEditorSubscriptionWhereInput!]
+  OR: [TextEditorSubscriptionWhereInput!]
+  NOT: [TextEditorSubscriptionWhereInput!]
+}
+
+input TextEditorUpdateInput {
+  name: String
+  text: String
+  totalMistakes: String
+  user: UserUpdateOneRequiredWithoutTextEditorInput
+  lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
+  lessonID: ID
+}
+
+input TextEditorUpdateManyWithoutLessonInput {
+  create: [TextEditorCreateWithoutLessonInput!]
+  delete: [TextEditorWhereUniqueInput!]
+  connect: [TextEditorWhereUniqueInput!]
+  disconnect: [TextEditorWhereUniqueInput!]
+  update: [TextEditorUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [TextEditorUpsertWithWhereUniqueWithoutLessonInput!]
+}
+
+input TextEditorUpdateManyWithoutUserInput {
+  create: [TextEditorCreateWithoutUserInput!]
+  delete: [TextEditorWhereUniqueInput!]
+  connect: [TextEditorWhereUniqueInput!]
+  disconnect: [TextEditorWhereUniqueInput!]
+  update: [TextEditorUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [TextEditorUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TextEditorUpdateWithoutLessonDataInput {
+  name: String
+  text: String
+  totalMistakes: String
+  user: UserUpdateOneRequiredWithoutTextEditorInput
+  lessonID: ID
+}
+
+input TextEditorUpdateWithoutUserDataInput {
+  name: String
+  text: String
+  totalMistakes: String
+  lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
+  lessonID: ID
+}
+
+input TextEditorUpdateWithWhereUniqueWithoutLessonInput {
+  where: TextEditorWhereUniqueInput!
+  data: TextEditorUpdateWithoutLessonDataInput!
+}
+
+input TextEditorUpdateWithWhereUniqueWithoutUserInput {
+  where: TextEditorWhereUniqueInput!
+  data: TextEditorUpdateWithoutUserDataInput!
+}
+
+input TextEditorUpsertWithWhereUniqueWithoutLessonInput {
+  where: TextEditorWhereUniqueInput!
+  update: TextEditorUpdateWithoutLessonDataInput!
+  create: TextEditorCreateWithoutLessonInput!
+}
+
+input TextEditorUpsertWithWhereUniqueWithoutUserInput {
+  where: TextEditorWhereUniqueInput!
+  update: TextEditorUpdateWithoutUserDataInput!
+  create: TextEditorCreateWithoutUserInput!
+}
+
+input TextEditorWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  totalMistakes: String
+  totalMistakes_not: String
+  totalMistakes_in: [String!]
+  totalMistakes_not_in: [String!]
+  totalMistakes_lt: String
+  totalMistakes_lte: String
+  totalMistakes_gt: String
+  totalMistakes_gte: String
+  totalMistakes_contains: String
+  totalMistakes_not_contains: String
+  totalMistakes_starts_with: String
+  totalMistakes_not_starts_with: String
+  totalMistakes_ends_with: String
+  totalMistakes_not_ends_with: String
+  user: UserWhereInput
+  lesson: LessonWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [TextEditorWhereInput!]
+  OR: [TextEditorWhereInput!]
+  NOT: [TextEditorWhereInput!]
+}
+
+input TextEditorWhereUniqueInput {
+  id: ID
+}
+
 type User {
   id: ID!
   name: String!
@@ -2942,6 +3281,7 @@ type User {
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   construction(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction!]
+  textEditor(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor!]
   isFamiliar: Boolean!
   createdAt: DateTime!
 }
@@ -2973,6 +3313,7 @@ input UserCreateInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3016,6 +3357,11 @@ input UserCreateOneWithoutTestsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutTextEditorInput {
+  create: UserCreateWithoutTextEditorInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
 }
@@ -3044,6 +3390,7 @@ input UserCreateWithoutConstructionInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3063,6 +3410,7 @@ input UserCreateWithoutCoursePagesInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3082,6 +3430,7 @@ input UserCreateWithoutLessonsInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3101,6 +3450,7 @@ input UserCreateWithoutProblemsInput {
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3120,6 +3470,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3139,6 +3490,7 @@ input UserCreateWithoutSandboxPagesInput {
   tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3156,6 +3508,27 @@ input UserCreateWithoutTestsInput {
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
+input UserCreateWithoutTextEditorInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
   isFamiliar: Boolean
@@ -3237,6 +3610,7 @@ input UserUpdateDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3261,6 +3635,7 @@ input UserUpdateInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3320,6 +3695,13 @@ input UserUpdateOneRequiredWithoutTestsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutTextEditorInput {
+  create: UserCreateWithoutTextEditorInput
+  update: UserUpdateWithoutTextEditorDataInput
+  upsert: UserUpsertWithoutTextEditorInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
 }
@@ -3348,6 +3730,7 @@ input UserUpdateWithoutConstructionDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3367,6 +3750,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3386,6 +3770,7 @@ input UserUpdateWithoutLessonsDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3405,6 +3790,7 @@ input UserUpdateWithoutProblemsDataInput {
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3424,6 +3810,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3443,6 +3830,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3460,6 +3848,27 @@ input UserUpdateWithoutTestsDataInput {
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
+input UserUpdateWithoutTextEditorDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
   isFamiliar: Boolean
@@ -3503,6 +3912,11 @@ input UserUpsertWithoutSandboxPagesInput {
 input UserUpsertWithoutTestsInput {
   update: UserUpdateWithoutTestsDataInput!
   create: UserCreateWithoutTestsInput!
+}
+
+input UserUpsertWithoutTextEditorInput {
+  update: UserUpdateWithoutTextEditorDataInput!
+  create: UserCreateWithoutTextEditorInput!
 }
 
 input UserWhereInput {
@@ -3605,6 +4019,9 @@ input UserWhereInput {
   construction_every: ConstructionWhereInput
   construction_some: ConstructionWhereInput
   construction_none: ConstructionWhereInput
+  textEditor_every: TextEditorWhereInput
+  textEditor_some: TextEditorWhereInput
+  textEditor_none: TextEditorWhereInput
   isFamiliar: Boolean
   isFamiliar_not: Boolean
   createdAt: DateTime
