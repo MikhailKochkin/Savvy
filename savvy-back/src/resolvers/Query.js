@@ -9,6 +9,7 @@ const Query = {
     lesson:forwardTo('db'),
     test:forwardTo('db'),
     problem:forwardTo('db'),
+    textEditor:forwardTo('db'),
     sandbox:forwardTo('db'),
     coursePagesConnection: forwardTo('db'),
     sandboxPagesConnection: forwardTo('db'),
@@ -37,6 +38,15 @@ const Query = {
     problems(parent, args, ctx, info){
       const lesID = args.where.lessonID;
       return ctx.db.query.problems(
+        {
+          where: {lessonID: lesID}
+        },
+        info
+      );
+    },
+    textEditors(parent, args, ctx, info){
+      const lesID = args.where.lessonID;
+      return ctx.db.query.textEditors(
         {
           where: {lessonID: lesID}
         },

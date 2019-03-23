@@ -27,6 +27,8 @@ type Mutation {
     deleteSandbox(id:ID!): Sandbox
     createSandboxPageGoal(goal: String!, sandboxPageID: ID!): SandboxPageGoal!
     deleteCoursePage(id:ID!): CoursePage
+    createTextEditor(name: String!, text: String!, totalMistakes: Int, lessonID: ID!): TextEditor!
+    deleteTextEditor(id:ID!): TextEditor
     createApplication(applicantId: ID!, applicantName: String!, message: String, coursePageID: ID!): Application!
     deleteApplication(id:ID!): Application
     signup(email: String!, password: String!, name: String!): User!
@@ -57,6 +59,8 @@ type Query {
     sandboxesConnection(where: SandboxWhereInput): SandboxConnection!
     lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, first: Int): [Lesson]!
     lesson(where: LessonWhereUniqueInput!): Lesson
+    textEditor(where: TextEditorWhereUniqueInput!): TextEditor
+    textEditors(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, first: Int): [TextEditor]!
     applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, first: Int,): [Application]!
     coursePagesConnection(where: CoursePageWhereInput): CoursePageConnection!
     lessonsConnection(where: LessonWhereInput): LessonConnection!

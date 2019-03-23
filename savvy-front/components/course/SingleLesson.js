@@ -7,6 +7,7 @@ import moment from 'moment';
 import SingleTest from './SingleTest';
 import SingleProblem from './SingleProblem';
 import SingleConstructor from './SingleConstructor';
+import SingleTextEditor from './SingleTextEditor';
 import PleaseSignIn from '../PleaseSignIn';
 import AreYouEnrolled from '../AreYouEnrolled';
 import User from '../User';
@@ -64,6 +65,14 @@ const SINGLE_LESSON_QUERY = gql`
           dbPart6
           dbPart7
           dbPart8
+          user {
+            id
+          }
+        }
+        texteditors {
+          id
+          name
+          text
           user {
             id
           }
@@ -155,13 +164,15 @@ class SingleLesson extends Component {
       button1: true,
       button2: false,
       button3: false,
+      button4: false,
   }
 
   pageView = ''
 
-  onTest = () => {this.setState({page: "test", button1: true, button2: false, button3: false })}
-  onProblem = () => {this.setState({page: "problem", button1: false, button2: true, button3: false })}
-  onConstructor = () => {this.setState({page: "constructor", button1: false, button2: false, button3: true })}
+  onTest = () => {this.setState({page: "test", button1: true, button2: false, button3: false, button4: false})}
+  onProblem = () => {this.setState({page: "problem", button1: false, button2: true, button3: false, button4: false })}
+  onConstructor = () => {this.setState({page: "constructor", button1: false, button2: false, button3: true, button4: false })}
+  onTextEditor = () => {this.setState({page: "texteditor", button1: false, button2: false, button3: false, button4: true })}
 
     render() {
       return (
@@ -225,6 +236,12 @@ class SingleLesson extends Component {
                               active={this.state.button3}
                           >
                               <h1>Конструкторы документов</h1>
+                          </ChooseButton>
+                          <ChooseButton
+                              onClick = {this.onTextEditor}
+                              active={this.state.button4}
+                          >
+                              <h1>Редакторы документов</h1>
                           </ChooseButton>
                       </ChooseButtons>
                   </Nav>
@@ -325,6 +342,42 @@ class SingleLesson extends Component {
                       :
                       <Center>
                         <h2>Конструкторов документов пока нет</h2>
+                      </Center>
+                    }
+                  </>
+                  }
+                  { this.state.button4 &&
+                  <>
+                    { me && me.id === lesson.user.id ?
+                    <Center>
+                      <Link href={{
+                            pathname: '/createTextEditor',
+                            query: {id: lesson.id}
+                            }}>
+                            <a>
+                            <Button>Составить редактор документа</Button>
+                            </a>
+                      </Link>
+                    </Center>
+                    :
+                    null}
+                    {/* <SingleTextEditor/> */}
+                    {lesson.texteditors.length > 0 ?
+                      <> 
+                        <h4>Ознакомьтесь с тектом. Ваша задача – выучить новые слова (они выделены жирным). Если вы не знаете слово, 
+                        то всегда можете щелкнуть на него и появится перевод. Новые слова можно закрепить в тестовых заданиях</h4>
+                        {lesson.texteditors.map(texteditor => 
+                          <SingleTextEditor 
+                            key={texteditor.id}
+                            lessonId={texteditor.id}
+                            data={texteditor}
+                            me={me}
+                          />
+                        )}
+                      </>
+                      :
+                      <Center>
+                        <h2>Редакторов документов пока нет</h2>
                       </Center>
                     }
                   </>

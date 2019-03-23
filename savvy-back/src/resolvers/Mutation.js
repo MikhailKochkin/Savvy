@@ -113,6 +113,39 @@ const Mutations = {
   );
     return coursePage;
   },
+  async createTextEditor(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const lessonID = args.lessonID
+    delete args.id
+    // console.log(ctx.request.userId)
+    // console.log(coursePagedID)
+    // if (!ctx.request.userId) {
+    //   throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+    // }
+
+    const TextEditor = await ctx.db.mutation.createTextEditor(
+        {
+        data: {
+            user: {
+              connect: { id: ctx.request.userId }
+              },
+            lesson: {
+                connect: { id: lessonID }
+              },
+            ...args
+        },
+    }, 
+    info
+  );
+    return TextEditor;
+},
+  async deleteTextEditor(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the lesson
+    const textEditor = await ctx.db.query.textEditor({ where }, `{ id }`);
+    //3. Delete it
+    return ctx.db.mutation.deleteTextEditor({ where }, info);
+  },
   async createSandboxPage(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     if (!ctx.request.userId) {
