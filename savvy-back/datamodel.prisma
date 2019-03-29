@@ -173,3 +173,13 @@ type Application {
   coursePage: CoursePage! @relation(name: "ApplicationOnCoursePage")
   coursePageID: ID!
 }
+
+type Order {
+  id: ID! @unique
+  coursePageID: ID!
+  price: Int!
+  paid: Boolean @default(value: "false")
+  payer: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}

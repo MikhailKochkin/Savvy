@@ -119,7 +119,7 @@ export default class Course extends Component {
                             <Button>Войти</Button>
                         </a>
                     </Link>}
-                    {me !== null && me.id !== coursePage.user.id 
+                    {me && me !== null && me.id !== coursePage.user.id 
                     && !this.state.revealApplication && !applicationsList.includes(me.id) &&
                     <EnrollCoursePage
                         coursePage = {coursePage}
@@ -132,7 +132,7 @@ export default class Course extends Component {
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
-                    {me !== null && me.id === coursePage.user.id &&
+                    {me && me !== null && me.id === coursePage.user.id &&
                     <>
                         <Link href={{
                                 pathname: '/coursePage',

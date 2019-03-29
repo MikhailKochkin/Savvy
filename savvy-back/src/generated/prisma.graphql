@@ -14,6 +14,10 @@ type AggregateLesson {
   count: Int!
 }
 
+type AggregateOrder {
+  count: Int!
+}
+
 type AggregateProblem {
   count: Int!
 }
@@ -1406,6 +1410,12 @@ type Mutation {
   upsertLesson(where: LessonWhereUniqueInput!, create: LessonCreateInput!, update: LessonUpdateInput!): Lesson!
   deleteLesson(where: LessonWhereUniqueInput!): Lesson
   deleteManyLessons(where: LessonWhereInput): BatchPayload!
+  createOrder(data: OrderCreateInput!): Order!
+  updateOrder(data: OrderUpdateInput!, where: OrderWhereUniqueInput!): Order
+  updateManyOrders(data: OrderUpdateInput!, where: OrderWhereInput): BatchPayload!
+  upsertOrder(where: OrderWhereUniqueInput!, create: OrderCreateInput!, update: OrderUpdateInput!): Order!
+  deleteOrder(where: OrderWhereUniqueInput!): Order
+  deleteManyOrders(where: OrderWhereInput): BatchPayload!
   createProblem(data: ProblemCreateInput!): Problem!
   updateProblem(data: ProblemUpdateInput!, where: ProblemWhereUniqueInput!): Problem
   updateManyProblems(data: ProblemUpdateInput!, where: ProblemWhereInput): BatchPayload!
@@ -1458,6 +1468,164 @@ enum MutationType {
 
 interface Node {
   id: ID!
+}
+
+type Order {
+  id: ID!
+  coursePageID: ID!
+  price: Int!
+  paid: Boolean
+  payer: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OrderConnection {
+  pageInfo: PageInfo!
+  edges: [OrderEdge]!
+  aggregate: AggregateOrder!
+}
+
+input OrderCreateInput {
+  coursePageID: ID!
+  price: Int!
+  paid: Boolean
+  payer: ID!
+}
+
+type OrderEdge {
+  node: Order!
+  cursor: String!
+}
+
+enum OrderOrderByInput {
+  id_ASC
+  id_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  price_ASC
+  price_DESC
+  paid_ASC
+  paid_DESC
+  payer_ASC
+  payer_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type OrderPreviousValues {
+  id: ID!
+  coursePageID: ID!
+  price: Int!
+  paid: Boolean
+  payer: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OrderSubscriptionPayload {
+  mutation: MutationType!
+  node: Order
+  updatedFields: [String!]
+  previousValues: OrderPreviousValues
+}
+
+input OrderSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: OrderWhereInput
+  AND: [OrderSubscriptionWhereInput!]
+  OR: [OrderSubscriptionWhereInput!]
+  NOT: [OrderSubscriptionWhereInput!]
+}
+
+input OrderUpdateInput {
+  coursePageID: ID
+  price: Int
+  paid: Boolean
+  payer: ID
+}
+
+input OrderWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  price: Int
+  price_not: Int
+  price_in: [Int!]
+  price_not_in: [Int!]
+  price_lt: Int
+  price_lte: Int
+  price_gt: Int
+  price_gte: Int
+  paid: Boolean
+  paid_not: Boolean
+  payer: ID
+  payer_not: ID
+  payer_in: [ID!]
+  payer_not_in: [ID!]
+  payer_lt: ID
+  payer_lte: ID
+  payer_gt: ID
+  payer_gte: ID
+  payer_contains: ID
+  payer_not_contains: ID
+  payer_starts_with: ID
+  payer_not_starts_with: ID
+  payer_ends_with: ID
+  payer_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+}
+
+input OrderWhereUniqueInput {
+  id: ID
 }
 
 type PageInfo {
@@ -1779,6 +1947,9 @@ type Query {
   lesson(where: LessonWhereUniqueInput!): Lesson
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson]!
   lessonsConnection(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LessonConnection!
+  order(where: OrderWhereUniqueInput!): Order
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
+  ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
   problem(where: ProblemWhereUniqueInput!): Problem
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem]!
   problemsConnection(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProblemConnection!
@@ -2578,6 +2749,7 @@ type Subscription {
   construction(where: ConstructionSubscriptionWhereInput): ConstructionSubscriptionPayload
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
+  order(where: OrderSubscriptionWhereInput): OrderSubscriptionPayload
   problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
   sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
   sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload

@@ -57,16 +57,6 @@ class SingleTextEditor extends Component {
             total: "",
             text: this.props.data.text
             //`
-                // <p>Philosophers from  <b> <span id='id' title='Перевод: заголовок'> headline </span></b> to the 
-                // Beatles have argued that money does not buy happiness.</p> 
-                // <p>Philosophers from Aristotle to the Beatles have argued that money does not buy happiness. 
-                //     But it seems to help. Since 2005 Gallup, a pollster, has asked a representative sample of 
-                //     adults from countries across the world to rate their life satisfaction on a scale from 
-                //     zero to ten. The <b> <span id='id' title='Перевод: заголовок'>headline </span></b>  result is clear: the richer the country, on average, the higher 
-                //     the level of self-reported happiness. The simple correlation suggests that doubling GDP per
-                //     person lifts life <b> <span id='id' title='Перевод: удовлетворение, удовольствие'> satisfaction </span></b> by about 0.7 points.
-                // </p>
-
             //     <p>Philosophers from Aristotle to the Beatles have argued that money does not buy happiness. 
             //         But it seems to help. Since 2005 Gallup, a pollster, has asked a representative sample of 
             //         adults from countries across the world to rate their life satisfaction on a scale from 
