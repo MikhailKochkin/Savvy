@@ -139,25 +139,14 @@ export default class CoursePageNav extends Component {
                                     <Button>Составить урок</Button>
                                 </a>
                                 </Link>
-                                
-                                {/* <Link href={{
-                                    pathname: '/createTest',
-                                    query: {id: this.props.id }
-                                }}>
-                                <a>
-                                    <Button>Составить тест</Button>
-                                </a>
-                                </Link>
-                                
                                 <Link href={{
-                                    pathname: '/createProblem',
+                                    pathname: '/createPointA',
                                     query: {id: this.props.id}
-                                }}>
-                                <a>
-                                    <Button>Составить задачу </Button>
-                                </a>
-                                </Link> */}
-                               
+                                    }}>
+                                    <a>
+                                        <Button>Составить описание</Button>
+                                    </a>
+                                </Link>
                                 {coursePage.courseType === "PRIVATE" &&
                                 <Link href={{
                                     pathname: '/applications',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import gql from "graphql-tag";
 import PropTypes from 'prop-types';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import DeleteCoursePage from '../DeleteCoursePage';
 import EnrollCoursePage from '../EnrollCoursePage';
 import User from '../User';
 import Application from './Application'
+// import TakeMyMoney from '../TakeMyMoney';
 
 const CaseCard = styled.div`
     border: 1px lightgrey solid;
@@ -24,7 +25,6 @@ const CaseCard = styled.div`
         }
     }
 `;
-
 
 const Img = styled.img`
     width: 100%;
@@ -57,8 +57,8 @@ const Button = styled.button`
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    width: 100px;
-    margin: 0% 2px;
+    width: 135px;
+    margin: 2px;
     cursor: pointer;
     &:hover {
        background-color: #003D5B;
@@ -67,6 +67,7 @@ const Button = styled.button`
 const Buttons = styled.div`
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: space-between;
     margin-bottom: 0.5%;
 `;
@@ -93,6 +94,8 @@ export default class Course extends Component {
             courseType = "Открытый"
         } else if (coursePage.courseType === "PRIVATE") {
             courseType = "Закрытый"
+        } else if (coursePage.courseType === "FORMONEY") {
+            courseType = "Платный"
         }
         const applicationsList = [];
         coursePage.applications.map(application => applicationsList.push(application.applicantId))
@@ -109,7 +112,21 @@ export default class Course extends Component {
                     <Author>{coursePage.user.name}</Author>
                     <p>Количество участников: {studentsArray.length}</p>
                     <p>Тип курса: {courseType}</p>
+                    {/* { me && me !== null && courseType === "Платный" &&
+                    <p>Стоимость курса: {coursePage.price} рублей</p>
+                    } */}
                     <Buttons>
+
+                    {coursePage.pointsA.length > 0 &&
+                    <Link href={{
+                            pathname: '/pointA',
+                            query: {id }
+                        }}>
+                        <a>
+                            <Button>Описание</Button>
+                        </a>
+                    </Link>
+                    }
                     {me === null && courseType === "Открытый" &&
                     <Link href={{
                             pathname: '/coursePage',
@@ -132,7 +149,7 @@ export default class Course extends Component {
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
-                    {me && me !== null && me.id === coursePage.user.id &&
+                    {me && me.id === coursePage.user.id &&
                     <>
                         <Link href={{
                                 pathname: '/coursePage',
@@ -156,6 +173,15 @@ export default class Course extends Component {
                             Удалить
                         </DeleteCoursePage> 
                     </>}
+                    {/* {me !== null && courseType === "Платный" &&
+                    <TakeMyMoney
+                        coursePageID={coursePage.id}
+                        user={me.id}
+                        price={coursePage.price}
+                    >
+                    Купить
+                    </TakeMyMoney>
+                    } */}
                     </Buttons>
                     {me && this.state.revealApplication && 
                     <Application

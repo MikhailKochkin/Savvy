@@ -11,11 +11,11 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/lesson": [
+    "/pointA": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/createTextEditor": [
+    "/courses": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]

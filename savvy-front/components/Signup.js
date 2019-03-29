@@ -153,12 +153,12 @@ class Signup extends Component {
                             />
                         </Label>
                         <Label className="name" htmlFor="name">
-                            <p className="first">Имя</p>
+                            <p className="first">Имя и фамилия</p>
                             <input
                                 className="second"
                                 type="text"
                                 name="name"
-                                placeholder="Имя"
+                                placeholder="Имя и фамилия"
                                 value={this.state.name}
                                 onChange={this.saveToState}
                             />

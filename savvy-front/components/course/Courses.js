@@ -85,6 +85,10 @@ const ALL_COURSE_PAGES_QUERY = gql`
       tags
       courseType
       students
+      price
+      pointsA {
+          id
+      }
       applications {
           id
           applicantId
@@ -107,6 +111,10 @@ const ALL_COURSEBYTAGS_PAGES_QUERY = gql`
       tags
       courseType
       students
+      price
+      pointsA {
+          id
+      }
       applications {
           id
           applicantId
@@ -174,7 +182,7 @@ class Courses extends Component {
                         return (
                             <CasesStyles>
                                 {tagged.length === 0 ? 
-                                <p>По этому тэгу пока еще нет курсов. Но мы это скоро исправим. Напишиите нам, 
+                                <p>По этому тэгу пока еще нет курсов. Но мы это скоро исправим. Напишите нам, 
                                 если у вас есть предложение по тому, как это сделать.</p>
                                 :
                                 tagged.map(coursePage => 

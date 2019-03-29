@@ -20,8 +20,8 @@ const Button = styled.button`
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
-    width: 100px;;
-    margin: 0% 2px;
+    width: 135px;;
+    margin: 2px;
     font-size:1.4rem;
     cursor: pointer;
     &:hover {

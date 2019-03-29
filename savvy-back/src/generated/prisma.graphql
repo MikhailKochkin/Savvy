@@ -18,6 +18,14 @@ type AggregateOrder {
   count: Int!
 }
 
+type AggregatePointA {
+  count: Int!
+}
+
+type AggregatePointATest {
+  count: Int!
+}
+
 type AggregateProblem {
   count: Int!
 }
@@ -554,10 +562,14 @@ type CoursePage {
   image: String!
   user: User!
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
+  pointsA(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointA!]
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application!]
+  pointATests(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointATest!]
   tags: [String!]!
   courseType: CourseType
   students: [ID!]!
+  price: Int
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -574,10 +586,14 @@ input CoursePageCreateInput {
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
+  price: Int
+  orders: OrderCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateManyWithoutUserInput {
@@ -595,6 +611,21 @@ input CoursePageCreateOneWithoutLessonsInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageCreateOneWithoutOrdersInput {
+  create: CoursePageCreateWithoutOrdersInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreateOneWithoutPointATestsInput {
+  create: CoursePageCreateWithoutPointATestsInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreateOneWithoutPointsAInput {
+  create: CoursePageCreateWithoutPointsAInput
+  connect: CoursePageWhereUniqueInput
+}
+
 input CoursePageCreatestudentsInput {
   set: [ID!]
 }
@@ -609,9 +640,13 @@ input CoursePageCreateWithoutApplicationsInput {
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
+  price: Int
+  orders: OrderCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutLessonsInput {
@@ -619,10 +654,59 @@ input CoursePageCreateWithoutLessonsInput {
   description: String!
   image: String!
   user: UserCreateOneWithoutCoursePagesInput!
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  price: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutOrdersInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  price: Int
+}
+
+input CoursePageCreateWithoutPointATestsInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
+  price: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutPointsAInput {
+  title: String!
+  description: String!
+  image: String!
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  price: Int
+  orders: OrderCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutUserInput {
@@ -630,10 +714,14 @@ input CoursePageCreateWithoutUserInput {
   description: String!
   image: String!
   lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
+  price: Int
+  orders: OrderCreateManyWithoutCoursePageInput
 }
 
 type CoursePageEdge {
@@ -652,6 +740,8 @@ enum CoursePageOrderByInput {
   image_DESC
   courseType_ASC
   courseType_DESC
+  price_ASC
+  price_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -666,6 +756,7 @@ type CoursePagePreviousValues {
   tags: [String!]!
   courseType: CourseType
   students: [ID!]!
+  price: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -694,10 +785,14 @@ input CoursePageUpdateInput {
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
+  price: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateManyWithoutUserInput {
@@ -723,6 +818,29 @@ input CoursePageUpdateOneRequiredWithoutLessonsInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageUpdateOneRequiredWithoutOrdersInput {
+  create: CoursePageCreateWithoutOrdersInput
+  update: CoursePageUpdateWithoutOrdersDataInput
+  upsert: CoursePageUpsertWithoutOrdersInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageUpdateOneRequiredWithoutPointsAInput {
+  create: CoursePageCreateWithoutPointsAInput
+  update: CoursePageUpdateWithoutPointsADataInput
+  upsert: CoursePageUpsertWithoutPointsAInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageUpdateOneWithoutPointATestsInput {
+  create: CoursePageCreateWithoutPointATestsInput
+  update: CoursePageUpdateWithoutPointATestsDataInput
+  upsert: CoursePageUpsertWithoutPointATestsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CoursePageWhereUniqueInput
+}
+
 input CoursePageUpdatestudentsInput {
   set: [ID!]
 }
@@ -737,9 +855,13 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
+  price: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutLessonsDataInput {
@@ -747,10 +869,59 @@ input CoursePageUpdateWithoutLessonsDataInput {
   description: String
   image: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  price: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutOrdersDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  price: Int
+}
+
+input CoursePageUpdateWithoutPointATestsDataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
+  price: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutPointsADataInput {
+  title: String
+  description: String
+  image: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  price: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutUserDataInput {
@@ -758,10 +929,14 @@ input CoursePageUpdateWithoutUserDataInput {
   description: String
   image: String
   lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
+  price: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutUserInput {
@@ -777,6 +952,21 @@ input CoursePageUpsertWithoutApplicationsInput {
 input CoursePageUpsertWithoutLessonsInput {
   update: CoursePageUpdateWithoutLessonsDataInput!
   create: CoursePageCreateWithoutLessonsInput!
+}
+
+input CoursePageUpsertWithoutOrdersInput {
+  update: CoursePageUpdateWithoutOrdersDataInput!
+  create: CoursePageCreateWithoutOrdersInput!
+}
+
+input CoursePageUpsertWithoutPointATestsInput {
+  update: CoursePageUpdateWithoutPointATestsDataInput!
+  create: CoursePageCreateWithoutPointATestsInput!
+}
+
+input CoursePageUpsertWithoutPointsAInput {
+  update: CoursePageUpdateWithoutPointsADataInput!
+  create: CoursePageCreateWithoutPointsAInput!
 }
 
 input CoursePageUpsertWithWhereUniqueWithoutUserInput {
@@ -846,13 +1036,30 @@ input CoursePageWhereInput {
   lessons_every: LessonWhereInput
   lessons_some: LessonWhereInput
   lessons_none: LessonWhereInput
+  pointsA_every: PointAWhereInput
+  pointsA_some: PointAWhereInput
+  pointsA_none: PointAWhereInput
   applications_every: ApplicationWhereInput
   applications_some: ApplicationWhereInput
   applications_none: ApplicationWhereInput
+  pointATests_every: PointATestWhereInput
+  pointATests_some: PointATestWhereInput
+  pointATests_none: PointATestWhereInput
   courseType: CourseType
   courseType_not: CourseType
   courseType_in: [CourseType!]
   courseType_not_in: [CourseType!]
+  price: Int
+  price_not: Int
+  price_in: [Int!]
+  price_not_in: [Int!]
+  price_lt: Int
+  price_lte: Int
+  price_gt: Int
+  price_gte: Int
+  orders_every: OrderWhereInput
+  orders_some: OrderWhereInput
+  orders_none: OrderWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -881,6 +1088,7 @@ input CoursePageWhereUniqueInput {
 enum CourseType {
   PUBLIC
   PRIVATE
+  FORMONEY
 }
 
 scalar DateTime
@@ -1131,17 +1339,19 @@ input LessonUpdateOneRequiredWithoutProblemsInput {
   connect: LessonWhereUniqueInput
 }
 
-input LessonUpdateOneRequiredWithoutTestsInput {
-  create: LessonCreateWithoutTestsInput
-  update: LessonUpdateWithoutTestsDataInput
-  upsert: LessonUpsertWithoutTestsInput
-  connect: LessonWhereUniqueInput
-}
-
 input LessonUpdateOneRequiredWithoutTexteditorsInput {
   create: LessonCreateWithoutTexteditorsInput
   update: LessonUpdateWithoutTexteditorsDataInput
   upsert: LessonUpsertWithoutTexteditorsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonUpdateOneWithoutTestsInput {
+  create: LessonCreateWithoutTestsInput
+  update: LessonUpdateWithoutTestsDataInput
+  upsert: LessonUpsertWithoutTestsInput
+  delete: Boolean
+  disconnect: Boolean
   connect: LessonWhereUniqueInput
 }
 
@@ -1416,6 +1626,18 @@ type Mutation {
   upsertOrder(where: OrderWhereUniqueInput!, create: OrderCreateInput!, update: OrderUpdateInput!): Order!
   deleteOrder(where: OrderWhereUniqueInput!): Order
   deleteManyOrders(where: OrderWhereInput): BatchPayload!
+  createPointA(data: PointACreateInput!): PointA!
+  updatePointA(data: PointAUpdateInput!, where: PointAWhereUniqueInput!): PointA
+  updateManyPointAs(data: PointAUpdateInput!, where: PointAWhereInput): BatchPayload!
+  upsertPointA(where: PointAWhereUniqueInput!, create: PointACreateInput!, update: PointAUpdateInput!): PointA!
+  deletePointA(where: PointAWhereUniqueInput!): PointA
+  deleteManyPointAs(where: PointAWhereInput): BatchPayload!
+  createPointATest(data: PointATestCreateInput!): PointATest!
+  updatePointATest(data: PointATestUpdateInput!, where: PointATestWhereUniqueInput!): PointATest
+  updateManyPointATests(data: PointATestUpdateInput!, where: PointATestWhereInput): BatchPayload!
+  upsertPointATest(where: PointATestWhereUniqueInput!, create: PointATestCreateInput!, update: PointATestUpdateInput!): PointATest!
+  deletePointATest(where: PointATestWhereUniqueInput!): PointATest
+  deleteManyPointATests(where: PointATestWhereInput): BatchPayload!
   createProblem(data: ProblemCreateInput!): Problem!
   updateProblem(data: ProblemUpdateInput!, where: ProblemWhereUniqueInput!): Problem
   updateManyProblems(data: ProblemUpdateInput!, where: ProblemWhereInput): BatchPayload!
@@ -1472,10 +1694,13 @@ interface Node {
 
 type Order {
   id: ID!
+  paymentId: String
+  coursePage: CoursePage!
   coursePageID: ID!
   price: Int!
   paid: Boolean
-  payer: ID!
+  user: User!
+  userID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1487,10 +1712,41 @@ type OrderConnection {
 }
 
 input OrderCreateInput {
+  paymentId: String
+  coursePage: CoursePageCreateOneWithoutOrdersInput!
   coursePageID: ID!
   price: Int!
   paid: Boolean
-  payer: ID!
+  user: UserCreateOneWithoutOrdersInput!
+  userID: ID
+}
+
+input OrderCreateManyWithoutCoursePageInput {
+  create: [OrderCreateWithoutCoursePageInput!]
+  connect: [OrderWhereUniqueInput!]
+}
+
+input OrderCreateManyWithoutUserInput {
+  create: [OrderCreateWithoutUserInput!]
+  connect: [OrderWhereUniqueInput!]
+}
+
+input OrderCreateWithoutCoursePageInput {
+  paymentId: String
+  coursePageID: ID!
+  price: Int!
+  paid: Boolean
+  user: UserCreateOneWithoutOrdersInput!
+  userID: ID
+}
+
+input OrderCreateWithoutUserInput {
+  paymentId: String
+  coursePage: CoursePageCreateOneWithoutOrdersInput!
+  coursePageID: ID!
+  price: Int!
+  paid: Boolean
+  userID: ID
 }
 
 type OrderEdge {
@@ -1501,14 +1757,16 @@ type OrderEdge {
 enum OrderOrderByInput {
   id_ASC
   id_DESC
+  paymentId_ASC
+  paymentId_DESC
   coursePageID_ASC
   coursePageID_DESC
   price_ASC
   price_DESC
   paid_ASC
   paid_DESC
-  payer_ASC
-  payer_DESC
+  userID_ASC
+  userID_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1517,10 +1775,11 @@ enum OrderOrderByInput {
 
 type OrderPreviousValues {
   id: ID!
+  paymentId: String
   coursePageID: ID!
   price: Int!
   paid: Boolean
-  payer: ID!
+  userID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1544,10 +1803,71 @@ input OrderSubscriptionWhereInput {
 }
 
 input OrderUpdateInput {
+  paymentId: String
+  coursePage: CoursePageUpdateOneRequiredWithoutOrdersInput
   coursePageID: ID
   price: Int
   paid: Boolean
-  payer: ID
+  user: UserUpdateOneRequiredWithoutOrdersInput
+  userID: ID
+}
+
+input OrderUpdateManyWithoutCoursePageInput {
+  create: [OrderCreateWithoutCoursePageInput!]
+  delete: [OrderWhereUniqueInput!]
+  connect: [OrderWhereUniqueInput!]
+  disconnect: [OrderWhereUniqueInput!]
+  update: [OrderUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [OrderUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input OrderUpdateManyWithoutUserInput {
+  create: [OrderCreateWithoutUserInput!]
+  delete: [OrderWhereUniqueInput!]
+  connect: [OrderWhereUniqueInput!]
+  disconnect: [OrderWhereUniqueInput!]
+  update: [OrderUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [OrderUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input OrderUpdateWithoutCoursePageDataInput {
+  paymentId: String
+  coursePageID: ID
+  price: Int
+  paid: Boolean
+  user: UserUpdateOneRequiredWithoutOrdersInput
+  userID: ID
+}
+
+input OrderUpdateWithoutUserDataInput {
+  paymentId: String
+  coursePage: CoursePageUpdateOneRequiredWithoutOrdersInput
+  coursePageID: ID
+  price: Int
+  paid: Boolean
+  userID: ID
+}
+
+input OrderUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: OrderWhereUniqueInput!
+  data: OrderUpdateWithoutCoursePageDataInput!
+}
+
+input OrderUpdateWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput!
+  data: OrderUpdateWithoutUserDataInput!
+}
+
+input OrderUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: OrderWhereUniqueInput!
+  update: OrderUpdateWithoutCoursePageDataInput!
+  create: OrderCreateWithoutCoursePageInput!
+}
+
+input OrderUpsertWithWhereUniqueWithoutUserInput {
+  where: OrderWhereUniqueInput!
+  update: OrderUpdateWithoutUserDataInput!
+  create: OrderCreateWithoutUserInput!
 }
 
 input OrderWhereInput {
@@ -1565,6 +1885,21 @@ input OrderWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  paymentId: String
+  paymentId_not: String
+  paymentId_in: [String!]
+  paymentId_not_in: [String!]
+  paymentId_lt: String
+  paymentId_lte: String
+  paymentId_gt: String
+  paymentId_gte: String
+  paymentId_contains: String
+  paymentId_not_contains: String
+  paymentId_starts_with: String
+  paymentId_not_starts_with: String
+  paymentId_ends_with: String
+  paymentId_not_ends_with: String
+  coursePage: CoursePageWhereInput
   coursePageID: ID
   coursePageID_not: ID
   coursePageID_in: [ID!]
@@ -1589,20 +1924,21 @@ input OrderWhereInput {
   price_gte: Int
   paid: Boolean
   paid_not: Boolean
-  payer: ID
-  payer_not: ID
-  payer_in: [ID!]
-  payer_not_in: [ID!]
-  payer_lt: ID
-  payer_lte: ID
-  payer_gt: ID
-  payer_gte: ID
-  payer_contains: ID
-  payer_not_contains: ID
-  payer_starts_with: ID
-  payer_not_starts_with: ID
-  payer_ends_with: ID
-  payer_not_ends_with: ID
+  user: UserWhereInput
+  userID: ID
+  userID_not: ID
+  userID_in: [ID!]
+  userID_not_in: [ID!]
+  userID_lt: ID
+  userID_lte: ID
+  userID_gt: ID
+  userID_gte: ID
+  userID_contains: ID
+  userID_not_contains: ID
+  userID_starts_with: ID
+  userID_not_starts_with: ID
+  userID_ends_with: ID
+  userID_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1642,6 +1978,611 @@ enum Permission {
   CASEUPDATE
   CASEDELETE
   PERMISSIONUPDATE
+}
+
+type PointA {
+  id: ID!
+  description: String
+  coursePage: CoursePage!
+  coursePageID: ID
+  user: User!
+  pointATests(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointATest!]
+}
+
+type PointAConnection {
+  pageInfo: PageInfo!
+  edges: [PointAEdge]!
+  aggregate: AggregatePointA!
+}
+
+input PointACreateInput {
+  description: String
+  coursePage: CoursePageCreateOneWithoutPointsAInput!
+  coursePageID: ID
+  user: UserCreateOneWithoutPointsAInput!
+  pointATests: PointATestCreateManyInput
+}
+
+input PointACreateManyWithoutCoursePageInput {
+  create: [PointACreateWithoutCoursePageInput!]
+  connect: [PointAWhereUniqueInput!]
+}
+
+input PointACreateManyWithoutUserInput {
+  create: [PointACreateWithoutUserInput!]
+  connect: [PointAWhereUniqueInput!]
+}
+
+input PointACreateWithoutCoursePageInput {
+  description: String
+  coursePageID: ID
+  user: UserCreateOneWithoutPointsAInput!
+  pointATests: PointATestCreateManyInput
+}
+
+input PointACreateWithoutUserInput {
+  description: String
+  coursePage: CoursePageCreateOneWithoutPointsAInput!
+  coursePageID: ID
+  pointATests: PointATestCreateManyInput
+}
+
+type PointAEdge {
+  node: PointA!
+  cursor: String!
+}
+
+enum PointAOrderByInput {
+  id_ASC
+  id_DESC
+  description_ASC
+  description_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PointAPreviousValues {
+  id: ID!
+  description: String
+  coursePageID: ID
+}
+
+type PointASubscriptionPayload {
+  mutation: MutationType!
+  node: PointA
+  updatedFields: [String!]
+  previousValues: PointAPreviousValues
+}
+
+input PointASubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PointAWhereInput
+  AND: [PointASubscriptionWhereInput!]
+  OR: [PointASubscriptionWhereInput!]
+  NOT: [PointASubscriptionWhereInput!]
+}
+
+type PointATest {
+  id: ID!
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: User!
+  coursePage: CoursePage
+  coursePageID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PointATestConnection {
+  pageInfo: PageInfo!
+  edges: [PointATestEdge]!
+  aggregate: AggregatePointATest!
+}
+
+input PointATestCreateInput {
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: UserCreateOneInput!
+  coursePage: CoursePageCreateOneWithoutPointATestsInput
+  coursePageID: ID
+}
+
+input PointATestCreateManyInput {
+  create: [PointATestCreateInput!]
+  connect: [PointATestWhereUniqueInput!]
+}
+
+input PointATestCreateManyWithoutCoursePageInput {
+  create: [PointATestCreateWithoutCoursePageInput!]
+  connect: [PointATestWhereUniqueInput!]
+}
+
+input PointATestCreateWithoutCoursePageInput {
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: UserCreateOneInput!
+  coursePageID: ID
+}
+
+type PointATestEdge {
+  node: PointATest!
+  cursor: String!
+}
+
+enum PointATestOrderByInput {
+  id_ASC
+  id_DESC
+  question_ASC
+  question_DESC
+  answer1_ASC
+  answer1_DESC
+  answer1Correct_ASC
+  answer1Correct_DESC
+  answer2_ASC
+  answer2_DESC
+  answer2Correct_ASC
+  answer2Correct_DESC
+  answer3_ASC
+  answer3_DESC
+  answer3Correct_ASC
+  answer3Correct_DESC
+  answer4_ASC
+  answer4_DESC
+  answer4Correct_ASC
+  answer4Correct_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PointATestPreviousValues {
+  id: ID!
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  coursePageID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PointATestSubscriptionPayload {
+  mutation: MutationType!
+  node: PointATest
+  updatedFields: [String!]
+  previousValues: PointATestPreviousValues
+}
+
+input PointATestSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PointATestWhereInput
+  AND: [PointATestSubscriptionWhereInput!]
+  OR: [PointATestSubscriptionWhereInput!]
+  NOT: [PointATestSubscriptionWhereInput!]
+}
+
+input PointATestUpdateDataInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: UserUpdateOneRequiredInput
+  coursePage: CoursePageUpdateOneWithoutPointATestsInput
+  coursePageID: ID
+}
+
+input PointATestUpdateInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: UserUpdateOneRequiredInput
+  coursePage: CoursePageUpdateOneWithoutPointATestsInput
+  coursePageID: ID
+}
+
+input PointATestUpdateManyInput {
+  create: [PointATestCreateInput!]
+  update: [PointATestUpdateWithWhereUniqueNestedInput!]
+  upsert: [PointATestUpsertWithWhereUniqueNestedInput!]
+  delete: [PointATestWhereUniqueInput!]
+  connect: [PointATestWhereUniqueInput!]
+  disconnect: [PointATestWhereUniqueInput!]
+}
+
+input PointATestUpdateManyWithoutCoursePageInput {
+  create: [PointATestCreateWithoutCoursePageInput!]
+  delete: [PointATestWhereUniqueInput!]
+  connect: [PointATestWhereUniqueInput!]
+  disconnect: [PointATestWhereUniqueInput!]
+  update: [PointATestUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [PointATestUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input PointATestUpdateWithoutCoursePageDataInput {
+  question: String
+  answer1: String
+  answer1Correct: String
+  answer2: String
+  answer2Correct: String
+  answer3: String
+  answer3Correct: String
+  answer4: String
+  answer4Correct: String
+  user: UserUpdateOneRequiredInput
+  coursePageID: ID
+}
+
+input PointATestUpdateWithWhereUniqueNestedInput {
+  where: PointATestWhereUniqueInput!
+  data: PointATestUpdateDataInput!
+}
+
+input PointATestUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: PointATestWhereUniqueInput!
+  data: PointATestUpdateWithoutCoursePageDataInput!
+}
+
+input PointATestUpsertWithWhereUniqueNestedInput {
+  where: PointATestWhereUniqueInput!
+  update: PointATestUpdateDataInput!
+  create: PointATestCreateInput!
+}
+
+input PointATestUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: PointATestWhereUniqueInput!
+  update: PointATestUpdateWithoutCoursePageDataInput!
+  create: PointATestCreateWithoutCoursePageInput!
+}
+
+input PointATestWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  question: String
+  question_not: String
+  question_in: [String!]
+  question_not_in: [String!]
+  question_lt: String
+  question_lte: String
+  question_gt: String
+  question_gte: String
+  question_contains: String
+  question_not_contains: String
+  question_starts_with: String
+  question_not_starts_with: String
+  question_ends_with: String
+  question_not_ends_with: String
+  answer1: String
+  answer1_not: String
+  answer1_in: [String!]
+  answer1_not_in: [String!]
+  answer1_lt: String
+  answer1_lte: String
+  answer1_gt: String
+  answer1_gte: String
+  answer1_contains: String
+  answer1_not_contains: String
+  answer1_starts_with: String
+  answer1_not_starts_with: String
+  answer1_ends_with: String
+  answer1_not_ends_with: String
+  answer1Correct: String
+  answer1Correct_not: String
+  answer1Correct_in: [String!]
+  answer1Correct_not_in: [String!]
+  answer1Correct_lt: String
+  answer1Correct_lte: String
+  answer1Correct_gt: String
+  answer1Correct_gte: String
+  answer1Correct_contains: String
+  answer1Correct_not_contains: String
+  answer1Correct_starts_with: String
+  answer1Correct_not_starts_with: String
+  answer1Correct_ends_with: String
+  answer1Correct_not_ends_with: String
+  answer2: String
+  answer2_not: String
+  answer2_in: [String!]
+  answer2_not_in: [String!]
+  answer2_lt: String
+  answer2_lte: String
+  answer2_gt: String
+  answer2_gte: String
+  answer2_contains: String
+  answer2_not_contains: String
+  answer2_starts_with: String
+  answer2_not_starts_with: String
+  answer2_ends_with: String
+  answer2_not_ends_with: String
+  answer2Correct: String
+  answer2Correct_not: String
+  answer2Correct_in: [String!]
+  answer2Correct_not_in: [String!]
+  answer2Correct_lt: String
+  answer2Correct_lte: String
+  answer2Correct_gt: String
+  answer2Correct_gte: String
+  answer2Correct_contains: String
+  answer2Correct_not_contains: String
+  answer2Correct_starts_with: String
+  answer2Correct_not_starts_with: String
+  answer2Correct_ends_with: String
+  answer2Correct_not_ends_with: String
+  answer3: String
+  answer3_not: String
+  answer3_in: [String!]
+  answer3_not_in: [String!]
+  answer3_lt: String
+  answer3_lte: String
+  answer3_gt: String
+  answer3_gte: String
+  answer3_contains: String
+  answer3_not_contains: String
+  answer3_starts_with: String
+  answer3_not_starts_with: String
+  answer3_ends_with: String
+  answer3_not_ends_with: String
+  answer3Correct: String
+  answer3Correct_not: String
+  answer3Correct_in: [String!]
+  answer3Correct_not_in: [String!]
+  answer3Correct_lt: String
+  answer3Correct_lte: String
+  answer3Correct_gt: String
+  answer3Correct_gte: String
+  answer3Correct_contains: String
+  answer3Correct_not_contains: String
+  answer3Correct_starts_with: String
+  answer3Correct_not_starts_with: String
+  answer3Correct_ends_with: String
+  answer3Correct_not_ends_with: String
+  answer4: String
+  answer4_not: String
+  answer4_in: [String!]
+  answer4_not_in: [String!]
+  answer4_lt: String
+  answer4_lte: String
+  answer4_gt: String
+  answer4_gte: String
+  answer4_contains: String
+  answer4_not_contains: String
+  answer4_starts_with: String
+  answer4_not_starts_with: String
+  answer4_ends_with: String
+  answer4_not_ends_with: String
+  answer4Correct: String
+  answer4Correct_not: String
+  answer4Correct_in: [String!]
+  answer4Correct_not_in: [String!]
+  answer4Correct_lt: String
+  answer4Correct_lte: String
+  answer4Correct_gt: String
+  answer4Correct_gte: String
+  answer4Correct_contains: String
+  answer4Correct_not_contains: String
+  answer4Correct_starts_with: String
+  answer4Correct_not_starts_with: String
+  answer4Correct_ends_with: String
+  answer4Correct_not_ends_with: String
+  user: UserWhereInput
+  coursePage: CoursePageWhereInput
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [PointATestWhereInput!]
+  OR: [PointATestWhereInput!]
+  NOT: [PointATestWhereInput!]
+}
+
+input PointATestWhereUniqueInput {
+  id: ID
+}
+
+input PointAUpdateInput {
+  description: String
+  coursePage: CoursePageUpdateOneRequiredWithoutPointsAInput
+  coursePageID: ID
+  user: UserUpdateOneRequiredWithoutPointsAInput
+  pointATests: PointATestUpdateManyInput
+}
+
+input PointAUpdateManyWithoutCoursePageInput {
+  create: [PointACreateWithoutCoursePageInput!]
+  delete: [PointAWhereUniqueInput!]
+  connect: [PointAWhereUniqueInput!]
+  disconnect: [PointAWhereUniqueInput!]
+  update: [PointAUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [PointAUpsertWithWhereUniqueWithoutCoursePageInput!]
+}
+
+input PointAUpdateManyWithoutUserInput {
+  create: [PointACreateWithoutUserInput!]
+  delete: [PointAWhereUniqueInput!]
+  connect: [PointAWhereUniqueInput!]
+  disconnect: [PointAWhereUniqueInput!]
+  update: [PointAUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [PointAUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input PointAUpdateWithoutCoursePageDataInput {
+  description: String
+  coursePageID: ID
+  user: UserUpdateOneRequiredWithoutPointsAInput
+  pointATests: PointATestUpdateManyInput
+}
+
+input PointAUpdateWithoutUserDataInput {
+  description: String
+  coursePage: CoursePageUpdateOneRequiredWithoutPointsAInput
+  coursePageID: ID
+  pointATests: PointATestUpdateManyInput
+}
+
+input PointAUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: PointAWhereUniqueInput!
+  data: PointAUpdateWithoutCoursePageDataInput!
+}
+
+input PointAUpdateWithWhereUniqueWithoutUserInput {
+  where: PointAWhereUniqueInput!
+  data: PointAUpdateWithoutUserDataInput!
+}
+
+input PointAUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: PointAWhereUniqueInput!
+  update: PointAUpdateWithoutCoursePageDataInput!
+  create: PointACreateWithoutCoursePageInput!
+}
+
+input PointAUpsertWithWhereUniqueWithoutUserInput {
+  where: PointAWhereUniqueInput!
+  update: PointAUpdateWithoutUserDataInput!
+  create: PointACreateWithoutUserInput!
+}
+
+input PointAWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
+  coursePage: CoursePageWhereInput
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  user: UserWhereInput
+  pointATests_every: PointATestWhereInput
+  pointATests_some: PointATestWhereInput
+  pointATests_none: PointATestWhereInput
+  AND: [PointAWhereInput!]
+  OR: [PointAWhereInput!]
+  NOT: [PointAWhereInput!]
+}
+
+input PointAWhereUniqueInput {
+  id: ID
 }
 
 type Problem {
@@ -1950,6 +2891,12 @@ type Query {
   order(where: OrderWhereUniqueInput!): Order
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
   ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
+  pointA(where: PointAWhereUniqueInput!): PointA
+  pointAs(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointA]!
+  pointAsConnection(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointAConnection!
+  pointATest(where: PointATestWhereUniqueInput!): PointATest
+  pointATests(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointATest]!
+  pointATestsConnection(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointATestConnection!
   problem(where: ProblemWhereUniqueInput!): Problem
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem]!
   problemsConnection(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProblemConnection!
@@ -2750,6 +3697,8 @@ type Subscription {
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   order(where: OrderSubscriptionWhereInput): OrderSubscriptionPayload
+  pointA(where: PointASubscriptionWhereInput): PointASubscriptionPayload
+  pointATest(where: PointATestSubscriptionWhereInput): PointATestSubscriptionPayload
   problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
   sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
   sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload
@@ -2771,8 +3720,8 @@ type Test {
   answer4: String
   answer4Correct: String
   user: User!
-  lesson: Lesson!
-  lessonID: ID!
+  lesson: Lesson
+  lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2794,8 +3743,8 @@ input TestCreateInput {
   answer4: String
   answer4Correct: String
   user: UserCreateOneWithoutTestsInput!
-  lesson: LessonCreateOneWithoutTestsInput!
-  lessonID: ID!
+  lesson: LessonCreateOneWithoutTestsInput
+  lessonID: ID
 }
 
 input TestCreateManyWithoutLessonInput {
@@ -2819,7 +3768,7 @@ input TestCreateWithoutLessonInput {
   answer4: String
   answer4Correct: String
   user: UserCreateOneWithoutTestsInput!
-  lessonID: ID!
+  lessonID: ID
 }
 
 input TestCreateWithoutUserInput {
@@ -2832,8 +3781,8 @@ input TestCreateWithoutUserInput {
   answer3Correct: String
   answer4: String
   answer4Correct: String
-  lesson: LessonCreateOneWithoutTestsInput!
-  lessonID: ID!
+  lesson: LessonCreateOneWithoutTestsInput
+  lessonID: ID
 }
 
 type TestEdge {
@@ -2881,7 +3830,7 @@ type TestPreviousValues {
   answer3Correct: String
   answer4: String
   answer4Correct: String
-  lessonID: ID!
+  lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2915,7 +3864,7 @@ input TestUpdateInput {
   answer4: String
   answer4Correct: String
   user: UserUpdateOneRequiredWithoutTestsInput
-  lesson: LessonUpdateOneRequiredWithoutTestsInput
+  lesson: LessonUpdateOneWithoutTestsInput
   lessonID: ID
 }
 
@@ -2961,7 +3910,7 @@ input TestUpdateWithoutUserDataInput {
   answer3Correct: String
   answer4: String
   answer4Correct: String
-  lesson: LessonUpdateOneRequiredWithoutTestsInput
+  lesson: LessonUpdateOneWithoutTestsInput
   lessonID: ID
 }
 
@@ -3451,8 +4400,10 @@ type User {
   sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal!]
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
+  pointsA(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointA!]
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem!]
   construction(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction!]
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   textEditor(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor!]
   isFamiliar: Boolean!
   createdAt: DateTime!
@@ -3483,8 +4434,10 @@ input UserCreateInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3506,6 +4459,16 @@ input UserCreateOneWithoutCoursePagesInput {
 
 input UserCreateOneWithoutLessonsInput {
   create: UserCreateWithoutLessonsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutOrdersInput {
+  create: UserCreateWithoutOrdersInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutPointsAInput {
+  create: UserCreateWithoutPointsAInput
   connect: UserWhereUniqueInput
 }
 
@@ -3561,7 +4524,9 @@ input UserCreateWithoutConstructionInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3580,8 +4545,10 @@ input UserCreateWithoutCoursePagesInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3600,8 +4567,54 @@ input UserCreateWithoutLessonsInput {
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
+input UserCreateWithoutOrdersInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
+input UserCreateWithoutPointsAInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3621,7 +4634,9 @@ input UserCreateWithoutProblemsInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3640,8 +4655,10 @@ input UserCreateWithoutSandboxPageGoalsInput {
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3660,8 +4677,10 @@ input UserCreateWithoutSandboxPagesInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3680,8 +4699,10 @@ input UserCreateWithoutTestsInput {
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3701,8 +4722,10 @@ input UserCreateWithoutTextEditorInput {
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
+  pointsA: PointACreateManyWithoutUserInput
   problems: ProblemCreateManyWithoutUserInput
   construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -3780,8 +4803,10 @@ input UserUpdateDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3805,8 +4830,10 @@ input UserUpdateInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3836,6 +4863,20 @@ input UserUpdateOneRequiredWithoutLessonsInput {
   create: UserCreateWithoutLessonsInput
   update: UserUpdateWithoutLessonsDataInput
   upsert: UserUpsertWithoutLessonsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutOrdersInput {
+  create: UserCreateWithoutOrdersInput
+  update: UserUpdateWithoutOrdersDataInput
+  upsert: UserUpsertWithoutOrdersInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutPointsAInput {
+  create: UserCreateWithoutPointsAInput
+  update: UserUpdateWithoutPointsADataInput
+  upsert: UserUpsertWithoutPointsAInput
   connect: UserWhereUniqueInput
 }
 
@@ -3901,7 +4942,9 @@ input UserUpdateWithoutConstructionDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3920,8 +4963,10 @@ input UserUpdateWithoutCoursePagesDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3940,8 +4985,54 @@ input UserUpdateWithoutLessonsDataInput {
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
+input UserUpdateWithoutOrdersDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+}
+
+input UserUpdateWithoutPointsADataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3961,7 +5052,9 @@ input UserUpdateWithoutProblemsDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -3980,8 +5073,10 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -4000,8 +5095,10 @@ input UserUpdateWithoutSandboxPagesDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -4020,8 +5117,10 @@ input UserUpdateWithoutTestsDataInput {
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
@@ -4041,8 +5140,10 @@ input UserUpdateWithoutTextEditorDataInput {
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
+  pointsA: PointAUpdateManyWithoutUserInput
   problems: ProblemUpdateManyWithoutUserInput
   construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
   isFamiliar: Boolean
 }
 
@@ -4064,6 +5165,16 @@ input UserUpsertWithoutCoursePagesInput {
 input UserUpsertWithoutLessonsInput {
   update: UserUpdateWithoutLessonsDataInput!
   create: UserCreateWithoutLessonsInput!
+}
+
+input UserUpsertWithoutOrdersInput {
+  update: UserUpdateWithoutOrdersDataInput!
+  create: UserCreateWithoutOrdersInput!
+}
+
+input UserUpsertWithoutPointsAInput {
+  update: UserUpdateWithoutPointsADataInput!
+  create: UserCreateWithoutPointsAInput!
 }
 
 input UserUpsertWithoutProblemsInput {
@@ -4185,12 +5296,18 @@ input UserWhereInput {
   tests_every: TestWhereInput
   tests_some: TestWhereInput
   tests_none: TestWhereInput
+  pointsA_every: PointAWhereInput
+  pointsA_some: PointAWhereInput
+  pointsA_none: PointAWhereInput
   problems_every: ProblemWhereInput
   problems_some: ProblemWhereInput
   problems_none: ProblemWhereInput
   construction_every: ConstructionWhereInput
   construction_some: ConstructionWhereInput
   construction_none: ConstructionWhereInput
+  orders_every: OrderWhereInput
+  orders_some: OrderWhereInput
+  orders_none: OrderWhereInput
   textEditor_every: TextEditorWhereInput
   textEditor_some: TextEditorWhereInput
   textEditor_none: TextEditorWhereInput

@@ -43,8 +43,8 @@ const Button = styled.button`
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
-    width: 95%;
-    margin: 0%;
+    width: 135px;
+    margin: 2px;
     font-size:1.4rem;
     cursor: pointer;
     &:hover {
@@ -121,7 +121,7 @@ class EnrollCoursePage extends Component {
                                             <Button 
                                                 onClick={e => this.onClick(e, 
                                                     enrollOnCourse, addUserToCoursePage)}>
-                                            {this.state.subjects.includes(this.props.coursePage.id) ? "Войти" : "Зарегистрироваться"}
+                                            {this.state.subjects.includes(this.props.coursePage.id) ? "Войти" : "Регистрация"}
                                     </Button>
                         )}
                     </Mutation>

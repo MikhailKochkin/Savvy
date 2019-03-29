@@ -1,9 +1,25 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const postmark = require("postmark");
 const { randomBytes } = require('crypto');
 const { promisify } = require('util');
-const { transport, makeANiceEmail } = require('../mail');
+// const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require("../utils");
+
+const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
+const makeANiceEmail = text => `
+  <div className="email" style="
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>Привет!</h2>
+    <p>Приятно познакомиться!</p>
+    <p>${text}</p>
+    <p>Основатель Savvy,Михаил Кочкин</p>
+  </div>
+`;
 
 const Mutations = {
   async updateUser(parent, args, ctx, info) {
@@ -21,14 +37,13 @@ const Mutations = {
       },
       info
     );
-    // console.log("Updated User!")
     return updatedUser; 
   },
   async requestReset(parent, args, ctx, info) {
     // 1. Check if this is a real user
     const user = await ctx.db.query.user({ where: { email: args.email } });
     if (!user) {
-      throw new Error(`No such user found for email ${args.email}`);
+      throw new Error(`Нет пользователя с электронной почтой: ${args.email}`);
     }
     // 2. Set a reset token and expiry on that user
     const randomBytesPromiseified = promisify(randomBytes);
@@ -39,17 +54,23 @@ const Mutations = {
       data: { resetToken, resetTokenExpiry },
     });
     // 3. Email them that reset token
-    const mailRes = await transport.sendMail({
-      from: 'mikhailvkochkin@gmail.com',
-      to: user.email,
-      subject: 'Your Password Reset Token',
-      html: makeANiceEmail(`Вот твой токен для смены пароля
-      \n\n
-      <a href="${process.env
-        .FRONTEND_URL}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
+    const mailRes = await client.sendEmail(
+      {
+          From: "MikhailKochkin@savvvy.app",
+          To: user.email,
+          Subject: "Смена пароля",
+          HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
+          \n\n
+          <a href="${process.env
+            .FRONTEND_URL2}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
+      }
+    ).then(response => {
+      console.log("Sending message");
+      console.log(response.To);
+      console.log(response.Message);
     });
     // 4. Return the message
-    return { message: 'Thanks!' };
+    return { message: 'Спасибо!' };
   },
   async resetPassword(parent, args, ctx, info) {
     // 1. check if the passwords match
@@ -112,6 +133,47 @@ const Mutations = {
     info
   );
     return coursePage;
+  },
+  async createPointA(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const coursePageID = args.coursePageID
+    delete args.id
+    // console.log(ctx.request.userId)
+    // console.log(coursePagedID)
+    if (!ctx.request.userId) {
+      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+    }
+    const PointA = await ctx.db.mutation.createPointA(
+        {
+        data: {
+            user: {
+              connect: { id: ctx.request.userId }
+            },
+            coursePage: {
+              connect: { id: coursePageID }
+            },
+            ...args
+        },
+    }, 
+    info
+  );
+    return PointA;
+  },
+  async updatePointA(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updatePointA(
+      {
+        data: updates,
+        where: {
+          id: args.id
+      },
+    }, 
+    info
+    );
   },
   async createTextEditor(parent, args, ctx, info) {
     // TODO: Check if they are logged in
@@ -297,12 +359,46 @@ const Mutations = {
       );
         return test;
     },
+    async createPointATest(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const coursePageID = args.coursePageID
+      delete args.id
+      // console.log(ctx.request.userId)
+      // console.log(coursePagedID)
+      if (!ctx.request.userId) {
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      }
+
+      const pointATest = await ctx.db.mutation.createPointATest(
+            {
+            data: {
+                user: {
+                  connect: { id: ctx.request.userId }
+                  },
+                coursePage: {
+                  connect: { id: coursePageID }
+                },
+                ...args
+            },
+        }, 
+        info
+      );
+        return pointATest;
+    },
+    
     async deleteTest(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson
       const test = await ctx.db.query.test({ where }, `{ id }`);
       //3. Delete it
       return ctx.db.mutation.deleteTest({ where }, info);
+    },
+    async deletePointATest(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the lesson
+      const pointATest = await ctx.db.query.pointATest({ where }, `{ id }`);
+      //3. Delete it
+      return ctx.db.mutation.deletePointATest({ where }, info);
     },
     async createProblem(parent, args, ctx, info) {
       // TODO: Check if they are logged in
@@ -530,9 +626,6 @@ const Mutations = {
     //1. find the case
     const coursePage = await ctx.db.query.coursePage({ where }, `{ id title user { id }}`);
     // console.log(coursePage)
-    // console.log(ctx.request.userId)
-    // console.log(ctx.request.userId)
-    // console.log(ctx.request.user.id)
     //2. check if they own the case or have the permissions
     //TODO
     const ownsCoursePage = coursePage.user.id === ctx.request.userId;
@@ -624,7 +717,7 @@ const Mutations = {
       }
     }, 
     info);
-  }
+  },
 };
 
 

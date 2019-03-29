@@ -28,20 +28,6 @@ const CREATE_TEXTEDITOR_MUTATION = gql`
   }
 `;
 
-// const PAGE_LESSONS_QUERY = gql`
-//   query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-//     lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
-//       id
-//       name
-//       number
-//       text
-//       user {
-//           id
-//       }
-//     }
-//   }
-// `;
-
 const Width = styled.div`
   display: flex;
   flex-direction: column;
@@ -53,71 +39,15 @@ const Width = styled.div`
   }
 `;
 
-const Container = styled.div`
-    border: 1px solid #F0F0F0;
-    border-radius: 5px;
-    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
-                0 5px 15px 0 rgba(0,0,0,0.08);
-    width: 60%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3 70px);
-    .video {
-        grid-area: first;
-    }
-    grid-template-areas:
-        "explain"
-        "first   ";
-    p, h4 {
-      padding: 0% 5%;
-    }
-    p > a {
-        font-weight: 700;
-    }
-    p > a:hover {
-        text-decoration: underline;
-    }
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-
-`;
-
-const Label = styled.label`
-    display: grid;
-    grid-template-columns: 20% 80%;
-    grid-template-rows: 100%;
-    justify-items: center;
-    align-items: center;
-    .first {
-        grid-area: first;
-    }
-
-    grid-template-areas:
-        "first second";
-    input {
-        height: 50%;
-        width: 80%;
-        border: 1px solid #ccc;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
-        border-radius: 3.5px;
-        padding: 2%;
-        font-size: 1.4rem;
-
-    }
-    @media (max-width: 600px) {
-        display: flex;
-        flex-direction: column;
+const Textarea = styled.textarea`
+    font-size: 1.6rem;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    line-height: 2.5rem;
+    padding: 10px;
+    @media (max-width: 800px) {
+        width: 400px;
     }
 `;
-
-const DynamicLoadedEditor = dynamic(
-  import('../editor/Editor'),
-  {
-    loading: () => (<p>Загрузка...</p>),
-    ssr: false
-  }
-)
 
 export default class CreateTextEditor extends Component {
     state = {
@@ -142,19 +72,15 @@ export default class CreateTextEditor extends Component {
           <AreYouATeacher
               subject={this.props.id}
           >
-              {/* <Link href={{
-                  pathname: '/coursePage',
-                  query: { id }
-                }}>
-                <a>
-                    <NavButton>Вернуться на страницу курса</NavButton>
-                </a>
-              </Link> */}
+            <Width>
+              <h2>Составьте свой редактор документа</h2>
+              <p>Составление документа происходит по определенным правилам. Если они вам не знакомы, 
+                обратитесь к администратору сайта <a href="https://vk.com/id4417564" target="_blank">Михаилу Кочкину</a></p>
               <label htmlFor="text">
-                        <textarea
+                        <Textarea
                             id="text"
                             name="text"
-                            placeholder="Текст задачи..."
+                            placeholder="Текст документа..."
                             cols={80}
                             rows={10}
                             spellcheck={true}
@@ -164,34 +90,6 @@ export default class CreateTextEditor extends Component {
                             onChange={this.handleChange}
                         />
                     </label>
-            {/* <Width>
-              <Container>
-              <h4 className="explain"> Напишите название и номер урока</h4>
-              <Label className="name" htmlFor="name">
-                  <p className="first">Название урока</p>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="Название урока"
-                      value={this.state.name}
-                      onChange={this.handleName}
-                    />
-                </Label>
-                <Label className="name" htmlFor="name">
-                  <p className="first">Номер урока</p>
-                    <input
-                      type="text"
-                      id="number"
-                      name="number"
-                      placeholder="Номер урока"
-                      value={this.state.number}
-                      onChange={this.handleNumber}
-                    />
-                </Label>
-              </Container>
-              </Width> */}
-              <Width>
               <Mutation 
                 mutation={CREATE_TEXTEDITOR_MUTATION} 
                 variables={{
@@ -210,12 +108,10 @@ export default class CreateTextEditor extends Component {
                       // call the mutation
                       const res = await createTextEditor();
                       console.log("Вроде бы получилось");
-                      
-                      // change the page to the single case page
-                      // Router.push({
-                      //   pathname: '/coursePage',
-                      //   query: {id: id}
-                      // })
+                      Router.push({
+                        pathname: '/lesson',
+                        query: {id: id}
+                      })
                     }}
                   >
                   Отправить на страницу курса

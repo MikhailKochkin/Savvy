@@ -10,6 +10,7 @@ enum Permission {
 enum CourseType {
   PUBLIC
   PRIVATE
+  FORMONEY
 }
 
 type User {
@@ -28,8 +29,10 @@ type User {
   sandboxPageGoals: [SandboxPageGoal] @relation(name: "UserSandboxPageGoals")
   lessons: [Lesson]!
   tests: [Test]!
+  pointsA: [PointA]!
   problems: [Problem]!
   construction: [Construction]!
+  orders: [Order]!
   textEditor: [TextEditor]!
   isFamiliar: Boolean! @default(value: "false")
   createdAt: DateTime!
@@ -42,10 +45,14 @@ type CoursePage {
   image: String!
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
+  pointsA: [PointA]! @relation(name: "CoursePagePointA" onDelete: CASCADE)
   applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
+  pointATests: [PointATest] @relation(name: "CoursePageTests" onDelete: CASCADE)
   tags: [String]
   courseType: CourseType
   students: [ID]
+  price: Int
+  orders: [Order] @relation(name: "CoursePageOrders" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -134,8 +141,28 @@ type Test {
   answer4: String
   answer4Correct: String
   user: User!
-  lesson: Lesson! @relation(name: "LessonTests")
-  lessonID: ID!
+  lesson: Lesson @relation(name: "LessonTests")
+  lessonID: ID
+  # coursePageID: ID
+  # pointAID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PointATest {
+  id: ID! @unique
+  question: String!
+  answer1: String!
+  answer1Correct: String!
+  answer2: String!
+  answer2Correct: String!
+  answer3: String
+  answer3Correct: String 
+  answer4: String
+  answer4Correct: String
+  user: User!
+  coursePage: CoursePage @relation(name: "CoursePageTests")
+  coursePageID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -176,10 +203,22 @@ type Application {
 
 type Order {
   id: ID! @unique
+  paymentId: String
+  coursePage: CoursePage! @relation(name: "CoursePageOrders")
   coursePageID: ID!
   price: Int!
   paid: Boolean @default(value: "false")
-  payer: ID!
+  user: User!
+  userID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type PointA {
+  id: ID! @unique
+  description: String
+  coursePage: CoursePage! @relation(name: "CoursePagePointA")
+  coursePageID: ID
+  user: User!
+  pointATests: [PointATest] @relation(name: "PointATests" onDelete: CASCADE)
 }

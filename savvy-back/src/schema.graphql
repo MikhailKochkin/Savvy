@@ -5,7 +5,10 @@ type SuccessMessage {
 }
 
 type Mutation {
-    createCoursePage(title: String!, description: String!, image: String, tags: [String], courseType: CourseType): CoursePage!
+    createPointA(description: String, coursePageID: ID!): PointA!
+    updatePointA(id: ID!, description: String): PointA
+    createCoursePage(title: String!, description: String!, image: String, tags: [String], courseType: CourseType, 
+    ,price: Int): CoursePage!
     updateCoursePage(id: ID!, title: String, description: String, image: String, courseType: CourseType): CoursePage
     createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     updateSandboxPage(id: ID!, title: String, description: String, image: String): SandboxPage
@@ -15,8 +18,12 @@ type Mutation {
     deleteLesson(id:ID!): Lesson
     createTest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
-        answer4Correct: String, lessonID: ID!): Test!
+        answer4Correct: String, lessonID: ID): Test!
     deleteTest(id:ID!): Test
+    createPointATest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
+        answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
+        answer4Correct: String, coursePageID: ID): PointATest!
+    deletePointATest(id:ID!): PointATest
     createProblem(text: String!, hints: String, solution: String, answer: String!,
         lessonID: ID!): Test!
     deleteProblem(id:ID!): Problem
@@ -50,6 +57,10 @@ type Mutation {
 type Query {
     coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, first: Int): [CoursePage]!
     coursePage(where: CoursePageWhereUniqueInput!): CoursePage
+    pointA(where: PointAWhereUniqueInput!): PointA
+    pointAs(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, first: Int): [PointA]!
+    pointATest(where: PointATestWhereUniqueInput!): PointATest
+    pointATests(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, first: Int): [PointATest]!
     sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, first: Int): [SandboxPage]!
     sandboxPagesConnection(where: SandboxPageWhereInput): SandboxPageConnection!
     sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, first: Int): [SandboxPageGoal]!
@@ -76,6 +87,7 @@ type Query {
     user(where: UserWhereUniqueInput!): User
     users(where: UserWhereInput!): [User]!
 }
+
 type User{
     id: ID!
     name: String!
