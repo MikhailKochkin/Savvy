@@ -8,7 +8,6 @@ import DeleteCoursePage from '../DeleteCoursePage';
 import EnrollCoursePage from '../EnrollCoursePage';
 import User from '../User';
 import Application from './Application'
-// import TakeMyMoney from '../TakeMyMoney';
 
 const CaseCard = styled.div`
     border: 1px lightgrey solid;
@@ -97,6 +96,13 @@ export default class Course extends Component {
         } else if (coursePage.courseType === "FORMONEY") {
             courseType = "Платный"
         }
+        let price;
+        if(coursePage.price) {
+            price = coursePage.price + " рублей"
+        } else  {
+            price = "Бесплатно"
+        }
+        coursePage.price
         const applicationsList = [];
         coursePage.applications.map(application => applicationsList.push(application.applicantId))
         return (
@@ -112,9 +118,7 @@ export default class Course extends Component {
                     <Author>{coursePage.user.name}</Author>
                     <p>Количество участников: {studentsArray.length}</p>
                     <p>Тип курса: {courseType}</p>
-                    {/* { me && me !== null && courseType === "Платный" &&
-                    <p>Стоимость курса: {coursePage.price} рублей</p>
-                    } */}
+                    <p>Стоимость курса: {price}</p>
                     <Buttons>
 
                     {coursePage.pointsA.length > 0 &&
@@ -137,7 +141,7 @@ export default class Course extends Component {
                         </a>
                     </Link>}
                     {me && me !== null && me.id !== coursePage.user.id 
-                    && !this.state.revealApplication && !applicationsList.includes(me.id) &&
+                    && !this.state.revealApplication && !applicationsList.includes(me.id) && courseType !== "Платный" &&
                     <EnrollCoursePage
                         coursePage = {coursePage}
                         studentsArray = {studentsArray}
@@ -145,7 +149,16 @@ export default class Course extends Component {
                         meData={me}
                         getInputReveal={this.myCallback}
 
-                    />} 
+                    />}
+                    {me && me !== null && me.id !== coursePage.user.id && courseType === "Платный" && subjectArray.includes(coursePage.id) &&
+                    <EnrollCoursePage
+                        coursePage = {coursePage}
+                        studentsArray = {studentsArray}
+                        subjectArray = {subjectArray}
+                        meData={me}
+                        getInputReveal={this.myCallback}
+
+                    />}
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
@@ -173,15 +186,6 @@ export default class Course extends Component {
                             Удалить
                         </DeleteCoursePage> 
                     </>}
-                    {/* {me !== null && courseType === "Платный" &&
-                    <TakeMyMoney
-                        coursePageID={coursePage.id}
-                        user={me.id}
-                        price={coursePage.price}
-                    >
-                    Купить
-                    </TakeMyMoney>
-                    } */}
                     </Buttons>
                     {me && this.state.revealApplication && 
                     <Application

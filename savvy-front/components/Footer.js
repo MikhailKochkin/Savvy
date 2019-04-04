@@ -21,7 +21,7 @@ const MissionContactStyles = styled.div`
     justify-content: space-between;
     padding: 2% 2%;
     div {
-        font-size: 2.2rem;
+        font-size: 1.8rem;
     }
     @media (max-width: 900px) {
         flex-direction: column;
@@ -60,8 +60,10 @@ const LegalAndSocial = styled.div`
     padding: 1% 2%;
     padding-bottom: 2%;
     font-size: 1.8rem;
-    a {
+    p {
         color: white;
+        margin: 0%;
+        padding-right: 10px;
     }
     div {
         padding: 0% 0%;
@@ -72,12 +74,16 @@ const LegalAndSocial = styled.div`
     a:hover, div > a:hover {
         color: #005987;
     }
+    .IP {
+        display: flex;
+        flex-direction: row;
+        
+    }
     @media (max-width: 900px) {
-        .year {
-            font-size: 1.2rem;;
-        }
-        a {
-            font-size: 1.2rem;
+        flex-direction: column;  
+        .IP {
+            display: flex;
+            flex-direction: column;  
         }
        
     }
@@ -87,33 +93,45 @@ const LegalAndSocial = styled.div`
 const Footer = () => (
     <FooterStyles>
         <MissionContactStyles>
-            <div className="motto">Наша задача – создавать новые инструменты для эффективного обучения <br/> и поиска нужной правовой информации</div>
+            <div className="motto">Savvy – это сайт для управления своими юридическими знаниями. <br/>
+            Здесь вы можете найти платные и бесплатные курсы по <br/> различным юридическим специальностям и 
+            юридическому английскому, <br/> а также делиться своим мнением по различным вопросам в песочницах.
+            </div>
             <LinksStyles>
                 <Link href={{
-                        pathname: '/training',
+                        pathname: '/legal',
+                        query: { name: 'terms' }
                     }}>
                     <a>
-                        Про Savvy
+                        Пользовательское соглашение
                     </a>
                 </Link>
                 <Link href={{
-                        pathname: '/courses',
+                        pathname: '/legal',
+                        query: { name: 'privacy' }
                     }}>
                     <a>
-                        Курсы и песочницы
+                        Политика обработки персональных данных
                     </a>
                 </Link>
+                <Link href={{
+                        pathname: '/legal',
+                        query: { name: 'offer' }
+                    }}>
+                    <a>
+                        Оферта
+                    </a>
+                </Link>
+                <a href="mailto:mikhailkochkin@savvvy.app">Напишите нам</a>  
             </LinksStyles> 
         </MissionContactStyles>
         <LegalAndSocial>
             <div className="year">© 2019 – Savvy</div>
-            <Link href={{
-                    pathname: '/pd',
-                }}>
-                <a>
-                    Политика обработки персональных данных
-                </a>
-            </Link>
+            <div className="IP">
+                <p>ИП Кочкин Михаил Валерьевич</p>
+                <p>ИНН: 771771639796</p>
+                <p>ОГРНИП: 318774600589944 </p>
+            </div>
             <div className="VK">
                 <a target="_blank" href='https://vk.com/savvy_university'>
                   <Icon size={40} icon={vk}/>  

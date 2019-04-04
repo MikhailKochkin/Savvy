@@ -11,11 +11,19 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/pointA": [
+    "/index": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/legal": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
     "/courses": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]
