@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
-// import SingleCase from './SingleCase'
 import User from '.././User'
 
 
@@ -147,7 +146,7 @@ export default class CoursePageNav extends Component {
                                         <Button>Составить описание</Button>
                                     </a>
                                 </Link>
-                                {coursePage.courseType === "PRIVATE" &&
+                                {coursePage.courseType !== "PUBLIC" &&
                                 <Link href={{
                                     pathname: '/applications',
                                     query: {id: this.props.id}
