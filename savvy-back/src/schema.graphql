@@ -5,10 +5,8 @@ type SuccessMessage {
 }
 
 type Mutation {
-    createPointA(description: String, coursePageID: ID!): PointA!
-    updatePointA(id: ID!, description: String): PointA
     createCoursePage(title: String!, description: String!, image: String, tags: [String], courseType: CourseType, 
-    ,price: Int): CoursePage!
+    ,price: Int, discountPrice: Int): CoursePage!
     updateCoursePage(id: ID!, title: String, description: String, image: String, courseType: CourseType): CoursePage
     createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     updateSandboxPage(id: ID!, title: String, description: String, image: String): SandboxPage
@@ -16,6 +14,8 @@ type Mutation {
     createLesson(name: String!, number: Int, text: String!, video: String, coursePageID: ID!): Lesson!
     updateLesson(id: ID!, name: String, number: Int, text: String, video: String): Lesson
     deleteLesson(id:ID!): Lesson
+    createPointA(description: String, coursePageID: ID!): PointA!
+    updatePointA(id: ID!, description: String): PointA
     createTest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
         answer4Correct: String, lessonID: ID): Test!
@@ -52,6 +52,8 @@ type Mutation {
     updateUser(id: ID!, name: String, email: String): User
     requestReset(email: String!): SuccessMessage
     resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
+    createOrder(coursePageID: ID!, userID: ID, price: Int!): Order!
+    deleteOrder(id:ID!): Order
 }
 
 type Query {
@@ -86,6 +88,12 @@ type Query {
     me: User
     user(where: UserWhereUniqueInput!): User
     users(where: UserWhereInput!): [User]!
+    order(where: OrderWhereUniqueInput!): Order
+    orders(where: OrderWhereInput): [Order]!
+}
+
+type Subscription {
+    order(orderID: ID!): Order!
 }
 
 type User{
@@ -98,4 +106,5 @@ type User{
     subjects: [ID]
     coursePages: [CoursePage]
     lessons: [Lesson]!
+    orders: [Order]!
 }

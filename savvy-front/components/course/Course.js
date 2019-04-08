@@ -8,6 +8,7 @@ import DeleteCoursePage from '../DeleteCoursePage';
 import EnrollCoursePage from '../EnrollCoursePage';
 import User from '../User';
 import Application from './Application'
+import TakeMyMoney from '../TakeMyMoney';
 
 const CaseCard = styled.div`
     border: 1px lightgrey solid;
@@ -34,6 +35,12 @@ const Img = styled.img`
 
 const Title = styled.p`
     font-size:2.4rem;
+    font-weight: bold;
+    margin-top: 1%;
+`;
+
+const Price = styled.span`
+    font-size:1.8rem;
     font-weight: bold;
     margin-top: 1%;
 `;
@@ -71,6 +78,10 @@ const Buttons = styled.div`
     margin-bottom: 0.5%;
 `;
 
+const LineThrough = styled.span`
+    text-decoration: line-through;
+`;
+
 export default class Course extends Component {
     state = {
         revealApplication: false
@@ -97,12 +108,17 @@ export default class Course extends Component {
             courseType = "Платный"
         }
         let price;
+        let discountPrice;
         if(coursePage.price) {
             price = coursePage.price + " рублей"
         } else  {
             price = "Бесплатно"
         }
-        coursePage.price
+        if(coursePage.discountPrice)  {
+            discountPrice = coursePage.discountPrice + " рублей"
+        } else {
+            discountPrice = null
+        }
         const applicationsList = [];
         coursePage.applications.map(application => applicationsList.push(application.applicantId))
         return (
@@ -118,7 +134,26 @@ export default class Course extends Component {
                     <Author>{coursePage.user.name}</Author>
                     <p>Количество участников: {studentsArray.length}</p>
                     <p>Тип курса: {courseType}</p>
-                    <p>Стоимость курса: {price}</p>
+
+                    <p>Стоимость: 
+                        
+                    {discountPrice !== null ?
+                        <>
+                            <span> </span>
+                            <LineThrough>{price}</LineThrough>
+                            <Price> {discountPrice}</Price>
+                        </>
+                        : 
+                        null
+                    }
+                    {discountPrice === null  ?
+                        <>
+                            <span> </span>
+                            {price} 
+                        </>
+                        : null}
+                
+                    </p>
                     <Buttons>
 
                     {coursePage.pointsA.length > 0 &&
@@ -162,6 +197,9 @@ export default class Course extends Component {
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
+                    {!me && courseType === "Платный" &&
+                        <p>Зарегистрируйтесь на сайте, чтобы купить курс.</p>
+                    }
                     {me && me.id === coursePage.user.id &&
                     <>
                         <Link href={{
@@ -186,6 +224,19 @@ export default class Course extends Component {
                             Удалить
                         </DeleteCoursePage> 
                     </>}
+                    {me !== null && courseType === "Платный" && 
+                    me.id !== coursePage.user.id && !applicationsList.includes(me.id) && !subjectArray.includes(coursePage.id) &&
+                    <TakeMyMoney
+                        coursePage = {coursePage}
+                        coursePageID={coursePage.id}
+                        name={me.name}
+                        user={me.id}
+                        price={coursePage.price}
+                        discountPrice={coursePage.discountPrice}
+                    >
+                    Купить
+                    </TakeMyMoney>
+                    }
                     </Buttons>
                     {me && this.state.revealApplication && 
                     <Application

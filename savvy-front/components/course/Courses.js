@@ -86,6 +86,7 @@ const ALL_COURSE_PAGES_QUERY = gql`
       courseType
       students
       price
+      discountPrice
       pointsA {
           id
       }
@@ -112,6 +113,7 @@ const ALL_COURSEBYTAGS_PAGES_QUERY = gql`
       courseType
       students
       price
+      discountPrice
       pointsA {
           id
       }

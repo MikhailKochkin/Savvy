@@ -5,6 +5,7 @@ const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 // const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require("../utils");
+const yandex = require('../yandexCheckout');
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 const makeANiceEmail = text => `
@@ -718,6 +719,72 @@ const Mutations = {
     }, 
     info);
   },
+  async createOrder(parent, args, ctx, info) {
+    // 1. TODO: Check if they are logged in
+    const idempotenceKey = '9l1c46332324-a549-eq1219db-891e-f14532310d67r7qd111';
+    if (!ctx.request.userId) {
+      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+    }
+    // console.log(args)
+    console.log("Мы на сервере!")
+    // 2. Create yandex payment
+    const result = await yandex.createPayment({
+      'amount':{
+        'value': args.price,
+        'currency': 'RUB',
+      },
+      'payment_method_data':{
+        'type': 'bank_card',
+      },
+      'confirmation':{
+        'type': 'redirect',
+        'return_url': 'https://www.savvvy.app/',
+      },
+      "capture": true,
+    }, idempotenceKey)
+    if(result.confirmation !== undefined) {
+      console.log(result.id);
+      const paymentId  = result.id
+    
+      yandex.getPayment(paymentId)
+        .then(function(result) {
+          console.log({payment: result});
+      })
+        .catch(function(err) {
+          console.error(err);
+      })
+
+      const order = await ctx.db.mutation.createOrder(
+        {
+        data: {
+          coursePageID: args.coursePageID,
+          price: args.price,
+          paymentId: paymentId,
+          userID: args.userID,
+          user: {
+            connect: { id: ctx.request.userId }
+            },
+          coursePage: {
+            connect: { id: args.coursePageID }
+            },
+          }, 
+            info
+          }
+        ) 
+
+      ctx.response.cookie('url', result.confirmation.confirmation_url)  
+      return order;  
+    } else {
+      console.log("Произошла ошибка!")
+    }
+    },
+    async deleteOrder(parent, args, ctx, info) {
+      const where = { id: args.id };
+      //1. find the lesson
+      const order = await ctx.db.query.order({ where }, `{ id }`);
+      //3. Delete it
+      return ctx.db.mutation.deleteOrder({ where }, info);
+    },
 };
 
 

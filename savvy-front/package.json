@@ -48,6 +48,7 @@
     "slate-plain-serializer": "^0.6.33",
     "slate-react": "^0.21.15",
     "styled-components": "^3.4.10",
+    "universal-cookie": "^3.1.0",
     "waait": "^1.0.2"
   },
   "devDependencies": {

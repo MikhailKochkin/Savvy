@@ -4,12 +4,15 @@ const { hasPermission } = require("../utils");
 const Query = {
     coursePages: forwardTo('db'),
     coursePage: forwardTo('db'),
+    pointA:forwardTo('db'),
+    pointATest:forwardTo('db'),
     sandboxPages: forwardTo('db'),
     sandboxPage: forwardTo('db'),
     lesson:forwardTo('db'),
     test:forwardTo('db'),
     problem:forwardTo('db'),
     textEditor:forwardTo('db'),
+    order:forwardTo('db'),
     sandbox:forwardTo('db'),
     coursePagesConnection: forwardTo('db'),
     sandboxPagesConnection: forwardTo('db'),
@@ -31,6 +34,15 @@ const Query = {
       return ctx.db.query.tests(
         {
           where: {lessonID: lesID}
+        },
+        info
+      );
+    },
+    pointATests(parent, args, ctx, info){
+      const coursePageID = args.where.coursePageID;
+      return ctx.db.query.pointATests(
+        {
+          where: {coursePageID: coursePageID}
         },
         info
       );
@@ -97,13 +109,16 @@ const Query = {
       if (!ctx.request.userId) {
         throw new Error("You must be logged in!")
       }
-      // 2. Check if the user has permissions to query
-      // all the users
-      // hasPermission(ctx.request.user, ['ADMIN', 
-      // 'PERMISSIONUPDATE']);
-
-      // 3. if they do, query all the users!
+      // 2. if they do, query all the users!
       return ctx.db.query.users({}, info);
+    },
+    async orders(parent, args, ctx, info) {
+
+      return ctx.db.query.orders({}, info);
+    },
+    async pointAs(parent, args, ctx, info) {
+
+      return ctx.db.query.pointAs({}, info);
     }
 };
 

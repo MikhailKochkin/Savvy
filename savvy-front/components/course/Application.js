@@ -79,3 +79,4 @@ class Application extends Component {
 }
 
 export default Application;
+export {CREATE_APPLICATION_MUTATION};

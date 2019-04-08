@@ -52,6 +52,7 @@ type CoursePage {
   courseType: CourseType
   students: [ID]
   price: Int
+  discountPrice: Int
   orders: [Order] @relation(name: "CoursePageOrders" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!

@@ -569,6 +569,7 @@ type CoursePage {
   courseType: CourseType
   students: [ID!]!
   price: Int
+  discountPrice: Int
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -593,6 +594,7 @@ input CoursePageCreateInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
 }
 
@@ -646,6 +648,7 @@ input CoursePageCreateWithoutApplicationsInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
 }
 
@@ -661,6 +664,7 @@ input CoursePageCreateWithoutLessonsInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
 }
 
@@ -677,6 +681,7 @@ input CoursePageCreateWithoutOrdersInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
 }
 
 input CoursePageCreateWithoutPointATestsInput {
@@ -691,6 +696,7 @@ input CoursePageCreateWithoutPointATestsInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
 }
 
@@ -706,6 +712,7 @@ input CoursePageCreateWithoutPointsAInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
 }
 
@@ -721,6 +728,7 @@ input CoursePageCreateWithoutUserInput {
   courseType: CourseType
   students: CoursePageCreatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
 }
 
@@ -742,6 +750,8 @@ enum CoursePageOrderByInput {
   courseType_DESC
   price_ASC
   price_DESC
+  discountPrice_ASC
+  discountPrice_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -757,6 +767,7 @@ type CoursePagePreviousValues {
   courseType: CourseType
   students: [ID!]!
   price: Int
+  discountPrice: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -792,6 +803,7 @@ input CoursePageUpdateInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
 }
 
@@ -861,6 +873,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
 }
 
@@ -876,6 +889,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
 }
 
@@ -892,6 +906,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
 }
 
 input CoursePageUpdateWithoutPointATestsDataInput {
@@ -906,6 +921,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
 }
 
@@ -921,6 +937,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
 }
 
@@ -936,6 +953,7 @@ input CoursePageUpdateWithoutUserDataInput {
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
   price: Int
+  discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
 }
 
@@ -1057,6 +1075,14 @@ input CoursePageWhereInput {
   price_lte: Int
   price_gt: Int
   price_gte: Int
+  discountPrice: Int
+  discountPrice_not: Int
+  discountPrice_in: [Int!]
+  discountPrice_not_in: [Int!]
+  discountPrice_lt: Int
+  discountPrice_lte: Int
+  discountPrice_gt: Int
+  discountPrice_gte: Int
   orders_every: OrderWhereInput
   orders_some: OrderWhereInput
   orders_none: OrderWhereInput

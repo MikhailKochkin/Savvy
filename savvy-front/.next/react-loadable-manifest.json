@@ -6,5 +6,1573 @@
       "file": "static/chunks/0.js",
       "publicPath": "static/chunks/0.js"
     }
+  ],
+  "./BoldMark": [
+    {
+      "id": "./components/editor/BoldMark.js",
+      "name": "./components/editor/BoldMark.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "../editor/Editor": [
+    {
+      "id": "./components/editor/Editor.js",
+      "name": "./components/editor/Editor.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./FormatToolbar": [
+    {
+      "id": "./components/editor/FormatToolbar.js",
+      "name": "./components/editor/FormatToolbar.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./HeaderMark": [
+    {
+      "id": "./components/editor/HeaderMark.js",
+      "name": "./components/editor/HeaderMark.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./ItalicMark": [
+    {
+      "id": "./components/editor/ItalicMark.js",
+      "name": "./components/editor/ItalicMark.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "camel-case": [
+    {
+      "id": "./node_modules/camel-case/camel-case.js",
+      "name": "./node_modules/camel-case/camel-case.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "debug": [
+    {
+      "id": "./node_modules/debug/src/browser.js",
+      "name": "./node_modules/debug/src/browser.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./common": [
+    {
+      "id": "./node_modules/debug/src/common.js",
+      "name": "./node_modules/debug/src/common.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "direction": [
+    {
+      "id": "./node_modules/direction/index.js",
+      "name": "./node_modules/direction/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "esrever": [
+    {
+      "id": "./node_modules/esrever/esrever.js",
+      "name": "./node_modules/esrever/esrever.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "get-document": [
+    {
+      "id": "./node_modules/get-document/index.js",
+      "name": "./node_modules/get-document/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "get-window": [
+    {
+      "id": "./node_modules/get-window/index.js",
+      "name": "./node_modules/get-window/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./needs-ie-fallback": [
+    {
+      "id": "./node_modules/get-window/needs-ie-fallback.br.js",
+      "name": "./node_modules/get-window/needs-ie-fallback.br.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "immutable": [
+    {
+      "id": "./node_modules/immutable/dist/immutable.es.js",
+      "name": "./node_modules/immutable/dist/immutable.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "is-hotkey": [
+    {
+      "id": "./node_modules/is-hotkey/lib/index.js",
+      "name": "./node_modules/is-hotkey/lib/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "is-in-browser": [
+    {
+      "id": "./node_modules/is-in-browser/dist/module.js",
+      "name": "./node_modules/is-in-browser/dist/module.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "is-plain-object": [
+    {
+      "id": "./node_modules/is-plain-object/index.js",
+      "name": "./node_modules/is-plain-object/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "isobject": [
+    {
+      "id": "./node_modules/isobject/index.js",
+      "name": "./node_modules/isobject/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "isomorphic-base64": [
+    {
+      "id": "./node_modules/isomorphic-base64/browser.js",
+      "name": "./node_modules/isomorphic-base64/browser.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_DataView": [
+    {
+      "id": "./node_modules/lodash/_DataView.js",
+      "name": "./node_modules/lodash/_DataView.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Hash": [
+    {
+      "id": "./node_modules/lodash/_Hash.js",
+      "name": "./node_modules/lodash/_Hash.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_ListCache": [
+    {
+      "id": "./node_modules/lodash/_ListCache.js",
+      "name": "./node_modules/lodash/_ListCache.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Map": [
+    {
+      "id": "./node_modules/lodash/_Map.js",
+      "name": "./node_modules/lodash/_Map.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_MapCache": [
+    {
+      "id": "./node_modules/lodash/_MapCache.js",
+      "name": "./node_modules/lodash/_MapCache.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Promise": [
+    {
+      "id": "./node_modules/lodash/_Promise.js",
+      "name": "./node_modules/lodash/_Promise.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Set": [
+    {
+      "id": "./node_modules/lodash/_Set.js",
+      "name": "./node_modules/lodash/_Set.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Stack": [
+    {
+      "id": "./node_modules/lodash/_Stack.js",
+      "name": "./node_modules/lodash/_Stack.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Symbol": [
+    {
+      "id": "./node_modules/lodash/_Symbol.js",
+      "name": "./node_modules/lodash/_Symbol.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_Uint8Array": [
+    {
+      "id": "./node_modules/lodash/_Uint8Array.js",
+      "name": "./node_modules/lodash/_Uint8Array.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_WeakMap": [
+    {
+      "id": "./node_modules/lodash/_WeakMap.js",
+      "name": "./node_modules/lodash/_WeakMap.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_apply": [
+    {
+      "id": "./node_modules/lodash/_apply.js",
+      "name": "./node_modules/lodash/_apply.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_arrayEach": [
+    {
+      "id": "./node_modules/lodash/_arrayEach.js",
+      "name": "./node_modules/lodash/_arrayEach.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_arrayFilter": [
+    {
+      "id": "./node_modules/lodash/_arrayFilter.js",
+      "name": "./node_modules/lodash/_arrayFilter.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_arrayLikeKeys": [
+    {
+      "id": "./node_modules/lodash/_arrayLikeKeys.js",
+      "name": "./node_modules/lodash/_arrayLikeKeys.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_arrayMap": [
+    {
+      "id": "./node_modules/lodash/_arrayMap.js",
+      "name": "./node_modules/lodash/_arrayMap.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_arrayPush": [
+    {
+      "id": "./node_modules/lodash/_arrayPush.js",
+      "name": "./node_modules/lodash/_arrayPush.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_assignValue": [
+    {
+      "id": "./node_modules/lodash/_assignValue.js",
+      "name": "./node_modules/lodash/_assignValue.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_assocIndexOf": [
+    {
+      "id": "./node_modules/lodash/_assocIndexOf.js",
+      "name": "./node_modules/lodash/_assocIndexOf.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseAssign": [
+    {
+      "id": "./node_modules/lodash/_baseAssign.js",
+      "name": "./node_modules/lodash/_baseAssign.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseAssignIn": [
+    {
+      "id": "./node_modules/lodash/_baseAssignIn.js",
+      "name": "./node_modules/lodash/_baseAssignIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseAssignValue": [
+    {
+      "id": "./node_modules/lodash/_baseAssignValue.js",
+      "name": "./node_modules/lodash/_baseAssignValue.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseClone": [
+    {
+      "id": "./node_modules/lodash/_baseClone.js",
+      "name": "./node_modules/lodash/_baseClone.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseCreate": [
+    {
+      "id": "./node_modules/lodash/_baseCreate.js",
+      "name": "./node_modules/lodash/_baseCreate.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseFlatten": [
+    {
+      "id": "./node_modules/lodash/_baseFlatten.js",
+      "name": "./node_modules/lodash/_baseFlatten.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseGet": [
+    {
+      "id": "./node_modules/lodash/_baseGet.js",
+      "name": "./node_modules/lodash/_baseGet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseGetAllKeys": [
+    {
+      "id": "./node_modules/lodash/_baseGetAllKeys.js",
+      "name": "./node_modules/lodash/_baseGetAllKeys.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseGetTag": [
+    {
+      "id": "./node_modules/lodash/_baseGetTag.js",
+      "name": "./node_modules/lodash/_baseGetTag.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseHasIn": [
+    {
+      "id": "./node_modules/lodash/_baseHasIn.js",
+      "name": "./node_modules/lodash/_baseHasIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseIsArguments": [
+    {
+      "id": "./node_modules/lodash/_baseIsArguments.js",
+      "name": "./node_modules/lodash/_baseIsArguments.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseIsMap": [
+    {
+      "id": "./node_modules/lodash/_baseIsMap.js",
+      "name": "./node_modules/lodash/_baseIsMap.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseIsNative": [
+    {
+      "id": "./node_modules/lodash/_baseIsNative.js",
+      "name": "./node_modules/lodash/_baseIsNative.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseIsSet": [
+    {
+      "id": "./node_modules/lodash/_baseIsSet.js",
+      "name": "./node_modules/lodash/_baseIsSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseIsTypedArray": [
+    {
+      "id": "./node_modules/lodash/_baseIsTypedArray.js",
+      "name": "./node_modules/lodash/_baseIsTypedArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseKeys": [
+    {
+      "id": "./node_modules/lodash/_baseKeys.js",
+      "name": "./node_modules/lodash/_baseKeys.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseKeysIn": [
+    {
+      "id": "./node_modules/lodash/_baseKeysIn.js",
+      "name": "./node_modules/lodash/_baseKeysIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_basePick": [
+    {
+      "id": "./node_modules/lodash/_basePick.js",
+      "name": "./node_modules/lodash/_basePick.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_basePickBy": [
+    {
+      "id": "./node_modules/lodash/_basePickBy.js",
+      "name": "./node_modules/lodash/_basePickBy.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseSet": [
+    {
+      "id": "./node_modules/lodash/_baseSet.js",
+      "name": "./node_modules/lodash/_baseSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseSetToString": [
+    {
+      "id": "./node_modules/lodash/_baseSetToString.js",
+      "name": "./node_modules/lodash/_baseSetToString.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseSlice": [
+    {
+      "id": "./node_modules/lodash/_baseSlice.js",
+      "name": "./node_modules/lodash/_baseSlice.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseTimes": [
+    {
+      "id": "./node_modules/lodash/_baseTimes.js",
+      "name": "./node_modules/lodash/_baseTimes.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseToString": [
+    {
+      "id": "./node_modules/lodash/_baseToString.js",
+      "name": "./node_modules/lodash/_baseToString.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseUnary": [
+    {
+      "id": "./node_modules/lodash/_baseUnary.js",
+      "name": "./node_modules/lodash/_baseUnary.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_baseUnset": [
+    {
+      "id": "./node_modules/lodash/_baseUnset.js",
+      "name": "./node_modules/lodash/_baseUnset.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_castPath": [
+    {
+      "id": "./node_modules/lodash/_castPath.js",
+      "name": "./node_modules/lodash/_castPath.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_cloneArrayBuffer": [
+    {
+      "id": "./node_modules/lodash/_cloneArrayBuffer.js",
+      "name": "./node_modules/lodash/_cloneArrayBuffer.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_cloneBuffer": [
+    {
+      "id": "./node_modules/lodash/_cloneBuffer.js",
+      "name": "./node_modules/lodash/_cloneBuffer.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_cloneDataView": [
+    {
+      "id": "./node_modules/lodash/_cloneDataView.js",
+      "name": "./node_modules/lodash/_cloneDataView.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_cloneRegExp": [
+    {
+      "id": "./node_modules/lodash/_cloneRegExp.js",
+      "name": "./node_modules/lodash/_cloneRegExp.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_cloneSymbol": [
+    {
+      "id": "./node_modules/lodash/_cloneSymbol.js",
+      "name": "./node_modules/lodash/_cloneSymbol.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_cloneTypedArray": [
+    {
+      "id": "./node_modules/lodash/_cloneTypedArray.js",
+      "name": "./node_modules/lodash/_cloneTypedArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_copyArray": [
+    {
+      "id": "./node_modules/lodash/_copyArray.js",
+      "name": "./node_modules/lodash/_copyArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_copyObject": [
+    {
+      "id": "./node_modules/lodash/_copyObject.js",
+      "name": "./node_modules/lodash/_copyObject.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_copySymbols": [
+    {
+      "id": "./node_modules/lodash/_copySymbols.js",
+      "name": "./node_modules/lodash/_copySymbols.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_copySymbolsIn": [
+    {
+      "id": "./node_modules/lodash/_copySymbolsIn.js",
+      "name": "./node_modules/lodash/_copySymbolsIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_coreJsData": [
+    {
+      "id": "./node_modules/lodash/_coreJsData.js",
+      "name": "./node_modules/lodash/_coreJsData.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_customOmitClone": [
+    {
+      "id": "./node_modules/lodash/_customOmitClone.js",
+      "name": "./node_modules/lodash/_customOmitClone.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_defineProperty": [
+    {
+      "id": "./node_modules/lodash/_defineProperty.js",
+      "name": "./node_modules/lodash/_defineProperty.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_flatRest": [
+    {
+      "id": "./node_modules/lodash/_flatRest.js",
+      "name": "./node_modules/lodash/_flatRest.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_freeGlobal": [
+    {
+      "id": "./node_modules/lodash/_freeGlobal.js",
+      "name": "./node_modules/lodash/_freeGlobal.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getAllKeys": [
+    {
+      "id": "./node_modules/lodash/_getAllKeys.js",
+      "name": "./node_modules/lodash/_getAllKeys.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getAllKeysIn": [
+    {
+      "id": "./node_modules/lodash/_getAllKeysIn.js",
+      "name": "./node_modules/lodash/_getAllKeysIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getMapData": [
+    {
+      "id": "./node_modules/lodash/_getMapData.js",
+      "name": "./node_modules/lodash/_getMapData.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getNative": [
+    {
+      "id": "./node_modules/lodash/_getNative.js",
+      "name": "./node_modules/lodash/_getNative.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getPrototype": [
+    {
+      "id": "./node_modules/lodash/_getPrototype.js",
+      "name": "./node_modules/lodash/_getPrototype.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getRawTag": [
+    {
+      "id": "./node_modules/lodash/_getRawTag.js",
+      "name": "./node_modules/lodash/_getRawTag.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getSymbols": [
+    {
+      "id": "./node_modules/lodash/_getSymbols.js",
+      "name": "./node_modules/lodash/_getSymbols.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getSymbolsIn": [
+    {
+      "id": "./node_modules/lodash/_getSymbolsIn.js",
+      "name": "./node_modules/lodash/_getSymbolsIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getTag": [
+    {
+      "id": "./node_modules/lodash/_getTag.js",
+      "name": "./node_modules/lodash/_getTag.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_getValue": [
+    {
+      "id": "./node_modules/lodash/_getValue.js",
+      "name": "./node_modules/lodash/_getValue.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_hasPath": [
+    {
+      "id": "./node_modules/lodash/_hasPath.js",
+      "name": "./node_modules/lodash/_hasPath.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_hashClear": [
+    {
+      "id": "./node_modules/lodash/_hashClear.js",
+      "name": "./node_modules/lodash/_hashClear.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_hashDelete": [
+    {
+      "id": "./node_modules/lodash/_hashDelete.js",
+      "name": "./node_modules/lodash/_hashDelete.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_hashGet": [
+    {
+      "id": "./node_modules/lodash/_hashGet.js",
+      "name": "./node_modules/lodash/_hashGet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_hashHas": [
+    {
+      "id": "./node_modules/lodash/_hashHas.js",
+      "name": "./node_modules/lodash/_hashHas.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_hashSet": [
+    {
+      "id": "./node_modules/lodash/_hashSet.js",
+      "name": "./node_modules/lodash/_hashSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_initCloneArray": [
+    {
+      "id": "./node_modules/lodash/_initCloneArray.js",
+      "name": "./node_modules/lodash/_initCloneArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_initCloneByTag": [
+    {
+      "id": "./node_modules/lodash/_initCloneByTag.js",
+      "name": "./node_modules/lodash/_initCloneByTag.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_initCloneObject": [
+    {
+      "id": "./node_modules/lodash/_initCloneObject.js",
+      "name": "./node_modules/lodash/_initCloneObject.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_isFlattenable": [
+    {
+      "id": "./node_modules/lodash/_isFlattenable.js",
+      "name": "./node_modules/lodash/_isFlattenable.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_isIndex": [
+    {
+      "id": "./node_modules/lodash/_isIndex.js",
+      "name": "./node_modules/lodash/_isIndex.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_isKey": [
+    {
+      "id": "./node_modules/lodash/_isKey.js",
+      "name": "./node_modules/lodash/_isKey.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_isKeyable": [
+    {
+      "id": "./node_modules/lodash/_isKeyable.js",
+      "name": "./node_modules/lodash/_isKeyable.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_isMasked": [
+    {
+      "id": "./node_modules/lodash/_isMasked.js",
+      "name": "./node_modules/lodash/_isMasked.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_isPrototype": [
+    {
+      "id": "./node_modules/lodash/_isPrototype.js",
+      "name": "./node_modules/lodash/_isPrototype.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_listCacheClear": [
+    {
+      "id": "./node_modules/lodash/_listCacheClear.js",
+      "name": "./node_modules/lodash/_listCacheClear.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_listCacheDelete": [
+    {
+      "id": "./node_modules/lodash/_listCacheDelete.js",
+      "name": "./node_modules/lodash/_listCacheDelete.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_listCacheGet": [
+    {
+      "id": "./node_modules/lodash/_listCacheGet.js",
+      "name": "./node_modules/lodash/_listCacheGet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_listCacheHas": [
+    {
+      "id": "./node_modules/lodash/_listCacheHas.js",
+      "name": "./node_modules/lodash/_listCacheHas.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_listCacheSet": [
+    {
+      "id": "./node_modules/lodash/_listCacheSet.js",
+      "name": "./node_modules/lodash/_listCacheSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_mapCacheClear": [
+    {
+      "id": "./node_modules/lodash/_mapCacheClear.js",
+      "name": "./node_modules/lodash/_mapCacheClear.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_mapCacheDelete": [
+    {
+      "id": "./node_modules/lodash/_mapCacheDelete.js",
+      "name": "./node_modules/lodash/_mapCacheDelete.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_mapCacheGet": [
+    {
+      "id": "./node_modules/lodash/_mapCacheGet.js",
+      "name": "./node_modules/lodash/_mapCacheGet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_mapCacheHas": [
+    {
+      "id": "./node_modules/lodash/_mapCacheHas.js",
+      "name": "./node_modules/lodash/_mapCacheHas.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_mapCacheSet": [
+    {
+      "id": "./node_modules/lodash/_mapCacheSet.js",
+      "name": "./node_modules/lodash/_mapCacheSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_memoizeCapped": [
+    {
+      "id": "./node_modules/lodash/_memoizeCapped.js",
+      "name": "./node_modules/lodash/_memoizeCapped.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_nativeCreate": [
+    {
+      "id": "./node_modules/lodash/_nativeCreate.js",
+      "name": "./node_modules/lodash/_nativeCreate.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_nativeKeys": [
+    {
+      "id": "./node_modules/lodash/_nativeKeys.js",
+      "name": "./node_modules/lodash/_nativeKeys.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_nativeKeysIn": [
+    {
+      "id": "./node_modules/lodash/_nativeKeysIn.js",
+      "name": "./node_modules/lodash/_nativeKeysIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_nodeUtil": [
+    {
+      "id": "./node_modules/lodash/_nodeUtil.js",
+      "name": "./node_modules/lodash/_nodeUtil.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_objectToString": [
+    {
+      "id": "./node_modules/lodash/_objectToString.js",
+      "name": "./node_modules/lodash/_objectToString.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_overArg": [
+    {
+      "id": "./node_modules/lodash/_overArg.js",
+      "name": "./node_modules/lodash/_overArg.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_overRest": [
+    {
+      "id": "./node_modules/lodash/_overRest.js",
+      "name": "./node_modules/lodash/_overRest.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_parent": [
+    {
+      "id": "./node_modules/lodash/_parent.js",
+      "name": "./node_modules/lodash/_parent.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_root": [
+    {
+      "id": "./node_modules/lodash/_root.js",
+      "name": "./node_modules/lodash/_root.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_setToString": [
+    {
+      "id": "./node_modules/lodash/_setToString.js",
+      "name": "./node_modules/lodash/_setToString.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_shortOut": [
+    {
+      "id": "./node_modules/lodash/_shortOut.js",
+      "name": "./node_modules/lodash/_shortOut.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_stackClear": [
+    {
+      "id": "./node_modules/lodash/_stackClear.js",
+      "name": "./node_modules/lodash/_stackClear.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_stackDelete": [
+    {
+      "id": "./node_modules/lodash/_stackDelete.js",
+      "name": "./node_modules/lodash/_stackDelete.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_stackGet": [
+    {
+      "id": "./node_modules/lodash/_stackGet.js",
+      "name": "./node_modules/lodash/_stackGet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_stackHas": [
+    {
+      "id": "./node_modules/lodash/_stackHas.js",
+      "name": "./node_modules/lodash/_stackHas.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_stackSet": [
+    {
+      "id": "./node_modules/lodash/_stackSet.js",
+      "name": "./node_modules/lodash/_stackSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_stringToPath": [
+    {
+      "id": "./node_modules/lodash/_stringToPath.js",
+      "name": "./node_modules/lodash/_stringToPath.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_toKey": [
+    {
+      "id": "./node_modules/lodash/_toKey.js",
+      "name": "./node_modules/lodash/_toKey.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./_toSource": [
+    {
+      "id": "./node_modules/lodash/_toSource.js",
+      "name": "./node_modules/lodash/_toSource.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./constant": [
+    {
+      "id": "./node_modules/lodash/constant.js",
+      "name": "./node_modules/lodash/constant.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./debounce": [
+    {
+      "id": "./node_modules/lodash/debounce.js",
+      "name": "./node_modules/lodash/debounce.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./eq": [
+    {
+      "id": "./node_modules/lodash/eq.js",
+      "name": "./node_modules/lodash/eq.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./flatten": [
+    {
+      "id": "./node_modules/lodash/flatten.js",
+      "name": "./node_modules/lodash/flatten.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./hasIn": [
+    {
+      "id": "./node_modules/lodash/hasIn.js",
+      "name": "./node_modules/lodash/hasIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./identity": [
+    {
+      "id": "./node_modules/lodash/identity.js",
+      "name": "./node_modules/lodash/identity.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isArguments": [
+    {
+      "id": "./node_modules/lodash/isArguments.js",
+      "name": "./node_modules/lodash/isArguments.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isArray": [
+    {
+      "id": "./node_modules/lodash/isArray.js",
+      "name": "./node_modules/lodash/isArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isArrayLike": [
+    {
+      "id": "./node_modules/lodash/isArrayLike.js",
+      "name": "./node_modules/lodash/isArrayLike.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isBuffer": [
+    {
+      "id": "./node_modules/lodash/isBuffer.js",
+      "name": "./node_modules/lodash/isBuffer.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isFunction": [
+    {
+      "id": "./node_modules/lodash/isFunction.js",
+      "name": "./node_modules/lodash/isFunction.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isLength": [
+    {
+      "id": "./node_modules/lodash/isLength.js",
+      "name": "./node_modules/lodash/isLength.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isMap": [
+    {
+      "id": "./node_modules/lodash/isMap.js",
+      "name": "./node_modules/lodash/isMap.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isObject": [
+    {
+      "id": "./node_modules/lodash/isObject.js",
+      "name": "./node_modules/lodash/isObject.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isObjectLike": [
+    {
+      "id": "./node_modules/lodash/isObjectLike.js",
+      "name": "./node_modules/lodash/isObjectLike.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isPlainObject": [
+    {
+      "id": "./node_modules/lodash/isPlainObject.js",
+      "name": "./node_modules/lodash/isPlainObject.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isSet": [
+    {
+      "id": "./node_modules/lodash/isSet.js",
+      "name": "./node_modules/lodash/isSet.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isSymbol": [
+    {
+      "id": "./node_modules/lodash/isSymbol.js",
+      "name": "./node_modules/lodash/isSymbol.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./isTypedArray": [
+    {
+      "id": "./node_modules/lodash/isTypedArray.js",
+      "name": "./node_modules/lodash/isTypedArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./keys": [
+    {
+      "id": "./node_modules/lodash/keys.js",
+      "name": "./node_modules/lodash/keys.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./keysIn": [
+    {
+      "id": "./node_modules/lodash/keysIn.js",
+      "name": "./node_modules/lodash/keysIn.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./last": [
+    {
+      "id": "./node_modules/lodash/last.js",
+      "name": "./node_modules/lodash/last.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./memoize": [
+    {
+      "id": "./node_modules/lodash/memoize.js",
+      "name": "./node_modules/lodash/memoize.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./now": [
+    {
+      "id": "./node_modules/lodash/now.js",
+      "name": "./node_modules/lodash/now.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "lodash/omit": [
+    {
+      "id": "./node_modules/lodash/omit.js",
+      "name": "./node_modules/lodash/omit.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "lodash/pick": [
+    {
+      "id": "./node_modules/lodash/pick.js",
+      "name": "./node_modules/lodash/pick.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./stubArray": [
+    {
+      "id": "./node_modules/lodash/stubArray.js",
+      "name": "./node_modules/lodash/stubArray.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./stubFalse": [
+    {
+      "id": "./node_modules/lodash/stubFalse.js",
+      "name": "./node_modules/lodash/stubFalse.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "lodash/throttle": [
+    {
+      "id": "./node_modules/lodash/throttle.js",
+      "name": "./node_modules/lodash/throttle.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./toNumber": [
+    {
+      "id": "./node_modules/lodash/toNumber.js",
+      "name": "./node_modules/lodash/toNumber.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./toString": [
+    {
+      "id": "./node_modules/lodash/toString.js",
+      "name": "./node_modules/lodash/toString.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "lower-case": [
+    {
+      "id": "./node_modules/lower-case/lower-case.js",
+      "name": "./node_modules/lower-case/lower-case.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "memoize-one": [
+    {
+      "id": "./node_modules/memoize-one/dist/memoize-one.esm.js",
+      "name": "./node_modules/memoize-one/dist/memoize-one.esm.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "ms": [
+    {
+      "id": "./node_modules/ms/index.js",
+      "name": "./node_modules/ms/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "no-case": [
+    {
+      "id": "./node_modules/no-case/no-case.js",
+      "name": "./node_modules/no-case/no-case.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./vendor/camel-case-regexp": [
+    {
+      "id": "./node_modules/no-case/vendor/camel-case-regexp.js",
+      "name": "./node_modules/no-case/vendor/camel-case-regexp.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./vendor/camel-case-upper-regexp": [
+    {
+      "id": "./node_modules/no-case/vendor/camel-case-upper-regexp.js",
+      "name": "./node_modules/no-case/vendor/camel-case-upper-regexp.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./vendor/non-word-regexp": [
+    {
+      "id": "./node_modules/no-case/vendor/non-word-regexp.js",
+      "name": "./node_modules/no-case/vendor/non-word-regexp.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "undefined": [
+    {
+      "id": "./node_modules/react-dom/index.js",
+      "name": "./node_modules/react-dom/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./Icon": [
+    {
+      "id": "./node_modules/react-icons-kit/Icon.js",
+      "name": "./node_modules/react-icons-kit/Icon.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./SvgIcon": [
+    {
+      "id": "./node_modules/react-icons-kit/SvgIcon.js",
+      "name": "./node_modules/react-icons-kit/SvgIcon.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "react-icons-kit/fa/bold": [
+    {
+      "id": "./node_modules/react-icons-kit/fa/bold.js",
+      "name": "./node_modules/react-icons-kit/fa/bold.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "react-icons-kit/fa/header": [
+    {
+      "id": "./node_modules/react-icons-kit/fa/header.js",
+      "name": "./node_modules/react-icons-kit/fa/header.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "react-icons-kit/fa/italic": [
+    {
+      "id": "./node_modules/react-icons-kit/fa/italic.js",
+      "name": "./node_modules/react-icons-kit/fa/italic.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "./horizontalCenter": [
+    {
+      "id": "./node_modules/react-icons-kit/horizontalCenter.js",
+      "name": "./node_modules/react-icons-kit/horizontalCenter.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "react-icons-kit": [
+    {
+      "id": "./node_modules/react-icons-kit/index.js",
+      "name": "./node_modules/react-icons-kit/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "react-immutable-proptypes": [
+    {
+      "id": "./node_modules/react-immutable-proptypes/dist/ImmutablePropTypes.js",
+      "name": "./node_modules/react-immutable-proptypes/dist/ImmutablePropTypes.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "selection-is-backward": [
+    {
+      "id": "./node_modules/selection-is-backward/index.js",
+      "name": "./node_modules/selection-is-backward/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-base64-serializer": [
+    {
+      "id": "./node_modules/slate-base64-serializer/lib/slate-base64-serializer.es.js",
+      "name": "./node_modules/slate-base64-serializer/lib/slate-base64-serializer.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-dev-environment": [
+    {
+      "id": "./node_modules/slate-dev-environment/lib/slate-dev-environment.es.js",
+      "name": "./node_modules/slate-dev-environment/lib/slate-dev-environment.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-hotkeys": [
+    {
+      "id": "./node_modules/slate-hotkeys/lib/slate-hotkeys.es.js",
+      "name": "./node_modules/slate-hotkeys/lib/slate-hotkeys.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-html-serializer": [
+    {
+      "id": "./node_modules/slate-html-serializer/lib/slate-html-serializer.es.js",
+      "name": "./node_modules/slate-html-serializer/lib/slate-html-serializer.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-plain-serializer": [
+    {
+      "id": "./node_modules/slate-plain-serializer/lib/slate-plain-serializer.es.js",
+      "name": "./node_modules/slate-plain-serializer/lib/slate-plain-serializer.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-prop-types": [
+    {
+      "id": "./node_modules/slate-prop-types/lib/slate-prop-types.es.js",
+      "name": "./node_modules/slate-prop-types/lib/slate-prop-types.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-react-placeholder": [
+    {
+      "id": "./node_modules/slate-react-placeholder/lib/slate-react-placeholder.es.js",
+      "name": "./node_modules/slate-react-placeholder/lib/slate-react-placeholder.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate-react": [
+    {
+      "id": "./node_modules/slate-react/lib/slate-react.es.js",
+      "name": "./node_modules/slate-react/lib/slate-react.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "slate": [
+    {
+      "id": "./node_modules/slate/lib/slate.es.js",
+      "name": "./node_modules/slate/lib/slate.es.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "tiny-invariant": [
+    {
+      "id": "./node_modules/tiny-invariant/dist/tiny-invariant.esm.js",
+      "name": "./node_modules/tiny-invariant/dist/tiny-invariant.esm.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "tiny-warning": [
+    {
+      "id": "./node_modules/tiny-warning/dist/tiny-warning.esm.js",
+      "name": "./node_modules/tiny-warning/dist/tiny-warning.esm.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "type-of": [
+    {
+      "id": "./node_modules/type-of/index.js",
+      "name": "./node_modules/type-of/index.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
+  ],
+  "upper-case": [
+    {
+      "id": "./node_modules/upper-case/upper-case.js",
+      "name": "./node_modules/upper-case/upper-case.js",
+      "file": "static/chunks/1.js",
+      "publicPath": "static/chunks/1.js"
+    }
   ]
 }

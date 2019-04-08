@@ -15,11 +15,15 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/index": [
+    "/updatePointA": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/": [
+    "/coursePage": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/pointA": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]
