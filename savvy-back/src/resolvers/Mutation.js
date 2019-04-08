@@ -721,7 +721,7 @@ const Mutations = {
   },
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
-    const idempotenceKey = '9l2c46332329-a549-eq1219db-891e-f14532we10d67r7qd111';
+    const idempotenceKey = '9ww2c46332329-a549-eq1219db-891e-f14532we10d67r7qd111';
     if (!ctx.request.userId) {
       throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }
@@ -770,7 +770,10 @@ const Mutations = {
             info
           }
         ) 
-      ctx.response.cookie('url', result.confirmation.confirmation_url, { httpOnly: false})  
+      ctx.response.cookie('url', result.confirmation.confirmation_url, { 
+        domain: '.savvvy.app',
+        httpOnly: false
+      })  
       return order;  
     },
     async deleteOrder(parent, args, ctx, info) {
