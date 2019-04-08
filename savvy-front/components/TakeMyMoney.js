@@ -77,9 +77,7 @@ class TakeMyMoney extends React.Component {
             })
             const res1 = await createApplication();
             const res2 = await createOrder();
-            // const link = await function() {
-              location.href = cookies.get('url')
-            // }
+            
             console.log(cookies.get('url'))
             this.setState({
               loading: false
