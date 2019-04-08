@@ -49,7 +49,8 @@ class TakeMyMoney extends React.Component {
     } else if (this.props.discountPrice === null){
       finalPrice = this.props.price
     }
-    console.log(Cookie.get('token'));
+    console.log(Cookie.get());
+    console.log(cookies.getAll());
     return (
       <Mutation 
         mutation={CREATE_APPLICATION_MUTATION} 
