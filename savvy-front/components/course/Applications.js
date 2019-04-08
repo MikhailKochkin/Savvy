@@ -27,6 +27,22 @@ const PAGE_APPLICATIONS_QUERY = gql`
   
 `;
 
+const PAGE_ORDERS_QUERY = gql`
+  query PAGE_ORDERS_QUERY($id: ID!) {
+    orders(where: {coursePageID: $id}) {
+      id
+      paymentId
+      paid
+      price
+      user {
+        name
+        id
+      }
+    }
+  },
+  
+`;
+
 class Applications extends Component {
     render() {
         return (
@@ -72,7 +88,41 @@ class Applications extends Component {
                                 )
                                 )}
                             </div>
-                            {/* <button onClick={this.onFetchMore}>Fetch More</button> */}
+                        </>
+                        )
+                    }}
+                </Query>
+                <Query
+                    query={PAGE_ORDERS_QUERY} 
+                    variables={{
+                            id: this.props.id,
+                        }}
+                    fetchPolicy="cache-first"
+                    >
+                    {({ data, error, loading}) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error: {error.message}</p>;
+                        return (
+                        <> 
+                            <h1>Список счетов</h1>
+                            {data.orders === 0 ?
+                            <p>По этому курсу нет заявок!</p>
+                            :
+                            null
+                            } 
+                            <div>
+                                {data.orders.map(order => (
+                                    <App
+                                      key = {order.id}
+                                    >
+                                        <h3>Чек</h3>
+                                        <p>Имя: {order.user.name}</p>
+                                        <p>Код чека: {order.paymentId}</p>
+                                        <p>Цена: {order.price}</p>
+                                    </App>
+                                )
+                                )}
+                            </div>
                         </>
                         )
                     }}

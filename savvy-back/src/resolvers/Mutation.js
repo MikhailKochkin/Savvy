@@ -721,7 +721,7 @@ const Mutations = {
   },
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
-    const idempotenceKey = '9l1c46332324-a549-eq1219db-891e-f14532310d67r7qd111';
+    const idempotenceKey = '9l1c46332329-a549-eq1219db-891e-f14532we10d67r7qd111';
     if (!ctx.request.userId) {
       throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }
