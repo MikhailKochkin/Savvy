@@ -104,9 +104,17 @@ class EnrollCoursePage extends Component {
             } else if(!this.state.subjects.includes(this.props.coursePage.id)) {
                 return this.props.getInputReveal(true);
             }
+        } else if ((this.props.coursePage.courseType === "FORMONEY")) {
+            //0. Check if the person is already on the course and let him pass
+            if(this.state.subjects.includes(this.props.coursePage.id)) {
+                // console.log("You are already enrolled!")
+                Router.push({
+                    pathname: '/coursePage',
+                    query: {id: this.props.coursePage.id}
+                })
         }
-        
-
+      }
+    
     }
     render() {
         return (
