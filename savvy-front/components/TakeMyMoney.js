@@ -2,6 +2,7 @@ import React from 'react';
 import { Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
+import Cookie from 'js-cookie';
 import gql from 'graphql-tag';
 import User, { CURRENT_USER_QUERY } from './User';
 import { CREATE_APPLICATION_MUTATION } from './course/Application'
@@ -41,12 +42,14 @@ class TakeMyMoney extends React.Component {
     loading: false
   }
   render() {
+  
     let finalPrice;
     if(this.props.discountPrice !== null) {
       finalPrice = this.props.discountPrice
     } else if (this.props.discountPrice === null){
       finalPrice = this.props.price
     }
+    console.log(Cookie.get("url"));
     return (
       <Mutation 
         mutation={CREATE_APPLICATION_MUTATION} 
@@ -75,10 +78,8 @@ class TakeMyMoney extends React.Component {
             })
             const res1 = await createApplication();
             const res2 = await createOrder();
-            setTimeout(function(){
-              console.log(cookies.get('token'))
-              console.log(cookies.get('url'))
-            }, 5000);
+            console.log(cookies.get('token'))
+            console.log(cookies.get('url'))
             this.setState({
               loading: false
             })
