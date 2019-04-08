@@ -224,7 +224,7 @@ export default class Course extends Component {
                             Удалить
                         </DeleteCoursePage> 
                     </>}
-                    {me !== null && courseType === "Платный" && 
+                    {me && me !== null && courseType === "Платный" && 
                     me.id !== coursePage.user.id && !applicationsList.includes(me.id) && !subjectArray.includes(coursePage.id) &&
                     <TakeMyMoney
                         coursePage = {coursePage}
