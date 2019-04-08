@@ -721,7 +721,7 @@ const Mutations = {
   },
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
-    const idempotenceKey = '9l1c46332329-a549-eq1219db-891e-f14532we10d67r7qd111';
+    const idempotenceKey = '9l2c46332329-a549-eq1219db-891e-f14532we10d67r7qd111';
     if (!ctx.request.userId) {
       throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }
@@ -742,7 +742,6 @@ const Mutations = {
       },
       "capture": true,
     }, idempotenceKey)
-    if(result.confirmation !== undefined) {
       console.log(result.id);
       const paymentId  = result.id
     
@@ -771,15 +770,8 @@ const Mutations = {
             info
           }
         ) 
-
-      ctx.response.cookie('url', result.confirmation.confirmation_url, {
-        httpOnly: false,
-        maxAge: 1000 * 60 * 60 * 24 * 365,
-      })  
+      ctx.response.cookie('url', result.confirmation.confirmation_url, { httpOnly: false})  
       return order;  
-    } else {
-      console.log("Произошла ошибка!")
-    }
     },
     async deleteOrder(parent, args, ctx, info) {
       const where = { id: args.id };
