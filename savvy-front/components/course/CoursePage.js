@@ -8,8 +8,8 @@ import PleaseSignIn from '../PleaseSignIn';
 import AreYouEnrolled from '../AreYouEnrolled';
 
 const PAGE_LESSONS_QUERY = gql`
-  query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: number_ASC, first: $first) {
+  query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0) {
+    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: number_ASC) {
       id
       name
       number
