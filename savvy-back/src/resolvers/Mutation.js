@@ -772,7 +772,10 @@ const Mutations = {
           }
         ) 
 
-      ctx.response.cookie('url', result.confirmation.confirmation_url)  
+      ctx.response.cookie('url', result.confirmation.confirmation_url, {
+        httpOnly: false,
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+      })  
       return order;  
     } else {
       console.log("Произошла ошибка!")
