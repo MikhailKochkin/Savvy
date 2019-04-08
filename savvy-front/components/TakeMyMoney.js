@@ -79,8 +79,6 @@ class TakeMyMoney extends React.Component {
             const res2 = await createOrder();
             setTimeout(function(){
               console.log(cookies.get('url'))
-              location.href = cookies.get('url')
-            
             }, 5000);
             this.setState({
               loading: false
