@@ -49,8 +49,6 @@ class TakeMyMoney extends React.Component {
     } else if (this.props.discountPrice === null){
       finalPrice = this.props.price
     }
-    console.log(Cookie.get());
-    console.log(cookies.getAll());
     return (
       <Mutation 
         mutation={CREATE_APPLICATION_MUTATION} 
@@ -79,7 +77,6 @@ class TakeMyMoney extends React.Component {
             })
             const res1 = await createApplication();
             const res2 = await createOrder();
-            console.log(cookies.get('token'))
             console.log(cookies.get('url'))
             this.setState({
               loading: false
