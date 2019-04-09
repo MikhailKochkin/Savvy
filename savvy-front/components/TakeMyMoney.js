@@ -35,6 +35,12 @@ const Button = styled.button`
     &:hover {
        background-color: #294D4A;
     }
+    &:disabled {
+      &:hover {
+       background-color: #84BC9C;
+    }
+    }
+       
 `
 
 class TakeMyMoney extends React.Component {
@@ -69,7 +75,9 @@ class TakeMyMoney extends React.Component {
           >
           {createOrder => (
           <>
-          <Button onClick={ async e => {
+          <Button 
+          disabled={this.state.loading}
+          onClick={ async e => {
             e.preventDefault
             this.setState({
               loading: true
