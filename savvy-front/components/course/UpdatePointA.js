@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import { SubmitButton } from '../styles/Button';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const SINGLE_POINTA_QUERY = gql`
   query SINGLE_POINTA_QUERY($id: ID!) {
