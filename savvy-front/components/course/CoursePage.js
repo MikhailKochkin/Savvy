@@ -4,8 +4,8 @@ import gql from 'graphql-tag';
 import LessonHeader from './LessonHeader';
 import CoursePageNav from './CoursePageNav';
 import { MaterialPerPage } from '../../config';
-import PleaseSignIn from '../PleaseSignIn';
-import AreYouEnrolled from '../AreYouEnrolled';
+import PleaseSignIn from '../auth/PleaseSignIn';
+import AreYouEnrolled from '../auth/AreYouEnrolled';
 
 const PAGE_LESSONS_QUERY = gql`
   query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0) {

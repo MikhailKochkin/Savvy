@@ -1,6 +1,6 @@
 import CreatePointATest from '../components/create/CreatePointATest.js';
-import PleaseSignIn from '../components/PleaseSignIn';
-import AreYouATeacher from '../components/AreYouATeacher';
+import PleaseSignIn from '../components/auth/PleaseSignIn';
+import AreYouATeacher from '../components/auth/AreYouATeacher';
 
 const TestPointAPage = (props) => (
     <PleaseSignIn>

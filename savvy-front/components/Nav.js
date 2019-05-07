@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import User from './User';
 import Search from './Search';
-import Signout from './Signout';
+import Signout from './auth/Signout';
 
 const StyledHeader = styled.header`
   background-color: #F2F2F2;

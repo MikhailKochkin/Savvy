@@ -1,4 +1,4 @@
-import PleaseSignIn from '../components/PleaseSignIn';
+import PleaseSignIn from '../components/auth/PleaseSignIn';
 import dynamic from 'next/dynamic';
 
 const DynamicLoadedEditor = dynamic(

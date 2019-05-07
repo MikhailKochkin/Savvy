@@ -4,15 +4,16 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { SINGLE_LESSON_QUERY } from './course/SingleLesson';
+import { SINGLE_LESSON_QUERY } from '../course/SingleLesson';
 
-const DELETE_PROBLEM_MUTATION =gql`
-    mutation DELETE_PROBLEM_MUTATION($id: ID!){
-        deleteProblem(id: $id) {
+const DELETE_CONSTRUCTION_MUTATION =gql`
+    mutation DELETE_CONSTRUCTION_MUTATION($id: ID!){
+        deleteConstruction(id: $id) {
             id
         }
     }
 `
+
 const Button = styled.button`
     border: none;
     cursor: pointer;
@@ -25,22 +26,23 @@ const Delete = styled.div`
   }
 `;
 
-class DeleteSingleProblem extends Component {
+
+class DeleteSingleConstruction extends Component {
     render() {
-        const { lessonId, id } = this.props
+        const { id } = this.props
         return (
             <Mutation 
-                mutation={DELETE_PROBLEM_MUTATION}
+                mutation={DELETE_CONSTRUCTION_MUTATION}
                 variables={{id}}
                 refetchQueries={() =>[{
                     query: SINGLE_LESSON_QUERY,
-                    variables: { id: lessonId},
+                    variables: { id: this.props.lessonID}
                   }]}
             >
-                {(deleteProblem, { error }) => (
+                {(deleteConstruction, { error }) => (
                     <Button onClick={() => {
-                    if (confirm('Вы точно хотите удалить эту запись?')) {
-                        deleteProblem().catch(error => {
+                    if (confirm('Вы точно хотите удалить этот конструктор?')) {
+                        deleteConstruction().catch(error => {
                             alert(error.message)
                         });
                         }
@@ -55,4 +57,4 @@ class DeleteSingleProblem extends Component {
     }
 }
 
-export default DeleteSingleProblem;
+export default DeleteSingleConstruction;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Query } from 'react-apollo';
 import Link from 'next/link';
 import AnswerOption from './AnswerOption';
-import DeleteSingleTest from '../DeleteSingleTest';
+import DeleteSingleTest from '../delete/DeleteSingleTest';
 import User from '../User';
 import Right from  './Right'
 import Wrong from  './Wrong'

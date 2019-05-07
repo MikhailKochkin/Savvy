@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DeleteSingleConstructor from '../DeleteSingleConstructor';
+import DeleteSingleConstructor from '../delete/DeleteSingleConstructor';
 import ConstructorElem from './ConstructorElem';
 
 class SingleConstructor extends Component {

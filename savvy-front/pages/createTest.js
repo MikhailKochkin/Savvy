@@ -1,5 +1,5 @@
 import CreateTest from '../components/create/CreateTest';
-import PleaseSignIn from '../components/PleaseSignIn';
+import PleaseSignIn from '../components/auth/PleaseSignIn';
 
 const CreateQuizPage = (props) => (
     <PleaseSignIn>

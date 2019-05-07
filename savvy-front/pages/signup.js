@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Signup from "../components/Signup";
-import Signin from "../components/Signin";
-import RequestReset from "../components/RequestReset";
-
+import Signup from "../components/auth/Signup";
+import Signin from "../components/auth/Signin";
+import RequestReset from "../components/auth/RequestReset";
 
 const Button = styled.button`
     background-color: ${props => props.active ? "#122557" : "white"};

@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import Link from 'next/link';
 import moment from 'moment';
-import DeleteSingleLesson from '../DeleteSingleLesson';
+import DeleteSingleLesson from '../delete/DeleteSingleLesson';
 import User from '../User';
 
 const SINGLE_LESSON_QUERY = gql`

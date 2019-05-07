@@ -8,8 +8,8 @@ import Link from 'next/link';
 // import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
 import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton } from '../styles/Button';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import AreYouATeacher from '../auth/AreYouATeacher';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(

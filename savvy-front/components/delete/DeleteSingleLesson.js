@@ -4,11 +4,11 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { SINGLE_LESSON_QUERY } from './course/SingleLesson';
+import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
 
-const DELETE_CONSTRUCTION_MUTATION =gql`
-    mutation DELETE_CONSTRUCTION_MUTATION($id: ID!){
-        deleteConstruction(id: $id) {
+const DELETE_LESSON_MUTATION =gql`
+    mutation DELETE_LESSON_MUTATION($id: ID!){
+        deleteLesson(id: $id) {
             id
         }
     }
@@ -21,34 +21,36 @@ const Button = styled.button`
 
 const Delete = styled.div`
   color: black;
+  font-size: 1.6rem;
   &:hover {
     color: red;
   }
 `;
 
 
-class DeleteSingleConstruction extends Component {
+class DeleteSingleLesson extends Component {
+
     render() {
-        const { id } = this.props
         return (
             <Mutation 
-                mutation={DELETE_CONSTRUCTION_MUTATION}
-                variables={{id}}
-                refetchQueries={() =>[{
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: this.props.lessonID}
+                mutation={DELETE_LESSON_MUTATION}
+                variables={{id: this.props.id}}
+                update={this.update}
+                refetchQueries={() => [{
+                    query: PAGE_LESSONS_QUERY,
+                    variables: { id: this.props.coursePageId },
                   }]}
             >
-                {(deleteConstruction, { error }) => (
+                {(DeleteSandbox, { error }) => (
                     <Button onClick={() => {
-                    if (confirm('Вы точно хотите удалить этот конструктор?')) {
-                        deleteConstruction().catch(error => {
+                    if (confirm('Вы точно хотите удалить этот урок?')) {
+                        DeleteSandbox().catch(error => {
                             alert(error.message)
                         });
                         }
                     }}>
                         <Delete id="remove">
-                            <Icon size={20} icon={remove}/> 
+                            Удалить
                         </Delete>
                     </Button>    
                 )}
@@ -57,4 +59,4 @@ class DeleteSingleConstruction extends Component {
     }
 }
 
-export default DeleteSingleConstruction;
+export default DeleteSingleLesson;

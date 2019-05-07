@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import moment from 'moment';
-import DeleteSingleProblem from '../DeleteSingleProblem';
-import User from '../User';
+import DeleteSingleProblem from '../delete/DeleteSingleProblem';
+import ProblemSteps from './ProblemSteps';
 
 const TextBar = styled.div`
-  width: 50%;
+  width: 58%;
   font-size: 1.8rem;
   border: 1px solid #C0D6DF;
   padding: 0 2%;
@@ -23,6 +21,15 @@ const Center = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+`;
+
+const Img = styled.img`
+    height: 325px;
+    width: 525px;
+    @media (max-width: 750px) {
+        width: 100%;
+        height: 200px;
+  }
 `;
 
 const Solution = styled.p`
@@ -65,6 +72,15 @@ class SingleProblem extends Component {
       moment.locale('ru');
       const problem = this.props.data;
       const me = this.props.me;
+      let image = '';
+      let hintText = ''; 
+      if(problem.hintsList.length > 0) {
+        problem.hintsList.map( hint => (
+            hint.includes("res.cloudinary") ? image = hint : null,
+            !hint.includes("res.cloudinary") ? hintText = hint : null
+        ))
+      }
+      console.log(image, hintText);
         return (
                 <Center>
                   <TextBar>
@@ -75,17 +91,28 @@ class SingleProblem extends Component {
                         {this.state.revealHints ? "Закрыть" : "Открыть"}
                     </button>
                     <Hints display={this.state.revealHints}>
-                        {problem.hints}
+                        {problem.hintsList && problem.hintsList.length > 0 ?
+                            hintText !== '' ? <p>{hintText}</p> : null
+                        :
+                        null}
+                        {problem.hintsList && problem.hintsList.length > 0 ?
+                        image !== '' ? <Img src={image} alt="Upload Preview" /> : null
+                        :
+                        null}
+                
+                        {problem.hintsList && problem.hintsList.length == 0 ? <p>{problem.hints}</p>: null}
+        
                     </Hints>
                     
                     <p><strong>Решение:</strong></p>
-                    <button onClick={this.onToggleSolution}>
+                    {/* <button onClick={this.onToggleSolution}>
                         {this.state.revealSolution ? "Закрыть" : "Открыть"}
                     </button>
-                    <Solution display={this.state.revealSolution}>
-                        {problem.solution}
-                    </Solution>
-
+                    <Solution display={this.state.revealSolution}> */}
+                        {problem.solutionList && problem.solutionList.length > 0 ? <ProblemSteps steps={problem.solutionList}/> : null}
+                        {problem.solutionList && problem.solutionList.length == 0 ? <p>{problem.solution}</p>: null}
+                    {/* </Solution> */}
+                    
                     <p><strong>Ответ:</strong></p>
                     <button onClick={this.onToggleAnswer}>
                         {this.state.revealAnswer ? "Закрыть" : "Открыть"}

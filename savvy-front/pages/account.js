@@ -1,5 +1,5 @@
 import AccountPage from '../components/AccountPage';
-import PleaseSignIn from '../components/PleaseSignIn';
+import PleaseSignIn from '../components/auth/PleaseSignIn';
 
 const AccountPagePage = props => (
   <div>

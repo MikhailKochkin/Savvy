@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { PAGE_SANDBOXES_QUERY } from './sandbox/SandboxPage';
+import { PAGE_SANDBOXES_QUERY } from '../sandbox/SandboxPage';
 
 const DELETE_SANDBOX_MUTATION =gql`
     mutation DELETE_SANDBOX_MUTATION($id: ID!){

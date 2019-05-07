@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import AnswerOption from './AnswerOption';
-import DeletePointATest from '../DeletePointATest';
+import DeletePointATest from '../delete/DeletePointATest';
 import Right from  './Right'
 import Wrong from  './Wrong'
 

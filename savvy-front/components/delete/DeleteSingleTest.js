@@ -4,11 +4,11 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { PAGE_LESSONS_QUERY } from './course/CoursePage';
+import { SINGLE_LESSON_QUERY } from '../course/SingleLesson';
 
-const DELETE_LESSON_MUTATION =gql`
-    mutation DELETE_LESSON_MUTATION($id: ID!){
-        deleteLesson(id: $id) {
+const DELETE_TEST_MUTATION =gql`
+    mutation DELETE_TEST_MUTATION($id: ID!){
+        deleteTest(id: $id) {
             id
         }
     }
@@ -27,23 +27,22 @@ const Delete = styled.div`
 `;
 
 
-class DeleteSingleLesson extends Component {
-
+class DeleteSingleTest extends Component {
     render() {
+        const { lessonId, id } = this.props
         return (
             <Mutation 
-                mutation={DELETE_LESSON_MUTATION}
-                variables={{id: this.props.id}}
-                update={this.update}
-                refetchQueries={() => [{
-                    query: PAGE_LESSONS_QUERY,
-                    variables: { id: this.props.coursePageId },
+                mutation={DELETE_TEST_MUTATION}
+                variables={{id}}
+                refetchQueries={() =>[{
+                    query: SINGLE_LESSON_QUERY,
+                    variables: { lessonId},
                   }]}
             >
-                {(DeleteSandbox, { error }) => (
+                {(deleteTest, { error }) => (
                     <Button onClick={() => {
                     if (confirm('Вы точно хотите удалить эту запись?')) {
-                        DeleteSandbox().catch(error => {
+                        deleteTest().catch(error => {
                             alert(error.message)
                         });
                         }
@@ -58,4 +57,4 @@ class DeleteSingleLesson extends Component {
     }
 }
 
-export default DeleteSingleLesson;
+export default DeleteSingleTest;

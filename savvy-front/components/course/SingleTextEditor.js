@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import renderHTML from 'react-render-html';
-import DeleteSingleTextEditor from '../DeleteSingleTextEditor';
+import DeleteSingleTextEditor from '../delete/DeleteSingleTextEditor';
 import User from '../User';
 
 const Center = styled.div`

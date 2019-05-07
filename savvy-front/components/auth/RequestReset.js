@@ -1,17 +1,14 @@
+
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Error from './ErrorMessage';
-import { CURRENT_USER_QUERY } from './User';
+import Error from '../ErrorMessage';
 
-const RESET_MUTATION = gql`
-  mutation RESET_MUTATION($resetToken: String!, $password: String!, $confirmPassword: String!) {
-    resetPassword(resetToken: $resetToken, password: $password, confirmPassword: $confirmPassword) {
-      id
-      email
-      name
+const REQUEST_RESET_MUTATION = gql`
+  mutation REQUEST_RESET_MUTATION($email: String!) {
+    requestReset(email: $email) {
+      message
     }
   }
 `;
@@ -51,21 +48,18 @@ const Fieldset = styled.fieldset`
     border-radius: 5px;
     box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
                 0 5px 15px 0 rgba(0,0,0,0.08);
+    /* min-height: 400px; */
 `;
 
 const Container = styled.div`
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: repeat(2 70px);
-    .password {
+    grid-template-rows: 70px;
+    .email {
         grid-area: first;
     }
-    .password2 {
-        grid-area: second;
-    }
     grid-template-areas:
-        "first   "
-        "second   ";
+        "first   ";
 `;
 
 const Label = styled.label`
@@ -108,70 +102,49 @@ const Buttons = styled.div`
     border-top: solid 1px #F0F0F0;
 `;
 
-class Reset extends Component {
-  static propTypes = {
-    resetToken: PropTypes.string.isRequired,
-  };
+class RequestReset extends Component {
   state = {
-    password: '',
-    confirmPassword: '',
+    email: '',
   };
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
     return (
-      <Mutation
-        mutation={RESET_MUTATION}
-        variables={{
-          resetToken: this.props.resetToken,
-          password: this.state.password,
-          confirmPassword: this.state.confirmPassword,
-        }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      <Mutation 
+        mutation={REQUEST_RESET_MUTATION}
+        variables={this.state}
       >
         {(reset, { error, loading, called }) => (
           <Form
             method="post"
+            data-test="form"
             onSubmit={async e => {
               e.preventDefault();
-              this.state.password !== this.state.confirmPassword ?
-              alert("Пароли не совпадают!") :
               await reset();
-              this.setState({ password: '', confirmPassword: '' });
+              this.setState({ email: '' });
             }}
           >
             <Fieldset disabled={loading} aria-busy={loading}>
-              <h2>Измените пароль</h2>
-              <Error error={error} /> 
+              <h2>Восстановите пароль</h2>
+              <p>Введите ваш эл. адрес, чтобы найти свой аккаунт и восстановить пароль</p>
               <Container>
-                <Label className="password" htmlFor="password">
-                  <p className="first">Новый пароль</p>
+                <Error error={error} />
+                {!error && !loading && called && <p>Success! Check your email for a reset link!</p>}
+                <Label className="email" htmlFor="email">
+                  <p className="first">Электронная почта</p>
                   <input
-                    className="second"
-                    type="password"
-                    name="password"
-                    placeholder="пароль"
-                    value={this.state.password}
+                    type="email"
+                    name="email"
+                    placeholder="Электронная почта"
+                    value={this.state.email}
                     onChange={this.saveToState}
                   />
                 </Label>
-
-                <Label className="password2" htmlFor="confirmPassword">
-                <p className="first">Повотрите пароль</p>
-                  <input
-                    className="second"
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Повотрите пароль"
-                    value={this.state.confirmPassword}
-                    onChange={this.saveToState}
-                  />
-                </Label>
-              </Container>
-              <Buttons>
-                <SubmitButton type="submit">Изменить пароль</SubmitButton>
-              </Buttons>
+                </Container>
+                <Buttons>
+                  <SubmitButton type="submit">Найти</SubmitButton>
+                </Buttons>
             </Fieldset>
           </Form>
         )}
@@ -180,4 +153,5 @@ class Reset extends Component {
   }
 }
 
-export default Reset;
+export default RequestReset;
+export { REQUEST_RESET_MUTATION };

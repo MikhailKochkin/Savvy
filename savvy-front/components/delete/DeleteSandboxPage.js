@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-import {ALL_SANDBOX_PAGES_QUERY} from './sandbox/Sandboxes';
+import {ALL_SANDBOX_PAGES_QUERY} from '../sandbox/Sandboxes';
 
 const DELETE_SANDBOXPAGE_MUTATION =gql`
     mutation DELETE_SANDBOXPAGE_MUTATION($id: ID!){

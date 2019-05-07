@@ -3,8 +3,8 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import ApplicationBox from './ApplicationBox';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import AreYouATeacher from '../auth/AreYouATeacher';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const App = styled.div`
     border: 2px solid black;

@@ -6,8 +6,8 @@ import Link from 'next/link';
 // import { PAGE_TESTS_QUERY } from '../course/CoursePage';
 import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton, Message } from '../styles/Button';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import AreYouATeacher from '../auth/AreYouATeacher';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const CREATE_TEST_MUTATION = gql`
   mutation CREATE_TEST_MUTATION(

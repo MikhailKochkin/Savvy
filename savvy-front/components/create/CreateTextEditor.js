@@ -7,8 +7,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton } from '../styles/Button';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import AreYouATeacher from '../auth/AreYouATeacher';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const CREATE_TEXTEDITOR_MUTATION = gql`
   mutation CREATE_TEXTEDITOR_MUTATION(

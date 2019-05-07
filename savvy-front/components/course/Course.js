@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import styled from 'styled-components';
-import DeleteCoursePage from '../DeleteCoursePage';
+import DeleteCoursePage from '../delete/DeleteCoursePage';
 import EnrollCoursePage from '../EnrollCoursePage';
 import User from '../User';
 import Application from './Application'

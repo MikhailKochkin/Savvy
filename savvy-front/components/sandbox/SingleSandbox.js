@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {heart} from 'react-icons-kit/ikons/heart'
 import moment from 'moment';
-import DeleteSingleSandbox from '../DeleteSingleSandbox';
+import DeleteSingleSandbox from '../delete/DeleteSingleSandbox';
 import { NavButton } from '../styles/Button';
 
 const ProposalBox = styled.div`

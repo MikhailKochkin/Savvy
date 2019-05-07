@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
-import gql from "graphql-tag";
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import styled from 'styled-components';
-import DeleteCoursePage from '../DeleteCoursePage';
-import EnrollCoursePage from '../EnrollCoursePage';
 import User from '../User';
 
 const CaseCard = styled.div`

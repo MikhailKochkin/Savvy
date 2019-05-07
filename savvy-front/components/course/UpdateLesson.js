@@ -7,8 +7,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
 import { NavButton, SubmitButton } from '../styles/Button';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import AreYouATeacher from '../auth/AreYouATeacher';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {

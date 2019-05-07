@@ -1,7 +1,7 @@
 import { Query } from 'react-apollo';
-import { CURRENT_USER_QUERY } from './User';
+import { CURRENT_USER_QUERY } from '../User';
 import Link from 'next/link';
-import { NavButton, SubmitButton } from './styles/Button'; 
+import { NavButton, SubmitButton } from '../styles/Button'; 
 
 const AreYouATeacher = props => (
     <Query query={CURRENT_USER_QUERY}>

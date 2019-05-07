@@ -4,11 +4,11 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { SINGLE_LESSON_QUERY } from './course/SingleLesson';
+import { SINGLE_LESSON_QUERY } from '../course/SingleLesson';
 
-const DELETE_TEXTEDITOR_MUTATION =gql`
-    mutation DELETE_TEXTEDITOR_MUTATION($id: ID!){
-        deleteTextEditor(id: $id) {
+const DELETE_PROBLEM_MUTATION =gql`
+    mutation DELETE_PROBLEM_MUTATION($id: ID!){
+        deleteProblem(id: $id) {
             id
         }
     }
@@ -30,17 +30,17 @@ class DeleteSingleProblem extends Component {
         const { lessonId, id } = this.props
         return (
             <Mutation 
-                mutation={DELETE_TEXTEDITOR_MUTATION}
+                mutation={DELETE_PROBLEM_MUTATION}
                 variables={{id}}
                 refetchQueries={() =>[{
                     query: SINGLE_LESSON_QUERY,
                     variables: { id: lessonId},
                   }]}
             >
-                {(deleteTextEditor, { error }) => (
+                {(deleteProblem, { error }) => (
                     <Button onClick={() => {
                     if (confirm('Вы точно хотите удалить эту запись?')) {
-                        deleteTextEditor().catch(error => {
+                        deleteProblem().catch(error => {
                             alert(error.message)
                         });
                         }

@@ -8,8 +8,8 @@ import SingleTest from './SingleTest';
 import SingleProblem from './SingleProblem';
 import SingleConstructor from './SingleConstructor';
 import SingleTextEditor from './SingleTextEditor';
-import PleaseSignIn from '../PleaseSignIn';
-import AreYouEnrolled from '../AreYouEnrolled';
+import PleaseSignIn from '../auth/PleaseSignIn';
+import AreYouEnrolled from '../auth/AreYouEnrolled';
 import User from '../User';
 
 
@@ -48,6 +48,8 @@ const SINGLE_LESSON_QUERY = gql`
           text
           hints
           solution
+          solutionList
+          hintsList
           answer
           user {
             id
@@ -303,6 +305,8 @@ class SingleLesson extends Component {
                             lessonId={lesson.id}
                             data={problem}
                             me={me}
+                            solutionList={problem.solutionList}
+                            hintsList={problem.hintsList}
                           />
                         )}
                       </>

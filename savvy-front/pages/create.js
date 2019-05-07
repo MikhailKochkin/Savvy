@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import CreateCourse from '../components/course/CreateCourse';
 import CreateSandbox from '../components/sandbox/CreateSandbox';
-import PleaseSignIn from '../components/PleaseSignIn';
+import PleaseSignIn from '../components/auth/PleaseSignIn';
 
 
 const HomeStyles = styled.div`

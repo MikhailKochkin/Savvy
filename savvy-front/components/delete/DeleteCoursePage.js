@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-import {ALL_COURSE_PAGES_QUERY} from './course/Courses';
+import {ALL_COURSE_PAGES_QUERY} from '../course/Courses';
 
 const DELETE_COURSEPAGE_MUTATION =gql`
     mutation DELETE_COURSEPAGE_MUTATION($id: ID!){

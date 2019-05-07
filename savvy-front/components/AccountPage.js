@@ -5,7 +5,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import {CURRENT_USER_QUERY} from './User';
 import MyCourses from './MyCourses';
-import PleaseSignIn from './PleaseSignIn';
+import PleaseSignIn from './auth/PleaseSignIn';
 
 
 const UPDATE_USER_MUTATION= gql`

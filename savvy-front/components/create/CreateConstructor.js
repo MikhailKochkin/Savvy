@@ -5,8 +5,8 @@ import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Router from 'next/router';
 import { NavButton, SubmitButton } from '../styles/Button';
-import AreYouATeacher from '../AreYouATeacher';
-import PleaseSignIn from '../PleaseSignIn';
+import AreYouATeacher from '../auth/AreYouATeacher';
+import PleaseSignIn from '../auth/PleaseSignIn';
 
 const CREATE_CONSTRUCTION_MUTATION = gql`
   mutation CREATE_CONSTRUCION_MUTATION(
