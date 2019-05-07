@@ -173,6 +173,8 @@ type Problem {
   text: String!
   hints: String
   solution: String
+  hintsList: [String]
+  solutionList: [String]
   answer: String!
   user: User!
   lesson: Lesson! @relation(name: "LessonProblems")
@@ -211,6 +213,7 @@ type Order {
   paid: Boolean @default(value: "false")
   user: User!
   userID: ID
+  clientID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }

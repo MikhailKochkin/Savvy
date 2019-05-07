@@ -405,6 +405,10 @@ const Mutations = {
       // TODO: Check if they are logged in
       const lessonID = args.lessonID
       delete args.id
+      const solutions = args.solutionList;
+      delete args.solutionList
+      const hints = args.hintsList;
+      delete args.hintsList
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
@@ -418,6 +422,12 @@ const Mutations = {
                   },
                 lesson: {
                   connect: { id: lessonID }
+                },
+                solutionList: {
+                  set: [...solutions]
+                },
+                hintsList: {
+                  set: [...hints]
                 },
                 ...args
             },
@@ -721,7 +731,7 @@ const Mutations = {
   },
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
-    const idempotenceKey = '3ww2c4329-a6649-rt9219db-891e-f14532we10d28r7qd111';
+    const idempotenceKey = '3ww9c4329-a6649-rt9219db-891e-f14532we10d28r7qd111';
     if (!ctx.request.userId) {
       throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }

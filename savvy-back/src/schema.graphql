@@ -24,7 +24,7 @@ type Mutation {
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
         answer4Correct: String, coursePageID: ID): PointATest!
     deletePointATest(id:ID!): PointATest
-    createProblem(text: String!, hints: String, solution: String, answer: String!,
+    createProblem(text: String!, hints: String, solution: String, hintsList: [String], solutionList: [String], answer: String!,
         lessonID: ID!): Test!
     deleteProblem(id:ID!): Problem
     createConstruction(name: String!, dbPart1: Json!, dbPart2: Json!, dbPart3: Json!, dbPart4: Json!,

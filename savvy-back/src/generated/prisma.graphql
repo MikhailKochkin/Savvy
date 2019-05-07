@@ -1727,6 +1727,7 @@ type Order {
   paid: Boolean
   user: User!
   userID: ID
+  clientID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1745,6 +1746,7 @@ input OrderCreateInput {
   paid: Boolean
   user: UserCreateOneWithoutOrdersInput!
   userID: ID
+  clientID: ID
 }
 
 input OrderCreateManyWithoutCoursePageInput {
@@ -1764,6 +1766,7 @@ input OrderCreateWithoutCoursePageInput {
   paid: Boolean
   user: UserCreateOneWithoutOrdersInput!
   userID: ID
+  clientID: ID
 }
 
 input OrderCreateWithoutUserInput {
@@ -1773,6 +1776,7 @@ input OrderCreateWithoutUserInput {
   price: Int!
   paid: Boolean
   userID: ID
+  clientID: ID
 }
 
 type OrderEdge {
@@ -1793,6 +1797,8 @@ enum OrderOrderByInput {
   paid_DESC
   userID_ASC
   userID_DESC
+  clientID_ASC
+  clientID_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1806,6 +1812,7 @@ type OrderPreviousValues {
   price: Int!
   paid: Boolean
   userID: ID
+  clientID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1836,6 +1843,7 @@ input OrderUpdateInput {
   paid: Boolean
   user: UserUpdateOneRequiredWithoutOrdersInput
   userID: ID
+  clientID: ID
 }
 
 input OrderUpdateManyWithoutCoursePageInput {
@@ -1863,6 +1871,7 @@ input OrderUpdateWithoutCoursePageDataInput {
   paid: Boolean
   user: UserUpdateOneRequiredWithoutOrdersInput
   userID: ID
+  clientID: ID
 }
 
 input OrderUpdateWithoutUserDataInput {
@@ -1872,6 +1881,7 @@ input OrderUpdateWithoutUserDataInput {
   price: Int
   paid: Boolean
   userID: ID
+  clientID: ID
 }
 
 input OrderUpdateWithWhereUniqueWithoutCoursePageInput {
@@ -1965,6 +1975,20 @@ input OrderWhereInput {
   userID_not_starts_with: ID
   userID_ends_with: ID
   userID_not_ends_with: ID
+  clientID: ID
+  clientID_not: ID
+  clientID_in: [ID!]
+  clientID_not_in: [ID!]
+  clientID_lt: ID
+  clientID_lte: ID
+  clientID_gt: ID
+  clientID_gte: ID
+  clientID_contains: ID
+  clientID_not_contains: ID
+  clientID_starts_with: ID
+  clientID_not_starts_with: ID
+  clientID_ends_with: ID
+  clientID_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -2616,6 +2640,8 @@ type Problem {
   text: String!
   hints: String
   solution: String
+  hintsList: [String!]!
+  solutionList: [String!]!
   answer: String!
   user: User!
   lesson: Lesson!
@@ -2630,10 +2656,16 @@ type ProblemConnection {
   aggregate: AggregateProblem!
 }
 
+input ProblemCreatehintsListInput {
+  set: [String!]
+}
+
 input ProblemCreateInput {
   text: String!
   hints: String
   solution: String
+  hintsList: ProblemCreatehintsListInput
+  solutionList: ProblemCreatesolutionListInput
   answer: String!
   user: UserCreateOneWithoutProblemsInput!
   lesson: LessonCreateOneWithoutProblemsInput!
@@ -2650,10 +2682,16 @@ input ProblemCreateManyWithoutUserInput {
   connect: [ProblemWhereUniqueInput!]
 }
 
+input ProblemCreatesolutionListInput {
+  set: [String!]
+}
+
 input ProblemCreateWithoutLessonInput {
   text: String!
   hints: String
   solution: String
+  hintsList: ProblemCreatehintsListInput
+  solutionList: ProblemCreatesolutionListInput
   answer: String!
   user: UserCreateOneWithoutProblemsInput!
   lessonID: ID!
@@ -2663,6 +2701,8 @@ input ProblemCreateWithoutUserInput {
   text: String!
   hints: String
   solution: String
+  hintsList: ProblemCreatehintsListInput
+  solutionList: ProblemCreatesolutionListInput
   answer: String!
   lesson: LessonCreateOneWithoutProblemsInput!
   lessonID: ID!
@@ -2697,6 +2737,8 @@ type ProblemPreviousValues {
   text: String!
   hints: String
   solution: String
+  hintsList: [String!]!
+  solutionList: [String!]!
   answer: String!
   lessonID: ID!
   createdAt: DateTime!
@@ -2721,10 +2763,16 @@ input ProblemSubscriptionWhereInput {
   NOT: [ProblemSubscriptionWhereInput!]
 }
 
+input ProblemUpdatehintsListInput {
+  set: [String!]
+}
+
 input ProblemUpdateInput {
   text: String
   hints: String
   solution: String
+  hintsList: ProblemUpdatehintsListInput
+  solutionList: ProblemUpdatesolutionListInput
   answer: String
   user: UserUpdateOneRequiredWithoutProblemsInput
   lesson: LessonUpdateOneRequiredWithoutProblemsInput
@@ -2749,10 +2797,16 @@ input ProblemUpdateManyWithoutUserInput {
   upsert: [ProblemUpsertWithWhereUniqueWithoutUserInput!]
 }
 
+input ProblemUpdatesolutionListInput {
+  set: [String!]
+}
+
 input ProblemUpdateWithoutLessonDataInput {
   text: String
   hints: String
   solution: String
+  hintsList: ProblemUpdatehintsListInput
+  solutionList: ProblemUpdatesolutionListInput
   answer: String
   user: UserUpdateOneRequiredWithoutProblemsInput
   lessonID: ID
@@ -2762,6 +2816,8 @@ input ProblemUpdateWithoutUserDataInput {
   text: String
   hints: String
   solution: String
+  hintsList: ProblemUpdatehintsListInput
+  solutionList: ProblemUpdatesolutionListInput
   answer: String
   lesson: LessonUpdateOneRequiredWithoutProblemsInput
   lessonID: ID
