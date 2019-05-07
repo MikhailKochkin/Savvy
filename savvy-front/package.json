@@ -1,6 +1,10 @@
 {
   "name": "savvy-frontend",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.1.0",
+    "npm": "6.9.0"
+  },
   "description": "Savvy App",
   "main": "index.js",
   "scripts": {
