@@ -80,7 +80,6 @@ class SingleProblem extends Component {
             !hint.includes("res.cloudinary") ? hintText = hint : null
         ))
       }
-      console.log(image, hintText);
         return (
                 <Center>
                   <TextBar>

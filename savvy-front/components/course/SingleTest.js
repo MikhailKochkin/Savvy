@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
 import styled from 'styled-components';
-import { Query } from 'react-apollo';
-import Link from 'next/link';
 import AnswerOption from './AnswerOption';
 import DeleteSingleTest from '../delete/DeleteSingleTest';
-import User from '../User';
 import Right from  './Right'
 import Wrong from  './Wrong'
-import { Message } from '../styles/Button';
 
 const Question = styled.p`
   font-size: 1.8rem;
@@ -102,7 +97,7 @@ class SingleTest extends Component {
                     {answers2.map((answer) =>
                       <ul>
                         <AnswerOption 
-                          key={answer.answer} 
+                          key={answer.id} 
                           id={answer}
                           onAnswerSelected={this.handleAnswerSelected}>
                         </AnswerOption>

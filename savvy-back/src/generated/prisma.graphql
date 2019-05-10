@@ -4204,7 +4204,7 @@ type TextEditor {
   id: ID!
   name: String!
   text: String!
-  totalMistakes: String
+  totalMistakes: Int
   user: User!
   lesson: Lesson!
   lessonID: ID!
@@ -4221,7 +4221,7 @@ type TextEditorConnection {
 input TextEditorCreateInput {
   name: String!
   text: String!
-  totalMistakes: String
+  totalMistakes: Int
   user: UserCreateOneWithoutTextEditorInput!
   lesson: LessonCreateOneWithoutTexteditorsInput!
   lessonID: ID!
@@ -4240,7 +4240,7 @@ input TextEditorCreateManyWithoutUserInput {
 input TextEditorCreateWithoutLessonInput {
   name: String!
   text: String!
-  totalMistakes: String
+  totalMistakes: Int
   user: UserCreateOneWithoutTextEditorInput!
   lessonID: ID!
 }
@@ -4248,7 +4248,7 @@ input TextEditorCreateWithoutLessonInput {
 input TextEditorCreateWithoutUserInput {
   name: String!
   text: String!
-  totalMistakes: String
+  totalMistakes: Int
   lesson: LessonCreateOneWithoutTexteditorsInput!
   lessonID: ID!
 }
@@ -4279,7 +4279,7 @@ type TextEditorPreviousValues {
   id: ID!
   name: String!
   text: String!
-  totalMistakes: String
+  totalMistakes: Int
   lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -4306,7 +4306,7 @@ input TextEditorSubscriptionWhereInput {
 input TextEditorUpdateInput {
   name: String
   text: String
-  totalMistakes: String
+  totalMistakes: Int
   user: UserUpdateOneRequiredWithoutTextEditorInput
   lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
   lessonID: ID
@@ -4333,7 +4333,7 @@ input TextEditorUpdateManyWithoutUserInput {
 input TextEditorUpdateWithoutLessonDataInput {
   name: String
   text: String
-  totalMistakes: String
+  totalMistakes: Int
   user: UserUpdateOneRequiredWithoutTextEditorInput
   lessonID: ID
 }
@@ -4341,7 +4341,7 @@ input TextEditorUpdateWithoutLessonDataInput {
 input TextEditorUpdateWithoutUserDataInput {
   name: String
   text: String
-  totalMistakes: String
+  totalMistakes: Int
   lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
   lessonID: ID
 }
@@ -4411,20 +4411,14 @@ input TextEditorWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
-  totalMistakes: String
-  totalMistakes_not: String
-  totalMistakes_in: [String!]
-  totalMistakes_not_in: [String!]
-  totalMistakes_lt: String
-  totalMistakes_lte: String
-  totalMistakes_gt: String
-  totalMistakes_gte: String
-  totalMistakes_contains: String
-  totalMistakes_not_contains: String
-  totalMistakes_starts_with: String
-  totalMistakes_not_starts_with: String
-  totalMistakes_ends_with: String
-  totalMistakes_not_ends_with: String
+  totalMistakes: Int
+  totalMistakes_not: Int
+  totalMistakes_in: [Int!]
+  totalMistakes_not_in: [Int!]
+  totalMistakes_lt: Int
+  totalMistakes_lte: Int
+  totalMistakes_gt: Int
+  totalMistakes_gte: Int
   user: UserWhereInput
   lesson: LessonWhereInput
   lessonID: ID

@@ -187,7 +187,7 @@ type TextEditor {
   id: ID! @unique
   name: String!
   text: String!
-  totalMistakes: String
+  totalMistakes: Int
   user: User!
   lesson: Lesson! @relation(name: "LessonTextEditors")
   lessonID: ID!

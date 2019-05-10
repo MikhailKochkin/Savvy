@@ -75,6 +75,7 @@ const SINGLE_LESSON_QUERY = gql`
           id
           name
           text
+          totalMistakes
           user {
             id
           }

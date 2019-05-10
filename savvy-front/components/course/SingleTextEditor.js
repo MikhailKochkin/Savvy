@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import renderHTML from 'react-render-html';
 import DeleteSingleTextEditor from '../delete/DeleteSingleTextEditor';
-import User from '../User';
+import Right from  './Right'
 
 const Center = styled.div`
     padding-top: 1%;
@@ -15,7 +13,7 @@ const Center = styled.div`
 `;
 
 const TextBar = styled.div`
-  width: 50%;
+  width: 55%;
   font-size: 1.8rem;
   padding: 0 2%;
   border-radius: 5px;
@@ -52,9 +50,10 @@ const Hint = styled.div`
 class SingleTextEditor extends Component {
         state = {
             shown: false,
+            mistakesShown: false,
             answer: "",
             found: 0,
-            total: "",
+            total: this.props.data.totalMistakes,
             text: this.props.data.text
             //`
             //     <p>Philosophers from Aristotle to the Beatles have argued that money does not buy happiness. 
@@ -86,17 +85,35 @@ class SingleTextEditor extends Component {
                 shown: true,
                 answer: e.target.title,
             })
-            if(e.target.className !== "Здесь все вроде бы в порядке.." && this.state.found < this.state.total) {
+            e.target.style.backgroundColor = '#ffa64d';
+            e.target.style.padding = '0.8%';
+            e.target.style.borderRadius = '8px';
+
+            if(e.target.title !== "Здесь все вроде бы в порядке.." && this.state.found < this.state.total) {
                 this.setState(prevState => ({
                     found: prevState.found + 1
                 }))
             }
         }
+
         onConceal = () => {
             this.setState({
                 shown: false
             })
         }
+
+        onShow = () => {
+          const mistakes = document.querySelectorAll("#id")
+          this.setState(prevState => ({ mistakesShown:!prevState.mistakesShown}))
+          if(!this.state.mistakesShown){
+            mistakes.forEach(mistake => mistake.style.backgroundColor = '#ffa64d')
+            mistakes.forEach(mistake => mistake.style.padding = '0.8%')
+            mistakes.forEach(mistake => mistake.style.borderRadius = '8px')
+          } else if(this.state.mistakesShown){
+            mistakes.forEach(mistake => mistake.style = null);
+          }
+        }
+
         componentDidMount() {
             const elements = document.querySelectorAll("#id")
             elements.forEach(element => element.addEventListener('click', this.onMouseClick))
@@ -107,9 +124,7 @@ class SingleTextEditor extends Component {
         return (
             <Center>
             <TextBar>
-              {this.state.total !== "" && <p>Всего рисков: {this.state.total} </p>}
-              {this.state.total !== "" && <p>Найдено рисков: {this.state.found} </p>}
-
+              {this.state.total !== "" && <p>Всего рисков/ошибок: {this.state.total} </p>}
               {this.state.shown &&
                   <Hint>
                       <div>{this.state.answer}</div>
@@ -118,15 +133,19 @@ class SingleTextEditor extends Component {
               }
               <EditText>
                   <div>{renderHTML(this.state.text)}</div>
+                  {this.state.total !== "" && <p><strong>Найдено рисков/ошибок:</strong> {this.state.found} </p>}
+                  {this.state.total === this.state.found ? <Right>Задание выполнено!</Right> : null}
               </EditText>
           </TextBar>
+          <button onClick={this.onShow}>{this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}</button>
+          <br/>
           { me && me.id === textEditor.user.id ?
-                    <DeleteSingleTextEditor
-                      id={this.props.data.id}
-                      lessonId={this.props.lessonID}
-                    />
-                    :
-                    null
+            <DeleteSingleTextEditor
+              id={this.props.data.id}
+              lessonId={this.props.lessonID}
+            />
+            :
+            null
          }  
         </Center>
     );
