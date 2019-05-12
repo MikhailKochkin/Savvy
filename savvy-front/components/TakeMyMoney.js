@@ -1,11 +1,9 @@
 import React from 'react';
-import { Mutation, Query } from 'react-apollo';
-import Router from 'next/router';
-import NProgress from 'nprogress';
+import { Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import Cookies from 'universal-cookie';
 import gql from 'graphql-tag';
-import User, { CURRENT_USER_QUERY } from './User';
+import { CURRENT_USER_QUERY } from './User';
 import { CREATE_APPLICATION_MUTATION } from './course/Application';
 
 const cookies = new Cookies();
@@ -74,29 +72,25 @@ class TakeMyMoney extends React.Component {
             }}
           >
           {createOrder => (
-          <>
-          <Button 
-          disabled={this.state.loading}
-          onClick={ async e => {
-            e.preventDefault
-            this.setState({
-              loading: true
-            })
-            const res1 = await createApplication();
-            const res2 = await createOrder();
-            console.log(cookies.get('url'))
-            location.href = cookies.get('url')
-            console.log("Переходим по ссылке!")
-            this.setState({
-              loading: false
-            })
-            }}
-          >
-          {this.props.children}
-          </Button>
-          <br/>
-          {this.state.loading ? <p>Готовим платеж. Пожалуйста, подождите немного.</p> : null}
-          </> 
+            <>
+              <Button 
+                disabled={this.state.loading}
+                onClick={ async e => {
+                  e.preventDefault
+                  this.setState({ loading: true})
+                  const res1 = await createApplication();
+                  const res2 = await createOrder();
+                  location.href = cookies.get('url')
+                  this.setState({
+                    loading: false
+                  })
+                }}
+              >
+              {this.props.children}
+              </Button>
+              <br/>
+              {this.state.loading ? <p>Готовим платеж. Пожалуйста, подождите немного.</p> : null}
+            </> 
           )}
           </Mutation>
         )}

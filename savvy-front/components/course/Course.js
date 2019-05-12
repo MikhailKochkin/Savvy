@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Mutation, Query } from 'react-apollo';
-import gql from "graphql-tag";
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -234,7 +232,7 @@ export default class Course extends Component {
                         price={coursePage.price}
                         discountPrice={coursePage.discountPrice}
                     >
-                    Купить
+                      Купить
                     </TakeMyMoney>
                     }
                     </Buttons>

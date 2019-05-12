@@ -731,13 +731,15 @@ const Mutations = {
   },
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
-    const idempotenceKey = '3ww9c4329-a6649-rt9219db-891e-f14532we10d28r7qd111';
+    const idempotenceKey = '3ww8c4329-a6849-rt9219db-891e-f24532we10d29r7qd211';
     if (!ctx.request.userId) {
       throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
     }
     // console.log(args)
     console.log("Мы на сервере!")
     // 2. Create yandex payment
+    // Убрали ключ идемпотентности, теперь он генерируется Яндексом самостоятельно
+    // и не влияет на повоторные покурки внутри приложения.
     const result = await yandex.createPayment({
       'amount':{
         'value': args.price,
@@ -751,10 +753,14 @@ const Mutations = {
         'return_url': 'https://www.savvvy.app/',
       },
       "capture": true,
-    }, idempotenceKey)
+    })
       console.log(result.id);
+      console.log(result.confirmation);
+      console.log(result);
       const paymentId  = result.id
     
+
+      // это кстати тоже можно убрать из продакшана
       yandex.getPayment(paymentId)
         .then(function(result) {
           console.log({payment: result});
@@ -780,8 +786,9 @@ const Mutations = {
             info
           }
         ) 
-      ctx.response.cookie('url', result.confirmation.confirmation_url, { 
-        domain: '.savvvy.app',
+      ctx.response.cookie('url', result.confirmation.confirmation_url, {
+        // в продакшене нужно вернуть domain: '.savvvy.app',
+        // сейчас он не нужен, потому что мы передаем кукис в локалхост
         httpOnly: false
       })  
       return order;  
