@@ -754,20 +754,20 @@ const Mutations = {
       },
       "capture": true,
     })
-      console.log(result.id);
-      console.log(result.confirmation);
-      console.log(result);
+      // console.log(result.id);
+      // console.log(result.confirmation);
+      // console.log(result);
       const paymentId  = result.id
     
 
       // это кстати тоже можно убрать из продакшана
-      yandex.getPayment(paymentId)
-        .then(function(result) {
-          console.log({payment: result});
-      })
-        .catch(function(err) {
-          console.error(err);
-      })
+      // yandex.getPayment(paymentId)
+      //   .then(function(result) {
+      //     console.log({payment: result});
+      // })
+      //   .catch(function(err) {
+      //     console.error(err);
+      // })
 
       const order = await ctx.db.mutation.createOrder(
         {
@@ -787,8 +787,7 @@ const Mutations = {
           }
         ) 
       ctx.response.cookie('url', result.confirmation.confirmation_url, {
-        // в продакшене нужно вернуть domain: '.savvvy.app',
-        // сейчас он не нужен, потому что мы передаем кукис в локалхост
+        domain: '.savvvy.app',
         httpOnly: false
       })  
       return order;  
