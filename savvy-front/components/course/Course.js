@@ -183,7 +183,7 @@ export default class Course extends Component {
                         </a>
                     </Link>
                     }
-                    {me === null && courseType === "Открытый" &&
+                    {/* {me === null && courseType === "Открытый" &&
                     <Link href={{
                             pathname: '/coursePage',
                             query: {id }
@@ -191,7 +191,7 @@ export default class Course extends Component {
                         <a>
                             <Button>Войти</Button>
                         </a>
-                    </Link>}
+                    </Link>} */}
                     {me && me !== null && me.id !== coursePage.user.id 
                     && !this.state.revealApplication && !applicationsList.includes(me.id) && courseType !== "Платный" &&
                     <EnrollCoursePage
@@ -211,14 +211,14 @@ export default class Course extends Component {
                         getInputReveal={this.myCallback}
 
                     />}
-                        <Link href={{
+                    <Link href={{
                                 pathname: '/coursePage',
                                 query: {id }
                             }}>
                             <a>
                                 <Button>Войти</Button>
                             </a>
-                        </Link>
+                    </Link>
                     {me && me.id === coursePage.user.id &&
                       <>
                         <Link href={{

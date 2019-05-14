@@ -53,7 +53,7 @@ class Home extends Component {
                 {({data: {me}}) => (  
                     <> 
                         <Banner/>
-                        <Buttons>
+                        {/* <Buttons>
                             <Button
                                 onClick = {this.onCourse}
                                 active={this.state.button1}
@@ -66,12 +66,12 @@ class Home extends Component {
                             >
                                 <h1>Песочницы</h1>
                             </Button>
-                        </Buttons>
-                        {this.state.page === 'course' ? 
+                        </Buttons> */}
+                        {/* {this.state.page === 'course' ?  */}
                             <Courses page={parseFloat(this.props.query.page) || 1}/>
-                        :
-                            <Sandboxes page={parseFloat(this.props.query.page) || 1}/>
-                        }
+                        {/* // :
+                        //     <Sandboxes page={parseFloat(this.props.query.page) || 1}/>
+                        // } */}
                     </>
                 )}
             </User>
