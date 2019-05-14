@@ -3,15 +3,20 @@ import Link from 'next/link';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
-import User from '.././User'
+import User from '../User'
 
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
     coursePage(where: { id: $id }) {
+        id
         title
         image
         courseType
+        students
+        pointsA {
+            id
+        }
         user {
             id
             name
@@ -43,7 +48,6 @@ const LeftHeadStyles = styled.div`
     flex-direction: column;
     flex: 1 50%;
     padding: 5% 0 0 5%;
-    
 `;
 
 const RightHeadStyles = styled.div`
@@ -108,16 +112,16 @@ export default class CoursePageNav extends Component {
             if (error) return <Error error={error} />;
             if (loading) return <p>Loading...</p>;
             const coursePage = data.coursePage;
+
             return (
             // if (!data.case) return <p>No Item Found for {this.props.id}</p>;
                 <User>
                     {({data: {me}}) => (
                         <HeadStyles>  
-                            {/* {console.log(me.id)} */}
                             <LeftHeadStyles>
                                 {coursePage.image && <Img src={coursePage.image} alt={coursePage.title}/>}
-                                <Author>{coursePage.title} </Author>
-                                <Author>{coursePage.user.name} </Author>
+                                <Author>Курс: {coursePage.title} </Author>
+                                <Author>Автор: {coursePage.user.name} </Author>
                                 { me !== null && coursePage.user.id === me.id ?
                                     <p>Если после создания или удаления материала он не появился сразу на странице, перезагрузите страницу и все будет в порядке.</p>
                                     :
@@ -125,42 +129,96 @@ export default class CoursePageNav extends Component {
                                 }
                                 <br/>
                             </LeftHeadStyles>
-
-                            { me !== null && coursePage.user.id === me.id ? 
                             <RightHeadStyles>
-                                <Header> Инструменты преподавателя: </Header>
-                                <Buttons>
-                                <Link href={{
-                                    pathname: '/createLesson',
-                                    query: {id: this.props.id}
-                                }}>
-                                <a>
-                                    <Button>Составить урок</Button>
-                                </a>
-                                </Link>
-                                <Link href={{
-                                    pathname: '/createPointA',
-                                    query: {id: this.props.id}
+                                { me && !coursePage.students.includes(me.id) && me.id !== coursePage.user.id &&
+                                <>
+                                  {coursePage.pointsA.length > 0 &&
+                                    <Link href={{
+                                            pathname: '/pointA',
+                                            query: coursePage.id
+                                        }}>
+                                        <a>
+                                            <Button>Описание курса</Button>
+                                        </a>
+                                    </Link>
+                                }
+                                  { coursePage.courseType === "FORMONEY" &&
+                                    <>
+                                        <Link href={{
+                                            pathname: '/',
+                                        }}>
+                                            <a>
+                                                <Button>На главную страницу</Button>
+                                            </a>
+                                        </Link>
+                                        <p>Купите курс на главной странице сайта! <br/>
+                                        После оплаты вам откроется доступ ко всем урокам курса.</p>
+                                    </>
+                                  }
+                                  { coursePage.courseType === "PRIVATE" &&
+                                    <>
+                                        <Link href={{
+                                            pathname: '/',
+                                        }}>
+                                            <a>
+                                                <Button>На главную страницу</Button>
+                                            </a>
+                                        </Link>
+                                        <p>Зарегестриуйтесь на курс на главной странице сайта! <br/>
+                                            Преподаватель одобрит вашу заявку и откроет доступ к материалам курса.</p>
+                                    </>
+                                  }
+                                  { coursePage.courseType === "PUBLIC" &&
+                                    <>
+                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
+                                        <br/>Сразу после регистрации вы получите доступ к материалам курса.</p>
+                                        <Link href={{
+                                            pathname: '/',
+                                        }}>
+                                            <a>
+                                                <Button>На главную страницу</Button>
+                                            </a>
+                                        </Link>
+                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
+                                        <br/>Сразу после регистрации вы получите доступ к материалам курса.</p>
+                                    </>
+                                  }
+                                </>
+                                }
+                                { me && me !== null && coursePage.user.id === me.id &&
+                                <>
+                                    <Header> Инструменты преподавателя: </Header>
+                                    <Buttons>
+                                    <Link href={{
+                                        pathname: '/createLesson',
+                                        query: {id: this.props.id}
                                     }}>
                                     <a>
-                                        <Button>Составить описание</Button>
+                                        <Button>Составить урок</Button>
                                     </a>
-                                </Link>
-                                {coursePage.courseType !== "PUBLIC" &&
-                                <Link href={{
-                                    pathname: '/applications',
-                                    query: {id: this.props.id}
-                                }}>
-                                <a>
-                                    <Button>Рассмотреть заявки </Button>
-                                </a>
-                                </Link>
-                                }
-                              </Buttons>
+                                    </Link>
+                                    <Link href={{
+                                        pathname: '/createPointA',
+                                        query: {id: this.props.id}
+                                        }}>
+                                        <a>
+                                            <Button>Составить описание</Button>
+                                        </a>
+                                    </Link>
+                                    {coursePage.courseType !== "PUBLIC" &&
+                                    <Link href={{
+                                        pathname: '/applications',
+                                        query: {id: this.props.id}
+                                    }}>
+                                    <a>
+                                        <Button>Рассмотреть заявки </Button>
+                                    </a>
+                                    </Link>
+                                    }
+                                </Buttons>
+                              </>
+                            }
                             </RightHeadStyles> 
-                            :
-                            null
-                        }
                     </HeadStyles>
                   )}
                   </User>

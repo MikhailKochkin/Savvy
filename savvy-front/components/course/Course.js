@@ -9,6 +9,8 @@ import Application from './Application'
 import TakeMyMoney from '../TakeMyMoney';
 
 const CaseCard = styled.div`
+    display: flex;
+    flex-direction: column;
     border: 1px lightgrey solid;
     border-radius: 5px;    
     text-align: left;
@@ -40,7 +42,12 @@ const Title = styled.p`
 const Price = styled.span`
     font-size:1.8rem;
     font-weight: bold;
-    margin-top: 1%;
+`;
+
+const PriceBox = styled.div`
+    font-size:1.8rem;
+    font-weight: bold;
+    margin-bottom: 8%;
 `;
 
 const Description = styled.p`
@@ -72,8 +79,14 @@ const Buttons = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: space-between;
     margin-bottom: 0.5%;
+`;
+
+const Additional = styled.div`
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 
 const LineThrough = styled.span`
@@ -126,14 +139,18 @@ export default class Course extends Component {
                 me && me.subjects.map(subject => subjectArray.push(subject))
                 return ( 
                 <CaseCard>
+                  {/* <Additional>
+                      <p>VB[</p>
+                      <p>VB[</p>
+                  </Additional> */}
+                  <Additional>
+                    <div>
                     {coursePage.image && <Img src={coursePage.image} alt={coursePage.title}/>}
                     <Title><a>{coursePage.title}</a></Title>
                     <Description>{coursePage.description}</Description>
                     <Author>{coursePage.user.name}</Author>
                     <p>Количество участников: {studentsArray.length}</p>
-                    <p>Тип курса: {courseType}</p>
-
-                    <p>Стоимость: 
+                    {price !== "Бесплатно" && <PriceBox>Стоимость: 
                         
                     {discountPrice !== null ?
                         <>
@@ -147,11 +164,13 @@ export default class Course extends Component {
                     {discountPrice === null  ?
                         <>
                             <span> </span>
-                            {price} 
+                            {price}
                         </>
                         : null}
                 
-                    </p>
+                    </PriceBox>}
+                    </div>
+                    <div>
                     <Buttons>
 
                     {coursePage.pointsA.length > 0 &&
@@ -192,14 +211,6 @@ export default class Course extends Component {
                         getInputReveal={this.myCallback}
 
                     />}
-                    {me && applicationsList.includes(me.id) &&
-                        <h4>Заявка находится на рассмотрении</h4>
-                    }
-                    {!me && courseType === "Платный" &&
-                        <p>Зарегистрируйтесь на сайте, чтобы купить курс.</p>
-                    }
-                    {me && me.id === coursePage.user.id &&
-                    <>
                         <Link href={{
                                 pathname: '/coursePage',
                                 query: {id }
@@ -208,6 +219,8 @@ export default class Course extends Component {
                                 <Button>Войти</Button>
                             </a>
                         </Link>
+                    {me && me.id === coursePage.user.id &&
+                      <>
                         <Link href={{
                                 pathname: '/updateCoursePage',
                                 query: {id }
@@ -242,8 +255,15 @@ export default class Course extends Component {
                         meData={me}
                         coursePageId = {coursePage.id}
                     />
-                   
                     }
+                    {me && applicationsList.includes(me.id) &&
+                        <h4>Заявка находится на рассмотрении</h4>
+                    }
+                    {!me && courseType === "Платный" &&
+                        <p>Зарегистрируйтесь на сайте, чтобы купить курс.</p>
+                    }
+                    </div>
+                  </Additional>
                 </CaseCard>
             )}}
         </User>

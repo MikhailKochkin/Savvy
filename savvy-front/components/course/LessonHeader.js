@@ -75,6 +75,7 @@ class SingleLesson extends Component {
                 <>
                     <TextBar>
                       <h4>Урок {this.props.lesson.number}. {this.props.name}</h4>
+                      { me && lesson && this.props.students.includes(me.id) || me && lesson && me.id === lesson.user.id ?
                       <Link href={{
                           pathname: '/lesson',
                           query: {id: this.props.lesson.id}
@@ -82,7 +83,7 @@ class SingleLesson extends Component {
                           <A>
                           <Button>Перейти к уроку</Button>
                           </A>
-                      </Link>
+                      </Link> : null}
                       { me && me.id === lesson.user.id ?
                       <DeleteSingleLesson 
                           id={this.props.lesson.id}

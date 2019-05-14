@@ -1,9 +1,26 @@
 import React, { Component } from 'react';
 import Link from 'next/link';
+import { Query } from 'react-apollo';
+import gql from "graphql-tag";
 import styled from 'styled-components';
 import User from './User';
+import Menu from './Menu';
 import Search from './Search';
 import Signout from './auth/Signout';
+
+const ALL_COURSE_PAGES_QUERY = gql`
+  query ALL_COURSE_PAGES_QUERY {
+    coursePages {
+      id
+      title
+      courseType
+      user {
+          id
+          name
+      }
+    }
+  }
+`;
 
 const StyledHeader = styled.header`
   background-color: #F2F2F2;
@@ -56,6 +73,20 @@ const Logo = styled.div`
   }
 `;
 
+const Button = styled.button`
+    border: none;
+    text-decoration: none;
+    color: #13214D;
+    font-family: "Gill Sans",serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: #F0F0F0;
+    &:hover {
+        color: #6DAAE1;
+    }
+`;
+
 const UserData = styled.div`
   grid-area: UserData;
   display: flex;
@@ -65,10 +96,20 @@ const UserData = styled.div`
 `;
 
 class Nav extends Component {
+  state = {
+    menuShown: false,
+  }
+  mouseEnter = () => {
+    this.setState({ menuShown: true });
+  }
+  mouseLeave = () => {
+    this.setState({ menuShown: false });
+  }
     render() {
       return (
       <User>
-        {({data: {me}}) => (     
+        {({data: {me}}) => (
+        <>   
           <StyledHeader>
             <CourseMenu>
                 <Link 
@@ -83,7 +124,8 @@ class Nav extends Component {
                     <a>Создать</a>
                   </Link>
                 )}
-                <Search/>
+                <Button onMouseEnter={this.mouseEnter}>Поиск</Button>
+                {/* <Search/> */}
             </CourseMenu>
             <Logo>
                 <Link prefetch href="/">
@@ -108,7 +150,23 @@ class Nav extends Component {
                     </Link>
                   )}
             </UserData>
-          </StyledHeader> 
+          </StyledHeader>
+          <Query 
+            query={ALL_COURSE_PAGES_QUERY} 
+            fetchPolicy="cache-first"
+          >
+            {({ data, error, loading }) => {
+                if (error) return <p>Error: {error.message}</p>;
+                return (
+                this.state.menuShown ?
+                <div onMouseLeave={this.mouseLeave}>
+                  <Menu courses={data.coursePages}/>
+                </div>
+                : 
+                null
+            )}}
+          </Query>
+        </>
         )}
     </User>  
   )}  

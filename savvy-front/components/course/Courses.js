@@ -3,16 +3,26 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 import ReactLoading from 'react-loading';
+import CourseList from './CourseList';
 import Course from './Course';
 import Pagination from '../pagination/CoursesPagination';
 import { CoursePerPage } from '../../config';
 import { Tags } from '../../config';
 
 const Center = styled.div`
-    text-align: center;
+    text-align: left;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    &{
+        padding-left: 5%;
+    }
+    @media (max-width: 800px) {
+        & {
+        padding-left: 0;
+        text-align: center;
+      } 
+    }
 `;
 
 const PaginationCenter = styled.div`
@@ -28,7 +38,7 @@ const CasesStyles = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: left;
     @media (max-width: 800px) {
         flex-direction: column;
         align-items: center;
@@ -141,10 +151,9 @@ class Courses extends Component {
     render() {
         return (
             <Center>
-                <PaginationCenter>
+                {/* <PaginationCenter>
                     <Pagination page={this.props.page} />
-                </PaginationCenter>
-                    <h1>Курсы</h1>
+                </PaginationCenter> */}
                     <Query 
                         query={ALL_COURSE_PAGES_QUERY} 
                         fetchPolicy="cache-first"
@@ -153,12 +162,36 @@ class Courses extends Component {
                     }}>
                     {({ data, error, loading }) => {
                         if (error) return <p>Error: {error.message}</p>;
-                        return <CasesStyles>
-                            {loading ? 
-                            <ReactLoading type={'spin'} color={'#13214D'} height={60} width={60} />
-                            :
-                            data.coursePages.map(coursePage => <Course key={coursePage.id} id={coursePage.id} coursePage={coursePage}/>)}
-                            </CasesStyles>  
+                        return (
+                            <>
+                                {loading ? 
+                                <ReactLoading type={'spin'} color={'#13214D'} height={60} width={60} />
+                                :
+                                <>
+                                    <h1>Платные курсы:</h1>
+                                    <CasesStyles>
+                                        <CourseList
+                                        courseList={data.coursePages}
+                                        type={"FORMONEY"}
+                                        />
+                                    </CasesStyles>
+                                </>
+                               }
+                               {loading ? 
+                                <ReactLoading type={'spin'} color={'#13214D'} height={60} width={60} />
+                                :
+                                <>
+                                    <h1>Бесплатные курсы:</h1>
+                                    <CasesStyles>
+                                        <CourseList
+                                        courseList={data.coursePages}
+                                        type={"PUBLIC"}
+                                        />
+                                    </CasesStyles>
+                                </>
+                               }
+                            </>
+                        )
                     }}
                    </Query>
                    <ChooseTag>
@@ -193,7 +226,7 @@ class Courses extends Component {
                                         id={coursePage.id} 
                                         coursePage={coursePage}
                                 />)
-                                }
+                              }  
                             </CasesStyles>
                         )
                     }}
