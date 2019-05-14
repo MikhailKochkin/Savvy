@@ -105,6 +105,12 @@ class Nav extends Component {
   mouseLeave = () => {
     this.setState({ menuShown: false });
   }
+
+  menuShow = () => {
+    this.setState(prevState => ({
+      menuShown: !prevState.menuShown
+    }))
+}
     render() {
       return (
       <User>
@@ -124,7 +130,7 @@ class Nav extends Component {
                     <a>Создать</a>
                   </Link>
                 )}
-                <Button onMouseEnter={this.mouseEnter}>Поиск</Button>
+                <Button onMouseEnter={this.mouseEnter} onClick={this.menuShow}>Поиск</Button>
                 {/* <Search/> */}
             </CourseMenu>
             <Logo>
