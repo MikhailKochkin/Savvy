@@ -81,25 +81,27 @@ class SingleTextEditor extends Component {
 
         }
         onMouseClick= (e) => {
-            this.setState({
-                shown: true,
-                answer: e.target.title,
-            })
+          if(this.state.total !== null) {
             e.target.style.backgroundColor = '#ffa64d';
             e.target.style.padding = '0.8%';
             e.target.style.borderRadius = '8px';
-
             if(e.target.title !== "Здесь все вроде бы в порядке.." && this.state.found < this.state.total) {
                 this.setState(prevState => ({
                     found: prevState.found + 1
                 }))
             }
+          }
+          this.setState({
+            shown: true,
+            answer: e.target.title,
+          })
         }
 
-        onConceal = () => {
+        onConceal = (e) => {
             this.setState({
                 shown: false
             })
+            e.currentTarget.style.textDecorationLine = null
         }
 
         onShow = () => {
@@ -113,7 +115,7 @@ class SingleTextEditor extends Component {
             mistakes.forEach(mistake => mistake.style = null);
           }
         }
-
+  
         componentDidMount() {
             const elements = document.querySelectorAll("#id")
             elements.forEach(element => element.addEventListener('click', this.onMouseClick))
@@ -124,7 +126,8 @@ class SingleTextEditor extends Component {
         return (
             <Center>
             <TextBar>
-              {this.state.total !== "" && <p>Всего рисков/ошибок: {this.state.total} </p>}
+              {this.state.total !== null && <h3>Всего рисков/ошибок: {this.state.total} </h3>}
+              {this.state.total === null && <h3> Изучите новые слова </h3>}
               {this.state.shown &&
                   <Hint>
                       <div>{this.state.answer}</div>
@@ -133,11 +136,11 @@ class SingleTextEditor extends Component {
               }
               <EditText>
                   <div>{renderHTML(this.state.text)}</div>
-                  {this.state.total !== "" && <p><strong>Найдено рисков/ошибок:</strong> {this.state.found} </p>}
+                  {this.state.total !== null && <p><strong>Найдено рисков/ошибок:</strong> {this.state.found} </p>}
                   {this.state.total === this.state.found ? <Right>Задание выполнено!</Right> : null}
               </EditText>
           </TextBar>
-          <button onClick={this.onShow}>{this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}</button>
+          {this.state.total !== null && <button onClick={this.onShow}>{this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}</button>}
           <br/>
           { me && me.id === textEditor.user.id ?
             <DeleteSingleTextEditor
