@@ -36,6 +36,9 @@ const Hint = styled.div`
   top: 20px;
   border-right: 1px solid #C0D6DF;
   width: 50%;
+  div {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
   @media (max-width: 1000px) {
       margin: 0%;
       width: 100%;
