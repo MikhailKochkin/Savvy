@@ -4,6 +4,7 @@ import Signup from "../components/auth/Signup";
 import Signin from "../components/auth/Signin";
 import RequestReset from "../components/auth/RequestReset";
 
+
 const Button = styled.button`
     background-color: ${props => props.active ? "#122557" : "white"};
     color: ${props => props.active ? "white" : "black"};
@@ -23,6 +24,16 @@ const Buttons = styled.div`
         width: 25%;
     }
     margin-bottom: 5%;
+    @media (max-width: 800px) {
+        flex-direction: column;
+        align-items: center;
+        Button {
+            width: 90%;
+            font-size: 0.8rem;
+            margin-top: 2%;
+
+        }
+    }
 `;
 
 class SignupPage extends Component {

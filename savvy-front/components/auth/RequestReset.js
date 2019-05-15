@@ -60,6 +60,9 @@ const Container = styled.div`
     }
     grid-template-areas:
         "first   ";
+    @media (max-width: 800px) {
+      margin-bottom: 10%; 
+    }
 `;
 
 const Label = styled.label`
@@ -100,6 +103,9 @@ const Buttons = styled.div`
     margin-top: 2%;
     padding: 3%;
     border-top: solid 1px #F0F0F0;
+    @media (max-width: 800px) {
+        margin-top: 10%; 
+    }
 `;
 
 class RequestReset extends Component {
@@ -127,7 +133,7 @@ class RequestReset extends Component {
           >
             <Fieldset disabled={loading} aria-busy={loading}>
               <h2>Восстановите пароль</h2>
-              <p>Введите ваш эл. адрес, чтобы найти свой аккаунт и восстановить пароль</p>
+              <p>Введите ваш эл. адрес, чтобы найти свой аккаунт и восстановить пароль.</p>
               <Container>
                 <Error error={error} />
                 {!error && !loading && called && <p>Success! Check your email for a reset link!</p>}

@@ -115,6 +115,9 @@ const LoggedIn = styled.p`
     border-radius: 10px;
     width: 45%;
     text-align: center;
+    @media (max-width: 600px) {
+        width: 70%;
+    }
 `;
 
 class Signin extends Component {

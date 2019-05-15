@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Mutation } from "react-apollo";
 import styled from 'styled-components';
 import gql from "graphql-tag";
+import Router from 'next/router';
 import Error from '../ErrorMessage';
 import { CURRENT_USER_QUERY } from '../User';
 
@@ -30,6 +31,10 @@ const SubmitButton = styled.button`
     cursor: pointer;
     &:hover {
         background: #0B3954;
+    }
+    @media (max-width: 800px) {
+        margin-top: 5%;
+        width: 80%;
     }
 `;
 
@@ -70,6 +75,9 @@ const Container = styled.div`
         "first   "
         "second   "
         "third   ";
+    @media (max-width: 800px) {
+        margin-bottom: 5%; 
+    }
 `;
 
 const Label = styled.label`
@@ -112,11 +120,24 @@ const Buttons = styled.div`
     border-top: solid 1px #F0F0F0;
 `;
 
+const LoggedIn = styled.p`
+    background-color: #00FF7F;
+    font-size: 1.8rem;
+    padding: 1% 2%;
+    border-radius: 10px;
+    width: 45%;
+    text-align: center;
+    @media (max-width: 600px) {
+        width: 100%;
+    }
+`;
+
 class Signup extends Component {
     state = {
         name: '',
         password: '',
         email: '',
+        loggedIn: false,
     }
     saveToState = e => {
         this.setState({ [e.target.name] : e.target.value}); 
@@ -134,12 +155,14 @@ class Signup extends Component {
                   onSubmit={ async e => {
                    e.preventDefault();
                    await signup();
-                   this.setState({name: '', email: '', password: ''});
+                   this.setState({name: '', email: '', password: '', loggedIn: true})
+                   setTimeout(() => Router.push({ pathname: '/'}), 2000)
                    }}
                 >
                 <Fieldset disabled={loading} aria-busy={loading}>
                     <h2>Зарегистрируйтесь на Savvy</h2>
                     <Error error={error} />
+                    {this.state.loggedIn && <LoggedIn>Вы успешно зарегистрировались!</LoggedIn>}
                     <Container>
                         <Label className="email" htmlFor="email">
                             <p className="first">Электронная почта</p>
@@ -176,7 +199,7 @@ class Signup extends Component {
                         </Label>
                     </Container>
                     <Buttons>
-                        <SubmitButton type="submit">{loading ? "Регистрируюсь" : "Зарегестрироваться"}</SubmitButton>
+                        <SubmitButton type="submit">{loading ? "Регистрируюсь" : "Зарегистрироваться"}</SubmitButton>
                     </Buttons>
                 </Fieldset>
               </Form>
