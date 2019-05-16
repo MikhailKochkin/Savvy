@@ -56,10 +56,25 @@ const RightHeadStyles = styled.div`
     flex: 1 50%;
     padding-top: 4%;
     font-size: 1.8rem;
+    div {
+        background: #FEFAE9;
+        border-left: 6px solid #F0C40F;
+        /* border-radius: 10px; */
+        
+        margin-right: 14%;
+        padding: 4%;
+        p {
+            color: black;
+            margin: 0;
+        }
+    }
     @media (max-width: 800px) {
         padding: 5%;
         h2 {
             margin-left: 8%;
+        }
+        div {
+        margin-right: 0%;
         }
     }
 `;
@@ -151,8 +166,10 @@ export default class CoursePageNav extends Component {
                                                 <Button>На главную страницу</Button>
                                             </a>
                                         </Link>
-                                        <p>Купите курс на главной странице сайта! <br/>
-                                        После оплаты вам откроется доступ ко всем урокам курса.</p>
+                                        <div>
+                                            <p><b>Совет</b>: купить курс вы можете на главной странице сайта.
+                                            После оплаты вам откроют доступ ко всем урокам курса.</p>
+                                        </div>
                                     </>
                                   }
                                   { coursePage.courseType === "PRIVATE" &&
@@ -164,14 +181,18 @@ export default class CoursePageNav extends Component {
                                                 <Button>На главную страницу</Button>
                                             </a>
                                         </Link>
-                                        <p>Зарегестриуйтесь на курс на главной странице сайта! <br/>
-                                            Преподаватель одобрит вашу заявку и откроет доступ к материалам курса.</p>
+                                        <div>
+                                        <p><b>Совет</b>:Зарегестриуйтесь на курс на главной странице сайта!
+                                        Преподаватель одобрит вашу заявку и откроет доступ к материалам курса.</p>
+                                        </div>
                                     </>
                                   }
                                   { coursePage.courseType === "PUBLIC" &&
                                     <>
-                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
-                                        <br/>Сразу после регистрации вы получите доступ к материалам курса.</p>
+                                        <div>
+                                        <p><b>Совет</b>:Зарегестриуйтесь на курс на главной странице сайта. 
+                                        Сразу после регистрации вы получите доступ к материалам курса.</p>
+                                        </div>
                                         <Link href={{
                                             pathname: '/',
                                         }}>
