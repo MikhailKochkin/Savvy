@@ -3,6 +3,16 @@ import Link from 'next/link';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
+import {
+    FacebookShareButton,
+    FacebookIcon,
+    FacebookShareCount,
+    VKShareButton,
+    VKIcon,
+    TelegramShareButton,
+    TelegramIcon,
+    TwitterShareButton,
+  } from 'react-share';
 import User from '../User'
 
 
@@ -48,6 +58,23 @@ const LeftHeadStyles = styled.div`
     flex-direction: column;
     flex: 1 50%;
     padding: 5% 0 0 5%;
+    .Demo__some-network__share-count {
+        margin-top: 3px;
+        font-size: 12px;
+    }
+
+    .Demo__some-network__share-button {
+        cursor: pointer;
+    }
+
+    .Demo__some-network__share-button:hover:not(:active) {
+        opacity: 0.75;
+    }
+
+    .Demo__some-network__custom-icon {
+        width:32px;
+        height:32px;
+}
 `;
 
 const RightHeadStyles = styled.div`
@@ -143,7 +170,50 @@ export default class CoursePageNav extends Component {
                                     null
                                 }
                                 <br/>
-                            </LeftHeadStyles>
+                                <SMButtons>
+                                    <FacebookShareButton
+                                        url={shareUrl}
+                                        onClick={this.onReveal}
+                                        quote={title}
+                                        className="Demo__some-network__share-button">
+                                        <FacebookIcon
+                                            size={32}
+                                            round 
+                                        />
+                                    </FacebookShareButton>
+                                    <FacebookShareCount
+                                        url={shareUrl}
+                                        className="Demo__some-network__share-count">
+                                        {count => count}
+                                    </FacebookShareCount>
+                                    <div className="Demo__some-network">
+                                        <VKShareButton
+                                            url={shareUrl}
+                                            title={title}
+                                            description={title}
+                                            // image={`${String(window.location)}/${exampleImage}`}
+                                            windowWidth={660}
+                                            windowHeight={460}
+                                            className="Demo__some-network__share-button">
+                                            <VKIcon
+                                            size={32}
+                                            round />
+                                        </VKShareButton>
+                                    </div>
+                                    <div className="Demo__some-network">
+                                        <TelegramShareButton
+                                            url={shareUrl}
+                                            title={title}
+                                            className="Demo__some-network__share-button">
+                                            <TelegramIcon size={32} round />
+                                        </TelegramShareButton>
+
+                                        <div className="Demo__some-network__share-count">
+                                            &nbsp;
+                                        </div>
+                                    </div>
+                                </SMButtons>
+                                </LeftHeadStyles>
                             <RightHeadStyles>
                                 { me && !coursePage.students.includes(me.id) && me.id !== coursePage.user.id &&
                                 <>
