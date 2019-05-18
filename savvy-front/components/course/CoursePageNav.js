@@ -159,7 +159,8 @@ export default class CoursePageNav extends Component {
             if (error) return <Error error={error} />;
             if (loading) return <p>Loading...</p>;
             const coursePage = data.coursePage;
-
+            const shareUrl = "www.savvvy.app";
+            const title = `Я прохожу курс: ${coursePage.title} на Savvvy.app`
             return (
             // if (!data.case) return <p>No Item Found for {this.props.id}</p>;
                 <User>
