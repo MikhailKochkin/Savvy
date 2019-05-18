@@ -3,16 +3,16 @@ import Link from 'next/link';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import gql from 'graphql-tag';
-import {
-    FacebookShareButton,
-    FacebookIcon,
-    FacebookShareCount,
-    VKShareButton,
-    VKIcon,
-    TelegramShareButton,
-    TelegramIcon,
-    TwitterShareButton,
-  } from 'react-share';
+// import {
+//     FacebookShareButton,
+//     FacebookIcon,
+//     FacebookShareCount,
+//     VKShareButton,
+//     VKIcon,
+//     TelegramShareButton,
+//     TelegramIcon,
+//     TwitterShareButton,
+//   } from 'react-share';
 import User from '../User'
 
 
@@ -121,10 +121,10 @@ const Button = styled.button`
     }
 `;
 
-const SMButtons = styled.div`
-    display: flex;
-    flex-direction: row;
-`;
+// const SMButtons = styled.div`
+//     display: flex;
+//     flex-direction: row;
+// `;
 
 const Buttons = styled.div`
     display: flex;
@@ -176,7 +176,8 @@ export default class CoursePageNav extends Component {
                                     null
                                 }
                                 <br/>
-                                <SMButtons>
+                                {/* <SMButtons>
+                                    <div className="Demo__some-network">
                                     <FacebookShareButton
                                         url={shareUrl}
                                         onClick={this.onReveal}
@@ -187,11 +188,7 @@ export default class CoursePageNav extends Component {
                                             round 
                                         />
                                     </FacebookShareButton>
-                                    <FacebookShareCount
-                                        url={shareUrl}
-                                        className="Demo__some-network__share-count">
-                                        {count => count}
-                                    </FacebookShareCount>
+                                    </div>
                                     <div className="Demo__some-network">
                                         <VKShareButton
                                             url={shareUrl}
@@ -218,7 +215,7 @@ export default class CoursePageNav extends Component {
                                             &nbsp;
                                         </div>
                                     </div>
-                                </SMButtons>
+                                </SMButtons> */}
                                 </LeftHeadStyles>
                             <RightHeadStyles>
                                 { me && !coursePage.students.includes(me.id) && me.id !== coursePage.user.id &&

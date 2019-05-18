@@ -7,7 +7,7 @@ const Meta = () => (
             <meta charSet="utf-8" />
             <link rel="shortcut icon" href="/static/favicon.ico" />
             <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-            <title>Savvy 2.0</title>
+            <title>Savvy – платформа для управления юридическими знаниями</title>
         </Head>
     </>
 )
