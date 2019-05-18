@@ -121,6 +121,11 @@ const Button = styled.button`
     }
 `;
 
+const SMButtons = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
 const Buttons = styled.div`
     display: flex;
     flex-direction: column;
