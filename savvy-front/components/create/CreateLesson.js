@@ -17,6 +17,7 @@ const CREATE_LESSON_MUTATION = gql`
     $number: Int
     $text: String!
     $video: String
+    $doc: String
     $coursePageID: ID!
   ) {
     createLesson(
@@ -24,6 +25,7 @@ const CREATE_LESSON_MUTATION = gql`
       number: $number
       text: $text 
       video: $video
+      doc: $doc
       coursePageID: $coursePageID
     ) {
       id
@@ -129,6 +131,7 @@ export default class CreateLesson extends Component {
         name: '',
         text: '',
         video: '',
+        doc: '',
         number: 0
       };
       this.handleName = e => {
@@ -199,6 +202,17 @@ export default class CreateLesson extends Component {
                       placeholder="Номер урока"
                       value={this.state.number}
                       onChange={this.handleNumber}
+                    />
+                </Label>
+                <Label className="name" htmlFor="name">
+                  <p className="first">Материалы урока</p>
+                    <input
+                      type="text"
+                      id="doc"
+                      name="doc"
+                      placeholder="Ссылка"
+                      value={this.state.doc}
+                      onChange={this.handleName}
                     />
                 </Label>
               </Container>

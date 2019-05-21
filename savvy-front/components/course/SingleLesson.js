@@ -21,6 +21,7 @@ const SINGLE_LESSON_QUERY = gql`
         name
         number
         video
+        doc
         createdAt
         user {
           id
@@ -129,7 +130,6 @@ const ChooseButton = styled.button`
 `;
 
 const Nav = styled.div`
-    /* border-top: 1px solid #0A2342; */
     padding-top: 1%;
     display: flex;
     flex-direction: row;
@@ -137,7 +137,6 @@ const Nav = styled.div`
 `;
 
 const Center = styled.div`
-    /* border-top: 1px solid #0A2342; */
     padding-top: 1%;
     display: flex;
     flex-direction: column;
@@ -149,7 +148,6 @@ const Button = styled.button`
     font-size: 1.4rem;
     font-weight: 600;
     padding: 2% ;
-    /* margin: 2%; */
     color: #FFFDF7;
     border-radius: 10px;
     background-color: #84BC9C;
@@ -158,6 +156,20 @@ const Button = styled.button`
     &:hover{
         background-color: #294D4A;
     }
+`;
+
+const LinkButton = styled.a`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #FFFDF7;
+  padding: 1rem ;
+  background: #84BC9C;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover{
+        background-color: #294D4A;
+  }
+
 `;
 
 
@@ -194,6 +206,7 @@ class SingleLesson extends Component {
                 // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
                 const lesson = data.lesson;
                 moment.locale('ru');
+                console.log(lesson.doc)
                 return (
                   <AreYouEnrolled 
                     subject={lesson.coursePage.id}
@@ -219,6 +232,8 @@ class SingleLesson extends Component {
                         null } 
                         <div dangerouslySetInnerHTML={{ __html: lesson.text }}></div>
                       </TextBar>
+
+                      <LinkButton href={lesson.doc} target="_blank">Материалы урока</LinkButton>
                     </Center>
                     <Nav>
                       <ChooseButtons>

@@ -11,8 +11,8 @@ type Mutation {
     createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     updateSandboxPage(id: ID!, title: String, description: String, image: String): SandboxPage
     deleteSandboxPage(id:ID!): SandboxPage
-    createLesson(name: String!, number: Int, text: String!, video: String, coursePageID: ID!): Lesson!
-    updateLesson(id: ID!, name: String, number: Int, text: String, video: String): Lesson
+    createLesson(name: String!, number: Int, text: String!, video: String, doc: String, coursePageID: ID!): Lesson!
+    updateLesson(id: ID!, name: String, number: Int, text: String, video: String, doc: String): Lesson
     deleteLesson(id:ID!): Lesson
     createPointA(description: String, coursePageID: ID!): PointA!
     updatePointA(id: ID!, description: String): PointA

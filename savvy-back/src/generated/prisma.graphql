@@ -1127,6 +1127,7 @@ type Lesson {
   number: Int
   text: String!
   video: String
+  doc: String
   user: User!
   coursePage: CoursePage!
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
@@ -1149,6 +1150,7 @@ input LessonCreateInput {
   number: Int
   text: String!
   video: String
+  doc: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
@@ -1193,6 +1195,7 @@ input LessonCreateWithoutConstructionsInput {
   number: Int
   text: String!
   video: String
+  doc: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
@@ -1206,6 +1209,7 @@ input LessonCreateWithoutCoursePageInput {
   number: Int
   text: String!
   video: String
+  doc: String
   user: UserCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
@@ -1219,6 +1223,7 @@ input LessonCreateWithoutProblemsInput {
   number: Int
   text: String!
   video: String
+  doc: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
@@ -1232,6 +1237,7 @@ input LessonCreateWithoutTestsInput {
   number: Int
   text: String!
   video: String
+  doc: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   problems: ProblemCreateManyWithoutLessonInput
@@ -1245,6 +1251,7 @@ input LessonCreateWithoutTexteditorsInput {
   number: Int
   text: String!
   video: String
+  doc: String
   user: UserCreateOneWithoutLessonsInput!
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
@@ -1258,6 +1265,7 @@ input LessonCreateWithoutUserInput {
   number: Int
   text: String!
   video: String
+  doc: String
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
@@ -1282,6 +1290,8 @@ enum LessonOrderByInput {
   text_DESC
   video_ASC
   video_DESC
+  doc_ASC
+  doc_DESC
   coursePageID_ASC
   coursePageID_DESC
   createdAt_ASC
@@ -1296,6 +1306,7 @@ type LessonPreviousValues {
   number: Int
   text: String!
   video: String
+  doc: String
   coursePageID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1324,6 +1335,7 @@ input LessonUpdateInput {
   number: Int
   text: String
   video: String
+  doc: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
@@ -1386,6 +1398,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   number: Int
   text: String
   video: String
+  doc: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
@@ -1399,6 +1412,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   number: Int
   text: String
   video: String
+  doc: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
@@ -1412,6 +1426,7 @@ input LessonUpdateWithoutProblemsDataInput {
   number: Int
   text: String
   video: String
+  doc: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
@@ -1425,6 +1440,7 @@ input LessonUpdateWithoutTestsDataInput {
   number: Int
   text: String
   video: String
+  doc: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   problems: ProblemUpdateManyWithoutLessonInput
@@ -1438,6 +1454,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   number: Int
   text: String
   video: String
+  doc: String
   user: UserUpdateOneRequiredWithoutLessonsInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
@@ -1451,6 +1468,7 @@ input LessonUpdateWithoutUserDataInput {
   number: Int
   text: String
   video: String
+  doc: String
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
@@ -1566,6 +1584,20 @@ input LessonWhereInput {
   video_not_starts_with: String
   video_ends_with: String
   video_not_ends_with: String
+  doc: String
+  doc_not: String
+  doc_in: [String!]
+  doc_not_in: [String!]
+  doc_lt: String
+  doc_lte: String
+  doc_gt: String
+  doc_gte: String
+  doc_contains: String
+  doc_not_contains: String
+  doc_starts_with: String
+  doc_not_starts_with: String
+  doc_ends_with: String
+  doc_not_ends_with: String
   user: UserWhereInput
   coursePage: CoursePageWhereInput
   tests_every: TestWhereInput

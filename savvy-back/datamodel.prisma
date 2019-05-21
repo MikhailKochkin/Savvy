@@ -88,6 +88,7 @@ type Lesson {
   number: Int
   text: String!
   video: String
+  doc: String
   user: User!
   coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
   tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
