@@ -345,7 +345,7 @@ const Click = styled.div`
 class Project extends Component {
     state = {
         tarif: "Базовый",
-        price: 1,
+        price: 1800,
         promo: '',
         promoUsed: false,
         months: "1",
