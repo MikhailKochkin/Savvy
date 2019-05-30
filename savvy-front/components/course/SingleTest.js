@@ -48,7 +48,6 @@ class SingleTest extends Component {
       } else if(event.currentTarget.value === 'false') {
         this.setState({answerState: "wrong"})
       }
-
     }
     render() {
       const answers = [
@@ -114,7 +113,6 @@ class SingleTest extends Component {
                   }
               </Center>
               );
-
     }
   }
   

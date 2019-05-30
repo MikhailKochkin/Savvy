@@ -8,11 +8,11 @@ class CourseList extends Component {
         const data = this.props.courseList
         if(this.props.type === "FORMONEY"){
             data.map(course => (
-                course.courseType === "FORMONEY" ? list.push(course) : null
+                course.courseType === "FORMONEY" || course.courseType === "PRIVATE" ? list.push(course) : null
             ))
         } else if(this.props.type === "PUBLIC") {
             data.map(course => (
-                course.courseType === "PUBLIC" || course.courseType === "PRIVATE" ? list.push(course) : null
+                course.courseType === "PUBLIC" ? list.push(course) : null
             ))
         }
         return (

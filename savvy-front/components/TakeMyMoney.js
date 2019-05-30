@@ -20,13 +20,15 @@ const CREATE_ORDER_MUTATION = gql`
 `;
 
 const Button = styled.button`
-    background-color: #84BC9C;
+    background-color: ${props => props.promo ? "#5DAE76" : "#84BC9C"};
     border: none;
+    border-radius: ${props => props.promo ? "5px" : "none"};
+    border: ${props => props.promo ? "solid 1px white" : "none"};
     color: white;
-    padding: 5px 12px;
+    padding: ${props => props.promo ? "4% 6%" : "5px 12px"};
     text-decoration: none;
     display: inline-block;
-    font-size: 14px;
+    font-size: ${props => props.promo ? "2.4rem" : "14px"};
     width: 135px;
     margin: 2px;
     cursor: pointer;
@@ -47,11 +49,14 @@ class TakeMyMoney extends React.Component {
   }
   render() {
     let finalPrice;
+    console.log(this.props.price);
+    console.log(this.props.discountPrice);
     if(this.props.discountPrice !== null) {
       finalPrice = this.props.discountPrice
     } else if (this.props.discountPrice === null){
       finalPrice = this.props.price
     }
+    console.log(finalPrice);
     return (
       <Mutation 
         mutation={CREATE_APPLICATION_MUTATION} 
@@ -85,6 +90,7 @@ class TakeMyMoney extends React.Component {
                     loading: false
                   })
                 }}
+                promo = {this.props.promo}
               >
               {this.props.children}
               </Button>

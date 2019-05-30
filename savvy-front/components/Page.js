@@ -17,7 +17,8 @@ const theme = {
 };
 
 const StyledPage = styled.div`
-    background: ${props => props.theme.lightgrey};
+    /* background: ${props => props.theme.lightgrey}; */
+    background: #fff;
     color: ${props => props.theme.black};
 `;
 
@@ -31,7 +32,8 @@ injectGlobal`
     html {
         box-sizing: border-box;
         font-size: 10px;
-        font-family: "Gill Sans", serif;
+        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+        font-family: 'Montserrat', serif;
         height:100%;
     }
     *, *:after, *:after {
@@ -41,7 +43,7 @@ injectGlobal`
         padding: 0;
         margin: 0;
         font-size:1.5rem;
-        line-height: 2;
+        line-height: 1.8;
         height:100%;
     }
     a {
