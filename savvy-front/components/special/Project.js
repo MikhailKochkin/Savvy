@@ -427,13 +427,13 @@ class Project extends Component {
                     </Video>
                     <Box>
                       <div>
-                        <Title> "Привет! Меня зовут Михаил Кочкин, я – основатель Savvvy.app. Мы запускаем новый сезон онлайн курсов
+                        <Title>Привет! Меня зовут Михаил Кочкин, я – основатель Savvvy.app. Мы запускаем новый сезон онлайн курсов
                             по юридическому английскому. 
                             <br/> 
                             <br/> 
                             Начнем мы его с двухмесячного курса по грамматике. Задача этого курса – 
                             рассказать вам о сложностях грамматики, которые будут важны при написании юридических текстов и их переводе, найти ваши
-                            ошибки и исправить их."
+                            ошибки и исправить их.
                         </Title>
                       </div>
                     </Box>
@@ -529,7 +529,7 @@ class Project extends Component {
                         <Card>
                             <Center>
                                 <Name>VIP</Name>
-                                <PriceBox>7000 рублей</PriceBox>
+                                <PriceBox>6790 рублей</PriceBox>
                             </Center>
                             <MainText>
                                 {program}
@@ -555,7 +555,6 @@ class Project extends Component {
                             onChange={this.handleChange}
                         />
                         <Button promo onClick={this.onHandlePromo}>Применить</Button>
-                        {/* <Button>Купить</Button> */}
                     </Price>
                 </Center>
                 <Buy>

@@ -14,10 +14,6 @@
     "/special": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
-    ],
-    "/legal": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
     ]
   }
 }
