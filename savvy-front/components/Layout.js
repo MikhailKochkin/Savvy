@@ -1,5 +1,6 @@
 import React from 'react'
 import { initGA, logPageView } from '../utils/analytics'
+import { YMInitializer } from 'react-yandex-metrika';
 
 export default class Layout extends React.Component {
   componentDidMount () {
@@ -12,6 +13,7 @@ export default class Layout extends React.Component {
   render () {
     return (
       <div>
+        <YMInitializer accounts={[52361302]} options={{webvisor: true}} version="2" />
         {this.props.children}
       </div>
     )
