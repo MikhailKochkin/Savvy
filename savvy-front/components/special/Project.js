@@ -355,7 +355,7 @@ class Project extends Component {
         this.setState({[name]: value})
         value === "Базовый" ? this.setState({price: 1800, months: "1"}) : null;
         value === "Стандарт" ? this.setState({price: 3200, months: "1"}) : null;
-        value === "Премиум" ? this.setState({price: 4290, months: "1"}) : null;
+        value === "Премиум" ? this.setState({price: 4300, months: "1"}) : null;
         value === "VIP" ? this.setState({price: 6790, months: "1"}) : null;
       }
     onHandlePromo = () => {
@@ -515,7 +515,7 @@ class Project extends Component {
                         <Card>
                             <Center>
                                 <Name>Премиум</Name>
-                                <PriceBox>4290 рублей</PriceBox>
+                                <PriceBox>4300 рублей</PriceBox>
                             </Center>
                             <MainText>
                                 {program}
