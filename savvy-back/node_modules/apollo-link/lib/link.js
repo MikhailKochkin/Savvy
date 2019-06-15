@@ -1,71 +1,77 @@
-import Observable from 'zen-observable-ts';
-import { validateOperation, isTerminating, LinkError, transformOperation, createOperation, } from './linkUtils';
-var passthrough = function (op, forward) { return (forward ? forward(op) : Observable.of()); };
-var toLink = function (handler) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var tslib_1 = require("tslib");
+var zen_observable_ts_1 = tslib_1.__importDefault(require("zen-observable-ts"));
+var ts_invariant_1 = require("ts-invariant");
+var linkUtils_1 = require("./linkUtils");
+function passthrough(op, forward) {
+    return forward ? forward(op) : zen_observable_ts_1.default.of();
+}
+function toLink(handler) {
     return typeof handler === 'function' ? new ApolloLink(handler) : handler;
-};
-export var empty = function () {
-    return new ApolloLink(function (op, forward) { return Observable.of(); });
-};
-export var from = function (links) {
+}
+function empty() {
+    return new ApolloLink(function () { return zen_observable_ts_1.default.of(); });
+}
+exports.empty = empty;
+function from(links) {
     if (links.length === 0)
         return empty();
     return links.map(toLink).reduce(function (x, y) { return x.concat(y); });
-};
-export var split = function (test, left, right) {
-    if (right === void 0) { right = new ApolloLink(passthrough); }
+}
+exports.from = from;
+function split(test, left, right) {
     var leftLink = toLink(left);
-    var rightLink = toLink(right);
-    if (isTerminating(leftLink) && isTerminating(rightLink)) {
+    var rightLink = toLink(right || new ApolloLink(passthrough));
+    if (linkUtils_1.isTerminating(leftLink) && linkUtils_1.isTerminating(rightLink)) {
         return new ApolloLink(function (operation) {
             return test(operation)
-                ? leftLink.request(operation) || Observable.of()
-                : rightLink.request(operation) || Observable.of();
+                ? leftLink.request(operation) || zen_observable_ts_1.default.of()
+                : rightLink.request(operation) || zen_observable_ts_1.default.of();
         });
     }
     else {
         return new ApolloLink(function (operation, forward) {
             return test(operation)
-                ? leftLink.request(operation, forward) || Observable.of()
-                : rightLink.request(operation, forward) || Observable.of();
+                ? leftLink.request(operation, forward) || zen_observable_ts_1.default.of()
+                : rightLink.request(operation, forward) || zen_observable_ts_1.default.of();
         });
     }
-};
-// join two Links together
-export var concat = function (first, second) {
+}
+exports.split = split;
+exports.concat = function (first, second) {
     var firstLink = toLink(first);
-    if (isTerminating(firstLink)) {
-        console.warn(new LinkError("You are calling concat on a terminating link, which will have no effect", firstLink));
+    if (linkUtils_1.isTerminating(firstLink)) {
+        ts_invariant_1.invariant.warn(new linkUtils_1.LinkError("You are calling concat on a terminating link, which will have no effect", firstLink));
         return firstLink;
     }
     var nextLink = toLink(second);
-    if (isTerminating(nextLink)) {
+    if (linkUtils_1.isTerminating(nextLink)) {
         return new ApolloLink(function (operation) {
-            return firstLink.request(operation, function (op) { return nextLink.request(op) || Observable.of(); }) || Observable.of();
+            return firstLink.request(operation, function (op) { return nextLink.request(op) || zen_observable_ts_1.default.of(); }) || zen_observable_ts_1.default.of();
         });
     }
     else {
         return new ApolloLink(function (operation, forward) {
             return (firstLink.request(operation, function (op) {
-                return nextLink.request(op, forward) || Observable.of();
-            }) || Observable.of());
+                return nextLink.request(op, forward) || zen_observable_ts_1.default.of();
+            }) || zen_observable_ts_1.default.of());
         });
     }
 };
-var ApolloLink = /** @class */ (function () {
+var ApolloLink = (function () {
     function ApolloLink(request) {
         if (request)
             this.request = request;
     }
     ApolloLink.prototype.split = function (test, left, right) {
-        if (right === void 0) { right = new ApolloLink(passthrough); }
-        return this.concat(split(test, left, right));
+        return this.concat(split(test, left, right || new ApolloLink(passthrough)));
     };
     ApolloLink.prototype.concat = function (next) {
-        return concat(this, next);
+        return exports.concat(this, next);
     };
     ApolloLink.prototype.request = function (operation, forward) {
-        throw new Error('request is not implemented');
+        throw new ts_invariant_1.InvariantError('request is not implemented');
     };
     ApolloLink.empty = empty;
     ApolloLink.from = from;
@@ -73,8 +79,9 @@ var ApolloLink = /** @class */ (function () {
     ApolloLink.execute = execute;
     return ApolloLink;
 }());
-export { ApolloLink };
-export function execute(link, operation) {
-    return (link.request(createOperation(operation.context, transformOperation(validateOperation(operation)))) || Observable.of());
+exports.ApolloLink = ApolloLink;
+function execute(link, operation) {
+    return (link.request(linkUtils_1.createOperation(operation.context, linkUtils_1.transformOperation(linkUtils_1.validateOperation(operation)))) || zen_observable_ts_1.default.of());
 }
+exports.execute = execute;
 //# sourceMappingURL=link.js.map
