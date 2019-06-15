@@ -1,5 +1,5 @@
 export const endpoint = `http://localhost:4444`;
-export const prodEndpoint = `https://api.savvvy.app`;
+export const prodEndpoint = `https://savvy-yoga-production.herokuapp.com/`;
 export const CoursePerPage = 4;
 export const SandboxPerPage = 6;
 export const MaterialPerPage = 5;
