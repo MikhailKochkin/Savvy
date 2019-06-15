@@ -32,6 +32,9 @@ const SubmitButton = styled.button`
     &:hover {
         background: #0B3954;
     }
+    @media (max-width: 800px) {
+      margin-top: 4%; 
+    }
 `;
 
 const Form = styled.form`
@@ -66,6 +69,9 @@ const Container = styled.div`
     grid-template-areas:
         "first   "
         "second   ";
+    @media (max-width: 800px) {
+      margin-bottom: 100px; 
+    }
 `;
 
 const Label = styled.label`
@@ -92,10 +98,6 @@ const Label = styled.label`
         font-size: 1.4rem;
 
     }
-    @media (max-width: 600px) {
-        display: flex;
-        flex-direction: column;
-    }
 `;
 
 
@@ -103,9 +105,13 @@ const Buttons = styled.div`
     display: flex;
     flex-direction: row;
     align-items: left;
-    margin-top: 2%;
+    margin-top: 8%;
     padding: 3%;
     border-top: solid 1px #F0F0F0;
+    @media (max-width: 600px) {
+        display: flex;
+        flex-direction: column;
+    }
 `;
 
 class Reset extends Component {

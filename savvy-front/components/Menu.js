@@ -6,6 +6,7 @@ const MenuStyle = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #F2F2F2;
+  border-bottom: 1px solid #152A5E;
   padding-left: 4%;
   padding-right: 4%;
   @media (max-width: 600px) {
@@ -34,7 +35,6 @@ const Column = styled.div`
     display: flex;
     flex-direction: column;
     text-align: center;
-    /* border: 1px solid black; */
     padding: 1%;
     flex-basis: 33.3%;
     @media (max-width: 600px) {

@@ -94,7 +94,6 @@ export default class CreateLesson extends Component {
                         pathname: '/pointA',
                         query: {id: data.pointA.id}
                       })
-                      console.log("Success")
                     }}
                   >
                   Отправить

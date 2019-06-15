@@ -1,4 +1,4 @@
-import SingleLesson from '../components/course/SingleLesson';
+import SingleLesson from '../components/lesson/SingleLesson';
 
 const LessonPage = props => (
   <div>

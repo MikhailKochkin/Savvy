@@ -18,7 +18,7 @@ const theme = {
 
 const StyledPage = styled.div`
     /* background: ${props => props.theme.lightgrey}; */
-    background: #fff;
+    background: #F4F4F4;
     color: ${props => props.theme.black};
 `;
 
@@ -26,14 +26,19 @@ const Inner = styled.div`
     max-width: ${props => props.theme.maxWidth};
     margin: 0 auto;
     padding: 2rem;
+    /* -webkit-user-select: none;
+     -moz-user-select: -moz-none;
+      -ms-user-select: none;
+          user-select: none; */
 `;
 
 injectGlobal`
     html {
+        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+        font-family: 'Montserrat', sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
         box-sizing: border-box;
         font-size: 10px;
-        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
-        font-family: 'Montserrat', serif;
         height:100%;
     }
     *, *:after, *:after {
@@ -63,8 +68,6 @@ const Page = ({ children, router }) => {
                   <Inner>{children}</Inner>
                   <Footer/>   
                 </Layout>
-                
-                {/* {router.pathname !== '/' ? <Footer/> : null} */}
               </StyledPage>
             </ThemeProvider>
         );

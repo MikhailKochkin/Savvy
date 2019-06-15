@@ -41,7 +41,6 @@ class DeleteSinglePontATest extends Component {
                         deleteTest().catch(error => {
                             alert(error.message)
                         });
-                        console.log("Удалено!")
                     }
                     }}>
                         <Delete id="remove">

@@ -11,24 +11,26 @@ type Mutation {
     createSandboxPage(title: String!, description: String!, image: String): SandboxPage!
     updateSandboxPage(id: ID!, title: String, description: String, image: String): SandboxPage
     deleteSandboxPage(id:ID!): SandboxPage
-    createLesson(name: String!, number: Int, text: String!, video: String, doc: String, coursePageID: ID!): Lesson!
-    updateLesson(id: ID!, name: String, number: Int, text: String, video: String, doc: String): Lesson
+    createLesson(name: String!, number: Int, text: String!, coursePageID: ID!): Lesson!
+    updateLesson(id: ID!, name: String, number: Int, text: String): Lesson
+    updatePublished(id: ID!, published: Boolean): Lesson
     deleteLesson(id:ID!): Lesson
     createPointA(description: String, coursePageID: ID!): PointA!
     updatePointA(id: ID!, description: String): PointA
     createTest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
         answer4Correct: String, lessonID: ID): Test!
-    deleteTest(id:ID!): Test
+    createNewTest(question: [String!], answers: [String!], correct: [Boolean!], lessonID: ID): NewTest!
+    deleteNewTest(id:ID!): NewTest
+    createQuiz(question: String!, answer: String, lang: String!, lessonID: ID): Quiz!
     createPointATest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
         answer4Correct: String, coursePageID: ID): PointATest!
     deletePointATest(id:ID!): PointATest
-    createProblem(text: String!, hints: String, solution: String, hintsList: [String], solutionList: [String], answer: String!,
-        lessonID: ID!): Test!
+    createProblem(text: String!, lessonID: ID!): Test!
     deleteProblem(id:ID!): Problem
     createConstruction(name: String!, dbPart1: Json!, dbPart2: Json!, dbPart3: Json!, dbPart4: Json!,
-    dbPart5: Json, dbPart6: Json, dbPart7: Json, dbPart8: Json, lessonID: ID!): Construction!
+        dbPart5: Json, dbPart6: Json, dbPart7: Json, dbPart8: Json, lessonID: ID!): Construction!
     deleteConstruction(id:ID!): Construction
     createSandbox(text: String!, video: String, link: String, sandboxPageID: ID!): Sandbox!
     deleteSandbox(id:ID!): Sandbox
@@ -38,7 +40,7 @@ type Mutation {
     deleteTextEditor(id:ID!): TextEditor
     createApplication(applicantId: ID!, applicantName: String!, message: String, coursePageID: ID!): Application!
     deleteApplication(id:ID!): Application
-    signup(email: String!, password: String!, name: String!): User!
+    signup(email: String!, password: String!, name: String!, isFamiliar: Boolean!): User!
     signin(email: String!, password: String!): User!
     signout: SuccessMessage
     updatePermissions(permissions: [Permission], userId: ID!) : User
@@ -49,11 +51,12 @@ type Mutation {
     # enrollOnSandbox(id: ID! , sandboxes: [ID]): User
     addUserToCoursePage(id:ID!, students: [ID]): CoursePage
     # addUserToSandboxPage(id:ID!, students: [ID]): CoursePage
-    updateUser(id: ID!, name: String, email: String): User
+    updateUser(id: ID!, name: String, email: String, careerTrackID: ID, isFamiliar: Boolean): User
     requestReset(email: String!): SuccessMessage
     resetPassword(resetToken: String!, password: String!, confirmPassword: String!): User!
     createOrder(coursePageID: ID!, userID: ID, price: Int!): Order!
     deleteOrder(id:ID!): Order
+
 }
 
 type Query {
@@ -90,6 +93,12 @@ type Query {
     users(where: UserWhereInput!): [User]!
     order(where: OrderWhereUniqueInput!): Order
     orders(where: OrderWhereInput): [Order]!
+    careerTrack(where: CareerTrackWhereUniqueInput!): CareerTrack
+    careerTracks(where: CareerTrackWhereInput, orderBy: CareerTrackOrderByInput, skip: Int, first: Int): [CareerTrack]!
+    newTest(where: NewTestWhereUniqueInput!): NewTest
+    newTests(where: NewTestWhereInput, orderBy: NewTestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NewTest]!
+    quiz(where: QuizWhereUniqueInput!): Quiz
+    quizzes(where: QuizWhereInput, orderBy: QuizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Quiz]!
 }
 
 type Subscription {
@@ -107,4 +116,5 @@ type User{
     coursePages: [CoursePage]
     lessons: [Lesson]!
     orders: [Order]!
+    careerTrack: CareerTrack
 }

@@ -7,11 +7,12 @@ import Error from '../ErrorMessage';
 import { CURRENT_USER_QUERY } from '../User';
 
 const SIGNUP_MUTATION = gql`
-    mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-        signup(email: $email, name: $name, password: $password) {
+    mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!, $isFamiliar: Boolean!) {
+        signup(email: $email, name: $name, password: $password, isFamiliar: $isFamiliar) {
             id
             email
             name
+            isFamiliar
         }
     }
 `;
@@ -39,7 +40,7 @@ const SubmitButton = styled.button`
 `;
 
 const Form = styled.form`
-    width: 40%;
+    width: 50%;
     margin: 50%;
     margin: 0 auto;
     font-size: 1.6rem;
@@ -55,7 +56,6 @@ const Fieldset = styled.fieldset`
     border-radius: 5px;
     box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
                 0 5px 15px 0 rgba(0,0,0,0.08);
-    /* min-height: 400px; */
 `;
 
 const Container = styled.div`
@@ -94,6 +94,9 @@ const Label = styled.label`
     }
     grid-template-areas:
         "first second";
+    p {
+        text-align: center;
+    }
     input {
         height: 50%;
         width: 80%;
@@ -102,11 +105,20 @@ const Label = styled.label`
         border-radius: 3.5px;
         padding: 2%;
         font-size: 1.4rem;
-
+    }
+    .checked {
+        height: 25%;
+        width: 40%;
+        border: none;
+        box-shadow: none;
     }
     @media (max-width: 600px) {
         display: flex;
         flex-direction: column;
+        .checked {
+            height: 100%;
+            width: 100%;
+    }
     }
 `;
 
@@ -127,9 +139,6 @@ const LoggedIn = styled.p`
     border-radius: 10px;
     width: 45%;
     text-align: center;
-    @media (max-width: 600px) {
-        width: 100%;
-    }
 `;
 
 class Signup extends Component {
@@ -137,10 +146,21 @@ class Signup extends Component {
         name: '',
         password: '',
         email: '',
+        isFamiliar: false,
         loggedIn: false,
     }
     saveToState = e => {
         this.setState({ [e.target.name] : e.target.value}); 
+    }
+
+    handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+      });
     }
     render() {
         return (
@@ -195,6 +215,17 @@ class Signup extends Component {
                                 placeholder="Пароль"
                                 value={this.state.password}
                                 onChange={this.saveToState}
+                            />
+                        </Label>
+                        <Label>
+                            <p className="first">Согласие на обработку персональных данных</p>
+                            <input
+                                className="checked" 
+                                type="checkbox"
+                                name="isFamiliar"
+                                value={true}
+                                checked={this.state.isFamiliar}
+                                onChange={this.handleInputChange} 
                             />
                         </Label>
                     </Container>

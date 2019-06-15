@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import LessonHeader from './LessonHeader';
+import LessonHeader from '../lesson/LessonHeader';
 import CoursePageNav from './CoursePageNav';
 import PleaseSignIn from '../auth/PleaseSignIn';
 import AreYouEnrolled from '../auth/AreYouEnrolled';
@@ -12,6 +12,7 @@ const PAGE_LESSONS_QUERY = gql`
       id
       name
       number
+      published
       text
       user {
           id

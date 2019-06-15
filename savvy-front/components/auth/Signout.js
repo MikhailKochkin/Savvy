@@ -14,15 +14,9 @@ const SIGN_OUT_MUTATION = gql`
 
 const Button = styled.button`
     border: none;
-    text-decoration: none;
-    color: #13214D;
-    font-family: "Gill Sans",serif;
+    background: none;
     font-size: 1.8rem;
-    font-weight: 700;
-    /* margin-top: 10%;
-    margin-bottom: -2%; */
     cursor: pointer;
-    background-color: #F0F0F0;
     &:hover {
         color: #6DAAE1;
     }

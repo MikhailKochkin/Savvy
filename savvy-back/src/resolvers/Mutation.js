@@ -26,14 +26,21 @@ const Mutations = {
   async updateUser(parent, args, ctx, info) {
     //run the update method
     const updates = { ...args };
+    const id = args.careerTrackID;
     //remove the ID from updates
     delete updates.id;
+    delete updates.args;
     //run the update method
     const updatedUser = await ctx.db.mutation.updateUser(
       {
-        data: updates,
         where: {
           id: args.id
+        },
+        data: {
+          careerTrack: {
+            connect: { id }
+          },
+          ...updates
         },
       },
       info
@@ -253,10 +260,15 @@ const Mutations = {
     //run the update method
     return ctx.db.mutation.updateCoursePage(
       {
-        data: updates,
+        data: {
+          careerTrack: {
+            connect: { id }
+          },
+          updates},
         where: {
           id: args.id
       },
+
     }, 
     info
   );
@@ -327,6 +339,24 @@ const Mutations = {
       info
     );
   },
+  async updatePublished(parent, args, ctx, info) {
+    console.log("здесь")
+    const updates = { ...args };
+    delete updates.id;
+    //run the update method
+    console.log(updates)
+    const published = await ctx.db.mutation.updateLesson(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        },
+      },
+    info
+    );
+    console.log("Готово!")
+    return published; 
+  },
     async deleteLesson(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson
@@ -360,6 +390,67 @@ const Mutations = {
       );
         return test;
     },
+    async createNewTest(parent, args, ctx, info) {
+
+      const lessonID = args.lessonID
+      const answers = args.answers
+      const correct = args.correct
+      const question = args.question
+      
+      if (!ctx.request.userId) {
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      }
+
+      const test = await ctx.db.mutation.createNewTest(
+            {
+            data: {
+                user: {
+                  connect: { id: ctx.request.userId }
+                  },
+                lesson: {
+                  connect: { id: lessonID }
+                },
+                answers: {
+                  set: [...answers]
+                },
+                correct: {
+                  set: [...correct]
+                },
+                question: {
+                  set: [...question]
+                },
+            },
+        }, 
+        info
+      );
+        return test;
+    },
+    async createQuiz(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const lessonID = args.lessonID
+      delete args.id
+      // console.log(ctx.request.userId)
+      // console.log(coursePagedID)
+      if (!ctx.request.userId) {
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      }
+
+      const Quiz = await ctx.db.mutation.createQuiz(
+          {
+          data: {
+              user: {
+                connect: { id: ctx.request.userId }
+                },
+              lesson: {
+                connect: { id: lessonID }
+              },
+              ...args
+          },
+      }, 
+      info
+    );
+      return Quiz;
+  },
     async createPointATest(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const coursePageID = args.coursePageID
@@ -387,12 +478,12 @@ const Mutations = {
         return pointATest;
     },
     
-    async deleteTest(parent, args, ctx, info) {
+    async deleteNewTest(parent, args, ctx, info) {
       const where = { id: args.id };
       //1. find the lesson
-      const test = await ctx.db.query.test({ where }, `{ id }`);
+      const test = await ctx.db.query.newTest({ where }, `{ id }`);
       //3. Delete it
-      return ctx.db.mutation.deleteTest({ where }, info);
+      return ctx.db.mutation.deleteNewTest({ where }, info);
     },
     async deletePointATest(parent, args, ctx, info) {
       const where = { id: args.id };
@@ -405,10 +496,10 @@ const Mutations = {
       // TODO: Check if they are logged in
       const lessonID = args.lessonID
       delete args.id
-      const solutions = args.solutionList;
-      delete args.solutionList
-      const hints = args.hintsList;
-      delete args.hintsList
+      // const solutions = args.solution;
+      // delete args.solution
+      // const hints = args.hints;
+      // delete args.hints
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
@@ -423,12 +514,12 @@ const Mutations = {
                 lesson: {
                   connect: { id: lessonID }
                 },
-                solutionList: {
-                  set: [...solutions]
-                },
-                hintsList: {
-                  set: [...hints]
-                },
+                // solution: {
+                //   set: [...solutions]
+                // },
+                // hints: {
+                //   set: [...hints]
+                // },
                 ...args
             },
         }, 
@@ -715,17 +806,18 @@ const Mutations = {
     // 3.Check if they have permissions to do it
     hasPermission(currentUser, ['ADMIN', 
     'PERMISSIONUPDATE']);
+    console.log(args.careerTrack)
     // 4. Update the permissions
     return ctx.db.mutation.updateUser({
       data: {
         permissions: {
-          //special prisma sytax for enum
+          //special prisma syntax for enum
           set: args.permissions,
-        }
+        },
       },
       where: {
         id: args.userId
-      }
+      },
     }, 
     info);
   },

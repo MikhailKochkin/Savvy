@@ -10,8 +10,13 @@ const Query = {
     sandboxPage: forwardTo('db'),
     lesson:forwardTo('db'),
     test:forwardTo('db'),
+    quiz:forwardTo('db'),
+    test:forwardTo('db'),
+    newTest:forwardTo('db'),
     problem:forwardTo('db'),
     textEditor:forwardTo('db'),
+    careerTrack:forwardTo('db'),
+    careerTracks:forwardTo('db'),
     order:forwardTo('db'),
     sandbox:forwardTo('db'),
     coursePagesConnection: forwardTo('db'),
@@ -32,6 +37,24 @@ const Query = {
     tests(parent, args, ctx, info){
       const lesID = args.where.lessonID;
       return ctx.db.query.tests(
+        {
+          where: {lessonID: lesID}
+        },
+        info
+      );
+    },
+    newTests(parent, args, ctx, info){
+      const lesID = args.where.lessonID;
+      return ctx.db.query.newTests(
+        {
+          where: {lessonID: lesID}
+        },
+        info
+      );
+    },
+    quizzes(parent, args, ctx, info){
+      const lesID = args.where.lessonID;
+      return ctx.db.query.newTests(
         {
           where: {lessonID: lesID}
         },

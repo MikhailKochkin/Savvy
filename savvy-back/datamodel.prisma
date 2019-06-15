@@ -1,10 +1,6 @@
 enum Permission {
   ADMIN
   USER
-  CASECREATE
-  CASEUPDATE
-  CASEDELETE
-  PERMISSIONUPDATE
 }
 
 enum CourseType {
@@ -20,6 +16,8 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+   careerTrack: CareerTrack @relation(name: "CareerForUser" onDelete: CASCADE)
+   careerTrackID: ID
   favourites: [ID]
   subjects: [ID]
   sandboxes: [ID]
@@ -29,6 +27,8 @@ type User {
   sandboxPageGoals: [SandboxPageGoal] @relation(name: "UserSandboxPageGoals")
   lessons: [Lesson]!
   tests: [Test]!
+    newTests: [NewTest]!
+    quizes: [Quiz]!
   pointsA: [PointA]!
   problems: [Problem]!
   construction: [Construction]!
@@ -48,6 +48,8 @@ type CoursePage {
   pointsA: [PointA]! @relation(name: "CoursePagePointA" onDelete: CASCADE)
   applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
   pointATests: [PointATest] @relation(name: "CoursePageTests" onDelete: CASCADE)
+   careerTrack: [ CareerTrack ] @relation(name: "CoursePageForCareer" onDelete: CASCADE)
+   numInCareerTrack: Int
   tags: [String]
   courseType: CourseType
   students: [ID]
@@ -87,15 +89,16 @@ type Lesson {
   name: String!
   number: Int
   text: String!
-  video: String
-  doc: String
   user: User!
   coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
   tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
+    newTests: [NewTest] @relation(name: "LessonNewTests" onDelete: CASCADE)
+    quizes: [Quiz] @relation(name: "LessonQuizes" onDelete: CASCADE)
   problems: [Problem] @relation(name: "LessonProblems" onDelete: CASCADE)
   constructions: [Construction] @relation(name: "LessonConstructions" onDelete: CASCADE)
-  texteditors: [TextEditor] @relation(name: "LessonTextEditors" onDelete: CASCADE)
+  texteditors: [TextEditor] @relation(name: "LessonTextEditors")
   coursePageID: ID!
+  published: Boolean @default(value: "false")
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -145,8 +148,30 @@ type Test {
   user: User!
   lesson: Lesson @relation(name: "LessonTests")
   lessonID: ID
-  # coursePageID: ID
-  # pointAID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type NewTest {
+  id: ID! @unique
+  question: [String!]
+  answers: [String!]
+  correct: [Boolean!] 
+  user: User!
+  lesson: Lesson @relation(name: "LessonNewTests")
+  lessonID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Quiz {
+  id: ID! @unique
+  question: String!
+  answer: String!
+  lang: String!
+  user: User!
+  lesson: Lesson @relation(name: "LessonQuizes")
+  lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -174,9 +199,9 @@ type Problem {
   text: String!
   hints: String
   solution: String
-  hintsList: [String]
-  solutionList: [String]
-  answer: String!
+  answer: String
+  hintsList: [String!]
+  solutionList: [String!]
   user: User!
   lesson: Lesson! @relation(name: "LessonProblems")
   lessonID: ID!
@@ -226,4 +251,11 @@ type PointA {
   coursePageID: ID
   user: User!
   pointATests: [PointATest] @relation(name: "PointATests" onDelete: CASCADE)
+}
+
+type CareerTrack {
+  id: ID! @unique
+  name: String!
+  members: User @relation(name: "CareerForUser")
+  coursePages: [CoursePage] @relation(name: "CoursePageForCareer")
 }

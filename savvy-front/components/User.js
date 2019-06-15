@@ -10,6 +10,7 @@ const CURRENT_USER_QUERY = gql`
       name
       permissions
       subjects
+      isFamiliar
       favourites
       coursePages {
         id
@@ -17,8 +18,11 @@ const CURRENT_USER_QUERY = gql`
       lessons {
         id
       }
+      careerTrack {
+        id
     }
   }
+}
 `;
 
 const User = props => (

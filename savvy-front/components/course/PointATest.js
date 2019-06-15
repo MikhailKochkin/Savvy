@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import AnswerOption from './AnswerOption';
+import AnswerOption from '../lesson/AnswerOption';
 import DeletePointATest from '../delete/DeletePointATest';
-import Right from  './Right'
-import Wrong from  './Wrong'
+import Right from  '../lesson/Right'
+import Wrong from  '../lesson/Wrong'
 
 const Question = styled.p`
   font-size: 1.8rem;

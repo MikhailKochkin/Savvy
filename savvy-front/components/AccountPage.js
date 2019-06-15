@@ -12,12 +12,16 @@ const UPDATE_USER_MUTATION= gql`
     mutation UPDATE_USER_MUTATION(
         $id: ID!,
         $name: String, 
-        $email: String
+        $email: String,
+        $careerTrackID: ID,
+        $isFamiliar: Boolean
         ) {
         updateUser(
             id: $id,
             email: $email, 
             name: $name
+            careerTrackID: $careerTrackID,
+            isFamiliar: $isFamiliar
             ) {
             id
         }
@@ -43,7 +47,7 @@ const SubmitButton = styled.button`
 `;
 
 const Form = styled.form`
-    width: 40%;
+    width: 50%;
     margin: 50%;
     margin: 0 auto;
     font-size: 1.6rem;
@@ -72,7 +76,7 @@ const Container = styled.div`
     .name {
         grid-area: second;
     }
-    .password {
+    .careerTrack {
         grid-area: third;
     }
     grid-template-areas:
@@ -83,7 +87,7 @@ const Container = styled.div`
 
 const Label = styled.label`
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 45% 55%;
     grid-template-rows: 100%;
     justify-items: center;
     align-items: center;
@@ -103,7 +107,24 @@ const Label = styled.label`
         border-radius: 3.5px;
         padding: 2%;
         font-size: 1.4rem;
-
+    }
+    select {
+        height: 50%;
+        width: 80%;
+        border: 1px solid #ccc;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+        border-radius: 3.5px;
+        padding: 2%;
+        font-size: 1.4rem;
+    }
+    p {
+        text-align: center;
+    }
+    .checked {
+        height: 20%;
+        width: 30%;
+        border: none;
+        box-shadow: none;
     }
     @media (max-width: 600px) {
         display: flex;
@@ -115,13 +136,24 @@ const Buttons = styled.div`
     display: flex;
     flex-direction: row;
     align-items: left;
-    margin-top: 2%;
-    padding: 3%;
     border-top: solid 1px #F0F0F0;
 `;
 
+const Green = styled.div`
+    background: #4DAC44;
+    padding: 2%;
+    border-radius: 10px;
+    width: 45%;
+    color: white;
+    text-align: center;
+    display: ${props => props.show ? "block" : "none"};
+
+`;
+
 class AccountPage extends Component {
-    state = {};
+    state = {
+        show: false
+    };
     handleChange = e => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
@@ -135,6 +167,22 @@ class AccountPage extends Component {
           },
         });
       };
+    handleSteps = e => {
+        e.preventDefault();
+        const { name, value } = e.target;
+        this.setState({[name]: value});
+    };
+
+    handleInputChange = (event) => {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+      });
+    }
+
     render() {
         return (
             <PleaseSignIn>
@@ -149,17 +197,21 @@ class AccountPage extends Component {
                 {(updateUser, {error, loading}) => (
                     <Form 
                         // method="post" 
-                        onSubmit={ e => 
-                        // e.preventDefault();
-                        // console.log(this.props.query.id)
-                        this.updateUser(e, updateUser)}
+                        onSubmit={ e => {
+                            e.preventDefault()
+                            this.setState({ show: true})      
+                            this.updateUser(e, updateUser)
+                      }
+                    }   
                     >
                     <Fieldset disabled={loading} aria-busy={loading}>
                     <>
                         <h2>Настройки аккаунта</h2>
+                        <Green show = {this.state.show}>Измнения внесены</Green>
                         <Container>
+
                             <Label className="name" htmlFor="password">
-                                <p className="first">Имя</p>
+                                <p className="first">Имя и фамилия</p>
                                 <input
                                     className="second"
                                     type="text"
@@ -170,7 +222,7 @@ class AccountPage extends Component {
                                     onChange={this.handleChange}
                                 />
                             </Label>
-                            <br/>
+                     
                             <Label className="email" htmlFor="password">
                                 <p className="first">Электронная почта</p>
                                 <input
@@ -183,6 +235,38 @@ class AccountPage extends Component {
                                     onChange={this.handleChange}
                                 />
                             </Label>
+                       
+                            <Label className="careerTrackID" htmlFor="careerTrackID">
+                                <p className="third">Карьерный трек</p>
+                                {me.careerTrack &&
+                                <select name="careerTrackID" defaultValue = {me.careerTrack.id} value={this.state.careerTrackID} onChange={this.handleSteps}>
+                                    <option value="NAN">Не выбран</option>
+                                    <option value="cjwx78u7700rb07121pelqctm">Корпоративное право</option>
+                                    <option value="cjwx79iaj00rk0712tz12j7vi">Право и технологии</option>
+                                </select>}
+                                {!me.careerTrack &&
+                                <select name="careerTrackID" value={this.state.careerTrackID} onChange={this.handleSteps}>
+                                    <option value="NAN">Не выбран</option>
+                                    <option value="cjwx78u7700rb07121pelqctm">Корпоративное право</option>
+                                    <option value="cjwx79iaj00rk0712tz12j7vi">Право и технологии</option>
+                                </select>}
+                                <br/>
+                            </Label>
+                            {!me.isFamiliar &&
+                            <Label>
+                                <p className="first">Когда вы пользуетесь Savvy, мы собираем ваши персональные данные.
+                                Пожалуйста, дайте нам свое согласие на это.</p>
+                                <input
+                                    className="checked" 
+                                    type="checkbox"
+                                    name="isFamiliar"
+                                    value={true}
+                                    checked={this.state.isFamiliar}
+                                    onChange={this.handleInputChange} 
+                                />
+                            </Label> }
+                            
+
                         </Container>
                         <Buttons>
                             <SubmitButton type="submit">Изменить</SubmitButton>

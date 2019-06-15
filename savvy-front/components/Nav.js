@@ -23,19 +23,19 @@ const ALL_COURSE_PAGES_QUERY = gql`
 `;
 
 const StyledHeader = styled.header`
-  background-color: #F2F2F2;
+  background-color: #112962;
   display: grid;
   grid-template-areas: "CourseMenu Logo UserData";
   grid-template-columns: 1fr 1.5fr 1fr;
-  border-bottom: 4px solid #152A5E;
+  border-bottom: 1px solid #152A5E;
   cursor: pointer;
   line-height: 0%;
   a, button, input, p {
     text-decoration: none;
-    color: #13214D;
+    color: white;
     font-size: 1.8rem;
-    font-weight: 700;
     padding-left: 2%;
+    background-color: none;
   }
   @media (max-width: 1000px) {
     grid-template-columns: 1fr 0.5fr 1fr;
@@ -75,13 +75,10 @@ const Logo = styled.div`
 
 const Button = styled.button`
     border: none;
-    text-decoration: none;
-    color: #13214D;
-    font-family: "Gill Sans",serif;
+    background: none;
     font-size: 1.8rem;
-    font-weight: 700;
+    padding-right: 0;
     cursor: pointer;
-    background-color: #F0F0F0;
     &:hover {
         color: #6DAAE1;
     }
@@ -120,7 +117,7 @@ class Nav extends Component {
             <CourseMenu>
                 <Link 
                   prefetch 
-                  href="/courses">
+                  href="/">
                     <a>Меню</a>
                 </Link>
                 {me && (
@@ -131,14 +128,13 @@ class Nav extends Component {
                   </Link>
                 )}
                 <Button onMouseEnter={this.mouseEnter} onClick={this.menuShow}>Поиск</Button>
-                {/* <Search/> */}
-               
+                {me && (
                   <Link 
                     prefetch 
                     href="/special">
-                    <a>Специальные проекты</a>
+                    <a>Спецпроекты</a>
                   </Link>
-              
+                )}
             </CourseMenu>
             <Logo>
                 <Link prefetch href="/">

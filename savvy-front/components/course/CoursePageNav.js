@@ -13,8 +13,7 @@ import gql from 'graphql-tag';
 //     TelegramIcon,
 //     TwitterShareButton,
 //   } from 'react-share';
-import User from '../User'
-
+import User from '.././User'
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
@@ -58,22 +57,29 @@ const LeftHeadStyles = styled.div`
     flex-direction: column;
     flex: 1 50%;
     padding: 5% 0 0 5%;
-    .Demo__some-network__share-count {
-        margin-top: 3px;
-        font-size: 12px;
-    }
+    .Demo__some-network {
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 15px;
+  text-align: center;
+}
 
-    .Demo__some-network__share-button {
-        cursor: pointer;
-    }
+.Demo__some-network__share-count {
+  margin-top: 3px;
+  font-size: 12px;
+}
 
-    .Demo__some-network__share-button:hover:not(:active) {
-        opacity: 0.75;
-    }
+.Demo__some-network__share-button {
+  cursor: pointer;
+}
 
-    .Demo__some-network__custom-icon {
-        width:32px;
-        height:32px;
+.Demo__some-network__share-button:hover:not(:active) {
+  opacity: 0.75;
+}
+
+.Demo__some-network__custom-icon {
+  width:32px;
+  height:32px;
 }
 `;
 
@@ -121,10 +127,10 @@ const Button = styled.button`
     }
 `;
 
-// const SMButtons = styled.div`
-//     display: flex;
-//     flex-direction: row;
-// `;
+const SMButtons = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 
 const Buttons = styled.div`
     display: flex;
@@ -132,8 +138,9 @@ const Buttons = styled.div`
 `;
 
 const Img = styled.img`
-    width: 350px;
-    height: 200px;
+    display: block;
+    max-width: 80%;
+    max-height: 17em;
 `;
 
 const Author = styled.p`
@@ -177,17 +184,17 @@ export default class CoursePageNav extends Component {
                                 }
                                 <br/>
                                 {/* <SMButtons>
+                                  <div className="Demo__container">
                                     <div className="Demo__some-network">
-                                    <FacebookShareButton
-                                        url={shareUrl}
-                                        onClick={this.onReveal}
-                                        quote={title}
-                                        className="Demo__some-network__share-button">
-                                        <FacebookIcon
-                                            size={32}
-                                            round 
-                                        />
-                                    </FacebookShareButton>
+                                        <FacebookShareButton
+                                            url={shareUrl}
+                                            quote={title}
+                                            className="Demo__some-network__share-button">
+                                            <FacebookIcon
+                                                size={32}
+                                                round 
+                                            />
+                                        </FacebookShareButton>
                                     </div>
                                     <div className="Demo__some-network">
                                         <VKShareButton
@@ -199,8 +206,9 @@ export default class CoursePageNav extends Component {
                                             windowHeight={460}
                                             className="Demo__some-network__share-button">
                                             <VKIcon
-                                            size={32}
-                                            round />
+                                                size={32}
+                                                round 
+                                            />
                                         </VKShareButton>
                                     </div>
                                     <div className="Demo__some-network">
@@ -214,6 +222,7 @@ export default class CoursePageNav extends Component {
                                         <div className="Demo__some-network__share-count">
                                             &nbsp;
                                         </div>
+                                      </div>
                                     </div>
                                 </SMButtons> */}
                                 </LeftHeadStyles>
@@ -247,6 +256,8 @@ export default class CoursePageNav extends Component {
                                   }
                                   { coursePage.courseType === "PRIVATE" &&
                                     <>
+                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
+                                            Преподаватель одобрит <br/> вашу заявку и откроет доступ к материалам курса.</p>
                                         <Link href={{
                                             pathname: '/',
                                         }}>
@@ -254,18 +265,12 @@ export default class CoursePageNav extends Component {
                                                 <Button>На главную страницу</Button>
                                             </a>
                                         </Link>
-                                        <div>
-                                        <p><b>Совет</b>:Зарегестриуйтесь на курс на главной странице сайта!
-                                        Преподаватель одобрит вашу заявку и откроет доступ к материалам курса.</p>
-                                        </div>
                                     </>
                                   }
                                   { coursePage.courseType === "PUBLIC" &&
                                     <>
-                                        <div>
-                                        <p><b>Совет</b>:Зарегестриуйтесь на курс на главной странице сайта. 
-                                        Сразу после регистрации вы получите доступ к материалам курса.</p>
-                                        </div>
+                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
+                                        <br/>Сразу после регистрации вы получите доступ к материалам курса.</p>
                                         <Link href={{
                                             pathname: '/',
                                         }}>
@@ -273,8 +278,6 @@ export default class CoursePageNav extends Component {
                                                 <Button>На главную страницу</Button>
                                             </a>
                                         </Link>
-                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
-                                        <br/>Сразу после регистрации вы получите доступ к материалам курса.</p>
                                     </>
                                   }
                                 </>

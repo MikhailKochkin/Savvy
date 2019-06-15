@@ -49,14 +49,11 @@ class TakeMyMoney extends React.Component {
   }
   render() {
     let finalPrice;
-    console.log(this.props.price);
-    console.log(this.props.discountPrice);
     if(this.props.discountPrice !== null) {
       finalPrice = this.props.discountPrice
     } else if (this.props.discountPrice === null){
       finalPrice = this.props.price
     }
-    console.log(finalPrice);
     return (
       <Mutation 
         mutation={CREATE_APPLICATION_MUTATION} 

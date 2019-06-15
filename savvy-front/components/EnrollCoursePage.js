@@ -4,7 +4,37 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Router from 'next/router';
 import {CURRENT_USER_QUERY} from './User';
-import {ALL_COURSE_PAGES_QUERY} from './course/Courses';
+import { CoursePerPage, Tags } from '../config';
+
+const ALL_COURSE_PAGES_QUERY = gql`
+  query ALL_COURSE_PAGES_QUERY($skip: Int = 0, $first: Int = ${CoursePerPage}) {
+    coursePages(first: $first, skip: $skip, orderBy: createdAt_DESC) {
+      id
+      title
+      description
+      image
+      tags
+      courseType
+      students
+      price
+      discountPrice
+      careerTrack {
+          id
+      }
+      pointsA {
+          id
+      }
+      applications {
+          id
+          applicantId
+      }
+      user {
+          id
+          name
+      }
+    }
+  }
+`;
 
 
 const ENROLL_COURSE_MUTATION = gql`
@@ -104,8 +134,7 @@ class EnrollCoursePage extends Component {
             } else if(!this.state.subjects.includes(this.props.coursePage.id)) {
                 return this.props.getInputReveal(true);
             }
-        } else if ((this.props.coursePage.courseType === "FORMONEY")) {
-            console.log("Money!!!")
+        } else if ((this.props.coursePage.courseType === "FORMONEY")) { 
             //0. Check if the person is already on the course and let him pass
             if(this.state.subjects.includes(this.props.coursePage.id)) {
                 // console.log("You are already enrolled!")

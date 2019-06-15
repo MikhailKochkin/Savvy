@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { SINGLE_LESSON_QUERY } from '../course/SingleLesson';
+import { SINGLE_LESSON_QUERY } from '../lesson/SingleLesson';
 
 const DELETE_TEXTEDITOR_MUTATION =gql`
     mutation DELETE_TEXTEDITOR_MUTATION($id: ID!){

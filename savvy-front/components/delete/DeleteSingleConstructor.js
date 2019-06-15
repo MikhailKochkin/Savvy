@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { SINGLE_LESSON_QUERY } from '../course/SingleLesson';
+import { SINGLE_LESSON_QUERY } from '../lesson/SingleLesson';
 
 const DELETE_CONSTRUCTION_MUTATION =gql`
     mutation DELETE_CONSTRUCTION_MUTATION($id: ID!){

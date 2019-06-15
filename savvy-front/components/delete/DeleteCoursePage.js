@@ -2,7 +2,38 @@ import React, { Component } from 'react';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-import {ALL_COURSE_PAGES_QUERY} from '../course/Courses';
+import { CoursePerPage, Tags } from '../../config';
+
+const ALL_COURSE_PAGES_QUERY = gql`
+  query ALL_COURSE_PAGES_QUERY($skip: Int = 0, $first: Int = ${CoursePerPage}) {
+    coursePages(first: $first, skip: $skip, orderBy: createdAt_DESC) {
+      id
+      title
+      description
+      image
+      tags
+      courseType
+      students
+      price
+      discountPrice
+      careerTrack {
+          id
+      }
+      pointsA {
+          id
+      }
+      applications {
+          id
+          applicantId
+      }
+      user {
+          id
+          name
+      }
+    }
+  }
+`;
+
 
 const DELETE_COURSEPAGE_MUTATION =gql`
     mutation DELETE_COURSEPAGE_MUTATION($id: ID!){

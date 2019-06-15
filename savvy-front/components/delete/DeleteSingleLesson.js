@@ -16,12 +16,14 @@ const DELETE_LESSON_MUTATION =gql`
 
 const Button = styled.button`
     border: none;
+    background: none;
     cursor: pointer;
 `
 
 const Delete = styled.div`
   color: black;
   font-size: 1.6rem;
+  background: none;
   &:hover {
     color: red;
   }

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import Courses from '../components/course/Courses';
 import Banner from '../components/Banner';
 import User from '../components/User';
-import Sandboxes from '../components/sandbox/Sandboxes';
-import styled from 'styled-components';
+import CareerTrackMenu from '../components/career/CareerTrackMenu'
+import CareerTrackMap from '../components/career/CareerTrackMap'
 
 const HomeStyles = styled.div`
     display: flex;
@@ -11,67 +12,52 @@ const HomeStyles = styled.div`
     justify-content: center;
 `;
 
-const Button = styled.button`
-    background-color: ${props => props.active ? "#122557" : "white"};
-    color: ${props => props.active ? "white" : "black"};
-    cursor: pointer;
-`;
-
-const Buttons = styled.div`
-    width: 100%;
+const Menu = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    Button {
-        width: 25%;
+    @media (max-width: 700px) {
+        flex-direction: column;
     }
-    @media (max-width: 800px) {
-        Button {
-            font-size: 1rem;
-        }
+`;
+
+const CoursesStyles = styled.div`
+    flex-basis: 65%;
+    background-color: white;
+    border-radius: 2px;
+    @media (max-width: 700px) {
+        order: 2;
     }
-    @media (max-width: 500px) {
-        Button {
-            font-size: 0.7rem;
-        }
+`;
+
+const CareerStyles = styled.div`
+    flex-basis: 35%;
+    margin-left: 1rem;
+    @media (max-width: 700px) {
+        order: 1;
     }
 `;
 
 class Home extends Component {
-    state = {
-        page: 'course',
-        button1: true,
-        button2: false
-    }
-    onCourse = () => {this.setState({page: "course", button1: true, button2: false})}
-    onSandBox = () => {this.setState({page: "sandbox", button1: false, button2: true})}
-
     render() {
         return (
             <HomeStyles>
               <User>
                 {({data: {me}}) => (  
-                    <> 
-                        <Banner/>
-                        {/* <Buttons>
-                            <Button
-                                onClick = {this.onCourse}
-                                active={this.state.button1}
-                            >
-                                <h1>Курсы</h1>
-                            </Button>
-                            <Button
-                                onClick = {this.onSandBox}
-                                active={this.state.button2}
-                            >
-                                <h1>Песочницы</h1>
-                            </Button>
-                        </Buttons> */}
-                        {/* {this.state.page === 'course' ?  */}
-                            <Courses page={parseFloat(this.props.query.page) || 1}/>
-                        {/* // :
-                        //     <Sandboxes page={parseFloat(this.props.query.page) || 1}/>
-                        // } */}
+                    <>
+                        {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
+                        {me === null && <Banner/>}
+                        {me !== null && me.careerTrack === null && <Banner/>}
+                        {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>}
+                        <Menu>
+                            <CoursesStyles>
+                                <Courses me={me} page={parseFloat(this.props.query.page) || 1 }/>
+                            </CoursesStyles>
+                            <CareerStyles>
+                                {!me && <CareerTrackMenu/> }
+                                {me && !me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me && me.careerTrack && <CareerTrackMenu me={me}/>}
+                            </CareerStyles>
+                        </Menu>
                     </>
                 )}
             </User>
@@ -79,5 +65,6 @@ class Home extends Component {
         )
     }
 }
+
 
 export default Home;

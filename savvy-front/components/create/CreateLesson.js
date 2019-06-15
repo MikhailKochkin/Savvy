@@ -10,22 +10,21 @@ import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton } from '../styles/Button';
 import AreYouATeacher from '../auth/AreYouATeacher';
 import PleaseSignIn from '../auth/PleaseSignIn';
+import Test from './Test';
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(
     $name: String!
     $number: Int
     $text: String!
-    $video: String
-    $doc: String
+    # $published: Boolean
     $coursePageID: ID!
   ) {
     createLesson(
       name: $name
       number: $number
       text: $text 
-      video: $video
-      doc: $doc
+      # published: $published
       coursePageID: $coursePageID
     ) {
       id
@@ -59,33 +58,7 @@ const Width = styled.div`
 `;
 
 const Container = styled.div`
-    border: 1px solid #F0F0F0;
-    border-radius: 5px;
-    box-shadow: 0 15px 30px 0 rgba(0,0,0,0.11),
-                0 5px 15px 0 rgba(0,0,0,0.08);
-    width: 60%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3 70px);
-    .video {
-        grid-area: first;
-    }
-    grid-template-areas:
-        "explain"
-        "first   ";
-    p, h4 {
-      padding: 0% 5%;
-    }
-    p > a {
-        font-weight: 700;
-    }
-    p > a:hover {
-        text-decoration: underline;
-    }
-    @media (max-width: 600px) {
-      width: 100%;
-    }
-
+  width: 90%;
 `;
 
 const Label = styled.label`
@@ -117,7 +90,7 @@ const Label = styled.label`
 `;
 
 const DynamicLoadedEditor = dynamic(
-  import('../editor/Editor'),
+  import('../editor/LessonEditor'),
   {
     loading: () => (<p>Загрузка...</p>),
     ssr: false
@@ -130,9 +103,8 @@ export default class CreateLesson extends Component {
       this.state = {
         name: '',
         text: '',
-        video: '',
-        doc: '',
-        number: 0
+        number: 0,
+        published: false,
       };
       this.handleName = e => {
         e.preventDefault();
@@ -145,15 +117,6 @@ export default class CreateLesson extends Component {
         const val = Math.round(value)
         this.setState({[name]: val});
       }
-      this.handleChange = e => {
-        const { name, type, value } = e.target;
-        if(value.includes('embed')) {
-          this.setState({video: value});
-        } else {
-          const newUrl = 'https://www.youtube.com/embed/' + value.slice(value.indexOf("=") + 1)
-          this.setState({video: newUrl});
-        }
-      };
       
     }
 
@@ -178,10 +141,9 @@ export default class CreateLesson extends Component {
                     <NavButton>Вернуться на страницу курса</NavButton>
                 </a>
               </Link>
-              <DynamicLoadedEditor getEditorText={this.myCallback}/>
             <Width>
               <Container>
-              <h4 className="explain"> Напишите название и номер урока</h4>
+              {/* <h4 className="explain"> Напишите название и номер урока</h4> */}
               <Label className="name" htmlFor="name">
                   <p className="first">Название урока</p>
                     <input
@@ -204,37 +166,13 @@ export default class CreateLesson extends Component {
                       onChange={this.handleNumber}
                     />
                 </Label>
-                <Label className="name" htmlFor="name">
-                  <p className="first">Материалы урока</p>
-                    <input
-                      type="text"
-                      id="doc"
-                      name="doc"
-                      placeholder="Ссылка"
-                      value={this.state.doc}
-                      onChange={this.handleName}
-                    />
-                </Label>
               </Container>
-              </Width>
-              <Width>
-              <Container>
-                <h4 className="explain"> Добавьте видео, если в этом есть необходимость:</h4>
-                <Label className="video" htmlFor="video">
-                  <p className="first">Видео</p>
-                    <input
-                      type="text"
-                      id="video"
-                      name="video"
-                      placeholder="Вставьте ссылку на видео..."
-                      value={this.state.video}
-                      onChange={this.handleChange}
-                    />
-                </Label>
-                  <p>Обратите внимание. Пока на сайт можно добавлять только видео с Youtube. 
-                    Для этого скопируйте ссылку в пустое поле выше. Она автоматически преобразуется в тот вид, в котором она сможет использоваться на сайте.
-                    Пожалуйста, не пытайтесь исправить ссылку после преобразования.</p>
-              </Container>
+            </Width>
+
+              <DynamicLoadedEditor getEditorText={this.myCallback}/>
+              
+            <Width>
+              {/* <Test data={this.state.text}/>   */}
               <Mutation 
                 mutation={CREATE_LESSON_MUTATION} 
                 variables={{

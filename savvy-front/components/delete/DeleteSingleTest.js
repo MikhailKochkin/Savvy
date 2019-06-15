@@ -4,11 +4,11 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Icon from 'react-icons-kit';
 import {remove} from 'react-icons-kit/fa/remove'
-import { SINGLE_LESSON_QUERY } from '../course/SingleLesson';
+import { SINGLE_LESSON_QUERY } from '../lesson/SingleLesson';
 
 const DELETE_TEST_MUTATION =gql`
     mutation DELETE_TEST_MUTATION($id: ID!){
-        deleteTest(id: $id) {
+        deleteNewTest(id: $id) {
             id
         }
     }
@@ -29,20 +29,20 @@ const Delete = styled.div`
 
 class DeleteSingleTest extends Component {
     render() {
-        const { lessonId, id } = this.props
+        const { lessonId, testId } = this.props
         return (
             <Mutation 
                 mutation={DELETE_TEST_MUTATION}
-                variables={{id}}
+                variables={{id: testId}}
                 refetchQueries={() =>[{
                     query: SINGLE_LESSON_QUERY,
-                    variables: { lessonId},
+                    variables: { id: lessonId},
                   }]}
             >
-                {(deleteTest, { error }) => (
+                {(deleteNewTest, { error }) => (
                     <Button onClick={() => {
                     if (confirm('Вы точно хотите удалить эту запись?')) {
-                        deleteTest().catch(error => {
+                        deleteNewTest().catch(error => {
                             alert(error.message)
                         });
                         }
