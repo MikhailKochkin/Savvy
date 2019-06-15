@@ -40,28 +40,29 @@ const CareerStyles = styled.div`
 class Home extends Component {
     render() {
         return (
-            <HomeStyles>
-              <User>
-                {({data: {me}}) => (  
-                    <>
-                        {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
-                        {me === null && <Banner/>}
-                        {me !== null && me.careerTrack === null && <Banner/>}
-                        {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>}
-                        <Menu>
-                            <CoursesStyles>
-                                <Courses me={me} page={parseFloat(this.props.query.page) || 1 }/>
-                            </CoursesStyles>
-                            <CareerStyles>
-                                {!me && <CareerTrackMenu/> }
-                                {me && !me.careerTrack && <CareerTrackMenu me={me}/>}
-                                {me && me.careerTrack && <CareerTrackMenu me={me}/>}
-                            </CareerStyles>
-                        </Menu>
-                    </>
-                )}
-            </User>
-          </HomeStyles>
+            <div>Стартовая страница</div>
+        //     <HomeStyles>
+        //       <User>
+        //         {({data: {me}}) => (  
+        //             <>
+        //                 {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
+        //                 {me === null && <Banner/>}
+        //                 {me !== null && me.careerTrack === null && <Banner/>}
+        //                 {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>}
+        //                 <Menu>
+        //                     <CoursesStyles>
+        //                         <Courses me={me} page={parseFloat(this.props.query.page) || 1 }/>
+        //                     </CoursesStyles>
+        //                     <CareerStyles>
+        //                         {!me && <CareerTrackMenu/> }
+        //                         {me && !me.careerTrack && <CareerTrackMenu me={me}/>}
+        //                         {me && me.careerTrack && <CareerTrackMenu me={me}/>}
+        //                     </CareerStyles>
+        //                 </Menu>
+        //             </>
+        //         )}
+        //     </User>
+        //   </HomeStyles>
         )
     }
 }
