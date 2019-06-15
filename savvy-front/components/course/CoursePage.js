@@ -50,7 +50,7 @@ class CoursePage extends Component {
     render() {
         return (
             <PleaseSignIn>
-              <CoursePageNav id={this.props.id}/>
+              <CoursePageNav id={this.props.id} />
                     <Query
                         query={PAGE_LESSONS_QUERY} 
                         fetchPolicy="cache-first"

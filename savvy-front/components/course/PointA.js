@@ -11,6 +11,7 @@ import User from '../User';
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
     coursePage(where: { id: $id }) {
+        id
         pointsA {
             id
             description
@@ -68,6 +69,7 @@ class PointA extends Component {
                 >
                     {({ data, error, loading }) => {
                         if (loading) return <p>Loading...</p>;
+                        console.log(data)
                         return (
                             <Center>
                                 <TextBar>

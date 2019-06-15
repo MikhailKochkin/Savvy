@@ -232,7 +232,7 @@ export default class CoursePageNav extends Component {
                                   {coursePage.pointsA.length > 0 &&
                                     <Link href={{
                                             pathname: '/pointA',
-                                            query: coursePage.id
+                                            query: { id: coursePage.id }
                                         }}>
                                         <a>
                                             <Button>Описание курса</Button>
