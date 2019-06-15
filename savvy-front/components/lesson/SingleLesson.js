@@ -67,14 +67,6 @@ const SINGLE_LESSON_QUERY = gql`
           }
           createdAt
         }
-        # quizes {
-        #   id
-        #   text
-        #   user {
-        #     id
-        #   }
-        #   createdAt
-        # }
         constructions {
           id
           name
@@ -200,6 +192,7 @@ const MenuPart = styled.div`
     display: ${props => props.shown ? "block" : "none"};
     order: 1;
     margin: 1%;
+    padding: 2%;
     position: absolute;
     /* right: 450px; */
     top: 200px;
@@ -320,6 +313,7 @@ const ShowMenu = styled.button`
   outline: none;
   @media (max-width: 800px) {
     display: block;
+    width: 16%;
 
   }
 `;

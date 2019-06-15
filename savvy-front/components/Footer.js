@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import Icon from 'react-icons-kit';
 import {vk} from 'react-icons-kit/icomoon/vk'
+import {instagram} from 'react-icons-kit/icomoon/instagram'
+import {telegram} from 'react-icons-kit/icomoon/telegram'
+
 
 const FooterStyles = styled.div`
     background-color: #112A62;
@@ -79,12 +82,21 @@ const LegalAndSocial = styled.div`
         flex-direction: row;
         
     }
+    .social {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        a {
+            padding-left: 15px;
+        }
+
+    }
     @media (max-width: 900px) {
         flex-direction: column;  
         .IP {
             display: flex;
             flex-direction: column;  
-        }
+        } 
        
     }
 `;
@@ -94,8 +106,7 @@ const Footer = () => (
     <FooterStyles>
         <MissionContactStyles>
             <div className="motto">Savvy – это сайт для управления своими юридическими знаниями. <br/>
-            Здесь вы можете найти платные и бесплатные курсы по <br/> различным юридическим специальностям и 
-            юридическому английскому, <br/> а также делиться своим мнением по различным вопросам в песочницах.
+            Проходите курсы, участвуйте в мероприятиях и рассказывайте о себе коллегам и работодателям.
             </div>
             <LinksStyles>
                 <Link href={{
@@ -132,10 +143,20 @@ const Footer = () => (
                 <p>ИНН: 771771639796</p>
                 <p>ОГРНИП: 318774600589944 </p>
             </div>
-            <div className="VK">
+            <div className="social" >
+        
                 <a target="_blank" href='https://vk.com/savvy_university'>
                   <Icon size={40} icon={vk}/>  
                 </a>
+         
+                <a target="_blank" href='https://www.instagram.com/savvy_legal'>
+                  <Icon size={40} icon={instagram}/>  
+                </a>
+    
+                <a target="_blank" href='https://t.me/SavvyLive'>
+                  <Icon size={40} icon={telegram}/>  
+                </a>
+     
             </div>
         </LegalAndSocial>
     </FooterStyles>

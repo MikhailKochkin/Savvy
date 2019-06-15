@@ -138,9 +138,8 @@ const Buttons = styled.div`
 `;
 
 const Img = styled.img`
-    display: block;
-    max-width: 80%;
-    max-height: 17em;
+    width: 330px;
+    height: 200px;
 `;
 
 const Author = styled.p`
