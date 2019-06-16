@@ -41,8 +41,8 @@ class HomePage extends Component {
     render() {
         return (
             <HomeStyles>
-              <User>
-                {({data: {me}}) => (  
+              {/* <User>
+                {({data: {me}}) => (   */}
                     <>
                         {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
                         {/* {me === null && <Banner/>}
@@ -60,7 +60,7 @@ class HomePage extends Component {
                         </Menu>
                     </>
                 )}
-            </User>
+            {/* </User> */}
           </HomeStyles>
         )
     }
