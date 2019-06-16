@@ -171,4 +171,3 @@ class UpdateSandboxPage extends Component {
 }
 
 export default UpdateSandboxPage;
-// export { UPDATE_ITEM_MUTATION };

@@ -124,4 +124,3 @@ class SingleTest extends Component {
   }
   
   export default SingleTest;
-  export { SINGLE_TEST_QUERY };
