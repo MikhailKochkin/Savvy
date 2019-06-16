@@ -31,7 +31,8 @@ class Courses extends Component {
             <CareerCoursesList me={me} />
           }
           <ForMoneyCoursesList me={me}/> */}
-          <FreeCoursesList me={me}/>
+          {/* <FreeCoursesList me={me}/> */}
+          <p>Boom</p>
       </Center>  
     );
   }
