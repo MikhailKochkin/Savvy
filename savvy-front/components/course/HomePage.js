@@ -50,7 +50,7 @@ class HomePage extends Component {
                         {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>} */}
                         <Menu>
                             <CoursesStyles>
-                                <Courses me={me}/>
+                                {/* <Courses me={me}/> */}
                             </CoursesStyles>
                             {/* <CareerStyles>
                                 {!me && <CareerTrackMenu/> }
