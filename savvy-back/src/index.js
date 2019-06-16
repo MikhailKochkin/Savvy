@@ -35,12 +35,12 @@ server.express.use(async (req, res, next) => {
 });
 
 server.start(
-  {
-    cors: {
-      credentials: false,
-      // origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL2, process.env.FRONTEND_URL3, process.env.FRONTEND_URL4]
-    },
-  },
+  // {
+  //   cors: {
+  //     credentials: false,
+  //     // origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL2, process.env.FRONTEND_URL3, process.env.FRONTEND_URL4]
+  //   },
+  // },
   deets => {
     console.log(`Server is now running 
     on port http://localhost:${deets.port}`);
