@@ -96,5 +96,4 @@ class SingleProblem extends Component {
             }
   
   export default SingleProblem;
-  export { SINGLE_CASE_QUERY };
 
