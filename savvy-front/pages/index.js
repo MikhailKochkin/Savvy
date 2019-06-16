@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import HomePage from '../components/course/HomePage';
+import FirstPage from '../components/FirstPage';
 
 class Home extends Component {
     render() {
         return (
-            <HomePage page={parseFloat(this.props.query.page) || 1 }/>
+            <FirstPage/>
         )    
     }
 }

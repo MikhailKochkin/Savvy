@@ -117,7 +117,7 @@ class Nav extends Component {
             <CourseMenu>
                 <Link 
                   prefetch 
-                  href="/">
+                  href="/courses">
                     <a>Меню</a>
                 </Link>
                 {me && (
@@ -137,7 +137,7 @@ class Nav extends Component {
                 )}
             </CourseMenu>
             <Logo>
-                <Link prefetch href="/">
+                <Link prefetch href="/courses">
                   <a ><h2>Savvy</h2></a>
                 </Link>
             </Logo>
