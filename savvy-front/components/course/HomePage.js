@@ -46,9 +46,9 @@ class HomePage extends Component {
                 {({data: {me}}) => (  
                     <>
                         {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
-                        {me === null && <Banner/>}
+                        {/* {me === null && <Banner/>}
                         {me !== null && me.careerTrack === null && <Banner/>}
-                        {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>}
+                        {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>} */}
                         <Menu>
                             <CoursesStyles>
                                 <Courses me={me} page={this.props.page }/>
