@@ -1,5 +1,5 @@
 export const endpoint = `http://localhost:4444`;
-export const prodEndpoint = `https://api.savvvy.app`;
+export const prodEndpoint = `http://api.savvvy.app`;
 export const CoursePerPage = 4;
 export const SandboxPerPage = 6;
 export const MaterialPerPage = 5;
