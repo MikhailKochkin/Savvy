@@ -34,9 +34,10 @@ const Card = styled.div`
     flex-direction: column;
     align-items: center;
     margin-bottom: 3%;
-    a {
+    button {
         padding: 15px 30px;
         background: #112862;
+        border: 1px solid white;
         &:hover {
             background: white;
             border: 1px solid #112862;
@@ -47,7 +48,7 @@ const Card = styled.div`
         font-weight: bold;
     }
     @media (max-width: 800px) {
-        a {
+        button {
             font-size: 1.6rem; 
         }
     }
@@ -65,7 +66,7 @@ class FirstPage extends Component {
                         <Link 
                             prefetch 
                             href="/signup">
-                            <a>Зарегистрироваться</a>
+                            <button>Зарегистрироваться</button>
                         </Link>
                     </Card>
                     <Card>
@@ -73,7 +74,7 @@ class FirstPage extends Component {
                         <Link 
                             prefetch 
                             href="/courses">
-                            <a>Посмотреть</a>
+                            <button>Посмотреть</button>
                         </Link>
                     </Card>
                   </Data>
