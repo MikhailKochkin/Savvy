@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Error from '../ErrorMessage';
 import Router from 'next/router';
 import { Tags } from '../../config';
-import { ALL_COURSE_PAGES_QUERY } from './Courses';
+// import { ALL_COURSE_PAGES_QUERY } from './Courses';
 
 const CREATE_COURSE_MUTATION = gql`
   mutation CREATE_COURSE_MUTATION(
@@ -203,9 +203,9 @@ export default class CreateCourse extends Component {
             <Mutation 
               mutation={CREATE_COURSE_MUTATION} 
               variables={this.state}
-              refetchQueries={() => [{
-                query: ALL_COURSE_PAGES_QUERY,
-              }]}
+              // refetchQueries={() => [{
+              //   query: ALL_COURSE_PAGES_QUERY,
+              // }]}
               >
               {(createCoursePage, {loading, error}) => (
                 <Form onSubmit={ async e => {
