@@ -114,5 +114,3 @@ class CoursePage extends Component {
 
 export default CoursePage;
 export { PAGE_LESSONS_QUERY };
-export { PAGE_TESTS_QUERY };
-export { PAGE_PROBLEMS_QUERY };
