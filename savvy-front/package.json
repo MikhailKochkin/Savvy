@@ -8,9 +8,11 @@
     "npm": "6.9.0"
   },
   "scripts": {
-    "dev": "node server.js",
+    "dev": "next -p 7777",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "next start -p $PORT",
+    "heroku-postbuild": "next build",
+    "test": "NODE_ENV=test jest --watch"
   },
   "author": "M.Kochkin",
   "license": "ISC",
