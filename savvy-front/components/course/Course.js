@@ -138,7 +138,7 @@ export default class Course extends Component {
             else {
                 price = coursePage.price
             }
-        } else if (me !== null && me.careerTrack === null) {
+        } else if (me && me.careerTrack === null) {
             if(coursePage.price === null) {
                 price = "Бесплатно"
             }
@@ -157,7 +157,6 @@ export default class Course extends Component {
             }
         }
         return (
-
                 <CaseCard>
                   <Additional>
                     <div>
@@ -170,7 +169,6 @@ export default class Course extends Component {
                     <PriceBox> Стоимость: 
                     <span> </span>
                     {price}
-
                     </PriceBox>}
                     </div>
                     <div>

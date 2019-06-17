@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import FirstPage from '../components/FirstPage';
+import HomePage from '../components/course/HomePage';
 
 class Home extends Component {
     render() {
         return (
-            <FirstPage/>
+            <HomePage/>
         )    
     }
 }

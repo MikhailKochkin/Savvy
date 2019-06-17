@@ -34,9 +34,8 @@ const Inner = styled.div`
 
 injectGlobal`
     html {
-        /* @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
-        font-family: 'Montserrat', sans-serif; */
-        font-family: Arial, Helvetica, sans-serif;
+        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+        font-family: 'Montserrat', sans-serif;
         box-sizing: border-box;
         font-size: 10px;
         height:100%;

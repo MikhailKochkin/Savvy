@@ -44,7 +44,7 @@ const Query = {
       );
     },
     newTests(parent, args, ctx, info){
-      const lesID = args.where.lessonID;
+      const courseType = args.where.courseType;
       return ctx.db.query.newTests(
         {
           where: {lessonID: lesID}
@@ -52,6 +52,15 @@ const Query = {
         info
       );
     },
+    // coursePages(parent, args, ctx, info){
+    //   const courseType = args.where.courseType;
+    //   return ctx.db.query.coursePages(
+    //     {
+    //       where: {courseType: courseType}
+    //     },
+    //     info
+    //   );
+    // },
     quizzes(parent, args, ctx, info){
       const lesID = args.where.lessonID;
       return ctx.db.query.newTests(

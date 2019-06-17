@@ -60,23 +60,23 @@ class ForMoneyCoursesList extends Component {
     render() {
       let me = this.props.me;
       return (
-        <Query
-          query={FOR_MONEY_COURSE_PAGES_QUERY}
-          fetchPolicy="cache-first"
+        <Query query={FOR_MONEY_COURSE_PAGES_QUERY} 
+        returnPartialData={true} 
+        fetchPolicy="cache-first"
           variables={{
             type: "FORMONEY",
             first: CoursePerPage,
             skip: 0
           }}
         >
-          {({ data: data1, error, loading, fetchMore }) => {
-            if (error) return <p>Error: {error.message}</p>;
+          {({ data: data1, loading, fetchMore }) => {
             return (
               <>
                 <>
                   <h2> Платные курсы: </h2>
                   <CasesStyles>
-                    {data1.coursePages.map(coursePage => (
+                    {loading === false &&
+                    data1.coursePages.map(coursePage => (
                       <Course
                         key={coursePage.id}
                         id={coursePage.id}
@@ -97,6 +97,8 @@ class ForMoneyCoursesList extends Component {
                       if (error2) return <p>Error: {error2.message}</p>;
                       return (
                         <>
+                          {data1.coursepages !== undefined &&
+                          <>
                           {data2.coursePagesConnection.aggregate.count >
                           data1.coursePages.length ? (
                             <FetchMore
@@ -118,6 +120,7 @@ class ForMoneyCoursesList extends Component {
                               }
                             />
                           ) : null}
+                          </>}
                         </>
                       );
                     }}

@@ -63,6 +63,7 @@ class FreeCoursesList extends Component {
       return (
         <Query
           query={FREE_COURSE_PAGES_QUERY}
+          returnPartialData={true} 
           fetchPolicy="cache-first"
           variables={{
             type: ["PRIVATE", "PUBLIC"],
@@ -77,7 +78,8 @@ class FreeCoursesList extends Component {
                 <>
                   <h2> Бесплатные курсы: </h2>
                   <CasesStyles>
-                    {data1.coursePages.map(coursePage => (
+                  {loading === false &&
+                    data1.coursePages.map(coursePage => (
                       <Course
                         key={coursePage.id}
                         id={coursePage.id}
@@ -98,7 +100,8 @@ class FreeCoursesList extends Component {
                       if (error2) return <p>Error: {error2.message}</p>;
                       return (
                         <>
-                          {data2.coursePagesConnection.aggregate.count >
+                          {data1.coursepages !== undefined &&
+                          data2.coursePagesConnection.aggregate.count >
                           data1.coursePages.length ? (
                             <FetchMore
                               onLoadMore={() =>
@@ -124,7 +127,7 @@ class FreeCoursesList extends Component {
                     }}
                   </Query>
                 </>
-              </>
+             </>
             );
           }}
         </Query>

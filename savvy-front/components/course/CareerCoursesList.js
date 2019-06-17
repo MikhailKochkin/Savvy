@@ -65,6 +65,7 @@ class CareerCoursesList extends Component {
         return (
             <Query
               query={CAREER_TRACK_COURSE_PAGES_QUERY}
+              returnPartialData={true} 
               fetchPolicy="cache-first"
               variables={{
                 id: me.careerTrack.id,
@@ -81,7 +82,8 @@ class CareerCoursesList extends Component {
                     <>
                       <h2> Курсы для вашего карьерного трека: </h2>
                       <CasesStyles>
-                        {data1.coursePages.map(coursePage => (
+                        {loading === false &&
+                        data1.coursePages.map(coursePage => (
                             <Course
                               key={coursePage.id}
                               id={coursePage.id}
@@ -103,7 +105,8 @@ class CareerCoursesList extends Component {
                             if (error2) return <p>Error: {error2.message}</p>;
                             return (
                       <>
-                      {data2.coursePagesConnection.aggregate.count > data1.coursePages.length ?
+                      {data1.coursepages !== undefined &&
+                      data2.coursePagesConnection.aggregate.count > data1.coursePages.length ?
                       <FetchMore
                           onLoadMore={() =>
                             fetchMore({

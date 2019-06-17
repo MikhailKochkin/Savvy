@@ -27,12 +27,12 @@ class Courses extends Component {
     let me = this.props.me
     return (
       <Center>
-          {/* { me && me.careerTrack &&
+          { me && me.careerTrack &&
             <CareerCoursesList me={me} />
           }
-          <ForMoneyCoursesList me={me}/> */}
-          {/* <FreeCoursesList me={me}/> */}
-          <p>Boom</p>
+          <ForMoneyCoursesList me={me}/>
+          <FreeCoursesList me={me}/>
+       
       </Center>  
     );
   }
