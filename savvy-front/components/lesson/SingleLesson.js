@@ -13,8 +13,6 @@ import AreYouEnrolled from '../auth/AreYouEnrolled';
 import User from '../User';
 import { IoMdMenu } from "react-icons/io";
 
-
-
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
     lesson(where: { id: $id }) {
@@ -289,6 +287,10 @@ const ChooseButton = styled.button`
 
 const Text = styled.div`
   line-height: 1.6;
+  a {
+    color: #800000;
+    text-decoration: underline;
+  }
   img {
     display: block;
     max-width: 100%;
