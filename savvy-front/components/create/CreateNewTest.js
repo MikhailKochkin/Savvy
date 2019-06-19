@@ -112,6 +112,15 @@ class CreateNewTest extends Component {
         const { name, value } = e.target;
         this.setState({[name]: value});
       }
+
+    handleBooleanChange = e => {
+        let val
+        e.preventDefault();
+        const { name, value } = e.target;
+        if(value === "true") { val = true } else { val = false }
+        this.setState({[name]: val});
+    }
+
     handleSteps = e => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -129,9 +138,6 @@ class CreateNewTest extends Component {
             arrQuestion.push(this.state.question);
             arrAnswers.map(item => item !== "" ? arrAnswers2.push(item) : null);
             for(var i = 0; i < arrAnswers2.length; i++){arrCorrect2.push(arrCorrect[i])};
-
-            // console.log(arrAnswers2)
-            // console.log(arrCorrect2)
 
             this.setState({answers: arrAnswers2 , correct: arrCorrect2, questions: arrQuestion })
             this.setState({
@@ -153,7 +159,8 @@ class CreateNewTest extends Component {
         }
     onSave = async (e, createNewTest) => {
         e.preventDefault();
-        if (!this.state.correct.includes("true")) {
+        console.log(this.state.correct)
+        if (!this.state.correct.includes(true)) {
             alert("Должен быть хотя бы один правильный ответ!")
         } else {
         document.getElementById("Message").style.display ='block'
@@ -247,7 +254,7 @@ class CreateNewTest extends Component {
                                         value={this.state.answer1}
                                         onChange={this.handleChange}
                                     />
-                                        <select name="answer1Correct" value={this.state.answer1Correct} onChange={this.handleChange}>
+                                        <select name="answer1Correct" value={this.state.answer1Correct} onChange={this.handleBooleanChange}>
                                             <option value={true}>Правильно</option>
                                             <option value={false}>Ошибочно</option>
                                         </select>
@@ -271,7 +278,7 @@ class CreateNewTest extends Component {
                                             value={this.state.answer2}
                                             onChange={this.handleChange}
                                         />
-                                        <select name="answer2Correct" value={this.state.answer2Correct} onChange={this.handleChange}>
+                                        <select name="answer2Correct" value={this.state.answer2Correct} onChange={this.handleBooleanChange}>
                                             <option value={true}>Правильно</option>
                                             <option value={false}>Ошибочно</option>
                                         </select>
@@ -295,7 +302,7 @@ class CreateNewTest extends Component {
                                             value={this.state.answer3}
                                             onChange={this.handleChange}
                                         />
-                                        <select name="answer3Correct" value={this.state.answer3Correct} onChange={this.handleChange}>
+                                        <select name="answer3Correct" value={this.state.answer3Correct} onChange={this.handleBooleanChange}>
                                             <option value={true}>Правильно</option>
                                             <option value={false}>Ошибочно</option>
                                         </select>
@@ -317,7 +324,7 @@ class CreateNewTest extends Component {
                                                 value={this.state.answer4}
                                                 onChange={this.handleChange}
                                             />
-                                            <select name="answer4Correct" value={this.state.answer4Correct} onChange={this.handleChange}>
+                                            <select name="answer4Correct" value={this.state.answer4Correct} onChange={this.handleBooleanChange}>
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
@@ -339,7 +346,7 @@ class CreateNewTest extends Component {
                                                 value={this.state.answer5}
                                                 onChange={this.handleChange}
                                             />
-                                            <select name="answer5Correct" value={this.state.answer5Correct} onChange={this.handleChange}>
+                                            <select name="answer5Correct" value={this.state.answer5Correct} onChange={this.handleBooleanChange}>
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
@@ -361,7 +368,7 @@ class CreateNewTest extends Component {
                                                 value={this.state.answer6}
                                                 onChange={this.handleChange}
                                             />
-                                            <select name="answer6Correct" value={this.state.answer6Correct} onChange={this.handleChange}>
+                                            <select name="answer6Correct" value={this.state.answer6Correct} onChange={this.handleBooleanChange}>
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
