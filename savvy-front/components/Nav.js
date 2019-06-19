@@ -128,13 +128,13 @@ class Nav extends Component {
                   </Link>
                 )}
                 <Button onMouseEnter={this.mouseEnter} onClick={this.menuShow}>Поиск</Button>
-                {me && (
+                
                   <Link 
                     prefetch 
                     href="/special">
                     <a>Спецпроекты</a>
                   </Link>
-                )}
+                
             </CourseMenu>
             <Logo>
                 <Link prefetch href="/">
