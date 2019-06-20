@@ -205,7 +205,6 @@ export default class Course extends Component {
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
-                    {!subjectArray.includes(coursePage.id) && 
                         <Link href={{
                                 pathname: '/coursePage',
                                 query: {id }
@@ -213,7 +212,7 @@ export default class Course extends Component {
                             <a>
                                 <Button>Войти</Button>
                             </a>
-                    </Link> }
+                    </Link>
                     {me && me.id === coursePage.user.id &&
                       <>
                         <Link href={{

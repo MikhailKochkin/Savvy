@@ -159,7 +159,6 @@ class CreateNewTest extends Component {
         }
     onSave = async (e, createNewTest) => {
         e.preventDefault();
-        console.log(this.state.correct)
         if (!this.state.correct.includes(true)) {
             alert("Должен быть хотя бы один правильный ответ!")
         } else {
