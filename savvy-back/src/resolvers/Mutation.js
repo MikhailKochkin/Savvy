@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const postmark = require("postmark");
 const { randomBytes } = require('crypto');
 const { promisify } = require('util');
-// const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require("../utils");
 const yandex = require('../yandexCheckout');
 

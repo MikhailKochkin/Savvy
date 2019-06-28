@@ -18,6 +18,7 @@ const Button = styled.button`
         text-decoration: none;
         display: inline-block;
         padding: 8px 16px;
+      
     }
 
     a:hover {
@@ -28,6 +29,7 @@ const Button = styled.button`
     .previous {
     background-color: #f1f1f1;
     color: black;
+    text-align: center;
     }
 
     .next {

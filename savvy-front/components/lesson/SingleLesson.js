@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import Link from 'next/link';
+import moment from 'moment';
 import TestGroup from './TestGroup';
 import QuizGroup from './QuizGroup';
 import ProblemGroup from './ProblemGroup';
@@ -11,6 +12,7 @@ import SingleTextEditor from './SingleTextEditor';
 import PleaseSignIn from '../auth/PleaseSignIn';
 import AreYouEnrolled from '../auth/AreYouEnrolled';
 import User from '../User';
+import { NavButton } from '../styles/Button';
 import { IoMdMenu } from "react-icons/io";
 
 const SINGLE_LESSON_QUERY = gql`
@@ -174,6 +176,10 @@ const LessonPart = styled.div`
   flex-direction: column;
   background: white;
   border-radius: 2px;
+  a {
+    padding-top: 2%;
+    padding-left: 2%;
+  }
   @media (max-width: 800px) {
     order: 2;
     margin: 1%;
@@ -190,9 +196,7 @@ const MenuPart = styled.div`
     display: ${props => props.shown ? "block" : "none"};
     order: 1;
     margin: 1%;
-    padding: 2%;
     position: absolute;
-    /* right: 450px; */
     top: 200px;
     z-index: 10;
     margin-right: -100%;
@@ -287,10 +291,6 @@ const ChooseButton = styled.button`
 
 const Text = styled.div`
   line-height: 1.6;
-  a {
-    color: #800000;
-    text-decoration: underline;
-  }
   img {
     display: block;
     max-width: 100%;
@@ -315,7 +315,6 @@ const ShowMenu = styled.button`
   outline: none;
   @media (max-width: 800px) {
     display: block;
-    width: 16%;
 
   }
 `;
@@ -338,14 +337,13 @@ class SingleLesson extends Component {
 
   }
     render() {
-   
-      const quizes = [[ "Как будет машина?", ["car", "automobile"]], ["Как будет кошка?", ["cat"]], ["Как будет такси?", ["cab", "taxi"]]]
-      return (
+         return (
         <PleaseSignIn>
           <User>
             {({data: {me}}) => (
             <Query
               query={SINGLE_LESSON_QUERY}
+              fetchPolicy="cache-and-network"
               variables={{
                 id: this.props.id,
               }}
@@ -355,12 +353,23 @@ class SingleLesson extends Component {
                 if (loading) return <p>Loading...</p>;
                 // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
                 const lesson = data.lesson;
+                moment.locale('ru');
                 return (
+                  <>
+                  {this.props.type !== "open" && 
                   <AreYouEnrolled 
                     subject={lesson.coursePage.id}
-                  >
+                  > 
                   <LessonStyles>
                     <LessonPart>
+                    <Link href={{
+                        pathname: '/coursePage',
+                        query: { id: lesson.coursePage.id }
+                    }}>
+                      <a>
+                        <NavButton>На страницу курса</NavButton>
+                      </a>
+                    </Link>
                       <Center>
                         {this.state.page === "lesson" && 
                         <TextBar>
@@ -398,13 +407,11 @@ class SingleLesson extends Component {
                       {this.state.page === "problem" &&
                       <>
                       {lesson.problems.length > 0 ?
-                        <>
-                            <ProblemGroup 
-                              lessonId={lesson.id}
-                              problems={lesson.problems}
-                              me={me}
-                            />
-                        </>
+                        <ProblemGroup 
+                          lessonId={lesson.id}
+                          problems={lesson.problems}
+                          me={me}
+                        />  
                       :
                         <Center>
                           <h2>Задач пока нет</h2>
@@ -518,7 +525,173 @@ class SingleLesson extends Component {
                     </MenuPart>              
                   </LessonStyles>
                   
-                </AreYouEnrolled>
+                </AreYouEnrolled>}
+                {this.props.type === "open" && 
+                <LessonStyles>
+                  <LessonPart>
+                  <Link href={{
+                      pathname: '/coursePage',
+                      query: { id: lesson.coursePage.id }
+                  }}>
+                    <a>
+                      <NavButton>На страницу курса</NavButton>
+                    </a>
+                  </Link>
+                    <Center>
+                      {this.state.page === "lesson" && 
+                      <TextBar>
+                        <Title>Урок {lesson.number}. {lesson.name}</Title>       
+                        <Text dangerouslySetInnerHTML={{ __html: lesson.text }}></Text>
+                      </TextBar>}
+                        
+                    {this.state.page === "test" && 
+                      <>
+                        {lesson.newTests.length > 0 ? 
+                        <TestGroup 
+                            tests={lesson.newTests}
+                            me={me}
+                            lessonId={lesson.id}
+                          />
+                        :
+                        <Center>
+                          <h2>Тестов по этому уроку нет</h2>
+                        </Center>
+                        }
+                      </>
+                    }
+                    
+                    {this.state.page === "quiz" &&
+                      <>
+                        {lesson.quizes.length > 0 ?
+                          <QuizGroup quizes={lesson.quizes}/>
+                          :
+                          <Center>
+                            <h2>Вопросов по этому уроку нет</h2>
+                          </Center>
+                        }
+                      </>
+                    }
+                    {this.state.page === "problem" &&
+                    <>
+                    {lesson.problems.length > 0 ?
+                      <ProblemGroup 
+                        lessonId={lesson.id}
+                        problems={lesson.problems}
+                        me={me}
+                      />  
+                    :
+                      <Center>
+                        <h2>Задач пока нет</h2>
+                      </Center>
+                    }
+                    </>
+                    }
+                    {this.state.page === "constructor" &&
+                      <> {lesson.constructions.length > 0 ?
+                        <>
+                          {lesson.constructions.map(constructor => 
+                            <SingleConstructor 
+                              key={constructor.id}
+                              lessonId={lesson.id}
+                              data={constructor}
+                              me={me}
+                            />
+                          )}
+                        </>
+                        :
+                        <Center>
+                          <h2>Конструкторов документов пока нет</h2>
+                        </Center>
+                      } </>
+                    }
+                    {this.state.page === "texteditor" &&
+                    <> {lesson.texteditors.length > 0 ?
+                    <> 
+                      {lesson.texteditors.map(texteditor => 
+                        <SingleTextEditor 
+                          key={texteditor.id}
+                          lessonId={texteditor.id}
+                          data={texteditor}
+                          me={me}
+                        />
+                      )}
+                    </>
+                    :
+                    <Center>
+                      <h2>Редакторов документов пока нет</h2>
+                    </Center>
+                  } </>
+                }
+
+                    </Center>
+           
+                  </LessonPart>
+                  <ShowMenu onClick={this.onShowMenu}><IoMdMenu size={32}/></ShowMenu>
+                  <MenuPart shown={this.state.shown}>
+                    <Sticky>
+                      <NavPart>
+                        <ButtonZone><ChooseButton onClick = {this.onLesson}> Урок </ChooseButton></ButtonZone>
+                        <ButtonZone><ChooseButton onClick = {this.onTest}> Тесты </ChooseButton></ButtonZone>
+                        <ButtonZone><ChooseButton onClick = {this.onQuiz}> Вопросы </ChooseButton></ButtonZone>
+                        <ButtonZone><ChooseButton onClick = {this.onProblem}> Задачи </ChooseButton></ButtonZone>
+                        <ButtonZone><ChooseButton onClick = {this.onConstructor}> Конструктор документов </ChooseButton></ButtonZone>
+                        <ButtonZone><ChooseButton onClick = {this.onTextEditor}> Редактор документов </ChooseButton></ButtonZone>
+                      </NavPart>
+                      {me && lesson.user.id === me.id && 
+                      <TeacherPart>
+                        <ButtonZone> <Link href={{
+                                  pathname: '/updateLesson',
+                                  query: {id: lesson.id}
+                              }}>
+                              <a>
+                              <ChooseButton>Изменить текст урока</ChooseButton>
+                              </a>
+                        </Link></ButtonZone>
+                        <ButtonZone> <Link href={{
+                            pathname: '/createNewTest',
+                            query: {id: lesson.id}
+                            }}>
+                            <a>
+                            <ChooseButton>Составить тест</ChooseButton>
+                          </a>
+                        </Link></ButtonZone>
+                        <ButtonZone> <Link href={{
+                            pathname: '/createQuiz',
+                            query: {id: lesson.id}
+                            }}>
+                            <a>
+                            <ChooseButton>Составить вопрос</ChooseButton>
+                            </a>
+                        </Link></ButtonZone>
+                        <ButtonZone> <Link href={{
+                          pathname: '/createProblem',
+                          query: {id: lesson.id}
+                          }}>
+                          <a>
+                          <ChooseButton>Составить задачу</ChooseButton>
+                          </a>
+                        </Link></ButtonZone>
+                        <ButtonZone> <Link href={{
+                            pathname: '/createConstructor',
+                            query: {id: lesson.id}
+                            }}>
+                            <a>
+                            <ChooseButton>Составить конструктор документа</ChooseButton>
+                            </a>
+                        </Link></ButtonZone>
+                        <ButtonZone> <Link href={{
+                            pathname: '/createTextEditor',
+                            query: {id: lesson.id}
+                            }}>
+                            <a>
+                            <ChooseButton>Составить редактор документа</ChooseButton>
+                            </a>
+                        </Link></ButtonZone> 
+                          </TeacherPart> }
+                    </Sticky>
+                  </MenuPart>              
+                </LessonStyles>}
+              </>
                 );
               }}
             </Query>

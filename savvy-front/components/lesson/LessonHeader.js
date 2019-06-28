@@ -53,7 +53,6 @@ const Button = styled.button`
     font-size: 1.4rem;
     font-weight: 600;
     padding: 5% ;
-    /* margin: 2%; */
     color: #FFFDF7;
     background-color: #84BC9C;
     border: solid 1px white;
@@ -209,7 +208,7 @@ class LessonHeader extends Component {
                             </A>
                         </Link> : null
                       }
-                      { me && lesson && students.includes(me.id) && this.state.published ?
+                      { me && lesson && me.id !== lesson.user.id && students.includes(me.id) && this.state.published ?
                         <Link href={{
                             pathname: '/lesson',
                             query: {id: lesson.id}
@@ -219,7 +218,17 @@ class LessonHeader extends Component {
                             </A>
                         </Link> : null
                       }
-                      { me && lesson && students.includes(me.id) && !this.state.published ?
+                      { me && lesson && me.id !== lesson.user.id && !students.includes(me.id) && this.props.open === "open" &&
+                        <Link href={{
+                            pathname: '/lesson',
+                            query: {id: lesson.id, type: "open"}
+                            }}>
+                            <A>
+                            <Button>Перейти к уроку</Button>
+                            </A>
+                        </Link>
+                      }
+                      { me && lesson && me.id !== lesson.user.id && students.includes(me.id) && !this.state.published ?
                         <InProgress>Урок в разработке</InProgress> : null
                       }
                      
