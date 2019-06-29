@@ -39,28 +39,27 @@ const CareerStyles = styled.div`
 
 class HomePage extends Component {
     render() {
+        const { me } = this.props;
+    
         return (
             <HomeStyles>
-              <User>
-                {({data: {me}}) => (  
-                    <>
                         {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
-                        {/* {me === null && <Banner/>}
-                        {me !== null && me.careerTrack === null && <Banner/>}
-                        {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>} */}
+                        {me === undefined && "Загрузка..."}
+                        {me === null && <Banner/>}
+                        {me !== undefined && me.careerTrackID === null && <Banner/>}
+                        {me !== undefined && me.careerTrackID !== null && <CareerTrackMap data={me.careerTrackID}/>}
                          <Menu>
                              <CoursesStyles>
-                                 <Courses me={me}/>
+                                 {me !== undefined &&  <Courses me={me}/>}
+                                
                              </CoursesStyles>
                         <CareerStyles>
                                 {me === null && <CareerTrackMenu/>}
-                                {me !== null && !me.careerTrack && <CareerTrackMenu me={me}/>}
-                                {me !== null && me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me !== undefined && !me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me !== undefined && me.careerTrack && <CareerTrackMenu me={me}/>}
                              </CareerStyles>
                          </Menu>
-                    </>
-                )}
-            </User>
+     
           </HomeStyles>
         )
     }
