@@ -55,9 +55,9 @@ class HomePage extends Component {
                                 <Courses me={me}/>
                             </CoursesStyles>
                             <CareerStyles>
-                                {!me && <CareerTrackMenu/> }
-                                {me && !me.careerTrackID && <CareerTrackMenu me={me}/>}
-                                {me && me.careerTrackID && <CareerTrackMenu me={me}/>}
+                                {me === null && <CareerTrackMenu/> }
+                                {me !== null && !me.careerTrackID && <CareerTrackMenu me={me}/>}
+                                {me !== null && me.careerTrackID && <CareerTrackMenu me={me}/>}
                             </CareerStyles>
                         </Menu>
                     </>

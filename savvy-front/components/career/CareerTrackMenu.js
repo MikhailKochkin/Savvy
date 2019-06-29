@@ -13,6 +13,7 @@ const CAREER_TRACK_QUERY = gql`
     careerTrack(where: { id: $id }) {
         id
         name
+
         coursePages {
           id
           title
@@ -39,9 +40,9 @@ class CareerTrackMenu extends Component {
   render() {
     return (
     <MenuStyle>
-      {!this.props.me && <CareerTrackNone />}
-      {this.props.me && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
-      {this.props.me && this.props.me.careerTrackID &&
+      {this.props.me === null && <CareerTrackNone />}
+      {this.props.me !== null && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
+      {this.props.me !== null && this.props.me.careerTrackID &&
       <Query
         query={CAREER_TRACK_QUERY}
         variables={{
