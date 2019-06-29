@@ -24,6 +24,7 @@ const CAREER_TRACK_QUERY = gql`
 `;
 
 const MenuStyle = styled.div`
+    /* position: -webkit-sticky; */
     position: sticky;
     top: -150px;
     @media (max-width: 700px) {
@@ -39,12 +40,12 @@ class CareerTrackMenu extends Component {
     return (
     <MenuStyle>
       {!this.props.me && <CareerTrackNone />}
-      {this.props.me && !this.props.me.careerTrack && <CareerTrackNone me={this.props.me.id} />}
-      {this.props.me && this.props.me.careerTrack &&
+      {this.props.me && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
+      {this.props.me && this.props.me.careerTrackID &&
       <Query
         query={CAREER_TRACK_QUERY}
         variables={{
-          id: this.props.me.careerTrack.id
+          id: this.props.me.careerTrackID
         }}
       >
         {({ data, error, loading }) => {
