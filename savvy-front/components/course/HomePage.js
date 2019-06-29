@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import Courses from './Courses';
-import ForMoneyCoursesList from './ForMoneyCoursesList';
 import Banner from '../Banner';
 import User from '../User';
-import dynamic from 'next/dynamic';
 import CareerTrackMenu from '../career/CareerTrackMenu'
 import CareerTrackMap from '../career/CareerTrackMap'
 
@@ -43,23 +41,23 @@ class HomePage extends Component {
     render() {
         return (
             <HomeStyles>
-               <User>
+              <User>
                 {({data: {me}}) => (  
                     <>
                         {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
                         {me === null && <Banner/>}
-                        {me !== null && me.careerTrackID === null && <Banner/>}
-                        {me !== null && me.careerTrackID !== null && <CareerTrackMap data={me.careerTrackID}/>}
-                        <Menu>
-                            <CoursesStyles>
-                                <Courses me={me}/>
-                            </CoursesStyles>
-                            <CareerStyles>
-                                {me === null && <CareerTrackMenu/> }
-                                {me !== null && !me.careerTrackID && <CareerTrackMenu me={me}/>}
-                                {me !== null && me.careerTrackID && <CareerTrackMenu me={me}/>}
-                            </CareerStyles>
-                        </Menu>
+                        {me !== null && me.careerTrack === null && <Banner/>}
+                        {me !== null && me.careerTrack !== null && <CareerTrackMap data={me.careerTrack.id}/>}
+                         <Menu>
+                             <CoursesStyles>
+                                 <Courses me={me}/>
+                             </CoursesStyles>
+                        <CareerStyles>
+                                {me === null && <CareerTrackMenu/>}
+                                {me !== null && !me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me !== null && me.careerTrack && <CareerTrackMenu me={me}/>}
+                             </CareerStyles>
+                         </Menu>
                     </>
                 )}
             </User>

@@ -46,7 +46,7 @@ class CareerTrackMenu extends Component {
       <Query
         query={CAREER_TRACK_QUERY}
         variables={{
-          id: this.props.me.careerTrackID
+          id: this.props.me.careerTrack.id
         }}
       >
         {({ data, error, loading }) => {
