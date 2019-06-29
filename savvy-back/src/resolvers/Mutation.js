@@ -25,7 +25,7 @@ const Mutations = {
   async updateUser(parent, args, ctx, info) {
     //run the update method
     const updates = { ...args };
-    const id = args.careerTrackID;
+    const careerTrackID = args.careerTrackID;
     //remove the ID from updates
     delete updates.id;
     delete updates.args;
@@ -37,7 +37,7 @@ const Mutations = {
         },
         data: {
           careerTrack: {
-            connect: { id }
+            connect: { id: careerTrackID }
           },
           ...updates
         },
