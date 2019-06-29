@@ -68,7 +68,7 @@ class CareerCoursesList extends Component {
               returnPartialData={true} 
               fetchPolicy="cache-first"
               variables={{
-                id: me.careerTrack.id,
+                id: me.careerTrackID,
                 first: CoursePerPage,
                 skip: 0,
                 
@@ -78,7 +78,7 @@ class CareerCoursesList extends Component {
                 if (error) return <p>Error: {error.message}</p>;
                 return (
                   <>
-                    {me !== null && me.careerTrack &&
+                    {me !== null && me.careerTrackID &&
                     <>
                       <h2> Курсы для вашего карьерного трека: </h2>
                       <CasesStyles>
@@ -97,7 +97,7 @@ class CareerCoursesList extends Component {
                         query={AGGREGATE_CAREER_TRACK_COURSE_PAGES_QUERY} 
                         fetchPolicy="cache-first"
                         variables={{
-                            id: me.careerTrack.id,
+                            id: me.careerTrackID,
                         }}
                       >
                         {({ data: data2, error: error2, loading: loading2 }) => {
