@@ -27,7 +27,7 @@ class Courses extends Component {
     let me = this.props.me
     return (
       <Center>
-          { me && me.careerTrack &&
+          { me && me.careerTrackID &&
             <CareerCoursesList me={me} />
           }
           <ForMoneyCoursesList me={me}/>
