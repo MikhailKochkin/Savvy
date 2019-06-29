@@ -40,9 +40,9 @@ class CareerTrackMenu extends Component {
   render() {
     return (
     <MenuStyle>
-      {this.props.me === null && <CareerTrackNone />}
-      {this.props.me !== null && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
-      {this.props.me !== null && this.props.me.careerTrackID &&
+      {this.props.me === null || this.props.me === undefined && <CareerTrackNone />}
+      {this.props.me !== null && this.props.me !== undefined && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
+      {this.props.me !== null &&  this.props.me !== undefined && this.props.me.careerTrackID &&
       <Query
         query={CAREER_TRACK_QUERY}
         variables={{

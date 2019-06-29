@@ -46,17 +46,16 @@ class HomePage extends Component {
                         {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
                         {me === undefined && "Загрузка..."}
                         {me === null && <Banner/>}
-                        {me !== undefined && me.careerTrackID === null && <Banner/>}
-                        {me !== undefined && me.careerTrackID !== null && <CareerTrackMap data={me.careerTrackID}/>}
+                        {me !== null && me !== undefined && me.careerTrackID === null && <Banner/>}
+                        {me !== null && me !== undefined && me.careerTrackID !== null && <CareerTrackMap data={me.careerTrackID}/>}
                          <Menu>
                              <CoursesStyles>
-                                 {me !== undefined &&  <Courses me={me}/>}
-                                
+                                 { <Courses me={me}/>}
                              </CoursesStyles>
                         <CareerStyles>
-                                {me === null && <CareerTrackMenu/>}
-                                {me !== undefined && !me.careerTrack && <CareerTrackMenu me={me}/>}
-                                {me !== undefined && me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me !== undefined && me === null &&  <CareerTrackMenu/>}
+                                {me !== null && me !== undefined && !me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me !== null && me !== undefined && me.careerTrack && <CareerTrackMenu me={me}/>}
                              </CareerStyles>
                          </Menu>
      
