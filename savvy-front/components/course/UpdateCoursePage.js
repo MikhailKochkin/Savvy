@@ -88,7 +88,6 @@ const P = styled.p`
 `;
 
 
-
 class UpdateCoursePage extends Component {
   state = {
     upload: false

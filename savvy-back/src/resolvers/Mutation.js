@@ -259,15 +259,10 @@ const Mutations = {
     //run the update method
     return ctx.db.mutation.updateCoursePage(
       {
-        data: {
-          careerTrack: {
-            connect: { id }
-          },
-          updates},
+        data: updates,
         where: {
           id: args.id
       },
-
     }, 
     info
   );
