@@ -69,7 +69,7 @@ class TakeMyMoney extends React.Component {
             refetchQueries={[{ query: CURRENT_USER_QUERY }]}
             variables={{
               coursePageID: this.props.coursePageID,
-              price: finalPrice,
+              price: this.props.price,
               userID: this.props.user
             }}
           >
