@@ -5,24 +5,9 @@ import LessonHeader from '../lesson/LessonHeader';
 import CoursePageNav from './CoursePageNav';
 import PleaseSignIn from '../auth/PleaseSignIn';
 
-const FIRST_LESSON_QUERY = gql`
-  query FIRST_LESSON_QUERY($id: ID!, $first: Int = 1) {
-    lessons(where: {coursePageID: $id}, orderBy: number_ASC, first: $first) {
-      id
-      name
-      number
-      published
-      text
-      user {
-          id
-      }
-    }
-  }
-`;
-
 const PAGE_LESSONS_QUERY = gql`
-  query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 1) {
-    lessons(where: {coursePageID: $id}, orderBy: number_ASC, skip: $skip) {
+  query PAGE_LESSONS_QUERY($id: ID!) {
+    lessons(where: {coursePageID: $id}, orderBy: number_ASC) {
       id
       name
       number
@@ -101,32 +86,7 @@ class CoursePage extends Component {
                                           return (
                                             <div>
                                                 <h4>Всего уроков: {data2.lessonsConnection.aggregate.count}</h4>
-                                                <Query
-                query={FIRST_LESSON_QUERY} 
-                fetchPolicy="cache-first"
-                variables={{
-                  id: this.props.id,
-                }}>
-                {({ data: data3, error: error3, loading: loading3 }) => {
-                        console.log(data3);
-                        if (loading3) return <p>Loading...</p>;
-                        if (error3) return <p>Error: {error3.message}</p>;
-                        return (
-                                <div>
-                                    {data3.lessons.map(lesson => 
-                                      <LessonHeader 
-                                        key={lesson.id} 
-                                        name={lesson.name} 
-                                        lesson={lesson} 
-                                        coursePageId={this.props.id}
-                                        students={coursePage.students}
-                                        open={"open"}
-                                      />
-                                    )}
-                                </div>
-                              )
-                            }}
-                </Query>
+                                            
                                                 {data1.lessons.map(lesson => 
                                                   <LessonHeader 
                                                     key={lesson.id} 
