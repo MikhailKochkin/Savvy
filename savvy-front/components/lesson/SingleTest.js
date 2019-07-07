@@ -50,7 +50,8 @@ class SingleTest extends Component {
         true: this.props.true,
         answerState: 'think',
         answerOptions: this.props.length,
-        correct: false,
+        answer: '',
+        attempts: 0
       }
 
     answerState = '';
@@ -60,20 +61,30 @@ class SingleTest extends Component {
       let int = parseInt(e.target.getAttribute("number"));
       answerVar[int] = !answerVar[int]
       this.setState({answerOptions: answerVar})
-      // localStorage.setItem(name, value)
     }
 
-    onCheck = () => {
+    onCheck = async () => {
+      const res1 = await this.setState(prevState => ({attempts: prevState.attempts + 1}))
+      const res = () => {
       if(JSON.stringify(this.state.answerOptions) == JSON.stringify(this.state.true)){
         this.setState({answerState: 'right'})
+        // const result = {
+        //   student: this.props.me.id,
+        //   attempts: this.state.attempts,
+        //   answer: "right"
+        // };
+        // console.log(result)
+        this.props.getTestData("+1");
       } else {
         this.setState({answerState: 'wrong'})
-      }
-    }
+      } }
+      const res2 = await res();
+  }
 
     nextQuestion = () => {
         this.props.getQuestionInfo(true);
     }
+
     render() {
       const mes = _.zip(this.state.answers, this.state.true);
       switch(this.state.answerState) {

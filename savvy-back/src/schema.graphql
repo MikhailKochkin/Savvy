@@ -21,6 +21,8 @@ type Mutation {
         answer2Correct: String!, answer3: String, answer3Correct: String, answer4: String,
         answer4Correct: String, lessonID: ID): Test!
     createNewTest(question: [String!], answers: [String!], correct: [Boolean!], lessonID: ID): NewTest!
+    createTestResult(answer: String, attempts: Int, lessonID: ID): TestResult!
+    createQuizResult(answer: String, attempts: Int, lessonID: ID): QuizResult!
     deleteNewTest(id:ID!): NewTest
     createQuiz(question: String!, answer: String, lang: String!, lessonID: ID): Quiz!
     createPointATest(question: String!, answer1: String!, answer1Correct: String!, answer2: String!,

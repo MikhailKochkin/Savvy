@@ -120,13 +120,13 @@ class Nav extends Component {
                   href="/">
                     <a>Меню</a>
                 </Link>
-                {me && (
+                {/* {me && (
                   <Link 
                     prefetch 
                     href="/create">
                     <a>Создать</a>
                   </Link>
-                )}
+                )} */}
                 <Button onMouseEnter={this.mouseEnter} onClick={this.menuShow}>Поиск</Button>
                 
                   <Link 

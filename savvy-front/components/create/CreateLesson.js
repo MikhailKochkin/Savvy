@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-// import { PAGE_LESSONS_QUERY } from '../course/CoursePage';
 import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton } from '../styles/Button';
 import AreYouATeacher from '../auth/AreYouATeacher';

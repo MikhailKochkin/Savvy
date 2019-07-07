@@ -69,6 +69,7 @@ class SingleQuiz extends Component {
         if(this.props.answer.toLowerCase()  === this.state.answer.toLowerCase() ) {
             // console.log(this.props.answer.includes(this.state.answer.toLowerCase()))
             this.setState({ correct: 'true'})
+            this.props.getQuizData("+1");
         } else {
             this.setState({ correct: 'false'})
         }

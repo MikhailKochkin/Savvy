@@ -396,7 +396,10 @@ class SingleLesson extends Component {
                       {this.state.page === "quiz" &&
                         <>
                           {lesson.quizes.length > 0 ?
-                            <QuizGroup quizes={lesson.quizes}/>
+                            <QuizGroup 
+                              quizes={lesson.quizes}
+                              lessonId={lesson.id}
+                            />
                             :
                             <Center>
                               <h2>Вопросов по этому уроку нет</h2>

@@ -72,9 +72,9 @@ const Mutations = {
             .FRONTEND_URL2}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
       }
     ).then(response => {
-      console.log("Sending message");
-      console.log(response.To);
-      console.log(response.Message);
+      // console.log("Sending message");
+      // console.log(response.To);
+      // console.log(response.Message);
     });
     // 4. Return the message
     return { message: 'Спасибо!' };
@@ -334,11 +334,9 @@ const Mutations = {
     );
   },
   async updatePublished(parent, args, ctx, info) {
-    console.log("здесь")
     const updates = { ...args };
     delete updates.id;
     //run the update method
-    console.log(updates)
     const published = await ctx.db.mutation.updateLesson(
       {
         data: updates,
@@ -348,7 +346,7 @@ const Mutations = {
       },
     info
     );
-    console.log("Готово!")
+
     return published; 
   },
     async deleteLesson(parent, args, ctx, info) {
@@ -419,6 +417,52 @@ const Mutations = {
       );
         return test;
     },
+    async createTestResult(parent, args, ctx, info) {
+      // TODO: Check if they are logged in
+      const lessonID = args.lessonID
+      // console.log(ctx.request.userId)
+      // console.log(coursePagedID)
+      if (!ctx.request.userId) {
+        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      }
+      const TestResult = await ctx.db.mutation.createTestResult(
+          {
+          data: {
+              student: {
+                connect: { id: ctx.request.userId }
+                },
+              lesson: {
+                connect: { id: lessonID }
+              },
+              ...args
+          },
+      }, 
+      info
+    );
+      return TestResult;
+  },
+  async createQuizResult(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const lessonID = args.lessonID
+    if (!ctx.request.userId) {
+      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+    }
+    const QuizResult = await ctx.db.mutation.createQuizResult(
+        {
+        data: {
+            student: {
+              connect: { id: ctx.request.userId }
+              },
+            lesson: {
+              connect: { id: lessonID }
+            },
+            ...args
+        },
+    }, 
+    info
+  );
+    return QuizResult;
+},
     async createQuiz(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const lessonID = args.lessonID
