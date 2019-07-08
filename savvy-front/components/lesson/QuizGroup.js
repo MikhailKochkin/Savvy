@@ -51,6 +51,8 @@ class QuizGroup extends Component {
         this.setState(prevState => ({completed: prevState.completed + 1}))
       }
     render() {
+        const userData = this.props.quizResults.filter(result => result.student.id === this.props.me.id);
+        console.log(userData)
         return (
             <>
                  <Advice><b>Совет</b>: чтобы преподаватель увидел, что вы выполнили задания, вам нужно сделать следущее. 
@@ -76,7 +78,7 @@ class QuizGroup extends Component {
               >
             {(createQuizResult, {loading, error}) => (
                 <>
-              {this.state.tests.length === this.state.completed && 
+            {this.state.tests.length === this.state.completed && userData.length === 0 &&
                 <Button onClick={
                     async e => {
                         // Stop the form from submitting
@@ -89,6 +91,7 @@ class QuizGroup extends Component {
                         }
                 }>{!this.state.handIn ? "Сохранить" : "Готово!"}</Button>
              }
+             {userData.length > 0 ? <p>Вопросы этого урока сданы!</p> : null}
              </>
             )}
               </Mutation>

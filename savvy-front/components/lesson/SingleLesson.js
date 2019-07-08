@@ -26,6 +26,20 @@ const SINGLE_LESSON_QUERY = gql`
         user {
           id
         }
+        testResults {
+          id
+          student {
+            id
+          }
+          answer
+        }
+        quizResults {
+          id
+          student {
+            id
+          }
+          answer
+        }
         coursePage {
           id
         }
@@ -384,6 +398,7 @@ class SingleLesson extends Component {
                               tests={lesson.newTests}
                               me={me}
                               lessonId={lesson.id}
+                              testResults={lesson.testResults}
                             />
                           :
                           <Center>
@@ -399,6 +414,8 @@ class SingleLesson extends Component {
                             <QuizGroup 
                               quizes={lesson.quizes}
                               lessonId={lesson.id}
+                              quizResults={lesson.quizResults}
+                              me={me}
                             />
                             :
                             <Center>

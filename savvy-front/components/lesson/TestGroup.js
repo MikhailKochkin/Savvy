@@ -54,6 +54,7 @@ class TestGroup extends Component {
     
     render() {
         let arr;
+        const userData = this.props.testResults.filter(result => result.student.id === this.props.me.id);
         return (
             <>
             <Advice><b>Совет</b>: чтобы преподаватель увидел, что вы выполнили задания, вам нужно сделать следущее. 
@@ -86,7 +87,7 @@ class TestGroup extends Component {
               >
             {(createTestResult, {loading, error}) => (
                 <>
-              {this.state.tests.length === this.state.completed && 
+              {this.state.tests.length === this.state.completed && userData.length === 0 &&
                 <Button onClick={
                     async e => {
                         // Stop the form from submitting
@@ -99,6 +100,7 @@ class TestGroup extends Component {
                         }
                 }>{!this.state.handIn ? "Сохранить" : "Готово!"}</Button>
              }
+             {userData.length > 0 ? <p>Тесты этого урока сданы!</p> : null}
              </>
             )}
               </Mutation>
