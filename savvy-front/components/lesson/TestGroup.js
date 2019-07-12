@@ -48,12 +48,16 @@ class TestGroup extends Component {
         handIn: false
     }
 
-    myCallback = () => {
-        this.setState(prevState => ({completed: prevState.completed + 1}))
+    myCallback = async e => {
+        const res = await this.setState(prevState => ({completed: prevState.completed + 1}))
+        if(this.state.tests.length === this.state.completed) {
+          console.log("Reached!")
+        }
     }
-    
+
     render() {
         let arr;
+        console.log(this.props)
         const userData = this.props.testResults.filter(result => result.student.id === this.props.me.id);
         return (
             <>

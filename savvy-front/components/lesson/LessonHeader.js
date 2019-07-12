@@ -218,10 +218,10 @@ class LessonHeader extends Component {
                             </A>
                         </Link> : null
                       }
-                      { me && lesson && me.id !== lesson.user.id && !students.includes(me.id) && this.props.open === "open" &&
+                      { me && lesson && me.id !== lesson.user.id && !students.includes(me.id) && this.props.index === 1 &&
                         <Link href={{
                             pathname: '/lesson',
-                            query: {id: lesson.id, type: "open"}
+                            query: {id: lesson.id}
                             }}>
                             <A>
                             <Button>Перейти к уроку</Button>

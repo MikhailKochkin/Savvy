@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const Styles = styled.div`
-    margin-bottom: 1%;
+    margin-top: 2%;
 `;
 
 const Banner = styled.img`

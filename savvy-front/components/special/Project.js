@@ -571,7 +571,7 @@ class Project extends Component {
                     </Terms>
                     <Click>
                         <Author>Окончательная стоимость курса: <span className="final">{this.state.price}</span> рублей. </Author>
-                        {!me && <Note>Зарегестрируйтесь на сайте, чтобы приобрести этот курс!</Note>}
+                        {!me && <Note>трируйтесь на сайте, чтобы приобрести этот курс!</Note>}
                         {me &&
                         <TakeMyMoney
                             coursePageID={"cjwaz2l0300dc0729d02opkzb"}

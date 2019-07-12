@@ -16,6 +16,7 @@ const DELETE_PROBLEM_MUTATION =gql`
 const Button = styled.button`
     border: none;
     cursor: pointer;
+    /* margin-top: 5%; */
 `
 
 const Delete = styled.div`
@@ -26,27 +27,38 @@ const Delete = styled.div`
 `;
 
 class DeleteSingleProblem extends Component {
+    update = (cache, payload) => {
+        // manually update the cache on the client, so it matches the server
+        // 1. Read the cache for the items we want
+        const data = cache.readQuery({ query: SINGLE_LESSON_QUERY, variables: { id: this.props.lessonId } });
+        console.log(data);
+        // 2. Filter the deleted itemout of the page
+        data.lessons = data.lesson.problems.filter(item => item.id !== payload.data.deleteProblem.id);
+        // 3. Put the items back!
+        cache.writeQuery({ query: SINGLE_LESSON_QUERY, variables: { id: this.props.lessonId }, data });
+      };
     render() {
-        const { lessonID, id } = this.props
+        const { lessonId, id } = this.props
         return (
             <Mutation 
                 mutation={DELETE_PROBLEM_MUTATION}
                 variables={{id}}
+                update={this.update}
                 refetchQueries={() =>[{
                     query: SINGLE_LESSON_QUERY,
-                    variables: { id: lessonID},
+                    variables: { id: lessonId},
                   }]}
             >
-                {(deleteProblem, { error }) => (
+                {(deleteProblem, { loading, error }) => (
                     <Button onClick={() => {
-                    if (confirm('Вы точно хотите удалить эту запись?')) {
+                    if (confirm('Вы точно хотите удалить эту задачу?')) {
                         deleteProblem().catch(error => {
                             alert(error.message)
                         });
                         }
                     }}>
                         <Delete id="remove">
-                            <Icon size={20} icon={remove}/> 
+                            {loading ? "Удаляем..." :<Icon size={20} icon={remove}/>  }
                         </Delete>
                     </Button>    
                 )}

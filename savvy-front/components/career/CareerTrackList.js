@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 const ListStyle = styled.div`
     background-color: white;
+    display: block;
     /* font-size: 1.6rem; */
-    margin-left: 2%;
     border: 0.25px solid #F8F8F8;
     border-radius: 4px;
     padding: 2% 4%;
@@ -22,6 +22,12 @@ const ListStyle = styled.div`
             color: grey;
         }
     }
+    li {
+        list-style-type: none;
+        display: block;
+        margin-left: -10%;
+        margin-bottom: 3%;
+    }
 `;
 
 const Title = styled.p`
@@ -36,32 +42,64 @@ const Button = styled.button`
     font-size: 1.8rem;
     font-style: italic;
     color: #112A61;
-    padding: 0;
+    padding: 0%;
     cursor: pointer;
     &:hover{
         color: #145C9E;
     }
 `;
 
+const Number = styled.span`
+    border: 1px solid green;
+    border: ${props => props.primary ? `1px solid ${props.primary}` : `1px solid black`};
+    padding:1%;
+    border-radius: 50%;
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    line-height: 20px;
+    text-align: center;
+    -moz-border-radius: 30px;
+`;
+
 class CareerTrackList extends Component {
     render() {
         const newList = this.props.CareerList.sort((a, b) => (a.numInCareerTrack > b.numInCareerTrack) ? 1 : -1)
+        let color;
         return (
             <ListStyle>
 
                     <Title>Рекомендованная программа карьерного трека:</Title>
-                    {newList.map(item =>
+                    <ol>
+                    {newList.map(item => (
                     <>
-                        <p key={item.numInCareerTrack}>{item.numInCareerTrack}. {item.title} – <span/>
-                        <Link href={{
-                            pathname: '/coursePage',
-                            query: {id: item.id}
-                          }}>
-                          <Button>Перейти</Button>
-                        </Link>
-                        </p>
-                    </>
+                        {this.props.mySubjects.includes(item.id) ? 
+                        <>
+                        <li key={item.numInCareerTrack}><Number primary={"#F89B4F"}>{item.numInCareerTrack}.</Number>
+                            <span> </span>
+                            {item.title} – <span/>
+                            <Link href={{
+                                pathname: '/coursePage',
+                                query: {id: item.id}
+                            }}>
+                            <Button>Перейти</Button>
+                            </Link>
+                        </li>
+                        </>
+                        : 
+                        <li key={item.numInCareerTrack}><Number primary={"#008CBA"}>{item.numInCareerTrack}.</Number>
+                            <span> </span>
+                            {item.title} – <span/>
+                            <Link href={{
+                                pathname: '/coursePage',
+                                query: {id: item.id}
+                            }}>
+                            <Button>Перейти</Button>
+                            </Link>
+                        </li> }
+                    </> )
                     )}
+                    </ol>
             </ListStyle>
         );
     }

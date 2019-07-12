@@ -5,15 +5,12 @@ import styled from 'styled-components';
 import CareerTrackInfo from './CareerTrackInfo';
 import CareerTrackList from './CareerTrackList';
 import CareerTrackNone from './CareerTrackNone';
-import Conf from './Conf';
-import Resume from './Resume';
 
 const CAREER_TRACK_QUERY = gql`
   query CAREER_TRACK_QUERY($id: ID!) {
     careerTrack(where: { id: $id }) {
         id
         name
-
         coursePages {
           id
           title
@@ -27,7 +24,7 @@ const CAREER_TRACK_QUERY = gql`
 const MenuStyle = styled.div`
     /* position: -webkit-sticky; */
     position: sticky;
-    top: -150px;
+    top: 10px;
     @media (max-width: 700px) {
         position: -webkit-relaitve;
         position: relative;
@@ -40,9 +37,9 @@ class CareerTrackMenu extends Component {
   render() {
     return (
     <MenuStyle>
-      {this.props.me === null || this.props.me === undefined && <CareerTrackNone />}
-      {this.props.me !== null && this.props.me !== undefined && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
-      {this.props.me !== null &&  this.props.me !== undefined && this.props.me.careerTrackID &&
+      {!this.props.me && <CareerTrackNone />}
+      {this.props.me && !this.props.me.careerTrackID && <CareerTrackNone me={this.props.me.id} />}
+      {this.props.me && this.props.me.careerTrackID &&
       <Query
         query={CAREER_TRACK_QUERY}
         variables={{
@@ -56,13 +53,11 @@ class CareerTrackMenu extends Component {
           return (
             <>
               <CareerTrackInfo name={career.name} />
-              <CareerTrackList CareerList={career.coursePages} id={career.id} />
+              <CareerTrackList CareerList={career.coursePages} id={career.id} mySubjects={this.props.me.subjects}/>
             </>
           )
         }}
       </Query>}
-      <Conf />
-      <Resume />
     </MenuStyle>
   )}
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import Router from 'next/router';
 import styled from 'styled-components';
 import Error from '../ErrorMessage';
 import { CURRENT_USER_QUERY } from '../User'
@@ -24,6 +25,7 @@ const SubmitButton = styled.button`
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    margin-top: 3%;
     font-size: 1.4rem;
     font-weight: 600;
     width: 50%;
@@ -31,15 +33,19 @@ const SubmitButton = styled.button`
     &:hover {
         background: #0B3954;
     }
+    @media (max-width: 800px) {
+        margin-top: 5%;
+        width: 80%;
+    }
 `;
 
 const Form = styled.form`
-    width: 40%;
+    width: 50%;
     margin: 50%;
     margin: 0 auto;
     font-size: 1.6rem;
     @media (max-width: 800px) {
-        width: 80%;
+        width:90%;
     }
 `;
 
@@ -90,8 +96,8 @@ const Label = styled.label`
         border-radius: 3.5px;
         padding: 2%;
         font-size: 1.4rem;
-
     }
+
     @media (max-width: 600px) {
         display: flex;
         flex-direction: column;
@@ -102,7 +108,7 @@ const Label = styled.label`
 const Buttons = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: left;
+    justify-content: center;
     margin-top: 2%;
     padding: 3%;
     border-top: solid 1px #F0F0F0;
@@ -124,7 +130,7 @@ class Signin extends Component {
         loggedIn: false
     }
     saveToStateEmail= e => {
-        this.setState({ [e.target.name] : e.target.value.toLowerCase()}); 
+        this.setState({ [e.target.name] : e.target.value}); 
     }
     saveToState= e => {
         this.setState({ [e.target.name] : e.target.value}); 
@@ -157,7 +163,7 @@ class Signin extends Component {
                                 name="email"
                                 placeholder="Почта"
                                 value={this.state.email}
-                                onChange={this.saveToState}
+                                onChange={this.saveToStateEmail}
                             />
                         </Label>
                         <Label className="password" htmlFor="password">
@@ -172,7 +178,7 @@ class Signin extends Component {
                         </Label>
                     </Container>
                     <Buttons>
-                        <SubmitButton type="submit">{loading ? "Вхожу" : "Войти"}!</SubmitButton>
+                        <SubmitButton type="submit">{loading ? "Вхожу" : "Войти"}</SubmitButton>
                     </Buttons>
                 </Fieldset>
               </Form>

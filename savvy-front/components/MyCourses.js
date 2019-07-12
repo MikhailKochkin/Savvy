@@ -47,9 +47,9 @@ class MyCourses extends Component {
                         if (error) return <p>Error: {error.message}</p>;
                         return (
                             <MyCoursesStyles>
-                                <h2>Список курсов, на которые вы зарегестрировались:</h2>
+                                <h2>Список курсов, на которые вы зарегистрировались:</h2>
                                 {data.coursePages == 0 ? 
-                                <p>Вы пока еще не зарегестрированы ни на один курс. Выберите курс для себя на главной странице.</p>
+                                <p>Вы пока еще не трированы ни на один курс. Выберите курс для себя на главной странице.</p>
                                 :
                                 <CoursesStyles>
                                 {data.coursePages.map(coursePage => <MyCourse key={coursePage.id} id={coursePage.id} coursePage={coursePage}/>)}

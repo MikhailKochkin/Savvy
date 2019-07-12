@@ -68,12 +68,6 @@ class SingleTest extends Component {
       const res = () => {
       if(JSON.stringify(this.state.answerOptions) == JSON.stringify(this.state.true)){
         this.setState({answerState: 'right'})
-        // const result = {
-        //   student: this.props.me.id,
-        //   attempts: this.state.attempts,
-        //   answer: "right"
-        // };
-        // console.log(result)
         this.props.getTestData("+1");
       } else {
         this.setState({answerState: 'wrong'})
@@ -117,7 +111,8 @@ class SingleTest extends Component {
                         </AnswerOption>
                     </ul>
                     )}
-                    <Button onClick={this.onCheck}>Проверить</Button><br/>
+                    {this.state.answerState !== "right" &&
+                    <Button onClick={this.onCheck}>Проверить</Button>}<br/>
                   </TextBar>
                   
                   { this.props.me && this.props.me.id === this.props.user ?

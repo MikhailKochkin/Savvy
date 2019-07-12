@@ -98,7 +98,9 @@ type Lesson {
   constructions: [Construction] @relation(name: "LessonConstructions" onDelete: CASCADE)
   texteditors: [TextEditor] @relation(name: "LessonTextEditors")
   testResults: [TestResult] @relation(name: "TestResults" onDelete: CASCADE)
-  quizResults: [QuizResult] @relation(name: "QuizResults" onDelete: CASCADE) 
+  quizResults: [QuizResult] @relation(name: "QuizResults" onDelete: CASCADE)
+  problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE) 
+  open: Boolean @default(value: "false")
   coursePageID: ID!
   published: Boolean @default(value: "false")
   createdAt: DateTime!
@@ -206,6 +208,7 @@ type Problem {
   solutionList: [String!]
   user: User!
   lesson: Lesson! @relation(name: "LessonProblems")
+  problemResults: [ProblemResult] @relation(name: "SingleProblemResults" onDelete: CASCADE)
   lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -278,4 +281,15 @@ type QuizResult {
   attempts: Int
   lesson: Lesson @relation(name: "QuizResults")
   lessonID: ID
+}
+
+type ProblemResult {
+  id: ID! @unique
+  student: User!
+  answer: String
+  revealed: [String!]
+  lesson: Lesson @relation(name: "ProblemResults")
+  lessonID: ID
+  problem: Problem @relation(name: "SingleProblemResults")
+  problemID: ID
 }

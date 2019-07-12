@@ -45,7 +45,7 @@ const Form = styled.form`
     margin: 0 auto;
     font-size: 1.6rem;
     @media (max-width: 800px) {
-        width: 80%;
+        width:90%;
     }
 `;
 
@@ -68,6 +68,9 @@ const Container = styled.div`
     .name {
         grid-area: second;
     }
+    /* .surname {
+        grid-area: third;
+    } */
     .password {
         grid-area: third;
     }
@@ -75,6 +78,7 @@ const Container = styled.div`
         "first   "
         "second   "
         "third   ";
+        /* "fourth   "; */
     @media (max-width: 800px) {
         margin-bottom: 5%; 
     }
@@ -108,7 +112,7 @@ const Label = styled.label`
     }
     .checked {
         height: 25%;
-        width: 40%;
+        width: 25%;
         border: none;
         box-shadow: none;
     }
@@ -116,9 +120,9 @@ const Label = styled.label`
         display: flex;
         flex-direction: column;
         .checked {
-            height: 100%;
-            width: 100%;
-    }
+            height: 30px;
+            width: 30px;
+      }
     }
 `;
 
@@ -126,7 +130,7 @@ const Label = styled.label`
 const Buttons = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: left;
+    justify-content: center;
     margin-top: 2%;
     padding: 3%;
     border-top: solid 1px #F0F0F0;
@@ -144,6 +148,7 @@ const LoggedIn = styled.p`
 class Signup extends Component {
     state = {
         name: '',
+        surname: '',
         password: '',
         email: '',
         isFamiliar: false,
@@ -176,11 +181,11 @@ class Signup extends Component {
                    e.preventDefault();
                    await signup();
                    this.setState({name: '', email: '', password: '', loggedIn: true})
-                   setTimeout(() => Router.push({ pathname: '/'}), 2000)
+                   setTimeout(() => Router.push({ pathname: '/chooseCareer'}), 2000)
                    }}
                 >
                 <Fieldset disabled={loading} aria-busy={loading}>
-                    <h2>Зарегистрируйтесь на Savvy</h2>
+                    <h2>Зарегистрируйтесь на Savvvy.app</h2>
                     <Error error={error} />
                     {this.state.loggedIn && <LoggedIn>Вы успешно зарегистрировались!</LoggedIn>}
                     <Container>
@@ -206,17 +211,18 @@ class Signup extends Component {
                                 onChange={this.saveToState}
                             />
                         </Label>
-                        <Label className="password" htmlFor="password">
-                            <p className="first">Пароль</p>
+                        {/* <Label className="surname" htmlFor="surname">
+                            <p className="first">Фамилия</p>
                             <input
                                 className="second"
-                                type="password"
-                                name="password"
-                                placeholder="Пароль"
-                                value={this.state.password}
+                                type="text"
+                                name="surname"
+                                placeholder="Фамилия"
+                                value={this.state.surname}
                                 onChange={this.saveToState}
                             />
-                        </Label>
+                        </Label> */}
+        
                         <Label>
                             <p className="first">Согласие на обработку персональных данных</p>
                             <input
@@ -226,6 +232,17 @@ class Signup extends Component {
                                 value={true}
                                 checked={this.state.isFamiliar}
                                 onChange={this.handleInputChange} 
+                            />
+                        </Label>
+                        <Label className="password" htmlFor="password">
+                            <p className="first">Пароль</p>
+                            <input
+                                className="third"
+                                type="password"
+                                name="password"
+                                placeholder="Пароль"
+                                value={this.state.password}
+                                onChange={this.saveToState}
                             />
                         </Label>
                     </Container>

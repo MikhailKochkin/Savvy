@@ -117,7 +117,7 @@ class Nav extends Component {
             <CourseMenu>
                 <Link 
                   prefetch 
-                  href="/">
+                  href="/courses">
                     <a>Меню</a>
                 </Link>
                 {/* {me && (
@@ -128,17 +128,15 @@ class Nav extends Component {
                   </Link>
                 )} */}
                 <Button onMouseEnter={this.mouseEnter} onClick={this.menuShow}>Поиск</Button>
-                
-                  <Link 
-                    prefetch 
-                    href="/special">
-                    <a>Спецпроекты</a>
-                  </Link>
-                
+                <Link 
+                  prefetch 
+                  href="/special">
+                  <a>Спецпроекты</a>
+                </Link>
             </CourseMenu>
             <Logo>
                 <Link prefetch href="/">
-                  <a ><h2>Savvy</h2></a>
+                  <a ><h2>Savvvy</h2></a>
                 </Link>
             </Logo>
             <UserData>

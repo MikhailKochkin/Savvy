@@ -22,6 +22,7 @@ const SINGLE_LESSON_QUERY = gql`
         text
         name
         number
+        open
         createdAt
         user {
           id
@@ -39,6 +40,16 @@ const SINGLE_LESSON_QUERY = gql`
             id
           }
           answer
+        }
+        problemResults {
+          id
+          student {
+            id
+          }
+          answer
+          problem {
+            id
+          }
         }
         coursePage {
           id
@@ -367,10 +378,8 @@ class SingleLesson extends Component {
                 if (loading) return <p>Loading...</p>;
                 // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
                 const lesson = data.lesson;
-                moment.locale('ru');
                 return (
                   <>
-                  {this.props.type !== "open" && 
                   <AreYouEnrolled 
                     subject={lesson.coursePage.id}
                   > 
@@ -428,9 +437,10 @@ class SingleLesson extends Component {
                       <>
                       {lesson.problems.length > 0 ?
                         <ProblemGroup 
-                          lessonId={lesson.id}
+                          lessonID={lesson.id}
                           problems={lesson.problems}
                           me={me}
+                          problemResults={lesson.problemResults}
                         />  
                       :
                         <Center>
@@ -540,177 +550,12 @@ class SingleLesson extends Component {
                               <ChooseButton>Составить редактор документа</ChooseButton>
                               </a>
                           </Link></ButtonZone> 
-                            </TeacherPart> }
+                        </TeacherPart> }
                       </Sticky>
                     </MenuPart>              
                   </LessonStyles>
                   
-                </AreYouEnrolled>}
-                {this.props.type === "open" && 
-                <LessonStyles>
-                  <LessonPart>
-                  <Link href={{
-                      pathname: '/coursePage',
-                      query: { id: lesson.coursePage.id }
-                  }}>
-                    <a>
-                      <NavButton>На страницу курса</NavButton>
-                    </a>
-                  </Link>
-                    <Center>
-                      {this.state.page === "lesson" && 
-                      <TextBar>
-                        <Title>Урок {lesson.number}. {lesson.name}</Title>       
-                        <Text dangerouslySetInnerHTML={{ __html: lesson.text }}></Text>
-                      </TextBar>}
-                        
-                    {this.state.page === "test" && 
-                      <>
-                        {lesson.newTests.length > 0 ? 
-                        <TestGroup 
-                            tests={lesson.newTests}
-                            me={me}
-                            lessonId={lesson.id}
-                          />
-                        :
-                        <Center>
-                          <h2>Тестов по этому уроку нет</h2>
-                        </Center>
-                        }
-                      </>
-                    }
-                    
-                    {this.state.page === "quiz" &&
-                      <>
-                        {lesson.quizes.length > 0 ?
-                          <QuizGroup quizes={lesson.quizes}/>
-                          :
-                          <Center>
-                            <h2>Вопросов по этому уроку нет</h2>
-                          </Center>
-                        }
-                      </>
-                    }
-                    {this.state.page === "problem" &&
-                    <>
-                    {lesson.problems.length > 0 ?
-                      <ProblemGroup 
-                        lessonId={lesson.id}
-                        problems={lesson.problems}
-                        me={me}
-                      />  
-                    :
-                      <Center>
-                        <h2>Задач пока нет</h2>
-                      </Center>
-                    }
-                    </>
-                    }
-                    {this.state.page === "constructor" &&
-                      <> {lesson.constructions.length > 0 ?
-                        <>
-                          {lesson.constructions.map(constructor => 
-                            <SingleConstructor 
-                              key={constructor.id}
-                              lessonId={lesson.id}
-                              data={constructor}
-                              me={me}
-                            />
-                          )}
-                        </>
-                        :
-                        <Center>
-                          <h2>Конструкторов документов пока нет</h2>
-                        </Center>
-                      } </>
-                    }
-                    {this.state.page === "texteditor" &&
-                    <> {lesson.texteditors.length > 0 ?
-                    <> 
-                      {lesson.texteditors.map(texteditor => 
-                        <SingleTextEditor 
-                          key={texteditor.id}
-                          lessonId={texteditor.id}
-                          data={texteditor}
-                          me={me}
-                        />
-                      )}
-                    </>
-                    :
-                    <Center>
-                      <h2>Редакторов документов пока нет</h2>
-                    </Center>
-                  } </>
-                }
-
-                    </Center>
-           
-                  </LessonPart>
-                  <ShowMenu onClick={this.onShowMenu}><IoMdMenu size={32}/></ShowMenu>
-                  <MenuPart shown={this.state.shown}>
-                    <Sticky>
-                      <NavPart>
-                        <ButtonZone><ChooseButton onClick = {this.onLesson}> Урок </ChooseButton></ButtonZone>
-                        <ButtonZone><ChooseButton onClick = {this.onTest}> Тесты </ChooseButton></ButtonZone>
-                        <ButtonZone><ChooseButton onClick = {this.onQuiz}> Вопросы </ChooseButton></ButtonZone>
-                        <ButtonZone><ChooseButton onClick = {this.onProblem}> Задачи </ChooseButton></ButtonZone>
-                        <ButtonZone><ChooseButton onClick = {this.onConstructor}> Конструктор документов </ChooseButton></ButtonZone>
-                        <ButtonZone><ChooseButton onClick = {this.onTextEditor}> Редактор документов </ChooseButton></ButtonZone>
-                      </NavPart>
-                      {me && lesson.user.id === me.id && 
-                      <TeacherPart>
-                        <ButtonZone> <Link href={{
-                                  pathname: '/updateLesson',
-                                  query: {id: lesson.id}
-                              }}>
-                              <a>
-                              <ChooseButton>Изменить текст урока</ChooseButton>
-                              </a>
-                        </Link></ButtonZone>
-                        <ButtonZone> <Link href={{
-                            pathname: '/createNewTest',
-                            query: {id: lesson.id}
-                            }}>
-                            <a>
-                            <ChooseButton>Составить тест</ChooseButton>
-                          </a>
-                        </Link></ButtonZone>
-                        <ButtonZone> <Link href={{
-                            pathname: '/createQuiz',
-                            query: {id: lesson.id}
-                            }}>
-                            <a>
-                            <ChooseButton>Составить вопрос</ChooseButton>
-                            </a>
-                        </Link></ButtonZone>
-                        <ButtonZone> <Link href={{
-                          pathname: '/createProblem',
-                          query: {id: lesson.id}
-                          }}>
-                          <a>
-                          <ChooseButton>Составить задачу</ChooseButton>
-                          </a>
-                        </Link></ButtonZone>
-                        <ButtonZone> <Link href={{
-                            pathname: '/createConstructor',
-                            query: {id: lesson.id}
-                            }}>
-                            <a>
-                            <ChooseButton>Составить конструктор документа</ChooseButton>
-                            </a>
-                        </Link></ButtonZone>
-                        <ButtonZone> <Link href={{
-                            pathname: '/createTextEditor',
-                            query: {id: lesson.id}
-                            }}>
-                            <a>
-                            <ChooseButton>Составить редактор документа</ChooseButton>
-                            </a>
-                        </Link></ButtonZone> 
-                          </TeacherPart> }
-                    </Sticky>
-                  </MenuPart>              
-                </LessonStyles>}
+                </AreYouEnrolled>
               </>
                 );
               }}
@@ -720,7 +565,7 @@ class SingleLesson extends Component {
         </PleaseSignIn>
       );
     }
-  }
+}
 
   
   export default SingleLesson;

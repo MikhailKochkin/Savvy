@@ -25,7 +25,7 @@ const Mutations = {
   async updateUser(parent, args, ctx, info) {
     //run the update method
     const updates = { ...args };
-    const careerTrackID = args.careerTrackID;
+    const id = args.careerTrackID;
     //remove the ID from updates
     delete updates.id;
     delete updates.args;
@@ -37,7 +37,7 @@ const Mutations = {
         },
         data: {
           careerTrack: {
-            connect: { id: careerTrackID }
+            connect: { id }
           },
           ...updates
         },
@@ -119,7 +119,7 @@ const Mutations = {
   async createCoursePage(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     if (!ctx.request.userId) {
-      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
     }
     const tags = args.tags
     delete args.tags
@@ -148,7 +148,7 @@ const Mutations = {
     // console.log(ctx.request.userId)
     // console.log(coursePagedID)
     if (!ctx.request.userId) {
-      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
     }
     const PointA = await ctx.db.mutation.createPointA(
         {
@@ -189,7 +189,7 @@ const Mutations = {
     // console.log(ctx.request.userId)
     // console.log(coursePagedID)
     // if (!ctx.request.userId) {
-    //   throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+    //   throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
     // }
 
     const TextEditor = await ctx.db.mutation.createTextEditor(
@@ -218,7 +218,7 @@ const Mutations = {
   async createSandboxPage(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     if (!ctx.request.userId) {
-      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
     }
     const sandboxPage = await ctx.db.mutation.createSandboxPage(
         {
@@ -298,7 +298,7 @@ const Mutations = {
         // console.log(ctx.request.userId)
         // console.log(coursePagedID)
         if (!ctx.request.userId) {
-          throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+          throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
         }
 
         const Lesson = await ctx.db.mutation.createLesson(
@@ -363,7 +363,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
 
       const test = await ctx.db.mutation.createTest(
@@ -390,31 +390,30 @@ const Mutations = {
       const question = args.question
       
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
 
-      const test = await ctx.db.mutation.createNewTest(
-            {
-            data: {
-                user: {
-                  connect: { id: ctx.request.userId }
-                  },
-                lesson: {
-                  connect: { id: lessonID }
-                },
-                answers: {
-                  set: [...answers]
-                },
-                correct: {
-                  set: [...correct]
-                },
-                question: {
-                  set: [...question]
-                },
-            },
-        }, 
+      const data = {
+        user: {
+          connect: { id: ctx.request.userId }
+          },
+        lesson: {
+          connect: { id: lessonID }
+        },
+        answers: {
+          set: [...answers]
+        },
+        correct: {
+          set: [...correct]
+        },
+        question: {
+          set: [...question]
+        },
+    }
+
+      const test = await ctx.db.mutation.createNewTest({data}, 
         info
-      );
+      ).then(console.log(data));
         return test;
     },
     async createTestResult(parent, args, ctx, info) {
@@ -423,7 +422,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
       const TestResult = await ctx.db.mutation.createTestResult(
           {
@@ -445,7 +444,7 @@ const Mutations = {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID
     if (!ctx.request.userId) {
-      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
     }
     const QuizResult = await ctx.db.mutation.createQuizResult(
         {
@@ -463,6 +462,39 @@ const Mutations = {
   );
     return QuizResult;
 },
+async createProblemResult(parent, args, ctx, info) {
+  // TODO: Check if they are logged in
+  const lessonID = args.lessonID
+  console.log("lesson Id: " + lessonID)
+  const problemID = args.problemID
+  const revealed = args.revealed
+  delete args.revealed
+  if (!ctx.request.userId) {
+    throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
+  }
+    const ProblemResult = await ctx.db.mutation.createProblemResult(
+      {
+      data: {
+          student: {
+            connect: { id: ctx.request.userId }
+          },
+          problem: {
+            connect: { id: problemID }
+          },
+          lesson: {
+            connect: { id: lessonID }
+          },
+          revealed: {
+            set: [...revealed]
+          },
+          ...args
+      },
+    }, 
+    info
+    );
+    return ProblemResult;
+},
+
     async createQuiz(parent, args, ctx, info) {
       // TODO: Check if they are logged in
       const lessonID = args.lessonID
@@ -470,7 +502,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
 
       const Quiz = await ctx.db.mutation.createQuiz(
@@ -496,7 +528,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
 
       const pointATest = await ctx.db.mutation.createPointATest(
@@ -541,7 +573,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
       const problem = await ctx.db.mutation.createProblem(
             {
@@ -579,7 +611,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(coursePagedID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
       const construction = await ctx.db.mutation.createConstruction(
             {
@@ -609,7 +641,7 @@ const Mutations = {
       const coursePageID = args.coursePageID
       delete args.id
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
       const application = await ctx.db.mutation.createApplication(
             {
@@ -638,7 +670,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(sandboxPageID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
 
       const sandbox = await ctx.db.mutation.createSandbox(
@@ -676,7 +708,7 @@ const Mutations = {
       // console.log(ctx.request.userId)
       // console.log(sandboxPageID)
       if (!ctx.request.userId) {
-        throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+        throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
       }
       const sandboxPageGoal = await ctx.db.mutation.createSandboxPageGoal(
           {
@@ -774,7 +806,7 @@ const Mutations = {
       ['ADMIN', 'CASEDELETE'].includes(permission)
     );
     if (!ownsCoursePage && !hasPermissions) {
-        throw new Error("Вы должны быть зарегестрированы на сайте, чтобы делать это!")
+        throw new Error("Вы должны быть зарегистрированы на сайте, чтобы делать это!")
     }
     //3. Delete it
     return ctx.db.mutation.deleteCoursePage({ where }, info);
@@ -863,7 +895,7 @@ const Mutations = {
     // 1. TODO: Check if they are logged in
     // const idempotenceKey = '3ww8c4329-a6849-rt9219db-891e-f24532we10d29r7qd211';
     if (!ctx.request.userId) {
-      throw new Error('Вы должны быть зарегестрированы на сайте, чтобы делать это!')
+      throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
     }
     // console.log(args)
     console.log("Мы на сервере!")

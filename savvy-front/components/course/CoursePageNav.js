@@ -255,7 +255,7 @@ export default class CoursePageNav extends Component {
                                   }
                                   { coursePage.courseType === "PRIVATE" &&
                                     <>
-                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
+                                        <p>Зарегистриуйтесь на курс на главной странице сайта! 
                                             Преподаватель одобрит <br/> вашу заявку и откроет доступ к материалам курса.</p>
                                         <Link href={{
                                             pathname: '/',
@@ -268,7 +268,7 @@ export default class CoursePageNav extends Component {
                                   }
                                   { coursePage.courseType === "PUBLIC" &&
                                     <>
-                                        <p>Зарегестриуйтесь на курс на главной странице сайта! 
+                                        <p>Зарегистриуйтесь на курс на главной странице сайта! 
                                         <br/>Сразу после регистрации вы получите доступ к материалам курса.</p>
                                         <Link href={{
                                             pathname: '/',

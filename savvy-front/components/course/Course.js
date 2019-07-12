@@ -127,9 +127,6 @@ export default class Course extends Component {
         const subjectArray = [];
         me && me.subjects.map(subject => subjectArray.push(subject))
 
-        const trackArray = [];
-        coursePage.careerTrack.map(item => trackArray.push(item.id))
-
         let price;
         if (me === null) {
             if(coursePage.price === null) {
@@ -138,25 +135,28 @@ export default class Course extends Component {
             else {
                 price = coursePage.price
             }
-        } else if (me && me.careerTrack === null) {
+        } else if (me !== null && me.careerTrack === null) {
             if(coursePage.price === null) {
                 price = "Бесплатно"
             }
             else {
                 price = coursePage.price
             }
-        } else if (me && me.careerTrack !== null) { 
-            if(trackArray.includes(me.careerTrack.id) && coursePage.price !== null){
-                price = coursePage.price * 0.9;
-            }
-            else if(coursePage.price === null) {
-                price = "Бесплатно"
-            }
-            else {
-                price = coursePage.price
-            }
+        } else if(me && me.careerTrack !== null) { 
+            coursePage.careerTrack.map(item => {
+                if(item.id === me.careerTrack.id && coursePage.price !== null){
+                    price = coursePage.price * 0.9;
+                }
+                else if(coursePage.price === null) {
+                    price = "Бесплатно"
+                }
+                else {
+                    price = coursePage.price
+                }
+            })
         }
         return (
+
                 <CaseCard>
                   <Additional>
                     <div>
@@ -169,12 +169,13 @@ export default class Course extends Component {
                     <PriceBox> Стоимость: 
                     <span> </span>
                     {price}
+
                     </PriceBox>}
                     </div>
                     <div>
                     <Buttons>
 
-                    {coursePage.pointsA.length > 0 &&
+                    {/* {coursePage.pointsA.length > 0 &&
                     <Link href={{
                             pathname: '/pointA',
                             query: {id }
@@ -183,7 +184,16 @@ export default class Course extends Component {
                             <Button>Описание</Button>
                         </a>
                     </Link>
-                    }
+                    } */}
+                    {!subjectArray.includes(coursePage.id) && 
+                        <Link href={{
+                                pathname: '/coursePage',
+                                query: {id }
+                            }}>
+                            <a>
+                                <Button>Обзор</Button>
+                            </a>
+                        </Link> }
                     {me && me !== null && me.id !== coursePage.user.id 
                     && !this.state.revealApplication && !applicationsList.includes(me.id) && courseType !== "Платный" &&
                     <EnrollCoursePage
@@ -205,14 +215,6 @@ export default class Course extends Component {
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
-                        <Link href={{
-                                pathname: '/coursePage',
-                                query: {id }
-                            }}>
-                            <a>
-                                <Button>Войти</Button>
-                            </a>
-                    </Link>
                     {me && me.id === coursePage.user.id &&
                       <>
                         <Link href={{

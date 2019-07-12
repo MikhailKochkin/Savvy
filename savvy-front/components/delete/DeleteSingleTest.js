@@ -28,27 +28,43 @@ const Delete = styled.div`
 
 
 class DeleteSingleTest extends Component {
+    update = async (cache, payload) => {
+        // manually update the cache on the client, so it matches the server
+        // 1. Read the cache for the items we want
+        const data = cache.readQuery({ query: SINGLE_LESSON_QUERY, variables: { id: this.props.lessonId } });
+        console.log(data.lesson.newTests, payload.data.deleteNewTest.id);
+
+        // 2. Filter the deleted itemout of the page
+        data.lesson = data.lesson.newTests.filter(item => item.id !== payload.data.deleteNewTest.id);
+        // 3. Put the items back!
+        console.log(data.lesson);
+        const res = await cache.writeQuery({ query: SINGLE_LESSON_QUERY, variables: { id: this.props.lessonId }, data });
+     
+      };
     render() {
-        const { lessonId, testId } = this.props
+        const { testId, lessonId } = this.props
         return (
             <Mutation 
                 mutation={DELETE_TEST_MUTATION}
                 variables={{id: testId}}
+                update={this.update}
                 refetchQueries={() =>[{
                     query: SINGLE_LESSON_QUERY,
-                    variables: { id: lessonId},
+                    variables: {id: this.props.lessonId},
                   }]}
+                
             >
-                {(deleteNewTest, { error }) => (
+                {(deleteTest, { error, loading }) => (
                     <Button onClick={() => {
-                    if (confirm('Вы точно хотите удалить эту запись?')) {
-                        deleteNewTest().catch(error => {
-                            alert(error.message)
-                        });
+                        if (confirm('Вы точно хотите удалить этот тест?')) {
+                            deleteTest()
+                            .catch(error => {
+                                alert(error.message)
+                            });
                         }
-                    }}>
+                        }}>
                         <Delete id="remove">
-                            <Icon size={20} icon={remove}/> 
+                            {loading ? "Удаляем..." : <Icon size={20} icon={remove}/> }
                         </Delete>
                     </Button>    
                 )}

@@ -38,6 +38,10 @@ type AggregateProblem {
   count: Int!
 }
 
+type AggregateProblemResult {
+  count: Int!
+}
+
 type AggregateQuiz {
   count: Int!
 }
@@ -1813,6 +1817,8 @@ type Lesson {
   texteditors(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor!]
   testResults(where: TestResultWhereInput, orderBy: TestResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TestResult!]
   quizResults(where: QuizResultWhereInput, orderBy: QuizResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuizResult!]
+  problemResults(where: ProblemResultWhereInput, orderBy: ProblemResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProblemResult!]
+  open: Boolean
   coursePageID: ID!
   published: Boolean
   createdAt: DateTime!
@@ -1839,6 +1845,8 @@ input LessonCreateInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -1860,6 +1868,11 @@ input LessonCreateOneWithoutConstructionsInput {
 
 input LessonCreateOneWithoutNewTestsInput {
   create: LessonCreateWithoutNewTestsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonCreateOneWithoutProblemResultsInput {
+  create: LessonCreateWithoutProblemResultsInput
   connect: LessonWhereUniqueInput
 }
 
@@ -1906,6 +1919,8 @@ input LessonCreateWithoutConstructionsInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -1923,6 +1938,8 @@ input LessonCreateWithoutCoursePageInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -1940,6 +1957,27 @@ input LessonCreateWithoutNewTestsInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+}
+
+input LessonCreateWithoutProblemResultsInput {
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -1957,6 +1995,8 @@ input LessonCreateWithoutProblemsInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -1974,6 +2014,8 @@ input LessonCreateWithoutQuizesInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -1991,6 +2033,8 @@ input LessonCreateWithoutQuizResultsInput {
   constructions: ConstructionCreateManyWithoutLessonInput
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -2008,6 +2052,8 @@ input LessonCreateWithoutTestResultsInput {
   constructions: ConstructionCreateManyWithoutLessonInput
   texteditors: TextEditorCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -2025,6 +2071,8 @@ input LessonCreateWithoutTestsInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -2042,6 +2090,8 @@ input LessonCreateWithoutTexteditorsInput {
   constructions: ConstructionCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -2059,6 +2109,8 @@ input LessonCreateWithoutUserInput {
   texteditors: TextEditorCreateManyWithoutLessonInput
   testResults: TestResultCreateManyWithoutLessonInput
   quizResults: QuizResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID!
   published: Boolean
 }
@@ -2077,6 +2129,8 @@ enum LessonOrderByInput {
   number_DESC
   text_ASC
   text_DESC
+  open_ASC
+  open_DESC
   coursePageID_ASC
   coursePageID_DESC
   published_ASC
@@ -2092,6 +2146,7 @@ type LessonPreviousValues {
   name: String!
   number: Int
   text: String!
+  open: Boolean
   coursePageID: ID!
   published: Boolean
   createdAt: DateTime!
@@ -2149,6 +2204,8 @@ input LessonScalarWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
+  open: Boolean
+  open_not: Boolean
   coursePageID: ID
   coursePageID_not: ID
   coursePageID_in: [ID!]
@@ -2218,6 +2275,8 @@ input LessonUpdateInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2226,6 +2285,7 @@ input LessonUpdateManyDataInput {
   name: String
   number: Int
   text: String
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2234,6 +2294,7 @@ input LessonUpdateManyMutationInput {
   name: String
   number: Int
   text: String
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2297,6 +2358,15 @@ input LessonUpdateOneWithoutNewTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonUpdateOneWithoutProblemResultsInput {
+  create: LessonCreateWithoutProblemResultsInput
+  update: LessonUpdateWithoutProblemResultsDataInput
+  upsert: LessonUpsertWithoutProblemResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LessonWhereUniqueInput
+}
+
 input LessonUpdateOneWithoutQuizesInput {
   create: LessonCreateWithoutQuizesInput
   update: LessonUpdateWithoutQuizesDataInput
@@ -2346,6 +2416,8 @@ input LessonUpdateWithoutConstructionsDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2363,6 +2435,8 @@ input LessonUpdateWithoutCoursePageDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2380,6 +2454,27 @@ input LessonUpdateWithoutNewTestsDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+}
+
+input LessonUpdateWithoutProblemResultsDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2397,6 +2492,8 @@ input LessonUpdateWithoutProblemsDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2414,6 +2511,8 @@ input LessonUpdateWithoutQuizesDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2431,6 +2530,8 @@ input LessonUpdateWithoutQuizResultsDataInput {
   constructions: ConstructionUpdateManyWithoutLessonInput
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2448,6 +2549,8 @@ input LessonUpdateWithoutTestResultsDataInput {
   constructions: ConstructionUpdateManyWithoutLessonInput
   texteditors: TextEditorUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2465,6 +2568,8 @@ input LessonUpdateWithoutTestsDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2482,6 +2587,8 @@ input LessonUpdateWithoutTexteditorsDataInput {
   constructions: ConstructionUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2499,6 +2606,8 @@ input LessonUpdateWithoutUserDataInput {
   texteditors: TextEditorUpdateManyWithoutLessonInput
   testResults: TestResultUpdateManyWithoutLessonInput
   quizResults: QuizResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  open: Boolean
   coursePageID: ID
   published: Boolean
 }
@@ -2521,6 +2630,11 @@ input LessonUpsertWithoutConstructionsInput {
 input LessonUpsertWithoutNewTestsInput {
   update: LessonUpdateWithoutNewTestsDataInput!
   create: LessonCreateWithoutNewTestsInput!
+}
+
+input LessonUpsertWithoutProblemResultsInput {
+  update: LessonUpdateWithoutProblemResultsDataInput!
+  create: LessonCreateWithoutProblemResultsInput!
 }
 
 input LessonUpsertWithoutProblemsInput {
@@ -2642,6 +2756,11 @@ input LessonWhereInput {
   quizResults_every: QuizResultWhereInput
   quizResults_some: QuizResultWhereInput
   quizResults_none: QuizResultWhereInput
+  problemResults_every: ProblemResultWhereInput
+  problemResults_some: ProblemResultWhereInput
+  problemResults_none: ProblemResultWhereInput
+  open: Boolean
+  open_not: Boolean
   coursePageID: ID
   coursePageID_not: ID
   coursePageID_in: [ID!]
@@ -2746,6 +2865,12 @@ type Mutation {
   upsertProblem(where: ProblemWhereUniqueInput!, create: ProblemCreateInput!, update: ProblemUpdateInput!): Problem!
   deleteProblem(where: ProblemWhereUniqueInput!): Problem
   deleteManyProblems(where: ProblemWhereInput): BatchPayload!
+  createProblemResult(data: ProblemResultCreateInput!): ProblemResult!
+  updateProblemResult(data: ProblemResultUpdateInput!, where: ProblemResultWhereUniqueInput!): ProblemResult
+  updateManyProblemResults(data: ProblemResultUpdateManyMutationInput!, where: ProblemResultWhereInput): BatchPayload!
+  upsertProblemResult(where: ProblemResultWhereUniqueInput!, create: ProblemResultCreateInput!, update: ProblemResultUpdateInput!): ProblemResult!
+  deleteProblemResult(where: ProblemResultWhereUniqueInput!): ProblemResult
+  deleteManyProblemResults(where: ProblemResultWhereInput): BatchPayload!
   createQuiz(data: QuizCreateInput!): Quiz!
   updateQuiz(data: QuizUpdateInput!, where: QuizWhereUniqueInput!): Quiz
   updateManyQuizzes(data: QuizUpdateManyMutationInput!, where: QuizWhereInput): BatchPayload!
@@ -4461,6 +4586,7 @@ type Problem {
   solutionList: [String!]!
   user: User!
   lesson: Lesson!
+  problemResults(where: ProblemResultWhereInput, orderBy: ProblemResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProblemResult!]
   lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -4485,6 +4611,7 @@ input ProblemCreateInput {
   solutionList: ProblemCreatesolutionListInput
   user: UserCreateOneWithoutProblemsInput!
   lesson: LessonCreateOneWithoutProblemsInput!
+  problemResults: ProblemResultCreateManyWithoutProblemInput
   lessonID: ID!
 }
 
@@ -4496,6 +4623,11 @@ input ProblemCreateManyWithoutLessonInput {
 input ProblemCreateManyWithoutUserInput {
   create: [ProblemCreateWithoutUserInput!]
   connect: [ProblemWhereUniqueInput!]
+}
+
+input ProblemCreateOneWithoutProblemResultsInput {
+  create: ProblemCreateWithoutProblemResultsInput
+  connect: ProblemWhereUniqueInput
 }
 
 input ProblemCreatesolutionListInput {
@@ -4510,6 +4642,19 @@ input ProblemCreateWithoutLessonInput {
   hintsList: ProblemCreatehintsListInput
   solutionList: ProblemCreatesolutionListInput
   user: UserCreateOneWithoutProblemsInput!
+  problemResults: ProblemResultCreateManyWithoutProblemInput
+  lessonID: ID!
+}
+
+input ProblemCreateWithoutProblemResultsInput {
+  text: String!
+  hints: String
+  solution: String
+  answer: String
+  hintsList: ProblemCreatehintsListInput
+  solutionList: ProblemCreatesolutionListInput
+  user: UserCreateOneWithoutProblemsInput!
+  lesson: LessonCreateOneWithoutProblemsInput!
   lessonID: ID!
 }
 
@@ -4521,6 +4666,7 @@ input ProblemCreateWithoutUserInput {
   hintsList: ProblemCreatehintsListInput
   solutionList: ProblemCreatesolutionListInput
   lesson: LessonCreateOneWithoutProblemsInput!
+  problemResults: ProblemResultCreateManyWithoutProblemInput
   lessonID: ID!
 }
 
@@ -4559,6 +4705,335 @@ type ProblemPreviousValues {
   lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+}
+
+type ProblemResult {
+  id: ID!
+  student: User!
+  answer: String
+  revealed: [String!]!
+  lesson: Lesson
+  lessonID: ID
+  problem: Problem
+  problemID: ID
+}
+
+type ProblemResultConnection {
+  pageInfo: PageInfo!
+  edges: [ProblemResultEdge]!
+  aggregate: AggregateProblemResult!
+}
+
+input ProblemResultCreateInput {
+  student: UserCreateOneInput!
+  answer: String
+  revealed: ProblemResultCreaterevealedInput
+  lesson: LessonCreateOneWithoutProblemResultsInput
+  lessonID: ID
+  problem: ProblemCreateOneWithoutProblemResultsInput
+  problemID: ID
+}
+
+input ProblemResultCreateManyWithoutLessonInput {
+  create: [ProblemResultCreateWithoutLessonInput!]
+  connect: [ProblemResultWhereUniqueInput!]
+}
+
+input ProblemResultCreateManyWithoutProblemInput {
+  create: [ProblemResultCreateWithoutProblemInput!]
+  connect: [ProblemResultWhereUniqueInput!]
+}
+
+input ProblemResultCreaterevealedInput {
+  set: [String!]
+}
+
+input ProblemResultCreateWithoutLessonInput {
+  student: UserCreateOneInput!
+  answer: String
+  revealed: ProblemResultCreaterevealedInput
+  lessonID: ID
+  problem: ProblemCreateOneWithoutProblemResultsInput
+  problemID: ID
+}
+
+input ProblemResultCreateWithoutProblemInput {
+  student: UserCreateOneInput!
+  answer: String
+  revealed: ProblemResultCreaterevealedInput
+  lesson: LessonCreateOneWithoutProblemResultsInput
+  lessonID: ID
+  problemID: ID
+}
+
+type ProblemResultEdge {
+  node: ProblemResult!
+  cursor: String!
+}
+
+enum ProblemResultOrderByInput {
+  id_ASC
+  id_DESC
+  answer_ASC
+  answer_DESC
+  lessonID_ASC
+  lessonID_DESC
+  problemID_ASC
+  problemID_DESC
+}
+
+type ProblemResultPreviousValues {
+  id: ID!
+  answer: String
+  revealed: [String!]!
+  lessonID: ID
+  problemID: ID
+}
+
+input ProblemResultScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  problemID: ID
+  problemID_not: ID
+  problemID_in: [ID!]
+  problemID_not_in: [ID!]
+  problemID_lt: ID
+  problemID_lte: ID
+  problemID_gt: ID
+  problemID_gte: ID
+  problemID_contains: ID
+  problemID_not_contains: ID
+  problemID_starts_with: ID
+  problemID_not_starts_with: ID
+  problemID_ends_with: ID
+  problemID_not_ends_with: ID
+  AND: [ProblemResultScalarWhereInput!]
+  OR: [ProblemResultScalarWhereInput!]
+  NOT: [ProblemResultScalarWhereInput!]
+}
+
+type ProblemResultSubscriptionPayload {
+  mutation: MutationType!
+  node: ProblemResult
+  updatedFields: [String!]
+  previousValues: ProblemResultPreviousValues
+}
+
+input ProblemResultSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProblemResultWhereInput
+  AND: [ProblemResultSubscriptionWhereInput!]
+  OR: [ProblemResultSubscriptionWhereInput!]
+  NOT: [ProblemResultSubscriptionWhereInput!]
+}
+
+input ProblemResultUpdateInput {
+  student: UserUpdateOneRequiredInput
+  answer: String
+  revealed: ProblemResultUpdaterevealedInput
+  lesson: LessonUpdateOneWithoutProblemResultsInput
+  lessonID: ID
+  problem: ProblemUpdateOneWithoutProblemResultsInput
+  problemID: ID
+}
+
+input ProblemResultUpdateManyDataInput {
+  answer: String
+  revealed: ProblemResultUpdaterevealedInput
+  lessonID: ID
+  problemID: ID
+}
+
+input ProblemResultUpdateManyMutationInput {
+  answer: String
+  revealed: ProblemResultUpdaterevealedInput
+  lessonID: ID
+  problemID: ID
+}
+
+input ProblemResultUpdateManyWithoutLessonInput {
+  create: [ProblemResultCreateWithoutLessonInput!]
+  delete: [ProblemResultWhereUniqueInput!]
+  connect: [ProblemResultWhereUniqueInput!]
+  set: [ProblemResultWhereUniqueInput!]
+  disconnect: [ProblemResultWhereUniqueInput!]
+  update: [ProblemResultUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [ProblemResultUpsertWithWhereUniqueWithoutLessonInput!]
+  deleteMany: [ProblemResultScalarWhereInput!]
+  updateMany: [ProblemResultUpdateManyWithWhereNestedInput!]
+}
+
+input ProblemResultUpdateManyWithoutProblemInput {
+  create: [ProblemResultCreateWithoutProblemInput!]
+  delete: [ProblemResultWhereUniqueInput!]
+  connect: [ProblemResultWhereUniqueInput!]
+  set: [ProblemResultWhereUniqueInput!]
+  disconnect: [ProblemResultWhereUniqueInput!]
+  update: [ProblemResultUpdateWithWhereUniqueWithoutProblemInput!]
+  upsert: [ProblemResultUpsertWithWhereUniqueWithoutProblemInput!]
+  deleteMany: [ProblemResultScalarWhereInput!]
+  updateMany: [ProblemResultUpdateManyWithWhereNestedInput!]
+}
+
+input ProblemResultUpdateManyWithWhereNestedInput {
+  where: ProblemResultScalarWhereInput!
+  data: ProblemResultUpdateManyDataInput!
+}
+
+input ProblemResultUpdaterevealedInput {
+  set: [String!]
+}
+
+input ProblemResultUpdateWithoutLessonDataInput {
+  student: UserUpdateOneRequiredInput
+  answer: String
+  revealed: ProblemResultUpdaterevealedInput
+  lessonID: ID
+  problem: ProblemUpdateOneWithoutProblemResultsInput
+  problemID: ID
+}
+
+input ProblemResultUpdateWithoutProblemDataInput {
+  student: UserUpdateOneRequiredInput
+  answer: String
+  revealed: ProblemResultUpdaterevealedInput
+  lesson: LessonUpdateOneWithoutProblemResultsInput
+  lessonID: ID
+  problemID: ID
+}
+
+input ProblemResultUpdateWithWhereUniqueWithoutLessonInput {
+  where: ProblemResultWhereUniqueInput!
+  data: ProblemResultUpdateWithoutLessonDataInput!
+}
+
+input ProblemResultUpdateWithWhereUniqueWithoutProblemInput {
+  where: ProblemResultWhereUniqueInput!
+  data: ProblemResultUpdateWithoutProblemDataInput!
+}
+
+input ProblemResultUpsertWithWhereUniqueWithoutLessonInput {
+  where: ProblemResultWhereUniqueInput!
+  update: ProblemResultUpdateWithoutLessonDataInput!
+  create: ProblemResultCreateWithoutLessonInput!
+}
+
+input ProblemResultUpsertWithWhereUniqueWithoutProblemInput {
+  where: ProblemResultWhereUniqueInput!
+  update: ProblemResultUpdateWithoutProblemDataInput!
+  create: ProblemResultCreateWithoutProblemInput!
+}
+
+input ProblemResultWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  student: UserWhereInput
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  lesson: LessonWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  problem: ProblemWhereInput
+  problemID: ID
+  problemID_not: ID
+  problemID_in: [ID!]
+  problemID_not_in: [ID!]
+  problemID_lt: ID
+  problemID_lte: ID
+  problemID_gt: ID
+  problemID_gte: ID
+  problemID_contains: ID
+  problemID_not_contains: ID
+  problemID_starts_with: ID
+  problemID_not_starts_with: ID
+  problemID_ends_with: ID
+  problemID_not_ends_with: ID
+  AND: [ProblemResultWhereInput!]
+  OR: [ProblemResultWhereInput!]
+  NOT: [ProblemResultWhereInput!]
+}
+
+input ProblemResultWhereUniqueInput {
+  id: ID
 }
 
 input ProblemScalarWhereInput {
@@ -4698,6 +5173,7 @@ input ProblemUpdateInput {
   solutionList: ProblemUpdatesolutionListInput
   user: UserUpdateOneRequiredWithoutProblemsInput
   lesson: LessonUpdateOneRequiredWithoutProblemsInput
+  problemResults: ProblemResultUpdateManyWithoutProblemInput
   lessonID: ID
 }
 
@@ -4750,6 +5226,15 @@ input ProblemUpdateManyWithWhereNestedInput {
   data: ProblemUpdateManyDataInput!
 }
 
+input ProblemUpdateOneWithoutProblemResultsInput {
+  create: ProblemCreateWithoutProblemResultsInput
+  update: ProblemUpdateWithoutProblemResultsDataInput
+  upsert: ProblemUpsertWithoutProblemResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ProblemWhereUniqueInput
+}
+
 input ProblemUpdatesolutionListInput {
   set: [String!]
 }
@@ -4762,6 +5247,19 @@ input ProblemUpdateWithoutLessonDataInput {
   hintsList: ProblemUpdatehintsListInput
   solutionList: ProblemUpdatesolutionListInput
   user: UserUpdateOneRequiredWithoutProblemsInput
+  problemResults: ProblemResultUpdateManyWithoutProblemInput
+  lessonID: ID
+}
+
+input ProblemUpdateWithoutProblemResultsDataInput {
+  text: String
+  hints: String
+  solution: String
+  answer: String
+  hintsList: ProblemUpdatehintsListInput
+  solutionList: ProblemUpdatesolutionListInput
+  user: UserUpdateOneRequiredWithoutProblemsInput
+  lesson: LessonUpdateOneRequiredWithoutProblemsInput
   lessonID: ID
 }
 
@@ -4773,6 +5271,7 @@ input ProblemUpdateWithoutUserDataInput {
   hintsList: ProblemUpdatehintsListInput
   solutionList: ProblemUpdatesolutionListInput
   lesson: LessonUpdateOneRequiredWithoutProblemsInput
+  problemResults: ProblemResultUpdateManyWithoutProblemInput
   lessonID: ID
 }
 
@@ -4784,6 +5283,11 @@ input ProblemUpdateWithWhereUniqueWithoutLessonInput {
 input ProblemUpdateWithWhereUniqueWithoutUserInput {
   where: ProblemWhereUniqueInput!
   data: ProblemUpdateWithoutUserDataInput!
+}
+
+input ProblemUpsertWithoutProblemResultsInput {
+  update: ProblemUpdateWithoutProblemResultsDataInput!
+  create: ProblemCreateWithoutProblemResultsInput!
 }
 
 input ProblemUpsertWithWhereUniqueWithoutLessonInput {
@@ -4871,6 +5375,9 @@ input ProblemWhereInput {
   answer_not_ends_with: String
   user: UserWhereInput
   lesson: LessonWhereInput
+  problemResults_every: ProblemResultWhereInput
+  problemResults_some: ProblemResultWhereInput
+  problemResults_none: ProblemResultWhereInput
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]
@@ -4941,6 +5448,9 @@ type Query {
   problem(where: ProblemWhereUniqueInput!): Problem
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem]!
   problemsConnection(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProblemConnection!
+  problemResult(where: ProblemResultWhereUniqueInput!): ProblemResult
+  problemResults(where: ProblemResultWhereInput, orderBy: ProblemResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProblemResult]!
+  problemResultsConnection(where: ProblemResultWhereInput, orderBy: ProblemResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProblemResultConnection!
   quiz(where: QuizWhereUniqueInput!): Quiz
   quizzes(where: QuizWhereInput, orderBy: QuizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Quiz]!
   quizzesConnection(where: QuizWhereInput, orderBy: QuizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuizConnection!
@@ -6697,6 +7207,7 @@ type Subscription {
   pointA(where: PointASubscriptionWhereInput): PointASubscriptionPayload
   pointATest(where: PointATestSubscriptionWhereInput): PointATestSubscriptionPayload
   problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
+  problemResult(where: ProblemResultSubscriptionWhereInput): ProblemResultSubscriptionPayload
   quiz(where: QuizSubscriptionWhereInput): QuizSubscriptionPayload
   quizResult(where: QuizResultSubscriptionWhereInput): QuizResultSubscriptionPayload
   sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
