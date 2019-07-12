@@ -22,7 +22,6 @@ const IntroText = styled.div`
     @media (max-width: 900px) {
         line-height: 1.4;
     }
-
 `;
 
 const Header = styled.p`
@@ -42,11 +41,12 @@ const Text = styled.p`
 
 const IntroPicture= styled.div`
     width: 50%;
-    height: auto;
+    height: 400px;
     content:url("../static/laptop.jpg");
     flex-basis: 50%;
     @media (max-width: 900px) {
         width: 100%;
+        height: auto;
     }
 `;
 
