@@ -9,21 +9,18 @@ import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton } from '../styles/Button';
 import AreYouATeacher from '../auth/AreYouATeacher';
 import PleaseSignIn from '../auth/PleaseSignIn';
-import Test from './Test';
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(
     $name: String!
     $number: Int
     $text: String!
-    # $published: Boolean
     $coursePageID: ID!
   ) {
     createLesson(
       name: $name
       number: $number
       text: $text 
-      # published: $published
       coursePageID: $coursePageID
     ) {
       id
@@ -115,8 +112,7 @@ export default class CreateLesson extends Component {
         const { name, value } = e.target;
         const val = Math.round(value)
         this.setState({[name]: val});
-      }
-      
+      }      
     }
 
     myCallback = (dataFromChild) => {
@@ -171,7 +167,6 @@ export default class CreateLesson extends Component {
               <DynamicLoadedEditor getEditorText={this.myCallback}/>
               
             <Width>
-              {/* <Test data={this.state.text}/>   */}
               <Mutation 
                 mutation={CREATE_LESSON_MUTATION} 
                 variables={{
@@ -180,8 +175,9 @@ export default class CreateLesson extends Component {
                 }}
                 refetchQueries={() => [{
                   query: PAGE_LESSONS_QUERY,
-                  variables: { id},
+                  variables: { id: this.props.id},
                 }]}
+                awaitRefetchQueries={true}
               >
                 {(createLesson, {loading, error}) => (
                   <SubmitButton onClick={ async e => {
@@ -189,14 +185,15 @@ export default class CreateLesson extends Component {
                       e.preventDefault();
                       // call the mutation
                       const res = await createLesson();
+                      console.log("Придумали!")
                       // change the page to the single case page
                       Router.push({
-                        pathname: '/coursePage',
-                        query: {id: id}
+                        pathname: '/lesson',
+                        query: {id: res.data.createLesson.id}
                       })
                     }}
                   >
-                  Отправить на страницу курса
+                  {loading ? "Готовим урок..." : "Отправить на страницу курса"} 
                   </SubmitButton>
                 )}
               </Mutation>
