@@ -117,7 +117,7 @@ class SingleProblem extends Component {
     }}
 
     onMouseClick = (e) => {
-      if(e.target.innerHTML.toLowerCase() !== "ответ" || this.state.revealAnswer === true){
+      if(e.target.innerHTML.toLowerCase() !== "ответ" || e.target.innerHTML.toLowerCase() !== "ответ." || this.state.revealAnswer === true){
         e.target.nextSibling.toggleAttribute("hidden")
       } else {
         console.log('Запрещено')
