@@ -206,13 +206,13 @@ class LandingPage extends Component {
                     <IntroText>
                         <Header>Savvvy.app</Header>
                         <Text>Все, что нужно для онлайн-образования юриста</Text>
-                        {/* <Text>Экосистема для онлайн образования юристов</Text>               */}
+                        {/* <Text>Экосистема для онлайн образования юристов</Text>*/}
                     </IntroText>  
                     <IntroPicture/>
                 </Level1>
                 <Introduction>
                         <Ask>
-                            Расскажите о себе и мы настроим систему под вас.
+                            Расскажите о себе и мы настроим систему под вас
                         </Ask>
                         <Options>
                             <Option active={this.state.active === 1} onClick={this.onOne}> 1.  Я хочу развивать свои юридические навыки онлайн </Option>

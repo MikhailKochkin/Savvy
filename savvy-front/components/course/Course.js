@@ -185,7 +185,16 @@ export default class Course extends Component {
                         </a>
                     </Link>
                     } */}
-                    {!subjectArray.includes(coursePage.id) && 
+                    {me && me !== null && me.id === coursePage.user.id && 
+                    <Link href={{
+                            pathname: '/coursePage',
+                            query: {id }
+                        }}>
+                        <a>
+                            <Button>Войти</Button>
+                        </a>
+                    </Link> }
+                    {!subjectArray.includes(coursePage.id) &&
                         <Link href={{
                                 pathname: '/coursePage',
                                 query: {id }

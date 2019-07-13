@@ -22,7 +22,7 @@ const CAREER_TRACK_QUERY = gql`
 `;
 
 const MenuStyle = styled.div`
-    /* position: -webkit-sticky; */
+    position: -webkit-sticky;
     position: sticky;
     top: 10px;
     @media (max-width: 700px) {

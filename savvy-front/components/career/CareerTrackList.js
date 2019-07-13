@@ -11,11 +11,10 @@ const ListStyle = styled.div`
     padding: 2% 4%;
     margin-bottom: 2rem;
     @media (max-width: 700px) {
-        margin-left: 0;
+        margin-right: 0;
     }
     a {
         border: 1px solid white;
-        /* background: #00CC00; */
         border-radius: 4px;
         padding: 2%;
         &:hover {
@@ -31,8 +30,6 @@ const ListStyle = styled.div`
 `;
 
 const Title = styled.p`
-    font-size: 2rem;
-    font-style: italic;
     margin-top: 10px;
 `;
 
@@ -65,7 +62,6 @@ const Number = styled.span`
 class CareerTrackList extends Component {
     render() {
         const newList = this.props.CareerList.sort((a, b) => (a.numInCareerTrack > b.numInCareerTrack) ? 1 : -1)
-        let color;
         return (
             <ListStyle>
 
