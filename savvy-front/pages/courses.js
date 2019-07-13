@@ -48,17 +48,17 @@ class Home extends Component {
                         <Menu>
                             <CareerStyles>
                                 {!me && <CareerTrackMenu/> }
-                                {me && !me.careerTrack && <CareerTrackMenu me={me}/>}
-                                {me && me.careerTrack && <CareerTrackMenu me={me}/>}
+                                {me && !me.careerTrackID && <CareerTrackMenu me={me}/>}
+                                {me && me.careerTrackID && <CareerTrackMenu me={me}/>}
                             </CareerStyles>
                             <CoursesStyles>
-                                <Courses me={me}/>
+                                {me !== undefined && <Courses me={me}/>}
                             </CoursesStyles>
                         </Menu>
                         {/* Do not remove me !== null, otherwise " Cannot read property 'careerTrack' of null" */}
-                        {me === null && <Banner/>}
-                        {me !== null && me.careerTrackID === null && <Banner/>}
-                        {me !== null && me.careerTrackID !== null && <CareerTrackMap data={me.careerTrackID}/>}
+                        {me !== undefined && me === null && <Banner/>}
+                        {me !== undefined && me !== null && me.careerTrackID === null && <Banner/>}
+                        {me !== undefined && me !== null && me.careerTrackID !== null && <CareerTrackMap data={me.careerTrackID}/>}
                     </>
                 )}
             </User>

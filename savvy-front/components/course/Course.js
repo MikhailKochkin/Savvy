@@ -108,6 +108,7 @@ export default class Course extends Component {
 
     render() {
         const { coursePage, key, id, me } = this.props;
+        console.log(me)
 
         const studentsArray = [];
         coursePage.students.map(student => studentsArray.push(student))
@@ -135,16 +136,16 @@ export default class Course extends Component {
             else {
                 price = coursePage.price
             }
-        } else if (me !== null && me.careerTrack === null) {
+        } else if (me !== null && me.careerTrackID === null) {
             if(coursePage.price === null) {
                 price = "Бесплатно"
             }
             else {
                 price = coursePage.price
             }
-        } else if(me && me.careerTrack !== null) { 
+        } else if(me && me.careerTrackID !== null) { 
             coursePage.careerTrack.map(item => {
-                if(item.id === me.careerTrack.id && coursePage.price !== null){
+                if(item.id === me.careerTrackID && coursePage.price !== null){
                     price = coursePage.price * 0.9;
                 }
                 else if(coursePage.price === null) {
@@ -156,7 +157,6 @@ export default class Course extends Component {
             })
         }
         return (
-
                 <CaseCard>
                   <Additional>
                     <div>
