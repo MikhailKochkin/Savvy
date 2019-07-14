@@ -66,8 +66,20 @@ class SingleQuiz extends Component {
     }
     onAnswer = (e) => {
         this.setState(prevState => ({ hidden: !prevState.hidden}))
-        if(this.props.answer.toLowerCase()  === this.state.answer.toLowerCase() ) {
-            // console.log(this.props.answer.includes(this.state.answer.toLowerCase()))
+
+        let s1 = this.props.answer.toLowerCase();
+        let s2 = this.state.answer.toLowerCase();
+
+        let s1Parts= s1.split(' ').filter(item => item !== "");
+        let s2Parts= s2.split(' ').filter(item => item !== "");
+        let score = 0;
+
+        for(var i = 0; i<s1Parts.length; i++)
+        {
+            if(s1Parts[i] === s2Parts[i])
+                score++;   
+        }
+        if( score == s1Parts.length) {
             this.setState({ correct: 'true'})
             this.props.getQuizData("+1");
         } else {
