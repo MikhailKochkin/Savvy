@@ -40,7 +40,7 @@ server.start(
       credentials: true,
       origin: [process.env.FRONTEND_URL, process.env.FRONTEND_URL2, 
       process.env.FRONTEND_URL3, process.env.FRONTEND_URL4,
-      process.env.FRONTEND_URL5]
+      process.env.FRONTEND_URL5, process.env.FRONTEND_URL6]
     },
   },
   deets => {
