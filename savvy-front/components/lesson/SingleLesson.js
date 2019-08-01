@@ -127,7 +127,10 @@ const TextBar = styled.div`
   width: 80%;
   font-size: 1.8rem;
   padding: 2% 2% 4% 2%;
-
+  a {
+    color: #800000;
+    text-decoration: underline;
+  }
   @media (max-width: 800px) {
     width: 100%;
     font-size: 1.8rem;

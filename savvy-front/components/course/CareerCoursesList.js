@@ -7,8 +7,8 @@ import { CoursePerPage } from '../../config';
 import FetchMore from '../FetchMore';
 
 const CAREER_TRACK_COURSE_PAGES_QUERY = gql`
-  query CAREER_TRACK_COURSE_PAGES_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
-      coursePages(where: {careerTrack_some: { id: $id}}, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
+  query CAREER_TRACK_COURSE_PAGES_QUERY($id: ID!, $boolean: Boolean = true, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
+      coursePages(where: {careerTrack_some: { id: $id}, published: $boolean}, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
         id
         title
         description

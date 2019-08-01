@@ -89,10 +89,6 @@ const Additional = styled.div`
     justify-content: space-between;
 `;
 
-const LineThrough = styled.span`
-    text-decoration: line-through;
-`;
-
 export default class Course extends Component {
     state = {
         revealApplication: false
@@ -152,17 +148,6 @@ export default class Course extends Component {
                     </div>
                     <div>
                     <Buttons>
-
-                    {/* {coursePage.pointsA.length > 0 &&
-                    <Link href={{
-                            pathname: '/pointA',
-                            query: {id }
-                        }}>
-                        <a>
-                            <Button>Описание</Button>
-                        </a>
-                    </Link>
-                    } */}
                     {me && me !== null && me.id === coursePage.user.id && 
                     <Link href={{
                             pathname: '/coursePage',
@@ -202,7 +187,7 @@ export default class Course extends Component {
                     {me && applicationsList.includes(me.id) &&
                         <h4>Заявка находится на рассмотрении</h4>
                     }
-                    {me && me.id === coursePage.user.id &&
+                    {/* {me && me.id === coursePage.user.id &&
                       <>
                         <Link href={{
                                 pathname: '/updateCoursePage',
@@ -217,7 +202,7 @@ export default class Course extends Component {
                         >
                             Удалить
                         </DeleteCoursePage> 
-                    </>}
+                    </>} */}
                     {me && me !== null && courseType === "Платный" && 
                     me.id !== coursePage.user.id && !applicationsList.includes(me.id) && !subjectArray.includes(coursePage.id) &&
                     <TakeMyMoney

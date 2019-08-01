@@ -7,8 +7,8 @@ import { CoursePerPage } from '../../config';
 import FetchMore from '../FetchMore';
 
 const FOR_MONEY_COURSE_PAGES_QUERY = gql`
-  query FOR_MONEY_COURSE_PAGES_QUERY($type: CourseType!, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
-      coursePages(where: {courseType: $type}, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
+  query FOR_MONEY_COURSE_PAGES_QUERY($type: CourseType!, $boolean: Boolean = true, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
+      coursePages(where: {courseType: $type, published: $boolean}, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
         id
         title
         description

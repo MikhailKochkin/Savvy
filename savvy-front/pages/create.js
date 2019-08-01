@@ -40,38 +40,12 @@ const Buttons = styled.div`
 `;
 
 class CreateCoursePage extends Component {
-  state = {
-    page: 'course',
-    button1: true,
-    button2: false
-  }
-  onCourse = () => {this.setState({page: "course", button1: true, button2: false})}
-  onSandBox = () => {this.setState({page: "sandbox", button1: false, button2: true})}
-
   render() {
     return (
         <div>
           <PleaseSignIn>
           <HomeStyles>
-            <Buttons>
-              <Button
-                onClick = {this.onCourse}
-                active={this.state.button1}
-              >
-              <h1>Создать курс</h1>
-              </Button>
-              <Button
-                onClick = {this.onSandBox}
-                active={this.state.button2}
-              >
-              <h1>Создать песочницу</h1>
-              </Button>
-            </Buttons>
-              {this.state.page === 'course' ? 
-                  <CreateCourse/>
-              :
-              <CreateSandbox/>
-              }
+              <CreateCourse/>
             </HomeStyles>
           </PleaseSignIn>
         </div>

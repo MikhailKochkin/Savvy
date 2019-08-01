@@ -5,7 +5,6 @@ import gql from "graphql-tag";
 import styled from 'styled-components';
 import User from './User';
 import Menu from './Menu';
-import Search from './Search';
 import Signout from './auth/Signout';
 
 const ALL_COURSE_PAGES_QUERY = gql`
@@ -120,13 +119,24 @@ class Nav extends Component {
                   href="/courses">
                     <a>Меню</a>
                 </Link>
-                {/* {me && (
+                {me && me !== null ? 
+                <>
+                  {me.status === "AUTHOR" && (
                   <Link 
                     prefetch 
-                    href="/create">
-                    <a>Создать</a>
+                    href="/educator">
+                    <a>Кабинет</a>
                   </Link>
-                )} */}
+                )}
+                {me.status === "SAVVY_AUTHOR" && (
+                  <Link 
+                    prefetch 
+                    href="/educator">
+                    <a>Кабинет</a>
+                  </Link>
+                )}
+                </> : null
+                }
                 <Button onMouseEnter={this.mouseEnter} onClick={this.menuShow}>Поиск</Button>
                 <Link 
                   prefetch 

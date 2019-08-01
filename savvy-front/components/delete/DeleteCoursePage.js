@@ -44,19 +44,18 @@ const DELETE_COURSEPAGE_MUTATION =gql`
 `;
 
 const Button = styled.button`
-    background-color: ${props => props.delete ? "red" : "#008CBA"};
+    background-color: #008CBA;
     border: none;
     color: white;
-    padding: 5px 10px;
+    padding: 5px 12px;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px;
-    width: 135px;;
+    font-size: 14px;
+    width: 135px;
     margin: 2px;
-    font-size:1.4rem;
     cursor: pointer;
     &:hover {
-        background-color: #003D5B;
+       background-color: #003D5B;
     }
 `
 

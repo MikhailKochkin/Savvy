@@ -4,23 +4,38 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Error from '../ErrorMessage';
 import Router from 'next/router';
-import { Tags } from '../../config';
-// import { ALL_COURSE_PAGES_QUERY } from './Courses';
+import User from '../User';
 
 const CREATE_COURSE_MUTATION = gql`
   mutation CREATE_COURSE_MUTATION(
     $title: String!
     $description: String! 
     $image: String
-    $tags: [String!]!
     $courseType: CourseType
+    $published: Boolean
+    $uniID: ID
   ) {
     createCoursePage(
       title: $title 
       description: $description
       image: $image
-      tags: $tags
       courseType: $courseType
+      published: $published
+      uniID: $uniID
+    ) {
+      id
+    }
+  }
+`;
+
+const UPDATE_UNI_MUTATION = gql`
+  mutation UPDATE_UNI_MUTATION(
+    $id: ID!,
+    $capacity: Int!
+  ) {
+    updateUni(
+      id: $id,
+      capacity: $capacity 
     ) {
       id
     }
@@ -91,28 +106,6 @@ const Container = styled.div`
         "fourth   ";
 `;
 
-const Container2 = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  @media (max-width: 600px) {
-        display: flex;
-        flex-direction: column;
-    }
-  
-`;
-
-const TagLabel = styled.label`
-  width: 100%;
-  display: grid;
-  grid-template-columns: 70% 30%;
-  justify-items: center;
-  align-items: center; 
-  /* @media (max-width: 600px) {
-        display: flex;
-        flex-direction: column;
-    } */
-`;
-
 const Label = styled.label`
     display: grid;
     grid-template-columns: 35% 65%;
@@ -154,8 +147,9 @@ export default class CreateCourse extends Component {
       title: '',
       description: '',
       image: '',
-      tags: '',
       courseType: 'PUBLIC',
+      uniID: '',
+      published: false, 
       upload: false
     };
     handleChange = e => {
@@ -198,26 +192,33 @@ export default class CreateCourse extends Component {
 
     render() {
         return (
-          <>
+          <User>
+            {({data: {me}}) => ( 
+            <>
             <h1>Создайте страницу нового курса!</h1>
             <Mutation 
               mutation={CREATE_COURSE_MUTATION} 
               variables={this.state}
-              // refetchQueries={() => [{
-              //   query: ALL_COURSE_PAGES_QUERY,
-              // }]}
-              >
+            >
               {(createCoursePage, {loading, error}) => (
+                <Mutation 
+                  mutation={UPDATE_UNI_MUTATION} 
+                  variables={{ 
+                      id: me.uni.id,
+                      capacity:  me.uni.capacity - 1,
+                    }}
+                >
+                  {(updateUni, {loading, error}) => (
                 <Form onSubmit={ async e => {
                     // Stop the form from submitting
                     e.preventDefault();
-                    this.state.tags.length === 0 ? alert("Пожалуйста выберите хотя бы один тег!") : null;
-                    // call the mutation
-                    const res = await createCoursePage();
-                    // change the page to the coursePage page
+                    const res = await me.uni.title !== "Savvvy App" ? this.setState({courseType: "PRIVATE"}) : this.setState({courseType: "PUBLIC"})
+                    const res1 = await this.setState({uniID: me.uni.id})
+                    const res2 = await createCoursePage();
+                    const res3 = await updateUni();
                     Router.push({
                       pathname: '/coursePage',
-                      query: {id: res.data.createCoursePage.id}
+                      query: {id: res2.data.createCoursePage.id}
                     })
                   }}
                 >
@@ -250,13 +251,6 @@ export default class CreateCourse extends Component {
                           onChange={this.handleChange}
                         />
                   </Label>
-                  <Label className="type" htmlFor="CourseType">
-                      <P className="first">Тип курса</P>
-                      <select name="courseType" value={this.state.CourseType} onChange={this.handleChange}>
-                        <option value="PUBLIC">Открытый</option>
-                        <option value="PRIVATE">Закрытый</option>
-                      </select>
-                  </Label>
                   <Label className="file" htmlFor="file">
                     <P className="first">Логотип курса</P>
                     <input
@@ -276,22 +270,6 @@ export default class CreateCourse extends Component {
                       <p>Загрузка прошла успешно!</p>
                     </>
                   )}
-                  <P>Выберите тэги, которые наиболее точно описывают ваш курс:</P>
-                    <Container2>
-                    {Tags.map(tag => (
-                      <TagLabel key={tag + "label"} htmlFor="label">
-                        <p>{tag}</p>
-                        <input
-                          key={tag}
-                          id="Bike"
-                          type="checkbox"
-                          checked={this.state.tags.includes(tag)}
-                          value={tag}
-                          onChange={this.handleTagChange}
-                        />
-                      </TagLabel>
-                      ))}
-                    </Container2>
                   <Buttons>
                     <SubmitButton type="submit">Создать</SubmitButton>
                   </Buttons>
@@ -299,7 +277,11 @@ export default class CreateCourse extends Component {
               </Form>
               )}
             </Mutation>
+            )}
+            </Mutation>
           </>
+          )}
+        </User>  
         )
     }
 }

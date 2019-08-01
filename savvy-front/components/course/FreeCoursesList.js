@@ -7,8 +7,8 @@ import { CoursePerPage } from '../../config';
 import FetchMore from '../FetchMore';
 
 const FREE_COURSE_PAGES_QUERY = gql`
-  query FREE_COURSE_PAGES_QUERY($type: [ CourseType! ], $skip: Int = 0, $first: Int = ${CoursePerPage}) {
-      coursePages(where: {courseType_in: $type }, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
+  query FREE_COURSE_PAGES_QUERY($type: [ CourseType! ], $boolean: Boolean = true, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
+      coursePages(where: {courseType_in: $type, published: $boolean }, orderBy: createdAt_DESC, first: $first, skip: $skip ) {
         id
         title
         description
@@ -66,7 +66,7 @@ class FreeCoursesList extends Component {
           returnPartialData={true} 
           fetchPolicy="cache-first"
           variables={{
-            type: ["PRIVATE", "PUBLIC"],
+            type: ["PUBLIC"],
             first: CoursePerPage,
             skip: 0
           }}

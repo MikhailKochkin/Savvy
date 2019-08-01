@@ -1,6 +1,6 @@
-import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
+import PropTypes from "prop-types";
 
 const CURRENT_USER_QUERY = gql`
   query {
@@ -10,8 +10,22 @@ const CURRENT_USER_QUERY = gql`
       name
       permissions
       subjects
+      status
+      uni {
+        id
+        title
+        teachers {
+          id
+        }
+        capacity
+        paidMonths
+        uniCoursePages {
+          id
+        }
+      }
       isFamiliar
       favourites
+      visitedLessons
       coursePages {
         id
       }
@@ -22,18 +36,22 @@ const CURRENT_USER_QUERY = gql`
         id
       }
       careerTrackID
+    }
   }
-}
 `;
 
 const User = props => (
-  <Query {...props} query={CURRENT_USER_QUERY}>
+  <Query
+    {...props}
+    query={CURRENT_USER_QUERY}
+    fetchPolicy={"cache-and-network"}
+  >
     {payload => props.children(payload)}
   </Query>
 );
 
 User.propTypes = {
-  children: PropTypes.func.isRequired,
+  children: PropTypes.func.isRequired
 };
 
 export default User;

@@ -7,6 +7,14 @@ enum CourseType {
   PUBLIC
   PRIVATE
   FORMONEY
+  UNI
+}
+
+enum Status {
+  STUDENT
+  AUTHOR
+  SAVVY_AUTHOR
+  HR
 }
 
 type User {
@@ -16,10 +24,14 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
-   careerTrack: CareerTrack @relation(name: "CareerForUser" onDelete: CASCADE)
-   careerTrackID: ID
+    status: Status @default(value: STUDENT)
+    uni: Uni
+    uniID: ID
+  careerTrack: CareerTrack @relation(name: "CareerForUser")
+  careerTrackID: ID
   favourites: [ID]
   subjects: [ID]
+  new_subjects: [CoursePage] @relation(name: "UserSubjects" onDelete: CASCADE)
   sandboxes: [ID]
   permissions: [Permission]
   coursePages: [CoursePage] @relation(name: "UserCoursePage" onDelete: CASCADE)
@@ -27,15 +39,31 @@ type User {
   sandboxPageGoals: [SandboxPageGoal] @relation(name: "UserSandboxPageGoals")
   lessons: [Lesson]!
   tests: [Test]!
-    newTests: [NewTest]!
-    quizes: [Quiz]!
+  newTests: [NewTest]!
+  quizes: [Quiz]!
+  lessonResults: [LessonResult] @relation(name: "UserLessonResults" onDelete: CASCADE)
+  testResults: [TestResult] @relation(name: "UserTestResults" onDelete: CASCADE)
+  quizResults: [QuizResult] @relation(name: "UserQuizResults" onDelete: CASCADE)
+  problemResults: [ProblemResult] @relation(name: "UserProblemResults" onDelete: CASCADE)
+  textEditorResults: [TextEditorResult] @relation(name: "UserTextEditorResults" onDelete: CASCADE)
   pointsA: [PointA]!
   problems: [Problem]!
   construction: [Construction]!
   orders: [Order]!
   textEditor: [TextEditor]!
-  isFamiliar: Boolean! @default(value: "false")
+  isFamiliar: Boolean! @default(value: false)
   createdAt: DateTime!
+  updatedAt: DateTime!
+
+}
+
+type Uni {
+  id: ID! @unique
+  title: String!
+  teachers: [User!]
+  capacity: Int @default(value: 2)
+  paidMonths: Int @default(value: 0)
+  uniCoursePages: [CoursePage] @relation(name: "UniCoursePage")
 }
 
 type CoursePage {
@@ -48,11 +76,15 @@ type CoursePage {
   pointsA: [PointA]! @relation(name: "CoursePagePointA" onDelete: CASCADE)
   applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
   pointATests: [PointATest] @relation(name: "CoursePageTests" onDelete: CASCADE)
-   careerTrack: [ CareerTrack ] @relation(name: "CoursePageForCareer" onDelete: CASCADE)
-   numInCareerTrack: Int
+  careerTrack: [ CareerTrack ] @relation(name: "CoursePageForCareer")
+  numInCareerTrack: Int
+    published: Boolean @default(value: false)
+    uni: Uni @relation(name: "UniCoursePage")
+    uniID: ID
   tags: [String]
   courseType: CourseType
   students: [ID]
+  new_students: [ User ] @relation(name: "UserSubjects")
   price: Int
   discountPrice: Int
   orders: [Order] @relation(name: "CoursePageOrders" onDelete: CASCADE)
@@ -96,13 +128,15 @@ type Lesson {
   quizes: [Quiz] @relation(name: "LessonQuizes" onDelete: CASCADE)
   problems: [Problem] @relation(name: "LessonProblems" onDelete: CASCADE)
   constructions: [Construction] @relation(name: "LessonConstructions" onDelete: CASCADE)
-  texteditors: [TextEditor] @relation(name: "LessonTextEditors")
+  texteditors: [TextEditor] @relation(name: "LessonTextEditors" onDelete: CASCADE)
+  lessonResults: [LessonResult] @relation(name: "LessonResults" onDelete: CASCADE)
   testResults: [TestResult] @relation(name: "TestResults" onDelete: CASCADE)
   quizResults: [QuizResult] @relation(name: "QuizResults" onDelete: CASCADE)
-  problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE) 
-  open: Boolean @default(value: "false")
+  textEditorResults: [TextEditorResult] @relation(name: "TextEditorResults" onDelete: CASCADE)
+  problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE)
+  open: Boolean @default(value: false)
   coursePageID: ID!
-  published: Boolean @default(value: "false")
+  published: Boolean @default(value: false)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -267,7 +301,7 @@ type CareerTrack {
 
 type TestResult {
   id: ID! @unique
-  student: User!
+  student: User! @relation(name: "UserTestResults")
   answer: String
   attempts: Int
   lesson: Lesson @relation(name: "TestResults")
@@ -276,7 +310,7 @@ type TestResult {
 
 type QuizResult {
   id: ID! @unique
-  student: User!
+  student: User! @relation(name: "UserQuizResults")
   answer: String
   attempts: Int
   lesson: Lesson @relation(name: "QuizResults")
@@ -285,11 +319,32 @@ type QuizResult {
 
 type ProblemResult {
   id: ID! @unique
-  student: User!
+  student: User! @relation(name: "UserProblemResults")
   answer: String
   revealed: [String!]
   lesson: Lesson @relation(name: "ProblemResults")
   lessonID: ID
   problem: Problem @relation(name: "SingleProblemResults")
   problemID: ID
+}
+
+type TextEditorResult {
+  id: ID! @unique
+  student: User! @relation(name: "UserTextEditorResults")
+  attempts: Int
+  revealed: [String!] @scalarList(strategy: RELATION)
+  lesson: Lesson @relation(name: "TextEditorResults")
+  lessonID: ID
+  textEditor: TextEditor @relation(name: "SingleTextEditorResults")
+  textEditorID: ID
+}
+
+type LessonResult {
+  id: ID! @unique
+  student: User! @relation(name: "UserLessonResults")
+  visitsNumber: Int @default(value: 0)
+  lesson: Lesson! @relation(name: "LessonResults")
+  lessonID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }

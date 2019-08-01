@@ -106,7 +106,7 @@ const Footer = () => (
     <FooterStyles>
         <MissionContactStyles>
             <div className="motto">Savvy – это сайт для управления своими юридическими знаниями. <br/>
-            Проходите курсы, участвуйте в мероприятиях и рассказывайте о себе коллегам и работодателям.
+            Проходите и организовайте курсы, работайте над своим юридическим портфолио, ищите работу и сотрудников.
             </div>
             <LinksStyles>
                 <Link href={{
@@ -137,7 +137,6 @@ const Footer = () => (
             </LinksStyles> 
         </MissionContactStyles>
         <LegalAndSocial>
-            <div className="year">© 2019 – Savvy</div>
             <div className="IP">
                 <p>ИП Кочкин Михаил Валерьевич</p>
                 <p>ИНН: 771771639796</p>

@@ -15,7 +15,7 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/createQuiz": [
+    "/courses": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],

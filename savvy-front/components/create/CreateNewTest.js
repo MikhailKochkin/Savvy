@@ -105,8 +105,15 @@ class CreateNewTest extends Component {
         answer5Correct: false,
         answer6: '',
         answer6Correct: false,
+        answer7: '',
+        answer7Correct: false,
+        answer8: '',
+        answer8Correct: false,
+        answer9: '',
+        answer9Correct: false,
         answerNumber: 2,
       };
+
     handleChange = e => {
         e.preventDefault();
         const { name, value } = e.target;
@@ -130,8 +137,8 @@ class CreateNewTest extends Component {
     onGenerate = (e) => {
             e.preventDefault();
 
-            const arrAnswers = [this.state.answer1, this.state.answer2, this.state.answer3, this.state.answer4, this.state.answer5, this.state.answer6]
-            const arrCorrect = [this.state.answer1Correct, this.state.answer2Correct, this.state.answer3Correct, this.state.answer4Correct, this.state.answer5Correct, this.state.answer6Correct]
+            const arrAnswers = [this.state.answer1, this.state.answer2, this.state.answer3, this.state.answer4, this.state.answer5, this.state.answer6, this.state.answer7, this.state.answer8, this.state.answer9]
+            const arrCorrect = [this.state.answer1Correct, this.state.answer2Correct, this.state.answer3Correct, this.state.answer4Correct, this.state.answer5Correct, this.state.answer6Correct, this.state.answer7Correct, this.state.answer8Correct, this.state.answer9Correct]
             const arrAnswers2 = []; 
             const arrCorrect2 = [];
             const arrQuestion  = [];
@@ -148,12 +155,18 @@ class CreateNewTest extends Component {
                 answer4: '',
                 answer5: '',
                 answer6: '',
+                answer7: '',
+                answer8: '',
+                answer9: '',
                 answer1Correct: false,
                 answer2Correct: false,
                 answer3Correct: false,
                 answer4Correct: false,
                 answer5Correct: false,
-                answer6Correct: false
+                answer6Correct: false,
+                answer7Correct: false,
+                answer8Correct: false,
+                answer9Correct: false
             });
 
         }
@@ -178,14 +191,14 @@ class CreateNewTest extends Component {
                 <AreYouATeacher
                     subject={this.props.id}
                 >
-                {/* <Link href={{
-                        pathname: '/coursePage',
-                        query: { id }
+                <Link href={{
+                        pathname: '/lesson',
+                        query: { id: this.props.id }
                     }}>
                     <a>
                         <NavButton>На страницу курса</NavButton>
                     </a>
-                </Link> */}
+                </Link>
                 <Mutation 
                     mutation={CREATE_NEWTEST_MUTATION} 
                     variables={{
@@ -219,6 +232,9 @@ class CreateNewTest extends Component {
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
                                 </select>
                             </CustomSelect1>
                             <fieldset>          
@@ -368,6 +384,72 @@ class CreateNewTest extends Component {
                                                 onChange={this.handleChange}
                                             />
                                             <select name="answer6Correct" value={this.state.answer6Correct} onChange={this.handleBooleanChange}>
+                                                <option value={true}>Правильно</option>
+                                                <option value={false}>Ошибочно</option>
+                                            </select>
+                                        </CustomSelect>
+                                    </AnswerOption>
+                                </label>}
+                                {this.state.answerNumber > 6 &&
+                                <label htmlFor="answer7">
+                                Вариант ответа 7
+                                    <AnswerOption>
+                                        <CustomSelect>
+                                            <textarea
+                                                cols={40}
+                                                rows={4}
+                                                spellCheck={true}
+                                                id="answer7"
+                                                name="answer7"
+                                                placeholder="Ответ..."
+                                                value={this.state.answer7}
+                                                onChange={this.handleChange}
+                                            />
+                                            <select name="answer7Correct" value={this.state.answer7Correct} onChange={this.handleBooleanChange}>
+                                                <option value={true}>Правильно</option>
+                                                <option value={false}>Ошибочно</option>
+                                            </select>
+                                        </CustomSelect>
+                                    </AnswerOption>
+                                </label>}
+                                {this.state.answerNumber > 7 &&
+                                <label htmlFor="answer8">
+                                Вариант ответа 8
+                                    <AnswerOption>
+                                        <CustomSelect>
+                                            <textarea
+                                                cols={40}
+                                                rows={4}
+                                                spellCheck={true}
+                                                id="answer8"
+                                                name="answer8"
+                                                placeholder="Ответ..."
+                                                value={this.state.answer8}
+                                                onChange={this.handleChange}
+                                            />
+                                            <select name="answer8Correct" value={this.state.answer8Correct} onChange={this.handleBooleanChange}>
+                                                <option value={true}>Правильно</option>
+                                                <option value={false}>Ошибочно</option>
+                                            </select>
+                                        </CustomSelect>
+                                    </AnswerOption>
+                                </label>}
+                                {this.state.answerNumber > 8 &&
+                                <label htmlFor="answer9">
+                                Вариант ответа 9
+                                    <AnswerOption>
+                                        <CustomSelect>
+                                            <textarea
+                                                cols={40}
+                                                rows={4}
+                                                spellCheck={true}
+                                                id="answer9"
+                                                name="answer9"
+                                                placeholder="Ответ..."
+                                                value={this.state.answer9}
+                                                onChange={this.handleChange}
+                                            />
+                                            <select name="answer9Correct" value={this.state.answer9Correct} onChange={this.handleBooleanChange}>
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
