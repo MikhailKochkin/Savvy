@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import styled from 'styled-components';
 import Link from 'next/link';
 import moment from 'moment';
@@ -8,7 +8,7 @@ import TestGroup from './TestGroup';
 import QuizGroup from './QuizGroup';
 import ProblemGroup from './ProblemGroup';
 import SingleConstructor from './SingleConstructor';
-import SingleTextEditor from './SingleTextEditor';
+import TextEditorGroup from './TextEditorGroup';
 import PleaseSignIn from '../auth/PleaseSignIn';
 import AreYouEnrolled from '../auth/AreYouEnrolled';
 import User from '../User';
@@ -48,6 +48,15 @@ const SINGLE_LESSON_QUERY = gql`
           }
           answer
           problem {
+            id
+          }
+        }
+        textEditorResults {
+          id
+          student {
+            id
+          }
+          textEditor {
             id
           }
         }
@@ -350,7 +359,7 @@ const ShowMenu = styled.button`
 
 class SingleLesson extends Component {
   state = {
-      page: 'lesson',
+      page: 'texteditor',
       shown: false,
   }
   onLesson = () => {this.setState({page: "lesson"}), this.setState(prevState => ({shown: !prevState.shown}))}
@@ -471,23 +480,19 @@ class SingleLesson extends Component {
                         } </>
                       }
                       {this.state.page === "texteditor" &&
-                      <> {lesson.texteditors.length > 0 ?
-                      <> 
-                        {lesson.texteditors.map(texteditor => 
-                          <SingleTextEditor 
-                            key={texteditor.id}
-                            lessonId={texteditor.id}
-                            data={texteditor}
-                            me={me}
-                          />
-                        )}
-                      </>
+                      (lesson.texteditors.length > 0 ?
+                        <TextEditorGroup 
+                          lessonID={lesson.id}
+                          textEditors={lesson.texteditors}
+                          me={me}
+                          textEditorResults={lesson.textEditorResults}
+                        />  
                       :
                       <Center>
                         <h2>Редакторов документов пока нет</h2>
-                      </Center>
-                    } </>
-                  }
+                      </Center>)
+                    }
+                  
 
                       </Center>
              

@@ -47,7 +47,8 @@ const TextBar = styled.div`
 `;
 
 const EditText = styled.div`
-  /* font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;  */
+  font-family: Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua,
+    Georgia, serif;
 `;
 
 const Hint = styled.div`
