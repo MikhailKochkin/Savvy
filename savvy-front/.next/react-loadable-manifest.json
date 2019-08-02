@@ -1,12 +1,4 @@
 {
-  "../editor/TextEditor": [
-    {
-      "id": "./components/editor/BoldMark.js",
-      "name": "./components/editor/BoldMark.js",
-      "file": "static/chunks/1.js",
-      "publicPath": "static/chunks/1.js"
-    }
-  ],
   "./noop": [
     {
       "id": "./node_modules/next/dist/client/noop.js",

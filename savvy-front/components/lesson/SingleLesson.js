@@ -59,6 +59,7 @@ const SINGLE_LESSON_QUERY = gql`
           textEditor {
             id
           }
+          textEditorID
         }
         coursePage {
           id
@@ -359,7 +360,7 @@ const ShowMenu = styled.button`
 
 class SingleLesson extends Component {
   state = {
-      page: 'texteditor',
+      page: 'lesson',
       shown: false,
   }
   onLesson = () => {this.setState({page: "lesson"}), this.setState(prevState => ({shown: !prevState.shown}))}

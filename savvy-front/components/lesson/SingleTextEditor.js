@@ -150,7 +150,7 @@ class SingleTextEditor extends Component {
     // console.log(this.props);
     const { textEditor, me, userData } = this.props;
     const data = userData.filter(
-      result => result.textEditor.id === textEditor.id
+      result => result.textEditorID === textEditor.id
     );
     // console.log(this.state.total > 0 && this.state.tital !== null);
     return (
