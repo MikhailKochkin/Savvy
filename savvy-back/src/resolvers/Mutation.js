@@ -1103,6 +1103,11 @@ const Mutations = {
     // console.log(result.confirmation);
     // console.log(result);
     const paymentId = result.id;
+    console.log(result.confirmation.confirmation_url);
+    ctx.response.cookie("url", result.confirmation.confirmation_url, {
+      domain: ".savvvy.app",
+      httpOnly: false
+    });
 
     // это кстати тоже можно убрать из продакшана
     // yandex.getPayment(paymentId)
