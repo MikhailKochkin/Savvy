@@ -285,8 +285,10 @@ class Person extends Component {
 
                 {lesson.texteditors.length > 0
                   ? lesson.textEditorResults.map(result =>
-                      result.student.id === student.id ? (
+                      result.student.id === student.id &&
+                      result.textEditor !== null ? (
                         <>
+                          {console.log(result.textEditor)}
                           <Pro className="grid-item">
                             <div>
                               {renderHTML(
