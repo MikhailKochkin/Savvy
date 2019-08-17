@@ -360,7 +360,7 @@ const ShowMenu = styled.button`
   outline: none;
   @media (max-width: 800px) {
     display: block;
-  }
+  }s
 `;
 
 class SingleLesson extends Component {
@@ -529,7 +529,7 @@ class SingleLesson extends Component {
                           </Center>
                         </LessonPart>
                         <ShowMenu onClick={this.onShowMenu}>
-                          <IoMdMenu size={32} />
+                          <IoMdMenu size={48} />
                         </ShowMenu>
                         <MenuPart shown={this.state.shown}>
                           <Sticky>

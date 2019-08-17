@@ -13,17 +13,17 @@ const CAREER_TRACK_QUERY = gql`
       name
       careerTrackUnits {
         id
-        # title
-        # topics
-        # articles
-        # coursePages {
-        #   id
-        #   title
-        #   user {
-        #     id
-        #     name
-        #   }
-        # }
+        title
+        topics
+        articles
+        coursePages {
+          id
+          title
+          user {
+            id
+            name
+          }
+        }
       }
       coursePages {
         id
@@ -69,12 +69,12 @@ class CareerTrackMenu extends Component {
               return (
                 <>
                   <CareerTrackInfo name={career.name} />
-                  {/* <CareerTrackList
+                  <CareerTrackList
                     CareerList={career.coursePages}
                     id={career.id}
                     mySubjects={this.props.me.subjects}
                     careerTrackUnits={career.careerTrackUnits}
-                  /> */}
+                  />
                 </>
               );
             }}
