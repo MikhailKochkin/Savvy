@@ -365,7 +365,7 @@ const ShowMenu = styled.button`
 
 class SingleLesson extends Component {
   state = {
-    page: "constructor",
+    page: "lesson",
     shown: false
   };
   onLesson = () => {
