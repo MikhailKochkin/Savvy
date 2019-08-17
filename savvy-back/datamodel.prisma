@@ -46,6 +46,8 @@ type User {
   quizResults: [QuizResult] @relation(name: "UserQuizResults" onDelete: CASCADE)
   problemResults: [ProblemResult] @relation(name: "UserProblemResults" onDelete: CASCADE)
   textEditorResults: [TextEditorResult] @relation(name: "UserTextEditorResults" onDelete: CASCADE)
+    constructionResults: [ConstructionResult] @relation(name: "UserConstructionResults", onDelete: CASCADE)
+
   pointsA: [PointA]!
   problems: [Problem]!
   construction: [Construction]!
@@ -134,6 +136,7 @@ type Lesson {
   quizResults: [QuizResult] @relation(name: "QuizResults" onDelete: CASCADE)
   textEditorResults: [TextEditorResult] @relation(name: "TextEditorResults" onDelete: CASCADE)
   problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE)
+  constructionResults: [ConstructionResult] @relation(name: "ConstructionResults" onDelete: CASCADE)
   open: Boolean @default(value: false)
   coursePageID: ID!
   published: Boolean @default(value: false)
@@ -141,23 +144,20 @@ type Lesson {
   updatedAt: DateTime!
 }
 
-type Construction {
+ type Construction {
   id: ID! @unique
   name: String!
-  dbPart1: Json!
-  dbPart2: Json!
-  dbPart3: Json!
-  dbPart4: Json!
-  dbPart5: Json
-  dbPart6: Json
-  dbPart7: Json
-  dbPart8: Json
+  variants: [String!]
+  answer: [String!]
+  hint: String
+  type: String!
+  constructionResults: [ConstructionResult] @relation(name: "SingleConstructionResults" onDelete: CASCADE)
   user: User!
   lesson: Lesson! @relation(name: "LessonConstructions")
   lessonID: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-}
+ }
 
 type Sandbox {
   id: ID! @unique
@@ -206,7 +206,6 @@ type Quiz {
   id: ID! @unique
   question: String!
   answer: String!
-  lang: String!
   user: User!
   lessonID: ID
   lesson: Lesson @relation(name: "LessonQuizes")
@@ -297,6 +296,17 @@ type CareerTrack {
   name: String!
   members: User @relation(name: "CareerForUser")
   coursePages: [CoursePage] @relation(name: "CoursePageForCareer")
+  careerTrackUnits: [CareerTrackUnit] @relation(name: "CareerTrackUnits" onDelete: CASCADE)
+}
+
+type CareerTrackUnit {
+  id: ID! @unique
+  title: String!
+  number: Int
+  topics: [String!]
+  articles: [String!]
+  coursePages: [CoursePage]
+  careerTrack: CareerTrack! @relation(name: "CareerTrackUnits")
 }
 
 type TestResult {
@@ -347,4 +357,15 @@ type LessonResult {
   lessonID: ID
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type ConstructionResult {
+  id: ID! @unique
+  student: User! @relation( name: "UserConstructionResults")
+  answer: String
+  attempts: Int
+  construction: Construction @relation(name: "SingleConstructionResults")
+  constructionID: ID
+  lesson: Lesson @relation(name: "ConstructionResults")
+  lessonID: ID
 }

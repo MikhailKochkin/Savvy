@@ -4,9 +4,11 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import Router from "next/router";
 import dynamic from "next/dynamic";
-import { SubmitButton } from "../styles/Button";
+import Link from "next/link";
+import { NavButton, SubmitButton } from "../styles/Button";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
+import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const CREATE_TEXTEDITOR_MUTATION = gql`
   mutation CREATE_TEXTEDITOR_MUTATION(
@@ -35,30 +37,25 @@ const Width = styled.div`
 `;
 
 const Label = styled.label`
-  display: grid;
-  grid-template-columns: 20% 80%;
-  grid-template-rows: 100%;
-  justify-items: center;
-  align-items: center;
-  .first {
-    grid-area: first;
-    text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 25%;
+  margin-bottom: 1%;
+  @media (max-width: 800px) {
+    width: 60%;
   }
+`;
 
-  grid-template-areas: "first second";
-  input {
-    height: 50%;
-    width: 80%;
-    border: 1px solid #ccc;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 3.5px;
-    padding: 2%;
-    font-size: 1.4rem;
-  }
-  @media (max-width: 600px) {
-    display: flex;
-    flex-direction: column;
-  }
+const Input = styled.input`
+  width: 20%;
+  border: 1px solid #ccc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 3.5px;
+  padding: 2%;
+  font-size: 1.4rem;
+  margin: 2% 0;
+  text-align: center;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/TextEditor"), {
@@ -83,29 +80,31 @@ export default class CreateTextEditor extends Component {
     this.setState({ [name]: value });
   };
 
-  handleNumber = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    const val = Math.round(value);
-    this.setState({ [name]: val });
-  };
-
   render() {
     const { id } = this.props;
     return (
       <PleaseSignIn>
         <AreYouATeacher subject={this.props.id}>
           <Width>
+            <Link
+              href={{
+                pathname: "/lesson",
+                query: { id: this.props.id }
+              }}
+            >
+              <a>
+                <NavButton>К уроку</NavButton>
+              </a>
+            </Link>
             <h2>Составьте свой редактор документа</h2>
-            <Label className="name" htmlFor="name">
-              <p className="first">Количество ошибок или рисков в документе</p>
-              <input
-                type="number"
+            <Label>
+              <p>Всего ошибок / рисков: </p>
+              <Input
+                spellcheck={true}
                 id="totalMistakes"
                 name="totalMistakes"
-                placeholder="Количество ошибок..."
                 value={this.state.totalMistakes}
-                onChange={this.handleNumber}
+                onChange={this.handleChange}
               />
             </Label>
             <DynamicLoadedEditor getEditorText={this.myCallback} />
@@ -114,8 +113,17 @@ export default class CreateTextEditor extends Component {
               mutation={CREATE_TEXTEDITOR_MUTATION}
               variables={{
                 lessonID: id,
-                ...this.state
+                totalMistakes: parseInt(this.state.totalMistakes),
+                text: this.state.text,
+                name: this.state.name
               }}
+              refetchQueries={() => [
+                {
+                  query: SINGLE_LESSON_QUERY,
+                  variables: { id }
+                }
+              ]}
+              awaitRefetchQueries={true}
             >
               {(createTextEditor, { loading, error }) => (
                 <SubmitButton

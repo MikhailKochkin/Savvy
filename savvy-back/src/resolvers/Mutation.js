@@ -707,23 +707,18 @@ const Mutations = {
     //3. Delete it
     return ctx.db.mutation.deleteNewTest({ where }, info);
   },
-  async deletePointATest(parent, args, ctx, info) {
+  async deleteQuiz(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const pointATest = await ctx.db.query.pointATest({ where }, `{ id }`);
+    const quiz = await ctx.db.query.quiz({ where }, `{ id }`);
     //3. Delete it
-    return ctx.db.mutation.deletePointATest({ where }, info);
+    return ctx.db.mutation.deleteQuiz({ where }, info);
   },
   async createProblem(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     delete args.id;
-    // const solutions = args.solution;
-    // delete args.solution
-    // const hints = args.hints;
-    // delete args.hints
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
+
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -738,12 +733,6 @@ const Mutations = {
           lesson: {
             connect: { id: lessonID }
           },
-          // solution: {
-          //   set: [...solutions]
-          // },
-          // hints: {
-          //   set: [...hints]
-          // },
           ...args
         }
       },
@@ -761,9 +750,11 @@ const Mutations = {
   async createConstruction(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
+    variants = args.variants;
+    answer = args.answer;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
+    delete args.answer;
+    delete args.variants;
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -777,6 +768,12 @@ const Mutations = {
           },
           lesson: {
             connect: { id: lessonID }
+          },
+          variants: {
+            set: [...variants]
+          },
+          answer: {
+            set: [...answer]
           },
           ...args
         }

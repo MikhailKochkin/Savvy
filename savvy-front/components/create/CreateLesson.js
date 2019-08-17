@@ -9,6 +9,8 @@ import { MaterialPerPage } from "../../config";
 import { NavButton, SubmitButton } from "../styles/Button";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
+import { CURRENT_USER_QUERY } from "../User";
+import { PAGE_LESSONS_QUERY } from "../course/CoursePage";
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(
@@ -24,20 +26,6 @@ const CREATE_LESSON_MUTATION = gql`
       coursePageID: $coursePageID
     ) {
       id
-    }
-  }
-`;
-
-const PAGE_LESSONS_QUERY = gql`
-  query PAGE_LESSONS_QUERY($id: ID!, $skip: Int = 0, $first: Int = ${MaterialPerPage}) {
-    lessons(where: {coursePageID: $id}, skip: $skip, orderBy: createdAt_DESC, first: $first) {
-      id
-      name
-      number
-      text
-      user {
-          id
-      }
     }
   }
 `;
@@ -172,7 +160,8 @@ export default class CreateLesson extends Component {
                 {
                   query: PAGE_LESSONS_QUERY,
                   variables: { id: this.props.id }
-                }
+                },
+                { query: CURRENT_USER_QUERY }
               ]}
               awaitRefetchQueries={true}
             >

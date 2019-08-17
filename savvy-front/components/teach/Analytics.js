@@ -3,7 +3,6 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
 import UserAnalytics from "./UserAnalytics";
-import LessonAnalytics from "./LessonAnalytics";
 import GeneralAnalytics from "./GeneralAnalytics";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
@@ -32,6 +31,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           text
           totalMistakes
+        }
+        constructions {
+          id
+          name
         }
         user {
           id
@@ -84,6 +87,18 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             totalMistakes
           }
         }
+        constructionResults {
+          id
+          student {
+            id
+          }
+          attempts
+          answer
+          construction {
+            id
+            name
+          }
+        }
       }
     }
   }
@@ -116,21 +131,11 @@ class Analytics extends Component {
                   coursePage={coursePage}
                   students={coursePage.new_students}
                 />
-                {/* <LessonAnalytics
-                  // coursePage={coursePage}
-                  // lesson={lesson}
-                  // userData={userData.users}
-                  students={coursePage.new_students}
-                /> */}
               </>
             </Styles>
           );
         }}
       </Query>
-      //     )
-      //   );
-      //     }}
-      //   </Query>
     );
   }
 }

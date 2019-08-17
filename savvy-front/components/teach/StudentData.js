@@ -22,6 +22,7 @@ const HeadContainer = styled.div`
 const Container = styled.div`
   display: grid;
   width: 100%;
+  /* grid-column-gap: ; */
   grid-column-start: 1;
   grid-column-end: 3;
   grid-template-columns: 33% 33% 33%;
@@ -37,6 +38,7 @@ const Container = styled.div`
 const ProblemContainer = styled.div`
   display: grid;
   width: 100%;
+  /* grid-column-gap: ; */
   grid-column-start: 1;
   grid-column-end: 3;
   grid-template-columns: 33% 33% 33%;
@@ -118,6 +120,11 @@ class Person extends Component {
                 result => result.student.id === student.id
               ).length > 0 ? (
                 <>
+                  {console.log(
+                    lesson.lessonResults.filter(
+                      result => result.student.id === student.id
+                    )
+                  )}
                   <p>
                     Количество заходов на страницу урока:{" "}
                     {
@@ -166,7 +173,7 @@ class Person extends Component {
                   <div className="grid-item">Тесты не созданы</div>
                 ) : null}
 
-                {lesson.newTests.length > 0 && lesson.testResults && (
+                {lesson.testResults && (
                   <>
                     {lesson.testResults.filter(
                       result => result.student.id === student.id
@@ -178,7 +185,7 @@ class Person extends Component {
                   </>
                 )}
 
-                {lesson.testResults.length > 0
+                {lesson.newTests.length > 0
                   ? lesson.testResults.map(result =>
                       result.student.id === student.id ? (
                         <div key={result.id} className="grid-item">
@@ -196,7 +203,7 @@ class Person extends Component {
                   <div className="grid-item">Вопросы не созданы</div>
                 ) : null}
 
-                {lesson.quizes.length > 0 && (
+                {lesson.quizResults.length > 0 && (
                   <>
                     {lesson.quizResults.filter(
                       result => result.student.id === student.id
@@ -229,8 +236,7 @@ class Person extends Component {
                   </>
                 ) : null}
 
-                {lesson.problems.length > 0 &&
-                lesson.problemResults.filter(
+                {lesson.problemResults.filter(
                   result => result.student.id === student.id
                 ).length === 0 ? (
                   <>
@@ -262,51 +268,75 @@ class Person extends Component {
                   : null}
               </ProblemContainer>
 
-              <ProblemContainer>
-                {lesson.texteditors.length === 0 ? (
+              <Container>
+                <div className="grid-item">Вопросы</div>
+
+                {lesson.quizes.length === 0 ? (
+                  <div className="grid-item">Вопросы не созданы</div>
+                ) : null}
+
+                {lesson.quizResults.length > 0 && (
                   <>
-                    <div className="grid-item">Редакторы</div>
+                    {lesson.quizResults.filter(
+                      result => result.student.id === student.id
+                    ).length === 0 ? (
+                      <>
+                        <div className="grid-item">
+                          Вопросы пока не выполнены
+                        </div>
+                      </>
+                    ) : null}
+                  </>
+                )}
+
+                {lesson.quizes.length > 0
+                  ? lesson.quizResults.map(result =>
+                      result.student.id === student.id ? (
+                        <div key={result.id} className="grid-item">
+                          Выполнены
+                        </div>
+                      ) : null
+                    )
+                  : null}
+              </Container>
+
+              <ProblemContainer>
+                {lesson.constructions.length === 0 ? (
+                  <>
+                    <div className="grid-item">Конструкторы</div>
                     <div className="grid-item">Не созданы</div>
                   </>
                 ) : null}
 
-                {lesson.texteditors.length > 0 && (
+                {lesson.constructions.length > 0 && (
                   <>
-                    {lesson.textEditorResults.filter(
+                    {lesson.constructionResults.filter(
                       result => result.student.id === student.id
                     ).length === 0 ? (
                       <>
-                        <div className="grid-item">Редакторы</div>
+                        <div className="grid-item">Конструкторы</div>
                         <div className="grid-item">Пока не выполнены</div>
                       </>
                     ) : null}
                   </>
                 )}
 
-                {lesson.texteditors.length > 0
-                  ? lesson.textEditorResults.map(result =>
-                      result.student.id === student.id &&
-                      result.textEditor !== null ? (
+                {lesson.constructions.length > 0
+                  ? lesson.constructionResults.map(result =>
+                      result.student.id === student.id ? (
                         <>
-                          {console.log(result.textEditor)}
                           <Pro className="grid-item">
                             <div>
                               {renderHTML(
-                                "Редактор: " +
-                                  result.textEditor.text.substring(0, 200) +
-                                  "..."
+                                "Конструктор: " + result.construction.name
                               )}
                             </div>
                           </Pro>
                           <div className="grid-item">
-                            {"Количество попыток: " + result.attempts}
+                            {"Документ составлен"}
                           </div>
                           <div className="grid-item">
-                            {"Найдены: " + result.revealed.join(", ")}
-                            {". "}
-                            {result.revealed.length +
-                              " из " +
-                              result.textEditor.totalMistakes}
+                            {"Количество попыток: " + result.attempts}
                           </div>
                         </>
                       ) : null

@@ -58,7 +58,6 @@ class CoursePage extends Component {
             <>
               <Query
                 query={PAGE_LESSONS_QUERY}
-                fetchPolicy="cache-and-network"
                 variables={{
                   id: this.props.id
                 }}
@@ -72,7 +71,6 @@ class CoursePage extends Component {
                     <>
                       <Query
                         query={AGGREGATE_PAGE_LESSONS_QUERY}
-                        fetchPolicy="cache-and-network"
                         variables={{
                           id: this.props.id
                         }}

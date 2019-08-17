@@ -68,6 +68,10 @@ class QuizGroup extends Component {
               answer={quiz.answer}
               num={index + 1}
               getQuizData={this.myCallback}
+              me={this.props.me}
+              lessonID={this.props.lessonID}
+              quizID={quiz.id}
+              user={quiz.user.id}
             />
           </>
         ))}
@@ -99,7 +103,7 @@ class QuizGroup extends Component {
                       const res = await createQuizResult();
                       const res2 = await this.setState({ handIn: true });
                       // change the page to the single case page
-                      // console.log("успех!");
+                      console.log("успех!");
                     }}
                   >
                     {!this.state.handIn ? "Сохранить" : "Готово!"}

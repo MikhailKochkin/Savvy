@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Link from 'next/link';
-// import { PAGE_TESTS_QUERY } from '../course/CoursePage';
-import { MaterialPerPage } from '../../config';
 import { NavButton, SubmitButton, Message } from '../styles/Button';
 import AreYouATeacher from '../auth/AreYouATeacher';
 import PleaseSignIn from '../auth/PleaseSignIn';
+import { SINGLE_LESSON_QUERY } from '../lesson/SingleLesson'
 
 const CREATE_NEWTEST_MUTATION = gql`
   mutation CREATE_NEWTEST_MUTATION(
@@ -196,7 +195,7 @@ class CreateNewTest extends Component {
                         query: { id: this.props.id }
                     }}>
                     <a>
-                        <NavButton>На страницу курса</NavButton>
+                        <NavButton>К уроку</NavButton>
                     </a>
                 </Link>
                 <Mutation 
@@ -207,10 +206,13 @@ class CreateNewTest extends Component {
                         answers: this.state.answers,
                         correct: this.state.correct,
                     }}
-                    // refetchQueries={() =>[{  
-                    //     query: PAGE_TESTS_QUERY,
-                    //     variables: { id}
-                    // }]}
+                    refetchQueries={() => [
+                        {
+                          query: SINGLE_LESSON_QUERY,
+                          variables: { id }
+                        },
+                      ]}
+                    awaitRefetchQueries={true}
                 >
 
                 {(createNewTest, {loading, error}) => (

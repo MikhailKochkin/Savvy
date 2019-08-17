@@ -81,13 +81,15 @@ type Mutation {
     lessonID: ID
     textEditorID: ID
   ): TextEditorResult!
-  deleteNewTest(id: ID!): NewTest
-  createQuiz(
-    question: String!
+  createConstructionResult(
     answer: String
-    lang: String!
+    attempts: Int
     lessonID: ID
-  ): Quiz!
+    constructionID: ID
+  ): ConstructionResult!
+  deleteNewTest(id: ID!): NewTest
+  createQuiz(question: String!, answer: String, lessonID: ID): Quiz!
+  deleteQuiz(id: ID!): Quiz
   createPointATest(
     question: String!
     answer1: String!
@@ -105,14 +107,10 @@ type Mutation {
   deleteProblem(id: ID!): Problem
   createConstruction(
     name: String!
-    dbPart1: Json!
-    dbPart2: Json!
-    dbPart3: Json!
-    dbPart4: Json!
-    dbPart5: Json
-    dbPart6: Json
-    dbPart7: Json
-    dbPart8: Json
+    variants: [String!]
+    answer: [String!]
+    hint: String
+    type: String!
     lessonID: ID!
   ): Construction!
   deleteConstruction(id: ID!): Construction
@@ -327,4 +325,5 @@ type User {
   quizResults: [QuizResult]
   problemResults: [ProblemResult]
   textEditorResults: [TextEditorResult]
+  lessonResults: [LessonResult]
 }
