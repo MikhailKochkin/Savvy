@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import styled, {ThemeProvider, injectGlobal } from 'styled-components';
-import { withRouter } from 'next/router'
-import Nav from './Nav';
-import Meta from './Meta';
-import LandingPage from './Landing';
-import Footer from './Footer';
-import Header from './Header';
-import Layout from '../components/Layout'
+import React, { Component } from "react";
+import styled, { ThemeProvider, injectGlobal } from "styled-components";
+import { withRouter } from "next/router";
+import Nav from "./Nav";
+import Meta from "./Meta";
+import LandingPage from "./Landing";
+import Footer from "./Footer";
+import Header from "./Header";
+import Layout from "../components/Layout";
 
 const theme = {
-    blue: '#6DAAE1',
-    black: '#393939',
-    maxWidth: '1200px',
-    offWhite: '#EDEDED',
-    lightGrey: '#E1E1E1',
+  blue: "#6DAAE1",
+  black: "#393939",
+  maxWidth: "1200px",
+  offWhite: "#EDEDED",
+  lightGrey: "#E1E1E1"
 };
 
 const StyledPage = styled.div`
@@ -23,10 +23,10 @@ const StyledPage = styled.div`
 `;
 
 const Inner = styled.div`
-    max-width: ${props => props.theme.maxWidth};
-    margin: 0 auto;
-    padding: 2rem;
-    /* -webkit-user-select: none;
+  max-width: ${props => props.theme.maxWidth};
+  margin: 0 auto;
+  padding: 2rem;
+  /* -webkit-user-select: none;
      -moz-user-select: -moz-none;
       -ms-user-select: none;
           user-select: none; */
@@ -54,22 +54,22 @@ injectGlobal`
         text-decoration: none;
         color: ${theme.black};
     }
-`
+`;
 
 const Page = ({ children, router }) => {
-        return (
-            <ThemeProvider theme={theme}>
-              <StyledPage>
-                <Meta/>
-                <Layout>
-                  <Header/>
-                  <Nav/>
-                  <Inner>{children}</Inner>
-                  <Footer/>   
-                </Layout>
-              </StyledPage>
-            </ThemeProvider>
-        );
-}
+  return (
+    <ThemeProvider theme={theme}>
+      <StyledPage>
+        <Meta />
+        <Layout>
+          <Header />
+          <Nav />
+          <Inner>{children}</Inner>
+          <Footer />
+        </Layout>
+      </StyledPage>
+    </ThemeProvider>
+  );
+};
 
 export default withRouter(Page);

@@ -360,7 +360,7 @@ const ShowMenu = styled.button`
   outline: none;
   @media (max-width: 800px) {
     display: block;
-  }s
+  }
 `;
 
 class SingleLesson extends Component {
