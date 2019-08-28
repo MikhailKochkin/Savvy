@@ -78,13 +78,13 @@ class QuizGroup extends Component {
         <Mutation
           mutation={CREATE_QUIZRESULT_MUTATION}
           variables={{
-            lessonID: this.props.lessonId,
+            lessonID: this.props.lessonID,
             answer: "Completed"
           }}
           refetchQueries={() => [
             {
               query: SINGLE_LESSON_QUERY,
-              variables: { id: this.props.lessonId }
+              variables: { id: this.props.lessonID }
             },
             {
               query: CURRENT_USER_QUERY
