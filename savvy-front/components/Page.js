@@ -32,30 +32,6 @@ const Inner = styled.div`
   width: 100%;
 `;
 
-const GlobalStyle = createGlobalStyle`
-    html {
-      @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=cyrillic');
-        font-family: 'Montserrat', sans-serif;
-        box-sizing: border-box;
-        font-size: 10px;
-        height:100%;
-    }
-    *, *:after, *:after {
-        box-sizing: inherit;
-    }
-    body {
-        padding: 0;
-        margin: 0;
-        font-size:1.5rem;
-        line-height: 1.8;
-        height:100%;
-    }
-    a {
-        text-decoration: none;
-        color: ${theme.black};
-    }
-`;
-
 const Page = ({ children, router }) => {
   return (
     <ThemeProvider theme={theme}>
@@ -69,7 +45,6 @@ const Page = ({ children, router }) => {
             {router.pathname !== "/" && <Footer />}
           </ModalProvider>
         </Layout>
-        <GlobalStyle />
       </StyledPage>
     </ThemeProvider>
   );
