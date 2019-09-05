@@ -277,9 +277,12 @@ class CoursePage extends Component {
                                 return (
                                   <>
                                     <Container>
-                                      {/* <LessonImage
-                                        src={coursePage.careerTrack[0].img}
-                                      /> */}
+                                      <LessonImage
+                                        src={
+                                          "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1567424791/singapore-river-255116.jpg"
+                                        }
+                                        // src={coursePage.careerTrack[0].img}
+                                      />
                                       <LessonStyles>
                                         <CourseInfo>
                                           <Data>

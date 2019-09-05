@@ -12,7 +12,7 @@ const SIGN_OUT_MUTATION = gql`
   }
 `;
 
-const Button = styled.button`
+const Button = styled.div`
   border: none;
   background: none;
   padding-right: 0;

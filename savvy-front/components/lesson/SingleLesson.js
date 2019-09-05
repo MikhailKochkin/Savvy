@@ -367,10 +367,6 @@ const ButtonZone = styled.div`
   width: 100%;
   align-content: left;
   background: white;
-  /* &:hover {
-    background: #f2f2f2;
-    color: black;
-  } */
   @media (max-width: 800px) {
     text-align: center;
     background: none;
