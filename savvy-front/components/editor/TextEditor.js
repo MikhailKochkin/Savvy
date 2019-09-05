@@ -61,11 +61,12 @@ const AppStyles = {
   color: "rgb(17, 17, 17)",
   maxWidth: "840px",
   backgroundColor: "rgb(255, 255, 255)",
+  border: "1px solid #EDEFED",
   boxShadow: "rgba(118, 143, 255, 0.1) 0px 16px 24px 0px",
   padding: "40px",
-  margin: "25px auto 45px",
+  margin: "25px auto 25px",
   borderRadius: "4.5px",
-  fontSize: "1.8rem"
+  fontSize: "1.6rem"
 };
 
 // Define the default node type.
@@ -130,7 +131,7 @@ const rules = [
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
       if (type) {
-        // console.log(el.src)
+        console.log(el.src);
         return {
           object: "block",
           type: type,
@@ -143,7 +144,7 @@ const rules = [
     },
     serialize(obj, children) {
       if (obj.object == "block") {
-        // console.log(obj.type)
+        console.log(obj.type);
         switch (obj.type) {
           case "paragraph":
             return <p className={obj.data.get("className")}>{children}</p>;
@@ -152,7 +153,7 @@ const rules = [
           case "list-item":
             return <li>{children}</li>;
           case "image":
-            // console.log(obj.data)
+            console.log(obj.data);
             return (
               <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
             );
@@ -199,7 +200,7 @@ const rules = [
   },
   {
     deserialize(el, next) {
-      // console.log(el)
+      console.log(el);
       if (el.tagName !== "A" && el.tagName !== "SPAN" && el.tagName !== "DIV") {
         return;
       }
@@ -431,7 +432,7 @@ class App extends React.Component {
 
   renderInline = (props, editor, next) => {
     const { attributes, children, node } = props;
-    // console.log("renderInline")
+    console.log("renderInline");
     switch (node.type) {
       case "link":
         return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
@@ -510,7 +511,7 @@ class App extends React.Component {
     if (type !== "numbered-list") {
       const isActive = this.hasBlock(type);
       const isList = this.hasBlock("list-item");
-      // console.log(isList)
+      console.log(isList);
       if (isList) {
         editor
           .setBlocks(isActive ? DEFAULT_NODE : type)
@@ -563,14 +564,14 @@ class App extends React.Component {
         // console.log("Ссылка создана!")
       }
     } else {
-      // console.log("else")
+      console.log("else");
       const href = window.prompt("Enter the URL of the link:");
-      // console.log(href)
+      console.log(href);
       if (href == null) {
         return;
       } else {
         const text = window.prompt("Enter the text for the link:");
-        // console.log(text)
+        console.log(text);
 
         if (text == null) {
           return;
@@ -621,7 +622,7 @@ class App extends React.Component {
   };
 
   onKeyDown = (event, editor, next) => {
-    // console.log(event.key)
+    console.log(event.key);
     if (event.key != "b" || !event.ctrlKey) return next();
 
     event.preventDefault();
@@ -651,7 +652,7 @@ class App extends React.Component {
   };
   onChange = ({ value }) => {
     this.setState({ value });
-    // console.log(html.serialize(this.state.value));
+    console.log(html.serialize(this.state.value));
     this.props.getEditorText(html.serialize(this.state.value));
   };
 }

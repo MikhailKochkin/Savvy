@@ -5,9 +5,7 @@ import styled from "styled-components";
 import Router from "next/router";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { NavButton, SubmitButton } from "../styles/Button";
-import AreYouATeacher from "../auth/AreYouATeacher";
-import PleaseSignIn from "../auth/PleaseSignIn";
+import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const CREATE_TEXTEDITOR_MUTATION = gql`
@@ -29,10 +27,23 @@ const CREATE_TEXTEDITOR_MUTATION = gql`
 `;
 
 const Width = styled.div`
-  width: 100%;
+  width: 90%;
   margin-bottom: 3%;
-  ${SubmitButton} {
-    margin-top: 3%;
+`;
+
+const Button = styled.button`
+  padding: 1.5% 3%;
+  font-size: 1.6rem;
+  width: 20%;
+  font-weight: 600;
+  color: #fffdf7;
+  background: ${props => props.theme.green};
+  border: solid 1px white;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  &:active {
+    background: ${props => props.theme.darkGreen};
   }
 `;
 
@@ -40,22 +51,29 @@ const Label = styled.label`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 25%;
+  width: 40%;
   margin-bottom: 1%;
   @media (max-width: 800px) {
-    width: 60%;
+    width: 70%;
+  }
+  input {
+    width: 60px;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 3.5px;
+    padding: 1%;
+    font-size: 1.4rem;
+    margin: 4% 2%;
+    text-align: center;
+    @media (max-width: 800px) {
+    }
   }
 `;
 
-const Input = styled.input`
-  width: 20%;
-  border: 1px solid #ccc;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 3.5px;
-  padding: 2%;
-  font-size: 1.4rem;
-  margin: 2% 0;
-  text-align: center;
+const Title = styled.p`
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-top: 2%;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/TextEditor"), {
@@ -81,70 +99,70 @@ export default class CreateTextEditor extends Component {
   };
 
   render() {
-    const { id } = this.props;
+    const { lessonID } = this.props;
     return (
-      <PleaseSignIn>
-        <AreYouATeacher subject={this.props.id}>
-          <Width>
-            <Link
-              href={{
-                pathname: "/lesson",
-                query: { id: this.props.id }
-              }}
-            >
-              <a>
-                <NavButton>К уроку</NavButton>
-              </a>
-            </Link>
-            <h2>Составьте свой редактор документа</h2>
-            <Label>
-              <p>Всего ошибок / рисков: </p>
-              <Input
-                spellcheck={true}
-                id="totalMistakes"
-                name="totalMistakes"
-                value={this.state.totalMistakes}
-                onChange={this.handleChange}
-              />
-            </Label>
-            <DynamicLoadedEditor getEditorText={this.myCallback} />
+      <Width>
+        {/* <Link
+          href={{
+            pathname: "/lesson",
+            query: { id: lessonID }
+          }}
+        >
+          <a>
+            <NavButton>К уроку</NavButton>
+          </a>
+        </Link> */}
+        <Title>Составьте свой редактор документа</Title>
+        <Label>
+          <p>Всего ошибок / рисков: </p>
+          <input
+            spellcheck={true}
+            id="totalMistakes"
+            name="totalMistakes"
+            value={this.state.totalMistakes}
+            onChange={this.handleChange}
+          />
+        </Label>
+        <DynamicLoadedEditor getEditorText={this.myCallback} />
 
-            <Mutation
-              mutation={CREATE_TEXTEDITOR_MUTATION}
-              variables={{
-                lessonID: id,
-                totalMistakes: parseInt(this.state.totalMistakes),
-                text: this.state.text,
-                name: this.state.name
+        <Mutation
+          mutation={CREATE_TEXTEDITOR_MUTATION}
+          variables={{
+            lessonID: lessonID,
+            totalMistakes: parseInt(this.state.totalMistakes),
+            text: this.state.text,
+            name: this.state.name
+          }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lessonID }
+            }
+          ]}
+          awaitRefetchQueries={true}
+        >
+          {(createTextEditor, { loading, error }) => (
+            <Button
+              onClick={async e => {
+                // Stop the form from submitting
+                e.preventDefault();
+                document.getElementById("Message").style.display = "block";
+                setTimeout(() => {
+                  document.getElementById("Message")
+                    ? (document.getElementById("Message").style.display =
+                        "none")
+                    : "none";
+                }, 3000);
+                // call the mutation
+                const res = await createTextEditor();
               }}
-              refetchQueries={() => [
-                {
-                  query: SINGLE_LESSON_QUERY,
-                  variables: { id }
-                }
-              ]}
-              awaitRefetchQueries={true}
             >
-              {(createTextEditor, { loading, error }) => (
-                <SubmitButton
-                  onClick={async e => {
-                    // Stop the form from submitting
-                    e.preventDefault();
-                    // call the mutation
-                    const res = await createTextEditor();
-                    Router.push({
-                      pathname: "/lesson",
-                      query: { id: id }
-                    });
-                  }}
-                >
-                  Отправить на страницу курса
-                </SubmitButton>
-              )}
-            </Mutation>
-          </Width>
-        </AreYouATeacher>
-      </PleaseSignIn>
+              {loading ? "Сохраняем..." : "Сохранить"}
+            </Button>
+          )}
+        </Mutation>
+        <Message id="Message">Вы создали новый редактор!</Message>
+      </Width>
     );
   }
 }

@@ -21,24 +21,44 @@ const makeANiceEmail = text => `
   </div>
 `;
 
+const newOrderEmail = (client, course, price) => `
+  <div className="email" style="
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>Привет!</h2>
+    <p>${client} оформил новый заказ.</p>
+    <p>Курс – ${course}, цена – ${price} </p>
+  </div>
+`;
+
 const Mutations = {
   async updateUser(parent, args, ctx, info) {
     //run the update method
     const updates = { ...args };
-    const id = args.careerTrackID;
-    const visitedLessons = args.visitedLessons;
+    const careerID = args.careerTrackID;
+    const uniID = args.uniID;
+    const id = args.id;
     //remove the ID from updates
-    delete updates.id;
+    delete updates.careerID;
+    delete updates.uniID;
     delete updates.args;
+    delete updates.id;
+    delete args;
     //run the update method
     const updatedUser = await ctx.db.mutation.updateUser(
       {
         where: {
-          id: args.id
+          id
         },
         data: {
           careerTrack: {
-            connect: { id }
+            connect: { id: careerID }
+          },
+          uni: {
+            connect: { id: uniID }
           },
           ...updates
         }
@@ -62,22 +82,14 @@ const Mutations = {
       data: { resetToken, resetTokenExpiry }
     });
     // 3. Email them that reset token
-    const mailRes = await client
-      .sendEmail({
-        From: "Mikhail@savvvy.app",
-        To: user.email,
-        Subject: "Смена пароля",
-        HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
+    const mailRes = await client.sendEmail({
+      From: "Mikhail@savvvy.app",
+      To: user.email,
+      Subject: "Смена пароля",
+      HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
           \n\n
-          <a href="${
-            process.env.FRONTEND_URL2
-          }/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`)
-      })
-      .then(response => {
-        // console.log("Sending message");
-        // console.log(response.To);
-        // console.log(response.Message);
-      });
+          <a href="${process.env.FRONTEND_URL2}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`)
+    });
     // 4. Return the message
     return { message: "Спасибо!" };
   },
@@ -149,7 +161,6 @@ const Mutations = {
   },
   async updateUni(parent, args, ctx, info) {
     //run the update method
-    // console.log(args);
     const updates = { ...args };
     const id = args.id;
     //remove the ID from updates
@@ -173,8 +184,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const coursePageID = args.coursePageID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -216,12 +225,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
-    // if (!ctx.request.userId) {
-    //   throw new Error('Вы должны быть зарегистрированы на сайте, чтобы делать это!')
-    // }
-
     const TextEditor = await ctx.db.mutation.createTextEditor(
       {
         data: {
@@ -333,8 +336,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const coursePageID = args.coursePageID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -400,8 +401,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -455,14 +454,11 @@ const Mutations = {
     };
 
     const test = await ctx.db.mutation.createNewTest({ data }, info);
-    // .then(console.log(data));
     return test;
   },
   async createTestResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -485,8 +481,6 @@ const Mutations = {
     return TestResult;
   },
   async createLessonResult(parent, args, ctx, info) {
-    // console.log(args);
-    // console.log(ctx.request.userId);
     const lessonID = args.lessonID;
     if (!ctx.request.userId) {
       throw new Error(
@@ -510,8 +504,6 @@ const Mutations = {
     return LessonResult;
   },
   async updateLessonResult(parent, args, ctx, info) {
-    // console.log(args);
-    // console.log(ctx.request.userId);
     const updates = { ...args };
     delete updates.id;
     //run the update method
@@ -529,8 +521,6 @@ const Mutations = {
   async createTestResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -610,7 +600,6 @@ const Mutations = {
     return ProblemResult;
   },
   async createTextEditorResult(parent, args, ctx, info) {
-    // console.log(args);
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     const textEditorID = args.textEditorID;
@@ -647,8 +636,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -675,8 +662,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const coursePageID = args.coursePageID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(coursePagedID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -718,7 +703,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     delete args.id;
-
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -789,6 +773,34 @@ const Mutations = {
     //3. Delete it
     return ctx.db.mutation.deleteConstruction({ where }, info);
   },
+  async createConstructionResult(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const lessonID = args.lessonID;
+    const constructionID = args.constructionID;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const ConstructionResult = await ctx.db.mutation.createConstructionResult(
+      {
+        data: {
+          student: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: lessonID }
+          },
+          construction: {
+            connect: { id: constructionID }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return ConstructionResult;
+  },
   async createApplication(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const coursePageID = args.coursePageID;
@@ -822,14 +834,11 @@ const Mutations = {
     // TODO: Check if they are logged in
     const sandboxPageID = args.sandboxPageID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(sandboxPageID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
       );
     }
-
     const sandbox = await ctx.db.mutation.createSandbox(
       {
         data: {
@@ -862,8 +871,6 @@ const Mutations = {
     // TODO: Check if they are logged in
     const sandboxPageID = args.sandboxPageID;
     delete args.id;
-    // console.log(ctx.request.userId)
-    // console.log(sandboxPageID)
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -918,8 +925,6 @@ const Mutations = {
     return updatedUser;
   },
   async enrollOnCourse(parent, args, ctx, info) {
-    // console.log("ctx.request.userId");
-    // console.log(args);
     //run the update method
     const enrolledUser = await ctx.db.mutation.updateUser(
       {
@@ -940,7 +945,6 @@ const Mutations = {
     return enrolledUser;
   },
   async addUserToCoursePage(parent, args, ctx, info) {
-    //run the update method
     const updatedCoursePage = await ctx.db.mutation.updateCoursePage(
       {
         data: {
@@ -961,13 +965,11 @@ const Mutations = {
   },
   async deleteCoursePage(parent, args, ctx, info) {
     const where = { id: args.id };
-    // console.log(where)
     //1. find the case
     const coursePage = await ctx.db.query.coursePage(
       { where },
       `{ id title user { id }}`
     );
-    // console.log(coursePage)
     //2. check if they own the case or have the permissions
     //TODO
     const ownsCoursePage = coursePage.user.id === ctx.request.userId;
@@ -984,9 +986,9 @@ const Mutations = {
   },
   async signup(parent, args, ctx, info) {
     // lower the email
-    // console.log(args);
     args.email = args.email.toLowerCase();
     const uniID = args.uniID;
+    delete args.uniID;
     // hash the password
     const password = await bcrypt.hash(args.password, 10);
     //create the user
@@ -1078,10 +1080,7 @@ const Mutations = {
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
       );
     }
-    // console.log(args)
     // 2. Create yandex payment
-    // Убрали ключ идемпотентности, теперь он генерируется Яндексом самостоятельно
-    // и не влияет на повоторные покурки внутри приложения.
     const result = await yandex.createPayment({
       amount: {
         value: args.price,
@@ -1096,24 +1095,11 @@ const Mutations = {
       },
       capture: true
     });
-    // console.log(result.id);
-    // console.log(result.confirmation);
-    // console.log(result);
     const paymentId = result.id;
-    console.log(result.confirmation.confirmation_url);
-    ctx.response.cookie("url", result.confirmation.confirmation_url, {
-      domain: ".savvvy.app",
-      httpOnly: false
+    const user = await ctx.db.query.user({ where: { id: args.userID } });
+    const coursePage = await ctx.db.query.coursePage({
+      where: { id: args.coursePageID }
     });
-
-    // это кстати тоже можно убрать из продакшана
-    // yandex.getPayment(paymentId)
-    //   .then(function(result) {
-    //     console.log({payment: result});
-    // })
-    //   .catch(function(err) {
-    //     console.error(err);
-    // })
 
     const order = await ctx.db.mutation.createOrder({
       data: {
@@ -1130,9 +1116,17 @@ const Mutations = {
       },
       info
     });
+
     ctx.response.cookie("url", result.confirmation.confirmation_url, {
       domain: ".savvvy.app",
       httpOnly: false
+    });
+
+    const newOrderMail = await client.sendEmail({
+      From: "Mikhail@savvvy.app",
+      To: "Mi.Kochkin@ya.ru",
+      Subject: "Новый клиент",
+      HtmlBody: newOrderEmail(user.name, coursePage.title, args.price)
     });
     return order;
   },
@@ -1142,6 +1136,93 @@ const Mutations = {
     const order = await ctx.db.query.order({ where }, `{ id }`);
     //3. Delete it
     return ctx.db.mutation.deleteOrder({ where }, info);
+  },
+  async createExamQuestion(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const coursePageID = args.coursePageID;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const examQuestion = await ctx.db.mutation.createExamQuestion(
+      {
+        data: {
+          coursePage: {
+            connect: { id: coursePageID }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return examQuestion;
+  },
+  updateExamQuestion(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateExamQuestion(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+  async createExamAnswer(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const examQuestionID = args.examQuestionID;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const examAnswer = await ctx.db.mutation.createExamAnswer(
+      {
+        data: {
+          student: {
+            connect: { id: ctx.request.userId }
+          },
+          examQuestion: {
+            connect: { id: examQuestionID }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return examAnswer;
+  },
+  async createArticle(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const IDList = [];
+    args.coursePageIDs.map(item => IDList.append({ id: { item } }));
+    delete args.coursePageIDs;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Article = await ctx.db.mutation.createArticle(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          coursePages: {
+            set: [...IDList]
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return Article;
   }
 };
 

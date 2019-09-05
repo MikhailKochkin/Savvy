@@ -1,13 +1,9 @@
-import AccountPage from '../components/AccountPage';
-import PleaseSignIn from '../components/auth/PleaseSignIn';
+import AccountPage from "../components/AccountPage";
 
 const AccountPagePage = props => (
   <div>
-    <PleaseSignIn>
-      <AccountPage />
-    </PleaseSignIn>
-    {/* <AccountPage id={props.query.id} /> */}
+    <AccountPage id={props.query.id} />
   </div>
 );
 
-export default AccountPage;
+export default AccountPagePage;

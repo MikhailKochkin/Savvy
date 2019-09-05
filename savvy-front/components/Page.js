@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import styled, { ThemeProvider, injectGlobal } from "styled-components";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { withRouter } from "next/router";
+import { ModalProvider } from "styled-react-modal";
+
 import Nav from "./Nav";
 import Meta from "./Meta";
-import LandingPage from "./Landing";
 import Footer from "./Footer";
 import Header from "./Header";
 import Layout from "../components/Layout";
@@ -13,28 +14,27 @@ const theme = {
   black: "#393939",
   maxWidth: "1200px",
   offWhite: "#EDEDED",
-  lightGrey: "#E1E1E1"
+  lightGrey: "#E1E1E1",
+  red: "#de6b48",
+  darkRed: "#ac2c05",
+  green: "#84BC9C",
+  darkGreen: "#294d4a",
+  yellow: "#FDF3C8"
 };
 
 const StyledPage = styled.div`
-    /* background: ${props => props.theme.lightgrey}; */
-    background: #F4F4F4;
-    color: ${props => props.theme.black};
+  background: #fff;
+  color: ${props => props.theme.black};
 `;
 
 const Inner = styled.div`
-  max-width: ${props => props.theme.maxWidth};
-  margin: 0 auto;
-  padding: 2rem;
-  /* -webkit-user-select: none;
-     -moz-user-select: -moz-none;
-      -ms-user-select: none;
-          user-select: none; */
+  margin: 0;
+  width: 100%;
 `;
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
     html {
-        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+      @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=cyrillic');
         font-family: 'Montserrat', sans-serif;
         box-sizing: border-box;
         font-size: 10px;
@@ -60,12 +60,15 @@ const Page = ({ children, router }) => {
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
+        <GlobalStyle />
         <Meta />
         <Layout>
-          <Header />
-          <Nav />
-          <Inner>{children}</Inner>
-          <Footer />
+          <ModalProvider>
+            <Header />
+            {router.pathname !== "/" && <Nav />}
+            <Inner>{children}</Inner>
+            {router.pathname !== "/" && <Footer />}
+          </ModalProvider>
         </Layout>
       </StyledPage>
     </ThemeProvider>

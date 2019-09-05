@@ -3,103 +3,73 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import Link from "next/link";
 
+const Styles = styled.div`
+  /* background: #f0f8ff; */
+  object-fit: none;
+  /* object-position: 0% 0%; */
+  width: 90%;
+  height: 210px;
+  border-radius: 10px;
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 3% 0;
+  margin-left: 5%;
+  box-shadow: ${props =>
+    props.shadow ? `4px 4px 4px rgba(0, 0, 0, 0.1)` : `none`};
+`;
+
+const Img = styled.img`
+  width: 100%;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  flex: 70%;
+  height: 70%;
+  object-fit: cover;
+`;
+
 const Title = styled.div`
-  font-size: 1.7rem;
-`;
+  font-size: 1.5rem;
+  flex: 30%;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
-const Info = styled.div`
-  border-bottom: 1px solid #edeef0;
-  margin-bottom: 4%;
-  padding-left: 3%;
-`;
-
-const Resources = styled.div`
-  border-bottom: 1px solid #edeef0;
-  padding-left: 3%;
-  ul {
-    margin: 0;
-  }
-`;
-
-const Button = styled.div`
-  background: none;
   text-align: center;
-  padding-bottom: 10px;
-  cursor: pointer;
-  margin: 4% 0;
-  border-bottom: ${props =>
-    props.secret ? "1px solid #112a62" : "1px solid #edeef0"};
-  &:hover {
-    border-bottom: 1px solid #112a62;
-    color: #112a62;
+
+  padding: 5px;
+  @media (max-width: 900px) {
+    font-size: 1.7rem;
   }
 `;
 
 class CareerTrackUnit extends Component {
   state = {
-    secret: false
+    effect: false
   };
   show = () => {
     this.setState(prevState => ({
       secret: !prevState.secret
     }));
   };
+  onShow = () => {
+    console.log("Yesss");
+    this.props.getData(this.props.unit);
+    this.props.getData2(this.props.index);
+  };
 
   render() {
-    const { unit, index } = this.props;
+    const { unit, index, shadow_index } = this.props;
     return (
-      <div>
-        <Button onClick={this.show} secret={this.state.secret}>
-          {index}. {unit.title}
-        </Button>
-        {this.state.secret && (
-          <>
-            <Info>
-              <Title>Темы</Title>
-              <ul>
-                {unit.topics.map((topic, index) => (
-                  <li>
-                    {index + 1}. {topic}
-                  </li>
-                ))}
-              </ul>
-            </Info>
-            <Info>
-              <Title>Знания</Title>
-              <ul>
-                {unit.articles.map((article, index) => (
-                  <li>
-                    {index + 1}. {renderHTML(article)}
-                  </li>
-                ))}
-              </ul>
-            </Info>
-
-            <Resources>
-              <Title>Навыки</Title>
-              <ul>
-                {unit.coursePages.map((course, index) => (
-                  <li>
-                    <Link
-                      href={{
-                        pathname: "/coursePage",
-                        query: { id: course.id }
-                      }}
-                    >
-                      <a>
-                        <div>
-                          {index + 1}. {course.title}
-                        </div>
-                        <div>{course.user.name}</div>
-                      </a>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Resources>
-          </>
-        )}
-      </div>
+      <>
+        <Styles onClick={this.onShow} shadow={index === shadow_index}>
+          <Img src={unit.img} />
+          <Title>{unit.title}</Title>
+        </Styles>
+      </>
     );
   }
 }

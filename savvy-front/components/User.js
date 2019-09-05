@@ -11,6 +11,9 @@ const CURRENT_USER_QUERY = gql`
       permissions
       subjects
       status
+      lessonResults {
+        id
+      }
       uni {
         id
         title
@@ -22,6 +25,19 @@ const CURRENT_USER_QUERY = gql`
         uniCoursePages {
           id
         }
+      }
+      uniID
+      examAnswers {
+        id
+        examQuestion {
+          id
+          question
+          coursePage {
+            title
+            id
+          }
+        }
+        answer
       }
       isFamiliar
       favourites

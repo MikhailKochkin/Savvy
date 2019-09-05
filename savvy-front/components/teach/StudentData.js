@@ -22,7 +22,6 @@ const HeadContainer = styled.div`
 const Container = styled.div`
   display: grid;
   width: 100%;
-  /* grid-column-gap: ; */
   grid-column-start: 1;
   grid-column-end: 3;
   grid-template-columns: 33% 33% 33%;
@@ -38,7 +37,6 @@ const Container = styled.div`
 const ProblemContainer = styled.div`
   display: grid;
   width: 100%;
-  /* grid-column-gap: ; */
   grid-column-start: 1;
   grid-column-end: 3;
   grid-template-columns: 33% 33% 33%;
@@ -56,9 +54,15 @@ const ProblemContainer = styled.div`
 
 const Pro = styled.div``;
 
-const Name = styled.p`
-  font-size: 1.8rem;
+const Name = styled.div`
+  font-size: 1.6rem;
   font-weight: bold;
+`;
+
+const Square = styled.div`
+  width: 70px;
+  height: 30px;
+  background: #de6b48;
 `;
 
 const Open = styled.div`
@@ -66,28 +70,37 @@ const Open = styled.div`
 `;
 
 const Header = styled.div`
-  width: 40%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  width: 80%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 50px;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  .div1 {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+  .div2 {
+    grid-area: 1 / 2 / 2 / 3;
+  }
+  .div3 {
+    grid-area: 1 / 3 / 2 / 4;
+  }
   @media (max-width: 800px) {
-    width: 80%;
+    width: 100%;
   }
 `;
 
 const Styles = styled.div`
   margin-bottom: 0;
+  padding: 0.5% 2%;
 `;
 
 const Button = styled.div`
   background: none;
-  border: 1px solid #112a62;
-  width: 100px;
   text-align: center;
   border-radius: 5px;
   cursor: pointer;
   color: #112a62;
-  margin: 4% 0;
 `;
 
 class Person extends Component {
@@ -105,8 +118,9 @@ class Person extends Component {
     return (
       <Styles>
         <Header>
-          <Name>{student.name}</Name>
-          <Button onClick={this.onShow}>
+          <Name className="div1">{student.name}</Name>
+          <Square className="div2" />
+          <Button className="div3" onClick={this.onShow}>
             {this.state.secret ? "Открыть" : "Закрыть"}
           </Button>
         </Header>
@@ -120,11 +134,11 @@ class Person extends Component {
                 result => result.student.id === student.id
               ).length > 0 ? (
                 <>
-                  {console.log(
+                  {/* {console.log(
                     lesson.lessonResults.filter(
                       result => result.student.id === student.id
                     )
-                  )}
+                  )} */}
                   <p>
                     Количество заходов на страницу урока:{" "}
                     {
@@ -268,38 +282,6 @@ class Person extends Component {
                   : null}
               </ProblemContainer>
 
-              <Container>
-                <div className="grid-item">Вопросы</div>
-
-                {lesson.quizes.length === 0 ? (
-                  <div className="grid-item">Вопросы не созданы</div>
-                ) : null}
-
-                {lesson.quizResults.length > 0 && (
-                  <>
-                    {lesson.quizResults.filter(
-                      result => result.student.id === student.id
-                    ).length === 0 ? (
-                      <>
-                        <div className="grid-item">
-                          Вопросы пока не выполнены
-                        </div>
-                      </>
-                    ) : null}
-                  </>
-                )}
-
-                {lesson.quizes.length > 0
-                  ? lesson.quizResults.map(result =>
-                      result.student.id === student.id ? (
-                        <div key={result.id} className="grid-item">
-                          Выполнены
-                        </div>
-                      ) : null
-                    )
-                  : null}
-              </Container>
-
               <ProblemContainer>
                 {lesson.constructions.length === 0 ? (
                   <>
@@ -334,6 +316,54 @@ class Person extends Component {
                           </Pro>
                           <div className="grid-item">
                             {"Документ составлен"}
+                          </div>
+                          <div className="grid-item">
+                            {"Количество попыток: " + result.attempts}
+                          </div>
+                        </>
+                      ) : null
+                    )
+                  : null}
+              </ProblemContainer>
+
+              <ProblemContainer>
+                {lesson.texteditors.length === 0 ? (
+                  <>
+                    <div className="grid-item">Редакторы</div>
+                    <div className="grid-item">Не созданы</div>
+                  </>
+                ) : null}
+
+                {lesson.texteditors.length > 0 && (
+                  <>
+                    {lesson.textEditorResults.filter(
+                      result => result.student.id === student.id
+                    ).length === 0 ? (
+                      <>
+                        <div className="grid-item">Редакторы</div>
+                        <div className="grid-item">Не выполнены</div>
+                      </>
+                    ) : null}
+                  </>
+                )}
+
+                {lesson.texteditors.length > 0
+                  ? lesson.textEditorResults.map(result =>
+                      result.student.id === student.id ? (
+                        <>
+                          <Pro className="grid-item">
+                            <div>
+                              {result.textEditor
+                                ? renderHTML(
+                                    "Конструктор: " +
+                                      result.textEditor.text.substring(0, 200) +
+                                      "..."
+                                  )
+                                : null}
+                            </div>
+                          </Pro>
+                          <div className="grid-item">
+                            {"Документ отредактирован"}
                           </div>
                           <div className="grid-item">
                             {"Количество попыток: " + result.attempts}

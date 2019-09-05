@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const Styles = styled.div`
-  padding: 1%;
-  background: white;
-  padding: 3%;
-  margin-bottom: 3%;
+  padding: 3% 0;
 `;
 
 class GeneralAnalytics extends Component {

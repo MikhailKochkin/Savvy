@@ -24,9 +24,11 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
-    status: Status @default(value: STUDENT)
-    uni: Uni
-    uniID: ID
+  status: Status @default(value: STUDENT)
+  legalPortfolio: LegalPortfolio @relation(name: "UserPortfolio", onDelete: CASCADE)
+  uni: Uni
+  uniID: ID
+  description: String
   careerTrack: CareerTrack @relation(name: "CareerForUser")
   careerTrackID: ID
   favourites: [ID]
@@ -46,17 +48,17 @@ type User {
   quizResults: [QuizResult] @relation(name: "UserQuizResults" onDelete: CASCADE)
   problemResults: [ProblemResult] @relation(name: "UserProblemResults" onDelete: CASCADE)
   textEditorResults: [TextEditorResult] @relation(name: "UserTextEditorResults" onDelete: CASCADE)
-    constructionResults: [ConstructionResult] @relation(name: "UserConstructionResults", onDelete: CASCADE)
-
+  constructionResults: [ConstructionResult] @relation(name: "UserConstructionResults", onDelete: CASCADE)
   pointsA: [PointA]!
   problems: [Problem]!
   construction: [Construction]!
   orders: [Order]!
   textEditor: [TextEditor]!
   isFamiliar: Boolean! @default(value: false)
+  articles: [Article] @relation(name: "UserArticles", onDelete: CASCADE)
+  examAnswers: [ExamAnswer] @relation(name: "UserExamAnswer", onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
-
 }
 
 type Uni {
@@ -73,6 +75,7 @@ type CoursePage {
   title: String!
   description: String!
   image: String!
+  news: String @default(value: "Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
   pointsA: [PointA]! @relation(name: "CoursePagePointA" onDelete: CASCADE)
@@ -80,9 +83,11 @@ type CoursePage {
   pointATests: [PointATest] @relation(name: "CoursePageTests" onDelete: CASCADE)
   careerTrack: [ CareerTrack ] @relation(name: "CoursePageForCareer")
   numInCareerTrack: Int
-    published: Boolean @default(value: false)
-    uni: Uni @relation(name: "UniCoursePage")
-    uniID: ID
+  examQuestion: ExamQuestion @relation(name: "CoursePageExamQuestion", onDelete: CASCADE)
+  published: Boolean @default(value: false)
+  uni: Uni @relation(name: "UniCoursePage")
+  uniID: ID
+  articles: [Article] @relation(link: TABLE, name: "ArticleCoursePages")
   tags: [String]
   courseType: CourseType
   students: [ID]
@@ -255,6 +260,7 @@ type TextEditor {
   user: User!
   lesson: Lesson! @relation(name: "LessonTextEditors")
   lessonID: ID!
+  textEditorResults: [TextEditorResult] @relation(name: "SingleTextEditorResults" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -294,6 +300,7 @@ type PointA {
 type CareerTrack {
   id: ID! @unique
   name: String!
+  img: String
   members: User @relation(name: "CareerForUser")
   coursePages: [CoursePage] @relation(name: "CoursePageForCareer")
   careerTrackUnits: [CareerTrackUnit] @relation(name: "CareerTrackUnits" onDelete: CASCADE)
@@ -303,6 +310,7 @@ type CareerTrackUnit {
   id: ID! @unique
   title: String!
   number: Int
+  img: String
   topics: [String!]
   articles: [String!]
   coursePages: [CoursePage]
@@ -368,4 +376,42 @@ type ConstructionResult {
   constructionID: ID
   lesson: Lesson @relation(name: "ConstructionResults")
   lessonID: ID
+}
+
+type ExamQuestion {
+  id: ID! @unique
+  coursePage: CoursePage! @relation(name: "CoursePageExamQuestion")
+  coursePageID: ID!
+  question: String!
+  answers: [ExamAnswer!] @relation(link: TABLE, name: "ExamQuestionAnswer")
+}
+
+type ExamAnswer {
+  id: ID! @unique
+  student: User! @relation(name: "UserExamAnswer")
+  answer: String!
+  examQuestion: ExamQuestion! @relation(name: "ExamQuestionAnswer")
+  examQuestionID: ID!
+}
+
+type LegalPortfolio {
+  id: ID! @unique
+  user: User!@relation(name: "UserPortfolio")
+  cv: String
+  portfolio: [ExamAnswer]
+  portfolioIDs: [ID] @scalarList(strategy: RELATION)
+  resume: String
+  open: Boolean! @default(value: false)
+
+}
+
+type Article {
+  id: ID! @unique
+  user: User!@relation(name: "UserArticles")
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePages: [CoursePage]@relation(name: "ArticleCoursePages")
+  coursePageIDs: [ID]@scalarList(strategy: RELATION)
 }

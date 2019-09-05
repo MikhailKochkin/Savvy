@@ -2,17 +2,22 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
-import Link from "next/link";
-import TestGroup from "./TestGroup";
-import QuizGroup from "./QuizGroup";
-import ProblemGroup from "./ProblemGroup";
-import ConstructorGroup from "./ConstructorGroup";
-import TextEditorGroup from "./TextEditorGroup";
+import ReactResizeDetector from "react-resize-detector";
+import TestGroup from "./tests/TestGroup";
+import QuizGroup from "./quizes/QuizGroup";
+import ProblemGroup from "./problems/ProblemGroup";
+import ConstructorGroup from "./constructions/ConstructorGroup";
+import TextEditorGroup from "./textEditors/TextEditorGroup";
 import PleaseSignIn from "../auth/PleaseSignIn";
+import CreateNewTest from "../create/CreateNewTest";
+import CreateQuiz from "../create/CreateQuiz";
+import CreateConstructor from "../create/CreateConstructor";
+import CreateTextEditor from "../create/CreateTextEditor";
+import CreateProblem from "../create/CreateProblem";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
+import DeleteSingleLesson from "../delete/DeleteSingleLesson";
+import UpdateLesson from "./UpdateLesson";
 import User from "../User";
-import { NavButton } from "../styles/Button";
-import { IoMdMenu } from "react-icons/io";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -72,21 +77,6 @@ const SINGLE_LESSON_QUERY = gql`
       coursePage {
         id
       }
-      tests {
-        id
-        answer1
-        answer1Correct
-        answer2
-        answer2Correct
-        answer3
-        answer3Correct
-        answer4
-        answer4Correct
-        question
-        user {
-          id
-        }
-      }
       quizes {
         id
         question
@@ -136,12 +126,72 @@ const SINGLE_LESSON_QUERY = gql`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* The side navigation menu */
+  .sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #112a62; /* Blue*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  }
+
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+  #main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+  }
+
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {
+      padding-top: 15px;
+    }
+    .sidenav a {
+      font-size: 18px;
+    }
+  }
+`;
+
 const TextBar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 80%;
-  font-size: 1.8rem;
+  width: 90%;
+  margin: 2.5% 0;
+  font-size: 1.6rem;
   padding: 2% 2% 4% 2%;
   a {
     color: #800000;
@@ -153,23 +203,46 @@ const TextBar = styled.div`
   }
 `;
 
-const Title = styled.p`
-  @import url("https://fonts.googleapis.com/css?family=Comfortaa&display=swap");
-  font-family: "Comfortaa", cursive;
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: #112962;
-`;
-
 const Center = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+`;
+
+const Head = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1% 0;
+  background: #f0f8ff;
+  width: 100%;
+  text-align: center;
+  font-size: 4rem;
+  @media (max-width: 800px) {
+    font-size: 1.8rem;
+    justify-content: space-between;
+    padding: 2% 15px;
+    span {
+      flex: 15%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #112a62;
+      color: #112a62;
+      border-radius: 5px;
+      padding: 0 1%;
+    }
+    div {
+      flex: 85%;
+      text-align: right;
+    }
+  }
 `;
 
 const LessonStyles = styled.div`
   display: flex;
+  width: 65%;
+  max-width: 1000px;
   flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
@@ -215,9 +288,10 @@ const LessonStyles = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
+
   flex-basis: 75%;
   flex-direction: column;
-  background: white;
+  /* background: white; */
   border-radius: 2px;
   a {
     padding-top: 2%;
@@ -267,7 +341,7 @@ const NavPart = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-radius: 2px;
+  margin: 20px 0;
   @media (max-width: 800px) {
     width: 50%;
     order: 0;
@@ -284,7 +358,6 @@ const TeacherPart = styled.div`
   width: 100%;
   margin-top: 1rem;
   background: white;
-  border-radius: 2px;
   @media (max-width: 800px) {
     display: none;
   }
@@ -294,16 +367,16 @@ const ButtonZone = styled.div`
   width: 100%;
   align-content: left;
   background: white;
-  &:hover {
+  /* &:hover {
     background: #f2f2f2;
     color: black;
-  }
+  } */
   @media (max-width: 800px) {
     text-align: center;
     background: none;
     align-content: center;
     padding-top: 3%;
-    border-bottom: solid 1px white;
+    border-bottom: solid 1px #112a62;
   }
 `;
 
@@ -312,30 +385,28 @@ const ChooseButton = styled.button`
   padding: 1%;
   width: 100%;
   border: none;
+  border-left: 1px solid white;
   padding-left: 8%;
+  outline: none;
   background: none;
   text-align: left;
   padding-top: 1.4rem;
   padding-bottom: 1.4rem;
   cursor: pointer;
   &:hover {
-    color: white;
-    background: #112a62;
-  }
-  &:focus {
-    outline: 0;
+    border-left: 1px solid #112a62;
   }
   @media (max-width: 800px) {
+    border-left: 1px solid #112a62;
     color: white;
     &:hover {
-      color: #112a62;
-      background: #f2f2f2;
+      border-bottom: 1px solid white;
     }
   }
 `;
 
 const Text = styled.div`
-  line-height: 1.6;
+  line-height: 1.8;
   img {
     display: block;
     max-width: 100%;
@@ -343,7 +414,7 @@ const Text = styled.div`
     box-shadow: "0 0 0 2px blue;";
   }
   iframe {
-    width: 100%;
+    width: 110%;
     height: 400px;
     @media (max-width: 800px) {
       width: 100%;
@@ -352,88 +423,163 @@ const Text = styled.div`
   }
 `;
 
-const ShowMenu = styled.button`
-  display: none;
-  border: none;
-  background: none;
-  width: 8%;
-  outline: none;
-  @media (max-width: 800px) {
-    display: block;
-  }
-`;
-
 class SingleLesson extends Component {
   state = {
     page: "lesson",
-    shown: false
-  };
-  onLesson = () => {
-    this.setState({ page: "lesson" }),
-      this.setState(prevState => ({ shown: !prevState.shown }));
-  };
-  onTest = () => {
-    this.setState({ page: "test" }),
-      this.setState(prevState => ({ shown: !prevState.shown }));
-  };
-  onQuiz = () => {
-    this.setState({ page: "quiz" }),
-      this.setState(prevState => ({ shown: !prevState.shown }));
-  };
-  onProblem = () => {
-    this.setState({ page: "problem" }),
-      this.setState(prevState => ({ shown: !prevState.shown }));
-  };
-  onConstructor = () => {
-    this.setState({ page: "constructor" }),
-      this.setState(prevState => ({ shown: !prevState.shown }));
-  };
-  onTextEditor = () => {
-    this.setState({ page: "texteditor" }),
-      this.setState(prevState => ({ shown: !prevState.shown }));
+    shown: false,
+    width: 0
   };
 
-  onShowMenu = () => {
+  onSwitch = e => {
+    e.preventDefault();
+    const name = e.target.getAttribute("name");
+
+    this.setState({ page: name });
     this.setState(prevState => ({ shown: !prevState.shown }));
+  };
+
+  onSwitchMob = e => {
+    e.preventDefault();
+    const name = e.target.getAttribute("name");
+
+    this.setState({ page: name });
+    this.setState(prevState => ({ shown: !prevState.shown }));
+    this.closeNav();
+  };
+
+  onResize = width => {
+    this.setState({ width });
+  };
+
+  openNav = () => {
+    document.getElementById("mySidenav2").style.width = "180px";
+  };
+
+  /* Set the width of the side navigation to 0 */
+  closeNav = () => {
+    document.getElementById("mySidenav2").style.width = "0";
   };
   render() {
     return (
-      <PleaseSignIn>
+      <PleaseSignIn number={this.props.number}>
         <User>
           {({ data: { me } }) => (
             <Query
               query={SINGLE_LESSON_QUERY}
-              // fetchPolicy="cache-and-network"
               variables={{
                 id: this.props.id
               }}
             >
               {({ data, error, loading }) => {
-                // if (error) return <Error error={error} />;
+                if (error) return <Error error={error} />;
                 if (loading) return <p>Loading...</p>;
                 // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
                 const lesson = data.lesson;
                 return (
                   <>
                     <AreYouEnrolled subject={lesson.coursePage.id}>
-                      <LessonStyles>
-                        <LessonPart>
-                          <Link
-                            href={{
-                              pathname: "/coursePage",
-                              query: { id: lesson.coursePage.id }
-                            }}
-                          >
-                            <a>
-                              <NavButton>На страницу курса</NavButton>
-                            </a>
-                          </Link>
-                          <Center>
+                      <Container>
+                        <ReactResizeDetector
+                          handleWidth
+                          handleHeight
+                          onResize={this.onResize}
+                        />
+                        {this.state.width < 800 && (
+                          <>
+                            <div id="mySidenav2" class="sidenav">
+                              <a
+                                href="javascript:void(0)"
+                                class="closebtn"
+                                onClick={this.closeNav}
+                              >
+                                &times;
+                              </a>
+
+                              <ButtonZone>
+                                <ChooseButton
+                                  name="lesson"
+                                  onClick={this.onSwitchMob}
+                                >
+                                  {" "}
+                                  Урок{" "}
+                                </ChooseButton>
+                              </ButtonZone>
+                              {lesson.newTests.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="test"
+                                    onClick={this.onSwitchMob}
+                                  >
+                                    {" "}
+                                    Тесты{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                              {lesson.quizes.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="quiz"
+                                    onClick={this.onSwitchMob}
+                                  >
+                                    {" "}
+                                    Вопросы{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                              {lesson.problems.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="problem"
+                                    onClick={this.onSwitchMob}
+                                  >
+                                    {" "}
+                                    Задачи{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                              {lesson.constructions.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="constructor"
+                                    onClick={this.onSwitchMob}
+                                  >
+                                    {" "}
+                                    Конструкторы{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                              {lesson.texteditors.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="textEditor"
+                                    onClick={this.onSwitchMob}
+                                  >
+                                    {" "}
+                                    Редакторы{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                            </div>
+                            {/* Use any element to open the sidenav */}
+                          </>
+                        )}
+
+                        <Head>
+                          {this.state.width < 800 && (
+                            <span onClick={this.openNav}>
+                              {/* <IoMdMenu size={32} /> */}
+                              Навигация
+                            </span>
+                          )}
+                          <div>
+                            Урок {lesson.number}. {lesson.name}
+                          </div>
+                        </Head>
+
+                        <LessonStyles>
+                          <LessonPart>
                             {this.state.page === "lesson" && (
                               <TextBar>
-                                <Title>
-                                  Урок {lesson.number}. {lesson.name}
-                                </Title>
                                 <Text
                                   dangerouslySetInnerHTML={{
                                     __html: lesson.text
@@ -513,7 +659,7 @@ class SingleLesson extends Component {
                                 )}{" "}
                               </>
                             )}
-                            {this.state.page === "texteditor" &&
+                            {this.state.page === "textEditor" &&
                               (lesson.texteditors.length > 0 ? (
                                 <TextEditorGroup
                                   lessonID={lesson.id}
@@ -526,148 +672,164 @@ class SingleLesson extends Component {
                                   <h2>Редакторов документов пока нет</h2>
                                 </Center>
                               ))}
-                          </Center>
-                        </LessonPart>
-                        <ShowMenu onClick={this.onShowMenu}>
-                          <IoMdMenu size={48} />
-                        </ShowMenu>
-                        <MenuPart shown={this.state.shown}>
-                          <Sticky>
-                            <NavPart>
-                              <ButtonZone>
-                                <ChooseButton onClick={this.onLesson}>
-                                  {" "}
-                                  Урок{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                              <ButtonZone>
-                                <ChooseButton onClick={this.onTest}>
-                                  {" "}
-                                  Тесты{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                              <ButtonZone>
-                                <ChooseButton onClick={this.onQuiz}>
-                                  {" "}
-                                  Вопросы{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                              <ButtonZone>
-                                <ChooseButton onClick={this.onProblem}>
-                                  {" "}
-                                  Задачи{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                              <ButtonZone>
-                                <ChooseButton onClick={this.onConstructor}>
-                                  {" "}
-                                  Конструктор документов{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                              <ButtonZone>
-                                <ChooseButton onClick={this.onTextEditor}>
-                                  {" "}
-                                  Редактор документов{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                            </NavPart>
-                            {me && lesson.user.id === me.id && (
-                              <TeacherPart>
-                                <ButtonZone>
-                                  {" "}
-                                  <Link
-                                    href={{
-                                      pathname: "/updateLesson",
-                                      query: { id: lesson.id }
-                                    }}
-                                  >
-                                    <a>
-                                      <ChooseButton>
-                                        Изменить текст урока
-                                      </ChooseButton>
-                                    </a>
-                                  </Link>
-                                </ButtonZone>
-                                <ButtonZone>
-                                  {" "}
-                                  <Link
-                                    href={{
-                                      pathname: "/createNewTest",
-                                      query: { id: lesson.id }
-                                    }}
-                                  >
-                                    <a>
-                                      <ChooseButton>
-                                        Составить тест
-                                      </ChooseButton>
-                                    </a>
-                                  </Link>
-                                </ButtonZone>
-                                <ButtonZone>
-                                  {" "}
-                                  <Link
-                                    href={{
-                                      pathname: "/createQuiz",
-                                      query: { id: lesson.id }
-                                    }}
-                                  >
-                                    <a>
-                                      <ChooseButton>
-                                        Составить вопрос
-                                      </ChooseButton>
-                                    </a>
-                                  </Link>
-                                </ButtonZone>
-                                <ButtonZone>
-                                  {" "}
-                                  <Link
-                                    href={{
-                                      pathname: "/createProblem",
-                                      query: { id: lesson.id }
-                                    }}
-                                  >
-                                    <a>
-                                      <ChooseButton>
-                                        Составить задачу
-                                      </ChooseButton>
-                                    </a>
-                                  </Link>
-                                </ButtonZone>
-                                <ButtonZone>
-                                  {" "}
-                                  <Link
-                                    href={{
-                                      pathname: "/createConstructor",
-                                      query: { id: lesson.id }
-                                    }}
-                                  >
-                                    <a>
-                                      <ChooseButton>
-                                        Составить конструктор документа
-                                      </ChooseButton>
-                                    </a>
-                                  </Link>
-                                </ButtonZone>
-                                <ButtonZone>
-                                  {" "}
-                                  <Link
-                                    href={{
-                                      pathname: "/createTextEditor",
-                                      query: { id: lesson.id }
-                                    }}
-                                  >
-                                    <a>
-                                      <ChooseButton>
-                                        Составить редактор документа
-                                      </ChooseButton>
-                                    </a>
-                                  </Link>
-                                </ButtonZone>
-                              </TeacherPart>
+                            {this.state.page === "createTest" && (
+                              <CreateNewTest lessonID={lesson.id} />
                             )}
-                          </Sticky>
-                        </MenuPart>
-                      </LessonStyles>
+                            {this.state.page === "createQuiz" && (
+                              <CreateQuiz lessonID={lesson.id} />
+                            )}
+                            {this.state.page === "createProblem" && (
+                              <CreateProblem lessonID={lesson.id} />
+                            )}
+                            {this.state.page === "createConstructor" && (
+                              <CreateConstructor lessonID={lesson.id} />
+                            )}
+                            {this.state.page === "createTextEditor" && (
+                              <CreateTextEditor lessonID={lesson.id} />
+                            )}
+                            {this.state.page === "changeLesson" && (
+                              <UpdateLesson lessonID={lesson.id} />
+                            )}
+                          </LessonPart>
+                          {/* <ShowMenu onClick={this.onShowMenu}>
+                            <IoMdMenu size={32} />
+                          </ShowMenu> */}
+                          {this.state.width > 800 && (
+                            <MenuPart shown={this.state.shown}>
+                              <Sticky>
+                                <NavPart>
+                                  <ButtonZone>
+                                    <ChooseButton
+                                      name="lesson"
+                                      onClick={this.onSwitch}
+                                    >
+                                      {" "}
+                                      Урок{" "}
+                                    </ChooseButton>
+                                  </ButtonZone>
+
+                                  {lesson.newTests.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="test"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Тесты{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.quizes.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="quiz"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Вопросы{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.problems.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="problem"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Задачи{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.constructions.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="constructor"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Конструкторы{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.texteditors.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="textEditor"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Редакторы{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                </NavPart>
+                                {me &&
+                                  (lesson.user.id === me.id ||
+                                    me.permissions.includes("ADMIN")) && (
+                                    <TeacherPart>
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createTest"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новый тест
+                                        </ChooseButton>
+                                      </ButtonZone>
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createQuiz"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новый вопрос
+                                        </ChooseButton>
+                                      </ButtonZone>
+
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createProblem"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новая задача
+                                        </ChooseButton>
+                                      </ButtonZone>
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createConstructor"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новый конструктор
+                                        </ChooseButton>
+                                      </ButtonZone>
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createTextEditor"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новый редактор
+                                        </ChooseButton>
+                                      </ButtonZone>
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="changeLesson"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Изменить урок
+                                        </ChooseButton>
+                                      </ButtonZone>
+                                      <ButtonZone>
+                                        <DeleteSingleLesson
+                                          id={lesson.id}
+                                          coursePageID={lesson.coursePage.id}
+                                        />
+                                      </ButtonZone>
+                                    </TeacherPart>
+                                  )}
+                              </Sticky>
+                            </MenuPart>
+                          )}
+                        </LessonStyles>
+                      </Container>
                     </AreYouEnrolled>
                   </>
                 );

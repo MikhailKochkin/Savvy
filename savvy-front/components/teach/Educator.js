@@ -3,10 +3,10 @@ import styled from "styled-components";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import Link from "next/link";
-import MyCourse from "../course/MyCourse";
+import Course from "../course/Course";
 import User from "../User";
 import Uni from "./Uni";
-import CreateCourseButton from "./CreateCourseButton";
+import EducatorImage from "./EducatorImage";
 import PleaseSignIn from "../auth/PleaseSignIn";
 
 const MY_COURSES_QUERY = gql`
@@ -17,6 +17,10 @@ const MY_COURSES_QUERY = gql`
       user {
         id
         name
+        uni {
+          id
+          title
+        }
       }
       description
       courseType
@@ -29,19 +33,23 @@ const MY_COURSES_QUERY = gql`
 const CaseCard = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px lightgrey dashed;
-  border-radius: 5px;
   text-align: left;
   background: white;
-  padding: 1%;
+  padding: 4px;
+  border: 1px solid #edefed;
+  border-radius: 10px;
   margin: 2%;
-  width: 300px;
+  width: 285px;
   line-height: 1.2;
-  @media (max-width: 800px) {
+  @media (max-width: 950px) {
     padding: 2%;
+    width: 158px;
     button {
       padding: 4px 6px;
     }
+  }
+  @media (max-width: 374px) {
+    width: 150px;
   }
 `;
 
@@ -51,45 +59,34 @@ const Img = styled.div`
   border: 1px dashed lightgrey;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  @media (max-width: 950px) {
+    object-fit: cover;
+    height: 100px;
+  }
 `;
 
 const Title2 = styled.p`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: 1%;
-  margin-bottom: 0;
-`;
-
-const Description = styled.p`
-  width: 100%;
-  height: 50px;
-  border: 1px dashed lightgrey;
-  border-radius: 5px;
-  margin-bottom: 0;
-`;
-
-const Author = styled.p`
   font-size: 1.6rem;
-  color: #686868;
+  margin-top: 5%;
 `;
 
 const Button = styled.button`
-  background-color: ${props => (props.delete ? "red" : "#008CBA")};
-  border: none;
-  color: white;
-  padding: 5px 10px;
+  border: 1px solid #112a62;
+  color: #112a62;
+  padding: 5px 12px;
+  background: white;
   text-decoration: none;
   display: inline-block;
-  font-size: 12px;
-  width: 135px;
-  margin: 2px;
-  font-size: 1.4rem;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 100%;
   cursor: pointer;
-  a {
-    color: white;
+  outline: 0;
+  &:active {
+    border: 2px solid #112a62;
   }
-  &:hover {
-    background-color: #003d5b;
+  @media (max-width: 950px) {
+    margin: 0;
   }
 `;
 
@@ -101,27 +98,43 @@ const Styles = styled.div`
 const Container = styled.div`
   font-size: 1.8rem;
   display: flex;
-  flex-direction: row;
-  @media (max-width: 900px) {
-    flex-direction: column;
-  }
+  flex-direction: column;
+  align-items: center;
 `;
 const Courses = styled.div`
-  margin-top: 2%;
+  width: 80%;
+  max-width: 1200px;
   background: white;
   padding: 1.5%;
+  @media (max-width: 850px) {
+    width: 95%;
+  }
 `;
 
 const Title = styled.p`
-  font-size: ${props => (props.primary ? "2.6rem" : "1.6rem")};
+  font-size: 2rem;
   margin-top: 0;
   margin-bottom: 1%;
+`;
+
+const Author = styled.p`
+  color: #686868;
+  @media (max-width: 950px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+`;
+
+const Additional = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 class Teach extends Component {
@@ -138,7 +151,6 @@ class Teach extends Component {
                     variables={{
                       id: me.id
                     }}
-                    fetchPolicy="cache-and-network"
                   >
                     {({ data, error, loading, fetchMore }) => {
                       if (loading) return <p>Loading...</p>;
@@ -165,51 +177,60 @@ class Teach extends Component {
                       let status = uni.capacity <= 2 || uni.paidMonths > 0;
                       return (
                         <>
+                          <EducatorImage />
                           <Container>
-                            <CreateCourseButton uni={me.uni} isPaid={isPaid} />
                             <Uni me={me} />
-                          </Container>
-                          <Courses>
-                            <Title primary> Опубликованные курсы </Title>
-                            <Row>
-                              {status && publishedCourses.length === 0 && (
-                                <Title>У вас еще нет запущенных курсов.</Title>
-                              )}
-                              {status &&
-                                publishedCourses.map(coursePage => (
-                                  <MyCourse
+                            <Courses>
+                              <Title primary> Опубликованные курсы </Title>
+                              <Row>
+                                {status && publishedCourses.length === 0 && (
+                                  <Title>
+                                    У вас еще нет запущенных курсов.
+                                  </Title>
+                                )}
+                                {status &&
+                                  publishedCourses.map(coursePage => (
+                                    <Course
+                                      key={coursePage.id}
+                                      id={coursePage.id}
+                                      coursePage={coursePage}
+                                      me={me}
+                                    />
+                                  ))}
+                                {!status && "Нет доступа к управлению курсами"}
+                              </Row>
+                            </Courses>
+                            <Courses>
+                              <Title primary> Курсы в разработке </Title>
+                              <Row>
+                                <CaseCard>
+                                  <Additional>
+                                    <>
+                                      <Img />
+                                      <Title2>Ваш новый курс</Title2>
+                                      <Author>{me.name}</Author>
+                                    </>
+                                    <>
+                                      <Link prefetch href="/create">
+                                        <Button>
+                                          <a>Создать курс</a>
+                                        </Button>
+                                      </Link>
+                                    </>
+                                  </Additional>
+                                </CaseCard>
+                                {developedCourses.map(coursePage => (
+                                  <Course
                                     key={coursePage.id}
                                     id={coursePage.id}
                                     coursePage={coursePage}
+                                    me={me}
                                   />
                                 ))}
+                              </Row>
                               {!status && "Нет доступа к управлению курсами"}
-                            </Row>
-                          </Courses>
-                          <Courses>
-                            <Title primary> Курсы в разработке </Title>
-                            <Row>
-                              <CaseCard>
-                                <Img />
-                                <Title2>Ваш новый курс</Title2>
-                                <Description />
-                                <Author>{me.name}</Author>
-                                <Link prefetch href="/create">
-                                  <Button>
-                                    <a>Создать курс</a>
-                                  </Button>
-                                </Link>
-                              </CaseCard>
-                              {developedCourses.map(coursePage => (
-                                <MyCourse
-                                  key={coursePage.id}
-                                  id={coursePage.id}
-                                  coursePage={coursePage}
-                                />
-                              ))}
-                            </Row>
-                            {!status && "Нет доступа к управлению курсами"}
-                          </Courses>
+                            </Courses>
+                          </Container>
                         </>
                       );
                     }}

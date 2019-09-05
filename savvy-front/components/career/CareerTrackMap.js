@@ -27,8 +27,8 @@ class CareerTrackMap extends Component {
     render() {
         return (
             <Styles>
-                {this.props.data === "cjwx78u7700rb07121pelqctm" && <Tech src="../static/корпюрист.png" onClick={this.onShow}/>}
-                {this.props.data === "cjwx79iaj00rk0712tz12j7vi" && <Banner src="../static/тех.png" onClick={this.onShow}/>}
+                {this.props.data === "cjymyvxjqqsoh0b53wtdnpzkk" && <Tech src="../static/корпюрист.png" onClick={this.onShow}/>}
+                {this.props.data === "cjymywj43tg8c0b36c762ii0w" && <Banner src="../static/тех.png" onClick={this.onShow}/>}
             </Styles>
         );
     }

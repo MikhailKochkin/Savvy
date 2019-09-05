@@ -3,7 +3,6 @@ import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
 import styled from "styled-components";
 import Link from "next/link";
-import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -62,14 +61,21 @@ const UPDATE_LESSONRESULT_MUTATION = gql`
 
 const TextBar = styled.div`
   display: grid;
-  grid-template-columns: 50% 15% 20% 15%;
+  grid-template-columns: 50% 50%;
   width: 100%;
-  font-size: 1.8rem;
-  border-top: 1px solid #112a62;
-  padding: 0 2%;
-  @media (max-width: 800px) {
-    grid-template-columns: 50% 20% 18% 12%;
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+  @media (max-width: 1000px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 3%;
   }
+`;
+
+const Title = styled.div`
+  font-size: 1.6rem;
+  padding: 4% 0;
 `;
 
 const A = styled.a`
@@ -78,31 +84,40 @@ const A = styled.a`
 `;
 
 const Button = styled.button`
-  font-size: 1.4rem;
-  font-weight: 600;
+  font-size: 1.6rem;
   padding: 5%;
-  color: #fffdf7;
-  background-color: #84bc9c;
-  border: solid 1px white;
+  background: #ffffff;
+  border: 1px solid #112a62;
+  color: #112a62;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 100px;
+  height: 40px;
   cursor: pointer;
-  &:hover {
-    background-color: #294d4a;
-  }
+  outline: 0;
   @media (max-width: 800px) {
     font-size: 1.4rem;
   }
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
 `;
 
 const InProgress = styled.p`
   justify-self: center;
   align-self: center;
   text-align: center;
-  font-size: 1.4rem;
-  font-weight: 600;
-  padding: 5%;
-  color: #fffdf7;
-  background-color: #84bc9c;
-  border: solid 1px white;
+  font-size: 1.6rem;
+  padding: 2% 1%;
+  width: 140px;
+  border: 1px solid #716d6d;
+  color: #716d6d;
+  box-sizing: border-box;
+  border-radius: 5px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
   }
@@ -183,77 +198,145 @@ class LessonHeader extends Component {
     return (
       <>
         <TextBar>
-          <h4>
+          <Title>
             Урок {lesson.number}. {name}
-          </h4>
-          {me && me.id === lesson.user.id ? (
-            <>
-              <Mutation
-                mutation={UPDATE_PUBLISHED_MUTATION}
-                variables={{
-                  id: lesson.id,
-                  published: !this.state.published
-                }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: lesson.id }
-                  }
-                ]}
-              >
-                {(updatePublished, { loading, error }) => (
-                  <ToggleQuestion>
-                    <label className="switch">
-                      <input
-                        name="published"
-                        type="checkbox"
-                        checked={this.state.published}
-                        onChange={async e => {
-                          updatePublished();
-                          this.handleInputChange(e);
-                        }}
-                      />
-                      <span className="slider" />
-                    </label>
-                  </ToggleQuestion>
-                )}
-              </Mutation>
-              <DeleteSingleLesson id={lesson.id} coursePageId={coursePageId} />
-            </>
-          ) : null}
+          </Title>
+          <Buttons>
+            {me &&
+            (me.id === lesson.user.id || me.permissions.includes("ADMIN")) ? (
+              <>
+                <Mutation
+                  mutation={UPDATE_PUBLISHED_MUTATION}
+                  variables={{
+                    id: lesson.id,
+                    published: !this.state.published
+                  }}
+                  refetchQueries={() => [
+                    {
+                      query: SINGLE_LESSON_QUERY,
+                      variables: { id: lesson.id, number: lesson.number }
+                    }
+                  ]}
+                >
+                  {(updatePublished, { loading, error }) => (
+                    <ToggleQuestion>
+                      <label className="switch">
+                        <input
+                          name="published"
+                          type="checkbox"
+                          checked={this.state.published}
+                          onChange={async e => {
+                            updatePublished();
+                            this.handleInputChange(e);
+                          }}
+                        />
+                        <span className="slider" />
+                      </label>
+                    </ToggleQuestion>
+                  )}
+                </Mutation>
+              </>
+            ) : null}
 
-          <Query
-            query={SINGLE_LESSONRESULT_QUERY}
-            fetchPolicy="cache-and-network"
-            variables={{
-              lessonID: lesson.id,
-              id: me.id
-            }}
-          >
-            {({ data, error, loading }) => {
-              if (loading) return <p>Loading...</p>;
-              if (error) return <p>Error: {error.message}</p>;
-              // console.log(data);
-              // console.log("Результаты:", data.lessonResults[0].lessonID);
-              return (
-                <>
-                  <Mutation
-                    mutation={CREATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      lessonID: lesson.id,
-                      visitsNumber: 1
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: SINGLE_LESSONRESULT_QUERY,
-                        variables: { lessonID: lesson.id }
-                      }
-                    ]}
-                  >
-                    {(createLessonResult, { loading, error }) => {
-                      return (
-                        <>
-                          {data.lessonResults.length === 0 && (
+            <Query
+              query={SINGLE_LESSONRESULT_QUERY}
+              variables={{
+                lessonID: lesson.id,
+                id: me.id
+              }}
+            >
+              {({ data, error, loading }) => {
+                if (loading) return <p>Loading...</p>;
+                if (error) return <p>Error: {error.message}</p>;
+                return (
+                  <>
+                    <Mutation
+                      mutation={CREATE_LESSONRESULT_MUTATION}
+                      variables={{
+                        lessonID: lesson.id,
+                        visitsNumber: 1
+                      }}
+                      refetchQueries={() => [
+                        {
+                          query: SINGLE_LESSONRESULT_QUERY,
+                          variables: { lessonID: lesson.id }
+                        }
+                      ]}
+                    >
+                      {(createLessonResult, { loading, error }) => {
+                        return (
+                          <>
+                            {data.lessonResults.length === 0 && (
+                              <>
+                                {me &&
+                                lesson &&
+                                (me.id === lesson.user.id ||
+                                  me.permissions.includes("ADMIN")) ? (
+                                  <Link
+                                    href={{
+                                      pathname: "/lesson",
+                                      query: { id: lesson.id }
+                                    }}
+                                  >
+                                    <A>
+                                      <Button
+                                        onChange={() => {
+                                          console.log("Добавили 0");
+                                        }}
+                                      >
+                                        Перейти
+                                      </Button>
+                                    </A>
+                                  </Link>
+                                ) : null}
+
+                                {me &&
+                                  lesson &&
+                                  me.id !== lesson.user.id &&
+                                  students.includes(me.id) &&
+                                  !me.permissions.includes("ADMIN") &&
+                                  this.state.published && (
+                                    <Link
+                                      href={{
+                                        pathname: "/lesson",
+                                        query: { id: lesson.id }
+                                      }}
+                                    >
+                                      <A>
+                                        <Button
+                                          onClick={() => {
+                                            createLessonResult();
+                                            console.log("CREATE");
+                                          }}
+                                        >
+                                          Перейти
+                                        </Button>
+                                      </A>
+                                    </Link>
+                                  )}
+                              </>
+                            )}
+                          </>
+                        );
+                      }}
+                    </Mutation>
+
+                    {data.lessonResults.length > 0 && (
+                      <Mutation
+                        mutation={UPDATE_LESSONRESULT_MUTATION}
+                        variables={{
+                          id: data.lessonResults[0].id,
+                          visitsNumber: data.lessonResults[0].visitsNumber + 1
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_LESSONRESULT_QUERY,
+                            variables: { lessonID: lesson.id }
+                          }
+                        ]}
+                      >
+                        {(updateLessonResult, { loading, error }) => {
+                          return (
                             <>
                               {me && lesson && me.id === lesson.user.id ? (
                                 <Link
@@ -263,7 +346,13 @@ class LessonHeader extends Component {
                                   }}
                                 >
                                   <A>
-                                    <Button>Перейти к уроку</Button>
+                                    <Button
+                                      onChange={() => {
+                                        console.log("Добавили 0");
+                                      }}
+                                    >
+                                      Перейти
+                                    </Button>
                                   </A>
                                 </Link>
                               ) : null}
@@ -282,19 +371,11 @@ class LessonHeader extends Component {
                                     <A>
                                       <Button
                                         onClick={() => {
-                                          // if (
-                                          //   data.lessonResults[0].lessonID ===
-                                          //   lesson.id
-                                          // ) {
-                                          //   updateLessonResult();
-                                          //   console.log("UPDATE");
-                                          // } else {
-                                          createLessonResult();
-                                          console.log("CREATE");
-                                          // }
+                                          updateLessonResult();
+                                          console.log("UPDATE");
                                         }}
                                       >
-                                        Перейти к уроку
+                                        Перейти
                                       </Button>
                                     </A>
                                   </Link>
@@ -314,140 +395,34 @@ class LessonHeader extends Component {
                                     <A>
                                       <Button
                                         onClick={() => {
-                                          // if (
-                                          //   data.lessonResults[0].lessonID ===
-                                          //   lesson.id
-                                          // ) {
-                                          //   updateLessonResult();
-                                          //   console.log("UPDATE");
-                                          // } else {
-                                          createLessonResult();
-                                          console.log("CREATE");
-                                          // }
+                                          updateLessonResult();
+                                          console.log("UPDATE");
                                         }}
                                       >
-                                        Перейти к уроку
+                                        Перейти
                                       </Button>
                                     </A>
                                   </Link>
                                 )}
                             </>
-                          )}
-                        </>
-                      );
-                    }}
-                  </Mutation>
+                          );
+                        }}
+                      </Mutation>
+                    )}
+                  </>
+                );
+              }}
+            </Query>
 
-                  {data.lessonResults.length > 0 && (
-                    <Mutation
-                      mutation={UPDATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        id: data.lessonResults[0].id,
-                        visitsNumber: data.lessonResults[0].visitsNumber + 1
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_LESSONRESULT_QUERY,
-                          variables: { lessonID: lesson.id }
-                        }
-                      ]}
-                    >
-                      {(updateLessonResult, { loading, error }) => {
-                        return (
-                          <>
-                            {me && lesson && me.id === lesson.user.id ? (
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: { id: lesson.id }
-                                }}
-                              >
-                                <A>
-                                  <Button>Перейти к уроку</Button>
-                                </A>
-                              </Link>
-                            ) : null}
-
-                            {me &&
-                              lesson &&
-                              me.id !== lesson.user.id &&
-                              students.includes(me.id) &&
-                              this.state.published && (
-                                <Link
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: { id: lesson.id }
-                                  }}
-                                >
-                                  <A>
-                                    <Button
-                                      onClick={() => {
-                                        // if (
-                                        //   data.lessonResults[0].lessonID ===
-                                        //   lesson.id
-                                        // ) {
-                                        updateLessonResult();
-                                        console.log("UPDATE");
-                                        // } else {
-                                        //   createLessonResult();
-                                        //   console.log("CREATE");
-                                        // }
-                                      }}
-                                    >
-                                      Перейти к уроку
-                                    </Button>
-                                  </A>
-                                </Link>
-                              )}
-
-                            {me &&
-                              lesson &&
-                              me.id !== lesson.user.id &&
-                              !students.includes(me.id) &&
-                              this.props.index === 1 && (
-                                <Link
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: { id: lesson.id }
-                                  }}
-                                >
-                                  <A>
-                                    <Button
-                                      onClick={() => {
-                                        // if (
-                                        //   data.lessonResults[0].lessonID ===
-                                        //   lesson.id
-                                        // ) {
-                                        updateLessonResult();
-                                        console.log("UPDATE");
-                                        // } else {
-                                        // createLessonResult();
-                                        // console.log("CREATE");
-                                        // }
-                                      }}
-                                    >
-                                      Перейти к уроку
-                                    </Button>
-                                  </A>
-                                </Link>
-                              )}
-                          </>
-                        );
-                      }}
-                    </Mutation>
-                  )}
-                </>
-              );
-            }}
-          </Query>
-
-          {me &&
-          lesson &&
-          me.id !== lesson.user.id &&
-          students.includes(me.id) &&
-          !this.state.published ? (
-            <InProgress>Урок в разработке</InProgress>
-          ) : null}
+            {me &&
+            lesson &&
+            me.id !== lesson.user.id &&
+            students.includes(me.id) &&
+            !me.permissions.includes("ADMIN") &&
+            !this.state.published ? (
+              <InProgress>В разработке</InProgress>
+            ) : null}
+          </Buttons>
         </TextBar>
       </>
     );

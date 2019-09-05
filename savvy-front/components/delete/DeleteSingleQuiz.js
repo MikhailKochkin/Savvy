@@ -15,14 +15,21 @@ const DELETE_QUIZ_MUTATION = gql`
 `;
 
 const Button = styled.button`
+  background: ${props => props.theme.red};
+  width: 20%;
+  color: white;
+  padding: 1.5% 3%;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border-radius: 5px;
   border: none;
   cursor: pointer;
-`;
-
-const Delete = styled.div`
-  color: black;
-  &:hover {
-    color: red;
+  outline: none;
+  &:active {
+    background-color: ${props => props.theme.darkRed};
+  }
+  @media (max-width: 800px) {
+    width: 40%;
   }
 `;
 
@@ -76,9 +83,7 @@ class DeleteSingleQuiz extends Component {
               }
             }}
           >
-            <Delete id="remove">
-              {loading ? "Удаляем..." : <Icon size={20} icon={remove} />}
-            </Delete>
+            {loading ? "Удаляем..." : "Удалить"}
           </Button>
         )}
       </Mutation>

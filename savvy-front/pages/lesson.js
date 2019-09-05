@@ -1,8 +1,8 @@
-import SingleLesson from '../components/lesson/SingleLesson';
+import SingleLesson from "../components/lesson/SingleLesson";
 
 const LessonPage = props => (
   <div>
-    <SingleLesson id={props.query.id} type={props.query.type}/>
+    <SingleLesson id={props.query.id} number={props.query.number} />
   </div>
 );
 

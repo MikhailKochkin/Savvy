@@ -1,22 +1,22 @@
-import { Query } from 'react-apollo';
-import { CURRENT_USER_QUERY } from '../User';
+import { Query } from "react-apollo";
+import { CURRENT_USER_QUERY } from "../User";
 
 const AreYouAdmin = props => (
-    <Query query={CURRENT_USER_QUERY}>
-    {({data}, loading) => {
-        if(loading) return <p>Загрузка...</p>;
-        if(!data.me.permissions.includes("ADMIN")) 
-        {
-            return (
-                <div>
-                    <p>Вы не имеете прав на просмотр данной страницы!</p>
-                    <button>Обратно к меню</button>
-                </div>
-            );
-        }
+  <Query query={CURRENT_USER_QUERY}>
+    {({ data }, loading) => {
+      if (loading) return <p>Загрузка...</p>;
+      console.log(data);
+      if (!data.me.permissions.includes("ADMIN")) {
+        return (
+          <div>
+            <p>Вы не имеете прав на просмотр данной страницы!</p>
+            <button>Обратно к меню</button>
+          </div>
+        );
+      }
       return props.children;
     }}
-    </Query>
-)
+  </Query>
+);
 
 export default AreYouAdmin;

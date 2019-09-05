@@ -6,6 +6,24 @@ import Router from "next/router";
 import { CURRENT_USER_QUERY } from "./User";
 import { SINGLE_COURSEPAGE_QUERY } from "./course/CoursePage";
 
+const CREATE_APPLICATION_MUTATION = gql`
+  mutation CREATE_APPLICATION_MUTATION(
+    $applicantId: ID!
+    $applicantName: String!
+    $message: String
+    $coursePageID: ID!
+  ) {
+    createApplication(
+      applicantId: $applicantId
+      applicantName: $applicantName
+      message: $message
+      coursePageID: $coursePageID
+    ) {
+      id
+    }
+  }
+`;
+
 const ENROLL_COURSE_MUTATION = gql`
   mutation ENROLL_COURSE_MUTATION(
     $id: ID!
@@ -27,47 +45,45 @@ const ADD_USER_TO_COURSEPAGE = gql`
 `;
 
 const Button = styled.button`
-  background-color: ${props => (props.delete ? "red" : "#008CBA")};
-  border: none;
+  background: ${props => props.theme.green};
+  border-radius: 5px;
+  width: 200px;
+  height: 38px;
+  outline: 0;
   color: white;
-  padding: 5px 10px;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 12px;
-  width: 135px;
-  margin: 2px;
+  font-weight: 600;
   font-size: 1.4rem;
+  outline: none;
   cursor: pointer;
-  &:hover {
-    background-color: #003d5b;
+  border: none;
+  margin-top: 10px;
+  &:active {
+    background-color: ${props => props.theme.darkGreen};
   }
+`;
+
+const Comment = styled.div`
+  padding-top: 15px;
 `;
 
 class EnrollCoursePage extends Component {
   state = {
     students: this.props.studentsArray,
-    subjects: this.props.subjectArray
+    subjects: this.props.subjectArray,
+    show: false
   };
   onClick = async (e, enrollOnCourse, addUserToCoursePage) => {
     e.preventDefault();
     if (this.props.coursePage.courseType === "PUBLIC") {
-      if (this.state.subjects.includes(this.props.coursePage.id)) {
-        // console.log("You are already enrolled!")
-        Router.push({
-          pathname: "/coursePage",
-          query: { id: this.props.coursePage.id }
-        });
-      } else if (!this.state.subjects.includes(this.props.coursePage.id)) {
+      if (!this.state.subjects.includes(this.props.coursePage.id)) {
         const newSubjects = this.state.subjects.concat(
           this.props.coursePage.id
         );
         const newStudents = this.state.students.concat(this.props.meData.id);
-        // console.log("Approach setState")
         const res = await this.setState({
           subjects: newSubjects,
           students: newStudents
         });
-        // console.log("Approach mutation")
         enrollOnCourse({
           variables: {
             id: this.props.meData.id,
@@ -83,62 +99,76 @@ class EnrollCoursePage extends Component {
         });
         alert("Вы успешно зарегистрировлаись. Наслаждайтесь курсом!");
         Router.push({
-          pathname: "/coursePage",
-          query: { id: this.props.coursePage.id }
+          pathname: "/lesson",
+          query: { id: this.props.coursePage.lessons[0].id }
         });
-      }
-    } else if (this.props.coursePage.courseType === "PRIVATE") {
-      // console.log("This is a private Course!")
-      if (this.state.subjects.includes(this.props.coursePage.id)) {
-        // console.log("You are already enrolled!")
-        Router.push({
-          pathname: "/coursePage",
-          query: { id: this.props.coursePage.id }
-        });
-      } else if (!this.state.subjects.includes(this.props.coursePage.id)) {
-        return this.props.getInputReveal(true);
-      }
-    } else if (this.props.coursePage.courseType === "FORMONEY") {
-      //0. Check if the person is already on the course and let him pass
-      if (this.state.subjects.includes(this.props.coursePage.id)) {
-        // console.log("You are already enrolled!")
-        Router.push({
-          pathname: "/coursePage",
-          query: { id: this.props.coursePage.id }
-        });
-      } else {
-        console.log("Вот ошибка!");
       }
     }
   };
   render() {
+    const { coursePage, meData } = this.props;
+    console.log(coursePage.lessons[0].id);
     return (
-      <Mutation
-        mutation={ENROLL_COURSE_MUTATION}
-        refetchQueries={() => [{ query: CURRENT_USER_QUERY }]}
-        refetchQueries={() => [
-          {
-            query: SINGLE_COURSEPAGE_QUERY,
-            variables: { id: this.props.coursePage.id }
-          }
-        ]}
-      >
-        {enrollOnCourse => (
-          <Mutation mutation={ADD_USER_TO_COURSEPAGE}>
-            {addUserToCoursePage => (
+      <>
+        {coursePage.courseType === "PUBLIC" && (
+          <Mutation
+            mutation={ENROLL_COURSE_MUTATION}
+            refetchQueries={() => [{ query: CURRENT_USER_QUERY }]}
+            refetchQueries={() => [
+              {
+                query: SINGLE_COURSEPAGE_QUERY,
+                variables: { id: coursePage.id }
+              }
+            ]}
+          >
+            {enrollOnCourse => (
+              <Mutation mutation={ADD_USER_TO_COURSEPAGE}>
+                {addUserToCoursePage => (
+                  <Button
+                    onClick={e =>
+                      this.onClick(e, enrollOnCourse, addUserToCoursePage)
+                    }
+                  >
+                    Регистрация
+                  </Button>
+                )}
+              </Mutation>
+            )}
+          </Mutation>
+        )}
+        {coursePage.courseType === "PRIVATE" && this.state.show === false && (
+          <Mutation
+            mutation={CREATE_APPLICATION_MUTATION}
+            variables={{
+              applicantId: meData.id,
+              applicantName: meData.name,
+              coursePageID: this.props.coursePage.id,
+              ...this.state
+            }}
+          >
+            {(createApplication, { loading, error }) => (
               <Button
-                onClick={e =>
-                  this.onClick(e, enrollOnCourse, addUserToCoursePage)
-                }
+                onClick={async e => {
+                  e.preventDefault;
+                  this.setState({
+                    show: true
+                  });
+                  // this.concealApplication();
+                  const res = await createApplication();
+                }}
               >
-                {this.state.subjects.includes(this.props.coursePage.id)
-                  ? "Войти"
-                  : "Регистрация"}
+                Регистрация
               </Button>
             )}
           </Mutation>
         )}
-      </Mutation>
+        {this.state.show === true && (
+          <Comment>
+            Ваша заявка на рассмотрении. Скоро преподаватель рассмотрит ее и
+            откроет доступ к курсу.
+          </Comment>
+        )}
+      </>
     );
   }
 }

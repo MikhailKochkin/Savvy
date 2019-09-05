@@ -32,8 +32,8 @@ const SIGNUP_MUTATION = gql`
 `;
 
 const SubmitButton = styled.button`
-  background-color: #008cba;
-  border: none;
+  background-color: #84bc9c;
+  border: 1px solid white;
   border-radius: 6px;
   color: white;
   padding: 2%;
@@ -42,45 +42,39 @@ const SubmitButton = styled.button`
   display: inline-block;
   font-size: 1.4rem;
   font-weight: 600;
-  width: 50%;
+  width: 100%;
   cursor: pointer;
-  &:hover {
-    background: #0b3954;
+  outline: 0;
+  &:active {
+    border: 1px solid black;
   }
   @media (max-width: 800px) {
     margin-top: 5%;
-    width: 80%;
   }
 `;
 
 const Form = styled.form`
-  width: 50%;
-  margin: 50%;
-  margin: 0 auto;
   font-size: 1.6rem;
-  @media (max-width: 800px) {
-    width: 90%;
-  }
 `;
 
 const Fieldset = styled.fieldset`
+  width: 85%;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   padding: 4%;
   border: 1px solid #f0f0f0;
   border-radius: 5px;
-  box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.11),
-    0 5px 15px 0 rgba(0, 0, 0, 0.08);
 `;
 
 const Container = styled.div`
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: repeat(3 70px);
-  .email {
+  .name {
     grid-area: first;
   }
-  .name {
+  .email {
     grid-area: second;
   }
   .password {
@@ -92,8 +86,11 @@ const Container = styled.div`
   .uni {
     grid-area: fifth;
   }
-  .checked {
+  .career {
     grid-area: sixth;
+  }
+  .checked {
+    grid-area: seventh;
   }
   grid-template-areas:
     "first   "
@@ -101,56 +98,42 @@ const Container = styled.div`
     "third   "
     "fourth   "
     "fifth   "
-    "sixth   ";
+    "sixth   "
+    "seventh   ";
   @media (max-width: 800px) {
     margin-bottom: 5%;
   }
-`;
-
-const Label = styled.label`
-  display: grid;
-  grid-template-columns: 35% 65%;
-  grid-template-rows: 100%;
-  justify-items: center;
-  align-items: center;
-  .first {
-    grid-area: first;
-  }
-  .second {
-    grid-area: second;
-  }
-  grid-template-areas: "first second";
-  p {
-    text-align: center;
-  }
-  select {
-    font-size: 1.4rem;
-    background: white;
-  }
   input {
-    height: 50%;
-    width: 80%;
+    width: 100%;
     border: 1px solid #ccc;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 3.5px;
-    padding: 2%;
+    border-radius: 5px;
+    padding: 1.5%;
     font-size: 1.4rem;
+    margin-bottom: 10px;
+    outline: 0;
   }
-  .checkedStyle {
-    height: 60px;
-    width: 60px;
-    border: none;
-    box-shadow: none;
-  }
-  @media (max-width: 600px) {
-    display: flex;
-    flex-direction: column;
-    .checkedStyle {
-      height: 30px;
-      width: 30px;
-      border: none;
-      box-shadow: none;
-    }
+  select {
+    width: 100%;
+    font-size: 1.4rem;
+    outline: none;
+    line-height: 1.3;
+    padding: 0.6em 1.4em 0.5em 0.8em;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #c5c5c5;
+    border-radius: 4px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
+      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+    margin-bottom: 10px;
   }
 `;
 
@@ -160,16 +143,35 @@ const Buttons = styled.div`
   justify-content: center;
   margin-top: 2%;
   padding: 3%;
-  border-top: solid 1px #f0f0f0;
+  border-bottom: solid 1px #f0f0f0;
 `;
 
-const LoggedIn = styled.p`
-  background-color: #00ff7f;
+const Title = styled.div`
   font-size: 1.8rem;
-  padding: 1% 2%;
-  border-radius: 10px;
-  width: 45%;
-  text-align: center;
+  font-weight: 900;
+  margin-bottom: 10px;
+`;
+
+const Comment = styled.div`
+  font-size: 1.2rem;
+  color: #767676;
+  padding: 0 1%;
+  line-height: 1.4;
+  margin-bottom: 5px;
+  a {
+    color: #112a62;
+    font-weight: 600;
+  }
+`;
+
+const Transit = styled.div`
+  margin-top: 3%;
+  font-size: 1.4rem;
+  span {
+    color: #112a62;
+    font-weight: 600;
+    cursor: pointer;
+  }
 `;
 
 class Signup extends Component {
@@ -179,7 +181,7 @@ class Signup extends Component {
     email: "",
     status: "STUDENT",
     uniID: "cjymz9pazr0ib0b53v38d401g",
-    isFamiliar: false,
+    isFamiliar: true,
     loggedIn: false
   };
   saveToState = e => {
@@ -195,6 +197,11 @@ class Signup extends Component {
       [name]: value
     });
   };
+
+  switch = e => {
+    const name = e.target.getAttribute("name");
+    this.props.getData(name);
+  };
   render() {
     return (
       <Mutation
@@ -208,106 +215,112 @@ class Signup extends Component {
             onSubmit={async e => {
               e.preventDefault();
               await signup();
+              this.props.closeNavBar(true);
               this.setState({
                 name: "",
                 email: "",
                 password: "",
                 loggedIn: true
               });
-              this.state.status === "STUDENT" &&
-                setTimeout(
-                  () => Router.push({ pathname: "/chooseCareer" }),
-                  2000
-                );
               this.state.status === "AUTHOR" &&
                 setTimeout(() => Router.push({ pathname: "/educator" }), 2000);
             }}
           >
             <Fieldset disabled={loading} aria-busy={loading}>
-              <h2>Зарегистрируйтесь на Savvvy.app</h2>
+              <Title>Зарегистрируйтесь на Savvvy.app</Title>
               <Error error={error} />
-              {this.state.loggedIn && (
-                <LoggedIn>Вы успешно зарегистрировались!</LoggedIn>
-              )}
               <Container>
-                <Label className="email" htmlFor="email">
-                  <p className="first">Электронная почта</p>
-                  <input
-                    className="second"
-                    type="email"
-                    name="email"
-                    placeholder="Почта"
-                    value={this.state.email}
-                    onChange={this.saveToState}
-                  />
-                </Label>
-                <Label className="name" htmlFor="name">
-                  <p className="first">Имя и фамилия</p>
-                  <input
-                    className="second"
-                    type="text"
-                    name="name"
-                    placeholder="Имя и фамилия"
-                    value={this.state.name}
-                    onChange={this.saveToState}
-                  />
-                </Label>
-                <Label className="status" htmlFor="status">
-                  <p className="first">Ваш статус</p>
+                <input
+                  className="name"
+                  type="text"
+                  name="name"
+                  placeholder="Имя и фамилия"
+                  value={this.state.name}
+                  onChange={this.saveToState}
+                />
+                <input
+                  className="email"
+                  type="email"
+                  name="email"
+                  placeholder="Почта"
+                  value={this.state.email}
+                  onChange={this.saveToState}
+                />
+                <input
+                  className="password"
+                  type="password"
+                  name="password"
+                  placeholder="Пароль"
+                  value={this.state.password}
+                  onChange={this.saveToState}
+                />
+                <select
+                  className="status"
+                  name="status"
+                  value={this.state.status}
+                  onChange={this.saveToState}
+                >
+                  <option value="STUDENT">Студент</option>
+                  <option value="AUTHOR">Преподаватель</option>
+                  {/* <option value="HR">HR</option> */}
+                </select>
+
+                <select
+                  className="uni"
+                  name="uniID"
+                  value={this.state.uni}
+                  onChange={this.saveToState}
+                >
+                  {Unis.map(uni => (
+                    <option value={Object.values(uni)[0]}>
+                      {Object.keys(uni)[0]}
+                    </option>
+                  ))}
+                </select>
+                <label className="career">
                   <select
-                    name="status"
-                    value={this.state.status}
+                    name="career"
+                    value={this.state.career}
                     onChange={this.saveToState}
                   >
-                    <option value="STUDENT">Студент</option>
-                    <option value="AUTHOR">Преподаватель</option>
+                    <option value="STUDENT">Корпоративное право</option>
+                    <option value="AUTHOR">Право и технологии</option>
                     {/* <option value="HR">HR</option> */}
                   </select>
-                </Label>
-                <Label className="uni" htmlFor="uni">
-                  <p className="first">Университет</p>
-                  <select
-                    name="uniID"
-                    value={this.state.uni}
-                    onChange={this.saveToState}
-                  >
-                    {Unis.map(uni => (
-                      <option value={Object.values(uni)[0]}>
-                        {Object.keys(uni)[0]}
-                      </option>
-                    ))}
-                  </select>
-                </Label>
-                <Label className="checked" htmlFor="checked">
-                  <p className="first">
+                  <Comment>
+                    Карьерный трек необходим для составления плана карьерного
+                    развития, поиска курсов и предложений работы.
+                  </Comment>
+                  <Comment>
+                    Если вы не знаете, какой карьерный трек выбрать,
+                    воспользуйтесь <a href="#">карьерным помощником.</a>
+                  </Comment>
+                </label>
+
+                <select
+                  name="isFamiliar"
+                  className="isFamiliar"
+                  // value={this.state.isFamiliar}
+                  // onChange={this.saveToState}
+                >
+                  <option value={false}>
                     Согласие на обработку персональных данных
-                  </p>
-                  <input
-                    className="checkedStyle"
-                    type="checkbox"
-                    name="isFamiliar"
-                    value={true}
-                    checked={this.state.isFamiliar}
-                    onChange={this.handleInputChange}
-                  />
-                </Label>
-                <Label className="password" htmlFor="password">
-                  <p className="first">Пароль</p>
-                  <input
-                    className="third"
-                    type="password"
-                    name="password"
-                    placeholder="Пароль"
-                    value={this.state.password}
-                    onChange={this.saveToState}
-                  />
-                </Label>
+                  </option>
+                  <option value={true}>Да</option>
+                  {/* <option value="HR">HR</option> */}
+                </select>
               </Container>
               <Buttons>
                 <SubmitButton type="submit">
                   {loading ? "Регистрируюсь" : "Зарегистрироваться"}
                 </SubmitButton>
               </Buttons>
+              <Transit>
+                У вас уже есть аккаунт на Savvvy?{" "}
+                <span name="signin" onClick={this.switch}>
+                  Войти
+                </span>
+              </Transit>
             </Fieldset>
           </Form>
         )}

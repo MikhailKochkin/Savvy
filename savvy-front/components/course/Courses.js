@@ -1,36 +1,32 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import CareerCoursesList from "./CareerCoursesList";
-import ForMoneyCoursesList from "./ForMoneyCoursesList";
-import FreeCoursesList from "./FreeCoursesList";
-import UniCoursesList from "./UniCoursesList";
+import CareerCoursesList from "./courseLists/CareerCoursesList";
+import ForMoneyCoursesList from "./courseLists/ForMoneyCoursesList";
+import FreeCoursesList from "./courseLists/FreeCoursesList";
+import Articles from "../article/Articles";
+import CareerTrackMenu from "../career/CareerTrackMenu";
+import User from "../User";
 
-const Center = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  & {
-    padding-left: 5%;
-  }
-  @media (max-width: 800px) {
-    & {
-      padding-left: 0;
-      text-align: center;
-    }
-  }
+const Container = styled.div`
+  padding: 2% 4%;
+  border: none;
 `;
 
 class Courses extends Component {
   render() {
-    let me = this.props.me;
     return (
-      <Center>
-        {me && me.careerTrackID && <CareerCoursesList me={me} />}
-        <ForMoneyCoursesList me={me} />
-        <FreeCoursesList me={me} />
-        <UniCoursesList me={me} />
-      </Center>
+      <User>
+        {({ data: { me } }) => (
+          <Container>
+            {me && me.careerTrackID && <CareerTrackMenu me={me} />}
+            {me && me.careerTrackID && <CareerCoursesList me={me} />}
+            <ForMoneyCoursesList me={me} />
+            <FreeCoursesList me={me} />
+            <Articles me={me} />
+          </Container>
+        )}
+      </User>
     );
   }
 }

@@ -3,16 +3,6 @@ export const prodEndpoint = `https://api.savvvy.app`;
 export const CoursePerPage = 4;
 export const SandboxPerPage = 6;
 export const MaterialPerPage = 5;
-export const Tags = [
-  "Собеседование",
-  "Гражданское право",
-  "Корпоративное право",
-  "МКА",
-  "Процессуальное право",
-  "Экзаменационные билеты",
-  "Юридический английский",
-  "Другое"
-];
 
 export const Unis = [
   { "Выберите вуз": "cjyimfz2e00lp07174jpder3m" },
@@ -40,6 +30,7 @@ export const Unis = [
   { РГУП: "cjysm7mh403ta07199vtzh4m0" },
   { РТА: "cjysm7se903tj0719aodga7la" },
   { РУДН: "cjysm833103ty0719l0ltm8is" },
+  { РШЧП: "cjysmaoeh03y707197hmfj0dn" },
   { РЭУ: "cjysm88n603u70719iwj14tle" },
   { СГЮА: "cjysm8d7o03ug0719egwxey2s" },
   { СДУ: "cjysm8h0103up0719t5vljlhb" },
@@ -56,6 +47,5 @@ export const Unis = [
   { ЮГУ: "cjysmafq103xp071997iaod4z" },
   { ЮУрГУ: "cjysmak2803xy0719n0d5ylws" },
   { ЮФУ: "cjysmaoeh03y707197hmfj0dn" },
-
   { Другой: "cjyimfz2e00lp07174jpder3m" }
 ];

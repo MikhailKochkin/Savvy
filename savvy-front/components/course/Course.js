@@ -2,27 +2,39 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
-import DeleteCoursePage from "../delete/DeleteCoursePage";
-import EnrollCoursePage from "../EnrollCoursePage";
-import User from "../User";
-import Application from "./Application";
-import TakeMyMoney from "../TakeMyMoney";
 
 const CaseCard = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px lightgrey solid;
-  border-radius: 5px;
   text-align: left;
-  padding: 1%;
+  padding: 4px;
+  border: 1px solid #edefed;
+  border-radius: 10px;
   margin: 2%;
-  width: 300px;
+  width: 265px;
   line-height: 1.2;
-  @media (max-width: 800px) {
-    padding: 2%;
+  @media (max-width: 1000px) {
+    width: 205px;
     button {
       padding: 4px 6px;
     }
+  }
+  @media (max-width: 650px) {
+    padding: 2%;
+    width: 158px;
+    button {
+      padding: 4px 6px;
+    }
+  }
+  @media (max-width: 374px) {
+    width: 150px;
+  }
+`;
+
+const Author = styled.p`
+  color: #686868;
+  @media (max-width: 950px) {
+    font-size: 1.4rem;
   }
 `;
 
@@ -31,48 +43,34 @@ const Img = styled.img`
   height: 200px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  @media (max-width: 950px) {
+    object-fit: cover;
+    height: 100px;
+  }
 `;
 
 const Title = styled.p`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: 1%;
-`;
-
-const Price = styled.span`
   font-size: 1.6rem;
-  font-weight: bold;
-`;
-
-const PriceBox = styled.div`
-  font-size: 1.6rem;
-  font-weight: bold;
-  margin-bottom: 8%;
-`;
-
-const Description = styled.p`
-  font-size: 1.7rem;
-  margin-top: -5%;
-`;
-
-const Author = styled.p`
-  font-size: 1.6rem;
-  color: #686868;
+  margin-top: 5%;
 `;
 
 const Button = styled.button`
-  background-color: #008cba;
-  border: none;
-  color: white;
+  border: 1px solid #112a62;
+  color: #112a62;
   padding: 5px 12px;
+  background: white;
   text-decoration: none;
   display: inline-block;
   font-size: 14px;
-  width: 135px;
-  margin: 2px;
+  border-radius: 5px;
+  width: 100%;
   cursor: pointer;
-  &:hover {
-    background-color: #003d5b;
+  outline: 0;
+  &:active {
+    border: 2px solid #112a62;
+  }
+  @media (max-width: 950px) {
+    margin: 0;
   }
 `;
 const Buttons = styled.div`
@@ -80,6 +78,10 @@ const Buttons = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   margin-bottom: 0.5%;
+  width: 100%;
+  a {
+    width: 100%;
+  }
 `;
 
 const Additional = styled.div`
@@ -103,33 +105,7 @@ export default class Course extends Component {
   };
 
   render() {
-    const { coursePage, key, id, me } = this.props;
-    const studentsArray = [];
-    coursePage.students.map(student => studentsArray.push(student));
-
-    let courseType;
-    if (coursePage.courseType === "PUBLIC") {
-      courseType = "Открытый";
-    } else if (coursePage.courseType === "PRIVATE") {
-      courseType = "Закрытый";
-    } else if (coursePage.courseType === "FORMONEY") {
-      courseType = "Платный";
-    }
-
-    const applicationsList = [];
-    coursePage.applications.map(application =>
-      applicationsList.push(application.applicantId)
-    );
-
-    const subjectArray = [];
-    me && me.subjects.map(subject => subjectArray.push(subject));
-
-    let price;
-    if (coursePage.price === null) {
-      price = "Бесплатно";
-    } else {
-      price = coursePage.price;
-    }
+    const { coursePage, id, me } = this.props;
 
     return (
       <CaseCard>
@@ -141,21 +117,13 @@ export default class Course extends Component {
             <Title>
               <a>{coursePage.title}</a>
             </Title>
-            <Description>{coursePage.description}</Description>
-            <Author>{coursePage.user.name}</Author>
-            {/* <p>Количество участников: {studentsArray.length}</p> */}
-            {price !== "Бесплатно" && (
-              <PriceBox>
-                {" "}
-                Стоимость:
-                <span> </span>
-                {price}
-              </PriceBox>
-            )}
+            <Author>
+              {coursePage.user.name} из {coursePage.user.uni.title}{" "}
+            </Author>
           </div>
           <div>
             <Buttons>
-              {me && me !== null && me.id === coursePage.user.id && (
+              {me && me !== null && (
                 <Link
                   href={{
                     pathname: "/coursePage",
@@ -163,80 +131,11 @@ export default class Course extends Component {
                   }}
                 >
                   <a>
-                    <Button>Войти</Button>
+                    <Button>Перейти</Button>
                   </a>
                 </Link>
               )}
-              {me &&
-                me !== null &&
-                me.id !== coursePage.user.id &&
-                !this.state.revealApplication &&
-                !applicationsList.includes(me.id) &&
-                courseType !== "Платный" && (
-                  <EnrollCoursePage
-                    coursePage={coursePage}
-                    studentsArray={studentsArray}
-                    subjectArray={subjectArray}
-                    meData={me}
-                    getInputReveal={this.myCallback}
-                  />
-                )}
-              {me &&
-                me !== null &&
-                me.id !== coursePage.user.id &&
-                courseType === "Платный" &&
-                subjectArray.includes(coursePage.id) && (
-                  <EnrollCoursePage
-                    coursePage={coursePage}
-                    studentsArray={studentsArray}
-                    subjectArray={subjectArray}
-                    meData={me}
-                    getInputReveal={this.myCallback}
-                  />
-                )}
-              {me && applicationsList.includes(me.id) && (
-                <h4>Заявка находится на рассмотрении</h4>
-              )}
-              {/* {me && me.id === coursePage.user.id &&
-                      <>
-                        <Link href={{
-                                pathname: '/updateCoursePage',
-                                query: {id }
-                            }}>
-                            <a>
-                            <Button>Изменить</Button>
-                            </a>
-                        </Link>
-                        <DeleteCoursePage
-                            id={id}
-                        >
-                            Удалить
-                        </DeleteCoursePage> 
-                    </>} */}
-              {me &&
-                me !== null &&
-                courseType === "Платный" &&
-                me.id !== coursePage.user.id &&
-                !applicationsList.includes(me.id) &&
-                !subjectArray.includes(coursePage.id) && (
-                  <TakeMyMoney
-                    coursePage={coursePage}
-                    coursePageID={coursePage.id}
-                    name={me.name}
-                    user={me.id}
-                    price={price}
-                  >
-                    Купить
-                  </TakeMyMoney>
-                )}
             </Buttons>
-            {me && this.state.revealApplication && (
-              <Application
-                getInputReveal={this.myCallback}
-                meData={me}
-                coursePageId={coursePage.id}
-              />
-            )}
           </div>
         </Additional>
       </CaseCard>

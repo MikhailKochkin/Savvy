@@ -2,6 +2,10 @@ type AggregateApplication {
   count: Int!
 }
 
+type AggregateArticle {
+  count: Int!
+}
+
 type AggregateCareerTrack {
   count: Int!
 }
@@ -19,6 +23,18 @@ type AggregateConstructionResult {
 }
 
 type AggregateCoursePage {
+  count: Int!
+}
+
+type AggregateExamAnswer {
+  count: Int!
+}
+
+type AggregateExamQuestion {
+  count: Int!
+}
+
+type AggregateLegalPortfolio {
   count: Int!
 }
 
@@ -391,6 +407,369 @@ input ApplicationWhereUniqueInput {
   id: ID
 }
 
+type Article {
+  id: ID!
+  user: User!
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
+  coursePageIDs: [ID!]!
+}
+
+type ArticleConnection {
+  pageInfo: PageInfo!
+  edges: [ArticleEdge]!
+  aggregate: AggregateArticle!
+}
+
+input ArticleCreatecoursePageIDsInput {
+  set: [ID!]
+}
+
+input ArticleCreateInput {
+  user: UserCreateOneWithoutArticlesInput!
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePages: CoursePageCreateManyWithoutArticlesInput
+  coursePageIDs: ArticleCreatecoursePageIDsInput
+}
+
+input ArticleCreateManyWithoutCoursePagesInput {
+  create: [ArticleCreateWithoutCoursePagesInput!]
+  connect: [ArticleWhereUniqueInput!]
+}
+
+input ArticleCreateManyWithoutUserInput {
+  create: [ArticleCreateWithoutUserInput!]
+  connect: [ArticleWhereUniqueInput!]
+}
+
+input ArticleCreateWithoutCoursePagesInput {
+  user: UserCreateOneWithoutArticlesInput!
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePageIDs: ArticleCreatecoursePageIDsInput
+}
+
+input ArticleCreateWithoutUserInput {
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePages: CoursePageCreateManyWithoutArticlesInput
+  coursePageIDs: ArticleCreatecoursePageIDsInput
+}
+
+type ArticleEdge {
+  node: Article!
+  cursor: String!
+}
+
+enum ArticleOrderByInput {
+  id_ASC
+  id_DESC
+  tag_ASC
+  tag_DESC
+  img_ASC
+  img_DESC
+  title_ASC
+  title_DESC
+  text_ASC
+  text_DESC
+}
+
+type ArticlePreviousValues {
+  id: ID!
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePageIDs: [ID!]!
+}
+
+input ArticleScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  tag: String
+  tag_not: String
+  tag_in: [String!]
+  tag_not_in: [String!]
+  tag_lt: String
+  tag_lte: String
+  tag_gt: String
+  tag_gte: String
+  tag_contains: String
+  tag_not_contains: String
+  tag_starts_with: String
+  tag_not_starts_with: String
+  tag_ends_with: String
+  tag_not_ends_with: String
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  AND: [ArticleScalarWhereInput!]
+  OR: [ArticleScalarWhereInput!]
+  NOT: [ArticleScalarWhereInput!]
+}
+
+type ArticleSubscriptionPayload {
+  mutation: MutationType!
+  node: Article
+  updatedFields: [String!]
+  previousValues: ArticlePreviousValues
+}
+
+input ArticleSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ArticleWhereInput
+  AND: [ArticleSubscriptionWhereInput!]
+  OR: [ArticleSubscriptionWhereInput!]
+  NOT: [ArticleSubscriptionWhereInput!]
+}
+
+input ArticleUpdatecoursePageIDsInput {
+  set: [ID!]
+}
+
+input ArticleUpdateInput {
+  user: UserUpdateOneRequiredWithoutArticlesInput
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePages: CoursePageUpdateManyWithoutArticlesInput
+  coursePageIDs: ArticleUpdatecoursePageIDsInput
+}
+
+input ArticleUpdateManyDataInput {
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePageIDs: ArticleUpdatecoursePageIDsInput
+}
+
+input ArticleUpdateManyMutationInput {
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePageIDs: ArticleUpdatecoursePageIDsInput
+}
+
+input ArticleUpdateManyWithoutCoursePagesInput {
+  create: [ArticleCreateWithoutCoursePagesInput!]
+  delete: [ArticleWhereUniqueInput!]
+  connect: [ArticleWhereUniqueInput!]
+  set: [ArticleWhereUniqueInput!]
+  disconnect: [ArticleWhereUniqueInput!]
+  update: [ArticleUpdateWithWhereUniqueWithoutCoursePagesInput!]
+  upsert: [ArticleUpsertWithWhereUniqueWithoutCoursePagesInput!]
+  deleteMany: [ArticleScalarWhereInput!]
+  updateMany: [ArticleUpdateManyWithWhereNestedInput!]
+}
+
+input ArticleUpdateManyWithoutUserInput {
+  create: [ArticleCreateWithoutUserInput!]
+  delete: [ArticleWhereUniqueInput!]
+  connect: [ArticleWhereUniqueInput!]
+  set: [ArticleWhereUniqueInput!]
+  disconnect: [ArticleWhereUniqueInput!]
+  update: [ArticleUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ArticleUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [ArticleScalarWhereInput!]
+  updateMany: [ArticleUpdateManyWithWhereNestedInput!]
+}
+
+input ArticleUpdateManyWithWhereNestedInput {
+  where: ArticleScalarWhereInput!
+  data: ArticleUpdateManyDataInput!
+}
+
+input ArticleUpdateWithoutCoursePagesDataInput {
+  user: UserUpdateOneRequiredWithoutArticlesInput
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePageIDs: ArticleUpdatecoursePageIDsInput
+}
+
+input ArticleUpdateWithoutUserDataInput {
+  tag: String
+  img: String
+  title: String
+  text: String
+  coursePages: CoursePageUpdateManyWithoutArticlesInput
+  coursePageIDs: ArticleUpdatecoursePageIDsInput
+}
+
+input ArticleUpdateWithWhereUniqueWithoutCoursePagesInput {
+  where: ArticleWhereUniqueInput!
+  data: ArticleUpdateWithoutCoursePagesDataInput!
+}
+
+input ArticleUpdateWithWhereUniqueWithoutUserInput {
+  where: ArticleWhereUniqueInput!
+  data: ArticleUpdateWithoutUserDataInput!
+}
+
+input ArticleUpsertWithWhereUniqueWithoutCoursePagesInput {
+  where: ArticleWhereUniqueInput!
+  update: ArticleUpdateWithoutCoursePagesDataInput!
+  create: ArticleCreateWithoutCoursePagesInput!
+}
+
+input ArticleUpsertWithWhereUniqueWithoutUserInput {
+  where: ArticleWhereUniqueInput!
+  update: ArticleUpdateWithoutUserDataInput!
+  create: ArticleCreateWithoutUserInput!
+}
+
+input ArticleWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  tag: String
+  tag_not: String
+  tag_in: [String!]
+  tag_not_in: [String!]
+  tag_lt: String
+  tag_lte: String
+  tag_gt: String
+  tag_gte: String
+  tag_contains: String
+  tag_not_contains: String
+  tag_starts_with: String
+  tag_not_starts_with: String
+  tag_ends_with: String
+  tag_not_ends_with: String
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  coursePages_every: CoursePageWhereInput
+  coursePages_some: CoursePageWhereInput
+  coursePages_none: CoursePageWhereInput
+  AND: [ArticleWhereInput!]
+  OR: [ArticleWhereInput!]
+  NOT: [ArticleWhereInput!]
+}
+
+input ArticleWhereUniqueInput {
+  id: ID
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -398,6 +777,7 @@ type BatchPayload {
 type CareerTrack {
   id: ID!
   name: String!
+  img: String
   members: User
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   careerTrackUnits(where: CareerTrackUnitWhereInput, orderBy: CareerTrackUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CareerTrackUnit!]
@@ -411,6 +791,7 @@ type CareerTrackConnection {
 
 input CareerTrackCreateInput {
   name: String!
+  img: String
   members: UserCreateOneWithoutCareerTrackInput
   coursePages: CoursePageCreateManyWithoutCareerTrackInput
   careerTrackUnits: CareerTrackUnitCreateManyWithoutCareerTrackInput
@@ -433,18 +814,21 @@ input CareerTrackCreateOneWithoutMembersInput {
 
 input CareerTrackCreateWithoutCareerTrackUnitsInput {
   name: String!
+  img: String
   members: UserCreateOneWithoutCareerTrackInput
   coursePages: CoursePageCreateManyWithoutCareerTrackInput
 }
 
 input CareerTrackCreateWithoutCoursePagesInput {
   name: String!
+  img: String
   members: UserCreateOneWithoutCareerTrackInput
   careerTrackUnits: CareerTrackUnitCreateManyWithoutCareerTrackInput
 }
 
 input CareerTrackCreateWithoutMembersInput {
   name: String!
+  img: String
   coursePages: CoursePageCreateManyWithoutCareerTrackInput
   careerTrackUnits: CareerTrackUnitCreateManyWithoutCareerTrackInput
 }
@@ -459,11 +843,14 @@ enum CareerTrackOrderByInput {
   id_DESC
   name_ASC
   name_DESC
+  img_ASC
+  img_DESC
 }
 
 type CareerTrackPreviousValues {
   id: ID!
   name: String!
+  img: String
 }
 
 input CareerTrackScalarWhereInput {
@@ -495,6 +882,20 @@ input CareerTrackScalarWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
   AND: [CareerTrackScalarWhereInput!]
   OR: [CareerTrackScalarWhereInput!]
   NOT: [CareerTrackScalarWhereInput!]
@@ -522,6 +923,7 @@ type CareerTrackUnit {
   id: ID!
   title: String!
   number: Int
+  img: String
   topics: [String!]!
   articles: [String!]!
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
@@ -541,6 +943,7 @@ input CareerTrackUnitCreatearticlesInput {
 input CareerTrackUnitCreateInput {
   title: String!
   number: Int
+  img: String
   topics: CareerTrackUnitCreatetopicsInput
   articles: CareerTrackUnitCreatearticlesInput
   coursePages: CoursePageCreateManyInput
@@ -559,6 +962,7 @@ input CareerTrackUnitCreatetopicsInput {
 input CareerTrackUnitCreateWithoutCareerTrackInput {
   title: String!
   number: Int
+  img: String
   topics: CareerTrackUnitCreatetopicsInput
   articles: CareerTrackUnitCreatearticlesInput
   coursePages: CoursePageCreateManyInput
@@ -576,12 +980,15 @@ enum CareerTrackUnitOrderByInput {
   title_DESC
   number_ASC
   number_DESC
+  img_ASC
+  img_DESC
 }
 
 type CareerTrackUnitPreviousValues {
   id: ID!
   title: String!
   number: Int
+  img: String
   topics: [String!]!
   articles: [String!]!
 }
@@ -623,6 +1030,20 @@ input CareerTrackUnitScalarWhereInput {
   number_lte: Int
   number_gt: Int
   number_gte: Int
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
   AND: [CareerTrackUnitScalarWhereInput!]
   OR: [CareerTrackUnitScalarWhereInput!]
   NOT: [CareerTrackUnitScalarWhereInput!]
@@ -653,6 +1074,7 @@ input CareerTrackUnitUpdatearticlesInput {
 input CareerTrackUnitUpdateInput {
   title: String
   number: Int
+  img: String
   topics: CareerTrackUnitUpdatetopicsInput
   articles: CareerTrackUnitUpdatearticlesInput
   coursePages: CoursePageUpdateManyInput
@@ -662,6 +1084,7 @@ input CareerTrackUnitUpdateInput {
 input CareerTrackUnitUpdateManyDataInput {
   title: String
   number: Int
+  img: String
   topics: CareerTrackUnitUpdatetopicsInput
   articles: CareerTrackUnitUpdatearticlesInput
 }
@@ -669,6 +1092,7 @@ input CareerTrackUnitUpdateManyDataInput {
 input CareerTrackUnitUpdateManyMutationInput {
   title: String
   number: Int
+  img: String
   topics: CareerTrackUnitUpdatetopicsInput
   articles: CareerTrackUnitUpdatearticlesInput
 }
@@ -697,6 +1121,7 @@ input CareerTrackUnitUpdatetopicsInput {
 input CareerTrackUnitUpdateWithoutCareerTrackDataInput {
   title: String
   number: Int
+  img: String
   topics: CareerTrackUnitUpdatetopicsInput
   articles: CareerTrackUnitUpdatearticlesInput
   coursePages: CoursePageUpdateManyInput
@@ -750,6 +1175,20 @@ input CareerTrackUnitWhereInput {
   number_lte: Int
   number_gt: Int
   number_gte: Int
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
   coursePages_every: CoursePageWhereInput
   coursePages_some: CoursePageWhereInput
   coursePages_none: CoursePageWhereInput
@@ -765,6 +1204,7 @@ input CareerTrackUnitWhereUniqueInput {
 
 input CareerTrackUpdateInput {
   name: String
+  img: String
   members: UserUpdateOneWithoutCareerTrackInput
   coursePages: CoursePageUpdateManyWithoutCareerTrackInput
   careerTrackUnits: CareerTrackUnitUpdateManyWithoutCareerTrackInput
@@ -772,10 +1212,12 @@ input CareerTrackUpdateInput {
 
 input CareerTrackUpdateManyDataInput {
   name: String
+  img: String
 }
 
 input CareerTrackUpdateManyMutationInput {
   name: String
+  img: String
 }
 
 input CareerTrackUpdateManyWithoutCoursePagesInput {
@@ -813,18 +1255,21 @@ input CareerTrackUpdateOneWithoutMembersInput {
 
 input CareerTrackUpdateWithoutCareerTrackUnitsDataInput {
   name: String
+  img: String
   members: UserUpdateOneWithoutCareerTrackInput
   coursePages: CoursePageUpdateManyWithoutCareerTrackInput
 }
 
 input CareerTrackUpdateWithoutCoursePagesDataInput {
   name: String
+  img: String
   members: UserUpdateOneWithoutCareerTrackInput
   careerTrackUnits: CareerTrackUnitUpdateManyWithoutCareerTrackInput
 }
 
 input CareerTrackUpdateWithoutMembersDataInput {
   name: String
+  img: String
   coursePages: CoursePageUpdateManyWithoutCareerTrackInput
   careerTrackUnits: CareerTrackUnitUpdateManyWithoutCareerTrackInput
 }
@@ -879,6 +1324,20 @@ input CareerTrackWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
   members: UserWhereInput
   coursePages_every: CoursePageWhereInput
   coursePages_some: CoursePageWhereInput
@@ -1755,6 +2214,7 @@ type CoursePage {
   title: String!
   description: String!
   image: String!
+  news: String
   user: User!
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   pointsA(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointA!]
@@ -1762,9 +2222,11 @@ type CoursePage {
   pointATests(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointATest!]
   careerTrack(where: CareerTrackWhereInput, orderBy: CareerTrackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CareerTrack!]
   numInCareerTrack: Int
+  examQuestion: ExamQuestion
   published: Boolean
   uni: Uni
   uniID: ID
+  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
   tags: [String!]!
   courseType: CourseType
   students: [ID!]!
@@ -1786,6 +2248,7 @@ input CoursePageCreateInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -1793,9 +2256,11 @@ input CoursePageCreateInput {
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -1807,6 +2272,11 @@ input CoursePageCreateInput {
 
 input CoursePageCreateManyInput {
   create: [CoursePageCreateInput!]
+  connect: [CoursePageWhereUniqueInput!]
+}
+
+input CoursePageCreateManyWithoutArticlesInput {
+  create: [CoursePageCreateWithoutArticlesInput!]
   connect: [CoursePageWhereUniqueInput!]
 }
 
@@ -1832,6 +2302,11 @@ input CoursePageCreateManyWithoutUserInput {
 
 input CoursePageCreateOneWithoutApplicationsInput {
   create: CoursePageCreateWithoutApplicationsInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreateOneWithoutExamQuestionInput {
+  create: CoursePageCreateWithoutExamQuestionInput
   connect: CoursePageWhereUniqueInput
 }
 
@@ -1867,12 +2342,40 @@ input CoursePageCreateWithoutApplicationsInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniCreateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  new_students: UserCreateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutArticlesInput {
+  title: String!
+  description: String!
+  image: String!
+  news: String
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
@@ -1889,15 +2392,43 @@ input CoursePageCreateWithoutCareerTrackInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  new_students: UserCreateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutExamQuestionInput {
+  title: String!
+  description: String!
+  image: String!
+  news: String
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  published: Boolean
+  uni: UniCreateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -1911,15 +2442,18 @@ input CoursePageCreateWithoutLessonsInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -1933,6 +2467,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -1940,9 +2475,11 @@ input CoursePageCreateWithoutNew_studentsInput {
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -1955,6 +2492,7 @@ input CoursePageCreateWithoutOrdersInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -1962,9 +2500,11 @@ input CoursePageCreateWithoutOrdersInput {
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -1977,15 +2517,18 @@ input CoursePageCreateWithoutPointATestsInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -1999,15 +2542,18 @@ input CoursePageCreateWithoutPointsAInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -2021,6 +2567,7 @@ input CoursePageCreateWithoutUniInput {
   title: String!
   description: String!
   image: String!
+  news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -2028,8 +2575,10 @@ input CoursePageCreateWithoutUniInput {
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -2043,15 +2592,18 @@ input CoursePageCreateWithoutUserInput {
   title: String!
   description: String!
   image: String!
+  news: String
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -2075,6 +2627,8 @@ enum CoursePageOrderByInput {
   description_DESC
   image_ASC
   image_DESC
+  news_ASC
+  news_DESC
   numInCareerTrack_ASC
   numInCareerTrack_DESC
   published_ASC
@@ -2098,6 +2652,7 @@ type CoursePagePreviousValues {
   title: String!
   description: String!
   image: String!
+  news: String
   numInCareerTrack: Int
   published: Boolean
   uniID: ID
@@ -2167,6 +2722,20 @@ input CoursePageScalarWhereInput {
   image_not_starts_with: String
   image_ends_with: String
   image_not_ends_with: String
+  news: String
+  news_not: String
+  news_in: [String!]
+  news_not_in: [String!]
+  news_lt: String
+  news_lte: String
+  news_gt: String
+  news_gte: String
+  news_contains: String
+  news_not_contains: String
+  news_starts_with: String
+  news_not_starts_with: String
+  news_ends_with: String
+  news_not_ends_with: String
   numInCareerTrack: Int
   numInCareerTrack_not: Int
   numInCareerTrack_in: [Int!]
@@ -2254,6 +2823,7 @@ input CoursePageUpdateDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -2261,9 +2831,11 @@ input CoursePageUpdateDataInput {
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2277,6 +2849,7 @@ input CoursePageUpdateInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -2284,9 +2857,11 @@ input CoursePageUpdateInput {
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2300,6 +2875,7 @@ input CoursePageUpdateManyDataInput {
   title: String
   description: String
   image: String
+  news: String
   numInCareerTrack: Int
   published: Boolean
   uniID: ID
@@ -2326,6 +2902,7 @@ input CoursePageUpdateManyMutationInput {
   title: String
   description: String
   image: String
+  news: String
   numInCareerTrack: Int
   published: Boolean
   uniID: ID
@@ -2334,6 +2911,18 @@ input CoursePageUpdateManyMutationInput {
   students: CoursePageUpdatestudentsInput
   price: Int
   discountPrice: Int
+}
+
+input CoursePageUpdateManyWithoutArticlesInput {
+  create: [CoursePageCreateWithoutArticlesInput!]
+  delete: [CoursePageWhereUniqueInput!]
+  connect: [CoursePageWhereUniqueInput!]
+  set: [CoursePageWhereUniqueInput!]
+  disconnect: [CoursePageWhereUniqueInput!]
+  update: [CoursePageUpdateWithWhereUniqueWithoutArticlesInput!]
+  upsert: [CoursePageUpsertWithWhereUniqueWithoutArticlesInput!]
+  deleteMany: [CoursePageScalarWhereInput!]
+  updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
 }
 
 input CoursePageUpdateManyWithoutCareerTrackInput {
@@ -2396,6 +2985,13 @@ input CoursePageUpdateOneRequiredWithoutApplicationsInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageUpdateOneRequiredWithoutExamQuestionInput {
+  create: CoursePageCreateWithoutExamQuestionInput
+  update: CoursePageUpdateWithoutExamQuestionDataInput
+  upsert: CoursePageUpsertWithoutExamQuestionInput
+  connect: CoursePageWhereUniqueInput
+}
+
 input CoursePageUpdateOneRequiredWithoutLessonsInput {
   create: CoursePageCreateWithoutLessonsInput
   update: CoursePageUpdateWithoutLessonsDataInput
@@ -2438,12 +3034,40 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniUpdateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  new_students: UserUpdateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutArticlesDataInput {
+  title: String
+  description: String
+  image: String
+  news: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
@@ -2460,15 +3084,43 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  new_students: UserUpdateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutExamQuestionDataInput {
+  title: String
+  description: String
+  image: String
+  news: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  published: Boolean
+  uni: UniUpdateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2482,15 +3134,18 @@ input CoursePageUpdateWithoutLessonsDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2504,6 +3159,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -2511,9 +3167,11 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2526,6 +3184,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -2533,9 +3192,11 @@ input CoursePageUpdateWithoutOrdersDataInput {
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2548,15 +3209,18 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2570,15 +3234,18 @@ input CoursePageUpdateWithoutPointsADataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2592,6 +3259,7 @@ input CoursePageUpdateWithoutUniDataInput {
   title: String
   description: String
   image: String
+  news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -2599,8 +3267,10 @@ input CoursePageUpdateWithoutUniDataInput {
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2614,15 +3284,18 @@ input CoursePageUpdateWithoutUserDataInput {
   title: String
   description: String
   image: String
+  news: String
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -2635,6 +3308,11 @@ input CoursePageUpdateWithoutUserDataInput {
 input CoursePageUpdateWithWhereUniqueNestedInput {
   where: CoursePageWhereUniqueInput!
   data: CoursePageUpdateDataInput!
+}
+
+input CoursePageUpdateWithWhereUniqueWithoutArticlesInput {
+  where: CoursePageWhereUniqueInput!
+  data: CoursePageUpdateWithoutArticlesDataInput!
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutCareerTrackInput {
@@ -2662,6 +3340,11 @@ input CoursePageUpsertWithoutApplicationsInput {
   create: CoursePageCreateWithoutApplicationsInput!
 }
 
+input CoursePageUpsertWithoutExamQuestionInput {
+  update: CoursePageUpdateWithoutExamQuestionDataInput!
+  create: CoursePageCreateWithoutExamQuestionInput!
+}
+
 input CoursePageUpsertWithoutLessonsInput {
   update: CoursePageUpdateWithoutLessonsDataInput!
   create: CoursePageCreateWithoutLessonsInput!
@@ -2686,6 +3369,12 @@ input CoursePageUpsertWithWhereUniqueNestedInput {
   where: CoursePageWhereUniqueInput!
   update: CoursePageUpdateDataInput!
   create: CoursePageCreateInput!
+}
+
+input CoursePageUpsertWithWhereUniqueWithoutArticlesInput {
+  where: CoursePageWhereUniqueInput!
+  update: CoursePageUpdateWithoutArticlesDataInput!
+  create: CoursePageCreateWithoutArticlesInput!
 }
 
 input CoursePageUpsertWithWhereUniqueWithoutCareerTrackInput {
@@ -2769,6 +3458,20 @@ input CoursePageWhereInput {
   image_not_starts_with: String
   image_ends_with: String
   image_not_ends_with: String
+  news: String
+  news_not: String
+  news_in: [String!]
+  news_not_in: [String!]
+  news_lt: String
+  news_lte: String
+  news_gt: String
+  news_gte: String
+  news_contains: String
+  news_not_contains: String
+  news_starts_with: String
+  news_not_starts_with: String
+  news_ends_with: String
+  news_not_ends_with: String
   user: UserWhereInput
   lessons_every: LessonWhereInput
   lessons_some: LessonWhereInput
@@ -2793,6 +3496,7 @@ input CoursePageWhereInput {
   numInCareerTrack_lte: Int
   numInCareerTrack_gt: Int
   numInCareerTrack_gte: Int
+  examQuestion: ExamQuestionWhereInput
   published: Boolean
   published_not: Boolean
   uni: UniWhereInput
@@ -2810,6 +3514,9 @@ input CoursePageWhereInput {
   uniID_not_starts_with: ID
   uniID_ends_with: ID
   uniID_not_ends_with: ID
+  articles_every: ArticleWhereInput
+  articles_some: ArticleWhereInput
+  articles_none: ArticleWhereInput
   courseType: CourseType
   courseType_not: CourseType
   courseType_in: [CourseType!]
@@ -2869,6 +3576,675 @@ enum CourseType {
 }
 
 scalar DateTime
+
+type ExamAnswer {
+  id: ID!
+  student: User!
+  answer: String!
+  examQuestion: ExamQuestion!
+  examQuestionID: ID!
+}
+
+type ExamAnswerConnection {
+  pageInfo: PageInfo!
+  edges: [ExamAnswerEdge]!
+  aggregate: AggregateExamAnswer!
+}
+
+input ExamAnswerCreateInput {
+  student: UserCreateOneWithoutExamAnswersInput!
+  answer: String!
+  examQuestion: ExamQuestionCreateOneWithoutAnswersInput!
+  examQuestionID: ID!
+}
+
+input ExamAnswerCreateManyInput {
+  create: [ExamAnswerCreateInput!]
+  connect: [ExamAnswerWhereUniqueInput!]
+}
+
+input ExamAnswerCreateManyWithoutExamQuestionInput {
+  create: [ExamAnswerCreateWithoutExamQuestionInput!]
+  connect: [ExamAnswerWhereUniqueInput!]
+}
+
+input ExamAnswerCreateManyWithoutStudentInput {
+  create: [ExamAnswerCreateWithoutStudentInput!]
+  connect: [ExamAnswerWhereUniqueInput!]
+}
+
+input ExamAnswerCreateWithoutExamQuestionInput {
+  student: UserCreateOneWithoutExamAnswersInput!
+  answer: String!
+  examQuestionID: ID!
+}
+
+input ExamAnswerCreateWithoutStudentInput {
+  answer: String!
+  examQuestion: ExamQuestionCreateOneWithoutAnswersInput!
+  examQuestionID: ID!
+}
+
+type ExamAnswerEdge {
+  node: ExamAnswer!
+  cursor: String!
+}
+
+enum ExamAnswerOrderByInput {
+  id_ASC
+  id_DESC
+  answer_ASC
+  answer_DESC
+  examQuestionID_ASC
+  examQuestionID_DESC
+}
+
+type ExamAnswerPreviousValues {
+  id: ID!
+  answer: String!
+  examQuestionID: ID!
+}
+
+input ExamAnswerScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  examQuestionID: ID
+  examQuestionID_not: ID
+  examQuestionID_in: [ID!]
+  examQuestionID_not_in: [ID!]
+  examQuestionID_lt: ID
+  examQuestionID_lte: ID
+  examQuestionID_gt: ID
+  examQuestionID_gte: ID
+  examQuestionID_contains: ID
+  examQuestionID_not_contains: ID
+  examQuestionID_starts_with: ID
+  examQuestionID_not_starts_with: ID
+  examQuestionID_ends_with: ID
+  examQuestionID_not_ends_with: ID
+  AND: [ExamAnswerScalarWhereInput!]
+  OR: [ExamAnswerScalarWhereInput!]
+  NOT: [ExamAnswerScalarWhereInput!]
+}
+
+type ExamAnswerSubscriptionPayload {
+  mutation: MutationType!
+  node: ExamAnswer
+  updatedFields: [String!]
+  previousValues: ExamAnswerPreviousValues
+}
+
+input ExamAnswerSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ExamAnswerWhereInput
+  AND: [ExamAnswerSubscriptionWhereInput!]
+  OR: [ExamAnswerSubscriptionWhereInput!]
+  NOT: [ExamAnswerSubscriptionWhereInput!]
+}
+
+input ExamAnswerUpdateDataInput {
+  student: UserUpdateOneRequiredWithoutExamAnswersInput
+  answer: String
+  examQuestion: ExamQuestionUpdateOneRequiredWithoutAnswersInput
+  examQuestionID: ID
+}
+
+input ExamAnswerUpdateInput {
+  student: UserUpdateOneRequiredWithoutExamAnswersInput
+  answer: String
+  examQuestion: ExamQuestionUpdateOneRequiredWithoutAnswersInput
+  examQuestionID: ID
+}
+
+input ExamAnswerUpdateManyDataInput {
+  answer: String
+  examQuestionID: ID
+}
+
+input ExamAnswerUpdateManyInput {
+  create: [ExamAnswerCreateInput!]
+  update: [ExamAnswerUpdateWithWhereUniqueNestedInput!]
+  upsert: [ExamAnswerUpsertWithWhereUniqueNestedInput!]
+  delete: [ExamAnswerWhereUniqueInput!]
+  connect: [ExamAnswerWhereUniqueInput!]
+  set: [ExamAnswerWhereUniqueInput!]
+  disconnect: [ExamAnswerWhereUniqueInput!]
+  deleteMany: [ExamAnswerScalarWhereInput!]
+  updateMany: [ExamAnswerUpdateManyWithWhereNestedInput!]
+}
+
+input ExamAnswerUpdateManyMutationInput {
+  answer: String
+  examQuestionID: ID
+}
+
+input ExamAnswerUpdateManyWithoutExamQuestionInput {
+  create: [ExamAnswerCreateWithoutExamQuestionInput!]
+  delete: [ExamAnswerWhereUniqueInput!]
+  connect: [ExamAnswerWhereUniqueInput!]
+  set: [ExamAnswerWhereUniqueInput!]
+  disconnect: [ExamAnswerWhereUniqueInput!]
+  update: [ExamAnswerUpdateWithWhereUniqueWithoutExamQuestionInput!]
+  upsert: [ExamAnswerUpsertWithWhereUniqueWithoutExamQuestionInput!]
+  deleteMany: [ExamAnswerScalarWhereInput!]
+  updateMany: [ExamAnswerUpdateManyWithWhereNestedInput!]
+}
+
+input ExamAnswerUpdateManyWithoutStudentInput {
+  create: [ExamAnswerCreateWithoutStudentInput!]
+  delete: [ExamAnswerWhereUniqueInput!]
+  connect: [ExamAnswerWhereUniqueInput!]
+  set: [ExamAnswerWhereUniqueInput!]
+  disconnect: [ExamAnswerWhereUniqueInput!]
+  update: [ExamAnswerUpdateWithWhereUniqueWithoutStudentInput!]
+  upsert: [ExamAnswerUpsertWithWhereUniqueWithoutStudentInput!]
+  deleteMany: [ExamAnswerScalarWhereInput!]
+  updateMany: [ExamAnswerUpdateManyWithWhereNestedInput!]
+}
+
+input ExamAnswerUpdateManyWithWhereNestedInput {
+  where: ExamAnswerScalarWhereInput!
+  data: ExamAnswerUpdateManyDataInput!
+}
+
+input ExamAnswerUpdateWithoutExamQuestionDataInput {
+  student: UserUpdateOneRequiredWithoutExamAnswersInput
+  answer: String
+  examQuestionID: ID
+}
+
+input ExamAnswerUpdateWithoutStudentDataInput {
+  answer: String
+  examQuestion: ExamQuestionUpdateOneRequiredWithoutAnswersInput
+  examQuestionID: ID
+}
+
+input ExamAnswerUpdateWithWhereUniqueNestedInput {
+  where: ExamAnswerWhereUniqueInput!
+  data: ExamAnswerUpdateDataInput!
+}
+
+input ExamAnswerUpdateWithWhereUniqueWithoutExamQuestionInput {
+  where: ExamAnswerWhereUniqueInput!
+  data: ExamAnswerUpdateWithoutExamQuestionDataInput!
+}
+
+input ExamAnswerUpdateWithWhereUniqueWithoutStudentInput {
+  where: ExamAnswerWhereUniqueInput!
+  data: ExamAnswerUpdateWithoutStudentDataInput!
+}
+
+input ExamAnswerUpsertWithWhereUniqueNestedInput {
+  where: ExamAnswerWhereUniqueInput!
+  update: ExamAnswerUpdateDataInput!
+  create: ExamAnswerCreateInput!
+}
+
+input ExamAnswerUpsertWithWhereUniqueWithoutExamQuestionInput {
+  where: ExamAnswerWhereUniqueInput!
+  update: ExamAnswerUpdateWithoutExamQuestionDataInput!
+  create: ExamAnswerCreateWithoutExamQuestionInput!
+}
+
+input ExamAnswerUpsertWithWhereUniqueWithoutStudentInput {
+  where: ExamAnswerWhereUniqueInput!
+  update: ExamAnswerUpdateWithoutStudentDataInput!
+  create: ExamAnswerCreateWithoutStudentInput!
+}
+
+input ExamAnswerWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  student: UserWhereInput
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  examQuestion: ExamQuestionWhereInput
+  examQuestionID: ID
+  examQuestionID_not: ID
+  examQuestionID_in: [ID!]
+  examQuestionID_not_in: [ID!]
+  examQuestionID_lt: ID
+  examQuestionID_lte: ID
+  examQuestionID_gt: ID
+  examQuestionID_gte: ID
+  examQuestionID_contains: ID
+  examQuestionID_not_contains: ID
+  examQuestionID_starts_with: ID
+  examQuestionID_not_starts_with: ID
+  examQuestionID_ends_with: ID
+  examQuestionID_not_ends_with: ID
+  AND: [ExamAnswerWhereInput!]
+  OR: [ExamAnswerWhereInput!]
+  NOT: [ExamAnswerWhereInput!]
+}
+
+input ExamAnswerWhereUniqueInput {
+  id: ID
+}
+
+type ExamQuestion {
+  id: ID!
+  coursePage: CoursePage!
+  coursePageID: ID!
+  question: String!
+  answers(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer!]
+}
+
+type ExamQuestionConnection {
+  pageInfo: PageInfo!
+  edges: [ExamQuestionEdge]!
+  aggregate: AggregateExamQuestion!
+}
+
+input ExamQuestionCreateInput {
+  coursePage: CoursePageCreateOneWithoutExamQuestionInput!
+  coursePageID: ID!
+  question: String!
+  answers: ExamAnswerCreateManyWithoutExamQuestionInput
+}
+
+input ExamQuestionCreateOneWithoutAnswersInput {
+  create: ExamQuestionCreateWithoutAnswersInput
+  connect: ExamQuestionWhereUniqueInput
+}
+
+input ExamQuestionCreateOneWithoutCoursePageInput {
+  create: ExamQuestionCreateWithoutCoursePageInput
+  connect: ExamQuestionWhereUniqueInput
+}
+
+input ExamQuestionCreateWithoutAnswersInput {
+  coursePage: CoursePageCreateOneWithoutExamQuestionInput!
+  coursePageID: ID!
+  question: String!
+}
+
+input ExamQuestionCreateWithoutCoursePageInput {
+  coursePageID: ID!
+  question: String!
+  answers: ExamAnswerCreateManyWithoutExamQuestionInput
+}
+
+type ExamQuestionEdge {
+  node: ExamQuestion!
+  cursor: String!
+}
+
+enum ExamQuestionOrderByInput {
+  id_ASC
+  id_DESC
+  coursePageID_ASC
+  coursePageID_DESC
+  question_ASC
+  question_DESC
+}
+
+type ExamQuestionPreviousValues {
+  id: ID!
+  coursePageID: ID!
+  question: String!
+}
+
+type ExamQuestionSubscriptionPayload {
+  mutation: MutationType!
+  node: ExamQuestion
+  updatedFields: [String!]
+  previousValues: ExamQuestionPreviousValues
+}
+
+input ExamQuestionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ExamQuestionWhereInput
+  AND: [ExamQuestionSubscriptionWhereInput!]
+  OR: [ExamQuestionSubscriptionWhereInput!]
+  NOT: [ExamQuestionSubscriptionWhereInput!]
+}
+
+input ExamQuestionUpdateInput {
+  coursePage: CoursePageUpdateOneRequiredWithoutExamQuestionInput
+  coursePageID: ID
+  question: String
+  answers: ExamAnswerUpdateManyWithoutExamQuestionInput
+}
+
+input ExamQuestionUpdateManyMutationInput {
+  coursePageID: ID
+  question: String
+}
+
+input ExamQuestionUpdateOneRequiredWithoutAnswersInput {
+  create: ExamQuestionCreateWithoutAnswersInput
+  update: ExamQuestionUpdateWithoutAnswersDataInput
+  upsert: ExamQuestionUpsertWithoutAnswersInput
+  connect: ExamQuestionWhereUniqueInput
+}
+
+input ExamQuestionUpdateOneWithoutCoursePageInput {
+  create: ExamQuestionCreateWithoutCoursePageInput
+  update: ExamQuestionUpdateWithoutCoursePageDataInput
+  upsert: ExamQuestionUpsertWithoutCoursePageInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ExamQuestionWhereUniqueInput
+}
+
+input ExamQuestionUpdateWithoutAnswersDataInput {
+  coursePage: CoursePageUpdateOneRequiredWithoutExamQuestionInput
+  coursePageID: ID
+  question: String
+}
+
+input ExamQuestionUpdateWithoutCoursePageDataInput {
+  coursePageID: ID
+  question: String
+  answers: ExamAnswerUpdateManyWithoutExamQuestionInput
+}
+
+input ExamQuestionUpsertWithoutAnswersInput {
+  update: ExamQuestionUpdateWithoutAnswersDataInput!
+  create: ExamQuestionCreateWithoutAnswersInput!
+}
+
+input ExamQuestionUpsertWithoutCoursePageInput {
+  update: ExamQuestionUpdateWithoutCoursePageDataInput!
+  create: ExamQuestionCreateWithoutCoursePageInput!
+}
+
+input ExamQuestionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  coursePage: CoursePageWhereInput
+  coursePageID: ID
+  coursePageID_not: ID
+  coursePageID_in: [ID!]
+  coursePageID_not_in: [ID!]
+  coursePageID_lt: ID
+  coursePageID_lte: ID
+  coursePageID_gt: ID
+  coursePageID_gte: ID
+  coursePageID_contains: ID
+  coursePageID_not_contains: ID
+  coursePageID_starts_with: ID
+  coursePageID_not_starts_with: ID
+  coursePageID_ends_with: ID
+  coursePageID_not_ends_with: ID
+  question: String
+  question_not: String
+  question_in: [String!]
+  question_not_in: [String!]
+  question_lt: String
+  question_lte: String
+  question_gt: String
+  question_gte: String
+  question_contains: String
+  question_not_contains: String
+  question_starts_with: String
+  question_not_starts_with: String
+  question_ends_with: String
+  question_not_ends_with: String
+  answers_every: ExamAnswerWhereInput
+  answers_some: ExamAnswerWhereInput
+  answers_none: ExamAnswerWhereInput
+  AND: [ExamQuestionWhereInput!]
+  OR: [ExamQuestionWhereInput!]
+  NOT: [ExamQuestionWhereInput!]
+}
+
+input ExamQuestionWhereUniqueInput {
+  id: ID
+}
+
+type LegalPortfolio {
+  id: ID!
+  user: User!
+  cv: String
+  portfolio(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer!]
+  portfolioIDs: [ID!]!
+  resume: String
+  open: Boolean!
+}
+
+type LegalPortfolioConnection {
+  pageInfo: PageInfo!
+  edges: [LegalPortfolioEdge]!
+  aggregate: AggregateLegalPortfolio!
+}
+
+input LegalPortfolioCreateInput {
+  user: UserCreateOneWithoutLegalPortfolioInput!
+  cv: String
+  portfolio: ExamAnswerCreateManyInput
+  portfolioIDs: LegalPortfolioCreateportfolioIDsInput
+  resume: String
+  open: Boolean
+}
+
+input LegalPortfolioCreateOneWithoutUserInput {
+  create: LegalPortfolioCreateWithoutUserInput
+  connect: LegalPortfolioWhereUniqueInput
+}
+
+input LegalPortfolioCreateportfolioIDsInput {
+  set: [ID!]
+}
+
+input LegalPortfolioCreateWithoutUserInput {
+  cv: String
+  portfolio: ExamAnswerCreateManyInput
+  portfolioIDs: LegalPortfolioCreateportfolioIDsInput
+  resume: String
+  open: Boolean
+}
+
+type LegalPortfolioEdge {
+  node: LegalPortfolio!
+  cursor: String!
+}
+
+enum LegalPortfolioOrderByInput {
+  id_ASC
+  id_DESC
+  cv_ASC
+  cv_DESC
+  resume_ASC
+  resume_DESC
+  open_ASC
+  open_DESC
+}
+
+type LegalPortfolioPreviousValues {
+  id: ID!
+  cv: String
+  portfolioIDs: [ID!]!
+  resume: String
+  open: Boolean!
+}
+
+type LegalPortfolioSubscriptionPayload {
+  mutation: MutationType!
+  node: LegalPortfolio
+  updatedFields: [String!]
+  previousValues: LegalPortfolioPreviousValues
+}
+
+input LegalPortfolioSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: LegalPortfolioWhereInput
+  AND: [LegalPortfolioSubscriptionWhereInput!]
+  OR: [LegalPortfolioSubscriptionWhereInput!]
+  NOT: [LegalPortfolioSubscriptionWhereInput!]
+}
+
+input LegalPortfolioUpdateInput {
+  user: UserUpdateOneRequiredWithoutLegalPortfolioInput
+  cv: String
+  portfolio: ExamAnswerUpdateManyInput
+  portfolioIDs: LegalPortfolioUpdateportfolioIDsInput
+  resume: String
+  open: Boolean
+}
+
+input LegalPortfolioUpdateManyMutationInput {
+  cv: String
+  portfolioIDs: LegalPortfolioUpdateportfolioIDsInput
+  resume: String
+  open: Boolean
+}
+
+input LegalPortfolioUpdateOneWithoutUserInput {
+  create: LegalPortfolioCreateWithoutUserInput
+  update: LegalPortfolioUpdateWithoutUserDataInput
+  upsert: LegalPortfolioUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LegalPortfolioWhereUniqueInput
+}
+
+input LegalPortfolioUpdateportfolioIDsInput {
+  set: [ID!]
+}
+
+input LegalPortfolioUpdateWithoutUserDataInput {
+  cv: String
+  portfolio: ExamAnswerUpdateManyInput
+  portfolioIDs: LegalPortfolioUpdateportfolioIDsInput
+  resume: String
+  open: Boolean
+}
+
+input LegalPortfolioUpsertWithoutUserInput {
+  update: LegalPortfolioUpdateWithoutUserDataInput!
+  create: LegalPortfolioCreateWithoutUserInput!
+}
+
+input LegalPortfolioWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  cv: String
+  cv_not: String
+  cv_in: [String!]
+  cv_not_in: [String!]
+  cv_lt: String
+  cv_lte: String
+  cv_gt: String
+  cv_gte: String
+  cv_contains: String
+  cv_not_contains: String
+  cv_starts_with: String
+  cv_not_starts_with: String
+  cv_ends_with: String
+  cv_not_ends_with: String
+  portfolio_every: ExamAnswerWhereInput
+  portfolio_some: ExamAnswerWhereInput
+  portfolio_none: ExamAnswerWhereInput
+  resume: String
+  resume_not: String
+  resume_in: [String!]
+  resume_not_in: [String!]
+  resume_lt: String
+  resume_lte: String
+  resume_gt: String
+  resume_gte: String
+  resume_contains: String
+  resume_not_contains: String
+  resume_starts_with: String
+  resume_not_starts_with: String
+  resume_ends_with: String
+  resume_not_ends_with: String
+  open: Boolean
+  open_not: Boolean
+  AND: [LegalPortfolioWhereInput!]
+  OR: [LegalPortfolioWhereInput!]
+  NOT: [LegalPortfolioWhereInput!]
+}
+
+input LegalPortfolioWhereUniqueInput {
+  id: ID
+}
 
 type Lesson {
   id: ID!
@@ -4441,6 +5817,12 @@ type Mutation {
   upsertApplication(where: ApplicationWhereUniqueInput!, create: ApplicationCreateInput!, update: ApplicationUpdateInput!): Application!
   deleteApplication(where: ApplicationWhereUniqueInput!): Application
   deleteManyApplications(where: ApplicationWhereInput): BatchPayload!
+  createArticle(data: ArticleCreateInput!): Article!
+  updateArticle(data: ArticleUpdateInput!, where: ArticleWhereUniqueInput!): Article
+  updateManyArticles(data: ArticleUpdateManyMutationInput!, where: ArticleWhereInput): BatchPayload!
+  upsertArticle(where: ArticleWhereUniqueInput!, create: ArticleCreateInput!, update: ArticleUpdateInput!): Article!
+  deleteArticle(where: ArticleWhereUniqueInput!): Article
+  deleteManyArticles(where: ArticleWhereInput): BatchPayload!
   createCareerTrack(data: CareerTrackCreateInput!): CareerTrack!
   updateCareerTrack(data: CareerTrackUpdateInput!, where: CareerTrackWhereUniqueInput!): CareerTrack
   updateManyCareerTracks(data: CareerTrackUpdateManyMutationInput!, where: CareerTrackWhereInput): BatchPayload!
@@ -4471,6 +5853,24 @@ type Mutation {
   upsertCoursePage(where: CoursePageWhereUniqueInput!, create: CoursePageCreateInput!, update: CoursePageUpdateInput!): CoursePage!
   deleteCoursePage(where: CoursePageWhereUniqueInput!): CoursePage
   deleteManyCoursePages(where: CoursePageWhereInput): BatchPayload!
+  createExamAnswer(data: ExamAnswerCreateInput!): ExamAnswer!
+  updateExamAnswer(data: ExamAnswerUpdateInput!, where: ExamAnswerWhereUniqueInput!): ExamAnswer
+  updateManyExamAnswers(data: ExamAnswerUpdateManyMutationInput!, where: ExamAnswerWhereInput): BatchPayload!
+  upsertExamAnswer(where: ExamAnswerWhereUniqueInput!, create: ExamAnswerCreateInput!, update: ExamAnswerUpdateInput!): ExamAnswer!
+  deleteExamAnswer(where: ExamAnswerWhereUniqueInput!): ExamAnswer
+  deleteManyExamAnswers(where: ExamAnswerWhereInput): BatchPayload!
+  createExamQuestion(data: ExamQuestionCreateInput!): ExamQuestion!
+  updateExamQuestion(data: ExamQuestionUpdateInput!, where: ExamQuestionWhereUniqueInput!): ExamQuestion
+  updateManyExamQuestions(data: ExamQuestionUpdateManyMutationInput!, where: ExamQuestionWhereInput): BatchPayload!
+  upsertExamQuestion(where: ExamQuestionWhereUniqueInput!, create: ExamQuestionCreateInput!, update: ExamQuestionUpdateInput!): ExamQuestion!
+  deleteExamQuestion(where: ExamQuestionWhereUniqueInput!): ExamQuestion
+  deleteManyExamQuestions(where: ExamQuestionWhereInput): BatchPayload!
+  createLegalPortfolio(data: LegalPortfolioCreateInput!): LegalPortfolio!
+  updateLegalPortfolio(data: LegalPortfolioUpdateInput!, where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
+  updateManyLegalPortfolios(data: LegalPortfolioUpdateManyMutationInput!, where: LegalPortfolioWhereInput): BatchPayload!
+  upsertLegalPortfolio(where: LegalPortfolioWhereUniqueInput!, create: LegalPortfolioCreateInput!, update: LegalPortfolioUpdateInput!): LegalPortfolio!
+  deleteLegalPortfolio(where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
+  deleteManyLegalPortfolios(where: LegalPortfolioWhereInput): BatchPayload!
   createLesson(data: LessonCreateInput!): Lesson!
   updateLesson(data: LessonUpdateInput!, where: LessonWhereUniqueInput!): Lesson
   updateManyLessons(data: LessonUpdateManyMutationInput!, where: LessonWhereInput): BatchPayload!
@@ -7127,6 +8527,9 @@ type Query {
   application(where: ApplicationWhereUniqueInput!): Application
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application]!
   applicationsConnection(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ApplicationConnection!
+  article(where: ArticleWhereUniqueInput!): Article
+  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article]!
+  articlesConnection(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ArticleConnection!
   careerTrack(where: CareerTrackWhereUniqueInput!): CareerTrack
   careerTracks(where: CareerTrackWhereInput, orderBy: CareerTrackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CareerTrack]!
   careerTracksConnection(where: CareerTrackWhereInput, orderBy: CareerTrackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CareerTrackConnection!
@@ -7142,6 +8545,15 @@ type Query {
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage]!
   coursePagesConnection(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CoursePageConnection!
+  examAnswer(where: ExamAnswerWhereUniqueInput!): ExamAnswer
+  examAnswers(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer]!
+  examAnswersConnection(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExamAnswerConnection!
+  examQuestion(where: ExamQuestionWhereUniqueInput!): ExamQuestion
+  examQuestions(where: ExamQuestionWhereInput, orderBy: ExamQuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamQuestion]!
+  examQuestionsConnection(where: ExamQuestionWhereInput, orderBy: ExamQuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExamQuestionConnection!
+  legalPortfolio(where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
+  legalPortfolios(where: LegalPortfolioWhereInput, orderBy: LegalPortfolioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LegalPortfolio]!
+  legalPortfoliosConnection(where: LegalPortfolioWhereInput, orderBy: LegalPortfolioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LegalPortfolioConnection!
   lesson(where: LessonWhereUniqueInput!): Lesson
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson]!
   lessonsConnection(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LessonConnection!
@@ -8928,11 +10340,15 @@ enum Status {
 
 type Subscription {
   application(where: ApplicationSubscriptionWhereInput): ApplicationSubscriptionPayload
+  article(where: ArticleSubscriptionWhereInput): ArticleSubscriptionPayload
   careerTrack(where: CareerTrackSubscriptionWhereInput): CareerTrackSubscriptionPayload
   careerTrackUnit(where: CareerTrackUnitSubscriptionWhereInput): CareerTrackUnitSubscriptionPayload
   construction(where: ConstructionSubscriptionWhereInput): ConstructionSubscriptionPayload
   constructionResult(where: ConstructionResultSubscriptionWhereInput): ConstructionResultSubscriptionPayload
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
+  examAnswer(where: ExamAnswerSubscriptionWhereInput): ExamAnswerSubscriptionPayload
+  examQuestion(where: ExamQuestionSubscriptionWhereInput): ExamQuestionSubscriptionPayload
+  legalPortfolio(where: LegalPortfolioSubscriptionWhereInput): LegalPortfolioSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   lessonResult(where: LessonResultSubscriptionWhereInput): LessonResultSubscriptionPayload
   newTest(where: NewTestSubscriptionWhereInput): NewTestSubscriptionPayload
@@ -9876,6 +11292,7 @@ type TextEditor {
   user: User!
   lesson: Lesson!
   lessonID: ID!
+  textEditorResults(where: TextEditorResultWhereInput, orderBy: TextEditorResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditorResult!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -9893,6 +11310,7 @@ input TextEditorCreateInput {
   user: UserCreateOneWithoutTextEditorInput!
   lesson: LessonCreateOneWithoutTexteditorsInput!
   lessonID: ID!
+  textEditorResults: TextEditorResultCreateManyWithoutTextEditorInput
 }
 
 input TextEditorCreateManyWithoutLessonInput {
@@ -9905,8 +11323,8 @@ input TextEditorCreateManyWithoutUserInput {
   connect: [TextEditorWhereUniqueInput!]
 }
 
-input TextEditorCreateOneInput {
-  create: TextEditorCreateInput
+input TextEditorCreateOneWithoutTextEditorResultsInput {
+  create: TextEditorCreateWithoutTextEditorResultsInput
   connect: TextEditorWhereUniqueInput
 }
 
@@ -9916,6 +11334,16 @@ input TextEditorCreateWithoutLessonInput {
   totalMistakes: Int
   user: UserCreateOneWithoutTextEditorInput!
   lessonID: ID!
+  textEditorResults: TextEditorResultCreateManyWithoutTextEditorInput
+}
+
+input TextEditorCreateWithoutTextEditorResultsInput {
+  name: String!
+  text: String!
+  totalMistakes: Int
+  user: UserCreateOneWithoutTextEditorInput!
+  lesson: LessonCreateOneWithoutTexteditorsInput!
+  lessonID: ID!
 }
 
 input TextEditorCreateWithoutUserInput {
@@ -9924,6 +11352,7 @@ input TextEditorCreateWithoutUserInput {
   totalMistakes: Int
   lesson: LessonCreateOneWithoutTexteditorsInput!
   lessonID: ID!
+  textEditorResults: TextEditorResultCreateManyWithoutTextEditorInput
 }
 
 type TextEditorEdge {
@@ -9981,7 +11410,7 @@ input TextEditorResultCreateInput {
   revealed: TextEditorResultCreaterevealedInput
   lesson: LessonCreateOneWithoutTextEditorResultsInput
   lessonID: ID
-  textEditor: TextEditorCreateOneInput
+  textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
   textEditorID: ID
 }
 
@@ -9995,6 +11424,11 @@ input TextEditorResultCreateManyWithoutStudentInput {
   connect: [TextEditorResultWhereUniqueInput!]
 }
 
+input TextEditorResultCreateManyWithoutTextEditorInput {
+  create: [TextEditorResultCreateWithoutTextEditorInput!]
+  connect: [TextEditorResultWhereUniqueInput!]
+}
+
 input TextEditorResultCreaterevealedInput {
   set: [String!]
 }
@@ -10004,7 +11438,7 @@ input TextEditorResultCreateWithoutLessonInput {
   attempts: Int
   revealed: TextEditorResultCreaterevealedInput
   lessonID: ID
-  textEditor: TextEditorCreateOneInput
+  textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
   textEditorID: ID
 }
 
@@ -10013,7 +11447,16 @@ input TextEditorResultCreateWithoutStudentInput {
   revealed: TextEditorResultCreaterevealedInput
   lesson: LessonCreateOneWithoutTextEditorResultsInput
   lessonID: ID
-  textEditor: TextEditorCreateOneInput
+  textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
+  textEditorID: ID
+}
+
+input TextEditorResultCreateWithoutTextEditorInput {
+  student: UserCreateOneWithoutTextEditorResultsInput!
+  attempts: Int
+  revealed: TextEditorResultCreaterevealedInput
+  lesson: LessonCreateOneWithoutTextEditorResultsInput
+  lessonID: ID
   textEditorID: ID
 }
 
@@ -10121,7 +11564,7 @@ input TextEditorResultUpdateInput {
   revealed: TextEditorResultUpdaterevealedInput
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
   lessonID: ID
-  textEditor: TextEditorUpdateOneInput
+  textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
   textEditorID: ID
 }
 
@@ -10163,6 +11606,18 @@ input TextEditorResultUpdateManyWithoutStudentInput {
   updateMany: [TextEditorResultUpdateManyWithWhereNestedInput!]
 }
 
+input TextEditorResultUpdateManyWithoutTextEditorInput {
+  create: [TextEditorResultCreateWithoutTextEditorInput!]
+  delete: [TextEditorResultWhereUniqueInput!]
+  connect: [TextEditorResultWhereUniqueInput!]
+  set: [TextEditorResultWhereUniqueInput!]
+  disconnect: [TextEditorResultWhereUniqueInput!]
+  update: [TextEditorResultUpdateWithWhereUniqueWithoutTextEditorInput!]
+  upsert: [TextEditorResultUpsertWithWhereUniqueWithoutTextEditorInput!]
+  deleteMany: [TextEditorResultScalarWhereInput!]
+  updateMany: [TextEditorResultUpdateManyWithWhereNestedInput!]
+}
+
 input TextEditorResultUpdateManyWithWhereNestedInput {
   where: TextEditorResultScalarWhereInput!
   data: TextEditorResultUpdateManyDataInput!
@@ -10177,7 +11632,7 @@ input TextEditorResultUpdateWithoutLessonDataInput {
   attempts: Int
   revealed: TextEditorResultUpdaterevealedInput
   lessonID: ID
-  textEditor: TextEditorUpdateOneInput
+  textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
   textEditorID: ID
 }
 
@@ -10186,7 +11641,16 @@ input TextEditorResultUpdateWithoutStudentDataInput {
   revealed: TextEditorResultUpdaterevealedInput
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
   lessonID: ID
-  textEditor: TextEditorUpdateOneInput
+  textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
+  textEditorID: ID
+}
+
+input TextEditorResultUpdateWithoutTextEditorDataInput {
+  student: UserUpdateOneRequiredWithoutTextEditorResultsInput
+  attempts: Int
+  revealed: TextEditorResultUpdaterevealedInput
+  lesson: LessonUpdateOneWithoutTextEditorResultsInput
+  lessonID: ID
   textEditorID: ID
 }
 
@@ -10200,6 +11664,11 @@ input TextEditorResultUpdateWithWhereUniqueWithoutStudentInput {
   data: TextEditorResultUpdateWithoutStudentDataInput!
 }
 
+input TextEditorResultUpdateWithWhereUniqueWithoutTextEditorInput {
+  where: TextEditorResultWhereUniqueInput!
+  data: TextEditorResultUpdateWithoutTextEditorDataInput!
+}
+
 input TextEditorResultUpsertWithWhereUniqueWithoutLessonInput {
   where: TextEditorResultWhereUniqueInput!
   update: TextEditorResultUpdateWithoutLessonDataInput!
@@ -10210,6 +11679,12 @@ input TextEditorResultUpsertWithWhereUniqueWithoutStudentInput {
   where: TextEditorResultWhereUniqueInput!
   update: TextEditorResultUpdateWithoutStudentDataInput!
   create: TextEditorResultCreateWithoutStudentInput!
+}
+
+input TextEditorResultUpsertWithWhereUniqueWithoutTextEditorInput {
+  where: TextEditorResultWhereUniqueInput!
+  update: TextEditorResultUpdateWithoutTextEditorDataInput!
+  create: TextEditorResultCreateWithoutTextEditorInput!
 }
 
 input TextEditorResultWhereInput {
@@ -10379,15 +11854,6 @@ input TextEditorSubscriptionWhereInput {
   NOT: [TextEditorSubscriptionWhereInput!]
 }
 
-input TextEditorUpdateDataInput {
-  name: String
-  text: String
-  totalMistakes: Int
-  user: UserUpdateOneRequiredWithoutTextEditorInput
-  lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
-  lessonID: ID
-}
-
 input TextEditorUpdateInput {
   name: String
   text: String
@@ -10395,6 +11861,7 @@ input TextEditorUpdateInput {
   user: UserUpdateOneRequiredWithoutTextEditorInput
   lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
   lessonID: ID
+  textEditorResults: TextEditorResultUpdateManyWithoutTextEditorInput
 }
 
 input TextEditorUpdateManyDataInput {
@@ -10440,10 +11907,10 @@ input TextEditorUpdateManyWithWhereNestedInput {
   data: TextEditorUpdateManyDataInput!
 }
 
-input TextEditorUpdateOneInput {
-  create: TextEditorCreateInput
-  update: TextEditorUpdateDataInput
-  upsert: TextEditorUpsertNestedInput
+input TextEditorUpdateOneWithoutTextEditorResultsInput {
+  create: TextEditorCreateWithoutTextEditorResultsInput
+  update: TextEditorUpdateWithoutTextEditorResultsDataInput
+  upsert: TextEditorUpsertWithoutTextEditorResultsInput
   delete: Boolean
   disconnect: Boolean
   connect: TextEditorWhereUniqueInput
@@ -10455,6 +11922,16 @@ input TextEditorUpdateWithoutLessonDataInput {
   totalMistakes: Int
   user: UserUpdateOneRequiredWithoutTextEditorInput
   lessonID: ID
+  textEditorResults: TextEditorResultUpdateManyWithoutTextEditorInput
+}
+
+input TextEditorUpdateWithoutTextEditorResultsDataInput {
+  name: String
+  text: String
+  totalMistakes: Int
+  user: UserUpdateOneRequiredWithoutTextEditorInput
+  lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
+  lessonID: ID
 }
 
 input TextEditorUpdateWithoutUserDataInput {
@@ -10463,6 +11940,7 @@ input TextEditorUpdateWithoutUserDataInput {
   totalMistakes: Int
   lesson: LessonUpdateOneRequiredWithoutTexteditorsInput
   lessonID: ID
+  textEditorResults: TextEditorResultUpdateManyWithoutTextEditorInput
 }
 
 input TextEditorUpdateWithWhereUniqueWithoutLessonInput {
@@ -10475,9 +11953,9 @@ input TextEditorUpdateWithWhereUniqueWithoutUserInput {
   data: TextEditorUpdateWithoutUserDataInput!
 }
 
-input TextEditorUpsertNestedInput {
-  update: TextEditorUpdateDataInput!
-  create: TextEditorCreateInput!
+input TextEditorUpsertWithoutTextEditorResultsInput {
+  update: TextEditorUpdateWithoutTextEditorResultsDataInput!
+  create: TextEditorCreateWithoutTextEditorResultsInput!
 }
 
 input TextEditorUpsertWithWhereUniqueWithoutLessonInput {
@@ -10559,6 +12037,9 @@ input TextEditorWhereInput {
   lessonID_not_starts_with: ID
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
+  textEditorResults_every: TextEditorResultWhereInput
+  textEditorResults_some: TextEditorResultWhereInput
+  textEditorResults_none: TextEditorResultWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -10796,8 +12277,10 @@ type User {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolio
   uni: Uni
   uniID: ID
+  description: String
   careerTrack: CareerTrack
   careerTrackID: ID
   favourites: [ID!]!
@@ -10824,6 +12307,8 @@ type User {
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   textEditor(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor!]
   isFamiliar: Boolean!
+  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
+  examAnswers(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -10845,8 +12330,10 @@ input UserCreateInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -10873,6 +12360,8 @@ input UserCreateInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateManyWithoutNew_subjectsInput {
@@ -10887,6 +12376,11 @@ input UserCreateManyWithoutUniInput {
 
 input UserCreateOneInput {
   create: UserCreateInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutArticlesInput {
+  create: UserCreateWithoutArticlesInput
   connect: UserWhereUniqueInput
 }
 
@@ -10907,6 +12401,16 @@ input UserCreateOneWithoutConstructionResultsInput {
 
 input UserCreateOneWithoutCoursePagesInput {
   create: UserCreateWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutExamAnswersInput {
+  create: UserCreateWithoutExamAnswersInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutLegalPortfolioInput {
+  create: UserCreateWithoutLegalPortfolioInput
   connect: UserWhereUniqueInput
 }
 
@@ -10997,15 +12501,18 @@ input UserCreatesubjectsInput {
   set: [ID!]
 }
 
-input UserCreateWithoutCareerTrackInput {
+input UserCreateWithoutArticlesInput {
   name: String!
   email: String!
   password: String!
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
@@ -11031,6 +12538,47 @@ input UserCreateWithoutCareerTrackInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutCareerTrackInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutConstructionInput {
@@ -11040,8 +12588,10 @@ input UserCreateWithoutConstructionInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11067,6 +12617,8 @@ input UserCreateWithoutConstructionInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutConstructionResultsInput {
@@ -11076,8 +12628,10 @@ input UserCreateWithoutConstructionResultsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11103,6 +12657,8 @@ input UserCreateWithoutConstructionResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutCoursePagesInput {
@@ -11112,8 +12668,10 @@ input UserCreateWithoutCoursePagesInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11139,6 +12697,88 @@ input UserCreateWithoutCoursePagesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutExamAnswersInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutLegalPortfolioInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutLessonResultsInput {
@@ -11148,8 +12788,10 @@ input UserCreateWithoutLessonResultsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11175,6 +12817,8 @@ input UserCreateWithoutLessonResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutLessonsInput {
@@ -11184,8 +12828,10 @@ input UserCreateWithoutLessonsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11211,6 +12857,8 @@ input UserCreateWithoutLessonsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutNew_subjectsInput {
@@ -11220,8 +12868,10 @@ input UserCreateWithoutNew_subjectsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11247,6 +12897,8 @@ input UserCreateWithoutNew_subjectsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutNewTestsInput {
@@ -11256,8 +12908,10 @@ input UserCreateWithoutNewTestsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11283,6 +12937,8 @@ input UserCreateWithoutNewTestsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutOrdersInput {
@@ -11292,8 +12948,10 @@ input UserCreateWithoutOrdersInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11319,6 +12977,8 @@ input UserCreateWithoutOrdersInput {
   construction: ConstructionCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutPointsAInput {
@@ -11328,8 +12988,10 @@ input UserCreateWithoutPointsAInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11355,6 +13017,8 @@ input UserCreateWithoutPointsAInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutProblemResultsInput {
@@ -11364,8 +13028,10 @@ input UserCreateWithoutProblemResultsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11391,6 +13057,8 @@ input UserCreateWithoutProblemResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutProblemsInput {
@@ -11400,8 +13068,10 @@ input UserCreateWithoutProblemsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11427,6 +13097,8 @@ input UserCreateWithoutProblemsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutQuizesInput {
@@ -11436,8 +13108,10 @@ input UserCreateWithoutQuizesInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11463,6 +13137,8 @@ input UserCreateWithoutQuizesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutQuizResultsInput {
@@ -11472,8 +13148,10 @@ input UserCreateWithoutQuizResultsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11499,6 +13177,8 @@ input UserCreateWithoutQuizResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutSandboxPageGoalsInput {
@@ -11508,8 +13188,10 @@ input UserCreateWithoutSandboxPageGoalsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11535,6 +13217,8 @@ input UserCreateWithoutSandboxPageGoalsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -11544,8 +13228,10 @@ input UserCreateWithoutSandboxPagesInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11571,6 +13257,8 @@ input UserCreateWithoutSandboxPagesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTestResultsInput {
@@ -11580,8 +13268,10 @@ input UserCreateWithoutTestResultsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11607,6 +13297,8 @@ input UserCreateWithoutTestResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -11616,8 +13308,10 @@ input UserCreateWithoutTestsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11643,6 +13337,8 @@ input UserCreateWithoutTestsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTextEditorInput {
@@ -11652,8 +13348,10 @@ input UserCreateWithoutTextEditorInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11679,6 +13377,8 @@ input UserCreateWithoutTextEditorInput {
   construction: ConstructionCreateManyWithoutUserInput
   orders: OrderCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTextEditorResultsInput {
@@ -11688,8 +13388,10 @@ input UserCreateWithoutTextEditorResultsInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11715,6 +13417,8 @@ input UserCreateWithoutTextEditorResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutUniInput {
@@ -11724,7 +13428,9 @@ input UserCreateWithoutUniInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -11751,6 +13457,8 @@ input UserCreateWithoutUniInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
 }
 
 type UserEdge {
@@ -11775,6 +13483,8 @@ enum UserOrderByInput {
   status_DESC
   uniID_ASC
   uniID_DESC
+  description_ASC
+  description_DESC
   careerTrackID_ASC
   careerTrackID_DESC
   isFamiliar_ASC
@@ -11794,6 +13504,7 @@ type UserPreviousValues {
   resetTokenExpiry: Float
   status: Status
   uniID: ID
+  description: String
   careerTrackID: ID
   favourites: [ID!]!
   subjects: [ID!]!
@@ -11901,6 +13612,20 @@ input UserScalarWhereInput {
   uniID_not_starts_with: ID
   uniID_ends_with: ID
   uniID_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   careerTrackID: ID
   careerTrackID_not: ID
   careerTrackID_in: [ID!]
@@ -11963,8 +13688,10 @@ input UserUpdateDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -11991,6 +13718,8 @@ input UserUpdateDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdatefavouritesInput {
@@ -12004,8 +13733,10 @@ input UserUpdateInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12032,6 +13763,8 @@ input UserUpdateInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateManyDataInput {
@@ -12042,6 +13775,7 @@ input UserUpdateManyDataInput {
   resetTokenExpiry: Float
   status: Status
   uniID: ID
+  description: String
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
@@ -12058,6 +13792,7 @@ input UserUpdateManyMutationInput {
   resetTokenExpiry: Float
   status: Status
   uniID: ID
+  description: String
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
@@ -12102,6 +13837,13 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutArticlesInput {
+  create: UserCreateWithoutArticlesInput
+  update: UserUpdateWithoutArticlesDataInput
+  upsert: UserUpsertWithoutArticlesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutConstructionInput {
   create: UserCreateWithoutConstructionInput
   update: UserUpdateWithoutConstructionDataInput
@@ -12120,6 +13862,20 @@ input UserUpdateOneRequiredWithoutCoursePagesInput {
   create: UserCreateWithoutCoursePagesInput
   update: UserUpdateWithoutCoursePagesDataInput
   upsert: UserUpsertWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutExamAnswersInput {
+  create: UserCreateWithoutExamAnswersInput
+  update: UserUpdateWithoutExamAnswersDataInput
+  upsert: UserUpsertWithoutExamAnswersInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutLegalPortfolioInput {
+  create: UserCreateWithoutLegalPortfolioInput
+  update: UserUpdateWithoutLegalPortfolioDataInput
+  upsert: UserUpsertWithoutLegalPortfolioInput
   connect: UserWhereUniqueInput
 }
 
@@ -12249,15 +14005,18 @@ input UserUpdatesubjectsInput {
   set: [ID!]
 }
 
-input UserUpdateWithoutCareerTrackDataInput {
+input UserUpdateWithoutArticlesDataInput {
   name: String
   email: String
   password: String
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
@@ -12283,6 +14042,47 @@ input UserUpdateWithoutCareerTrackDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutCareerTrackDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutConstructionDataInput {
@@ -12292,8 +14092,10 @@ input UserUpdateWithoutConstructionDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12319,6 +14121,8 @@ input UserUpdateWithoutConstructionDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutConstructionResultsDataInput {
@@ -12328,8 +14132,10 @@ input UserUpdateWithoutConstructionResultsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12355,6 +14161,8 @@ input UserUpdateWithoutConstructionResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutCoursePagesDataInput {
@@ -12364,8 +14172,10 @@ input UserUpdateWithoutCoursePagesDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12391,6 +14201,88 @@ input UserUpdateWithoutCoursePagesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutExamAnswersDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutLegalPortfolioDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutLessonResultsDataInput {
@@ -12400,8 +14292,10 @@ input UserUpdateWithoutLessonResultsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12427,6 +14321,8 @@ input UserUpdateWithoutLessonResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutLessonsDataInput {
@@ -12436,8 +14332,10 @@ input UserUpdateWithoutLessonsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12463,6 +14361,8 @@ input UserUpdateWithoutLessonsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutNew_subjectsDataInput {
@@ -12472,8 +14372,10 @@ input UserUpdateWithoutNew_subjectsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12499,6 +14401,8 @@ input UserUpdateWithoutNew_subjectsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutNewTestsDataInput {
@@ -12508,8 +14412,10 @@ input UserUpdateWithoutNewTestsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12535,6 +14441,8 @@ input UserUpdateWithoutNewTestsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutOrdersDataInput {
@@ -12544,8 +14452,10 @@ input UserUpdateWithoutOrdersDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12571,6 +14481,8 @@ input UserUpdateWithoutOrdersDataInput {
   construction: ConstructionUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutPointsADataInput {
@@ -12580,8 +14492,10 @@ input UserUpdateWithoutPointsADataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12607,6 +14521,8 @@ input UserUpdateWithoutPointsADataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutProblemResultsDataInput {
@@ -12616,8 +14532,10 @@ input UserUpdateWithoutProblemResultsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12643,6 +14561,8 @@ input UserUpdateWithoutProblemResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutProblemsDataInput {
@@ -12652,8 +14572,10 @@ input UserUpdateWithoutProblemsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12679,6 +14601,8 @@ input UserUpdateWithoutProblemsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutQuizesDataInput {
@@ -12688,8 +14612,10 @@ input UserUpdateWithoutQuizesDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12715,6 +14641,8 @@ input UserUpdateWithoutQuizesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutQuizResultsDataInput {
@@ -12724,8 +14652,10 @@ input UserUpdateWithoutQuizResultsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12751,6 +14681,8 @@ input UserUpdateWithoutQuizResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutSandboxPageGoalsDataInput {
@@ -12760,8 +14692,10 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12787,6 +14721,8 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -12796,8 +14732,10 @@ input UserUpdateWithoutSandboxPagesDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12823,6 +14761,8 @@ input UserUpdateWithoutSandboxPagesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTestResultsDataInput {
@@ -12832,8 +14772,10 @@ input UserUpdateWithoutTestResultsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12859,6 +14801,8 @@ input UserUpdateWithoutTestResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -12868,8 +14812,10 @@ input UserUpdateWithoutTestsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12895,6 +14841,8 @@ input UserUpdateWithoutTestsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTextEditorDataInput {
@@ -12904,8 +14852,10 @@ input UserUpdateWithoutTextEditorDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12931,6 +14881,8 @@ input UserUpdateWithoutTextEditorDataInput {
   construction: ConstructionUpdateManyWithoutUserInput
   orders: OrderUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTextEditorResultsDataInput {
@@ -12940,8 +14892,10 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -12967,6 +14921,8 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutUniDataInput {
@@ -12976,7 +14932,9 @@ input UserUpdateWithoutUniDataInput {
   resetToken: String
   resetTokenExpiry: Float
   status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uniID: ID
+  description: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -13003,6 +14961,8 @@ input UserUpdateWithoutUniDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithWhereUniqueWithoutNew_subjectsInput {
@@ -13018,6 +14978,11 @@ input UserUpdateWithWhereUniqueWithoutUniInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutArticlesInput {
+  update: UserUpdateWithoutArticlesDataInput!
+  create: UserCreateWithoutArticlesInput!
 }
 
 input UserUpsertWithoutCareerTrackInput {
@@ -13038,6 +15003,16 @@ input UserUpsertWithoutConstructionResultsInput {
 input UserUpsertWithoutCoursePagesInput {
   update: UserUpdateWithoutCoursePagesDataInput!
   create: UserCreateWithoutCoursePagesInput!
+}
+
+input UserUpsertWithoutExamAnswersInput {
+  update: UserUpdateWithoutExamAnswersDataInput!
+  create: UserCreateWithoutExamAnswersInput!
+}
+
+input UserUpsertWithoutLegalPortfolioInput {
+  update: UserUpdateWithoutLegalPortfolioDataInput!
+  create: UserCreateWithoutLegalPortfolioInput!
 }
 
 input UserUpsertWithoutLessonResultsInput {
@@ -13210,6 +15185,7 @@ input UserWhereInput {
   status_not: Status
   status_in: [Status!]
   status_not_in: [Status!]
+  legalPortfolio: LegalPortfolioWhereInput
   uni: UniWhereInput
   uniID: ID
   uniID_not: ID
@@ -13225,6 +15201,20 @@ input UserWhereInput {
   uniID_not_starts_with: ID
   uniID_ends_with: ID
   uniID_not_ends_with: ID
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   careerTrack: CareerTrackWhereInput
   careerTrackID: ID
   careerTrackID_not: ID
@@ -13299,6 +15289,12 @@ input UserWhereInput {
   textEditor_none: TextEditorWhereInput
   isFamiliar: Boolean
   isFamiliar_not: Boolean
+  articles_every: ArticleWhereInput
+  articles_some: ArticleWhereInput
+  articles_none: ArticleWhereInput
+  examAnswers_every: ExamAnswerWhereInput
+  examAnswers_some: ExamAnswerWhereInput
+  examAnswers_none: ExamAnswerWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Cookies from "universal-cookie";
 import gql from "graphql-tag";
 import { CURRENT_USER_QUERY } from "./User";
-import { CREATE_APPLICATION_MUTATION } from "./course/Application";
 
 const cookies = new Cookies();
 
@@ -20,20 +19,20 @@ const CREATE_ORDER_MUTATION = gql`
 `;
 
 const Button = styled.button`
-  background-color: ${props => (props.promo ? "#5DAE76" : "#84BC9C")};
-  border: none;
-  border-radius: ${props => (props.promo ? "5px" : "none")};
-  border: ${props => (props.promo ? "solid 1px white" : "none")};
+  background: ${props => props.theme.green};
+  border-radius: 5px;
+  width: 200px;
+  height: 38px;
+  outline: 0;
   color: white;
-  padding: ${props => (props.promo ? "4% 6%" : "5px 12px")};
-  text-decoration: none;
-  display: inline-block;
-  font-size: ${props => (props.promo ? "2.4rem" : "14px")};
-  width: 135px;
-  margin: 2px;
+  font-weight: 600;
+  font-size: 1.4rem;
+  outline: none;
   cursor: pointer;
-  &:hover {
-    background-color: #294d4a;
+  border: none;
+  margin-top: 10px;
+  &:active {
+    background-color: ${props => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {
@@ -47,12 +46,8 @@ class TakeMyMoney extends React.Component {
     loading: false
   };
   render() {
-    let finalPrice;
-    if (this.props.discountPrice !== null) {
-      finalPrice = this.props.discountPrice;
-    } else if (this.props.discountPrice === null) {
-      finalPrice = this.props.price;
-    }
+    console.log(typeof this.props.price);
+    console.log(this.props.price);
     return (
       <Mutation
         mutation={CREATE_APPLICATION_MUTATION}
@@ -75,26 +70,27 @@ class TakeMyMoney extends React.Component {
           >
             {createOrder => (
               <>
-                <Button
-                  disabled={this.state.loading}
-                  onClick={async e => {
-                    e.preventDefault;
-                    this.setState({ loading: true });
-                    const res1 = await createApplication();
-                    const res2 = await createOrder();
-                    // console.log(cookies.get("url"));
-                    location.href = cookies.get("url");
-                    this.setState({
-                      loading: false
-                    });
-                  }}
-                  promo={this.props.promo}
-                >
-                  {this.props.children}
-                </Button>
-                <br />
+                {this.state.loading === false && (
+                  <Button
+                    disabled={this.state.loading}
+                    onClick={async e => {
+                      e.preventDefault;
+                      this.setState({ loading: true });
+                      const res1 = await createApplication();
+                      const res2 = await createOrder();
+                      location.href = cookies.get("url");
+                      this.setState({
+                        loading: false
+                      });
+                    }}
+                    promo={this.props.promo}
+                  >
+                    {this.props.children}
+                  </Button>
+                )}
+
                 {this.state.loading ? (
-                  <p>Готовим платеж. Пожалуйста, подождите немного.</p>
+                  <div>Готовим платеж. Пожалуйста, подождите немного.</div>
                 ) : null}
               </>
             )}

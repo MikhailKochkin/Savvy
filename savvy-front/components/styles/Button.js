@@ -26,12 +26,12 @@ const SubmitButton = styled.button`
   border-radius: 6px;
   color: white;
   padding: 1%;
-  width: 15%;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 1.4rem;
-  font-weight: 600;
+  width: 20%;
+  /* font-weight: 600; */
   cursor: pointer;
   &:hover {
     background-color: ${props => (props.red ? "#8B0000" : "#0B3954")};
@@ -39,11 +39,11 @@ const SubmitButton = styled.button`
 `;
 
 const Message = styled.p`
-  background-color: #00ff7f;
-  font-size: 1.8rem;
+  background-color: ${props => props.theme.yellow};
+  width: 36%;
+  font-size: 1.6rem;
   padding: 1% 2%;
-  border-radius: 10px;
-  width: 30%;
+  border-radius: 5px;
   display: none;
 `;
 

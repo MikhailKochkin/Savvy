@@ -1,25 +1,25 @@
-import React from 'react';
-import styled from 'styled-components';
-import Plain from 'slate-plain-serializer';
-import Html from 'slate-html-serializer'
-import { Editor } from 'slate-react';
-import Icon from 'react-icons-kit';
-import isUrl from 'is-url'
-import BoldMark from './BoldMark';
-import HeaderMark from './HeaderMark';
-import ItalicMark from './ItalicMark';
-import LinkMark from './Link';
-import CommentStyle from './CommentStyle';
-import FormatToolBar from './FormatToolbar';
-import {bold} from 'react-icons-kit/fa/bold'
-import {italic} from 'react-icons-kit/fa/italic'
-import {header} from 'react-icons-kit/fa/header'
-import {link} from 'react-icons-kit/fa/link'
-import {image} from 'react-icons-kit/fa/image'
-import {commentO} from 'react-icons-kit/fa/commentO'
-import {eyeSlash} from 'react-icons-kit/fa/eyeSlash'
-import {list} from 'react-icons-kit/fa/list'
-import {film} from 'react-icons-kit/fa/film'
+import React from "react";
+import styled from "styled-components";
+import Plain from "slate-plain-serializer";
+import Html from "slate-html-serializer";
+import { Editor } from "slate-react";
+import Icon from "react-icons-kit";
+import isUrl from "is-url";
+import BoldMark from "./BoldMark";
+import HeaderMark from "./HeaderMark";
+import ItalicMark from "./ItalicMark";
+import LinkMark from "./Link";
+import CommentStyle from "./CommentStyle";
+import FormatToolBar from "./FormatToolbar";
+import { bold } from "react-icons-kit/fa/bold";
+import { italic } from "react-icons-kit/fa/italic";
+import { header } from "react-icons-kit/fa/header";
+import { link } from "react-icons-kit/fa/link";
+import { image } from "react-icons-kit/fa/image";
+import { commentO } from "react-icons-kit/fa/commentO";
+import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
+import { list } from "react-icons-kit/fa/list";
+import { film } from "react-icons-kit/fa/film";
 
 const LinkStyle = styled.a`
   text-decoration: underline;
@@ -27,279 +27,311 @@ const LinkStyle = styled.a`
 `;
 
 const HintBlock = styled.div`
-  color: #333A8A;
+  color: #333a8a;
 `;
 
 const Img = styled.img`
   display: block;
   max-width: 100%;
   max-height: 20em;
-  box-shadow: '0 0 0 2px blue;';
+  box-shadow: "0 0 0 2px blue;";
 `;
 
 const Iframe = styled.iframe`
   width: 80%;
   height: 20em;
   @media (max-width: 800px) {
-        width: 100%;
-        height: 15em;
-    }
-  box-shadow: '0 0 0 2px blue;';
+    width: 100%;
+    height: 15em;
+  }
+  box-shadow: "0 0 0 2px blue;";
 `;
 
 const ButtonStyle = styled.button`
   padding: 7px;
   margin: 3px;
+  background: white;
   border-radius: 5px;
   outline: none;
   &:hover {
     background: #112862;
     color: white;
   }
-`
+`;
 
 const AppStyles = {
-  color: 'rgb(17, 17, 17)',
-	maxWidth: '840px',
-	backgroundColor: 'rgb(255, 255, 255)',
-	boxShadow: 'rgba(118, 143, 255, 0.1) 0px 16px 24px 0px',
-	padding: '40px',
-	margin: '25px auto 45px',
-  borderRadius: '4.5px',
-  fontSize: '1.8rem'
-}
+  color: "rgb(17, 17, 17)",
+  maxWidth: "840px",
+  backgroundColor: "rgb(255, 255, 255)",
+  border: "1px solid #EDEFED",
+  boxShadow: "rgba(118, 143, 255, 0.1) 0px 16px 24px 0px",
+  margin: "25px auto 25px",
+  padding: "40px",
+  borderRadius: "4.5px",
+  fontSize: "1.6rem"
+};
 
 // Define the default node type.
-const DEFAULT_NODE = 'paragraph'
+const DEFAULT_NODE = "paragraph";
 
 const BLOCK_TAGS = {
-  p: 'paragraph',
-  img: 'image',
-  iframe: 'video',
-  code: 'code',
-  div: 'hint',
-  ol: 'numbered-list',
-  li: 'list-item'
-}
+  p: "paragraph",
+  img: "image",
+  iframe: "video",
+  code: "code",
+  div: "hint",
+  ol: "numbered-list",
+  li: "list-item"
+};
 
 const INLINE_TAGS = {
-  a: 'link',
+  a: "link"
 };
 
 const MARK_TAGS = {
-  i: 'italic',
-  strong: 'bold',
-  header: 'header',
-}
+  i: "italic",
+  strong: "bold",
+  header: "header"
+};
 
 // A function to determine whether a URL has an image extension.
 
 function isImage(url) {
-  return imageExtensions.includes(getExtension(url))
+  return imageExtensions.includes(getExtension(url));
 }
 
 // Get the extension of the URL, using the URL API.
 
 function getExtension(url) {
-  return new URL(url).pathname.split('.').pop()
+  return new URL(url).pathname.split(".").pop();
 }
 
 function insertImage(editor, src, target) {
   if (target) {
-    editor.select(target)
+    editor.select(target);
   }
 
   editor.insertBlock({
-    type: 'image',
-    data: { src },
-  })
+    type: "image",
+    data: { src }
+  });
 }
 
 function insertVideo(editor, src, target) {
   if (target) {
-    editor.select(target)
+    editor.select(target);
   }
 
   editor.insertBlock({
-    type: 'video',
-    data: { src },
-  })
+    type: "video",
+    data: { src }
+  });
 }
 
 const rules = [
   {
     deserialize(el, next) {
-      const type = BLOCK_TAGS[el.tagName.toLowerCase()]
+      const type = BLOCK_TAGS[el.tagName.toLowerCase()];
       if (type) {
         // console.log(el)
         return {
-          object: 'block',
+          object: "block",
           type: type,
           data: {
-            className: el.src,
+            className: el.src
           },
-          nodes: next(el.childNodes),
-        }
+          nodes: next(el.childNodes)
+        };
       }
     },
     serialize(obj, children) {
-      if (obj.object == 'block') {
-        console.log(obj.type)
+      if (obj.object == "block") {
+        console.log(obj.type);
         switch (obj.type) {
-          case 'paragraph':
-            return <p className={obj.data.get('className')}>{children}</p>
-          case 'hint':
-            console.log(obj.data)
-            return <div id="conceal" data-text={obj.data._root.entries[0][1]}>{children}</div>
-          case 'numbered-list':
-              return <ol>{children}</ol>
-          case 'list-item':
-            return <li>{children}</li>
-          case 'image':
-            return <img src={obj.data._root.entries[0][1]} alt="caption_goes_here"/>;
-          case 'video':
-            return <iframe src={obj.data._root.entries[0][1]} frameborder="0" tabindex="0" allow="autoplay" data-translatedyoutubelang="ru" allowFullScreen></iframe>;
+          case "paragraph":
+            return <p className={obj.data.get("className")}>{children}</p>;
+          case "hint":
+            console.log(obj.data);
+            return (
+              <div id="conceal" data-text={obj.data._root.entries[0][1]}>
+                {children}
+              </div>
+            );
+          case "numbered-list":
+            return <ol>{children}</ol>;
+          case "list-item":
+            return <li>{children}</li>;
+          case "image":
+            return (
+              <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
+            );
+          case "video":
+            return (
+              <iframe
+                src={obj.data._root.entries[0][1]}
+                frameborder="0"
+                tabindex="0"
+                allow="autoplay"
+                data-translatedyoutubelang="ru"
+                allowFullScreen
+              />
+            );
         }
       }
-    },
+    }
   },
   // Add a new rule that handles marks...
   {
     deserialize(el, next) {
-      const type = MARK_TAGS[el.tagName.toLowerCase()]
+      const type = MARK_TAGS[el.tagName.toLowerCase()];
       if (type) {
         // console.log(el, type)
         return {
-          object: 'mark',
+          object: "mark",
           type: type,
-          nodes: next(el.childNodes),
-        }
-      }
-    },
-    serialize(obj, children) {
-      if (obj.object == 'mark') {
-        switch (obj.type) {
-          case 'bold':
-            return <strong>{children}</strong>
-          case 'italic':
-            return <i>{children}</i>
-          case 'header':
-            return <h2>{children}</h2>
-        }
-      }
-    },
-  },
-  {
-    deserialize (el, next) {
-        console.log(el)
-        if (el.tagName !== 'A' && el.tagName !== 'SPAN' && el.tagName !== 'DIV' ) { return; }
-        const type = INLINE_TAGS[el.tagName.toLowerCase()];
-        if (type) {
-        return {
-            // inline to show that Inline nodes may contain nested inline nodes and text nodes—just like in the DOM.
-            object: 'inline',
-            type: type,
-            nodes: next(el.childNodes),
-            data: {
-              href: Array.from(el.attributes).find(({name}) => name == 'href') !== undefined ? Array.from(el.attributes).find(({name}) => name == 'href').value : null,
-            }
+          nodes: next(el.childNodes)
         };
       }
     },
-    serialize: function (object, children) {
-        if (object.object == 'inline') {
-        switch (object.type) {
-            case 'link':
-              return <LinkStyle href={object.data._root.entries[0][1]} target="_blank">{children}</LinkStyle>;
+    serialize(obj, children) {
+      if (obj.object == "mark") {
+        switch (obj.type) {
+          case "bold":
+            return <strong>{children}</strong>;
+          case "italic":
+            return <i>{children}</i>;
+          case "header":
+            return <h2>{children}</h2>;
         }
       }
     }
   },
-]
+  {
+    deserialize(el, next) {
+      console.log(el);
+      if (el.tagName !== "A" && el.tagName !== "SPAN" && el.tagName !== "DIV") {
+        return;
+      }
+      const type = INLINE_TAGS[el.tagName.toLowerCase()];
+      if (type) {
+        return {
+          // inline to show that Inline nodes may contain nested inline nodes and text nodes—just like in the DOM.
+          object: "inline",
+          type: type,
+          nodes: next(el.childNodes),
+          data: {
+            href:
+              Array.from(el.attributes).find(({ name }) => name == "href") !==
+              undefined
+                ? Array.from(el.attributes).find(({ name }) => name == "href")
+                    .value
+                : null
+          }
+        };
+      }
+    },
+    serialize: function(object, children) {
+      if (object.object == "inline") {
+        switch (object.type) {
+          case "link":
+            return (
+              <LinkStyle href={object.data._root.entries[0][1]} target="_blank">
+                {children}
+              </LinkStyle>
+            );
+        }
+      }
+    }
+  }
+];
 
 const html = new Html({
-  rules,
+  rules
 });
 
-const initialValue = `<p></p>`
+const initialValue = `<p></p>`;
 
 class App extends React.Component {
+  // Deserialize the initial editor value.
+  state = {
+    value: this.props.previousText
+      ? html.deserialize(this.props.previousText)
+      : html.deserialize(initialValue)
+  };
 
-    // Deserialize the initial editor value.
-    state = {
-      value: this.props.previousText ? html.deserialize(this.props.previousText) : html.deserialize(initialValue)
-    }
+  // Check if the current selection has a mark with `type` in it.
 
-    // Check if the current selection has a mark with `type` in it.
+  hasMark = type => {
+    const { value } = this.state;
+    return value.activeMarks.some(mark => mark.type === type);
+  };
 
-    hasMark = type => {
-      const { value } = this.state
-      return value.activeMarks.some(mark => mark.type === type)
-    }
+  hasBlock = type => {
+    const { value } = this.state;
+    return value.blocks.some(node => node.type === type);
+  };
 
-    hasBlock = type => {
-      const { value } = this.state
-      return value.blocks.some(node => node.type === type)
-    }
+  hasLinks = () => {
+    const { value } = this.state;
+    return value.inlines.some(inline => inline.type === "link");
+  };
 
-    hasLinks = () => {
-      const { value } = this.state
-      return value.inlines.some(inline => inline.type === 'link')
-    }
-
-    wrapLink = (editor, href) => {
+  wrapLink = (editor, href) => {
     editor.wrapInline({
-      type: 'link',
-      data: { href },
-    })
-    editor.moveToEnd()
-  }
-  
-  unwrapLink = (editor) => { editor.unwrapInline('link') }
+      type: "link",
+      data: { href }
+    });
+    editor.moveToEnd();
+  };
+
+  unwrapLink = editor => {
+    editor.unwrapInline("link");
+  };
 
   hasHints = () => {
-    const { value } = this.state
-    return value.inlines.some(inline => inline.type === 'hint')
-  }
+    const { value } = this.state;
+    return value.inlines.some(inline => inline.type === "hint");
+  };
 
   wrapHint = (editor, hint) => {
     editor.wrapInline({
-        type: 'hintWrapper',
-        data: { hint },
-    })
-    editor.moveToEnd()
-  }
+      type: "hintWrapper",
+      data: { hint }
+    });
+    editor.moveToEnd();
+  };
 
-  unwrapHint = (editor) => { editor.unwrapInline('hint') }
+  unwrapHint = editor => {
+    editor.unwrapInline("hint");
+  };
 
   // Store a reference to the `editor`.
-    ref = editor => {
-      this.editor = editor
-    }  
-  
-  render () {
-   
+  ref = editor => {
+    this.editor = editor;
+  };
+
+  render() {
     return (
       <>
         <FormatToolBar>
-          {this.renderMarkButton('bold', bold)}
-          {this.renderMarkButton('italic', italic)}
-          {this.renderMarkButton('header', header)}
-          {this.renderBlockButton('numbered-list', list)}
-          <ButtonStyle onMouseDown= {event => this.onClickLink(event)}>
-            <Icon icon={link}/>
+          {this.renderMarkButton("bold", bold)}
+          {this.renderMarkButton("italic", italic)}
+          {this.renderMarkButton("header", header)}
+          {this.renderBlockButton("numbered-list", list)}
+          <ButtonStyle onMouseDown={event => this.onClickLink(event)}>
+            <Icon icon={link} />
           </ButtonStyle>
           <ButtonStyle onMouseDown={event => this.onClickImage(event)}>
-            <Icon icon={image}/>
+            <Icon icon={image} />
           </ButtonStyle>
           <ButtonStyle onMouseDown={event => this.onClickFilm(event)}>
-            <Icon icon={film}/>
+            <Icon icon={film} />
           </ButtonStyle>
-          {this.renderHintBlockButton('hint', eyeSlash)}
+          {this.renderHintBlockButton("hint", eyeSlash)}
         </FormatToolBar>
         <Editor
-          style = {AppStyles}
-          placeholder='Начните писать...'
+          style={AppStyles}
+          placeholder="Начните писать..."
           ref={this.ref}
           value={this.state.value}
           onChange={this.onChange}
@@ -310,284 +342,265 @@ class App extends React.Component {
         />
         {/* <div dangerouslySetInnerHTML={{ __html: html.serialize(this.state.value) }}></div>     */}
       </>
-    )
+    );
   }
 
   // Render a Slate block.
   renderBlock = (props, editor, next) => {
     // console.log("Render Block!!!")
-    const { attributes, node, isFocused, children } = props
+    const { attributes, node, isFocused, children } = props;
     // console.log(props)
     switch (node.type) {
-      case 'paragraph':
-        return <p {...attributes}>{children}</p>
-      case 'hint': {
-        return <HintBlock data-text={"1111"}>{children}</HintBlock>
+      case "paragraph":
+        return <p {...attributes}>{children}</p>;
+      case "hint": {
+        return <HintBlock data-text={"1111"}>{children}</HintBlock>;
       }
-      case 'list-item':
-        return <li {...attributes}>{children}</li>
-      case 'numbered-list':
-        return <ol {...attributes}>{children}</ol>
-      case 'image': {
-        const src = node.data.get('src')
-        return (
-          <Img
-            {...attributes}
-            src={src}
-          />
-        )
+      case "list-item":
+        return <li {...attributes}>{children}</li>;
+      case "numbered-list":
+        return <ol {...attributes}>{children}</ol>;
+      case "image": {
+        const src = node.data.get("src");
+        return <Img {...attributes} src={src} />;
       }
-      case 'video': {
-        const src = node.data.get('src')
+      case "video": {
+        const src = node.data.get("src");
         return (
           <Iframe
             {...attributes}
             src={src}
-            frameborder="0" tabindex="0" allow="autoplay" data-translatedyoutubelang="ru" allowFullScreen
-          ></Iframe>
-        )
+            frameborder="0"
+            tabindex="0"
+            allow="autoplay"
+            data-translatedyoutubelang="ru"
+            allowFullScreen
+          />
+        );
       }
       default: {
-        return next()
+        return next();
       }
     }
-  }
+  };
 
   renderMark = (props, editor, next) => {
-    const { mark, children, attributes } = props
+    const { mark, children, attributes } = props;
     // console.log("mark:" + mark)
     switch (mark.type) {
-      case 'bold':
-        return <BoldMark {...attributes}>{children}</BoldMark>
-      case 'italic':
-        return <ItalicMark {...attributes}>{children}</ItalicMark>
-      case 'header':
-        return <HeaderMark {...attributes}>{children}</HeaderMark>
+      case "bold":
+        return <BoldMark {...attributes}>{children}</BoldMark>;
+      case "italic":
+        return <ItalicMark {...attributes}>{children}</ItalicMark>;
+      case "header":
+        return <HeaderMark {...attributes}>{children}</HeaderMark>;
       default:
-        return next()
+        return next();
     }
-  }
+  };
 
   renderInline = (props, editor, next) => {
-    const { attributes, children, node } = props
-    console.log("renderInline")
+    const { attributes, children, node } = props;
+    console.log("renderInline");
     switch (node.type) {
-      case 'link': 
-        return <LinkMark href={node.data.get('href')}>{children}</LinkMark>
-      default: 
-        return next()
+      case "link":
+        return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
+      default:
+        return next();
     }
-  }
+  };
 
   onClickMark = (event, type) => {
-    event.preventDefault()
-    this.editor.toggleMark(type)
-  }
+    event.preventDefault();
+    this.editor.toggleMark(type);
+  };
 
   // Render a mark-toggling toolbar button.
   renderMarkButton = (type, icon) => {
     return (
-      <ButtonStyle
-        onClick={event => this.onClickMark(event, type)}
-      >
-        <Icon icon={icon}/>
+      <ButtonStyle onClick={event => this.onClickMark(event, type)}>
+        <Icon icon={icon} />
       </ButtonStyle>
-    )
-  }
+    );
+  };
 
   renderBlockButton = (type, icon) => {
     return (
-      <ButtonStyle
-        onMouseDown={event => this.onClickBlock(event, type)}
-      >
-        <Icon icon={icon}/>
+      <ButtonStyle onMouseDown={event => this.onClickBlock(event, type)}>
+        <Icon icon={icon} />
       </ButtonStyle>
-    )
-}
+    );
+  };
 
-renderHintBlockButton = (type, icon) => {
+  renderHintBlockButton = (type, icon) => {
     return (
-      <ButtonStyle
-        onMouseDown={event => this.onClickHintBlock(event, type)}
-      >
-        <Icon icon={icon}/>
+      <ButtonStyle onMouseDown={event => this.onClickHintBlock(event, type)}>
+        <Icon icon={icon} />
       </ButtonStyle>
-    )
-  }
+    );
+  };
 
   // On clicking the image button, prompt for an image and insert it.
-onClickImage = event => {
-  event.preventDefault()
-  const src = window.prompt('Enter the URL of the image:')
-  if (!src) return
-  this.editor.command(insertImage, src)
-}
+  onClickImage = event => {
+    event.preventDefault();
+    const src = window.prompt("Enter the URL of the image:");
+    if (!src) return;
+    this.editor.command(insertImage, src);
+  };
 
-onClickFilm = event => {
-  event.preventDefault()
-  const src = window.prompt('Enter the URL of the video:')
-  if (!src) return
-  this.editor.command(insertVideo, src)
-}
+  onClickFilm = event => {
+    event.preventDefault();
+    const src = window.prompt("Enter the URL of the video:");
+    if (!src) return;
+    this.editor.command(insertVideo, src);
+  };
 
-onClickBlock = (event, type) => {
-    event.preventDefault()
+  onClickBlock = (event, type) => {
+    event.preventDefault();
 
-    const { editor } = this
-    const { value } = editor
-    const { document } = value
+    const { editor } = this;
+    const { value } = editor;
+    const { document } = value;
 
     // Handle everything but list buttons.
-    if (type !== 'numbered-list') {
-      const isActive = this.hasBlock(type)
-      const isList = this.hasBlock('list-item')
-      console.log(isList)
+    if (type !== "numbered-list") {
+      const isActive = this.hasBlock(type);
+      const isList = this.hasBlock("list-item");
+      console.log(isList);
       if (isList) {
         editor
           .setBlocks(isActive ? DEFAULT_NODE : type)
-          .unwrapBlock('bulleted-list')
-          .unwrapBlock('numbered-list')
+          .unwrapBlock("bulleted-list")
+          .unwrapBlock("numbered-list");
       } else {
-        editor.setBlocks(isActive ? DEFAULT_NODE : type)
+        editor.setBlocks(isActive ? DEFAULT_NODE : type);
       }
     } else {
       // Handle the extra wrapping required for list buttons.
-      const isList = this.hasBlock('list-item')
+      const isList = this.hasBlock("list-item");
       const isType = value.blocks.some(block => {
-        return !!document.getClosest(block.key, parent => parent.type === type)
-      })
+        return !!document.getClosest(block.key, parent => parent.type === type);
+      });
 
       if (isList && isType) {
-        editor
-          .setBlocks(DEFAULT_NODE)
-          .unwrapBlock('bulleted-list')
+        editor.setBlocks(DEFAULT_NODE).unwrapBlock("bulleted-list");
       } else if (isList) {
         editor
           .unwrapBlock(
-            type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
+            type === "bulleted-list" ? "numbered-list" : "bulleted-list"
           )
-          .wrapBlock(type)
+          .wrapBlock(type);
       } else {
-        editor.setBlocks('list-item').wrapBlock(type)
+        editor.setBlocks("list-item").wrapBlock(type);
       }
     }
-  }
+  };
 
   onClickHintBlock = (event, type) => {
-    event.preventDefault()
+    event.preventDefault();
 
-    const { editor } = this
-    const { value } = editor
-    const { document } = value
-    const data = window.prompt('Как назвать этот текст?')
- 
+    const { editor } = this;
+    const { value } = editor;
+    const { document } = value;
+    const data = window.prompt("Как назвать этот текст?");
+
     // Handle everything but list buttons.
-    if (type !== 'hint') {
-      console.log("0")
-      const isActive = this.hasBlock(type)
-      console.log(isActive)
-      const isHint = this.hasBlock('paragraph')
-      console.log(isHint)
-    
+    if (type !== "hint") {
+      console.log("0");
+      const isActive = this.hasBlock(type);
+      console.log(isActive);
+      const isHint = this.hasBlock("paragraph");
+      console.log(isHint);
+
       if (isHint) {
-        console.log("1")
-        editor
-          .setBlocks(isActive ? DEFAULT_NODE : type)
-          // .unwrapBlock('bulleted-list')
+        console.log("1");
+        editor.setBlocks(isActive ? DEFAULT_NODE : type);
+        // .unwrapBlock('bulleted-list')
       } else {
-        console.log("2")
-        editor.setBlocks(isActive ? DEFAULT_NODE : type)
+        console.log("2");
+        editor.setBlocks(isActive ? DEFAULT_NODE : type);
       }
     } else {
-      console.log("3")
+      console.log("3");
       // Handle the extra wrapping required for list buttons.
-      const isList = this.hasBlock('paragraph')
+      const isList = this.hasBlock("paragraph");
       const isType = value.blocks.some(block => {
-        return !!document.getClosest(block.key, parent => parent.type === type)
-      })
+        return !!document.getClosest(block.key, parent => parent.type === type);
+      });
 
       if (isList && isType) {
-        console.log("4")
-        editor
-          .setBlocks(DEFAULT_NODE)
-          .unwrapBlock('hint')
-          // .unwrapBlock('numbered-list')
-      } 
-      else if (isList) {
-        console.log("5")
-        editor
-          .wrapBlock({
-            type: 'hint',
-            data: {data} ,
-          })
-  
-          // .wrapBlock('hint', 'hintdata')
+        console.log("4");
+        editor.setBlocks(DEFAULT_NODE).unwrapBlock("hint");
+        // .unwrapBlock('numbered-list')
+      } else if (isList) {
+        console.log("5");
+        editor.wrapBlock({
+          type: "hint",
+          data: { data }
+        });
 
+        // .wrapBlock('hint', 'hintdata')
       } else {
-        console.log("6")
-        editor.setBlocks('paragraph')
+        console.log("6");
+        editor.setBlocks("paragraph");
       }
     }
-  }
-
+  };
 
   //When clicking a link, if the selection has a link in it, remove the link.
   //Otherwise, add a new link with an href and text.
 
   onClickLink = event => {
-    event.preventDefault()
+    event.preventDefault();
     // console.log("Click the link!")
-    const { editor } = this
-    const { value } = editor
-    const hasLinks = this.hasLinks()
+    const { editor } = this;
+    const { value } = editor;
+    const hasLinks = this.hasLinks();
     // console.log(value.selection)
     if (hasLinks) {
       // console.log("hasLinks")
-      this.editor.command(this.unwrapLink)
-    } 
-    else if (value.selection.isExpanded) {
+      this.editor.command(this.unwrapLink);
+    } else if (value.selection.isExpanded) {
       // console.log("selection.isExpanded")
-      const href = window.prompt('Enter the URL of the link:')
+      const href = window.prompt("Enter the URL of the link:");
       if (href == null) {
-        return
+        return;
       } else {
-        this.editor.command(this.wrapLink, href)
+        this.editor.command(this.wrapLink, href);
         // console.log("Ссылка создана!")
       }
-    } 
-    else {
-      console.log("else")
-      const href = window.prompt('Enter the URL of the link:')
-      console.log(href)
+    } else {
+      console.log("else");
+      const href = window.prompt("Enter the URL of the link:");
+      console.log(href);
       if (href == null) {
-        return
+        return;
       } else {
-        const text = window.prompt('Enter the text for the link:')
-        console.log(text)
+        const text = window.prompt("Enter the text for the link:");
+        console.log(text);
 
         if (text == null) {
-          return
+          return;
         }
 
         editor
-        .insertText(text)
-        .moveFocusBackward(text.length)
-        .command(this.wrapLink, href)
+          .insertText(text)
+          .moveFocusBackward(text.length)
+          .command(this.wrapLink, href);
       }
     }
-  }
+  };
 
   onKeyDown = (event, editor, next) => {
-    console.log(event.key)
-    if (event.key != 'b' || !event.ctrlKey) return next()
+    console.log(event.key);
+    if (event.key != "b" || !event.ctrlKey) return next();
 
-   
-    event.preventDefault()
+    event.preventDefault();
 
     // Determine whether any of the currently selected blocks are code blocks.
     // const isCode = this.editor.value.blocks.some(block => block.type == 'code')
     // console.log(isCode)
-    editor.setBlocks('code')
+    editor.setBlocks("code");
 
     // let mark
     // if (isBoldHotkey(event)) {
@@ -606,13 +619,12 @@ onClickBlock = (event, type) => {
     // console.log("mark: " + mark)
     // event.preventDefault()
     // if(mark !== undefined){this.editor.toggleMark(mark)}
-
-}
+  };
   onChange = ({ value }) => {
-    this.setState({value})
+    this.setState({ value });
     console.log(html.serialize(this.state.value));
     this.props.getEditorText(html.serialize(this.state.value));
-  }
+  };
 }
 
-export default App
+export default App;

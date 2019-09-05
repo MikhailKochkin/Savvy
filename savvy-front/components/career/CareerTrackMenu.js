@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
-import CareerTrackInfo from "./CareerTrackInfo";
 import CareerTrackList from "./CareerTrackList";
-import CareerTrackNone from "./CareerTrackNone";
 
 const CAREER_TRACK_QUERY = gql`
   query CAREER_TRACK_QUERY($id: ID!) {
@@ -15,6 +13,7 @@ const CAREER_TRACK_QUERY = gql`
         id
         title
         topics
+        img
         articles
         coursePages {
           id
@@ -35,14 +34,14 @@ const CAREER_TRACK_QUERY = gql`
   }
 `;
 
-const MenuStyle = styled.div`
-  position: -webkit-sticky;
-  position: sticky;
-  top: 10px;
-  @media (max-width: 700px) {
-    position: -webkit-relaitve;
-    position: relative;
-    top: 0;
+const MenuStyle = styled.div``;
+
+const Title = styled.div`
+  font-size: 1.8rem;
+  margin-bottom: 1%;
+  font-weight: 700;
+  @media (max-width: 900px) {
+    padding: 2% 4%;
   }
 `;
 
@@ -50,10 +49,6 @@ class CareerTrackMenu extends Component {
   render() {
     return (
       <MenuStyle>
-        {!this.props.me && <CareerTrackNone />}
-        {this.props.me && !this.props.me.careerTrackID && (
-          <CareerTrackNone me={this.props.me.id} />
-        )}
         {this.props.me && this.props.me.careerTrackID && (
           <Query
             query={CAREER_TRACK_QUERY}
@@ -62,17 +57,17 @@ class CareerTrackMenu extends Component {
             }}
           >
             {({ data, error, loading }) => {
-              // if (error) return <Error error={error} />;
+              if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const career = data.careerTrack;
-              console.log(career);
               return (
                 <>
-                  <CareerTrackInfo name={career.name} />
+                  <Title>
+                    Карьерный трек "<span className="name">{career.name}</span>"
+                  </Title>
                   <CareerTrackList
                     CareerList={career.coursePages}
                     id={career.id}
-                    mySubjects={this.props.me.subjects}
                     careerTrackUnits={career.careerTrackUnits}
                   />
                 </>

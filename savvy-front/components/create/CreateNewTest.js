@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import  { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import Link from 'next/link';
-import { NavButton, SubmitButton, Message } from '../styles/Button';
-import AreYouATeacher from '../auth/AreYouATeacher';
-import PleaseSignIn from '../auth/PleaseSignIn';
+import { Message } from '../styles/Button';
 import { SINGLE_LESSON_QUERY } from '../lesson/SingleLesson'
 
 const CREATE_NEWTEST_MUTATION = gql`
@@ -26,10 +23,28 @@ const CREATE_NEWTEST_MUTATION = gql`
   }
 `;
 
+const Button = styled.button`
+    background: #84BC9C;
+    cursor: pointer;
+    padding: 1% 2%;
+    width: 125px;
+    border-radius: 5px;
+    font-size: 1.6rem;
+    color: white;
+`;
+
+const TestCreate = styled.div`
+ display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1% 2%;
+`;
+
 const Form = styled.form`
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     background: white;
-    padding: 4%;
     fieldset {
         border:none;
         textarea {
@@ -40,9 +55,9 @@ const Form = styled.form`
 
 const Answers = styled.div`
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    flex-direction: column;
+    /* justify-content: space-between;
+    flex-wrap: wrap; */
     margin-bottom: 3%;
 `;
 
@@ -50,39 +65,78 @@ const CustomSelect1 = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 29%;
+    width: 30%;
     @media (max-width: 800px) {
         width: 65%;
-  }
-`;
-
-const CustomSelect = styled.div`
-
+    }
+    select {
+        border: 1px solid #C4C4C4;
+        background: none;
+        width: 40px;
+        font-size: 1.6rem;
+    }
 `;
 
 
 const AnswerOption = styled.div`
     display: flex;
     flex-direction: column;
-    select {
-        width: 30%;
+    margin: 2% 0;
+    textarea {
+        border-radius: 5px;
+        border: 1px solid #C4C4C4;
+        width: 80%;
+        height: 100px;
+        padding: 1.5%;
         font-size: 1.4rem;
-        margin-top: 5%;
-        margin: 3%;
+        outline: 0;
     }
-    ${CustomSelect} {
-        width: 30%;
-        border-radius: 3px;
-    }
-    ${CustomSelect} select {
-        width: 100%;
-        border: none;
-        box-shadow: none;
-        background: #0878C6;
-        color: white;
-    }
-    ${CustomSelect} select:focus {
-        outline: none;
+    select {
+    width: 20%;
+    font-size: 1.4rem;
+    outline: none;
+    line-height: 1.3;
+    padding: 0.5% 1% ;
+    /* padding: 0.6em 1.4em 0.5em 0.8em; */
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: 2%;
+    border: 1px solid #c5c5c5;
+    border-radius: 4px;
+    background: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
+      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+  }
+`;
+
+const Advice = styled.p`
+  font-size: 1.6rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 0;
+  width: 80%;
+`
+
+const Question = styled.div`
+    margin-top: 3%;
+    textarea {
+        border-radius: 5px;
+        border: 1px solid #C4C4C4;
+        width: 80%;
+        height: 100px;
+        padding: 1.5%;
+        font-size: 1.4rem;
+        outline:0;
     }
 `;
 
@@ -184,24 +238,14 @@ class CreateNewTest extends Component {
     }
     
     render() {
-        const {id} = this.props
+        const {lessonID} = this.props
         return (
-            <PleaseSignIn>
-                <AreYouATeacher
-                    subject={this.props.id}
-                >
-                <Link href={{
-                        pathname: '/lesson',
-                        query: { id: this.props.id }
-                    }}>
-                    <a>
-                        <NavButton>К уроку</NavButton>
-                    </a>
-                </Link>
+        
+                <TestCreate>
                 <Mutation 
                     mutation={CREATE_NEWTEST_MUTATION} 
                     variables={{
-                        lessonID: id,
+                        lessonID: lessonID,
                         question: this.state.questions,
                         answers: this.state.answers,
                         correct: this.state.correct,
@@ -209,7 +253,7 @@ class CreateNewTest extends Component {
                     refetchQueries={() => [
                         {
                           query: SINGLE_LESSON_QUERY,
-                          variables: { id }
+                          variables: { id: lessonID }
                         },
                       ]}
                     awaitRefetchQueries={true}
@@ -223,10 +267,10 @@ class CreateNewTest extends Component {
                             const res2 = await this.onSave(e, createNewTest);
                         }}
                     >   
-                            <p>Создайте новый тестовый вопрос. Введите сам вопрос, 
-                                2-6 вариантов ответа. Количество правильных ответов может быть любым.</p>  
+                            <Advice>Создайте новый тестовый вопрос. Введите сам вопрос, 
+                                2-6 вариантов ответа. Количество правильных ответов может быть любым.</Advice>  
                             <CustomSelect1>
-                                Количество вариантов ответа:
+                                Вариантов ответа:
                                 <span></span>
                                 <select name="answerNumber" value={this.state.answerNumber} onChange={this.handleSteps}>
                                     <option value="2">2</option>
@@ -239,34 +283,27 @@ class CreateNewTest extends Component {
                                     <option value="9">9</option>
                                 </select>
                             </CustomSelect1>
-                            <fieldset>          
-                            <label htmlFor="question">
-                            Вопрос
-                            <br/>
+                             
+                            <Question>
                             <textarea
                                 id="question"
                                 name="question"
-                                cols={40}
-                                rows={4}
                                 spellCheck={true}
-                                placeholder="Вопрос..."
+                                placeholder="Вопрос"
                                 autoFocus
                                 required
                                 value={this.state.question}
                                 onChange={this.handleChange}
                             />
-                            </label>
+                            </Question>
                             <Answers>
-                                <label htmlFor="answer1">
-                                Вариант ответа 1
-                                  <AnswerOption>
-                                    <CustomSelect>
+                                <AnswerOption>
+                               
                                     <textarea
-                                        cols={40}
-                                        rows={4}
+                                
                                         id="answer1"
                                         name="answer1"
-                                        placeholder="Ответ..."
+                                        placeholder="Ответ 1"
                                         required
                                         value={this.state.answer1}
                                         onChange={this.handleChange}
@@ -275,22 +312,17 @@ class CreateNewTest extends Component {
                                             <option value={true}>Правильно</option>
                                             <option value={false}>Ошибочно</option>
                                         </select>
-                                    </CustomSelect>
+                                       
                                   </AnswerOption>
-                                </label>
-                               
-                                <label htmlFor="answer2">
-                                Вариант ответа 2
-                              
+                    
                                 <AnswerOption>
-                                    <CustomSelect>
+                           
                                         <textarea
-                                            cols={40}
-                                            rows={4}
+                                 
                                             spellCheck={true}
                                             id="answer2"
                                             name="answer2"
-                                            placeholder="Ответ..."
+                                            placeholder="Ответ 2"
                                             required
                                             value={this.state.answer2}
                                             onChange={this.handleChange}
@@ -299,23 +331,20 @@ class CreateNewTest extends Component {
                                             <option value={true}>Правильно</option>
                                             <option value={false}>Ошибочно</option>
                                         </select>
-                                    </CustomSelect>
+                                     
                                 </AnswerOption>
-                                </label>
+                            
                                 
                                 {this.state.answerNumber > 2 &&
-                                <label htmlFor="answer3">
-                                Вариант ответа 3
-                             
+                    
                                 <AnswerOption>
-                                    <CustomSelect>
+                                
                                         <textarea
-                                            cols={40}
-                                            rows={4}
+                            
                                             spellCheck={true}
                                             id="answer3"
                                             name="answer3"
-                                            placeholder="Ответ..."
+                                            placeholder="Ответ 3"
                                             value={this.state.answer3}
                                             onChange={this.handleChange}
                                         />
@@ -323,17 +352,15 @@ class CreateNewTest extends Component {
                                             <option value={true}>Правильно</option>
                                             <option value={false}>Ошибочно</option>
                                         </select>
-                                    </CustomSelect>
+                                  
                                 </AnswerOption>
-                                </label>}
+                                }
                                 {this.state.answerNumber > 3 &&
-                                <label htmlFor="answer4">
-                                Вариант ответа 4
+
                                     <AnswerOption>
-                                        <CustomSelect>
+                                    
                                             <textarea
-                                                cols={40}
-                                                rows={4}
+                                     
                                                 spellCheck={true}
                                                 id="answer4"
                                                 name="answer4"
@@ -345,17 +372,14 @@ class CreateNewTest extends Component {
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
-                                        </CustomSelect>
+                                        
                                     </AnswerOption>
-                                </label>}
+                                }
                                 {this.state.answerNumber > 4 &&
-                                <label htmlFor="answer5">
-                                Вариант ответа 5
+                            
                                     <AnswerOption>
-                                        <CustomSelect>
                                             <textarea
-                                                cols={40}
-                                                rows={4}
+                                    
                                                 spellCheck={true}
                                                 id="answer5"
                                                 name="answer5"
@@ -367,17 +391,13 @@ class CreateNewTest extends Component {
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
-                                        </CustomSelect>
                                     </AnswerOption>
-                                </label>}
+                                }
                                 {this.state.answerNumber > 5 &&
-                                <label htmlFor="answer6">
-                                Вариант ответа 6
+   
                                     <AnswerOption>
-                                        <CustomSelect>
                                             <textarea
-                                                cols={40}
-                                                rows={4}
+                                  
                                                 spellCheck={true}
                                                 id="answer6"
                                                 name="answer6"
@@ -389,17 +409,14 @@ class CreateNewTest extends Component {
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
-                                        </CustomSelect>
                                     </AnswerOption>
-                                </label>}
+                                }
                                 {this.state.answerNumber > 6 &&
-                                <label htmlFor="answer7">
-                                Вариант ответа 7
+                   
+                              
                                     <AnswerOption>
-                                        <CustomSelect>
                                             <textarea
-                                                cols={40}
-                                                rows={4}
+                                          
                                                 spellCheck={true}
                                                 id="answer7"
                                                 name="answer7"
@@ -411,17 +428,13 @@ class CreateNewTest extends Component {
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
-                                        </CustomSelect>
                                     </AnswerOption>
-                                </label>}
+                                }
                                 {this.state.answerNumber > 7 &&
-                                <label htmlFor="answer8">
-                                Вариант ответа 8
+                       
                                     <AnswerOption>
-                                        <CustomSelect>
                                             <textarea
-                                                cols={40}
-                                                rows={4}
+                                           
                                                 spellCheck={true}
                                                 id="answer8"
                                                 name="answer8"
@@ -433,17 +446,14 @@ class CreateNewTest extends Component {
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
-                                        </CustomSelect>
                                     </AnswerOption>
-                                </label>}
+                                }
                                 {this.state.answerNumber > 8 &&
-                                <label htmlFor="answer9">
-                                Вариант ответа 9
+                    
                                     <AnswerOption>
-                                        <CustomSelect>
+                                  
                                             <textarea
-                                                cols={40}
-                                                rows={4}
+                                         
                                                 spellCheck={true}
                                                 id="answer9"
                                                 name="answer9"
@@ -455,20 +465,19 @@ class CreateNewTest extends Component {
                                                 <option value={true}>Правильно</option>
                                                 <option value={false}>Ошибочно</option>
                                             </select>
-                                        </CustomSelect>
                                     </AnswerOption>
-                                </label>}
+                                }
                             </Answers>
-                            <SubmitButton type="submit">
-                                Создать
-                            </SubmitButton>
+                            <Button type="submit">
+                            {loading ? "Сохраняем..." : "Сохранить"}
+                            </Button>
                             <Message id="Message">Вы создали новый тестовый вопрос!</Message> 
-                        </fieldset>
+                  
                     </Form>
                 )}
                 </Mutation>
-            </AreYouATeacher>
-          </PleaseSignIn>
+                </TestCreate>
+
         )
     }
 }

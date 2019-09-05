@@ -42,14 +42,36 @@ const Center = styled.div`
 `;
 
 const Textarea = styled.textarea`
-  margin: 1%;
-  outline: none;
-  padding: 1%;
   font-size: 1.6rem;
-  resize: none;
+  height: 100px;
+  width: 90%;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  outline: 0;
+  padding: 2%;
+  font-size: 1.6rem;
+  margin-top: 3%;
 
   @media (max-width: 800px) {
     width: 350px;
+  }
+`;
+
+const Button = styled.button`
+  padding: 1.5% 3%;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-top: 3%;
+  width: 20%;
+  color: #fffdf7;
+  background: ${props => props.theme.green};
+  border: solid 1px white;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  &:active {
+    background: ${props => props.theme.darkGreen};
   }
 `;
 
@@ -58,15 +80,35 @@ const ChooseTag = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  select.number {
-    width: 10%;
+  select {
     font-size: 1.4rem;
+    outline: none;
+    line-height: 1.3;
+    padding: 0.5% 1%;
+    /* padding: 0.6em 1.4em 0.5em 0.8em; */
+    max-width: 100%;
+    box-sizing: border-box;
+    margin-top: 2%;
+    border: 1px solid #c5c5c5;
+    border-radius: 4px;
+    background: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
+      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right 0.7em top 50%, 0 0;
+    background-size: 0.65em auto, 100%;
+  }
+  select.number {
+    width: 20%;
     margin-top: 5%;
     margin: 3%;
   }
   select.type {
-    width: 50%;
-    font-size: 1.4rem;
+    width: 80%;
     margin-top: 5%;
     margin: 3%;
   }
@@ -96,26 +138,13 @@ const ChooseTag = styled.div`
   }
 `;
 
-const Box = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  p {
-    flex-basis: 50%;
-    text-align: center;
-    align-items: center;
-    padding: 1% 3%;
-  }
-  textarea {
-    flex-basis: 50%;
-  }
-`;
+const Box = styled.div``;
 
 const Header = styled.div`
   display: flex;
   flex-direction: row;
   background: #eff8ff;
-  width: 100%;
+  width: 90%;
   padding: 2%;
 `;
 
@@ -129,7 +158,7 @@ class CreateConstructor extends Component {
   state = {
     name: "12",
     partsNumber: 5,
-    lessonID: this.props.id,
+    lessonID: this.props.lessonID,
     type: "equal",
     variants: "",
     answer: "",
@@ -210,38 +239,25 @@ class CreateConstructor extends Component {
     let text;
     _.times(this.state.partsNumber, i => {
       index = `doc${i + 1}`;
-      placeholder = `${i + 1}`;
+      placeholder = `${i + 1}.`;
       text = `Статья ${i + 1}`;
       card.push(
         <Box>
-          <p>{text}</p>
           <Textarea
             key={index}
             name={index}
-            cols={60}
-            rows={5}
             spellCheck={true}
             onChange={this.handleAnswer}
+            placeholder={text}
           />
         </Box>
       );
     });
-    const { id } = this.props;
+    const { lessonID } = this.props;
     return (
       <PleaseSignIn>
-        <AreYouATeacher subject={id}>
+        <AreYouATeacher subject={lessonID}>
           <Center>
-            <Link
-              href={{
-                pathname: "/lesson",
-                query: { id: this.props.id }
-              }}
-            >
-              <a>
-                <NavButton>К уроку</NavButton>
-              </a>
-            </Link>
-            <h2>Создаем конструктор</h2>
             <Header>
               <ChooseTag>
                 <p>Сколько в документе частей?</p>
@@ -284,76 +300,63 @@ class CreateConstructor extends Component {
               </ChooseTag>
             </Header>
             <Box>
-              <p className="first">Название документа</p>
               <Textarea
                 type="text"
-                cols={60}
-                rows={1}
+                placeholder="Название документа"
                 spellCheck={true}
                 name="name"
-                placeholder="Например: Договор оказания медицинских услуг"
+                placeholder="Название документа. Например: Договор оказания медицинских услуг"
                 onChange={this.saveToState}
               />
             </Box>
             <Variants>{card.map(item => item)}</Variants>
             <Box>
-              <p className="first">
-                Запишите правильные ответы. Используйте только цифры и запишите
-                их через запятые, без пробелов.
-              </p>
               <Textarea
                 type="text"
                 cols={60}
                 rows={1}
                 spellCheck={true}
                 name="answerNumber"
-                placeholder="1,2,3,4"
+                placeholder="Запишите правильные ответы. Используйте только цифры и запишите
+                их через запятые, без пробелов: 1,2,3,4"
                 onChange={this.saveToState}
               />
             </Box>
             <Box>
-              <p className="first">
-                Запишите подсказку или пояснение к документу.
-              </p>
               <Textarea
                 type="text"
                 cols={60}
                 rows={1}
                 spellCheck={true}
                 name="hint"
-                placeholder="Подсказка"
+                placeholder="Запишите подсказку или пояснение к документу."
                 onChange={this.saveToState}
               />
             </Box>
-            <br />
             <Mutation
               mutation={CREATE_CONSTRUCTION_MUTATION}
               variables={{
-                lessonID: id,
+                lessonID,
                 ...this.state
               }}
               refetchQueries={() => [
                 {
                   query: SINGLE_LESSON_QUERY,
-                  variables: { id }
+                  variables: { id: lessonID }
                 }
               ]}
               awaitRefetchQueries={true}
             >
               {(createConstruction, { loading, error }) => (
-                <SubmitButton
+                <Button
                   onClick={async e => {
                     e.preventDefault();
                     const res0 = await this.generate();
                     const res = await createConstruction();
-                    Router.push({
-                      pathname: "/lesson",
-                      query: { id }
-                    });
                   }}
                 >
-                  Сохранить документ
-                </SubmitButton>
+                  {loading ? "Сохраняем..." : "Сохранить"}
+                </Button>
               )}
             </Mutation>
             <Message id="Message">Вы создали новый тестовый вопрос!</Message>

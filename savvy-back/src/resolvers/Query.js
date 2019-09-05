@@ -20,12 +20,16 @@ const Query = {
   lessonResults: forwardTo("db"),
   order: forwardTo("db"),
   sandbox: forwardTo("db"),
+  examQuestions: forwardTo("db"),
   coursePagesConnection: forwardTo("db"),
   sandboxPagesConnection: forwardTo("db"),
   sandboxesConnection: forwardTo("db"),
   lessonsConnection: forwardTo("db"),
   problemsConnection: forwardTo("db"),
   testsConnection: forwardTo("db"),
+  article: forwardTo("db"),
+  articles: forwardTo("db"),
+  applications: forwardTo("db"),
   lessons(parent, args, ctx, info) {
     const pageId = args.where.coursePageID;
     return ctx.db.query.lessons(
@@ -53,15 +57,6 @@ const Query = {
       info
     );
   },
-  // coursePages(parent, args, ctx, info){
-  //   const courseType = args.where.courseType;
-  //   return ctx.db.query.coursePages(
-  //     {
-  //       where: {courseType: courseType}
-  //     },
-  //     info
-  //   );
-  // },
   quizzes(parent, args, ctx, info) {
     const lesID = args.where.lessonID;
     return ctx.db.query.newTests(
@@ -99,13 +94,7 @@ const Query = {
     );
   },
   applications(parent, args, ctx, info) {
-    const pageId = args.where.coursePageID;
-    return ctx.db.query.applications(
-      {
-        where: { coursePageID: pageId }
-      },
-      info
-    );
+    return ctx.db.query.applications({}, info);
   },
   sandboxes(parent, args, ctx, info) {
     const pageId = args.where.sandboxPageID;
