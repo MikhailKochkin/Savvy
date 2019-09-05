@@ -60,7 +60,6 @@ const Page = ({ children, router }) => {
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
-        <GlobalStyle />
         <Meta />
         <Layout>
           <ModalProvider>
@@ -70,6 +69,7 @@ const Page = ({ children, router }) => {
             {router.pathname !== "/" && <Footer />}
           </ModalProvider>
         </Layout>
+        <GlobalStyle />
       </StyledPage>
     </ThemeProvider>
   );
