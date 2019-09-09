@@ -28,8 +28,6 @@ const PaidApplicationsPage = () => (
     {({ data, loading, error }) => {
       if (loading) return <p>Загрузка...</p>;
       if (error) return <p>Error: {error.message}</p>;
-      console.log(data.coursePages);
-      // return <PaidApplications />;
       return data.coursePages.map(coursePage => (
         <PaidApplications id={coursePage.id} title={coursePage.title} />
       ));

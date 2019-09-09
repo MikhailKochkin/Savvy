@@ -8,7 +8,7 @@ const UniInfo = styled.div`
   padding: 1.5%;
   flex-basis: 50%;
   height: 250px;
-  @media (max-width: 850px) {
+  @media (max-width: 950px) {
     width: 95%;
   }
 `;
@@ -66,7 +66,7 @@ const Box = styled.div`
     grid-area: 1 / 3 / 2 / 4;
     border-left: 1px solid #edefed;
   }
-  @media (max-width: 850px) {
+  @media (max-width: 950px) {
     display: flex;
     flex-direction: column;
     margin-bottom: 5%;
@@ -122,7 +122,7 @@ class Uni extends Component {
           <div className="div3">Оплачено месяцев: {price}</div>
         </Box>
 
-        <Button onClick={this.pay}>
+        {/* <Button onClick={this.pay}>
           <a>Пополнить</a>
         </Button>
 
@@ -130,7 +130,7 @@ class Uni extends Component {
           <PaymentBox>
             <div>Информация об оплате</div>
           </PaymentBox>
-        )}
+        )} */}
       </UniInfo>
     );
   }

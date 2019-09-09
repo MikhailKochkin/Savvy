@@ -54,7 +54,19 @@ const Width = styled.div`
   align-items: center;
 `;
 
+const Orders = styled.div`
+  display: none;
+`;
+
 class PaidApplications extends Component {
+  state = {
+    show: false
+  };
+  toggle = () => {
+    this.setState(prevState => ({
+      show: !prevState.show
+    }));
+  };
   render() {
     return (
       <AreYouAdmin>
@@ -107,16 +119,22 @@ class PaidApplications extends Component {
                     {data.orders === 0 ? (
                       <p>По этому курсу нет заявок!</p>
                     ) : null}
-                    <div>
-                      {data.orders.map(order => (
-                        <App key={order.id}>
-                          <h3>Чек</h3>
-                          <div>Имя: {order.user.name}</div>
-                          <div>Код чека: {order.paymentId}</div>
-                          <div>Цена: {order.price}</div>
-                        </App>
-                      ))}
-                    </div>
+                    <button onClick={this.toggle}>Показать</button>
+                    {this.state.show && (
+                      <>
+                        <p>Счета:</p>
+                        <Orders>
+                          {data.orders.map(order => (
+                            <App key={order.id}>
+                              <h3>Чек</h3>
+                              <div>Имя: {order.user.name}</div>
+                              <div>Код чека: {order.paymentId}</div>
+                              <div>Цена: {order.price}</div>
+                            </App>
+                          ))}
+                        </Orders>
+                      </>
+                    )}
                   </>
                 );
               }}

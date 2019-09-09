@@ -60,12 +60,18 @@ const CasesStyles = styled.div`
     align-items: flex-start;
   }
 `;
-
 const Title = styled.div`
   font-size: 1.8rem;
   margin-bottom: 1%;
   font-weight: 700;
+  width: 17%;
+  @media (max-width: 850px) {
+    margin-left: 10px;
+    width: 50%;
+  }
 `;
+
+const Styles = styled.div``;
 
 class FreeCoursesList extends Component {
   render() {
@@ -87,7 +93,7 @@ class FreeCoursesList extends Component {
           const coursePages = data1.coursePages;
           return (
             <>
-              <>
+              <Styles data-tut="third-step">
                 <Title> Бесплатные курсы </Title>
                 <CasesStyles>
                   {coursePages &&
@@ -139,7 +145,7 @@ class FreeCoursesList extends Component {
                     );
                   }}
                 </Query>
-              </>
+              </Styles>
             </>
           );
         }}

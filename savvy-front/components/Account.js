@@ -36,7 +36,8 @@ const Form = styled.div`
   margin: 0 auto;
   font-size: 1.6rem;
   @media (max-width: 800px) {
-    width: 80%;
+    width: 90%;
+    margin-bottom: 5%;
   }
 `;
 
@@ -131,6 +132,9 @@ const Button = styled.button`
   &:active {
     background-color: ${props => props.theme.darkGreen};
   }
+  @media (max-width: 800px) {
+    width: 50%;
+  }
 `;
 
 const Green = styled.div`
@@ -147,7 +151,7 @@ class Account extends Component {
   state = {
     show: false,
     careerTrackID: this.props.me.careerTrackID || "NAN",
-    uniID: this.props.me.uniID || "cjyimfz2e00lp07174jpder3m"
+    uniID: this.props.me.uniID || "cjymz9pazr0ib0b53v38d401g"
   };
   handleChange = e => {
     const { name, value } = e.target;
@@ -235,69 +239,36 @@ class Account extends Component {
                       </Comment>
                     </>
                     <>
-                      {me.status !== "SAVVY_AUTHOR" && (
-                        <select
-                          name="status"
-                          defaultValue={me.status}
-                          value={this.state.status}
-                          onChange={this.handleSteps}
-                        >
-                          <option value="NAN">Не выбран</option>
-                          <option value="STUDENT">Студент</option>
-                          <option value="AUTHOR">Преподаватель</option>
-                        </select>
-                      )}
-                      {me.status == "SAVVY_AUTHOR" && (
-                        <select
-                          name="status"
-                          defaultValue={me.status}
-                          value={this.state.status}
-                          onChange={this.handleSteps}
-                        >
-                          <option value="NAN">Не выбран</option>
-                          <option value="STUDENT">Студент</option>
-                          <option value="AUTHOR">Преподаватель</option>
-                          <option value="SAVVY_AUTHOR">
-                            Преподаватель SAVVY
-                          </option>
-                        </select>
-                      )}
+                      <select
+                        name="status"
+                        defaultValue={me.status}
+                        value={this.state.status}
+                        onChange={this.handleSteps}
+                      >
+                        <option value="NAN">Не выбран</option>
+                        <option value="STUDENT">Студент</option>
+                        <option value="AUTHOR">Преподаватель</option>
+                      </select>
                       <Comment>
                         Выберите статус, чтобы проходить курсы в качестве
                         студента или создавать курсы в качестве преподавателя.
                       </Comment>
                     </>
                     <>
-                      {me.status !== "SAVVY_AUTHOR" && (
-                        <select
-                          name="uniID"
-                          defaultValue={
-                            me.uni ? me.uni.id : "cjymz9pazr0ib0b53v38d401g"
-                          }
-                          value={this.state.uni}
-                          onChange={this.handleSteps}
-                        >
-                          {Unis.map(uni => (
-                            <option value={Object.values(uni)[0]}>
-                              {Object.keys(uni)[0]}
-                            </option>
-                          ))}
-                        </select>
-                      )}
-                      {me.status === "SAVVY_AUTHOR" && (
-                        <select
-                          name="uniID"
-                          defaultValue={
-                            me.uni ? me.uni.id : "cjyig1o94021g07849cemkw35"
-                          }
-                          value={this.state.uni}
-                          onChange={this.handleSteps}
-                        >
-                          <option value="cjyig1o94021g07849cemkw35">
-                            Savvvy App
+                      <select
+                        name="uniID"
+                        defaultValue={
+                          me.uni ? me.uni.id : "cjymz9pazr0ib0b53v38d401g"
+                        }
+                        value={this.state.uni}
+                        onChange={this.handleSteps}
+                      >
+                        {Unis.map(uni => (
+                          <option value={Object.values(uni)[0]}>
+                            {Object.keys(uni)[0]}
                           </option>
-                        </select>
-                      )}
+                        ))}
+                      </select>
                       <Comment>
                         Выберите университет, чтобы получать доступ к курсам
                         вузов или получить возможность создавать курсы для
@@ -339,7 +310,6 @@ class Account extends Component {
             </Form>
           )}
         </Mutation>
-        {/* <MyCourses meData={me} /> */}
       </>
     );
   }

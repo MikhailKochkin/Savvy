@@ -248,44 +248,6 @@ const Mutations = {
     //3. Delete it
     return ctx.db.mutation.deleteTextEditor({ where }, info);
   },
-  async createSandboxPage(parent, args, ctx, info) {
-    // TODO: Check if they are logged in
-    if (!ctx.request.userId) {
-      throw new Error(
-        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
-      );
-    }
-    const sandboxPage = await ctx.db.mutation.createSandboxPage(
-      {
-        data: {
-          user: {
-            connect: {
-              id: ctx.request.userId
-            }
-          },
-          ...args
-        }
-      },
-      info
-    );
-    return sandboxPage;
-  },
-  updateSandboxPage(parent, args, ctx, info) {
-    //first take a copy of the updates
-    const updates = { ...args };
-    //remove the ID from updates
-    delete updates.id;
-    //run the update method
-    return ctx.db.mutation.updateSandboxPage(
-      {
-        data: updates,
-        where: {
-          id: args.id
-        }
-      },
-      info
-    );
-  },
   updateCoursePage(parent, args, ctx, info) {
     //first take a copy of the updates
     const updates = { ...args };
@@ -301,21 +263,6 @@ const Mutations = {
       },
       info
     );
-  },
-  async deleteSandboxPage(parent, args, ctx, info) {
-    const where = { id: args.id };
-    //1. find the case
-    const sandboxPage = await ctx.db.query.sandboxPage(
-      { where },
-      `{ id title user { id }}`
-    );
-    //2. check if they own the case or have the permissions
-    const ownsSandboxPage = sandboxPage.user.id === ctx.request.userId;
-    if (!ownsSandboxPage) {
-      throw new Error("К сожалению, у вас нет полномочий на это.");
-    }
-    //3. Delete it
-    return ctx.db.mutation.deleteSandboxPage({ where }, info);
   },
   async deleteCoursePage(parent, args, ctx, info) {
     const where = { id: args.id };
@@ -988,7 +935,7 @@ const Mutations = {
     // lower the email
     args.email = args.email.toLowerCase();
     const uniID = args.uniID;
-    delete args.uniID;
+    const careerTrackID = args.careerTrackID;
     // hash the password
     const password = await bcrypt.hash(args.password, 10);
     //create the user
@@ -1000,6 +947,9 @@ const Mutations = {
           permissions: { set: ["USER"] },
           uni: {
             connect: { id: uniID }
+          },
+          careerTrack: {
+            connect: { id: careerTrackID }
           }
         }
       },

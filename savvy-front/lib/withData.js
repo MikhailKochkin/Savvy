@@ -1,5 +1,4 @@
 import withApollo from "next-with-apollo";
-// import ApolloClient from "apollo-boost";
 import { endpoint, prodEndpoint } from "../config";
 
 import { ApolloClient } from "apollo-client";

@@ -64,10 +64,14 @@ const Title = styled.div`
   font-size: 1.8rem;
   margin-bottom: 1%;
   font-weight: 700;
+  width: 17%;
   @media (max-width: 850px) {
     margin-left: 10px;
+    width: 50%;
   }
 `;
+
+const Styles = styled.div``;
 
 class ForMoneyCoursesList extends Component {
   render() {
@@ -88,7 +92,7 @@ class ForMoneyCoursesList extends Component {
           if (error) return <p>Error: {error.message}</p>;
           return (
             <>
-              <>
+              <Styles data-tut="second-step">
                 <Title> Платные курсы </Title>
                 <CasesStyles>
                   {data1.coursePages &&
@@ -145,7 +149,7 @@ class ForMoneyCoursesList extends Component {
                     );
                   }}
                 </Query>
-              </>
+              </Styles>
             </>
           );
         }}

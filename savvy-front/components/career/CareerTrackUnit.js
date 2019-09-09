@@ -56,7 +56,6 @@ class CareerTrackUnit extends Component {
     }));
   };
   onShow = () => {
-    console.log("Yesss");
     this.props.getData(this.props.unit);
     this.props.getData2(this.props.index);
   };

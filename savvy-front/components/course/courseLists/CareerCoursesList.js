@@ -119,10 +119,6 @@ class CareerCoursesList extends Component {
                       if (loading2) return <p>Загрузка...</p>;
                       if (error2) return <p>Error: {error2.message}</p>;
                       const coursePagesConnection = data2.coursePagesConnection;
-                      console.log(
-                        coursePagesConnection.aggregate.count,
-                        coursePages.length
-                      );
                       return (
                         <>
                           {coursePages !== undefined &&

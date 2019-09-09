@@ -19,9 +19,14 @@ const ENGLISH_ARTICLES_QUERY = gql`
 const Title = styled.div`
   font-size: 1.8rem;
   margin-bottom: 1%;
-  font-weight: bold;
-  .name {
-    font-weight: 600;
+  font-weight: 700;
+  width: 30%;
+  @media (max-width: 1500px) {
+    width: 50%;
+  }
+  @media (max-width: 900px) {
+    padding: 2%;
+    width: 100%;
   }
 `;
 
@@ -62,6 +67,8 @@ const ArticlesGroup = styled.div`
   }
 `;
 
+const Group = styled.div``;
+
 class Articles extends Component {
   state = {
     width: 1
@@ -97,7 +104,7 @@ class Articles extends Component {
             // console.log(data1.articles);
 
             return (
-              <>
+              <Group data-tut="fourth-step">
                 <Title> Юридический английский. Полезные статьи. </Title>
 
                 {this.state.width > 1000 && (
@@ -131,7 +138,7 @@ class Articles extends Component {
                     </Carousel>
                   </ListStyle>
                 )}
-              </>
+              </Group>
             );
           }}
         </Query>

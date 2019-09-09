@@ -17,6 +17,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   width: 60%;
+  @media (max-width: 800px) {
+    width: 95%;
+    flex-direction: column;
+  }
 `;
 
 const Menu = styled.div`
@@ -30,6 +34,17 @@ const Menu = styled.div`
     border-right: 1px solid white;
     &:hover {
       border-right: 1px solid #112a62;
+    }
+  }
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    div {
+      &:hover {
+        border-right: 1px solid white;
+        border-bottom: 1px solid #112a62;
+      }
     }
   }
 `;

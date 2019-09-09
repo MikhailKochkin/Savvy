@@ -41,45 +41,69 @@ const Title = styled.div`
   font-size: 1.8rem;
   margin-bottom: 1%;
   font-weight: 700;
+  width: 30%;
+  @media (max-width: 1500px) {
+    width: 50%;
+  }
   @media (max-width: 900px) {
     padding: 2%;
+    width: 100%;
   }
 `;
 
-const Styles = styled.div``;
+const Styles = styled.div`
+  padding: 2% 4%;
+`;
+
+const Group = styled.div``;
 
 class LandingCareerTrack extends Component {
+  state = {
+    isTourOpen: false,
+    times: 0
+  };
+  open = () => {
+    this.setState({ isTourOpen: true });
+  };
+  closeTour = () => {
+    this.setState({ isTourOpen: false });
+  };
   render() {
     return (
-      <Styles>
-        <Query
-          query={CAREER_TRACK_QUERY}
-          variables={{
-            id: "cjwx78u7700rb07121pelqctm"
-          }}
-        >
-          {({ data, error, loading }) => {
-            if (error) return <Error error={error} />;
-            if (loading) return <p>Loading...</p>;
-            const career = data.careerTrack;
-            return (
-              <>
-                <Title>
-                  Карьерный трек "<span className="name">{career.name}</span>"
-                </Title>
-                <CareerTrackList
-                  CareerList={career.coursePages}
-                  id={career.id}
-                  careerTrackUnits={career.careerTrackUnits}
-                />
-                <ForMoneyCoursesList />
-                <FreeCoursesList />
-                <Articles />
-              </>
-            );
-          }}
-        </Query>
-      </Styles>
+      <>
+        <Styles className="el">
+          <Query
+            query={CAREER_TRACK_QUERY}
+            variables={{
+              id: "cjwx78u7700rb07121pelqctm"
+            }}
+          >
+            {({ data, error, loading }) => {
+              if (error) return <Error error={error} />;
+              if (loading) return <p>Loading...</p>;
+              const career = data.careerTrack;
+              return (
+                <>
+                  <Group data-tut="first-step">
+                    <Title>
+                      Карьерный трек "
+                      <span className="name">{career.name}</span>"
+                    </Title>
+                    <CareerTrackList
+                      CareerList={career.coursePages}
+                      id={career.id}
+                      careerTrackUnits={career.careerTrackUnits}
+                    />
+                  </Group>
+                  <ForMoneyCoursesList />
+                  <FreeCoursesList />
+                  <Articles />
+                </>
+              );
+            }}
+          </Query>
+        </Styles>
+      </>
     );
   }
 }

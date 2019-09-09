@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styled, { ThemeProvider, injectGlobal } from "styled-components";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { withRouter } from "next/router";
 import { ModalProvider } from "styled-react-modal";
 
@@ -8,6 +8,7 @@ import Meta from "./Meta";
 import Footer from "./Footer";
 import Header from "./Header";
 import Layout from "../components/Layout";
+import User from "./User";
 
 const theme = {
   blue: "#6DAAE1",
@@ -32,9 +33,10 @@ const Inner = styled.div`
   width: 100%;
 `;
 
-injectGlobal`
-    html {
+const GlobalStyle = createGlobalStyle`
       @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=cyrillic');
+
+    html {
         font-family: 'Montserrat', sans-serif;
         box-sizing: border-box;
         font-size: 10px;
@@ -60,15 +62,24 @@ const Page = ({ children, router }) => {
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
-        <Meta />
-        <Layout>
-          <ModalProvider>
-            <Header />
-            {router.pathname !== "/" && <Nav />}
-            <Inner>{children}</Inner>
-            {router.pathname !== "/" && <Footer />}
-          </ModalProvider>
-        </Layout>
+        <User>
+          {({ data: { me } }) => (
+            <>
+              <GlobalStyle />
+              <Meta />
+              <Layout>
+                <ModalProvider>
+                  <Header />
+                  {router.pathname === "/" && me && <Nav />}
+                  {router.pathname !== "/" && <Nav />}
+                  <Inner>{children}</Inner>
+                  {router.pathname === "/" && me && <Footer />}
+                  {router.pathname !== "/" && <Footer />}
+                </ModalProvider>
+              </Layout>
+            </>
+          )}
+        </User>
       </StyledPage>
     </ThemeProvider>
   );

@@ -1,37 +1,13 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import { Mutation } from "react-apollo";
-import gql from "graphql-tag";
 import ReactResizeDetector from "react-resize-detector";
-import { Unis } from "../config";
-import { CURRENT_USER_QUERY } from "./User";
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
+import dynamic from "next/dynamic";
 import User from "./User";
 import LandingCareerTrack from "./LandingCareerTrack";
-
-const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION(
-    $email: String!
-    $name: String!
-    $password: String!
-    $isFamiliar: Boolean!
-    $status: Status!
-    $uniID: ID
-  ) {
-    signup(
-      email: $email
-      name: $name
-      password: $password
-      isFamiliar: $isFamiliar
-      status: $status
-      uniID: $uniID
-    ) {
-      id
-      email
-      name
-    }
-  }
-`;
+import LandingRegister from "./auth/LandingRegister";
+import LandingLogIn from "./auth/LandingLogIn";
 
 const Image = styled.div`
   background: black;
@@ -86,153 +62,6 @@ const Nav = styled.div`
   }
 `;
 
-const Black = styled.div`
-  position: absolute;
-  top: 15%;
-  left: 15%;
-  display: flex;
-  width: 70%;
-  flex-direction: column;
-  justify-content: space-between;
-  @media (max-width: 1300px) {
-    width: 70%;
-    left: 10%;
-  }
-  @media (max-width: 1000px) {
-    left: 20%;
-  }
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    top: 12%;
-    left: 5%;
-    width: 90%;
-  }
-`;
-
-const SubmitButton = styled.button`
-  background: #84bc9c;
-  border-radius: 5px;
-  border: none;
-  padding: 3%;
-  margin-top: 5%;
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 1.4rem;
-  color: #ffffff;
-  cursor: pointer;
-  outline: none;
-  &:hover {
-    background: #32ac66;
-  }
-`;
-
-const Button = styled.button`
-  font-size: 1.6rem;
-  width: 430px;
-  padding: 1% 0;
-  border-radius: 5px;
-  opacity: 0.92;
-  border: 1px solid white;
-  background: white;
-  -webkit-box-shadow: 0px -1px 5px 1px rgba(171, 171, 171, 0.63);
-  -moz-box-shadow: 0px -1px 5px 1px rgba(171, 171, 171, 0.63);
-  box-shadow: 0px -1px 5px 1px rgba(171, 171, 171, 0.63);
-  border: none;
-  margin-top: 2%;
-  line-height: 1.2;
-  font-weight: 600;
-  outline: 0;
-  cursor: pointer;
-  &:hover {
-    opacity: 1;
-  }
-  &:active {
-    border: 1px solid #c4c4c4;
-  }
-  @media (max-width: 600px) {
-    width: 95%;
-    margin-top: 4%;
-    padding: 2%;
-  }
-`;
-
-const Form = styled.div`
-  width: 430px;
-  min-height: 450px;
-  border: none;
-  border-radius: 7px;
-  background: white;
-  padding: 2%;
-  overflow: auto;
-  -webkit-box-shadow: 0px -1px 5px 1px rgba(171, 171, 171, 0.63);
-  -moz-box-shadow: 0px -1px 5px 1px rgba(171, 171, 171, 0.63);
-  box-shadow: 0px -1px 5px 1px rgba(171, 171, 171, 0.63);
-  @media (max-width: 1200px) {
-    left: 50%;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-    height: 100%;
-    padding: 15px 20px;
-  }
-`;
-
-const Header = styled.div`
-  font-size: 2rem;
-  line-height: 1.3;
-  font-weight: 600;
-  width: 100%;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 3%;
-  font-size: 1.4rem;
-  border: 1px solid #c5c5c5;
-  box-sizing: border-box;
-  border-radius: 4px;
-  margin-bottom: 3%;
-  outline: none;
-  &:focus {
-    border: 1px solid #112a62;
-  }
-`;
-
-const Label = styled.label`
-  margin-bottom: 10px;
-  select {
-    width: 100%;
-    font-size: 1.4rem;
-    outline: none;
-    line-height: 1.3;
-    padding: 0.6em 1.4em 0.5em 0.8em;
-    max-width: 100%;
-    box-sizing: border-box;
-    margin: 0;
-    border: 1px solid #c5c5c5;
-    border-radius: 4px;
-    background: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: #fff;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
-      linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
-    background-repeat: no-repeat, repeat;
-    background-position: right 0.7em top 50%, 0 0;
-    background-size: 0.65em auto, 100%;
-  }
-`;
-
-const Name = styled.p`
-  font-size: 1.4rem;
-  margin: 1% auto;
-  font-weight: 600;
-`;
-
 const Logo = styled.p`
   font-size: 2rem;
   color: white;
@@ -250,243 +79,258 @@ const Logo = styled.p`
 const FYI = styled.div`
   width: 100vw;
   height: 100vh;
-  padding: 2% 4%;
 `;
+
+const NavButton = styled.div`
+  background: none;
+  color: #112a62;
+  border: 1px solid #112a62;
+  border-radius: 5px;
+  text-align: center;
+  width: 12%;
+  padding: 0.5% 0.5%;
+  margin: 2% 0% 0% 4%;
+  cursor: pointer;
+  transition: 0.4s;
+  &:hover {
+    background: #112a62;
+    color: white;
+  }
+  @media (max-width: 1000px) {
+    width: 50%;
+  }
+`;
+
+const DynamicTour = dynamic(import("reactour"), {
+  ssr: false
+});
 
 class LandingPage extends Component {
   state = {
     width: 1,
-    status: "STUDENT"
+    height: 1,
+    isTourOpen: false,
+    times: 0,
+    page: "register"
   };
 
-  onResize = width => {
-    this.setState({ width });
+  onResize = (width, height) => {
+    this.setState({ width, height });
+  };
+
+  open = () => {
+    this.setState({ isTourOpen: true });
+  };
+  closeTour = () => {
+    this.setState({ isTourOpen: false });
   };
 
   onSwitch = e => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-    this.setState({ status: name });
+    const page = e.target.getAttribute("name");
+    this.setState({ page });
   };
 
-  saveToState = e => {
-    this.setState({ [e.target.name]: e.target.value });
+  onScroll = e => {
+    e.target.scrollingElement.scrollHeight /
+      e.target.scrollingElement.scrollTop <
+    7
+      ? this.setState(prevState => ({
+          times: prevState.times + 1
+        }))
+      : null;
+
+    if (this.state.times === 1) {
+      this.setState({ isTourOpen: true });
+      this.setState(prevState => ({
+        times: prevState.times + 1
+      }));
+    }
   };
 
-  handleSteps = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+  componentDidMount() {
+    document.addEventListener("scroll", this.onScroll);
+  }
 
   render() {
+    const steps = [
+      {
+        selector: '[data-tut="zero-step"]',
+        content: function DemoHelperComponent0() {
+          return (
+            <>
+              <p>Можно рассказать вам, как работает Savvvy.app?</p>
+            </>
+          );
+        }
+      },
+      {
+        selector: '[data-tut="first-step"]',
+        content: function DemoHelperComponent1() {
+          return (
+            <>
+              <p>
+                При регистрации вы выбираете <b>карьерный трек</b>.
+              </p>
+              <div>
+                Карьерный трек – это пошаговый план по развитию в одной из
+                юридических отраслей. Он подскажет, какие темы вам необходимо
+                изучить, где получить знания и с помощью каких курсов развить
+                практические навыки.
+              </div>
+            </>
+          );
+        }
+      },
+      {
+        selector: '[data-tut="second-step"]',
+        content: function DemoHelperComponent2() {
+          return (
+            <>
+              <p>
+                Неотъемлемой частью каждого карьерного трека являются{" "}
+                <b>курсы</b>.
+              </p>
+              <div>
+                Большинство курсов – платные. Стоимость курса обычно варьируется
+                от 1800 до 3600 рублей. Каждый курс направлен на оттачивание
+                практических навыков юристов. Для этого мы постоянно
+                разрабатываем новые онлайн тренажеры и привлекаем крутых
+                специалистов для создания курсов.
+              </div>
+            </>
+          );
+        }
+      },
+      {
+        selector: '[data-tut="third-step"]',
+        content: function DemoHelperComponent3() {
+          return (
+            <>
+              <p>
+                Тем не менее, есть и <b>бесплатные курсы</b>, которые создают
+                наши партнеры или университеты.
+              </p>
+              <div>
+                Для доступа к бесплатным курсам достаточно на них
+                зарегистрироваться. На курс университета необходимо отправить
+                заявку, которая должна быть одобрена преподавателем. К курсам
+                университетов можно попасть с помощью специальной вкладки "Курсы
+                вузов и сообществ" в меню.
+              </div>
+            </>
+          );
+        }
+      },
+      {
+        selector: '[data-tut="fourth-step"]',
+        content: function DemoHelperComponent4() {
+          return (
+            <>
+              <p>
+                Читайте наши <b>статьи</b>!
+              </p>
+              <div>
+                В статьях даются практические рекомендации по развитию карьеры и
+                ссылки на скачивание материалов, которые мы готовим специально
+                для вас.
+              </div>
+            </>
+          );
+        }
+      },
+      {
+        selector: '[data-tut="fifth-step"]',
+        content: function DemoHelperComponent5() {
+          return (
+            <>
+              <p>
+                Чтобы получить доступ к персонализированным карьерным трекам,
+                курсам и статьям, надо зарегистрироваться!
+              </p>
+              <div>
+                Если у вас уже есть аккаунт, войдите в него. Мы дадим вам новые
+                возможности для совершенствования юридических навыков.
+              </div>
+            </>
+          );
+        }
+      }
+    ];
+    const disableBody = target => disableBodyScroll(target);
+    const enableBody = target => enableBodyScroll(target);
     return (
       <User>
         {({ data: { me } }) => (
-          <Mutation
-            mutation={SIGNUP_MUTATION}
-            variables={this.state}
-            refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-          >
-            {(signup, { error, loading }) => (
-              <>
-                <ReactResizeDetector
-                  handleWidth
-                  handleHeight
-                  onResize={this.onResize}
-                />
-                <Logo>Savvvy App</Logo>
-                <Nav>
-                  <span>
-                    <Link prefetch href="/courses">
-                      <a>Курсы</a>
-                    </Link>
-                  </span>
-
-                  {this.state.height > 1000 && me && me.status === "AUTHOR" && (
-                    <span>
-                      <Link prefetch href="/educator">
-                        <a>Кабинет</a>
-                      </Link>
-                    </span>
-                  )}
-
-                  {this.state.width > 1000 &&
-                    me &&
-                    me.status === "SAVVY_AUTHOR" && (
-                      <span>
-                        <Link prefetch href="/educator">
-                          <a>Кабинет</a>
-                        </Link>
-                      </span>
-                    )}
-                  {this.state.width > 1000 && (
-                    <span>
-                      <a href="mailto:mi.kochkin@ya.ru?cc=valvin2000@ya.ru&subject=Проблема%20с%20сайтом">
-                        Поддержка
-                      </a>
-                    </span>
-                  )}
-                </Nav>
-                <Black>
-                  <>
-                    {this.state.status === "STUDENT" && (
-                      <Form>
-                        <Header>
-                          Приобретайте юридические навыки онлайн, используя
-                          технологии и уникальные материалы{" "}
-                        </Header>
-                        <Label>
-                          <Name>Имя и фамилия</Name>
-                          <Input
-                            className="name"
-                            type="text"
-                            name="name"
-                            placeholder="Имя и фамилия"
-                            value={this.state.name}
-                            onChange={this.saveToState}
-                          />
-                        </Label>
-                        <Label>
-                          <Name>Электронная почта</Name>
-                          <Input
-                            className="email"
-                            type="email"
-                            name="email"
-                            placeholder="Почта"
-                            value={this.state.email}
-                            onChange={this.saveToState}
-                          />
-                        </Label>
-                        <Label>
-                          <Name>Пароль</Name>
-                          <Input
-                            className="password"
-                            type="password"
-                            name="password"
-                            placeholder="Пароль"
-                            value={this.state.password}
-                            onChange={this.saveToState}
-                          />
-                        </Label>
-                        <Label>
-                          <Name>Карьерный трек</Name>
-                          <select
-                            class="select-css"
-                            name="career"
-                            value={this.state.career}
-                            onChange={this.handleSteps}
-                          >
-                            <option value="NAN">Не выбран</option>
-                            <option value="cjymyvxjqqsoh0b53wtdnpzkk">
-                              Старт карьеры. Корпоративное право
-                            </option>
-                            <option value="jymywj43tg8c0b36c762ii0w">
-                              Старт карьеры. Право и технологии
-                            </option>
-                          </select>
-                        </Label>
-                        <SubmitButton
-                          onClick={async e => {
-                            e.preventDefault();
-                            await signup();
-                            setTimeout(
-                              () => Router.push({ pathname: "/courses" }),
-                              2000
-                            );
-                          }}
-                        >
-                          Зарегистрироваться
-                        </SubmitButton>
-                      </Form>
-                    )}
-                    {this.state.status === "AUTHOR" && (
-                      <Form>
-                        <Header>
-                          Начните обучать юристов, используя современные
-                          технологии
-                        </Header>
-                        <Label>
-                          <Name>Имя и фамилия</Name>
-                          <Input
-                            className="name"
-                            type="text"
-                            name="name"
-                            placeholder="Имя и фамилия"
-                            value={this.state.name}
-                            onChange={this.saveToState}
-                          />
-                        </Label>
-                        <Label>
-                          <Name>Электронная почта</Name>
-                          <Input
-                            className="email"
-                            type="email"
-                            name="email"
-                            placeholder="Почта"
-                            value={this.state.email}
-                            onChange={this.saveToState}
-                          />
-                        </Label>
-                        <Label>
-                          <Name>Пароль</Name>
-                          <Input
-                            className="password"
-                            type="password"
-                            name="password"
-                            placeholder="Пароль"
-                            value={this.state.password}
-                            onChange={this.saveToState}
-                          />
-                        </Label>
-                        <Label>
-                          <Name>Где вы преподаете?</Name>
-                          <select
-                            class="select-css"
-                            name="careerTrackID"
-                            value={this.state.careerTrackID}
-                            onChange={this.handleSteps}
-                          >
-                            {Unis.map(uni => (
-                              <option value={Object.values(uni)[0]}>
-                                {Object.keys(uni)[0]}
-                              </option>
-                            ))}
-                          </select>
-                        </Label>
-                        <SubmitButton
-                          onClick={async e => {
-                            e.preventDefault();
-                            await signup();
-                            setTimeout(
-                              () => Router.push({ pathname: "/educator" }),
-                              2000
-                            );
-                          }}
-                        >
-                          Зарегистрироваться
-                        </SubmitButton>
-                      </Form>
-                    )}
-                    {this.state.status === "STUDENT" && (
-                      <Button name="AUTHOR" onClick={this.onSwitch}>
-                        Я преподаватель
-                      </Button>
-                    )}
-                    {this.state.status === "AUTHOR" && (
-                      <Button name="STUDENT" onClick={this.onSwitch}>
-                        Я ученик
-                      </Button>
-                    )}
-                  </>
-                </Black>
-                <Image />
-                <FYI>
-                  <LandingCareerTrack />
-                </FYI>
-              </>
-            )}
-          </Mutation>
+          <>
+            <ReactResizeDetector
+              handleWidth
+              handleHeight
+              onResize={this.onResize}
+            />
+            <Logo>Savvvy App</Logo>
+            <Nav>
+              {!me && this.state.page === "register" && (
+                <span>
+                  <a onClick={this.onSwitch} name="login">
+                    Войти
+                  </a>
+                </span>
+              )}
+              {!me && this.state.page === "login" && (
+                <span>
+                  <a onClick={this.onSwitch} name="register">
+                    Регистрация
+                  </a>
+                </span>
+              )}
+              {me && (
+                <span>
+                  <Link prefetch href="/courses">
+                    <a>Курсы</a>
+                  </Link>
+                </span>
+              )}
+              {this.state.height > 1000 && me && me.status === "AUTHOR" && (
+                <span>
+                  <Link prefetch href="/educator">
+                    <a>Кабинет</a>
+                  </Link>
+                </span>
+              )}
+              {this.state.width > 1000 && me && me.status === "SAVVY_AUTHOR" && (
+                <span>
+                  <Link prefetch href="/educator">
+                    <a>Кабинет</a>
+                  </Link>
+                </span>
+              )}
+              {this.state.width > 1000 && (
+                <span>
+                  <a href="mailto:mi.kochkin@ya.ru?cc=valvin2000@ya.ru&subject=Проблема%20с%20сайтом">
+                    Поддержка
+                  </a>
+                </span>
+              )}
+            </Nav>
+            {this.state.page === "login" && <LandingLogIn />}
+            {this.state.page === "register" && <LandingRegister />}
+            <Image />
+            <FYI>
+              <NavButton onClick={this.open} data-tut="zero-step">
+                Тур по Savvvy.app
+              </NavButton>
+              <LandingCareerTrack width={this.state.width} />
+            </FYI>
+            <DynamicTour
+              onAfterOpen={this.state.width > 600 ? disableBody : null}
+              onBeforeClose={this.state.width > 600 ? enableBody : null}
+              disableDotsNavigation={false}
+              steps={steps}
+              isOpen={this.state.isTourOpen}
+              onRequestClose={this.closeTour}
+              closeWithMask={true}
+            />
+          </>
         )}
       </User>
     );
