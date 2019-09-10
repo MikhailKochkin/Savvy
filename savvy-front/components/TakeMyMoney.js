@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Cookies from "universal-cookie";
 import gql from "graphql-tag";
 import { CURRENT_USER_QUERY } from "./User";
+import { CREATE_APPLICATION_MUTATION } from "./course/Application";
 
 const cookies = new Cookies();
 
