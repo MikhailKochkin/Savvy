@@ -68,8 +68,8 @@ type Mutation {
   createTextEditorResult(
     attempts: Int
     revealed: [String!]
-    lessonID: ID
-    textEditorID: ID
+    lessonID: ID!
+    textEditorID: ID!
   ): TextEditorResult!
   createConstructionResult(
     answer: String

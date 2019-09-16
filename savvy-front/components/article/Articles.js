@@ -59,7 +59,7 @@ const ListStyle = styled.div`
 const ArticlesGroup = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 2% 0 5% 0;
   width: 100%;
   @media (max-width: 700px) {
