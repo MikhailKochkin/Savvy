@@ -9,11 +9,13 @@ const AreYouEnrolled = props => (
       if (loading) return <p>Loading...</p>;
       const arr1 = [];
       const index = 1;
+      console.log(data.me);
       if (data.me) {
         data.me.coursePages.map(obj => arr1.push(Object.values(obj)[0]));
         if (
           !data.me.subjects.includes(props.subject) &&
-          !arr1.includes(props.subject)
+          !arr1.includes(props.subject) &&
+          !data.me.permissions.includes("ADMIN")
         ) {
           return (
             <div>

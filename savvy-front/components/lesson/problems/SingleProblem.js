@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import renderHTML from "react-render-html";
+import dynamic from "next/dynamic";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
@@ -58,8 +59,8 @@ const Button = styled.button`
   padding: 1.5% 3%;
   font-size: 1.6rem;
   font-weight: 600;
-  margin-top: 3%;
-  width: 20%;
+  /* margin-top: 3%; */
+  width: 30%;
   color: #fffdf7;
   background: ${props => props.theme.green};
   border: solid 1px white;
@@ -74,24 +75,41 @@ const Button = styled.button`
   }
 `;
 
-const Form = styled.form`
-  textarea {
-    height: 150px;
-    width: 90%;
-    border: 1px solid #c4c4c4;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 2%;
-    font-size: 1.6rem;
-    margin-top: 1%;
-    height: 100px;
-    outline: 0;
-    @media (max-width: 750px) {
-      width: 95%;
-      height: auto;
-    }
+const Frame = styled.div`
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  width: 100%;
+  margin: 3% 0;
+  padding: 0% 3%;
+  .com {
+    border-top: 1px solid #c4c4c4;
   }
 `;
+
+const Advice = styled.span`
+  font-size: 1.6rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 5px 0 15px 0;
+  width: 45%;
+  @media (max-width: 850px) {
+    width: 100%;
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+`;
+
+const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false
+});
 
 class SingleProblem extends Component {
   state = {
@@ -106,6 +124,13 @@ class SingleProblem extends Component {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  };
+
+  myCallback = (dataFromChild, name) => {
+    let st = name;
+    this.setState({
+      [st]: dataFromChild
+    });
   };
 
   onCheck = data => {
@@ -143,17 +168,14 @@ class SingleProblem extends Component {
   }
   render() {
     const { problem, me, userData } = this.props;
-    const data = this.props.userData.filter(
-      result => result.problem.id === this.props.problem.id
-    );
-    console.log(this.props.lessonID);
+    const data = userData.filter(result => result.problem.id === problem.id);
     return (
       <>
         <TextBar>
           {renderHTML(problem.text)}
           {data.length > 0 && (
-            <>
-              <p>Работа уже сдана.</p>
+            <ButtonGroup>
+              <Advice>Эта задача выполнена.</Advice>
               <Button
                 onClick={async e => {
                   // Stop the form from submitting
@@ -163,59 +185,68 @@ class SingleProblem extends Component {
                   // change the page to the single case page
                 }}
               >
-                Ответить
+                Открыть ответы
               </Button>
-            </>
+            </ButtonGroup>
           )}
-          {!this.state.revealAnswer && data.length < 1 && (
-            <Form>
-              {this.state.revealAnswer && (
-                <p>Теперь вы можете посмотреть ответ.</p>
-              )}
-              <textarea
-                rows={4}
-                id="answer"
-                name="answer"
-                placeholder="Ответ..."
-                required
-                value={this.state.answer}
-                onChange={this.handleChange}
-              />
-            </Form>
+          {this.state.revealAnswer && data.length > 0 && (
+            <Frame>
+              <p>
+                <b>Ваш ответ:</b>
+              </p>{" "}
+              {renderHTML(data[0].answer)}
+            </Frame>
           )}
           {data.length === 0 && (
-            <Mutation
-              mutation={CREATE_PROBLEMRESULT_MUTATION}
-              variables={{
-                lessonID: this.props.lessonID,
-                answer: this.state.answer,
-                revealed: this.state.revealed,
-                problemID: this.props.problem.id
-              }}
-              refetchQueries={() => [
-                {
-                  query: SINGLE_LESSON_QUERY,
-                  variables: { id: this.props.lessonID }
-                },
-                {
-                  query: CURRENT_USER_QUERY
-                }
-              ]}
-            >
-              {(createProblemResult, { loading, error }) => (
-                <Button
-                  onClick={async e => {
-                    // Stop the form from submitting
-                    e.preventDefault();
-                    // call the mutation
-                    // const res = await createProblemResult();
-                    const res2 = await this.setState({ revealAnswer: true });
-                  }}
-                >
-                  {loading ? "В процессе" : "Ответить"}
-                </Button>
-              )}
-            </Mutation>
+            <>
+              <Frame>
+                <DynamicLoadedEditor
+                  index={1}
+                  name="answer"
+                  getEditorText={this.myCallback}
+                  placeholder={``}
+                />
+              </Frame>
+              <Mutation
+                mutation={CREATE_PROBLEMRESULT_MUTATION}
+                variables={{
+                  lessonID: this.props.lessonID,
+                  answer: this.state.answer,
+                  revealed: this.state.revealed,
+                  problemID: this.props.problem.id
+                }}
+                refetchQueries={() => [
+                  {
+                    query: SINGLE_LESSON_QUERY,
+                    variables: { id: this.props.lessonID }
+                  },
+                  {
+                    query: CURRENT_USER_QUERY
+                  }
+                ]}
+              >
+                {(createProblemResult, { loading, error }) => (
+                  <Button
+                    onClick={async e => {
+                      // Stop the form from submitting
+                      e.preventDefault();
+                      // call the mutation
+                      if (this.state.answer !== "") {
+                        const res = await createProblemResult();
+                        const res2 = await this.setState({
+                          revealAnswer: true
+                        });
+                        console.log("Yes");
+                      } else {
+                        console.log("No");
+                      }
+                    }}
+                  >
+                    {loading ? "В процессе..." : "Ответить"}
+                  </Button>
+                )}
+              </Mutation>
+            </>
           )}
           {me && me.id === problem.user.id ? (
             <DeleteSingleProblem

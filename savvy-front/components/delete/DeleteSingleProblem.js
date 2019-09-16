@@ -18,7 +18,6 @@ const Button = styled.button`
   width: 20%;
   color: white;
   padding: 1.5% 3%;
-  margin-left: 3%;
   font-size: 1.6rem;
   font-weight: 600;
   border-radius: 5px;

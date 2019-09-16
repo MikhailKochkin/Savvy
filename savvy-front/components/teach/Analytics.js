@@ -14,6 +14,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       new_students {
         id
         name
+        email
       }
       examQuestion {
         id

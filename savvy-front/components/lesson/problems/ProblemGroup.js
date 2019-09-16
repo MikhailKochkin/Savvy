@@ -40,7 +40,6 @@ const Advice = styled.div`
 
 class ProblemGroup extends Component {
   state = {
-    shown: false,
     num: 0
   };
   onNext = () => {

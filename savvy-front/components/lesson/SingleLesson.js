@@ -556,16 +556,12 @@ class SingleLesson extends Component {
                                 </ButtonZone>
                               )}
                             </div>
-                            {/* Use any element to open the sidenav */}
                           </>
                         )}
 
                         <Head>
                           {this.state.width < 800 && (
-                            <span onClick={this.openNav}>
-                              {/* <IoMdMenu size={32} /> */}
-                              Навигация
-                            </span>
+                            <span onClick={this.openNav}>Навигация</span>
                           )}
                           <div>
                             Урок {lesson.number}. {lesson.name}
@@ -687,9 +683,6 @@ class SingleLesson extends Component {
                               <UpdateLesson lessonID={lesson.id} />
                             )}
                           </LessonPart>
-                          {/* <ShowMenu onClick={this.onShowMenu}>
-                            <IoMdMenu size={32} />
-                          </ShowMenu> */}
                           {this.state.width > 800 && (
                             <MenuPart shown={this.state.shown}>
                               <Sticky>
@@ -826,6 +819,7 @@ class SingleLesson extends Component {
                           )}
                         </LessonStyles>
                       </Container>
+                      <div id="root"></div>
                     </AreYouEnrolled>
                   </>
                 );
