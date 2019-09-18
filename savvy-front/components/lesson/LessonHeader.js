@@ -190,7 +190,7 @@ class LessonHeader extends Component {
     this.setState({ [name]: value });
   };
   render() {
-    const { lesson, name, students, coursePageId, me } = this.props;
+    const { lesson, name, new_students, coursePageId, me } = this.props;
     return (
       <>
         <TextBar>
@@ -292,7 +292,7 @@ class LessonHeader extends Component {
                                 {me &&
                                   lesson &&
                                   me.id !== lesson.user.id &&
-                                  students.includes(me.id) &&
+                                  new_students.includes(me.id) &&
                                   !me.permissions.includes("ADMIN") &&
                                   this.state.published && (
                                     <Link
@@ -365,7 +365,7 @@ class LessonHeader extends Component {
                               {me &&
                                 lesson &&
                                 me.id !== lesson.user.id &&
-                                students.includes(me.id) &&
+                                new_students.includes(me.id) &&
                                 this.state.published && (
                                   <Link
                                     href={{
@@ -392,7 +392,7 @@ class LessonHeader extends Component {
                               {me &&
                                 lesson &&
                                 me.id !== lesson.user.id &&
-                                !students.includes(me.id) &&
+                                !new_students.includes(me.id) &&
                                 this.props.index === 1 && (
                                   <Link
                                     href={{
@@ -428,7 +428,7 @@ class LessonHeader extends Component {
             {me &&
             lesson &&
             me.id !== lesson.user.id &&
-            students.includes(me.id) &&
+            new_students.includes(me.id) &&
             !me.permissions.includes("ADMIN") &&
             !this.state.published ? (
               <InProgress>В разработке</InProgress>

@@ -254,6 +254,10 @@ class CoursePage extends Component {
                                 if (loading) return <p>Loading...</p>;
 
                                 const coursePage = data.coursePage;
+                                const student_list = [];
+                                coursePage.new_students.map(ns =>
+                                  student_list.push(ns.id)
+                                );
                                 let price;
                                 if (coursePage.price === null) {
                                   price = "Бесплатно";
@@ -409,9 +413,7 @@ class CoursePage extends Component {
                                                     name={lesson.name}
                                                     lesson={lesson}
                                                     coursePageId={this.props.id}
-                                                    students={
-                                                      coursePage.students
-                                                    }
+                                                    new_students={student_list}
                                                     open={index + 1 === 1}
                                                     index={index + 1}
                                                   />

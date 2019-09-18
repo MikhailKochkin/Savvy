@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Router from "next/router";
 import { CURRENT_USER_QUERY } from "./User";
 import { SINGLE_COURSEPAGE_QUERY } from "./course/CoursePage";
 
@@ -98,10 +97,6 @@ class EnrollCoursePage extends Component {
           }
         });
         alert("Вы успешно зарегистрировлаись. Наслаждайтесь курсом!");
-        Router.push({
-          pathname: "/lesson",
-          query: { id: this.props.coursePage.lessons[0].id }
-        });
       }
     }
   };
