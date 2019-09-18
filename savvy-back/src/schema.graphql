@@ -31,7 +31,14 @@ type Mutation {
     text: String!
     coursePageID: ID!
   ): Lesson!
-  updateLesson(id: ID!, name: String, number: Int, text: String): Lesson
+  updateLesson(
+    id: ID!
+    name: String
+    number: Int
+    text: String
+    type: Type
+    map: [Json]
+  ): Lesson
   updatePublished(id: ID!, published: Boolean): Lesson
   updateUni(id: ID!, capacity: Int, paidMonths: Int): Uni
   deleteLesson(id: ID!): Lesson
@@ -57,8 +64,18 @@ type Mutation {
   ): NewTest!
   createLessonResult(visitsNumber: Int, lessonID: ID): LessonResult!
   updateLessonResult(id: ID!, visitsNumber: Int): LessonResult!
-  createTestResult(answer: String, attempts: Int, lessonID: ID): TestResult!
-  createQuizResult(answer: String, attempts: Int, lessonID: ID): QuizResult!
+  createTestResult(
+    answer: String
+    attempts: Int
+    lessonID: ID
+    testID: ID
+  ): TestResult!
+  createQuizResult(
+    answer: String
+    attempts: Int
+    lessonID: ID
+    quiz: ID
+  ): QuizResult!
   createProblemResult(
     answer: String
     revealed: [String!]
@@ -68,8 +85,8 @@ type Mutation {
   createTextEditorResult(
     attempts: Int
     revealed: [String!]
-    lessonID: ID!
-    textEditorID: ID!
+    lessonID: ID
+    textEditorID: ID
   ): TextEditorResult!
   createConstructionResult(
     answer: String
@@ -176,6 +193,23 @@ type Mutation {
     text: String
     coursePageIDs: [ID]
   ): Article!
+  createShot(
+    title: String!
+    parts: [String!]
+    comments: [String!]
+    lessonID: ID
+  ): Shot!
+  createShotResult(answer: String!, shotID: ID, lessonID: ID): Shot!
+  deleteShot(id: ID!): Shot
+  updateShots(
+    id: ID!
+    title: String!
+    parts: [String!]
+    comments: [String!]
+  ): CoursePage
+  createNote(text: String, lessonID: ID): Note!
+  updateNote(id: ID!, text: String): Note
+  deleteNote(id: ID!): Note
 }
 
 type Query {

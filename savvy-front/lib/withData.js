@@ -20,8 +20,7 @@ function createClient({ headers }) {
         if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
       new HttpLink({
-        uri:
-          process.env.NODE_ENV === "development" ? prodEndpoint : prodEndpoint,
+        uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
         credentials: "include",
         headers
       })

@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import SingleTest from "./SingleTest";
-import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { CURRENT_USER_QUERY } from "../../User";
 
 const Button = styled.button`
   padding: 1% 2%;
@@ -48,35 +45,23 @@ class TestGroup extends Component {
     handIn: false
   };
 
-  myCallback = async e => {
-    const res = await this.setState(prevState => ({
-      completed: prevState.completed + 1
-    }));
-    if (this.state.tests.length === this.state.completed) {
-      console.log("Reached!");
-    }
-  };
-
   render() {
     let arr;
-    console.log(this.props);
-    const userData = this.props.testResults.filter(
-      result => result.student.id === this.props.me.id
-    );
     return (
       <>
-        <Advice>
+        {/* <Advice>
           <b>Совет</b>: чтобы преподаватель увидел, что вы выполнили задания,
           вам нужно сделать следущее. Ответьте правильно на все вопросы,
           самостоятельно или с помощью подсказок. После этого в самом низу
           страницы появится кнопка "Сохранить". Только после того, как вы на нее
           нажмете, преподаватель получит информацию, что вы выполнили все
           задания этого типа.
-        </Advice>
+        </Advice> */}
         {this.state.tests.map((test, index) => (
           <>
             {(arr = Array(test.correct.length).fill(false))}
             <SingleTest
+              id={test.id}
               question={test.question}
               num={index + 1}
               answers={test.answers}
@@ -84,13 +69,12 @@ class TestGroup extends Component {
               length={arr}
               user={test.user.id}
               me={this.props.me}
-              testId={test.id}
-              lessonId={this.props.lessonId}
-              getTestData={this.myCallback}
+              lessonID={this.props.lessonID}
+              userData={this.props.testResults}
             />
           </>
         ))}
-        <Mutation
+        {/* <Mutation
           mutation={CREATE_TESTRESULT_MUTATION}
           variables={{
             lessonID: this.props.lessonId,
@@ -125,9 +109,9 @@ class TestGroup extends Component {
                   </Button>
                 )}
               {userData.length > 0 ? <p>Тесты этого урока сданы!</p> : null}
-            </>
-          )}
-        </Mutation>
+            </> */}
+        {/* )}
+        </Mutation> */}
       </>
     );
   }

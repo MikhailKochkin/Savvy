@@ -62,7 +62,6 @@ class TextEditorGroup extends Component {
       result => result.student.id === this.props.me.id
     );
     const textEditor = this.props.textEditors[this.state.num];
-    console.log(userData);
     return (
       <>
         <Advice>

@@ -71,7 +71,7 @@ const Hint = styled.div`
 const Button = styled.button`
   padding: 1.5% 2%;
   background: ${props => props.theme.green};
-  width: 25%;
+  width: 35%;
   border-radius: 5px;
   color: white;
   font-weight: 600;
@@ -105,7 +105,6 @@ class SingleTextEditor extends Component {
   };
   onMouseClick = e => {
     if (this.state.total !== null && this.state.total > 0) {
-      console.log(e.target.innerHTML);
       e.target.style.backgroundColor = "#FDF3C8";
       e.target.style.padding = "0.8%";
       e.target.style.borderRadius = "8px";
@@ -132,10 +131,8 @@ class SingleTextEditor extends Component {
 
   onShow = () => {
     const mistakes = document.querySelectorAll("#id");
-    // console.log(mistakes);
-    // console.log(this.state.mistakesShown);
     this.setState(prevState => ({ mistakesShown: !prevState.mistakesShown }));
-    // console.log(this.state.mistakesShown);
+    console.log(this.state.mistakesShown);
     if (!this.state.mistakesShown) {
       mistakes.forEach(mistake => (mistake.style.backgroundColor = "#F0C40F"));
       mistakes.forEach(mistake => (mistake.style.padding = "0.8%"));
@@ -143,9 +140,7 @@ class SingleTextEditor extends Component {
     } else if (this.state.mistakesShown) {
       mistakes.forEach(mistake => (mistake.style = null));
     }
-    // console.log("Конец");
   };
-
   componentDidMount() {
     const elements = document.querySelectorAll("#id");
     elements.forEach(element =>
@@ -154,9 +149,10 @@ class SingleTextEditor extends Component {
   }
   render() {
     const { textEditor, me, userData } = this.props;
-    const data = userData.filter(
-      result => result.textEditor.id === textEditor.id
-    );
+    const data = userData
+      .filter(result => result.textEditor.id === textEditor.id)
+      .filter(result => result.student.id === me.id);
+    console.log(data);
     return (
       <>
         <TextBar>
@@ -174,49 +170,48 @@ class SingleTextEditor extends Component {
             ) : null}
           </EditText>
         </TextBar>
-        {this.state.total > 0 && this.state.total !== null && (
-          <>
-            {data.length === 0 && (
-              <Mutation
-                mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-                variables={{
-                  lessonID: this.props.lessonID,
-                  attempts: this.state.attempts,
-                  revealed: this.state.revealed,
-                  textEditorID: this.props.textEditor.id
-                }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: this.props.lessonID }
-                  },
-                  {
-                    query: CURRENT_USER_QUERY
-                  }
-                ]}
-              >
-                {(createTextEditorResult, { loading, error }) => (
-                  <Button
-                    onClick={async e => {
-                      e.preventDefault();
-                      this.onShow;
-                      const res = await createTextEditorResult();
-                      console.log("Ответ сохранен!");
-                    }}
-                  >
-                    Показать ошибки
-                  </Button>
-                )}
-              </Mutation>
-            )}
-            {data.length > 0 && (
-              <Button onClick={this.onShow}>
-                {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
-              </Button>
-            )}
-          </>
-        )}
-
+        <>
+          {data.length === 0 && (
+            <Mutation
+              mutation={CREATE_TEXTEDITORRESULT_MUTATION}
+              variables={{
+                lessonID: this.props.lessonID,
+                attempts: this.state.attempts,
+                revealed: this.state.revealed,
+                textEditorID: this.props.textEditor.id
+              }}
+              refetchQueries={() => [
+                {
+                  query: SINGLE_LESSON_QUERY,
+                  variables: { id: this.props.lessonID }
+                },
+                {
+                  query: CURRENT_USER_QUERY
+                }
+              ]}
+            >
+              {(createTextEditorResult, { loading, error }) => (
+                <Button
+                  onClick={async e => {
+                    e.preventDefault();
+                    this.onShow();
+                    const res = await createTextEditorResult();
+                    console.log("Ответ сохранен!");
+                  }}
+                >
+                  {this.state.mistakesShown
+                    ? "Скрыть ошибки"
+                    : "Показать ошибки"}
+                </Button>
+              )}
+            </Mutation>
+          )}
+          {data.length > 0 && (
+            <Button onClick={this.onShow}>
+              {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
+            </Button>
+          )}
+        </>
         {me && me.id === textEditor.user.id ? (
           <DeleteSingleTextEditor
             id={this.props.textEditor.id}

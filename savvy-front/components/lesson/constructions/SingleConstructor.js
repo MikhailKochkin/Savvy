@@ -111,7 +111,7 @@ const Advice = styled.p`
 
 class SingleConstructor extends Component {
   state = {
-    variants: this.props.construction.variants,
+    variants: this.props.variants,
     answer: this.props.construction.answer,
     received: this.props.arr,
     answerState: "",
@@ -199,10 +199,11 @@ class SingleConstructor extends Component {
     }
   };
   render() {
-    const { me, lessonID, construction } = this.props;
-    const data = this.props.userData.filter(
-      result => result.construction.id === construction.id
-    );
+    const { me, lessonID, construction, userData } = this.props;
+    const data = userData
+      .filter(result => result.construction.id === construction.id)
+      .filter(result => result.student.id === this.props.me.id);
+    console.log(userData);
     return (
       <Styles>
         <Variants>
@@ -217,7 +218,7 @@ class SingleConstructor extends Component {
           ))}
         </Variants>
         <Answers>
-          <Title>Составьте документ</Title>
+          <Title>{construction.name}</Title>
           {this.state.received.map((option, index) => (
             <Label className="Var">
               <input

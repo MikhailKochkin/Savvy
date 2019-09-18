@@ -50,6 +50,10 @@ type AggregateNewTest {
   count: Int!
 }
 
+type AggregateNote {
+  count: Int!
+}
+
 type AggregateOrder {
   count: Int!
 }
@@ -87,6 +91,14 @@ type AggregateSandboxPage {
 }
 
 type AggregateSandboxPageGoal {
+  count: Int!
+}
+
+type AggregateShot {
+  count: Int!
+}
+
+type AggregateShotResult {
   count: Int!
 }
 
@@ -4062,6 +4074,8 @@ input ExamQuestionWhereUniqueInput {
   id: ID
 }
 
+scalar Json
+
 type LegalPortfolio {
   id: ID!
   user: User!
@@ -4252,6 +4266,11 @@ type Lesson {
   number: Int
   text: String!
   user: User!
+  type: Type
+  map: [Json!]!
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
+  shots(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Shot!]
+  shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult!]
   coursePage: CoursePage!
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test!]
   newTests(where: NewTestWhereInput, orderBy: NewTestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NewTest!]
@@ -4283,6 +4302,11 @@ input LessonCreateInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4311,6 +4335,10 @@ input LessonCreateManyWithoutUserInput {
   connect: [LessonWhereUniqueInput!]
 }
 
+input LessonCreatemapInput {
+  set: [Json!]
+}
+
 input LessonCreateOneWithoutConstructionResultsInput {
   create: LessonCreateWithoutConstructionResultsInput
   connect: LessonWhereUniqueInput
@@ -4331,6 +4359,11 @@ input LessonCreateOneWithoutNewTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonCreateOneWithoutNotesInput {
+  create: LessonCreateWithoutNotesInput
+  connect: LessonWhereUniqueInput
+}
+
 input LessonCreateOneWithoutProblemResultsInput {
   create: LessonCreateWithoutProblemResultsInput
   connect: LessonWhereUniqueInput
@@ -4348,6 +4381,16 @@ input LessonCreateOneWithoutQuizesInput {
 
 input LessonCreateOneWithoutQuizResultsInput {
   create: LessonCreateWithoutQuizResultsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonCreateOneWithoutShotResultsInput {
+  create: LessonCreateWithoutShotResultsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonCreateOneWithoutShotsInput {
+  create: LessonCreateWithoutShotsInput
   connect: LessonWhereUniqueInput
 }
 
@@ -4376,6 +4419,11 @@ input LessonCreateWithoutConstructionResultsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4398,6 +4446,11 @@ input LessonCreateWithoutConstructionsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4420,6 +4473,11 @@ input LessonCreateWithoutCoursePageInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
   quizes: QuizCreateManyWithoutLessonInput
@@ -4442,6 +4500,11 @@ input LessonCreateWithoutLessonResultsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4464,8 +4527,40 @@ input LessonCreateWithoutNewTestsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  lessonResults: LessonResultCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+}
+
+input LessonCreateWithoutNotesInput {
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
   quizes: QuizCreateManyWithoutLessonInput
   problems: ProblemCreateManyWithoutLessonInput
   constructions: ConstructionCreateManyWithoutLessonInput
@@ -4486,6 +4581,11 @@ input LessonCreateWithoutProblemResultsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4508,6 +4608,11 @@ input LessonCreateWithoutProblemsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4530,6 +4635,11 @@ input LessonCreateWithoutQuizesInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4552,6 +4662,11 @@ input LessonCreateWithoutQuizResultsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4569,11 +4684,70 @@ input LessonCreateWithoutQuizResultsInput {
   published: Boolean
 }
 
+input LessonCreateWithoutShotResultsInput {
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  lessonResults: LessonResultCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+}
+
+input LessonCreateWithoutShotsInput {
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  lessonResults: LessonResultCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+}
+
 input LessonCreateWithoutTestResultsInput {
   name: String!
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4596,6 +4770,11 @@ input LessonCreateWithoutTestsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   newTests: NewTestCreateManyWithoutLessonInput
   quizes: QuizCreateManyWithoutLessonInput
@@ -4618,6 +4797,11 @@ input LessonCreateWithoutTextEditorResultsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4640,6 +4824,11 @@ input LessonCreateWithoutTexteditorsInput {
   number: Int
   text: String!
   user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4661,6 +4850,11 @@ input LessonCreateWithoutUserInput {
   name: String!
   number: Int
   text: String!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
@@ -4693,6 +4887,8 @@ enum LessonOrderByInput {
   number_DESC
   text_ASC
   text_DESC
+  type_ASC
+  type_DESC
   open_ASC
   open_DESC
   coursePageID_ASC
@@ -4710,6 +4906,8 @@ type LessonPreviousValues {
   name: String!
   number: Int
   text: String!
+  type: Type
+  map: [Json!]!
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -5059,6 +5257,10 @@ input LessonScalarWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
+  type: Type
+  type_not: Type
+  type_in: [Type!]
+  type_not_in: [Type!]
   open: Boolean
   open_not: Boolean
   coursePageID: ID
@@ -5121,6 +5323,11 @@ input LessonUpdateInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5143,6 +5350,8 @@ input LessonUpdateManyDataInput {
   name: String
   number: Int
   text: String
+  type: Type
+  map: LessonUpdatemapInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5152,6 +5361,8 @@ input LessonUpdateManyMutationInput {
   name: String
   number: Int
   text: String
+  type: Type
+  map: LessonUpdatemapInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5184,6 +5395,10 @@ input LessonUpdateManyWithoutUserInput {
 input LessonUpdateManyWithWhereNestedInput {
   where: LessonScalarWhereInput!
   data: LessonUpdateManyDataInput!
+}
+
+input LessonUpdatemapInput {
+  set: [Json!]
 }
 
 input LessonUpdateOneRequiredWithoutConstructionsInput {
@@ -5232,6 +5447,15 @@ input LessonUpdateOneWithoutNewTestsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonUpdateOneWithoutNotesInput {
+  create: LessonCreateWithoutNotesInput
+  update: LessonUpdateWithoutNotesDataInput
+  upsert: LessonUpsertWithoutNotesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LessonWhereUniqueInput
+}
+
 input LessonUpdateOneWithoutProblemResultsInput {
   create: LessonCreateWithoutProblemResultsInput
   update: LessonUpdateWithoutProblemResultsDataInput
@@ -5254,6 +5478,24 @@ input LessonUpdateOneWithoutQuizResultsInput {
   create: LessonCreateWithoutQuizResultsInput
   update: LessonUpdateWithoutQuizResultsDataInput
   upsert: LessonUpsertWithoutQuizResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LessonWhereUniqueInput
+}
+
+input LessonUpdateOneWithoutShotResultsInput {
+  create: LessonCreateWithoutShotResultsInput
+  update: LessonUpdateWithoutShotResultsDataInput
+  upsert: LessonUpsertWithoutShotResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LessonWhereUniqueInput
+}
+
+input LessonUpdateOneWithoutShotsInput {
+  create: LessonCreateWithoutShotsInput
+  update: LessonUpdateWithoutShotsDataInput
+  upsert: LessonUpsertWithoutShotsInput
   delete: Boolean
   disconnect: Boolean
   connect: LessonWhereUniqueInput
@@ -5291,6 +5533,11 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5313,6 +5560,11 @@ input LessonUpdateWithoutConstructionsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5335,6 +5587,11 @@ input LessonUpdateWithoutCoursePageDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
   quizes: QuizUpdateManyWithoutLessonInput
@@ -5357,6 +5614,11 @@ input LessonUpdateWithoutLessonResultsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5379,8 +5641,40 @@ input LessonUpdateWithoutNewTestsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  lessonResults: LessonResultUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+}
+
+input LessonUpdateWithoutNotesDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
   quizes: QuizUpdateManyWithoutLessonInput
   problems: ProblemUpdateManyWithoutLessonInput
   constructions: ConstructionUpdateManyWithoutLessonInput
@@ -5401,6 +5695,11 @@ input LessonUpdateWithoutProblemResultsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5423,6 +5722,11 @@ input LessonUpdateWithoutProblemsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5445,6 +5749,11 @@ input LessonUpdateWithoutQuizesDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5467,6 +5776,11 @@ input LessonUpdateWithoutQuizResultsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5484,11 +5798,70 @@ input LessonUpdateWithoutQuizResultsDataInput {
   published: Boolean
 }
 
+input LessonUpdateWithoutShotResultsDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  lessonResults: LessonResultUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+}
+
+input LessonUpdateWithoutShotsDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  lessonResults: LessonResultUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+}
+
 input LessonUpdateWithoutTestResultsDataInput {
   name: String
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5511,6 +5884,11 @@ input LessonUpdateWithoutTestsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   newTests: NewTestUpdateManyWithoutLessonInput
   quizes: QuizUpdateManyWithoutLessonInput
@@ -5533,6 +5911,11 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5555,6 +5938,11 @@ input LessonUpdateWithoutTexteditorsDataInput {
   number: Int
   text: String
   user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5576,6 +5964,11 @@ input LessonUpdateWithoutUserDataInput {
   name: String
   number: Int
   text: String
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
@@ -5624,6 +6017,11 @@ input LessonUpsertWithoutNewTestsInput {
   create: LessonCreateWithoutNewTestsInput!
 }
 
+input LessonUpsertWithoutNotesInput {
+  update: LessonUpdateWithoutNotesDataInput!
+  create: LessonCreateWithoutNotesInput!
+}
+
 input LessonUpsertWithoutProblemResultsInput {
   update: LessonUpdateWithoutProblemResultsDataInput!
   create: LessonCreateWithoutProblemResultsInput!
@@ -5642,6 +6040,16 @@ input LessonUpsertWithoutQuizesInput {
 input LessonUpsertWithoutQuizResultsInput {
   update: LessonUpdateWithoutQuizResultsDataInput!
   create: LessonCreateWithoutQuizResultsInput!
+}
+
+input LessonUpsertWithoutShotResultsInput {
+  update: LessonUpdateWithoutShotResultsDataInput!
+  create: LessonCreateWithoutShotResultsInput!
+}
+
+input LessonUpsertWithoutShotsInput {
+  update: LessonUpdateWithoutShotsDataInput!
+  create: LessonCreateWithoutShotsInput!
 }
 
 input LessonUpsertWithoutTestResultsInput {
@@ -5728,6 +6136,19 @@ input LessonWhereInput {
   text_ends_with: String
   text_not_ends_with: String
   user: UserWhereInput
+  type: Type
+  type_not: Type
+  type_in: [Type!]
+  type_not_in: [Type!]
+  notes_every: NoteWhereInput
+  notes_some: NoteWhereInput
+  notes_none: NoteWhereInput
+  shots_every: ShotWhereInput
+  shots_some: ShotWhereInput
+  shots_none: ShotWhereInput
+  shotResults_every: ShotResultWhereInput
+  shotResults_some: ShotResultWhereInput
+  shotResults_none: ShotResultWhereInput
   coursePage: CoursePageWhereInput
   tests_every: TestWhereInput
   tests_some: TestWhereInput
@@ -5889,6 +6310,12 @@ type Mutation {
   upsertNewTest(where: NewTestWhereUniqueInput!, create: NewTestCreateInput!, update: NewTestUpdateInput!): NewTest!
   deleteNewTest(where: NewTestWhereUniqueInput!): NewTest
   deleteManyNewTests(where: NewTestWhereInput): BatchPayload!
+  createNote(data: NoteCreateInput!): Note!
+  updateNote(data: NoteUpdateInput!, where: NoteWhereUniqueInput!): Note
+  updateManyNotes(data: NoteUpdateManyMutationInput!, where: NoteWhereInput): BatchPayload!
+  upsertNote(where: NoteWhereUniqueInput!, create: NoteCreateInput!, update: NoteUpdateInput!): Note!
+  deleteNote(where: NoteWhereUniqueInput!): Note
+  deleteManyNotes(where: NoteWhereInput): BatchPayload!
   createOrder(data: OrderCreateInput!): Order!
   updateOrder(data: OrderUpdateInput!, where: OrderWhereUniqueInput!): Order
   updateManyOrders(data: OrderUpdateManyMutationInput!, where: OrderWhereInput): BatchPayload!
@@ -5949,6 +6376,18 @@ type Mutation {
   upsertSandboxPageGoal(where: SandboxPageGoalWhereUniqueInput!, create: SandboxPageGoalCreateInput!, update: SandboxPageGoalUpdateInput!): SandboxPageGoal!
   deleteSandboxPageGoal(where: SandboxPageGoalWhereUniqueInput!): SandboxPageGoal
   deleteManySandboxPageGoals(where: SandboxPageGoalWhereInput): BatchPayload!
+  createShot(data: ShotCreateInput!): Shot!
+  updateShot(data: ShotUpdateInput!, where: ShotWhereUniqueInput!): Shot
+  updateManyShots(data: ShotUpdateManyMutationInput!, where: ShotWhereInput): BatchPayload!
+  upsertShot(where: ShotWhereUniqueInput!, create: ShotCreateInput!, update: ShotUpdateInput!): Shot!
+  deleteShot(where: ShotWhereUniqueInput!): Shot
+  deleteManyShots(where: ShotWhereInput): BatchPayload!
+  createShotResult(data: ShotResultCreateInput!): ShotResult!
+  updateShotResult(data: ShotResultUpdateInput!, where: ShotResultWhereUniqueInput!): ShotResult
+  updateManyShotResults(data: ShotResultUpdateManyMutationInput!, where: ShotResultWhereInput): BatchPayload!
+  upsertShotResult(where: ShotResultWhereUniqueInput!, create: ShotResultCreateInput!, update: ShotResultUpdateInput!): ShotResult!
+  deleteShotResult(where: ShotResultWhereUniqueInput!): ShotResult
+  deleteManyShotResults(where: ShotResultWhereInput): BatchPayload!
   createTest(data: TestCreateInput!): Test!
   updateTest(data: TestUpdateInput!, where: TestWhereUniqueInput!): Test
   updateManyTests(data: TestUpdateManyMutationInput!, where: TestWhereInput): BatchPayload!
@@ -5998,6 +6437,7 @@ type NewTest {
   question: [String!]!
   answers: [String!]!
   correct: [Boolean!]!
+  testResults(where: TestResultWhereInput, orderBy: TestResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TestResult!]
   user: User!
   lesson: Lesson
   lessonID: ID
@@ -6023,6 +6463,7 @@ input NewTestCreateInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  testResults: TestResultCreateManyWithoutTestInput
   user: UserCreateOneWithoutNewTestsInput!
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
@@ -6038,6 +6479,11 @@ input NewTestCreateManyWithoutUserInput {
   connect: [NewTestWhereUniqueInput!]
 }
 
+input NewTestCreateOneWithoutTestResultsInput {
+  create: NewTestCreateWithoutTestResultsInput
+  connect: NewTestWhereUniqueInput
+}
+
 input NewTestCreatequestionInput {
   set: [String!]
 }
@@ -6046,7 +6492,17 @@ input NewTestCreateWithoutLessonInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  testResults: TestResultCreateManyWithoutTestInput
   user: UserCreateOneWithoutNewTestsInput!
+  lessonID: ID
+}
+
+input NewTestCreateWithoutTestResultsInput {
+  question: NewTestCreatequestionInput
+  answers: NewTestCreateanswersInput
+  correct: NewTestCreatecorrectInput
+  user: UserCreateOneWithoutNewTestsInput!
+  lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
 }
 
@@ -6054,6 +6510,7 @@ input NewTestCreateWithoutUserInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  testResults: TestResultCreateManyWithoutTestInput
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
 }
@@ -6164,6 +6621,7 @@ input NewTestUpdateInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  testResults: TestResultUpdateManyWithoutTestInput
   user: UserUpdateOneRequiredWithoutNewTestsInput
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
@@ -6212,6 +6670,15 @@ input NewTestUpdateManyWithWhereNestedInput {
   data: NewTestUpdateManyDataInput!
 }
 
+input NewTestUpdateOneWithoutTestResultsInput {
+  create: NewTestCreateWithoutTestResultsInput
+  update: NewTestUpdateWithoutTestResultsDataInput
+  upsert: NewTestUpsertWithoutTestResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: NewTestWhereUniqueInput
+}
+
 input NewTestUpdatequestionInput {
   set: [String!]
 }
@@ -6220,7 +6687,17 @@ input NewTestUpdateWithoutLessonDataInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  testResults: TestResultUpdateManyWithoutTestInput
   user: UserUpdateOneRequiredWithoutNewTestsInput
+  lessonID: ID
+}
+
+input NewTestUpdateWithoutTestResultsDataInput {
+  question: NewTestUpdatequestionInput
+  answers: NewTestUpdateanswersInput
+  correct: NewTestUpdatecorrectInput
+  user: UserUpdateOneRequiredWithoutNewTestsInput
+  lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
 }
 
@@ -6228,6 +6705,7 @@ input NewTestUpdateWithoutUserDataInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  testResults: TestResultUpdateManyWithoutTestInput
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
 }
@@ -6240,6 +6718,11 @@ input NewTestUpdateWithWhereUniqueWithoutLessonInput {
 input NewTestUpdateWithWhereUniqueWithoutUserInput {
   where: NewTestWhereUniqueInput!
   data: NewTestUpdateWithoutUserDataInput!
+}
+
+input NewTestUpsertWithoutTestResultsInput {
+  update: NewTestUpdateWithoutTestResultsDataInput!
+  create: NewTestCreateWithoutTestResultsInput!
 }
 
 input NewTestUpsertWithWhereUniqueWithoutLessonInput {
@@ -6269,6 +6752,9 @@ input NewTestWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  testResults_every: TestResultWhereInput
+  testResults_some: TestResultWhereInput
+  testResults_none: TestResultWhereInput
   user: UserWhereInput
   lesson: LessonWhereInput
   lessonID: ID
@@ -6312,6 +6798,269 @@ input NewTestWhereUniqueInput {
 
 interface Node {
   id: ID!
+}
+
+type Note {
+  id: ID!
+  text: String!
+  user: User
+  lessonID: ID
+  lesson: Lesson
+}
+
+type NoteConnection {
+  pageInfo: PageInfo!
+  edges: [NoteEdge]!
+  aggregate: AggregateNote!
+}
+
+input NoteCreateInput {
+  text: String!
+  user: UserCreateOneWithoutNotesInput
+  lessonID: ID
+  lesson: LessonCreateOneWithoutNotesInput
+}
+
+input NoteCreateManyWithoutLessonInput {
+  create: [NoteCreateWithoutLessonInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateManyWithoutUserInput {
+  create: [NoteCreateWithoutUserInput!]
+  connect: [NoteWhereUniqueInput!]
+}
+
+input NoteCreateWithoutLessonInput {
+  text: String!
+  user: UserCreateOneWithoutNotesInput
+  lessonID: ID
+}
+
+input NoteCreateWithoutUserInput {
+  text: String!
+  lessonID: ID
+  lesson: LessonCreateOneWithoutNotesInput
+}
+
+type NoteEdge {
+  node: Note!
+  cursor: String!
+}
+
+enum NoteOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  lessonID_ASC
+  lessonID_DESC
+}
+
+type NotePreviousValues {
+  id: ID!
+  text: String!
+  lessonID: ID
+}
+
+input NoteScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  AND: [NoteScalarWhereInput!]
+  OR: [NoteScalarWhereInput!]
+  NOT: [NoteScalarWhereInput!]
+}
+
+type NoteSubscriptionPayload {
+  mutation: MutationType!
+  node: Note
+  updatedFields: [String!]
+  previousValues: NotePreviousValues
+}
+
+input NoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: NoteWhereInput
+  AND: [NoteSubscriptionWhereInput!]
+  OR: [NoteSubscriptionWhereInput!]
+  NOT: [NoteSubscriptionWhereInput!]
+}
+
+input NoteUpdateInput {
+  text: String
+  user: UserUpdateOneWithoutNotesInput
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutNotesInput
+}
+
+input NoteUpdateManyDataInput {
+  text: String
+  lessonID: ID
+}
+
+input NoteUpdateManyMutationInput {
+  text: String
+  lessonID: ID
+}
+
+input NoteUpdateManyWithoutLessonInput {
+  create: [NoteCreateWithoutLessonInput!]
+  delete: [NoteWhereUniqueInput!]
+  connect: [NoteWhereUniqueInput!]
+  set: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutLessonInput!]
+  deleteMany: [NoteScalarWhereInput!]
+  updateMany: [NoteUpdateManyWithWhereNestedInput!]
+}
+
+input NoteUpdateManyWithoutUserInput {
+  create: [NoteCreateWithoutUserInput!]
+  delete: [NoteWhereUniqueInput!]
+  connect: [NoteWhereUniqueInput!]
+  set: [NoteWhereUniqueInput!]
+  disconnect: [NoteWhereUniqueInput!]
+  update: [NoteUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [NoteUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [NoteScalarWhereInput!]
+  updateMany: [NoteUpdateManyWithWhereNestedInput!]
+}
+
+input NoteUpdateManyWithWhereNestedInput {
+  where: NoteScalarWhereInput!
+  data: NoteUpdateManyDataInput!
+}
+
+input NoteUpdateWithoutLessonDataInput {
+  text: String
+  user: UserUpdateOneWithoutNotesInput
+  lessonID: ID
+}
+
+input NoteUpdateWithoutUserDataInput {
+  text: String
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutNotesInput
+}
+
+input NoteUpdateWithWhereUniqueWithoutLessonInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutLessonDataInput!
+}
+
+input NoteUpdateWithWhereUniqueWithoutUserInput {
+  where: NoteWhereUniqueInput!
+  data: NoteUpdateWithoutUserDataInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutLessonInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutLessonDataInput!
+  create: NoteCreateWithoutLessonInput!
+}
+
+input NoteUpsertWithWhereUniqueWithoutUserInput {
+  where: NoteWhereUniqueInput!
+  update: NoteUpdateWithoutUserDataInput!
+  create: NoteCreateWithoutUserInput!
+}
+
+input NoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  user: UserWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  lesson: LessonWhereInput
+  AND: [NoteWhereInput!]
+  OR: [NoteWhereInput!]
+  NOT: [NoteWhereInput!]
+}
+
+input NoteWhereUniqueInput {
+  id: ID
 }
 
 type Order {
@@ -8563,6 +9312,9 @@ type Query {
   newTest(where: NewTestWhereUniqueInput!): NewTest
   newTests(where: NewTestWhereInput, orderBy: NewTestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [NewTest]!
   newTestsConnection(where: NewTestWhereInput, orderBy: NewTestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NewTestConnection!
+  note(where: NoteWhereUniqueInput!): Note
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note]!
+  notesConnection(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NoteConnection!
   order(where: OrderWhereUniqueInput!): Order
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
   ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
@@ -8593,6 +9345,12 @@ type Query {
   sandboxPageGoal(where: SandboxPageGoalWhereUniqueInput!): SandboxPageGoal
   sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal]!
   sandboxPageGoalsConnection(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxPageGoalConnection!
+  shot(where: ShotWhereUniqueInput!): Shot
+  shots(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Shot]!
+  shotsConnection(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ShotConnection!
+  shotResult(where: ShotResultWhereUniqueInput!): ShotResult
+  shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult]!
+  shotResultsConnection(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ShotResultConnection!
   test(where: TestWhereUniqueInput!): Test
   tests(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Test]!
   testsConnection(where: TestWhereInput, orderBy: TestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TestConnection!
@@ -8621,6 +9379,7 @@ type Quiz {
   user: User!
   lessonID: ID
   lesson: Lesson
+  quizResults(where: QuizResultWhereInput, orderBy: QuizResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuizResult!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -8637,6 +9396,7 @@ input QuizCreateInput {
   user: UserCreateOneWithoutQuizesInput!
   lessonID: ID
   lesson: LessonCreateOneWithoutQuizesInput
+  quizResults: QuizResultCreateManyWithoutQuizInput
 }
 
 input QuizCreateManyWithoutLessonInput {
@@ -8649,11 +9409,25 @@ input QuizCreateManyWithoutUserInput {
   connect: [QuizWhereUniqueInput!]
 }
 
+input QuizCreateOneWithoutQuizResultsInput {
+  create: QuizCreateWithoutQuizResultsInput
+  connect: QuizWhereUniqueInput
+}
+
 input QuizCreateWithoutLessonInput {
   question: String!
   answer: String!
   user: UserCreateOneWithoutQuizesInput!
   lessonID: ID
+  quizResults: QuizResultCreateManyWithoutQuizInput
+}
+
+input QuizCreateWithoutQuizResultsInput {
+  question: String!
+  answer: String!
+  user: UserCreateOneWithoutQuizesInput!
+  lessonID: ID
+  lesson: LessonCreateOneWithoutQuizesInput
 }
 
 input QuizCreateWithoutUserInput {
@@ -8661,6 +9435,7 @@ input QuizCreateWithoutUserInput {
   answer: String!
   lessonID: ID
   lesson: LessonCreateOneWithoutQuizesInput
+  quizResults: QuizResultCreateManyWithoutQuizInput
 }
 
 type QuizEdge {
@@ -8697,6 +9472,7 @@ type QuizResult {
   student: User!
   answer: String
   attempts: Int
+  quiz: Quiz
   lesson: Lesson
   lessonID: ID
 }
@@ -8711,12 +9487,18 @@ input QuizResultCreateInput {
   student: UserCreateOneWithoutQuizResultsInput!
   answer: String
   attempts: Int
+  quiz: QuizCreateOneWithoutQuizResultsInput
   lesson: LessonCreateOneWithoutQuizResultsInput
   lessonID: ID
 }
 
 input QuizResultCreateManyWithoutLessonInput {
   create: [QuizResultCreateWithoutLessonInput!]
+  connect: [QuizResultWhereUniqueInput!]
+}
+
+input QuizResultCreateManyWithoutQuizInput {
+  create: [QuizResultCreateWithoutQuizInput!]
   connect: [QuizResultWhereUniqueInput!]
 }
 
@@ -8729,12 +9511,22 @@ input QuizResultCreateWithoutLessonInput {
   student: UserCreateOneWithoutQuizResultsInput!
   answer: String
   attempts: Int
+  quiz: QuizCreateOneWithoutQuizResultsInput
+  lessonID: ID
+}
+
+input QuizResultCreateWithoutQuizInput {
+  student: UserCreateOneWithoutQuizResultsInput!
+  answer: String
+  attempts: Int
+  lesson: LessonCreateOneWithoutQuizResultsInput
   lessonID: ID
 }
 
 input QuizResultCreateWithoutStudentInput {
   answer: String
   attempts: Int
+  quiz: QuizCreateOneWithoutQuizResultsInput
   lesson: LessonCreateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -8840,6 +9632,7 @@ input QuizResultUpdateInput {
   student: UserUpdateOneRequiredWithoutQuizResultsInput
   answer: String
   attempts: Int
+  quiz: QuizUpdateOneWithoutQuizResultsInput
   lesson: LessonUpdateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -8868,6 +9661,18 @@ input QuizResultUpdateManyWithoutLessonInput {
   updateMany: [QuizResultUpdateManyWithWhereNestedInput!]
 }
 
+input QuizResultUpdateManyWithoutQuizInput {
+  create: [QuizResultCreateWithoutQuizInput!]
+  delete: [QuizResultWhereUniqueInput!]
+  connect: [QuizResultWhereUniqueInput!]
+  set: [QuizResultWhereUniqueInput!]
+  disconnect: [QuizResultWhereUniqueInput!]
+  update: [QuizResultUpdateWithWhereUniqueWithoutQuizInput!]
+  upsert: [QuizResultUpsertWithWhereUniqueWithoutQuizInput!]
+  deleteMany: [QuizResultScalarWhereInput!]
+  updateMany: [QuizResultUpdateManyWithWhereNestedInput!]
+}
+
 input QuizResultUpdateManyWithoutStudentInput {
   create: [QuizResultCreateWithoutStudentInput!]
   delete: [QuizResultWhereUniqueInput!]
@@ -8889,12 +9694,22 @@ input QuizResultUpdateWithoutLessonDataInput {
   student: UserUpdateOneRequiredWithoutQuizResultsInput
   answer: String
   attempts: Int
+  quiz: QuizUpdateOneWithoutQuizResultsInput
+  lessonID: ID
+}
+
+input QuizResultUpdateWithoutQuizDataInput {
+  student: UserUpdateOneRequiredWithoutQuizResultsInput
+  answer: String
+  attempts: Int
+  lesson: LessonUpdateOneWithoutQuizResultsInput
   lessonID: ID
 }
 
 input QuizResultUpdateWithoutStudentDataInput {
   answer: String
   attempts: Int
+  quiz: QuizUpdateOneWithoutQuizResultsInput
   lesson: LessonUpdateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -8902,6 +9717,11 @@ input QuizResultUpdateWithoutStudentDataInput {
 input QuizResultUpdateWithWhereUniqueWithoutLessonInput {
   where: QuizResultWhereUniqueInput!
   data: QuizResultUpdateWithoutLessonDataInput!
+}
+
+input QuizResultUpdateWithWhereUniqueWithoutQuizInput {
+  where: QuizResultWhereUniqueInput!
+  data: QuizResultUpdateWithoutQuizDataInput!
 }
 
 input QuizResultUpdateWithWhereUniqueWithoutStudentInput {
@@ -8913,6 +9733,12 @@ input QuizResultUpsertWithWhereUniqueWithoutLessonInput {
   where: QuizResultWhereUniqueInput!
   update: QuizResultUpdateWithoutLessonDataInput!
   create: QuizResultCreateWithoutLessonInput!
+}
+
+input QuizResultUpsertWithWhereUniqueWithoutQuizInput {
+  where: QuizResultWhereUniqueInput!
+  update: QuizResultUpdateWithoutQuizDataInput!
+  create: QuizResultCreateWithoutQuizInput!
 }
 
 input QuizResultUpsertWithWhereUniqueWithoutStudentInput {
@@ -8959,6 +9785,7 @@ input QuizResultWhereInput {
   attempts_lte: Int
   attempts_gt: Int
   attempts_gte: Int
+  quiz: QuizWhereInput
   lesson: LessonWhereInput
   lessonID: ID
   lessonID_not: ID
@@ -9085,6 +9912,7 @@ input QuizUpdateInput {
   user: UserUpdateOneRequiredWithoutQuizesInput
   lessonID: ID
   lesson: LessonUpdateOneWithoutQuizesInput
+  quizResults: QuizResultUpdateManyWithoutQuizInput
 }
 
 input QuizUpdateManyDataInput {
@@ -9128,11 +9956,29 @@ input QuizUpdateManyWithWhereNestedInput {
   data: QuizUpdateManyDataInput!
 }
 
+input QuizUpdateOneWithoutQuizResultsInput {
+  create: QuizCreateWithoutQuizResultsInput
+  update: QuizUpdateWithoutQuizResultsDataInput
+  upsert: QuizUpsertWithoutQuizResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: QuizWhereUniqueInput
+}
+
 input QuizUpdateWithoutLessonDataInput {
   question: String
   answer: String
   user: UserUpdateOneRequiredWithoutQuizesInput
   lessonID: ID
+  quizResults: QuizResultUpdateManyWithoutQuizInput
+}
+
+input QuizUpdateWithoutQuizResultsDataInput {
+  question: String
+  answer: String
+  user: UserUpdateOneRequiredWithoutQuizesInput
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutQuizesInput
 }
 
 input QuizUpdateWithoutUserDataInput {
@@ -9140,6 +9986,7 @@ input QuizUpdateWithoutUserDataInput {
   answer: String
   lessonID: ID
   lesson: LessonUpdateOneWithoutQuizesInput
+  quizResults: QuizResultUpdateManyWithoutQuizInput
 }
 
 input QuizUpdateWithWhereUniqueWithoutLessonInput {
@@ -9150,6 +9997,11 @@ input QuizUpdateWithWhereUniqueWithoutLessonInput {
 input QuizUpdateWithWhereUniqueWithoutUserInput {
   where: QuizWhereUniqueInput!
   data: QuizUpdateWithoutUserDataInput!
+}
+
+input QuizUpsertWithoutQuizResultsInput {
+  update: QuizUpdateWithoutQuizResultsDataInput!
+  create: QuizCreateWithoutQuizResultsInput!
 }
 
 input QuizUpsertWithWhereUniqueWithoutLessonInput {
@@ -9223,6 +10075,9 @@ input QuizWhereInput {
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
   lesson: LessonWhereInput
+  quizResults_every: QuizResultWhereInput
+  quizResults_some: QuizResultWhereInput
+  quizResults_none: QuizResultWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -10331,6 +11186,787 @@ input SandboxWhereUniqueInput {
   id: ID
 }
 
+type Shot {
+  id: ID!
+  user: User!
+  title: String!
+  parts: [String!]!
+  comments: [String!]!
+  shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult!]
+  lessonID: ID
+  lesson: Lesson
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ShotConnection {
+  pageInfo: PageInfo!
+  edges: [ShotEdge]!
+  aggregate: AggregateShot!
+}
+
+input ShotCreatecommentsInput {
+  set: [String!]
+}
+
+input ShotCreateInput {
+  user: UserCreateOneWithoutShotsInput!
+  title: String!
+  parts: ShotCreatepartsInput
+  comments: ShotCreatecommentsInput
+  shotResults: ShotResultCreateManyWithoutShotInput
+  lessonID: ID
+  lesson: LessonCreateOneWithoutShotsInput
+}
+
+input ShotCreateManyWithoutLessonInput {
+  create: [ShotCreateWithoutLessonInput!]
+  connect: [ShotWhereUniqueInput!]
+}
+
+input ShotCreateManyWithoutUserInput {
+  create: [ShotCreateWithoutUserInput!]
+  connect: [ShotWhereUniqueInput!]
+}
+
+input ShotCreateOneWithoutShotResultsInput {
+  create: ShotCreateWithoutShotResultsInput
+  connect: ShotWhereUniqueInput
+}
+
+input ShotCreatepartsInput {
+  set: [String!]
+}
+
+input ShotCreateWithoutLessonInput {
+  user: UserCreateOneWithoutShotsInput!
+  title: String!
+  parts: ShotCreatepartsInput
+  comments: ShotCreatecommentsInput
+  shotResults: ShotResultCreateManyWithoutShotInput
+  lessonID: ID
+}
+
+input ShotCreateWithoutShotResultsInput {
+  user: UserCreateOneWithoutShotsInput!
+  title: String!
+  parts: ShotCreatepartsInput
+  comments: ShotCreatecommentsInput
+  lessonID: ID
+  lesson: LessonCreateOneWithoutShotsInput
+}
+
+input ShotCreateWithoutUserInput {
+  title: String!
+  parts: ShotCreatepartsInput
+  comments: ShotCreatecommentsInput
+  shotResults: ShotResultCreateManyWithoutShotInput
+  lessonID: ID
+  lesson: LessonCreateOneWithoutShotsInput
+}
+
+type ShotEdge {
+  node: Shot!
+  cursor: String!
+}
+
+enum ShotOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  lessonID_ASC
+  lessonID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ShotPreviousValues {
+  id: ID!
+  title: String!
+  parts: [String!]!
+  comments: [String!]!
+  lessonID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ShotResult {
+  id: ID!
+  student: User!
+  answer: String!
+  lessonID: ID
+  lesson: Lesson
+  shot: Shot
+  shotID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ShotResultConnection {
+  pageInfo: PageInfo!
+  edges: [ShotResultEdge]!
+  aggregate: AggregateShotResult!
+}
+
+input ShotResultCreateInput {
+  student: UserCreateOneWithoutShotResultsInput!
+  answer: String!
+  lessonID: ID
+  lesson: LessonCreateOneWithoutShotResultsInput
+  shot: ShotCreateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultCreateManyWithoutLessonInput {
+  create: [ShotResultCreateWithoutLessonInput!]
+  connect: [ShotResultWhereUniqueInput!]
+}
+
+input ShotResultCreateManyWithoutShotInput {
+  create: [ShotResultCreateWithoutShotInput!]
+  connect: [ShotResultWhereUniqueInput!]
+}
+
+input ShotResultCreateManyWithoutStudentInput {
+  create: [ShotResultCreateWithoutStudentInput!]
+  connect: [ShotResultWhereUniqueInput!]
+}
+
+input ShotResultCreateWithoutLessonInput {
+  student: UserCreateOneWithoutShotResultsInput!
+  answer: String!
+  lessonID: ID
+  shot: ShotCreateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultCreateWithoutShotInput {
+  student: UserCreateOneWithoutShotResultsInput!
+  answer: String!
+  lessonID: ID
+  lesson: LessonCreateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultCreateWithoutStudentInput {
+  answer: String!
+  lessonID: ID
+  lesson: LessonCreateOneWithoutShotResultsInput
+  shot: ShotCreateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+type ShotResultEdge {
+  node: ShotResult!
+  cursor: String!
+}
+
+enum ShotResultOrderByInput {
+  id_ASC
+  id_DESC
+  answer_ASC
+  answer_DESC
+  lessonID_ASC
+  lessonID_DESC
+  shotID_ASC
+  shotID_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ShotResultPreviousValues {
+  id: ID!
+  answer: String!
+  lessonID: ID
+  shotID: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ShotResultScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  shotID: ID
+  shotID_not: ID
+  shotID_in: [ID!]
+  shotID_not_in: [ID!]
+  shotID_lt: ID
+  shotID_lte: ID
+  shotID_gt: ID
+  shotID_gte: ID
+  shotID_contains: ID
+  shotID_not_contains: ID
+  shotID_starts_with: ID
+  shotID_not_starts_with: ID
+  shotID_ends_with: ID
+  shotID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ShotResultScalarWhereInput!]
+  OR: [ShotResultScalarWhereInput!]
+  NOT: [ShotResultScalarWhereInput!]
+}
+
+type ShotResultSubscriptionPayload {
+  mutation: MutationType!
+  node: ShotResult
+  updatedFields: [String!]
+  previousValues: ShotResultPreviousValues
+}
+
+input ShotResultSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ShotResultWhereInput
+  AND: [ShotResultSubscriptionWhereInput!]
+  OR: [ShotResultSubscriptionWhereInput!]
+  NOT: [ShotResultSubscriptionWhereInput!]
+}
+
+input ShotResultUpdateInput {
+  student: UserUpdateOneRequiredWithoutShotResultsInput
+  answer: String
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutShotResultsInput
+  shot: ShotUpdateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultUpdateManyDataInput {
+  answer: String
+  lessonID: ID
+  shotID: ID
+}
+
+input ShotResultUpdateManyMutationInput {
+  answer: String
+  lessonID: ID
+  shotID: ID
+}
+
+input ShotResultUpdateManyWithoutLessonInput {
+  create: [ShotResultCreateWithoutLessonInput!]
+  delete: [ShotResultWhereUniqueInput!]
+  connect: [ShotResultWhereUniqueInput!]
+  set: [ShotResultWhereUniqueInput!]
+  disconnect: [ShotResultWhereUniqueInput!]
+  update: [ShotResultUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [ShotResultUpsertWithWhereUniqueWithoutLessonInput!]
+  deleteMany: [ShotResultScalarWhereInput!]
+  updateMany: [ShotResultUpdateManyWithWhereNestedInput!]
+}
+
+input ShotResultUpdateManyWithoutShotInput {
+  create: [ShotResultCreateWithoutShotInput!]
+  delete: [ShotResultWhereUniqueInput!]
+  connect: [ShotResultWhereUniqueInput!]
+  set: [ShotResultWhereUniqueInput!]
+  disconnect: [ShotResultWhereUniqueInput!]
+  update: [ShotResultUpdateWithWhereUniqueWithoutShotInput!]
+  upsert: [ShotResultUpsertWithWhereUniqueWithoutShotInput!]
+  deleteMany: [ShotResultScalarWhereInput!]
+  updateMany: [ShotResultUpdateManyWithWhereNestedInput!]
+}
+
+input ShotResultUpdateManyWithoutStudentInput {
+  create: [ShotResultCreateWithoutStudentInput!]
+  delete: [ShotResultWhereUniqueInput!]
+  connect: [ShotResultWhereUniqueInput!]
+  set: [ShotResultWhereUniqueInput!]
+  disconnect: [ShotResultWhereUniqueInput!]
+  update: [ShotResultUpdateWithWhereUniqueWithoutStudentInput!]
+  upsert: [ShotResultUpsertWithWhereUniqueWithoutStudentInput!]
+  deleteMany: [ShotResultScalarWhereInput!]
+  updateMany: [ShotResultUpdateManyWithWhereNestedInput!]
+}
+
+input ShotResultUpdateManyWithWhereNestedInput {
+  where: ShotResultScalarWhereInput!
+  data: ShotResultUpdateManyDataInput!
+}
+
+input ShotResultUpdateWithoutLessonDataInput {
+  student: UserUpdateOneRequiredWithoutShotResultsInput
+  answer: String
+  lessonID: ID
+  shot: ShotUpdateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultUpdateWithoutShotDataInput {
+  student: UserUpdateOneRequiredWithoutShotResultsInput
+  answer: String
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultUpdateWithoutStudentDataInput {
+  answer: String
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutShotResultsInput
+  shot: ShotUpdateOneWithoutShotResultsInput
+  shotID: ID
+}
+
+input ShotResultUpdateWithWhereUniqueWithoutLessonInput {
+  where: ShotResultWhereUniqueInput!
+  data: ShotResultUpdateWithoutLessonDataInput!
+}
+
+input ShotResultUpdateWithWhereUniqueWithoutShotInput {
+  where: ShotResultWhereUniqueInput!
+  data: ShotResultUpdateWithoutShotDataInput!
+}
+
+input ShotResultUpdateWithWhereUniqueWithoutStudentInput {
+  where: ShotResultWhereUniqueInput!
+  data: ShotResultUpdateWithoutStudentDataInput!
+}
+
+input ShotResultUpsertWithWhereUniqueWithoutLessonInput {
+  where: ShotResultWhereUniqueInput!
+  update: ShotResultUpdateWithoutLessonDataInput!
+  create: ShotResultCreateWithoutLessonInput!
+}
+
+input ShotResultUpsertWithWhereUniqueWithoutShotInput {
+  where: ShotResultWhereUniqueInput!
+  update: ShotResultUpdateWithoutShotDataInput!
+  create: ShotResultCreateWithoutShotInput!
+}
+
+input ShotResultUpsertWithWhereUniqueWithoutStudentInput {
+  where: ShotResultWhereUniqueInput!
+  update: ShotResultUpdateWithoutStudentDataInput!
+  create: ShotResultCreateWithoutStudentInput!
+}
+
+input ShotResultWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  student: UserWhereInput
+  answer: String
+  answer_not: String
+  answer_in: [String!]
+  answer_not_in: [String!]
+  answer_lt: String
+  answer_lte: String
+  answer_gt: String
+  answer_gte: String
+  answer_contains: String
+  answer_not_contains: String
+  answer_starts_with: String
+  answer_not_starts_with: String
+  answer_ends_with: String
+  answer_not_ends_with: String
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  lesson: LessonWhereInput
+  shot: ShotWhereInput
+  shotID: ID
+  shotID_not: ID
+  shotID_in: [ID!]
+  shotID_not_in: [ID!]
+  shotID_lt: ID
+  shotID_lte: ID
+  shotID_gt: ID
+  shotID_gte: ID
+  shotID_contains: ID
+  shotID_not_contains: ID
+  shotID_starts_with: ID
+  shotID_not_starts_with: ID
+  shotID_ends_with: ID
+  shotID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ShotResultWhereInput!]
+  OR: [ShotResultWhereInput!]
+  NOT: [ShotResultWhereInput!]
+}
+
+input ShotResultWhereUniqueInput {
+  id: ID
+}
+
+input ShotScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ShotScalarWhereInput!]
+  OR: [ShotScalarWhereInput!]
+  NOT: [ShotScalarWhereInput!]
+}
+
+type ShotSubscriptionPayload {
+  mutation: MutationType!
+  node: Shot
+  updatedFields: [String!]
+  previousValues: ShotPreviousValues
+}
+
+input ShotSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ShotWhereInput
+  AND: [ShotSubscriptionWhereInput!]
+  OR: [ShotSubscriptionWhereInput!]
+  NOT: [ShotSubscriptionWhereInput!]
+}
+
+input ShotUpdatecommentsInput {
+  set: [String!]
+}
+
+input ShotUpdateInput {
+  user: UserUpdateOneRequiredWithoutShotsInput
+  title: String
+  parts: ShotUpdatepartsInput
+  comments: ShotUpdatecommentsInput
+  shotResults: ShotResultUpdateManyWithoutShotInput
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutShotsInput
+}
+
+input ShotUpdateManyDataInput {
+  title: String
+  parts: ShotUpdatepartsInput
+  comments: ShotUpdatecommentsInput
+  lessonID: ID
+}
+
+input ShotUpdateManyMutationInput {
+  title: String
+  parts: ShotUpdatepartsInput
+  comments: ShotUpdatecommentsInput
+  lessonID: ID
+}
+
+input ShotUpdateManyWithoutLessonInput {
+  create: [ShotCreateWithoutLessonInput!]
+  delete: [ShotWhereUniqueInput!]
+  connect: [ShotWhereUniqueInput!]
+  set: [ShotWhereUniqueInput!]
+  disconnect: [ShotWhereUniqueInput!]
+  update: [ShotUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [ShotUpsertWithWhereUniqueWithoutLessonInput!]
+  deleteMany: [ShotScalarWhereInput!]
+  updateMany: [ShotUpdateManyWithWhereNestedInput!]
+}
+
+input ShotUpdateManyWithoutUserInput {
+  create: [ShotCreateWithoutUserInput!]
+  delete: [ShotWhereUniqueInput!]
+  connect: [ShotWhereUniqueInput!]
+  set: [ShotWhereUniqueInput!]
+  disconnect: [ShotWhereUniqueInput!]
+  update: [ShotUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ShotUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [ShotScalarWhereInput!]
+  updateMany: [ShotUpdateManyWithWhereNestedInput!]
+}
+
+input ShotUpdateManyWithWhereNestedInput {
+  where: ShotScalarWhereInput!
+  data: ShotUpdateManyDataInput!
+}
+
+input ShotUpdateOneWithoutShotResultsInput {
+  create: ShotCreateWithoutShotResultsInput
+  update: ShotUpdateWithoutShotResultsDataInput
+  upsert: ShotUpsertWithoutShotResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ShotWhereUniqueInput
+}
+
+input ShotUpdatepartsInput {
+  set: [String!]
+}
+
+input ShotUpdateWithoutLessonDataInput {
+  user: UserUpdateOneRequiredWithoutShotsInput
+  title: String
+  parts: ShotUpdatepartsInput
+  comments: ShotUpdatecommentsInput
+  shotResults: ShotResultUpdateManyWithoutShotInput
+  lessonID: ID
+}
+
+input ShotUpdateWithoutShotResultsDataInput {
+  user: UserUpdateOneRequiredWithoutShotsInput
+  title: String
+  parts: ShotUpdatepartsInput
+  comments: ShotUpdatecommentsInput
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutShotsInput
+}
+
+input ShotUpdateWithoutUserDataInput {
+  title: String
+  parts: ShotUpdatepartsInput
+  comments: ShotUpdatecommentsInput
+  shotResults: ShotResultUpdateManyWithoutShotInput
+  lessonID: ID
+  lesson: LessonUpdateOneWithoutShotsInput
+}
+
+input ShotUpdateWithWhereUniqueWithoutLessonInput {
+  where: ShotWhereUniqueInput!
+  data: ShotUpdateWithoutLessonDataInput!
+}
+
+input ShotUpdateWithWhereUniqueWithoutUserInput {
+  where: ShotWhereUniqueInput!
+  data: ShotUpdateWithoutUserDataInput!
+}
+
+input ShotUpsertWithoutShotResultsInput {
+  update: ShotUpdateWithoutShotResultsDataInput!
+  create: ShotCreateWithoutShotResultsInput!
+}
+
+input ShotUpsertWithWhereUniqueWithoutLessonInput {
+  where: ShotWhereUniqueInput!
+  update: ShotUpdateWithoutLessonDataInput!
+  create: ShotCreateWithoutLessonInput!
+}
+
+input ShotUpsertWithWhereUniqueWithoutUserInput {
+  where: ShotWhereUniqueInput!
+  update: ShotUpdateWithoutUserDataInput!
+  create: ShotCreateWithoutUserInput!
+}
+
+input ShotWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  shotResults_every: ShotResultWhereInput
+  shotResults_some: ShotResultWhereInput
+  shotResults_none: ShotResultWhereInput
+  lessonID: ID
+  lessonID_not: ID
+  lessonID_in: [ID!]
+  lessonID_not_in: [ID!]
+  lessonID_lt: ID
+  lessonID_lte: ID
+  lessonID_gt: ID
+  lessonID_gte: ID
+  lessonID_contains: ID
+  lessonID_not_contains: ID
+  lessonID_starts_with: ID
+  lessonID_not_starts_with: ID
+  lessonID_ends_with: ID
+  lessonID_not_ends_with: ID
+  lesson: LessonWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ShotWhereInput!]
+  OR: [ShotWhereInput!]
+  NOT: [ShotWhereInput!]
+}
+
+input ShotWhereUniqueInput {
+  id: ID
+}
+
 enum Status {
   STUDENT
   AUTHOR
@@ -10352,6 +11988,7 @@ type Subscription {
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   lessonResult(where: LessonResultSubscriptionWhereInput): LessonResultSubscriptionPayload
   newTest(where: NewTestSubscriptionWhereInput): NewTestSubscriptionPayload
+  note(where: NoteSubscriptionWhereInput): NoteSubscriptionPayload
   order(where: OrderSubscriptionWhereInput): OrderSubscriptionPayload
   pointA(where: PointASubscriptionWhereInput): PointASubscriptionPayload
   pointATest(where: PointATestSubscriptionWhereInput): PointATestSubscriptionPayload
@@ -10362,6 +11999,8 @@ type Subscription {
   sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
   sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload
   sandboxPageGoal(where: SandboxPageGoalSubscriptionWhereInput): SandboxPageGoalSubscriptionPayload
+  shot(where: ShotSubscriptionWhereInput): ShotSubscriptionPayload
+  shotResult(where: ShotResultSubscriptionWhereInput): ShotResultSubscriptionPayload
   test(where: TestSubscriptionWhereInput): TestSubscriptionPayload
   testResult(where: TestResultSubscriptionWhereInput): TestResultSubscriptionPayload
   textEditor(where: TextEditorSubscriptionWhereInput): TextEditorSubscriptionPayload
@@ -10504,6 +12143,8 @@ type TestResult {
   attempts: Int
   lesson: Lesson
   lessonID: ID
+  test: NewTest
+  testID: ID
 }
 
 type TestResultConnection {
@@ -10518,6 +12159,8 @@ input TestResultCreateInput {
   attempts: Int
   lesson: LessonCreateOneWithoutTestResultsInput
   lessonID: ID
+  test: NewTestCreateOneWithoutTestResultsInput
+  testID: ID
 }
 
 input TestResultCreateManyWithoutLessonInput {
@@ -10530,11 +12173,18 @@ input TestResultCreateManyWithoutStudentInput {
   connect: [TestResultWhereUniqueInput!]
 }
 
+input TestResultCreateManyWithoutTestInput {
+  create: [TestResultCreateWithoutTestInput!]
+  connect: [TestResultWhereUniqueInput!]
+}
+
 input TestResultCreateWithoutLessonInput {
   student: UserCreateOneWithoutTestResultsInput!
   answer: String
   attempts: Int
   lessonID: ID
+  test: NewTestCreateOneWithoutTestResultsInput
+  testID: ID
 }
 
 input TestResultCreateWithoutStudentInput {
@@ -10542,6 +12192,17 @@ input TestResultCreateWithoutStudentInput {
   attempts: Int
   lesson: LessonCreateOneWithoutTestResultsInput
   lessonID: ID
+  test: NewTestCreateOneWithoutTestResultsInput
+  testID: ID
+}
+
+input TestResultCreateWithoutTestInput {
+  student: UserCreateOneWithoutTestResultsInput!
+  answer: String
+  attempts: Int
+  lesson: LessonCreateOneWithoutTestResultsInput
+  lessonID: ID
+  testID: ID
 }
 
 type TestResultEdge {
@@ -10558,6 +12219,8 @@ enum TestResultOrderByInput {
   attempts_DESC
   lessonID_ASC
   lessonID_DESC
+  testID_ASC
+  testID_DESC
 }
 
 type TestResultPreviousValues {
@@ -10565,6 +12228,7 @@ type TestResultPreviousValues {
   answer: String
   attempts: Int
   lessonID: ID
+  testID: ID
 }
 
 input TestResultScalarWhereInput {
@@ -10618,6 +12282,20 @@ input TestResultScalarWhereInput {
   lessonID_not_starts_with: ID
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
+  testID: ID
+  testID_not: ID
+  testID_in: [ID!]
+  testID_not_in: [ID!]
+  testID_lt: ID
+  testID_lte: ID
+  testID_gt: ID
+  testID_gte: ID
+  testID_contains: ID
+  testID_not_contains: ID
+  testID_starts_with: ID
+  testID_not_starts_with: ID
+  testID_ends_with: ID
+  testID_not_ends_with: ID
   AND: [TestResultScalarWhereInput!]
   OR: [TestResultScalarWhereInput!]
   NOT: [TestResultScalarWhereInput!]
@@ -10647,18 +12325,22 @@ input TestResultUpdateInput {
   attempts: Int
   lesson: LessonUpdateOneWithoutTestResultsInput
   lessonID: ID
+  test: NewTestUpdateOneWithoutTestResultsInput
+  testID: ID
 }
 
 input TestResultUpdateManyDataInput {
   answer: String
   attempts: Int
   lessonID: ID
+  testID: ID
 }
 
 input TestResultUpdateManyMutationInput {
   answer: String
   attempts: Int
   lessonID: ID
+  testID: ID
 }
 
 input TestResultUpdateManyWithoutLessonInput {
@@ -10685,6 +12367,18 @@ input TestResultUpdateManyWithoutStudentInput {
   updateMany: [TestResultUpdateManyWithWhereNestedInput!]
 }
 
+input TestResultUpdateManyWithoutTestInput {
+  create: [TestResultCreateWithoutTestInput!]
+  delete: [TestResultWhereUniqueInput!]
+  connect: [TestResultWhereUniqueInput!]
+  set: [TestResultWhereUniqueInput!]
+  disconnect: [TestResultWhereUniqueInput!]
+  update: [TestResultUpdateWithWhereUniqueWithoutTestInput!]
+  upsert: [TestResultUpsertWithWhereUniqueWithoutTestInput!]
+  deleteMany: [TestResultScalarWhereInput!]
+  updateMany: [TestResultUpdateManyWithWhereNestedInput!]
+}
+
 input TestResultUpdateManyWithWhereNestedInput {
   where: TestResultScalarWhereInput!
   data: TestResultUpdateManyDataInput!
@@ -10695,6 +12389,8 @@ input TestResultUpdateWithoutLessonDataInput {
   answer: String
   attempts: Int
   lessonID: ID
+  test: NewTestUpdateOneWithoutTestResultsInput
+  testID: ID
 }
 
 input TestResultUpdateWithoutStudentDataInput {
@@ -10702,6 +12398,17 @@ input TestResultUpdateWithoutStudentDataInput {
   attempts: Int
   lesson: LessonUpdateOneWithoutTestResultsInput
   lessonID: ID
+  test: NewTestUpdateOneWithoutTestResultsInput
+  testID: ID
+}
+
+input TestResultUpdateWithoutTestDataInput {
+  student: UserUpdateOneRequiredWithoutTestResultsInput
+  answer: String
+  attempts: Int
+  lesson: LessonUpdateOneWithoutTestResultsInput
+  lessonID: ID
+  testID: ID
 }
 
 input TestResultUpdateWithWhereUniqueWithoutLessonInput {
@@ -10714,6 +12421,11 @@ input TestResultUpdateWithWhereUniqueWithoutStudentInput {
   data: TestResultUpdateWithoutStudentDataInput!
 }
 
+input TestResultUpdateWithWhereUniqueWithoutTestInput {
+  where: TestResultWhereUniqueInput!
+  data: TestResultUpdateWithoutTestDataInput!
+}
+
 input TestResultUpsertWithWhereUniqueWithoutLessonInput {
   where: TestResultWhereUniqueInput!
   update: TestResultUpdateWithoutLessonDataInput!
@@ -10724,6 +12436,12 @@ input TestResultUpsertWithWhereUniqueWithoutStudentInput {
   where: TestResultWhereUniqueInput!
   update: TestResultUpdateWithoutStudentDataInput!
   create: TestResultCreateWithoutStudentInput!
+}
+
+input TestResultUpsertWithWhereUniqueWithoutTestInput {
+  where: TestResultWhereUniqueInput!
+  update: TestResultUpdateWithoutTestDataInput!
+  create: TestResultCreateWithoutTestInput!
 }
 
 input TestResultWhereInput {
@@ -10779,6 +12497,21 @@ input TestResultWhereInput {
   lessonID_not_starts_with: ID
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
+  test: NewTestWhereInput
+  testID: ID
+  testID_not: ID
+  testID_in: [ID!]
+  testID_not_in: [ID!]
+  testID_lt: ID
+  testID_lte: ID
+  testID_gt: ID
+  testID_gte: ID
+  testID_contains: ID
+  testID_not_contains: ID
+  testID_starts_with: ID
+  testID_not_starts_with: ID
+  testID_ends_with: ID
+  testID_not_ends_with: ID
   AND: [TestResultWhereInput!]
   OR: [TestResultWhereInput!]
   NOT: [TestResultWhereInput!]
@@ -12065,6 +13798,11 @@ input TextEditorWhereUniqueInput {
   id: ID
 }
 
+enum Type {
+  STORY
+  REGULAR
+}
+
 type Uni {
   id: ID!
   title: String!
@@ -12309,6 +14047,9 @@ type User {
   isFamiliar: Boolean!
   articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
   examAnswers(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer!]
+  shots(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Shot!]
+  shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult!]
+  notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -12362,6 +14103,9 @@ input UserCreateInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateManyWithoutNew_subjectsInput {
@@ -12429,6 +14173,11 @@ input UserCreateOneWithoutNewTestsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutOrdersInput {
   create: UserCreateWithoutOrdersInput
   connect: UserWhereUniqueInput
@@ -12466,6 +14215,16 @@ input UserCreateOneWithoutSandboxPageGoalsInput {
 
 input UserCreateOneWithoutSandboxPagesInput {
   create: UserCreateWithoutSandboxPagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutShotResultsInput {
+  create: UserCreateWithoutShotResultsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutShotsInput {
+  create: UserCreateWithoutShotsInput
   connect: UserWhereUniqueInput
 }
 
@@ -12539,6 +14298,9 @@ input UserCreateWithoutArticlesInput {
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutCareerTrackInput {
@@ -12579,6 +14341,9 @@ input UserCreateWithoutCareerTrackInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutConstructionInput {
@@ -12619,6 +14384,9 @@ input UserCreateWithoutConstructionInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutConstructionResultsInput {
@@ -12659,6 +14427,9 @@ input UserCreateWithoutConstructionResultsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutCoursePagesInput {
@@ -12699,6 +14470,9 @@ input UserCreateWithoutCoursePagesInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutExamAnswersInput {
@@ -12739,6 +14513,9 @@ input UserCreateWithoutExamAnswersInput {
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutLegalPortfolioInput {
@@ -12779,6 +14556,9 @@ input UserCreateWithoutLegalPortfolioInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutLessonResultsInput {
@@ -12819,6 +14599,9 @@ input UserCreateWithoutLessonResultsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutLessonsInput {
@@ -12859,6 +14642,9 @@ input UserCreateWithoutLessonsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutNew_subjectsInput {
@@ -12899,6 +14685,9 @@ input UserCreateWithoutNew_subjectsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutNewTestsInput {
@@ -12939,6 +14728,52 @@ input UserCreateWithoutNewTestsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutNotesInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutOrdersInput {
@@ -12979,6 +14814,9 @@ input UserCreateWithoutOrdersInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutPointsAInput {
@@ -13019,6 +14857,9 @@ input UserCreateWithoutPointsAInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutProblemResultsInput {
@@ -13059,6 +14900,9 @@ input UserCreateWithoutProblemResultsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutProblemsInput {
@@ -13099,6 +14943,9 @@ input UserCreateWithoutProblemsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutQuizesInput {
@@ -13139,6 +14986,9 @@ input UserCreateWithoutQuizesInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutQuizResultsInput {
@@ -13179,6 +15029,9 @@ input UserCreateWithoutQuizResultsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutSandboxPageGoalsInput {
@@ -13219,6 +15072,9 @@ input UserCreateWithoutSandboxPageGoalsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -13259,6 +15115,95 @@ input UserCreateWithoutSandboxPagesInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutShotResultsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  notes: NoteCreateManyWithoutUserInput
+}
+
+input UserCreateWithoutShotsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTestResultsInput {
@@ -13299,6 +15244,9 @@ input UserCreateWithoutTestResultsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -13339,6 +15287,9 @@ input UserCreateWithoutTestsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTextEditorInput {
@@ -13379,6 +15330,9 @@ input UserCreateWithoutTextEditorInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutTextEditorResultsInput {
@@ -13419,6 +15373,9 @@ input UserCreateWithoutTextEditorResultsInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 input UserCreateWithoutUniInput {
@@ -13459,6 +15416,9 @@ input UserCreateWithoutUniInput {
   isFamiliar: Boolean
   articles: ArticleCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
 }
 
 type UserEdge {
@@ -13720,6 +15680,9 @@ input UserUpdateDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdatefavouritesInput {
@@ -13765,6 +15728,9 @@ input UserUpdateInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -13956,6 +15922,20 @@ input UserUpdateOneRequiredWithoutSandboxPagesInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutShotResultsInput {
+  create: UserCreateWithoutShotResultsInput
+  update: UserUpdateWithoutShotResultsDataInput
+  upsert: UserUpsertWithoutShotResultsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutShotsInput {
+  create: UserCreateWithoutShotsInput
+  update: UserUpdateWithoutShotsDataInput
+  upsert: UserUpsertWithoutShotsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutTestResultsInput {
   create: UserCreateWithoutTestResultsInput
   update: UserUpdateWithoutTestResultsDataInput
@@ -13988,6 +15968,15 @@ input UserUpdateOneWithoutCareerTrackInput {
   create: UserCreateWithoutCareerTrackInput
   update: UserUpdateWithoutCareerTrackDataInput
   upsert: UserUpsertWithoutCareerTrackInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneWithoutNotesInput {
+  create: UserCreateWithoutNotesInput
+  update: UserUpdateWithoutNotesDataInput
+  upsert: UserUpsertWithoutNotesInput
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput
@@ -14043,6 +16032,9 @@ input UserUpdateWithoutArticlesDataInput {
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutCareerTrackDataInput {
@@ -14083,6 +16075,9 @@ input UserUpdateWithoutCareerTrackDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutConstructionDataInput {
@@ -14123,6 +16118,9 @@ input UserUpdateWithoutConstructionDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutConstructionResultsDataInput {
@@ -14163,6 +16161,9 @@ input UserUpdateWithoutConstructionResultsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutCoursePagesDataInput {
@@ -14203,6 +16204,9 @@ input UserUpdateWithoutCoursePagesDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutExamAnswersDataInput {
@@ -14243,6 +16247,9 @@ input UserUpdateWithoutExamAnswersDataInput {
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutLegalPortfolioDataInput {
@@ -14283,6 +16290,9 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutLessonResultsDataInput {
@@ -14323,6 +16333,9 @@ input UserUpdateWithoutLessonResultsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutLessonsDataInput {
@@ -14363,6 +16376,9 @@ input UserUpdateWithoutLessonsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutNew_subjectsDataInput {
@@ -14403,6 +16419,9 @@ input UserUpdateWithoutNew_subjectsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutNewTestsDataInput {
@@ -14443,6 +16462,52 @@ input UserUpdateWithoutNewTestsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutNotesDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutOrdersDataInput {
@@ -14483,6 +16548,9 @@ input UserUpdateWithoutOrdersDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutPointsADataInput {
@@ -14523,6 +16591,9 @@ input UserUpdateWithoutPointsADataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutProblemResultsDataInput {
@@ -14563,6 +16634,9 @@ input UserUpdateWithoutProblemResultsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutProblemsDataInput {
@@ -14603,6 +16677,9 @@ input UserUpdateWithoutProblemsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutQuizesDataInput {
@@ -14643,6 +16720,9 @@ input UserUpdateWithoutQuizesDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutQuizResultsDataInput {
@@ -14683,6 +16763,9 @@ input UserUpdateWithoutQuizResultsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutSandboxPageGoalsDataInput {
@@ -14723,6 +16806,9 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -14763,6 +16849,95 @@ input UserUpdateWithoutSandboxPagesDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutShotResultsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  notes: NoteUpdateManyWithoutUserInput
+}
+
+input UserUpdateWithoutShotsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTestResultsDataInput {
@@ -14803,6 +16978,9 @@ input UserUpdateWithoutTestResultsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -14843,6 +17021,9 @@ input UserUpdateWithoutTestsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTextEditorDataInput {
@@ -14883,6 +17064,9 @@ input UserUpdateWithoutTextEditorDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutTextEditorResultsDataInput {
@@ -14923,6 +17107,9 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithoutUniDataInput {
@@ -14963,6 +17150,9 @@ input UserUpdateWithoutUniDataInput {
   isFamiliar: Boolean
   articles: ArticleUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
 }
 
 input UserUpdateWithWhereUniqueWithoutNew_subjectsInput {
@@ -15030,6 +17220,11 @@ input UserUpsertWithoutNewTestsInput {
   create: UserCreateWithoutNewTestsInput!
 }
 
+input UserUpsertWithoutNotesInput {
+  update: UserUpdateWithoutNotesDataInput!
+  create: UserCreateWithoutNotesInput!
+}
+
 input UserUpsertWithoutOrdersInput {
   update: UserUpdateWithoutOrdersDataInput!
   create: UserCreateWithoutOrdersInput!
@@ -15068,6 +17263,16 @@ input UserUpsertWithoutSandboxPageGoalsInput {
 input UserUpsertWithoutSandboxPagesInput {
   update: UserUpdateWithoutSandboxPagesDataInput!
   create: UserCreateWithoutSandboxPagesInput!
+}
+
+input UserUpsertWithoutShotResultsInput {
+  update: UserUpdateWithoutShotResultsDataInput!
+  create: UserCreateWithoutShotResultsInput!
+}
+
+input UserUpsertWithoutShotsInput {
+  update: UserUpdateWithoutShotsDataInput!
+  create: UserCreateWithoutShotsInput!
 }
 
 input UserUpsertWithoutTestResultsInput {
@@ -15295,6 +17500,15 @@ input UserWhereInput {
   examAnswers_every: ExamAnswerWhereInput
   examAnswers_some: ExamAnswerWhereInput
   examAnswers_none: ExamAnswerWhereInput
+  shots_every: ShotWhereInput
+  shots_some: ShotWhereInput
+  shots_none: ShotWhereInput
+  shotResults_every: ShotResultWhereInput
+  shotResults_some: ShotResultWhereInput
+  shotResults_none: ShotResultWhereInput
+  notes_every: NoteWhereInput
+  notes_some: NoteWhereInput
+  notes_none: NoteWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

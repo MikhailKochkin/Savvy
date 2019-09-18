@@ -32,6 +32,7 @@ const CaseCard = styled.div`
 `;
 
 const Author = styled.p`
+  font-size: 1.6rem;
   color: #686868;
   @media (max-width: 950px) {
     font-size: 1.4rem;

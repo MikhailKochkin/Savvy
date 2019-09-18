@@ -10,6 +10,7 @@ const SINGLE_LESSON_QUERY = gql`
       id
       text
       number
+      type
       published
       createdAt
       user {
@@ -71,11 +72,6 @@ const TextBar = styled.div`
     justify-content: center;
     padding: 0 3%;
   }
-`;
-
-const Title = styled.div`
-  font-size: 1.6rem;
-  padding: 4% 0;
 `;
 
 const A = styled.a`
@@ -198,9 +194,9 @@ class LessonHeader extends Component {
     return (
       <>
         <TextBar>
-          <Title>
+          <h4>
             Урок {lesson.number}. {name}
-          </Title>
+          </h4>
           <Buttons>
             {me &&
             (me.id === lesson.user.id || me.permissions.includes("ADMIN")) ? (
@@ -214,7 +210,7 @@ class LessonHeader extends Component {
                   refetchQueries={() => [
                     {
                       query: SINGLE_LESSON_QUERY,
-                      variables: { id: lesson.id, number: lesson.number }
+                      variables: { id: lesson.id }
                     }
                   ]}
                 >
@@ -275,7 +271,10 @@ class LessonHeader extends Component {
                                   <Link
                                     href={{
                                       pathname: "/lesson",
-                                      query: { id: lesson.id }
+                                      query: {
+                                        id: lesson.id,
+                                        type: lesson.type.toLowerCase()
+                                      }
                                     }}
                                   >
                                     <A>
@@ -299,7 +298,10 @@ class LessonHeader extends Component {
                                     <Link
                                       href={{
                                         pathname: "/lesson",
-                                        query: { id: lesson.id }
+                                        query: {
+                                          id: lesson.id,
+                                          type: lesson.type.toLowerCase()
+                                        }
                                       }}
                                     >
                                       <A>
@@ -342,7 +344,10 @@ class LessonHeader extends Component {
                                 <Link
                                   href={{
                                     pathname: "/lesson",
-                                    query: { id: lesson.id }
+                                    query: {
+                                      id: lesson.id,
+                                      type: lesson.type.toLowerCase()
+                                    }
                                   }}
                                 >
                                   <A>
@@ -365,7 +370,10 @@ class LessonHeader extends Component {
                                   <Link
                                     href={{
                                       pathname: "/lesson",
-                                      query: { id: lesson.id }
+                                      query: {
+                                        id: lesson.id,
+                                        type: lesson.type.toLowerCase()
+                                      }
                                     }}
                                   >
                                     <A>
@@ -389,7 +397,10 @@ class LessonHeader extends Component {
                                   <Link
                                     href={{
                                       pathname: "/lesson",
-                                      query: { id: lesson.id }
+                                      query: {
+                                        id: lesson.id,
+                                        type: lesson.type.toLowerCase()
+                                      }
                                     }}
                                   >
                                     <A>

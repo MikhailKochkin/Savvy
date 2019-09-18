@@ -168,14 +168,16 @@ class SingleProblem extends Component {
   }
   render() {
     const { problem, me, userData } = this.props;
-    const data = userData.filter(result => result.problem.id === problem.id);
+    const data = userData
+      .filter(result => result.problem.id === problem.id)
+      .filter(result => result.student.id === me.id);
     return (
       <>
         <TextBar>
           {renderHTML(problem.text)}
           {data.length > 0 && (
             <ButtonGroup>
-              <Advice>Эта задача выполнена.</Advice>
+              <Advice>Эта задача уже выполнена.</Advice>
               <Button
                 onClick={async e => {
                   // Stop the form from submitting

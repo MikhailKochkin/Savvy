@@ -3,7 +3,10 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
+import renderHTML from "react-render-html";
+import Note from "./notes/Note";
 import TestGroup from "./tests/TestGroup";
+import ShotsGroup from "./shots/ShotsGroup";
 import QuizGroup from "./quizes/QuizGroup";
 import ProblemGroup from "./problems/ProblemGroup";
 import ConstructorGroup from "./constructions/ConstructorGroup";
@@ -11,9 +14,11 @@ import TextEditorGroup from "./textEditors/TextEditorGroup";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import CreateNewTest from "../create/CreateNewTest";
 import CreateQuiz from "../create/CreateQuiz";
+import CreateShot from "../create/CreateShot";
 import CreateConstructor from "../create/CreateConstructor";
 import CreateTextEditor from "../create/CreateTextEditor";
 import CreateProblem from "../create/CreateProblem";
+import CreateNote from "../create/CreateNote";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import UpdateLesson from "./UpdateLesson";
@@ -37,10 +42,26 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
         answer
+        test {
+          id
+        }
+      }
+      shotResults {
+        id
+        student {
+          id
+        }
+        shot {
+          id
+        }
+        answer
       }
       quizResults {
         id
         student {
+          id
+        }
+        quiz {
           id
         }
         answer
@@ -76,6 +97,19 @@ const SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
+      }
+      shots {
+        id
+        title
+        parts
+        comments
+        user {
+          id
+        }
+      }
+      notes {
+        id
+        text
       }
       quizes {
         id
@@ -217,7 +251,7 @@ const Head = styled.div`
   background: #f0f8ff;
   width: 100%;
   text-align: center;
-  font-size: 4rem;
+  font-size: 2.6rem;
   @media (max-width: 800px) {
     font-size: 1.8rem;
     justify-content: space-between;
@@ -418,6 +452,10 @@ const Text = styled.div`
     }
   }
 `;
+const NoteStyles = styled.div`
+  border-bottom: 1px solid grey;
+  margin-bottom: 2%;
+`;
 
 class SingleLesson extends Component {
   state = {
@@ -469,8 +507,10 @@ class SingleLesson extends Component {
               {({ data, error, loading }) => {
                 if (error) return <Error error={error} />;
                 if (loading) return <p>Loading...</p>;
-                // if (!data.lesson) return <p>No Lesson Found for {this.props.id}</p>;
+                if (data === null) return <p>Нет урока</p>;
                 const lesson = data.lesson;
+                console.log(lesson);
+                console.log(this.props.id);
                 return (
                   <>
                     <AreYouEnrolled subject={lesson.coursePage.id}>
@@ -500,6 +540,17 @@ class SingleLesson extends Component {
                                   Урок{" "}
                                 </ChooseButton>
                               </ButtonZone>
+                              {lesson.notes.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="note"
+                                    onClick={this.onSwitchMob}
+                                  >
+                                    {" "}
+                                    Заметки{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
                               {lesson.newTests.length > 0 && (
                                 <ButtonZone>
                                   <ChooseButton
@@ -556,12 +607,16 @@ class SingleLesson extends Component {
                                 </ButtonZone>
                               )}
                             </div>
+                            {/* Use any element to open the sidenav */}
                           </>
                         )}
 
                         <Head>
                           {this.state.width < 800 && (
-                            <span onClick={this.openNav}>Навигация</span>
+                            <span onClick={this.openNav}>
+                              {/* <IoMdMenu size={32} /> */}
+                              Навигация
+                            </span>
                           )}
                           <div>
                             Урок {lesson.number}. {lesson.name}
@@ -572,12 +627,20 @@ class SingleLesson extends Component {
                           <LessonPart>
                             {this.state.page === "lesson" && (
                               <TextBar>
-                                <Text
-                                  dangerouslySetInnerHTML={{
-                                    __html: lesson.text
-                                  }}
-                                />
+                                <Text>{renderHTML(lesson.text)}</Text>
                               </TextBar>
+                            )}
+                            {this.state.page === "note" &&
+                              lesson.notes.map(note => (
+                                <Note text={note.text} />
+                              ))}
+                            {this.state.page === "shots" && (
+                              <ShotsGroup
+                                shots={lesson.shots}
+                                me={me}
+                                lessonID={lesson.id}
+                                shotResults={lesson.shotResults}
+                              />
                             )}
 
                             {this.state.page === "test" && (
@@ -586,7 +649,7 @@ class SingleLesson extends Component {
                                   <TestGroup
                                     tests={lesson.newTests}
                                     me={me}
-                                    lessonId={lesson.id}
+                                    lessonID={lesson.id}
                                     testResults={lesson.testResults}
                                   />
                                 ) : (
@@ -634,7 +697,6 @@ class SingleLesson extends Component {
                                 {" "}
                                 {lesson.constructions.length > 0 ? (
                                   <>
-                                    {/* {lesson.constructions.map(constructor =>  */}
                                     <ConstructorGroup
                                       constructions={lesson.constructions}
                                       lessonID={lesson.id}
@@ -667,6 +729,12 @@ class SingleLesson extends Component {
                             {this.state.page === "createTest" && (
                               <CreateNewTest lessonID={lesson.id} />
                             )}
+                            {this.state.page === "createNote" && (
+                              <CreateNote lessonID={lesson.id} />
+                            )}
+                            {this.state.page === "createShot" && (
+                              <CreateShot lessonID={lesson.id} />
+                            )}
                             {this.state.page === "createQuiz" && (
                               <CreateQuiz lessonID={lesson.id} />
                             )}
@@ -679,10 +747,14 @@ class SingleLesson extends Component {
                             {this.state.page === "createTextEditor" && (
                               <CreateTextEditor lessonID={lesson.id} />
                             )}
-                            {this.state.page === "changeLesson" && (
+                            {this.state.page === "updateLesson" && (
                               <UpdateLesson lessonID={lesson.id} />
                             )}
+                            {this.state.page === "updateShots" && (
+                              <UpdateShots lessonID={lesson.id} />
+                            )}
                           </LessonPart>
+
                           {this.state.width > 800 && (
                             <MenuPart shown={this.state.shown}>
                               <Sticky>
@@ -696,6 +768,28 @@ class SingleLesson extends Component {
                                       Урок{" "}
                                     </ChooseButton>
                                   </ButtonZone>
+                                  {lesson.shots.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="shots"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Раскадровка{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.notes.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="note"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Заметки{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
 
                                   {lesson.newTests.length > 0 && (
                                     <ButtonZone>
@@ -765,6 +859,25 @@ class SingleLesson extends Component {
                                           Новый тест
                                         </ChooseButton>
                                       </ButtonZone>
+
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createNote"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новая заметка
+                                        </ChooseButton>
+                                      </ButtonZone>
+
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createShot"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новая раскадровка
+                                        </ChooseButton>
+                                      </ButtonZone>
+
                                       <ButtonZone>
                                         <ChooseButton
                                           name="createQuiz"
@@ -800,12 +913,13 @@ class SingleLesson extends Component {
                                       </ButtonZone>
                                       <ButtonZone>
                                         <ChooseButton
-                                          name="changeLesson"
+                                          name="updateLesson"
                                           onClick={this.onSwitch}
                                         >
                                           Изменить урок
                                         </ChooseButton>
                                       </ButtonZone>
+
                                       <ButtonZone>
                                         <DeleteSingleLesson
                                           id={lesson.id}

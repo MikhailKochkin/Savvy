@@ -1,0 +1,598 @@
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "react-apollo";
+import styled from "styled-components";
+import ReactResizeDetector from "react-resize-detector";
+import Link from "next/link";
+import Note from "./notes/Note";
+import Shots from "./shots/Shots";
+import SingleTest from "./tests/SingleTest";
+import SingleQuiz from "./quizes/SingleQuiz";
+import SingleProblem from "./problems/SingleProblem";
+import SingleTextEditor from "./textEditors/SingleTextEditor";
+import SingleConstructor from "./constructions/SingleConstructor";
+import PleaseSignIn from "../auth/PleaseSignIn";
+import AreYouEnrolled from "../auth/AreYouEnrolled";
+import User from "../User";
+
+const SINGLE_LESSON_QUERY = gql`
+  query SINGLE_LESSON_QUERY($id: ID!) {
+    lesson(where: { id: $id }) {
+      id
+      text
+      name
+      number
+      type
+      map
+      open
+      createdAt
+      user {
+        id
+      }
+      notes {
+        id
+        text
+      }
+      shots {
+        id
+        title
+        parts
+        comments
+        user {
+          id
+        }
+      }
+      shotResults {
+        id
+        student {
+          id
+        }
+        shot {
+          id
+        }
+        answer
+      }
+      testResults {
+        id
+        student {
+          id
+        }
+        testID
+        answer
+        attempts
+      }
+      quizResults {
+        id
+        student {
+          id
+        }
+        answer
+        quiz {
+          id
+        }
+      }
+      problemResults {
+        id
+        student {
+          id
+        }
+        answer
+        problem {
+          id
+        }
+      }
+      textEditorResults {
+        id
+        student {
+          id
+        }
+        textEditor {
+          id
+        }
+      }
+      constructionResults {
+        id
+        answer
+        student {
+          id
+        }
+        construction {
+          id
+        }
+      }
+      coursePage {
+        id
+      }
+      quizes {
+        id
+        question
+        answer
+        user {
+          id
+        }
+      }
+      newTests {
+        id
+        answers
+        correct
+        question
+        user {
+          id
+        }
+      }
+      problems {
+        id
+        text
+        user {
+          id
+        }
+        createdAt
+      }
+      constructions {
+        id
+        name
+        answer
+        variants
+        hint
+        type
+        user {
+          id
+        }
+      }
+      texteditors {
+        id
+        name
+        text
+        totalMistakes
+        user {
+          id
+        }
+      }
+    }
+  }
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* The side navigation menu */
+  .sidenav {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #112a62; /* Blue*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  }
+
+  /* The navigation menu links */
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+
+  /* When you mouse over the navigation links, change their color */
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  /* Position and style the close button (top right corner) */
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+  #main {
+    transition: margin-left 0.5s;
+    padding: 20px;
+  }
+
+  /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+  @media screen and (max-height: 450px) {
+    .sidenav {
+      padding-top: 15px;
+    }
+    .sidenav a {
+      font-size: 18px;
+    }
+  }
+`;
+
+const Head = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1% 0;
+  background: #f0f8ff;
+  width: 100%;
+  text-align: center;
+  font-size: 4rem;
+  @media (max-width: 800px) {
+    font-size: 1.8rem;
+    justify-content: space-between;
+    padding: 2% 15px;
+    span {
+      flex: 15%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #112a62;
+      color: #112a62;
+      border-radius: 5px;
+      padding: 0 1%;
+    }
+    div {
+      flex: 85%;
+      text-align: right;
+    }
+  }
+`;
+
+const LessonPart = styled.div`
+  display: flex;
+  border: 1px solid #edefed;
+  padding: 0.5% 2%;
+  width: 50%;
+  flex-direction: column;
+  border-radius: 2px;
+  margin: 0 0 20px 0;
+  a {
+    padding-top: 2%;
+    padding-left: 2%;
+  }
+  @media (max-width: 800px) {
+    margin: 1%;
+    width: 95%;
+  }
+`;
+
+const Navigation = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 40px;
+  width: 50%;
+  @media (max-width: 800px) {
+    width: 95%;
+    margin-top: 20px;
+  }
+  button {
+    border: none;
+    background: none;
+    border: 1px solid #112a62;
+    border-radius: 5px;
+    font-family: Montserrat;
+    padding: 1.5% 3%;
+    font-size: 1.6rem;
+    margin-right: 3%;
+    outline: 0;
+    color: #112a62;
+    cursor: pointer;
+    &:hover {
+      background: #112a62;
+      color: white;
+    }
+    @media (max-width: 800px) {
+      padding: 1.5%;
+    }
+  }
+  div {
+    font-weight: bold;
+    color: #112a62;
+    margin-left: 15px;
+    padding: 10px;
+    cursor: pointer;
+  }
+`;
+
+const Header = styled.div`
+  border: 1px solid #edefed;
+  background: #edefed;
+  margin-top: 4%;
+  border-bottom: 0;
+  width: 50%;
+  text-align: left;
+  padding: 5px 0px 5px 2%;
+  @media (max-width: 800px) {
+    width: 95%;
+  }
+`;
+
+class SingleLesson extends Component {
+  state = {
+    page: "shots",
+    shown: false,
+    width: 0,
+    step: 0,
+    tests: 0,
+    quizes: 0
+  };
+
+  onSwitch = e => {
+    e.preventDefault();
+    const name = e.target.getAttribute("name");
+
+    this.setState({ page: name });
+    this.setState(prevState => ({ shown: !prevState.shown }));
+  };
+
+  onSwitchMob = e => {
+    e.preventDefault();
+    const name = e.target.getAttribute("name");
+
+    this.setState({ page: name });
+    this.setState(prevState => ({ shown: !prevState.shown }));
+    this.closeNav();
+  };
+
+  onResize = width => {
+    this.setState({ width });
+  };
+
+  shuffle = array => {
+    var m = array.length,
+      t,
+      i;
+
+    // While there remain elements to shuffle…
+    while (m) {
+      // Pick a remaining element…
+      i = Math.floor(Math.random() * m--);
+
+      // And swap it with the current element.
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+
+    return array;
+  };
+
+  openNav = () => {
+    document.getElementById("mySidenav2").style.width = "180px";
+  };
+
+  /* Set the width of the side navigation to 0 */
+  closeNav = () => {
+    document.getElementById("mySidenav2").style.width = "0";
+  };
+
+  more = e => {
+    const max = parseInt(e.target.getAttribute("data"));
+    if (this.state.step < parseInt(max) - 1) {
+      this.setState(prev => ({ step: prev.step + 1 }));
+    }
+  };
+
+  less = () => {
+    if (this.state.step > 0) {
+      this.setState(prev => ({ step: prev.step - 1 }));
+    }
+  };
+
+  plusTest = () => {
+    this.setState(prevState => ({
+      steps: prevState.steps + 1
+    }));
+  };
+
+  render() {
+    let arr2;
+    return (
+      <PleaseSignIn number={this.props.number}>
+        <User>
+          {({ data: { me } }) => (
+            <Query
+              query={SINGLE_LESSON_QUERY}
+              variables={{
+                id: this.props.id
+              }}
+            >
+              {({ data, error, loading }) => {
+                if (error) return <Error error={error} />;
+                if (loading) return <p>Loading...</p>;
+                const lesson = data.lesson;
+                let arr = [];
+                if (lesson) {
+                  const m = lesson.map[0];
+                  m.map(prop => {
+                    if (Object.keys(prop)[0] === "newTest") {
+                      arr.push(
+                        lesson.newTests.find(
+                          test => test.id === Object.values(prop)[0]
+                        )
+                      );
+                    } else if (Object.keys(prop)[0] === "quiz") {
+                      arr.push(
+                        lesson.quizes.find(
+                          quiz => quiz.id === Object.values(prop)[0]
+                        )
+                      );
+                    } else if (Object.keys(prop)[0] === "note") {
+                      arr.push(
+                        lesson.notes.find(
+                          note => note.id === Object.values(prop)[0]
+                        )
+                      );
+                    } else if (Object.keys(prop)[0] === "shot") {
+                      arr.push(
+                        lesson.shots.find(
+                          shot => shot.id === Object.values(prop)[0]
+                        )
+                      );
+                    } else if (Object.keys(prop)[0] === "problem") {
+                      arr.push(
+                        lesson.problems.find(
+                          problem => problem.id === Object.values(prop)[0]
+                        )
+                      );
+                    } else if (Object.keys(prop)[0] === "texteditor") {
+                      arr.push(
+                        lesson.texteditors.find(
+                          texteditor => texteditor.id === Object.values(prop)[0]
+                        )
+                      );
+                    } else if (Object.keys(prop)[0] === "construction") {
+                      arr.push(
+                        lesson.constructions.find(
+                          con => con.id === Object.values(prop)[0]
+                        )
+                      );
+                    }
+                  });
+                }
+                return (
+                  <>
+                    <AreYouEnrolled subject={lesson.coursePage.id}>
+                      <Container>
+                        <ReactResizeDetector
+                          handleWidth
+                          handleHeight
+                          onResize={this.onResize}
+                        />
+                        <Head>
+                          <div>
+                            Урок {lesson.number}. {lesson.name}
+                          </div>
+                        </Head>
+                        <Header>
+                          Шаг {this.state.step + 1} из {arr.length}
+                        </Header>
+                        <LessonPart>
+                          {arr[this.state.step].__typename === "Shot" ? (
+                            <Shots
+                              key={arr[this.state.step].id}
+                              comments={arr[this.state.step].comments}
+                              parts={arr[this.state.step].parts}
+                              shotUser={arr[this.state.step].user.id}
+                              me={me}
+                              shotID={arr[this.state.step].id}
+                              lessonID={lesson.id}
+                              title={arr[this.state.step].title}
+                              userData={lesson.shotResults}
+                            />
+                          ) : null}
+                          {arr[this.state.step].__typename === "Note" ? (
+                            <Note text={arr[this.state.step].text} />
+                          ) : null}
+                          {arr[this.state.step].__typename === "NewTest" ? (
+                            <>
+                              {
+                                (arr2 = Array(
+                                  arr[this.state.step].correct.length
+                                ).fill(false))
+                              }
+                              <SingleTest
+                                id={arr[this.state.step].id}
+                                question={arr[this.state.step].question}
+                                num={this.state.step + 1}
+                                answers={arr[this.state.step].answers}
+                                true={arr[this.state.step].correct}
+                                user={arr[this.state.step].user.id}
+                                me={me}
+                                userData={lesson.testResults}
+                                lessonID={lesson.id}
+                                length={arr2}
+                                userData={lesson.testResults}
+                              />
+                            </>
+                          ) : null}
+                          {arr[this.state.step].__typename === "Quiz" ? (
+                            <SingleQuiz
+                              question={arr[this.state.step].question}
+                              answer={arr[this.state.step].answer}
+                              num={this.state.step + 1}
+                              me={me}
+                              userData={lesson.quizResults}
+                              lessonID={lesson.id}
+                              id={arr[this.state.step].id}
+                              user={arr[this.state.step].user.id}
+                            />
+                          ) : null}
+
+                          {arr[this.state.step].__typename === "Problem" ? (
+                            <SingleProblem
+                              key={arr[this.state.step].id}
+                              problem={arr[this.state.step]}
+                              lessonID={lesson.id}
+                              me={me}
+                              userData={lesson.problemResults}
+                            />
+                          ) : null}
+
+                          {arr[this.state.step].__typename === "TextEditor" ? (
+                            <SingleTextEditor
+                              key={arr[this.state.step].id}
+                              lessonID={lesson.id}
+                              textEditor={arr[this.state.step]}
+                              me={me}
+                              userData={lesson.textEditorResults}
+                            />
+                          ) : null}
+
+                          {arr[this.state.step].__typename ===
+                          "Construction" ? (
+                            <>
+                              {
+                                (arr2 = Array(
+                                  arr[this.state.step].answer.length
+                                ).fill(""))
+                              }
+                              <SingleConstructor
+                                key={arr[this.state.step].id}
+                                lessonID={lesson.id}
+                                construction={arr[this.state.step]}
+                                variants={this.shuffle(
+                                  arr[this.state.step].variants
+                                )}
+                                me={me}
+                                arr={arr2}
+                                userData={lesson.constructionResults}
+                              />
+                            </>
+                          ) : null}
+                        </LessonPart>
+                        <Navigation>
+                          <button onClick={this.less}>Назад</button>
+                          <button data={arr.length} onClick={this.more}>
+                            Вперед
+                          </button>
+                          {this.state.step + 1 === arr.length && (
+                            <Link
+                              href={{
+                                pathname: "/coursePage",
+                                query: { id: lesson.coursePage.id }
+                              }}
+                            >
+                              <div>Вернуться на страницу курса</div>
+                            </Link>
+                          )}
+                        </Navigation>
+                      </Container>{" "}
+                      <div id="root"></div>
+                    </AreYouEnrolled>
+                  </>
+                );
+              }}
+            </Query>
+          )}
+        </User>
+      </PleaseSignIn>
+    );
+  }
+}
+
+export default SingleLesson;
+export { SINGLE_LESSON_QUERY };

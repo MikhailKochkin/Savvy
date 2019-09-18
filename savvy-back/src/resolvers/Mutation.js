@@ -405,6 +405,7 @@ const Mutations = {
   },
   async createTestResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
+    const testID = args.testID;
     const lessonID = args.lessonID;
     if (!ctx.request.userId) {
       throw new Error(
@@ -416,6 +417,9 @@ const Mutations = {
         data: {
           student: {
             connect: { id: ctx.request.userId }
+          },
+          test: {
+            connect: { id: testID }
           },
           lesson: {
             connect: { id: lessonID }
@@ -465,33 +469,11 @@ const Mutations = {
     );
     return updatedLessonResult;
   },
-  async createTestResult(parent, args, ctx, info) {
-    // TODO: Check if they are logged in
-    const lessonID = args.lessonID;
-    if (!ctx.request.userId) {
-      throw new Error(
-        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
-      );
-    }
-    const TestResult = await ctx.db.mutation.createTestResult(
-      {
-        data: {
-          student: {
-            connect: { id: ctx.request.userId }
-          },
-          lesson: {
-            connect: { id: lessonID }
-          },
-          ...args
-        }
-      },
-      info
-    );
-    return TestResult;
-  },
   async createQuizResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
+    const quiz = args.quiz;
+    delete args.quiz;
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -505,6 +487,9 @@ const Mutations = {
           },
           lesson: {
             connect: { id: lessonID }
+          },
+          quiz: {
+            connect: { id: quiz }
           },
           ...args
         }
@@ -1173,6 +1158,119 @@ const Mutations = {
       info
     );
     return Article;
+  },
+  async createShot(parent, args, ctx, info) {
+    const parts = args.parts;
+    const comments = args.comments;
+    delete args.parts;
+    delete args.comments;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Shot = await ctx.db.mutation.createShot(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: args.lessonID }
+          },
+          parts: {
+            set: [...parts]
+          },
+          comments: {
+            set: [...comments]
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return Shot;
+  },
+  async deleteShot(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the lesson
+    const shot = await ctx.db.query.shot({ where }, `{ id }`);
+    //3. Delete it
+    return ctx.db.mutation.deleteShot({ where }, info);
+  },
+  async createShotResult(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const ShotResult = await ctx.db.mutation.createShotResult(
+      {
+        data: {
+          student: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: args.lessonID }
+          },
+          shot: {
+            connect: { id: args.shotID }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return ShotResult;
+  },
+  async createNote(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const lessonID = args.lessonID;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Note = await ctx.db.mutation.createNote(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: lessonID }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return Note;
+  },
+  async updateNote(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateNote(
+      {
+        data: {
+          updates
+        },
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+  async deleteNote(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the lesson
+    const note = await ctx.db.query.note({ where }, `{ id }`);
+    //3. Delete it
+    return ctx.db.mutation.deleteNote({ where }, info);
   }
 };
 

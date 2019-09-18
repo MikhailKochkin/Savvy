@@ -3,8 +3,6 @@ import SingleConstructor from "./SingleConstructor";
 import styled from "styled-components";
 
 const Title = styled.p`
-  /* @import url("https://fonts.googleapis.com/css?family=Comfortaa&display=swap");
-  font-family: "Comfortaa", cursive; */
   font-size: 1.6rem;
   font-weight: 600;
 `;
@@ -115,8 +113,6 @@ class TextEditorGroup extends Component {
   };
 
   render() {
-    // const arr2 = this.shuffle(this.props.constructions[0].variants);
-    // console.log(arr2);
     const userData = this.props.constructionResults.filter(
       result => result.student.id === this.props.me.id
     );
@@ -146,6 +142,7 @@ class TextEditorGroup extends Component {
               key={construction.id}
               lessonID={this.props.lessonID}
               construction={construction}
+              variants={this.shuffle(construction.variants)}
               me={this.props.me}
               arr={arr}
               userData={userData}

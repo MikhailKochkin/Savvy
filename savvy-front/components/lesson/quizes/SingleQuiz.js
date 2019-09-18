@@ -1,12 +1,26 @@
 import React, { Component } from "react";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 import styled from "styled-components";
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
+
+const CREATE_QUIZRESULT_MUTATION = gql`
+  mutation CREATE_QUIZRESULT_MUTATION(
+    $answer: String
+    $quiz: ID
+    $lessonID: ID
+  ) {
+    createQuizResult(answer: $answer, quiz: $quiz, lessonID: $lessonID) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  margin-bottom: 3%;
+  margin: 3% 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {
     flex-direction: column;
@@ -69,10 +83,10 @@ const Answer = styled.div`
 const Button = styled.button`
   padding: 1% 2%;
   background: ${props => props.theme.green};
-  width: 20%;
+  width: 30%;
   border-radius: 5px;
   color: white;
-  font-weight: bold;
+  font-weight: 600;
   font-size: 1.6rem;
   margin: 2% 0;
   cursor: pointer;
@@ -98,17 +112,11 @@ class SingleQuiz extends Component {
     const element = document.querySelector(".answer");
     console.log(element);
     this.setState({ color: "#DE6B48" });
-    // element.style.border = "1px solid #DE6B48";
   };
 
   showRight = () => {
     const element = document.querySelector(".answer");
-    console.log(element);
-    // element.style.border = "1px solid #84BC9C";
     this.setState({ color: "#32AC66" });
-    // setTimeout(function() {
-    //   this.setState({ color: "#c4c4c4" });
-    // }, 3000);
   };
 
   onShow = () => {
@@ -120,21 +128,14 @@ class SingleQuiz extends Component {
 
     let s1 = this.props.answer.toLowerCase();
     let s2 = this.state.answer.toLowerCase();
-    console.log(s1);
-    console.log(s2);
     let s1Parts = s1.split(" ").filter(item => item !== "");
     let s2Parts = s2.split(" ").filter(item => item !== "");
-    console.log(s1Parts);
-    console.log(s2Parts);
     let score = 0;
-
     for (var i = 0; i < s1Parts.length; i++) {
       if (s1Parts[i] === s2Parts[i]) score++;
     }
-    console.log(score);
     if (score == s1Parts.length) {
       this.setState({ correct: "true" });
-      this.props.getQuizData("+1");
       this.showRight();
     } else {
       this.setState({ correct: "false" });
@@ -147,34 +148,59 @@ class SingleQuiz extends Component {
     this.setState({ [name]: value });
   };
   render() {
-    const { me, user } = this.props;
+    const { me, user, userData } = this.props;
+    const data = userData
+      .filter(el => el.student.id === me.id)
+      .filter(el => el.quiz.id === this.props.id);
     return (
-      <>
-        <Styles>
-          <Question>
-            Вопрос {this.props.num}. {this.props.question}
-            <Textarea
-              inputColor={this.state.color}
-              type="text"
-              className="answer"
-              name="answer"
-              required
-              onChange={this.handleChange}
-              placeholder="Ответ на вопрос..."
-            />
-          </Question>
+      <Styles>
+        <Question>
+          {this.props.question}
+          <Textarea
+            inputColor={this.state.color}
+            type="text"
+            className="answer"
+            name="answer"
+            required
+            onChange={this.handleChange}
+            placeholder="Ответ на вопрос..."
+          />
+        </Question>
 
-          <Answer display={this.state.hidden}>{this.props.answer}</Answer>
-          <Button onClick={this.onAnswer}>Проверить</Button>
-          {me && me.id === user ? (
-            <DeleteSingleQuiz
-              id={me.id}
-              quizID={this.props.quizID}
-              lessonID={this.props.lessonID}
-            />
-          ) : null}
-        </Styles>
-      </>
+        <Answer display={this.state.hidden}>{this.props.answer}</Answer>
+        <Mutation
+          mutation={CREATE_QUIZRESULT_MUTATION}
+          variables={{
+            quiz: this.props.quizID,
+            lessonID: this.props.lessonID,
+            answer: this.state.answer
+          }}
+        >
+          {(createQuizResult, { loading, error }) => (
+            <Button
+              onClick={async e => {
+                // Stop the form from submitting
+                e.preventDefault();
+                // call the mutation
+                const res = await this.onAnswer();
+                if (data.length === 0) {
+                  const res0 = await createQuizResult();
+                  console.log("Успех!");
+                }
+              }}
+            >
+              Проверить
+            </Button>
+          )}
+        </Mutation>
+        {me && me.id === user ? (
+          <DeleteSingleQuiz
+            id={me.id}
+            quizID={this.props.quizID}
+            lessonID={this.props.lessonID}
+          />
+        ) : null}
+      </Styles>
     );
   }
 }

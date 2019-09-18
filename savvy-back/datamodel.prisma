@@ -17,6 +17,11 @@ enum Status {
   HR
 }
 
+enum Type {
+  STORY
+  REGULAR
+}
+
 type User {
   id: ID! @unique
   name: String!
@@ -57,6 +62,10 @@ type User {
   isFamiliar: Boolean! @default(value: false)
   articles: [Article] @relation(name: "UserArticles", onDelete: CASCADE)
   examAnswers: [ExamAnswer] @relation(name: "UserExamAnswer", onDelete: CASCADE)
+  shots: [Shot]
+  shotResults: [ShotResult]
+  notes: [Note]
+
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -129,6 +138,11 @@ type Lesson {
   number: Int
   text: String!
   user: User!
+  type: Type @default(value: REGULAR)
+  map: [Json]
+  notes: [Note] @relation(name: "LessonNotes", onDelete: CASCADE)
+  shots: [Shot] @relation(name: "LessonShots", onDelete: CASCADE)
+  shotResults: [ShotResult] @relation(name: "ShotLessonResults" onDelete: CASCADE)
   coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
   tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
   newTests: [NewTest] @relation(name: "LessonNewTests" onDelete: CASCADE)
@@ -199,7 +213,8 @@ type NewTest {
   id: ID! @unique
   question: [String!]
   answers: [String!]
-  correct: [Boolean!] 
+  correct: [Boolean!]
+  testResults: [TestResult] @relation(name: "NewTestResults" onDelete: CASCADE)
   user: User!
   lesson: Lesson @relation(name: "LessonNewTests")
   lessonID: ID
@@ -214,6 +229,7 @@ type Quiz {
   user: User!
   lessonID: ID
   lesson: Lesson @relation(name: "LessonQuizes")
+  quizResults: [QuizResult] @relation(name: "NewQuizResults" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -322,8 +338,10 @@ type TestResult {
   student: User! @relation(name: "UserTestResults")
   answer: String
   attempts: Int
-  lesson: Lesson @relation(name: "TestResults")
+  lesson: Lesson @relation( name: "TestResults")
   lessonID: ID
+  test: NewTest @relation(name: "NewTestResults")
+  testID: ID
 }
 
 type QuizResult {
@@ -331,6 +349,7 @@ type QuizResult {
   student: User! @relation(name: "UserQuizResults")
   answer: String
   attempts: Int
+  quiz: Quiz @relation(name: "NewQuizResults")
   lesson: Lesson @relation(name: "QuizResults")
   lessonID: ID
 }
@@ -414,4 +433,37 @@ type Article {
   text: String
   coursePages: [CoursePage]@relation(name: "ArticleCoursePages")
   coursePageIDs: [ID]@scalarList(strategy: RELATION)
+}
+
+type Shot {
+  id: ID! @unique
+  user: User! 
+  title: String!
+  parts: [String!]
+  comments: [String!]
+  shotResults: [ShotResult] @relation(name: "ShotResults", onDelete: CASCADE)
+  lessonID: ID
+  lesson: Lesson @relation( name: "LessonShots")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type ShotResult {
+  id: ID! @unique
+  student: User! 
+  answer: String!
+  lessonID: ID
+  lesson: Lesson @relation( name: "ShotLessonResults")
+  shot: Shot @relation( name: "ShotResults")
+  shotID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Note {
+  id: ID! @unique
+  text: String!
+  user: User
+  lessonID: ID
+  lesson: Lesson @relation( name: "LessonNotes")
 }

@@ -55,7 +55,7 @@ const Width = styled.div`
 `;
 
 const Orders = styled.div`
-  display: none;
+  display: block;
 `;
 
 class PaidApplications extends Component {
@@ -113,11 +113,12 @@ class PaidApplications extends Component {
               {({ data, error, loading }) => {
                 if (loading) return <p>Loading...</p>;
                 if (error) return <p>Error: {error.message}</p>;
+                console.log(data);
                 return (
                   <>
                     <p>Список счетов</p>
                     {data.orders === 0 ? (
-                      <p>По этому курсу нет заявок!</p>
+                      <p>По этому курсу нет счетов!</p>
                     ) : null}
                     <button onClick={this.toggle}>Показать</button>
                     {this.state.show && (

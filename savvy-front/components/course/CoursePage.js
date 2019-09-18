@@ -20,6 +20,7 @@ const PAGE_LESSONS_QUERY = gql`
       id
       name
       number
+      type
       published
       text
       user {

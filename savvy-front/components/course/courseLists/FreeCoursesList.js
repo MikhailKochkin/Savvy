@@ -106,7 +106,7 @@ class FreeCoursesList extends Component {
                       />
                     ))}
                 </CasesStyles>
-                <Query
+                {/* <Query
                   query={AGGREGATE_FREE_COURSE_PAGES_QUERY}
                   fetchPolicy="cache-first"
                   variables={{
@@ -144,7 +144,7 @@ class FreeCoursesList extends Component {
                       </>
                     );
                   }}
-                </Query>
+                </Query> */}
               </Styles>
             </>
           );
