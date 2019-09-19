@@ -219,7 +219,7 @@ const Head = styled.div`
   background: #f0f8ff;
   width: 100%;
   text-align: center;
-  font-size: 4rem;
+  font-size: 2.6rem;
   @media (max-width: 800px) {
     font-size: 1.8rem;
     justify-content: space-between;
@@ -245,7 +245,7 @@ const LessonPart = styled.div`
   display: flex;
   border: 1px solid #edefed;
   padding: 0.5% 2%;
-  width: 50%;
+  width: 40%;
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
@@ -255,7 +255,7 @@ const LessonPart = styled.div`
   }
   @media (max-width: 800px) {
     margin: 1%;
-    width: 95%;
+    width: 90%;
   }
 `;
 
@@ -263,11 +263,7 @@ const Navigation = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 40px;
-  width: 50%;
-  @media (max-width: 800px) {
-    width: 95%;
-    margin-top: 20px;
-  }
+  width: 40%;
   button {
     border: none;
     background: none;
@@ -284,9 +280,6 @@ const Navigation = styled.div`
       background: #112a62;
       color: white;
     }
-    @media (max-width: 800px) {
-      padding: 1.5%;
-    }
   }
   div {
     font-weight: bold;
@@ -295,6 +288,14 @@ const Navigation = styled.div`
     padding: 10px;
     cursor: pointer;
   }
+  @media (max-width: 800px) {
+    width: 90%;
+    margin-top: 20px;
+    padding: 1.5%;
+    button {
+      width: 50%;
+    }
+  }
 `;
 
 const Header = styled.div`
@@ -302,11 +303,11 @@ const Header = styled.div`
   background: #edefed;
   margin-top: 4%;
   border-bottom: 0;
-  width: 50%;
+  width: 40%;
   text-align: left;
   padding: 5px 0px 5px 2%;
   @media (max-width: 800px) {
-    width: 95%;
+    width: 90%;
   }
 `;
 
@@ -389,7 +390,6 @@ class SingleLesson extends Component {
   };
 
   render() {
-    let arr2;
     return (
       <PleaseSignIn number={this.props.number}>
         <User>
@@ -405,6 +405,7 @@ class SingleLesson extends Component {
                 if (loading) return <p>Loading...</p>;
                 const lesson = data.lesson;
                 let arr = [];
+                let arr2;
                 if (lesson) {
                   const m = lesson.map[0];
                   m.map(prop => {
@@ -487,28 +488,6 @@ class SingleLesson extends Component {
                           {arr[this.state.step].__typename === "Note" ? (
                             <Note text={arr[this.state.step].text} />
                           ) : null}
-                          {arr[this.state.step].__typename === "NewTest" ? (
-                            <>
-                              {
-                                (arr2 = Array(
-                                  arr[this.state.step].correct.length
-                                ).fill(false))
-                              }
-                              <SingleTest
-                                id={arr[this.state.step].id}
-                                question={arr[this.state.step].question}
-                                num={this.state.step + 1}
-                                answers={arr[this.state.step].answers}
-                                true={arr[this.state.step].correct}
-                                user={arr[this.state.step].user.id}
-                                me={me}
-                                userData={lesson.testResults}
-                                lessonID={lesson.id}
-                                length={arr2}
-                                userData={lesson.testResults}
-                              />
-                            </>
-                          ) : null}
                           {arr[this.state.step].__typename === "Quiz" ? (
                             <SingleQuiz
                               question={arr[this.state.step].question}
@@ -530,6 +509,26 @@ class SingleLesson extends Component {
                               me={me}
                               userData={lesson.problemResults}
                             />
+                          ) : null}
+
+                          {arr[this.state.step].__typename === "NewTest" ? (
+                            <>
+                              <SingleTest
+                                id={arr[this.state.step].id}
+                                answers={arr[this.state.step].answers}
+                                question={arr[this.state.step].question}
+                                num={this.state.step + 1}
+                                true={arr[this.state.step].correct}
+                                user={arr[this.state.step].user.id}
+                                me={me}
+                                userData={lesson.testResults}
+                                lessonID={lesson.id}
+                                length={Array(
+                                  arr[this.state.step].correct.length
+                                ).fill(false)}
+                                userData={lesson.testResults}
+                              />
+                            </>
                           ) : null}
 
                           {arr[this.state.step].__typename === "TextEditor" ? (
@@ -566,9 +565,11 @@ class SingleLesson extends Component {
                         </LessonPart>
                         <Navigation>
                           <button onClick={this.less}>Назад</button>
-                          <button data={arr.length} onClick={this.more}>
-                            Вперед
-                          </button>
+                          {this.state.step + 1 !== arr.length && (
+                            <button data={arr.length} onClick={this.more}>
+                              Вперед
+                            </button>
+                          )}
                           {this.state.step + 1 === arr.length && (
                             <Link
                               href={{

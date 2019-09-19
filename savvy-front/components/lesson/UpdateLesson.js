@@ -169,10 +169,10 @@ export default class UpdateLesson extends Component {
                             // call the mutation
                             const res = await updateLesson();
                             // change the page to the single case page
-                            Router.push({
-                              pathname: "/lesson",
-                              query: { id: lessonID }
-                            });
+                            // Router.push({
+                            //   pathname: "/lesson",
+                            //   query: { id: lessonID, type: "REGULAR" }
+                            // });
                           }}
                         >
                           {loading ? "Сохраняем..." : "Сохранить"}

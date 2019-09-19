@@ -19,7 +19,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   margin: 3% 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {

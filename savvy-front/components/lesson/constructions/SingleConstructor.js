@@ -26,7 +26,7 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  width: 90%;
+  width: 100%;
   padding-right: 4%;
   display: flex;
   margin-bottom: 4%;

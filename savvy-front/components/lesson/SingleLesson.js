@@ -280,6 +280,7 @@ const LessonStyles = styled.div`
   flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
+    width: 90%;
   }
   .slideout-menu {
     position: fixed;
@@ -451,10 +452,6 @@ const Text = styled.div`
       height: auto;
     }
   }
-`;
-const NoteStyles = styled.div`
-  border-bottom: 1px solid grey;
-  margin-bottom: 2%;
 `;
 
 class SingleLesson extends Component {

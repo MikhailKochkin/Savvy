@@ -26,7 +26,7 @@ const Question = styled.p`
 `;
 
 const TextBar = styled.div`
-  width: 85%;
+  width: 100%;
   font-size: 1.6rem;
   border-left: 2px solid white;
   padding-top: 2%;
@@ -36,7 +36,8 @@ const TextBar = styled.div`
     list-style-type: none;
   }
   @media (max-width: 800px) {
-    width: 95%;
+    width: 100%;
+    padding-left: 5px;
   }
 `;
 
@@ -58,8 +59,6 @@ const Button = styled.button`
 
 class SingleTest extends Component {
   state = {
-    answers: this.props.answers,
-    true: this.props.true,
     answerState: "think",
     answerOptions: this.props.length,
     answer: "",
@@ -98,7 +97,7 @@ class SingleTest extends Component {
     const res = () => {
       if (
         JSON.stringify(this.state.answerOptions) ==
-        JSON.stringify(this.state.true)
+        JSON.stringify(this.props.true)
       ) {
         this.showRight();
         this.setState({ answerState: "right" });
@@ -109,14 +108,12 @@ class SingleTest extends Component {
     };
     const res2 = await res();
   };
-
   render() {
-    const mes = _.zip(this.state.answers, this.state.true);
-    console.log(this.props.userData);
+    const mes = _.zip(this.props.answers, this.props.true);
     const userData = this.props.userData
-      .filter(el => el.test.id === this.props.id)
+      .filter(el => el.testID === this.props.id)
       .filter(el => el.student.id === this.props.me.id);
-    console.log(userData);
+    console.log(this.props.question, mes);
     return (
       <TextBar className="Test">
         <Question>{this.props.question}</Question>

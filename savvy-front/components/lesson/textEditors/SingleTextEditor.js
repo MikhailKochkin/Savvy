@@ -28,7 +28,7 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  width: 80%;
+  width: 100%;
   font-size: 1.6rem;
   border-radius: 5px;
   @media (max-width: 800px) {

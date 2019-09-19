@@ -180,7 +180,10 @@ export default class CreateLesson extends Component {
                         const res = await createLesson();
                         Router.push({
                           pathname: "/lesson",
-                          query: { id: res.data.createLesson.id }
+                          query: {
+                            id: res.data.createLesson.id,
+                            type: "regular"
+                          }
                         });
                       }}
                     >

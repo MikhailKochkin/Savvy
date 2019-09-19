@@ -6,6 +6,7 @@ const NoteStyles = styled.div`
   width: 100%;
   margin: 2% 0;
   padding: 1%;
+  font-size: 1.6rem;
   img {
     display: block;
     max-width: 100%;
@@ -18,6 +19,12 @@ const NoteStyles = styled.div`
     @media (max-width: 800px) {
       width: 100%;
       height: auto;
+    }
+  }
+  a {
+    color: #112b62;
+    &:hover {
+      text-decoration: underline;
     }
   }
 `;
