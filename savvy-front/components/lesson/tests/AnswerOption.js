@@ -101,8 +101,6 @@ const AnswerOption = props => (
       <label class="container">
         <input
           type="checkbox"
-          // className="radioCustomButton"
-          // name="radioGroup"
           value={props.correct}
           disabled={false}
           number={props.number}

@@ -40,8 +40,10 @@ const Text = styled.div`
 
 const Title = styled.div`
   margin: 10px 0;
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 1.6rem;
+  span {
+    font-weight: bold;
+  }
 `;
 
 const Buttons = styled.div`
@@ -139,7 +141,9 @@ class Shots extends Component {
       <Styles>
         {this.state.page === "show" && (
           <>
-            <Title>Раскадровка: {title}</Title>
+            <Title>
+              <span>Раскадровка:</span> {title}
+            </Title>
             <>
               <Text>
                 {visible.map((part, index) => (

@@ -406,50 +406,107 @@ class SingleLesson extends Component {
                 const lesson = data.lesson;
                 let arr = [];
                 let arr2;
+                let el;
+
                 if (lesson) {
                   const m = lesson.map[0];
                   m.map(prop => {
                     if (Object.keys(prop)[0] === "newTest") {
+                      el = lesson.newTests.find(
+                        test => test.id === Object.values(prop)[0]
+                      );
                       arr.push(
-                        lesson.newTests.find(
-                          test => test.id === Object.values(prop)[0]
-                        )
+                        <SingleTest
+                          id={el.id}
+                          question={el.question}
+                          answers={el.answers}
+                          true={el.correct}
+                          user={el.user.id}
+                          me={me}
+                          userData={lesson.testResults}
+                          lessonID={lesson.id}
+                          length={Array(el.correct.length).fill(false)}
+                          userData={lesson.testResults}
+                        />
                       );
                     } else if (Object.keys(prop)[0] === "quiz") {
+                      el = lesson.quizes.find(
+                        quiz => quiz.id === Object.values(prop)[0]
+                      );
                       arr.push(
-                        lesson.quizes.find(
-                          quiz => quiz.id === Object.values(prop)[0]
-                        )
+                        <SingleQuiz
+                          question={el.question}
+                          answer={el.answer}
+                          me={me}
+                          hidden={true}
+                          userData={lesson.quizResults}
+                          lessonID={lesson.id}
+                          id={el.id}
+                          user={el.user.id}
+                        />
                       );
                     } else if (Object.keys(prop)[0] === "note") {
-                      arr.push(
-                        lesson.notes.find(
-                          note => note.id === Object.values(prop)[0]
-                        )
+                      el = lesson.notes.find(
+                        note => note.id === Object.values(prop)[0]
                       );
+                      arr.push(<Note text={el.text} />);
                     } else if (Object.keys(prop)[0] === "shot") {
+                      el = lesson.shots.find(
+                        shot => shot.id === Object.values(prop)[0]
+                      );
                       arr.push(
-                        lesson.shots.find(
-                          shot => shot.id === Object.values(prop)[0]
-                        )
+                        <Shots
+                          key={el.id}
+                          comments={el.comments}
+                          parts={el.parts}
+                          shotUser={el.user.id}
+                          me={me}
+                          shotID={el.id}
+                          lessonID={lesson.id}
+                          title={el.title}
+                          userData={lesson.shotResults}
+                        />
                       );
                     } else if (Object.keys(prop)[0] === "problem") {
+                      el = lesson.problems.find(
+                        problem => problem.id === Object.values(prop)[0]
+                      );
                       arr.push(
-                        lesson.problems.find(
-                          problem => problem.id === Object.values(prop)[0]
-                        )
+                        <SingleProblem
+                          key={el.id}
+                          problem={arr[this.state.step]}
+                          lessonID={lesson.id}
+                          me={me}
+                          userData={lesson.problemResults}
+                        />
                       );
                     } else if (Object.keys(prop)[0] === "texteditor") {
+                      el = lesson.texteditors.find(
+                        texteditor => texteditor.id === Object.values(prop)[0]
+                      );
                       arr.push(
-                        lesson.texteditors.find(
-                          texteditor => texteditor.id === Object.values(prop)[0]
-                        )
+                        <SingleTextEditor
+                          key={el.id}
+                          lessonID={lesson.id}
+                          textEditor={el}
+                          me={me}
+                          userData={lesson.textEditorResults}
+                        />
                       );
                     } else if (Object.keys(prop)[0] === "construction") {
+                      el = lesson.constructions.find(
+                        con => con.id === Object.values(prop)[0]
+                      );
                       arr.push(
-                        lesson.constructions.find(
-                          con => con.id === Object.values(prop)[0]
-                        )
+                        <SingleConstructor
+                          key={el.id}
+                          lessonID={lesson.id}
+                          construction={el}
+                          variants={this.shuffle(el.variants)}
+                          me={me}
+                          arr={Array(el.answer.length).fill("")}
+                          userData={lesson.constructionResults}
+                        />
                       );
                     }
                   });
@@ -471,98 +528,7 @@ class SingleLesson extends Component {
                         <Header>
                           Шаг {this.state.step + 1} из {arr.length}
                         </Header>
-                        <LessonPart>
-                          {arr[this.state.step].__typename === "Shot" ? (
-                            <Shots
-                              key={arr[this.state.step].id}
-                              comments={arr[this.state.step].comments}
-                              parts={arr[this.state.step].parts}
-                              shotUser={arr[this.state.step].user.id}
-                              me={me}
-                              shotID={arr[this.state.step].id}
-                              lessonID={lesson.id}
-                              title={arr[this.state.step].title}
-                              userData={lesson.shotResults}
-                            />
-                          ) : null}
-                          {arr[this.state.step].__typename === "Note" ? (
-                            <Note text={arr[this.state.step].text} />
-                          ) : null}
-                          {arr[this.state.step].__typename === "Quiz" ? (
-                            <SingleQuiz
-                              question={arr[this.state.step].question}
-                              answer={arr[this.state.step].answer}
-                              num={this.state.step + 1}
-                              me={me}
-                              userData={lesson.quizResults}
-                              lessonID={lesson.id}
-                              id={arr[this.state.step].id}
-                              user={arr[this.state.step].user.id}
-                            />
-                          ) : null}
-
-                          {arr[this.state.step].__typename === "Problem" ? (
-                            <SingleProblem
-                              key={arr[this.state.step].id}
-                              problem={arr[this.state.step]}
-                              lessonID={lesson.id}
-                              me={me}
-                              userData={lesson.problemResults}
-                            />
-                          ) : null}
-
-                          {arr[this.state.step].__typename === "NewTest" ? (
-                            <>
-                              <SingleTest
-                                id={arr[this.state.step].id}
-                                answers={arr[this.state.step].answers}
-                                question={arr[this.state.step].question}
-                                num={this.state.step + 1}
-                                true={arr[this.state.step].correct}
-                                user={arr[this.state.step].user.id}
-                                me={me}
-                                userData={lesson.testResults}
-                                lessonID={lesson.id}
-                                length={Array(
-                                  arr[this.state.step].correct.length
-                                ).fill(false)}
-                                userData={lesson.testResults}
-                              />
-                            </>
-                          ) : null}
-
-                          {arr[this.state.step].__typename === "TextEditor" ? (
-                            <SingleTextEditor
-                              key={arr[this.state.step].id}
-                              lessonID={lesson.id}
-                              textEditor={arr[this.state.step]}
-                              me={me}
-                              userData={lesson.textEditorResults}
-                            />
-                          ) : null}
-
-                          {arr[this.state.step].__typename ===
-                          "Construction" ? (
-                            <>
-                              {
-                                (arr2 = Array(
-                                  arr[this.state.step].answer.length
-                                ).fill(""))
-                              }
-                              <SingleConstructor
-                                key={arr[this.state.step].id}
-                                lessonID={lesson.id}
-                                construction={arr[this.state.step]}
-                                variants={this.shuffle(
-                                  arr[this.state.step].variants
-                                )}
-                                me={me}
-                                arr={arr2}
-                                userData={lesson.constructionResults}
-                              />
-                            </>
-                          ) : null}
-                        </LessonPart>
+                        <LessonPart>{arr[this.state.step]}</LessonPart>
                         <Navigation>
                           <button onClick={this.less}>Назад</button>
                           {this.state.step + 1 !== arr.length && (
