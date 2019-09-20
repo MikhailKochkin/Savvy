@@ -474,7 +474,7 @@ class SingleLesson extends Component {
                       arr.push(
                         <SingleProblem
                           key={el.id}
-                          problem={arr[this.state.step]}
+                          problem={el}
                           lessonID={lesson.id}
                           me={me}
                           userData={lesson.problemResults}
