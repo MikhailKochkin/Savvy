@@ -132,7 +132,6 @@ class SingleTextEditor extends Component {
   onShow = () => {
     const mistakes = document.querySelectorAll("#id");
     this.setState(prevState => ({ mistakesShown: !prevState.mistakesShown }));
-    console.log(this.state.mistakesShown);
     if (!this.state.mistakesShown) {
       mistakes.forEach(mistake => (mistake.style.backgroundColor = "#F0C40F"));
       mistakes.forEach(mistake => (mistake.style.padding = "0.8%"));
@@ -152,7 +151,6 @@ class SingleTextEditor extends Component {
     const data = userData
       .filter(result => result.textEditor.id === textEditor.id)
       .filter(result => result.student.id === me.id);
-    console.log(data);
     return (
       <>
         <TextBar>
@@ -196,7 +194,6 @@ class SingleTextEditor extends Component {
                     e.preventDefault();
                     this.onShow();
                     const res = await createTextEditorResult();
-                    console.log("Ответ сохранен!");
                   }}
                 >
                   {this.state.mistakesShown

@@ -113,7 +113,6 @@ class SingleTest extends Component {
     const userData = this.props.userData
       .filter(el => el.testID === this.props.id)
       .filter(el => el.student.id === this.props.me.id);
-    console.log(this.props.question, mes);
     return (
       <TextBar className="Test">
         <Question>{this.props.question}</Question>
@@ -157,7 +156,6 @@ class SingleTest extends Component {
                   this.state.answerState === "right"
                 ) {
                   const res0 = await createTestResult();
-                  console.log("Успех!");
                 }
               }}
             >

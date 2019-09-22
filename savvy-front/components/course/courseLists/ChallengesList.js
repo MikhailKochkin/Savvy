@@ -91,6 +91,7 @@ class ChallengesList extends Component {
           if (error) return <p>Error: {error.message}</p>;
           if (loading) return <p>Загрузка...</p>;
           const coursePages = data1.coursePages;
+          console.log(coursePages);
           return (
             <>
               <>

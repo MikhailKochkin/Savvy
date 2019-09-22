@@ -8,12 +8,13 @@ const AreYouEnrolled = props => (
     {({ data }, loading) => {
       if (loading) return <p>Loading...</p>;
       const arr1 = [];
-      const index = 1;
-      console.log(data.me.new_subjects);
+      const subj_list = [];
+      data.me.new_subjects.map(sbj => subj_list.push(sbj.id));
+      data.me.coursePages.map(obj => arr1.push(Object.values(obj)[0]));
       if (data.me) {
-        data.me.coursePages.map(obj => arr1.push(Object.values(obj)[0]));
         if (
-          !data.me.subjects.includes(props.subject) &&
+          (!data.me.subjects.includes(props.subject) ||
+            !subj_list.includes(props.subject)) &&
           !arr1.includes(props.subject) &&
           !data.me.permissions.includes("ADMIN")
         ) {
