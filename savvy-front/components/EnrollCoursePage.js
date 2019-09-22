@@ -108,8 +108,8 @@ class EnrollCoursePage extends Component {
     console.log(coursePage.lessons[0].id);
     return (
       <>
-        {(coursePage.courseType === "PUBLIC" &&
-          coursePage.courseType === "CHALLENGE")(
+        {(coursePage.courseType === "PUBLIC" ||
+          coursePage.courseType === "CHALLENGE") && (
           <Mutation
             mutation={ENROLL_COURSE_MUTATION}
             refetchQueries={() => [{ query: CURRENT_USER_QUERY }]}
