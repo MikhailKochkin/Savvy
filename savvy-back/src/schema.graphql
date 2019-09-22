@@ -367,6 +367,7 @@ type User {
   isFamiliar: Boolean!
   favourites: [ID]
   subjects: [ID]
+  new_subjects: [CoursePage]
   coursePages: [CoursePage]
   lessons: [Lesson]!
   orders: [Order]!

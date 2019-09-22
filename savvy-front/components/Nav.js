@@ -407,6 +407,15 @@ class Nav extends Component {
                           <a>Курсы вузов и сообществ</a>
                         </button>
                       </Link>
+                      <Link
+                        href={{
+                          pathname: "/challenges"
+                        }}
+                      >
+                        <button onClick={this.closeNav}>
+                          <a>Испытания</a>
+                        </button>
+                      </Link>
                       {me ? <Signout /> : null}
                     </div>
                   </SideMenu>

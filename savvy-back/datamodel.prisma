@@ -8,6 +8,7 @@ enum CourseType {
   PRIVATE
   FORMONEY
   UNI
+  CHALLENGE
 }
 
 enum Status {

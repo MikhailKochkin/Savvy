@@ -413,6 +413,9 @@ class CoursePage extends Component {
                                                     name={lesson.name}
                                                     lesson={lesson}
                                                     coursePageId={this.props.id}
+                                                    students={
+                                                      coursePage.students
+                                                    }
                                                     new_students={student_list}
                                                     open={index + 1 === 1}
                                                     index={index + 1}

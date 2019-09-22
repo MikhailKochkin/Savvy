@@ -10,6 +10,9 @@ const CURRENT_USER_QUERY = gql`
       name
       permissions
       subjects
+      new_subjects {
+        id
+      }
       status
       lessonResults {
         id

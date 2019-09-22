@@ -73,7 +73,10 @@ class EnrollCoursePage extends Component {
   };
   onClick = async (e, enrollOnCourse, addUserToCoursePage) => {
     e.preventDefault();
-    if (this.props.coursePage.courseType === "PUBLIC") {
+    if (
+      this.props.coursePage.courseType === "PUBLIC" ||
+      this.props.coursePage.courseType === "CHALLENGE"
+    ) {
       if (!this.state.subjects.includes(this.props.coursePage.id)) {
         const newSubjects = this.state.subjects.concat(
           this.props.coursePage.id
@@ -105,7 +108,8 @@ class EnrollCoursePage extends Component {
     console.log(coursePage.lessons[0].id);
     return (
       <>
-        {coursePage.courseType === "PUBLIC" && (
+        {(coursePage.courseType === "PUBLIC" &&
+          coursePage.courseType === "CHALLENGE")(
           <Mutation
             mutation={ENROLL_COURSE_MUTATION}
             refetchQueries={() => [{ query: CURRENT_USER_QUERY }]}
@@ -148,7 +152,6 @@ class EnrollCoursePage extends Component {
                   this.setState({
                     show: true
                   });
-                  // this.concealApplication();
                   const res = await createApplication();
                 }}
               >

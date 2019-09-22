@@ -3585,6 +3585,7 @@ enum CourseType {
   PRIVATE
   FORMONEY
   UNI
+  CHALLENGE
 }
 
 scalar DateTime

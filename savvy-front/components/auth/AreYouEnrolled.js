@@ -9,6 +9,7 @@ const AreYouEnrolled = props => (
       if (loading) return <p>Loading...</p>;
       const arr1 = [];
       const index = 1;
+      console.log(data.me.new_subjects);
       if (data.me) {
         data.me.coursePages.map(obj => arr1.push(Object.values(obj)[0]));
         if (

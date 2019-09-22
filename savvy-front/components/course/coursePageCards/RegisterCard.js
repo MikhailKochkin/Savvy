@@ -77,12 +77,18 @@ class RegisterCard extends Component {
   };
   render() {
     const { coursePage, me, price, studentsArray, subjectArray } = this.props;
+    console.log(this.state.price);
     return (
       <>
         <Payment>
           <Part1>
-            <Header>{this.state.price} рублей</Header>
-            {coursePage.courseType === "PUBLIC" && (
+            <Header>
+              {this.state.price !== "Бесплатно"
+                ? `${this.state.price} рублей`
+                : this.state.price}{" "}
+            </Header>
+            {(coursePage.courseType === "PUBLIC" ||
+              coursePage.courseType === "CHALLENGE") && (
               <div className="message">
                 Вам необходимо зарегистрироваться на курс, чтобы открыть доступ
                 к урокам.

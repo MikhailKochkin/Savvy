@@ -190,7 +190,7 @@ class LessonHeader extends Component {
     this.setState({ [name]: value });
   };
   render() {
-    const { lesson, name, new_students, coursePageId, me } = this.props;
+    const { lesson, name, new_students, students, me } = this.props;
     return (
       <>
         <TextBar>
@@ -292,7 +292,8 @@ class LessonHeader extends Component {
                                 {me &&
                                   lesson &&
                                   me.id !== lesson.user.id &&
-                                  new_students.includes(me.id) &&
+                                  (students.includes(me.id) ||
+                                    new_students.includes(me.id)) &&
                                   !me.permissions.includes("ADMIN") &&
                                   this.state.published && (
                                     <Link
@@ -365,7 +366,8 @@ class LessonHeader extends Component {
                               {me &&
                                 lesson &&
                                 me.id !== lesson.user.id &&
-                                new_students.includes(me.id) &&
+                                (students.includes(me.id) ||
+                                  new_students.includes(me.id)) &&
                                 this.state.published && (
                                   <Link
                                     href={{
@@ -389,10 +391,11 @@ class LessonHeader extends Component {
                                   </Link>
                                 )}
 
-                              {me &&
+                              {/* {me &&
                                 lesson &&
                                 me.id !== lesson.user.id &&
-                                !new_students.includes(me.id) &&
+                                (!students.includes(me.id) ||
+                                  !new_students.includes(me.id)) &&
                                 this.props.index === 1 && (
                                   <Link
                                     href={{
@@ -410,11 +413,11 @@ class LessonHeader extends Component {
                                           console.log("UPDATE");
                                         }}
                                       >
-                                        Перейти
+                                        Перейти4
                                       </Button>
                                     </A>
                                   </Link>
-                                )}
+                                )} */}
                             </>
                           );
                         }}
@@ -428,7 +431,7 @@ class LessonHeader extends Component {
             {me &&
             lesson &&
             me.id !== lesson.user.id &&
-            new_students.includes(me.id) &&
+            (students.includes(me.id) || new_students.includes(me.id)) &&
             !me.permissions.includes("ADMIN") &&
             !this.state.published ? (
               <InProgress>В разработке</InProgress>

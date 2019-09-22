@@ -49,6 +49,15 @@ class Menu extends Component {
             <a>Курсы вузов и сообществ</a>
           </Link>
         </Box>
+        <Box>
+          <Link
+            href={{
+              pathname: "/challenges"
+            }}
+          >
+            <a>Испытания</a>
+          </Link>
+        </Box>
       </MenuStyle>
     );
   }
