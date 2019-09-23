@@ -104,6 +104,7 @@ class SingleQuiz extends Component {
     testFormat: false,
     answer: "",
     correct: "",
+    show: false,
     color: "#c4c4c4"
   };
 
@@ -136,15 +137,15 @@ class SingleQuiz extends Component {
       if (s1Parts[i] === s2Parts[i]) score++;
     }
     if (score == s1Parts.length) {
-      this.setState({ correct: "true" });
+      this.setState({ correct: "true", show: true });
       this.showRight();
+      setTimeout(() => {
+        this.setState({ answer: "" });
+      }, 1000);
     } else {
-      this.setState({ correct: "false" });
+      this.setState({ correct: "false", show: true });
       this.showWrong();
     }
-    setTimeout(() => {
-      this.setState({ answer: "" });
-    }, 1000);
   };
 
   handleChange = e => {
@@ -176,7 +177,7 @@ class SingleQuiz extends Component {
         <Mutation
           mutation={CREATE_QUIZRESULT_MUTATION}
           variables={{
-            quiz: this.props.quizID,
+            quiz: this.props.id,
             lessonID: this.props.lessonID,
             answer: this.state.answer
           }}
@@ -187,9 +188,13 @@ class SingleQuiz extends Component {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation
-                const res = await this.onAnswer();
-                if (data.length === 0) {
-                  const res0 = await createQuizResult();
+                if (this.state.answer !== "") {
+                  const res = await this.onAnswer();
+                  if (data.length === 0) {
+                    const res0 = await createQuizResult();
+                  }
+                } else {
+                  alert("Поле ответа не может быть пустым!");
                 }
               }}
             >
@@ -197,7 +202,9 @@ class SingleQuiz extends Component {
             </Button>
           )}
         </Mutation>
-        <Button onClick={this.onShow}>Показать ответ</Button>
+        {this.state.show && (
+          <Button onClick={this.onShow}>Показать ответ</Button>
+        )}
         {me && me.id === user ? (
           <DeleteSingleQuiz
             id={me.id}

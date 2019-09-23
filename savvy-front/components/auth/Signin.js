@@ -161,7 +161,6 @@ class Signin extends Component {
             <Fieldset disabled={loading} aria-busy={loading}>
               <Title>Войдите на Savvvy App</Title>
               <Error error={error} />
-              {/* {this.state.loggedIn && <LoggedIn>Вы вошли в аккаунт!</LoggedIn>} */}
               <Container>
                 <input
                   primary={this.state.loggedIn}

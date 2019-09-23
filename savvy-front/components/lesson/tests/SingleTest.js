@@ -79,7 +79,7 @@ class SingleTest extends Component {
     element.style.borderLeft = "2px solid #84BC9C";
     setTimeout(function() {
       element.style.border = "2px solid white";
-    }, 3000);
+    }, 2000);
   };
 
   showWrong = () => {
@@ -87,7 +87,7 @@ class SingleTest extends Component {
     element.style.borderLeft = "2px solid #DE6B48";
     setTimeout(function() {
       element.style.border = "2px solid white";
-    }, 3000);
+    }, 2000);
   };
 
   onCheck = async () => {

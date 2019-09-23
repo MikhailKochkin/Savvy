@@ -47,8 +47,6 @@ class TakeMyMoney extends React.Component {
     loading: false
   };
   render() {
-    console.log(typeof this.props.price);
-    console.log(this.props.price);
     return (
       <Mutation
         mutation={CREATE_APPLICATION_MUTATION}

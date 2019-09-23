@@ -168,7 +168,6 @@ class SingleProblem extends Component {
   }
   render() {
     const { problem, me, userData } = this.props;
-    console.log(problem);
     const data = userData
       .filter(result => result.problem.id === problem.id)
       .filter(result => result.student.id === me.id);
@@ -178,7 +177,7 @@ class SingleProblem extends Component {
           {renderHTML(problem.text)}
           {data.length > 0 && (
             <ButtonGroup>
-              <Advice>Эта задача уже выполнена.</Advice>
+              <Advice>Задача выполнена</Advice>
               <Button
                 onClick={async e => {
                   // Stop the form from submitting

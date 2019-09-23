@@ -917,6 +917,7 @@ const Mutations = {
   },
   async signup(parent, args, ctx, info) {
     // lower the email
+    console.log(args);
     args.email = args.email.toLowerCase();
     const uniID = args.uniID;
     const careerTrackID = args.careerTrackID;

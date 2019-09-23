@@ -15,6 +15,7 @@ const SIGNUP_MUTATION = gql`
     $isFamiliar: Boolean!
     $status: Status!
     $uniID: ID
+    $careerTrackID: ID
   ) {
     signup(
       email: $email
@@ -23,6 +24,7 @@ const SIGNUP_MUTATION = gql`
       isFamiliar: $isFamiliar
       status: $status
       uniID: $uniID
+      careerTrackID: $careerTrackID
     ) {
       id
       email
@@ -194,6 +196,7 @@ class WideSignUp extends Component {
     email: "",
     status: "STUDENT",
     uniID: "cjymz9pazr0ib0b53v38d401g",
+    careerTrackID: "cjwx78u7700rb07121pelqctm",
     isFamiliar: true,
     loggedIn: false
   };
@@ -235,11 +238,6 @@ class WideSignUp extends Component {
                 password: "",
                 loggedIn: true
               });
-              // this.state.status === "STUDENT" &&
-              //   setTimeout(
-              //     () => Router.push({ pathname: "/chooseCareer" }),
-              //     2000
-              //   );
               this.state.status === "AUTHOR" &&
                 setTimeout(() => Router.push({ pathname: "/educator" }), 2000);
             }}
@@ -300,22 +298,25 @@ class WideSignUp extends Component {
                 </select>
                 <label className="career">
                   <select
-                    name="career"
-                    value={this.state.career}
+                    name="careerTrackID"
+                    value={this.state.careerTrackID}
                     onChange={this.saveToState}
                   >
-                    <option value="STUDENT">Корпоративное право</option>
-                    <option value="AUTHOR">Право и технологии</option>
-                    {/* <option value="HR">HR</option> */}
+                    <option value="cjwx78u7700rb07121pelqctm">
+                      Корпоративное право
+                    </option>
+                    <option value="cjwx79iaj00rk0712tz12j7vi">
+                      Право и технологии
+                    </option>
                   </select>
                   <Comment>
                     Карьерный трек необходим для составления плана карьерного
                     развития, поиска курсов и предложений работы.
                   </Comment>
-                  <Comment>
+                  {/* <Comment>
                     Если вы не знаете, какой карьерный трек выбрать,
                     воспользуйтесь <a href="#">карьерным помощником.</a>
-                  </Comment>
+                  </Comment> */}
                 </label>
 
                 <select name="isFamiliar" className="isFamiliar">
