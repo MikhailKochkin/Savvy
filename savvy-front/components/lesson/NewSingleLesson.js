@@ -334,25 +334,6 @@ class SingleLesson extends Component {
     this.setState({ width });
   };
 
-  shuffle = array => {
-    var m = array.length,
-      t,
-      i;
-
-    // While there remain elements to shuffle…
-    while (m) {
-      // Pick a remaining element…
-      i = Math.floor(Math.random() * m--);
-
-      // And swap it with the current element.
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-
-    return array;
-  };
-
   openNav = () => {
     document.getElementById("mySidenav2").style.width = "180px";
   };
@@ -431,7 +412,7 @@ class SingleLesson extends Component {
                                 Вперед
                               </button>
                             )}
-                            {this.state.step + 1 === lesson.length && (
+                            {this.state.step + 1 === m.length && (
                               <Link
                                 href={{
                                   pathname: "/coursePage",
