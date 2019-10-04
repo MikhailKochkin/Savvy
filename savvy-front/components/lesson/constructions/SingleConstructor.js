@@ -237,15 +237,15 @@ class SingleConstructor extends Component {
               attempts: this.state.attempts,
               constructionID: this.props.construction.id
             }}
-            refetchQueries={() => [
-              {
-                query: SINGLE_LESSON_QUERY,
-                variables: { id: lessonID }
-              },
-              {
-                query: CURRENT_USER_QUERY
-              }
-            ]}
+            // refetchQueries={() => [
+            //   {
+            //     query: SINGLE_LESSON_QUERY,
+            //     variables: { id: lessonID }
+            //   },
+            //   {
+            //     query: CURRENT_USER_QUERY
+            //   }
+            // ]}
           >
             {(createConstructionResult, { loading, error }) => (
               <Button

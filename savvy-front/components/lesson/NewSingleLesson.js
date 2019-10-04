@@ -377,8 +377,6 @@ class SingleLesson extends Component {
                 if (error) return <Error error={error} />;
                 if (loading) return <p>Loading...</p>;
                 const lesson = data.lesson;
-                const m = lesson.map[0];
-                console.log(m);
                 return (
                   <>
                     {lesson && (
@@ -395,33 +393,43 @@ class SingleLesson extends Component {
                             </div>
                           </Head>
                           <Header>
-                            Шаг {this.state.step + 1} из {m.length}
+                            Шаг {this.state.step + 1} из{" "}
+                            {data.lesson.map[0].length}
                           </Header>
                           <LessonPart>
                             <StoryEx
-                              m={m}
+                              m={data.lesson.map[0][this.state.step]}
                               me={me}
                               lesson={lesson}
                               step={this.state.step}
                             />
                           </LessonPart>
                           <Navigation>
-                            <button onClick={this.less}>Назад</button>
-                            {this.state.step + 1 !== m.length && (
-                              <button data={m.length} onClick={this.more}>
-                                Вперед
-                              </button>
+                            {lesson && this.state.step + 1 > 1 && (
+                              <button onClick={this.less}>Назад</button>
                             )}
-                            {this.state.step + 1 === m.length && (
-                              <Link
-                                href={{
-                                  pathname: "/coursePage",
-                                  query: { id: lesson.coursePage.id }
-                                }}
-                              >
-                                <div>Вернуться на страницу курса</div>
-                              </Link>
-                            )}
+                            {lesson &&
+                              this.state.step + 1 !==
+                                data.lesson.map[0].length && (
+                                <button
+                                  data={data.lesson.map[0].length}
+                                  onClick={this.more}
+                                >
+                                  Вперед
+                                </button>
+                              )}
+                            {lesson &&
+                              this.state.step + 1 ===
+                                data.lesson.map[0].length && (
+                                <Link
+                                  href={{
+                                    pathname: "/coursePage",
+                                    query: { id: lesson.coursePage.id }
+                                  }}
+                                >
+                                  <div>Вернуться на страницу курса</div>
+                                </Link>
+                              )}
                           </Navigation>
                         </Container>{" "}
                         <div id="root"></div>

@@ -15,6 +15,15 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         name
         email
+        lessonResults {
+          id
+          visitsNumber
+          lesson {
+            id
+          }
+          createdAt
+          updatedAt
+        }
       }
       examQuestion {
         id
@@ -34,22 +43,78 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         name
         newTests {
           id
+          question
+          testResults {
+            id
+            student {
+              id
+            }
+            answer
+            test {
+              question
+            }
+          }
         }
         quizes {
           id
+          question
+          quizResults {
+            id
+            student {
+              id
+            }
+            answer
+          }
         }
         problems {
           id
           text
+          problemResults {
+            id
+            student {
+              id
+            }
+            answer
+            revealed
+            problem {
+              id
+              text
+            }
+          }
         }
         texteditors {
           id
           text
           totalMistakes
+          textEditorResults {
+            id
+            student {
+              id
+            }
+            revealed
+            attempts
+            textEditor {
+              id
+              text
+              totalMistakes
+            }
+          }
         }
         constructions {
           id
           name
+          constructionResults {
+            id
+            student {
+              id
+            }
+            attempts
+            answer
+            construction {
+              id
+              name
+            }
+          }
         }
         user {
           id
@@ -58,61 +123,11 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           student {
             id
+            email
           }
           visitsNumber
           createdAt
           updatedAt
-        }
-        testResults {
-          id
-          student {
-            id
-          }
-          answer
-        }
-        quizResults {
-          id
-          student {
-            id
-          }
-          answer
-        }
-        problemResults {
-          id
-          student {
-            id
-          }
-          answer
-          revealed
-          problem {
-            id
-            text
-          }
-        }
-        textEditorResults {
-          id
-          student {
-            id
-          }
-          revealed
-          attempts
-          textEditor {
-            id
-            text
-            totalMistakes
-          }
-        }
-        constructionResults {
-          id
-          student {
-            id
-          }
-          attempts
-          answer
-          construction {
-            id
-            name
-          }
         }
       }
     }

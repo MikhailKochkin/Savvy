@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Query, Mutation } from "react-apollo";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import _ from "lodash";
 import AnswerOption from "./AnswerOption";
@@ -28,7 +28,8 @@ const Question = styled.p`
 const TextBar = styled.div`
   width: 100%;
   font-size: 1.6rem;
-  border-left: 2px solid white;
+  border-left: 2px solid;
+  border-left-color: ${props => props.inputColor};
   padding-top: 2%;
   padding-left: 25px;
   padding-bottom: 2%;
@@ -61,33 +62,32 @@ class SingleTest extends Component {
   state = {
     answerState: "think",
     answerOptions: this.props.length,
-    answer: "",
-    attempts: 0
+    answer: [],
+    attempts: 0,
+    inputColor: "white"
   };
 
   answerState = "";
 
-  handleAnswerSelected = e => {
+  handleAnswerSelected = async e => {
     let answerVar = this.state.answerOptions;
     let int = parseInt(e.target.getAttribute("number"));
     answerVar[int] = !answerVar[int];
-    this.setState({ answerOptions: answerVar });
-  };
+    let answerText = this.state.answer;
 
-  showRight = () => {
-    const element = document.querySelector(".Test");
-    element.style.borderLeft = "2px solid #84BC9C";
-    setTimeout(function() {
-      element.style.border = "2px solid white";
-    }, 2000);
-  };
-
-  showWrong = () => {
-    const element = document.querySelector(".Test");
-    element.style.borderLeft = "2px solid #DE6B48";
-    setTimeout(function() {
-      element.style.border = "2px solid white";
-    }, 2000);
+    function change() {
+      if (!answerText.includes(e.target.getAttribute("answer"))) {
+        answerText.push(e.target.getAttribute("answer"));
+      } else if (answerText.includes(e.target.getAttribute("answer"))) {
+        var index = answerText.indexOf(e.target.getAttribute("answer"));
+        answerText.splice(index, 1);
+      }
+    }
+    const res = await change();
+    const res1 = await this.setState({
+      answerOptions: answerVar,
+      answer: answerText
+    });
   };
 
   onCheck = async () => {
@@ -99,11 +99,9 @@ class SingleTest extends Component {
         JSON.stringify(this.state.answerOptions) ==
         JSON.stringify(this.props.true)
       ) {
-        this.showRight();
-        this.setState({ answerState: "right" });
+        this.setState({ answerState: "right", inputColor: "#84BC9C" });
       } else {
-        this.showWrong();
-        this.setState({ answerState: "wrong" });
+        this.setState({ answerState: "wrong", inputColor: "#DE6B48" });
       }
     };
     const res2 = await res();
@@ -114,7 +112,7 @@ class SingleTest extends Component {
       .filter(el => el.testID === this.props.id)
       .filter(el => el.student.id === this.props.me.id);
     return (
-      <TextBar className="Test">
+      <TextBar className="Test" inputColor={this.state.inputColor}>
         <Question>{this.props.question}</Question>
         {mes.map((answer, index) => (
           <ul>
@@ -132,17 +130,17 @@ class SingleTest extends Component {
           variables={{
             testID: this.props.id,
             lessonID: this.props.lessonID,
-            answer: "Completed"
+            answer: `${this.state.answer}, ${this.state.answerState}`
           }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: this.props.lessonID }
-            },
-            {
-              query: CURRENT_USER_QUERY
-            }
-          ]}
+          // refetchQueries={() => [
+          //   {
+          //     query: SINGLE_LESSON_QUERY,
+          //     variables: { id: this.props.lessonID }
+          //   },
+          //   {
+          //     query: CURRENT_USER_QUERY
+          //   }
+          // ]}
         >
           {(createTestResult, { loading, error }) => (
             <Button
@@ -151,10 +149,7 @@ class SingleTest extends Component {
                 e.preventDefault();
                 // call the mutation
                 const res = await this.onCheck();
-                if (
-                  userData.length === 0 &&
-                  this.state.answerState === "right"
-                ) {
+                if (userData.length === 0) {
                   const res0 = await createTestResult();
                 }
               }}

@@ -91,9 +91,6 @@ const StyledButton = styled.div`
       top: 4px;
     }
   }
-  p {
-    font-size: 1.6rem;
-  }
 `;
 const AnswerOption = props => (
   <StyledButton>
@@ -103,6 +100,7 @@ const AnswerOption = props => (
           type="checkbox"
           value={props.correct}
           disabled={false}
+          answer={props.question}
           number={props.number}
           onChange={props.onAnswerSelected}
         />

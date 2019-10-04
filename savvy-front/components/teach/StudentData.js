@@ -1,20 +1,12 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import renderHTML from "react-render-html";
 import moment from "moment";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  p {
-    margin: 0.5% 0;
-  }
-  .answer {
-    border-top: 2px solid #edefed;
-    border-bottom: 2px solid #edefed;
-  }
-`;
+import TestResult from "./results/TestResult";
+import QuizResult from "./results/QuizResult";
+import ProblemResult from "./results/ProblemResult";
+import ConstructionResult from "./results/ConstructionResult";
+import TexteditorResult from "./results/TexteditorResult";
 
 const Name = styled.div`
   font-size: 1.6rem;
@@ -24,7 +16,7 @@ const Name = styled.div`
 const Square = styled.div`
   width: 70px;
   height: 30px;
-  background: #de6b48;
+  background: ${props => props.inputColor || "palevioletred"};
 `;
 
 const Open = styled.div`
@@ -101,11 +93,27 @@ class Person extends Component {
     let { student, lessons } = this.props;
     moment.locale("ru");
     let mail = `mailto:${student.email}`;
+    let color;
+    let lesson_list = [];
+    lessons.map(l => lesson_list.push(l.id));
+    let lesson_results = student.lessonResults.filter(l =>
+      lesson_list.includes(l.lesson.id)
+    );
+    if (lesson_results.length / lessons.length === 0) {
+      color = "#DE6B48";
+    } else if (
+      lesson_results.length / lessons.length > 0 &&
+      lesson_results.length / lessons.length < 1
+    ) {
+      color = "#FDF3C8";
+    } else if (lesson_results.length / lessons.length >= 1) {
+      color = "#84BC9C";
+    }
     return (
       <Styles>
         <Header>
           <Name className="div1">{student.name}</Name>
-          <Square className="div2" />
+          <Square className="div2" inputColor={color} />
           <Button className="div3" onClick={this.onShow}>
             {this.state.secret ? "Открыть" : "Закрыть"}
           </Button>
@@ -158,186 +166,17 @@ class Person extends Component {
                 <div className="time">Нет данных по заходам на урок.</div>
               )}
 
-              <Container>
-                {lesson.newTests.length === 0 && (
-                  <li>
-                    <b>Тесты</b> не созданы
-                  </li>
-                )}
-                {lesson.newTests.length > 0 && lesson.testResults && (
-                  <>
-                    {lesson.testResults.filter(
-                      result => result.student.id === student.id
-                    ).length === 0 && (
-                      <li>
-                        <b>Тесты</b> не выполнены
-                      </li>
-                    )}
-                  </>
-                )}
-
-                {lesson.newTests.length > 0 &&
-                  lesson.testResults.map(
-                    result =>
-                      result.student.id === student.id && (
-                        <li>
-                          {" "}
-                          <b>Тесты</b> выполнены
-                        </li>
-                      )
-                  )}
-              </Container>
-
-              <Container>
-                {lesson.quizes.length === 0 && (
-                  <li>
-                    <b>Вопросы</b> не созданы
-                  </li>
-                )}
-                {lesson.quizes.length > 0 && lesson.quizResults.length === 0 && (
-                  <>
-                    {lesson.quizResults.filter(
-                      result => result.student.id === student.id
-                    ).length === 0 ? (
-                      <li>
-                        <b>Вопросы</b> пока не выполнены
-                      </li>
-                    ) : null}
-                  </>
-                )}
-
-                {lesson.quizes.length > 0 &&
-                  lesson.quizResults.length > 0 &&
-                  lesson.quizResults.map(
-                    result =>
-                      result.student.id === student.id && (
-                        <li key={result.id}>
-                          <b>Вопросы</b> выполнены
-                        </li>
-                      )
-                  )}
-              </Container>
-
-              <Container>
-                {lesson.problems.length === 0 && (
-                  <li>
-                    <b>Задачи</b> не созданы
-                  </li>
-                )}
-                {lesson.problems.length > 0 &&
-                  lesson.problemResults.filter(
-                    result => result.student.id === student.id
-                  ).length === 0 && (
-                    <li>
-                      <b>Задачи</b> пока не выполнены
-                    </li>
-                  )}
-
-                {lesson.problems.length > 0 &&
-                  lesson.problemResults.map(
-                    result =>
-                      result.student.id === student.id && (
-                        <>
-                          <div>
-                            {renderHTML(
-                              `<li><b>Задача:</b></li>
-                                ${result.problem.text.substring(0, 200)}...
-                              `
-                            )}
-                          </div>
-
-                          <div className="answer">
-                            Ответ: {renderHTML(result.answer)}
-                          </div>
-                          <div>
-                            Открытые подсказки:{" "}
-                            {result.revealed
-                              ? result.revealed.join(", ")
-                              : "Студент не использовал подсказки"}
-                          </div>
-                        </>
-                      )
-                  )}
-              </Container>
-
-              <Container>
-                {lesson.constructions.length === 0 && (
-                  <li>
-                    <b>Конструкторы</b> не созданы
-                  </li>
-                )}
-
-                {lesson.constructions.length > 0 && (
-                  <>
-                    {lesson.constructionResults.filter(
-                      result => result.student.id === student.id
-                    ).length === 0 && (
-                      <li>
-                        <b>Конструкторы </b>
-                        пока не выполнены
-                      </li>
-                    )}
-                  </>
-                )}
-
-                {lesson.constructions.length > 0 &&
-                  lesson.constructionResults.map(
-                    result =>
-                      result.student.id === student.id && (
-                        <>
-                          <div>
-                            {renderHTML(
-                              "Конструктор: " +
-                                result.construction.name +
-                                " составлен"
-                            )}
-                          </div>
-                          <div>{"Количество попыток: " + result.attempts}</div>
-                        </>
-                      )
-                  )}
-              </Container>
-
-              <Container>
-                {lesson.texteditors.length === 0 && (
-                  <li>
-                    <b>Редакторы</b> не созданы
-                  </li>
-                )}
-
-                {lesson.texteditors.length > 0 && (
-                  <>
-                    {lesson.textEditorResults.filter(
-                      result => result.student.id === student.id
-                    ).length === 0 ? (
-                      <li>
-                        <b className="grid-item">Редакторы </b>
-                        не выполнены
-                      </li>
-                    ) : null}
-                  </>
-                )}
-
-                {lesson.texteditors.length > 0 &&
-                  lesson.textEditorResults.map(
-                    result =>
-                      result.student.id === student.id && (
-                        <>
-                          <li>
-                            {renderHTML(
-                              "<b>Редактор:</b> " +
-                                result.textEditor.text.substring(0, 200) +
-                                "..."
-                            )}
-                          </li>
-                          <div>
-                            {"Документ отредактирован. Количество попыток: " +
-                              result.attempts}
-                          </div>
-                        </>
-                      )
-                  )}
-              </Container>
+              <TestResult newTests={lesson.newTests} student={student} />
+              <QuizResult quizes={lesson.quizes} student={student} />
+              <ProblemResult problems={lesson.problems} student={student} />
+              <ConstructionResult
+                constructions={lesson.constructions}
+                student={student}
+              />
+              <TexteditorResult
+                texteditors={lesson.texteditors}
+                student={student}
+              />
             </>
           ))}
         </Open>

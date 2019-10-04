@@ -70,11 +70,9 @@ const Page = ({ children, router }) => {
               <Layout>
                 <ModalProvider>
                   <Header />
-                  {router.pathname === "/" && me && <Nav />}
-                  {router.pathname !== "/" && <Nav />}
+                  <Nav />
                   <Inner>{children}</Inner>
-                  {router.pathname === "/" && me && <Footer />}
-                  {router.pathname !== "/" && <Footer />}
+                  <Footer />
                 </ModalProvider>
               </Layout>
             </>
