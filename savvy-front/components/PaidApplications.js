@@ -3,7 +3,7 @@ import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import AreYouAdmin from "./auth/AreYouAdmin";
-import ApplicationBox from "./teach/ApplicationBox";
+import ApplicationBox from "./teach/applications/ApplicationBox";
 
 const PAGE_APPLICATIONS_QUERY = gql`
   query PAGE_APPLICATIONS_QUERY($id: ID!) {
