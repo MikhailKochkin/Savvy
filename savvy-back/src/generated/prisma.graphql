@@ -13125,7 +13125,7 @@ type TextEditorResult {
   id: ID!
   student: User!
   attempts: Int
-  revealed: [String!]!
+  revealed: [Json!]!
   lesson: Lesson
   lessonID: ID
   textEditor: TextEditor
@@ -13164,7 +13164,7 @@ input TextEditorResultCreateManyWithoutTextEditorInput {
 }
 
 input TextEditorResultCreaterevealedInput {
-  set: [String!]
+  set: [Json!]
 }
 
 input TextEditorResultCreateWithoutLessonInput {
@@ -13213,7 +13213,7 @@ enum TextEditorResultOrderByInput {
 type TextEditorResultPreviousValues {
   id: ID!
   attempts: Int
-  revealed: [String!]!
+  revealed: [Json!]!
   lessonID: ID
   textEditorID: ID
 }
@@ -13358,7 +13358,7 @@ input TextEditorResultUpdateManyWithWhereNestedInput {
 }
 
 input TextEditorResultUpdaterevealedInput {
-  set: [String!]
+  set: [Json!]
 }
 
 input TextEditorResultUpdateWithoutLessonDataInput {

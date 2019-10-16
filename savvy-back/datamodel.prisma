@@ -370,7 +370,7 @@ type TextEditorResult {
   id: ID! @unique
   student: User! @relation(name: "UserTextEditorResults")
   attempts: Int
-  revealed: [String!] @scalarList(strategy: RELATION)
+  revealed: [Json] @scalarList(strategy: RELATION)
   lesson: Lesson @relation(name: "TextEditorResults")
   lessonID: ID
   textEditor: TextEditor @relation(name: "SingleTextEditorResults")
