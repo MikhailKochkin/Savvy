@@ -207,7 +207,9 @@ class SingleTextEditor extends Component {
                     )}
                   </>
                 )}
-                {(this.state.total === 0 || this.state.total === undefined) &&
+                {(this.state.total === 0 ||
+                  this.state.total === undefined ||
+                  this.state.total === null) &&
                   this.state.correct_option}
               </div>
               {this.state.total > 0 && (
@@ -224,7 +226,7 @@ class SingleTextEditor extends Component {
           </EditText>
         </TextBar>
         <Buttons>
-          {data.length === 0 && (
+          {data.length === 0 && this.state.total > 0 && (
             <Mutation
               mutation={CREATE_TEXTEDITORRESULT_MUTATION}
               variables={{
@@ -258,7 +260,7 @@ class SingleTextEditor extends Component {
               )}
             </Mutation>
           )}
-          {data.length > 0 && (
+          {data.length > 0 && this.state.total > 0 && (
             <Button onClick={this.onShow}>
               {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
             </Button>
