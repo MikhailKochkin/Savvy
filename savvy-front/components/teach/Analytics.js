@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
 import UserAnalytics from "./UserAnalytics";
-import Applications from "./Applications";
+import Applications from "./applications/Applications";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
@@ -44,6 +44,8 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         newTests {
           id
           question
+          answers
+          correct
           testResults {
             id
             student {
@@ -58,6 +60,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         quizes {
           id
           question
+          answer
           quizResults {
             id
             student {
@@ -103,6 +106,8 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         constructions {
           id
           name
+          variants
+          answer
           constructionResults {
             id
             student {

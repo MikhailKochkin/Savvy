@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import styled from "styled-components";
+import styled, { consolidateStreamedStyles } from "styled-components";
 import renderHTML from "react-render-html";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -12,7 +12,7 @@ import { CURRENT_USER_QUERY } from "../../User";
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
     $attempts: Int
-    $revealed: [String!]
+    $revealed: [Json]
     $lessonID: ID
     $textEditorID: ID
   ) {
@@ -50,10 +50,6 @@ const Hint = styled.div`
   border: 1px solid #c0d6df;
   border-radius: 10px;
   width: 100%;
-  /* div {
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
-  } */
   button {
     background: none;
     border: none;
@@ -62,6 +58,7 @@ const Hint = styled.div`
     font-size: 1.4rem;
     padding: 0;
     margin: 0;
+    margin-right: 10px;
     &:hover {
       text-decoration: underline;
     }
@@ -86,16 +83,46 @@ const Button = styled.button`
     width: 50%;
   }
 `;
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Input = styled.input`
+  margin-left: 10px;
+  border: none;
+  border-bottom: 1px solid #edefed;
+  outline: 0;
+  font-size: 1.6rem;
+  font-family: Montserrat;
+`;
 
 class SingleTextEditor extends Component {
   state = {
     shown: false,
     mistakesShown: false,
     answer: "",
+    correct_option: "",
+    wrong_option: "",
+    show: false,
     revealed: [],
     attempts: 0,
+    answers: [],
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text
+  };
+
+  onCheck = e => {
+    let a = {
+      wrong_variant: this.state.wrong_option,
+      student_variant: this.state.answer,
+      correct_variant: this.state.correct_option
+    };
+    this.setState(prevState => ({
+      show: !prevState.show,
+      answers: [...prevState.answers, this.state.answer],
+      revealed: [...prevState.revealed, a]
+    }));
   };
 
   onTest = e => {
@@ -103,30 +130,32 @@ class SingleTextEditor extends Component {
       attempts: prevState.attempts + 1
     }));
   };
+
   onMouseClick = e => {
     if (this.state.total !== null && this.state.total > 0) {
       e.target.style.backgroundColor = "#FDF3C8";
       e.target.style.padding = "0.8%";
       e.target.style.borderRadius = "8px";
-      if (e.target.title !== "Здесь все вроде бы в порядке..") {
-        if (!this.state.revealed.includes(e.target.innerHTML)) {
-          this.setState(prevState => ({
-            revealed: [...prevState.revealed, e.target.innerHTML]
-          }));
-        }
-      }
     }
     this.setState({
       shown: true,
-      answer: e.target.title
+      show: false,
+      correct_option: e.target.getAttribute("data"),
+      wrong_option: e.target.innerHTML
     });
   };
 
   onConceal = e => {
     this.setState({
-      shown: false
+      shown: false,
+      show: false
     });
     e.currentTarget.style.textDecorationLine = null;
+  };
+
+  handleChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   };
 
   onShow = () => {
@@ -156,19 +185,45 @@ class SingleTextEditor extends Component {
         <TextBar>
           {this.state.shown && (
             <Hint>
-              <div>{this.state.answer}</div>
+              <div>
+                {this.state.total > 0 && (
+                  <>
+                    {!this.state.show && (
+                      <>
+                        Да, это ошибка. Исправьте её:
+                        <Input
+                          type="text"
+                          name="answer"
+                          required
+                          onChange={this.handleChange}
+                        />
+                      </>
+                    )}
+                    {this.state.show && (
+                      <span>
+                        Правильный ответ:{" "}
+                        {this.state.show && this.state.correct_option}
+                      </span>
+                    )}
+                  </>
+                )}
+                {(this.state.total === 0 || this.state.total === undefined) &&
+                  this.state.correct_option}
+              </div>
+              {this.state.total > 0 && (
+                <button onClick={this.onCheck}>Ответить</button>
+              )}
               <button onClick={this.onConceal}>Скрыть подсказку</button>
             </Hint>
           )}
           <EditText>
             <div onClick={this.onTest}>{renderHTML(this.state.text)}</div>
-            {/* {this.state.total !== 0 && <p><strong>Всего рисков/ошибок:</strong> {this.state.total} </p>} */}
             {this.state.total === this.state.revealed ? (
               <Right>Задание выполнено!</Right>
             ) : null}
           </EditText>
         </TextBar>
-        <>
+        <Buttons>
           {data.length === 0 && (
             <Mutation
               mutation={CREATE_TEXTEDITORRESULT_MUTATION}
@@ -198,23 +253,23 @@ class SingleTextEditor extends Component {
                 >
                   {this.state.mistakesShown
                     ? "Скрыть ошибки"
-                    : "Показать ошибки"}
+                    : "Проверить и сохранить"}
                 </Button>
               )}
             </Mutation>
           )}
           {data.length > 0 && (
             <Button onClick={this.onShow}>
-              {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
+              {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
             </Button>
           )}
-        </>
-        {me && me.id === textEditor.user.id ? (
-          <DeleteSingleTextEditor
-            id={this.props.textEditor.id}
-            lessonID={this.props.lessonID}
-          />
-        ) : null}
+          {me && me.id === textEditor.user.id ? (
+            <DeleteSingleTextEditor
+              id={this.props.textEditor.id}
+              lessonID={this.props.lessonID}
+            />
+          ) : null}
+        </Buttons>
       </>
     );
   }

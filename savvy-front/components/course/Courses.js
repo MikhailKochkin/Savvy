@@ -19,8 +19,6 @@ class Courses extends Component {
       <User>
         {({ data: { me } }) => (
           <Container>
-            {/* {!me && <Landing />} */}
-            {/* {me && me.careerTrackID && <CareerTrackMenu me={me} />} */}
             {me && me.careerTrackID && <CareerCoursesList me={me} />}
             <ForMoneyCoursesList me={me} />
             <FreeCoursesList me={me} />

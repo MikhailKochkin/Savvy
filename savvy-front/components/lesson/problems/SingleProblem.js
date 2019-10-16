@@ -177,7 +177,7 @@ class SingleProblem extends Component {
           {renderHTML(problem.text)}
           {data.length > 0 && (
             <ButtonGroup>
-              <Advice>Задача выполнена</Advice>
+              <Advice>Эта задача уже выполнена.</Advice>
               <Button
                 onClick={async e => {
                   // Stop the form from submitting

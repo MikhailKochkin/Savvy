@@ -51,13 +51,13 @@ const Label = styled.label`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 40%;
+  width: 50%;
   margin-bottom: 1%;
   @media (max-width: 800px) {
     width: 70%;
   }
   input {
-    width: 60px;
+    width: 40px;
     border: 1px solid #ccc;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 3.5px;
@@ -65,8 +65,7 @@ const Label = styled.label`
     font-size: 1.4rem;
     margin: 4% 2%;
     text-align: center;
-    @media (max-width: 800px) {
-    }
+    outline: 0;
   }
 `;
 
@@ -102,16 +101,6 @@ export default class CreateTextEditor extends Component {
     const { lessonID } = this.props;
     return (
       <Width>
-        {/* <Link
-          href={{
-            pathname: "/lesson",
-            query: { id: lessonID }
-          }}
-        >
-          <a>
-            <NavButton>К уроку</NavButton>
-          </a>
-        </Link> */}
         <Title>Составьте свой редактор документа</Title>
         <Label>
           <p>Всего ошибок / рисков: </p>

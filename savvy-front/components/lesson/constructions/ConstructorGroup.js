@@ -93,32 +93,13 @@ class TextEditorGroup extends Component {
     }
   };
 
-  shuffle = array => {
-    var m = array.length,
-      t,
-      i;
-
-    // While there remain elements to shuffle…
-    while (m) {
-      // Pick a remaining element…
-      i = Math.floor(Math.random() * m--);
-
-      // And swap it with the current element.
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-
-    return array;
-  };
-
   render() {
     const userData = this.props.constructionResults.filter(
       result => result.student.id === this.props.me.id
     );
-    console.log(userData);
     let arr;
     const construction = this.props.constructions[this.state.num];
+
     return (
       <>
         <Advice>
@@ -142,7 +123,7 @@ class TextEditorGroup extends Component {
               key={construction.id}
               lessonID={this.props.lessonID}
               construction={construction}
-              variants={this.shuffle(construction.variants)}
+              variants={construction.variants}
               me={this.props.me}
               arr={arr}
               userData={userData}

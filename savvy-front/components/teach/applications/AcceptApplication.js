@@ -5,9 +5,9 @@ import styled from "styled-components";
 import {
   ADD_USER_TO_COURSEPAGE,
   ENROLL_COURSE_MUTATION
-} from "../EnrollCoursePage";
-import { CURRENT_USER_QUERY } from "../User";
-import { ALL_COURSE_PAGES_QUERY } from "../course/Courses";
+} from "../../EnrollCoursePage";
+import { CURRENT_USER_QUERY } from "../../User";
+import { ALL_COURSE_PAGES_QUERY } from "../../course/Courses";
 
 const DELETE_APPLICATION_MUTATION = gql`
   mutation DELETE_APPLICATION_MUTATION($id: ID!) {

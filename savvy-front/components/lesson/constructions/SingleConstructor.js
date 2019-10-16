@@ -88,7 +88,7 @@ const Label = styled.div`
 
   input {
     padding: 2%;
-    width: 15%;
+    width: 22%;
     border: none;
     border-bottom: 1px solid grey;
     white-space: nowrap;
@@ -111,15 +111,28 @@ const Advice = styled.p`
 
 class SingleConstructor extends Component {
   state = {
-    variants: this.props.variants,
+    variants: [],
     answer: this.props.construction.answer,
     received: this.props.arr,
     answerState: "",
     type: this.props.construction.type,
-    attempts: 0
+    attempts: 1
   };
 
   answerState = "";
+
+  shuffle = array => {
+    var m = array.length,
+      t,
+      i;
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+    return array;
+  };
 
   handleSteps = e => {
     e.preventDefault();
@@ -127,14 +140,15 @@ class SingleConstructor extends Component {
     const { value } = e.target;
     // 2. Get the number of the article
     const article_number = e.target.getAttribute("data");
-    console.log(article_number, value);
     // 3. Save to state the user data
     this.setState(state => {
       const received = state.received.map((item, index) => {
-        console.log(item, index);
         if (index === article_number - 1) {
-          console.log(this.state.variants[value - 1]);
-          return (item = this.state.variants[value - 1]);
+          if (this.state.variants[value - 1] === undefined) {
+            return (item = "");
+          } else {
+            return (item = this.state.variants[value - 1]);
+          }
         } else {
           return item;
         }
@@ -149,7 +163,6 @@ class SingleConstructor extends Component {
     elements.forEach(element => {
       element.style.border = "1px solid #DE6B48";
     });
-    console.log("weo");
     this.setState({ answerState: "wrong" });
     this.setState(prevState => ({
       attempts: prevState.attempts + 1
@@ -189,6 +202,7 @@ class SingleConstructor extends Component {
         });
       }
     } else if (this.state.type === "equal") {
+      // 3. Check if all the correct variants are included into the answer, order does matter
       if (
         JSON.stringify(this.state.answer) == JSON.stringify(this.state.received)
       ) {
@@ -198,12 +212,17 @@ class SingleConstructor extends Component {
       }
     }
   };
+
+  componentDidMount() {
+    const vars = this.shuffle(this.props.variants);
+    this.setState({ variants: vars });
+  }
+
   render() {
     const { me, lessonID, construction, userData } = this.props;
     const data = userData
       .filter(result => result.construction.id === construction.id)
       .filter(result => result.student.id === this.props.me.id);
-    console.log(userData);
     return (
       <Styles>
         <Variants>
@@ -233,19 +252,10 @@ class SingleConstructor extends Component {
             mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
             variables={{
               lessonID,
-              answer: "Drafted!",
+              answer: "Drafted",
               attempts: this.state.attempts,
               constructionID: this.props.construction.id
             }}
-            // refetchQueries={() => [
-            //   {
-            //     query: SINGLE_LESSON_QUERY,
-            //     variables: { id: lessonID }
-            //   },
-            //   {
-            //     query: CURRENT_USER_QUERY
-            //   }
-            // ]}
           >
             {(createConstructionResult, { loading, error }) => (
               <Button
@@ -254,7 +264,6 @@ class SingleConstructor extends Component {
                   const res = await this.check();
                   if (data.length === 0) {
                     if (this.state.answerState === "right") {
-                      console.log("Ура!");
                       const res2 = await createConstructionResult();
                     }
                   }

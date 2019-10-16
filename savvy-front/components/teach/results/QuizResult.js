@@ -5,6 +5,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  font-size: 1.4rem;
   p {
     margin: 0.5% 0;
   }
@@ -18,13 +19,12 @@ const Box = styled.div`
   display: flex;
   justify-content: row;
   margin-bottom: 1%;
-  li {
-    flex: 50%;
-  }
   div {
     flex: 50%;
-    border-left: 1px solid #c4c4c4;
-    padding-left: 2%;
+    &.column {
+      padding-left: 2%;
+      border-left: 1px solid #edefed;
+    }
   }
 `;
 
@@ -33,25 +33,20 @@ class QuizResult extends Component {
     const { quizes, student } = this.props;
     return (
       <Container>
-        {quizes.length === 0 && (
-          <li>
-            <b>Вопросы</b> не созданы
-          </li>
-        )}
         {quizes.length > 0 &&
           quizes.map(q => (
             <Box>
-              <li>
-                <b>Вопрос: </b>
-                {q.question.substring(0, 100) + "..."}
-                {/* {console.log(q)} */}
-              </li>
               <div>
+                <b>Вопрос: </b>
+                {q.question}
+              </div>
+              <div className="column">{`Правильный ответ: ${q.answer}`}</div>
+              <div className="column">
                 {q.quizResults.filter(t => t.student.id === student.id).length >
                 0 ? (
                   q.quizResults
                     .filter(t => t.student.id === student.id)
-                    .map(t => <span>{t.answer}, </span>)
+                    .map(t => <li>{t.answer}</li>)
                 ) : (
                   <span>Не выполнен</span>
                 )}

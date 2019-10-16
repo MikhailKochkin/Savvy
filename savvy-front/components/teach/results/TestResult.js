@@ -5,6 +5,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  font-size: 1.4rem;
   p {
     margin: 0.5% 0;
   }
@@ -23,34 +24,48 @@ const Box = styled.div`
   }
   div {
     flex: 50%;
-    border-left: 1px solid #c4c4c4;
-    padding-left: 2%;
+    &.column {
+      padding-left: 2%;
+      border-left: 1px solid #edefed;
+    }
   }
 `;
 
 class TestResult extends Component {
+  getAllIndexes = (arr, val) => {
+    var indexes = [],
+      i;
+    for (i = 0; i < arr.length; i++) if (arr[i] === val) indexes.push(i);
+    return indexes;
+  };
   render() {
     const { newTests, student } = this.props;
     return (
       <Container>
-        {newTests.length === 0 && (
-          <li>
+        {/* {newTests.length === 0 && (
+          <span>
             <b>Тесты</b> не созданы
-          </li>
-        )}
+          </span>
+        )} */}
         {newTests.length > 0 &&
           newTests.map(test => (
             <Box>
-              <li>
-                <b>Тест: </b>
-                {test.question[0].substring(0, 100) + "..."}
-              </li>
               <div>
+                <b>Тест: </b>
+                {test.question[0]}
+              </div>
+              <div className="column">
+                Правильный ответ:
+                {this.getAllIndexes(test.correct, true).map(i => (
+                  <li>{test.answers[i]}</li>
+                ))}
+              </div>
+              <div className="column">
                 {test.testResults.filter(t => t.student.id === student.id)
                   .length > 0 ? (
                   test.testResults
                     .filter(t => t.student.id === student.id)
-                    .map(t => <span>{t.answer + ", "}</span>)
+                    .map(t => <li>{t.answer}</li>)
                 ) : (
                   <span>Не выполнен</span>
                 )}

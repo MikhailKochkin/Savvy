@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  font-size: 1.4rem;
   p {
     margin: 0.5% 0;
   }
@@ -24,8 +25,10 @@ const Box = styled.div`
   }
   div {
     flex: 50%;
-    border-left: 1px solid #c4c4c4;
-    padding-left: 2%;
+    &.column {
+      padding-left: 2%;
+      border-left: 1px solid #edefed;
+    }
   }
 `;
 
@@ -34,20 +37,22 @@ class ConstructionResult extends Component {
     const { constructions, student } = this.props;
     return (
       <Container>
-        {constructions.length === 0 && (
-          <li>
+        {/* {constructions.length === 0 && (
+          <div>
             <b>Конструкторы</b> не созданы
-          </li>
-        )}
+          </div>
+        )} */}
         {constructions.length > 0 &&
           constructions.map(construction => (
             <Box>
-              <li>
-                {renderHTML(
-                  "<b>Конструктор</b> '" + construction.name + "' составлен"
-                )}
-              </li>
               <div>
+                {renderHTML("<b>Конструктор</b> '" + construction.name)}
+              </div>
+              <div className="column">
+                <div>Всего вариантов: {construction.variants.length}</div>
+                <div>Всего частей документа: {construction.answer.length}</div>
+              </div>
+              <div className="column">
                 {construction.constructionResults.filter(
                   t => t.student.id === student.id
                 ).length > 0 ? (

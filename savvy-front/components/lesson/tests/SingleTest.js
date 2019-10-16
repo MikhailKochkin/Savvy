@@ -6,9 +6,6 @@ import _ from "lodash";
 import AnswerOption from "./AnswerOption";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
 
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { CURRENT_USER_QUERY } from "../../User";
-
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
     $answer: String
@@ -130,17 +127,8 @@ class SingleTest extends Component {
           variables={{
             testID: this.props.id,
             lessonID: this.props.lessonID,
-            answer: `${this.state.answer}, ${this.state.answerState}`
+            answer: this.state.answer.join(", ")
           }}
-          // refetchQueries={() => [
-          //   {
-          //     query: SINGLE_LESSON_QUERY,
-          //     variables: { id: this.props.lessonID }
-          //   },
-          //   {
-          //     query: CURRENT_USER_QUERY
-          //   }
-          // ]}
         >
           {(createTestResult, { loading, error }) => (
             <Button

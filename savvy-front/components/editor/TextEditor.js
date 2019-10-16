@@ -4,6 +4,7 @@ import Html from "slate-html-serializer";
 import { Editor } from "slate-react";
 import Icon from "react-icons-kit";
 import BoldMark from "./BoldMark";
+import CodeMark from "./CodeMark";
 import HeaderMark from "./HeaderMark";
 import ItalicMark from "./ItalicMark";
 import LinkMark from "./Link";
@@ -13,6 +14,7 @@ import FormatToolBar from "./FormatToolbar";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
+import { code } from "react-icons-kit/fa/code";
 import { link } from "react-icons-kit/fa/link";
 import { image } from "react-icons-kit/fa/image";
 import { commentO } from "react-icons-kit/fa/commentO";
@@ -89,7 +91,8 @@ const INLINE_TAGS = {
 const MARK_TAGS = {
   i: "italic",
   strong: "bold",
-  header: "header"
+  header: "header",
+  code: "code"
 };
 
 // A function to determine whether a URL has an image extension.
@@ -131,7 +134,6 @@ const rules = [
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
       if (type) {
-        console.log(el.src);
         return {
           object: "block",
           type: type,
@@ -144,7 +146,6 @@ const rules = [
     },
     serialize(obj, children) {
       if (obj.object == "block") {
-        console.log(obj.type);
         switch (obj.type) {
           case "paragraph":
             return <p className={obj.data.get("className")}>{children}</p>;
@@ -153,7 +154,6 @@ const rules = [
           case "list-item":
             return <li>{children}</li>;
           case "image":
-            console.log(obj.data);
             return (
               <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
             );
@@ -177,7 +177,6 @@ const rules = [
     deserialize(el, next) {
       const type = MARK_TAGS[el.tagName.toLowerCase()];
       if (type) {
-        // console.log(el, type)
         return {
           object: "mark",
           type: type,
@@ -194,13 +193,18 @@ const rules = [
             return <i>{children}</i>;
           case "header":
             return <h2>{children}</h2>;
+          case "code":
+            return (
+              <pre>
+                <code>{children}</code>
+              </pre>
+            );
         }
       }
     }
   },
   {
     deserialize(el, next) {
-      console.log(el);
       if (el.tagName !== "A" && el.tagName !== "SPAN" && el.tagName !== "DIV") {
         return;
       }
@@ -218,10 +222,10 @@ const rules = [
                 ? Array.from(el.attributes).find(({ name }) => name == "href")
                     .value
                 : null,
-            title:
-              Array.from(el.attributes).find(({ name }) => name == "title") !==
+            data:
+              Array.from(el.attributes).find(({ name }) => name == "data") !==
               undefined
-                ? Array.from(el.attributes).find(({ name }) => name == "title")
+                ? Array.from(el.attributes).find(({ name }) => name == "data")
                     .value
                 : null
           }
@@ -239,14 +243,14 @@ const rules = [
             );
           case "comment":
             return (
-              <CommentStyle2 id="id" title={object.data._root.entries[0][1]}>
+              <CommentStyle2 id="id" data={object.data._root.entries[0][1]}>
                 {children}
               </CommentStyle2>
             );
           case "translation":
             return (
               <b>
-                <span id="id" title={object.data._root.entries[0][1]}>
+                <span id="id" data={object.data._root.entries[0][1]}>
                   {children}
                 </span>
               </b>
@@ -346,6 +350,7 @@ class App extends React.Component {
           {this.renderMarkButton("bold", bold)}
           {this.renderMarkButton("italic", italic)}
           {this.renderMarkButton("header", header)}
+          {this.renderMarkButton("code", code)}
           {this.renderBlockButton("numbered-list", "format_list_numbered")}
           <ButtonStyle onMouseDown={event => this.onClickLink(event)}>
             <Icon icon={link} />
@@ -381,9 +386,7 @@ class App extends React.Component {
 
   // Render a Slate block.
   renderBlock = (props, editor, next) => {
-    // console.log("Render Block!!!")
     const { attributes, node, isFocused, children } = props;
-    // console.log(props)
     switch (node.type) {
       case "paragraph":
         return <p {...attributes}>{children}</p>;
@@ -417,7 +420,6 @@ class App extends React.Component {
 
   renderMark = (props, editor, next) => {
     const { mark, children, attributes } = props;
-    // console.log("mark:" + mark)
     switch (mark.type) {
       case "bold":
         return <BoldMark {...attributes}>{children}</BoldMark>;
@@ -425,6 +427,8 @@ class App extends React.Component {
         return <ItalicMark {...attributes}>{children}</ItalicMark>;
       case "header":
         return <HeaderMark {...attributes}>{children}</HeaderMark>;
+      case "code":
+        return <CodeMark {...attributes}>{children}</CodeMark>;
       default:
         return next();
     }
@@ -432,17 +436,16 @@ class App extends React.Component {
 
   renderInline = (props, editor, next) => {
     const { attributes, children, node } = props;
-    console.log("renderInline");
     switch (node.type) {
       case "link":
         return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
       case "comment":
         return (
-          <CommentStyle title={node.data.get("title")}>{children}</CommentStyle>
+          <CommentStyle data={node.data.get("data")}>{children}</CommentStyle>
         );
       case "translation":
         return (
-          <TranslationStyle title={node.data.get("title")}>
+          <TranslationStyle data={node.data.get("data")}>
             {children}
           </TranslationStyle>
         );
@@ -511,7 +514,6 @@ class App extends React.Component {
     if (type !== "numbered-list") {
       const isActive = this.hasBlock(type);
       const isList = this.hasBlock("list-item");
-      console.log(isList);
       if (isList) {
         editor
           .setBlocks(isActive ? DEFAULT_NODE : type)
@@ -546,37 +548,27 @@ class App extends React.Component {
 
   onClickLink = event => {
     event.preventDefault();
-    // console.log("Click the link!")
     const { editor } = this;
     const { value } = editor;
     const hasLinks = this.hasLinks();
-    // console.log(value.selection)
     if (hasLinks) {
-      // console.log("hasLinks")
       this.editor.command(this.unwrapLink);
     } else if (value.selection.isExpanded) {
-      // console.log("selection.isExpanded")
       const href = window.prompt("Enter the URL of the link:");
       if (href == null) {
         return;
       } else {
         this.editor.command(this.wrapLink, href);
-        // console.log("Ссылка создана!")
       }
     } else {
-      console.log("else");
       const href = window.prompt("Enter the URL of the link:");
-      console.log(href);
       if (href == null) {
         return;
       } else {
         const text = window.prompt("Enter the text for the link:");
-        console.log(text);
-
         if (text == null) {
           return;
         }
-
         editor
           .insertText(text)
           .moveFocusBackward(text.length)
@@ -591,10 +583,9 @@ class App extends React.Component {
     const { value } = editor;
     const hasComments = this.hasComments();
     if (hasComments) {
-      // console.log("hasLinks")
       this.editor.command(this.unwrapComment);
     } else if (value.selection.isExpanded) {
-      const comment = window.prompt("Напишите комментарий:");
+      const comment = window.prompt("Напишите правильный вариант:");
       if (comment == null) {
         return;
       } else {
@@ -609,7 +600,6 @@ class App extends React.Component {
     const { value } = editor;
     const hasTranslations = this.hasTranslations();
     if (hasTranslations) {
-      // console.log("hasLinks")
       this.editor.command(this.unwrapTranslation);
     } else if (value.selection.isExpanded) {
       const translation = window.prompt("Напишите перевод:");
@@ -622,14 +612,12 @@ class App extends React.Component {
   };
 
   onKeyDown = (event, editor, next) => {
-    console.log(event.key);
     if (event.key != "b" || !event.ctrlKey) return next();
 
     event.preventDefault();
 
     // Determine whether any of the currently selected blocks are code blocks.
     // const isCode = this.editor.value.blocks.some(block => block.type == 'code')
-    // console.log(isCode)
     editor.setBlocks("code");
 
     // let mark
@@ -646,13 +634,11 @@ class App extends React.Component {
     // } else {
     //   return next()
     // }
-    // console.log("mark: " + mark)
     // event.preventDefault()
     // if(mark !== undefined){this.editor.toggleMark(mark)}
   };
   onChange = ({ value }) => {
     this.setState({ value });
-    console.log(html.serialize(this.state.value));
     this.props.getEditorText(html.serialize(this.state.value));
   };
 }
