@@ -1,19 +1,9 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import SingleQuiz from "./SingleQuiz";
+import styled from "styled-components";
 
-const Advice = styled.p`
-  font-size: 1.6rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 85%;
-  @media (max-width: 800px) {
-    width: 95%;
-  }
+const Styles = styled.div`
+  margin-top: 5%;
 `;
 
 class QuizGroup extends Component {
@@ -28,13 +18,14 @@ class QuizGroup extends Component {
   };
   render() {
     return (
-      <>
+      <Styles>
         {this.props.quizes.map((quiz, index) => (
           <>
             <SingleQuiz
               id={quiz.id}
               question={quiz.question}
               answer={quiz.answer}
+              type={quiz.type}
               num={index + 1}
               getQuizData={this.myCallback}
               me={this.props.me}
@@ -45,7 +36,7 @@ class QuizGroup extends Component {
             />
           </>
         ))}
-      </>
+      </Styles>
     );
   }
 }

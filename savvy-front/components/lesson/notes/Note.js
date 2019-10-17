@@ -14,7 +14,7 @@ const NoteStyles = styled.div`
     box-shadow: "0 0 0 2px blue;";
   }
   iframe {
-    width: 110%;
+    width: 100%;
     height: 400px;
     @media (max-width: 800px) {
       width: 100%;

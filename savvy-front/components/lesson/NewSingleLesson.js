@@ -101,6 +101,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
+        type
         user {
           id
         }
@@ -108,6 +109,7 @@ const SINGLE_LESSON_QUERY = gql`
       newTests {
         id
         answers
+        type
         correct
         question
         user {

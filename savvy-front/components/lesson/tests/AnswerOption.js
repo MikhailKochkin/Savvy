@@ -32,10 +32,15 @@ const StyledButton = styled.div`
     width: 0;
   }
 
+  .container div {
+    font-size: 1.6rem;
+    margin-top: 10px;
+  }
+
   /* Create a custom checkbox */
   .checkmark {
     position: absolute;
-    top: 6px;
+    top: 0;
     left: 0;
     height: 25px;
     width: 25px;
@@ -105,7 +110,7 @@ const AnswerOption = props => (
           onChange={props.onAnswerSelected}
         />
         <span class="checkmark" />
-        <p>{props.question}</p>
+        <div>{props.question}</div>
       </label>
     </li>
   </StyledButton>

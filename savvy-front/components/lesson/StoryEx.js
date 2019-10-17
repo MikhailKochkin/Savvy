@@ -8,24 +8,11 @@ import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
 
 class StoryEx extends Component {
-  shuffle = array => {
-    var m = array.length,
-      t,
-      i;
-    while (m) {
-      i = Math.floor(Math.random() * m--);
-      t = array[m];
-      array[m] = array[i];
-      array[i] = t;
-    }
-    return array;
-  };
   render() {
     const { m, me, lesson } = this.props;
     let arr = [];
     let el;
     let item;
-
     if (Object.keys(m)[0] === "note") {
       el = lesson.notes.find(note => note.id === Object.values(m)[0]);
       item = <Note text={el.text} />;
@@ -39,6 +26,7 @@ class StoryEx extends Component {
           answers={el.answers}
           true={el.correct}
           user={el.user.id}
+          type={el.type}
           me={me}
           userData={lesson.testResults}
           lessonID={lesson.id}
@@ -50,10 +38,12 @@ class StoryEx extends Component {
       el = lesson.quizes.find(quiz => quiz.id === Object.values(m)[0]);
       item = (
         <SingleQuiz
+          id={el.id}
           key={el.id}
           question={el.question}
           answer={el.answer}
           me={me}
+          type={el.type}
           hidden={true}
           userData={lesson.quizResults}
           lessonID={lesson.id}
@@ -107,7 +97,7 @@ class StoryEx extends Component {
           key={el.id}
           lessonID={lesson.id}
           construction={el}
-          variants={this.shuffle(el.variants)}
+          variants={el.variants}
           me={me}
           arr={Array(el.answer.length).fill("")}
           userData={lesson.constructionResults}

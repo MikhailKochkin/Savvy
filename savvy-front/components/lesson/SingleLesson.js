@@ -114,6 +114,7 @@ const SINGLE_LESSON_QUERY = gql`
       quizes {
         id
         question
+        type
         answer
         user {
           id
@@ -123,6 +124,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         answers
         correct
+        type
         question
         user {
           id

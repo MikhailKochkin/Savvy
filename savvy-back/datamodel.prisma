@@ -23,6 +23,11 @@ enum Type {
   REGULAR
 }
 
+enum TaskType {
+  TEST
+  FORM
+}
+
 type User {
   id: ID! @unique
   name: String!
@@ -215,6 +220,7 @@ type NewTest {
   question: [String!]
   answers: [String!]
   correct: [Boolean!]
+  type: TaskType @default(value: TEST)
   testResults: [TestResult] @relation(name: "NewTestResults" onDelete: CASCADE)
   user: User!
   lesson: Lesson @relation(name: "LessonNewTests")
@@ -228,6 +234,7 @@ type Quiz {
   question: String!
   answer: String!
   user: User!
+  type: TaskType @default(value: TEST)
   lessonID: ID
   lesson: Lesson @relation(name: "LessonQuizes")
   quizResults: [QuizResult] @relation(name: "NewQuizResults" onDelete: CASCADE)

@@ -46,6 +46,7 @@ const Button = styled.button`
   margin-top: 3%;
   color: #fffdf7;
   background: ${props => props.theme.green};
+  background: ${props => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
@@ -87,6 +88,11 @@ class SingleTest extends Component {
     });
   };
 
+  onSend = async () => {
+    this.setState({ answerState: "right", inputColor: "#84BC9C" });
+    document.querySelector(".button").disabled = true;
+  };
+
   onCheck = async () => {
     const res1 = await this.setState(prevState => ({
       attempts: prevState.attempts + 1
@@ -97,6 +103,7 @@ class SingleTest extends Component {
         JSON.stringify(this.props.true)
       ) {
         this.setState({ answerState: "right", inputColor: "#84BC9C" });
+        document.querySelector(".button").disabled = true;
       } else {
         this.setState({ answerState: "wrong", inputColor: "#DE6B48" });
       }
@@ -132,13 +139,22 @@ class SingleTest extends Component {
         >
           {(createTestResult, { loading, error }) => (
             <Button
+              className="button"
               onClick={async e => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation
-                const res = await this.onCheck();
-                if (userData.length === 0) {
-                  const res0 = await createTestResult();
+                if (this.state.answer.length < 1) {
+                  alert("Выберите хотя бы один ответ!");
+                } else {
+                  if (this.props.type === "FORM") {
+                    const res1 = await this.onSend();
+                  } else {
+                    const res = await this.onCheck();
+                  }
+                  if (userData.length === 0) {
+                    const res0 = await createTestResult();
+                  }
                 }
               }}
             >

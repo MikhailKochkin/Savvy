@@ -1,41 +1,9 @@
 import React, { Component } from "react";
 import SingleTest from "./SingleTest";
-import gql from "graphql-tag";
 import styled from "styled-components";
 
-const Button = styled.button`
-  padding: 1% 2%;
-  background: #84bc9c;
-  width: 20%;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
-  cursor: pointer;
-`;
-
-const Advice = styled.p`
-  font-size: 1.6rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 80%;
-  @media (max-width: 800px) {
-    width: 100%;
-    font-size: 1.4rem;
-  }
-`;
-
-const CREATE_TESTRESULT_MUTATION = gql`
-  mutation CREATE_TESTRESULT_MUTATION($answer: String, $lessonID: ID) {
-    createTestResult(answer: $answer, lessonID: $lessonID) {
-      id
-    }
-  }
+const Styles = styled.div`
+  margin-top: 5%;
 `;
 
 class TestGroup extends Component {
@@ -48,7 +16,7 @@ class TestGroup extends Component {
   render() {
     let arr;
     return (
-      <>
+      <Styles>
         {/* <Advice>
           <b>Совет</b>: чтобы преподаватель увидел, что вы выполнили задания,
           вам нужно сделать следущее. Ответьте правильно на все вопросы,
@@ -64,6 +32,7 @@ class TestGroup extends Component {
               id={test.id}
               question={test.question}
               num={index + 1}
+              type={test.type}
               answers={test.answers}
               true={test.correct}
               length={arr}
@@ -74,45 +43,7 @@ class TestGroup extends Component {
             />
           </>
         ))}
-        {/* <Mutation
-          mutation={CREATE_TESTRESULT_MUTATION}
-          variables={{
-            lessonID: this.props.lessonId,
-            answer: "Completed"
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: this.props.lessonId }
-            },
-            {
-              query: CURRENT_USER_QUERY
-            }
-          ]}
-        >
-          {(createTestResult, { loading, error }) => (
-            <>
-              {this.state.tests.length === this.state.completed &&
-                userData.length === 0 && (
-                  <Button
-                    onClick={async e => {
-                      // Stop the form from submitting
-                      e.preventDefault();
-                      // call the mutation
-                      const res = await createTestResult();
-                      const res2 = await this.setState({ handIn: true });
-                      // change the page to the single case page
-                      console.log("успех!");
-                    }}
-                  >
-                    {!this.state.handIn ? "Сохранить" : "Готово!"}
-                  </Button>
-                )}
-              {userData.length > 0 ? <p>Тесты этого урока сданы!</p> : null}
-            </> */}
-        {/* )}
-        </Mutation> */}
-      </>
+      </Styles>
     );
   }
 }

@@ -6438,6 +6438,7 @@ type NewTest {
   question: [String!]!
   answers: [String!]!
   correct: [Boolean!]!
+  type: TaskType
   testResults(where: TestResultWhereInput, orderBy: TestResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TestResult!]
   user: User!
   lesson: Lesson
@@ -6464,6 +6465,7 @@ input NewTestCreateInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  type: TaskType
   testResults: TestResultCreateManyWithoutTestInput
   user: UserCreateOneWithoutNewTestsInput!
   lesson: LessonCreateOneWithoutNewTestsInput
@@ -6493,6 +6495,7 @@ input NewTestCreateWithoutLessonInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  type: TaskType
   testResults: TestResultCreateManyWithoutTestInput
   user: UserCreateOneWithoutNewTestsInput!
   lessonID: ID
@@ -6502,6 +6505,7 @@ input NewTestCreateWithoutTestResultsInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  type: TaskType
   user: UserCreateOneWithoutNewTestsInput!
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
@@ -6511,6 +6515,7 @@ input NewTestCreateWithoutUserInput {
   question: NewTestCreatequestionInput
   answers: NewTestCreateanswersInput
   correct: NewTestCreatecorrectInput
+  type: TaskType
   testResults: TestResultCreateManyWithoutTestInput
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
@@ -6524,6 +6529,8 @@ type NewTestEdge {
 enum NewTestOrderByInput {
   id_ASC
   id_DESC
+  type_ASC
+  type_DESC
   lessonID_ASC
   lessonID_DESC
   createdAt_ASC
@@ -6537,6 +6544,7 @@ type NewTestPreviousValues {
   question: [String!]!
   answers: [String!]!
   correct: [Boolean!]!
+  type: TaskType
   lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -6557,6 +6565,10 @@ input NewTestScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  type: TaskType
+  type_not: TaskType
+  type_in: [TaskType!]
+  type_not_in: [TaskType!]
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]
@@ -6622,6 +6634,7 @@ input NewTestUpdateInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  type: TaskType
   testResults: TestResultUpdateManyWithoutTestInput
   user: UserUpdateOneRequiredWithoutNewTestsInput
   lesson: LessonUpdateOneWithoutNewTestsInput
@@ -6632,6 +6645,7 @@ input NewTestUpdateManyDataInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  type: TaskType
   lessonID: ID
 }
 
@@ -6639,6 +6653,7 @@ input NewTestUpdateManyMutationInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  type: TaskType
   lessonID: ID
 }
 
@@ -6688,6 +6703,7 @@ input NewTestUpdateWithoutLessonDataInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  type: TaskType
   testResults: TestResultUpdateManyWithoutTestInput
   user: UserUpdateOneRequiredWithoutNewTestsInput
   lessonID: ID
@@ -6697,6 +6713,7 @@ input NewTestUpdateWithoutTestResultsDataInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  type: TaskType
   user: UserUpdateOneRequiredWithoutNewTestsInput
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
@@ -6706,6 +6723,7 @@ input NewTestUpdateWithoutUserDataInput {
   question: NewTestUpdatequestionInput
   answers: NewTestUpdateanswersInput
   correct: NewTestUpdatecorrectInput
+  type: TaskType
   testResults: TestResultUpdateManyWithoutTestInput
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
@@ -6753,6 +6771,10 @@ input NewTestWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  type: TaskType
+  type_not: TaskType
+  type_in: [TaskType!]
+  type_not_in: [TaskType!]
   testResults_every: TestResultWhereInput
   testResults_some: TestResultWhereInput
   testResults_none: TestResultWhereInput
@@ -9378,6 +9400,7 @@ type Quiz {
   question: String!
   answer: String!
   user: User!
+  type: TaskType
   lessonID: ID
   lesson: Lesson
   quizResults(where: QuizResultWhereInput, orderBy: QuizResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuizResult!]
@@ -9395,6 +9418,7 @@ input QuizCreateInput {
   question: String!
   answer: String!
   user: UserCreateOneWithoutQuizesInput!
+  type: TaskType
   lessonID: ID
   lesson: LessonCreateOneWithoutQuizesInput
   quizResults: QuizResultCreateManyWithoutQuizInput
@@ -9419,6 +9443,7 @@ input QuizCreateWithoutLessonInput {
   question: String!
   answer: String!
   user: UserCreateOneWithoutQuizesInput!
+  type: TaskType
   lessonID: ID
   quizResults: QuizResultCreateManyWithoutQuizInput
 }
@@ -9427,6 +9452,7 @@ input QuizCreateWithoutQuizResultsInput {
   question: String!
   answer: String!
   user: UserCreateOneWithoutQuizesInput!
+  type: TaskType
   lessonID: ID
   lesson: LessonCreateOneWithoutQuizesInput
 }
@@ -9434,6 +9460,7 @@ input QuizCreateWithoutQuizResultsInput {
 input QuizCreateWithoutUserInput {
   question: String!
   answer: String!
+  type: TaskType
   lessonID: ID
   lesson: LessonCreateOneWithoutQuizesInput
   quizResults: QuizResultCreateManyWithoutQuizInput
@@ -9451,6 +9478,8 @@ enum QuizOrderByInput {
   question_DESC
   answer_ASC
   answer_DESC
+  type_ASC
+  type_DESC
   lessonID_ASC
   lessonID_DESC
   createdAt_ASC
@@ -9463,6 +9492,7 @@ type QuizPreviousValues {
   id: ID!
   question: String!
   answer: String!
+  type: TaskType
   lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -9854,6 +9884,10 @@ input QuizScalarWhereInput {
   answer_not_starts_with: String
   answer_ends_with: String
   answer_not_ends_with: String
+  type: TaskType
+  type_not: TaskType
+  type_in: [TaskType!]
+  type_not_in: [TaskType!]
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]
@@ -9911,6 +9945,7 @@ input QuizUpdateInput {
   question: String
   answer: String
   user: UserUpdateOneRequiredWithoutQuizesInput
+  type: TaskType
   lessonID: ID
   lesson: LessonUpdateOneWithoutQuizesInput
   quizResults: QuizResultUpdateManyWithoutQuizInput
@@ -9919,12 +9954,14 @@ input QuizUpdateInput {
 input QuizUpdateManyDataInput {
   question: String
   answer: String
+  type: TaskType
   lessonID: ID
 }
 
 input QuizUpdateManyMutationInput {
   question: String
   answer: String
+  type: TaskType
   lessonID: ID
 }
 
@@ -9970,6 +10007,7 @@ input QuizUpdateWithoutLessonDataInput {
   question: String
   answer: String
   user: UserUpdateOneRequiredWithoutQuizesInput
+  type: TaskType
   lessonID: ID
   quizResults: QuizResultUpdateManyWithoutQuizInput
 }
@@ -9978,6 +10016,7 @@ input QuizUpdateWithoutQuizResultsDataInput {
   question: String
   answer: String
   user: UserUpdateOneRequiredWithoutQuizesInput
+  type: TaskType
   lessonID: ID
   lesson: LessonUpdateOneWithoutQuizesInput
 }
@@ -9985,6 +10024,7 @@ input QuizUpdateWithoutQuizResultsDataInput {
 input QuizUpdateWithoutUserDataInput {
   question: String
   answer: String
+  type: TaskType
   lessonID: ID
   lesson: LessonUpdateOneWithoutQuizesInput
   quizResults: QuizResultUpdateManyWithoutQuizInput
@@ -10061,6 +10101,10 @@ input QuizWhereInput {
   answer_ends_with: String
   answer_not_ends_with: String
   user: UserWhereInput
+  type: TaskType
+  type_not: TaskType
+  type_in: [TaskType!]
+  type_not_in: [TaskType!]
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]
@@ -12008,6 +12052,11 @@ type Subscription {
   textEditorResult(where: TextEditorResultSubscriptionWhereInput): TextEditorResultSubscriptionPayload
   uni(where: UniSubscriptionWhereInput): UniSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+}
+
+enum TaskType {
+  TEST
+  FORM
 }
 
 type Test {

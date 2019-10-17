@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
@@ -19,8 +19,8 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin: 3% 0;
+  width: 90%;
+  margin-bottom: 3%;
   font-size: 1.6rem;
   @media (max-width: 800px) {
     flex-direction: column;
@@ -65,7 +65,8 @@ const Textarea = styled.textarea`
 `;
 
 const Answer = styled.div`
-  border: 1px solid #c4c4c4;
+  border: 1px solid #84bc9c;
+  border-color: ${props => props.inputColor};
   border-radius: 5px;
   width: 90%;
   padding: 2%;
@@ -87,7 +88,7 @@ const Button = styled.button`
   color: white;
   font-weight: 600;
   font-size: 1.6rem;
-  margin: 2% 0;
+  margin: 1% 0;
   cursor: pointer;
   outline: 0;
   &:active {
@@ -100,34 +101,24 @@ const Button = styled.button`
 
 class SingleQuiz extends Component {
   state = {
-    hidden: this.props.hidden,
+    hidden: true,
     testFormat: false,
     answer: "",
     correct: "",
-    show: false,
-    color: "#c4c4c4"
+    inputColor: "#c4c4c4"
   };
 
-  showWrong = () => {
-    const element = document.querySelector(".answer");
-    this.setState({ color: "#DE6B48" });
-    setTimeout(() => this.setState({ color: "#c4c4c4" }), 1000);
+  onShow = e => {
+    this.setState(prevState => ({ hidden: !prevState.hidden }));
   };
 
-  showRight = () => {
-    const element = document.querySelector(".answer");
-    this.setState({ color: "#32AC66" });
-    setTimeout(() => this.setState({ color: "#c4c4c4" }), 1000);
-  };
-
-  onShow = () => {
-    this.setState({ answer: this.props.answer });
-    setTimeout(() => {
-      this.setState({ answer: "" });
-    }, 2000);
+  onSend = async () => {
+    this.setState({ correct: "true", inputColor: "#32AC66" });
+    document.querySelector(".button").disabled = true;
   };
 
   onAnswer = e => {
+    this.setState({ answer: this.props.answer });
     let s1 = this.props.answer.toLowerCase();
     let s2 = this.state.answer.toLowerCase();
     let s1Parts = s1.split(" ").filter(item => item !== "");
@@ -137,14 +128,9 @@ class SingleQuiz extends Component {
       if (s1Parts[i] === s2Parts[i]) score++;
     }
     if (score == s1Parts.length) {
-      this.setState({ correct: "true", show: true });
-      this.showRight();
-      setTimeout(() => {
-        this.setState({ answer: "" });
-      }, 1000);
+      this.setState({ correct: "true", inputColor: "#32AC66" });
     } else {
-      this.setState({ correct: "false", show: true });
-      this.showWrong();
+      this.setState({ correct: "false", inputColor: "#DE6B48" });
     }
   };
 
@@ -154,56 +140,60 @@ class SingleQuiz extends Component {
   };
   render() {
     const { me, user, userData } = this.props;
+    console.log(this.props.id, me.id);
     const data = userData
-      .filter(el => el.student.id === me.id)
-      .filter(el => el.quiz.id === this.props.id);
-
+      .filter(el => el.quiz.id === this.props.id)
+      .filter(el => el.student.id === me.id);
+    console.log(data);
     return (
       <Styles>
         <Question>
           {this.props.question}
           <Textarea
-            inputColor={this.state.color}
+            inputColor={this.state.inputColor}
+            type="text"
             className="answer"
             name="answer"
             required
-            value={this.state.answer}
             onChange={this.handleChange}
             placeholder="Ответ на вопрос..."
           />
         </Question>
 
-        {/* <Answer display={this.props.hidden}>{this.props.answer}</Answer> */}
+        <Answer display={this.state.hidden} inputColor={this.state.inputColor}>
+          {this.props.answer}
+        </Answer>
         <Mutation
           mutation={CREATE_QUIZRESULT_MUTATION}
           variables={{
-            quiz: this.props.id,
+            quiz: this.props.quizID,
             lessonID: this.props.lessonID,
             answer: this.state.answer
           }}
         >
           {(createQuizResult, { loading, error }) => (
             <Button
+              className="button"
               onClick={async e => {
-                // Stop the form from submitting
                 e.preventDefault();
-                // call the mutation
-                if (this.state.answer !== "") {
-                  const res = await this.onAnswer();
-                  if (data.length === 0) {
-                    const res0 = await createQuizResult();
-                  }
+                if (this.props.type === "FORM") {
+                  const res1 = await this.onSend();
                 } else {
-                  alert("Поле ответа не может быть пустым!");
+                  const res = await this.onAnswer();
+                }
+                if (data.length === 0) {
+                  const res0 = await createQuizResult();
                 }
               }}
             >
-              Проверить
+              {this.props.type === "FORM" ? "Ответить" : "Проверить"}
             </Button>
           )}
         </Mutation>
-        {this.state.show && (
-          <Button onClick={this.onShow}>Показать ответ</Button>
+        {this.props.type !== "FORM" && (
+          <Button onClick={this.onShow}>
+            {this.state.hidden === true ? "Открыть ответ" : "Скрыть ответ"}
+          </Button>
         )}
         {me && me.id === user ? (
           <DeleteSingleQuiz
