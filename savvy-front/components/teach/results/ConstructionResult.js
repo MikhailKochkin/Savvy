@@ -7,6 +7,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   font-size: 1.4rem;
+  margin-bottom: 1%;
   p {
     margin: 0.5% 0;
   }
@@ -37,17 +38,10 @@ class ConstructionResult extends Component {
     const { constructions, student } = this.props;
     return (
       <Container>
-        {/* {constructions.length === 0 && (
-          <div>
-            <b>Конструкторы</b> не созданы
-          </div>
-        )} */}
         {constructions.length > 0 &&
           constructions.map(construction => (
             <Box>
-              <div>
-                {renderHTML("<b>Конструктор</b> '" + construction.name)}
-              </div>
+              <div>{renderHTML("<b>Конструктор</b> " + construction.name)}</div>
               <div className="column">
                 <div>Всего вариантов: {construction.variants.length}</div>
                 <div>Всего частей документа: {construction.answer.length}</div>

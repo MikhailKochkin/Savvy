@@ -67,12 +67,8 @@ class ProblemModal extends Component {
             {problem.problemResults.filter(t => t.student.id === student.id)
               .length > 0 ? (
               problem.problemResults
-                .filter(t => t.student.id === student.id)
-                .map(t =>
-                  t.revealed.map(el => {
-                    <li>{el}</li>;
-                  })
-                )
+                .filter(t => t.student.id === student.id)[0]
+                .revealed.map(t => <li>{t}</li>)
             ) : (
               <span>Не выполнена</span>
             )}

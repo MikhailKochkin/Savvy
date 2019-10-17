@@ -6,6 +6,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 100%;
   font-size: 1.4rem;
+  margin-bottom: 1%;
   p {
     margin: 0.5% 0;
   }
@@ -61,11 +62,13 @@ class TestResult extends Component {
                 ))}
               </div>
               <div className="column">
+                <div>Полученные ответы</div>
                 {test.testResults.filter(t => t.student.id === student.id)
                   .length > 0 ? (
                   test.testResults
-                    .filter(t => t.student.id === student.id)
-                    .map(t => <li>{t.answer}</li>)
+                    .filter(t => t.student.id === student.id)[0]
+                    .answer.split(", ")
+                    .map(t => <li>{t}</li>)
                 ) : (
                   <span>Не выполнен</span>
                 )}
