@@ -66,11 +66,9 @@ class RegisterCard extends Component {
     price: this.props.price
   };
   handleInputChange = event => {
-    console.log("!!!");
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
-    console.log(value, name);
     this.setState({
       [name]: value
     });

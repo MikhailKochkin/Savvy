@@ -203,6 +203,7 @@ class Analytics extends Component {
       >
         {({ data: data2, error: error2, loading: loading2 }) => {
           if (loading2) return <p>Loading...</p>;
+          if (error) return <p>Error: {error.message}</p>;
           let coursePage = data2.coursePage;
           return (
             <Styles>

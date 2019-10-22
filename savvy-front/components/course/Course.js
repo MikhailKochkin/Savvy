@@ -118,9 +118,9 @@ export default class Course extends Component {
             <Title>
               <a>{coursePage.title}</a>
             </Title>
-            <Author>
+            {/* <Author>
               {coursePage.user.name} из {coursePage.user.uni.title}{" "}
-            </Author>
+            </Author> */}
           </div>
           <div>
             <Buttons>

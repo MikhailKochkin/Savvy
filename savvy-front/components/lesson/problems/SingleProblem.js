@@ -217,24 +217,26 @@ class SingleProblem extends Component {
                   revealed: this.state.revealed,
                   problemID: this.props.problem.id
                 }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: this.props.lessonID }
-                  },
-                  {
-                    query: CURRENT_USER_QUERY
-                  }
-                ]}
+                // refetchQueries={() => [
+                //   {
+                //     query: SINGLE_LESSON_QUERY,
+                //     variables: { id: this.props.lessonID }
+                //   },
+                //   {
+                //     query: CURRENT_USER_QUERY
+                //   }
+                // ]}
               >
                 {(createProblemResult, { loading, error }) => (
                   <Button
+                    className="button"
                     onClick={async e => {
                       // Stop the form from submitting
                       e.preventDefault();
                       // call the mutation
                       if (this.state.answer !== "") {
                         const res = await createProblemResult();
+                        document.querySelector(".button").disabled = true;
                         const res2 = await this.setState({
                           revealAnswer: true
                         });
