@@ -88,6 +88,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           title
         }
+        company {
+          id
+          name
+        }
       }
     }
   }
@@ -308,7 +312,9 @@ class CoursePage extends Component {
                                               {coursePage.user.name}
                                             </p>
                                             <p className="company">
-                                              {coursePage.user.uni.title}
+                                              {coursePage.user.status === "HR"
+                                                ? coursePage.user.company.name
+                                                : coursePage.user.uni.title}
                                             </p>
                                             {/* {coursePage.careerTrack && (
                                               <p className="track">
