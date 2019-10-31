@@ -30,10 +30,15 @@ const FOR_MONEY_COURSE_PAGES_QUERY = gql`
         user {
             id
             name
+            status
+            company {
+              id
+              name
+            }
             uni {
               id
               title
-            }
+          }
         }
       }
   }
@@ -71,7 +76,9 @@ const Title = styled.div`
   }
 `;
 
-const Styles = styled.div``;
+const Styles = styled.div`
+  margin-top: 3%;
+`;
 
 class ForMoneyCoursesList extends Component {
   render() {
@@ -159,3 +166,4 @@ class ForMoneyCoursesList extends Component {
 }
 
 export default ForMoneyCoursesList;
+export { FOR_MONEY_COURSE_PAGES_QUERY };

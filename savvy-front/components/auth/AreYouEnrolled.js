@@ -13,8 +13,8 @@ const AreYouEnrolled = props => (
       data.me.coursePages.map(obj => arr1.push(Object.values(obj)[0]));
       if (data.me) {
         if (
-          (!data.me.subjects.includes(props.subject) ||
-            !subj_list.includes(props.subject)) &&
+          !data.me.subjects.includes(props.subject) &&
+          !subj_list.includes(props.subject) &&
           !arr1.includes(props.subject) &&
           !data.me.permissions.includes("ADMIN")
         ) {

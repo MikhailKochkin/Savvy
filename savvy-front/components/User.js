@@ -10,8 +10,28 @@ const CURRENT_USER_QUERY = gql`
       name
       permissions
       subjects
+      teacherFeedback {
+        id
+        text
+        lesson {
+          id
+          name
+        }
+      }
+      studentFeedback {
+        id
+        text
+        lesson {
+          id
+          name
+        }
+      }
       new_subjects {
         id
+      }
+      company {
+        id
+        name
       }
       status
       lessonResults {
@@ -29,7 +49,6 @@ const CURRENT_USER_QUERY = gql`
           id
         }
       }
-      uniID
       examAnswers {
         id
         examQuestion {
@@ -44,6 +63,8 @@ const CURRENT_USER_QUERY = gql`
       }
       isFamiliar
       favourites
+      coverLetter
+      resume
       visitedLessons
       coursePages {
         id

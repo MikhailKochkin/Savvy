@@ -31,10 +31,15 @@ const UNI_COURSE_PAGES_QUERY = gql`
         user {
             id
             name
+            status
+            company {
+              id
+              name
+            }
             uni {
               id
               title
-        }
+          }
         }
       }
   }

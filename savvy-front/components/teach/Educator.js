@@ -184,7 +184,7 @@ class Teach extends Component {
                               <Title primary> Опубликованные курсы </Title>
                               <Row>
                                 {status && publishedCourses.length === 0 && (
-                                  <div>У вас еще нет запущенных курсов.</div>
+                                  <p>У вас еще нет запущенных курсов.</p>
                                 )}
                                 {status &&
                                   publishedCourses.map(coursePage => (

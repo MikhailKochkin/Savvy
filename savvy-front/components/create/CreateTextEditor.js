@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Router from "next/router";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
@@ -51,13 +49,13 @@ const Label = styled.label`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 50%;
+  width: 40%;
   margin-bottom: 1%;
   @media (max-width: 800px) {
     width: 70%;
   }
   input {
-    width: 40px;
+    width: 60px;
     border: 1px solid #ccc;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     border-radius: 3.5px;
@@ -65,7 +63,8 @@ const Label = styled.label`
     font-size: 1.4rem;
     margin: 4% 2%;
     text-align: center;
-    outline: 0;
+    @media (max-width: 800px) {
+    }
   }
 `;
 

@@ -7,10 +7,11 @@ import { Button, IconBlock, Menu } from "./components";
 import Icon from "react-icons-kit";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
+import { pencil } from "react-icons-kit/fa/pencil";
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",
-  padding: "5px 20px",
+  padding: "0 20px",
   maxWidth: "840px",
   width: "100%",
   fontSize: "1.6rem"
@@ -28,8 +29,7 @@ const BLOCK_TAGS = {
 
 const INLINE_TAGS = {
   a: "link",
-  span: "comment",
-  span: "translation"
+  input: "input"
 };
 
 const MARK_TAGS = {
@@ -84,6 +84,38 @@ const rules = [
         }
       }
     }
+  },
+  {
+    deserialize(el, next) {
+      if (el.tagName !== "INPUT") {
+        return;
+      }
+      const type = INLINE_TAGS[el.tagName.toLowerCase()];
+      if (type) {
+        return {
+          // inline to show that Inline nodes may contain nested inline nodes and text nodes—just like in the DOM.
+          object: "inline",
+          type: type,
+          nodes: next(el.childNodes),
+          data: {
+            href:
+              Array.from(el.attributes).find(({ name }) => name == "href") !==
+              undefined
+                ? Array.from(el.attributes).find(({ name }) => name == "href")
+                    .value
+                : null
+          }
+        };
+      }
+    },
+    serialize: function(object, children) {
+      if (object.object == "inline") {
+        switch (object.type) {
+          case "input":
+            return <input name={object.data._root.entries[0][1]} id="text" />;
+        }
+      }
+    }
   }
 ];
 
@@ -101,6 +133,40 @@ const MarkButton = ({ editor, type, icon }) => {
       onMouseDown={event => {
         event.preventDefault();
         editor.toggleMark(type);
+      }}
+    >
+      <IconBlock>
+        <Icon icon={icon} />
+      </IconBlock>
+    </Button>
+  );
+};
+
+const wrapInput = (editor, src) => {
+  editor.wrapInline({
+    type: "input",
+    data: { src }
+  });
+  editor.moveToEnd();
+};
+
+const onClickLink = (event, editor) => {
+  event.preventDefault();
+  const src = window.prompt("Enter the URL of the image:");
+  if (!src) return;
+  editor.command(wrapInput(editor, src));
+};
+
+const InputButton = ({ editor, type, icon }) => {
+  const { value } = editor;
+  const isActive = value.activeMarks.some(mark => mark.type === type);
+  return (
+    <Button
+      reversed
+      active={isActive}
+      onMouseDown={event => {
+        event.preventDefault();
+        onClickLink(event, editor);
       }}
     >
       <IconBlock>
@@ -130,6 +196,7 @@ const HoverMenu = React.forwardRef(({ editor }, ref) => {
     >
       <MarkButton editor={editor} type="bold" icon={bold} />
       <MarkButton editor={editor} type="italic" icon={italic} />
+      <InputButton editor={editor} type="pencil" icon={pencil} />
     </Menu>,
     root
   );
@@ -212,12 +279,12 @@ class HoveringMenu extends React.Component {
       <div>
         <Editor
           style={AppStyles}
-          // placeholder="Напишите что-нибудь..."
           value={this.state.value}
           onChange={this.onChange}
           renderEditor={this.renderEditor}
           renderMark={this.renderMark}
           renderBlock={this.renderBlock}
+          renderInline={this.renderInline}
         />
       </div>
     );
@@ -278,6 +345,16 @@ class HoveringMenu extends React.Component {
       default: {
         return next();
       }
+    }
+  };
+
+  renderInline = (props, editor, next) => {
+    const { attributes, children, node } = props;
+    switch (node.type) {
+      case "input":
+        return <input id="text" />;
+      default:
+        return next();
     }
   };
 }

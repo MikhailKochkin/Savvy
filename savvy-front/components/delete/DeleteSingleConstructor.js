@@ -36,12 +36,10 @@ class DeleteSingleConstruction extends Component {
   update = (cache, payload) => {
     // manually update the cache on the client, so it matches the server
     // 1. Read the cache for the items we want
-    console.log("Здесь!");
     const data = cache.readQuery({
       query: SINGLE_LESSON_QUERY,
       variables: { id: this.props.lessonID }
     });
-    console.log(data);
     // 2. Filter the deleted itemout of the page
     data.lessons = data.lesson.constructions.filter(
       item => item.id !== payload.data.deleteConstruction.id
@@ -78,7 +76,6 @@ class DeleteSingleConstruction extends Component {
                   alert(error.message);
                 });
               }
-              console.log("Тут!");
             }}
           >
             {loading ? "Удаляем..." : "Удалить"}

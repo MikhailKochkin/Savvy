@@ -198,7 +198,6 @@ class Shots extends Component {
                           this.state.num + 1 === parts.length
                         ) {
                           const res2 = await createShotResult();
-                          console.log("!!!");
                         }
                       }}
                     >

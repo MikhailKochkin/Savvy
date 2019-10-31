@@ -204,7 +204,6 @@ class UpdateCoursePage extends Component {
                 if (!data.coursePage)
                   return <p>No Course Page Found for ID {this.props.id}</p>;
                 const coursePage = data.coursePage;
-                console.log(me.permissions.includes("ADMIN"));
                 return (
                   <>
                     {me !== null &&

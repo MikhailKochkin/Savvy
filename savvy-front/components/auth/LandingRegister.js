@@ -202,7 +202,6 @@ class LandingRegister extends Component {
   };
 
   saveToStateBoolean = e => {
-    console.log(e.target.value);
     if (e.target.value === "true") {
       this.setState({ isFamiliar: true });
     }

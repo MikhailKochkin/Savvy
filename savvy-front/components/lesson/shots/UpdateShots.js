@@ -139,7 +139,6 @@ class CreateShot extends Component {
 
   remove = () => {
     if (this.state.steps > 1) {
-      console.log(`comment${this.state.steps}`);
       this.setState({
         [`comment${this.state.steps}`]: undefined,
         [`part${this.state.steps}`]: undefined
@@ -159,7 +158,6 @@ class CreateShot extends Component {
       .map(t => comments.push(t[1]));
     parts = parts.filter(el => el !== undefined);
     comments = comments.filter(el => el !== undefined);
-    console.log(parts, comments);
     this.setState({
       final_p: parts,
       final_c: comments
@@ -174,7 +172,6 @@ class CreateShot extends Component {
 
   render() {
     const { parts, comments, shotID } = this.props;
-    console.log(parts, comments);
     let rows = [];
     let part;
     let comment;
@@ -202,7 +199,6 @@ class CreateShot extends Component {
         </Row>
       );
     });
-    console.log(rows);
     return (
       <Mutation
         mutation={UPDATE_SHOTS_MUTATION}

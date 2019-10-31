@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import styled from "styled-components";
-import UserAnalytics from "./UserAnalytics";
+import dynamic from "next/dynamic";
 import Applications from "./applications/Applications";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
@@ -15,6 +15,16 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         name
         email
+        resume
+        coverLetter
+        studentFeedback {
+          id
+          text
+          lesson {
+            id
+          }
+          createdAt
+        }
         lessonResults {
           id
           visitsNumber
@@ -113,6 +123,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             student {
               id
             }
+            inputs
             attempts
             answer
             construction {
@@ -182,6 +193,11 @@ const Container = styled.div`
   }
 `;
 
+const DynamicUserAnalytics = dynamic(import("./UserAnalytics"), {
+  loading: () => <p>Загрузка...</p>,
+  ssr: false
+});
+
 class Analytics extends Component {
   state = {
     page: this.props.name
@@ -203,7 +219,6 @@ class Analytics extends Component {
       >
         {({ data: data2, error: error2, loading: loading2 }) => {
           if (loading2) return <p>Loading...</p>;
-          if (error2) return <p>Error: {error2.message}</p>;
           let coursePage = data2.coursePage;
           return (
             <Styles>
@@ -220,7 +235,7 @@ class Analytics extends Component {
                 </div>
                 <div className="data">
                   {this.state.page === "stats" && (
-                    <UserAnalytics
+                    <DynamicUserAnalytics
                       coursePage={coursePage}
                       students={coursePage.new_students}
                     />
@@ -231,6 +246,7 @@ class Analytics extends Component {
                     )}
                 </div>
               </Container>
+              <div id="root"></div>
             </Styles>
           );
         }}
@@ -240,3 +256,4 @@ class Analytics extends Component {
 }
 
 export default Analytics;
+export { SINGLE_COURSEPAGE_QUERY };

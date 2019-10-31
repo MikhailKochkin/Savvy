@@ -2,6 +2,36 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
+import gql from "graphql-tag";
+import { Mutation, Query } from "react-apollo";
+
+const SINGLE_COURSE_VISIT_QUERY = gql`
+  query SINGLE_COURSE_VISIT_QUERY($coursePage: ID!) {
+    courseVisits(where: { coursePage: { id: $coursePage } }) {
+      id
+      visitsNumber
+      student {
+        id
+      }
+    }
+  }
+`;
+
+const CREATE_COURSE_VISIT_MUTATION = gql`
+  mutation CREATE_COURSE_VISIT_MUTATION($visitsNumber: Int, $coursePage: ID) {
+    createCourseVisit(visitsNumber: $visitsNumber, coursePage: $coursePage) {
+      id
+    }
+  }
+`;
+
+const UPDATE_COURSE_VISIT_MUTATION = gql`
+  mutation UPDATE_COURSE_VISIT_MUTATION($id: ID!, $visitsNumber: Int) {
+    updateCourseVisit(id: $id, visitsNumber: $visitsNumber) {
+      id
+    }
+  }
+`;
 
 const CaseCard = styled.div`
   display: flex;
@@ -11,7 +41,7 @@ const CaseCard = styled.div`
   border: 1px solid #edefed;
   border-radius: 10px;
   margin: 2%;
-  width: 265px;
+  width: 285px;
   line-height: 1.2;
   @media (max-width: 1000px) {
     width: 205px;
@@ -32,7 +62,6 @@ const CaseCard = styled.div`
 `;
 
 const Author = styled.p`
-  font-size: 1.6rem;
   color: #686868;
   @media (max-width: 950px) {
     font-size: 1.4rem;
@@ -111,33 +140,120 @@ export default class Course extends Component {
     return (
       <CaseCard>
         <Additional>
-          <div>
+          <>
             {coursePage.image && (
               <Img src={coursePage.image} alt={coursePage.title} />
             )}
             <Title>
               <a>{coursePage.title}</a>
             </Title>
-            {/* <Author>
-              {coursePage.user.name} из {coursePage.user.uni.title}{" "}
-            </Author> */}
-          </div>
-          <div>
-            <Buttons>
-              {me && me !== null && (
-                <Link
-                  href={{
-                    pathname: "/coursePage",
-                    query: { id }
-                  }}
-                >
-                  <a>
-                    <Button>Перейти</Button>
-                  </a>
-                </Link>
-              )}
-            </Buttons>
-          </div>
+            {coursePage.user.status === "HR" && (
+              <Author>
+                {coursePage.user.name} из {coursePage.user.company.name}
+              </Author>
+            )}
+
+            <Query
+              query={SINGLE_COURSE_VISIT_QUERY}
+              variables={{
+                coursePage: id
+              }}
+            >
+              {({ data, error, loading }) => {
+                if (loading) return <p>Loading...</p>;
+                if (error) return <p>Error: {error.message}</p>;
+                return (
+                  <>
+                    {data.courseVisits.length === 0 && (
+                      <Mutation
+                        mutation={CREATE_COURSE_VISIT_MUTATION}
+                        variables={{
+                          coursePage: id,
+                          visitsNumber: 1
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_COURSE_VISIT_QUERY,
+                            variables: {
+                              coursePage: id
+                            }
+                          }
+                        ]}
+                      >
+                        {(createCourseVisit, { loading, error }) => {
+                          return (
+                            <>
+                              <>
+                                {me && coursePage && (
+                                  <Link
+                                    href={{
+                                      pathname: "/coursePage",
+                                      query: { id }
+                                    }}
+                                  >
+                                    <a>
+                                      <Button
+                                        onClick={() => {
+                                          createCourseVisit();
+                                        }}
+                                      >
+                                        Перейти
+                                      </Button>
+                                    </a>
+                                  </Link>
+                                )}
+                              </>
+                            </>
+                          );
+                        }}
+                      </Mutation>
+                    )}
+                    {data.courseVisits.length > 0 && (
+                      <Mutation
+                        mutation={UPDATE_COURSE_VISIT_MUTATION}
+                        variables={{
+                          id: data.courseVisits[0].id,
+                          visitsNumber: data.courseVisits[0].visitsNumber + 1
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_COURSE_VISIT_QUERY,
+                            variables: {
+                              coursePage: id
+                            }
+                          }
+                        ]}
+                      >
+                        {(updateCourseVisit, { loading, error }) => {
+                          return (
+                            me &&
+                            coursePage && (
+                              <Link
+                                href={{
+                                  pathname: "/coursePage",
+                                  query: { id }
+                                }}
+                              >
+                                <a>
+                                  <Button
+                                    onClick={() => {
+                                      updateCourseVisit();
+                                    }}
+                                  >
+                                    Перейти
+                                  </Button>
+                                </a>
+                              </Link>
+                            )
+                          );
+                        }}
+                      </Mutation>
+                    )}
+                  </>
+                );
+              }}
+            </Query>
+          </>
         </Additional>
       </CaseCard>
     );

@@ -31,18 +31,28 @@ const FREE_COURSE_PAGES_QUERY = gql`
         user {
             id
             name
+            status
+            company {
+              id
+              name
+            }
             uni {
               id
               title
-            }
+          }
         }
       }
   }
 `;
 
 const AGGREGATE_FREE_COURSE_PAGES_QUERY = gql`
-  query AGGREGATE_FREE_COURSE_PAGES_QUERY($type: [CourseType!]) {
-    coursePagesConnection(where: { courseType_in: $type }) {
+  query AGGREGATE_FREE_COURSE_PAGES_QUERY(
+    $type: [CourseType!]
+    $boolean: Boolean = true
+  ) {
+    coursePagesConnection(
+      where: { courseType_in: $type, published: $boolean }
+    ) {
       aggregate {
         count
       }
@@ -80,7 +90,7 @@ class FreeCoursesList extends Component {
       <Query
         query={FREE_COURSE_PAGES_QUERY}
         returnPartialData={true}
-        fetchPolicy="cache-first"
+        fetchPolicy="cache-and-network"
         variables={{
           type: ["PUBLIC"],
           first: CoursePerPage,
@@ -106,7 +116,7 @@ class FreeCoursesList extends Component {
                       />
                     ))}
                 </CasesStyles>
-                {/* <Query
+                <Query
                   query={AGGREGATE_FREE_COURSE_PAGES_QUERY}
                   fetchPolicy="cache-first"
                   variables={{
@@ -144,7 +154,7 @@ class FreeCoursesList extends Component {
                       </>
                     );
                   }}
-                </Query> */}
+                </Query>
               </Styles>
             </>
           );
@@ -155,3 +165,4 @@ class FreeCoursesList extends Component {
 }
 
 export default FreeCoursesList;
+export { FREE_COURSE_PAGES_QUERY };

@@ -80,7 +80,6 @@ class ExamQuestion extends Component {
                 e.preventDefault();
                 // call the mutation
                 const res = await createExamQuestion();
-                console.log("Создали!");
                 // change the page to the single case page
               }}
             >

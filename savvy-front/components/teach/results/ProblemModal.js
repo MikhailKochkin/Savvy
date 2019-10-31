@@ -31,7 +31,6 @@ const StyledModal = Modal.styled`
 `;
 
 const Button = styled.button`
-  /* padding: 1% 2.5%; */
   text-align: center;
   background: #ffffff;
   border: 1px solid #112a62;

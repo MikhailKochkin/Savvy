@@ -49,8 +49,7 @@ const Form = styled.form`
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
-  border: 1px solid #f0f0f0;
-  border-radius: 5px;
+  border: none;
   padding: 15px;
 `;
 
@@ -98,15 +97,6 @@ const Buttons = styled.div`
   @media (max-width: 850px) {
     margin-top: 0.5%;
   }
-`;
-
-const LoggedIn = styled.p`
-  background-color: #00ff7f;
-  font-size: 1.8rem;
-  padding: 1% 2%;
-  border-radius: 10px;
-  width: 45%;
-  text-align: center;
 `;
 
 const Title = styled.div`

@@ -41,11 +41,12 @@ const Mutations = {
     const careerID = args.careerTrackID;
     const uniID = args.uniID;
     const id = args.id;
-    //remove the ID from updates
+    const company = args.company;
     delete updates.careerID;
     delete updates.uniID;
     delete updates.args;
     delete updates.id;
+    delete updates.company;
     delete args;
     //run the update method
     const updatedUser = await ctx.db.mutation.updateUser(
@@ -59,6 +60,9 @@ const Mutations = {
           },
           uni: {
             connect: { id: uniID }
+          },
+          company: {
+            connect: { id: company }
           },
           ...updates
         }
@@ -708,6 +712,8 @@ const Mutations = {
     // TODO: Check if they are logged in
     const lessonID = args.lessonID;
     const constructionID = args.constructionID;
+    const inputs = args.inputs;
+    delete args.inputs;
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -724,6 +730,9 @@ const Mutations = {
           },
           construction: {
             connect: { id: constructionID }
+          },
+          inputs: {
+            set: [...inputs]
           },
           ...args
         }
@@ -917,10 +926,12 @@ const Mutations = {
   },
   async signup(parent, args, ctx, info) {
     // lower the email
-    console.log(args);
     args.email = args.email.toLowerCase();
     const uniID = args.uniID;
     const careerTrackID = args.careerTrackID;
+    const company = args.company;
+    delete args.uniID;
+    delete args.company;
     // hash the password
     const password = await bcrypt.hash(args.password, 10);
     //create the user
@@ -932,6 +943,9 @@ const Mutations = {
           permissions: { set: ["USER"] },
           uni: {
             connect: { id: uniID }
+          },
+          company: {
+            connect: { id: company }
           },
           careerTrack: {
             connect: { id: careerTrackID }
@@ -1271,6 +1285,71 @@ const Mutations = {
     const note = await ctx.db.query.note({ where }, `{ id }`);
     //3. Delete it
     return ctx.db.mutation.deleteNote({ where }, info);
+  },
+  async createFeedback(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Feedback = await ctx.db.mutation.createFeedback(
+      {
+        data: {
+          teacher: {
+            connect: { id: ctx.request.userId }
+          },
+          student: {
+            connect: { id: args.student }
+          },
+          lesson: {
+            connect: { id: args.lesson }
+          },
+          text: args.text
+        }
+      },
+      info
+    );
+    return Feedback;
+  },
+  async createCourseVisit(parent, args, ctx, info) {
+    const id = args.coursePage;
+    delete args.coursePage;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const CourseVisit = await ctx.db.mutation.createCourseVisit(
+      {
+        data: {
+          student: {
+            connect: { id: ctx.request.userId }
+          },
+          coursePage: {
+            connect: { id }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return CourseVisit;
+  },
+  async updateCourseVisit(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    //run the update method
+    const CourseVisit = await ctx.db.mutation.updateCourseVisit(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+    return CourseVisit;
   }
 };
 

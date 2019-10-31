@@ -4,7 +4,7 @@ import User from "./User";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import { CURRENT_USER_QUERY } from "./User";
-import { Unis } from "../config";
+import { Unis, Companies } from "../config";
 
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION(
@@ -13,7 +13,11 @@ const UPDATE_USER_MUTATION = gql`
     $email: String
     $careerTrackID: ID
     $uniID: ID
+    $status: Status
     $isFamiliar: Boolean
+    $resume: String
+    $coverLetter: String
+    $company: ID
   ) {
     updateUser(
       id: $id
@@ -21,7 +25,11 @@ const UPDATE_USER_MUTATION = gql`
       name: $name
       careerTrackID: $careerTrackID
       uniID: $uniID
+      status: $status
       isFamiliar: $isFamiliar
+      resume: $resume
+      coverLetter: $coverLetter
+      company: $company
     ) {
       id
     }
@@ -69,7 +77,7 @@ const Fieldset = styled.fieldset`
     max-width: 100%;
     box-sizing: border-box;
     margin-left: 2%;
-    margin-bottom: 2%;
+    margin-bottom: 0.5%;
     border: 1px solid #c5c5c5;
     border-radius: 4px;
     background: none;
@@ -150,8 +158,12 @@ const Green = styled.div`
 class Account extends Component {
   state = {
     show: false,
-    careerTrackID: this.props.me.careerTrackID || "NAN",
-    uniID: this.props.me.uniID || "cjymz9pazr0ib0b53v38d401g"
+    careerTrackID: this.props.me.careerTrackID || "cjwx78u7700rb07121pelqctm",
+    uniID: this.props.me.uniID || "cjyimfz2e00lp07174jpder3m",
+    company: this.props.me.company
+      ? this.props.me.company.id
+      : "ck2eobt3u04sh078578d6jhqb",
+    status: this.props.me.status
   };
   handleChange = e => {
     const { name, value } = e.target;
@@ -226,10 +238,10 @@ class Account extends Component {
                         onChange={this.handleSteps}
                       >
                         <option value="NAN">Выберите карьерный трек</option>
-                        <option value="cjwx78u7700rb07121pelqctm">
+                        <option value="cjymyvxjqqsoh0b53wtdnpzkk">
                           Старт карьеры. Корпоративное право
                         </option>
-                        <option value="cjwx79iaj00rk0712tz12j7vi">
+                        <option value="cjymywj43tg8c0b36c762ii0w">
                           Старт карьеры. Право и технологии
                         </option>
                       </select>
@@ -248,33 +260,82 @@ class Account extends Component {
                         <option value="NAN">Не выбран</option>
                         <option value="STUDENT">Студент</option>
                         <option value="AUTHOR">Преподаватель</option>
+                        <option value="HR">HR</option>
                       </select>
                       <Comment>
                         Выберите статус, чтобы проходить курсы в качестве
-                        студента или создавать курсы в качестве преподавателя.
+                        студента, создавать курсы в качестве преподавателя или
+                        искать сотрудников в качестве HR.
                       </Comment>
                     </>
-                    <>
-                      <select
-                        name="uniID"
-                        defaultValue={
-                          me.uni ? me.uni.id : "cjymz9pazr0ib0b53v38d401g"
-                        }
-                        value={this.state.uni}
-                        onChange={this.handleSteps}
-                      >
-                        {Unis.map(uni => (
-                          <option value={Object.values(uni)[0]}>
-                            {Object.keys(uni)[0]}
-                          </option>
-                        ))}
-                      </select>
-                      <Comment>
-                        Выберите университет, чтобы получать доступ к курсам
-                        вузов или получить возможность создавать курсы для
-                        вашего вуза.
-                      </Comment>
-                    </>
+                    {this.state.status === "HR" && (
+                      <>
+                        <select
+                          name="company"
+                          defaultValue={
+                            me.company
+                              ? me.company.id
+                              : "ck2akkofk0bce0919xo8ooxma"
+                          }
+                          value={this.state.company}
+                          onChange={this.handleSteps}
+                        >
+                          {Companies.map(co => (
+                            <option value={Object.values(co)[0]}>
+                              {Object.keys(co)[0]}
+                            </option>
+                          ))}
+                        </select>
+                      </>
+                    )}
+                    {this.state.status !== "HR" && (
+                      <>
+                        <>
+                          <select
+                            name="uniID"
+                            defaultValue={
+                              me.uni ? me.uni.id : "cjymz9pazr0ib0b53v38d401g"
+                            }
+                            value={this.state.uni}
+                            onChange={this.handleSteps}
+                          >
+                            {Unis.map(uni => (
+                              <option value={Object.values(uni)[0]}>
+                                {Object.keys(uni)[0]}
+                              </option>
+                            ))}
+                          </select>
+                          <Comment>
+                            Выберите университет, чтобы получать доступ к курсам
+                            вузов или создавать курсы для вашего вуза.
+                          </Comment>
+                        </>
+
+                        <>
+                          <input
+                            className="second"
+                            type="text"
+                            name="resume"
+                            placeholder="Ссылка на резюме"
+                            defaultValue={me.resume}
+                            onChange={this.handleChange}
+                          />
+                          <br />
+                          <input
+                            className="second"
+                            type="text"
+                            name="coverLetter"
+                            placeholder="Ссылка на сопроводительное письмо"
+                            defaultValue={me.coverLetter}
+                            onChange={this.handleChange}
+                          />
+                          <Comment>
+                            Загрузите документы на Яндекс Диск или Гугл Драйв и
+                            добавьте ссылки в форму выше.
+                          </Comment>
+                        </>
+                      </>
+                    )}
                     {!me.isFamiliar && (
                       <>
                         <p className="first">

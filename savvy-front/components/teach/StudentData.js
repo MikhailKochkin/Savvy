@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import renderHTML from "react-render-html";
 import moment from "moment";
-
+import CreateFeedback from "./CreateFeedback";
 import TestResult from "./results/TestResult";
 import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
 import ConstructionResult from "./results/ConstructionResult";
 import TexteditorResult from "./results/TexteditorResult";
+import Feedback from "./Feedback";
 
 const Name = styled.div`
   font-size: 1.6rem;
-  font-weight: bold;
+  /* font-weight: bold; */
 `;
 
 const Square = styled.div`
@@ -67,7 +67,6 @@ const Buttons = styled.div`
 
 const SendButton = styled.div`
   font-size: 1.6rem;
-  /* padding: 0.5% 1%; */
   text-align: center;
   background: #ffffff;
   border: 1px solid;
@@ -76,7 +75,6 @@ const SendButton = styled.div`
   border-radius: 5px;
   cursor: pointer;
   outline: 0;
-  /* margin: 1% 0; */
   margin-right: 20px;
   width: 130px;
   color: #112a62;
@@ -95,7 +93,7 @@ const Box = styled.div`
   grid-template-columns: 0.6fr 1.2fr 1.2fr;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-  margin: 20px 0;
+  margin: 10px 0;
   padding: 0.5%;
   div {
     padding: 0 15px;
@@ -131,6 +129,13 @@ const Box = styled.div`
 
 const StyledCV = styled.div`
   margin-bottom: 2%;
+  a {
+    color: #112b62;
+    font-weight: bold;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 
 const StyledResume = styled.div`
@@ -149,11 +154,10 @@ class Person extends Component {
   };
 
   onSwitch = e => {
-    console.log(e.target.getAttribute("name"));
     this.setState({ page: e.target.getAttribute("name") });
   };
   render() {
-    let { student, lessons } = this.props;
+    let { student, lessons, coursePage } = this.props;
     moment.locale("ru");
     let mail = `mailto:${student.email}`;
     let color;
@@ -173,100 +177,125 @@ class Person extends Component {
       color = "#84BC9C";
     }
     return (
-      <Styles>
-        <Header>
-          <Name className="div1">{student.name}</Name>
-          <Square className="div2" inputColor={color} />
-          <Button className="div3" onClick={this.onShow}>
-            {this.state.secret ? "Открыть" : "Закрыть"}
-          </Button>
-        </Header>
-        <Open secret={this.state.secret}>
-          <Buttons>
-            <SendButton onClick={this.onSwitch} name="results">
-              Результаты
-            </SendButton>
-            <SendButton onClick={this.onSwitch} name="CV">
-              CV
-            </SendButton>
-            <SendButton onClick={this.onSwitch} name="resume">
-              Резюме
-            </SendButton>
-            <SendButton green>
-              <a href={mail}>Написать</a>
-            </SendButton>
-          </Buttons>
-          {this.state.page === "results" &&
-            lessons.map((lesson, index) => (
-              <>
-                <Name>
-                  {index + 1}. {lesson.name}
-                </Name>
-                {lesson.lessonResults.filter(
-                  result => result.student.id === student.id
-                ).length > 0 ? (
-                  <Box>
-                    <div className="div1">
-                      Заходов на урок:{" "}
-                      {
-                        lesson.lessonResults.filter(
-                          result => result.student.id === student.id
-                        )[0].visitsNumber
-                      }{" "}
-                    </div>
-                    <div className="div2">
-                      Первый заход:{" "}
-                      {moment(
-                        lesson.lessonResults.filter(
-                          result => result.student.id === student.id
-                        )[0].createdAt
-                      ).format("LLL")}
-                    </div>
-                    <div className="div3">
-                      Последний заход:{" "}
-                      {moment(
-                        lesson.lessonResults.filter(
-                          result => result.student.id === student.id
-                        )[0].updatedAt
-                      ).format("LLL")}
-                      {"–"}
-                      {moment(
-                        lesson.lessonResults.filter(
-                          result => result.student.id === student.id
-                        )[0].updatedAt
-                      ).fromNow()}
-                    </div>
-                  </Box>
-                ) : (
-                  <div className="time">Нет данных по заходам на урок.</div>
-                )}
+      <>
+        <Styles>
+          <Header>
+            <Name className="div1">{student.name}</Name>
+            <Square className="div2" inputColor={color} />
+            <Button className="div3" onClick={this.onShow}>
+              {this.state.secret ? "Открыть" : "Закрыть"}
+            </Button>
+          </Header>
+          <Open secret={this.state.secret}>
+            <Buttons>
+              <SendButton onClick={this.onSwitch} name="results">
+                Результаты
+              </SendButton>
+              <SendButton onClick={this.onSwitch} name="CV">
+                CV
+              </SendButton>
+              <SendButton onClick={this.onSwitch} name="resume">
+                Резюме
+              </SendButton>
+            </Buttons>
+            {this.state.page === "results" &&
+              lessons.map((lesson, index) => (
+                <>
+                  <Name>
+                    {index + 1}. {lesson.name}
+                  </Name>
+                  {lesson.lessonResults.filter(
+                    result => result.student.id === student.id
+                  ).length > 0 ? (
+                    <Box>
+                      <div className="div1">
+                        Заходов на урок:{" "}
+                        {
+                          lesson.lessonResults.filter(
+                            result => result.student.id === student.id
+                          )[0].visitsNumber
+                        }{" "}
+                      </div>
+                      <div className="div2">
+                        Первый заход:{" "}
+                        {moment(
+                          lesson.lessonResults.filter(
+                            result => result.student.id === student.id
+                          )[0].createdAt
+                        ).format("LLL")}
+                      </div>
+                      <div className="div3">
+                        Последний заход:{" "}
+                        {moment(
+                          lesson.lessonResults.filter(
+                            result => result.student.id === student.id
+                          )[0].updatedAt
+                        ).format("LLL")}
+                        {"–"}
+                        {moment(
+                          lesson.lessonResults.filter(
+                            result => result.student.id === student.id
+                          )[0].updatedAt
+                        ).fromNow()}
+                      </div>
+                    </Box>
+                  ) : (
+                    <div className="time">Нет данных по заходам на урок.</div>
+                  )}
 
-                <TestResult newTests={lesson.newTests} student={student} />
-                <QuizResult quizes={lesson.quizes} student={student} />
-                <ProblemResult problems={lesson.problems} student={student} />
-                <ConstructionResult
-                  constructions={lesson.constructions}
-                  student={student}
-                />
-                <TexteditorResult
-                  texteditors={lesson.texteditors}
-                  student={student}
-                />
-              </>
-            ))}
-          {this.state.page === "CV" && (
-            <StyledCV>
-              На этой странице можно будет посмотреть и скачать CV кандидата.
-            </StyledCV>
-          )}
-          {this.state.page === "resume" && (
-            <StyledResume>
-              На этой странице можно будет посмотреть и скачать резюме
-              кандидата.
-            </StyledResume>
-          )}
-        </Open>
-      </Styles>
+                  <TestResult newTests={lesson.newTests} student={student} />
+                  <QuizResult quizes={lesson.quizes} student={student} />
+                  <ProblemResult problems={lesson.problems} student={student} />
+                  <ConstructionResult
+                    constructions={lesson.constructions}
+                    student={student}
+                  />
+                  <TexteditorResult
+                    texteditors={lesson.texteditors}
+                    student={student}
+                  />
+                  <CreateFeedback
+                    coursePage={coursePage}
+                    lesson={lesson.id}
+                    student={student.id}
+                  />
+                  <Feedback
+                    feedback={student.studentFeedback}
+                    lesson={lesson.id}
+                  />
+                </>
+              ))}
+            {this.state.page === "CV" && (
+              <StyledCV>
+                {student.coverLetter ? (
+                  <div>
+                    Скачайте сопроводительное письмо{" "}
+                    <a href={student.coverLetter} target="_blank">
+                      по ссылке.
+                    </a>
+                  </div>
+                ) : (
+                  <div>Сопроводительное письмо не загружено.</div>
+                )}
+              </StyledCV>
+            )}
+            {this.state.page === "resume" && (
+              <StyledCV>
+                {student.resume ? (
+                  <div>
+                    Скачайте резюме{" "}
+                    <a href={student.resume} target="_blank">
+                      по ссылке.
+                    </a>
+                  </div>
+                ) : (
+                  <div>Резюме не загружено.</div>
+                )}
+              </StyledCV>
+            )}
+          </Open>
+        </Styles>
+      </>
     );
   }
 }

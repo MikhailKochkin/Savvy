@@ -92,6 +92,7 @@ type Mutation {
     answer: String
     attempts: Int
     lessonID: ID
+    inputs: [String]
     constructionID: ID
   ): ConstructionResult!
   deleteNewTest(id: ID!): NewTest
@@ -150,6 +151,7 @@ type Mutation {
     name: String!
     status: Status
     uniID: ID
+    company: ID
     careerTrackID: ID
     isFamiliar: Boolean!
   ): User!
@@ -167,6 +169,9 @@ type Mutation {
     email: String
     careerTrackID: ID
     uniID: ID
+    resume: String
+    company: ID
+    coverLetter: String
     status: Status
     visitedLessons: [String]
     isFamiliar: Boolean
@@ -210,6 +215,9 @@ type Mutation {
   createNote(text: String, lessonID: ID): Note!
   updateNote(id: ID!, text: String): Note
   deleteNote(id: ID!): Note
+  createFeedback(text: String!, lesson: ID, student: ID): Feedback!
+  createCourseVisit(visitsNumber: Int, coursePage: ID): CourseVisit!
+  updateCourseVisit(id: ID!, visitsNumber: Int): CourseVisit!
 }
 
 type Query {
@@ -356,6 +364,15 @@ type Query {
     first: Int
     last: Int
   ): [Article]!
+  courseVisits(
+    where: CourseVisitWhereInput
+    orderBy: CourseVisitOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [CourseVisit]!
 }
 
 type User {
@@ -375,12 +392,17 @@ type User {
   visitedLessons: [String]
   careerTrackID: ID
   status: Status
+  coverLetter: String
+  resume: String
   uni: Uni
   uniID: ID
+  company: Company
   testResults: [TestResult]
   quizResults: [QuizResult]
   problemResults: [ProblemResult]
   textEditorResults: [TextEditorResult]
   lessonResults: [LessonResult]
   examAnswers: [ExamAnswer]
+  studentFeedback: [Feedback]
+  teacherFeedback: [Feedback]
 }

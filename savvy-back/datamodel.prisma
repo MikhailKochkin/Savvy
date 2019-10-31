@@ -38,8 +38,11 @@ type User {
   status: Status @default(value: STUDENT)
   legalPortfolio: LegalPortfolio @relation(name: "UserPortfolio", onDelete: CASCADE)
   uni: Uni
+  company: Company
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrack @relation(name: "CareerForUser")
   careerTrackID: ID
   favourites: [ID]
@@ -71,7 +74,9 @@ type User {
   shots: [Shot]
   shotResults: [ShotResult]
   notes: [Note]
-
+  teacherFeedback: [Feedback] @relation( name: "TeacherFeedback", onDelete: CASCADE)
+  studentFeedback: [Feedback] @relation( name: "StudentFeedback", onDelete: CASCADE)
+  courseVisits: [CourseVisit] @relation( name: "UserCourseVisits", onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -110,6 +115,9 @@ type CoursePage {
   price: Int
   discountPrice: Int
   orders: [Order] @relation(name: "CoursePageOrders" onDelete: CASCADE)
+  company: Company @relation(name: "CompanyCoursePage")
+  promocode: [Json]
+  visits: [CourseVisit] @relation(name: "CourseVisits" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -162,6 +170,7 @@ type Lesson {
   textEditorResults: [TextEditorResult] @relation(name: "TextEditorResults" onDelete: CASCADE)
   problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE)
   constructionResults: [ConstructionResult] @relation(name: "ConstructionResults" onDelete: CASCADE)
+  lessonFeedback: [Feedback] @relation(link: TABLE, name: "LessonFeedback" onDelete: CASCADE)
   open: Boolean @default(value: false)
   coursePageID: ID!
   published: Boolean @default(value: false)
@@ -399,6 +408,7 @@ type ConstructionResult {
   student: User! @relation( name: "UserConstructionResults")
   answer: String
   attempts: Int
+  inputs: [String]
   construction: Construction @relation(name: "SingleConstructionResults")
   constructionID: ID
   lesson: Lesson @relation(name: "ConstructionResults")
@@ -474,4 +484,31 @@ type Note {
   user: User
   lessonID: ID
   lesson: Lesson @relation( name: "LessonNotes")
+}
+
+type Company {
+  id: ID! @unique
+  name: String!
+  hrs: [User!]
+  paidMonths: Int @default(value: 0)
+  coursePages: [CoursePage] @relation(name: "CompanyCoursePage")
+}
+
+type Feedback {
+  id: ID! @unique
+  text: String!
+  lesson: Lesson @relation( name: "LessonFeedback")
+  teacher: User! @relation( name: "TeacherFeedback")
+  student: User! @relation( name: "StudentFeedback")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type CourseVisit {
+  id: ID! @unique
+  student: User! @relation( name: "UserCourseVisits")
+  visitsNumber: Int @default(value: 0)
+  coursePage: CoursePage! @relation( name: "CourseVisits")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }

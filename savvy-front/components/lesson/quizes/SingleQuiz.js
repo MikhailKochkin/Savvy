@@ -140,11 +140,9 @@ class SingleQuiz extends Component {
   };
   render() {
     const { me, user, userData } = this.props;
-    console.log(this.props.id, me.id);
     const data = userData
       .filter(el => el.quiz.id === this.props.id)
       .filter(el => el.student.id === me.id);
-    console.log(data);
     return (
       <Styles>
         <Question>

@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import HrPaymentBox from "./HrPaymentBox";
 
 const UniInfo = styled.div`
-  width: 70%;
+  width: 80%;
   max-width: 1200px;
   padding: 1.5%;
   flex-basis: 50%;
   height: 250px;
-  @media (max-width: 950px) {
+  @media (max-width: 850px) {
     width: 95%;
   }
 `;
@@ -45,7 +46,6 @@ const Box = styled.div`
   display: grid;
   border: 1px solid #edefed;
   border-radius: 5px;
-  width: 90%;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 35px;
   grid-column-gap: 0px;
@@ -66,7 +66,7 @@ const Box = styled.div`
     grid-area: 1 / 3 / 2 / 4;
     border-left: 1px solid #edefed;
   }
-  @media (max-width: 950px) {
+  @media (max-width: 850px) {
     display: flex;
     flex-direction: column;
     margin-bottom: 5%;
@@ -84,24 +84,13 @@ const Box = styled.div`
   }
 `;
 
-const PaymentBox = styled.div`
-  border: 1px solid #edefed;
-  width: 25%;
-  padding: 2%;
-  margin-top: 2%;
-  border-radius: 5px;
-  @media (max-width: 850px) {
-    width: 95%;
-  }
-`;
-
 class Uni extends Component {
   state = {
     pay: false
   };
 
   pay = () => {
-    this.setState({ pay: true });
+    this.setState(prev => ({ pay: !prev.pay }));
   };
   render() {
     const { me } = this.props;
@@ -111,26 +100,31 @@ class Uni extends Component {
     } else {
       price = me.uni.paidMonths;
     }
-    console.log(me);
     return (
       <UniInfo>
-        <Title primary>Кабинет преподавателя</Title>
+        {me.status === "HR" ? (
+          <Title primary>Кабинет рекрутера</Title>
+        ) : (
+          <Title primary>Кабинет преподавателя</Title>
+        )}
         <Title>{me.name}</Title>
         <Box>
-          <div className="div1"> {me.uni.title}</div>
-          <div className="div2">Лимит новых курсов: {me.uni.capacity}</div>
+          {me.status === "HR" ? (
+            <div className="div1"> {me.company.name}</div>
+          ) : (
+            <div className="div1"> {me.uni.title}</div>
+          )}
+          {me.status === "HR" ? null : (
+            <div className="div2">Лимит новых курсов: {me.uni.capacity}</div>
+          )}
           <div className="div3">Оплачено месяцев: {price}</div>
         </Box>
 
-        {/* <Button onClick={this.pay}>
+        <Button onClick={this.pay}>
           <a>Пополнить</a>
         </Button>
 
-        {this.state.pay && (
-          <PaymentBox>
-            <div>Информация об оплате</div>
-          </PaymentBox>
-        )} */}
+        {this.state.pay && <HrPaymentBox me={me} />}
       </UniInfo>
     );
   }

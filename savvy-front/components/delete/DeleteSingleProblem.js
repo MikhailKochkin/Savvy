@@ -40,7 +40,6 @@ class DeleteSingleProblem extends Component {
       query: SINGLE_LESSON_QUERY,
       variables: { id: this.props.lessonId }
     });
-    console.log(data);
     // 2. Filter the deleted itemout of the page
     data.lessons = data.lesson.problems.filter(
       item => item.id !== payload.data.deleteProblem.id

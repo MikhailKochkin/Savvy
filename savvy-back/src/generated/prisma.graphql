@@ -14,6 +14,10 @@ type AggregateCareerTrackUnit {
   count: Int!
 }
 
+type AggregateCompany {
+  count: Int!
+}
+
 type AggregateConstruction {
   count: Int!
 }
@@ -26,11 +30,19 @@ type AggregateCoursePage {
   count: Int!
 }
 
+type AggregateCourseVisit {
+  count: Int!
+}
+
 type AggregateExamAnswer {
   count: Int!
 }
 
 type AggregateExamQuestion {
+  count: Int!
+}
+
+type AggregateFeedback {
   count: Int!
 }
 
@@ -1366,6 +1378,191 @@ input CareerTrackWhereUniqueInput {
   id: ID
 }
 
+type Company {
+  id: ID!
+  name: String!
+  hrs(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  paidMonths: Int
+  coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
+}
+
+type CompanyConnection {
+  pageInfo: PageInfo!
+  edges: [CompanyEdge]!
+  aggregate: AggregateCompany!
+}
+
+input CompanyCreateInput {
+  name: String!
+  hrs: UserCreateManyWithoutCompanyInput
+  paidMonths: Int
+  coursePages: CoursePageCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateOneWithoutCoursePagesInput {
+  create: CompanyCreateWithoutCoursePagesInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateOneWithoutHrsInput {
+  create: CompanyCreateWithoutHrsInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateWithoutCoursePagesInput {
+  name: String!
+  hrs: UserCreateManyWithoutCompanyInput
+  paidMonths: Int
+}
+
+input CompanyCreateWithoutHrsInput {
+  name: String!
+  paidMonths: Int
+  coursePages: CoursePageCreateManyWithoutCompanyInput
+}
+
+type CompanyEdge {
+  node: Company!
+  cursor: String!
+}
+
+enum CompanyOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  paidMonths_ASC
+  paidMonths_DESC
+}
+
+type CompanyPreviousValues {
+  id: ID!
+  name: String!
+  paidMonths: Int
+}
+
+type CompanySubscriptionPayload {
+  mutation: MutationType!
+  node: Company
+  updatedFields: [String!]
+  previousValues: CompanyPreviousValues
+}
+
+input CompanySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CompanyWhereInput
+  AND: [CompanySubscriptionWhereInput!]
+  OR: [CompanySubscriptionWhereInput!]
+  NOT: [CompanySubscriptionWhereInput!]
+}
+
+input CompanyUpdateInput {
+  name: String
+  hrs: UserUpdateManyWithoutCompanyInput
+  paidMonths: Int
+  coursePages: CoursePageUpdateManyWithoutCompanyInput
+}
+
+input CompanyUpdateManyMutationInput {
+  name: String
+  paidMonths: Int
+}
+
+input CompanyUpdateOneWithoutCoursePagesInput {
+  create: CompanyCreateWithoutCoursePagesInput
+  update: CompanyUpdateWithoutCoursePagesDataInput
+  upsert: CompanyUpsertWithoutCoursePagesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyUpdateOneWithoutHrsInput {
+  create: CompanyCreateWithoutHrsInput
+  update: CompanyUpdateWithoutHrsDataInput
+  upsert: CompanyUpsertWithoutHrsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyUpdateWithoutCoursePagesDataInput {
+  name: String
+  hrs: UserUpdateManyWithoutCompanyInput
+  paidMonths: Int
+}
+
+input CompanyUpdateWithoutHrsDataInput {
+  name: String
+  paidMonths: Int
+  coursePages: CoursePageUpdateManyWithoutCompanyInput
+}
+
+input CompanyUpsertWithoutCoursePagesInput {
+  update: CompanyUpdateWithoutCoursePagesDataInput!
+  create: CompanyCreateWithoutCoursePagesInput!
+}
+
+input CompanyUpsertWithoutHrsInput {
+  update: CompanyUpdateWithoutHrsDataInput!
+  create: CompanyCreateWithoutHrsInput!
+}
+
+input CompanyWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  hrs_every: UserWhereInput
+  hrs_some: UserWhereInput
+  hrs_none: UserWhereInput
+  paidMonths: Int
+  paidMonths_not: Int
+  paidMonths_in: [Int!]
+  paidMonths_not_in: [Int!]
+  paidMonths_lt: Int
+  paidMonths_lte: Int
+  paidMonths_gt: Int
+  paidMonths_gte: Int
+  coursePages_every: CoursePageWhereInput
+  coursePages_some: CoursePageWhereInput
+  coursePages_none: CoursePageWhereInput
+  AND: [CompanyWhereInput!]
+  OR: [CompanyWhereInput!]
+  NOT: [CompanyWhereInput!]
+}
+
+input CompanyWhereUniqueInput {
+  id: ID
+}
+
 type Construction {
   id: ID!
   name: String!
@@ -1494,6 +1691,7 @@ type ConstructionResult {
   student: User!
   answer: String
   attempts: Int
+  inputs: [String!]!
   construction: Construction
   constructionID: ID
   lesson: Lesson
@@ -1510,10 +1708,15 @@ input ConstructionResultCreateInput {
   student: UserCreateOneWithoutConstructionResultsInput!
   answer: String
   attempts: Int
+  inputs: ConstructionResultCreateinputsInput
   construction: ConstructionCreateOneWithoutConstructionResultsInput
   constructionID: ID
   lesson: LessonCreateOneWithoutConstructionResultsInput
   lessonID: ID
+}
+
+input ConstructionResultCreateinputsInput {
+  set: [String!]
 }
 
 input ConstructionResultCreateManyWithoutConstructionInput {
@@ -1535,6 +1738,7 @@ input ConstructionResultCreateWithoutConstructionInput {
   student: UserCreateOneWithoutConstructionResultsInput!
   answer: String
   attempts: Int
+  inputs: ConstructionResultCreateinputsInput
   constructionID: ID
   lesson: LessonCreateOneWithoutConstructionResultsInput
   lessonID: ID
@@ -1544,6 +1748,7 @@ input ConstructionResultCreateWithoutLessonInput {
   student: UserCreateOneWithoutConstructionResultsInput!
   answer: String
   attempts: Int
+  inputs: ConstructionResultCreateinputsInput
   construction: ConstructionCreateOneWithoutConstructionResultsInput
   constructionID: ID
   lessonID: ID
@@ -1552,6 +1757,7 @@ input ConstructionResultCreateWithoutLessonInput {
 input ConstructionResultCreateWithoutStudentInput {
   answer: String
   attempts: Int
+  inputs: ConstructionResultCreateinputsInput
   construction: ConstructionCreateOneWithoutConstructionResultsInput
   constructionID: ID
   lesson: LessonCreateOneWithoutConstructionResultsInput
@@ -1580,6 +1786,7 @@ type ConstructionResultPreviousValues {
   id: ID!
   answer: String
   attempts: Int
+  inputs: [String!]!
   constructionID: ID
   lessonID: ID
 }
@@ -1676,15 +1883,21 @@ input ConstructionResultUpdateInput {
   student: UserUpdateOneRequiredWithoutConstructionResultsInput
   answer: String
   attempts: Int
+  inputs: ConstructionResultUpdateinputsInput
   construction: ConstructionUpdateOneWithoutConstructionResultsInput
   constructionID: ID
   lesson: LessonUpdateOneWithoutConstructionResultsInput
   lessonID: ID
 }
 
+input ConstructionResultUpdateinputsInput {
+  set: [String!]
+}
+
 input ConstructionResultUpdateManyDataInput {
   answer: String
   attempts: Int
+  inputs: ConstructionResultUpdateinputsInput
   constructionID: ID
   lessonID: ID
 }
@@ -1692,6 +1905,7 @@ input ConstructionResultUpdateManyDataInput {
 input ConstructionResultUpdateManyMutationInput {
   answer: String
   attempts: Int
+  inputs: ConstructionResultUpdateinputsInput
   constructionID: ID
   lessonID: ID
 }
@@ -1741,6 +1955,7 @@ input ConstructionResultUpdateWithoutConstructionDataInput {
   student: UserUpdateOneRequiredWithoutConstructionResultsInput
   answer: String
   attempts: Int
+  inputs: ConstructionResultUpdateinputsInput
   constructionID: ID
   lesson: LessonUpdateOneWithoutConstructionResultsInput
   lessonID: ID
@@ -1750,6 +1965,7 @@ input ConstructionResultUpdateWithoutLessonDataInput {
   student: UserUpdateOneRequiredWithoutConstructionResultsInput
   answer: String
   attempts: Int
+  inputs: ConstructionResultUpdateinputsInput
   construction: ConstructionUpdateOneWithoutConstructionResultsInput
   constructionID: ID
   lessonID: ID
@@ -1758,6 +1974,7 @@ input ConstructionResultUpdateWithoutLessonDataInput {
 input ConstructionResultUpdateWithoutStudentDataInput {
   answer: String
   attempts: Int
+  inputs: ConstructionResultUpdateinputsInput
   construction: ConstructionUpdateOneWithoutConstructionResultsInput
   constructionID: ID
   lesson: LessonUpdateOneWithoutConstructionResultsInput
@@ -2246,6 +2463,9 @@ type CoursePage {
   price: Int
   discountPrice: Int
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
+  company: Company
+  promocode: [Json!]!
+  visits(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseVisit!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2280,6 +2500,9 @@ input CoursePageCreateInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateManyInput {
@@ -2294,6 +2517,11 @@ input CoursePageCreateManyWithoutArticlesInput {
 
 input CoursePageCreateManyWithoutCareerTrackInput {
   create: [CoursePageCreateWithoutCareerTrackInput!]
+  connect: [CoursePageWhereUniqueInput!]
+}
+
+input CoursePageCreateManyWithoutCompanyInput {
+  create: [CoursePageCreateWithoutCompanyInput!]
   connect: [CoursePageWhereUniqueInput!]
 }
 
@@ -2342,6 +2570,15 @@ input CoursePageCreateOneWithoutPointsAInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageCreateOneWithoutVisitsInput {
+  create: CoursePageCreateWithoutVisitsInput
+  connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageCreatepromocodeInput {
+  set: [Json!]
+}
+
 input CoursePageCreatestudentsInput {
   set: [ID!]
 }
@@ -2373,6 +2610,9 @@ input CoursePageCreateWithoutApplicationsInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutArticlesInput {
@@ -2398,6 +2638,9 @@ input CoursePageCreateWithoutArticlesInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutCareerTrackInput {
@@ -2423,6 +2666,37 @@ input CoursePageCreateWithoutCareerTrackInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutCompanyInput {
+  title: String!
+  description: String!
+  image: String!
+  news: String
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniCreateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  new_students: UserCreateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutExamQuestionInput {
@@ -2448,6 +2722,9 @@ input CoursePageCreateWithoutExamQuestionInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutLessonsInput {
@@ -2473,6 +2750,9 @@ input CoursePageCreateWithoutLessonsInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutNew_studentsInput {
@@ -2498,6 +2778,9 @@ input CoursePageCreateWithoutNew_studentsInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutOrdersInput {
@@ -2523,6 +2806,9 @@ input CoursePageCreateWithoutOrdersInput {
   new_students: UserCreateManyWithoutNew_subjectsInput
   price: Int
   discountPrice: Int
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutPointATestsInput {
@@ -2548,6 +2834,9 @@ input CoursePageCreateWithoutPointATestsInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutPointsAInput {
@@ -2573,6 +2862,9 @@ input CoursePageCreateWithoutPointsAInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutUniInput {
@@ -2598,6 +2890,9 @@ input CoursePageCreateWithoutUniInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
 }
 
 input CoursePageCreateWithoutUserInput {
@@ -2623,6 +2918,37 @@ input CoursePageCreateWithoutUserInput {
   price: Int
   discountPrice: Int
   orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
+}
+
+input CoursePageCreateWithoutVisitsInput {
+  title: String!
+  description: String!
+  image: String!
+  news: String
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniCreateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleCreateManyWithoutCoursePagesInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  new_students: UserCreateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
 }
 
 type CoursePageEdge {
@@ -2673,6 +2999,7 @@ type CoursePagePreviousValues {
   students: [ID!]!
   price: Int
   discountPrice: Int
+  promocode: [Json!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2855,6 +3182,9 @@ input CoursePageUpdateDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateInput {
@@ -2881,6 +3211,9 @@ input CoursePageUpdateInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateManyDataInput {
@@ -2896,6 +3229,7 @@ input CoursePageUpdateManyDataInput {
   students: CoursePageUpdatestudentsInput
   price: Int
   discountPrice: Int
+  promocode: CoursePageUpdatepromocodeInput
 }
 
 input CoursePageUpdateManyInput {
@@ -2923,6 +3257,7 @@ input CoursePageUpdateManyMutationInput {
   students: CoursePageUpdatestudentsInput
   price: Int
   discountPrice: Int
+  promocode: CoursePageUpdatepromocodeInput
 }
 
 input CoursePageUpdateManyWithoutArticlesInput {
@@ -2945,6 +3280,18 @@ input CoursePageUpdateManyWithoutCareerTrackInput {
   disconnect: [CoursePageWhereUniqueInput!]
   update: [CoursePageUpdateWithWhereUniqueWithoutCareerTrackInput!]
   upsert: [CoursePageUpsertWithWhereUniqueWithoutCareerTrackInput!]
+  deleteMany: [CoursePageScalarWhereInput!]
+  updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
+}
+
+input CoursePageUpdateManyWithoutCompanyInput {
+  create: [CoursePageCreateWithoutCompanyInput!]
+  delete: [CoursePageWhereUniqueInput!]
+  connect: [CoursePageWhereUniqueInput!]
+  set: [CoursePageWhereUniqueInput!]
+  disconnect: [CoursePageWhereUniqueInput!]
+  update: [CoursePageUpdateWithWhereUniqueWithoutCompanyInput!]
+  upsert: [CoursePageUpsertWithWhereUniqueWithoutCompanyInput!]
   deleteMany: [CoursePageScalarWhereInput!]
   updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
 }
@@ -3025,6 +3372,13 @@ input CoursePageUpdateOneRequiredWithoutPointsAInput {
   connect: CoursePageWhereUniqueInput
 }
 
+input CoursePageUpdateOneRequiredWithoutVisitsInput {
+  create: CoursePageCreateWithoutVisitsInput
+  update: CoursePageUpdateWithoutVisitsDataInput
+  upsert: CoursePageUpsertWithoutVisitsInput
+  connect: CoursePageWhereUniqueInput
+}
+
 input CoursePageUpdateOneWithoutPointATestsInput {
   create: CoursePageCreateWithoutPointATestsInput
   update: CoursePageUpdateWithoutPointATestsDataInput
@@ -3032,6 +3386,10 @@ input CoursePageUpdateOneWithoutPointATestsInput {
   delete: Boolean
   disconnect: Boolean
   connect: CoursePageWhereUniqueInput
+}
+
+input CoursePageUpdatepromocodeInput {
+  set: [Json!]
 }
 
 input CoursePageUpdatestudentsInput {
@@ -3065,6 +3423,9 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutArticlesDataInput {
@@ -3090,6 +3451,9 @@ input CoursePageUpdateWithoutArticlesDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutCareerTrackDataInput {
@@ -3115,6 +3479,37 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutCompanyDataInput {
+  title: String
+  description: String
+  image: String
+  news: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniUpdateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  new_students: UserUpdateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutExamQuestionDataInput {
@@ -3140,6 +3535,9 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutLessonsDataInput {
@@ -3165,6 +3563,9 @@ input CoursePageUpdateWithoutLessonsDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutNew_studentsDataInput {
@@ -3190,6 +3591,9 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutOrdersDataInput {
@@ -3215,6 +3619,9 @@ input CoursePageUpdateWithoutOrdersDataInput {
   new_students: UserUpdateManyWithoutNew_subjectsInput
   price: Int
   discountPrice: Int
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutPointATestsDataInput {
@@ -3240,6 +3647,9 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutPointsADataInput {
@@ -3265,6 +3675,9 @@ input CoursePageUpdateWithoutPointsADataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutUniDataInput {
@@ -3290,6 +3703,9 @@ input CoursePageUpdateWithoutUniDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
 }
 
 input CoursePageUpdateWithoutUserDataInput {
@@ -3315,6 +3731,37 @@ input CoursePageUpdateWithoutUserDataInput {
   price: Int
   discountPrice: Int
   orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
+}
+
+input CoursePageUpdateWithoutVisitsDataInput {
+  title: String
+  description: String
+  image: String
+  news: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniUpdateOneWithoutUniCoursePagesInput
+  uniID: ID
+  articles: ArticleUpdateManyWithoutCoursePagesInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  new_students: UserUpdateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
 }
 
 input CoursePageUpdateWithWhereUniqueNestedInput {
@@ -3330,6 +3777,11 @@ input CoursePageUpdateWithWhereUniqueWithoutArticlesInput {
 input CoursePageUpdateWithWhereUniqueWithoutCareerTrackInput {
   where: CoursePageWhereUniqueInput!
   data: CoursePageUpdateWithoutCareerTrackDataInput!
+}
+
+input CoursePageUpdateWithWhereUniqueWithoutCompanyInput {
+  where: CoursePageWhereUniqueInput!
+  data: CoursePageUpdateWithoutCompanyDataInput!
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutNew_studentsInput {
@@ -3377,6 +3829,11 @@ input CoursePageUpsertWithoutPointsAInput {
   create: CoursePageCreateWithoutPointsAInput!
 }
 
+input CoursePageUpsertWithoutVisitsInput {
+  update: CoursePageUpdateWithoutVisitsDataInput!
+  create: CoursePageCreateWithoutVisitsInput!
+}
+
 input CoursePageUpsertWithWhereUniqueNestedInput {
   where: CoursePageWhereUniqueInput!
   update: CoursePageUpdateDataInput!
@@ -3393,6 +3850,12 @@ input CoursePageUpsertWithWhereUniqueWithoutCareerTrackInput {
   where: CoursePageWhereUniqueInput!
   update: CoursePageUpdateWithoutCareerTrackDataInput!
   create: CoursePageCreateWithoutCareerTrackInput!
+}
+
+input CoursePageUpsertWithWhereUniqueWithoutCompanyInput {
+  where: CoursePageWhereUniqueInput!
+  update: CoursePageUpdateWithoutCompanyDataInput!
+  create: CoursePageCreateWithoutCompanyInput!
 }
 
 input CoursePageUpsertWithWhereUniqueWithoutNew_studentsInput {
@@ -3555,6 +4018,10 @@ input CoursePageWhereInput {
   orders_every: OrderWhereInput
   orders_some: OrderWhereInput
   orders_none: OrderWhereInput
+  company: CompanyWhereInput
+  visits_every: CourseVisitWhereInput
+  visits_some: CourseVisitWhereInput
+  visits_none: CourseVisitWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -3586,6 +4053,257 @@ enum CourseType {
   FORMONEY
   UNI
   CHALLENGE
+}
+
+type CourseVisit {
+  id: ID!
+  student: User!
+  visitsNumber: Int
+  coursePage: CoursePage!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CourseVisitConnection {
+  pageInfo: PageInfo!
+  edges: [CourseVisitEdge]!
+  aggregate: AggregateCourseVisit!
+}
+
+input CourseVisitCreateInput {
+  student: UserCreateOneWithoutCourseVisitsInput!
+  visitsNumber: Int
+  coursePage: CoursePageCreateOneWithoutVisitsInput!
+}
+
+input CourseVisitCreateManyWithoutCoursePageInput {
+  create: [CourseVisitCreateWithoutCoursePageInput!]
+  connect: [CourseVisitWhereUniqueInput!]
+}
+
+input CourseVisitCreateManyWithoutStudentInput {
+  create: [CourseVisitCreateWithoutStudentInput!]
+  connect: [CourseVisitWhereUniqueInput!]
+}
+
+input CourseVisitCreateWithoutCoursePageInput {
+  student: UserCreateOneWithoutCourseVisitsInput!
+  visitsNumber: Int
+}
+
+input CourseVisitCreateWithoutStudentInput {
+  visitsNumber: Int
+  coursePage: CoursePageCreateOneWithoutVisitsInput!
+}
+
+type CourseVisitEdge {
+  node: CourseVisit!
+  cursor: String!
+}
+
+enum CourseVisitOrderByInput {
+  id_ASC
+  id_DESC
+  visitsNumber_ASC
+  visitsNumber_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CourseVisitPreviousValues {
+  id: ID!
+  visitsNumber: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CourseVisitScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  visitsNumber: Int
+  visitsNumber_not: Int
+  visitsNumber_in: [Int!]
+  visitsNumber_not_in: [Int!]
+  visitsNumber_lt: Int
+  visitsNumber_lte: Int
+  visitsNumber_gt: Int
+  visitsNumber_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CourseVisitScalarWhereInput!]
+  OR: [CourseVisitScalarWhereInput!]
+  NOT: [CourseVisitScalarWhereInput!]
+}
+
+type CourseVisitSubscriptionPayload {
+  mutation: MutationType!
+  node: CourseVisit
+  updatedFields: [String!]
+  previousValues: CourseVisitPreviousValues
+}
+
+input CourseVisitSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CourseVisitWhereInput
+  AND: [CourseVisitSubscriptionWhereInput!]
+  OR: [CourseVisitSubscriptionWhereInput!]
+  NOT: [CourseVisitSubscriptionWhereInput!]
+}
+
+input CourseVisitUpdateInput {
+  student: UserUpdateOneRequiredWithoutCourseVisitsInput
+  visitsNumber: Int
+  coursePage: CoursePageUpdateOneRequiredWithoutVisitsInput
+}
+
+input CourseVisitUpdateManyDataInput {
+  visitsNumber: Int
+}
+
+input CourseVisitUpdateManyMutationInput {
+  visitsNumber: Int
+}
+
+input CourseVisitUpdateManyWithoutCoursePageInput {
+  create: [CourseVisitCreateWithoutCoursePageInput!]
+  delete: [CourseVisitWhereUniqueInput!]
+  connect: [CourseVisitWhereUniqueInput!]
+  set: [CourseVisitWhereUniqueInput!]
+  disconnect: [CourseVisitWhereUniqueInput!]
+  update: [CourseVisitUpdateWithWhereUniqueWithoutCoursePageInput!]
+  upsert: [CourseVisitUpsertWithWhereUniqueWithoutCoursePageInput!]
+  deleteMany: [CourseVisitScalarWhereInput!]
+  updateMany: [CourseVisitUpdateManyWithWhereNestedInput!]
+}
+
+input CourseVisitUpdateManyWithoutStudentInput {
+  create: [CourseVisitCreateWithoutStudentInput!]
+  delete: [CourseVisitWhereUniqueInput!]
+  connect: [CourseVisitWhereUniqueInput!]
+  set: [CourseVisitWhereUniqueInput!]
+  disconnect: [CourseVisitWhereUniqueInput!]
+  update: [CourseVisitUpdateWithWhereUniqueWithoutStudentInput!]
+  upsert: [CourseVisitUpsertWithWhereUniqueWithoutStudentInput!]
+  deleteMany: [CourseVisitScalarWhereInput!]
+  updateMany: [CourseVisitUpdateManyWithWhereNestedInput!]
+}
+
+input CourseVisitUpdateManyWithWhereNestedInput {
+  where: CourseVisitScalarWhereInput!
+  data: CourseVisitUpdateManyDataInput!
+}
+
+input CourseVisitUpdateWithoutCoursePageDataInput {
+  student: UserUpdateOneRequiredWithoutCourseVisitsInput
+  visitsNumber: Int
+}
+
+input CourseVisitUpdateWithoutStudentDataInput {
+  visitsNumber: Int
+  coursePage: CoursePageUpdateOneRequiredWithoutVisitsInput
+}
+
+input CourseVisitUpdateWithWhereUniqueWithoutCoursePageInput {
+  where: CourseVisitWhereUniqueInput!
+  data: CourseVisitUpdateWithoutCoursePageDataInput!
+}
+
+input CourseVisitUpdateWithWhereUniqueWithoutStudentInput {
+  where: CourseVisitWhereUniqueInput!
+  data: CourseVisitUpdateWithoutStudentDataInput!
+}
+
+input CourseVisitUpsertWithWhereUniqueWithoutCoursePageInput {
+  where: CourseVisitWhereUniqueInput!
+  update: CourseVisitUpdateWithoutCoursePageDataInput!
+  create: CourseVisitCreateWithoutCoursePageInput!
+}
+
+input CourseVisitUpsertWithWhereUniqueWithoutStudentInput {
+  where: CourseVisitWhereUniqueInput!
+  update: CourseVisitUpdateWithoutStudentDataInput!
+  create: CourseVisitCreateWithoutStudentInput!
+}
+
+input CourseVisitWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  student: UserWhereInput
+  visitsNumber: Int
+  visitsNumber_not: Int
+  visitsNumber_in: [Int!]
+  visitsNumber_not_in: [Int!]
+  visitsNumber_lt: Int
+  visitsNumber_lte: Int
+  visitsNumber_gt: Int
+  visitsNumber_gte: Int
+  coursePage: CoursePageWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CourseVisitWhereInput!]
+  OR: [CourseVisitWhereInput!]
+  NOT: [CourseVisitWhereInput!]
+}
+
+input CourseVisitWhereUniqueInput {
+  id: ID
 }
 
 scalar DateTime
@@ -4075,6 +4793,317 @@ input ExamQuestionWhereUniqueInput {
   id: ID
 }
 
+type Feedback {
+  id: ID!
+  text: String!
+  lesson: Lesson
+  teacher: User!
+  student: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type FeedbackConnection {
+  pageInfo: PageInfo!
+  edges: [FeedbackEdge]!
+  aggregate: AggregateFeedback!
+}
+
+input FeedbackCreateInput {
+  text: String!
+  lesson: LessonCreateOneWithoutLessonFeedbackInput
+  teacher: UserCreateOneWithoutTeacherFeedbackInput!
+  student: UserCreateOneWithoutStudentFeedbackInput!
+}
+
+input FeedbackCreateManyWithoutLessonInput {
+  create: [FeedbackCreateWithoutLessonInput!]
+  connect: [FeedbackWhereUniqueInput!]
+}
+
+input FeedbackCreateManyWithoutStudentInput {
+  create: [FeedbackCreateWithoutStudentInput!]
+  connect: [FeedbackWhereUniqueInput!]
+}
+
+input FeedbackCreateManyWithoutTeacherInput {
+  create: [FeedbackCreateWithoutTeacherInput!]
+  connect: [FeedbackWhereUniqueInput!]
+}
+
+input FeedbackCreateWithoutLessonInput {
+  text: String!
+  teacher: UserCreateOneWithoutTeacherFeedbackInput!
+  student: UserCreateOneWithoutStudentFeedbackInput!
+}
+
+input FeedbackCreateWithoutStudentInput {
+  text: String!
+  lesson: LessonCreateOneWithoutLessonFeedbackInput
+  teacher: UserCreateOneWithoutTeacherFeedbackInput!
+}
+
+input FeedbackCreateWithoutTeacherInput {
+  text: String!
+  lesson: LessonCreateOneWithoutLessonFeedbackInput
+  student: UserCreateOneWithoutStudentFeedbackInput!
+}
+
+type FeedbackEdge {
+  node: Feedback!
+  cursor: String!
+}
+
+enum FeedbackOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type FeedbackPreviousValues {
+  id: ID!
+  text: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input FeedbackScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [FeedbackScalarWhereInput!]
+  OR: [FeedbackScalarWhereInput!]
+  NOT: [FeedbackScalarWhereInput!]
+}
+
+type FeedbackSubscriptionPayload {
+  mutation: MutationType!
+  node: Feedback
+  updatedFields: [String!]
+  previousValues: FeedbackPreviousValues
+}
+
+input FeedbackSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FeedbackWhereInput
+  AND: [FeedbackSubscriptionWhereInput!]
+  OR: [FeedbackSubscriptionWhereInput!]
+  NOT: [FeedbackSubscriptionWhereInput!]
+}
+
+input FeedbackUpdateInput {
+  text: String
+  lesson: LessonUpdateOneWithoutLessonFeedbackInput
+  teacher: UserUpdateOneRequiredWithoutTeacherFeedbackInput
+  student: UserUpdateOneRequiredWithoutStudentFeedbackInput
+}
+
+input FeedbackUpdateManyDataInput {
+  text: String
+}
+
+input FeedbackUpdateManyMutationInput {
+  text: String
+}
+
+input FeedbackUpdateManyWithoutLessonInput {
+  create: [FeedbackCreateWithoutLessonInput!]
+  delete: [FeedbackWhereUniqueInput!]
+  connect: [FeedbackWhereUniqueInput!]
+  set: [FeedbackWhereUniqueInput!]
+  disconnect: [FeedbackWhereUniqueInput!]
+  update: [FeedbackUpdateWithWhereUniqueWithoutLessonInput!]
+  upsert: [FeedbackUpsertWithWhereUniqueWithoutLessonInput!]
+  deleteMany: [FeedbackScalarWhereInput!]
+  updateMany: [FeedbackUpdateManyWithWhereNestedInput!]
+}
+
+input FeedbackUpdateManyWithoutStudentInput {
+  create: [FeedbackCreateWithoutStudentInput!]
+  delete: [FeedbackWhereUniqueInput!]
+  connect: [FeedbackWhereUniqueInput!]
+  set: [FeedbackWhereUniqueInput!]
+  disconnect: [FeedbackWhereUniqueInput!]
+  update: [FeedbackUpdateWithWhereUniqueWithoutStudentInput!]
+  upsert: [FeedbackUpsertWithWhereUniqueWithoutStudentInput!]
+  deleteMany: [FeedbackScalarWhereInput!]
+  updateMany: [FeedbackUpdateManyWithWhereNestedInput!]
+}
+
+input FeedbackUpdateManyWithoutTeacherInput {
+  create: [FeedbackCreateWithoutTeacherInput!]
+  delete: [FeedbackWhereUniqueInput!]
+  connect: [FeedbackWhereUniqueInput!]
+  set: [FeedbackWhereUniqueInput!]
+  disconnect: [FeedbackWhereUniqueInput!]
+  update: [FeedbackUpdateWithWhereUniqueWithoutTeacherInput!]
+  upsert: [FeedbackUpsertWithWhereUniqueWithoutTeacherInput!]
+  deleteMany: [FeedbackScalarWhereInput!]
+  updateMany: [FeedbackUpdateManyWithWhereNestedInput!]
+}
+
+input FeedbackUpdateManyWithWhereNestedInput {
+  where: FeedbackScalarWhereInput!
+  data: FeedbackUpdateManyDataInput!
+}
+
+input FeedbackUpdateWithoutLessonDataInput {
+  text: String
+  teacher: UserUpdateOneRequiredWithoutTeacherFeedbackInput
+  student: UserUpdateOneRequiredWithoutStudentFeedbackInput
+}
+
+input FeedbackUpdateWithoutStudentDataInput {
+  text: String
+  lesson: LessonUpdateOneWithoutLessonFeedbackInput
+  teacher: UserUpdateOneRequiredWithoutTeacherFeedbackInput
+}
+
+input FeedbackUpdateWithoutTeacherDataInput {
+  text: String
+  lesson: LessonUpdateOneWithoutLessonFeedbackInput
+  student: UserUpdateOneRequiredWithoutStudentFeedbackInput
+}
+
+input FeedbackUpdateWithWhereUniqueWithoutLessonInput {
+  where: FeedbackWhereUniqueInput!
+  data: FeedbackUpdateWithoutLessonDataInput!
+}
+
+input FeedbackUpdateWithWhereUniqueWithoutStudentInput {
+  where: FeedbackWhereUniqueInput!
+  data: FeedbackUpdateWithoutStudentDataInput!
+}
+
+input FeedbackUpdateWithWhereUniqueWithoutTeacherInput {
+  where: FeedbackWhereUniqueInput!
+  data: FeedbackUpdateWithoutTeacherDataInput!
+}
+
+input FeedbackUpsertWithWhereUniqueWithoutLessonInput {
+  where: FeedbackWhereUniqueInput!
+  update: FeedbackUpdateWithoutLessonDataInput!
+  create: FeedbackCreateWithoutLessonInput!
+}
+
+input FeedbackUpsertWithWhereUniqueWithoutStudentInput {
+  where: FeedbackWhereUniqueInput!
+  update: FeedbackUpdateWithoutStudentDataInput!
+  create: FeedbackCreateWithoutStudentInput!
+}
+
+input FeedbackUpsertWithWhereUniqueWithoutTeacherInput {
+  where: FeedbackWhereUniqueInput!
+  update: FeedbackUpdateWithoutTeacherDataInput!
+  create: FeedbackCreateWithoutTeacherInput!
+}
+
+input FeedbackWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  lesson: LessonWhereInput
+  teacher: UserWhereInput
+  student: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [FeedbackWhereInput!]
+  OR: [FeedbackWhereInput!]
+  NOT: [FeedbackWhereInput!]
+}
+
+input FeedbackWhereUniqueInput {
+  id: ID
+}
+
 scalar Json
 
 type LegalPortfolio {
@@ -4285,6 +5314,7 @@ type Lesson {
   textEditorResults(where: TextEditorResultWhereInput, orderBy: TextEditorResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditorResult!]
   problemResults(where: ProblemResultWhereInput, orderBy: ProblemResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProblemResult!]
   constructionResults(where: ConstructionResultWhereInput, orderBy: ConstructionResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ConstructionResult!]
+  lessonFeedback(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback!]
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4321,6 +5351,7 @@ input LessonCreateInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4347,6 +5378,11 @@ input LessonCreateOneWithoutConstructionResultsInput {
 
 input LessonCreateOneWithoutConstructionsInput {
   create: LessonCreateWithoutConstructionsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonCreateOneWithoutLessonFeedbackInput {
+  create: LessonCreateWithoutLessonFeedbackInput
   connect: LessonWhereUniqueInput
 }
 
@@ -4437,6 +5473,7 @@ input LessonCreateWithoutConstructionResultsInput {
   quizResults: QuizResultCreateManyWithoutLessonInput
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4464,6 +5501,7 @@ input LessonCreateWithoutConstructionsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4479,6 +5517,35 @@ input LessonCreateWithoutCoursePageInput {
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  lessonResults: LessonResultCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+}
+
+input LessonCreateWithoutLessonFeedbackInput {
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
   tests: TestCreateManyWithoutLessonInput
   newTests: NewTestCreateManyWithoutLessonInput
   quizes: QuizCreateManyWithoutLessonInput
@@ -4518,6 +5585,7 @@ input LessonCreateWithoutLessonResultsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4545,6 +5613,7 @@ input LessonCreateWithoutNewTestsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4572,6 +5641,7 @@ input LessonCreateWithoutNotesInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4599,6 +5669,7 @@ input LessonCreateWithoutProblemResultsInput {
   quizResults: QuizResultCreateManyWithoutLessonInput
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4626,6 +5697,7 @@ input LessonCreateWithoutProblemsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4653,6 +5725,7 @@ input LessonCreateWithoutQuizesInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4680,6 +5753,7 @@ input LessonCreateWithoutQuizResultsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4707,6 +5781,7 @@ input LessonCreateWithoutShotResultsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4734,6 +5809,7 @@ input LessonCreateWithoutShotsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4761,6 +5837,7 @@ input LessonCreateWithoutTestResultsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4788,6 +5865,7 @@ input LessonCreateWithoutTestsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4815,6 +5893,7 @@ input LessonCreateWithoutTextEditorResultsInput {
   quizResults: QuizResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4842,6 +5921,7 @@ input LessonCreateWithoutTexteditorsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -4869,6 +5949,7 @@ input LessonCreateWithoutUserInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -5342,6 +6423,7 @@ input LessonUpdateInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5434,6 +6516,15 @@ input LessonUpdateOneWithoutConstructionResultsInput {
   create: LessonCreateWithoutConstructionResultsInput
   update: LessonUpdateWithoutConstructionResultsDataInput
   upsert: LessonUpsertWithoutConstructionResultsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LessonWhereUniqueInput
+}
+
+input LessonUpdateOneWithoutLessonFeedbackInput {
+  create: LessonCreateWithoutLessonFeedbackInput
+  update: LessonUpdateWithoutLessonFeedbackDataInput
+  upsert: LessonUpsertWithoutLessonFeedbackInput
   delete: Boolean
   disconnect: Boolean
   connect: LessonWhereUniqueInput
@@ -5551,6 +6642,7 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   quizResults: QuizResultUpdateManyWithoutLessonInput
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5578,6 +6670,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5593,6 +6686,35 @@ input LessonUpdateWithoutCoursePageDataInput {
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  lessonResults: LessonResultUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+}
+
+input LessonUpdateWithoutLessonFeedbackDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
   tests: TestUpdateManyWithoutLessonInput
   newTests: NewTestUpdateManyWithoutLessonInput
   quizes: QuizUpdateManyWithoutLessonInput
@@ -5632,6 +6754,7 @@ input LessonUpdateWithoutLessonResultsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5659,6 +6782,7 @@ input LessonUpdateWithoutNewTestsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5686,6 +6810,7 @@ input LessonUpdateWithoutNotesDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5713,6 +6838,7 @@ input LessonUpdateWithoutProblemResultsDataInput {
   quizResults: QuizResultUpdateManyWithoutLessonInput
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5740,6 +6866,7 @@ input LessonUpdateWithoutProblemsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5767,6 +6894,7 @@ input LessonUpdateWithoutQuizesDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5794,6 +6922,7 @@ input LessonUpdateWithoutQuizResultsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5821,6 +6950,7 @@ input LessonUpdateWithoutShotResultsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5848,6 +6978,7 @@ input LessonUpdateWithoutShotsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5875,6 +7006,7 @@ input LessonUpdateWithoutTestResultsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5902,6 +7034,7 @@ input LessonUpdateWithoutTestsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5929,6 +7062,7 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   quizResults: QuizResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5956,6 +7090,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -5983,6 +7118,7 @@ input LessonUpdateWithoutUserDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -6006,6 +7142,11 @@ input LessonUpsertWithoutConstructionResultsInput {
 input LessonUpsertWithoutConstructionsInput {
   update: LessonUpdateWithoutConstructionsDataInput!
   create: LessonCreateWithoutConstructionsInput!
+}
+
+input LessonUpsertWithoutLessonFeedbackInput {
+  update: LessonUpdateWithoutLessonFeedbackDataInput!
+  create: LessonCreateWithoutLessonFeedbackInput!
 }
 
 input LessonUpsertWithoutLessonResultsInput {
@@ -6187,6 +7328,9 @@ input LessonWhereInput {
   constructionResults_every: ConstructionResultWhereInput
   constructionResults_some: ConstructionResultWhereInput
   constructionResults_none: ConstructionResultWhereInput
+  lessonFeedback_every: FeedbackWhereInput
+  lessonFeedback_some: FeedbackWhereInput
+  lessonFeedback_none: FeedbackWhereInput
   open: Boolean
   open_not: Boolean
   coursePageID: ID
@@ -6257,6 +7401,12 @@ type Mutation {
   upsertCareerTrackUnit(where: CareerTrackUnitWhereUniqueInput!, create: CareerTrackUnitCreateInput!, update: CareerTrackUnitUpdateInput!): CareerTrackUnit!
   deleteCareerTrackUnit(where: CareerTrackUnitWhereUniqueInput!): CareerTrackUnit
   deleteManyCareerTrackUnits(where: CareerTrackUnitWhereInput): BatchPayload!
+  createCompany(data: CompanyCreateInput!): Company!
+  updateCompany(data: CompanyUpdateInput!, where: CompanyWhereUniqueInput!): Company
+  updateManyCompanies(data: CompanyUpdateManyMutationInput!, where: CompanyWhereInput): BatchPayload!
+  upsertCompany(where: CompanyWhereUniqueInput!, create: CompanyCreateInput!, update: CompanyUpdateInput!): Company!
+  deleteCompany(where: CompanyWhereUniqueInput!): Company
+  deleteManyCompanies(where: CompanyWhereInput): BatchPayload!
   createConstruction(data: ConstructionCreateInput!): Construction!
   updateConstruction(data: ConstructionUpdateInput!, where: ConstructionWhereUniqueInput!): Construction
   updateManyConstructions(data: ConstructionUpdateManyMutationInput!, where: ConstructionWhereInput): BatchPayload!
@@ -6275,6 +7425,12 @@ type Mutation {
   upsertCoursePage(where: CoursePageWhereUniqueInput!, create: CoursePageCreateInput!, update: CoursePageUpdateInput!): CoursePage!
   deleteCoursePage(where: CoursePageWhereUniqueInput!): CoursePage
   deleteManyCoursePages(where: CoursePageWhereInput): BatchPayload!
+  createCourseVisit(data: CourseVisitCreateInput!): CourseVisit!
+  updateCourseVisit(data: CourseVisitUpdateInput!, where: CourseVisitWhereUniqueInput!): CourseVisit
+  updateManyCourseVisits(data: CourseVisitUpdateManyMutationInput!, where: CourseVisitWhereInput): BatchPayload!
+  upsertCourseVisit(where: CourseVisitWhereUniqueInput!, create: CourseVisitCreateInput!, update: CourseVisitUpdateInput!): CourseVisit!
+  deleteCourseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
+  deleteManyCourseVisits(where: CourseVisitWhereInput): BatchPayload!
   createExamAnswer(data: ExamAnswerCreateInput!): ExamAnswer!
   updateExamAnswer(data: ExamAnswerUpdateInput!, where: ExamAnswerWhereUniqueInput!): ExamAnswer
   updateManyExamAnswers(data: ExamAnswerUpdateManyMutationInput!, where: ExamAnswerWhereInput): BatchPayload!
@@ -6287,6 +7443,12 @@ type Mutation {
   upsertExamQuestion(where: ExamQuestionWhereUniqueInput!, create: ExamQuestionCreateInput!, update: ExamQuestionUpdateInput!): ExamQuestion!
   deleteExamQuestion(where: ExamQuestionWhereUniqueInput!): ExamQuestion
   deleteManyExamQuestions(where: ExamQuestionWhereInput): BatchPayload!
+  createFeedback(data: FeedbackCreateInput!): Feedback!
+  updateFeedback(data: FeedbackUpdateInput!, where: FeedbackWhereUniqueInput!): Feedback
+  updateManyFeedbacks(data: FeedbackUpdateManyMutationInput!, where: FeedbackWhereInput): BatchPayload!
+  upsertFeedback(where: FeedbackWhereUniqueInput!, create: FeedbackCreateInput!, update: FeedbackUpdateInput!): Feedback!
+  deleteFeedback(where: FeedbackWhereUniqueInput!): Feedback
+  deleteManyFeedbacks(where: FeedbackWhereInput): BatchPayload!
   createLegalPortfolio(data: LegalPortfolioCreateInput!): LegalPortfolio!
   updateLegalPortfolio(data: LegalPortfolioUpdateInput!, where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
   updateManyLegalPortfolios(data: LegalPortfolioUpdateManyMutationInput!, where: LegalPortfolioWhereInput): BatchPayload!
@@ -9308,6 +10470,9 @@ type Query {
   careerTrackUnit(where: CareerTrackUnitWhereUniqueInput!): CareerTrackUnit
   careerTrackUnits(where: CareerTrackUnitWhereInput, orderBy: CareerTrackUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CareerTrackUnit]!
   careerTrackUnitsConnection(where: CareerTrackUnitWhereInput, orderBy: CareerTrackUnitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CareerTrackUnitConnection!
+  company(where: CompanyWhereUniqueInput!): Company
+  companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company]!
+  companiesConnection(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyConnection!
   construction(where: ConstructionWhereUniqueInput!): Construction
   constructions(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Construction]!
   constructionsConnection(where: ConstructionWhereInput, orderBy: ConstructionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ConstructionConnection!
@@ -9317,12 +10482,18 @@ type Query {
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage]!
   coursePagesConnection(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CoursePageConnection!
+  courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
+  courseVisits(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseVisit]!
+  courseVisitsConnection(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CourseVisitConnection!
   examAnswer(where: ExamAnswerWhereUniqueInput!): ExamAnswer
   examAnswers(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer]!
   examAnswersConnection(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExamAnswerConnection!
   examQuestion(where: ExamQuestionWhereUniqueInput!): ExamQuestion
   examQuestions(where: ExamQuestionWhereInput, orderBy: ExamQuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamQuestion]!
   examQuestionsConnection(where: ExamQuestionWhereInput, orderBy: ExamQuestionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ExamQuestionConnection!
+  feedback(where: FeedbackWhereUniqueInput!): Feedback
+  feedbacks(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback]!
+  feedbacksConnection(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedbackConnection!
   legalPortfolio(where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
   legalPortfolios(where: LegalPortfolioWhereInput, orderBy: LegalPortfolioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LegalPortfolio]!
   legalPortfoliosConnection(where: LegalPortfolioWhereInput, orderBy: LegalPortfolioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LegalPortfolioConnection!
@@ -12024,11 +13195,14 @@ type Subscription {
   article(where: ArticleSubscriptionWhereInput): ArticleSubscriptionPayload
   careerTrack(where: CareerTrackSubscriptionWhereInput): CareerTrackSubscriptionPayload
   careerTrackUnit(where: CareerTrackUnitSubscriptionWhereInput): CareerTrackUnitSubscriptionPayload
+  company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   construction(where: ConstructionSubscriptionWhereInput): ConstructionSubscriptionPayload
   constructionResult(where: ConstructionResultSubscriptionWhereInput): ConstructionResultSubscriptionPayload
   coursePage(where: CoursePageSubscriptionWhereInput): CoursePageSubscriptionPayload
+  courseVisit(where: CourseVisitSubscriptionWhereInput): CourseVisitSubscriptionPayload
   examAnswer(where: ExamAnswerSubscriptionWhereInput): ExamAnswerSubscriptionPayload
   examQuestion(where: ExamQuestionSubscriptionWhereInput): ExamQuestionSubscriptionPayload
+  feedback(where: FeedbackSubscriptionWhereInput): FeedbackSubscriptionPayload
   legalPortfolio(where: LegalPortfolioSubscriptionWhereInput): LegalPortfolioSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   lessonResult(where: LessonResultSubscriptionWhereInput): LessonResultSubscriptionPayload
@@ -14067,8 +15241,11 @@ type User {
   status: Status
   legalPortfolio: LegalPortfolio
   uni: Uni
+  company: Company
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrack
   careerTrackID: ID
   favourites: [ID!]!
@@ -14100,6 +15277,9 @@ type User {
   shots(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Shot!]
   shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult!]
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
+  teacherFeedback(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback!]
+  studentFeedback(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback!]
+  courseVisits(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseVisit!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -14123,8 +15303,11 @@ input UserCreateInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14156,6 +15339,14 @@ input UserCreateInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+}
+
+input UserCreateManyWithoutCompanyInput {
+  create: [UserCreateWithoutCompanyInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutNew_subjectsInput {
@@ -14195,6 +15386,11 @@ input UserCreateOneWithoutConstructionResultsInput {
 
 input UserCreateOneWithoutCoursePagesInput {
   create: UserCreateWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutCourseVisitsInput {
+  create: UserCreateWithoutCourseVisitsInput
   connect: UserWhereUniqueInput
 }
 
@@ -14278,6 +15474,16 @@ input UserCreateOneWithoutShotsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutStudentFeedbackInput {
+  create: UserCreateWithoutStudentFeedbackInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutTeacherFeedbackInput {
+  create: UserCreateWithoutTeacherFeedbackInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutTestResultsInput {
   create: UserCreateWithoutTestResultsInput
   connect: UserWhereUniqueInput
@@ -14319,8 +15525,11 @@ input UserCreateWithoutArticlesInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14351,6 +15560,9 @@ input UserCreateWithoutArticlesInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutCareerTrackInput {
@@ -14362,8 +15574,11 @@ input UserCreateWithoutCareerTrackInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
   subjects: UserCreatesubjectsInput
@@ -14394,6 +15609,58 @@ input UserCreateWithoutCareerTrackInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutCompanyInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutConstructionInput {
@@ -14405,8 +15672,11 @@ input UserCreateWithoutConstructionInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14437,6 +15707,9 @@ input UserCreateWithoutConstructionInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutConstructionResultsInput {
@@ -14448,8 +15721,11 @@ input UserCreateWithoutConstructionResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14480,6 +15756,9 @@ input UserCreateWithoutConstructionResultsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutCoursePagesInput {
@@ -14491,8 +15770,11 @@ input UserCreateWithoutCoursePagesInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14523,6 +15805,58 @@ input UserCreateWithoutCoursePagesInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutCourseVisitsInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutExamAnswersInput {
@@ -14534,8 +15868,11 @@ input UserCreateWithoutExamAnswersInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14566,6 +15903,9 @@ input UserCreateWithoutExamAnswersInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutLegalPortfolioInput {
@@ -14576,8 +15916,11 @@ input UserCreateWithoutLegalPortfolioInput {
   resetTokenExpiry: Float
   status: Status
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14609,6 +15952,9 @@ input UserCreateWithoutLegalPortfolioInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutLessonResultsInput {
@@ -14620,8 +15966,11 @@ input UserCreateWithoutLessonResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14652,6 +16001,9 @@ input UserCreateWithoutLessonResultsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutLessonsInput {
@@ -14663,8 +16015,11 @@ input UserCreateWithoutLessonsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14695,6 +16050,9 @@ input UserCreateWithoutLessonsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutNew_subjectsInput {
@@ -14706,8 +16064,11 @@ input UserCreateWithoutNew_subjectsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14738,6 +16099,9 @@ input UserCreateWithoutNew_subjectsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutNewTestsInput {
@@ -14749,8 +16113,11 @@ input UserCreateWithoutNewTestsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14781,6 +16148,9 @@ input UserCreateWithoutNewTestsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutNotesInput {
@@ -14792,8 +16162,11 @@ input UserCreateWithoutNotesInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14824,6 +16197,9 @@ input UserCreateWithoutNotesInput {
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutOrdersInput {
@@ -14835,8 +16211,11 @@ input UserCreateWithoutOrdersInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14867,6 +16246,9 @@ input UserCreateWithoutOrdersInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutPointsAInput {
@@ -14878,8 +16260,11 @@ input UserCreateWithoutPointsAInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14910,6 +16295,9 @@ input UserCreateWithoutPointsAInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutProblemResultsInput {
@@ -14921,8 +16309,11 @@ input UserCreateWithoutProblemResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14953,6 +16344,9 @@ input UserCreateWithoutProblemResultsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutProblemsInput {
@@ -14964,8 +16358,11 @@ input UserCreateWithoutProblemsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -14996,6 +16393,9 @@ input UserCreateWithoutProblemsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutQuizesInput {
@@ -15007,8 +16407,11 @@ input UserCreateWithoutQuizesInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15039,6 +16442,9 @@ input UserCreateWithoutQuizesInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutQuizResultsInput {
@@ -15050,8 +16456,11 @@ input UserCreateWithoutQuizResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15082,6 +16491,9 @@ input UserCreateWithoutQuizResultsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutSandboxPageGoalsInput {
@@ -15093,8 +16505,11 @@ input UserCreateWithoutSandboxPageGoalsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15125,6 +16540,9 @@ input UserCreateWithoutSandboxPageGoalsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -15136,8 +16554,11 @@ input UserCreateWithoutSandboxPagesInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15168,6 +16589,9 @@ input UserCreateWithoutSandboxPagesInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutShotResultsInput {
@@ -15179,8 +16603,11 @@ input UserCreateWithoutShotResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15211,6 +16638,9 @@ input UserCreateWithoutShotResultsInput {
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutShotsInput {
@@ -15222,8 +16652,11 @@ input UserCreateWithoutShotsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15254,6 +16687,107 @@ input UserCreateWithoutShotsInput {
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutStudentFeedbackInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutTeacherFeedbackInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  sandboxes: UserCreatesandboxesInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTestResultsInput {
@@ -15265,8 +16799,11 @@ input UserCreateWithoutTestResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15297,6 +16834,9 @@ input UserCreateWithoutTestResultsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -15308,8 +16848,11 @@ input UserCreateWithoutTestsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15340,6 +16883,9 @@ input UserCreateWithoutTestsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTextEditorInput {
@@ -15351,8 +16897,11 @@ input UserCreateWithoutTextEditorInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15383,6 +16932,9 @@ input UserCreateWithoutTextEditorInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutTextEditorResultsInput {
@@ -15394,8 +16946,11 @@ input UserCreateWithoutTextEditorResultsInput {
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15426,6 +16981,9 @@ input UserCreateWithoutTextEditorResultsInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 input UserCreateWithoutUniInput {
@@ -15436,8 +16994,11 @@ input UserCreateWithoutUniInput {
   resetTokenExpiry: Float
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  company: CompanyCreateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackCreateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserCreatefavouritesInput
@@ -15469,6 +17030,9 @@ input UserCreateWithoutUniInput {
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
 }
 
 type UserEdge {
@@ -15495,6 +17059,10 @@ enum UserOrderByInput {
   uniID_DESC
   description_ASC
   description_DESC
+  resume_ASC
+  resume_DESC
+  coverLetter_ASC
+  coverLetter_DESC
   careerTrackID_ASC
   careerTrackID_DESC
   isFamiliar_ASC
@@ -15515,6 +17083,8 @@ type UserPreviousValues {
   status: Status
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrackID: ID
   favourites: [ID!]!
   subjects: [ID!]!
@@ -15636,6 +17206,34 @@ input UserScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  resume: String
+  resume_not: String
+  resume_in: [String!]
+  resume_not_in: [String!]
+  resume_lt: String
+  resume_lte: String
+  resume_gt: String
+  resume_gte: String
+  resume_contains: String
+  resume_not_contains: String
+  resume_starts_with: String
+  resume_not_starts_with: String
+  resume_ends_with: String
+  resume_not_ends_with: String
+  coverLetter: String
+  coverLetter_not: String
+  coverLetter_in: [String!]
+  coverLetter_not_in: [String!]
+  coverLetter_lt: String
+  coverLetter_lte: String
+  coverLetter_gt: String
+  coverLetter_gte: String
+  coverLetter_contains: String
+  coverLetter_not_contains: String
+  coverLetter_starts_with: String
+  coverLetter_not_starts_with: String
+  coverLetter_ends_with: String
+  coverLetter_not_ends_with: String
   careerTrackID: ID
   careerTrackID_not: ID
   careerTrackID_in: [ID!]
@@ -15700,8 +17298,11 @@ input UserUpdateDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -15733,6 +17334,9 @@ input UserUpdateDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdatefavouritesInput {
@@ -15748,8 +17352,11 @@ input UserUpdateInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -15781,6 +17388,9 @@ input UserUpdateInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateManyDataInput {
@@ -15792,6 +17402,8 @@ input UserUpdateManyDataInput {
   status: Status
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
@@ -15809,12 +17421,26 @@ input UserUpdateManyMutationInput {
   status: Status
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
   sandboxes: UserUpdatesandboxesInput
   permissions: UserUpdatepermissionsInput
   isFamiliar: Boolean
+}
+
+input UserUpdateManyWithoutCompanyInput {
+  create: [UserCreateWithoutCompanyInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCompanyInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCompanyInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithoutNew_subjectsInput {
@@ -15878,6 +17504,13 @@ input UserUpdateOneRequiredWithoutCoursePagesInput {
   create: UserCreateWithoutCoursePagesInput
   update: UserUpdateWithoutCoursePagesDataInput
   upsert: UserUpsertWithoutCoursePagesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutCourseVisitsInput {
+  create: UserCreateWithoutCourseVisitsInput
+  update: UserUpdateWithoutCourseVisitsDataInput
+  upsert: UserUpsertWithoutCourseVisitsInput
   connect: UserWhereUniqueInput
 }
 
@@ -15986,6 +17619,20 @@ input UserUpdateOneRequiredWithoutShotsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutStudentFeedbackInput {
+  create: UserCreateWithoutStudentFeedbackInput
+  update: UserUpdateWithoutStudentFeedbackDataInput
+  upsert: UserUpsertWithoutStudentFeedbackInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutTeacherFeedbackInput {
+  create: UserCreateWithoutTeacherFeedbackInput
+  update: UserUpdateWithoutTeacherFeedbackDataInput
+  upsert: UserUpsertWithoutTeacherFeedbackInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneRequiredWithoutTestResultsInput {
   create: UserCreateWithoutTestResultsInput
   update: UserUpdateWithoutTestResultsDataInput
@@ -16053,8 +17700,11 @@ input UserUpdateWithoutArticlesDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16085,6 +17735,9 @@ input UserUpdateWithoutArticlesDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutCareerTrackDataInput {
@@ -16096,8 +17749,11 @@ input UserUpdateWithoutCareerTrackDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
   subjects: UserUpdatesubjectsInput
@@ -16128,6 +17784,58 @@ input UserUpdateWithoutCareerTrackDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutCompanyDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutConstructionDataInput {
@@ -16139,8 +17847,11 @@ input UserUpdateWithoutConstructionDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16171,6 +17882,9 @@ input UserUpdateWithoutConstructionDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutConstructionResultsDataInput {
@@ -16182,8 +17896,11 @@ input UserUpdateWithoutConstructionResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16214,6 +17931,9 @@ input UserUpdateWithoutConstructionResultsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutCoursePagesDataInput {
@@ -16225,8 +17945,11 @@ input UserUpdateWithoutCoursePagesDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16257,6 +17980,58 @@ input UserUpdateWithoutCoursePagesDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutCourseVisitsDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutExamAnswersDataInput {
@@ -16268,8 +18043,11 @@ input UserUpdateWithoutExamAnswersDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16300,6 +18078,9 @@ input UserUpdateWithoutExamAnswersDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutLegalPortfolioDataInput {
@@ -16310,8 +18091,11 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   resetTokenExpiry: Float
   status: Status
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16343,6 +18127,9 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutLessonResultsDataInput {
@@ -16354,8 +18141,11 @@ input UserUpdateWithoutLessonResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16386,6 +18176,9 @@ input UserUpdateWithoutLessonResultsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutLessonsDataInput {
@@ -16397,8 +18190,11 @@ input UserUpdateWithoutLessonsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16429,6 +18225,9 @@ input UserUpdateWithoutLessonsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutNew_subjectsDataInput {
@@ -16440,8 +18239,11 @@ input UserUpdateWithoutNew_subjectsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16472,6 +18274,9 @@ input UserUpdateWithoutNew_subjectsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutNewTestsDataInput {
@@ -16483,8 +18288,11 @@ input UserUpdateWithoutNewTestsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16515,6 +18323,9 @@ input UserUpdateWithoutNewTestsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutNotesDataInput {
@@ -16526,8 +18337,11 @@ input UserUpdateWithoutNotesDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16558,6 +18372,9 @@ input UserUpdateWithoutNotesDataInput {
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutOrdersDataInput {
@@ -16569,8 +18386,11 @@ input UserUpdateWithoutOrdersDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16601,6 +18421,9 @@ input UserUpdateWithoutOrdersDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutPointsADataInput {
@@ -16612,8 +18435,11 @@ input UserUpdateWithoutPointsADataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16644,6 +18470,9 @@ input UserUpdateWithoutPointsADataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutProblemResultsDataInput {
@@ -16655,8 +18484,11 @@ input UserUpdateWithoutProblemResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16687,6 +18519,9 @@ input UserUpdateWithoutProblemResultsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutProblemsDataInput {
@@ -16698,8 +18533,11 @@ input UserUpdateWithoutProblemsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16730,6 +18568,9 @@ input UserUpdateWithoutProblemsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutQuizesDataInput {
@@ -16741,8 +18582,11 @@ input UserUpdateWithoutQuizesDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16773,6 +18617,9 @@ input UserUpdateWithoutQuizesDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutQuizResultsDataInput {
@@ -16784,8 +18631,11 @@ input UserUpdateWithoutQuizResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16816,6 +18666,9 @@ input UserUpdateWithoutQuizResultsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutSandboxPageGoalsDataInput {
@@ -16827,8 +18680,11 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16859,6 +18715,9 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -16870,8 +18729,11 @@ input UserUpdateWithoutSandboxPagesDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16902,6 +18764,9 @@ input UserUpdateWithoutSandboxPagesDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutShotResultsDataInput {
@@ -16913,8 +18778,11 @@ input UserUpdateWithoutShotResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16945,6 +18813,9 @@ input UserUpdateWithoutShotResultsDataInput {
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutShotsDataInput {
@@ -16956,8 +18827,11 @@ input UserUpdateWithoutShotsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -16988,6 +18862,107 @@ input UserUpdateWithoutShotsDataInput {
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutStudentFeedbackDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutTeacherFeedbackDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  sandboxes: UserUpdatesandboxesInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTestResultsDataInput {
@@ -16999,8 +18974,11 @@ input UserUpdateWithoutTestResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -17031,6 +19009,9 @@ input UserUpdateWithoutTestResultsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -17042,8 +19023,11 @@ input UserUpdateWithoutTestsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -17074,6 +19058,9 @@ input UserUpdateWithoutTestsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTextEditorDataInput {
@@ -17085,8 +19072,11 @@ input UserUpdateWithoutTextEditorDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -17117,6 +19107,9 @@ input UserUpdateWithoutTextEditorDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutTextEditorResultsDataInput {
@@ -17128,8 +19121,11 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -17160,6 +19156,9 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
 }
 
 input UserUpdateWithoutUniDataInput {
@@ -17170,8 +19169,11 @@ input UserUpdateWithoutUniDataInput {
   resetTokenExpiry: Float
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  company: CompanyUpdateOneWithoutHrsInput
   uniID: ID
   description: String
+  resume: String
+  coverLetter: String
   careerTrack: CareerTrackUpdateOneWithoutMembersInput
   careerTrackID: ID
   favourites: UserUpdatefavouritesInput
@@ -17203,6 +19205,14 @@ input UserUpdateWithoutUniDataInput {
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithWhereUniqueWithoutCompanyInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutCompanyDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutNew_subjectsInput {
@@ -17243,6 +19253,11 @@ input UserUpsertWithoutConstructionResultsInput {
 input UserUpsertWithoutCoursePagesInput {
   update: UserUpdateWithoutCoursePagesDataInput!
   create: UserCreateWithoutCoursePagesInput!
+}
+
+input UserUpsertWithoutCourseVisitsInput {
+  update: UserUpdateWithoutCourseVisitsDataInput!
+  create: UserCreateWithoutCourseVisitsInput!
 }
 
 input UserUpsertWithoutExamAnswersInput {
@@ -17325,6 +19340,16 @@ input UserUpsertWithoutShotsInput {
   create: UserCreateWithoutShotsInput!
 }
 
+input UserUpsertWithoutStudentFeedbackInput {
+  update: UserUpdateWithoutStudentFeedbackDataInput!
+  create: UserCreateWithoutStudentFeedbackInput!
+}
+
+input UserUpsertWithoutTeacherFeedbackInput {
+  update: UserUpdateWithoutTeacherFeedbackDataInput!
+  create: UserCreateWithoutTeacherFeedbackInput!
+}
+
 input UserUpsertWithoutTestResultsInput {
   update: UserUpdateWithoutTestResultsDataInput!
   create: UserCreateWithoutTestResultsInput!
@@ -17343,6 +19368,12 @@ input UserUpsertWithoutTextEditorInput {
 input UserUpsertWithoutTextEditorResultsInput {
   update: UserUpdateWithoutTextEditorResultsDataInput!
   create: UserCreateWithoutTextEditorResultsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCompanyInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutCompanyDataInput!
+  create: UserCreateWithoutCompanyInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutNew_subjectsInput {
@@ -17442,6 +19473,7 @@ input UserWhereInput {
   status_not_in: [Status!]
   legalPortfolio: LegalPortfolioWhereInput
   uni: UniWhereInput
+  company: CompanyWhereInput
   uniID: ID
   uniID_not: ID
   uniID_in: [ID!]
@@ -17470,6 +19502,34 @@ input UserWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  resume: String
+  resume_not: String
+  resume_in: [String!]
+  resume_not_in: [String!]
+  resume_lt: String
+  resume_lte: String
+  resume_gt: String
+  resume_gte: String
+  resume_contains: String
+  resume_not_contains: String
+  resume_starts_with: String
+  resume_not_starts_with: String
+  resume_ends_with: String
+  resume_not_ends_with: String
+  coverLetter: String
+  coverLetter_not: String
+  coverLetter_in: [String!]
+  coverLetter_not_in: [String!]
+  coverLetter_lt: String
+  coverLetter_lte: String
+  coverLetter_gt: String
+  coverLetter_gte: String
+  coverLetter_contains: String
+  coverLetter_not_contains: String
+  coverLetter_starts_with: String
+  coverLetter_not_starts_with: String
+  coverLetter_ends_with: String
+  coverLetter_not_ends_with: String
   careerTrack: CareerTrackWhereInput
   careerTrackID: ID
   careerTrackID_not: ID
@@ -17559,6 +19619,15 @@ input UserWhereInput {
   notes_every: NoteWhereInput
   notes_some: NoteWhereInput
   notes_none: NoteWhereInput
+  teacherFeedback_every: FeedbackWhereInput
+  teacherFeedback_some: FeedbackWhereInput
+  teacherFeedback_none: FeedbackWhereInput
+  studentFeedback_every: FeedbackWhereInput
+  studentFeedback_some: FeedbackWhereInput
+  studentFeedback_none: FeedbackWhereInput
+  courseVisits_every: CourseVisitWhereInput
+  courseVisits_some: CourseVisitWhereInput
+  courseVisits_none: CourseVisitWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

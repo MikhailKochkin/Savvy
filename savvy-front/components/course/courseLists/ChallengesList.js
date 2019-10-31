@@ -31,10 +31,15 @@ const CHALLENGES_QUERY = gql`
         user {
             id
             name
+            status
+            company {
+              id
+              name
+            }
             uni {
               id
               title
-        }
+          }
         }
       }
   }
@@ -80,6 +85,7 @@ class ChallengesList extends Component {
     return (
       <Query
         query={CHALLENGES_QUERY}
+        fetchPolicy="cache-and-network"
         returnPartialData={true}
         variables={{
           type: "CHALLENGE",
@@ -153,3 +159,4 @@ class ChallengesList extends Component {
 }
 
 export default ChallengesList;
+export { CHALLENGES_QUERY };

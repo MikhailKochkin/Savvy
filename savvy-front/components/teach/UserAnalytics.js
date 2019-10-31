@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import StudentData from "./StudentData";
 import styled from "styled-components";
-import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   border: 2px solid #edefed;
@@ -25,25 +24,16 @@ const Header = styled.p`
 class UserAnalytics extends Component {
   render() {
     const { coursePage, students } = this.props;
-    // console.log(coursePage.examQuestion.answers);
     return (
       <Styles>
         <Header>Ученики</Header>
         {students.map(student => (
           <>
-            <StudentData student={student} lessons={coursePage.lessons} />
-            {/* {coursePage.examQuestion.answers.filter(
-              answer => answer.student.id === student.id
-            )[0] !== undefined ? (
-              <>
-                <p> Ответ на финальное практическое задание </p>
-                {renderHTML(
-                  coursePage.examQuestion.answers.filter(
-                    answer => answer.student.id === student.id
-                  )[0].answer
-                )}
-              </>
-            ) : null} */}
+            <StudentData
+              coursePage={coursePage.id}
+              student={student}
+              lessons={coursePage.lessons}
+            />
           </>
         ))}
       </Styles>

@@ -105,7 +105,6 @@ class EnrollCoursePage extends Component {
   };
   render() {
     const { coursePage, meData } = this.props;
-    console.log(coursePage.lessons[0].id);
     return (
       <>
         {(coursePage.courseType === "PUBLIC" ||

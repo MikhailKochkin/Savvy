@@ -1,7 +1,4 @@
 import React, { Component } from "react";
-import { Query } from "react-apollo";
-import Link from "next/link";
-import gql from "graphql-tag";
 import styled from "styled-components";
 import TakeMyMoney from "../../TakeMyMoney";
 import EnrollCoursePage from "../../EnrollCoursePage";
@@ -30,9 +27,31 @@ const Header = styled.div`
   line-height: 1.4;
 `;
 
+const Input = styled.input`
+  width: 100%;
+  padding: 3%;
+  border-radius: 5px;
+  outline: 0;
+  border: 1px solid #edefed;
+  font-size: 1.4rem;
+`;
+
 const Part1 = styled.div``;
 
 const Part2 = styled.div``;
+
+const SmallButton = styled.div`
+  border: none;
+  background: none;
+  color: #112a62;
+  padding: 10px 0;
+  font-size: 1.4rem;
+  cursor: pointer;
+  outline: 0;
+  &:hover {
+    font-weight: bold;
+  }
+`;
 
 const GridContainer = styled.div`
   display: grid;
@@ -63,19 +82,52 @@ const GridContainer = styled.div`
 
 class RegisterCard extends Component {
   state = {
-    price: this.props.price
+    price: this.props.price,
+    used: false
   };
+  change = async e => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+
+  promo = () => {
+    const promo = [];
+    let discount;
+    this.props.promocode.map(el => promo.push(Object.keys(el)[0]));
+    if (promo.includes(this.state.promo) && !this.state.used) {
+      this.props.promocode.map(el =>
+        Object.keys(el)[0] === this.state.promo
+          ? (discount = Object.values(el)[0])
+          : null
+      );
+      this.setState(prev => ({
+        price: prev.price * discount
+      }));
+      this.setState({
+        used: true
+      });
+    }
+  };
+
   handleInputChange = event => {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
     this.setState({
-      [name]: value
+      [name]: value,
+      used: false
     });
   };
   render() {
-    const { coursePage, me, price, studentsArray, subjectArray } = this.props;
-    console.log(this.state.price);
+    const {
+      coursePage,
+      me,
+      price,
+      discountPrice,
+      studentsArray,
+      subjectArray
+    } = this.props;
     return (
       <>
         <Payment>
@@ -110,7 +162,6 @@ class RegisterCard extends Component {
                   name="price"
                   onChange={this.handleInputChange}
                 />
-
                 <div className="Teacher">
                   Еженедельные задания от преподавателей
                 </div>
@@ -125,6 +176,16 @@ class RegisterCard extends Component {
             )}
           </Part1>
           <Part2>
+            {this.props.promocode && this.props.promocode.length > 0 && (
+              <>
+                <Input
+                  name="promo"
+                  onChange={this.change}
+                  placeholder="Введите промокод"
+                />
+                <SmallButton onClick={this.promo}>Применить</SmallButton>
+              </>
+            )}
             {coursePage.courseType === "FORMONEY" && (
               <TakeMyMoney
                 coursePage={coursePage}

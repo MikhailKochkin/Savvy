@@ -31,10 +31,15 @@ const CAREER_TRACK_COURSE_PAGES_QUERY = gql`
         user {
             id
             name
+            status
+            company {
+              id
+              name
+            }
             uni {
               id
-          title
-        }
+              title
+          }
         }
       }
   }
@@ -67,7 +72,7 @@ const CasesStyles = styled.div`
 
 const Title = styled.div`
   font-size: 1.8rem;
-  margin-bottom: 1%;
+  margin: 2% 0 1% 0;
   font-weight: bold;
   @media (max-width: 850px) {
     margin-left: 10px;
@@ -81,7 +86,7 @@ class CareerCoursesList extends Component {
       <Query
         query={CAREER_TRACK_COURSE_PAGES_QUERY}
         returnPartialData={true}
-        fetchPolicy="cache-first"
+        fetchPolicy="cache-and-network"
         variables={{
           id: me.careerTrackID,
           first: CoursePerPage,
@@ -96,7 +101,10 @@ class CareerCoursesList extends Component {
             <>
               {me !== null && me.careerTrackID && (
                 <>
-                  <Title> Курсы для вашего карьерного трека </Title>
+                  <Title data-tut="first-step">
+                    {" "}
+                    Курсы для вашего карьерного трека{" "}
+                  </Title>
                   <CasesStyles>
                     {coursePages &&
                       coursePages.map(coursePage => (
@@ -158,3 +166,4 @@ class CareerCoursesList extends Component {
 }
 
 export default CareerCoursesList;
+export { CAREER_TRACK_COURSE_PAGES_QUERY };

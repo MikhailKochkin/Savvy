@@ -3,9 +3,8 @@ import _ from "lodash";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import renderHTML from "react-render-html";
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -13,12 +12,14 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
     $attempts: Int
     $lessonID: ID
     $constructionID: ID
+    $inputs: [String]
   ) {
     createConstructionResult(
       answer: $answer
       attempts: $attempts
       lessonID: $lessonID
       constructionID: $constructionID
+      inputs: $inputs
     ) {
       id
     }
@@ -71,6 +72,9 @@ const Box = styled.div`
   border-radius: 10px;
   padding: 0 4%;
   margin-bottom: 4%;
+  input {
+    pointer-events: none;
+  }
 `;
 
 const Title = styled.p`
@@ -86,12 +90,24 @@ const Label = styled.div`
   border-radius: 10px;
   margin-bottom: 4%;
 
-  input {
+  input.l {
     padding: 2%;
     width: 22%;
     border: none;
     border-bottom: 1px solid grey;
     white-space: nowrap;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+  }
+
+  input#text {
+    padding: 2%;
+    width: 85%;
+    border: none;
+    border-bottom: 1px solid grey;
+    white-space: nowrap;
+    font-family: Montserrat;
+    font-size: 1.4rem;
   }
   input:focus {
     outline: none;
@@ -116,7 +132,8 @@ class SingleConstructor extends Component {
     received: this.props.arr,
     answerState: "",
     type: this.props.construction.type,
-    attempts: 1
+    attempts: 1,
+    inputs: ""
   };
 
   answerState = "";
@@ -142,17 +159,26 @@ class SingleConstructor extends Component {
     const article_number = e.target.getAttribute("data");
     // 3. Save to state the user data
     this.setState(state => {
+      // console.log(state.received);
       const received = state.received.map((item, index) => {
         if (index === article_number - 1) {
+          // console.log(0);
+          // console.log(value);
+          // console.log(this.state.variants[value - 1]);
           if (this.state.variants[value - 1] === undefined) {
+            // console.log(1);
             return (item = "");
           } else {
+            // console.log(2);
             return (item = this.state.variants[value - 1]);
           }
         } else {
+          // console.log(3);
+          // console.log(item);
           return item;
         }
       });
+      // console.log(state.received);
       return { received };
     });
   };
@@ -163,6 +189,7 @@ class SingleConstructor extends Component {
     elements.forEach(element => {
       element.style.border = "1px solid #DE6B48";
     });
+    // console.log("weo");
     this.setState({ answerState: "wrong" });
     this.setState(prevState => ({
       attempts: prevState.attempts + 1
@@ -180,6 +207,7 @@ class SingleConstructor extends Component {
       element.style.border = "1px solid #84BC9C";
     });
     this.setState({ answerState: "right" });
+    document.querySelector(".button").disabled = true;
   };
 
   check = () => {
@@ -211,6 +239,18 @@ class SingleConstructor extends Component {
         this.showWrong();
       }
     }
+
+    //4. Save the input data
+    const data = [];
+    Object.entries(this.state)
+      .filter(text => text[0].includes("Ввод"))
+      .map(t => data.push(t[1]));
+    this.setState({ inputs: data });
+  };
+
+  handleChange = e => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   };
 
   componentDidMount() {
@@ -218,34 +258,42 @@ class SingleConstructor extends Component {
     this.setState({ variants: vars });
   }
 
+  componentDidUpdate() {
+    const elements = document.querySelectorAll("#text");
+    elements.forEach(element => {
+      element.addEventListener("change", this.handleChange);
+    });
+  }
+
   render() {
     const { me, lessonID, construction, userData } = this.props;
     const data = userData
       .filter(result => result.construction.id === construction.id)
       .filter(result => result.student.id === this.props.me.id);
+    console.log(data);
     return (
       <Styles>
         <Variants>
           <Title>Конструктор</Title>
           {this.state.variants.map((option, index) => (
             <Box>
-              <p key={index}>
-                <span>{index + 1}. </span>
-                {option}
-              </p>
+              <div key={index}>
+                {renderHTML(`<span>${index + 1}. </span>` + option)}
+              </div>
             </Box>
           ))}
         </Variants>
         <Answers>
           <Title>{construction.name}</Title>
           {this.state.received.map((option, index) => (
-            <Label className="Var">
+            <Label className="Var" key={index + 1}>
               <input
+                className="l"
                 data={index + 1}
                 type="number"
                 onChange={this.handleSteps}
               />
-              <span>{this.state.received[index]}</span>
+              {renderHTML(this.state.received[index])}
             </Label>
           ))}
           <Mutation
@@ -254,16 +302,21 @@ class SingleConstructor extends Component {
               lessonID,
               answer: "Drafted",
               attempts: this.state.attempts,
-              constructionID: this.props.construction.id
+              constructionID: this.props.construction.id,
+              inputs: this.state.inputs
             }}
           >
             {(createConstructionResult, { loading, error }) => (
               <Button
+                className="button"
                 onClick={async e => {
                   e.preventDefault();
                   const res = await this.check();
+                  console.log("!!!");
+                  console.log(data.length);
                   if (data.length === 0) {
                     if (this.state.answerState === "right") {
+                      console.log("Ура!");
                       const res2 = await createConstructionResult();
                     }
                   }

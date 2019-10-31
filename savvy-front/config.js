@@ -1,6 +1,6 @@
 export const endpoint = `http://localhost:4444`;
 export const prodEndpoint = `https://api.savvvy.app`;
-export const CoursePerPage = 4;
+export const CoursePerPage = 6;
 export const SandboxPerPage = 6;
 export const MaterialPerPage = 5;
 
@@ -48,4 +48,10 @@ export const Unis = [
   { ЮУрГУ: "cjysmak2803xy0719n0d5ylws" },
   { ЮФУ: "cjysmaoeh03y707197hmfj0dn" },
   { Другой: "cjyimfz2e00lp07174jpder3m" }
+];
+
+export const Companies = [
+  { "Выберите компанию": "ck2eobt3u04sh078578d6jhqb" },
+  { "Tomashevskaya & Partners": "ck2eobfn204s80785xo66ybzw" },
+  { Другая: "ck2eobt3u04sh078578d6jhqb" }
 ];

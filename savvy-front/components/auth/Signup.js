@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import Router from "next/router";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
-import { Unis } from "../../config";
+import { Unis, Companies } from "../../config";
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -15,6 +15,7 @@ const SIGNUP_MUTATION = gql`
     $isFamiliar: Boolean!
     $status: Status!
     $uniID: ID
+    $company: ID
     $careerTrackID: ID
   ) {
     signup(
@@ -24,6 +25,7 @@ const SIGNUP_MUTATION = gql`
       isFamiliar: $isFamiliar
       status: $status
       uniID: $uniID
+      company: $company
       careerTrackID: $careerTrackID
     ) {
       id
@@ -60,13 +62,14 @@ const Form = styled.form`
 `;
 
 const Fieldset = styled.fieldset`
-  width: 85%;
+  width: 100%;
   padding: 15px;
   display: flex;
   flex-direction: column;
   padding: 4%;
-  border: 1px solid #f0f0f0;
-  border-radius: 5px;
+  border: none;
+  /* border: 1px solid #f0f0f0;
+  border-radius: 5px; */
 `;
 
 const Container = styled.div`
@@ -182,7 +185,8 @@ class Signup extends Component {
     password: "",
     email: "",
     status: "STUDENT",
-    uniID: "cjymz9pazr0ib0b53v38d401g",
+    uniID: "cjyimfz2e00lp07174jpder3m",
+    company: "ck2eobt3u04sh078578d6jhqb",
     careerTrackID: "cjwx78u7700rb07121pelqctm",
     isFamiliar: true,
     loggedIn: false
@@ -225,7 +229,7 @@ class Signup extends Component {
                 password: "",
                 loggedIn: true
               });
-              this.state.status === "AUTHOR" &&
+              (this.state.status === "AUTHOR" || this.state.status === "HR") &&
                 setTimeout(() => Router.push({ pathname: "/educator" }), 2000);
             }}
           >
@@ -265,44 +269,55 @@ class Signup extends Component {
                 >
                   <option value="STUDENT">Студент</option>
                   <option value="AUTHOR">Преподаватель</option>
-                  {/* <option value="HR">HR</option> */}
+                  <option value="HR">HR</option>
                 </select>
 
-                <select
-                  className="uni"
-                  name="uniID"
-                  value={this.state.uni}
-                  onChange={this.saveToState}
-                >
-                  {Unis.map(uni => (
-                    <option value={Object.values(uni)[0]}>
-                      {Object.keys(uni)[0]}
-                    </option>
-                  ))}
-                </select>
-                <label className="career">
+                {this.state.status === "HR" && (
                   <select
-                    name="careerTrackID"
-                    value={this.state.careerTrackID}
+                    className="company"
+                    name="company"
+                    value={this.state.company}
                     onChange={this.saveToState}
                   >
-                    <option value="cjwx78u7700rb07121pelqctm">
-                      Корпоративное право
-                    </option>
-                    <option value="cjwx79iaj00rk0712tz12j7vi">
-                      Право и технологии
-                    </option>
+                    {Companies.map(co => (
+                      <option value={Object.values(co)[0]}>
+                        {Object.keys(co)[0]}
+                      </option>
+                    ))}
                   </select>
-                  <Comment>
-                    Карьерный трек необходим для составления плана карьерного
-                    развития, поиска курсов и предложений работы.
-                  </Comment>
-                  {/* <Comment>
-                    Если вы не знаете, какой карьерный трек выбрать,
-                    воспользуйтесь <a href="#">карьерным помощником.</a>
-                  </Comment> */}
-                </label>
+                )}
 
+                {this.state.status !== "HR" && (
+                  <>
+                    <select
+                      className="uni"
+                      name="uniID"
+                      value={this.state.uni}
+                      onChange={this.saveToState}
+                    >
+                      {Unis.map(uni => (
+                        <option value={Object.values(uni)[0]}>
+                          {Object.keys(uni)[0]}
+                        </option>
+                      ))}
+                    </select>
+
+                    <label className="career">
+                      <select
+                        name="careerTrackID"
+                        value={this.state.careerTrackID}
+                        onChange={this.saveToState}
+                      >
+                        <option value="STUDENT">Корпоративное право</option>
+                        <option value="AUTHOR">Право и технологии</option>
+                      </select>
+                      <Comment>
+                        Карьерный трек необходим для составления плана
+                        карьерного развития, поиска курсов и предложений работы.
+                      </Comment>
+                    </label>
+                  </>
+                )}
                 <select
                   name="isFamiliar"
                   className="isFamiliar"

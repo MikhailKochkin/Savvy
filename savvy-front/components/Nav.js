@@ -183,6 +183,7 @@ const StyledModal = Modal.styled`
   background-color: white;
   border: 1px solid grey;
   border-radius: 10px;
+  max-width: 30%;
   @media (max-width: 800px) {
     width: 90%;
   }
@@ -205,7 +206,7 @@ class Nav extends Component {
   };
 
   openNav = () => {
-    document.getElementById("mySidenav").style.height = "35%";
+    document.getElementById("mySidenav").style.height = "30%";
     document.getElementById("mySidenav").style.paddingTop = "40px";
   };
 
@@ -262,6 +263,13 @@ class Nav extends Component {
                       {me && me !== null ? (
                         <>
                           {me.status && me.status === "AUTHOR" && (
+                            <Link prefetch href="/educator">
+                              <div>
+                                <a>Кабинет</a>
+                              </div>
+                            </Link>
+                          )}
+                          {me.status && me.status === "HR" && (
                             <Link prefetch href="/educator">
                               <div>
                                 <a>Кабинет</a>
@@ -405,15 +413,6 @@ class Nav extends Component {
                       >
                         <button onClick={this.closeNav}>
                           <a>Курсы вузов и сообществ</a>
-                        </button>
-                      </Link>
-                      <Link
-                        href={{
-                          pathname: "/challenges"
-                        }}
-                      >
-                        <button onClick={this.closeNav}>
-                          <a>Испытания</a>
                         </button>
                       </Link>
                       {me ? <Signout /> : null}

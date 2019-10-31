@@ -80,7 +80,6 @@ class ExamAnswer extends Component {
   };
   render() {
     const { question } = this.props;
-    console.log(question);
     return (
       <>
         <Styles>
@@ -104,7 +103,6 @@ class ExamAnswer extends Component {
                     e.preventDefault();
                     // call the mutation
                     const res = await createExamAnswer();
-                    console.log("Создали!");
                     this.setState({ sent: true });
                     // change the page to the single case page
                   }}

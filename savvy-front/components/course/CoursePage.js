@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Query } from "react-apollo";
-import Link from "next/link";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import LessonHeader from "../lesson/LessonHeader";
@@ -13,6 +12,7 @@ import ApplicationCard from "./coursePageCards/ApplicationCard";
 import ExamAnswer from "./ExamAnswer";
 import ExamQuestion from "./ExamQuestion";
 import UpdateExamQuestion from "./UpdateExamQuestion";
+import Feedback from "./Feedback";
 
 const PAGE_LESSONS_QUERY = gql`
   query PAGE_LESSONS_QUERY($id: ID!) {
@@ -48,6 +48,8 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       image
       news
       price
+      discountPrice
+      promocode
       published
       lessons {
         id
@@ -81,6 +83,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       user {
         id
         name
+        status
         uni {
           id
           title
@@ -270,14 +273,23 @@ class CoursePage extends Component {
                                 );
 
                                 const subjectArray = [];
+                                const new_subjectArray = [];
                                 me &&
                                   me.subjects.map(subject =>
                                     subjectArray.push(subject)
                                   );
-
+                                me &&
+                                  me.new_subjects.map(new_subject =>
+                                    new_subjectArray.push(new_subject.id)
+                                  );
                                 const applicationsList = [];
                                 coursePage.applications.map(application =>
                                   applicationsList.push(application.applicantId)
+                                );
+
+                                let lessonsList = [];
+                                coursePage.lessons.map(l =>
+                                  lessonsList.push(l.id)
                                 );
                                 return (
                                   <>
@@ -321,9 +333,12 @@ class CoursePage extends Component {
                                               !applicationsList.includes(
                                                 me.id
                                               ) &&
-                                              !subjectArray.includes(
+                                              (!subjectArray.includes(
                                                 coursePage.id
                                               ) &&
+                                                !new_subjectArray.includes(
+                                                  coursePage.id
+                                                )) &&
                                               !me.permissions.includes(
                                                 "ADMIN"
                                               ) && (
@@ -331,6 +346,12 @@ class CoursePage extends Component {
                                                   me={me}
                                                   coursePage={coursePage}
                                                   price={price}
+                                                  discountPrice={
+                                                    coursePage.discountPrice
+                                                  }
+                                                  promocode={
+                                                    coursePage.promocode[0]
+                                                  }
                                                   studentsArray={studentsArray}
                                                   subjectArray={subjectArray}
                                                 />
@@ -354,9 +375,12 @@ class CoursePage extends Component {
                                               )}
                                             {/* Карточка ученика */}
                                             {me &&
-                                              subjectArray.includes(
+                                              (subjectArray.includes(
                                                 coursePage.id
-                                              ) &&
+                                              ) ||
+                                                new_subjectArray.includes(
+                                                  coursePage.id
+                                                )) &&
                                               !me.permissions.includes(
                                                 "ADMIN"
                                               ) && (
@@ -368,34 +392,27 @@ class CoursePage extends Component {
                                           </PayBox>
                                         </CourseInfo>
                                         <LessonsInfo>
-                                          {me &&
-                                            (me.id === coursePage.user.id ||
-                                              me.permissions.includes(
-                                                "ADMIN"
-                                              )) && (
-                                              <Buttons>
-                                                <Button
-                                                  primary={
-                                                    this.state.page ===
-                                                    "lessons"
-                                                  }
-                                                  name="lessons"
-                                                  onClick={this.switch}
-                                                >
-                                                  Уроки
-                                                </Button>
+                                          <Buttons>
+                                            <Button
+                                              primary={
+                                                this.state.page === "lessons"
+                                              }
+                                              name="lessons"
+                                              onClick={this.switch}
+                                            >
+                                              Уроки
+                                            </Button>
 
-                                                <Button
-                                                  primary={
-                                                    this.state.page === "finals"
-                                                  }
-                                                  name="finals"
-                                                  onClick={this.switch}
-                                                >
-                                                  Финальное задание
-                                                </Button>
-                                              </Buttons>
-                                            )}
+                                            <Button
+                                              primary={
+                                                this.state.page === "feedback"
+                                              }
+                                              name="feedback"
+                                              onClick={this.switch}
+                                            >
+                                              Обратная связь
+                                            </Button>
+                                          </Buttons>
                                           {this.state.page === "lessons" && (
                                             <>
                                               <Total>
@@ -422,6 +439,28 @@ class CoursePage extends Component {
                                                   />
                                                 )
                                               )}
+                                            </>
+                                          )}
+                                          {this.state.page === "feedback" && (
+                                            <>
+                                              {me.studentFeedback.filter(feed =>
+                                                lessonsList.includes(
+                                                  feed.lesson.id
+                                                )
+                                              ).length === 0 ? (
+                                                <p>Обратной связи нет</p>
+                                              ) : null}
+                                              {me.studentFeedback
+                                                .filter(feed =>
+                                                  lessonsList.includes(
+                                                    feed.lesson.id
+                                                  )
+                                                )
+                                                .map(feedback => (
+                                                  <Feedback
+                                                    feedback={feedback}
+                                                  />
+                                                ))}
                                             </>
                                           )}
                                           {this.state.page === "finals" && (

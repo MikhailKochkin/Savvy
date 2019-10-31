@@ -40,33 +40,6 @@ const EditText = styled.div`
   /* font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;  */
 `;
 
-const TextStyles = styled.div`
-  width: 100%;
-  margin: 2% 0;
-  padding: 1%;
-  font-size: 1.6rem;
-  img {
-    display: block;
-    max-width: 100%;
-    max-height: 20em;
-    box-shadow: "0 0 0 2px blue;";
-  }
-  iframe {
-    width: 100%;
-    height: 400px;
-    @media (max-width: 800px) {
-      width: 100%;
-      height: auto;
-    }
-  }
-  a {
-    color: #112b62;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
 const Hint = styled.div`
   position: -webkit-sticky;
   position: sticky;
@@ -234,9 +207,7 @@ class SingleTextEditor extends Component {
                     )}
                   </>
                 )}
-                {(this.state.total === 0 ||
-                  this.state.total === undefined ||
-                  this.state.total === null) &&
+                {(this.state.total === 0 || this.state.total === undefined) &&
                   this.state.correct_option}
               </div>
               {this.state.total > 0 && (
@@ -246,16 +217,14 @@ class SingleTextEditor extends Component {
             </Hint>
           )}
           <EditText>
-            <TextStyles onClick={this.onTest}>
-              {renderHTML(this.state.text)}
-            </TextStyles>
+            <div onClick={this.onTest}>{renderHTML(this.state.text)}</div>
             {this.state.total === this.state.revealed ? (
               <Right>Задание выполнено!</Right>
             ) : null}
           </EditText>
         </TextBar>
         <Buttons>
-          {data.length === 0 && this.state.total > 0 && (
+          {data.length === 0 && (
             <Mutation
               mutation={CREATE_TEXTEDITORRESULT_MUTATION}
               variables={{
@@ -289,7 +258,7 @@ class SingleTextEditor extends Component {
               )}
             </Mutation>
           )}
-          {data.length > 0 && this.state.total > 0 && (
+          {data.length > 0 && (
             <Button onClick={this.onShow}>
               {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
             </Button>

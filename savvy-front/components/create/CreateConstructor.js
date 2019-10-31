@@ -3,9 +3,8 @@ import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import _ from "lodash";
 import gql from "graphql-tag";
-import Router from "next/router";
-import Link from "next/link";
-import { NavButton, SubmitButton, Message } from "../styles/Button";
+import dynamic from "next/dynamic";
+import { Message } from "../styles/Button";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
@@ -75,6 +74,34 @@ const Button = styled.button`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 15%;
+  margin-top: 2%;
+`;
+
+const MoreButton = styled.button`
+  font-size: 2.2rem;
+  background: #ffffff;
+  border: 1px solid #112a62;
+  color: #112a62;
+  box-sizing: border-box;
+  border-radius: 5px;
+  height: 30px;
+  width: 45%;
+  margin-top: 10px;
+  cursor: pointer;
+  outline: 0;
+  &:active {
+    border: 2px solid #112a62;
+  }
+  @media (max-width: 800px) {
+    font-size: 1.4rem;
+  }
+`;
+
 const ChooseTag = styled.div`
   display: flex;
   flex-direction: column;
@@ -85,7 +112,6 @@ const ChooseTag = styled.div`
     outline: none;
     line-height: 1.3;
     padding: 0.5% 1%;
-    /* padding: 0.6em 1.4em 0.5em 0.8em; */
     max-width: 100%;
     box-sizing: border-box;
     margin-top: 2%;
@@ -138,6 +164,21 @@ const ChooseTag = styled.div`
   }
 `;
 
+const TextBox = styled.div`
+  font-size: 1.6rem;
+  width: 90%;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  outline: 0;
+  padding: 2%;
+  font-size: 1.6rem;
+  margin-top: 3%;
+  @media (max-width: 800px) {
+    width: 350px;
+  }
+`;
+
 const Box = styled.div``;
 
 const Header = styled.div`
@@ -154,15 +195,20 @@ const Variants = styled.div`
   flex-wrap: wrap;
 `;
 
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false
+});
+
 class CreateConstructor extends Component {
   state = {
     name: "12",
-    partsNumber: 5,
+    partsNumber: 1,
     lessonID: this.props.lessonID,
     type: "equal",
     variants: "",
     answer: "",
-    answerNumber: "",
+    answersNumber: "",
     hint: ""
   };
   handleChange = e => {
@@ -189,42 +235,52 @@ class CreateConstructor extends Component {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
+
+  myCallback = (dataFromChild, name) => {
+    let st = name;
+    this.setState({
+      [st]: dataFromChild
+    });
+  };
+
+  more = () => {
+    this.setState(prev => ({ partsNumber: prev.partsNumber + 1 }));
+  };
+
+  remove = () => {
+    if (this.state.partsNumber > 1) {
+      this.setState({
+        [`doc${this.state.partsNumber}`]: undefined
+      });
+      this.setState(prev => ({ partsNumber: prev.partsNumber - 1 }));
+    }
+  };
+
   generate = () => {
-    const variants = [
-      this.state.doc1,
-      this.state.doc2,
-      this.state.doc3,
-      this.state.doc4,
-      this.state.doc5,
-      this.state.doc6,
-      this.state.doc7,
-      this.state.doc8,
-      this.state.doc9,
-      this.state.doc10,
-      this.state.doc11,
-      this.state.doc12,
-      this.state.doc13,
-      this.state.doc14,
-      this.state.doc15,
-      this.state.doc16,
-      this.state.doc17,
-      this.state.doc18,
-      this.state.doc19
-    ];
-    const newVariants = variants.filter(item => item !== undefined);
-    const data = this.state.answerNumber;
-    this.setState({ variants: newVariants });
+    // 1. Get the variants of every article of the document and put them into state
+    let articles = [];
+    Object.entries(this.state)
+      .filter(text => text[0].includes("doc"))
+      .filter(text => text[1] !== undefined)
+      .map(t => articles.push(t[1]));
+    this.setState({ variants: articles });
+    // 2. Get the order of the correct variants
+    const data = this.state.answersNumber;
     const data1 = data
       .trim()
       .split(",")
       .map(item => parseInt(item) - 1);
     const answer = [];
     let option;
+
+    // 3. Get the articles of the document in a correct order and save them to state
     const data2 = data1.map(i => {
-      option = newVariants[i];
+      option = articles[i];
       answer.push(option);
     });
     this.setState({ answer: answer });
+
+    // 4. Show the "Created" message
     document.getElementById("Message").style.display = "block";
     setTimeout(function() {
       document.getElementById("Message")
@@ -232,25 +288,23 @@ class CreateConstructor extends Component {
         : "none";
     }, 4000);
   };
+
   render() {
     let card = [];
     let index;
-    let placeholder;
     let text;
     _.times(this.state.partsNumber, i => {
       index = `doc${i + 1}`;
-      placeholder = `${i + 1}.`;
-      text = `Статья ${i + 1}`;
+      text = `${i + 1}.`;
       card.push(
-        <Box>
-          <Textarea
-            key={index}
+        <TextBox>
+          <DynamicLoadedEditor
+            index={i + 1}
             name={index}
-            spellCheck={true}
-            onChange={this.handleAnswer}
+            getEditorText={this.myCallback}
             placeholder={text}
           />
-        </Box>
+        </TextBox>
       );
     });
     const { lessonID } = this.props;
@@ -259,29 +313,6 @@ class CreateConstructor extends Component {
         <AreYouATeacher subject={lessonID}>
           <Center>
             <Header>
-              <ChooseTag>
-                <p>Сколько в документе частей?</p>
-                <select
-                  className="number"
-                  name="partsNumber"
-                  value={this.state.partsNumber}
-                  onChange={this.handleChange}
-                >
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                </select>
-              </ChooseTag>
               <ChooseTag>
                 <p> Метод проверки </p>
                 <select
@@ -310,13 +341,17 @@ class CreateConstructor extends Component {
               />
             </Box>
             <Variants>{card.map(item => item)}</Variants>
+            <Buttons>
+              <MoreButton onClick={this.remove}>-</MoreButton>
+              <MoreButton onClick={this.more}>+</MoreButton>
+            </Buttons>
             <Box>
               <Textarea
                 type="text"
                 cols={60}
                 rows={1}
                 spellCheck={true}
-                name="answerNumber"
+                name="answersNumber"
                 placeholder="Запишите правильные ответы. Используйте только цифры и запишите
                 их через запятые, без пробелов: 1,2,3,4"
                 onChange={this.saveToState}
@@ -359,7 +394,7 @@ class CreateConstructor extends Component {
                 </Button>
               )}
             </Mutation>
-            <Message id="Message">Вы создали новый тестовый вопрос!</Message>
+            <Message id="Message">Готово!</Message>
           </Center>
         </AreYouATeacher>
       </PleaseSignIn>

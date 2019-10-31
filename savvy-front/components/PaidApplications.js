@@ -113,7 +113,6 @@ class PaidApplications extends Component {
               {({ data, error, loading }) => {
                 if (loading) return <p>Loading...</p>;
                 if (error) return <p>Error: {error.message}</p>;
-                console.log(data);
                 return (
                   <>
                     <p>Список счетов</p>

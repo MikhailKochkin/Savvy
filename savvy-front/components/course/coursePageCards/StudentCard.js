@@ -65,7 +65,6 @@ class StudentCard extends Component {
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio = (status * 100) / coursePage.lessons.length;
-    console.log(ratio);
     let left = coursePage.lessons.length - status;
     return (
       <Payment>

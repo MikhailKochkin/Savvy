@@ -146,12 +146,10 @@ const rules = [
     },
     serialize(obj, children) {
       if (obj.object == "block") {
-        console.log(obj.type);
         switch (obj.type) {
           case "paragraph":
             return <p className={obj.data.get("className")}>{children}</p>;
           case "hint":
-            console.log(obj.data);
             return (
               <div id="conceal" data-text={obj.data._root.entries[0][1]}>
                 {children}
@@ -208,7 +206,6 @@ const rules = [
   },
   {
     deserialize(el, next) {
-      console.log(el);
       if (el.tagName !== "A" && el.tagName !== "SPAN" && el.tagName !== "DIV") {
         return;
       }
@@ -401,7 +398,6 @@ class App extends React.Component {
 
   renderInline = (props, editor, next) => {
     const { attributes, children, node } = props;
-    console.log("renderInline");
     switch (node.type) {
       case "link":
         return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
@@ -466,7 +462,6 @@ class App extends React.Component {
     if (type !== "numbered-list") {
       const isActive = this.hasBlock(type);
       const isList = this.hasBlock("list-item");
-      console.log(isList);
       if (isList) {
         editor
           .setBlocks(isActive ? DEFAULT_NODE : type)
@@ -506,22 +501,15 @@ class App extends React.Component {
 
     // Handle everything but list buttons.
     if (type !== "hint") {
-      console.log("0");
       const isActive = this.hasBlock(type);
-      console.log(isActive);
       const isHint = this.hasBlock("paragraph");
-      console.log(isHint);
-
       if (isHint) {
-        console.log("1");
         editor.setBlocks(isActive ? DEFAULT_NODE : type);
         // .unwrapBlock('bulleted-list')
       } else {
-        console.log("2");
         editor.setBlocks(isActive ? DEFAULT_NODE : type);
       }
     } else {
-      console.log("3");
       // Handle the extra wrapping required for list buttons.
       const isList = this.hasBlock("paragraph");
       const isType = value.blocks.some(block => {
@@ -529,11 +517,9 @@ class App extends React.Component {
       });
 
       if (isList && isType) {
-        console.log("4");
         editor.setBlocks(DEFAULT_NODE).unwrapBlock("hint");
         // .unwrapBlock('numbered-list')
       } else if (isList) {
-        console.log("5");
         editor.wrapBlock({
           type: "hint",
           data: { data }
@@ -541,7 +527,6 @@ class App extends React.Component {
 
         // .wrapBlock('hint', 'hintdata')
       } else {
-        console.log("6");
         editor.setBlocks("paragraph");
       }
     }
@@ -570,15 +555,11 @@ class App extends React.Component {
         // console.log("Ссылка создана!")
       }
     } else {
-      console.log("else");
       const href = window.prompt("Enter the URL of the link:");
-      console.log(href);
       if (href == null) {
         return;
       } else {
         const text = window.prompt("Enter the text for the link:");
-        console.log(text);
-
         if (text == null) {
           return;
         }
@@ -592,7 +573,6 @@ class App extends React.Component {
   };
 
   onKeyDown = (event, editor, next) => {
-    console.log(event.key);
     if (event.key != "b" || !event.ctrlKey) return next();
 
     event.preventDefault();
@@ -622,7 +602,6 @@ class App extends React.Component {
   };
   onChange = ({ value }) => {
     this.setState({ value });
-    console.log(html.serialize(this.state.value));
     this.props.getEditorText(html.serialize(this.state.value));
   };
 }
