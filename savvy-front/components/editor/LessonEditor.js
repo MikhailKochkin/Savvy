@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Plain from "slate-plain-serializer";
 import Html from "slate-html-serializer";
 import { Editor } from "slate-react";
 import Icon from "react-icons-kit";
@@ -8,17 +7,19 @@ import BoldMark from "./BoldMark";
 import HeaderMark from "./HeaderMark";
 import ItalicMark from "./ItalicMark";
 import LinkMark from "./Link";
-import CommentStyle from "./CommentStyle";
 import FormatToolBar from "./FormatToolbar";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
 import { link } from "react-icons-kit/fa/link";
 import { image } from "react-icons-kit/fa/image";
-import { commentO } from "react-icons-kit/fa/commentO";
-import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
+import { table } from "react-icons-kit/fa/table";
+
+import DeepTable from "slate-deep-table";
+
+const plugins = [DeepTable()];
 
 const LinkStyle = styled.a`
   text-decoration: underline;
@@ -30,6 +31,30 @@ const Img = styled.img`
   max-width: 100%;
   max-height: 20em;
   box-shadow: "0 0 0 2px blue;";
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border: 1px solid #edefed;
+  border-collapse: collapse;
+  tr {
+    border: 1px solid #edefed;
+  }
+  thead {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+  th {
+    border: 1px solid #edefed;
+  }
+  td {
+    border: 1px solid #edefed;
+    padding: 0% 2.5%;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    position: relative;
+  }
 `;
 
 const Iframe = styled.iframe`
@@ -56,10 +81,11 @@ const ButtonStyle = styled.button`
 const AppStyles = {
   color: "rgb(17, 17, 17)",
   maxWidth: "840px",
+  width: "100%",
   backgroundColor: "rgb(255, 255, 255)",
   border: "1px solid #EDEFED",
   boxShadow: "rgba(118, 143, 255, 0.1) 0px 16px 24px 0px",
-  padding: "40px",
+  padding: "20px 40px",
   margin: "25px auto 25px",
   borderRadius: "4.5px",
   fontSize: "1.6rem"
@@ -122,6 +148,7 @@ function insertVideo(editor, src, target) {
 }
 
 const rules = [
+  ...DeepTable.makeSerializerRules(),
   {
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
@@ -238,7 +265,8 @@ class App extends React.Component {
   state = {
     value: this.props.previousText
       ? html.deserialize(this.props.previousText)
-      : html.deserialize(initialValue)
+      : html.deserialize(initialValue),
+    editor: null
   };
 
   // Check if the current selection has a mark with `type` in it.
@@ -276,6 +304,8 @@ class App extends React.Component {
   };
 
   render() {
+    const { value } = this.state;
+    const isTable = this.editor && this.editor.isSelectionInTable(value);
     return (
       <>
         <FormatToolBar>
@@ -292,19 +322,22 @@ class App extends React.Component {
           <ButtonStyle onMouseDown={event => this.onClickFilm(event)}>
             <Icon icon={film} />
           </ButtonStyle>
+          <ButtonStyle onMouseDown={event => this.onInsertTable(event)}>
+            <Icon icon={table} />
+          </ButtonStyle>
         </FormatToolBar>
+        {isTable ? this.renderTableToolbar() : null}
         <Editor
           style={AppStyles}
           placeholder="Начните писать..."
           ref={this.ref}
+          plugins={plugins}
           value={this.state.value}
           onChange={this.onChange}
-          onKeyDown={this.onKeyDown}
           renderBlock={this.renderBlock}
           renderInline={this.renderInline}
           renderMark={this.renderMark}
         />
-        {/* <div dangerouslySetInnerHTML={{ __html: html.serialize(this.state.value) }}></div>     */}
       </>
     );
   }
@@ -337,6 +370,16 @@ class App extends React.Component {
           />
         );
       }
+      case "table":
+        return (
+          <Table>
+            <tbody {...attributes}>{children}</tbody>
+          </Table>
+        );
+      case "table-row":
+        return <tr {...attributes}>{children}</tr>;
+      case "table-cell":
+        return <td {...attributes}>{children}</td>;
       default: {
         return next();
       }
@@ -398,6 +441,69 @@ class App extends React.Component {
       <ButtonStyle onMouseDown={event => this.onClickBlock(event, type)}>
         <Icon icon={list} />
       </ButtonStyle>
+    );
+  };
+
+  renderTableToolbar = () => {
+    return (
+      <div className="buttons">
+        <ButtonStyle onClick={this.onInsertColumn}>
+          Добавить столбец
+        </ButtonStyle>
+        <ButtonStyle onClick={this.onInsertRow}>Добавить строку</ButtonStyle>
+        <ButtonStyle onClick={this.onRemoveColumn}>Убрать столбец</ButtonStyle>
+        <ButtonStyle onClick={this.onRemoveRow}>Убрать строку</ButtonStyle>
+        <ButtonStyle onClick={this.onRemoveTable}>Убрать таблицу</ButtonStyle>
+        <ButtonStyle onClick={this.onToggleHeaders}>
+          Поменять заголовок
+        </ButtonStyle>
+      </div>
+    );
+  };
+
+  renderNormalToolbar = () => {
+    return (
+      <div className="buttons">
+        <button onClick={this.onInsertTable}>Insert Table</button>
+      </div>
+    );
+  };
+
+  onInsertTable = () => {
+    console.log(this.editor);
+    this.onChange(this.editor.insertTable());
+  };
+
+  onInsertColumn = () => {
+    this.onChange(this.editor.insertColumn());
+  };
+
+  onInsertRow = () => {
+    this.onChange(this.editor.insertRow());
+  };
+
+  onRemoveColumn = () => {
+    this.onChange(this.editor.removeColumn());
+  };
+
+  onRemoveRow = () => {
+    this.onChange(this.editor.removeRow());
+  };
+
+  onRemoveTable = () => {
+    this.onChange(this.editor.removeTable());
+  };
+
+  onToggleHeaders = () => {
+    console.log("!!!");
+    this.onChange(this.editor.toggleTableHeaders());
+  };
+
+  renderNormalToolbar = () => {
+    return (
+      <div className="buttons">
+        <button onClick={this.onInsertTable}>Insert Table</button>
+      </div>
     );
   };
 
@@ -491,33 +597,6 @@ class App extends React.Component {
     }
   };
 
-  onKeyDown = (event, editor, next) => {
-    if (event.key != "b" || !event.ctrlKey) return next();
-
-    event.preventDefault();
-
-    // Determine whether any of the currently selected blocks are code blocks.
-    // const isCode = this.editor.value.blocks.some(block => block.type == 'code')
-    editor.setBlocks("code");
-
-    // let mark
-    // if (isBoldHotkey(event)) {
-    //   mark = 'bold'
-    // } else if (isItalicHotkey(event)) {
-    //   mark = 'italic'
-    // } else if (isUnderlinedHotkey(event)) {
-    //   mark = 'header'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'code'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'quote'
-    // } else {
-    //   return next()
-    // }
-    // console.log("mark: " + mark)
-    // event.preventDefault()
-    // if(mark !== undefined){this.editor.toggleMark(mark)}
-  };
   onChange = ({ value }) => {
     this.setState({ value });
     this.props.getEditorText(html.serialize(this.state.value));

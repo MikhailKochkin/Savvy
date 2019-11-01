@@ -27,6 +27,29 @@ const NoteStyles = styled.div`
       text-decoration: underline;
     }
   }
+  table {
+    width: 90%;
+    border: 1px solid #edefed;
+    border-collapse: collapse;
+    tr {
+      border: 1px solid #edefed;
+    }
+    thead {
+      background: #f5f5f5;
+      font-weight: bold;
+    }
+    th {
+      border: 1px solid #edefed;
+    }
+    td {
+      border: 1px solid #edefed;
+      border-top: none;
+      border-bottom: none;
+      border-right: none;
+      padding: 0% 2.5%;
+      position: relative;
+    }
+  }
 `;
 
 class note extends Component {
