@@ -406,7 +406,7 @@ class CoursePage extends Component {
                                               name="lessons"
                                               onClick={this.switch}
                                             >
-                                              Уроки
+                                              Материалы
                                             </Button>
 
                                             <Button
@@ -421,13 +421,13 @@ class CoursePage extends Component {
                                           </Buttons>
                                           {this.state.page === "lessons" && (
                                             <>
-                                              <Total>
-                                                Всего уроков:{" "}
+                                              {/* <Total>
+                                                Всего:{" "}
                                                 {
                                                   data2.lessonsConnection
                                                     .aggregate.count
                                                 }
-                                              </Total>
+                                              </Total> */}
                                               {data1.lessons.map(
                                                 (lesson, index) => (
                                                   <LessonHeader

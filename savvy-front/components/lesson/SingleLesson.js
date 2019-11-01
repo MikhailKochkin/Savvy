@@ -534,7 +534,7 @@ class SingleLesson extends Component {
                                   onClick={this.onSwitchMob}
                                 >
                                   {" "}
-                                  Урок{" "}
+                                  Введение{" "}
                                 </ChooseButton>
                               </ButtonZone>
                               {lesson.notes.length > 0 && (
@@ -616,7 +616,7 @@ class SingleLesson extends Component {
                             </span>
                           )}
                           <div>
-                            Урок {lesson.number}. {lesson.name}
+                            {lesson.number}. {lesson.name}
                           </div>
                         </Head>
 
@@ -762,7 +762,7 @@ class SingleLesson extends Component {
                                       onClick={this.onSwitch}
                                     >
                                       {" "}
-                                      Урок{" "}
+                                      Введение{" "}
                                     </ChooseButton>
                                   </ButtonZone>
                                   {lesson.shots.length > 0 && (

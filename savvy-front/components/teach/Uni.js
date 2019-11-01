@@ -8,7 +8,6 @@ const UniInfo = styled.div`
   max-width: 1200px;
   padding: 1.5%;
   flex-basis: 50%;
-  height: 250px;
   @media (max-width: 850px) {
     width: 95%;
   }

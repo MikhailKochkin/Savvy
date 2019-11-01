@@ -391,7 +391,7 @@ class SingleLesson extends Component {
                           />
                           <Head>
                             <div>
-                              Урок {lesson.number}. {lesson.name}
+                              {lesson.number}. {lesson.name}
                             </div>
                           </Head>
                           <Header>

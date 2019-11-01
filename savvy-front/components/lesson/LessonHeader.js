@@ -195,7 +195,7 @@ class LessonHeader extends Component {
       <>
         <TextBar>
           <h4>
-            Урок {lesson.number}. {name}
+            {lesson.number}. {name}
           </h4>
           <Buttons>
             {me &&

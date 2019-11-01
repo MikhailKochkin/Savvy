@@ -180,14 +180,13 @@ class SingleProblem extends Component {
               <Advice>Эта задача уже выполнена.</Advice>
               <Button
                 onClick={async e => {
-                  // Stop the form from submitting
                   e.preventDefault();
-                  // call the mutation
-                  const res2 = await this.setState({ revealAnswer: true });
-                  // change the page to the single case page
+                  const res2 = await this.setState(prev => ({
+                    revealAnswer: !prev.revealAnswer
+                  }));
                 }}
               >
-                Открыть ответы
+                {this.state.revealAnswer ? "Закрыть ответы" : "Открыть ответы"}
               </Button>
             </ButtonGroup>
           )}
@@ -217,15 +216,15 @@ class SingleProblem extends Component {
                   revealed: this.state.revealed,
                   problemID: this.props.problem.id
                 }}
-                // refetchQueries={() => [
-                //   {
-                //     query: SINGLE_LESSON_QUERY,
-                //     variables: { id: this.props.lessonID }
-                //   },
-                //   {
-                //     query: CURRENT_USER_QUERY
-                //   }
-                // ]}
+                refetchQueries={() => [
+                  {
+                    query: SINGLE_LESSON_QUERY,
+                    variables: { id: this.props.lessonID }
+                  },
+                  {
+                    query: CURRENT_USER_QUERY
+                  }
+                ]}
               >
                 {(createProblemResult, { loading, error }) => (
                   <Button

@@ -10,6 +10,7 @@ const Title = styled.p`
 const Box = styled.div`
   display: flex;
   flex-direction: row;
+  margin-top: 3%;
   button {
     border: none;
     background: none;
@@ -63,12 +64,12 @@ class ProblemGroup extends Component {
     const id = this.props.problems[this.state.num];
     return (
       <>
-        <Advice>
+        {/* <Advice>
           <b>Совет</b>: чтобы увидеть ответ на задачу, вам нужно сначала дать
           собственный ответ. Для этого введите его в форму ниже и нажмите на
           кнопку "Ответить". После этого при нажатии на раздел "Ответ", вам
           откроется ответ на задачу.{" "}
-        </Advice>
+        </Advice> */}
         <Box>
           <Title>
             Задача {this.state.num + 1} из {this.props.problems.length}

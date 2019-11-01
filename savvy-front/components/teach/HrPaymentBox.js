@@ -31,7 +31,7 @@ class HrPaymentBox extends Component {
         <div className="text">Оплатите подписку на ещё один месяц: 1000₽</div>
         <TakeMyMoney
           coursePage={"coursePage"}
-          coursePageID={"ck2bkn6hrkhup0994huigdrdw"}
+          coursePageID={"ck2ez6cr606ss0785ll2w9cwy"}
           name={me.name}
           user={me.id}
           price={1000}
