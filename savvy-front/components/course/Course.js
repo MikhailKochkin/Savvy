@@ -165,6 +165,7 @@ export default class Course extends Component {
                 const my_course_visitis = data.courseVisits.filter(
                   visit => visit.student.id === me.id
                 );
+                console.log(my_course_visitis.length);
                 return (
                   <>
                     {my_course_visitis.length === 0 && (
@@ -197,6 +198,7 @@ export default class Course extends Component {
                                     <a>
                                       <Button
                                         onClick={() => {
+                                          console.log("1");
                                           createCourseVisit();
                                         }}
                                       >
@@ -215,8 +217,8 @@ export default class Course extends Component {
                       <Mutation
                         mutation={UPDATE_COURSE_VISIT_MUTATION}
                         variables={{
-                          id: data.courseVisits[0].id,
-                          visitsNumber: data.courseVisits[0].visitsNumber + 1
+                          id: my_course_visitis[0].id,
+                          visitsNumber: my_course_visitis[0].visitsNumber + 1
                         }}
                         refetchQueries={() => [
                           {
@@ -240,6 +242,11 @@ export default class Course extends Component {
                                 <a>
                                   <Button
                                     onClick={() => {
+                                      console.log("2");
+                                      console.log(
+                                        data.courseVisits[0].id,
+                                        data.courseVisits[0].visitsNumber
+                                      );
                                       updateCourseVisit();
                                     }}
                                   >
