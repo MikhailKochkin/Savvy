@@ -28,7 +28,7 @@ const NoteStyles = styled.div`
     }
   }
   table {
-    width: 90%;
+    width: 100%;
     border: 1px solid #edefed;
     border-collapse: collapse;
     tr {
@@ -48,6 +48,7 @@ const NoteStyles = styled.div`
       border-right: none;
       padding: 0% 2.5%;
       position: relative;
+      width: 5%;
     }
   }
 `;

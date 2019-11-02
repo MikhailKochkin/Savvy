@@ -162,9 +162,12 @@ export default class Course extends Component {
               {({ data, error, loading }) => {
                 if (loading) return <p>Loading...</p>;
                 if (error) return <p>Error: {error.message}</p>;
+                const my_course_visitis = data.courseVisits.filter(
+                  visit => visit.student.id === me.id
+                );
                 return (
                   <>
-                    {data.courseVisits.length === 0 && (
+                    {my_course_visitis.length === 0 && (
                       <Mutation
                         mutation={CREATE_COURSE_VISIT_MUTATION}
                         variables={{
@@ -208,7 +211,7 @@ export default class Course extends Component {
                         }}
                       </Mutation>
                     )}
-                    {data.courseVisits.length > 0 && (
+                    {my_course_visitis.length > 0 && (
                       <Mutation
                         mutation={UPDATE_COURSE_VISIT_MUTATION}
                         variables={{
