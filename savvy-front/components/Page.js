@@ -11,7 +11,7 @@ import Layout from "../components/Layout";
 import User from "./User";
 
 const theme = {
-  blue: "#6DAAE1",
+  blue: "#112A62",
   black: "#393939",
   maxWidth: "1200px",
   offWhite: "#EDEDED",

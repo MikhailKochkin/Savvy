@@ -26,6 +26,9 @@ const SINGLE_LESSON_QUERY = gql`
       notes {
         id
         text
+        user {
+          id
+        }
       }
       shots {
         id
@@ -241,7 +244,7 @@ const LessonPart = styled.div`
   display: flex;
   border: 1px solid #edefed;
   padding: 0.5% 2%;
-  width: 40%;
+  width: 45%;
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
@@ -259,7 +262,7 @@ const Navigation = styled.div`
   display: flex;
   flex-direction: row;
   margin-bottom: 40px;
-  width: 40%;
+  width: 45%;
   button {
     border: none;
     background: none;
@@ -290,6 +293,10 @@ const Navigation = styled.div`
     padding: 1.5%;
     button {
       width: 50%;
+      height: 40px;
+    }
+    div {
+      padding: 0;
     }
   }
 `;
@@ -299,7 +306,7 @@ const Header = styled.div`
   background: #edefed;
   margin-top: 4%;
   border-bottom: 0;
-  width: 40%;
+  width: 45%;
   text-align: left;
   padding: 5px 0px 5px 2%;
   @media (max-width: 800px) {
@@ -382,7 +389,8 @@ class SingleLesson extends Component {
                 return (
                   <>
                     {lesson && (
-                      <AreYouEnrolled subject={lesson.coursePage.id}>
+                      <>
+                        {/* <AreYouEnrolled subject={lesson.coursePage.id}> */}
                         <Container>
                           <ReactResizeDetector
                             handleWidth
@@ -435,7 +443,8 @@ class SingleLesson extends Component {
                           </Navigation>
                         </Container>{" "}
                         <div id="root"></div>
-                      </AreYouEnrolled>
+                        {/* </AreYouEnrolled> */}
+                      </>
                     )}
                   </>
                 );

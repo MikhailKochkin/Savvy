@@ -110,6 +110,9 @@ const SINGLE_LESSON_QUERY = gql`
       notes {
         id
         text
+        user {
+          id
+        }
       }
       quizes {
         id
@@ -325,8 +328,7 @@ const LessonStyles = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
-
-  flex-basis: 75%;
+  flex-basis: 70%;
   flex-direction: column;
   /* background: white; */
   border-radius: 2px;
@@ -342,7 +344,7 @@ const LessonPart = styled.div`
 
 const MenuPart = styled.div`
   display: flex;
-  flex-basis: 25%;
+  flex-basis: 30%;
   flex-direction: column;
   margin-left: 1rem;
   border-radius: 2px;
@@ -629,7 +631,13 @@ class SingleLesson extends Component {
                             )}
                             {this.state.page === "note" &&
                               lesson.notes.map(note => (
-                                <Note text={note.text} />
+                                <Note
+                                  text={note.text}
+                                  note={note.id}
+                                  teacher={note.user.id}
+                                  lessonID={lesson.id}
+                                  me={me}
+                                />
                               ))}
                             {this.state.page === "shots" && (
                               <ShotsGroup

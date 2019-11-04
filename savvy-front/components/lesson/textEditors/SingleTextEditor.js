@@ -28,11 +28,50 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  width: 100%;
+  width: 90%;
   font-size: 1.6rem;
   border-radius: 5px;
   @media (max-width: 800px) {
     width: 100%;
+    font-size: 1.4rem;
+  }
+  img {
+    display: block;
+    max-width: 100%;
+    max-height: 20em;
+    box-shadow: "0 0 0 2px blue;";
+  }
+  iframe {
+    width: 100%;
+    height: 400px;
+    @media (max-width: 800px) {
+      width: 100%;
+      height: auto;
+    }
+  }
+  table {
+    width: 100%;
+    border: 1px solid #edefed;
+    border-collapse: collapse;
+    tr {
+      border: 1px solid #edefed;
+    }
+    thead {
+      background: #f5f5f5;
+      font-weight: bold;
+    }
+    th {
+      border: 1px solid #edefed;
+    }
+    td {
+      border: 1px solid #edefed;
+      border-top: none;
+      border-bottom: none;
+      border-right: none;
+      padding: 0% 2.5%;
+      position: relative;
+      width: 5%;
+    }
   }
 `;
 
@@ -68,7 +107,7 @@ const Hint = styled.div`
 const Button = styled.button`
   padding: 1.5% 2%;
   background: ${props => props.theme.green};
-  width: 35%;
+  width: 20%;
   border-radius: 5px;
   color: white;
   font-weight: 600;
@@ -190,7 +229,7 @@ class SingleTextEditor extends Component {
                   <>
                     {!this.state.show && (
                       <>
-                        Да, это ошибка. Исправьте её:
+                        Ваш вариант:
                         <Input
                           type="text"
                           name="answer"
@@ -224,7 +263,7 @@ class SingleTextEditor extends Component {
           </EditText>
         </TextBar>
         <Buttons>
-          {data.length === 0 && (
+          {data.length === 0 && this.state.total > 0 && (
             <Mutation
               mutation={CREATE_TEXTEDITORRESULT_MUTATION}
               variables={{
@@ -251,9 +290,7 @@ class SingleTextEditor extends Component {
                     const res = await createTextEditorResult();
                   }}
                 >
-                  {this.state.mistakesShown
-                    ? "Скрыть ошибки"
-                    : "Проверить и сохранить"}
+                  {this.state.mistakesShown ? "Скрыть ошибки" : " Сохранить"}
                 </Button>
               )}
             </Mutation>

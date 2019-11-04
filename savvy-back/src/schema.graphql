@@ -373,6 +373,7 @@ type Query {
     first: Int
     last: Int
   ): [CourseVisit]!
+  note(where: NoteWhereUniqueInput!): Note
 }
 
 type User {

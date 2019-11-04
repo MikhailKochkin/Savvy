@@ -288,6 +288,32 @@ class LessonHeader extends Component {
                                     </A>
                                   </Link>
                                 ) : null}
+                                {me &&
+                                  lesson &&
+                                  me.id !== lesson.user.id &&
+                                  lesson.id === "ck2f2qpye07gr078552nipxok" &&
+                                  this.state.published && (
+                                    <Link
+                                      href={{
+                                        pathname: "/lesson",
+                                        query: {
+                                          id: lesson.id,
+                                          type: lesson.type.toLowerCase()
+                                        }
+                                      }}
+                                    >
+                                      <A>
+                                        <Button
+                                          onClick={() => {
+                                            createLessonResult();
+                                            console.log("CREATE");
+                                          }}
+                                        >
+                                          Перейти
+                                        </Button>
+                                      </A>
+                                    </Link>
+                                  )}
 
                                 {me &&
                                   lesson &&
@@ -390,34 +416,6 @@ class LessonHeader extends Component {
                                     </A>
                                   </Link>
                                 )}
-
-                              {/* {me &&
-                                lesson &&
-                                me.id !== lesson.user.id &&
-                                (!students.includes(me.id) ||
-                                  !new_students.includes(me.id)) &&
-                                this.props.index === 1 && (
-                                  <Link
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: lesson.type.toLowerCase()
-                                      }
-                                    }}
-                                  >
-                                    <A>
-                                      <Button
-                                        onClick={() => {
-                                          updateLessonResult();
-                                          console.log("UPDATE");
-                                        }}
-                                      >
-                                        Перейти4
-                                      </Button>
-                                    </A>
-                                  </Link>
-                                )} */}
                             </>
                           );
                         }}

@@ -4,31 +4,23 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import Router from "next/router";
 import dynamic from "next/dynamic";
-import { PAGE_LESSONS_QUERY } from "../course/CoursePage";
-import AreYouATeacher from "../auth/AreYouATeacher";
-import PleaseSignIn from "../auth/PleaseSignIn";
+import { PAGE_LESSONS_QUERY } from "../../course/CoursePage";
+import AreYouATeacher from "../../auth/AreYouATeacher";
+import PleaseSignIn from "../../auth/PleaseSignIn";
 
-const SINGLE_LESSON_QUERY = gql`
-  query SINGLE_LESSON_QUERY($id: ID!) {
-    lesson(where: { id: $id }) {
-      name
-      number
+const SINGLE_NOTE_QUERY = gql`
+  query SINGLE_NOTE_QUERY($id: ID!) {
+    note(where: { id: $id }) {
+      id
       text
     }
   }
 `;
 
-const UPDATE_LESSON_MUTATION = gql`
-  mutation UPDATE_LESSON_MUTATION(
-    $id: ID!
-    $number: Int
-    $name: String
-    $text: String
-  ) {
-    updateLesson(id: $id, number: $number, name: $name, text: $text) {
+const UPDATE_NOTE_MUTATION = gql`
+  mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String) {
+    updateNote(id: $id, text: $text) {
       id
-      number
-      name
       text
     }
   }
@@ -37,13 +29,12 @@ const UPDATE_LESSON_MUTATION = gql`
 const Container = styled.div`
   width: 100%;
   display: grid;
-  margin: 5% 0;
+  margin: 1% 0 0 0;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(3 70px);
   grid-template-areas:
     "explain"
     "first   ";
-
   h4 {
     padding: 0% 5%;
   }
@@ -84,23 +75,17 @@ const Button = styled.button`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
+const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false
 });
 
-export default class UpdateLesson extends Component {
+export default class UpdateNote extends Component {
   state = {};
   handleName = e => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
-  };
-  handleNumber = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    const val = Math.round(value);
-    this.setState({ [name]: val });
   };
 
   myCallback = dataFromChild => {
@@ -115,64 +100,43 @@ export default class UpdateLesson extends Component {
       <PleaseSignIn>
         <AreYouATeacher subject={lessonID}>
           <Query
-            query={SINGLE_LESSON_QUERY}
+            query={SINGLE_NOTE_QUERY}
             variables={{
-              id: lessonID
+              id: this.props.note
             }}
           >
             {({ data, loading }) => {
               if (loading) return <p>Loading...</p>;
-              if (!data.lesson)
+              if (!data.note)
                 return <p>No Course Page Found for ID {lessonID}</p>;
               return (
                 <>
                   <Container>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="Название урока"
-                      defaultValue={data.lesson.name}
-                      onChange={this.handleName}
-                    />
-                    <input
-                      type="number"
-                      id="number"
-                      name="number"
-                      placeholder="Номер урока"
-                      defaultValue={data.lesson.number}
-                      onChange={this.handleNumber}
-                    />
                     <DynamicLoadedEditor
                       getEditorText={this.myCallback}
-                      previousText={data.lesson.text}
+                      previousText={data.note.text}
                     />
 
                     <Mutation
-                      mutation={UPDATE_LESSON_MUTATION}
+                      mutation={UPDATE_NOTE_MUTATION}
                       variables={{
-                        id: lessonID,
+                        id: this.props.note,
                         ...this.state
                       }}
-                      refetchQueries={() => [
-                        {
-                          query: PAGE_LESSONS_QUERY,
-                          variables: { id: lessonID }
-                        }
-                      ]}
+                      //   refetchQueries={() => [
+                      //     {
+                      //       query: PAGE_LESSONS_QUERY,
+                      //       variables: { id: lessonID }
+                      //     }
+                      //   ]}
                     >
-                      {(updateLesson, { loading, error }) => (
+                      {(updateNote, { loading, error }) => (
                         <Button
                           onClick={async e => {
                             // Stop the form from submitting
                             e.preventDefault();
                             // call the mutation
-                            const res = await updateLesson();
-                            // change the page to the single case page
-                            // Router.push({
-                            //   pathname: "/lesson",
-                            //   query: { id: lessonID, type: "REGULAR" }
-                            // });
+                            const res = await updateNote();
                           }}
                         >
                           {loading ? "Сохраняем..." : "Сохранить"}

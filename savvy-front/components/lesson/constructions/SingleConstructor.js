@@ -33,6 +33,9 @@ const Styles = styled.div`
   margin-bottom: 4%;
   flex-direction: row;
   justify-content: space-between;
+  @media (max-width: 800px) {
+    font-size: 1.4rem;
+  }
 `;
 
 const Variants = styled.div`
@@ -44,7 +47,6 @@ const Answers = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
-  /* justify-content: center; */
 `;
 
 const Button = styled.button`
@@ -70,10 +72,19 @@ const Button = styled.button`
 const Box = styled.div`
   border: 1px solid #c4c4c4;
   border-radius: 10px;
-  padding: 0 4%;
+  /* padding: 0 4%; */
   margin-bottom: 4%;
   input {
     pointer-events: none;
+  }
+  .box {
+    padding: 0 15px;
+  }
+  .number {
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    padding: 0 15px;
+    background: #edefed;
   }
 `;
 
@@ -276,11 +287,14 @@ class SingleConstructor extends Component {
         <Variants>
           <Title>Конструктор</Title>
           {this.state.variants.map((option, index) => (
-            <Box>
-              <div key={index}>
-                {renderHTML(`<span>${index + 1}. </span>` + option)}
-              </div>
-            </Box>
+            <>
+              <Box>
+                <div key={index}>
+                  <div className="number">{index + 1}. </div>
+                  <div className="box">{renderHTML(option)} </div>
+                </div>
+              </Box>
+            </>
           ))}
         </Variants>
         <Answers>

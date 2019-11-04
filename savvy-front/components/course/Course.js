@@ -152,117 +152,118 @@ export default class Course extends Component {
                 {coursePage.user.name} из {coursePage.user.company.name}
               </Author>
             )}
-
-            <Query
-              query={SINGLE_COURSE_VISIT_QUERY}
-              variables={{
-                coursePage: id
-              }}
-            >
-              {({ data, error, loading }) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error: {error.message}</p>;
-                const my_course_visitis = data.courseVisits.filter(
-                  visit => visit.student.id === me.id
-                );
-                console.log(my_course_visitis.length);
-                return (
-                  <>
-                    {my_course_visitis.length === 0 && (
-                      <Mutation
-                        mutation={CREATE_COURSE_VISIT_MUTATION}
-                        variables={{
-                          coursePage: id,
-                          visitsNumber: 1
-                        }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_COURSE_VISIT_QUERY,
-                            variables: {
-                              coursePage: id
+            {me && (
+              <Query
+                query={SINGLE_COURSE_VISIT_QUERY}
+                variables={{
+                  coursePage: id
+                }}
+              >
+                {({ data, error, loading }) => {
+                  if (loading) return <p>Loading...</p>;
+                  if (error) return <p>Error: {error.message}</p>;
+                  const my_course_visitis = data.courseVisits.filter(
+                    visit => visit.student.id === me.id
+                  );
+                  console.log(my_course_visitis.length);
+                  return (
+                    <>
+                      {my_course_visitis.length === 0 && (
+                        <Mutation
+                          mutation={CREATE_COURSE_VISIT_MUTATION}
+                          variables={{
+                            coursePage: id,
+                            visitsNumber: 1
+                          }}
+                          refetchQueries={() => [
+                            {
+                              query: SINGLE_COURSE_VISIT_QUERY,
+                              variables: {
+                                coursePage: id
+                              }
                             }
-                          }
-                        ]}
-                      >
-                        {(createCourseVisit, { loading, error }) => {
-                          return (
-                            <>
+                          ]}
+                        >
+                          {(createCourseVisit, { loading, error }) => {
+                            return (
                               <>
-                                {me && coursePage && (
-                                  <Link
-                                    href={{
-                                      pathname: "/coursePage",
-                                      query: { id }
-                                    }}
-                                  >
-                                    <a>
-                                      <Button
-                                        onClick={() => {
-                                          console.log("1");
-                                          createCourseVisit();
-                                        }}
-                                      >
-                                        Перейти
-                                      </Button>
-                                    </a>
-                                  </Link>
-                                )}
+                                <>
+                                  {me && coursePage && (
+                                    <Link
+                                      href={{
+                                        pathname: "/coursePage",
+                                        query: { id }
+                                      }}
+                                    >
+                                      <a>
+                                        <Button
+                                          onClick={() => {
+                                            console.log("1");
+                                            createCourseVisit();
+                                          }}
+                                        >
+                                          Перейти
+                                        </Button>
+                                      </a>
+                                    </Link>
+                                  )}
+                                </>
                               </>
-                            </>
-                          );
-                        }}
-                      </Mutation>
-                    )}
-                    {my_course_visitis.length > 0 && (
-                      <Mutation
-                        mutation={UPDATE_COURSE_VISIT_MUTATION}
-                        variables={{
-                          id: my_course_visitis[0].id,
-                          visitsNumber: my_course_visitis[0].visitsNumber + 1
-                        }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_COURSE_VISIT_QUERY,
-                            variables: {
-                              coursePage: id
+                            );
+                          }}
+                        </Mutation>
+                      )}
+                      {my_course_visitis.length > 0 && (
+                        <Mutation
+                          mutation={UPDATE_COURSE_VISIT_MUTATION}
+                          variables={{
+                            id: my_course_visitis[0].id,
+                            visitsNumber: my_course_visitis[0].visitsNumber + 1
+                          }}
+                          refetchQueries={() => [
+                            {
+                              query: SINGLE_COURSE_VISIT_QUERY,
+                              variables: {
+                                coursePage: id
+                              }
                             }
-                          }
-                        ]}
-                      >
-                        {(updateCourseVisit, { loading, error }) => {
-                          return (
-                            me &&
-                            coursePage && (
-                              <Link
-                                href={{
-                                  pathname: "/coursePage",
-                                  query: { id }
-                                }}
-                              >
-                                <a>
-                                  <Button
-                                    onClick={() => {
-                                      console.log("2");
-                                      console.log(
-                                        data.courseVisits[0].id,
-                                        data.courseVisits[0].visitsNumber
-                                      );
-                                      updateCourseVisit();
-                                    }}
-                                  >
-                                    Перейти
-                                  </Button>
-                                </a>
-                              </Link>
-                            )
-                          );
-                        }}
-                      </Mutation>
-                    )}
-                  </>
-                );
-              }}
-            </Query>
+                          ]}
+                        >
+                          {(updateCourseVisit, { loading, error }) => {
+                            return (
+                              me &&
+                              coursePage && (
+                                <Link
+                                  href={{
+                                    pathname: "/coursePage",
+                                    query: { id }
+                                  }}
+                                >
+                                  <a>
+                                    <Button
+                                      onClick={() => {
+                                        console.log("2");
+                                        console.log(
+                                          data.courseVisits[0].id,
+                                          data.courseVisits[0].visitsNumber
+                                        );
+                                        updateCourseVisit();
+                                      }}
+                                    >
+                                      Перейти
+                                    </Button>
+                                  </a>
+                                </Link>
+                              )
+                            );
+                          }}
+                        </Mutation>
+                      )}
+                    </>
+                  );
+                }}
+              </Query>
+            )}
           </>
         </Additional>
       </CaseCard>

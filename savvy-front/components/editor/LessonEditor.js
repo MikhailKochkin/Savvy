@@ -461,16 +461,7 @@ class App extends React.Component {
     );
   };
 
-  renderNormalToolbar = () => {
-    return (
-      <div className="buttons">
-        <button onClick={this.onInsertTable}>Insert Table</button>
-      </div>
-    );
-  };
-
   onInsertTable = () => {
-    console.log(this.editor);
     this.onChange(this.editor.insertTable());
   };
 
@@ -495,16 +486,7 @@ class App extends React.Component {
   };
 
   onToggleHeaders = () => {
-    console.log("!!!");
     this.onChange(this.editor.toggleTableHeaders());
-  };
-
-  renderNormalToolbar = () => {
-    return (
-      <div className="buttons">
-        <button onClick={this.onInsertTable}>Insert Table</button>
-      </div>
-    );
   };
 
   // On clicking the image button, prompt for an image and insert it.

@@ -71,7 +71,6 @@ const Container = styled.div`
   grid-template-areas:
     "explain"
     "first   ";
-  p,
   h4 {
     padding: 0% 5%;
   }

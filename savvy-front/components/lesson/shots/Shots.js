@@ -30,8 +30,11 @@ const Commentary = styled.div`
 const Text = styled.div`
   p {
     padding: 1% 2%;
-    margin: 2% 0;
+    margin: 1% 0;
   }
+  /* span {
+    padding: 0.5% 0.3%;
+  } */
   .true {
     background: #edffe7;
     border-radius: 10px;

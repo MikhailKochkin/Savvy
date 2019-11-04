@@ -21,6 +21,10 @@ import { commentO } from "react-icons-kit/fa/commentO";
 import { commentingO } from "react-icons-kit/fa/commentingO";
 import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
+import { table } from "react-icons-kit/fa/table";
+
+import DeepTable from "slate-deep-table";
+const plugins = [DeepTable()];
 
 const LinkStyle = styled.a`
   text-decoration: underline;
@@ -52,6 +56,30 @@ const ButtonStyle = styled.button`
   &:hover {
     background: #112862;
     color: white;
+  }
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border: 1px solid #edefed;
+  border-collapse: collapse;
+  tr {
+    border: 1px solid #edefed;
+  }
+  thead {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+  th {
+    border: 1px solid #edefed;
+  }
+  td {
+    border: 1px solid #edefed;
+    padding: 0% 2.5%;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    position: relative;
   }
 `;
 
@@ -130,6 +158,7 @@ function insertVideo(editor, src, target) {
 }
 
 const rules = [
+  ...DeepTable.makeSerializerRules(),
   {
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
@@ -338,12 +367,42 @@ class App extends React.Component {
     editor.unwrapInline("translation");
   };
 
+  onInsertTable = () => {
+    this.onChange(this.editor.insertTable());
+  };
+
+  onInsertColumn = () => {
+    this.onChange(this.editor.insertColumn());
+  };
+
+  onInsertRow = () => {
+    this.onChange(this.editor.insertRow());
+  };
+
+  onRemoveColumn = () => {
+    this.onChange(this.editor.removeColumn());
+  };
+
+  onRemoveRow = () => {
+    this.onChange(this.editor.removeRow());
+  };
+
+  onRemoveTable = () => {
+    this.onChange(this.editor.removeTable());
+  };
+
+  onToggleHeaders = () => {
+    this.onChange(this.editor.toggleTableHeaders());
+  };
+
   // Store a reference to the `editor`.
   ref = editor => {
     this.editor = editor;
   };
 
   render() {
+    const { value } = this.state;
+    const isTable = this.editor && this.editor.isSelectionInTable(value);
     return (
       <>
         <FormatToolBar>
@@ -361,6 +420,9 @@ class App extends React.Component {
           <ButtonStyle onMouseDown={event => this.onClickFilm(event)}>
             <Icon icon={film} />
           </ButtonStyle>
+          <ButtonStyle onMouseDown={event => this.onInsertTable(event)}>
+            <Icon icon={table} />
+          </ButtonStyle>
           <ButtonStyle onMouseDown={event => this.onClickComment(event)}>
             <Icon icon={commentO} />
           </ButtonStyle>
@@ -368,10 +430,12 @@ class App extends React.Component {
             <Icon icon={commentingO} />
           </ButtonStyle>
         </FormatToolBar>
+        {isTable ? this.renderTableToolbar() : null}
         <Editor
           style={AppStyles}
           placeholder="Начните писать..."
           ref={this.ref}
+          plugins={plugins}
           value={this.state.value}
           onChange={this.onChange}
           onKeyDown={this.onKeyDown}
@@ -412,6 +476,16 @@ class App extends React.Component {
           />
         );
       }
+      case "table":
+        return (
+          <Table>
+            <tbody {...attributes}>{children}</tbody>
+          </Table>
+        );
+      case "table-row":
+        return <tr {...attributes}>{children}</tr>;
+      case "table-cell":
+        return <td {...attributes}>{children}</td>;
       default: {
         return next();
       }
@@ -485,6 +559,23 @@ class App extends React.Component {
       <ButtonStyle onMouseDown={event => this.onClickBlock(event, type)}>
         <Icon icon={list} />
       </ButtonStyle>
+    );
+  };
+
+  renderTableToolbar = () => {
+    return (
+      <div className="buttons">
+        <ButtonStyle onClick={this.onInsertColumn}>
+          Добавить столбец
+        </ButtonStyle>
+        <ButtonStyle onClick={this.onInsertRow}>Добавить строку</ButtonStyle>
+        <ButtonStyle onClick={this.onRemoveColumn}>Убрать столбец</ButtonStyle>
+        <ButtonStyle onClick={this.onRemoveRow}>Убрать строку</ButtonStyle>
+        <ButtonStyle onClick={this.onRemoveTable}>Убрать таблицу</ButtonStyle>
+        <ButtonStyle onClick={this.onToggleHeaders}>
+          Поменять заголовок
+        </ButtonStyle>
+      </div>
     );
   };
 

@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import UpdateNote from "./UpdateNote";
 
 const NoteStyles = styled.div`
   width: 100%;
-  margin: 2% 0;
+  margin: 2% 0 0 0;
   padding: 1%;
   font-size: 1.6rem;
+  @media (max-width: 800px) {
+    font-size: 1.4rem;
+  }
   img {
     display: block;
     max-width: 100%;
@@ -53,9 +57,48 @@ const NoteStyles = styled.div`
   }
 `;
 
+const Button = styled.button`
+  border: none;
+  background: none;
+  border: 1px solid #112a62;
+  border-radius: 5px;
+  font-family: Montserrat;
+  padding: 1.5% 3%;
+  font-size: 1.6rem;
+  margin-right: 3%;
+  outline: 0;
+  color: #112a62;
+  cursor: pointer;
+  &:hover {
+    background: #112a62;
+    color: white;
+  }
+  @media (max-width: 800px) {
+    margin-bottom: 20px;
+  }
+`;
+
 class note extends Component {
+  state = {
+    update: false
+  };
+  switch = () => {
+    this.setState(prev => ({ update: !prev.update }));
+  };
   render() {
-    return <NoteStyles>{renderHTML(this.props.text)}</NoteStyles>;
+    return (
+      <>
+        {!this.state.update && (
+          <NoteStyles>{renderHTML(this.props.text)}</NoteStyles>
+        )}
+        {this.state.update && <UpdateNote note={this.props.note} />}
+        {this.props.me.id === this.props.teacher && (
+          <Button onClick={this.switch}>
+            {!this.state.update ? "Изменить" : "Вернуться"}
+          </Button>
+        )}
+      </>
+    );
   }
 }
 

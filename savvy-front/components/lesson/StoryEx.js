@@ -15,7 +15,16 @@ class StoryEx extends Component {
     let item;
     if (Object.keys(m)[0] === "note") {
       el = lesson.notes.find(note => note.id === Object.values(m)[0]);
-      item = <Note text={el.text} />;
+      item = (
+        <Note
+          text={el.text}
+          text={el.text}
+          note={el.id}
+          teacher={el.user.id}
+          lessonID={lesson.id}
+          me={me}
+        />
+      );
     } else if (Object.keys(m)[0] === "newTest") {
       el = lesson.newTests.find(test => test.id === Object.values(m)[0]);
       item = (
