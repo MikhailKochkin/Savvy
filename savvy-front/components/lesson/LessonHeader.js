@@ -306,7 +306,6 @@ class LessonHeader extends Component {
                                         <Button
                                           onClick={() => {
                                             createLessonResult();
-                                            console.log("CREATE");
                                           }}
                                         >
                                           Перейти
@@ -335,7 +334,6 @@ class LessonHeader extends Component {
                                         <Button
                                           onClick={() => {
                                             createLessonResult();
-                                            console.log("CREATE");
                                           }}
                                         >
                                           Перейти
@@ -367,7 +365,10 @@ class LessonHeader extends Component {
                         {(updateLessonResult, { loading, error }) => {
                           return (
                             <>
-                              {me && lesson && me.id === lesson.user.id ? (
+                              {me &&
+                              lesson &&
+                              (me.id === lesson.user.id ||
+                                lesson.id === "ck2f2qpye07gr078552nipxok") ? (
                                 <Link
                                   href={{
                                     pathname: "/lesson",
@@ -408,7 +409,6 @@ class LessonHeader extends Component {
                                       <Button
                                         onClick={() => {
                                           updateLessonResult();
-                                          console.log("UPDATE");
                                         }}
                                       >
                                         Перейти
