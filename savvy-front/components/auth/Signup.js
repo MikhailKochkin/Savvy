@@ -308,8 +308,12 @@ class Signup extends Component {
                         value={this.state.careerTrackID}
                         onChange={this.saveToState}
                       >
-                        <option value="STUDENT">Корпоративное право</option>
-                        <option value="AUTHOR">Право и технологии</option>
+                        <option value="cjwx78u7700rb07121pelqctm">
+                          Корпоративное право
+                        </option>
+                        <option value="cjwx79iaj00rk0712tz12j7vi">
+                          Право и технологии
+                        </option>
                       </select>
                       <Comment>
                         Карьерный трек необходим для составления плана
@@ -318,12 +322,7 @@ class Signup extends Component {
                     </label>
                   </>
                 )}
-                <select
-                  name="isFamiliar"
-                  className="isFamiliar"
-                  // value={this.state.isFamiliar}
-                  // onChange={this.saveToState}
-                >
+                <select name="isFamiliar" className="isFamiliar">
                   <option value={false}>
                     Согласие на обработку персональных данных
                   </option>

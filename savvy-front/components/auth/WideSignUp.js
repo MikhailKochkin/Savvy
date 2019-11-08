@@ -313,10 +313,6 @@ class WideSignUp extends Component {
                     Карьерный трек необходим для составления плана карьерного
                     развития, поиска курсов и предложений работы.
                   </Comment>
-                  {/* <Comment>
-                    Если вы не знаете, какой карьерный трек выбрать,
-                    воспользуйтесь <a href="#">карьерным помощником.</a>
-                  </Comment> */}
                 </label>
 
                 <select name="isFamiliar" className="isFamiliar">

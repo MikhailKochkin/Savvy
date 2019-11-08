@@ -269,6 +269,7 @@ class LessonHeader extends Component {
                                 (me.id === lesson.user.id ||
                                   me.permissions.includes("ADMIN")) ? (
                                   <Link
+                                    // The user is the teacher or the admin. We do not record their activity.
                                     href={{
                                       pathname: "/lesson",
                                       query: {
@@ -288,31 +289,6 @@ class LessonHeader extends Component {
                                     </A>
                                   </Link>
                                 ) : null}
-                                {me &&
-                                  lesson &&
-                                  me.id !== lesson.user.id &&
-                                  lesson.id === "ck2f2qpye07gr078552nipxok" &&
-                                  this.state.published && (
-                                    <Link
-                                      href={{
-                                        pathname: "/lesson",
-                                        query: {
-                                          id: lesson.id,
-                                          type: lesson.type.toLowerCase()
-                                        }
-                                      }}
-                                    >
-                                      <A>
-                                        <Button
-                                          onClick={() => {
-                                            createLessonResult();
-                                          }}
-                                        >
-                                          Перейти
-                                        </Button>
-                                      </A>
-                                    </Link>
-                                  )}
 
                                 {me &&
                                   lesson &&
@@ -322,6 +298,7 @@ class LessonHeader extends Component {
                                   !me.permissions.includes("ADMIN") &&
                                   this.state.published && (
                                     <Link
+                                      // The user hasn't visited the lesson page before. Create the lesson visit node.
                                       href={{
                                         pathname: "/lesson",
                                         query: {
@@ -370,6 +347,7 @@ class LessonHeader extends Component {
                               (me.id === lesson.user.id ||
                                 lesson.id === "ck2f2qpye07gr078552nipxok") ? (
                                 <Link
+                                  // The teacher or the admin visit the lesson page for the second time. We do not update anything.
                                   href={{
                                     pathname: "/lesson",
                                     query: {
@@ -397,6 +375,7 @@ class LessonHeader extends Component {
                                   new_students.includes(me.id)) &&
                                 this.state.published && (
                                   <Link
+                                    // The user HAS visited the lesson page and we update it now
                                     href={{
                                       pathname: "/lesson",
                                       query: {

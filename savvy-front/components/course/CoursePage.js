@@ -421,13 +421,6 @@ class CoursePage extends Component {
                                           </Buttons>
                                           {this.state.page === "lessons" && (
                                             <>
-                                              {/* <Total>
-                                                Всего:{" "}
-                                                {
-                                                  data2.lessonsConnection
-                                                    .aggregate.count
-                                                }
-                                              </Total> */}
                                               {data1.lessons.map(
                                                 (lesson, index) => (
                                                   <LessonHeader
