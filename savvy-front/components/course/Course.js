@@ -117,10 +117,9 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
   max-width: 30%;
   @media (max-width: 800px) {
-    width: 90%;
+    max-width: 90%;
   }
 `;
-
 const Additional = styled.div`
   display: flex;
   height: 100%;
@@ -131,7 +130,7 @@ const Additional = styled.div`
 const SignUpButton = styled.button`
   font-family: Montserrat;
   border: none;
-  /* background: #f0f8ff; */
+  background: #fff;
   border-radius: 5px;
   padding: 2% 1.5%;
   font-size: 1.5rem;

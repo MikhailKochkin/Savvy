@@ -15,7 +15,7 @@ const SIGN_OUT_MUTATION = gql`
 const Button = styled.div`
   border: none;
   background: none;
-  padding-right: 0;
+  margin-left: 8px;
   cursor: pointer;
   &:hover {
     color: #6daae1;

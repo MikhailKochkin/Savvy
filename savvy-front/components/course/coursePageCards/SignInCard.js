@@ -71,7 +71,7 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
   max-width: 30%;
   @media (max-width: 800px) {
-    width: 90%;
+    max-width: 90%;
   }
 `;
 

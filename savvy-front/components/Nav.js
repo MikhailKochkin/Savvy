@@ -206,8 +206,8 @@ class Nav extends Component {
   };
 
   openNav = () => {
-    document.getElementById("mySidenav").style.height = "30%";
-    document.getElementById("mySidenav").style.paddingTop = "40px";
+    document.getElementById("mySidenav").style.height = "35%";
+    document.getElementById("mySidenav").style.paddingTop = "50px";
   };
 
   /* Set the width of the side navigation to 0 */
@@ -403,7 +403,7 @@ class Nav extends Component {
                         }}
                       >
                         <button onClick={this.closeNav}>
-                          <a>Курсы по карьерным трекам</a>
+                          <a>Курсы Savvvy App</a>
                         </button>
                       </Link>
                       <Link
