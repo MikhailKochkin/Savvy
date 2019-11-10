@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import dynamic from "next/dynamic";
 import Error from "../ErrorMessage";
 import Router from "next/router";
 import User from "../User";
@@ -11,6 +12,10 @@ const CREATE_COURSE_MUTATION = gql`
     $title: String!
     $description: String!
     $image: String
+    $audience: String
+    $result: String
+    $tariffs: String
+    $methods: String
     $courseType: CourseType
     $published: Boolean
     $uniID: ID
@@ -19,6 +24,10 @@ const CREATE_COURSE_MUTATION = gql`
       title: $title
       description: $description
       image: $image
+      audience: $audience
+      result: $result
+      tariffs: $tariffs
+      methods: $methods
       courseType: $courseType
       published: $published
       uniID: $uniID
@@ -66,6 +75,7 @@ const Fieldset = styled.fieldset`
     padding: 2%;
     font-size: 1.6rem;
     outline: 0;
+    font-family: Montserrat;
   }
   textarea {
     height: 60%;
@@ -76,6 +86,7 @@ const Fieldset = styled.fieldset`
     padding: 2%;
     font-size: 1.6rem;
     outline: 0;
+    font-family: Montserrat;
   }
   .upload {
     border: 1px dashed #e5e5e5;
@@ -127,6 +138,29 @@ const Button = styled.button`
   }
 `;
 
+const Frame = styled.div`
+  height: 60%;
+  width: 100%;
+  margin-bottom: 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3.5px;
+  padding-left: 1%;
+  font-size: 1.6rem;
+  outline: 0;
+  p {
+    margin-left: 0.6%;
+  }
+`;
+
+const Header = styled.div`
+  margin-bottom: 1.5%;
+`;
+
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false
+});
+
 export default class CreateCourse extends Component {
   state = {
     title: "",
@@ -177,113 +211,150 @@ export default class CreateCourse extends Component {
     });
   };
 
+  myCallback = (dataFromChild, name) => {
+    let st = name;
+    this.setState({
+      [st]: dataFromChild
+    });
+  };
+
   render() {
     return (
-      <User>
-        {({ data: { me } }) => (
-          <>
-            <Mutation mutation={CREATE_COURSE_MUTATION} variables={this.state}>
-              {(createCoursePage, { loading, error }) => (
-                <Mutation
-                  mutation={UPDATE_UNI_MUTATION}
-                  variables={{
-                    id: me.uni.id,
-                    capacity: me.uni.capacity - 1
-                  }}
-                >
-                  {(updateUni, { loading, error }) => (
-                    <Form
-                      onSubmit={async e => {
-                        // Stop the form from submitting
-                        e.preventDefault();
-                        const res =
-                          (await me.uni.title) !== "Savvvy App"
-                            ? this.setState({ courseType: "PRIVATE" })
-                            : this.setState({ courseType: "PUBLIC" });
-                        const res1 = await this.setState({ uniID: me.uni.id });
-                        const res2 = await createCoursePage();
-                        const res3 = await updateUni();
-                        Router.push({
-                          pathname: "/coursePage",
-                          query: { id: res2.data.createCoursePage.id }
-                        });
-                      }}
-                    >
-                      <Error error={error} />
-                      <Title>Создайте страницу нового курса!</Title>
-                      <Fieldset disabled={loading} aria-busy={loading}>
-                        <input
-                          className="second"
-                          type="text"
-                          id="title"
-                          name="title"
-                          placeholder="Название курса"
-                          value={this.state.title}
-                          required
-                          onChange={this.handleChange}
-                        />
-                        <input
-                          className="second"
-                          type="text"
-                          id="description"
-                          name="description"
-                          placeholder="Его краткое описание"
-                          required
-                          value={this.state.description}
-                          onChange={this.handleChange}
-                        />
-                        <textarea
-                          type="text"
-                          id="news"
-                          name="news"
-                          placeholder="Новости курса"
-                          required
-                          value={this.state.news}
-                          onChange={this.handleChange}
-                        />
-                        <label for="file">
-                          <div className="upload">
-                            {this.state.upload === false
-                              ? "Загрузите картинку курса"
-                              : null}
-                            {this.state.upload === "pending"
-                              ? "Идет загрузка..."
-                              : null}
-                            {this.state.upload === true
-                              ? "Загрузка прошла успешно!"
-                              : null}
-                          </div>
-                        </label>
-                        <input
-                          style={{ display: "none" }}
-                          className="second"
-                          type="file"
-                          id="file"
-                          name="file"
-                          placeholder="Загрузите логотип курса..."
-                          onChange={this.uploadFile}
-                        />
-
-                        {/* {this.state.upload && (
-                          <p>Идет загрузка изображения...</p>
-                        )} */}
-                        {this.state.image && (
-                          <>
-                            <Img src={this.state.image} alt="Upload Preview" />
-                          </>
-                        )}
-                        <Buttons>
-                          <Button type="submit">Создать</Button>
-                        </Buttons>
-                      </Fieldset>
-                    </Form>
-                  )}
-                </Mutation>
-              )}
-            </Mutation>
-          </>
-        )}
-      </User>
+      <>
+        <User>
+          {({ data: { me } }) => (
+            <>
+              <Mutation
+                mutation={CREATE_COURSE_MUTATION}
+                variables={this.state}
+              >
+                {(createCoursePage, { loading, error }) => (
+                  <Mutation
+                    mutation={UPDATE_UNI_MUTATION}
+                    variables={{
+                      id: me.uni.id,
+                      capacity: me.uni.capacity - 1
+                    }}
+                  >
+                    {(updateUni, { loading, error }) => (
+                      <Form
+                        onSubmit={async e => {
+                          // Stop the form from submitting
+                          e.preventDefault();
+                          const res =
+                            (await me.uni.title) !== "Savvvy App"
+                              ? this.setState({ courseType: "PRIVATE" })
+                              : this.setState({ courseType: "PUBLIC" });
+                          const res1 = await this.setState({
+                            uniID: me.uni.id
+                          });
+                          const res2 = await createCoursePage();
+                          const res3 = await updateUni();
+                          Router.push({
+                            pathname: "/coursePage",
+                            query: { id: res2.data.createCoursePage.id }
+                          });
+                        }}
+                      >
+                        <Error error={error} />
+                        <Title>Создайте страницу нового курса!</Title>
+                        <Fieldset disabled={loading} aria-busy={loading}>
+                          <input
+                            className="second"
+                            type="text"
+                            id="title"
+                            name="title"
+                            placeholder="Название курса"
+                            value={this.state.title}
+                            required
+                            onChange={this.handleChange}
+                          />
+                          <input
+                            className="second"
+                            type="text"
+                            id="description"
+                            name="description"
+                            placeholder="Его краткое описание"
+                            required
+                            value={this.state.description}
+                            onChange={this.handleChange}
+                          />
+                          <Frame>
+                            <DynamicLoadedEditor
+                              index={1}
+                              name="result"
+                              getEditorText={this.myCallback}
+                              placeholder="Результаты студентов по итогам курса..."
+                            />
+                          </Frame>
+                          <Frame>
+                            <DynamicLoadedEditor
+                              index={1}
+                              name="methods"
+                              getEditorText={this.myCallback}
+                              placeholder="Методики преподавания..."
+                            />
+                          </Frame>
+                          <Frame>
+                            <DynamicLoadedEditor
+                              index={1}
+                              name="audience"
+                              getEditorText={this.myCallback}
+                              placeholder="Для кого этот курс..."
+                            />
+                          </Frame>
+                          <Frame>
+                            <DynamicLoadedEditor
+                              index={1}
+                              name="tariffs"
+                              getEditorText={this.myCallback}
+                              placeholder="Как работают тарифы на курсе..."
+                            />
+                          </Frame>
+                          <label for="file">
+                            <div className="upload">
+                              {this.state.upload === false
+                                ? "Загрузите картинку курса"
+                                : null}
+                              {this.state.upload === "pending"
+                                ? "Идет загрузка..."
+                                : null}
+                              {this.state.upload === true
+                                ? "Загрузка прошла успешно!"
+                                : null}
+                            </div>
+                          </label>
+                          <input
+                            style={{ display: "none" }}
+                            className="second"
+                            type="file"
+                            id="file"
+                            name="file"
+                            placeholder="Загрузите логотип курса..."
+                            onChange={this.uploadFile}
+                          />
+                          {this.state.image && (
+                            <>
+                              <Img
+                                src={this.state.image}
+                                alt="Upload Preview"
+                              />
+                            </>
+                          )}
+                          <Buttons>
+                            <Button type="submit">Создать</Button>
+                          </Buttons>
+                        </Fieldset>
+                      </Form>
+                    )}
+                  </Mutation>
+                )}
+              </Mutation>
+            </>
+          )}
+        </User>
+        <div id="root"></div>
+      </>
     );
   }
 }

@@ -16,12 +16,14 @@ const CREATE_LESSON_MUTATION = gql`
     $name: String!
     $number: Int
     $text: String!
+    $description: String!
     $coursePageID: ID!
   ) {
     createLesson(
       name: $name
       number: $number
       text: $text
+      description: $description
       coursePageID: $coursePageID
     ) {
       id
@@ -44,7 +46,7 @@ const Container = styled.div`
     height: 50%;
     width: 100%;
     margin: 1% 0;
-    border: 1px solid #c4c4c4;
+    border: 1px solid #e5e5e5;
     border-radius: 3.5px;
     padding: 2%;
     font-size: 1.6rem;
@@ -97,36 +99,59 @@ const Editor = styled.div`
   margin-top: 1%;
 `;
 
+const Frame = styled.div`
+  width: 100%;
+  margin-bottom: 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3.5px;
+  padding-left: 1%;
+  font-size: 1.6rem;
+  outline: 0;
+  p {
+    /* margin: 0.8%; */
+    margin-left: 0.6%;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false
 });
 
+const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>Загрузка...</p>,
+  ssr: false
+});
+
 export default class CreateLesson extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      text: "",
-      number: 0,
-      published: false
-    };
-    this.handleName = e => {
-      e.preventDefault();
-      const { name, value } = e.target;
-      this.setState({ [name]: value });
-    };
-    this.handleNumber = e => {
-      e.preventDefault();
-      const { name, value } = e.target;
-      const val = Math.round(value);
-      this.setState({ [name]: val });
-    };
-  }
+  state = {
+    name: "",
+    text: "",
+    number: 0,
+    published: false
+  };
+  handleName = e => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
+  };
+  handleNumber = e => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    const val = Math.round(value);
+    this.setState({ [name]: val });
+  };
 
   myCallback = dataFromChild => {
     this.setState({
       text: dataFromChild
+    });
+  };
+
+  myCallback2 = (dataFromChild, name) => {
+    let st = name;
+    this.setState({
+      [st]: dataFromChild
     });
   };
 
@@ -154,6 +179,16 @@ export default class CreateLesson extends Component {
                 placeholder="Номер"
                 onChange={this.handleNumber}
               />
+
+              <Frame>
+                <DynamicHoverEditor
+                  index={1}
+                  name="description"
+                  getEditorText={this.myCallback2}
+                  placeholder="Описание"
+                />
+              </Frame>
+
               <Editor>
                 <DynamicLoadedEditor getEditorText={this.myCallback} />
               </Editor>
@@ -201,6 +236,7 @@ export default class CreateLesson extends Component {
                 )}
               </Mutation>
             </Container>
+            <div id="root"></div>
           </Width>
         </AreYouATeacher>
       </PleaseSignIn>

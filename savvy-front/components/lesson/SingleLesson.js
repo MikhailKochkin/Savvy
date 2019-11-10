@@ -31,6 +31,7 @@ const SINGLE_LESSON_QUERY = gql`
       text
       name
       number
+      description
       open
       createdAt
       user {
@@ -97,6 +98,7 @@ const SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
+        openLesson
       }
       shots {
         id
@@ -110,9 +112,6 @@ const SINGLE_LESSON_QUERY = gql`
       notes {
         id
         text
-        user {
-          id
-        }
       }
       quizes {
         id
@@ -235,6 +234,7 @@ const TextBar = styled.div`
   a {
     color: #800000;
     text-decoration: underline;
+    cursor: pointer;
   }
   @media (max-width: 800px) {
     width: 100%;
@@ -328,7 +328,8 @@ const LessonStyles = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
-  flex-basis: 70%;
+
+  flex-basis: 75%;
   flex-direction: column;
   /* background: white; */
   border-radius: 2px;
@@ -344,7 +345,7 @@ const LessonPart = styled.div`
 
 const MenuPart = styled.div`
   display: flex;
-  flex-basis: 30%;
+  flex-basis: 25%;
   flex-direction: column;
   margin-left: 1rem;
   border-radius: 2px;
@@ -460,7 +461,7 @@ const Text = styled.div`
 
 class SingleLesson extends Component {
   state = {
-    page: "lesson",
+    page: "createNote",
     shown: false,
     width: 0
   };
@@ -510,9 +511,14 @@ class SingleLesson extends Component {
                 if (loading) return <p>Loading...</p>;
                 if (data === null) return <p>Нет урока</p>;
                 const lesson = data.lesson;
+                console.log(lesson);
                 return (
                   <>
-                    <AreYouEnrolled subject={lesson.coursePage.id}>
+                    <AreYouEnrolled
+                      subject={lesson.coursePage.id}
+                      openLesson={lesson.coursePage.openLesson}
+                      lesson={lesson.id}
+                    >
                       <Container>
                         <ReactResizeDetector
                           handleWidth
@@ -536,7 +542,7 @@ class SingleLesson extends Component {
                                   onClick={this.onSwitchMob}
                                 >
                                   {" "}
-                                  Введение{" "}
+                                  Урок{" "}
                                 </ChooseButton>
                               </ButtonZone>
                               {lesson.notes.length > 0 && (
@@ -618,7 +624,7 @@ class SingleLesson extends Component {
                             </span>
                           )}
                           <div>
-                            {lesson.number}. {lesson.name}
+                            Урок {lesson.number}. {lesson.name}
                           </div>
                         </Head>
 
@@ -631,13 +637,7 @@ class SingleLesson extends Component {
                             )}
                             {this.state.page === "note" &&
                               lesson.notes.map(note => (
-                                <Note
-                                  text={note.text}
-                                  note={note.id}
-                                  teacher={note.user.id}
-                                  lessonID={lesson.id}
-                                  me={me}
-                                />
+                                <Note text={note.text} />
                               ))}
                             {this.state.page === "shots" && (
                               <ShotsGroup
@@ -753,7 +753,10 @@ class SingleLesson extends Component {
                               <CreateTextEditor lessonID={lesson.id} />
                             )}
                             {this.state.page === "updateLesson" && (
-                              <UpdateLesson lessonID={lesson.id} />
+                              <UpdateLesson
+                                lessonID={lesson.id}
+                                description={lesson.description}
+                              />
                             )}
                             {this.state.page === "updateShots" && (
                               <UpdateShots lessonID={lesson.id} />
@@ -770,7 +773,7 @@ class SingleLesson extends Component {
                                       onClick={this.onSwitch}
                                     >
                                       {" "}
-                                      Введение{" "}
+                                      Урок{" "}
                                     </ChooseButton>
                                   </ButtonZone>
                                   {lesson.shots.length > 0 && (

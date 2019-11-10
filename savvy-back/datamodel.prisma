@@ -118,6 +118,12 @@ type CoursePage {
   company: Company @relation(name: "CompanyCoursePage")
   promocode: [Json]
   visits: [CourseVisit] @relation(name: "CourseVisits" onDelete: CASCADE)
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: [String] @scalarList(strategy: RELATION)
+  openLesson: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -174,6 +180,7 @@ type Lesson {
   open: Boolean @default(value: false)
   coursePageID: ID!
   published: Boolean @default(value: false)
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }

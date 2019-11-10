@@ -3,6 +3,7 @@ import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import User from "../User";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
@@ -12,6 +13,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       title
       description
       image
+      audience
+      result
+      tariffs
+      methods
       news
       user {
         id
@@ -26,6 +31,10 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $title: String
     $news: String
     $description: String
+    $audience: String
+    $result: String
+    $tariffs: String
+    $methods: String
     $image: String
   ) {
     updateCoursePage(
@@ -33,6 +42,10 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       news: $news
       title: $title
       description: $description
+      audience: $audience
+      result: $result
+      tariffs: $tariffs
+      methods: $methods
       image: $image
     ) {
       id
@@ -79,6 +92,7 @@ const Fieldset = styled.fieldset`
     padding: 2%;
     font-size: 1.6rem;
     outline: 0;
+    font-family: Montserrat;
   }
   textarea {
     height: 100px;
@@ -89,6 +103,7 @@ const Fieldset = styled.fieldset`
     padding: 2%;
     font-size: 1.6rem;
     outline: 0;
+    font-family: Montserrat;
   }
   .upload {
     border: 1px dashed #e5e5e5;
@@ -146,6 +161,26 @@ const Img = styled.img`
   margin-top: 3%;
 `;
 
+const Frame = styled.div`
+  height: 60%;
+  width: 100%;
+  margin-bottom: 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3.5px;
+  padding-left: 1%;
+  font-size: 1.6rem;
+  outline: 0;
+  p {
+    margin: 0.8%;
+    margin-left: 0.6%;
+  }
+`;
+
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false
+});
+
 class UpdateCoursePage extends Component {
   state = {
     upload: false
@@ -185,6 +220,13 @@ class UpdateCoursePage extends Component {
     this.setState({
       image: file.secure_url,
       upload: true
+    });
+  };
+
+  myCallback = (dataFromChild, name) => {
+    let st = name;
+    this.setState({
+      [st]: dataFromChild
     });
   };
 
@@ -255,6 +297,43 @@ class UpdateCoursePage extends Component {
                                 onChange={this.handleChange}
                               />
 
+                              <Frame>
+                                <DynamicLoadedEditor
+                                  index={1}
+                                  name="result"
+                                  getEditorText={this.myCallback}
+                                  value={coursePage.result}
+                                  placeholder="Результаты студентов по итогам курса..."
+                                />
+                              </Frame>
+                              <Frame>
+                                <DynamicLoadedEditor
+                                  index={1}
+                                  name="methods"
+                                  getEditorText={this.myCallback}
+                                  value={coursePage.methods}
+                                  placeholder="Методики преподавания..."
+                                />
+                              </Frame>
+                              <Frame>
+                                <DynamicLoadedEditor
+                                  index={1}
+                                  name="audience"
+                                  getEditorText={this.myCallback}
+                                  value={coursePage.audience}
+                                  placeholder="Для кого этот курс..."
+                                />
+                              </Frame>
+                              <Frame>
+                                <DynamicLoadedEditor
+                                  index={1}
+                                  name="tariffs"
+                                  getEditorText={this.myCallback}
+                                  value={coursePage.tariffs}
+                                  placeholder="Как работают тарифы на курсе..."
+                                />
+                              </Frame>
+
                               <label for="file">
                                 <div className="upload">
                                   {this.state.upload === false
@@ -316,6 +395,7 @@ class UpdateCoursePage extends Component {
             </Query>
           )}
         </User>
+        <div id="root"></div>
       </Width>
     );
   }

@@ -3,6 +3,8 @@ import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
 import styled from "styled-components";
 import Link from "next/link";
+import renderHTML from "react-render-html";
+import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -62,10 +64,16 @@ const UPDATE_LESSONRESULT_MUTATION = gql`
 
 const TextBar = styled.div`
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 65% 35%;
   width: 100%;
   font-size: 1.6rem;
   margin-bottom: 15px;
+  span {
+    cursor: pointer;
+    &:hover {
+      color: red;
+    }
+  }
   @media (max-width: 1000px) {
     display: flex;
     flex-direction: column;
@@ -77,6 +85,16 @@ const TextBar = styled.div`
 const A = styled.a`
   justify-self: center;
   align-self: center;
+`;
+
+const Text = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 25px;
+  .arrow {
+    cursor: pointer;
+  }
 `;
 
 const Button = styled.button`
@@ -100,7 +118,7 @@ const Buttons = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 70%;
+  width: 100%;
 `;
 
 const InProgress = styled.p`
@@ -116,6 +134,16 @@ const InProgress = styled.p`
   border-radius: 5px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
+  }
+`;
+
+const Info = styled.div`
+  background: rgba(50, 172, 102, 0.05);
+  padding: 2% 4%;
+  margin: 0 0 4% 0;
+  width: 100%;
+  @media (max-width: 800px) {
+    padding: 2% 8%;
   }
 `;
 
@@ -179,7 +207,13 @@ const ToggleQuestion = styled.div`
 
 class LessonHeader extends Component {
   state = {
-    published: this.props.lesson.published
+    published: this.props.lesson.published,
+    reveal: false,
+    info: `
+    <p>Привет!</p>
+    <p>В уроке разбираются, такие вопросы, как ...</p>
+    <p>Вы научитесь, считать, писать или читать!</p>
+    <p>Обязателен для тех, кто хочет получить отметку 5.</p>`
   };
 
   handleInputChange = event => {
@@ -189,14 +223,25 @@ class LessonHeader extends Component {
 
     this.setState({ [name]: value });
   };
+
+  toggle = () => {
+    this.setState(prev => ({ reveal: !prev.reveal }));
+  };
+
   render() {
-    const { lesson, name, new_students, students, me } = this.props;
+    const { lesson, name, new_students, students, me, openLesson } = this.props;
+    console.log(lesson.description);
     return (
       <>
         <TextBar>
-          <h4>
-            {lesson.number}. {name}
-          </h4>
+          <Text>
+            <h4>
+              {lesson.number}. {name}{" "}
+              <span className="arrow" onClick={this.toggle}>
+                {this.state.reveal ? `🔼` : `🔽`}
+              </span>
+            </h4>
+          </Text>
           <Buttons>
             {me &&
             (me.id === lesson.user.id || me.permissions.includes("ADMIN")) ? (
@@ -233,72 +278,46 @@ class LessonHeader extends Component {
                 </Mutation>
               </>
             ) : null}
-
-            <Query
-              query={SINGLE_LESSONRESULT_QUERY}
-              variables={{
-                lessonID: lesson.id,
-                id: me.id
-              }}
-            >
-              {({ data, error, loading }) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error: {error.message}</p>;
-                return (
-                  <>
-                    <Mutation
-                      mutation={CREATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        lessonID: lesson.id,
-                        visitsNumber: 1
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_LESSONRESULT_QUERY,
-                          variables: { lessonID: lesson.id }
-                        }
-                      ]}
-                    >
-                      {(createLessonResult, { loading, error }) => {
-                        return (
-                          <>
-                            {data.lessonResults.length === 0 && (
-                              <>
-                                {me &&
-                                lesson &&
-                                (me.id === lesson.user.id ||
-                                  me.permissions.includes("ADMIN")) ? (
-                                  <Link
-                                    // The user is the teacher or the admin. We do not record their activity.
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: lesson.type.toLowerCase()
-                                      }
-                                    }}
-                                  >
-                                    <A>
-                                      <Button
-                                        onChange={() => {
-                                          console.log("Добавили 0");
-                                        }}
-                                      >
-                                        Перейти
-                                      </Button>
-                                    </A>
-                                  </Link>
-                                ) : null}
-
-                                {me &&
+            {me && (
+              <Query
+                query={SINGLE_LESSONRESULT_QUERY}
+                variables={{
+                  lessonID: lesson.id,
+                  id: me.id
+                }}
+              >
+                {({ data, error, loading }) => {
+                  if (loading) return <p>Loading...</p>;
+                  if (error) return <p>Error: {error.message}</p>;
+                  return (
+                    <>
+                      <Mutation
+                        mutation={CREATE_LESSONRESULT_MUTATION}
+                        variables={{
+                          lessonID: lesson.id,
+                          visitsNumber: 1
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_LESSONRESULT_QUERY,
+                            variables: { lessonID: lesson.id }
+                          }
+                        ]}
+                      >
+                        {(createLessonResult, { loading, error }) => {
+                          return (
+                            <>
+                              {data.lessonResults.length === 0 && (
+                                <>
+                                  {me &&
                                   lesson &&
-                                  me.id !== lesson.user.id &&
-                                  (students.includes(me.id) ||
-                                    new_students.includes(me.id)) &&
-                                  !me.permissions.includes("ADMIN") &&
-                                  this.state.published && (
+                                  (me.id === lesson.user.id ||
+                                    me.permissions.includes("ADMIN") ||
+                                    lesson.id === openLesson) &&
+                                  (!students.includes(me.id) ||
+                                    !new_students.includes(me.id)) ? (
                                     <Link
-                                      // The user hasn't visited the lesson page before. Create the lesson visit node.
+                                      // The user is the teacher or the admin or it is an openLesson.
                                       href={{
                                         pathname: "/lesson",
                                         query: {
@@ -317,65 +336,68 @@ class LessonHeader extends Component {
                                         </Button>
                                       </A>
                                     </Link>
-                                  )}
-                              </>
-                            )}
-                          </>
-                        );
-                      }}
-                    </Mutation>
+                                  ) : null}
 
-                    {data.lessonResults.length > 0 && (
-                      <Mutation
-                        mutation={UPDATE_LESSONRESULT_MUTATION}
-                        variables={{
-                          id: data.lessonResults[0].id,
-                          visitsNumber: data.lessonResults[0].visitsNumber + 1
+                                  {me &&
+                                    lesson &&
+                                    me.id !== lesson.user.id &&
+                                    (students.includes(me.id) ||
+                                      new_students.includes(me.id)) &&
+                                    !me.permissions.includes("ADMIN") &&
+                                    this.state.published && (
+                                      <Link
+                                        // The user hasn't visited the lesson page before. Create the lesson visit node.
+                                        href={{
+                                          pathname: "/lesson",
+                                          query: {
+                                            id: lesson.id,
+                                            type: lesson.type.toLowerCase()
+                                          }
+                                        }}
+                                      >
+                                        <A>
+                                          <Button
+                                            onClick={() => {
+                                              createLessonResult();
+                                            }}
+                                          >
+                                            Перейти
+                                          </Button>
+                                        </A>
+                                      </Link>
+                                    )}
+                                </>
+                              )}
+                            </>
+                          );
                         }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_LESSONRESULT_QUERY,
-                            variables: { lessonID: lesson.id }
-                          }
-                        ]}
-                      >
-                        {(updateLessonResult, { loading, error }) => {
-                          return (
-                            <>
-                              {me &&
-                              lesson &&
-                              (me.id === lesson.user.id ||
-                                lesson.id === "ck2f2qpye07gr078552nipxok") ? (
-                                <Link
-                                  // The teacher or the admin visit the lesson page for the second time. We do not update anything.
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: {
-                                      id: lesson.id,
-                                      type: lesson.type.toLowerCase()
-                                    }
-                                  }}
-                                >
-                                  <A>
-                                    <Button
-                                      onChange={() => {
-                                        console.log("Добавили 0");
-                                      }}
-                                    >
-                                      Перейти
-                                    </Button>
-                                  </A>
-                                </Link>
-                              ) : null}
-
-                              {me &&
+                      </Mutation>
+                      {data.lessonResults.length > 0 && (
+                        <Mutation
+                          mutation={UPDATE_LESSONRESULT_MUTATION}
+                          variables={{
+                            id: data.lessonResults[0].id,
+                            visitsNumber: data.lessonResults[0].visitsNumber + 1
+                          }}
+                          refetchQueries={() => [
+                            {
+                              query: SINGLE_LESSONRESULT_QUERY,
+                              variables: { lessonID: lesson.id }
+                            }
+                          ]}
+                        >
+                          {(updateLessonResult, { loading, error }) => {
+                            return (
+                              <>
+                                {me &&
                                 lesson &&
-                                me.id !== lesson.user.id &&
-                                (students.includes(me.id) ||
-                                  new_students.includes(me.id)) &&
-                                this.state.published && (
+                                (me.id === lesson.user.id ||
+                                  me.permissions.includes("ADMIN") ||
+                                  lesson.id === openLesson) &&
+                                (!students.includes(me.id) ||
+                                  !new_students.includes(me.id)) ? (
                                   <Link
-                                    // The user HAS visited the lesson page and we update it now
+                                    // The teacher or the admin visit the lesson page for the second time. We do not update anything.
                                     href={{
                                       pathname: "/lesson",
                                       query: {
@@ -394,16 +416,45 @@ class LessonHeader extends Component {
                                       </Button>
                                     </A>
                                   </Link>
-                                )}
-                            </>
-                          );
-                        }}
-                      </Mutation>
-                    )}
-                  </>
-                );
-              }}
-            </Query>
+                                ) : null}
+
+                                {me &&
+                                  lesson &&
+                                  me.id !== lesson.user.id &&
+                                  (students.includes(me.id) ||
+                                    new_students.includes(me.id)) &&
+                                  this.state.published && (
+                                    <Link
+                                      // The user HAS visited the lesson page and we update it now
+                                      href={{
+                                        pathname: "/lesson",
+                                        query: {
+                                          id: lesson.id,
+                                          type: lesson.type.toLowerCase()
+                                        }
+                                      }}
+                                    >
+                                      <A>
+                                        <Button
+                                          onClick={() => {
+                                            updateLessonResult();
+                                          }}
+                                        >
+                                          Перейти
+                                        </Button>
+                                      </A>
+                                    </Link>
+                                  )}
+                              </>
+                            );
+                          }}
+                        </Mutation>
+                      )}
+                    </>
+                  );
+                }}
+              </Query>
+            )}
 
             {me &&
             lesson &&
@@ -415,6 +466,10 @@ class LessonHeader extends Component {
             ) : null}
           </Buttons>
         </TextBar>
+
+        {lesson.description && this.state.reveal && (
+          <Info>{renderHTML(lesson.description)}</Info>
+        )}
       </>
     );
   }

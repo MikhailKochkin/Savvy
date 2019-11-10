@@ -11,7 +11,7 @@ import { pencil } from "react-icons-kit/fa/pencil";
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",
-  padding: "0 20px",
+  padding: "0 5px",
   maxWidth: "840px",
   width: "100%",
   fontSize: "1.6rem"
@@ -216,8 +216,8 @@ class HoveringMenu extends React.Component {
    */
 
   state = {
-    value: this.props.placeholder
-      ? html.deserialize(this.props.placeholder)
+    value: this.props.value
+      ? html.deserialize(this.props.value)
       : html.deserialize(``)
   };
 
@@ -285,6 +285,7 @@ class HoveringMenu extends React.Component {
           renderMark={this.renderMark}
           renderBlock={this.renderBlock}
           renderInline={this.renderInline}
+          placeholder={this.props.placeholder}
         />
       </div>
     );
@@ -336,9 +337,7 @@ class HoveringMenu extends React.Component {
 
   // Render a Slate block.
   renderBlock = (props, editor, next) => {
-    // console.log("Render Block!!!")
     const { attributes, node, isFocused, children } = props;
-    // console.log(props)
     switch (node.type) {
       case "paragraph":
         return <p {...attributes}>{children}</p>;

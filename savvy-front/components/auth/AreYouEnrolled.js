@@ -16,7 +16,8 @@ const AreYouEnrolled = props => (
           !data.me.subjects.includes(props.subject) &&
           !subj_list.includes(props.subject) &&
           !arr1.includes(props.subject) &&
-          !data.me.permissions.includes("ADMIN")
+          !data.me.permissions.includes("ADMIN") &&
+          !(props.openLesson === props.lesson)
         ) {
           return (
             <div>

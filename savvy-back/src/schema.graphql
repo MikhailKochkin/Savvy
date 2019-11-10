@@ -12,6 +12,10 @@ type Mutation {
     news: String
     courseType: CourseType
     price: Int
+    audience: String
+    result: String
+    tariffs: String
+    methods: String
     discountPrice: Int
     uniID: ID
     published: Boolean
@@ -21,6 +25,10 @@ type Mutation {
     title: String
     description: String
     news: String
+    audience: String
+    result: String
+    tariffs: String
+    methods: String
     image: String
     courseType: CourseType
     published: Boolean
@@ -29,6 +37,7 @@ type Mutation {
     name: String!
     number: Int
     text: String!
+    description: String
     coursePageID: ID!
   ): Lesson!
   updateLesson(
@@ -36,6 +45,7 @@ type Mutation {
     name: String
     number: Int
     text: String
+    description: String
     type: Type
     map: [Json]
   ): Lesson

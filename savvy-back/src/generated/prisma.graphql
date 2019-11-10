@@ -2466,6 +2466,12 @@ type CoursePage {
   company: Company
   promocode: [Json!]!
   visits(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseVisit!]
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: [String!]!
+  openLesson: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -2503,6 +2509,12 @@ input CoursePageCreateInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateManyInput {
@@ -2579,6 +2591,10 @@ input CoursePageCreatepromocodeInput {
   set: [Json!]
 }
 
+input CoursePageCreatereviewsInput {
+  set: [String!]
+}
+
 input CoursePageCreatestudentsInput {
   set: [ID!]
 }
@@ -2613,6 +2629,12 @@ input CoursePageCreateWithoutApplicationsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutArticlesInput {
@@ -2641,6 +2663,12 @@ input CoursePageCreateWithoutArticlesInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutCareerTrackInput {
@@ -2669,6 +2697,12 @@ input CoursePageCreateWithoutCareerTrackInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutCompanyInput {
@@ -2697,6 +2731,12 @@ input CoursePageCreateWithoutCompanyInput {
   orders: OrderCreateManyWithoutCoursePageInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutExamQuestionInput {
@@ -2725,6 +2765,12 @@ input CoursePageCreateWithoutExamQuestionInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutLessonsInput {
@@ -2753,6 +2799,12 @@ input CoursePageCreateWithoutLessonsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutNew_studentsInput {
@@ -2781,6 +2833,12 @@ input CoursePageCreateWithoutNew_studentsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutOrdersInput {
@@ -2809,6 +2867,12 @@ input CoursePageCreateWithoutOrdersInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutPointATestsInput {
@@ -2837,6 +2901,12 @@ input CoursePageCreateWithoutPointATestsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutPointsAInput {
@@ -2865,6 +2935,12 @@ input CoursePageCreateWithoutPointsAInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutUniInput {
@@ -2893,6 +2969,12 @@ input CoursePageCreateWithoutUniInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutUserInput {
@@ -2921,6 +3003,12 @@ input CoursePageCreateWithoutUserInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageCreateWithoutVisitsInput {
@@ -2949,6 +3037,12 @@ input CoursePageCreateWithoutVisitsInput {
   orders: OrderCreateManyWithoutCoursePageInput
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageCreatereviewsInput
+  openLesson: ID
 }
 
 type CoursePageEdge {
@@ -2979,6 +3073,16 @@ enum CoursePageOrderByInput {
   price_DESC
   discountPrice_ASC
   discountPrice_DESC
+  audience_ASC
+  audience_DESC
+  result_ASC
+  result_DESC
+  tariffs_ASC
+  tariffs_DESC
+  methods_ASC
+  methods_DESC
+  openLesson_ASC
+  openLesson_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -3000,6 +3104,12 @@ type CoursePagePreviousValues {
   price: Int
   discountPrice: Int
   promocode: [Json!]!
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: [String!]!
+  openLesson: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -3119,6 +3229,76 @@ input CoursePageScalarWhereInput {
   discountPrice_lte: Int
   discountPrice_gt: Int
   discountPrice_gte: Int
+  audience: String
+  audience_not: String
+  audience_in: [String!]
+  audience_not_in: [String!]
+  audience_lt: String
+  audience_lte: String
+  audience_gt: String
+  audience_gte: String
+  audience_contains: String
+  audience_not_contains: String
+  audience_starts_with: String
+  audience_not_starts_with: String
+  audience_ends_with: String
+  audience_not_ends_with: String
+  result: String
+  result_not: String
+  result_in: [String!]
+  result_not_in: [String!]
+  result_lt: String
+  result_lte: String
+  result_gt: String
+  result_gte: String
+  result_contains: String
+  result_not_contains: String
+  result_starts_with: String
+  result_not_starts_with: String
+  result_ends_with: String
+  result_not_ends_with: String
+  tariffs: String
+  tariffs_not: String
+  tariffs_in: [String!]
+  tariffs_not_in: [String!]
+  tariffs_lt: String
+  tariffs_lte: String
+  tariffs_gt: String
+  tariffs_gte: String
+  tariffs_contains: String
+  tariffs_not_contains: String
+  tariffs_starts_with: String
+  tariffs_not_starts_with: String
+  tariffs_ends_with: String
+  tariffs_not_ends_with: String
+  methods: String
+  methods_not: String
+  methods_in: [String!]
+  methods_not_in: [String!]
+  methods_lt: String
+  methods_lte: String
+  methods_gt: String
+  methods_gte: String
+  methods_contains: String
+  methods_not_contains: String
+  methods_starts_with: String
+  methods_not_starts_with: String
+  methods_ends_with: String
+  methods_not_ends_with: String
+  openLesson: ID
+  openLesson_not: ID
+  openLesson_in: [ID!]
+  openLesson_not_in: [ID!]
+  openLesson_lt: ID
+  openLesson_lte: ID
+  openLesson_gt: ID
+  openLesson_gte: ID
+  openLesson_contains: ID
+  openLesson_not_contains: ID
+  openLesson_starts_with: ID
+  openLesson_not_starts_with: ID
+  openLesson_ends_with: ID
+  openLesson_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -3185,6 +3365,12 @@ input CoursePageUpdateDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateInput {
@@ -3214,6 +3400,12 @@ input CoursePageUpdateInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateManyDataInput {
@@ -3230,6 +3422,12 @@ input CoursePageUpdateManyDataInput {
   price: Int
   discountPrice: Int
   promocode: CoursePageUpdatepromocodeInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateManyInput {
@@ -3258,6 +3456,12 @@ input CoursePageUpdateManyMutationInput {
   price: Int
   discountPrice: Int
   promocode: CoursePageUpdatepromocodeInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateManyWithoutArticlesInput {
@@ -3392,6 +3596,10 @@ input CoursePageUpdatepromocodeInput {
   set: [Json!]
 }
 
+input CoursePageUpdatereviewsInput {
+  set: [String!]
+}
+
 input CoursePageUpdatestudentsInput {
   set: [ID!]
 }
@@ -3426,6 +3634,12 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutArticlesDataInput {
@@ -3454,6 +3668,12 @@ input CoursePageUpdateWithoutArticlesDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutCareerTrackDataInput {
@@ -3482,6 +3702,12 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutCompanyDataInput {
@@ -3510,6 +3736,12 @@ input CoursePageUpdateWithoutCompanyDataInput {
   orders: OrderUpdateManyWithoutCoursePageInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutExamQuestionDataInput {
@@ -3538,6 +3770,12 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutLessonsDataInput {
@@ -3566,6 +3804,12 @@ input CoursePageUpdateWithoutLessonsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutNew_studentsDataInput {
@@ -3594,6 +3838,12 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutOrdersDataInput {
@@ -3622,6 +3872,12 @@ input CoursePageUpdateWithoutOrdersDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutPointATestsDataInput {
@@ -3650,6 +3906,12 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutPointsADataInput {
@@ -3678,6 +3940,12 @@ input CoursePageUpdateWithoutPointsADataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutUniDataInput {
@@ -3706,6 +3974,12 @@ input CoursePageUpdateWithoutUniDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutUserDataInput {
@@ -3734,6 +4008,12 @@ input CoursePageUpdateWithoutUserDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithoutVisitsDataInput {
@@ -3762,6 +4042,12 @@ input CoursePageUpdateWithoutVisitsDataInput {
   orders: OrderUpdateManyWithoutCoursePageInput
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  reviews: CoursePageUpdatereviewsInput
+  openLesson: ID
 }
 
 input CoursePageUpdateWithWhereUniqueNestedInput {
@@ -4022,6 +4308,76 @@ input CoursePageWhereInput {
   visits_every: CourseVisitWhereInput
   visits_some: CourseVisitWhereInput
   visits_none: CourseVisitWhereInput
+  audience: String
+  audience_not: String
+  audience_in: [String!]
+  audience_not_in: [String!]
+  audience_lt: String
+  audience_lte: String
+  audience_gt: String
+  audience_gte: String
+  audience_contains: String
+  audience_not_contains: String
+  audience_starts_with: String
+  audience_not_starts_with: String
+  audience_ends_with: String
+  audience_not_ends_with: String
+  result: String
+  result_not: String
+  result_in: [String!]
+  result_not_in: [String!]
+  result_lt: String
+  result_lte: String
+  result_gt: String
+  result_gte: String
+  result_contains: String
+  result_not_contains: String
+  result_starts_with: String
+  result_not_starts_with: String
+  result_ends_with: String
+  result_not_ends_with: String
+  tariffs: String
+  tariffs_not: String
+  tariffs_in: [String!]
+  tariffs_not_in: [String!]
+  tariffs_lt: String
+  tariffs_lte: String
+  tariffs_gt: String
+  tariffs_gte: String
+  tariffs_contains: String
+  tariffs_not_contains: String
+  tariffs_starts_with: String
+  tariffs_not_starts_with: String
+  tariffs_ends_with: String
+  tariffs_not_ends_with: String
+  methods: String
+  methods_not: String
+  methods_in: [String!]
+  methods_not_in: [String!]
+  methods_lt: String
+  methods_lte: String
+  methods_gt: String
+  methods_gte: String
+  methods_contains: String
+  methods_not_contains: String
+  methods_starts_with: String
+  methods_not_starts_with: String
+  methods_ends_with: String
+  methods_not_ends_with: String
+  openLesson: ID
+  openLesson_not: ID
+  openLesson_in: [ID!]
+  openLesson_not_in: [ID!]
+  openLesson_lt: ID
+  openLesson_lte: ID
+  openLesson_gt: ID
+  openLesson_gte: ID
+  openLesson_contains: ID
+  openLesson_not_contains: ID
+  openLesson_starts_with: ID
+  openLesson_not_starts_with: ID
+  openLesson_ends_with: ID
+  openLesson_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -5318,6 +5674,7 @@ type Lesson {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -5355,6 +5712,7 @@ input LessonCreateInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateManyWithoutCoursePageInput {
@@ -5477,6 +5835,7 @@ input LessonCreateWithoutConstructionResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutConstructionsInput {
@@ -5505,6 +5864,7 @@ input LessonCreateWithoutConstructionsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutCoursePageInput {
@@ -5533,6 +5893,7 @@ input LessonCreateWithoutCoursePageInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutLessonFeedbackInput {
@@ -5561,6 +5922,7 @@ input LessonCreateWithoutLessonFeedbackInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutLessonResultsInput {
@@ -5589,6 +5951,7 @@ input LessonCreateWithoutLessonResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutNewTestsInput {
@@ -5617,6 +5980,7 @@ input LessonCreateWithoutNewTestsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutNotesInput {
@@ -5645,6 +6009,7 @@ input LessonCreateWithoutNotesInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutProblemResultsInput {
@@ -5673,6 +6038,7 @@ input LessonCreateWithoutProblemResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutProblemsInput {
@@ -5701,6 +6067,7 @@ input LessonCreateWithoutProblemsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutQuizesInput {
@@ -5729,6 +6096,7 @@ input LessonCreateWithoutQuizesInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutQuizResultsInput {
@@ -5757,6 +6125,7 @@ input LessonCreateWithoutQuizResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutShotResultsInput {
@@ -5785,6 +6154,7 @@ input LessonCreateWithoutShotResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutShotsInput {
@@ -5813,6 +6183,7 @@ input LessonCreateWithoutShotsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutTestResultsInput {
@@ -5841,6 +6212,7 @@ input LessonCreateWithoutTestResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutTestsInput {
@@ -5869,6 +6241,7 @@ input LessonCreateWithoutTestsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutTextEditorResultsInput {
@@ -5897,6 +6270,7 @@ input LessonCreateWithoutTextEditorResultsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutTexteditorsInput {
@@ -5925,6 +6299,7 @@ input LessonCreateWithoutTexteditorsInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 input LessonCreateWithoutUserInput {
@@ -5953,6 +6328,7 @@ input LessonCreateWithoutUserInput {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
 }
 
 type LessonEdge {
@@ -5977,6 +6353,8 @@ enum LessonOrderByInput {
   coursePageID_DESC
   published_ASC
   published_DESC
+  description_ASC
+  description_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -5993,6 +6371,7 @@ type LessonPreviousValues {
   open: Boolean
   coursePageID: ID!
   published: Boolean
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -6361,6 +6740,20 @@ input LessonScalarWhereInput {
   coursePageID_not_ends_with: ID
   published: Boolean
   published_not: Boolean
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -6427,6 +6820,7 @@ input LessonUpdateInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateManyDataInput {
@@ -6438,6 +6832,7 @@ input LessonUpdateManyDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateManyMutationInput {
@@ -6449,6 +6844,7 @@ input LessonUpdateManyMutationInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateManyWithoutCoursePageInput {
@@ -6646,6 +7042,7 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutConstructionsDataInput {
@@ -6674,6 +7071,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutCoursePageDataInput {
@@ -6702,6 +7100,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutLessonFeedbackDataInput {
@@ -6730,6 +7129,7 @@ input LessonUpdateWithoutLessonFeedbackDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutLessonResultsDataInput {
@@ -6758,6 +7158,7 @@ input LessonUpdateWithoutLessonResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutNewTestsDataInput {
@@ -6786,6 +7187,7 @@ input LessonUpdateWithoutNewTestsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutNotesDataInput {
@@ -6814,6 +7216,7 @@ input LessonUpdateWithoutNotesDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutProblemResultsDataInput {
@@ -6842,6 +7245,7 @@ input LessonUpdateWithoutProblemResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutProblemsDataInput {
@@ -6870,6 +7274,7 @@ input LessonUpdateWithoutProblemsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutQuizesDataInput {
@@ -6898,6 +7303,7 @@ input LessonUpdateWithoutQuizesDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutQuizResultsDataInput {
@@ -6926,6 +7332,7 @@ input LessonUpdateWithoutQuizResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutShotResultsDataInput {
@@ -6954,6 +7361,7 @@ input LessonUpdateWithoutShotResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutShotsDataInput {
@@ -6982,6 +7390,7 @@ input LessonUpdateWithoutShotsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutTestResultsDataInput {
@@ -7010,6 +7419,7 @@ input LessonUpdateWithoutTestResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutTestsDataInput {
@@ -7038,6 +7448,7 @@ input LessonUpdateWithoutTestsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutTextEditorResultsDataInput {
@@ -7066,6 +7477,7 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutTexteditorsDataInput {
@@ -7094,6 +7506,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithoutUserDataInput {
@@ -7122,6 +7535,7 @@ input LessonUpdateWithoutUserDataInput {
   open: Boolean
   coursePageID: ID
   published: Boolean
+  description: String
 }
 
 input LessonUpdateWithWhereUniqueWithoutCoursePageInput {
@@ -7349,6 +7763,20 @@ input LessonWhereInput {
   coursePageID_not_ends_with: ID
   published: Boolean
   published_not: Boolean
+  description: String
+  description_not: String
+  description_in: [String!]
+  description_not_in: [String!]
+  description_lt: String
+  description_lte: String
+  description_gt: String
+  description_gte: String
+  description_contains: String
+  description_not_contains: String
+  description_starts_with: String
+  description_not_starts_with: String
+  description_ends_with: String
+  description_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

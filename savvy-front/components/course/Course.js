@@ -4,6 +4,10 @@ import Link from "next/link";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
+import Signup from "../auth/Signup";
+import Signin from "../auth/Signin";
+import RequestReset from "../auth/RequestReset";
+import Modal from "styled-react-modal";
 
 const SINGLE_COURSE_VISIT_QUERY = gql`
   query SINGLE_COURSE_VISIT_QUERY($coursePage: ID!) {
@@ -103,14 +107,17 @@ const Button = styled.button`
     margin: 0;
   }
 `;
-const Buttons = styled.div`
+
+const StyledModal = Modal.styled`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-bottom: 0.5%;
-  width: 100%;
-  a {
-    width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 30%;
+  @media (max-width: 800px) {
+    width: 90%;
   }
 `;
 
@@ -121,16 +128,39 @@ const Additional = styled.div`
   justify-content: space-between;
 `;
 
+const SignUpButton = styled.button`
+  font-family: Montserrat;
+  border: none;
+  /* background: #f0f8ff; */
+  border-radius: 5px;
+  padding: 2% 1.5%;
+  font-size: 1.5rem;
+  color: #112b62;
+  cursor: pointer;
+  border: 1px solid #112b62;
+  outline: 0;
+  &:hover {
+    border: 1.5px solid #112b62;
+  }
+`;
+
 export default class Course extends Component {
   state = {
-    revealApplication: false
+    revealApplication: false,
+    isOpen: false,
+    auth: "signin"
   };
   static propTypes = {
     coursePage: PropTypes.object.isRequired
   };
-  myCallback = dataFromChild => {
+
+  toggleModal = e => {
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  };
+
+  changeState = dataFromChild => {
     this.setState({
-      revealApplication: dataFromChild
+      auth: dataFromChild
     });
   };
 
@@ -152,6 +182,9 @@ export default class Course extends Component {
                 {coursePage.user.name} из {coursePage.user.company.name}
               </Author>
             )}
+            {!me && (
+              <SignUpButton onClick={this.toggleModal}>Войти</SignUpButton>
+            )}
             {me && (
               <Query
                 query={SINGLE_COURSE_VISIT_QUERY}
@@ -162,13 +195,9 @@ export default class Course extends Component {
                 {({ data, error, loading }) => {
                   if (loading) return <p>Loading...</p>;
                   if (error) return <p>Error: {error.message}</p>;
-                  const my_course_visitis = data.courseVisits.filter(
-                    visit => visit.student.id === me.id
-                  );
-                  console.log(my_course_visitis.length);
                   return (
                     <>
-                      {my_course_visitis.length === 0 && (
+                      {data.courseVisits.length === 0 && (
                         <Mutation
                           mutation={CREATE_COURSE_VISIT_MUTATION}
                           variables={{
@@ -198,7 +227,6 @@ export default class Course extends Component {
                                       <a>
                                         <Button
                                           onClick={() => {
-                                            console.log("1");
                                             createCourseVisit();
                                           }}
                                         >
@@ -213,12 +241,12 @@ export default class Course extends Component {
                           }}
                         </Mutation>
                       )}
-                      {my_course_visitis.length > 0 && (
+                      {data.courseVisits.length > 0 && (
                         <Mutation
                           mutation={UPDATE_COURSE_VISIT_MUTATION}
                           variables={{
-                            id: my_course_visitis[0].id,
-                            visitsNumber: my_course_visitis[0].visitsNumber + 1
+                            id: data.courseVisits[0].id,
+                            visitsNumber: data.courseVisits[0].visitsNumber + 1
                           }}
                           refetchQueries={() => [
                             {
@@ -242,11 +270,6 @@ export default class Course extends Component {
                                   <a>
                                     <Button
                                       onClick={() => {
-                                        console.log("2");
-                                        console.log(
-                                          data.courseVisits[0].id,
-                                          data.courseVisits[0].visitsNumber
-                                        );
                                         updateCourseVisit();
                                       }}
                                     >
@@ -266,6 +289,21 @@ export default class Course extends Component {
             )}
           </>
         </Additional>
+        <StyledModal
+          isOpen={this.state.isOpen}
+          onBackgroundClick={this.toggleModal}
+          onEscapeKeydown={this.toggleModal}
+        >
+          {this.state.auth === "signin" && (
+            <Signin getData={this.changeState} closeNavBar={this.toggleModal} />
+          )}
+          {this.state.auth === "signup" && (
+            <Signup getData={this.changeState} closeNavBar={this.toggleModal} />
+          )}
+          {this.state.auth === "reset" && (
+            <RequestReset getData={this.changeState} />
+          )}
+        </StyledModal>
       </CaseCard>
     );
   }
