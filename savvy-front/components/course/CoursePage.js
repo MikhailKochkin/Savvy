@@ -246,6 +246,9 @@ const MoveButton = styled.button`
       background-color: #84bc9c;
     }
   }
+  @media (max-width: 800px) {
+    width: 50%;
+  }
 `;
 
 const Details = styled.div`
@@ -412,7 +415,9 @@ class CoursePage extends Component {
                                                 discountPrice={
                                                   coursePage.discountPrice
                                                 }
-                                                promoCode={coursePage.promocode}
+                                                promocode={
+                                                  coursePage.promocode[0]
+                                                }
                                                 studentsArray={studentsArray}
                                                 subjectArray={subjectArray}
                                               />

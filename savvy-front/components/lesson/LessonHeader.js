@@ -233,7 +233,6 @@ class LessonHeader extends Component {
 
   render() {
     const { lesson, name, new_students, students, me, openLesson } = this.props;
-    console.log(lesson.description);
     return (
       <>
         <TextBar>
