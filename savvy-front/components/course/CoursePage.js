@@ -222,13 +222,39 @@ const Reviews = styled.div`
   align-items: center;
 `;
 
+const MoveButton = styled.button`
+  background: #0846d8;
+  border-radius: 5px;
+  width: 20%;
+  height: 38px;
+  outline: 0;
+  color: white;
+  font-weight: 600;
+  font-size: 1.4rem;
+  outline: none;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px;
+  &:hover {
+    background: rgba(8, 70, 216, 0.85);
+  }
+  &:active {
+    background-color: ${props => props.theme.darkGreen};
+  }
+  &:disabled {
+    &:hover {
+      background-color: #84bc9c;
+    }
+  }
+`;
+
 const Details = styled.div`
   margin: 3% 0;
   padding: 0 2%;
+  font-size: 1.6rem;
   .yellow {
     padding: 4%;
     background: rgba(253, 173, 18, 0.05);
-    /* margin-bottom: 4%; */
     margin-top: 2%;
     width: 100%;
     @media (max-width: 800px) {
@@ -245,7 +271,7 @@ const Details = styled.div`
   }
   .blue {
     padding: 4%;
-    background: #f0f8ff;
+    background: rgba(36, 101, 255, 0.1);
     margin-bottom: 4%;
     width: 100%;
     @media (max-width: 800px) {
@@ -267,6 +293,9 @@ class CoursePage extends Component {
   switch = e => {
     const { name } = e.target;
     this.setState({ page: name });
+  };
+  scroll = () => {
+    window.scrollTo(0, 0);
   };
   render() {
     return (
@@ -587,6 +616,9 @@ class CoursePage extends Component {
                                                 data.coursePage.tariffs
                                               )}
                                             </div>
+                                            <MoveButton onClick={this.scroll}>
+                                              Наверх
+                                            </MoveButton>
                                           </div>
                                         )}
                                       </Details>

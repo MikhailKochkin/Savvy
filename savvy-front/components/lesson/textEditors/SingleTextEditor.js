@@ -28,7 +28,7 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  width: 90%;
+  width: 98%;
   font-size: 1.6rem;
   border-radius: 5px;
   @media (max-width: 800px) {
@@ -246,7 +246,7 @@ class SingleTextEditor extends Component {
                     )}
                   </>
                 )}
-                {(this.state.total === 0 || this.state.total === undefined) &&
+                {(this.state.total === 0 || this.state.total === null) &&
                   this.state.correct_option}
               </div>
               {this.state.total > 0 && (

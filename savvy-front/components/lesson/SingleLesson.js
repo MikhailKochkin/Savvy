@@ -260,16 +260,18 @@ const Head = styled.div`
   @media (max-width: 800px) {
     font-size: 1.8rem;
     justify-content: space-between;
+    align-items: center;
     padding: 2% 15px;
     span {
       flex: 15%;
+      height: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
       border: 1px solid #112a62;
       color: #112a62;
       border-radius: 5px;
-      padding: 0 1%;
+      padding: 1% 3%;
     }
     div {
       flex: 85%;
@@ -461,7 +463,7 @@ const Text = styled.div`
 
 class SingleLesson extends Component {
   state = {
-    page: "createNote",
+    page: "lesson",
     shown: false,
     width: 0
   };
@@ -636,7 +638,11 @@ class SingleLesson extends Component {
                             )}
                             {this.state.page === "note" &&
                               lesson.notes.map(note => (
-                                <Note text={note.text} />
+                                <Note
+                                  text={note.text}
+                                  me={me}
+                                  teacher={lesson.user.id}
+                                />
                               ))}
                             {this.state.page === "shots" && (
                               <ShotsGroup

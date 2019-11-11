@@ -92,6 +92,9 @@ const Text = styled.div`
   flex-direction: row;
   justify-content: space-between;
   padding-right: 25px;
+  div {
+    padding: 2% 0% 2% 0%;
+  }
   .arrow {
     cursor: pointer;
   }
@@ -235,12 +238,12 @@ class LessonHeader extends Component {
       <>
         <TextBar>
           <Text>
-            <h4>
+            <div>
               {lesson.number}. {name}{" "}
               <span className="arrow" onClick={this.toggle}>
                 {this.state.reveal ? `🔼` : `🔽`}
               </span>
-            </h4>
+            </div>
           </Text>
           <Buttons>
             {me &&
