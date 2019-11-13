@@ -463,7 +463,7 @@ const Text = styled.div`
 
 class SingleLesson extends Component {
   state = {
-    page: "updateLesson",
+    page: "lesson",
     shown: false,
     width: 0
   };
