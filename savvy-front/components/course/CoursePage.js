@@ -97,6 +97,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           title
         }
+        company {
+          id
+          name
+        }
       }
     }
   }
@@ -385,9 +389,15 @@ class CoursePage extends Component {
                                           <p className="name">
                                             {coursePage.user.name}
                                           </p>
-                                          <p className="company">
-                                            {coursePage.user.uni.title}
-                                          </p>
+                                          {coursePage.user.status ? (
+                                            <p className="company">
+                                              {coursePage.user.company.name}
+                                            </p>
+                                          ) : (
+                                            <p className="company">
+                                              {coursePage.user.uni.title}
+                                            </p>
+                                          )}
                                           <p className="track2">
                                             {coursePage.description}
                                           </p>
@@ -399,12 +409,12 @@ class CoursePage extends Component {
                                           {me &&
                                             me.id !== coursePage.user.id &&
                                             !applicationsList.includes(me.id) &&
-                                            (!subjectArray.includes(
+                                            !subjectArray.includes(
                                               coursePage.id
                                             ) &&
                                               !new_subjectArray.includes(
                                                 coursePage.id
-                                              )) &&
+                                              ) &&
                                             !me.permissions.includes(
                                               "ADMIN"
                                             ) && (
@@ -550,7 +560,7 @@ class CoursePage extends Component {
                                           </>
                                         )}
                                         {this.state.page === "feedback" &&
-                                          (me && (
+                                          me && (
                                             <>
                                               {me.studentFeedback.filter(feed =>
                                                 lessonsList.includes(
@@ -571,7 +581,7 @@ class CoursePage extends Component {
                                                   />
                                                 ))}
                                             </>
-                                          ))}
+                                          )}
                                         {this.state.page === "finals" && (
                                           <>
                                             {me &&
@@ -589,10 +599,10 @@ class CoursePage extends Component {
                                                 />
                                               ))}
                                             {me &&
-                                              (me.id !== coursePage.user.id &&
+                                              me.id !== coursePage.user.id &&
                                                 !me.permissions.includes(
                                                   "ADMIN"
-                                                )) &&
+                                                ) &&
                                               (coursePage.examQuestion ? (
                                                 <ExamAnswer
                                                   id={this.props.id}
