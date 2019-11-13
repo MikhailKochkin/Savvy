@@ -313,16 +313,33 @@ const Mutations = {
     const updates = { ...args };
     //remove the ID from updates
     delete updates.id;
+    console.log(args.map);
     //run the update method
-    return ctx.db.mutation.updateLesson(
-      {
-        data: updates,
-        where: {
-          id: args.id
-        }
-      },
-      info
-    );
+    if (args.map) {
+      return ctx.db.mutation.updateLesson(
+        {
+          data: {
+            map: {
+              set: [[...args.map]]
+            }
+          },
+          where: {
+            id: args.id
+          }
+        },
+        info
+      );
+    } else {
+      return ctx.db.mutation.updateLesson(
+        {
+          data: updates,
+          where: {
+            id: args.id
+          }
+        },
+        info
+      );
+    }
   },
   async updatePublished(parent, args, ctx, info) {
     const updates = { ...args };

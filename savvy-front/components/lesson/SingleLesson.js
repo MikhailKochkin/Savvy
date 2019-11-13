@@ -463,7 +463,7 @@ const Text = styled.div`
 
 class SingleLesson extends Component {
   state = {
-    page: "lesson",
+    page: "updateLesson",
     shown: false,
     width: 0
   };
@@ -642,6 +642,7 @@ class SingleLesson extends Component {
                                   text={note.text}
                                   me={me}
                                   teacher={lesson.user.id}
+                                  note={note.id}
                                 />
                               ))}
                             {this.state.page === "shots" && (
@@ -761,6 +762,7 @@ class SingleLesson extends Component {
                               <UpdateLesson
                                 lessonID={lesson.id}
                                 description={lesson.description}
+                                lesson={lesson}
                               />
                             )}
                             {this.state.page === "updateShots" && (

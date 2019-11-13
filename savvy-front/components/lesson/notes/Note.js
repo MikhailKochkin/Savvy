@@ -92,7 +92,6 @@ class note extends Component {
           <NoteStyles>{renderHTML(this.props.text)}</NoteStyles>
         )}
         {this.state.update && <UpdateNote note={this.props.note} />}
-        {console.log(this.props.me)}
         {this.props.me.id === this.props.teacher && (
           <Button onClick={this.switch}>
             {!this.state.update ? "Изменить" : "Вернуться"}
