@@ -34,6 +34,13 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           createdAt
           updatedAt
         }
+        problemResults {
+          id
+          answer
+          lesson {
+            id
+          }
+        }
       }
       examQuestion {
         id

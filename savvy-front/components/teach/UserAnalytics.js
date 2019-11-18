@@ -26,7 +26,7 @@ class UserAnalytics extends Component {
     const { coursePage, students } = this.props;
     return (
       <Styles>
-        <Header>Ученики</Header>
+        <Header>Участники</Header>
         {students.map(student => (
           <>
             <StudentData

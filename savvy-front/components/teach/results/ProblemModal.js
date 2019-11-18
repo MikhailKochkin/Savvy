@@ -58,7 +58,7 @@ class ProblemModal extends Component {
       <Box key={problem.id}>
         <div>
           <b>Задача: </b>
-          {renderHTML(`${problem.text}`)}
+          {renderHTML(`${problem.text.substring(0, 400) + "..."}`)}
         </div>
         <div className="column">
           <div>Открытые подсказки:</div>

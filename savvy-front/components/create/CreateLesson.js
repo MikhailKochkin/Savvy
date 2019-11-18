@@ -100,6 +100,7 @@ const Editor = styled.div`
 `;
 
 const Frame = styled.div`
+  height: 60%;
   width: 100%;
   margin-bottom: 15px;
   border: 1px solid #e5e5e5;

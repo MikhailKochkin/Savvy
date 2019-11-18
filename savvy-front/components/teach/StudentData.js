@@ -162,10 +162,22 @@ class Person extends Component {
     let mail = `mailto:${student.email}`;
     let color;
     let lesson_list = [];
+    console.log(lesson_list);
+    console.log(lessons);
+    let problem_list = [];
     lessons.map(l => lesson_list.push(l.id));
+    console.log(lesson_list);
     let lesson_results = student.lessonResults.filter(l =>
       lesson_list.includes(l.lesson.id)
     );
+    console.log(lesson_results);
+    // console.log(student);
+    // let problem_results = student.problemResults.filter(p =>
+    //   p.lesson.id ===
+    //   problem_list.push()
+    //   problem_list.includes(p.problem.id)
+    // );
+    // console.log(problem_results);
     if (lesson_results.length / lessons.length === 0) {
       color = "#DE6B48";
     } else if (
