@@ -389,7 +389,7 @@ class CoursePage extends Component {
                                           <p className="name">
                                             {coursePage.user.name}
                                           </p>
-                                          {coursePage.user.status ? (
+                                          {coursePage.user.status === "HR" ? (
                                             <p className="company">
                                               {coursePage.user.company.name}
                                             </p>
@@ -412,9 +412,9 @@ class CoursePage extends Component {
                                             !subjectArray.includes(
                                               coursePage.id
                                             ) &&
-                                              !new_subjectArray.includes(
-                                                coursePage.id
-                                              ) &&
+                                            !new_subjectArray.includes(
+                                              coursePage.id
+                                            ) &&
                                             !me.permissions.includes(
                                               "ADMIN"
                                             ) && (
@@ -559,29 +559,26 @@ class CoursePage extends Component {
                                             )}
                                           </>
                                         )}
-                                        {this.state.page === "feedback" &&
-                                          me && (
-                                            <>
-                                              {me.studentFeedback.filter(feed =>
+                                        {this.state.page === "feedback" && me && (
+                                          <>
+                                            {me.studentFeedback.filter(feed =>
+                                              lessonsList.includes(
+                                                feed.lesson.id
+                                              )
+                                            ).length === 0 ? (
+                                              <p>Обратной связи нет</p>
+                                            ) : null}
+                                            {me.studentFeedback
+                                              .filter(feed =>
                                                 lessonsList.includes(
                                                   feed.lesson.id
                                                 )
-                                              ).length === 0 ? (
-                                                <p>Обратной связи нет</p>
-                                              ) : null}
-                                              {me.studentFeedback
-                                                .filter(feed =>
-                                                  lessonsList.includes(
-                                                    feed.lesson.id
-                                                  )
-                                                )
-                                                .map(feedback => (
-                                                  <Feedback
-                                                    feedback={feedback}
-                                                  />
-                                                ))}
-                                            </>
-                                          )}
+                                              )
+                                              .map(feedback => (
+                                                <Feedback feedback={feedback} />
+                                              ))}
+                                          </>
+                                        )}
                                         {this.state.page === "finals" && (
                                           <>
                                             {me &&
@@ -600,9 +597,9 @@ class CoursePage extends Component {
                                               ))}
                                             {me &&
                                               me.id !== coursePage.user.id &&
-                                                !me.permissions.includes(
-                                                  "ADMIN"
-                                                ) &&
+                                              !me.permissions.includes(
+                                                "ADMIN"
+                                              ) &&
                                               (coursePage.examQuestion ? (
                                                 <ExamAnswer
                                                   id={this.props.id}

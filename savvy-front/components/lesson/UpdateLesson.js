@@ -239,7 +239,7 @@ export default class UpdateLesson extends Component {
               );
             }}
           </Query>
-          {/* <StoryUpdate lesson={lesson} /> */}
+          <StoryUpdate lesson={lesson} />
         </AreYouATeacher>
       </PleaseSignIn>
     );

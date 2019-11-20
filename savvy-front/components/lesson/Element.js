@@ -1,8 +1,30 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import renderHTML from "react-render-html";
 
 const El = styled.div`
   display: ${props => (props.hide ? "none" : "block")};
+  border: 1px solid #edefed;
+  padding: 1.5%;
+  margin-bottom: 3%;
+  border-radius: 5px;
+  img {
+    width: 80%;
+  }
+  .header {
+    font-weight: bold;
+  }
+`;
+
+const Button = styled.button`
+  font-family: Montserrat;
+  color: #112a62;
+  padding: 0.5% 1%;
+  font-size: 1.6rem;
+  background: #ffffff;
+  border: 1px solid #112a62;
+  border-radius: 5px;
+  margin-top: 3%;
 `;
 
 class Element extends Component {
@@ -27,27 +49,44 @@ class Element extends Component {
     const { data } = this.props;
     return (
       <El hide={this.state.hide}>
-        <div>Тип задания: {data.__typename}</div>
         {this.props.data.__typename === "Note" && (
-          <div>Текст: {data.text.substring(0, 100)}</div>
+          <>
+            <div className="header">Заметка</div>
+            <div>{renderHTML(data.text.substring(0, 300))}</div>
+          </>
         )}
 
         {this.props.data.__typename === "NewTest" && (
-          <div>Вопрос: {data.question[0]}</div>
+          <>
+            <div className="header">Тест</div>
+            <div>{data.question[0]}</div>
+          </>
         )}
         {this.props.data.__typename === "Quiz" && (
-          <div>Вопрос: {data.question}</div>
+          <>
+            <div className="header">Вопрос</div>
+            <div>{data.question}</div>
+          </>
         )}
         {this.props.data.__typename === "TextEditor" && (
-          <div>Текст: {data.text.substring(0, 100)}</div>
+          <>
+            <div className="header">Редактор текста</div>
+            <div>{data.text.substring(0, 100)}</div>
+          </>
         )}
         {this.props.data.__typename === "Constructor" && (
-          <div>Название: {data.name}</div>
+          <>
+            <div className="header">Конструктор</div>
+            <div>{data.name}</div>
+          </>
         )}
         {this.props.data.__typename === "Problem" && (
-          <div>Текст: {data.text.substring(0, 100)}</div>
+          <>
+            <div className="header">Задача</div>
+            <div>{renderHTML(data.text.substring(0, 300))}</div>
+          </>
         )}
-        <button onClick={this.push}>Выбрать!</button>
+        <Button onClick={this.push}>Выбрать!</Button>
       </El>
     );
   }

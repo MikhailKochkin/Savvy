@@ -33,6 +33,19 @@ const Inner = styled.div`
   width: 100%;
 `;
 
+const SpecialModalBackground = styled.div`
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 30;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-items: center;
+  justify-content: center;
+`;
+
 const GlobalStyle = createGlobalStyle`
       @import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=cyrillic');
 
@@ -68,7 +81,7 @@ const Page = ({ children, router }) => {
               <GlobalStyle />
               <Meta />
               <Layout>
-                <ModalProvider>
+                <ModalProvider backgroundComponent={SpecialModalBackground}>
                   <Header />
                   <Nav />
                   <Inner>{children}</Inner>

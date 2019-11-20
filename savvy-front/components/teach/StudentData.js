@@ -61,8 +61,8 @@ const Button = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 1.5% 0;
-  /* justify-content: space-between; */
+  margin: 2% 0;
+  margin-bottom: 3%;
 `;
 
 const SendButton = styled.div`
@@ -79,7 +79,7 @@ const SendButton = styled.div`
   width: 130px;
   color: #112a62;
   a {
-    color: #84bc9c;
+    color: #112a62;
   }
   @media (max-width: 800px) {
     font-size: 1.4rem;
@@ -161,33 +161,41 @@ class Person extends Component {
     moment.locale("ru");
     let mail = `mailto:${student.email}`;
     let color;
+    // Step 1. We filter the lessons to see if the lessons have have been
+    // visited by the student. For that we check if the lesson results of the student include the
+    // results of the lessons of this course
     let lesson_list = [];
-    console.log(lesson_list);
-    console.log(lessons);
-    let problem_list = [];
     lessons.map(l => lesson_list.push(l.id));
-    console.log(lesson_list);
     let lesson_results = student.lessonResults.filter(l =>
       lesson_list.includes(l.lesson.id)
     );
-    console.log(lesson_results);
-    // console.log(student);
-    // let problem_results = student.problemResults.filter(p =>
-    //   p.lesson.id ===
-    //   problem_list.push()
-    //   problem_list.includes(p.problem.id)
-    // );
-    // console.log(problem_results);
-    if (lesson_results.length / lessons.length === 0) {
-      color = "#DE6B48";
+
+    // Step 2. We create a "completed" array. We will push to this array the lessons which
+    // have been visited and whose prooblems have been completed.
+    let completed = [];
+    // Step 3. We map through the lessons and check a. if the number of problems of this lesson
+    // is equal to the number of completed problems for this lesson of the student
+    lessons.map(les =>
+      les.problems.length ===
+        student.problemResults.filter(pr => pr.lesson.id === les.id).length &&
+      // Step 4. b. to see if the number of lessons is equal to the number of visited lessons by the student.
+      lessons.length === lesson_results.length
+        ? // Step 5. if the lesson meets the criteria it is pushed to the completed array.
+          completed.push(les)
+        : null
+    );
+    // Step 6. Based on the number of completed lessons we determone the color of the lesson
+    if (completed.length / lessons.length < 0.2) {
+      color = "#e97573";
     } else if (
-      lesson_results.length / lessons.length > 0 &&
-      lesson_results.length / lessons.length < 1
+      completed.length / lessons.length > 0.2 &&
+      completed.length / lessons.length < 0.85
     ) {
       color = "#FDF3C8";
-    } else if (lesson_results.length / lessons.length >= 1) {
+    } else if (completed.length / lessons.length > 0.85) {
       color = "#84BC9C";
     }
+
     return (
       <>
         <Styles>
@@ -208,6 +216,9 @@ class Person extends Component {
               </SendButton>
               <SendButton onClick={this.onSwitch} name="resume">
                 Резюме
+              </SendButton>
+              <SendButton name="mail">
+                <a href={mail}>Написать</a>
               </SendButton>
             </Buttons>
             {this.state.page === "results" &&

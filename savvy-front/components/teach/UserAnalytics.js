@@ -10,7 +10,7 @@ const Styles = styled.div`
 `;
 
 const Header = styled.p`
-  font-size: 2rem;
+  font-size: 1.8rem;
   background: #edefed;
   padding: 0.5% 2%;
   padding-top: 8px;
@@ -26,7 +26,7 @@ class UserAnalytics extends Component {
     const { coursePage, students } = this.props;
     return (
       <Styles>
-        <Header>Участники</Header>
+        <Header>Участники: {students.length}</Header>
         {students.map(student => (
           <>
             <StudentData

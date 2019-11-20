@@ -13,11 +13,23 @@ const UPDATE_LESSON_MUTATION = gql`
 `;
 
 const Button = styled.button`
-  width: 15%;
+  padding: 1% 2%;
+  background: ${props => props.theme.green};
+  width: 20%;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.6rem;
+  margin: 2% 0;
+  cursor: pointer;
+  outline: 0;
+  &:active {
+    background-color: ${props => props.theme.darkGreen};
+  }
 `;
 
 const Block = styled.div`
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
 `;
 
 class StoryUpdate extends Component {
@@ -56,17 +68,8 @@ class StoryUpdate extends Component {
         >
           {(updateLesson, { loading, error }) => (
             <>
-              <button
-                onClick={async e => {
-                  // Stop the form from submitting
-                  e.preventDefault();
-                  // call the mutation
-                  const res = await updateLesson();
-                  // change the page to the single case page
-                }}
-              >
-                Update
-              </button>
+              <h2>Выстроить структуру урока</h2>
+              <h3>Список заданий</h3>
               <Block>
                 {lesson.notes.map(t => (
                   <Element data={t} getData={this.myCallback} />
@@ -92,6 +95,17 @@ class StoryUpdate extends Component {
                   <Element data={t} getData={this.myCallback} />
                 ))}
               </Block>
+              <Button
+                onClick={async e => {
+                  // Stop the form from submitting
+                  e.preventDefault();
+                  // call the mutation
+                  const res = await updateLesson();
+                  // change the page to the single case page
+                }}
+              >
+                Изменить
+              </Button>
             </>
           )}
         </Mutation>

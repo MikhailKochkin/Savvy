@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import Pdf from "react-to-pdf";
 import Modal from "styled-react-modal";
+import { IoLogoYahoo } from "react-icons/io";
 
 const Box = styled.div`
   display: flex;
@@ -16,6 +18,8 @@ const Box = styled.div`
   }
 `;
 
+const Block = styled.div``;
+
 const StyledModal = Modal.styled`
   display: flex;
   align-items: center;
@@ -24,10 +28,17 @@ const StyledModal = Modal.styled`
   border: 1px solid grey;
   border-radius: 10px;
   padding: 1% 2%;
-  width: 50%;
+  width: 40%;
+  height: 60%;
   @media (max-width: 800px) {
     width: 90%;
+    height: 90%;
   }
+`;
+
+const Modal2 = styled.div`
+  height: 100%;
+  overflow-y: scroll;
 `;
 
 const Button = styled.button`
@@ -54,64 +65,72 @@ class ProblemModal extends Component {
   };
   render() {
     const { problem, student } = this.props;
+    let mail = `body:${student.email}`;
     return (
-      <Box key={problem.id}>
-        <div>
-          <b>Задача: </b>
-          {renderHTML(`${problem.text.substring(0, 400) + "..."}`)}
-        </div>
-        <div className="column">
-          <div>Открытые подсказки:</div>
+      <>
+        <Box key={problem.id}>
           <div>
+            <b>Задача: </b>
+            {renderHTML(`${problem.text.substring(0, 400) + "..."}`)}
+          </div>
+          <div className="column">
+            <div>Открытые подсказки:</div>
+            <div>
+              {problem.problemResults.filter(t => t.student.id === student.id)
+                .length > 0 ? (
+                problem.problemResults
+                  .filter(t => t.student.id === student.id)[0]
+                  .revealed.map(t => <li>{t}</li>)
+              ) : (
+                <span>Не выполнена</span>
+              )}
+            </div>
+          </div>
+          <div className="column">
             {problem.problemResults.filter(t => t.student.id === student.id)
               .length > 0 ? (
               problem.problemResults
-                .filter(t => t.student.id === student.id)[0]
-                .revealed.map(t => <li>{t}</li>)
+                .filter(t => t.student.id === student.id)
+                .map(t => (
+                  <>
+                    {t.answer.length < 200 ? (
+                      <span>{renderHTML(t.answer)}</span>
+                    ) : (
+                      <span>
+                        {renderHTML(t.answer.substring(0, 200) + "...")}
+                      </span>
+                    )}
+                    <Button onClick={this.toggleModal}>
+                      <a>Развернуть</a>
+                    </Button>
+                  </>
+                ))
             ) : (
               <span>Не выполнена</span>
             )}
           </div>
-        </div>
-        <div className="column">
+        </Box>
+        <StyledModal
+          isOpen={this.state.isOpen}
+          onBackgroundClick={this.toggleModal}
+          onEscapeKeydown={this.toggleModal}
+        >
           {problem.problemResults.filter(t => t.student.id === student.id)
             .length > 0 ? (
             problem.problemResults
               .filter(t => t.student.id === student.id)
-              .map(t => (
-                <>
-                  {t.answer.length < 200 ? (
-                    <span>{renderHTML(t.answer)}</span>
-                  ) : (
-                    <span>
-                      {renderHTML(t.answer.substring(0, 200) + "...")}
-                    </span>
-                  )}
-                  <StyledModal
-                    isOpen={this.state.isOpen}
-                    onBackgroundClick={this.toggleModal}
-                    onEscapeKeydown={this.toggleModal}
-                  >
-                    {problem.problemResults.filter(
-                      t => t.student.id === student.id
-                    ).length > 0 ? (
-                      problem.problemResults
-                        .filter(t => t.student.id === student.id)
-                        .map(t => <span>{renderHTML(t.answer)}</span>)
-                    ) : (
-                      <span>Не выполнена</span>
-                    )}
-                  </StyledModal>
-                  <Button onClick={this.toggleModal}>
-                    <a>Развернуть</a>
-                  </Button>
-                </>
-              ))
+              .map(t => {
+                return (
+                  <Modal2>
+                    <div id="toCopy">{renderHTML(t.answer)}</div>
+                  </Modal2>
+                );
+              })
           ) : (
             <span>Не выполнена</span>
           )}
-        </div>
-      </Box>
+        </StyledModal>
+      </>
     );
   }
 }

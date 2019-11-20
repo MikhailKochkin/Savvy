@@ -66,7 +66,11 @@ const StyledModal = Modal.styled`
   }
 `;
 
-const Text = styled.div``;
+const Text = styled.div`
+  img {
+    max-width: 200px;
+  }
+`;
 
 class TexteditorModal extends Component {
   state = {

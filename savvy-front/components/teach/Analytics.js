@@ -99,6 +99,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             problem {
               id
               text
+              lesson {
+                id
+              }
             }
           }
         }
@@ -152,6 +155,16 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           createdAt
           updatedAt
         }
+        problemResults {
+          id
+          answer
+          lesson {
+            id
+          }
+          student {
+            id
+          }
+        }
       }
     }
   }
@@ -184,6 +197,16 @@ const Container = styled.div`
     }
     .header {
       margin-bottom: 20px;
+    }
+    .button {
+      cursor: pointer;
+      margin-bottom: 4%;
+      text-align: right;
+      margin-left: 4%;
+      margin-right: 20px;
+      &:hover {
+        border-left: 1px solid #122a62;
+      }
     }
   }
   .data {
@@ -218,46 +241,56 @@ class Analytics extends Component {
 
   render() {
     return (
-      <Query
-        query={SINGLE_COURSEPAGE_QUERY}
-        variables={{
-          id: this.props.id
-        }}
-      >
-        {({ data: data2, error: error2, loading: loading2 }) => {
-          if (loading2) return <p>Loading...</p>;
-          let coursePage = data2.coursePage;
-          return (
-            <Styles>
-              <Container>
-                <div className="menu">
-                  <button name="stats" onClick={this.onSwitch}>
-                    Аналитика
-                  </button>
-                  {coursePage.courseType !== "FORMONEY" && (
-                    <button name="applications" onClick={this.onSwitch}>
-                      Заявки
-                    </button>
-                  )}
-                </div>
-                <div className="data">
-                  {this.state.page === "stats" && (
-                    <DynamicUserAnalytics
-                      coursePage={coursePage}
-                      students={coursePage.new_students}
-                    />
-                  )}
-                  {this.state.page === "applications" &&
-                    coursePage.courseType !== "FORMONEY" && (
-                      <Applications id={coursePage.id} />
+      <>
+        <div id="root" />
+        <Query
+          query={SINGLE_COURSEPAGE_QUERY}
+          variables={{
+            id: this.props.id
+          }}
+        >
+          {({ data: data2, error: error2, loading: loading2 }) => {
+            if (loading2) return <p>Loading...</p>;
+            let coursePage = data2.coursePage;
+            return (
+              <Styles>
+                <Container>
+                  <div className="menu">
+                    <div
+                      className="button"
+                      name="stats"
+                      onClick={this.onSwitch}
+                    >
+                      Аналитика
+                    </div>
+                    {coursePage.courseType !== "FORMONEY" && (
+                      <div
+                        className="button"
+                        name="applications"
+                        onClick={this.onSwitch}
+                      >
+                        Заявки
+                      </div>
                     )}
-                </div>
-              </Container>
-              <div id="root"></div>
-            </Styles>
-          );
-        }}
-      </Query>
+                  </div>
+                  <div className="data">
+                    {this.state.page === "stats" && (
+                      <DynamicUserAnalytics
+                        coursePage={coursePage}
+                        students={coursePage.new_students}
+                      />
+                    )}
+                    {this.state.page === "applications" &&
+                      coursePage.courseType !== "FORMONEY" && (
+                        <Applications id={coursePage.id} />
+                      )}
+                  </div>
+                </Container>
+              </Styles>
+            );
+          }}
+        </Query>
+      </>
     );
   }
 }
