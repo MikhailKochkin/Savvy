@@ -71,7 +71,7 @@ class Element extends Component {
         {this.props.data.__typename === "TextEditor" && (
           <>
             <div className="header">Редактор текста</div>
-            <div>{data.text.substring(0, 100)}</div>
+            <div>{renderHTML(data.text.substring(0, 300))}</div>
           </>
         )}
         {this.props.data.__typename === "Constructor" && (

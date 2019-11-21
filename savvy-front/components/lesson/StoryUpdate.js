@@ -101,6 +101,7 @@ class StoryUpdate extends Component {
                   e.preventDefault();
                   // call the mutation
                   const res = await updateLesson();
+                  alert("!!!");
                   // change the page to the single case page
                 }}
               >
