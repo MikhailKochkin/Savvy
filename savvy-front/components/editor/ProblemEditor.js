@@ -133,7 +133,6 @@ const rules = [
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
       if (type) {
-        // console.log(el)
         return {
           object: "block",
           type: type,
@@ -183,7 +182,6 @@ const rules = [
     deserialize(el, next) {
       const type = MARK_TAGS[el.tagName.toLowerCase()];
       if (type) {
-        // console.log(el, type)
         return {
           object: "mark",
           type: type,
@@ -337,16 +335,13 @@ class App extends React.Component {
           renderInline={this.renderInline}
           renderMark={this.renderMark}
         />
-        {/* <div dangerouslySetInnerHTML={{ __html: html.serialize(this.state.value) }}></div>     */}
       </>
     );
   }
 
   // Render a Slate block.
   renderBlock = (props, editor, next) => {
-    // console.log("Render Block!!!")
     const { attributes, node, isFocused, children } = props;
-    // console.log(props)
     switch (node.type) {
       case "paragraph":
         return <p {...attributes}>{children}</p>;
@@ -383,7 +378,6 @@ class App extends React.Component {
 
   renderMark = (props, editor, next) => {
     const { mark, children, attributes } = props;
-    // console.log("mark:" + mark)
     switch (mark.type) {
       case "bold":
         return <BoldMark {...attributes}>{children}</BoldMark>;
@@ -537,22 +531,17 @@ class App extends React.Component {
 
   onClickLink = event => {
     event.preventDefault();
-    // console.log("Click the link!")
     const { editor } = this;
     const { value } = editor;
     const hasLinks = this.hasLinks();
-    // console.log(value.selection)
     if (hasLinks) {
-      // console.log("hasLinks")
       this.editor.command(this.unwrapLink);
     } else if (value.selection.isExpanded) {
-      // console.log("selection.isExpanded")
       const href = window.prompt("Enter the URL of the link:");
       if (href == null) {
         return;
       } else {
         this.editor.command(this.wrapLink, href);
-        // console.log("Ссылка создана!")
       }
     } else {
       const href = window.prompt("Enter the URL of the link:");
@@ -563,7 +552,6 @@ class App extends React.Component {
         if (text == null) {
           return;
         }
-
         editor
           .insertText(text)
           .moveFocusBackward(text.length)
@@ -579,26 +567,7 @@ class App extends React.Component {
 
     // Determine whether any of the currently selected blocks are code blocks.
     // const isCode = this.editor.value.blocks.some(block => block.type == 'code')
-    // console.log(isCode)
     editor.setBlocks("code");
-
-    // let mark
-    // if (isBoldHotkey(event)) {
-    //   mark = 'bold'
-    // } else if (isItalicHotkey(event)) {
-    //   mark = 'italic'
-    // } else if (isUnderlinedHotkey(event)) {
-    //   mark = 'header'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'code'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'quote'
-    // } else {
-    //   return next()
-    // }
-    // console.log("mark: " + mark)
-    // event.preventDefault()
-    // if(mark !== undefined){this.editor.toggleMark(mark)}
   };
   onChange = ({ value }) => {
     this.setState({ value });

@@ -31,6 +31,14 @@ const NoteStyles = styled.div`
       text-decoration: underline;
     }
   }
+  pre {
+    background: #282c34;
+    color: white;
+    padding: 2% 4%;
+    line-height: 1;
+    font-size: 1.4rem;
+    border-radius: 10px;
+  }
   table {
     width: 100%;
     border: 1px solid #edefed;

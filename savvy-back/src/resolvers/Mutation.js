@@ -313,7 +313,6 @@ const Mutations = {
     const updates = { ...args };
     //remove the ID from updates
     delete updates.id;
-    console.log(args.map);
     //run the update method
     if (args.map) {
       return ctx.db.mutation.updateLesson(

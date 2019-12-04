@@ -9,6 +9,7 @@ import ItalicMark from "./ItalicMark";
 import LinkMark from "./Link";
 import FormatToolBar from "./FormatToolbar";
 import { bold } from "react-icons-kit/fa/bold";
+import { code } from "react-icons-kit/fa/code";
 import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
 import { link } from "react-icons-kit/fa/link";
@@ -24,6 +25,15 @@ const plugins = [DeepTable()];
 const LinkStyle = styled.a`
   text-decoration: underline;
   color: #800000;
+`;
+
+const Pre = styled.pre`
+  background: #282c34;
+  color: white;
+  padding: 2% 4%;
+  line-height: 1;
+  font-size: 1.4rem;
+  border-radius: 10px;
 `;
 
 const Img = styled.img`
@@ -148,7 +158,6 @@ function insertVideo(editor, src, target) {
 }
 
 const rules = [
-  ...DeepTable.makeSerializerRules(),
   {
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
@@ -157,7 +166,7 @@ const rules = [
           object: "block",
           type: type,
           data: {
-            src: el.src
+            className: el.src
           },
           nodes: next(el.childNodes)
         };
@@ -176,12 +185,18 @@ const rules = [
             return (
               <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
             );
+          case "code":
+            return (
+              <pre>
+                <code>{children}</code>
+              </pre>
+            );
           case "video":
             return (
               <iframe
                 src={obj.data._root.entries[0][1]}
-                frameBorder="0"
-                tabIndex="0"
+                frameborder="0"
+                tabindex="0"
                 allow="autoplay"
                 data-translatedyoutubelang="ru"
                 allowFullScreen
@@ -212,6 +227,8 @@ const rules = [
             return <i>{children}</i>;
           case "header":
             return <h2>{children}</h2>;
+          case "code":
+            return <code>{children}</code>;
         }
       }
     }
@@ -281,6 +298,11 @@ class App extends React.Component {
     return value.blocks.some(node => node.type === type);
   };
 
+  hasCodeBlock = type => {
+    const { value } = this.state;
+    return value.blocks.some(node => node.type === type);
+  };
+
   hasLinks = () => {
     const { value } = this.state;
     return value.inlines.some(inline => inline.type === "link");
@@ -291,11 +313,23 @@ class App extends React.Component {
       type: "link",
       data: { href }
     });
+
+    editor.moveToEnd();
+  };
+
+  wrapCode = editor => {
+    editor.wrapInline({
+      type: "code"
+    });
     editor.moveToEnd();
   };
 
   unwrapLink = editor => {
     editor.unwrapInline("link");
+  };
+
+  unwrapCode = editor => {
+    editor.unwrapInline("code");
   };
 
   // Store a reference to the `editor`.
@@ -313,6 +347,9 @@ class App extends React.Component {
           {this.renderMarkButton("italic", italic)}
           {this.renderMarkButton("header", header)}
           {this.renderBlockButton("numbered-list", "format_list_numbered")}
+          <ButtonStyle onMouseDown={event => this.onClickCode(event)}>
+            <Icon icon={code} />
+          </ButtonStyle>
           <ButtonStyle onMouseDown={event => this.onClickLink(event)}>
             <Icon icon={link} />
           </ButtonStyle>
@@ -356,6 +393,12 @@ class App extends React.Component {
         const src = node.data.get("src");
         return <Img {...attributes} src={src} />;
       }
+      case "code":
+        return (
+          <Pre>
+            <code>{children}</code>
+          </Pre>
+        );
       case "video": {
         const src = node.data.get("src");
         return (
@@ -404,7 +447,13 @@ class App extends React.Component {
     const { attributes, children, node } = props;
     switch (node.type) {
       case "link":
-        return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
+        const { data } = node;
+        const href = data.get("href");
+        return (
+          <LinkMark href={href} target="_blank">
+            {children}
+          </LinkMark>
+        );
       default:
         return next();
     }
@@ -504,6 +553,16 @@ class App extends React.Component {
     this.editor.command(insertVideo, src);
   };
 
+  onClickCode = event => {
+    event.preventDefault();
+    const isCode = this.hasCodeBlock("code");
+    if (isCode) {
+      this.editor.unwrapBlock("code");
+    } else {
+      this.editor.wrapBlock("code");
+    }
+  };
+
   onClickBlock = (event, type) => {
     event.preventDefault();
 
@@ -570,7 +629,6 @@ class App extends React.Component {
         if (text == null) {
           return;
         }
-
         editor
           .insertText(text)
           .moveFocusBackward(text.length)

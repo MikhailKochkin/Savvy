@@ -26,6 +26,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $name: String
     $text: String
     $description: String
+    $type: Type
   ) {
     updateLesson(
       id: $id
@@ -33,6 +34,7 @@ const UPDATE_LESSON_MUTATION = gql`
       name: $name
       text: $text
       description: $description
+      type: $type
     ) {
       id
       number
@@ -193,6 +195,14 @@ export default class UpdateLesson extends Component {
                       defaultValue={data.lesson.number}
                       onChange={this.handleNumber}
                     />
+                    <select
+                      name="type"
+                      defaultValue={data.lesson.type}
+                      onChange={this.handleName}
+                    >
+                      <option value="REGULAR">Обычный</option>
+                      <option value="STORY">История</option>
+                    </select>
                     <Frame>
                       <DynamicHoverEditor
                         index={1}
@@ -239,7 +249,7 @@ export default class UpdateLesson extends Component {
               );
             }}
           </Query>
-          {/* <StoryUpdate lesson={lesson} /> */}
+          <StoryUpdate lesson={lesson} />
         </AreYouATeacher>
       </PleaseSignIn>
     );
