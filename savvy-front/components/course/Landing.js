@@ -8,7 +8,7 @@ const Banner = styled.div`
   color: white;
   border-radius: 10px;
   width: 92vw;
-  content: url("../static/computer.jpg");
+  content: url("../static/computer_mini.jpg");
   @media (max-width: 800px) {
     top: 0;
     left: 0;
