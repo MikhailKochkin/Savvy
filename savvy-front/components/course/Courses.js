@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import ReactResizeDetector from "react-resize-detector";
 import dynamic from "next/dynamic";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import CareerCoursesList from "./courseLists/CareerCoursesList";
@@ -14,6 +13,17 @@ import User from "../User";
 const Container = styled.div`
   padding: 2% 4%;
   border: none;
+`;
+
+const Title = styled.div`
+  font-size: 1.8rem;
+  margin: 1% 0;
+  margin-top: 2.5%;
+  font-weight: 700;
+  @media (max-width: 850px) {
+    margin-left: 10px;
+    /* width: 50%; */
+  }
 `;
 
 const DynamicTour = dynamic(import("reactour"), {
@@ -170,10 +180,14 @@ class Courses extends Component {
           <Container>
             <Landing getTour={this.myCallback} />
             {/* {me && me.careerTrackID && <CareerTrackMenu me={me} />} */}
+            <Title>Вакансии</Title>
             <Vacancies me={me} />
             {me && me.careerTrackID && <CareerCoursesList me={me} />}
+            <Title> Платные курсы </Title>
             <ForMoneyCoursesList me={me} />
+            <Title> Бесплатные курсы </Title>
             <FreeCoursesList me={me} />
+            <Title> Юридический английский. Полезные статьи. </Title>
             <Articles me={me} />
             <DynamicTour
               onAfterOpen={this.state.width > 600 ? disableBody : null}

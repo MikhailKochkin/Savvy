@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Course from "../Course";
 import { CoursePerPage } from "../../../config";
 import FetchMore from "../../FetchMore";
+import LoadingDummy from "../LoadingDummy";
 
 const FOR_MONEY_COURSE_PAGES_QUERY = gql`
   query FOR_MONEY_COURSE_PAGES_QUERY($type: CourseType!, $status: Status!, $boolean: Boolean = true, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
@@ -55,17 +56,6 @@ const CasesStyles = styled.div`
   }
 `;
 
-const Title = styled.div`
-  font-size: 1.8rem;
-  margin-bottom: 1%;
-  font-weight: 700;
-  width: 17%;
-  @media (max-width: 850px) {
-    margin-left: 10px;
-    width: 50%;
-  }
-`;
-
 const Styles = styled.div`
   margin-top: 1.5%;
 `;
@@ -86,13 +76,12 @@ class Vacancies extends Component {
         }}
       >
         {({ data: data1, loading, error, fetchMore }) => {
-          if (loading) return <p>Загрузка...</p>;
+          if (loading) return <LoadingDummy />;
           if (error) return <p>Error: {error.message}</p>;
           return (
             <>
               {data1.coursePages && data1.coursePages.length > 0 && (
                 <Styles data-tut="second-step">
-                  <Title> Вакансии </Title>
                   <CasesStyles>
                     {data1.coursePages.map(coursePage => (
                       <Course

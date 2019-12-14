@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Course from "../Course";
 import { CoursePerPage } from "../../../config";
 import FetchMore from "../../FetchMore";
+import LoadingDummy from "../LoadingDummy";
 
 const FREE_COURSE_PAGES_QUERY = gql`
   query FREE_COURSE_PAGES_QUERY($type: [ CourseType! ], $boolean: Boolean = true, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
@@ -70,16 +71,6 @@ const CasesStyles = styled.div`
     align-items: flex-start;
   }
 `;
-const Title = styled.div`
-  font-size: 1.8rem;
-  margin-bottom: 1%;
-  font-weight: 700;
-  width: 17%;
-  @media (max-width: 850px) {
-    margin-left: 10px;
-    width: 50%;
-  }
-`;
 
 const Styles = styled.div``;
 
@@ -99,12 +90,11 @@ class FreeCoursesList extends Component {
       >
         {({ data: data1, error, loading, fetchMore }) => {
           if (error) return <p>Error: {error.message}</p>;
-          if (loading) return <p>Загрузка...</p>;
+          if (loading) return <LoadingDummy />;
           const coursePages = data1.coursePages;
           return (
             <>
               <Styles data-tut="third-step">
-                <Title> Бесплатные курсы </Title>
                 <CasesStyles>
                   {coursePages &&
                     coursePages.map(coursePage => (

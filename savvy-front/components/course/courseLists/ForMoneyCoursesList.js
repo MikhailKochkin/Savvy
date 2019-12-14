@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Course from "../Course";
 import { CoursePerPage } from "../../../config";
 import FetchMore from "../../FetchMore";
+import LoadingDummy from "../LoadingDummy";
 
 const FOR_MONEY_COURSE_PAGES_QUERY = gql`
   query FOR_MONEY_COURSE_PAGES_QUERY($type: CourseType!, $boolean: Boolean = true, $skip: Int = 0, $first: Int = ${CoursePerPage}) {
@@ -95,12 +96,11 @@ class ForMoneyCoursesList extends Component {
         }}
       >
         {({ data: data1, loading, error, fetchMore }) => {
-          if (loading) return <p>Загрузка...</p>;
+          if (loading) return <LoadingDummy />;
           if (error) return <p>Error: {error.message}</p>;
           return (
             <>
               <Styles data-tut="second-step">
-                <Title> Платные курсы </Title>
                 <CasesStyles>
                   {data1.coursePages &&
                     data1.coursePages.map(coursePage => (

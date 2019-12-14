@@ -5,6 +5,7 @@ import Carousel from "nuka-carousel";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import Article from "./ArticleCard";
+import LoadingDummy from "../course/LoadingDummy";
 
 const ENGLISH_ARTICLES_QUERY = gql`
   query ENGLISH_ARTICLES_QUERY($tag: String!) {
@@ -13,20 +14,6 @@ const ENGLISH_ARTICLES_QUERY = gql`
       title
       img
     }
-  }
-`;
-
-const Title = styled.div`
-  font-size: 1.8rem;
-  margin-bottom: 1%;
-  font-weight: 700;
-  width: 30%;
-  @media (max-width: 1500px) {
-    width: 50%;
-  }
-  @media (max-width: 900px) {
-    padding: 2%;
-    width: 100%;
   }
 `;
 
@@ -100,13 +87,11 @@ class Articles extends Component {
           }}
         >
           {({ data: data1, loading, fetchMore }) => {
-            if (loading) return <p>Загрузка</p>;
+            if (loading) return <LoadingDummy />;
             // console.log(data1.articles);
 
             return (
               <Group data-tut="fourth-step">
-                <Title> Юридический английский. Полезные статьи. </Title>
-
                 {this.state.width > 1000 && (
                   <ArticlesGroup>
                     {data1.articles.map(article => (
