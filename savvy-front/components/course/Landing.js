@@ -1,14 +1,14 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
-const Banner = styled.div`
+const Banner = styled.img`
   max-height: 45vh;
   object-fit: cover;
   text-align: center;
   color: white;
   border-radius: 10px;
   width: 92vw;
-  content: url("../static/computer_mini.jpg");
+  /* content: url("../static/computer.jpg"); */
   @media (max-width: 800px) {
     top: 0;
     left: 0;
@@ -20,6 +20,7 @@ const Banner = styled.div`
 `;
 
 const Square = styled.div`
+  display: none;
   position: absolute;
   top: 30%;
   left: 6%;
@@ -90,24 +91,25 @@ const Button = styled.button`
   }
 `;
 
-class Landing extends Component {
-  open = () => {
-    this.props.getTour(true);
+const Landing = props => {
+  const open = () => {
+    props.getTour(true);
   };
-  render() {
-    return (
-      <>
-        <Banner />
-        <Square>
-          <div className="text">
-            Ищите вакансии и проходите курсы, наполненные упражнениями для
-            развития нетехнических навыков
-          </div>
-          <Button onClick={this.open}>Подробнее</Button>
-        </Square>
-      </>
-    );
-  }
-}
+  useEffect(() => {
+    document.getElementById("square").style.display = "block";
+  });
+  return (
+    <>
+      <Banner id="banner" src="../static/computer_mini.jpg" />
+      <Square id="square">
+        <div className="text">
+          Ищите вакансии и проходите курсы, наполненные упражнениями для
+          развития нетехнических навыков
+        </div>
+        <Button onClick={open}>Подробнее</Button>
+      </Square>
+    </>
+  );
+};
 
 export default Landing;

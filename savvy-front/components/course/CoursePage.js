@@ -25,7 +25,6 @@ const PAGE_LESSONS_QUERY = gql`
       type
       description
       published
-      text
       user {
         id
       }

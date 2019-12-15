@@ -81,7 +81,7 @@ class FreeCoursesList extends Component {
       <Query
         query={FREE_COURSE_PAGES_QUERY}
         returnPartialData={true}
-        fetchPolicy="cache-and-network"
+        fetchPolicy="cache-first"
         variables={{
           type: ["PUBLIC"],
           first: CoursePerPage,

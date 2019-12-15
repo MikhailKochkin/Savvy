@@ -46,8 +46,11 @@ const FOR_MONEY_COURSE_PAGES_QUERY = gql`
 `;
 
 const AGGREGATE_FOR_MONEY_COURSE_PAGES_QUERY = gql`
-  query AGGREGATE_FOR_MONEY_COURSE_PAGES_QUERY($type: CourseType!) {
-    coursePagesConnection(where: { courseType: $type }) {
+  query AGGREGATE_FOR_MONEY_COURSE_PAGES_QUERY(
+    $type: CourseType!
+    $boolean: Boolean = true
+  ) {
+    coursePagesConnection(where: { courseType: $type, published: $boolean }) {
       aggregate {
         count
       }
@@ -66,19 +69,8 @@ const CasesStyles = styled.div`
   }
 `;
 
-const Title = styled.div`
-  font-size: 1.8rem;
-  margin-bottom: 1%;
-  font-weight: 700;
-  width: 17%;
-  @media (max-width: 850px) {
-    margin-left: 10px;
-    width: 50%;
-  }
-`;
-
 const Styles = styled.div`
-  margin-top: 3%;
+  /* margin-top: 3%; */
 `;
 
 class ForMoneyCoursesList extends Component {
@@ -120,11 +112,11 @@ class ForMoneyCoursesList extends Component {
                   }}
                 >
                   {({ data: data2, error: error2, loading: loading2 }) => {
-                    if (loading2) return <p>Загрузка...</p>;
+                    if (loading2) return <p></p>;
                     if (error2) return <p>Error: {error2.message}</p>;
                     return (
                       <>
-                        {data1.coursepages !== undefined && (
+                        {data1.coursePages !== undefined && (
                           <>
                             {data2.coursePagesConnection.aggregate.count >
                             data1.coursePages.length ? (

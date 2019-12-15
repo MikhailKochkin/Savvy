@@ -95,7 +95,7 @@ class Articles extends Component {
                 {this.state.width > 1000 && (
                   <ArticlesGroup>
                     {data1.articles.map(article => (
-                      <Article article={article} />
+                      <Article id={article.id} article={article} />
                     ))}
                   </ArticlesGroup>
                 )}
