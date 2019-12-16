@@ -3,7 +3,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Router from "next/router";
-import { PAGE_LESSONS_QUERY } from "../course/CoursePage";
+import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 
 const DELETE_LESSON_MUTATION = gql`
   mutation DELETE_LESSON_MUTATION($id: ID!) {
@@ -51,7 +51,7 @@ class DeleteSingleLesson extends Component {
         update={this.update}
         refetchQueries={() => [
           {
-            query: PAGE_LESSONS_QUERY,
+            query: SINGLE_COURSEPAGE_QUERY,
             variables: { id: this.props.coursePageID }
           }
         ]}

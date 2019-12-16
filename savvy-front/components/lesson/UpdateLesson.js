@@ -15,6 +15,9 @@ const SINGLE_LESSON_QUERY = gql`
       name
       number
       text
+      coursePage {
+        id
+      }
     }
   }
 `;
@@ -225,8 +228,8 @@ export default class UpdateLesson extends Component {
                       }}
                       refetchQueries={() => [
                         {
-                          query: PAGE_LESSONS_QUERY,
-                          variables: { id: lessonID }
+                          query: SINGLE_COURSEPAGE_QUERY,
+                          variables: { id: data.lesson.coursePage.id }
                         }
                       ]}
                     >

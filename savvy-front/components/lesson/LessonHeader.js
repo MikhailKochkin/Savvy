@@ -6,35 +6,6 @@ import Link from "next/link";
 import renderHTML from "react-render-html";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 
-const SINGLE_LESSON_QUERY = gql`
-  query SINGLE_LESSON_QUERY($id: ID!) {
-    lesson(where: { id: $id }) {
-      id
-      text
-      number
-      type
-      published
-      createdAt
-      user {
-        id
-      }
-    }
-  }
-`;
-
-const SINGLE_LESSONRESULT_QUERY = gql`
-  query SINGLE_LESSONRESULT_QUERY($lessonID: ID!, $id: ID) {
-    lessonResults(where: { lessonID: $lessonID, student: { id: $id } }) {
-      id
-      visitsNumber
-      lessonID
-      student {
-        id
-      }
-    }
-  }
-`;
-
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: ID!, $published: Boolean) {
     updatePublished(id: $id, published: $published) {
@@ -256,8 +227,8 @@ class LessonHeader extends Component {
                   }}
                   refetchQueries={() => [
                     {
-                      query: SINGLE_LESSON_QUERY,
-                      variables: { id: lesson.id }
+                      query: SINGLE_COURSEPAGE_QUERY,
+                      variables: { id: lesson.coursePage.id }
                     }
                   ]}
                 >
@@ -281,181 +252,189 @@ class LessonHeader extends Component {
               </>
             ) : null}
             {me && (
-              <Query
-                query={SINGLE_LESSONRESULT_QUERY}
-                variables={{
-                  lessonID: lesson.id,
-                  id: me.id
-                }}
-              >
-                {({ data, error, loading }) => {
-                  if (loading) return <p>Loading...</p>;
-                  if (error) return <p>Error: {error.message}</p>;
-                  return (
-                    <>
-                      <Mutation
-                        mutation={CREATE_LESSONRESULT_MUTATION}
-                        variables={{
-                          lessonID: lesson.id,
-                          visitsNumber: 1
-                        }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_LESSONRESULT_QUERY,
-                            variables: { lessonID: lesson.id }
-                          }
-                        ]}
-                      >
-                        {(createLessonResult, { loading, error }) => {
-                          return (
-                            <>
-                              {data.lessonResults.length === 0 && (
-                                <>
-                                  {me &&
-                                  lesson &&
-                                  (me.id === lesson.user.id ||
-                                    me.permissions.includes("ADMIN") ||
-                                    lesson.id === openLesson) &&
-                                  (!students.includes(me.id) ||
-                                    !new_students.includes(me.id)) ? (
-                                    <Link
-                                      // The user is the teacher or the admin or it is an openLesson.
-                                      href={{
-                                        pathname: "/lesson",
-                                        query: {
-                                          id: lesson.id,
-                                          type: lesson.type.toLowerCase()
-                                        }
-                                      }}
-                                    >
-                                      <A>
-                                        <Button
-                                          onClick={() => {
-                                            createLessonResult();
-                                          }}
-                                        >
-                                          Перейти
-                                        </Button>
-                                      </A>
-                                    </Link>
-                                  ) : null}
-
-                                  {me &&
-                                    lesson &&
-                                    me.id !== lesson.user.id &&
-                                    (students.includes(me.id) ||
-                                      new_students.includes(me.id)) &&
-                                    !me.permissions.includes("ADMIN") &&
-                                    this.state.published && (
-                                      <Link
-                                        // The user hasn't visited the lesson page before. Create the lesson visit node.
-                                        href={{
-                                          pathname: "/lesson",
-                                          query: {
-                                            id: lesson.id,
-                                            type: lesson.type.toLowerCase()
-                                          }
-                                        }}
-                                      >
-                                        <A>
-                                          <Button
-                                            onClick={() => {
-                                              createLessonResult();
-                                            }}
-                                          >
-                                            Перейти
-                                          </Button>
-                                        </A>
-                                      </Link>
-                                    )}
-                                </>
-                              )}
-                            </>
-                          );
-                        }}
-                      </Mutation>
-                      {data.lessonResults.length > 0 && (
-                        <Mutation
-                          mutation={UPDATE_LESSONRESULT_MUTATION}
-                          variables={{
-                            id: data.lessonResults[0].id,
-                            visitsNumber: data.lessonResults[0].visitsNumber + 1
-                          }}
-                          refetchQueries={() => [
-                            {
-                              query: SINGLE_LESSONRESULT_QUERY,
-                              variables: { lessonID: lesson.id }
-                            }
-                          ]}
-                        >
-                          {(updateLessonResult, { loading, error }) => {
-                            return (
-                              <>
-                                {me &&
-                                lesson &&
-                                (me.id === lesson.user.id ||
-                                  me.permissions.includes("ADMIN") ||
-                                  lesson.id === openLesson) &&
-                                (!students.includes(me.id) ||
-                                  !new_students.includes(me.id)) ? (
-                                  <Link
-                                    // The teacher or the admin visit the lesson page for the second time. We do not update anything.
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: lesson.type.toLowerCase()
-                                      }
+              // <Query
+              //   query={SINGLE_LESSONRESULT_QUERY}
+              //   variables={{
+              //     lessonID: lesson.id,
+              //     id: me.id
+              //   }}
+              // >
+              //   {({ data, error, loading }) => {
+              //     if (loading) return <p>Loading...</p>;
+              //     if (error) return <p>Error: {error.message}</p>;
+              //     return (
+              <>
+                <Mutation
+                  mutation={CREATE_LESSONRESULT_MUTATION}
+                  variables={{
+                    lessonID: lesson.id,
+                    visitsNumber: 1
+                  }}
+                  refetchQueries={() => [
+                    {
+                      query: SINGLE_COURSEPAGE_QUERY,
+                      variables: { id: lesson.coursePage.id }
+                    }
+                  ]}
+                >
+                  {(createLessonResult, { loading, error }) => {
+                    return (
+                      <>
+                        {lesson.lessonResults.filter(
+                          l => l.student.id === me.id
+                        ).length === 0 && (
+                          <>
+                            {me &&
+                            lesson &&
+                            (me.id === lesson.user.id ||
+                              me.permissions.includes("ADMIN") ||
+                              lesson.id === openLesson) &&
+                            (!students.includes(me.id) ||
+                              !new_students.includes(me.id)) ? (
+                              <Link
+                                // The user is the teacher or the admin or it is an openLesson.
+                                href={{
+                                  pathname: "/lesson",
+                                  query: {
+                                    id: lesson.id,
+                                    type: lesson.type.toLowerCase()
+                                  }
+                                }}
+                              >
+                                <A>
+                                  <Button
+                                    onClick={() => {
+                                      createLessonResult();
+                                      console.log(0);
                                     }}
                                   >
-                                    <A>
-                                      <Button
-                                        onClick={() => {
-                                          updateLessonResult();
-                                        }}
-                                      >
-                                        Перейти
-                                      </Button>
-                                    </A>
-                                  </Link>
-                                ) : null}
+                                    Перейти1
+                                  </Button>
+                                </A>
+                              </Link>
+                            ) : null}
 
-                                {me &&
-                                  lesson &&
-                                  me.id !== lesson.user.id &&
-                                  (students.includes(me.id) ||
-                                    new_students.includes(me.id)) &&
-                                  this.state.published && (
-                                    <Link
-                                      // The user HAS visited the lesson page and we update it now
-                                      href={{
-                                        pathname: "/lesson",
-                                        query: {
-                                          id: lesson.id,
-                                          type: lesson.type.toLowerCase()
-                                        }
+                            {me &&
+                              lesson &&
+                              me.id !== lesson.user.id &&
+                              (students.includes(me.id) ||
+                                new_students.includes(me.id)) &&
+                              !me.permissions.includes("ADMIN") &&
+                              this.state.published && (
+                                <Link
+                                  // The user hasn't visited the lesson page before. Create the lesson visit node.
+                                  href={{
+                                    pathname: "/lesson",
+                                    query: {
+                                      id: lesson.id,
+                                      type: lesson.type.toLowerCase()
+                                    }
+                                  }}
+                                >
+                                  <A>
+                                    <Button
+                                      onClick={() => {
+                                        createLessonResult();
+                                        console.log(1);
                                       }}
                                     >
-                                      <A>
-                                        <Button
-                                          onClick={() => {
-                                            updateLessonResult();
-                                          }}
-                                        >
-                                          Перейти
-                                        </Button>
-                                      </A>
-                                    </Link>
-                                  )}
-                              </>
-                            );
-                          }}
-                        </Mutation>
-                      )}
-                    </>
-                  );
-                }}
-              </Query>
+                                      Перейти2
+                                    </Button>
+                                  </A>
+                                </Link>
+                              )}
+                          </>
+                        )}
+                      </>
+                    );
+                  }}
+                </Mutation>
+                {lesson.lessonResults.filter(l => l.student.id === me.id)
+                  .length > 0 && (
+                  <Mutation
+                    mutation={UPDATE_LESSONRESULT_MUTATION}
+                    variables={{
+                      id: lesson.lessonResults[0].id,
+                      visitsNumber: lesson.lessonResults[0].visitsNumber + 1
+                    }}
+                    refetchQueries={() => [
+                      {
+                        query: SINGLE_COURSEPAGE_QUERY,
+                        variables: { id: lesson.coursePage.id }
+                      }
+                    ]}
+                  >
+                    {(updateLessonResult, { loading, error }) => {
+                      return (
+                        <>
+                          {me &&
+                          lesson &&
+                          (me.id === lesson.user.id ||
+                            me.permissions.includes("ADMIN") ||
+                            lesson.id === openLesson) &&
+                          (!students.includes(me.id) ||
+                            !new_students.includes(me.id)) ? (
+                            <Link
+                              // The teacher or the admin visit the lesson page for the second time. We do not update anything.
+                              href={{
+                                pathname: "/lesson",
+                                query: {
+                                  id: lesson.id,
+                                  type: lesson.type.toLowerCase()
+                                }
+                              }}
+                            >
+                              <A>
+                                <Button
+                                  onClick={() => {
+                                    updateLessonResult();
+                                    console.log(3, lesson.lessonResults);
+                                  }}
+                                >
+                                  Перейти3
+                                </Button>
+                              </A>
+                            </Link>
+                          ) : null}
+
+                          {me &&
+                            lesson &&
+                            me.id !== lesson.user.id &&
+                            !me.permissions.includes("ADMIN") &&
+                            (students.includes(me.id) ||
+                              new_students.includes(me.id)) &&
+                            this.state.published && (
+                              <Link
+                                // The user HAS visited the lesson page and we update it now
+                                href={{
+                                  pathname: "/lesson",
+                                  query: {
+                                    id: lesson.id,
+                                    type: lesson.type.toLowerCase()
+                                  }
+                                }}
+                              >
+                                <A>
+                                  <Button
+                                    onClick={() => {
+                                      updateLessonResult();
+                                      console.log(4);
+                                    }}
+                                  >
+                                    Перейти4
+                                  </Button>
+                                </A>
+                              </Link>
+                            )}
+                        </>
+                      );
+                    }}
+                  </Mutation>
+                )}
+              </>
+              //     );
+              //   }}
+              // </Query>
             )}
 
             {me &&
