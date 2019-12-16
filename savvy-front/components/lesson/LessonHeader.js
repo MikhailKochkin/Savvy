@@ -308,7 +308,7 @@ class LessonHeader extends Component {
                                       console.log(0);
                                     }}
                                   >
-                                    Перейти1
+                                    Перейти
                                   </Button>
                                 </A>
                               </Link>
@@ -338,7 +338,7 @@ class LessonHeader extends Component {
                                         console.log(1);
                                       }}
                                     >
-                                      Перейти2
+                                      Перейти
                                     </Button>
                                   </A>
                                 </Link>
@@ -391,7 +391,7 @@ class LessonHeader extends Component {
                                     console.log(3, lesson.lessonResults);
                                   }}
                                 >
-                                  Перейти3
+                                  Перейти
                                 </Button>
                               </A>
                             </Link>
@@ -421,7 +421,7 @@ class LessonHeader extends Component {
                                       console.log(4);
                                     }}
                                   >
-                                    Перейти4
+                                    Перейти
                                   </Button>
                                 </A>
                               </Link>
