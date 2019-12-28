@@ -4,8 +4,8 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import LessonHeader from "../lesson/LessonHeader";
-import PleaseSignIn from "../auth/PleaseSignIn";
 import User from "../User";
+import FirstLesson from "./coursePageCards/FirstLesson";
 import RegisterCard from "./coursePageCards/RegisterCard";
 import StudentCard from "./coursePageCards/StudentCard";
 import TeacherCard from "./coursePageCards/TeacherCard";
@@ -83,6 +83,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       user {
         id
         name
+        description
         status
         uni {
           id
@@ -125,6 +126,12 @@ const CourseInfo = styled.div`
 const LessonsInfo = styled.div`
   margin-top: 2%;
   padding: 0 3%;
+  .week {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin: 1% 0;
+    margin-top: 3%;
+  }
 `;
 
 const Data = styled.div`
@@ -134,25 +141,26 @@ const Data = styled.div`
     margin: 0;
   }
   .name {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    font-weight: bold;
     padding-bottom: 4%;
+    padding-top: 4%;
+    border-top: 1px solid #e4e4e4;
   }
   .company {
     font-size: 1.6rem;
     padding-bottom: 4%;
-    border-bottom: 1px solid #e4e4e4;
   }
   .track {
     font-size: 1.6rem;
     line-height: 1.4;
     padding-top: 4%;
     padding-bottom: 4%;
-    border-bottom: 1px solid #e4e4e4;
   }
   .track2 {
     font-size: 1.6rem;
     line-height: 1.4;
-    padding-top: 4%;
+    padding-top: 0%;
     padding-bottom: 4%;
   }
   .trackName {
@@ -185,7 +193,7 @@ const LessonImage = styled.img`
 
 const Header = styled.div`
   font-size: 2.4rem;
-  padding-bottom: 6%;
+  padding-bottom: 4%;
   padding-top: 4%;
   line-height: 1.4;
 `;
@@ -217,7 +225,7 @@ const Reviews = styled.div`
   align-items: center;
 `;
 
-const MoveButton = styled.button`
+const SignInButton = styled.button`
   background: #0846d8;
   border-radius: 5px;
   width: 20%;
@@ -279,6 +287,28 @@ const Details = styled.div`
   .header {
     font-size: 1.8rem;
     font-weight: bold;
+    margin-bottom: 1%;
+    @media (max-width: 800px) {
+      font-size: 1.6rem;
+    }
+  }
+  .openLesson {
+    margin: 3% 0;
+    @media (max-width: 800px) {
+      margin: 6% 0;
+    }
+  }
+`;
+
+const Video = styled.div`
+  .header {
+    margin-bottom: 3%;
+  }
+  margin: 3% 0;
+  iframe {
+    width: 100%;
+    height: 45vh;
+    border: none;
   }
 `;
 
@@ -350,6 +380,10 @@ class CoursePage extends Component {
 
                       let lessonsList = [];
                       coursePage.lessons.map(l => lessonsList.push(l.id));
+
+                      const openLesson = coursePage.lessons.filter(
+                        c => c.id === coursePage.openLesson
+                      );
                       return (
                         <>
                           <Container>
@@ -362,18 +396,17 @@ class CoursePage extends Component {
                               <CourseInfo>
                                 <Data>
                                   <Header>{coursePage.title}</Header>
-                                  <p className="name">{coursePage.user.name}</p>
-                                  {coursePage.user.status === "HR" ? (
-                                    <p className="company">
-                                      {coursePage.user.company.name}
-                                    </p>
-                                  ) : (
-                                    <p className="company">
-                                      {coursePage.user.uni.title}
-                                    </p>
-                                  )}
                                   <p className="track2">
                                     {coursePage.description}
+                                  </p>
+                                  <p className="name">
+                                    {coursePage.user.name} из{" "}
+                                    {coursePage.user.status === "HR"
+                                      ? coursePage.user.company.name
+                                      : coursePage.user.uni.title}
+                                  </p>
+                                  <p className="track2">
+                                    {coursePage.user.description}
                                   </p>
                                 </Data>
                                 <PayBox>
@@ -386,21 +419,14 @@ class CoursePage extends Component {
                                     !subjectArray.includes(coursePage.id) &&
                                     !new_subjectArray.includes(coursePage.id) &&
                                     !me.permissions.includes("ADMIN") && (
-                                      <RegisterCard
-                                        me={me}
-                                        coursePage={coursePage}
-                                        price={price}
-                                        discountPrice={coursePage.discountPrice}
-                                        promocode={coursePage.promocode[0]}
-                                        studentsArray={studentsArray}
-                                        subjectArray={subjectArray}
-                                      />
+                                      <FirstLesson lesson={openLesson} />
                                     )}
-                                  {/* Карточка заявки на рассмотрении */}
+                                  {/* Карточка первого урока */}
                                   {me &&
                                     me.id !== coursePage.user.id &&
+                                    !me.permissions.includes("ADMIN") &&
                                     applicationsList.includes(me.id) && (
-                                      <ApplicationCard />
+                                      <FirstLesson lesson={openLesson} />
                                     )}
                                   {/* Карточка преподавателя */}
                                   {me &&
@@ -426,27 +452,69 @@ class CoursePage extends Component {
                                 </PayBox>
                               </CourseInfo>
                               <Details>
-                                {data.coursePage.methods && (
+                                {data.coursePage.audience && (
                                   <div className="yellow">
                                     <div className="header">
-                                      🛠 Какие методики мы использовали при
-                                      создании онлайн-уроков?
-                                    </div>
-                                    <div>
-                                      {renderHTML(data.coursePage.methods)}
-                                    </div>
-                                  </div>
-                                )}
-                                {data.coursePage.audience && (
-                                  <div className="green">
-                                    <div className="header">
-                                      🙋🏻‍♀ Для кого этот курс предназначен?
+                                      🙋🏻‍♀ Кому нужен этот курс?
                                     </div>
                                     <div>
                                       {renderHTML(data.coursePage.audience)}
                                     </div>
                                   </div>
                                 )}
+                                {data.coursePage.video && (
+                                  <Video>
+                                    <div className="header">
+                                      Посмотрите презентацию курса от его
+                                      автора:
+                                    </div>
+                                    <iframe
+                                      src={data.coursePage.video}
+                                      allowfullscreen
+                                    />
+                                  </Video>
+                                )}
+                                {data.coursePage.methods && (
+                                  <div className="green">
+                                    <div className="header">
+                                      👨🏻‍🏫 👩🏼‍🏫 Об авторе курса
+                                    </div>
+                                    <div>
+                                      {renderHTML(data.coursePage.methods)}
+                                    </div>
+                                  </div>
+                                )}
+                                <div className="openLesson">
+                                  <div className="header">
+                                    Посмотрите первый открытый урок уже сейчас!
+                                  </div>
+                                  {!me && (
+                                    <>
+                                      <p>
+                                        Войдите или зарегистрируйтесь, чтобы это
+                                        сделать.
+                                      </p>
+                                      <SignInButton onClick={this.scroll}>
+                                        Войти
+                                      </SignInButton>
+                                    </>
+                                  )}
+                                  {me &&
+                                    openLesson.map((lesson, index) => (
+                                      <LessonHeader
+                                        me={me}
+                                        key={lesson.id}
+                                        name={lesson.name}
+                                        lesson={lesson}
+                                        coursePageId={this.props.id}
+                                        students={coursePage.students}
+                                        openLesson={coursePage.openLesson}
+                                        new_students={student_list}
+                                        open={index + 1 === 1}
+                                        index={index + 1}
+                                      />
+                                    ))}
+                                </div>
                                 {data.coursePage.result && (
                                   <div className="blue">
                                     <div className="header">
@@ -488,18 +556,25 @@ class CoursePage extends Component {
                                         a.number > b.number ? 1 : -1
                                       )
                                       .map((lesson, index) => (
-                                        <LessonHeader
-                                          me={me}
-                                          key={lesson.id}
-                                          name={lesson.name}
-                                          lesson={lesson}
-                                          coursePageId={this.props.id}
-                                          students={coursePage.students}
-                                          openLesson={coursePage.openLesson}
-                                          new_students={student_list}
-                                          open={index + 1 === 1}
-                                          index={index + 1}
-                                        />
+                                        <>
+                                          {(index + 3) % 3 === 0 && (
+                                            <div className="week">
+                                              Неделя {(index + 3) / 3}
+                                            </div>
+                                          )}
+                                          <LessonHeader
+                                            me={me}
+                                            key={lesson.id}
+                                            name={lesson.name}
+                                            lesson={lesson}
+                                            coursePageId={this.props.id}
+                                            students={coursePage.students}
+                                            openLesson={coursePage.openLesson}
+                                            new_students={student_list}
+                                            open={index + 1 === 1}
+                                            index={index + 1}
+                                          />
+                                        </>
                                       ))}
                                   </>
                                 )}
@@ -552,19 +627,23 @@ class CoursePage extends Component {
                                 {data.coursePage.tariffs && (
                                   <div className="yellow">
                                     <div className="header">
-                                      ️️📚Как проходит обучение на разных
-                                      тарифах?
+                                      📚Как проходит обучение на разных тарифах?
                                     </div>
                                     <div>
                                       {renderHTML(data.coursePage.tariffs)}
                                     </div>
-                                    <MoveButton onClick={this.scroll}>
-                                      Наверх
-                                    </MoveButton>
                                   </div>
                                 )}
                               </Details>
-                              {/* )} */}
+                              <RegisterCard
+                                me={me}
+                                coursePage={coursePage}
+                                price={price}
+                                discountPrice={coursePage.discountPrice}
+                                promocode={coursePage.promocode}
+                                studentsArray={studentsArray}
+                                subjectArray={subjectArray}
+                              />
                               {data.coursePage.reviews.length > 0 && (
                                 <Reviews>
                                   {data.coursePage.reviews.map(post =>

@@ -124,6 +124,7 @@ type CoursePage {
   methods: String
   reviews: [String] @scalarList(strategy: RELATION)
   openLesson: ID
+  video: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }

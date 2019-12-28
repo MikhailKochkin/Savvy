@@ -59,6 +59,7 @@ const SubmitButton = styled.button`
 
 const Form = styled.form`
   font-size: 1.6rem;
+  overflow: scroll;
 `;
 
 const Fieldset = styled.fieldset`

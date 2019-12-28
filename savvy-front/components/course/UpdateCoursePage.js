@@ -17,6 +17,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       result
       tariffs
       methods
+      video
       news
       user {
         id
@@ -36,6 +37,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $tariffs: String
     $methods: String
     $image: String
+    $video: String
   ) {
     updateCoursePage(
       id: $id
@@ -47,6 +49,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       tariffs: $tariffs
       methods: $methods
       image: $image
+      video: $video
     ) {
       id
       title
@@ -261,7 +264,6 @@ class UpdateCoursePage extends Component {
                               this.updateCoursePage(e, updateCoursePage)
                             }
                           >
-                            {/* <Error error={error} /> */}
                             <Title>
                               Внесите изменения в информацию о курсе
                             </Title>
@@ -285,6 +287,17 @@ class UpdateCoursePage extends Component {
                                 placeholder="Новое описание"
                                 required
                                 defaultValue={coursePage.description}
+                                onChange={this.handleChange}
+                              />
+
+                              <input
+                                className="second"
+                                type="text"
+                                id="video"
+                                name="video"
+                                placeholder="Видео курса"
+                                required
+                                defaultValue={coursePage.video}
                                 onChange={this.handleChange}
                               />
 
@@ -312,7 +325,7 @@ class UpdateCoursePage extends Component {
                                   name="methods"
                                   getEditorText={this.myCallback}
                                   value={coursePage.methods}
-                                  placeholder="Методики преподавания..."
+                                  placeholder="Об авторе курса и методиках преподавания..."
                                 />
                               </Frame>
                               <Frame>

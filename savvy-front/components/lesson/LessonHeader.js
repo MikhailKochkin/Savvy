@@ -203,7 +203,15 @@ class LessonHeader extends Component {
   };
 
   render() {
-    const { lesson, name, new_students, students, me, openLesson } = this.props;
+    const {
+      lesson,
+      name,
+      new_students,
+      coursePageId,
+      students,
+      me,
+      openLesson
+    } = this.props;
     return (
       <>
         <TextBar>
@@ -211,7 +219,7 @@ class LessonHeader extends Component {
             <div>
               {lesson.number}. {name}{" "}
               <span className="arrow" onClick={this.toggle}>
-                {this.state.reveal ? `🔼` : `🔽`}
+                {this.state.reveal ? `🔽` : `🔼`}
               </span>
             </div>
           </Text>
@@ -228,7 +236,7 @@ class LessonHeader extends Component {
                   refetchQueries={() => [
                     {
                       query: SINGLE_COURSEPAGE_QUERY,
-                      variables: { id: lesson.coursePage.id }
+                      variables: { id: coursePageId }
                     }
                   ]}
                 >
@@ -252,17 +260,6 @@ class LessonHeader extends Component {
               </>
             ) : null}
             {me && (
-              // <Query
-              //   query={SINGLE_LESSONRESULT_QUERY}
-              //   variables={{
-              //     lessonID: lesson.id,
-              //     id: me.id
-              //   }}
-              // >
-              //   {({ data, error, loading }) => {
-              //     if (loading) return <p>Loading...</p>;
-              //     if (error) return <p>Error: {error.message}</p>;
-              //     return (
               <>
                 <Mutation
                   mutation={CREATE_LESSONRESULT_MUTATION}
@@ -273,7 +270,7 @@ class LessonHeader extends Component {
                   refetchQueries={() => [
                     {
                       query: SINGLE_COURSEPAGE_QUERY,
-                      variables: { id: lesson.coursePage.id }
+                      variables: { id: coursePageId }
                     }
                   ]}
                 >
@@ -360,7 +357,7 @@ class LessonHeader extends Component {
                     refetchQueries={() => [
                       {
                         query: SINGLE_COURSEPAGE_QUERY,
-                        variables: { id: lesson.coursePage.id }
+                        variables: { id: coursePageId }
                       }
                     ]}
                   >
@@ -432,9 +429,6 @@ class LessonHeader extends Component {
                   </Mutation>
                 )}
               </>
-              //     );
-              //   }}
-              // </Query>
             )}
 
             {me &&

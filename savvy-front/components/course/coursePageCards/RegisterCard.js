@@ -2,6 +2,39 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import TakeMyMoney from "../../TakeMyMoney";
 import EnrollCoursePage from "../../EnrollCoursePage";
+import BuyDummy from "../BuyDummy";
+
+const Data = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    width: 100%;
+    padding: 3%;
+  }
+`;
+
+const Description = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(36, 101, 255, 0.1);
+  padding: 4%;
+  box-sizing: border-box;
+  width: 350px;
+  min-height: 290px;
+  .title {
+    font-weight: bold;
+    font-size: 1.7rem;
+    line-height: 1.4;
+    margin-bottom: 2%;
+  }
+  @media (max-width: 800px) {
+    margin-bottom: 8%;
+    width: 100%;
+  }
+`;
 
 const Payment = styled.div`
   display: flex;
@@ -10,13 +43,10 @@ const Payment = styled.div`
   background: #ffffff;
   border: 1px solid #e4e4e4;
   box-sizing: border-box;
-  border-radius: 10px;
-  width: 270px;
+  width: 350px;
   min-height: 290px;
-  /* padding: 2% 4%; */
-  .message {
-    border-bottom: 1px solid #e4e4e4;
-    padding-bottom: 15px;
+  @media (max-width: 800px) {
+    width: 100%;
   }
 `;
 
@@ -25,11 +55,9 @@ const Header = styled.div`
   padding-bottom: 4%;
   padding-top: 4%;
   line-height: 1.4;
-  border-radius: 10px 10px 0 0;
   background: rgba(36, 101, 255, 0.1);
   margin: 0;
   text-align: center;
-  /* color: #112b62; */
 `;
 
 const Input = styled.input`
@@ -53,9 +81,6 @@ const SmallButton = styled.div`
   font-size: 1.4rem;
   cursor: pointer;
   outline: 0;
-  /* &:hover {
-    font-weight: bold;
-  } */
 `;
 
 const Text = styled.div`
@@ -122,9 +147,10 @@ class RegisterCard extends Component {
   promo = () => {
     const promo = [];
     let discount;
-    this.props.promocode.map(el => promo.push(Object.keys(el)[0]));
+    this.props.promocode[0].map(el => promo.push(Object.keys(el)[0]));
+    console.log(promo.includes(this.state.promo));
     if (promo.includes(this.state.promo) && !this.state.used) {
-      this.props.promocode.map(el =>
+      this.props.promocode[0].map(el =>
         Object.keys(el)[0] === this.state.promo
           ? (discount = Object.values(el)[0])
           : null
@@ -152,16 +178,17 @@ class RegisterCard extends Component {
     });
   };
   render() {
-    const {
-      coursePage,
-      me,
-      price,
-      discountPrice,
-      studentsArray,
-      subjectArray
-    } = this.props;
+    const { coursePage, me, price, studentsArray, subjectArray } = this.props;
     return (
-      <>
+      <Data>
+        <Description>
+          <div className="title">Выберите подходящий тариф и получите:</div>
+          <div>- пожизненный доступ</div>
+          <div>- доступ сразу после оплаты</div>
+          <div>- полный комплект услуг по выбранному тарифу</div>
+          <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
+          <div>- эксклюзивные карьерные возможнорсти от Savvy App</div>
+        </Description>
         <Payment>
           <Header>
             {this.state.price !== "Бесплатно"
@@ -224,29 +251,34 @@ class RegisterCard extends Component {
                   <SmallButton onClick={this.promo}>Применить</SmallButton>
                 </>
               )}
-              {coursePage.courseType === "FORMONEY" && (
-                <TakeMyMoney
-                  coursePage={coursePage}
-                  coursePageID={coursePage.id}
-                  name={me.name}
-                  user={me.id}
-                  price={parseInt(this.state.price)}
-                >
-                  Купить
-                </TakeMyMoney>
-              )}
-              {coursePage.courseType !== "FORMONEY" && (
-                <EnrollCoursePage
-                  coursePage={coursePage}
-                  studentsArray={studentsArray}
-                  subjectArray={subjectArray}
-                  meData={me}
-                />
+              {!me && <BuyDummy onClick={this.toggleModal}>Купить</BuyDummy>}
+              {me && (
+                <>
+                  {coursePage.courseType === "FORMONEY" && (
+                    <TakeMyMoney
+                      coursePage={coursePage}
+                      coursePageID={coursePage.id}
+                      name={me.name}
+                      user={me.id}
+                      price={parseInt(this.state.price)}
+                    >
+                      Купить
+                    </TakeMyMoney>
+                  )}
+                  {coursePage.courseType !== "FORMONEY" && (
+                    <EnrollCoursePage
+                      coursePage={coursePage}
+                      studentsArray={studentsArray}
+                      subjectArray={subjectArray}
+                      meData={me}
+                    />
+                  )}
+                </>
               )}
             </Part2>
           </Text>
         </Payment>
-      </>
+      </Data>
     );
   }
 }
