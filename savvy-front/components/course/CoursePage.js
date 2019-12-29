@@ -412,22 +412,22 @@ class CoursePage extends Component {
                                 <PayBox>
                                   {/* Карточка регистрации на сайте */}
                                   {!me && <SignInCard />}
-                                  {/* Карточка регистрации на курс */}
+                                  {/* Карточка первого урока */}
                                   {me &&
                                     me.id !== coursePage.user.id &&
-                                    !applicationsList.includes(me.id) &&
+                                    // !applicationsList.includes(me.id) &&
                                     !subjectArray.includes(coursePage.id) &&
                                     !new_subjectArray.includes(coursePage.id) &&
                                     !me.permissions.includes("ADMIN") && (
                                       <FirstLesson lesson={openLesson} />
                                     )}
                                   {/* Карточка первого урока */}
-                                  {me &&
+                                  {/* {me &&
                                     me.id !== coursePage.user.id &&
                                     !me.permissions.includes("ADMIN") &&
                                     applicationsList.includes(me.id) && (
                                       <FirstLesson lesson={openLesson} />
-                                    )}
+                                    )} */}
                                   {/* Карточка преподавателя */}
                                   {me &&
                                     (me.id === coursePage.user.id ||
@@ -484,37 +484,40 @@ class CoursePage extends Component {
                                     </div>
                                   </div>
                                 )}
-                                <div className="openLesson">
-                                  <div className="header">
-                                    Посмотрите первый открытый урок уже сейчас!
+                                {openLesson.length > 0 && (
+                                  <div className="openLesson">
+                                    <div className="header">
+                                      Посмотрите первый открытый урок уже
+                                      сейчас!
+                                    </div>
+                                    {!me && (
+                                      <>
+                                        <p>
+                                          Войдите или зарегистрируйтесь, чтобы
+                                          это сделать.
+                                        </p>
+                                        <SignInButton onClick={this.scroll}>
+                                          Войти
+                                        </SignInButton>
+                                      </>
+                                    )}
+                                    {me &&
+                                      openLesson.map((lesson, index) => (
+                                        <LessonHeader
+                                          me={me}
+                                          key={lesson.id}
+                                          name={lesson.name}
+                                          lesson={lesson}
+                                          coursePageId={this.props.id}
+                                          students={coursePage.students}
+                                          openLesson={coursePage.openLesson}
+                                          new_students={student_list}
+                                          open={index + 1 === 1}
+                                          index={index + 1}
+                                        />
+                                      ))}
                                   </div>
-                                  {!me && (
-                                    <>
-                                      <p>
-                                        Войдите или зарегистрируйтесь, чтобы это
-                                        сделать.
-                                      </p>
-                                      <SignInButton onClick={this.scroll}>
-                                        Войти
-                                      </SignInButton>
-                                    </>
-                                  )}
-                                  {me &&
-                                    openLesson.map((lesson, index) => (
-                                      <LessonHeader
-                                        me={me}
-                                        key={lesson.id}
-                                        name={lesson.name}
-                                        lesson={lesson}
-                                        coursePageId={this.props.id}
-                                        students={coursePage.students}
-                                        openLesson={coursePage.openLesson}
-                                        new_students={student_list}
-                                        open={index + 1 === 1}
-                                        index={index + 1}
-                                      />
-                                    ))}
-                                </div>
+                                )}
                                 {data.coursePage.result && (
                                   <div className="blue">
                                     <div className="header">

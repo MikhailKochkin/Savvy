@@ -12,7 +12,7 @@ const Payment = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   width: 270px;
-  min-height: 290px;
+  min-height: 260px;
   /* padding: 2% 4%; */
   .message {
     border-bottom: 1px solid #e4e4e4;
@@ -63,6 +63,9 @@ const Button = styled.button`
   cursor: pointer;
   border: none;
   margin-top: 10px;
+  a {
+    color: white;
+  }
   &:hover {
     background: rgba(8, 70, 216, 0.85);
   }
@@ -77,39 +80,62 @@ const Button = styled.button`
 `;
 
 const RegisterCard = props => {
+  console.log(props);
   let l = props.lesson[0];
   return (
     <>
       <Payment>
-        <Header>🔓 Открытый урок</Header>
-        <Text>
-          <Part1>
-            <div className="Title">
-              Урок {l.number}. {l.name}
-            </div>
-            <div>{renderHTML(l.description)}</div>
-          </Part1>
-          <Part2>
-            <Link
-              // The user is the teacher or the admin or it is an openLesson.
-              href={{
-                pathname: "/lesson",
-                query: {
-                  id: l.id,
-                  type: l.type.toLowerCase()
-                }
-              }}
-            >
-              <Button
-                onClick={() => {
-                  console.log(0);
-                }}
-              >
-                Перейти
-              </Button>
-            </Link>
-          </Part2>
-        </Text>
+        {!l && (
+          <>
+            <Header>🔓 Открытый урок</Header>
+            <Text>
+              <Part1>
+                <div className="Title">Открытый урок</div>
+                <div>
+                  Мы скоро откроем для вас первый открытый урок. Напишите нам,
+                  какой урок вам было бы интереснее всего посмотреть.
+                </div>
+              </Part1>
+              <Part2>
+                <Button>
+                  <a href="mailto:mikhailvkochkin@gmail.com">Перейти</a>
+                </Button>
+              </Part2>
+            </Text>
+          </>
+        )}
+        {l && (
+          <>
+            <Header>🔓 Открытый урок</Header>
+            <Text>
+              <Part1>
+                <div className="Title">
+                  Урок {l.number}. {l.name}
+                </div>
+                <div>{renderHTML(l.description)}</div>
+              </Part1>
+              <Part2>
+                <Link
+                  href={{
+                    pathname: "/lesson",
+                    query: {
+                      id: l.id,
+                      type: l.type.toLowerCase()
+                    }
+                  }}
+                >
+                  <Button
+                    onClick={() => {
+                      console.log(0);
+                    }}
+                  >
+                    Перейти
+                  </Button>
+                </Link>
+              </Part2>
+            </Text>
+          </>
+        )}
       </Payment>
     </>
   );
