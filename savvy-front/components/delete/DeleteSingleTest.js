@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Icon from "react-icons-kit";
-import { remove } from "react-icons-kit/fa/remove";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const DELETE_TEST_MUTATION = gql`
@@ -14,20 +12,14 @@ const DELETE_TEST_MUTATION = gql`
   }
 `;
 
-const Button = styled.button`
-  background: ${props => props.theme.red};
-  width: 120px;
-  color: white;
-  padding: 1.5% 3%;
-  margin-left: 3%;
-  font-size: 1.6rem;
-  font-weight: 600;
-  border-radius: 5px;
+const Button = styled.div`
   border: none;
+  background: none;
   cursor: pointer;
-  outline: none;
-  &:active {
-    background-color: ${props => props.theme.darkRed};
+  font-size: 1.6rem;
+  /* margin-bottom: 1.5%; */
+  &:hover {
+    text-decoration: underline;
   }
 `;
 
@@ -47,6 +39,7 @@ class DeleteSingleTest extends Component {
       >
         {(deleteTest, { error, loading }) => (
           <Button
+            className="but2"
             onClick={() => {
               if (
                 confirm(

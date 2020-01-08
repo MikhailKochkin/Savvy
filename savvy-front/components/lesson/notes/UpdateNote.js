@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Router from "next/router";
 import dynamic from "next/dynamic";
+import Option from "../Option";
 import { PAGE_LESSONS_QUERY } from "../../course/CoursePage";
 import AreYouATeacher from "../../auth/AreYouATeacher";
 import PleaseSignIn from "../../auth/PleaseSignIn";
@@ -18,10 +18,11 @@ const SINGLE_NOTE_QUERY = gql`
 `;
 
 const UPDATE_NOTE_MUTATION = gql`
-  mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String) {
-    updateNote(id: $id, text: $text) {
+  mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String, $next: Json) {
+    updateNote(id: $id, text: $text, next: $next) {
       id
       text
+      next
     }
   }
 `;
@@ -30,6 +31,7 @@ const Container = styled.div`
   width: 100%;
   display: grid;
   margin: 1% 0 0 0;
+  margin-top: 5%;
   grid-template-columns: 1fr;
   grid-template-rows: repeat(3 70px);
   grid-template-areas:
@@ -60,9 +62,9 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 1% 2%;
+  padding: 0.5% 1%;
   background: ${props => props.theme.green};
-  width: 20%;
+  width: 25%;
   border-radius: 5px;
   color: white;
   font-weight: bold;
@@ -73,6 +75,19 @@ const Button = styled.button`
   &:active {
     background-color: ${props => props.theme.darkGreen};
   }
+`;
+
+const Button2 = styled.button`
+  font-family: Montserrat;
+  /* color: #112a62; */
+  padding: 0.5% 1%;
+  font-size: 1.6rem;
+  background: #ffffff;
+  /* border: 1px solid #112a62; */
+  border-radius: 5px;
+  outline: 0;
+  margin-top: 3%;
+  width: 25%;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
@@ -94,62 +109,83 @@ export default class UpdateNote extends Component {
     });
   };
 
-  render() {
-    const { lessonID } = this.props;
-    return (
-      <PleaseSignIn>
-        <AreYouATeacher subject={lessonID}>
-          <Query
-            query={SINGLE_NOTE_QUERY}
-            variables={{
-              id: this.props.note
-            }}
-          >
-            {({ data, loading }) => {
-              if (loading) return <p>Loading...</p>;
-              if (!data.note)
-                return <p>No Course Page Found for ID {lessonID}</p>;
-              return (
-                <>
-                  <Container>
-                    <DynamicLoadedEditor
-                      getEditorText={this.myCallback}
-                      previousText={data.note.text}
-                    />
+  myCallback2 = async (type, data) => {
+    const res = await this.setState({
+      [type]: data
+    });
+  };
 
-                    <Mutation
-                      mutation={UPDATE_NOTE_MUTATION}
-                      variables={{
-                        id: this.props.note,
-                        ...this.state
-                      }}
-                      //   refetchQueries={() => [
-                      //     {
-                      //       query: PAGE_LESSONS_QUERY,
-                      //       variables: { id: lessonID }
-                      //     }
-                      //   ]}
-                    >
-                      {(updateNote, { loading, error }) => (
-                        <Button
-                          onClick={async e => {
-                            // Stop the form from submitting
-                            e.preventDefault();
-                            // call the mutation
-                            const res = await updateNote();
-                          }}
-                        >
-                          {loading ? "Сохраняем..." : "Сохранить"}
-                        </Button>
-                      )}
-                    </Mutation>
-                  </Container>
-                </>
-              );
+  onAddItem = () => {
+    this.setState(state => {
+      const list = [...state.list, state.value];
+      return {
+        list,
+        value: ""
+      };
+    });
+  };
+
+  onSave = () => {
+    this.setState({
+      next: {
+        true: this.state.true,
+        false: this.state.false
+      }
+    });
+  };
+
+  render() {
+    const { notes, text, quizes, id, tests } = this.props;
+    return (
+      <>
+        <Container>
+          <DynamicLoadedEditor
+            getEditorText={this.myCallback}
+            previousText={text}
+          />
+          <h3>Выберите задания для формата "Экзамен":</h3>
+          <h3>Вопросы:</h3>
+          {quizes.map(quiz => (
+            <Option quiz={quiz} getData={this.myCallback2} />
+          ))}
+          <h3>Заметки:</h3>
+          {notes.map(note => (
+            <Option note={note} getData={this.myCallback2} />
+          ))}
+          <h3>Тесты:</h3>
+          {tests.map(test => (
+            <Option key={test.id} test={test} getData={this.myCallback2} />
+          ))}
+          <Button2 onClick={this.onSave}>Compile</Button2>
+          <Mutation
+            mutation={UPDATE_NOTE_MUTATION}
+            variables={{
+              id,
+              ...this.state
             }}
-          </Query>
-        </AreYouATeacher>
-      </PleaseSignIn>
+            //   refetchQueries={() => [
+            //     {
+            //       query: PAGE_LESSONS_QUERY,
+            //       variables: { id: lessonID }
+            //     }
+            //   ]}
+          >
+            {(updateNote, { loading, error }) => (
+              <Button
+                onClick={async e => {
+                  // Stop the form from submitting
+                  e.preventDefault();
+                  // call the mutation
+                  const res = await updateNote();
+                }}
+              >
+                {loading ? "Сохраняем..." : "Сохранить"}
+              </Button>
+            )}
+          </Mutation>
+          {/* </Group> */}
+        </Container>
+      </>
     );
   }
 }

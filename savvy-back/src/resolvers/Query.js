@@ -32,6 +32,7 @@ const Query = {
   applications: forwardTo("db"),
   courseVisits: forwardTo("db"),
   note: forwardTo("db"),
+  exams: forwardTo("db"),
   lessons(parent, args, ctx, info) {
     const pageId = args.where.coursePageID;
     return ctx.db.query.lessons(

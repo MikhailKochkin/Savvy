@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
+import Interactive from "./Interactive";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -27,8 +28,9 @@ const CREATE_PROBLEMRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  width: 85%;
+  width: 100%;
   font-size: 1.6rem;
+  padding: 0;
   padding-top: 2%;
   margin-bottom: 3%;
   @media (max-width: 800px) {
@@ -168,7 +170,7 @@ class SingleProblem extends Component {
     });
   }
   render() {
-    const { problem, me, userData } = this.props;
+    const { problem, me, userData, lesson } = this.props;
     const data = userData
       .filter(result => result.problem.id === problem.id)
       .filter(result => result.student.id === me.id);
@@ -176,6 +178,7 @@ class SingleProblem extends Component {
       <>
         <TextBar>
           {renderHTML(problem.text)}
+          <Interactive lesson={lesson} me={me} exam={problem} />
           {data.length > 0 && (
             <ButtonGroup>
               <Advice>Эта задача уже выполнена.</Advice>

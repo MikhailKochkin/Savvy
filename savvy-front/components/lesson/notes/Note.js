@@ -3,11 +3,19 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import UpdateNote from "./UpdateNote";
 
-const NoteStyles = styled.div`
-  width: 100%;
-  margin: 2% 0 0 0;
-  padding: 1%;
+const Container = styled.div`
+  width: ${props => (props.story ? "100%" : "95%")};
   font-size: 1.6rem;
+  margin: 30px 0;
+`;
+
+const NoteStyles = styled.div`
+  width: ${props => (props.story ? "100%" : "95%")};
+  margin: 2% 0 0 0;
+  padding: 0% 2%;
+  font-size: 1.6rem;
+  border: ${props => (props.story ? null : "1px solid #e4e4e4")};
+  border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
   }
@@ -65,24 +73,34 @@ const NoteStyles = styled.div`
   }
 `;
 
-const Button = styled.button`
+const Dots = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 90px;
+  margin-bottom: 5%;
+  .group {
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    justify-content: space-between;
+    margin-top: 5%;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    background: #c4c4c4;
+    border-radius: 50%;
+  }
+`;
+
+const MiniButton = styled.div`
   border: none;
   background: none;
-  border: 1px solid #112a62;
-  border-radius: 5px;
-  font-family: Montserrat;
-  padding: 1.5% 3%;
-  font-size: 1.6rem;
-  margin-right: 3%;
-  outline: 0;
-  color: #112a62;
   cursor: pointer;
+  margin: 1.5% 0;
   &:hover {
-    background: #112a62;
-    color: white;
-  }
-  @media (max-width: 800px) {
-    margin-bottom: 20px;
+    text-decoration: underline;
   }
 `;
 
@@ -93,17 +111,51 @@ class note extends Component {
   switch = () => {
     this.setState(prev => ({ update: !prev.update }));
   };
+  push = () => {
+    this.props.exam
+      ? this.props.getData(
+          this.props.next ? this.props.next.true : { finish: 0 },
+          "true"
+        )
+      : null;
+  };
   render() {
     return (
       <>
-        {!this.state.update && (
-          <NoteStyles>{renderHTML(this.props.text)}</NoteStyles>
-        )}
-        {this.state.update && <UpdateNote note={this.props.note} />}
-        {this.props.me.id === this.props.teacher && (
-          <Button onClick={this.switch}>
-            {!this.state.update ? "Изменить" : "Вернуться"}
-          </Button>
+        <Container story={this.props.story}>
+          {!this.props.exam && this.props.me.id === this.props.teacher && (
+            <MiniButton onClick={this.switch}>
+              {!this.state.update ? "Настройки" : "Заметка"}
+            </MiniButton>
+          )}
+          {!this.state.update && (
+            <NoteStyles story={this.props.story}>
+              {renderHTML(this.props.text)}
+            </NoteStyles>
+          )}
+          {this.props.getData && (
+            <MiniButton onClick={this.push}>
+              Разобрались? Поехали дальше!
+            </MiniButton>
+          )}
+          {this.state.update && this.props.story !== true && (
+            <UpdateNote
+              notes={this.props.notes}
+              text={this.props.text}
+              tests={this.props.tests}
+              id={this.props.note}
+              quizes={this.props.quizes}
+            />
+          )}
+        </Container>
+        {this.props.exam && (
+          <Dots>
+            <div className="group">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
+          </Dots>
         )}
       </>
     );

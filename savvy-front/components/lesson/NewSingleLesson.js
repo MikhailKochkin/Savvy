@@ -26,6 +26,7 @@ const SINGLE_LESSON_QUERY = gql`
       notes {
         id
         text
+        next
         user {
           id
         }
@@ -105,6 +106,7 @@ const SINGLE_LESSON_QUERY = gql`
         question
         answer
         type
+        next
         user {
           id
         }
@@ -115,6 +117,7 @@ const SINGLE_LESSON_QUERY = gql`
         type
         correct
         question
+        next
         user {
           id
         }
@@ -122,6 +125,8 @@ const SINGLE_LESSON_QUERY = gql`
       problems {
         id
         text
+        nodeID
+        nodeType
         user {
           id
         }
@@ -143,6 +148,14 @@ const SINGLE_LESSON_QUERY = gql`
         name
         text
         totalMistakes
+        user {
+          id
+        }
+      }
+      exams {
+        id
+        nodeID
+        nodeType
         user {
           id
         }
@@ -233,6 +246,34 @@ const Head = styled.div`
       border-radius: 5px;
       padding: 0 1%;
     }
+    div {
+      flex: 85%;
+      text-align: right;
+    }
+  }
+`;
+
+const Head2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0;
+  background: #3626a7;
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 1.8rem;
+  span {
+    color: #3ddc97;
+    cursor: pointer;
+    &:hover {
+      color: #139a43;
+    }
+  }
+  @media (max-width: 800px) {
+    font-size: 1.8rem;
+    justify-content: space-between;
+    padding: 2% 15px;
     div {
       flex: 85%;
       text-align: right;
@@ -402,6 +443,26 @@ class SingleLesson extends Component {
                               {lesson.number}. {lesson.name}
                             </div>
                           </Head>
+                          {lesson.user.id === me.id && (
+                            <Head2>
+                              {lesson.map.length > 0 && (
+                                <div>
+                                  Режим истории →
+                                  <Link
+                                    href={{
+                                      pathname: "/lesson",
+                                      query: {
+                                        id: lesson.id,
+                                        type: "regular"
+                                      }
+                                    }}
+                                  >
+                                    <span> Переключить</span>
+                                  </Link>
+                                </div>
+                              )}
+                            </Head2>
+                          )}
                           <Header>
                             Шаг {this.state.step + 1} из{" "}
                             {data.lesson.map[0].length}

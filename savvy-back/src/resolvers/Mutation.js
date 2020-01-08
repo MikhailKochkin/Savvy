@@ -422,6 +422,22 @@ const Mutations = {
     const test = await ctx.db.mutation.createNewTest({ data }, info);
     return test;
   },
+  async updateNewTest(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateNewTest(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
   async createTestResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const testID = args.testID;
@@ -609,6 +625,23 @@ const Mutations = {
     );
     return Quiz;
   },
+  async updateQuiz(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    console.log(args);
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateQuiz(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
   async createPointATest(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const coursePageID = args.coursePageID;
@@ -674,6 +707,22 @@ const Mutations = {
       info
     );
     return problem;
+  },
+  async updateProblem(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args };
+    //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateProblem(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   },
   async deleteProblem(parent, args, ctx, info) {
     const where = { id: args.id };
@@ -1364,6 +1413,73 @@ const Mutations = {
       info
     );
     return CourseVisit;
+  },
+  async createExam(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const lesson = args.lesson;
+    console.log(args);
+    delete args.lesson;
+    const Exam = await ctx.db.mutation.createExam(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: lesson }
+          },
+          ...args
+        }
+      },
+      info
+    );
+    return Exam;
+  },
+  async updateExam(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    return ctx.db.mutation.updateExam(
+      {
+        data: {
+          ...updates
+        },
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
+  async deleteExam(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the lesson
+    const Exam = await ctx.db.query.exam({ where }, `{ id }`);
+    //3. Delete it
+    return ctx.db.mutation.deleteExam({ where }, info);
+  },
+  async createExamResult(parent, args, ctx, info) {
+    console.log(args);
+    console.log(ctx.request.userId);
+    const ExamResult = await ctx.db.mutation.createExamResult(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          answers: {
+            set: [...args.answers]
+          },
+          lesson: {
+            connect: { id: args.lesson }
+          },
+          exam: {
+            connect: { id: args.exam }
+          }
+        }
+      },
+      info
+    );
+    return ExamResult;
   }
 };
 

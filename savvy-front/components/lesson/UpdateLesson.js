@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Router from "next/router";
 import dynamic from "next/dynamic";
-import { PAGE_LESSONS_QUERY } from "../course/CoursePage";
+import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import StoryUpdate from "./StoryUpdate";
@@ -15,6 +14,7 @@ const SINGLE_LESSON_QUERY = gql`
       name
       number
       text
+      type
       coursePage {
         id
       }
@@ -127,8 +127,6 @@ const Frame = styled.div`
   }
 `;
 
-const Map = styled.div``;
-
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false
@@ -181,73 +179,75 @@ export default class UpdateLesson extends Component {
               if (!data) return <p>No lesson Found for ID {lessonID}</p>;
               return (
                 <>
-                  <Container>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="Название урока"
-                      defaultValue={data.lesson.name}
-                      onChange={this.handleName}
-                    />
-                    <input
-                      type="number"
-                      id="number"
-                      name="number"
-                      placeholder="Номер урока"
-                      defaultValue={data.lesson.number}
-                      onChange={this.handleNumber}
-                    />
-                    <select
-                      name="type"
-                      defaultValue={data.lesson.type}
-                      onChange={this.handleName}
-                    >
-                      <option value="REGULAR">Обычный</option>
-                      <option value="STORY">История</option>
-                    </select>
-                    <Frame>
-                      <DynamicHoverEditor
-                        index={1}
-                        name="description"
-                        getEditorText={this.myCallback2}
-                        placeholder="Описание"
-                        value={description}
+                  {data.lesson && (
+                    <Container>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Название урока"
+                        defaultValue={data.lesson.name}
+                        onChange={this.handleName}
                       />
-                    </Frame>
-                    <DynamicLoadedEditor
-                      getEditorText={this.myCallback}
-                      previousText={data.lesson.text}
-                    />
+                      <input
+                        type="number"
+                        id="number"
+                        name="number"
+                        placeholder="Номер урока"
+                        defaultValue={data.lesson.number}
+                        onChange={this.handleNumber}
+                      />
+                      <select
+                        name="type"
+                        defaultValue={data.lesson.type}
+                        onChange={this.handleName}
+                      >
+                        <option value="REGULAR">Обычный</option>
+                        <option value="STORY">История</option>
+                      </select>
+                      <Frame>
+                        <DynamicHoverEditor
+                          index={1}
+                          name="description"
+                          getEditorText={this.myCallback2}
+                          placeholder="Описание"
+                          value={description}
+                        />
+                      </Frame>
+                      <DynamicLoadedEditor
+                        getEditorText={this.myCallback}
+                        previousText={data.lesson.text}
+                      />
 
-                    <Mutation
-                      mutation={UPDATE_LESSON_MUTATION}
-                      variables={{
-                        id: lessonID,
-                        ...this.state
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_COURSEPAGE_QUERY,
-                          variables: { id: data.lesson.coursePage.id }
-                        }
-                      ]}
-                    >
-                      {(updateLesson, { loading, error }) => (
-                        <Button
-                          onClick={async e => {
-                            // Stop the form from submitting
-                            e.preventDefault();
-                            // call the mutation
-                            const res = await updateLesson();
-                            // change the page to the single case page
-                          }}
-                        >
-                          {loading ? "Сохраняем..." : "Сохранить"}
-                        </Button>
-                      )}
-                    </Mutation>
-                  </Container>
+                      <Mutation
+                        mutation={UPDATE_LESSON_MUTATION}
+                        variables={{
+                          id: lessonID,
+                          ...this.state
+                        }}
+                        refetchQueries={() => [
+                          {
+                            query: SINGLE_COURSEPAGE_QUERY,
+                            variables: { id: data.lesson.coursePage.id }
+                          }
+                        ]}
+                      >
+                        {(updateLesson, { loading, error }) => (
+                          <Button
+                            onClick={async e => {
+                              // Stop the form from submitting
+                              e.preventDefault();
+                              // call the mutation
+                              const res = await updateLesson();
+                              // change the page to the single case page
+                            }}
+                          >
+                            {loading ? "Сохраняем..." : "Сохранить"}
+                          </Button>
+                        )}
+                      </Mutation>
+                    </Container>
+                  )}
                 </>
               );
             }}

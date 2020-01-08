@@ -31,6 +31,7 @@ enum TaskType {
 type User {
   id: ID! @unique
   name: String!
+  surname: String
   email: String! @unique
   password: String!
   resetToken: String
@@ -77,6 +78,8 @@ type User {
   teacherFeedback: [Feedback] @relation( name: "TeacherFeedback", onDelete: CASCADE)
   studentFeedback: [Feedback] @relation( name: "StudentFeedback", onDelete: CASCADE)
   courseVisits: [CourseVisit] @relation( name: "UserCourseVisits", onDelete: CASCADE)
+  examResults: [ExamResult]
+  exams: [Exam]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -182,6 +185,8 @@ type Lesson {
   coursePageID: ID!
   published: Boolean @default(value: false)
   description: String
+  exams: [Exam] @relation(name: "LessonExams" onDelete: CASCADE)
+  examResults: [ExamResult] @relation(name: "LessonExamResults" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -242,6 +247,7 @@ type NewTest {
   user: User!
   lesson: Lesson @relation(name: "LessonNewTests")
   lessonID: ID
+  next: Json
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -255,6 +261,7 @@ type Quiz {
   lessonID: ID
   lesson: Lesson @relation(name: "LessonQuizes")
   quizResults: [QuizResult] @relation(name: "NewQuizResults" onDelete: CASCADE)
+  next: Json
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -289,6 +296,8 @@ type Problem {
   lesson: Lesson! @relation(name: "LessonProblems")
   problemResults: [ProblemResult] @relation(name: "SingleProblemResults" onDelete: CASCADE)
   lessonID: ID!
+  nodeType: String
+  nodeID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -490,6 +499,7 @@ type Note {
   id: ID! @unique
   text: String!
   user: User
+  next: Json
   lessonID: ID
   lesson: Lesson @relation( name: "LessonNotes")
 }
@@ -519,4 +529,24 @@ type CourseVisit {
   coursePage: CoursePage! @relation( name: "CourseVisits")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type Exam {
+  id: ID! @unique
+  user: User!
+  lesson: Lesson! @relation( name: "LessonExams")
+  examResults: [ExamResult] @relation(name: "ExamResults" onDelete: CASCADE)
+  nodeType: String
+  nodeID: ID
+  question: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type ExamResult {
+  id: ID! @unique
+  user: User
+  answers: [String]
+  lesson: Lesson @relation( name: "LessonExamResults")
+  exam: Exam @relation( name: "ExamResults")
 }

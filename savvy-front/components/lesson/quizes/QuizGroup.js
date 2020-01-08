@@ -10,12 +10,26 @@ class QuizGroup extends Component {
   state = {
     tests: this.props.quizes,
     completed: 0,
-    handIn: false
+    handIn: false,
+    data: [this.props.quizes]
   };
 
   myCallback = () => {
     this.setState(prevState => ({ completed: prevState.completed + 1 }));
   };
+
+  updateArray = data => {
+    const newQuiz = this.props.quizes.filter(
+      q => q.id === Object.values(data)[0]
+    )[0];
+    this.setState(state => {
+      const data = [...state.data, newQuiz];
+      return {
+        data
+      };
+    });
+  };
+
   render() {
     return (
       <Styles>
@@ -33,6 +47,12 @@ class QuizGroup extends Component {
               quizID={quiz.id}
               user={quiz.user.id}
               userData={this.props.quizResults}
+              quizes={this.props.quizes}
+              notes={this.props.notes}
+              tests={this.props.tests}
+              notes={this.props.notes}
+              next={quiz.next}
+              getData={this.updateArray}
             />
           </>
         ))}

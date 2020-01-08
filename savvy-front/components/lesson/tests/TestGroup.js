@@ -17,14 +17,6 @@ class TestGroup extends Component {
     let arr;
     return (
       <Styles>
-        {/* <Advice>
-          <b>Совет</b>: чтобы преподаватель увидел, что вы выполнили задания,
-          вам нужно сделать следущее. Ответьте правильно на все вопросы,
-          самостоятельно или с помощью подсказок. После этого в самом низу
-          страницы появится кнопка "Сохранить". Только после того, как вы на нее
-          нажмете, преподаватель получит информацию, что вы выполнили все
-          задания этого типа.
-        </Advice> */}
         {this.state.tests.map((test, index) => (
           <>
             {(arr = Array(test.correct.length).fill(false))}
@@ -40,6 +32,9 @@ class TestGroup extends Component {
               me={this.props.me}
               lessonID={this.props.lessonID}
               userData={this.props.testResults}
+              quizes={this.props.quizes}
+              notes={this.props.notes}
+              tests={this.props.tests}
             />
           </>
         ))}

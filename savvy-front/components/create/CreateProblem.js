@@ -8,8 +8,18 @@ import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import { Message } from "../styles/Button";
 
 const CREATE_PROBLEM_MUTATION = gql`
-  mutation CREATE_PROBLEM_MUTATION($text: String!, $lessonID: ID!) {
-    createProblem(text: $text, lessonID: $lessonID) {
+  mutation CREATE_PROBLEM_MUTATION(
+    $text: String!
+    $lessonID: ID!
+    $nodeID: ID!
+    $nodeType: String
+  ) {
+    createProblem(
+      text: $text
+      lessonID: $lessonID
+      nodeID: $nodeID
+      nodeType: $nodeType
+    ) {
       id
     }
   }
@@ -40,6 +50,19 @@ const Styles = styled.div`
   margin-top: 2%;
 `;
 
+const Box = styled.div`
+  border-bottom: 1px solid #edefed;
+  padding: 1%;
+  padding-bottom: 2%;
+  padding-top: 4%;
+  background: ${props =>
+    props.color === "true" ? "rgba(50, 172, 102, 0.05)" : "none"};
+  .question {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/ProblemEditor"), {
   loading: () => <p>Загрузка редактора...</p>,
   ssr: false
@@ -57,12 +80,34 @@ class CreateProblem extends Component {
     });
   };
 
+  handleChange = e => {
+    let nodeID = e.target.getAttribute("nodeid");
+    let nodeType = e.target.getAttribute("nodetype");
+    // console.log(nodeID, nodeType);
+    this.setState({
+      nodeID,
+      nodeType
+    });
+  };
+
   render() {
-    const { lessonID } = this.props;
+    const { lessonID, lesson } = this.props;
     return (
       <Styles>
         <Title>Создайте новую задачу для вашего урока</Title>
         <DynamicLoadedEditor getEditorText={this.myCallback} />
+        <h3>
+          Выберите первый вопрос, с которого начнется объяснение решения задачи.
+        </h3>
+        {lesson.quizes.map(q => (
+          <Box key={q.id} color={(this.state.nodeID === q.id).toString()}>
+            <div className="question">{q.question}</div>
+            <div className="answer">{q.answer}</div>
+            <button nodeid={q.id} nodetype="quiz" onClick={this.handleChange}>
+              Выбрать
+            </button>
+          </Box>
+        ))}
         <Mutation
           mutation={CREATE_PROBLEM_MUTATION}
           variables={{

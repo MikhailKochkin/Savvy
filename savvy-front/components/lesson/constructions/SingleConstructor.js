@@ -89,7 +89,7 @@ const Box = styled.div`
 `;
 
 const Title = styled.p`
-  font-size: 1.8rem;
+  font-size: 1.6rem;
 `;
 
 const Label = styled.div`
@@ -170,26 +170,17 @@ class SingleConstructor extends Component {
     const article_number = e.target.getAttribute("data");
     // 3. Save to state the user data
     this.setState(state => {
-      // console.log(state.received);
       const received = state.received.map((item, index) => {
         if (index === article_number - 1) {
-          // console.log(0);
-          // console.log(value);
-          // console.log(this.state.variants[value - 1]);
           if (this.state.variants[value - 1] === undefined) {
-            // console.log(1);
             return (item = "");
           } else {
-            // console.log(2);
             return (item = this.state.variants[value - 1]);
           }
         } else {
-          // console.log(3);
-          // console.log(item);
           return item;
         }
       });
-      // console.log(state.received);
       return { received };
     });
   };
@@ -281,7 +272,6 @@ class SingleConstructor extends Component {
     const data = userData
       .filter(result => result.construction.id === construction.id)
       .filter(result => result.student.id === this.props.me.id);
-    console.log(data);
     return (
       <Styles>
         <Variants>
@@ -327,10 +317,8 @@ class SingleConstructor extends Component {
                   e.preventDefault();
                   const res = await this.check();
                   console.log("!!!");
-                  console.log(data.length);
                   if (data.length === 0) {
                     if (this.state.answerState === "right") {
-                      console.log("Ура!");
                       const res2 = await createConstructionResult();
                     }
                   }

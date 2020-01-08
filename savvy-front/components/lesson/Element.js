@@ -42,6 +42,8 @@ class Element extends Component {
       this.props.getData({ texteditor: this.props.data.id });
     } else if (this.props.data.__typename === "Problem") {
       this.props.getData({ problem: this.props.data.id });
+    } else if (this.props.data.__typename === "Construction") {
+      this.props.getData({ construction: this.props.data.id });
     }
     this.setState({ hide: true });
   };
@@ -74,10 +76,15 @@ class Element extends Component {
             <div>{renderHTML(data.text.substring(0, 300))}</div>
           </>
         )}
-        {this.props.data.__typename === "Constructor" && (
+        {this.props.data.__typename === "Construction" && (
           <>
             <div className="header">Конструктор</div>
             <div>{data.name}</div>
+            <ul>
+              {data.variants.map(v => (
+                <li>{renderHTML(v)}</li>
+              ))}
+            </ul>
           </>
         )}
         {this.props.data.__typename === "Problem" && (

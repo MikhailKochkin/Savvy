@@ -6,6 +6,7 @@ import SingleQuiz from "./quizes/SingleQuiz";
 import SingleProblem from "./problems/SingleProblem";
 import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
+import Exam from "./exams/Exam";
 
 class StoryEx extends Component {
   render() {
@@ -15,16 +16,7 @@ class StoryEx extends Component {
     let item;
     if (Object.keys(m)[0] === "note") {
       el = lesson.notes.find(note => note.id === Object.values(m)[0]);
-      item = (
-        <Note
-          text={el.text}
-          text={el.text}
-          note={el.id}
-          teacher={el.user.id}
-          lessonID={lesson.id}
-          me={me}
-        />
-      );
+      item = <Note text={el.text} me={me} story={true} />;
     } else if (Object.keys(m)[0] === "newTest") {
       el = lesson.newTests.find(test => test.id === Object.values(m)[0]);
       item = (
@@ -41,13 +33,13 @@ class StoryEx extends Component {
           lessonID={lesson.id}
           length={Array(el.correct.length).fill(false)}
           userData={lesson.testResults}
+          story={true}
         />
       );
     } else if (Object.keys(m)[0] === "quiz") {
       el = lesson.quizes.find(quiz => quiz.id === Object.values(m)[0]);
       item = (
         <SingleQuiz
-          id={el.id}
           key={el.id}
           question={el.question}
           answer={el.answer}
@@ -58,6 +50,7 @@ class StoryEx extends Component {
           lessonID={lesson.id}
           quizID={el.id}
           user={el.user.id}
+          story={true}
         />
       );
     } else if (Object.keys(m)[0] === "shot") {
@@ -73,6 +66,7 @@ class StoryEx extends Component {
           lessonID={lesson.id}
           title={el.title}
           userData={lesson.shotResults}
+          story={true}
         />
       );
     } else if (Object.keys(m)[0] === "problem") {
@@ -84,6 +78,8 @@ class StoryEx extends Component {
           lessonID={lesson.id}
           me={me}
           userData={lesson.problemResults}
+          story={true}
+          lesson={lesson}
         />
       );
     } else if (Object.keys(m)[0] === "texteditor") {
@@ -97,6 +93,7 @@ class StoryEx extends Component {
           textEditor={el}
           me={me}
           userData={lesson.textEditorResults}
+          story={true}
         />
       );
     } else if (Object.keys(m)[0] === "construction") {
@@ -110,8 +107,12 @@ class StoryEx extends Component {
           me={me}
           arr={Array(el.answer.length).fill("")}
           userData={lesson.constructionResults}
+          story={true}
         />
       );
+    } else if (Object.keys(m)[0] === "exam") {
+      el = lesson.exams.find(con => con.id === Object.values(m)[0]);
+      item = <Exam lesson={lesson} me={this.props.me} exam={el} />;
     }
     return <div>{item}</div>;
   }

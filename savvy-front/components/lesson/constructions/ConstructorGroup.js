@@ -102,10 +102,10 @@ class TextEditorGroup extends Component {
 
     return (
       <>
-        <Advice>
+        {/* <Advice>
           <b>Совет</b>: не забудьте нажать на кнопку "Сохранить" после
           выполнения задания.{" "}
-        </Advice>
+        </Advice> */}
         <Box>
           <Title>
             Конструктор {this.state.num + 1} из{" "}

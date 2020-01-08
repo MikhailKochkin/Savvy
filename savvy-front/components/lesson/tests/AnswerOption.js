@@ -2,117 +2,41 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.div`
-  input {
-    width: 5%;
-  }
-
-  /* Customize the label (the container) */
-  .container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 1.8rem;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    @media (max-width: 700px) {
-      font-size: 1.4rem;
-    }
-  }
-
-  /* Hide the browser's default checkbox */
-  .container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-
-  .container div {
-    font-size: 1.6rem;
-    margin-top: 10px;
-  }
-
-  /* Create a custom checkbox */
-  .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-    @media (max-width: 700px) {
-      top: 3px;
-      height: 20px;
-      width: 20px;
-    }
-  }
-
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark {
-    background-color: #ccc;
-  }
-
-  /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark {
-    background-color: #2196f3;
-  }
-
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
-    content: "";
-    top: 10px;
-    right: 5px;
-    position: absolute;
-    display: none;
-    @media (max-width: 700px) {
-      top: 10px;
-      right: 5px;
-    }
-  }
-
-  /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  /* Style the checkmark/indicator */
-  .container .checkmark:after {
-    left: 10px;
-    top: 7px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    @media (max-width: 700px) {
-      left: 7px;
-      top: 4px;
-    }
-  }
+  display: inline-block;
+  border: ${props =>
+    props.choose ? "1.5px solid #122A62" : "1px solid #c4c4c4"};
+  padding: 5px 15px;
+  cursor: pointer;
+  margin-right: 3%;
+  margin-bottom: 2%;
 `;
-const AnswerOption = props => (
-  <StyledButton>
-    <li className="answerOption">
-      <label class="container">
-        <input
-          type="checkbox"
-          value={props.correct}
-          disabled={false}
-          answer={props.question}
-          number={props.number}
-          onChange={props.onAnswerSelected}
-        />
-        <span class="checkmark" />
-        <div>{props.question}</div>
-      </label>
-    </li>
-  </StyledButton>
-);
+
+class AnswerOption extends Component {
+  state = {
+    choose: false
+  };
+
+  change = e => {
+    this.props.onAnswerSelected(this.props.number, this.props.answer);
+    this.setState(prev => ({
+      choose: !prev.choose
+    }));
+  };
+
+  render() {
+    return (
+      <StyledButton
+        type="checkbox"
+        value={this.props.correct}
+        answer={this.props.answer}
+        number={this.props.number}
+        choose={this.state.choose}
+        onClick={this.change}
+      >
+        <span>{this.props.answer}</span>
+      </StyledButton>
+    );
+  }
+}
+
 export default AnswerOption;

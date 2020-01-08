@@ -53,6 +53,7 @@ class StoryUpdate extends Component {
       value: dataFromChild
     });
     this.onAddItem();
+    console.log(this.state.list);
   };
 
   render() {
@@ -95,13 +96,18 @@ class StoryUpdate extends Component {
                   <Element data={t} getData={this.myCallback} />
                 ))}
               </Block>
+              <Block>
+                {lesson.constructions.map(t => (
+                  <Element data={t} getData={this.myCallback} />
+                ))}
+              </Block>
               <Button
                 onClick={async e => {
                   // Stop the form from submitting
                   e.preventDefault();
                   // call the mutation
                   const res = await updateLesson();
-                  alert("!!!");
+                  alert("Последовательность сохранена!");
                   // change the page to the single case page
                 }}
               >
