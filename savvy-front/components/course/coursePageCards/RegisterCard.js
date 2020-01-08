@@ -87,6 +87,13 @@ const Text = styled.div`
   margin: 4% 4%;
 `;
 
+const Paid = styled.div`
+  background: #fdf3c8;
+  padding: 1% 3%;
+  border-radius: 5px;
+  font-size: 1.4rem;
+`;
+
 const GridContainer = styled.div`
   display: grid;
   max-width: 280px;
@@ -147,10 +154,9 @@ class RegisterCard extends Component {
   promo = () => {
     const promo = [];
     let discount;
-    this.props.promocode[0].map(el => promo.push(Object.keys(el)[0]));
-    console.log(promo.includes(this.state.promo));
+    this.props.promocode.map(el => promo.push(Object.keys(el)[0]));
     if (promo.includes(this.state.promo) && !this.state.used) {
-      this.props.promocode[0].map(el =>
+      this.props.promocode.map(el =>
         Object.keys(el)[0] === this.state.promo
           ? (discount = Object.values(el)[0])
           : null
@@ -178,16 +184,28 @@ class RegisterCard extends Component {
     });
   };
   render() {
-    const { coursePage, me, price, studentsArray, subjectArray } = this.props;
+    const {
+      coursePage,
+      me,
+      price,
+      discountPrice,
+      studentsArray,
+      subjectArray
+    } = this.props;
+    let applied;
+    me
+      ? coursePage.applications.filter(ap => ap.applicantId === me.id).length >
+        0
+      : applied === false;
     return (
       <Data>
         <Description>
           <div className="title">Выберите подходящий тариф и получите:</div>
           <div>- пожизненный доступ</div>
           <div>- доступ сразу после оплаты</div>
-          <div>- полный комплект услуг по выбранному тарифу</div>
-          <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
-          <div>- эксклюзивные карьерные возможнорсти от Savvy App</div>
+          <div>- полный комплекст услуг по выбранному тарифу</div>
+          <div>- эксклюзивные предложени я на другие курсы от Savvvy App</div>
+          <div>- эксклюзивные карьерные возможнорсти от Savvvy App</div>
         </Description>
         <Payment>
           <Header>
@@ -250,6 +268,13 @@ class RegisterCard extends Component {
                   />
                   <SmallButton onClick={this.promo}>Применить</SmallButton>
                 </>
+              )}
+              {applied && (
+                <Paid>
+                  Мы получили вашу заявку. Если оплата прошла, то скоро откроем
+                  доступ. Если оплата не прошла, вы можете провести ее еще раз и
+                  мы откроем доступ.
+                </Paid>
               )}
               {!me && <BuyDummy onClick={this.toggleModal}>Купить</BuyDummy>}
               {me && (
