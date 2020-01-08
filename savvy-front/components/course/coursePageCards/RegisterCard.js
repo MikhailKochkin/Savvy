@@ -184,19 +184,12 @@ class RegisterCard extends Component {
     });
   };
   render() {
-    const {
-      coursePage,
-      me,
-      price,
-      discountPrice,
-      studentsArray,
-      subjectArray
-    } = this.props;
+    const { coursePage, me, price, studentsArray, subjectArray } = this.props;
     let applied;
-    me
-      ? coursePage.applications.filter(ap => ap.applicantId === me.id).length >
-        0
-      : applied === false;
+    me &&
+    coursePage.applications.filter(ap => ap.applicantId === me.id).length > 0
+      ? (applied = true)
+      : (applied = false);
     return (
       <Data>
         <Description>

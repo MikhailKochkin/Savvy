@@ -5,6 +5,7 @@ const AreYouAdmin = props => (
   <Query query={CURRENT_USER_QUERY}>
     {({ data }, loading) => {
       if (loading) return <p>Загрузка...</p>;
+      console.log(data);
       if (!data.me.permissions.includes("ADMIN")) {
         return (
           <div>
