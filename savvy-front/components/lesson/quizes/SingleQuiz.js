@@ -170,28 +170,11 @@ class SingleQuiz extends Component {
     document.querySelector(".button").disabled = true;
   };
 
-  onAnswer = e => {
-    this.setState({ answer: this.props.answer });
-    let s1 = this.props.answer.toLowerCase();
-    let s2 = this.state.answer.toLowerCase();
-    let s1Parts = s1.split(" ").filter(item => item !== "");
-    let s2Parts = s2.split(" ").filter(item => item !== "");
-    let score = 0;
-    for (var i = 0; i < s1Parts.length; i++) {
-      if (s1Parts[i] === s2Parts[i]) score++;
-    }
-    if (score == s1Parts.length) {
-      this.setState({ correct: "true", inputColor: "#32AC66" });
-    } else {
-      this.setState({ correct: "false", inputColor: "#DE6B48" });
-    }
-  };
-
-  move = e => {
+  move = result => {
     // 1. if the data is sent for the first time
     if (!this.state.sent) {
       // 2. and if we get the right answer
-      if (e.target.getAttribute("name") === "true") {
+      if (result === "true") {
         // 3. and if this quiz is a part of an exam
         if (this.props.exam) {
           // 4. we transfer the "true" data to the exam component
@@ -201,7 +184,7 @@ class SingleQuiz extends Component {
           );
         }
         // 2. and if we get the wrong answer
-      } else if (e.target.getAttribute("name") === "false") {
+      } else if (result === "false") {
         // 3. and if this quiz is a part of an exam
         if (this.props.exam) {
           // 4. we transfer the "false" data to the exam component
@@ -213,6 +196,33 @@ class SingleQuiz extends Component {
       }
     }
     this.setState({ sent: true });
+  };
+
+  onAnswer = e => {
+    this.setState({ answer: this.props.answer });
+    let data1 = {
+      sentence1: this.props.answer.toLowerCase(),
+      sentence2: this.state.answer.toLowerCase()
+    };
+    fetch("https://dry-plains-91452.herokuapp.com", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data1)
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res);
+        if (res > 0.59) {
+          this.setState({ correct: "true", inputColor: "#32AC66" });
+          this.move("true");
+        } else {
+          this.setState({ correct: "false", inputColor: "#DE6B48" });
+          this.move("false");
+        }
+      })
+      .catch(err => console.log(err));
   };
 
   switch = () => {
@@ -299,7 +309,12 @@ class SingleQuiz extends Component {
             </Answer>
             {this.props.exam && (
               <Block display={this.state.move.toString()}>
-                <div id="comment">Ваш ответ совпадает с нашим?</div>
+                <div id="comment">
+                  Вы дали верный ответ? (Если наша система проверки ошиблась,
+                  укажите это. Это важно для выстраивания дальнейшей
+                  последовательности решения задачи. Рекомендуем это делать,
+                  только если вы уверены в своей правоте. )
+                </div>
                 <Group className="move">
                   <div id="but1" onClick={this.move} name="true">
                     Да ✅
