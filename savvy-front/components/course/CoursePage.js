@@ -34,6 +34,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       image
       news
       price
+      video
       audience
       result
       tariffs
