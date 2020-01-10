@@ -1328,13 +1328,11 @@ const Mutations = {
     return Note;
   },
   async updateNote(parent, args, ctx, info) {
-    //first take a copy of the updates
-    //run the update method
+    const updates = { ...args };
+    delete updates.id;
     return ctx.db.mutation.updateNote(
       {
-        data: {
-          text: args.text
-        },
+        data: updates,
         where: {
           id: args.id
         }

@@ -99,6 +99,7 @@ const MiniButton = styled.div`
   background: none;
   cursor: pointer;
   margin: 1.5% 0;
+  padding: 0% 2%;
   &:hover {
     text-decoration: underline;
   }

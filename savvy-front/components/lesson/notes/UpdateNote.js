@@ -163,12 +163,6 @@ export default class UpdateNote extends Component {
               id,
               ...this.state
             }}
-            //   refetchQueries={() => [
-            //     {
-            //       query: PAGE_LESSONS_QUERY,
-            //       variables: { id: lessonID }
-            //     }
-            //   ]}
           >
             {(updateNote, { loading, error }) => (
               <Button
@@ -177,6 +171,7 @@ export default class UpdateNote extends Component {
                   e.preventDefault();
                   // call the mutation
                   const res = await updateNote();
+                  console.log(this.state);
                 }}
               >
                 {loading ? "Сохраняем..." : "Сохранить"}

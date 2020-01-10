@@ -176,7 +176,8 @@ export default class UpdateLesson extends Component {
           >
             {({ data, loading }) => {
               if (loading) return <p>Loading...</p>;
-              if (!data) return <p>No lesson Found for ID {lessonID}</p>;
+
+              if (!data) return <p>Did not query data for lesson {lessonID}</p>;
               return (
                 <>
                   {data.lesson && (
