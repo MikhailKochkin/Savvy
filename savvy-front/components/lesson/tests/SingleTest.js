@@ -83,7 +83,7 @@ const Dots = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   height: 90px;
   margin-bottom: 5%;
   .group {

@@ -6,6 +6,7 @@ import ReactResizeDetector from "react-resize-detector";
 import renderHTML from "react-render-html";
 import Link from "next/link";
 import Note from "./notes/Note";
+import Exams from "./exams/Exams";
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
 import QuizGroup from "./quizes/QuizGroup";
@@ -473,6 +474,7 @@ const ChooseButton = styled.button`
   border-left: 1px solid white;
   padding-left: 8%;
   outline: none;
+  font-family: Montserrat;
   background: none;
   text-align: left;
   padding-top: 1.4rem;

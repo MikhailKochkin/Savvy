@@ -56,6 +56,7 @@ const Textarea = styled.textarea`
   border-color: ${props => props.inputColor};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  font-family: Montserrat;
   outline: 0;
   padding: 2%;
   font-size: 1.6rem;
@@ -162,6 +163,8 @@ class SingleQuiz extends Component {
   onShow = e => {
     if (this.state.correct !== "") {
       this.setState(prevState => ({ hidden: !prevState.hidden }));
+    } else {
+      alert("Сначала дайте свой ответ!");
     }
   };
 
