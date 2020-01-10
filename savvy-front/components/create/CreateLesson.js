@@ -5,11 +5,9 @@ import styled from "styled-components";
 import Router from "next/router";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { NavButton, SubmitButton } from "../styles/Button";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import { CURRENT_USER_QUERY } from "../User";
-import { PAGE_LESSONS_QUERY } from "../course/CoursePage";
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(
@@ -128,6 +126,7 @@ export default class CreateLesson extends Component {
   state = {
     name: "",
     text: "",
+    description: "",
     number: 0,
     published: false
   };
@@ -199,13 +198,7 @@ export default class CreateLesson extends Component {
                   coursePageID: id,
                   ...this.state
                 }}
-                refetchQueries={() => [
-                  {
-                    query: PAGE_LESSONS_QUERY,
-                    variables: { id: this.props.id }
-                  },
-                  { query: CURRENT_USER_QUERY }
-                ]}
+                refetchQueries={[{ query: CURRENT_USER_QUERY }]}
                 awaitRefetchQueries={true}
               >
                 {(createLesson, { loading, error }) => (
