@@ -202,7 +202,7 @@ class SingleQuiz extends Component {
   };
 
   onAnswer = e => {
-    this.setState({ answer: this.props.answer });
+    // this.setState({ answer: this.props.answer });
     let data1 = {
       sentence1: this.props.answer.toLowerCase(),
       sentence2: this.state.answer.toLowerCase()

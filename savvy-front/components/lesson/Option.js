@@ -25,11 +25,18 @@ const Group = styled.div`
 
 const Box = styled.div`
   display: ${props => (props.hide ? "none" : "block")};
+  border: 1px solid #edefed;
+  width: 30%;
+  padding: 1.5%;
+  font-size: 1.5rem;
+  background: ${props => props.color || null};
+  margin-bottom: 2%;
 `;
 
 class Option extends Component {
   state = {
-    hide: false
+    hide: false,
+    color: null
   };
   push = e => {
     e.target.getAttribute("type") === "note" &&
@@ -44,7 +51,27 @@ class Option extends Component {
       (e.target.name === "true"
         ? this.props.getData(true, { newTest: this.props.test.id })
         : this.props.getData(false, { newTest: this.props.test.id }));
-    this.setState({ hide: true });
+
+    e.target.name === "true"
+      ? this.setState({ color: "rgba(50, 172, 102, 0.05)" })
+      : this.setState({ color: "rgba(253, 156, 125, 0.5);" });
+  };
+
+  reset = e => {
+    e.target.getAttribute("type") === "note" &&
+    this.state.color === "rgba(50, 172, 102, 0.05)"
+      ? this.props.getData(true, { note: null })
+      : this.props.getData(false, { note: null });
+    e.target.getAttribute("type") === "quiz" &&
+      (this.state.color === "rgba(50, 172, 102, 0.05)"
+        ? this.props.getData(true, { quiz: null })
+        : this.props.getData(false, { quiz: null }));
+    e.target.getAttribute("type") === "newTest" &&
+      (this.state.color === "rgba(50, 172, 102, 0.05)"
+        ? this.props.getData(true, { newTest: null })
+        : this.props.getData(false, { newTest: null }));
+
+    this.setState({ color: null });
   };
 
   render() {
@@ -52,40 +79,49 @@ class Option extends Component {
     return (
       <>
         {note && (
-          <Box hide={this.state.hide}>
+          <Box color={this.state.color}>
             <div>{renderHTML(note.text.substring(0, 150) + "...")}</div>
             <Group>
               <Button onClick={this.push} name="true" type="note">
-                Правильно
+                ✅
               </Button>
               <Button onClick={this.push} name="false" type="note">
-                Неправильно
+                ⛔️
+              </Button>
+              <Button onClick={this.reset} type="note">
+                👊🏻
               </Button>
             </Group>
           </Box>
         )}
         {test && (
-          <Box hide={this.state.hide}>
+          <Box color={this.state.color}>
             <div>{test.question}</div>
             <Group>
               <Button onClick={this.push} name="true" type="newTest">
-                Правильно
+                ✅
               </Button>
               <Button onClick={this.push} name="false" type="newTest">
-                Неправильно
+                ⛔️
+              </Button>
+              <Button onClick={this.reset} type="newTest">
+                👊🏻
               </Button>
             </Group>
           </Box>
         )}
         {quiz && (
-          <Box hide={this.state.hide}>
+          <Box color={this.state.color}>
             <div>{quiz.question}</div>
             <Group>
               <Button onClick={this.push} name="true" type="quiz">
-                Правильно
+                ✅
               </Button>
               <Button onClick={this.push} name="false" type="quiz">
-                Неправильно
+                ⛔️
+              </Button>
+              <Button onClick={this.reset} type="quiz">
+                👊🏻
               </Button>
             </Group>
           </Box>

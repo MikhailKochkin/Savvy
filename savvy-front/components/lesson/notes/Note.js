@@ -4,7 +4,7 @@ import renderHTML from "react-render-html";
 import UpdateNote from "./UpdateNote";
 
 const Container = styled.div`
-  width: ${props => (props.story ? "100%" : "95%")};
+  width: ${props => (props.story ? "95%" : "100%")};
   font-size: 1.6rem;
   margin: 30px 0;
 `;

@@ -171,7 +171,7 @@ export default class UpdateNote extends Component {
                   e.preventDefault();
                   // call the mutation
                   const res = await updateNote();
-                  console.log(this.state);
+                  alert("Готово!");
                 }}
               >
                 {loading ? "Сохраняем..." : "Сохранить"}

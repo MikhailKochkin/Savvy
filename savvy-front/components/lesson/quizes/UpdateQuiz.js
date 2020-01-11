@@ -83,6 +83,13 @@ const Button = styled.button`
   }
 `;
 
+const Grid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 class UpdateQuiz extends Component {
   state = {};
 
@@ -117,6 +124,7 @@ class UpdateQuiz extends Component {
     });
     // this.onAddItem();
   };
+
   render() {
     const {
       lessonID,
@@ -148,17 +156,23 @@ class UpdateQuiz extends Component {
         />
         <h2>Выберите задания для формата "Экзамен":</h2>
         <h3>Вопросы:</h3>
-        {quizes.map(quiz => (
-          <Option key={quiz.id} quiz={quiz} getData={this.myCallback} />
-        ))}
+        <Grid>
+          {quizes.map(quiz => (
+            <Option key={quiz.id} quiz={quiz} getData={this.myCallback} />
+          ))}
+        </Grid>
         <h3>Заметки:</h3>
-        {notes.map(note => (
-          <Option key={note.id} note={note} getData={this.myCallback} />
-        ))}
+        <Grid>
+          {notes.map(note => (
+            <Option key={note.id} note={note} getData={this.myCallback} />
+          ))}
+        </Grid>
         <h3>Тесты:</h3>
-        {tests.map(test => (
-          <Option key={test.id} test={test} getData={this.myCallback} />
-        ))}
+        <Grid>
+          {tests.map(test => (
+            <Option key={test.id} test={test} getData={this.myCallback} />
+          ))}
+        </Grid>
         <button onClick={this.onSave}>Compile</button>
         <Mutation
           mutation={UPDATE_QUIZ_MUTATION}

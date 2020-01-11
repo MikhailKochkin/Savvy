@@ -33,6 +33,13 @@ const Button2 = styled.button`
   width: 25%;
 `;
 
+const Grid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION($id: ID!, $next: Json) {
     updateNewTest(id: $id, next: $next) {
@@ -72,17 +79,23 @@ class UpdateTest extends Component {
       <div>
         <h2>Выберите задания для формата "Экзамен":</h2>
         <h3>Вопросы:</h3>
-        {quizes.map(quiz => (
-          <Option key={quiz.id} quiz={quiz} getData={this.myCallback2} />
-        ))}
+        <Grid>
+          {quizes.map(quiz => (
+            <Option key={quiz.id} quiz={quiz} getData={this.myCallback2} />
+          ))}
+        </Grid>
         <h3>Заметки:</h3>
-        {notes.map(note => (
-          <Option key={note.id} note={note} getData={this.myCallback2} />
-        ))}
+        <Grid>
+          {notes.map(note => (
+            <Option key={note.id} note={note} getData={this.myCallback2} />
+          ))}
+        </Grid>
         <h3>Тесты:</h3>
-        {tests.map(test => (
-          <Option key={test.id} test={test} getData={this.myCallback2} />
-        ))}
+        <Grid>
+          {tests.map(test => (
+            <Option key={test.id} test={test} getData={this.myCallback2} />
+          ))}
+        </Grid>
         <Button2 onClick={this.onSave}>Compile</Button2>
         <Mutation
           mutation={UPDATE_TEST_MUTATION}

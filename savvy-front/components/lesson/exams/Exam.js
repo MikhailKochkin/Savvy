@@ -37,6 +37,7 @@ class Exam extends Component {
       newQuiz = (
         <SingleQuiz
           key={el.id}
+          id={el.id}
           question={el.question}
           answer={el.answer}
           me={this.props.me}
@@ -149,6 +150,7 @@ class Exam extends Component {
       newQuiz = (
         <SingleQuiz
           index={1}
+          id={el.id}
           key={el.id}
           question={el.question}
           answer={el.answer}

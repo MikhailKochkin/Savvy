@@ -155,7 +155,9 @@ class SingleTest extends Component {
           this.props.exam
             ? //3. we transfer the "true" data to the exam component
               this.props.getData(
-                this.props.next ? this.props.next.true : { finish: 0 },
+                this.props.next
+                  ? this.props.next.true && props.next.true !== null
+                  : { finish: 0 },
                 "true"
               )
             : null;
