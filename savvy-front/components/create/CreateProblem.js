@@ -11,7 +11,7 @@ const CREATE_PROBLEM_MUTATION = gql`
   mutation CREATE_PROBLEM_MUTATION(
     $text: String!
     $lessonID: ID!
-    $nodeID: ID!
+    $nodeID: ID
     $nodeType: String
   ) {
     createProblem(
