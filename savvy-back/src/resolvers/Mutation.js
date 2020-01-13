@@ -1109,6 +1109,13 @@ const Mutations = {
       },
       capture: true
     });
+
+    console.log(result, result.confirmation.confirmation_url);
+    ctx.response.cookie("url", result.confirmation.confirmation_url, {
+      domain: ".savvvy.app",
+      httpOnly: false
+    });
+
     const paymentId = result.id;
     const user = await ctx.db.query.user({ where: { id: args.userID } });
     const coursePage = await ctx.db.query.coursePage({
@@ -1129,11 +1136,6 @@ const Mutations = {
         }
       },
       info
-    });
-
-    ctx.response.cookie("url", result.confirmation.confirmation_url, {
-      domain: ".savvvy.app",
-      httpOnly: false
     });
 
     const newOrderMail = await client.sendEmail({

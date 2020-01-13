@@ -78,9 +78,9 @@ class TakeMyMoney extends React.Component {
                     onClick={async e => {
                       e.preventDefault;
                       this.setState({ loading: true });
-                      location.href = cookies.get("url");
                       const res1 = await createApplication();
                       const res2 = await createOrder();
+                      location.href = cookies.get("url");
                       // this.setState({
                       //   loading: false
                       // });

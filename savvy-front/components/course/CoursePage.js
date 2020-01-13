@@ -463,18 +463,19 @@ class CoursePage extends Component {
                                     </div>
                                   </div>
                                 )}
-                                {data.coursePage.video && (
-                                  <Video>
-                                    <div className="header">
-                                      Посмотрите презентацию курса от его
-                                      автора:
-                                    </div>
-                                    <iframe
-                                      src={data.coursePage.video}
-                                      allowfullscreen
-                                    />
-                                  </Video>
-                                )}
+                                {data.coursePage.video &&
+                                  data.coursePage.video !== "" && (
+                                    <Video>
+                                      <div className="header">
+                                        Посмотрите презентацию курса от его
+                                        автора:
+                                      </div>
+                                      <iframe
+                                        src={data.coursePage.video}
+                                        allowfullscreen
+                                      />
+                                    </Video>
+                                  )}
                                 {data.coursePage.methods && (
                                   <div className="green">
                                     <div className="header">

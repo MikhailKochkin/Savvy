@@ -296,7 +296,6 @@ class UpdateCoursePage extends Component {
                                 id="video"
                                 name="video"
                                 placeholder="Видео курса"
-                                required
                                 defaultValue={coursePage.video}
                                 onChange={this.handleChange}
                               />
