@@ -645,7 +645,7 @@ class CoursePage extends Component {
                                 coursePage={coursePage}
                                 price={price}
                                 discountPrice={coursePage.discountPrice}
-                                promocode={coursePage.promocode}
+                                promocode={coursePage.promocode[0]}
                                 studentsArray={studentsArray}
                                 subjectArray={subjectArray}
                               />
