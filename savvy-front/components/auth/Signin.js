@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-import Router from "next/router";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 
@@ -16,32 +18,11 @@ const SIGNIN_MUTATION = gql`
   }
 `;
 
-const SubmitButton = styled.button`
-  background-color: #84bc9c;
-  border: 1px solid white;
-  border-radius: 6px;
-  color: white;
-  padding: 2%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1.4rem;
-  font-weight: 600;
-  width: 100%;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    border: 1px solid black;
-  }
-  @media (max-width: 800px) {
-    margin-top: 1%;
-  }
-`;
-
 const Form = styled.form`
-  width: 100%;
+  min-width: 400px;
   font-size: 1.6rem;
   @media (max-width: 800px) {
+    min-width: 100px;
     width: 100%;
   }
 `;
@@ -51,51 +32,9 @@ const Fieldset = styled.fieldset`
   flex-direction: column;
   border: none;
   padding: 15px;
-`;
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: repeat(2 70px);
-  .email {
-    grid-area: first;
-  }
-  .password {
-    grid-area: second;
-  }
   input {
-    width: 100%;
-    border: ${props =>
-      props.primary ? "2px solid #84BC9C" : "1px solid #ccc"};
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 1.5%;
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    outline: 0;
-  }
-  grid-template-areas:
-    "first   "
-    "second   ";
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2%;
-  padding: 0 3% 2% 3%;
-  border-bottom: solid 1px #f0f0f0;
-  div {
-    font-size: 1.3rem;
-    color: #112a62;
-    font-weight: 900;
-    cursor: pointer;
-    margin-top: 2%;
-  }
-  @media (max-width: 850px) {
-    margin-top: 0.5%;
+    font-size: 1.6rem;
+    font-family: Montserrat;
   }
 `;
 
@@ -115,81 +54,101 @@ const Transit = styled.div`
   }
 `;
 
-class Signin extends Component {
-  state = {
-    password: "",
-    email: "",
-    loggedIn: true
-  };
-  saveToStateEmail = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  saveToState = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  switch = e => {
-    const name = e.target.getAttribute("name");
-    this.props.getData(name);
-  };
-  render() {
-    return (
-      <Mutation
-        mutation={SIGNIN_MUTATION}
-        variables={this.state}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {(signin, { error, loading }) => (
-          <Form
-            method="post"
-            onSubmit={async e => {
-              e.preventDefault();
-              await signin();
-              this.props.closeNavBar(true);
-              this.setState({ email: "", password: "", loggedIn: true });
-            }}
-          >
-            <Fieldset disabled={loading} aria-busy={loading}>
-              <Title>Войдите на Savvvy App</Title>
-              <Error error={error} />
-              <Container>
-                <input
-                  primary={this.state.loggedIn}
-                  type="email"
-                  name="email"
-                  placeholder="Электронная почта"
-                  value={this.state.email}
-                  onChange={this.saveToStateEmail}
-                />
-
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Пароль"
-                  value={this.state.password}
-                  onChange={this.saveToState}
-                />
-              </Container>
-              <Buttons>
-                <SubmitButton type="submit">
-                  {loading ? "Вхожу" : "Войти"}
-                </SubmitButton>
-                <div name="reset" onClick={this.switch}>
-                  Забыли пароль?
-                </div>
-              </Buttons>
-              <Transit>
-                Ещё не зарегистрированы на Savvvy?{" "}
-                <span name="signup" onClick={this.switch}>
-                  Зарегистрироваться
-                </span>
-              </Transit>
-            </Fieldset>
-          </Form>
-        )}
-      </Mutation>
-    );
+const useStyles = makeStyles({
+  button: {
+    width: "100%",
+    marginBottom: "2%",
+    fontSize: "1.4rem",
+    textTransform: "none"
+  },
+  root: {
+    marginBottom: "4%"
+  },
+  labelRoot: {
+    fontSize: "1.5rem"
   }
-}
+});
+
+const Signin = props => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const classes = useStyles();
+  const change = e => props.getData(e.target.getAttribute("name"));
+  return (
+    <Mutation
+      mutation={SIGNIN_MUTATION}
+      variables={{
+        email: email,
+        password: password
+      }}
+      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+    >
+      {(signin, { error, loading }) => (
+        <Form
+          onSubmit={async e => {
+            e.preventDefault();
+            await signin();
+            props.closeNavBar(true);
+            setPassword("");
+            setEmail("");
+          }}
+        >
+          <Fieldset disabled={loading} aria-busy={loading}>
+            <Title>Войдите на Savvy App</Title>
+            <Error error={error} />
+            <TextField
+              type="text"
+              className={classes.root}
+              InputLabelProps={{
+                classes: {
+                  root: classes.labelRoot
+                }
+              }}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              id="standard-basic"
+              name="email"
+              label="Электронная почта"
+            />
+            <TextField
+              type="password"
+              className={classes.root}
+              InputLabelProps={{
+                classes: {
+                  root: classes.labelRoot
+                }
+              }}
+              id="standard-basic"
+              name="password"
+              label="Пароль"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              {loading ? "Вхожу" : "Войти"}
+            </Button>
+            <Transit>
+              <div>
+                <span name="reset" onClick={change}>
+                  Забыли пароль?
+                </span>
+              </div>
+              Ещё не зарегистрированы на Savvy?{" "}
+              <span name="signup" onClick={change}>
+                Зарегистрироваться
+              </span>
+            </Transit>
+          </Fieldset>
+        </Form>
+      )}
+    </Mutation>
+  );
+};
 
 export default Signin;
 export { SIGNIN_MUTATION };

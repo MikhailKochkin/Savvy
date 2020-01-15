@@ -4,6 +4,8 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
@@ -47,26 +49,6 @@ const Answers = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
-`;
-
-const Button = styled.button`
-  padding: 3%;
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin-top: 3%;
-  width: 45%;
-  color: #fffdf7;
-  background: ${props => props.theme.green};
-  border: solid 1px white;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-  &:active {
-    background: ${props => props.theme.darkGreen};
-  }
-  @media (max-width: 800px) {
-    width: 75%;
-  }
 `;
 
 const Box = styled.div`
@@ -135,6 +117,16 @@ const Advice = styled.p`
   margin: 30px 0;
   width: 100%;
 `;
+
+const StyledButton = withStyles({
+  root: {
+    margin: "4% 0",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none",
+    width: "40%"
+  }
+})(Button);
 
 class SingleConstructor extends Component {
   state = {
@@ -311,7 +303,9 @@ class SingleConstructor extends Component {
             }}
           >
             {(createConstructionResult, { loading, error }) => (
-              <Button
+              <StyledButton
+                variant="contained"
+                color="primary"
                 className="button"
                 onClick={async e => {
                   e.preventDefault();
@@ -325,7 +319,7 @@ class SingleConstructor extends Component {
                 }}
               >
                 Проверить
-              </Button>
+              </StyledButton>
             )}
           </Mutation>
           {this.state.answerState === "wrong" ? (

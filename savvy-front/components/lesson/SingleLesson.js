@@ -26,6 +26,8 @@ import AreYouEnrolled from "../auth/AreYouEnrolled";
 import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import User from "../User";
+import { Icon } from "react-icons-kit";
+import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -271,32 +273,33 @@ const Center = styled.div`
 const Head = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  padding: 1% 0;
-  background: #f0f8ff;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  height: 10vh;
+  background: #1a2980; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #26d0ce,
+    #1a2980
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #26d0ce, #1a2980);
   width: 100%;
-  text-align: center;
-  font-size: 2.6rem;
+  font-size: 2.3rem;
+  span {
+    margin: 0 3%;
+  }
+  #back {
+    &:hover {
+      color: #e4e4e4;
+    }
+    cursor: pointer;
+  }
   @media (max-width: 800px) {
     font-size: 1.8rem;
     justify-content: space-between;
     align-items: center;
-    padding: 2% 15px;
-    span {
-      flex: 15%;
-      height: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: 1px solid #112a62;
-      color: #112a62;
-      border-radius: 5px;
-      padding: 1% 3%;
-    }
-    div {
-      flex: 85%;
-      text-align: right;
-    }
+    margin: 0 1%;
   }
 `;
 
@@ -305,7 +308,13 @@ const Head2 = styled.div`
   flex-direction: row;
   justify-content: center;
   padding: 0;
-  background: #3626a7;
+  background: #1a2980; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #26d0ce,
+    #1a2980
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #26d0ce, #1a2980);
   color: white;
   width: 100%;
   text-align: center;
@@ -678,15 +687,27 @@ class SingleLesson extends Component {
                         )}
 
                         <Head>
-                          {this.state.width < 800 && (
-                            <span onClick={this.openNav}>
-                              {/* <IoMdMenu size={32} /> */}
-                              Навигация
-                            </span>
+                          {this.state.width > 800 ? (
+                            <Link
+                              href={{
+                                pathname: "/coursePage",
+                                query: {
+                                  id: lesson.coursePage.id
+                                }
+                              }}
+                            >
+                              <span>
+                                <Icon size={"10%"} icon={arrowLeft} id="back" />
+                              </span>
+                            </Link>
+                          ) : (
+                            this.state.width < 800 && (
+                              <span onClick={this.openNav}>Навигация</span>
+                            )
                           )}
-                          <div>
+                          <span>
                             Урок {lesson.number}. {lesson.name}
-                          </div>
+                          </span>
                         </Head>
                         {lesson.user.id === me.id && (
                           <Head2>
@@ -735,7 +756,8 @@ class SingleLesson extends Component {
                                   text={note.text}
                                   me={me}
                                   teacher={lesson.user.id}
-                                  note={note.id}
+                                  note={note}
+                                  id={note.id}
                                   next={note.next}
                                   quizes={lesson.quizes}
                                   notes={lesson.notes}

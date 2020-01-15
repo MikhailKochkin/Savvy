@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
 
@@ -56,7 +59,6 @@ const Textarea = styled.textarea`
   border-color: ${props => props.inputColor};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  font-family: Montserrat;
   outline: 0;
   padding: 2%;
   font-size: 1.6rem;
@@ -91,7 +93,6 @@ const Group = styled.div`
   border: 1px solid #c4c4c4;
   border-radius: 5px;
   padding: 0.5%;
-  margin-bottom: 3%;
   div {
     border: none;
     background: none;
@@ -132,14 +133,27 @@ const Dots = styled.div`
   }
 `;
 
-const MiniButton = styled.div`
-  border: none;
-  background: none;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
+const Progress = styled.div`
+  display: ${props => (props.display === "true" ? "flex" : "none")};
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin: 0 0 2% 0;
 `;
+
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const StyledButton = withStyles({
+  root: {
+    margin: "4% 0",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none"
+  }
+})(Button);
 
 const Block = styled.div`
   display: ${props => (props.display === "true" ? "block" : "none")};
@@ -157,7 +171,8 @@ class SingleQuiz extends Component {
     inputColor: "#c4c4c4",
     update: false,
     sent: false,
-    move: false
+    move: false,
+    progress: "false"
   };
 
   onShow = e => {
@@ -169,8 +184,36 @@ class SingleQuiz extends Component {
   };
 
   onSend = async () => {
-    this.setState({ correct: "true", inputColor: "#32AC66" });
     document.querySelector(".button").disabled = true;
+  };
+
+  onAnswer = async e => {
+    console.log("here");
+    this.setState({ progress: "true" });
+    let data1 = {
+      sentence1: this.props.answer.toLowerCase(),
+      sentence2: this.state.answer.toLowerCase()
+    };
+    const r = await fetch("https://dry-plains-91452.herokuapp.com", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data1)
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res);
+        if (res > 0.59) {
+          this.setState({ correct: "true", inputColor: "#32AC66" });
+          this.move("true");
+        } else {
+          this.setState({ correct: "false", inputColor: "#DE6B48" });
+          this.move("false");
+        }
+      })
+      .catch(err => console.log(err));
+    this.setState({ progress: "false" });
   };
 
   move = result => {
@@ -201,33 +244,6 @@ class SingleQuiz extends Component {
     this.setState({ sent: true });
   };
 
-  onAnswer = e => {
-    // this.setState({ answer: this.props.answer });
-    let data1 = {
-      sentence1: this.props.answer.toLowerCase(),
-      sentence2: this.state.answer.toLowerCase()
-    };
-    fetch("https://dry-plains-91452.herokuapp.com", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data1)
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log(res);
-        if (res > 0.59) {
-          this.setState({ correct: "true", inputColor: "#32AC66" });
-          this.move("true");
-        } else {
-          this.setState({ correct: "false", inputColor: "#DE6B48" });
-          this.move("false");
-        }
-      })
-      .catch(err => console.log(err));
-  };
-
   switch = () => {
     this.setState(prev => ({ update: !prev.update }));
   };
@@ -243,16 +259,6 @@ class SingleQuiz extends Component {
       .filter(el => el.student.id === me.id);
     return (
       <Styles story={story}>
-        {me && me.id === user && !this.props.exam ? (
-          <DeleteSingleQuiz
-            id={me.id}
-            quizID={this.props.quizID}
-            lessonID={this.props.lessonID}
-          />
-        ) : null}
-        {!exam && story !== true && (
-          <MiniButton onClick={this.switch}>Настройки</MiniButton>
-        )}
         {!this.state.update && (
           <>
             <Question story={story}>
@@ -267,6 +273,9 @@ class SingleQuiz extends Component {
                 placeholder="Ответ на вопрос..."
               />
             </Question>
+            <Progress display={this.state.progress}>
+              <CircularProgress />
+            </Progress>
             <Group>
               <Mutation
                 mutation={CREATE_QUIZRESULT_MUTATION}
@@ -287,9 +296,10 @@ class SingleQuiz extends Component {
                       } else {
                         const res = await this.onAnswer();
                       }
-                      if (data.length === 0) {
-                        const res0 = await createQuizResult();
-                      }
+                      // this.setState({ progress: "false" });
+                      // if (data.length === 0) {
+                      //   const res0 = await createQuizResult();
+                      // }
                     }}
                   >
                     {this.props.type === "FORM" ? "Ответить" : "Проверить"}
@@ -312,12 +322,7 @@ class SingleQuiz extends Component {
             </Answer>
             {this.props.exam && (
               <Block display={this.state.move.toString()}>
-                <div id="comment">
-                  Вы дали верный ответ? (Если наша система проверки ошиблась,
-                  укажите это. Это важно для выстраивания дальнейшей
-                  последовательности решения задачи. Рекомендуем это делать,
-                  только если вы уверены в своей правоте. )
-                </div>
+                <div id="comment">Ваш ответ совпадает с нашим?</div>
                 <Group className="move">
                   <div id="but1" onClick={this.move} name="true">
                     Да ✅
@@ -341,6 +346,18 @@ class SingleQuiz extends Component {
             tests={this.props.tests}
           />
         )}
+        <Buttons>
+          {!exam && !story && (
+            <StyledButton onClick={this.switch}>Настройки</StyledButton>
+          )}
+          {me && me.id === user && !this.props.exam && !this.props.story ? (
+            <DeleteSingleQuiz
+              id={me.id}
+              quizID={this.props.quizID}
+              lessonID={this.props.lessonID}
+            />
+          ) : null}
+        </Buttons>
         {this.props.exam && (
           <Dots>
             <div className="group">

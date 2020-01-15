@@ -3,7 +3,8 @@ import styled, { consolidateStreamedStyles } from "styled-components";
 import renderHTML from "react-render-html";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
@@ -104,27 +105,9 @@ const Hint = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 1.5% 2%;
-  background: ${props => props.theme.green};
-  width: 20%;
-  border-radius: 5px;
-  color: white;
-  font-weight: 600;
-  font-size: 1.6rem;
-  margin: 2% 0;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${props => props.theme.darkGreen};
-  }
-  @media (max-width: 800px) {
-    width: 50%;
-  }
-`;
 const Buttons = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 `;
 
 const Input = styled.input`
@@ -135,6 +118,15 @@ const Input = styled.input`
   font-size: 1.6rem;
   font-family: Montserrat;
 `;
+
+const StyledButton = withStyles({
+  root: {
+    margin: "4% 0",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none"
+  }
+})(Button);
 
 class SingleTextEditor extends Component {
   state = {
@@ -283,7 +275,9 @@ class SingleTextEditor extends Component {
               ]}
             >
               {(createTextEditorResult, { loading, error }) => (
-                <Button
+                <StyledButton
+                  variant="contained"
+                  color="primary"
                   onClick={async e => {
                     e.preventDefault();
                     this.onShow();
@@ -291,14 +285,18 @@ class SingleTextEditor extends Component {
                   }}
                 >
                   {this.state.mistakesShown ? "Скрыть ошибки" : " Сохранить"}
-                </Button>
+                </StyledButton>
               )}
             </Mutation>
           )}
           {data.length > 0 && (
-            <Button onClick={this.onShow}>
+            <StyledButton
+              variant="contained"
+              color="primary"
+              onClick={this.onShow}
+            >
               {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
-            </Button>
+            </StyledButton>
           )}
           {me && me.id === textEditor.user.id ? (
             <DeleteSingleTextEditor

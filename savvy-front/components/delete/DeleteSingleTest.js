@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const DELETE_TEST_MUTATION = gql`
@@ -12,52 +14,49 @@ const DELETE_TEST_MUTATION = gql`
   }
 `;
 
-const Button = styled.div`
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 1.6rem;
-  /* margin-bottom: 1.5%; */
-  &:hover {
-    text-decoration: underline;
+const useStyles = makeStyles({
+  button: {
+    margin: "4% 0",
+    fontSize: "1.6rem",
+    textTransform: "none"
   }
-`;
+});
 
-class DeleteSingleTest extends Component {
-  render() {
-    const { testId, lessonId } = this.props;
-    return (
-      <Mutation
-        mutation={DELETE_TEST_MUTATION}
-        variables={{ id: testId }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonId }
-          }
-        ]}
-      >
-        {(deleteTest, { error, loading }) => (
-          <Button
-            className="but2"
-            onClick={() => {
-              if (
-                confirm(
-                  "Вы точно хотите удалить этот тест? Тест исчезнет после перезагрузки страницы."
-                )
-              ) {
-                deleteTest().catch(error => {
-                  alert(error.message);
-                });
-              }
-            }}
-          >
-            {loading ? "Удаляем..." : "Удалить"}
-          </Button>
-        )}
-      </Mutation>
-    );
-  }
-}
+const DeleteSingleTest = props => {
+  const { testId, lessonId } = props;
+  const classes = useStyles();
+  return (
+    <Mutation
+      mutation={DELETE_TEST_MUTATION}
+      variables={{ id: testId }}
+      refetchQueries={() => [
+        {
+          query: SINGLE_LESSON_QUERY,
+          variables: { id: lessonId }
+        }
+      ]}
+    >
+      {(deleteTest, { error, loading }) => (
+        <Button
+          className={classes.button}
+          color="secondary"
+          onClick={() => {
+            if (
+              confirm(
+                "Вы точно хотите удалить этот тест? Тест исчезнет после перезагрузки страницы."
+              )
+            ) {
+              deleteTest().catch(error => {
+                alert(error.message);
+              });
+            }
+          }}
+        >
+          {loading ? "Удаляем..." : "Удалить"}
+        </Button>
+      )}
+    </Mutation>
+  );
+};
 
 export default DeleteSingleTest;

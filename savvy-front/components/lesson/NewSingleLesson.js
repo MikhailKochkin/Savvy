@@ -1,11 +1,19 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
-import { Query, Mutation } from "react-apollo";
+import { Query } from "react-apollo";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
+import { Icon } from "react-icons-kit";
+import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import MobileStepper from "@material-ui/core/MobileStepper";
+import Button from "@material-ui/core/Button";
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import StoryEx from "./StoryEx";
 import User from "../User";
 
@@ -168,6 +176,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 50vh;
   /* The side navigation menu */
   .sidenav {
     height: 100%; /* 100% Full-height */
@@ -226,30 +235,34 @@ const Container = styled.div`
 const Head = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  padding: 1% 0;
-  background: #f0f8ff;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  height: 10vh;
+  background: #1a2980; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #26d0ce,
+    #1a2980
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #26d0ce, #1a2980);
   width: 100%;
-  text-align: center;
-  font-size: 2.6rem;
+  font-size: 2.3rem;
+  span {
+    margin: 0 3%;
+    margin-right: 3%;
+  }
+  #back {
+    &:hover {
+      color: #e4e4e4;
+    }
+    cursor: pointer;
+  }
   @media (max-width: 800px) {
     font-size: 1.8rem;
     justify-content: space-between;
-    padding: 2% 15px;
-    span {
-      flex: 15%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: 1px solid #112a62;
-      color: #112a62;
-      border-radius: 5px;
-      padding: 0 1%;
-    }
-    div {
-      flex: 85%;
-      text-align: right;
-    }
+    align-items: center;
+    margin: 0 1%;
   }
 `;
 
@@ -258,7 +271,13 @@ const Head2 = styled.div`
   flex-direction: row;
   justify-content: center;
   padding: 0;
-  background: #3626a7;
+  background: #1a2980; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #26d0ce,
+    #1a2980
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #26d0ce, #1a2980);
   color: white;
   width: 100%;
   text-align: center;
@@ -285,7 +304,7 @@ const LessonPart = styled.div`
   display: flex;
   border: 1px solid #edefed;
   padding: 0.5% 2%;
-  width: 45%;
+  width: 40%;
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
@@ -297,57 +316,32 @@ const LessonPart = styled.div`
     margin: 1%;
     width: 90%;
   }
-`;
+  .example-enter {
+    opacity: 0.01;
+  }
 
-const Navigation = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 40px;
-  width: 45%;
-  button {
-    border: none;
-    background: none;
-    border: 1px solid #112a62;
-    border-radius: 5px;
-    font-family: Montserrat;
-    padding: 1.5% 3%;
-    font-size: 1.6rem;
-    margin-right: 3%;
-    outline: 0;
-    color: #112a62;
-    cursor: pointer;
-    &:hover {
-      background: #112a62;
-      color: white;
-    }
+  .example-enter.example-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
   }
-  div {
-    font-weight: bold;
-    color: #112a62;
-    margin-left: 15px;
-    padding: 10px;
-    cursor: pointer;
+
+  .example-leave {
+    opacity: 1;
   }
-  @media (max-width: 800px) {
-    width: 90%;
-    margin-top: 20px;
-    padding: 1.5%;
-    button {
-      width: 50%;
-      height: 40px;
-    }
-    div {
-      padding: 0;
-    }
+
+  .example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
   }
 `;
 
 const Header = styled.div`
   border: 1px solid #edefed;
-  background: #edefed;
+  background: #1a2980;
+  color: white;
   margin-top: 4%;
   border-bottom: 0;
-  width: 45%;
+  width: 40%;
   text-align: left;
   padding: 5px 0px 5px 2%;
   @media (max-width: 800px) {
@@ -355,168 +349,188 @@ const Header = styled.div`
   }
 `;
 
-class SingleLesson extends Component {
-  state = {
-    page: "shots",
-    shown: false,
-    width: 0,
-    step: 0
-  };
-
-  onSwitch = e => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-
-    this.setState({ page: name });
-    this.setState(prevState => ({ shown: !prevState.shown }));
-  };
-
-  onSwitchMob = e => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-
-    this.setState({ page: name });
-    this.setState(prevState => ({ shown: !prevState.shown }));
-    this.closeNav();
-  };
-
-  onResize = width => {
-    this.setState({ width });
-  };
-
-  openNav = () => {
-    document.getElementById("mySidenav2").style.width = "180px";
-  };
-
-  /* Set the width of the side navigation to 0 */
-  closeNav = () => {
-    document.getElementById("mySidenav2").style.width = "0";
-  };
-
-  more = e => {
-    const max = parseInt(e.target.getAttribute("data"));
-    if (this.state.step < parseInt(max) - 1) {
-      this.setState(prev => ({ step: prev.step + 1 }));
+const useStyles = makeStyles(theme => ({
+  root: {
+    maxWidth: 600,
+    width: 600,
+    [theme.breakpoints.down("sm")]: {
+      width: 315
+    },
+    flexGrow: 1,
+    background: "white",
+    marginBottom: "2%"
+  },
+  progress: {
+    width: 350,
+    [theme.breakpoints.down("sm")]: {
+      width: 100
     }
+  },
+  textSizeSmall: {
+    fontSize: "1.7rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5rem"
+    },
+    textTransform: "none",
+    fontFamily: "Montserrat"
+  }
+}));
+
+const SingleLesson = props => {
+  const [width, setWidth] = useState(0);
+  const onResize = width => setWidth(width);
+
+  const classes = useStyles();
+  const theme = useTheme();
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
 
-  less = () => {
-    if (this.state.step > 0) {
-      this.setState(prev => ({ step: prev.step - 1 }));
-    }
+  const handleBack = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
-
-  plusTest = () => {
-    this.setState(prevState => ({
-      steps: prevState.steps + 1
-    }));
-  };
-
-  render() {
-    return (
-      <PleaseSignIn number={this.props.number}>
-        <User>
-          {({ data: { me } }) => (
-            <Query
-              query={SINGLE_LESSON_QUERY}
-              variables={{
-                id: this.props.id
-              }}
-            >
-              {({ data, error, loading }) => {
-                if (error) return <Error error={error} />;
-                if (loading) return <p>Loading...</p>;
-                const lesson = data.lesson;
-                return (
-                  <>
-                    {lesson && (
-                      <>
-                        {/* <AreYouEnrolled subject={lesson.coursePage.id}> */}
-                        <Container>
-                          <ReactResizeDetector
-                            handleWidth
-                            handleHeight
-                            onResize={this.onResize}
-                          />
-                          <Head>
-                            <div>
-                              {lesson.number}. {lesson.name}
-                            </div>
-                          </Head>
-                          {lesson.user.id === me.id && (
-                            <Head2>
-                              {lesson.map.length > 0 && (
-                                <div>
-                                  Режим истории →
-                                  <Link
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: "regular"
-                                      }
-                                    }}
-                                  >
-                                    <span> Переключить</span>
-                                  </Link>
-                                </div>
-                              )}
-                            </Head2>
+  return (
+    <PleaseSignIn>
+      <User>
+        {({ data: { me } }) => (
+          <Query
+            query={SINGLE_LESSON_QUERY}
+            variables={{
+              id: props.id
+            }}
+          >
+            {({ data, error, loading }) => {
+              if (error) return <Error error={error} />;
+              if (loading) return <p>Loading...</p>;
+              const lesson = data.lesson;
+              return (
+                <>
+                  {lesson && (
+                    <>
+                      {/* <AreYouEnrolled subject={lesson.coursePage.id}> */}
+                      <Container>
+                        <ReactResizeDetector
+                          handleWidth
+                          handleHeight
+                          onResize={onResize}
+                        />
+                        <Head>
+                          {width > 800 && (
+                            <Link
+                              href={{
+                                pathname: "/coursePage",
+                                query: {
+                                  id: lesson.coursePage.id
+                                }
+                              }}
+                            >
+                              <span>
+                                <Icon size={"10%"} icon={arrowLeft} id="back" />
+                              </span>
+                            </Link>
                           )}
-                          <Header>
-                            Шаг {this.state.step + 1} из{" "}
-                            {data.lesson.map[0].length}
-                          </Header>
-                          <LessonPart>
-                            <StoryEx
-                              m={data.lesson.map[0][this.state.step]}
-                              me={me}
-                              lesson={lesson}
-                              step={this.state.step}
-                            />
-                          </LessonPart>
-                          <Navigation>
-                            {lesson && this.state.step + 1 > 1 && (
-                              <button onClick={this.less}>Назад</button>
-                            )}
-                            {lesson &&
-                              this.state.step + 1 !==
-                                data.lesson.map[0].length && (
-                                <button
-                                  data={data.lesson.map[0].length}
-                                  onClick={this.more}
-                                >
-                                  Вперед
-                                </button>
-                              )}
-                            {lesson &&
-                              this.state.step + 1 ===
-                                data.lesson.map[0].length && (
+                          <span>
+                            Урок {lesson.number}. {lesson.name}
+                          </span>
+                        </Head>
+                        {lesson.user.id === me.id && (
+                          <Head2>
+                            {lesson.map.length > 0 && (
+                              <div>
+                                Режим истории →
                                 <Link
                                   href={{
-                                    pathname: "/coursePage",
-                                    query: { id: lesson.coursePage.id }
+                                    pathname: "/lesson",
+                                    query: {
+                                      id: lesson.id,
+                                      type: "regular"
+                                    }
                                   }}
                                 >
-                                  <div>Вернуться на страницу курса</div>
+                                  <span> Переключить</span>
                                 </Link>
+                              </div>
+                            )}
+                          </Head2>
+                        )}
+                        <Header>
+                          Часть {activeStep + 1} из {data.lesson.map[0].length}
+                        </Header>
+                        <LessonPart>
+                          <ReactCSSTransitionGroup
+                            transitionName="example"
+                            transitionEnterTimeout={5500}
+                            transitionLeaveTimeout={3300}
+                          >
+                            <StoryEx
+                              m={data.lesson.map[0][activeStep]}
+                              me={me}
+                              lesson={lesson}
+                              step={activeStep}
+                            />
+                          </ReactCSSTransitionGroup>
+                        </LessonPart>
+                        <MobileStepper
+                          variant="progress"
+                          steps={data.lesson.map[0].length}
+                          position="static"
+                          activeStep={activeStep}
+                          classes={{
+                            root: classes.root, // class name, e.g. `classes-nesting-root-x`
+                            progress: classes.progress // class name, e.g. `classes-nesting-label-x`
+                          }}
+                          nextButton={
+                            <Button
+                              size="small"
+                              variant="text"
+                              onClick={handleNext}
+                              classes={{ textSizeSmall: classes.textSizeSmall }}
+                              disabled={
+                                activeStep ===
+                                parseInt(data.lesson.map[0].length - 1)
+                              }
+                            >
+                              Вперёд
+                              {theme.direction === "rtl" ? (
+                                <KeyboardArrowLeft />
+                              ) : (
+                                <KeyboardArrowRight />
                               )}
-                          </Navigation>
-                        </Container>{" "}
-                        <div id="root"></div>
-                        {/* </AreYouEnrolled> */}
-                      </>
-                    )}
-                  </>
-                );
-              }}
-            </Query>
-          )}
-        </User>
-      </PleaseSignIn>
-    );
-  }
-}
+                            </Button>
+                          }
+                          backButton={
+                            <Button
+                              size="small"
+                              variant="text"
+                              onClick={handleBack}
+                              classes={{ textSizeSmall: classes.textSizeSmall }}
+                              disabled={activeStep === 0}
+                            >
+                              {theme.direction === "rtl" ? (
+                                <KeyboardArrowRight />
+                              ) : (
+                                <KeyboardArrowLeft />
+                              )}
+                              Назад
+                            </Button>
+                          }
+                        />
+                      </Container>{" "}
+                      <div id="root"></div>
+                      {/* </AreYouEnrolled> */}
+                    </>
+                  )}
+                </>
+              );
+            }}
+          </Query>
+        )}
+      </User>
+    </PleaseSignIn>
+  );
+};
 
 export default SingleLesson;
 export { SINGLE_LESSON_QUERY };

@@ -184,8 +184,11 @@ const StyledModal = Modal.styled`
   border: 1px solid grey;
   border-radius: 10px;
   max-width: 30%;
+  min-width: 400px;
+  overflow:scroll;
   @media (max-width: 800px) {
     max-width: 90%;
+    margin: 10px;
   }
 `;
 
@@ -300,7 +303,9 @@ class Nav extends Component {
                             query: { id: me.id }
                           }}
                         >
-                          <a className="name">{me.name}</a>
+                          <a className="name">
+                            {me.surname ? `${me.name} ${me.surname}` : me.name}
+                          </a>
                         </Link>
                       ) : null}
                       {me ? <Signout /> : null}
@@ -363,7 +368,9 @@ class Nav extends Component {
                             query: { id: me.id }
                           }}
                         >
-                          <a className="name">{me.name}</a>
+                          <a className="name">
+                            {me.surname ? `${me.name} ${me.surname}` : me.name}
+                          </a>
                         </Link>
                       ) : null}
                       {!me && (

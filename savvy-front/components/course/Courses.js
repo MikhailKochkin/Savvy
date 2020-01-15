@@ -180,7 +180,7 @@ class Courses extends Component {
           <Container>
             <Landing getTour={this.myCallback} />
             {/* {me && me.careerTrackID && <CareerTrackMenu me={me} />} */}
-            <Title>Вакансии</Title>
+            {/* <Title>Вакансии</Title> */}
             <Vacancies me={me} />
             {me && me.careerTrackID && <CareerCoursesList me={me} />}
             <Title> Платные курсы </Title>

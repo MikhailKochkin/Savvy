@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import styled from "styled-components";
 import Note from "./notes/Note";
 import Shots from "./shots/Shots";
 import SingleTest from "./tests/SingleTest";
@@ -8,6 +10,26 @@ import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
 import Exam from "./exams/Exam";
 
+const Container = styled.div`
+  .fade-enter {
+    opacity: 0.01;
+  }
+
+  .fade-enter.fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+
+  .fade-leave {
+    opacity: 1;
+  }
+
+  .fade-leave.fade-leave-active {
+    opacity: 0.01;
+    transition: opacity 10ms ease-in;
+  }
+`;
+
 class StoryEx extends Component {
   render() {
     const { m, me, lesson } = this.props;
@@ -16,7 +38,7 @@ class StoryEx extends Component {
     let item;
     if (Object.keys(m)[0] === "note") {
       el = lesson.notes.find(note => note.id === Object.values(m)[0]);
-      item = <Note text={el.text} me={me} story={true} />;
+      item = <Note text={el.text} me={me} story={true} note={el} />;
     } else if (Object.keys(m)[0] === "newTest") {
       el = lesson.newTests.find(test => test.id === Object.values(m)[0]);
       item = (
@@ -112,9 +134,19 @@ class StoryEx extends Component {
       );
     } else if (Object.keys(m)[0] === "exam") {
       el = lesson.exams.find(con => con.id === Object.values(m)[0]);
-      item = <Exam lesson={lesson} me={this.props.me} exam={el} />;
+      item = <Exam lesson={lesson} me={this.props.me} exam={el} story={true} />;
     }
-    return <div>{item}</div>;
+    return (
+      <Container>
+        <ReactCSSTransitionGroup
+          transitionName="fade"
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={10}
+        >
+          {item}
+        </ReactCSSTransitionGroup>
+      </Container>
+    );
   }
 }
 

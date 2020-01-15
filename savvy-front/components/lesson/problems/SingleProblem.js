@@ -4,6 +4,8 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import renderHTML from "react-render-html";
 import dynamic from "next/dynamic";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
@@ -58,26 +60,6 @@ const TextBar = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 1.5% 3%;
-  font-size: 1.6rem;
-  font-weight: 600;
-  /* margin-top: 3%; */
-  width: 30%;
-  color: #fffdf7;
-  background: ${props => props.theme.green};
-  border: solid 1px white;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-  &:active {
-    background: ${props => props.theme.darkGreen};
-  }
-  @media (max-width: 800px) {
-    width: 40%;
-  }
-`;
-
 const Frame = styled.div`
   border: 1px solid #c4c4c4;
   border-radius: 10px;
@@ -90,24 +72,32 @@ const Frame = styled.div`
 `;
 
 const Advice = styled.span`
+  display: inline;
   font-size: 1.6rem;
   margin: 1% 4%;
   background: #fdf3c8;
   border: 1px solid #c4c4c4;
   border-radius: 10px;
-  padding: 2%;
+  padding: 1%;
   margin: 5px 0 15px 0;
-  width: 45%;
   @media (max-width: 850px) {
     width: 100%;
   }
 `;
 
 const ButtonGroup = styled.div`
-  display: flex;
-  flex-direction: column;
   margin-bottom: 10px;
 `;
+
+const StyledButton = withStyles({
+  root: {
+    margin: "4% 0",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none",
+    width: "40%"
+  }
+})(Button);
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -181,8 +171,10 @@ class SingleProblem extends Component {
           <Interactive lesson={lesson} me={me} exam={problem} />
           {data.length > 0 && (
             <ButtonGroup>
-              <Advice>Эта задача уже выполнена.</Advice>
-              <Button
+              {/* <Advice>Эта задача уже выполнена.</Advice> */}
+              <StyledButton
+                variant="contained"
+                color="primary"
                 onClick={async e => {
                   e.preventDefault();
                   const res2 = await this.setState(prev => ({
@@ -191,7 +183,7 @@ class SingleProblem extends Component {
                 }}
               >
                 {this.state.revealAnswer ? "Закрыть ответы" : "Открыть ответы"}
-              </Button>
+              </StyledButton>
             </ButtonGroup>
           )}
           {this.state.revealAnswer && data.length > 0 && (
@@ -231,8 +223,9 @@ class SingleProblem extends Component {
                 ]}
               >
                 {(createProblemResult, { loading, error }) => (
-                  <Button
-                    className="button"
+                  <StyledButton
+                    variant="contained"
+                    color="primary"
                     onClick={async e => {
                       // Stop the form from submitting
                       e.preventDefault();
@@ -250,7 +243,7 @@ class SingleProblem extends Component {
                     }}
                   >
                     {loading ? "В процессе..." : "Ответить"}
-                  </Button>
+                  </StyledButton>
                 )}
               </Mutation>
             </>

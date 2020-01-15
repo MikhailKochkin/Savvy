@@ -34,7 +34,6 @@ class Interactive extends Component {
     let newNote;
     let newTest;
     let finish;
-    console.log(data, type);
     if (Object.keys(data)[0] === "quiz") {
       let el = this.props.lesson.quizes.filter(
         q => q.id === Object.values(data)[0]

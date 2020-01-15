@@ -8,6 +8,7 @@ const CURRENT_USER_QUERY = gql`
       id
       email
       name
+      surname
       permissions
       subjects
       teacherFeedback {

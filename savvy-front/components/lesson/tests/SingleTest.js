@@ -3,9 +3,21 @@ import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import _ from "lodash";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
 import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
+
+const StyledButton = withStyles({
+  root: {
+    width: "15%",
+    height: "45px",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none"
+  }
+})(Button);
 
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
@@ -83,7 +95,7 @@ const Dots = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 100%;
+  width: 90%;
   height: 90px;
   margin-bottom: 5%;
   .group {
@@ -193,11 +205,6 @@ class SingleTest extends Component {
       .filter(el => el.student.id === this.props.me.id);
     return (
       <>
-        {!exam && story !== true && (
-          <MiniButton onClick={this.switch}>
-            {!this.state.update ? "Настройки" : "Тест"}
-          </MiniButton>
-        )}
         {!this.state.update && (
           <TextBar className="Test" story={story}>
             <Question>{this.props.question}</Question>
@@ -247,13 +254,6 @@ class SingleTest extends Component {
                   </MiniButton>
                 )}
               </Mutation>
-              {this.props.me && this.props.me.id === this.props.user ? (
-                <DeleteSingleTest
-                  id={this.props.me.id}
-                  testId={this.props.id}
-                  lessonId={this.props.lessonID}
-                />
-              ) : null}
             </Group>
           </TextBar>
         )}
@@ -265,6 +265,21 @@ class SingleTest extends Component {
             tests={this.props.tests}
           />
         )}
+        {!exam && story !== true && (
+          <StyledButton onClick={this.switch}>
+            {!this.state.update ? "Настройки" : "Тест"}
+          </StyledButton>
+        )}
+        {this.props.me &&
+          this.props.me.id === this.props.user &&
+          !this.props.story &&
+          !this.props.exam && (
+            <DeleteSingleTest
+              id={this.props.me.id}
+              testId={this.props.id}
+              lessonId={this.props.lessonID}
+            />
+          )}
         {this.props.exam && (
           <Dots>
             <div className="group">

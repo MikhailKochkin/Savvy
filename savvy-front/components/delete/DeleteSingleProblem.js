@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-import styled from "styled-components";
-import Icon from "react-icons-kit";
-import { remove } from "react-icons-kit/fa/remove";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const DELETE_PROBLEM_MUTATION = gql`
@@ -13,27 +12,17 @@ const DELETE_PROBLEM_MUTATION = gql`
     }
   }
 `;
-const Button = styled.button`
-  background: ${props => props.theme.red};
-  width: 20%;
-  color: white;
-  padding: 1.5% 3%;
-  font-size: 1.6rem;
-  font-weight: 600;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  &:active {
-    background-color: ${props => props.theme.darkRed};
-  }
-  @media (max-width: 800px) {
-    width: 40%;
-  }
-`;
 
-class DeleteSingleProblem extends Component {
-  update = (cache, payload) => {
+const useStyles = makeStyles({
+  button: {
+    margin: "0",
+    fontSize: "1.6rem",
+    textTransform: "none"
+  }
+});
+
+const DeleteSingleProblem = props => {
+  const update = (cache, payload) => {
     // manually update the cache on the client, so it matches the server
     // 1. Read the cache for the items we want
     const data = cache.readQuery({
@@ -51,36 +40,37 @@ class DeleteSingleProblem extends Component {
       data
     });
   };
-  render() {
-    const { lessonId, id } = this.props;
-    return (
-      <Mutation
-        mutation={DELETE_PROBLEM_MUTATION}
-        variables={{ id }}
-        update={this.update}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonId }
-          }
-        ]}
-      >
-        {(deleteProblem, { loading, error }) => (
-          <Button
-            onClick={() => {
-              if (confirm("Вы точно хотите удалить эту задачу?")) {
-                deleteProblem().catch(error => {
-                  alert(error.message);
-                });
-              }
-            }}
-          >
-            {loading ? "Удаляем..." : "Удалить"}
-          </Button>
-        )}
-      </Mutation>
-    );
-  }
-}
+  const { lessonId, id } = props;
+  const classes = useStyles();
+  return (
+    <Mutation
+      mutation={DELETE_PROBLEM_MUTATION}
+      variables={{ id }}
+      update={update}
+      refetchQueries={() => [
+        {
+          query: SINGLE_LESSON_QUERY,
+          variables: { id: lessonId }
+        }
+      ]}
+    >
+      {(deleteProblem, { loading, error }) => (
+        <Button
+          className={classes.button}
+          color="secondary"
+          onClick={() => {
+            if (confirm("Вы точно хотите удалить эту задачу?")) {
+              deleteProblem().catch(error => {
+                alert(error.message);
+              });
+            }
+          }}
+        >
+          {loading ? "Удаляем..." : "Удалить"}
+        </Button>
+      )}
+    </Mutation>
+  );
+};
 
 export default DeleteSingleProblem;
