@@ -155,15 +155,12 @@ class RegisterCard extends Component {
     const promo = [];
     let discount;
     const res = this.props.promocode.map(el => promo.push(Object.keys(el)[0]));
-    console.log(res);
     if (promo.includes(this.state.promo) && !this.state.used) {
-      console.log(1);
       this.props.promocode.map(el =>
         Object.keys(el)[0] === this.state.promo
           ? (discount = Object.values(el)[0])
           : null
       );
-      console.log(discount);
       this.setState(prev => ({
         price: prev.price * discount
       }));
@@ -193,7 +190,6 @@ class RegisterCard extends Component {
     coursePage.applications.filter(ap => ap.applicantId === me.id).length > 0
       ? (applied = true)
       : (applied = false);
-    console.log(this.props.promocode);
     return (
       <Data>
         <Description>

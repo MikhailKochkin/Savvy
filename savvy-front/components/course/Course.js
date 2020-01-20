@@ -10,8 +10,10 @@ import RequestReset from "../auth/RequestReset";
 import Modal from "styled-react-modal";
 
 const SINGLE_COURSE_VISIT_QUERY = gql`
-  query SINGLE_COURSE_VISIT_QUERY($coursePage: ID!) {
-    courseVisits(where: { coursePage: { id: $coursePage } }) {
+  query SINGLE_COURSE_VISIT_QUERY($coursePage: ID!, $student: ID!) {
+    courseVisits(
+      where: { coursePage: { id: $coursePage }, student: { id: $student } }
+    ) {
       id
       visitsNumber
       student {
@@ -165,7 +167,6 @@ export default class Course extends Component {
 
   render() {
     const { coursePage, id, me } = this.props;
-
     return (
       <CaseCard>
         <Additional>
@@ -188,12 +189,14 @@ export default class Course extends Component {
               <Query
                 query={SINGLE_COURSE_VISIT_QUERY}
                 variables={{
-                  coursePage: id
+                  coursePage: id,
+                  student: me.id
                 }}
               >
                 {({ data, error, loading }) => {
                   if (loading) return <p></p>;
                   if (error) return <p>Error: {error.message}</p>;
+
                   return (
                     <>
                       {data.courseVisits.length === 0 && (
@@ -207,7 +210,8 @@ export default class Course extends Component {
                             {
                               query: SINGLE_COURSE_VISIT_QUERY,
                               variables: {
-                                coursePage: id
+                                coursePage: id,
+                                student: me.id
                               }
                             }
                           ]}
@@ -227,6 +231,7 @@ export default class Course extends Component {
                                       <a>
                                         <Button
                                           onClick={() => {
+                                            console.log(1);
                                             createCourseVisit();
                                           }}
                                         >
@@ -252,7 +257,8 @@ export default class Course extends Component {
                             {
                               query: SINGLE_COURSE_VISIT_QUERY,
                               variables: {
-                                coursePage: id
+                                coursePage: id,
+                                student: me.id
                               }
                             }
                           ]}
@@ -271,6 +277,7 @@ export default class Course extends Component {
                                   <a>
                                     <Button
                                       onClick={() => {
+                                        console.log(2);
                                         updateCourseVisit();
                                       }}
                                     >

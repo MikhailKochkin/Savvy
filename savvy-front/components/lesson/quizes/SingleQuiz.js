@@ -188,7 +188,6 @@ class SingleQuiz extends Component {
   };
 
   onAnswer = async e => {
-    console.log("here");
     this.setState({ progress: "true" });
     let data1 = {
       sentence1: this.props.answer.toLowerCase(),
@@ -296,10 +295,9 @@ class SingleQuiz extends Component {
                       } else {
                         const res = await this.onAnswer();
                       }
-                      // this.setState({ progress: "false" });
-                      // if (data.length === 0) {
-                      //   const res0 = await createQuizResult();
-                      // }
+                      if (data.length === 0) {
+                        const res0 = await createQuizResult();
+                      }
                     }}
                   >
                     {this.props.type === "FORM" ? "Ответить" : "Проверить"}
