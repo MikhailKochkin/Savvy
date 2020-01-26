@@ -39,6 +39,19 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
       }
+      documents {
+        id
+        title
+        user {
+          id
+        }
+        clauses {
+          number
+          commentary
+          keywords
+          sample
+        }
+      }
       shots {
         id
         title

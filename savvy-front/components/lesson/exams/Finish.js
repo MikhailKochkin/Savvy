@@ -45,7 +45,8 @@ const Finish = props => {
       <Mutation
         mutation={CREATE_EXAM_RESULT_MUTATION}
         variables={{
-          lesson: props.lesson,
+          lesson: props.lesson.id,
+          document: props.document.id,
           exam: props.exam,
           answers: props.results
         }}
@@ -71,10 +72,10 @@ const Finish = props => {
   );
 };
 
-Finish.propTypes = {
-  results: PropTypes.array.isRequired,
-  exam: PropTypes.string.isRequired,
-  lesson: PropTypes.string.isRequired
-};
+// Document.propTypes = {
+//   title: PropTypes.array.isRequired,
+//   cla: PropTypes.string.isRequired,
+//   lesson: PropTypes.string.isRequired
+// };
 
 export default Finish;

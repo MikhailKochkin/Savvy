@@ -8,6 +8,7 @@ import SingleQuiz from "./quizes/SingleQuiz";
 import SingleProblem from "./problems/SingleProblem";
 import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
+import Document from "./documents/Document";
 import Exam from "./exams/Exam";
 
 const Container = styled.div`
@@ -135,6 +136,21 @@ class StoryEx extends Component {
     } else if (Object.keys(m)[0] === "exam") {
       el = lesson.exams.find(con => con.id === Object.values(m)[0]);
       item = <Exam lesson={lesson} me={this.props.me} exam={el} story={true} />;
+    } else if (Object.keys(m)[0] === "document") {
+      el = lesson.documents.find(con => con.id === Object.values(m)[0]);
+      item = (
+        <Document
+          key={el.id}
+          clauses={el.clauses}
+          title={el.title}
+          me={me}
+          documentID={el.id}
+          user={lesson.user.id}
+          lessonID={lesson.id}
+          // userData={lesson.documentResults}
+          story={true}
+        />
+      );
     }
     return (
       <Container>

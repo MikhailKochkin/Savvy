@@ -1480,6 +1480,110 @@ const Mutations = {
       info
     );
     return ExamResult;
+  },
+  async createDocument(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+
+    const Document = await ctx.db.mutation.createDocument(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: args.lesson }
+          },
+          title: args.title
+        }
+      },
+      info
+    );
+    return Document;
+  },
+  async deleteDocument(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the lesson
+    const document = await ctx.db.query.clause({ where }, `{ id }`);
+    //3. Delete it
+    return ctx.db.mutation.deleteDocument({ where }, info);
+  },
+  async createClause(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    delete args.id;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+
+    const Clause = await ctx.db.mutation.createClause(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          document: {
+            connect: { id: args.document }
+          },
+          keywords: {
+            set: [...args.keywords]
+          },
+          commentary: args.commentary,
+          sample: args.sample,
+          number: args.number
+        }
+      },
+      info
+    );
+    return Clause;
+  },
+  async deleteClause(parent, args, ctx, info) {
+    const where = { id: args.id };
+    //1. find the lesson
+    const clause = await ctx.db.query.clause({ where }, `{ id }`);
+    //3. Delete it
+    return ctx.db.mutation.deleteClause({ where }, info);
+  },
+  async createDocumentResult(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const lesson = args.lesson;
+    const document = args.document;
+    const answers = args.answers;
+    const drafts = args.drafts;
+    delete args;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const DocumentResult = await ctx.db.mutation.createDocumentResult(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          lesson: {
+            connect: { id: lesson }
+          },
+          document: {
+            connect: { id: document }
+          },
+          answers: {
+            set: [...answers]
+          },
+          drafts: {
+            set: [...drafts]
+          }
+        }
+      },
+      info
+    );
+    return DocumentResult;
   }
 };
 

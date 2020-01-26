@@ -80,6 +80,8 @@ type User {
   courseVisits: [CourseVisit] @relation( name: "UserCourseVisits", onDelete: CASCADE)
   examResults: [ExamResult]
   exams: [Exam]
+  documents: [Document]
+  clauses: [Clause]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -179,6 +181,7 @@ type Lesson {
   quizResults: [QuizResult] @relation(name: "QuizResults" onDelete: CASCADE)
   textEditorResults: [TextEditorResult] @relation(name: "TextEditorResults" onDelete: CASCADE)
   problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE)
+  documentResults: [DocumentResult] @relation(link: TABLE, name: "LessonDocumentResults" onDelete: CASCADE)
   constructionResults: [ConstructionResult] @relation(name: "ConstructionResults" onDelete: CASCADE)
   lessonFeedback: [Feedback] @relation(link: TABLE, name: "LessonFeedback" onDelete: CASCADE)
   open: Boolean @default(value: false)
@@ -187,6 +190,7 @@ type Lesson {
   description: String
   exams: [Exam] @relation(name: "LessonExams" onDelete: CASCADE)
   examResults: [ExamResult] @relation(name: "LessonExamResults" onDelete: CASCADE)
+  documents: [Document] @relation(link: TABLE, name: "LessonDocuments" onDelete: CASCADE)
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -549,4 +553,36 @@ type ExamResult {
   answers: [String]
   lesson: Lesson @relation( name: "LessonExamResults")
   exam: Exam @relation( name: "ExamResults")
+}
+
+type Document  {
+  id: ID! @unique
+  title: String!
+  user: User!
+  lesson: Lesson! @relation( name: "LessonDocuments")
+  documentResults: [DocumentResult] @relation(name: "DocumentResults" onDelete: CASCADE)
+  clauses: [Clause] @relation(name: "DocumentClauses" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Clause  {
+  id: ID! @unique
+  user: User!
+  number: Int!
+  commentary: String!
+  keywords: [String]
+  sample: String
+  document: Document! @relation( name: "DocumentClauses")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type DocumentResult {
+  id: ID! @unique
+  user: User
+  answers: [String]
+  drafts: [String]
+  lesson: Lesson @relation( name: "LessonDocumentResults")
+  document: Document @relation( name: "DocumentResults")
 }

@@ -14,7 +14,7 @@ const AppStyles = {
   padding: "0 5px",
   maxWidth: "840px",
   width: "100%",
-  fontSize: "1.6rem"
+  fontSize: "1.5rem"
 };
 
 const DEFAULT_NODE = "paragraph";

@@ -243,6 +243,22 @@ type Mutation {
   updateExam(id: ID!, nodeID: ID, nodeType: String): Exam
   deleteExam(id: ID!): Exam
   createExamResult(lesson: ID, exam: ID, answers: [String]): ExamResult!
+  createDocument(title: String!, lesson: ID): Document!
+  deleteDocument(id: ID!): Document!
+  createClause(
+    commentary: String
+    sample: String
+    number: Int
+    keywords: [String]
+    document: ID
+  ): Clause!
+  deleteClause(id: ID!): Clause!
+  createDocumentResult(
+    answers: [String]
+    drafts: [String]
+    lesson: ID
+    document: ID
+  ): DocumentResult!
 }
 
 type Query {
@@ -408,6 +424,17 @@ type Query {
     first: Int
     last: Int
   ): [Exam]!
+  documents(
+    where: ExamWhereInput
+    orderBy: ExamOrderByInput
+    skip: Int
+  ): [Document]!
+  clause(where: ExamWhereInput, orderBy: ExamOrderByInput, skip: Int): [Clause]!
+  documentResults(
+    where: DocumentResultWhereInput
+    orderBy: DocumentResultOrderByInput
+    skip: Int
+  ): [DocumentResult!]
 }
 
 type User {

@@ -6,6 +6,7 @@ import ReactResizeDetector from "react-resize-detector";
 import renderHTML from "react-render-html";
 import Link from "next/link";
 import Note from "./notes/Note";
+import Document from "./documents/Document";
 import Exams from "./exams/Exams";
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
@@ -22,6 +23,7 @@ import CreateTextEditor from "../create/CreateTextEditor";
 import CreateProblem from "../create/CreateProblem";
 import CreateNote from "../create/CreateNote";
 import CreateExam from "../create/CreateExam";
+import CreateDocument from "./documents/CreateDocument";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import UpdateLesson from "./UpdateLesson";
@@ -131,6 +133,19 @@ const SINGLE_LESSON_QUERY = gql`
         next
         user {
           id
+        }
+      }
+      documents {
+        id
+        title
+        user {
+          id
+        }
+        clauses {
+          number
+          commentary
+          keywords
+          sample
         }
       }
       newTests {
@@ -586,10 +601,10 @@ class SingleLesson extends Component {
                         />
                         {this.state.width < 800 && (
                           <>
-                            <div id="mySidenav2" class="sidenav">
+                            <div id="mySidenav2" className="sidenav">
                               <a
                                 href="javascript:void(0)"
-                                class="closebtn"
+                                className="closebtn"
                                 onClick={this.closeNav}
                               >
                                 &times;
@@ -612,6 +627,17 @@ class SingleLesson extends Component {
                                   >
                                     {" "}
                                     Заметки{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                              {lesson.documents.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="document"
+                                    onClick={this.onSwitch}
+                                  >
+                                    {" "}
+                                    Документы{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -764,6 +790,17 @@ class SingleLesson extends Component {
                                   tests={lesson.newTests}
                                 />
                               ))}
+                            {this.state.page === "document" &&
+                              lesson.documents.map(doc => (
+                                <Document
+                                  clauses={doc.clauses}
+                                  title={doc.title}
+                                  me={me}
+                                  documentID={doc.id}
+                                  user={lesson.user.id}
+                                  lessonID={lesson.id}
+                                />
+                              ))}
                             {this.state.page === "shots" && (
                               <ShotsGroup
                                 shots={lesson.shots}
@@ -872,6 +909,9 @@ class SingleLesson extends Component {
                             {this.state.page === "createNote" && (
                               <CreateNote lessonID={lesson.id} />
                             )}
+                            {this.state.page === "createDocument" && (
+                              <CreateDocument lessonID={lesson.id} />
+                            )}
                             {this.state.page === "createShot" && (
                               <CreateShot lessonID={lesson.id} />
                             )}
@@ -940,6 +980,17 @@ class SingleLesson extends Component {
                                       >
                                         {" "}
                                         Заметки{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.documents.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="document"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Документы{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1030,6 +1081,15 @@ class SingleLesson extends Component {
                                           onClick={this.onSwitch}
                                         >
                                           Новая заметка
+                                        </ChooseButton>
+                                      </ButtonZone>
+
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createDocument"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новый документ
                                         </ChooseButton>
                                       </ButtonZone>
 

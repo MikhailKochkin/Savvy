@@ -106,6 +106,11 @@ class StoryUpdate extends Component {
                   <Element data={t} getData={this.myCallback} />
                 ))}
               </Block>
+              <Block>
+                {lesson.documents.map(t => (
+                  <Element data={t} getData={this.myCallback} />
+                ))}
+              </Block>
               <Button
                 onClick={async e => {
                   // Stop the form from submitting

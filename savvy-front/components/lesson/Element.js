@@ -42,10 +42,10 @@ class Element extends Component {
       this.props.getData({ texteditor: this.props.data.id });
     } else if (this.props.data.__typename === "Problem") {
       this.props.getData({ problem: this.props.data.id });
-    } else if (this.props.data.__typename === "Construction") {
-      this.props.getData({ construction: this.props.data.id });
     } else if (this.props.data.__typename === "Exam") {
       this.props.getData({ exam: this.props.data.id });
+    } else if (this.props.data.__typename === "Document") {
+      this.props.getData({ document: this.props.data.id });
     }
     this.setState({ hide: true });
   };
@@ -53,52 +53,53 @@ class Element extends Component {
     const { data } = this.props;
     return (
       <El hide={this.state.hide}>
-        {this.props.data.__typename === "Note" && (
+        {data.__typename === "Note" && (
           <>
             <div className="header">Заметка</div>
             <div>{renderHTML(data.text.substring(0, 300))}</div>
           </>
         )}
 
-        {this.props.data.__typename === "NewTest" && (
+        {data.__typename === "NewTest" && (
           <>
             <div className="header">Тест</div>
             <div>{data.question[0]}</div>
           </>
         )}
-        {this.props.data.__typename === "Quiz" && (
+        {data.__typename === "Quiz" && (
           <>
             <div className="header">Вопрос</div>
             <div>{data.question}</div>
           </>
         )}
-        {this.props.data.__typename === "TextEditor" && (
+        {data.__typename === "TextEditor" && (
           <>
             <div className="header">Редактор текста</div>
-            <div>{renderHTML(data.text.substring(0, 300))}</div>
+            <div>{data.text.substring(0, 100)}</div>
           </>
         )}
-        {this.props.data.__typename === "Construction" && (
+        {data.__typename === "Constructor" && (
           <>
             <div className="header">Конструктор</div>
             <div>{data.name}</div>
-            <ul>
-              {data.variants.map(v => (
-                <li>{renderHTML(v)}</li>
-              ))}
-            </ul>
           </>
         )}
-        {this.props.data.__typename === "Problem" && (
+        {data.__typename === "Problem" && (
           <>
             <div className="header">Задача</div>
             <div>{renderHTML(data.text.substring(0, 300))}</div>
           </>
         )}
-        {this.props.data.__typename === "Exam" && (
+        {data.__typename === "Exam" && (
           <>
             <div className="header">Экзамен</div>
             <div>ID первого вопроса: {data.id}</div>
+          </>
+        )}
+        {data.__typename === "Document" && (
+          <>
+            <div className="header">Документ</div>
+            <div>Название документа: {data.title}</div>
           </>
         )}
         <Button onClick={this.push}>Выбрать!</Button>
