@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import moment from "moment";
-import CreateFeedback from "./CreateFeedback";
-import TestResult from "./results/TestResult";
-import QuizResult from "./results/QuizResult";
-import ProblemResult from "./results/ProblemResult";
-import ConstructionResult from "./results/ConstructionResult";
-import TexteditorResult from "./results/TexteditorResult";
-import Feedback from "./Feedback";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import LessonData from "./LessonData";
 
 const Name = styled.div`
   font-size: 1.6rem;
-  /* font-weight: bold; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 4%;
 `;
 
 const Square = styled.div`
@@ -48,14 +46,6 @@ const Header = styled.div`
 const Styles = styled.div`
   margin-bottom: 0;
   padding: 0.5% 2%;
-`;
-
-const Button = styled.div`
-  background: none;
-  text-align: center;
-  border-radius: 5px;
-  cursor: pointer;
-  color: #112a62;
 `;
 
 const Buttons = styled.div`
@@ -138,9 +128,14 @@ const StyledCV = styled.div`
   }
 `;
 
-const StyledResume = styled.div`
-  margin-bottom: 2%;
-`;
+const StyledButton = withStyles({
+  root: {
+    margin: "1% 0",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none"
+  }
+})(Button);
 
 class Person extends Component {
   state = {
@@ -161,7 +156,7 @@ class Person extends Component {
     moment.locale("ru");
     let mail = `mailto:${student.email}`;
     let color;
-    // Step 1. We filter the lessons to see if the lessons have have been
+    // Step 1. We filter the lessons to see if the lessons have been
     // visited by the student. For that we check if the lesson results of the student include the
     // results of the lessons of this course
     let lesson_list = [];
@@ -184,7 +179,7 @@ class Person extends Component {
           completed.push(les)
         : null
     );
-    // Step 6. Based on the number of completed lessons we determone the color of the lesson
+    // Step 6. Based on the number of completed lessons we determone the color of the student
     if (completed.length / lessons.length < 0.2) {
       color = "#e97573";
     } else if (
@@ -202,9 +197,9 @@ class Person extends Component {
           <Header>
             <Name className="div1">{student.name}</Name>
             <Square className="div2" inputColor={color} />
-            <Button className="div3" onClick={this.onShow}>
+            <StyledButton className="div3" onClick={this.onShow}>
               {this.state.secret ? "Открыть" : "Закрыть"}
-            </Button>
+            </StyledButton>
           </Header>
           <Open secret={this.state.secret}>
             <Buttons>
@@ -223,70 +218,12 @@ class Person extends Component {
             </Buttons>
             {this.state.page === "results" &&
               lessons.map((lesson, index) => (
-                <>
-                  <Name>
-                    {index + 1}. {lesson.name}
-                  </Name>
-                  {lesson.lessonResults.filter(
-                    result => result.student.id === student.id
-                  ).length > 0 ? (
-                    <Box>
-                      <div className="div1">
-                        Заходов на урок:{" "}
-                        {
-                          lesson.lessonResults.filter(
-                            result => result.student.id === student.id
-                          )[0].visitsNumber
-                        }{" "}
-                      </div>
-                      <div className="div2">
-                        Первый заход:{" "}
-                        {moment(
-                          lesson.lessonResults.filter(
-                            result => result.student.id === student.id
-                          )[0].createdAt
-                        ).format("LLL")}
-                      </div>
-                      <div className="div3">
-                        Последний заход:{" "}
-                        {moment(
-                          lesson.lessonResults.filter(
-                            result => result.student.id === student.id
-                          )[0].updatedAt
-                        ).format("LLL")}
-                        {"–"}
-                        {moment(
-                          lesson.lessonResults.filter(
-                            result => result.student.id === student.id
-                          )[0].updatedAt
-                        ).fromNow()}
-                      </div>
-                    </Box>
-                  ) : (
-                    <div className="time">Нет данных по заходам на урок.</div>
-                  )}
-
-                  <TestResult newTests={lesson.newTests} student={student} />
-                  <QuizResult quizes={lesson.quizes} student={student} />
-                  <ProblemResult problems={lesson.problems} student={student} />
-                  <ConstructionResult
-                    constructions={lesson.constructions}
-                    student={student}
-                  />
-                  <TexteditorResult
-                    texteditors={lesson.texteditors}
-                    student={student}
-                  />
-                  <CreateFeedback
-                    coursePage={coursePage}
-                    lesson={lesson.id}
-                    student={student.id}
-                  />
-                  <Feedback
-                    feedback={student.studentFeedback}
-                    lesson={lesson.id}
-                  />
-                </>
+                <LessonData
+                  lesson={lesson}
+                  index={index}
+                  coursePage={coursePage}
+                  student={student}
+                />
               ))}
             {this.state.page === "CV" && (
               <StyledCV>
