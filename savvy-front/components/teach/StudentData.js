@@ -153,7 +153,6 @@ class Person extends Component {
   };
   render() {
     let { student, lessons, coursePage } = this.props;
-    moment.locale("ru");
     let mail = `mailto:${student.email}`;
     let color;
     // Step 1. We filter the lessons to see if the lessons have been
