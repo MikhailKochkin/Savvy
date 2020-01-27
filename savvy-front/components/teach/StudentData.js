@@ -166,27 +166,27 @@ class Person extends Component {
 
     // Step 2. We create a "completed" array. We will push to this array the lessons which
     // have been visited and whose prooblems have been completed.
-    let completed = [];
-    // Step 3. We map through the lessons and check a. if the number of problems of this lesson
-    // is equal to the number of completed problems for this lesson of the student
-    lessons.map(les =>
-      les.problems.length ===
-        student.problemResults.filter(pr => pr.lesson.id === les.id).length &&
-      // Step 4. b. to see if the number of lessons is equal to the number of visited lessons by the student.
-      lessons.length === lesson_results.length
-        ? // Step 5. if the lesson meets the criteria it is pushed to the completed array.
-          completed.push(les)
-        : null
-    );
+    // let completed = [];
+    // // Step 3. We map through the lessons and check a. if the number of problems of this lesson
+    // // is equal to the number of completed problems for this lesson of the student
+    // lessons.map(les =>
+    //   les.problems.length ===
+    //     student.problemResults.filter(pr => pr.lesson.id === les.id).length &&
+    //   // Step 4. b. to see if the number of lessons is equal to the number of visited lessons by the student.
+    //   lessons.length === lesson_results.length
+    //     ? // Step 5. if the lesson meets the criteria it is pushed to the completed array.
+    //       completed.push(les)
+    //     : null
+    // );
     // Step 6. Based on the number of completed lessons we determone the color of the student
-    if (completed.length / lessons.length < 0.2) {
+    if (lesson_results.length / lessons.length < 0.2) {
       color = "#e97573";
     } else if (
-      completed.length / lessons.length > 0.2 &&
-      completed.length / lessons.length < 0.85
+      lesson_results.length / lessons.length > 0.2 &&
+      lesson_results.length / lessons.length < 0.85
     ) {
       color = "#FDF3C8";
-    } else if (completed.length / lessons.length > 0.85) {
+    } else if (lesson_results.length / lessons.length > 0.85) {
       color = "#84BC9C";
     }
 
