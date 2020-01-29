@@ -9,6 +9,7 @@ import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
 import ConstructionResult from "./results/ConstructionResult";
 import TexteditorResult from "./results/TexteditorResult";
+import DocumentResult from "./results/DocumentResult";
 import Feedback from "./Feedback";
 
 const Data = styled.div`
@@ -138,6 +139,7 @@ const LessonData = props => {
             texteditors={lesson.texteditors}
             student={student}
           />
+          <DocumentResult documents={lesson.documents} student={student} />
           <CreateFeedback
             coursePage={coursePage}
             lesson={lesson.id}

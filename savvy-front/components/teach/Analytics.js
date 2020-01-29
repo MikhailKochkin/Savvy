@@ -86,6 +86,21 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             answer
           }
         }
+        documents {
+          id
+          title
+          documentResults {
+            id
+            user {
+              id
+            }
+            document {
+              id
+            }
+            answers
+            drafts
+          }
+        }
         problems {
           id
           text
