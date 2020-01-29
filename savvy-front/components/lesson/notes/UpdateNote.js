@@ -4,18 +4,6 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Option from "../Option";
-import { PAGE_LESSONS_QUERY } from "../../course/CoursePage";
-import AreYouATeacher from "../../auth/AreYouATeacher";
-import PleaseSignIn from "../../auth/PleaseSignIn";
-
-const SINGLE_NOTE_QUERY = gql`
-  query SINGLE_NOTE_QUERY($id: ID!) {
-    note(where: { id: $id }) {
-      id
-      text
-    }
-  }
-`;
 
 const UPDATE_NOTE_MUTATION = gql`
   mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String, $next: Json) {

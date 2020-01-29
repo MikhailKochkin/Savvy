@@ -25,7 +25,6 @@ class Exam extends Component {
     answers: []
   };
   updateArray = (data, type) => {
-    console.log(data, type);
     let newQuiz;
     let newNote;
     let newTest;

@@ -13,7 +13,7 @@ const NoteStyles = styled.div`
   width: ${props => (props.story ? "100%" : "95%")};
   margin: 2% 0 0 0;
   padding: 0% 2%;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   border: ${props => (props.story ? null : "1px solid #e4e4e4")};
   border-radius: 8px;
   @media (max-width: 800px) {
@@ -144,7 +144,7 @@ class note extends Component {
               notes={this.props.notes}
               text={this.props.text}
               tests={this.props.tests}
-              id={this.props.note}
+              id={this.props.note.id}
               quizes={this.props.quizes}
             />
           )}

@@ -385,7 +385,7 @@ class LessonHeader extends Component {
                                 <Button
                                   onClick={() => {
                                     updateLessonResult();
-                                    console.log(3, lesson.lessonResults);
+                                    console.log(3);
                                   }}
                                 >
                                   Перейти

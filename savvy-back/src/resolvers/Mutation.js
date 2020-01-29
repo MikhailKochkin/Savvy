@@ -628,7 +628,6 @@ const Mutations = {
   async updateQuiz(parent, args, ctx, info) {
     //first take a copy of the updates
     const updates = { ...args };
-    console.log(args);
     //remove the ID from updates
     delete updates.id;
     //run the update method
@@ -1110,7 +1109,6 @@ const Mutations = {
       capture: true
     });
 
-    console.log(result, result.confirmation.confirmation_url);
     ctx.response.cookie("url", result.confirmation.confirmation_url, {
       domain: ".savvvy.app",
       httpOnly: false
@@ -1417,7 +1415,6 @@ const Mutations = {
   async createExam(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const lesson = args.lesson;
-    console.log(args);
     delete args.lesson;
     const Exam = await ctx.db.mutation.createExam(
       {
@@ -1458,8 +1455,6 @@ const Mutations = {
     return ctx.db.mutation.deleteExam({ where }, info);
   },
   async createExamResult(parent, args, ctx, info) {
-    console.log(args);
-    console.log(ctx.request.userId);
     const ExamResult = await ctx.db.mutation.createExamResult(
       {
         data: {

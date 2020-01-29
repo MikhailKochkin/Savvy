@@ -78,7 +78,7 @@ const Answer = styled.div`
   padding: 2%;
   min-height: 150px;
   display: ${props => (props.display === "true" ? "none" : "block")};
-  margin-bottom: 3%;
+  margin: 3% 0;
   @media (max-width: 800px) {
     width: 100%;
     height: 100px;
@@ -202,7 +202,6 @@ class SingleQuiz extends Component {
     })
       .then(response => response.json())
       .then(res => {
-        console.log(res);
         if (res > 0.59) {
           this.setState({ correct: "true", inputColor: "#32AC66" });
           this.move("true");
@@ -224,7 +223,7 @@ class SingleQuiz extends Component {
         if (this.props.exam) {
           // 4. we transfer the "true" data to the exam component
           this.props.getData(
-            this.props.next ? this.props.next.true : { finish: 0 },
+            this.props.next.true ? this.props.next.true : { finish: 0 },
             "true"
           );
         }
@@ -234,7 +233,7 @@ class SingleQuiz extends Component {
         if (this.props.exam) {
           // 4. we transfer the "false" data to the exam component
           this.props.getData(
-            this.props.next ? this.props.next.false : { finish: 0 },
+            this.props.next.false ? this.props.next.false : { finish: 1 },
             "false"
           );
         }

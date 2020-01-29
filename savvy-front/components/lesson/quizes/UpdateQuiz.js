@@ -135,7 +135,6 @@ class UpdateQuiz extends Component {
       notes,
       tests
     } = this.props;
-    console.log(this.props);
     return (
       <Container>
         <textarea
@@ -194,7 +193,6 @@ class UpdateQuiz extends Component {
                 e.preventDefault();
                 // call the mutation
                 const res = await updateQuiz();
-                console.log(this.state);
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}

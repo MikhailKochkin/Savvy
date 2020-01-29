@@ -83,7 +83,6 @@ class CreateProblem extends Component {
   handleChange = e => {
     let nodeID = e.target.getAttribute("nodeid");
     let nodeType = e.target.getAttribute("nodetype");
-    // console.log(nodeID, nodeType);
     this.setState({
       nodeID,
       nodeType

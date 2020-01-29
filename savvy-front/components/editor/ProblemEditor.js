@@ -91,7 +91,7 @@ const INLINE_TAGS = {
 const MARK_TAGS = {
   i: "italic",
   strong: "bold",
-  header: "header"
+  h2: "header"
 };
 
 // A function to determine whether a URL has an image extension.

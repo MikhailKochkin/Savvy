@@ -53,7 +53,6 @@ class StoryUpdate extends Component {
       value: dataFromChild
     });
     this.onAddItem();
-    console.log(this.state.list);
   };
 
   render() {

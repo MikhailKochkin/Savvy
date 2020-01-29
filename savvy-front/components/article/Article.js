@@ -133,7 +133,6 @@ class Article extends Component {
 
               const article = data.article;
 
-              //   article.coursePages.map(course => console.log(course.title));
               return (
                 <Styles>
                   <Container>

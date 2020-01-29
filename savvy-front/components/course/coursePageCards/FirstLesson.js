@@ -80,7 +80,6 @@ const Button = styled.button`
 `;
 
 const RegisterCard = props => {
-  console.log(props);
   let l = props.lesson[0];
   return (
     <>

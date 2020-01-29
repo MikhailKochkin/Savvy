@@ -69,7 +69,6 @@ const DeleteSingleConstruction = props => {
                 alert(error.message);
               });
             }
-            console.log("Тут!");
           }}
         >
           {loading ? "Удаляем..." : "Удалить"}

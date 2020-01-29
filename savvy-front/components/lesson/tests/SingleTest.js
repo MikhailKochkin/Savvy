@@ -95,7 +95,7 @@ const Dots = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  width: 90%;
+  width: 100%;
   height: 90px;
   margin-bottom: 5%;
   .group {
@@ -167,9 +167,7 @@ class SingleTest extends Component {
           this.props.exam
             ? //3. we transfer the "true" data to the exam component
               this.props.getData(
-                this.props.next
-                  ? this.props.next.true && props.next.true !== null
-                  : { finish: 0 },
+                this.props.next.true ? this.props.next.true : { finish: 0 },
                 "true"
               )
             : null;
@@ -183,7 +181,7 @@ class SingleTest extends Component {
           this.props.exam
             ? // 3. we transfer the "false" data to the exam component
               this.props.getData(
-                this.props.next ? this.props.next.false : { finish: 1 },
+                this.props.next.false ? this.props.next.false : { finish: 1 },
                 "false"
               )
             : null;

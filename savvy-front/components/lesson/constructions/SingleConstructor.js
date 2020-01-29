@@ -310,7 +310,6 @@ class SingleConstructor extends Component {
                 onClick={async e => {
                   e.preventDefault();
                   const res = await this.check();
-                  console.log("!!!");
                   if (data.length === 0) {
                     if (this.state.answerState === "right") {
                       const res2 = await createConstructionResult();

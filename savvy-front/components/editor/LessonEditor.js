@@ -120,7 +120,7 @@ const INLINE_TAGS = {
 const MARK_TAGS = {
   i: "italic",
   strong: "bold",
-  header: "header"
+  h2: "header"
 };
 
 // A function to determine whether a URL has an image extension.
@@ -158,6 +158,7 @@ function insertVideo(editor, src, target) {
 }
 
 const rules = [
+  ...DeepTable.makeSerializerRules(),
   {
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
@@ -166,7 +167,8 @@ const rules = [
           object: "block",
           type: type,
           data: {
-            className: el.src
+            className: el.src,
+            src: el.src
           },
           nodes: next(el.childNodes)
         };

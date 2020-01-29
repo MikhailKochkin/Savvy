@@ -194,7 +194,6 @@ class Shots extends Component {
                         // Stop the form from submitting
                         e.preventDefault();
                         // call the mutation
-                        console.log(data, this.state.num + 1, parts.length);
                         const res = await this.plus();
                         if (
                           data.length === 0 &&
