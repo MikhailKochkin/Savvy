@@ -158,7 +158,6 @@ function insertVideo(editor, src, target) {
 }
 
 const rules = [
-  ...DeepTable.makeSerializerRules(),
   {
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
@@ -270,7 +269,8 @@ const rules = [
         }
       }
     }
-  }
+  },
+  ...DeepTable.makeSerializerRules()
 ];
 
 const html = new Html({
@@ -449,13 +449,7 @@ class App extends React.Component {
     const { attributes, children, node } = props;
     switch (node.type) {
       case "link":
-        const { data } = node;
-        const href = data.get("href");
-        return (
-          <LinkMark href={href} target="_blank">
-            {children}
-          </LinkMark>
-        );
+        return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
       default:
         return next();
     }

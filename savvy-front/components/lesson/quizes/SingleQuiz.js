@@ -193,6 +193,8 @@ class SingleQuiz extends Component {
       sentence1: this.props.answer.toLowerCase(),
       sentence2: this.state.answer.toLowerCase()
     };
+    // https://dry-plains-91452.herokuapp.com
+    // http://localhost:5000/
     const r = await fetch("https://dry-plains-91452.herokuapp.com", {
       method: "POST", // or 'PUT'
       headers: {
@@ -223,7 +225,9 @@ class SingleQuiz extends Component {
         if (this.props.exam) {
           // 4. we transfer the "true" data to the exam component
           this.props.getData(
-            this.props.next.true ? this.props.next.true : { finish: 0 },
+            this.props.next && this.props.next.true
+              ? this.props.next.true
+              : { finish: 0 },
             "true"
           );
         }
@@ -233,7 +237,9 @@ class SingleQuiz extends Component {
         if (this.props.exam) {
           // 4. we transfer the "false" data to the exam component
           this.props.getData(
-            this.props.next.false ? this.props.next.false : { finish: 1 },
+            this.props.next && this.props.next.false
+              ? this.props.next.false
+              : { finish: 1 },
             "false"
           );
         }

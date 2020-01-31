@@ -241,7 +241,7 @@ class RegisterCard extends Component {
                       className="Price2"
                       type="radio"
                       name="price"
-                      value={price * 2}
+                      value={price * 1.75}
                       onChange={this.handleInputChange}
                     />
                   </GridContainer>

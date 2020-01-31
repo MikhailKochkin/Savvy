@@ -158,7 +158,6 @@ function insertVideo(editor, src, target) {
 }
 
 const rules = [
-  ...DeepTable.makeSerializerRules(),
   {
     deserialize(el, next) {
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
@@ -287,7 +286,8 @@ const rules = [
         }
       }
     }
-  }
+  },
+  ...DeepTable.makeSerializerRules()
 ];
 
 const html = new Html({
