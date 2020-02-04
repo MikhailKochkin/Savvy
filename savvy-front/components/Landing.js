@@ -158,7 +158,7 @@ class LandingPage extends Component {
         content: function DemoHelperComponent0() {
           return (
             <>
-              <p>Можно рассказать вам, как работает Savvvy.app?</p>
+              <p>Можно рассказать вам, как работает Savvy.app?</p>
             </>
           );
         }
@@ -267,7 +267,7 @@ class LandingPage extends Component {
               handleHeight
               onResize={this.onResize}
             />
-            <Logo>Savvvy App</Logo>
+            <Logo>Savvy App</Logo>
             <Nav>
               {!me && this.state.page === "register" && (
                 <span>

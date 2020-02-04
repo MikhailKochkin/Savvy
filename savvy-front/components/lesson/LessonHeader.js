@@ -206,12 +206,14 @@ class LessonHeader extends Component {
     const {
       lesson,
       name,
+      author,
       new_students,
       coursePageId,
       students,
       me,
       openLesson
     } = this.props;
+
     return (
       <>
         <TextBar>
@@ -224,8 +226,7 @@ class LessonHeader extends Component {
             </div>
           </Text>
           <Buttons>
-            {me &&
-            (me.id === lesson.user.id || me.permissions.includes("ADMIN")) ? (
+            {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
               <>
                 <Mutation
                   mutation={UPDATE_PUBLISHED_MUTATION}
@@ -283,11 +284,9 @@ class LessonHeader extends Component {
                           <>
                             {me &&
                             lesson &&
-                            (me.id === lesson.user.id ||
+                            (me.id === author ||
                               me.permissions.includes("ADMIN") ||
-                              lesson.id === openLesson) &&
-                            (!students.includes(me.id) ||
-                              !new_students.includes(me.id)) ? (
+                              lesson.id === openLesson) ? (
                               <Link
                                 // The user is the teacher or the admin or it is an openLesson.
                                 href={{

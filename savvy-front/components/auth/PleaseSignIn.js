@@ -10,8 +10,8 @@ const Styles = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  p {
-    margin-top: 5%;
+  #content {
+    pointer-events: none;
   }
 `;
 
@@ -41,9 +41,10 @@ class PleaseSignIn extends Component {
           if (!data.me) {
             return (
               <Styles>
+                <div id="content">{this.props.children}</div>
                 <Title>
-                  Пожалуйста, зарегистрируйтесь или войдите в свой аккаунт перед
-                  тем, как работать с этой страницей.
+                  Не нажимаются кнопки? Просто зарегистрируйтесь или войдите в
+                  аккаунт и все заработает! 😉
                 </Title>
                 {this.state.auth === "signin" && (
                   <WideSignIn getData={this.changeState} />
@@ -63,7 +64,5 @@ class PleaseSignIn extends Component {
     );
   }
 }
-
-auth: "signin";
 
 export default PleaseSignIn;

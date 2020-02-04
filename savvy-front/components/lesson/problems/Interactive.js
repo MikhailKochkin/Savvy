@@ -7,6 +7,11 @@ import Note from "../notes/Note";
 
 const Styles = styled.div`
   width: 100%;
+  #suggestion {
+    background: #f0f8ff;
+    border-radius: 16px;
+    padding: 3% 5%;
+  }
   span {
     cursor: pointer;
     &:hover {
@@ -19,6 +24,33 @@ const Questions = styled.div`
   display: ${props => (props.display ? `display` : `none`)};
   width: 100%;
   margin-top: 2%;
+`;
+
+const Final = styled.div`
+  width: 100%;
+  margin-top: 2%;
+  text-align: center;
+  background: #f0f8ff;
+  border-radius: 16px;
+  padding: 3% 5%;
+`;
+
+const Button = styled.div`
+  width: 40%;
+  text-align: center;
+  border: 1px solid #24315e;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: none;
+  padding: 1.5% 3%;
+  margin-top: 2%;
+  cursor: pointer;
+  @media (max-width: 800px) {
+    width: 46%;
+  }
+  &:hover {
+    background: #e3f2ff;
+  }
 `;
 
 class Interactive extends Component {
@@ -128,14 +160,21 @@ class Interactive extends Component {
       });
     }
     if (Object.keys(data)[0] === "finish") {
-      finish = <p> Запишите ответ на задачу!</p>;
+      finish = (
+        <Final>
+          {" "}
+          Теперь запишите ответ на задачу на основе наводящих вопросов📝
+        </Final>
+      );
       this.setState(state => {
-        const componentList = [...state.componentList, finish];
-        const results = [...state.results, type];
-        return {
-          componentList,
-          results
-        };
+        if (!(finish in this.state.componentList)) {
+          const componentList = [...state.componentList, finish];
+          const results = [...state.results, type];
+          return {
+            componentList,
+            results
+          };
+        }
       });
     }
   };
@@ -177,9 +216,13 @@ class Interactive extends Component {
   render() {
     return (
       <Styles>
-        <div>
-          Начнем решать задачу вместе?{" "}
-          <span onClick={this.show}>Первый вопрос</span>
+        <div id="suggestion">
+          👩🏼‍🏫<b>Начнем решать задачу вместе?</b> Зададим наводящие вопросы и
+          покажем, как прийти к правильному ответу.
+          <br />
+          <Button onClick={this.show}>
+            {!this.state.display ? "Первый вопрос" : "Закрыть"}
+          </Button>
         </div>
         <Questions display={this.state.display}>
           {this.state.componentList.map(el => el)}

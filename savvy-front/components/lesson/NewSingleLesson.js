@@ -26,7 +26,6 @@ const SINGLE_LESSON_QUERY = gql`
       number
       type
       map
-      open
       createdAt
       user {
         id
@@ -325,6 +324,9 @@ const LessonPart = styled.div`
     padding-top: 2%;
     padding-left: 2%;
   }
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
   @media (max-width: 800px) {
     margin: 1%;
     width: 90%;
@@ -357,6 +359,9 @@ const Header = styled.div`
   width: 40%;
   text-align: left;
   padding: 5px 0px 5px 2%;
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
   @media (max-width: 800px) {
     width: 90%;
   }
@@ -429,47 +434,55 @@ const SingleLesson = props => {
                           handleHeight
                           onResize={onResize}
                         />
-                        <Head>
-                          {width > 800 && (
-                            <Link
-                              href={{
-                                pathname: "/coursePage",
-                                query: {
-                                  id: lesson.coursePage.id
-                                }
-                              }}
-                            >
-                              <span>
-                                <Icon size={"10%"} icon={arrowLeft} id="back" />
-                              </span>
-                            </Link>
-                          )}
-                          <span>
-                            Урок {lesson.number}. {lesson.name}
-                          </span>
-                        </Head>
-                        {lesson.user.id === me.id && (
-                          <Head2>
-                            {lesson.map.length > 0 && (
-                              <div>
-                                Режим истории →
-                                <Link
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: {
-                                      id: lesson.id,
-                                      type: "regular"
-                                    }
-                                  }}
-                                >
-                                  <span> Переключить</span>
-                                </Link>
-                              </div>
+                        {me && (
+                          <Head>
+                            {width > 800 && (
+                              <Link
+                                href={{
+                                  pathname: "/coursePage",
+                                  query: {
+                                    id: lesson.coursePage.id
+                                  }
+                                }}
+                              >
+                                <span>
+                                  <Icon
+                                    size={"10%"}
+                                    icon={arrowLeft}
+                                    id="back"
+                                  />
+                                </span>
+                              </Link>
                             )}
-                          </Head2>
+                            <span>
+                              Урок {lesson.number}. {lesson.name}
+                            </span>
+                          </Head>
                         )}
+                        {me &&
+                          (lesson.user.id === me.id ||
+                            me.permissions.includes("ADMIN")) && (
+                            <Head2>
+                              {lesson.map.length > 0 && (
+                                <div>
+                                  Режим истории →
+                                  <Link
+                                    href={{
+                                      pathname: "/lesson",
+                                      query: {
+                                        id: lesson.id,
+                                        type: "regular"
+                                      }
+                                    }}
+                                  >
+                                    <span> Переключить</span>
+                                  </Link>
+                                </div>
+                              )}
+                            </Head2>
+                          )}
                         <Header>
-                          Часть {activeStep + 1} из {data.lesson.map[0].length}
+                          Глава {activeStep + 1} из {data.lesson.map[0].length}
                         </Header>
                         <LessonPart>
                           <ReactCSSTransitionGroup

@@ -255,6 +255,7 @@ class SingleProblem extends Component {
             />
           ) : null}
         </TextBar>
+        <div id="root"></div>
       </>
     );
   }

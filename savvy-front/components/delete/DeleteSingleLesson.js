@@ -18,6 +18,7 @@ const Button = styled.button`
   padding: 1%;
   width: 100%;
   border: none;
+  font-family: Montserrat;
   border-left: 1px solid white;
   padding-left: 8%;
   outline: none;

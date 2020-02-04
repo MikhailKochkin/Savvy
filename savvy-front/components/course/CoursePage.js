@@ -43,6 +43,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       promocode
       openLesson
       published
+      user {
+        id
+      }
       lessons {
         id
         name
@@ -572,7 +575,8 @@ class CoursePage extends Component {
                                             key={lesson.id}
                                             name={lesson.name}
                                             lesson={lesson}
-                                            coursePageId={this.props.id}
+                                            coursePage={this.props.id}
+                                            author={coursePage.user.id}
                                             students={coursePage.students}
                                             openLesson={coursePage.openLesson}
                                             new_students={student_list}

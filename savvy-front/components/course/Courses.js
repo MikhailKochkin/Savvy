@@ -63,7 +63,7 @@ class Courses extends Component {
       //   content: function DemoHelperComponent0() {
       //     return (
       //       <>
-      //         <p>Можно рассказать вам, как работает Savvvy.app?</p>
+      //         <p>Можно рассказать вам, как работает Savvy.app?</p>
       //       </>
       //     );
       //   }
@@ -104,7 +104,7 @@ class Courses extends Component {
         content: function DemoHelperComponent2() {
           return (
             <>
-              <p>На Savvvy App есть очень много курсов.</p>
+              <p>На Savvy App есть очень много курсов.</p>
               <div>
                 Большинство курсов – платные. Стоимость курса обычно варьируется
                 от 1800 до 3600 рублей. Каждый курс направлен на оттачивание

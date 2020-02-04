@@ -259,7 +259,7 @@ class Nav extends Component {
                     <CourseMenu>
                       <Link prefetch href="/">
                         <div className="logo">
-                          <a>Savvvy App</a>
+                          <a>Savvy App</a>
                         </div>
                       </Link>
 
@@ -410,7 +410,7 @@ class Nav extends Component {
                         }}
                       >
                         <button onClick={this.closeNav}>
-                          <a>Курсы Savvvy App</a>
+                          <a>Курсы Savvy App</a>
                         </button>
                       </Link>
                       <Link

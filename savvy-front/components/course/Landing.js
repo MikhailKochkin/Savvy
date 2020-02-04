@@ -103,8 +103,8 @@ const Landing = props => {
       <Banner id="banner" src="../static/computer_mini.jpg" />
       <Square id="square">
         <div className="text">
-          Ищите вакансии и проходите курсы, наполненные упражнениями для
-          развития нетехнических навыков
+          Ищите вакансии, проходите интерактивные курсы и приобретайте
+          практические юридические навыки.
         </div>
         <Button onClick={open}>Подробнее</Button>
       </Square>

@@ -160,7 +160,7 @@ class WideSignin extends Component {
             }}
           >
             <Fieldset disabled={loading} aria-busy={loading}>
-              <Title>Войдите на Savvvy App</Title>
+              <Title>Войдите на Svvvy App</Title>
               <Error error={error} />
               {/* {this.state.loggedIn && <LoggedIn>Вы вошли в аккаунт!</LoggedIn>} */}
               <Container>
@@ -190,7 +190,7 @@ class WideSignin extends Component {
                 </div>
               </Buttons>
               <Transit>
-                Ещё не зарегистрированы на Savvvy?{" "}
+                Ещё не зарегистрированы на Savvy?{" "}
                 <span name="signup" onClick={this.switch}>
                   Зарегистрироваться
                 </span>

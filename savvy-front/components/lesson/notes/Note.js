@@ -4,17 +4,17 @@ import renderHTML from "react-render-html";
 import UpdateNote from "./UpdateNote";
 
 const Container = styled.div`
-  width: ${props => (props.story ? "95%" : "100%")};
+  width: ${props => (props.story ? "100%" : "100%")};
   font-size: 1.6rem;
   margin: 30px 0;
 `;
 
 const NoteStyles = styled.div`
-  width: ${props => (props.story ? "100%" : "95%")};
+  width: ${props => (props.story ? "100%" : "100%")};
   margin: 2% 0 0 0;
-  padding: 0% 2%;
+  padding: 0% 3.5%;
   font-size: 1.5rem;
-  border: ${props => (props.story ? null : "1px solid #e4e4e4")};
+  border: ${props => (props.story ? "1px solid #e4e4e4" : "1px solid #e4e4e4")};
   border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;

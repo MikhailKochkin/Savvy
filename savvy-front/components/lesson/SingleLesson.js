@@ -735,7 +735,8 @@ class SingleLesson extends Component {
                             Урок {lesson.number}. {lesson.name}
                           </span>
                         </Head>
-                        {lesson.user.id === me.id && (
+                        {(lesson.user.id === me.id ||
+                          me.permissions.includes("ADMIN")) && (
                           <Head2>
                             {lesson.map.length > 0 ? (
                               <div>

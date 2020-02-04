@@ -8,20 +8,6 @@ import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import StoryUpdate from "./StoryUpdate";
 
-const SINGLE_LESSON_QUERY = gql`
-  query SINGLE_LESSON_QUERY($id: ID!) {
-    lesson(where: { id: $id }) {
-      name
-      number
-      text
-      type
-      coursePage {
-        id
-      }
-    }
-  }
-`;
-
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION(
     $id: ID!
@@ -168,91 +154,73 @@ export default class UpdateLesson extends Component {
     return (
       <PleaseSignIn>
         <AreYouATeacher subject={lessonID}>
-          <Query
-            query={SINGLE_LESSON_QUERY}
-            variables={{
-              id: lessonID
-            }}
-          >
-            {({ data, loading }) => {
-              if (loading) return <p>Loading...</p>;
+          <Container>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Название урока"
+              defaultValue={lesson.name}
+              onChange={this.handleName}
+            />
+            <input
+              type="number"
+              id="number"
+              name="number"
+              placeholder="Номер урока"
+              defaultValue={lesson.number}
+              onChange={this.handleNumber}
+            />
+            <select
+              name="type"
+              defaultValue={lesson.type}
+              onChange={this.handleName}
+            >
+              <option value="REGULAR">Обычный</option>
+              <option value="STORY">История</option>
+            </select>
+            <Frame>
+              <DynamicHoverEditor
+                index={1}
+                name="description"
+                getEditorText={this.myCallback2}
+                placeholder="Описание"
+                value={description}
+              />
+            </Frame>
+            <DynamicLoadedEditor
+              getEditorText={this.myCallback}
+              previousText={lesson.text}
+            />
 
-              if (!data) return <p>Did not query data for lesson {lessonID}</p>;
-              return (
-                <>
-                  {data.lesson && (
-                    <Container>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Название урока"
-                        defaultValue={data.lesson.name}
-                        onChange={this.handleName}
-                      />
-                      <input
-                        type="number"
-                        id="number"
-                        name="number"
-                        placeholder="Номер урока"
-                        defaultValue={data.lesson.number}
-                        onChange={this.handleNumber}
-                      />
-                      <select
-                        name="type"
-                        defaultValue={data.lesson.type}
-                        onChange={this.handleName}
-                      >
-                        <option value="REGULAR">Обычный</option>
-                        <option value="STORY">История</option>
-                      </select>
-                      <Frame>
-                        <DynamicHoverEditor
-                          index={1}
-                          name="description"
-                          getEditorText={this.myCallback2}
-                          placeholder="Описание"
-                          value={description}
-                        />
-                      </Frame>
-                      <DynamicLoadedEditor
-                        getEditorText={this.myCallback}
-                        previousText={data.lesson.text}
-                      />
-
-                      <Mutation
-                        mutation={UPDATE_LESSON_MUTATION}
-                        variables={{
-                          id: lessonID,
-                          ...this.state
-                        }}
-                        refetchQueries={() => [
-                          {
-                            query: SINGLE_COURSEPAGE_QUERY,
-                            variables: { id: data.lesson.coursePage.id }
-                          }
-                        ]}
-                      >
-                        {(updateLesson, { loading, error }) => (
-                          <Button
-                            onClick={async e => {
-                              // Stop the form from submitting
-                              e.preventDefault();
-                              // call the mutation
-                              const res = await updateLesson();
-                              // change the page to the single case page
-                            }}
-                          >
-                            {loading ? "Сохраняем..." : "Сохранить"}
-                          </Button>
-                        )}
-                      </Mutation>
-                    </Container>
-                  )}
-                </>
-              );
-            }}
-          </Query>
+            <Mutation
+              mutation={UPDATE_LESSON_MUTATION}
+              variables={{
+                id: lessonID,
+                ...this.state
+              }}
+              refetchQueries={() => [
+                {
+                  query: SINGLE_COURSEPAGE_QUERY,
+                  variables: { id: lesson.coursePage.id }
+                }
+              ]}
+            >
+              {(updateLesson, { loading, error }) => (
+                <Button
+                  onClick={async e => {
+                    // Stop the form from submitting
+                    e.preventDefault();
+                    // call the mutation
+                    const res = await updateLesson();
+                    // change the page to the single case page
+                  }}
+                >
+                  {loading ? "Сохраняем..." : "Сохранить"}
+                </Button>
+              )}
+            </Mutation>
+          </Container>
           <StoryUpdate lesson={lesson} />
         </AreYouATeacher>
       </PleaseSignIn>

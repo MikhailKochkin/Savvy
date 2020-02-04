@@ -37,7 +37,7 @@ class Menu extends Component {
               pathname: "/courses"
             }}
           >
-            <a>Курсы Savvvy App</a>
+            <a>Курсы Savvy App</a>
           </Link>
         </Box>
         <Box>
