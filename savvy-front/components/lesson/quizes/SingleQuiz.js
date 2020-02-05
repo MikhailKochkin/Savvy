@@ -28,6 +28,7 @@ const Styles = styled.div`
   font-size: 1.6rem;
   @media (max-width: 800px) {
     flex-direction: column;
+    font-size: 1.5rem;
   }
 `;
 
@@ -61,6 +62,7 @@ const Textarea = styled.textarea`
   border-radius: 5px;
   outline: 0;
   padding: 2%;
+  font-family: Montserrat;
   font-size: 1.6rem;
   margin-top: 3%;
   @media (max-width: 800px) {

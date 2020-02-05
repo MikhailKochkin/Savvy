@@ -135,9 +135,7 @@ class note extends Component {
             </NoteStyles>
           )}
           {this.props.getData && (
-            <MiniButton onClick={this.push}>
-              Разобрались? Поехали дальше!
-            </MiniButton>
+            <MiniButton onClick={this.push}>Далее</MiniButton>
           )}
           {this.state.update && this.props.story !== true && (
             <UpdateNote

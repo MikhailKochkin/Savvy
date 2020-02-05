@@ -52,6 +52,7 @@ const TextBar = styled.div`
   }
   @media (max-width: 800px) {
     width: 100%;
+    font-size: 1.5rem;
     padding-left: 5px;
   }
 `;
