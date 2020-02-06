@@ -26,7 +26,7 @@ const Square = styled.div`
   left: 6%;
   z-index: 2;
   width: 30%;
-  font-size: 2rem;
+  font-size: 1.9rem;
   background: #ece9e6; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to left,
