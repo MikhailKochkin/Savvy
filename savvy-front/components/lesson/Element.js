@@ -44,6 +44,8 @@ class Element extends Component {
       this.props.getData({ problem: this.props.data.id });
     } else if (this.props.data.__typename === "Exam") {
       this.props.getData({ exam: this.props.data.id });
+    } else if (this.props.data.__typename === "Construction") {
+      this.props.getData({ construction: this.props.data.id });
     } else if (this.props.data.__typename === "Document") {
       this.props.getData({ document: this.props.data.id });
     }
@@ -78,7 +80,7 @@ class Element extends Component {
             <div>{data.text.substring(0, 100)}</div>
           </>
         )}
-        {data.__typename === "Constructor" && (
+        {data.__typename === "Construction" && (
           <>
             <div className="header">Конструктор</div>
             <div>{data.name}</div>

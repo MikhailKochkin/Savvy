@@ -423,6 +423,7 @@ const SingleLesson = props => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
+              console.log(lesson.map);
               return (
                 <>
                   {lesson && (
