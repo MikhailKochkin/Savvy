@@ -57,7 +57,6 @@ class StoryUpdate extends Component {
 
   render() {
     const { lesson } = this.props;
-    console.log(this.state.list);
     return (
       <>
         <Mutation

@@ -14,7 +14,7 @@ const NoteStyles = styled.div`
   margin: 2% 0 0 0;
   padding: 0% 3.5%;
   font-size: 1.5rem;
-  border: ${props => (props.story ? "1px solid #e4e4e4" : "1px solid #e4e4e4")};
+  border: ${props => (props.exam ? "1px solid #e4e4e4" : "none")};
   border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
@@ -124,13 +124,15 @@ class note extends Component {
     return (
       <>
         <Container story={this.props.story}>
-          {!this.props.exam && this.props.me.id === this.props.teacher && (
-            <MiniButton onClick={this.switch}>
-              {!this.state.update ? "Настройки" : "Заметка"}
-            </MiniButton>
-          )}
+          {this.props.me &&
+            !this.props.exam &&
+            this.props.me.id === this.props.teacher && (
+              <MiniButton onClick={this.switch}>
+                {!this.state.update ? "Настройки" : "Заметка"}
+              </MiniButton>
+            )}
           {!this.state.update && (
-            <NoteStyles story={this.props.story}>
+            <NoteStyles exam={this.props.exam}>
               {renderHTML(this.props.text)}
             </NoteStyles>
           )}

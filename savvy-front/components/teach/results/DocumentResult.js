@@ -17,7 +17,6 @@ const Container = styled.div`
 
 const DocumentResult = props => {
   const { documents, student } = props;
-  console.log(documents);
 
   return (
     <Container>
