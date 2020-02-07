@@ -21,7 +21,7 @@ const makeANiceEmail = text => `
   </div>
 `;
 
-const newOrderEmail = (client, course, price) => `
+const newOrderEmail = (client, surname, email, course, price) => `
   <div className="email" style="
     padding: 20px;
     font-family: sans-serif;
@@ -29,7 +29,8 @@ const newOrderEmail = (client, course, price) => `
     font-size: 20px;
   ">
     <h2>Привет!</h2>
-    <p>${client} оформил новый заказ.</p>
+    <p>${client} ${surname}оформил новый заказ.</p>
+    <p> Имейл: ${email} </p>
     <p>Курс – ${course}, цена – ${price} </p>
   </div>
 `;
@@ -1140,7 +1141,13 @@ const Mutations = {
       From: "Mikhail@savvvy.app",
       To: "Mi.Kochkin@ya.ru",
       Subject: "Новый клиент",
-      HtmlBody: newOrderEmail(user.name, coursePage.title, args.price)
+      HtmlBody: newOrderEmail(
+        user.name,
+        user.surname,
+        user.email,
+        coursePage.title,
+        args.price
+      )
     });
     return order;
   },

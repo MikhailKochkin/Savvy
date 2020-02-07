@@ -6,6 +6,7 @@ projects:
         default: "http://localhost:4444"
   prisma:
     schemaPath: "src/generated/prisma.graphql"
+    image: "prismagraphql/prisma:1.34.10"
     extensions:
       prisma: prisma.yml
     # codegen:
