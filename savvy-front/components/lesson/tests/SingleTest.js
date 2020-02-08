@@ -264,6 +264,8 @@ class SingleTest extends Component {
           <UpdateTest
             testID={this.props.id}
             quizes={this.props.quizes}
+            question={this.props.question}
+            mes={mes}
             notes={this.props.notes}
             tests={this.props.tests}
           />

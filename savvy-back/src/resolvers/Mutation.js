@@ -431,7 +431,18 @@ const Mutations = {
     //run the update method
     return ctx.db.mutation.updateNewTest(
       {
-        data: updates,
+        data: {
+          answers: {
+            set: [...args.answers]
+          },
+          correct: {
+            set: [...args.correct]
+          },
+          question: {
+            set: [...args.question]
+          },
+          next: args.next
+        },
         where: {
           id: args.id
         }

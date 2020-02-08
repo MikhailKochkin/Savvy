@@ -74,7 +74,13 @@ type Mutation {
     correct: [Boolean!]
     lessonID: ID
   ): NewTest!
-  updateNewTest(id: ID!, next: Json): NewTest
+  updateNewTest(
+    id: ID!
+    question: [String!]
+    answers: [String!]
+    correct: [Boolean!]
+    next: Json
+  ): NewTest
   createLessonResult(visitsNumber: Int, lessonID: ID): LessonResult!
   updateLessonResult(id: ID!, visitsNumber: Int): LessonResult!
   createTestResult(

@@ -56,8 +56,6 @@ const Form = styled.form`
 const Answers = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between;
-    flex-wrap: wrap; */
   margin-bottom: 3%;
 `;
 
