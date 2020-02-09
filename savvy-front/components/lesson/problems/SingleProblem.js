@@ -168,7 +168,9 @@ class SingleProblem extends Component {
       <>
         <TextBar>
           {renderHTML(problem.text)}
-          <Interactive lesson={lesson} me={me} exam={problem} />
+          {problem.nodeID && (
+            <Interactive lesson={lesson} me={me} exam={problem} />
+          )}
           {data.length > 0 && (
             <ButtonGroup>
               {/* <Advice>Эта задача уже выполнена.</Advice> */}

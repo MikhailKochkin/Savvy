@@ -4,30 +4,33 @@ import renderHTML from "react-render-html";
 
 const Button = styled.button`
   font-family: Montserrat;
-  /* color: #112a62; */
   padding: 0.5% 1%;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   background: #ffffff;
-  /* border: 1px solid #112a62; */
   border-radius: 5px;
+  text-align: center;
   outline: 0;
-  margin-top: 3%;
-  width: 45%;
+  margin-right: 0.5%;
+  width: 20%;
 `;
 
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  width: 50%;
+  font-size: 1.5rem;
+  width: 25%;
   justify-content: space-between;
-  margin-bottom: 3%;
+  margin-bottom: 1%;
 `;
 
 const Box = styled.div`
-  display: ${props => (props.hide ? "none" : "block")};
+  display: ${props => (props.hide ? "none" : "flex")};
+  flex-direction: row;
+  justify-content: space-between;
   border: 1px solid #edefed;
-  width: 30%;
+  width: 100%;
   padding: 1.5%;
+  padding-bottom: 0;
   font-size: 1.5rem;
   background: ${props => props.color || null};
   margin-bottom: 2%;
@@ -80,7 +83,7 @@ class Option extends Component {
       <>
         {note && (
           <Box color={this.state.color}>
-            <div>{renderHTML(note.text.substring(0, 150) + "...")}</div>
+            <div>{note.text.substring(0, 50)}</div>
             <Group>
               <Button onClick={this.push} name="true" type="note">
                 ✅
@@ -96,7 +99,7 @@ class Option extends Component {
         )}
         {test && (
           <Box color={this.state.color}>
-            <div>{test.question}</div>
+            <div>{test.question[0].substring(0, 40)}</div>
             <Group>
               <Button onClick={this.push} name="true" type="newTest">
                 ✅
@@ -112,7 +115,7 @@ class Option extends Component {
         )}
         {quiz && (
           <Box color={this.state.color}>
-            <div>{quiz.question}</div>
+            <div>{quiz.question.substring(0, 50)}</div>
             <Group>
               <Button onClick={this.push} name="true" type="quiz">
                 ✅

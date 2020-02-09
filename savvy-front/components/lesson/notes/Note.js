@@ -105,7 +105,7 @@ const MiniButton = styled.div`
   }
 `;
 
-class note extends Component {
+class Note extends Component {
   state = {
     update: false
   };
@@ -163,4 +163,4 @@ class note extends Component {
   }
 }
 
-export default note;
+export default Note;

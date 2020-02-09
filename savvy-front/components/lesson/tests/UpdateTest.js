@@ -117,9 +117,7 @@ const UPDATE_TEST_MUTATION = gql`
   }
 `;
 class UpdateTest extends Component {
-  state = {
-    question: this.props.question
-  };
+  state = {};
   myCallback2 = async (type, data) => {
     const res = await this.setState({
       [type]: data
@@ -133,15 +131,6 @@ class UpdateTest extends Component {
         list,
         value: ""
       };
-    });
-  };
-
-  onSave = () => {
-    this.setState({
-      next: {
-        true: this.state.true,
-        false: this.state.false
-      }
     });
   };
 
@@ -163,54 +152,59 @@ class UpdateTest extends Component {
     this.setState({ [name]: val });
   };
 
-  onGenerate = e => {
+  onGenerate = async e => {
     e.preventDefault();
+    if (this.state.answer1) {
+      const arrAnswers = [
+        this.state.answer1,
+        this.state.answer2,
+        this.state.answer3,
+        this.state.answer4,
+        this.state.answer5,
+        this.state.answer6,
+        this.state.answer7,
+        this.state.answer8,
+        this.state.answer9
+      ];
+      const arrCorrect = [
+        this.state.answer1Correct,
+        this.state.answer2Correct,
+        this.state.answer3Correct,
+        this.state.answer4Correct,
+        this.state.answer5Correct,
+        this.state.answer6Correct,
+        this.state.answer7Correct,
+        this.state.answer8Correct,
+        this.state.answer9Correct
+      ];
+      const arrAnswers2 = [];
+      const arrCorrect2 = [];
+      const arrQuestion = [];
+      arrQuestion.push(this.state.question);
+      arrAnswers.map(item =>
+        item !== undefined ? arrAnswers2.push(item) : null
+      );
+      for (var i = 0; i < arrAnswers2.length; i++) {
+        arrCorrect2.push(arrCorrect[i]);
+      }
 
-    const arrAnswers = [
-      this.state.answer1,
-      this.state.answer2,
-      this.state.answer3,
-      this.state.answer4,
-      this.state.answer5,
-      this.state.answer6,
-      this.state.answer7,
-      this.state.answer8,
-      this.state.answer9
-    ];
-    const arrCorrect = [
-      this.state.answer1Correct,
-      this.state.answer2Correct,
-      this.state.answer3Correct,
-      this.state.answer4Correct,
-      this.state.answer5Correct,
-      this.state.answer6Correct,
-      this.state.answer7Correct,
-      this.state.answer8Correct,
-      this.state.answer9Correct
-    ];
-    const arrAnswers2 = [];
-    const arrCorrect2 = [];
-    const arrQuestion = [];
-    arrQuestion.push(this.state.question);
-    arrAnswers.map(item =>
-      item !== undefined ? arrAnswers2.push(item) : null
-    );
-    for (var i = 0; i < arrAnswers2.length; i++) {
-      arrCorrect2.push(arrCorrect[i]);
+      const res = await this.setState({
+        answers: arrAnswers2,
+        correct: arrCorrect2,
+        questions: arrQuestion
+      });
     }
-
-    this.setState({
-      answers: arrAnswers2,
-      correct: arrCorrect2,
-      questions: arrQuestion
-    });
+    if (this.state.true) {
+      this.setState({
+        next: {
+          true: this.state.true,
+          false: this.state.false
+        }
+      });
+    }
   };
   onSave = async (e, updateNewTest) => {
     e.preventDefault();
-    if (!this.state.correct.includes(true)) {
-      alert("Должен быть хотя бы один правильный ответ!");
-    }
-
     const res = await updateNewTest();
     alert("Готово!");
   };
@@ -277,14 +271,13 @@ class UpdateTest extends Component {
             <Option key={test.id} test={test} getData={this.myCallback2} />
           ))}
         </Grid>
-        <Button2 onClick={this.onSave}>Compile</Button2>
         <Mutation
           mutation={UPDATE_TEST_MUTATION}
           variables={{
             id: testID,
-            question: this.state.questions,
-            answers: this.state.answers,
-            correct: this.state.correct,
+            // question: this.state.questions,
+            // answers: this.state.answers,
+            // correct: this.state.correct,
             ...this.state
           }}
         >
