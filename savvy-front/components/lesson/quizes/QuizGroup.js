@@ -54,6 +54,7 @@ class QuizGroup extends Component {
               next={quiz.next}
               getData={this.updateArray}
             />
+            <hr />
           </>
         ))}
       </Styles>

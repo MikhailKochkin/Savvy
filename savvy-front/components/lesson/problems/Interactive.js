@@ -66,7 +66,7 @@ class Interactive extends Component {
     let newNote;
     let newTest;
     let finish;
-    if (Object.keys(data)[0] === "quiz") {
+    if (Object.keys(data)[0] === "quiz" && Object.values(data)[0] !== null) {
       let el = this.props.lesson.quizes.filter(
         q => q.id === Object.values(data)[0]
       )[0];
@@ -98,7 +98,7 @@ class Interactive extends Component {
         };
       });
     }
-    if (Object.keys(data)[0] === "newTest") {
+    if (Object.keys(data)[0] === "newTest" && Object.values(data)[0] !== null) {
       let el = this.props.lesson.newTests.filter(
         n => n.id === Object.values(data)[0]
       )[0];
@@ -132,7 +132,7 @@ class Interactive extends Component {
         };
       });
     }
-    if (Object.keys(data)[0] === "note") {
+    if (Object.keys(data)[0] === "note" && Object.values(data)[0] !== null) {
       let el = this.props.lesson.notes.filter(
         q => q.id === Object.values(data)[0]
       )[0];
@@ -159,7 +159,7 @@ class Interactive extends Component {
         };
       });
     }
-    if (Object.keys(data)[0] === "finish") {
+    if (Object.keys(data)[0] === "finish" || Object.values(data)[0] == null) {
       finish = (
         <Final>
           {" "}

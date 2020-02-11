@@ -17,27 +17,30 @@ class TestGroup extends Component {
     let arr;
     return (
       <Styles>
-        {this.state.tests.map((test, index) => (
-          <>
-            {(arr = Array(test.correct.length).fill(false))}
-            <SingleTest
-              id={test.id}
-              question={test.question}
-              num={index + 1}
-              type={test.type}
-              answers={test.answers}
-              true={test.correct}
-              length={arr}
-              user={test.user.id}
-              me={this.props.me}
-              lessonID={this.props.lessonID}
-              userData={this.props.testResults}
-              quizes={this.props.quizes}
-              notes={this.props.notes}
-              tests={this.props.tests}
-            />
-          </>
-        ))}
+        {this.state.tests.map((test, index) => {
+          let arr = Array(test.correct.length).fill(false);
+          return (
+            <>
+              <SingleTest
+                id={test.id}
+                question={test.question}
+                num={index + 1}
+                type={test.type}
+                answers={test.answers}
+                true={test.correct}
+                length={arr}
+                next={test.next}
+                user={test.user.id}
+                me={this.props.me}
+                lessonID={this.props.lessonID}
+                userData={this.props.testResults}
+                quizes={this.props.quizes}
+                notes={this.props.notes}
+                tests={this.props.tests}
+              />
+            </>
+          );
+        })}
       </Styles>
     );
   }

@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { Mutation, Query } from "react-apollo";
+import React, { useState } from "react";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Option from "../Option";
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION(
@@ -83,125 +84,85 @@ const Button = styled.button`
   }
 `;
 
-const Grid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-`;
+const UpdateQuiz = props => {
+  const [answer, setAnswer] = useState(props.answer);
+  const [question, setQuestion] = useState(props.question);
+  const [trueVal, setTrueVal] = useState(
+    props.next && props.next.true ? props.next.true : ""
+  );
+  const [falseVal, setFalseVal] = useState(
+    props.next && props.next.false ? props.next.false : ""
+  );
 
-class UpdateQuiz extends Component {
-  state = {};
-
-  handleName = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  const myCallback = async (type, data) => {
+    return type === true ? setTrueVal(data) : setFalseVal(data);
   };
 
-  onAddItem = () => {
-    this.setState(state => {
-      const list = [...state.list, state.value];
-      return {
-        list,
-        value: ""
-      };
-    });
-  };
-
-  onSave = () => {
-    this.setState({
-      next: {
-        true: this.state.true,
-        false: this.state.false
-      }
-    });
-  };
-
-  myCallback = async (type, data) => {
-    const res = await this.setState({
-      [type]: data
-    });
-    // this.onAddItem();
-  };
-
-  render() {
-    const {
-      lessonID,
-      answer,
-      question,
-      quizID,
-      quizes,
-      notes,
-      tests
-    } = this.props;
-    return (
-      <Container>
-        <textarea
-          id="question"
-          name="question"
-          required
-          placeholder="Название урока"
-          defaultValue={question}
-          onChange={this.handleName}
-        />
-        <textarea
-          id="answer"
-          name="answer"
-          required
-          placeholder="Номер урока"
-          defaultValue={answer}
-          onChange={this.handleName}
-        />
-        <h2>Выберите задания для формата "Экзамен":</h2>
-        <h3>Вопросы:</h3>
-        <Grid>
-          {quizes.map(quiz => (
-            <Option key={quiz.id} quiz={quiz} getData={this.myCallback} />
-          ))}
-        </Grid>
-        <h3>Заметки:</h3>
-        <Grid>
-          {notes.map(note => (
-            <Option key={note.id} note={note} getData={this.myCallback} />
-          ))}
-        </Grid>
-        <h3>Тесты:</h3>
-        <Grid>
-          {tests.map(test => (
-            <Option key={test.id} test={test} getData={this.myCallback} />
-          ))}
-        </Grid>
-        <button onClick={this.onSave}>Compile</button>
-        <Mutation
-          mutation={UPDATE_QUIZ_MUTATION}
-          variables={{
-            id: quizID,
-            ...this.state
-          }}
-          //   refetchQueries={() => [
-          //     {
-          //       query: PAGE_LESSONS_QUERY,
-          //       variables: { id: lessonID }
-          //     }
-          //   ]}
-        >
-          {(updateQuiz, { loading, error }) => (
-            <Button
-              onClick={async e => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                const res = await updateQuiz();
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
-          )}
-        </Mutation>
-      </Container>
-    );
-  }
-}
+  const { lessonID, quizID, quizes, notes, tests } = props;
+  return (
+    <Container>
+      <textarea
+        id="question"
+        name="question"
+        required
+        placeholder="Вопрос"
+        defaultValue={question}
+        onChange={e => setQuestion(e.target.value)}
+      />
+      <textarea
+        id="answer"
+        name="answer"
+        required
+        placeholder="Ответ"
+        defaultValue={answer}
+        onChange={e => setAnswer(e.target.value)}
+      />
+      <h2>Выберите задания для формата "Экзамен":</h2>
+      <h3>Заметки:</h3>
+      {notes.map(note => (
+        <Option key={note.id} note={note} getData={myCallback} />
+      ))}
+      <h3>Вопросы:</h3>
+      {quizes.map(quiz => (
+        <Option key={quiz.id} quiz={quiz} getData={myCallback} />
+      ))}
+      <h3>Тесты:</h3>
+      {tests.map(test => (
+        <Option key={test.id} test={test} getData={myCallback} />
+      ))}
+      <Mutation
+        mutation={UPDATE_QUIZ_MUTATION}
+        variables={{
+          id: quizID,
+          question: question,
+          answer: answer,
+          next: {
+            true: trueVal,
+            false: falseVal
+          }
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID }
+          }
+        ]}
+      >
+        {(updateQuiz, { loading, error }) => (
+          <Button
+            onClick={async e => {
+              // Stop the form from submitting
+              e.preventDefault();
+              // call the mutation
+              const res = await updateQuiz();
+            }}
+          >
+            {loading ? "Сохраняем..." : "Сохранить"}
+          </Button>
+        )}
+      </Mutation>
+    </Container>
+  );
+};
 
 export default UpdateQuiz;

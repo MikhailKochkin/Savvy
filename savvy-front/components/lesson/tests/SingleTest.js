@@ -156,6 +156,7 @@ class SingleTest extends Component {
     const res1 = await this.setState(prevState => ({
       attempts: prevState.attempts + 1
     }));
+    console.log(this.props.next);
     const res = () => {
       if (
         JSON.stringify(this.state.answerOptions) ==
@@ -208,6 +209,21 @@ class SingleTest extends Component {
       .filter(el => el.student.id === this.props.me.id);
     return (
       <>
+        {!exam && story !== true && (
+          <StyledButton onClick={this.switch}>
+            {!this.state.update ? "Настройки" : "Тест"}
+          </StyledButton>
+        )}
+        {this.props.me &&
+          this.props.me.id === this.props.user &&
+          !this.props.story &&
+          !this.props.exam && (
+            <DeleteSingleTest
+              id={this.props.me.id}
+              testId={this.props.id}
+              lessonId={this.props.lessonID}
+            />
+          )}
         {!this.state.update && (
           <TextBar className="Test" story={story}>
             <Question>{this.props.question}</Question>
@@ -263,28 +279,17 @@ class SingleTest extends Component {
         {this.state.update && (
           <UpdateTest
             testID={this.props.id}
+            lessonID={this.props.lessonID}
             quizes={this.props.quizes}
             question={this.props.question}
+            answers={this.props.answers}
+            correct={this.props.true}
             mes={mes}
+            next={this.props.next}
             notes={this.props.notes}
             tests={this.props.tests}
           />
         )}
-        {!exam && story !== true && (
-          <StyledButton onClick={this.switch}>
-            {!this.state.update ? "Настройки" : "Тест"}
-          </StyledButton>
-        )}
-        {this.props.me &&
-          this.props.me.id === this.props.user &&
-          !this.props.story &&
-          !this.props.exam && (
-            <DeleteSingleTest
-              id={this.props.me.id}
-              testId={this.props.id}
-              lessonId={this.props.lessonID}
-            />
-          )}
         {this.props.exam && (
           <Dots>
             <div className="group">

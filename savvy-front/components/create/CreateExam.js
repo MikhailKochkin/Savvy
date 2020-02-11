@@ -32,9 +32,35 @@ const useStyles = makeStyles({
   }
 });
 
+const Input = styled.input`
+  width: 50%;
+  background: none;
+  font-size: 1.6rem;
+  border: none;
+  font-family: Montserrat;
+  outline: 0;
+  border-bottom: 1px solid #edefed;
+  padding-bottom: 0.5%;
+  &:focus {
+    border-bottom: 1px solid #1a2a81;
+  }
+`;
+
 const CREATE_EXAM_MUTATION = gql`
-  mutation CREATE_EXAM_MUTATION($lesson: ID!, $nodeID: ID!, $nodeType: String) {
-    createExam(lesson: $lesson, nodeID: $nodeID, nodeType: $nodeType) {
+  mutation CREATE_EXAM_MUTATION(
+    $lesson: ID!
+    $name: String
+    $question: String
+    $nodeID: ID!
+    $nodeType: String
+  ) {
+    createExam(
+      lesson: $lesson
+      name: $name
+      question: $question
+      nodeID: $nodeID
+      nodeType: $nodeType
+    ) {
       id
     }
   }
@@ -43,10 +69,16 @@ const CREATE_EXAM_MUTATION = gql`
 const CreateExam = props => {
   const [nodeID, setNodeID] = useState("");
   const [nodeType, setNodeType] = useState("");
+  const [name, setName] = useState("");
+  const [question, setQuestion] = useState("");
   const classes = useStyles();
   const { lesson } = props;
   return (
     <>
+      <h3>Тема экзамена:</h3>
+      <Input value={name} onChange={e => setName(event.target.value)} />
+      <h3>Вводные:</h3>
+      <Input value={question} onChange={e => setQuestion(event.target.value)} />
       <h3>Выберите первый вопрос, с которого начнется экзамен.</h3>
       {lesson.quizes.map(q => (
         <Box key={q.id} color={(nodeID === q.id).toString()}>
@@ -65,14 +97,16 @@ const CreateExam = props => {
       ))}
       <div>
         Впоследствии, в каждом из заданий вам будет необходимо выбрать, куда они
-        будут двигатьс в случе правильно и неправильного ответа.
+        будут двигаться в случе правильно и неправильного ответа.
       </div>
       <Mutation
         mutation={CREATE_EXAM_MUTATION}
         variables={{
           lesson: lesson.id,
           nodeID,
-          nodeType
+          nodeType,
+          name,
+          question
         }}
       >
         {(createExam, { loading, error }) => (

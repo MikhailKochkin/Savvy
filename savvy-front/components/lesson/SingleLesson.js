@@ -191,6 +191,8 @@ const SINGLE_LESSON_QUERY = gql`
       }
       exams {
         id
+        name
+        question
         nodeID
         nodeType
         user {
@@ -782,13 +784,14 @@ class SingleLesson extends Component {
                                 <Note
                                   text={note.text}
                                   me={me}
-                                  teacher={lesson.user.id}
+                                  user={lesson.user.id}
                                   note={note}
                                   id={note.id}
                                   next={note.next}
                                   quizes={lesson.quizes}
                                   notes={lesson.notes}
                                   tests={lesson.newTests}
+                                  lessonID={lesson.id}
                                 />
                               ))}
                             {this.state.page === "document" &&

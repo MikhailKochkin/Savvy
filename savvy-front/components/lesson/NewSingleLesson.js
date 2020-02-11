@@ -174,6 +174,8 @@ const SINGLE_LESSON_QUERY = gql`
       }
       exams {
         id
+        name
+        question
         nodeID
         nodeType
         user {

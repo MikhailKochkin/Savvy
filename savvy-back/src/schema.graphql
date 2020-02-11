@@ -245,7 +245,13 @@ type Mutation {
   createFeedback(text: String!, lesson: ID, student: ID): Feedback!
   createCourseVisit(visitsNumber: Int, coursePage: ID): CourseVisit!
   updateCourseVisit(id: ID!, visitsNumber: Int): CourseVisit!
-  createExam(lesson: ID, nodeID: ID, nodeType: String): Exam!
+  createExam(
+    lesson: ID
+    name: String
+    question: String
+    nodeID: ID
+    nodeType: String
+  ): Exam!
   updateExam(id: ID!, nodeID: ID, nodeType: String): Exam
   deleteExam(id: ID!): Exam
   createExamResult(lesson: ID, exam: ID, answers: [String]): ExamResult!

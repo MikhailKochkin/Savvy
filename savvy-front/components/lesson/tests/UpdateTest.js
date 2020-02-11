@@ -1,8 +1,29 @@
-import React, { Component } from "react";
-import { Mutation, Query } from "react-apollo";
+import React, { useState } from "react";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import Option from "../Option";
+
+const UPDATE_TEST_MUTATION = gql`
+  mutation UPDATE_TEST_MUTATION(
+    $id: ID!
+    $next: Json
+    $question: [String!]
+    $answers: [String!]
+    $correct: [Boolean!]
+  ) {
+    updateNewTest(
+      id: $id
+      next: $next
+      question: $question
+      answers: $answers
+      correct: $correct
+    ) {
+      id
+    }
+  }
+`;
 
 const Button = styled.button`
   padding: 1% 2%;
@@ -18,26 +39,6 @@ const Button = styled.button`
   &:active {
     background-color: ${props => props.theme.darkGreen};
   }
-`;
-
-const Button2 = styled.button`
-  font-family: Montserrat;
-  /* color: #112a62; */
-  padding: 0.5% 1%;
-  font-size: 1.6rem;
-  background: #ffffff;
-  /* border: 1px solid #112a62; */
-  border-radius: 5px;
-  outline: 0;
-  margin-top: 3%;
-  width: 25%;
-`;
-
-const Grid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
 const Question = styled.div`
@@ -97,207 +98,132 @@ const AnswerOption = styled.div`
   }
 `;
 
-const UPDATE_TEST_MUTATION = gql`
-  mutation UPDATE_TEST_MUTATION(
-    $id: ID!
-    $next: Json
-    $question: [String!]
-    $answers: [String!]
-    $correct: [Boolean!]
-  ) {
-    updateNewTest(
-      id: $id
-      next: $next
-      question: $question
-      answers: $answers
-      correct: $correct
-    ) {
-      id
-    }
-  }
+const Grid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
 `;
-class UpdateTest extends Component {
-  state = {};
-  myCallback2 = async (type, data) => {
-    const res = await this.setState({
-      [type]: data
-    });
+
+const UpdateTest = props => {
+  const [answers, setAnswers] = useState(props.answers);
+  const [correct, setCorrect] = useState(props.correct);
+  const [question, setQuestion] = useState(props.question[0]);
+  const [trueVal, setTrueVal] = useState(
+    props.next && props.next.true ? props.next.true : ""
+  );
+  const [falseVal, setFalseVal] = useState(
+    props.next && props.next.false ? props.next.false : ""
+  );
+
+  const handleArray = (val, i) => {
+    let arr = [...answers];
+    arr[i] = val;
+    return setAnswers(arr);
   };
 
-  onAddItem = () => {
-    this.setState(state => {
-      const list = [...state.list, state.value];
-      return {
-        list,
-        value: ""
-      };
-    });
+  const handleCorrect = (val, i) => {
+    let arr = [...correct];
+    let value;
+    val === "true" ? (value = true) : (value = false);
+    arr[i] = value;
+    return setCorrect(arr);
   };
 
-  handleChange = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  const myCallback = async (type, data) => {
+    return type === true ? setTrueVal(data) : setFalseVal(data);
   };
 
-  handleBooleanChange = e => {
-    let val;
-    e.preventDefault();
-    const { name, value } = e.target;
-    if (value === "true") {
-      val = true;
-    } else {
-      val = false;
-    }
-    this.setState({ [name]: val });
-  };
-
-  onGenerate = async e => {
-    e.preventDefault();
-    if (this.state.answer1) {
-      const arrAnswers = [
-        this.state.answer1,
-        this.state.answer2,
-        this.state.answer3,
-        this.state.answer4,
-        this.state.answer5,
-        this.state.answer6,
-        this.state.answer7,
-        this.state.answer8,
-        this.state.answer9
-      ];
-      const arrCorrect = [
-        this.state.answer1Correct,
-        this.state.answer2Correct,
-        this.state.answer3Correct,
-        this.state.answer4Correct,
-        this.state.answer5Correct,
-        this.state.answer6Correct,
-        this.state.answer7Correct,
-        this.state.answer8Correct,
-        this.state.answer9Correct
-      ];
-      const arrAnswers2 = [];
-      const arrCorrect2 = [];
-      const arrQuestion = [];
-      arrQuestion.push(this.state.question);
-      arrAnswers.map(item =>
-        item !== undefined ? arrAnswers2.push(item) : null
-      );
-      for (var i = 0; i < arrAnswers2.length; i++) {
-        arrCorrect2.push(arrCorrect[i]);
-      }
-
-      const res = await this.setState({
-        answers: arrAnswers2,
-        correct: arrCorrect2,
-        questions: arrQuestion
-      });
-    }
-    if (this.state.true) {
-      this.setState({
-        next: {
-          true: this.state.true,
-          false: this.state.false
-        }
-      });
-    }
-  };
-  onSave = async (e, updateNewTest) => {
-    e.preventDefault();
-    const res = await updateNewTest();
-    alert("Готово!");
-  };
-
-  render() {
-    const { testID, tests, quizes, notes, question, mes } = this.props;
-    return (
-      <div>
-        <h2>Выберите задания для формата "Экзамен":</h2>
-        <Question>
-          <textarea
-            id="question"
-            name="question"
-            spellCheck={true}
-            placeholder="Вопрос"
-            autoFocus
-            required
-            defaultValue={question}
-            onChange={this.handleChange}
-          />
-        </Question>
-        <Answers>
-          {mes.map((answer, index) => {
-            let num = `answer${index + 1}`;
-            let tr = `answer${index + 1}Correct`;
-            let an = `Ответ ${index + 1}`;
-            return (
-              <AnswerOption>
-                <textarea
-                  id={num}
-                  name={num}
-                  placeholder={an}
-                  required
-                  defaultValue={answer[0]}
-                  onChange={this.handleChange}
-                />
-                <select
-                  name={tr}
-                  defaultValue={answer[1]}
-                  onChange={this.handleBooleanChange}
-                >
-                  <option value={true}>Правильно</option>
-                  <option value={false}>Ошибочно</option>
-                </select>
-              </AnswerOption>
-            );
-          })}
-        </Answers>
-        <h3>Вопросы:</h3>
-        <Grid>
-          {quizes.map(quiz => (
-            <Option key={quiz.id} quiz={quiz} getData={this.myCallback2} />
-          ))}
-        </Grid>
-        <h3>Заметки:</h3>
-        <Grid>
-          {notes.map(note => (
-            <Option key={note.id} note={note} getData={this.myCallback2} />
-          ))}
-        </Grid>
-        <h3>Тесты:</h3>
-        <Grid>
-          {tests.map(test => (
-            <Option key={test.id} test={test} getData={this.myCallback2} />
-          ))}
-        </Grid>
-        <Mutation
-          mutation={UPDATE_TEST_MUTATION}
-          variables={{
-            id: testID,
-            // question: this.state.questions,
-            // answers: this.state.answers,
-            // correct: this.state.correct,
-            ...this.state
-          }}
-        >
-          {(updateNewTest, { loading, error }) => (
-            <Button
-              onClick={async e => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                const res1 = await this.onGenerate(e);
-                const res2 = await this.onSave(e, updateNewTest);
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
-          )}
-        </Mutation>
-      </div>
-    );
-  }
-}
+  const { testID, tests, quizes, notes, mes, lessonID } = props;
+  return (
+    <div>
+      <Question>
+        <textarea
+          id="question"
+          name="question"
+          spellCheck={true}
+          placeholder="Вопрос"
+          autoFocus
+          required
+          defaultValue={question}
+          onChange={e => setQuestion(e.target.value)}
+        />
+      </Question>
+      <Answers>
+        {mes.map((answer, i) => {
+          let an = `answer${i + 1}`;
+          return (
+            <AnswerOption id={an}>
+              <textarea
+                name={an}
+                placeholder={`Ответ ${i + 1}`}
+                required
+                defaultValue={answer[0]}
+                onChange={e => handleArray(e.target.value, i)}
+              />
+              <select
+                defaultValue={answer[1]}
+                onChange={e => handleCorrect(e.target.value, i)}
+              >
+                <option value={true}>Правильно</option>
+                <option value={false}>Ошибочно</option>
+              </select>
+            </AnswerOption>
+          );
+        })}
+      </Answers>
+      <h2>Выберите задания для формата "Экзамен" и "Задача":</h2>
+      <h3>Вопросы:</h3>
+      <Grid>
+        {quizes.map(quiz => (
+          <Option key={quiz.id} quiz={quiz} getData={myCallback} />
+        ))}
+      </Grid>
+      <h3>Заметки:</h3>
+      <Grid>
+        {notes.map(note => (
+          <Option key={note.id} note={note} getData={myCallback} />
+        ))}
+      </Grid>
+      <h3>Тесты:</h3>
+      <Grid>
+        {tests.map(test => (
+          <Option key={test.id} test={test} getData={myCallback} />
+        ))}
+      </Grid>
+      <Mutation
+        mutation={UPDATE_TEST_MUTATION}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID }
+          }
+        ]}
+        variables={{
+          id: testID,
+          question: [question],
+          answers: answers,
+          correct: correct,
+          next: {
+            true: trueVal,
+            false: falseVal
+          }
+        }}
+      >
+        {(updateNewTest, { loading, error }) => (
+          <Button
+            onClick={async e => {
+              // Stop the form from submitting
+              e.preventDefault();
+              updateNewTest();
+            }}
+          >
+            {loading ? "Сохраняем..." : "Сохранить"}
+          </Button>
+        )}
+      </Mutation>
+    </div>
+  );
+};
 
 export default UpdateTest;

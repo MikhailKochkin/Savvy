@@ -174,6 +174,7 @@ class Exam extends Component {
     });
   };
   render() {
+    console.log(this.props.exam.question);
     return (
       <Styles>
         {this.props.me && this.props.me.id === this.props.exam.user.id ? (
@@ -183,7 +184,8 @@ class Exam extends Component {
             lessonID={this.props.lesson.id}
           />
         ) : null}
-        <Title>Начало экзамена</Title>
+        <Title>{this.props.exam.name}</Title>
+        <p>{this.props.exam.question}</p>
         {this.state.componentList.map(el => el)}
       </Styles>
     );

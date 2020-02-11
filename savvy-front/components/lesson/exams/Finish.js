@@ -46,7 +46,6 @@ const Finish = props => {
         mutation={CREATE_EXAM_RESULT_MUTATION}
         variables={{
           lesson: props.lesson.id,
-          document: props.document.id,
           exam: props.exam,
           answers: props.results
         }}

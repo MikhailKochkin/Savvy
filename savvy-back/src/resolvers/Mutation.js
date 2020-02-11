@@ -424,24 +424,28 @@ const Mutations = {
     return test;
   },
   async updateNewTest(parent, args, ctx, info) {
-    //first take a copy of the updates
+    const answers = args.answers;
+    const correct = args.correct;
+    const question = args.question;
     const updates = { ...args };
-    //remove the ID from updates
     delete updates.id;
-    //run the update method
+    delete updates.answers;
+    delete updates.correct;
+    delete updates.question;
+
     return ctx.db.mutation.updateNewTest(
       {
         data: {
           answers: {
-            set: [...args.answers]
+            set: [...answers]
           },
           correct: {
-            set: [...args.correct]
+            set: [...correct]
           },
           question: {
-            set: [...args.question]
+            set: [...question]
           },
-          next: args.next
+          ...updates
         },
         where: {
           id: args.id

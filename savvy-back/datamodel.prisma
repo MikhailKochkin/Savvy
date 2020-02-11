@@ -29,7 +29,7 @@ enum TaskType {
 }
 
 type User {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   surname: String
   email: String! @unique
@@ -37,92 +37,97 @@ type User {
   resetToken: String
   resetTokenExpiry: Float
   status: Status @default(value: STUDENT)
-  legalPortfolio: LegalPortfolio @relation(name: "UserPortfolio", onDelete: CASCADE)
-  uni: Uni
-  company: Company
+  legalPortfolio: LegalPortfolio @relation(link: TABLE, name: "UserPortfolio", onDelete: CASCADE)
+  uni: Uni @relation(link: TABLE, name: "UniToUser")
+  company: Company @relation(link: TABLE, name: "CompanyToUser", onDelete: CASCADE)
   uniID: ID
   description: String
   resume: String
   coverLetter: String
-  careerTrack: CareerTrack @relation(name: "CareerForUser")
+  careerTrack: CareerTrack @relation(link: TABLE, name: "CareerForUser")
   careerTrackID: ID
-  favourites: [ID]
-  subjects: [ID]
-  new_subjects: [CoursePage] @relation(name: "UserSubjects" onDelete: CASCADE)
-  sandboxes: [ID]
-  permissions: [Permission]
-  coursePages: [CoursePage] @relation(name: "UserCoursePage" onDelete: CASCADE)
-  sandboxPages: [SandboxPage] @relation(name: "UserSandboxPage" onDelete: CASCADE)
-  sandboxPageGoals: [SandboxPageGoal] @relation(name: "UserSandboxPageGoals")
-  lessons: [Lesson]!
-  tests: [Test]!
-  newTests: [NewTest]!
-  quizes: [Quiz]!
-  lessonResults: [LessonResult] @relation(name: "UserLessonResults" onDelete: CASCADE)
-  testResults: [TestResult] @relation(name: "UserTestResults" onDelete: CASCADE)
-  quizResults: [QuizResult] @relation(name: "UserQuizResults" onDelete: CASCADE)
-  problemResults: [ProblemResult] @relation(name: "UserProblemResults" onDelete: CASCADE)
-  textEditorResults: [TextEditorResult] @relation(name: "UserTextEditorResults" onDelete: CASCADE)
-  constructionResults: [ConstructionResult] @relation(name: "UserConstructionResults", onDelete: CASCADE)
-  pointsA: [PointA]!
-  problems: [Problem]!
-  construction: [Construction]!
-  orders: [Order]!
-  textEditor: [TextEditor]!
+  sandboxes: [ID] @scalarList(strategy: RELATION)
+  new_sandboxes: [Sandbox] @relation(link: TABLE, name: "SandboxToUser", onDelete: CASCADE)
+  favourites: [ID] @scalarList(strategy: RELATION)
+  subjects: [ID] @scalarList(strategy: RELATION)
+  new_subjects: [CoursePage] @relation(link: TABLE, name: "UserSubjects", onDelete: CASCADE)
+  permissions: [Permission] @scalarList(strategy: RELATION)
+  coursePages: [CoursePage] @relation(link: TABLE, name: "UserCoursePage", onDelete: CASCADE)
+  sandboxPages: [SandboxPage] @relation(link: TABLE, name: "UserSandboxPage", onDelete: CASCADE)
+  sandboxPageGoals: [SandboxPageGoal] @relation(link: TABLE, name: "UserSandboxPageGoals")
+  lessons: [Lesson]! @relation(link: TABLE, name: "LessonToUser" onDelete: CASCADE)
+  tests: [Test]! @relation(link: TABLE, name: "TestToUser" onDelete: CASCADE)
+  newTests: [NewTest]! @relation(link: TABLE, name: "NewTestToUser" onDelete: CASCADE)
+  quizes: [Quiz]! @relation(link: TABLE, name: "QuizToUser" onDelete: CASCADE)
+  lessonResults: [LessonResult] @relation(link: TABLE, name: "UserLessonResults" onDelete: CASCADE)
+  testResults: [TestResult] @relation(link: TABLE, name: "UserTestResults" onDelete: CASCADE)
+  quizResults: [QuizResult] @relation(link: TABLE, name: "UserQuizResults" onDelete: CASCADE)
+  problemResults: [ProblemResult] @relation(link: TABLE, name: "UserProblemResults" onDelete: CASCADE)
+  textEditorResults: [TextEditorResult] @relation(link: TABLE, name: "UserTextEditorResults" onDelete: CASCADE)
+  constructionResults: [ConstructionResult] @relation(link: TABLE, name: "UserConstructionResults", onDelete: CASCADE)
+  pointsA: [PointA]! @relation(link: TABLE, name: "PointAToUser", onDelete: CASCADE)
+  pointATests: [PointATest] @relation(link: TABLE, name: "PointATestToUser" onDelete: CASCADE)
+  problems: [Problem]! @relation(link: TABLE, name: "ProblemToUser", onDelete: CASCADE)
+  construction: [Construction]!@relation(link: TABLE, name: "ConstructionToUser", onDelete: CASCADE)
+  orders: [Order]! @relation(link: TABLE, name: "OrderToUser", onDelete: CASCADE)
+  textEditor: [TextEditor]! @relation(link: TABLE, name: "TextEditorToUser", onDelete: CASCADE)
   isFamiliar: Boolean! @default(value: false)
-  articles: [Article] @relation(name: "UserArticles", onDelete: CASCADE)
-  examAnswers: [ExamAnswer] @relation(name: "UserExamAnswer", onDelete: CASCADE)
-  shots: [Shot]
-  shotResults: [ShotResult]
-  notes: [Note]
-  teacherFeedback: [Feedback] @relation( name: "TeacherFeedback", onDelete: CASCADE)
-  studentFeedback: [Feedback] @relation( name: "StudentFeedback", onDelete: CASCADE)
-  courseVisits: [CourseVisit] @relation( name: "UserCourseVisits", onDelete: CASCADE)
-  examResults: [ExamResult]
-  exams: [Exam]
-  documents: [Document]
-  clauses: [Clause]
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  articles: [Article] @relation(link: TABLE, name: "UserArticles", onDelete: CASCADE)
+  examAnswers: [ExamAnswer] @relation(link: TABLE, name: "UserExamAnswer", onDelete: CASCADE)
+  shots: [Shot] @relation(link: TABLE, name: "ShotToUser", onDelete: CASCADE)
+  shotResults: [ShotResult] @relation(link: TABLE, name: "ShotResultToUser", onDelete: CASCADE)
+  notes: [Note] @relation(link: TABLE, name: "NoteToUser", onDelete: CASCADE)
+  teacherFeedback: [Feedback] @relation(link: TABLE, name: "TeacherFeedback", onDelete: CASCADE)
+  studentFeedback: [Feedback] @relation(link: TABLE, name: "StudentFeedback", onDelete: CASCADE)
+  courseVisits: [CourseVisit] @relation(link: TABLE, name: "UserCourseVisits", onDelete: CASCADE)
+  examResults: [ExamResult] @relation(link: TABLE, name: "ExamResultToUser", onDelete: CASCADE)
+  exams: [Exam] @relation(link: TABLE, name: "ExamToUser", onDelete: CASCADE)
+  documents: [Document] @relation(link: TABLE, name: "DocumentToUser", onDelete: CASCADE)
+  documentResults: [DocumentResult] @relation(link: TABLE, name: "DocumentResultToUser", onDelete: CASCADE)
+  clauses: [Clause] @relation(link: TABLE, name: "ClauseToUser", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Uni {
-  id: ID! @unique
+  id: ID! @id
   title: String!
-  teachers: [User!]
+  teachers: [User!] @relation(name: "UniToUser")
   capacity: Int @default(value: 2)
   paidMonths: Int @default(value: 0)
   uniCoursePages: [CoursePage] @relation(name: "UniCoursePage")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type CoursePage {
-  id: ID! @unique
+  id: ID! @id
   title: String!
   description: String!
   image: String!
   news: String @default(value: "Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
-  pointsA: [PointA]! @relation(name: "CoursePagePointA" onDelete: CASCADE)
-  applications: [Application]! @relation(name: "ApplicationOnCoursePage" onDelete: CASCADE)
-  pointATests: [PointATest] @relation(name: "CoursePageTests" onDelete: CASCADE)
+  pointsA: [PointA]! @relation(link: TABLE, name: "CoursePagePointA" onDelete: CASCADE)
+  applications: [Application]! @relation(link: TABLE, name: "ApplicationOnCoursePage" onDelete: CASCADE)
+  pointATests: [PointATest] @relation(link: TABLE, name: "CoursePageTests" onDelete: CASCADE)
   careerTrack: [ CareerTrack ] @relation(name: "CoursePageForCareer")
   numInCareerTrack: Int
-  examQuestion: ExamQuestion @relation(name: "CoursePageExamQuestion", onDelete: CASCADE)
+  examQuestion: ExamQuestion @relation(link: TABLE, name: "CoursePageExamQuestion", onDelete: CASCADE)
   published: Boolean @default(value: false)
-  uni: Uni @relation(name: "UniCoursePage")
+  uni: Uni @relation(link: TABLE, name: "UniCoursePage")
   uniID: ID
   articles: [Article] @relation(link: TABLE, name: "ArticleCoursePages")
-  tags: [String]
+  tags: [String] @scalarList(strategy: RELATION)
   courseType: CourseType
-  students: [ID]
+  students: [ID] @scalarList(strategy: RELATION)
   new_students: [ User ] @relation(name: "UserSubjects")
   price: Int
   discountPrice: Int
-  orders: [Order] @relation(name: "CoursePageOrders" onDelete: CASCADE)
+  orders: [Order] @relation(link: TABLE, name: "CoursePageOrders" onDelete: CASCADE)
   company: Company @relation(name: "CompanyCoursePage")
-  promocode: [Json]
-  visits: [CourseVisit] @relation(name: "CourseVisits" onDelete: CASCADE)
+  promocode: [Json] @scalarList(strategy: RELATION)
+  visits: [CourseVisit] @relation(link: TABLE, name: "CourseVisits" onDelete: CASCADE)
   audience: String
   result: String
   tariffs: String
@@ -130,101 +135,100 @@ type CoursePage {
   reviews: [String] @scalarList(strategy: RELATION)
   openLesson: ID
   video: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type SandboxPage {
-  id: ID! @unique
+  id: ID! @id
   title: String!
   description: String!
   image: String!
   user: User! @relation(name: "UserSandboxPage")
-  sandboxes: [Sandbox]! @relation(name: "SandboxesOnSandboxPage" onDelete: CASCADE)
-  sandboxPageGoals: [SandboxPageGoal] @relation(name: "GoalsOnSandboxPage" onDelete: CASCADE)
-  students: [ID]
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  sandboxes: [Sandbox]! @relation(link: TABLE, name: "SandboxesOnSandboxPage" onDelete: CASCADE)
+  sandboxPageGoals: [SandboxPageGoal] @relation(link: TABLE, name: "GoalsOnSandboxPage" onDelete: CASCADE)
+  students: [ID] @scalarList(strategy: RELATION)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type SandboxPageGoal {
-  id: ID! @unique
+  id: ID! @id
   goal: String!
   user: User! @relation(name: "UserSandboxPageGoals")
-  completed: Boolean! @default(value: "false")
+  completed: Boolean! @default(value: false)
   sandboxPage: SandboxPage @relation(name: "GoalsOnSandboxPage")
   sandboxPageID: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Lesson {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   number: Int
   text: String!
-  user: User!
+  user: User! @relation(name: "LessonToUser")
   type: Type @default(value: REGULAR)
-  map: [Json]
-  notes: [Note] @relation(name: "LessonNotes", onDelete: CASCADE)
-  shots: [Shot] @relation(name: "LessonShots", onDelete: CASCADE)
-  shotResults: [ShotResult] @relation(name: "ShotLessonResults" onDelete: CASCADE)
-  coursePage: CoursePage! @relation(name: "LessonsOnCoursePage")
-  tests: [Test] @relation(name: "LessonTests" onDelete: CASCADE)
-  newTests: [NewTest] @relation(name: "LessonNewTests" onDelete: CASCADE)
-  quizes: [Quiz] @relation(name: "LessonQuizes" onDelete: CASCADE)
-  problems: [Problem] @relation(name: "LessonProblems" onDelete: CASCADE)
-  constructions: [Construction] @relation(name: "LessonConstructions" onDelete: CASCADE)
-  texteditors: [TextEditor] @relation(name: "LessonTextEditors" onDelete: CASCADE)
-  lessonResults: [LessonResult] @relation(name: "LessonResults" onDelete: CASCADE)
-  testResults: [TestResult] @relation(name: "TestResults" onDelete: CASCADE)
-  quizResults: [QuizResult] @relation(name: "QuizResults" onDelete: CASCADE)
-  textEditorResults: [TextEditorResult] @relation(name: "TextEditorResults" onDelete: CASCADE)
-  problemResults: [ProblemResult] @relation(name: "ProblemResults" onDelete: CASCADE)
-  documentResults: [DocumentResult] @relation(link: TABLE, name: "LessonDocumentResults" onDelete: CASCADE)
-  constructionResults: [ConstructionResult] @relation(name: "ConstructionResults" onDelete: CASCADE)
+  map: [Json] @scalarList(strategy: RELATION)
+  notes: [Note] @relation(link: TABLE, name: "LessonNotes", onDelete: CASCADE)
+  shots: [Shot] @relation(link: TABLE, name: "LessonShots", onDelete: CASCADE)
+  shotResults: [ShotResult] @relation(link: TABLE, name: "ShotLessonResults" onDelete: CASCADE)
+  coursePage: CoursePage! @relation(link: TABLE, name: "LessonsOnCoursePage")
+  tests: [Test] @relation(link: TABLE, name: "LessonTests" onDelete: CASCADE)
+  newTests: [NewTest] @relation(link: TABLE, name: "LessonNewTests" onDelete: CASCADE)
+  quizes: [Quiz] @relation(link: TABLE, name: "LessonQuizes" onDelete: CASCADE)
+  problems: [Problem] @relation(link: TABLE, name: "LessonProblems" onDelete: CASCADE)
+  constructions: [Construction] @relation(link: TABLE, name: "LessonConstructions" onDelete: CASCADE)
+  texteditors: [TextEditor] @relation(link: TABLE, name: "LessonTextEditors" onDelete: CASCADE)
+  lessonResults: [LessonResult] @relation(link: TABLE, name: "LessonResults" onDelete: CASCADE)
+  testResults: [TestResult] @relation(link: TABLE, name: "TestResults" onDelete: CASCADE)
+  quizResults: [QuizResult] @relation(link: TABLE, name: "QuizResults" onDelete: CASCADE)
+  textEditorResults: [TextEditorResult] @relation(link: TABLE, name: "TextEditorResults" onDelete: CASCADE)
+  problemResults: [ProblemResult] @relation(link: TABLE, name: "ProblemResults" onDelete: CASCADE)
+  constructionResults: [ConstructionResult] @relation(link: TABLE, name: "ConstructionResults" onDelete: CASCADE)
   lessonFeedback: [Feedback] @relation(link: TABLE, name: "LessonFeedback" onDelete: CASCADE)
   open: Boolean @default(value: false)
   coursePageID: ID!
   published: Boolean @default(value: false)
   description: String
-  exams: [Exam] @relation(name: "LessonExams" onDelete: CASCADE)
-  examResults: [ExamResult] @relation(name: "LessonExamResults" onDelete: CASCADE)
+  exams: [Exam] @relation(link: TABLE, name: "LessonExams" onDelete: CASCADE)
+  examResults: [ExamResult] @relation(link: TABLE, name: "LessonExamResults" onDelete: CASCADE)
   documents: [Document] @relation(link: TABLE, name: "LessonDocuments" onDelete: CASCADE)
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  documentResults: [DocumentResult] @relation(link: TABLE, name: "LessonDocumentResults" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
  type Construction {
-  id: ID! @unique
+  id: ID! @id
   name: String!
-  variants: [String!]
-  answer: [String!]
+  variants: [String!] @scalarList(strategy: RELATION)
+  answer: [String!] @scalarList(strategy: RELATION)
   hint: String
   type: String!
-  constructionResults: [ConstructionResult] @relation(name: "SingleConstructionResults" onDelete: CASCADE)
-  user: User!
+  constructionResults: [ConstructionResult] @relation(link: TABLE, name: "SingleConstructionResults" onDelete: CASCADE)
+  user: User! @relation(name: "ConstructionToUser")
   lesson: Lesson! @relation(name: "LessonConstructions")
   lessonID: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
  }
 
 type Sandbox {
-  id: ID! @unique
+  id: ID! @id
   text: String!
   video: String
-  user: User!
   sandboxPage: SandboxPage! @relation(name: "SandboxesOnSandboxPage")
   sandboxPageID: ID!
   link: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  likes: Int @default(value: "0")
+  likes: Int @default(value: 0)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Test {
-  id: ID! @unique
+  id: ID! @id
   question: String!
   answer1: String!
   answer1Correct: String!
@@ -234,44 +238,44 @@ type Test {
   answer3Correct: String 
   answer4: String
   answer4Correct: String
-  user: User!
+  user: User! @relation(name: "TestToUser")
   lesson: Lesson @relation(name: "LessonTests")
   lessonID: ID
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type NewTest {
-  id: ID! @unique
-  question: [String!]
-  answers: [String!]
-  correct: [Boolean!]
+  id: ID! @id
+  question: [String!] @scalarList(strategy: RELATION)
+  answers: [String!] @scalarList(strategy: RELATION)
+  correct: [Boolean!] @scalarList(strategy: RELATION)
   type: TaskType @default(value: TEST)
-  testResults: [TestResult] @relation(name: "NewTestResults" onDelete: CASCADE)
-  user: User!
+  testResults: [TestResult] @relation(link: TABLE, name: "NewTestResults" onDelete: CASCADE)
+  user: User! @relation(name: "NewTestToUser")
   lesson: Lesson @relation(name: "LessonNewTests")
   lessonID: ID
   next: Json
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Quiz {
-  id: ID! @unique
+  id: ID! @id
   question: String!
   answer: String!
-  user: User!
+  user: User! @relation(name: "QuizToUser")
   type: TaskType @default(value: TEST)
   lessonID: ID
   lesson: Lesson @relation(name: "LessonQuizes")
-  quizResults: [QuizResult] @relation(name: "NewQuizResults" onDelete: CASCADE)
+  quizResults: [QuizResult] @relation(link: TABLE, name: "NewQuizResults" onDelete: CASCADE)
   next: Json
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type PointATest {
-  id: ID! @unique
+  id: ID! @id
   question: String!
   answer1: String!
   answer1Correct: String!
@@ -281,98 +285,106 @@ type PointATest {
   answer3Correct: String 
   answer4: String
   answer4Correct: String
-  user: User!
+  user: User! @relation(name: "PointATestToUser")
   coursePage: CoursePage @relation(name: "CoursePageTests")
   coursePageID: ID
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Problem {
-  id: ID! @unique
+  id: ID! @id
   text: String!
   hints: String
   solution: String
   answer: String
-  hintsList: [String!]
-  solutionList: [String!]
-  user: User!
+  hintsList: [String!] @scalarList(strategy: RELATION)
+  solutionList: [String!] @scalarList(strategy: RELATION)
+  user: User! @relation(name: "ProblemToUser")
   lesson: Lesson! @relation(name: "LessonProblems")
-  problemResults: [ProblemResult] @relation(name: "SingleProblemResults" onDelete: CASCADE)
+  problemResults: [ProblemResult] @relation(link: TABLE, name: "SingleProblemResults" onDelete: CASCADE)
   lessonID: ID!
   nodeType: String
   nodeID: ID
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type TextEditor {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   text: String!
   totalMistakes: Int
-  user: User!
+  user: User! @relation(name: "TextEditorToUser")
   lesson: Lesson! @relation(name: "LessonTextEditors")
   lessonID: ID!
-  textEditorResults: [TextEditorResult] @relation(name: "SingleTextEditorResults" onDelete: CASCADE)
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  textEditorResults: [TextEditorResult] @relation(link: TABLE, name: "SingleTextEditorResults" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Application {
-  id: ID! @unique
+  id: ID! @id
   applicantId: ID!
   applicantName: String!
   message: String
   coursePage: CoursePage! @relation(name: "ApplicationOnCoursePage")
   coursePageID: ID!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Order {
-  id: ID! @unique
+  id: ID! @id
   paymentId: String
   coursePage: CoursePage! @relation(name: "CoursePageOrders")
   coursePageID: ID!
   price: Int!
-  paid: Boolean @default(value: "false")
-  user: User!
+  paid: Boolean @default(value: false)
+  user: User! @relation(name: "OrderToUser")
   userID: ID
   clientID: ID
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type PointA {
-  id: ID! @unique
+  id: ID! @id
   description: String
   coursePage: CoursePage! @relation(name: "CoursePagePointA")
   coursePageID: ID
-  user: User!
-  pointATests: [PointATest] @relation(name: "PointATests" onDelete: CASCADE)
+  user: User! @relation(name: "PointAToUser")
+  pointATests: [PointATest] @relation(link: TABLE, name: "PointATests" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type CareerTrack {
-  id: ID! @unique
+  id: ID! @id
   name: String!
   img: String
   members: User @relation(name: "CareerForUser")
   coursePages: [CoursePage] @relation(name: "CoursePageForCareer")
-  careerTrackUnits: [CareerTrackUnit] @relation(name: "CareerTrackUnits" onDelete: CASCADE)
+  careerTrackUnits: [CareerTrackUnit] @relation(link: TABLE, name: "CareerTrackUnits" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type CareerTrackUnit {
-  id: ID! @unique
+  id: ID! @id
   title: String!
   number: Int
   img: String
-  topics: [String!]
-  articles: [String!]
+  topics: [String!] @scalarList(strategy: RELATION)
+  articles: [String!] @scalarList(strategy: RELATION)
   coursePages: [CoursePage]
   careerTrack: CareerTrack! @relation(name: "CareerTrackUnits")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type TestResult {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation(name: "UserTestResults")
   answer: String
   attempts: Int
@@ -380,31 +392,37 @@ type TestResult {
   lessonID: ID
   test: NewTest @relation(name: "NewTestResults")
   testID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type QuizResult {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation(name: "UserQuizResults")
   answer: String
   attempts: Int
   quiz: Quiz @relation(name: "NewQuizResults")
   lesson: Lesson @relation(name: "QuizResults")
   lessonID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type ProblemResult {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation(name: "UserProblemResults")
   answer: String
-  revealed: [String!]
+  revealed: [String!] @scalarList(strategy: RELATION)
   lesson: Lesson @relation(name: "ProblemResults")
   lessonID: ID
   problem: Problem @relation(name: "SingleProblemResults")
   problemID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type TextEditorResult {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation(name: "UserTextEditorResults")
   attempts: Int
   revealed: [Json] @scalarList(strategy: RELATION)
@@ -412,10 +430,12 @@ type TextEditorResult {
   lessonID: ID
   textEditor: TextEditor @relation(name: "SingleTextEditorResults")
   textEditorID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type LessonResult {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation(name: "UserLessonResults")
   visitsNumber: Int @default(value: 0)
   lesson: Lesson! @relation(name: "LessonResults")
@@ -425,46 +445,53 @@ type LessonResult {
 }
 
 type ConstructionResult {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation( name: "UserConstructionResults")
   answer: String
   attempts: Int
-  inputs: [String]
+  inputs: [String] @scalarList(strategy: RELATION)
   construction: Construction @relation(name: "SingleConstructionResults")
   constructionID: ID
   lesson: Lesson @relation(name: "ConstructionResults")
   lessonID: ID
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type ExamQuestion {
-  id: ID! @unique
+  id: ID! @id
   coursePage: CoursePage! @relation(name: "CoursePageExamQuestion")
   coursePageID: ID!
   question: String!
   answers: [ExamAnswer!] @relation(link: TABLE, name: "ExamQuestionAnswer")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type ExamAnswer {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation(name: "UserExamAnswer")
   answer: String!
   examQuestion: ExamQuestion! @relation(name: "ExamQuestionAnswer")
   examQuestionID: ID!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type LegalPortfolio {
-  id: ID! @unique
+  id: ID! @id
   user: User!@relation(name: "UserPortfolio")
   cv: String
   portfolio: [ExamAnswer]
   portfolioIDs: [ID] @scalarList(strategy: RELATION)
   resume: String
   open: Boolean! @default(value: false)
-
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Article {
-  id: ID! @unique
+  id: ID! @id
   user: User!@relation(name: "UserArticles")
   tag: String
   img: String
@@ -472,15 +499,17 @@ type Article {
   text: String
   coursePages: [CoursePage]@relation(name: "ArticleCoursePages")
   coursePageIDs: [ID]@scalarList(strategy: RELATION)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Shot {
-  id: ID! @unique
-  user: User! 
+  id: ID! @id
+  user: User! @relation(name: "ShotToUser")
   title: String!
-  parts: [String!]
-  comments: [String!]
-  shotResults: [ShotResult] @relation(name: "ShotResults", onDelete: CASCADE)
+  parts: [String!] @scalarList(strategy: RELATION)
+  comments: [String!] @scalarList(strategy: RELATION)
+  shotResults: [ShotResult] @relation(link: TABLE, name: "ShotResults", onDelete: CASCADE)
   lessonID: ID
   lesson: Lesson @relation( name: "LessonShots")
   createdAt: DateTime! @createdAt
@@ -488,8 +517,8 @@ type Shot {
 }
 
 type ShotResult {
-  id: ID! @unique
-  student: User! 
+  id: ID! @id
+  student: User! @relation(name: "ShotResultToUser")
   answer: String!
   lessonID: ID
   lesson: Lesson @relation( name: "ShotLessonResults")
@@ -500,24 +529,28 @@ type ShotResult {
 }
 
 type Note {
-  id: ID! @unique
+  id: ID! @id
   text: String!
-  user: User
+  user: User @relation( name: "NoteToUser")
   next: Json
   lessonID: ID
   lesson: Lesson @relation( name: "LessonNotes")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Company {
-  id: ID! @unique
+  id: ID! @id
   name: String!
-  hrs: [User!]
+  hrs: [User!] @relation( name: "CompanyToUser")
   paidMonths: Int @default(value: 0)
   coursePages: [CoursePage] @relation(name: "CompanyCoursePage")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Feedback {
-  id: ID! @unique
+  id: ID! @id
   text: String!
   lesson: Lesson @relation( name: "LessonFeedback")
   teacher: User! @relation( name: "TeacherFeedback")
@@ -527,7 +560,7 @@ type Feedback {
 }
 
 type CourseVisit {
-  id: ID! @unique
+  id: ID! @id
   student: User! @relation( name: "UserCourseVisits")
   visitsNumber: Int @default(value: 0)
   coursePage: CoursePage! @relation( name: "CourseVisits")
@@ -536,10 +569,11 @@ type CourseVisit {
 }
 
 type Exam {
-  id: ID! @unique
-  user: User!
+  id: ID! @id
+  user: User! @relation( name: "ExamToUser")
+  name: String
   lesson: Lesson! @relation( name: "LessonExams")
-  examResults: [ExamResult] @relation(name: "ExamResults" onDelete: CASCADE)
+  examResults: [ExamResult] @relation(link: TABLE, name: "ExamResults" onDelete: CASCADE)
   nodeType: String
   nodeID: ID
   question: String
@@ -548,41 +582,45 @@ type Exam {
 }
 
 type ExamResult {
-  id: ID! @unique
-  user: User
-  answers: [String]
+  id: ID! @id
+  user: User @relation( name: "ExamResultToUser")
+  answers: [String] @scalarList(strategy: RELATION)
   lesson: Lesson @relation( name: "LessonExamResults")
   exam: Exam @relation( name: "ExamResults")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Document  {
-  id: ID! @unique
+  id: ID! @id
   title: String!
-  user: User!
+  user: User! @relation( name: "DocumentToUser")
   lesson: Lesson! @relation( name: "LessonDocuments")
-  documentResults: [DocumentResult] @relation(name: "DocumentResults" onDelete: CASCADE)
-  clauses: [Clause] @relation(name: "DocumentClauses" onDelete: CASCADE)
+  documentResults: [DocumentResult] @relation(link: TABLE, name: "DocumentResults" onDelete: CASCADE)
+  clauses: [Clause] @relation(link: TABLE, name: "DocumentClauses" onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
 
 type Clause  {
-  id: ID! @unique
-  user: User!
+  id: ID! @id
+  user: User! @relation(name: "ClauseToUser")
   number: Int!
   commentary: String!
-  keywords: [String]
+  keywords: [String] @scalarList(strategy: RELATION)
   sample: String
-  document: Document! @relation( name: "DocumentClauses")
+  document: Document! @relation(name: "DocumentClauses")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
 
 type DocumentResult {
-  id: ID! @unique
-  user: User
-  answers: [String]
-  drafts: [String]
+  id: ID! @id
+  user: User @relation( name: "DocumentResultToUser")
+  answers: [String] @scalarList(strategy: RELATION)
+  drafts: [String] @scalarList(strategy: RELATION)
   lesson: Lesson @relation( name: "LessonDocumentResults")
   document: Document @relation( name: "DocumentResults")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }

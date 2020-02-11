@@ -28,7 +28,6 @@ const Styles = styled.div`
   font-size: 1.6rem;
   @media (max-width: 800px) {
     flex-direction: column;
-    font-size: 1.5rem;
   }
 `;
 
@@ -190,14 +189,13 @@ class SingleQuiz extends Component {
   };
 
   onAnswer = async e => {
+    console.log("here");
     this.setState({ progress: "true" });
     let data1 = {
       sentence1: this.props.answer.toLowerCase(),
       sentence2: this.state.answer.toLowerCase()
     };
-    // https://dry-plains-91452.herokuapp.com
-    // http://localhost:5000/
-    const r = await fetch("https://dry-plains-91452.herokuapp.com", {
+    const r = await fetch("https://dry-plains-91452.herokuapp.com/", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json"
@@ -206,6 +204,7 @@ class SingleQuiz extends Component {
     })
       .then(response => response.json())
       .then(res => {
+        console.log(res);
         if (res > 0.59) {
           this.setState({ correct: "true", inputColor: "#32AC66" });
           this.move("true");
@@ -227,9 +226,7 @@ class SingleQuiz extends Component {
         if (this.props.exam) {
           // 4. we transfer the "true" data to the exam component
           this.props.getData(
-            this.props.next && this.props.next.true
-              ? this.props.next.true
-              : { finish: 0 },
+            this.props.next ? this.props.next.true : { finish: 0 },
             "true"
           );
         }
@@ -239,9 +236,7 @@ class SingleQuiz extends Component {
         if (this.props.exam) {
           // 4. we transfer the "false" data to the exam component
           this.props.getData(
-            this.props.next && this.props.next.false
-              ? this.props.next.false
-              : { finish: 1 },
+            this.props.next ? this.props.next.false : { finish: 0 },
             "false"
           );
         }
@@ -265,6 +260,18 @@ class SingleQuiz extends Component {
       .filter(el => el.student.id === me.id);
     return (
       <Styles story={story}>
+        <Buttons>
+          {!exam && !story && (
+            <StyledButton onClick={this.switch}>Настройки</StyledButton>
+          )}
+          {me && me.id === user && !this.props.exam && !this.props.story ? (
+            <DeleteSingleQuiz
+              id={me.id}
+              quizID={this.props.quizID}
+              lessonID={this.props.lessonID}
+            />
+          ) : null}
+        </Buttons>
         {!this.state.update && (
           <>
             <Question story={story}>
@@ -302,6 +309,7 @@ class SingleQuiz extends Component {
                       } else {
                         const res = await this.onAnswer();
                       }
+                      this.setState({ progress: "false" });
                       if (data.length === 0) {
                         const res0 = await createQuizResult();
                       }
@@ -347,22 +355,11 @@ class SingleQuiz extends Component {
             answer={this.props.answer}
             question={this.props.question}
             notes={this.props.notes}
+            next={this.props.next}
             quizes={this.props.quizes.filter(q => q.id !== this.props.quizID)}
             tests={this.props.tests}
           />
         )}
-        <Buttons>
-          {!exam && !story && (
-            <StyledButton onClick={this.switch}>Настройки</StyledButton>
-          )}
-          {me && me.id === user && !this.props.exam && !this.props.story ? (
-            <DeleteSingleQuiz
-              id={me.id}
-              quizID={this.props.quizID}
-              lessonID={this.props.lessonID}
-            />
-          ) : null}
-        </Buttons>
         {this.props.exam && (
           <Dots>
             <div className="group">

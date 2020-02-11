@@ -3,34 +3,8 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import Button from "@material-ui/core/Button";
 import Option from "../Option";
-import { makeStyles } from "@material-ui/core/styles";
-
-const useStyles = makeStyles({
-  button: {
-    width: "30%",
-    margin: "2% 0",
-    fontSize: "1.4rem",
-    textTransform: "none"
-  },
-  root: {
-    marginBottom: "4%"
-  },
-  formControl: {
-    width: "70%",
-    fontSize: "2.4rem",
-    padding: "1% 0"
-  },
-  label: {
-    fontSize: "1.5rem",
-    fontFamily: "Montserrat",
-    marginBottom: "1%"
-  },
-  labelRoot: {
-    fontSize: "1.5rem"
-  }
-});
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_NOTE_MUTATION = gql`
   mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String, $next: Json) {
@@ -76,6 +50,22 @@ const Container = styled.div`
   }
 `;
 
+const Button = styled.button`
+  padding: 0.5% 1%;
+  background: ${props => props.theme.green};
+  width: 25%;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.6rem;
+  margin: 2% 0;
+  cursor: pointer;
+  outline: 0;
+  &:active {
+    background-color: ${props => props.theme.darkGreen};
+  }
+`;
+
 const Button2 = styled.button`
   font-family: Montserrat;
   /* color: #112a62; */
@@ -95,64 +85,62 @@ const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
 });
 
 const UpdateNote = props => {
-  const [trueVal, setTrueVal] = useState("");
-  const [falseVal, setFalseVal] = useState("");
-  const [txt, setText] = useState("");
-  const [next, setNext] = useState("");
-  const classes = useStyles();
+  const [text, setText] = useState(props.text);
+  const [trueVal, setTrueVal] = useState(
+    props.next && props.next.true ? props.next.true : ""
+  );
+  const [falseVal, setFalseVal] = useState(
+    props.next && props.next.false ? props.next.false : ""
+  );
 
-  const myCallback = d => setText(d);
-
-  const myCallback2 = async (type, data) => {
-    return type === "true" ? setTrueVal(data) : setFalseVal(data);
+  const myCallback = async (type, data) => {
+    return type === true ? setTrueVal(data) : setFalseVal(data);
   };
 
-  const onSave = () => {
-    return setNext({
-      true: trueVal,
-      false: falseVal
-    });
-  };
+  const getText = d => setText(d);
 
-  const { notes, text, quizes, id, tests } = props;
+  const { notes, quizes, id, tests, lessonID } = props;
   return (
     <>
       <Container>
-        <DynamicLoadedEditor getEditorText={myCallback} previousText={text} />
-        <h3>Выберите задания для формата "Экзамен":</h3>
+        <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+        <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
         <h3>Вопросы:</h3>
         {quizes.map(quiz => (
-          <Option quiz={quiz} getData={myCallback2} />
+          <Option quiz={quiz} getData={myCallback} />
         ))}
         <h3>Заметки:</h3>
         {notes.map(note => (
-          <Option note={note} getData={myCallback2} />
+          <Option note={note} getData={myCallback} />
         ))}
         <h3>Тесты:</h3>
         {tests.map(test => (
-          <Option key={test.id} test={test} getData={myCallback2} />
+          <Option key={test.id} test={test} getData={myCallback} />
         ))}
-        <Button2 onClick={e => onSave()}>Compile</Button2>
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
           variables={{
             id: id,
-            text: txt,
-            next: next
+            text: text,
+            next: {
+              true: trueVal,
+              false: falseVal
+            }
           }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lessonID }
+            }
+          ]}
         >
           {(updateNote, { loading, error }) => (
             <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
               onClick={async e => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation
                 const res = await updateNote();
-                alert("Готово!");
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}

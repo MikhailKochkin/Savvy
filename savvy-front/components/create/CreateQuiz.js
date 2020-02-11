@@ -58,7 +58,7 @@ const AnswerOption = styled.div`
 const Button = styled.button`
   padding: 1.5% 3%;
   font-size: 1.6rem;
-  width: 20%;
+  width: 30%;
   font-weight: 600;
   color: #fffdf7;
   background: ${props => props.theme.green};

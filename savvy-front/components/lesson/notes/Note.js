@@ -1,20 +1,33 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
 import UpdateNote from "./UpdateNote";
+import DeleteNote from "../../delete/DeleteNote";
+
+const StyledButton = withStyles({
+  root: {
+    width: "15%",
+    height: "45px",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none"
+  }
+})(Button);
 
 const Container = styled.div`
-  width: ${props => (props.story ? "100%" : "100%")};
+  width: ${props => (props.story ? "100%" : "95%")};
   font-size: 1.6rem;
-  margin: 30px 0;
+  margin: 20px 0;
 `;
 
 const NoteStyles = styled.div`
-  width: ${props => (props.story ? "100%" : "100%")};
+  width: ${props => (props.story ? "100%" : "95%")};
   margin: 2% 0 0 0;
-  padding: 0% 3.5%;
-  font-size: 1.5rem;
-  border: ${props => (props.exam ? "1px solid #e4e4e4" : "none")};
+  padding: 0% 2%;
+  font-size: 1.6rem;
+  border: ${props => (props.story ? null : "1px solid #e4e4e4")};
   border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
@@ -73,11 +86,16 @@ const NoteStyles = styled.div`
   }
 `;
 
+const Buttons = styled.div`
+  margin-top: 3%;
+`;
+
 const Dots = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   height: 90px;
+  width: 100%;
   margin-bottom: 5%;
   .group {
     display: flex;
@@ -99,68 +117,72 @@ const MiniButton = styled.div`
   background: none;
   cursor: pointer;
   margin: 1.5% 0;
-  padding: 0% 2%;
   &:hover {
     text-decoration: underline;
   }
 `;
 
-class Note extends Component {
-  state = {
-    update: false
-  };
-  switch = () => {
-    this.setState(prev => ({ update: !prev.update }));
-  };
-  push = () => {
-    this.props.exam
-      ? this.props.getData(
-          this.props.next ? this.props.next.true : { finish: 0 },
-          "true"
-        )
+const Note = props => {
+  const [update, setUpdate] = useState(false);
+
+  const push = () => {
+    props.exam
+      ? props.getData(props.next ? props.next.true : { finish: 0 }, "true")
       : null;
   };
-  render() {
-    return (
-      <>
-        <Container story={this.props.story}>
-          {this.props.me &&
-            !this.props.exam &&
-            this.props.me.id === this.props.teacher && (
-              <MiniButton onClick={this.switch}>
-                {!this.state.update ? "Настройки" : "Заметка"}
-              </MiniButton>
-            )}
-          {!this.state.update && (
-            <NoteStyles exam={this.props.exam}>
-              {renderHTML(this.props.text)}
-            </NoteStyles>
-          )}
-          {this.props.getData && (
-            <MiniButton onClick={this.push}>Далее</MiniButton>
-          )}
-          {this.state.update && this.props.story !== true && (
-            <UpdateNote
-              notes={this.props.notes}
-              text={this.props.text}
-              tests={this.props.tests}
-              id={this.props.note.id}
-              quizes={this.props.quizes}
-            />
-          )}
-        </Container>
-        {this.props.exam && (
-          <Dots>
-            <div className="group">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-            </div>
-          </Dots>
+
+  const {
+    exam,
+    story,
+    me,
+    text,
+    notes,
+    note,
+    tests,
+    quizes,
+    id,
+    user,
+    getData,
+    lessonID
+  } = props;
+  return (
+    <>
+      <Buttons>
+        {!exam && !story && me.id === note.user.id && (
+          <StyledButton onClick={e => setUpdate(!update)}>
+            {!update ? "Настройки" : "Заметка"}
+          </StyledButton>
         )}
-      </>
-    );
-  }
-}
+        {me && me.id === user && !props.story && !props.exam && (
+          <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
+        )}
+      </Buttons>
+      <Container story={story}>
+        {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
+        {getData && <MiniButton onClick={push}>Далее</MiniButton>}
+        {update && !story && !exam && (
+          <UpdateNote
+            notes={notes}
+            text={text}
+            tests={tests}
+            id={id}
+            quizes={quizes}
+            next={props.next}
+            lessonID={lessonID}
+          />
+        )}
+      </Container>
+      {exam && (
+        <Dots>
+          <div className="group">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
+        </Dots>
+      )}
+    </>
+  );
+};
 
 export default Note;
