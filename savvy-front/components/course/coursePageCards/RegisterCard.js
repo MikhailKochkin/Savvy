@@ -245,9 +245,6 @@ class RegisterCard extends Component {
                       onChange={this.handleInputChange}
                     />
                   </GridContainer>
-                  <SmallButton onClick={this.scroll}>
-                    Подробнее о тарифах
-                  </SmallButton>
                 </>
               )}
             </Part1>

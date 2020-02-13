@@ -482,7 +482,7 @@ class CoursePage extends Component {
                                 {data.coursePage.methods && (
                                   <div className="green">
                                     <div className="header">
-                                      👨🏻‍🏫 👩🏼‍🏫 Об авторе курса
+                                      👨🏻‍🏫 👩🏼‍🏫 Об авторе курса и его подходах
                                     </div>
                                     <div>
                                       {renderHTML(data.coursePage.methods)}

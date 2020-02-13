@@ -7,6 +7,12 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies } from "../../config";
@@ -41,34 +47,12 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-const SubmitButton = styled.button`
-  background-color: #84bc9c;
-  border: 1px solid white;
-  border-radius: 6px;
-  color: white;
-  padding: 2%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1.4rem;
-  font-weight: 600;
-  width: 100%;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    border: 1px solid black;
-  }
-  @media (max-width: 800px) {
-    margin-top: 5%;
-  }
-`;
-
 const Form = styled.form`
   min-width: 400px;
   font-size: 1.6rem;
   @media (max-width: 800px) {
     min-width: 100px;
-    width: 100%;
+    max-width: 100%;
   }
 `;
 
@@ -81,22 +65,19 @@ const Fieldset = styled.fieldset`
     font-size: 1.6rem;
     font-family: Montserrat;
   }
+  .condition {
+    font-size: 1.4rem;
+    line-height: 1.4;
+    margin-top: 4%;
+  }
   #standard-select-currency {
+    width: 50%;
     font-size: 1.6rem;
     font-family: Montserrat;
   }
   #standard-select-currency-label {
     display: none;
   }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  margin-top: 2%;
-  padding: 3%;
-  border-bottom: solid 1px #f0f0f0;
 `;
 
 const Title = styled.div`
@@ -127,6 +108,23 @@ const Transit = styled.div`
   }
 `;
 
+// const useStyles = makeStyles({
+//   button: {
+//     width: "90%",
+//     marginBottom: "2%",
+//     fontSize: "1.4rem",
+//     textTransform: "none"
+//   },
+//   root: {
+//     margin: "2% 0 2% 0",
+//     fontSize: "1.5rem",
+//     width: "95%"
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem"
+//   }
+// });
+
 const useStyles = makeStyles({
   button: {
     width: "100%",
@@ -135,10 +133,13 @@ const useStyles = makeStyles({
     textTransform: "none"
   },
   root: {
-    margin: "2% 0 2% 0",
-    fontSize: "1.5rem"
+    marginBottom: "4%",
+    width: "100%"
   },
   labelRoot: {
+    fontSize: "1.5rem"
+  },
+  formControl: {
     fontSize: "1.5rem"
   }
 });
@@ -163,6 +164,10 @@ const Signup = props => {
     props.getData(name);
   };
 
+  const handleChange = event => {
+    setIsFamiliar(event.target.value);
+  };
+
   return (
     <Mutation
       mutation={SIGNUP_MUTATION}
@@ -184,6 +189,10 @@ const Signup = props => {
           method="post"
           onSubmit={async e => {
             e.preventDefault();
+            if (!isFamiliar) {
+              alert("Не забыли про согласие на обработку персональных данных?");
+              return;
+            }
             await signup();
             props.closeNavBar(true);
             setEmail("");
@@ -344,8 +353,6 @@ const Signup = props => {
                     </MenuItem>
                   ))}
                 </TextField>
-
-                {/* <label className="career"> */}
                 <TextField
                   className="careerTrackID"
                   name="careerTrackID"
@@ -372,10 +379,11 @@ const Signup = props => {
                   Карьерный трек необходим для составления плана карьерного
                   развития, поиска курсов и предложений работы.
                 </Comment>
-                {/* </label> */}
               </>
             )}
-
+            <div className="condition">
+              Согласие на обработку персональных данных
+            </div>
             <TextField
               name="isFamiliar"
               className="isFamiliar"
@@ -391,9 +399,6 @@ const Signup = props => {
               value={isFamiliar}
               onChange={e => setIsFamiliar(e.target.value)}
             >
-              <MenuItem key={123} value={false}>
-                Согласие на обработку персональных данных
-              </MenuItem>
               <MenuItem key={23425} value={true}>
                 Да
               </MenuItem>

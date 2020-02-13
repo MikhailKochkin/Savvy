@@ -21,6 +21,14 @@ const NavButton = styled.button`
   text-decoration: none;
   font-size: 1.4rem;
   outline: none;
+  &:hover {
+    border: 1px solid #122a62;
+  }
+  @media (max-width: 800px) {
+    border: 1px solid #122a62;
+    width: 40%;
+    margin: 3% 0;
+  }
 `;
 
 class FetchMore extends Component {

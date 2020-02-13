@@ -97,7 +97,7 @@ const Signin = props => {
             <Title>Войдите на Savvy App</Title>
             <Error error={error} />
             <TextField
-              type="text"
+              type="email"
               className={classes.root}
               InputLabelProps={{
                 classes: {
