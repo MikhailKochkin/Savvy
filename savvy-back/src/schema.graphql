@@ -447,6 +447,24 @@ type Query {
     orderBy: DocumentResultOrderByInput
     skip: Int
   ): [DocumentResult!]
+  testResults(
+    where: TestResultWhereInput
+    orderBy: TestResultOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [TestResult!]
+  quizResults(
+    where: QuizResultWhereInput
+    orderBy: QuizResultOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [QuizResult!]
 }
 
 type User {

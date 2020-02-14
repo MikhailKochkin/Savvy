@@ -18,6 +18,8 @@ const Query = {
   careerTrack: forwardTo("db"),
   careerTracks: forwardTo("db"),
   lessonResults: forwardTo("db"),
+  testResults: forwardTo("db"),
+  quizResults: forwardTo("db"),
   order: forwardTo("db"),
   sandbox: forwardTo("db"),
   examQuestions: forwardTo("db"),
