@@ -26,7 +26,6 @@ const SIGNUP_MUTATION = gql`
     $isFamiliar: Boolean!
     $status: Status!
     $uniID: ID
-    $company: ID
     $careerTrackID: ID
   ) {
     signup(
@@ -37,7 +36,6 @@ const SIGNUP_MUTATION = gql`
       isFamiliar: $isFamiliar
       status: $status
       uniID: $uniID
-      company: $company
       careerTrackID: $careerTrackID
     ) {
       id
@@ -108,23 +106,6 @@ const Transit = styled.div`
   }
 `;
 
-// const useStyles = makeStyles({
-//   button: {
-//     width: "90%",
-//     marginBottom: "2%",
-//     fontSize: "1.4rem",
-//     textTransform: "none"
-//   },
-//   root: {
-//     margin: "2% 0 2% 0",
-//     fontSize: "1.5rem",
-//     width: "95%"
-//   },
-//   labelRoot: {
-//     fontSize: "1.5rem"
-//   }
-// });
-
 const useStyles = makeStyles({
   button: {
     width: "100%",
@@ -151,7 +132,7 @@ const Signup = props => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("STUDENT");
   const [uniID, setUniID] = useState("cjyimfz2e00lp07174jpder3m");
-  const [company, setCompany] = useState("ck6mmk07k004v0757xcaaex8m");
+  const [company, setCompany] = useState("ck6mn2jhf009z07570hftqn7p");
   const [careerTrackID, setCareerTrackID] = useState(
     "cjwx78u7700rb07121pelqctm"
   );
@@ -178,7 +159,6 @@ const Signup = props => {
         email: email,
         status: status,
         uniID: uniID,
-        company: company,
         careerTrackID: careerTrackID,
         isFamiliar: isFamiliar
       }}
