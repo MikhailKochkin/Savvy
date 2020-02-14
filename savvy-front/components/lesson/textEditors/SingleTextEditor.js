@@ -284,7 +284,7 @@ class SingleTextEditor extends Component {
                     const res = await createTextEditorResult();
                   }}
                 >
-                  {this.state.mistakesShown ? "Скрыть ошибки" : " Сохранить"}
+                  {this.state.mistakesShown ? "Скрыть ошибки" : " Проверить"}
                 </StyledButton>
               )}
             </Mutation>

@@ -151,7 +151,7 @@ const Signup = props => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("STUDENT");
   const [uniID, setUniID] = useState("cjyimfz2e00lp07174jpder3m");
-  const [company, setCompany] = useState("ck2eobt3u04sh078578d6jhqb");
+  const [company, setCompany] = useState("ck6mmk07k004v0757xcaaex8m");
   const [careerTrackID, setCareerTrackID] = useState(
     "cjwx78u7700rb07121pelqctm"
   );
