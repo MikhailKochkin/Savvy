@@ -443,7 +443,7 @@ class Nav extends Component {
                       />
                     )}
                     {this.state.auth === "reset" && (
-                      <Reset getData={this.changeState} />
+                      <RequestReset getData={this.changeState} />
                     )}
                   </StyledModal>
                 </>

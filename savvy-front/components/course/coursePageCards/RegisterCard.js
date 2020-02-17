@@ -221,7 +221,6 @@ class RegisterCard extends Component {
                     зарегистрироваться, нажав на кнопку ниже, чтобы получить
                     доступ к урокам.
                   </div>
-                  <div></div>
                 </>
               )}
               {coursePage.courseType === "PRIVATE" && (
@@ -275,7 +274,7 @@ class RegisterCard extends Component {
                   мы откроем доступ.
                 </Paid>
               )}
-              {!me && <BuyDummy onClick={this.toggleModal}>Купить</BuyDummy>}
+              {!me && <BuyDummy onClick={this.toggleModal}>Войти</BuyDummy>}
               {me && (
                 <>
                   {coursePage.courseType === "FORMONEY" && (
