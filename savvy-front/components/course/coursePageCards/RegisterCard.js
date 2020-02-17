@@ -69,7 +69,12 @@ const Input = styled.input`
   font-size: 1.4rem;
 `;
 
-const Part1 = styled.div``;
+const Part1 = styled.div`
+  .message {
+    text-align: center;
+    margin-bottom: 10%;
+  }
+`;
 
 const Part2 = styled.div``;
 
@@ -210,10 +215,14 @@ class RegisterCard extends Component {
             <Part1>
               {(coursePage.courseType === "PUBLIC" ||
                 coursePage.courseType === "CHALLENGE") && (
-                <div className="message">
-                  Вам необходимо зарегистрироваться на курс, чтобы открыть
-                  доступ к урокам.
-                </div>
+                <>
+                  <div className="message">
+                    Это открытый курс, но вам необходимо на него
+                    зарегистрироваться, нажав на кнопку ниже, чтобы получить
+                    доступ к урокам.
+                  </div>
+                  <div></div>
+                </>
               )}
               {coursePage.courseType === "PRIVATE" && (
                 <div className="message">

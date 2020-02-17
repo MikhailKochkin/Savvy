@@ -44,9 +44,9 @@ const ADD_USER_TO_COURSEPAGE = gql`
 `;
 
 const Button = styled.button`
-  background: ${props => props.theme.green};
+  background: #0846d8;
   border-radius: 5px;
-  width: 200px;
+  width: 100%;
   height: 38px;
   outline: 0;
   color: white;
@@ -56,8 +56,16 @@ const Button = styled.button`
   cursor: pointer;
   border: none;
   margin-top: 10px;
+  &:hover {
+    background: rgba(8, 70, 216, 0.85);
+  }
   &:active {
     background-color: ${props => props.theme.darkGreen};
+  }
+  &:disabled {
+    &:hover {
+      background-color: #84bc9c;
+    }
   }
 `;
 
