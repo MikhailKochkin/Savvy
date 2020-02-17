@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import AreYouAdmin from "./auth/AreYouAdmin";
 import ApplicationBox from "./teach/applications/ApplicationBox";
-import dynamic from "next/dynamic";
 
 const PAGE_APPLICATIONS_QUERY = gql`
   query PAGE_APPLICATIONS_QUERY($id: ID!) {
@@ -59,10 +58,6 @@ const Orders = styled.div`
   display: block;
 `;
 
-const DynamicComponent = dynamic(import("./ActiveUsers"), {
-  ssr: false
-});
-
 class PaidApplications extends Component {
   state = {
     show: false
@@ -76,7 +71,6 @@ class PaidApplications extends Component {
     return (
       <AreYouAdmin>
         <Width>
-          <DynamicComponent />
           <Container>
             <Query
               query={PAGE_APPLICATIONS_QUERY}

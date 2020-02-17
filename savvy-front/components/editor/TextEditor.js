@@ -244,16 +244,16 @@ const rules = [
           type: type,
           nodes: next(el.childNodes),
           data: {
-            href:
-              Array.from(el.attributes).find(({ name }) => name == "href") !==
-              undefined
-                ? Array.from(el.attributes).find(({ name }) => name == "href")
-                    .value
-                : null,
             data:
               Array.from(el.attributes).find(({ name }) => name == "data") !==
               undefined
                 ? Array.from(el.attributes).find(({ name }) => name == "data")
+                    .value
+                : null,
+            href:
+              Array.from(el.attributes).find(({ name }) => name == "href") !==
+              undefined
+                ? Array.from(el.attributes).find(({ name }) => name == "href")
                     .value
                 : null
           }

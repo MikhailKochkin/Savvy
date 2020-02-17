@@ -6,7 +6,7 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
-
+import UpdateTextEditor from "./UpdateTextEditor";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
 
@@ -140,7 +140,8 @@ class SingleTextEditor extends Component {
     attempts: 0,
     answers: [],
     total: this.props.textEditor.totalMistakes,
-    text: this.props.textEditor.text
+    text: this.props.textEditor.text,
+    update: false
   };
 
   onCheck = e => {
@@ -213,98 +214,120 @@ class SingleTextEditor extends Component {
       .filter(result => result.student.id === me.id);
     return (
       <>
-        <TextBar>
-          {this.state.shown && (
-            <Hint>
-              <div>
-                {this.state.total > 0 && (
-                  <>
-                    {!this.state.show && (
+        {!this.state.update && (
+          <>
+            <TextBar>
+              {this.state.shown && (
+                <Hint>
+                  <div>
+                    {this.state.total > 0 && (
                       <>
-                        Ваш вариант:
-                        <Input
-                          type="text"
-                          name="answer"
-                          required
-                          onChange={this.handleChange}
-                        />
+                        {!this.state.show && (
+                          <>
+                            Да, это ошибка. Исправьте её:
+                            <Input
+                              type="text"
+                              name="answer"
+                              required
+                              onChange={this.handleChange}
+                            />
+                          </>
+                        )}
+                        {this.state.show && (
+                          <span>
+                            Правильный ответ:{" "}
+                            {this.state.show && this.state.correct_option}
+                          </span>
+                        )}
                       </>
                     )}
-                    {this.state.show && (
-                      <span>
-                        Правильный ответ:{" "}
-                        {this.state.show && this.state.correct_option}
-                      </span>
-                    )}
-                  </>
-                )}
-                {(this.state.total === 0 || this.state.total === null) &&
-                  this.state.correct_option}
-              </div>
-              {this.state.total > 0 && (
-                <button onClick={this.onCheck}>Ответить</button>
+                    {(this.state.total === 0 ||
+                      this.state.total === undefined) &&
+                      this.state.correct_option}
+                  </div>
+                  {this.state.total > 0 && (
+                    <button onClick={this.onCheck}>Ответить</button>
+                  )}
+                  <button onClick={this.onConceal}>Скрыть подсказку</button>
+                </Hint>
               )}
-              <button onClick={this.onConceal}>Скрыть подсказку</button>
-            </Hint>
-          )}
-          <EditText>
-            <div onClick={this.onTest}>{renderHTML(this.state.text)}</div>
-            {this.state.total === this.state.revealed ? (
-              <Right>Задание выполнено!</Right>
-            ) : null}
-          </EditText>
-        </TextBar>
-        <Buttons>
-          {data.length === 0 && this.state.total > 0 && (
-            <Mutation
-              mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-              variables={{
-                lessonID: this.props.lessonID,
-                attempts: this.state.attempts,
-                revealed: this.state.revealed,
-                textEditorID: this.props.textEditor.id
-              }}
-              refetchQueries={() => [
-                {
-                  query: SINGLE_LESSON_QUERY,
-                  variables: { id: this.props.lessonID }
-                },
-                {
-                  query: CURRENT_USER_QUERY
-                }
-              ]}
-            >
-              {(createTextEditorResult, { loading, error }) => (
+              <EditText>
+                <div onClick={this.onTest}>{renderHTML(this.state.text)}</div>
+                {this.state.total === this.state.revealed ? (
+                  <Right>Задание выполнено!</Right>
+                ) : null}
+              </EditText>
+            </TextBar>
+            <Buttons>
+              {data.length === 0 && (
+                <Mutation
+                  mutation={CREATE_TEXTEDITORRESULT_MUTATION}
+                  variables={{
+                    lessonID: this.props.lessonID,
+                    attempts: this.state.attempts,
+                    revealed: this.state.revealed,
+                    textEditorID: this.props.textEditor.id
+                  }}
+                  refetchQueries={() => [
+                    {
+                      query: SINGLE_LESSON_QUERY,
+                      variables: { id: this.props.lessonID }
+                    },
+                    {
+                      query: CURRENT_USER_QUERY
+                    }
+                  ]}
+                >
+                  {(createTextEditorResult, { loading, error }) => (
+                    <StyledButton
+                      variant="contained"
+                      color="primary"
+                      onClick={async e => {
+                        e.preventDefault();
+                        this.onShow();
+                        const res = await createTextEditorResult();
+                      }}
+                    >
+                      {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
+                    </StyledButton>
+                  )}
+                </Mutation>
+              )}
+              {data.length > 0 && (
                 <StyledButton
+                  onClick={this.onShow}
                   variant="contained"
                   color="primary"
-                  onClick={async e => {
-                    e.preventDefault();
-                    this.onShow();
-                    const res = await createTextEditorResult();
-                  }}
                 >
-                  {this.state.mistakesShown ? "Скрыть ошибки" : " Проверить"}
+                  {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
                 </StyledButton>
               )}
-            </Mutation>
-          )}
-          {data.length > 0 && (
-            <StyledButton
-              variant="contained"
-              color="primary"
-              onClick={this.onShow}
-            >
-              {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
-            </StyledButton>
-          )}
-          {me && me.id === textEditor.user.id ? (
-            <DeleteSingleTextEditor
-              id={this.props.textEditor.id}
-              lessonID={this.props.lessonID}
-            />
-          ) : null}
-        </Buttons>
+              {me && me.id === textEditor.user.id ? (
+                <DeleteSingleTextEditor
+                  id={this.props.textEditor.id}
+                  lessonID={this.props.lessonID}
+                />
+              ) : null}
+              {me && me.id === textEditor.user.id && (
+                <StyledButton
+                  onClick={e =>
+                    this.setState(prev => ({ update: !prev.update }))
+                  }
+                >
+                  Изменить
+                </StyledButton>
+              )}
+            </Buttons>
+          </>
+        )}
+        {this.state.update && (
+          <UpdateTextEditor
+            lessonID={this.props.lessonID}
+            id={this.props.textEditor.id}
+            text={this.state.text}
+            totalMistakes={this.state.total}
+          />
+        )}
       </>
     );
   }

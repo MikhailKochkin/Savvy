@@ -107,6 +107,12 @@ type Mutation {
     lessonID: ID
     textEditorID: ID
   ): TextEditorResult!
+  updateTextEditor(
+    id: ID!
+    name: String
+    text: String
+    totalMistakes: Int
+  ): TextEditor!
   createConstructionResult(
     answer: String
     attempts: Int

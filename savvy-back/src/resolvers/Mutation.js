@@ -29,7 +29,7 @@ const newOrderEmail = (client, surname, email, course, price) => `
     font-size: 20px;
   ">
     <h2>Привет!</h2>
-    <p>${client} ${surname}оформил новый заказ.</p>
+    <p>${client} ${surname} оформил новый заказ.</p>
     <p> Имейл: ${email} </p>
     <p>Курс – ${course}, цена – ${price} </p>
   </div>
@@ -244,6 +244,19 @@ const Mutations = {
       info
     );
     return TextEditor;
+  },
+  async updateTextEditor(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    return ctx.db.mutation.updateTextEditor(
+      {
+        data: updates,
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   },
   async deleteTextEditor(parent, args, ctx, info) {
     const where = { id: args.id };
