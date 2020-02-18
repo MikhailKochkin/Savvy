@@ -365,13 +365,11 @@ class LessonHeader extends Component {
                         <>
                           {me &&
                           lesson &&
-                          (me.id === lesson.user.id ||
+                          (me.id === author ||
                             me.permissions.includes("ADMIN") ||
-                            lesson.id === openLesson) &&
-                          (!students.includes(me.id) ||
-                            !new_students.includes(me.id)) ? (
+                            lesson.id === openLesson) ? (
                             <Link
-                              // The teacher or the admin visit the lesson page for the second time. We do not update anything.
+                              // The user is the teacher or the admin or it is an openLesson.
                               href={{
                                 pathname: "/lesson",
                                 query: {

@@ -59,6 +59,7 @@ const NoteStyles = styled.div`
     line-height: 1;
     font-size: 1.4rem;
     border-radius: 10px;
+    overflow-x: scroll;
   }
   table {
     width: 100%;
