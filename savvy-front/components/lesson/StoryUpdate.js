@@ -76,6 +76,11 @@ class StoryUpdate extends Component {
                 ))}
               </Block>
               <Block>
+                {lesson.shots.map(t => (
+                  <Element data={t} getData={this.myCallback} />
+                ))}
+              </Block>
+              <Block>
                 {lesson.newTests.map(t => (
                   <Element data={t} getData={this.myCallback} />
                 ))}

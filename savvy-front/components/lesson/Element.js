@@ -48,6 +48,8 @@ class Element extends Component {
       this.props.getData({ construction: this.props.data.id });
     } else if (this.props.data.__typename === "Document") {
       this.props.getData({ document: this.props.data.id });
+    } else if (this.props.data.__typename === "Shot") {
+      this.props.getData({ shot: this.props.data.id });
     }
     this.setState({ hide: true });
   };
@@ -59,6 +61,13 @@ class Element extends Component {
           <>
             <div className="header">Заметка</div>
             <div>{renderHTML(data.text.substring(0, 300))}</div>
+          </>
+        )}
+
+        {data.__typename === "Shot" && (
+          <>
+            <div className="header">Последовательность</div>
+            <div>{renderHTML(data.title)}</div>
           </>
         )}
 

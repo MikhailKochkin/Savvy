@@ -393,7 +393,7 @@ class CoursePage extends Component {
                           <Container>
                             <LessonImage
                               src={
-                                "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1567424791/singapore-river-255116.jpg"
+                                "https://cdn.pixabay.com/photo/2014/01/30/18/26/singapore-river-255116_1280.jpg"
                               }
                             />
                             <LessonStyles>
