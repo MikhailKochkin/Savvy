@@ -19,6 +19,7 @@ const Title = styled.p`
   font-size: 1.8rem;
   width: 33%;
   text-align: center;
+  margin-top: 3%;
   @media (max-width: 600px) {
     width: 90%;
   }
@@ -43,7 +44,7 @@ class PleaseSignIn extends Component {
               <Styles>
                 <div id="content">{this.props.children}</div>
                 <Title>
-                  Не нажимаются кнопки? Просто зарегистрируйтесь или войдите в
+                  Что-то не получается? Просто зарегистрируйтесь или войдите в
                   аккаунт и все заработает! 😉
                 </Title>
                 {this.state.auth === "signin" && (

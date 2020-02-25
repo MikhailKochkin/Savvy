@@ -195,7 +195,8 @@ class SingleQuiz extends Component {
       sentence1: this.props.answer.toLowerCase(),
       sentence2: this.state.answer.toLowerCase()
     };
-    const r = await fetch("https://dry-plains-91452.herokuapp.com/", {
+    // https://dry-plains-91452.herokuapp.com/
+    const r = await fetch("http://localhost:5000/", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json"

@@ -13,6 +13,7 @@ const Name = styled.div`
 `;
 
 const Square = styled.div`
+  text-align: center;
   width: 70px;
   height: 30px;
   background: ${props => props.inputColor || "palevioletred"};
@@ -179,14 +180,14 @@ class Person extends Component {
     //     : null
     // );
     // Step 6. Based on the number of completed lessons we determone the color of the student
-    if (lesson_results.length / lessons.length < 0.2) {
+    if (lesson_results.length / lessons.length <= 0.2) {
       color = "#e97573";
     } else if (
       lesson_results.length / lessons.length > 0.2 &&
       lesson_results.length / lessons.length < 0.85
     ) {
       color = "#FDF3C8";
-    } else if (lesson_results.length / lessons.length > 0.85) {
+    } else if (lesson_results.length / lessons.length >= 0.85) {
       color = "#84BC9C";
     }
 
@@ -194,8 +195,14 @@ class Person extends Component {
       <>
         <Styles>
           <Header>
-            <Name className="div1">{student.name}</Name>
-            <Square className="div2" inputColor={color} />
+            <Name className="div1">
+              {student.surname
+                ? `${student.name} ${student.surname}`
+                : student.name}
+            </Name>
+            <Square className="div2" inputColor={color}>
+              {lesson_results.length}/{lessons.length}
+            </Square>
             <StyledButton className="div3" onClick={this.onShow}>
               {this.state.secret ? "Открыть" : "Закрыть"}
             </StyledButton>
