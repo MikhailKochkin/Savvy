@@ -738,41 +738,42 @@ class SingleLesson extends Component {
                             Урок {lesson.number}. {lesson.name}
                           </span>
                         </Head>
-                        {(lesson.user.id === me.id ||
-                          me.permissions.includes("ADMIN")) && (
-                          <Head2>
-                            {lesson.map.length > 0 ? (
-                              <div>
-                                Режим разработки →
-                                <Link
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: {
-                                      id: lesson.id,
-                                      type: "story"
+                        {me &&
+                          (lesson.user.id === me.id ||
+                            me.permissions.includes("ADMIN")) && (
+                            <Head2>
+                              {lesson.map.length > 0 ? (
+                                <div>
+                                  Режим разработки →
+                                  <Link
+                                    href={{
+                                      pathname: "/lesson",
+                                      query: {
+                                        id: lesson.id,
+                                        type: "story"
+                                      }
+                                    }}
+                                  >
+                                    <span> Переключить</span>
+                                  </Link>
+                                </div>
+                              ) : (
+                                <div>
+                                  Режим разработки →
+                                  <span
+                                    onClick={() =>
+                                      alert(
+                                        `Формат истории не создан, это можно сделать в настройках.`
+                                      )
                                     }
-                                  }}
-                                >
-                                  <span> Переключить</span>
-                                </Link>
-                              </div>
-                            ) : (
-                              <div>
-                                Режим разработки →
-                                <span
-                                  onClick={() =>
-                                    alert(
-                                      `Формат истории не создан, это можно сделать в настройках.`
-                                    )
-                                  }
-                                >
-                                  {" "}
-                                  Переключить
-                                </span>
-                              </div>
-                            )}
-                          </Head2>
-                        )}
+                                  >
+                                    {" "}
+                                    Переключить
+                                  </span>
+                                </div>
+                              )}
+                            </Head2>
+                          )}
                         <LessonStyles>
                           <LessonPart>
                             {this.state.page === "lesson" && (

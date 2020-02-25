@@ -204,9 +204,11 @@ class SingleTest extends Component {
   render() {
     const { exam, story } = this.props;
     const mes = _.zip(this.props.answers, this.props.true);
-    const userData = this.props.userData
-      .filter(el => el.testID === this.props.id)
-      .filter(el => el.student.id === this.props.me.id);
+    if (this.props.me) {
+      const userData = this.props.userData
+        .filter(el => el.testID === this.props.id)
+        .filter(el => el.student.id === this.props.me.id);
+    }
     return (
       <>
         {!exam && story !== true && (
