@@ -430,132 +430,133 @@ const SingleLesson = props => {
                 <>
                   {lesson && (
                     <>
-                      {/* <AreYouEnrolled
+                      <AreYouEnrolled
                         open={lesson.id === lesson.coursePage.openLesson}
                         subject={lesson.coursePage.id}
-                      > */}
-                      <Container>
-                        <ReactResizeDetector
-                          handleWidth
-                          handleHeight
-                          onResize={onResize}
-                        />
-                        {me && (
-                          <Head>
-                            {width > 800 && (
-                              <Link
-                                href={{
-                                  pathname: "/coursePage",
-                                  query: {
-                                    id: lesson.coursePage.id
-                                  }
-                                }}
-                              >
-                                <span>
-                                  <Icon
-                                    size={"10%"}
-                                    icon={arrowLeft}
-                                    id="back"
-                                  />
-                                </span>
-                              </Link>
-                            )}
-                            <span>
-                              Урок {lesson.number}. {lesson.name}
-                            </span>
-                          </Head>
-                        )}
-                        {me &&
-                          (lesson.user.id === me.id ||
-                            me.permissions.includes("ADMIN")) && (
-                            <Head2>
-                              {lesson.map.length > 0 && (
-                                <div>
-                                  Режим истории →
-                                  <Link
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: "regular"
-                                      }
-                                    }}
-                                  >
-                                    <span> Переключить</span>
-                                  </Link>
-                                </div>
+                      >
+                        <Container>
+                          <ReactResizeDetector
+                            handleWidth
+                            handleHeight
+                            onResize={onResize}
+                          />
+                          {me && (
+                            <Head>
+                              {width > 800 && (
+                                <Link
+                                  href={{
+                                    pathname: "/coursePage",
+                                    query: {
+                                      id: lesson.coursePage.id
+                                    }
+                                  }}
+                                >
+                                  <span>
+                                    <Icon
+                                      size={"10%"}
+                                      icon={arrowLeft}
+                                      id="back"
+                                    />
+                                  </span>
+                                </Link>
                               )}
-                            </Head2>
+                              <span>
+                                Урок {lesson.number}. {lesson.name}
+                              </span>
+                            </Head>
                           )}
-                        <Header>
-                          Глава {activeStep + 1} из {data.lesson.map[0].length}
-                        </Header>
-                        <LessonPart>
-                          <ReactCSSTransitionGroup
-                            transitionName="example"
-                            transitionEnterTimeout={5500}
-                            transitionLeaveTimeout={3300}
-                          >
-                            <StoryEx
-                              m={data.lesson.map[0][activeStep]}
-                              me={me}
-                              lesson={lesson}
-                              step={activeStep}
-                            />
-                          </ReactCSSTransitionGroup>
-                        </LessonPart>
-                        <MobileStepper
-                          variant="progress"
-                          steps={data.lesson.map[0].length}
-                          position="static"
-                          activeStep={activeStep}
-                          classes={{
-                            root: classes.root, // class name, e.g. `classes-nesting-root-x`
-                            progress: classes.progress // class name, e.g. `classes-nesting-label-x`
-                          }}
-                          nextButton={
-                            <Button
-                              size="small"
-                              variant="text"
-                              onClick={handleNext}
-                              classes={{
-                                textSizeSmall: classes.textSizeSmall
-                              }}
-                              disabled={
-                                activeStep ===
-                                parseInt(data.lesson.map[0].length - 1)
-                              }
+                          {me &&
+                            (lesson.user.id === me.id ||
+                              me.permissions.includes("ADMIN")) && (
+                              <Head2>
+                                {lesson.map.length > 0 && (
+                                  <div>
+                                    Режим истории →
+                                    <Link
+                                      href={{
+                                        pathname: "/lesson",
+                                        query: {
+                                          id: lesson.id,
+                                          type: "regular"
+                                        }
+                                      }}
+                                    >
+                                      <span> Переключить</span>
+                                    </Link>
+                                  </div>
+                                )}
+                              </Head2>
+                            )}
+                          <Header>
+                            Глава {activeStep + 1} из{" "}
+                            {data.lesson.map[0].length}
+                          </Header>
+                          <LessonPart>
+                            <ReactCSSTransitionGroup
+                              transitionName="example"
+                              transitionEnterTimeout={5500}
+                              transitionLeaveTimeout={3300}
                             >
-                              Вперёд
-                              {theme.direction === "rtl" ? (
-                                <KeyboardArrowLeft />
-                              ) : (
-                                <KeyboardArrowRight />
-                              )}
-                            </Button>
-                          }
-                          backButton={
-                            <Button
-                              size="small"
-                              variant="text"
-                              onClick={handleBack}
-                              classes={{
-                                textSizeSmall: classes.textSizeSmall
-                              }}
-                              disabled={activeStep === 0}
-                            >
-                              {theme.direction === "rtl" ? (
-                                <KeyboardArrowRight />
-                              ) : (
-                                <KeyboardArrowLeft />
-                              )}
-                              Назад
-                            </Button>
-                          }
-                        />
-                      </Container>{" "}
-                      <div id="root"></div>
-                      {/* </AreYouEnrolled> */}
+                              <StoryEx
+                                m={data.lesson.map[0][activeStep]}
+                                me={me}
+                                lesson={lesson}
+                                step={activeStep}
+                              />
+                            </ReactCSSTransitionGroup>
+                          </LessonPart>
+                          <MobileStepper
+                            variant="progress"
+                            steps={data.lesson.map[0].length}
+                            position="static"
+                            activeStep={activeStep}
+                            classes={{
+                              root: classes.root, // class name, e.g. `classes-nesting-root-x`
+                              progress: classes.progress // class name, e.g. `classes-nesting-label-x`
+                            }}
+                            nextButton={
+                              <Button
+                                size="small"
+                                variant="text"
+                                onClick={handleNext}
+                                classes={{
+                                  textSizeSmall: classes.textSizeSmall
+                                }}
+                                disabled={
+                                  activeStep ===
+                                  parseInt(data.lesson.map[0].length - 1)
+                                }
+                              >
+                                Вперёд
+                                {theme.direction === "rtl" ? (
+                                  <KeyboardArrowLeft />
+                                ) : (
+                                  <KeyboardArrowRight />
+                                )}
+                              </Button>
+                            }
+                            backButton={
+                              <Button
+                                size="small"
+                                variant="text"
+                                onClick={handleBack}
+                                classes={{
+                                  textSizeSmall: classes.textSizeSmall
+                                }}
+                                disabled={activeStep === 0}
+                              >
+                                {theme.direction === "rtl" ? (
+                                  <KeyboardArrowRight />
+                                ) : (
+                                  <KeyboardArrowLeft />
+                                )}
+                                Назад
+                              </Button>
+                            }
+                          />
+                        </Container>{" "}
+                        <div id="root"></div>
+                      </AreYouEnrolled>
                     </>
                   )}
                 </>
