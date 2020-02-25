@@ -93,6 +93,7 @@ const Group = styled.div`
   width: 100%;
   border: 1px solid #c4c4c4;
   border-radius: 5px;
+  pointer-events: ${props => (props.progress === "true" ? "none" : "auto")};
   padding: 0.5%;
   div {
     border: none;
@@ -195,8 +196,7 @@ class SingleQuiz extends Component {
       sentence1: this.props.answer.toLowerCase(),
       sentence2: this.state.answer.toLowerCase()
     };
-    // https://dry-plains-91452.herokuapp.com/
-    const r = await fetch("http://localhost:5000/", {
+    const r = await fetch("https://dry-plains-91452.herokuapp.com/", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json"
@@ -290,7 +290,7 @@ class SingleQuiz extends Component {
             <Progress display={this.state.progress}>
               <CircularProgress />
             </Progress>
-            <Group>
+            <Group progress={this.state.progress}>
               <Mutation
                 mutation={CREATE_QUIZRESULT_MUTATION}
                 variables={{
