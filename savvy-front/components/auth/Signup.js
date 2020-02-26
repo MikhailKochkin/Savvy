@@ -7,12 +7,6 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies } from "../../config";
@@ -130,7 +124,7 @@ const Signup = props => {
   const [surname, setSurname] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("STUDENT");
+  const [status, setStatus] = useState("LAWYER");
   const [uniID, setUniID] = useState("cjyimfz2e00lp07174jpder3m");
   const [company, setCompany] = useState("ck6mn2jhf009z07570hftqn7p");
   const [careerTrackID, setCareerTrackID] = useState(
@@ -143,10 +137,6 @@ const Signup = props => {
   const move = e => {
     const name = e.target.getAttribute("name");
     props.getData(name);
-  };
-
-  const handleChange = event => {
-    setIsFamiliar(event.target.value);
   };
 
   return (
@@ -171,6 +161,12 @@ const Signup = props => {
             e.preventDefault();
             if (!isFamiliar) {
               alert("Не забыли про согласие на обработку персональных данных?");
+              return;
+            } else if (status === "") {
+              alert("Укажите свой статус на сайте!");
+              return;
+            } else if (surname === "") {
+              alert("Укажите свою фамилию!");
               return;
             }
             await signup();
@@ -271,6 +267,9 @@ const Signup = props => {
               <MenuItem key="STUDENT" value="STUDENT">
                 Студент
               </MenuItem>
+              <MenuItem key="LAWYER" value="LAWYER">
+                Юрист
+              </MenuItem>
               <MenuItem key="AUTHOR" value="AUTHOR">
                 Преподаватель
               </MenuItem>
@@ -307,7 +306,7 @@ const Signup = props => {
               </TextField>
             )}
 
-            {status !== "HR" && (
+            {status === "STUDENT" && (
               <>
                 <TextField
                   className="uni"

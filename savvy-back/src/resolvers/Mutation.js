@@ -35,6 +35,20 @@ const newOrderEmail = (client, surname, email, course, price) => `
   </div>
 `;
 
+const NotificationEmail = (name, course, coursePageID) => `
+  <div className="email" style="
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>${name}, здравствуйте!</h2>
+    <p>Вам открыт доступ к курсу ${course} на сайте savvvy.app.</p>
+    <p>Переходите к курсу <a href="https://savvvy.app/coursePage?id=${coursePageID}">по ссылке.</a> </p>
+    <p>Если вы не покупали ничего на сайте, то просто проигнорируйте это письмо.</p>
+  </div>
+`;
+
 const Mutations = {
   async updateUser(parent, args, ctx, info) {
     //run the update method
@@ -975,6 +989,19 @@ const Mutations = {
       },
       info
     );
+
+    const user = await ctx.db.query.user({ where: { id: ctx.request.userId } });
+    const coursePage = await ctx.db.query.coursePage({
+      where: { id: args.id }
+    });
+
+    const notification = await client.sendEmail({
+      From: "Mikhail@savvvy.app",
+      To: user.email,
+      Subject: "Savvy App: доступ к курсу открыт!",
+      HtmlBody: NotificationEmail(user.name, coursePage.title, coursePage.id)
+    });
+
     return enrolledUser;
   },
   async addUserToCoursePage(parent, args, ctx, info) {

@@ -13,6 +13,7 @@ enum CourseType {
 
 enum Status {
   STUDENT
+  LAWYER
   AUTHOR
   SAVVY_AUTHOR
   HR
@@ -105,6 +106,7 @@ type CoursePage {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String @default(value: "Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
