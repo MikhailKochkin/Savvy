@@ -3061,6 +3061,7 @@ type CoursePage {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: User!
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
@@ -3106,6 +3107,7 @@ input CoursePageCreateInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3229,6 +3231,7 @@ input CoursePageCreateWithoutApplicationsInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3265,6 +3268,7 @@ input CoursePageCreateWithoutArticlesInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3301,6 +3305,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3337,6 +3342,7 @@ input CoursePageCreateWithoutCompanyInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3373,6 +3379,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3409,6 +3416,7 @@ input CoursePageCreateWithoutLessonsInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -3445,6 +3453,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3481,6 +3490,7 @@ input CoursePageCreateWithoutOrdersInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3517,6 +3527,7 @@ input CoursePageCreateWithoutPointATestsInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3553,6 +3564,7 @@ input CoursePageCreateWithoutPointsAInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3589,6 +3601,7 @@ input CoursePageCreateWithoutUniInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3625,6 +3638,7 @@ input CoursePageCreateWithoutUserInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -3661,6 +3675,7 @@ input CoursePageCreateWithoutVisitsInput {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3706,6 +3721,8 @@ enum CoursePageOrderByInput {
   description_DESC
   image_ASC
   image_DESC
+  banner_ASC
+  banner_DESC
   news_ASC
   news_DESC
   numInCareerTrack_ASC
@@ -3743,6 +3760,7 @@ type CoursePagePreviousValues {
   title: String!
   description: String!
   image: String!
+  banner: String
   news: String
   numInCareerTrack: Int
   published: Boolean
@@ -3821,6 +3839,20 @@ input CoursePageScalarWhereInput {
   image_not_starts_with: String
   image_ends_with: String
   image_not_ends_with: String
+  banner: String
+  banner_not: String
+  banner_in: [String!]
+  banner_not_in: [String!]
+  banner_lt: String
+  banner_lte: String
+  banner_gt: String
+  banner_gte: String
+  banner_contains: String
+  banner_not_contains: String
+  banner_starts_with: String
+  banner_not_starts_with: String
+  banner_ends_with: String
+  banner_not_ends_with: String
   news: String
   news_not: String
   news_in: [String!]
@@ -4006,6 +4038,7 @@ input CoursePageUpdateDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4042,6 +4075,7 @@ input CoursePageUpdateInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4078,6 +4112,7 @@ input CoursePageUpdateManyDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   numInCareerTrack: Int
   published: Boolean
@@ -4113,6 +4148,7 @@ input CoursePageUpdateManyMutationInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   numInCareerTrack: Int
   published: Boolean
@@ -4280,6 +4316,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4315,6 +4352,7 @@ input CoursePageUpdateWithoutArticlesDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4350,6 +4388,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4385,6 +4424,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4420,6 +4460,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4455,6 +4496,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -4490,6 +4532,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4525,6 +4568,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4560,6 +4604,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4595,6 +4640,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4630,6 +4676,7 @@ input CoursePageUpdateWithoutUniDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4665,6 +4712,7 @@ input CoursePageUpdateWithoutUserDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -4700,6 +4748,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   title: String
   description: String
   image: String
+  banner: String
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4900,6 +4949,20 @@ input CoursePageWhereInput {
   image_not_starts_with: String
   image_ends_with: String
   image_not_ends_with: String
+  banner: String
+  banner_not: String
+  banner_in: [String!]
+  banner_not_in: [String!]
+  banner_lt: String
+  banner_lte: String
+  banner_gt: String
+  banner_gte: String
+  banner_contains: String
+  banner_not_contains: String
+  banner_starts_with: String
+  banner_not_starts_with: String
+  banner_ends_with: String
+  banner_not_ends_with: String
   news: String
   news_not: String
   news_in: [String!]
@@ -16798,6 +16861,7 @@ input ShotWhereUniqueInput {
 
 enum Status {
   STUDENT
+  LAWYER
   AUTHOR
   SAVVY_AUTHOR
   HR
