@@ -150,7 +150,6 @@ class SingleTest extends Component {
 
   onSend = async () => {
     this.setState({ answerState: "right", inputColor: "#84BC9C" });
-    document.querySelector(".button").disabled = true;
   };
 
   onCheck = async () => {
@@ -176,7 +175,6 @@ class SingleTest extends Component {
               )
             : null;
         }
-        document.querySelector(".button").disabled = true;
       } else {
         this.setState({ answerState: "wrong", inputColor: "#DE6B48" });
         // 1. if the data is sent for the first time
@@ -253,6 +251,7 @@ class SingleTest extends Component {
                 {(createTestResult, { loading, error }) => (
                   <MiniButton
                     answerState={this.state.answerState}
+                    block={this.state.block}
                     className="button"
                     id="but1"
                     onClick={async e => {

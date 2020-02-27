@@ -107,7 +107,9 @@ class EnrollCoursePage extends Component {
             ...this.state
           }
         });
-        alert("Вы успешно зарегистрировлаись. Наслаждайтесь курсом!");
+        alert(
+          "Вы успешно зарегистрировлаись. Перезагрузите страницу и наслаждайтесь курсом!"
+        );
       }
     }
   };
@@ -119,8 +121,8 @@ class EnrollCoursePage extends Component {
           coursePage.courseType === "CHALLENGE") && (
           <Mutation
             mutation={ENROLL_COURSE_MUTATION}
-            refetchQueries={() => [{ query: CURRENT_USER_QUERY }]}
-            refetchQueries={() => [
+            refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+            refetchQueries={[
               {
                 query: SINGLE_COURSEPAGE_QUERY,
                 variables: { id: coursePage.id }

@@ -992,7 +992,7 @@ const Mutations = {
 
     const user = await ctx.db.query.user({ where: { id: ctx.request.userId } });
     const coursePage = await ctx.db.query.coursePage({
-      where: { id: args.id }
+      where: { id: args.coursePageID }
     });
 
     const notification = await client.sendEmail({
