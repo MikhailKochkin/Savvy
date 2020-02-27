@@ -84,6 +84,7 @@ const Group = styled.div`
   }
 `;
 const MiniButton = styled.div`
+  pointer-events: ${props => (props.answerState === "right" ? "none" : "auto")};
   border: none;
   background: none;
   cursor: pointer;
@@ -156,7 +157,6 @@ class SingleTest extends Component {
     const res1 = await this.setState(prevState => ({
       attempts: prevState.attempts + 1
     }));
-    console.log(this.props.next);
     const res = () => {
       if (
         JSON.stringify(this.state.answerOptions) ==
@@ -204,11 +204,12 @@ class SingleTest extends Component {
   render() {
     const { exam, story } = this.props;
     const mes = _.zip(this.props.answers, this.props.true);
-    if (this.props.me) {
-      const userData = this.props.userData
-        .filter(el => el.testID === this.props.id)
-        .filter(el => el.student.id === this.props.me.id);
-    }
+    let userData;
+    this.props.me
+      ? (userData = this.props.userData
+          .filter(el => el.testID === this.props.id)
+          .filter(el => el.student.id === this.props.me.id))
+      : (userData = 1);
     return (
       <>
         {!exam && story !== true && (
@@ -251,6 +252,7 @@ class SingleTest extends Component {
               >
                 {(createTestResult, { loading, error }) => (
                   <MiniButton
+                    answerState={this.state.answerState}
                     className="button"
                     id="but1"
                     onClick={async e => {
