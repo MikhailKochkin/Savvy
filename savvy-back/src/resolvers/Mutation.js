@@ -990,21 +990,10 @@ const Mutations = {
       info
     );
 
-    const user = await ctx.db.query.user({ where: { id: ctx.request.userId } });
-    const coursePage = await ctx.db.query.coursePage({
-      where: { id: args.coursePageID }
-    });
-
-    const notification = await client.sendEmail({
-      From: "Mikhail@savvvy.app",
-      To: user.email,
-      Subject: "Savvy App: доступ к курсу открыт!",
-      HtmlBody: NotificationEmail(user.name, coursePage.title, coursePage.id)
-    });
-
     return enrolledUser;
   },
   async addUserToCoursePage(parent, args, ctx, info) {
+    let studentID = args.students[args.students.length - 1];
     const updatedCoursePage = await ctx.db.mutation.updateCoursePage(
       {
         data: {
@@ -1012,7 +1001,7 @@ const Mutations = {
             set: [...args.students]
           },
           new_students: {
-            connect: { id: ctx.request.userId }
+            connect: { id: studentID }
           }
         },
         where: {
@@ -1021,6 +1010,19 @@ const Mutations = {
       },
       info
     );
+
+    const user = await ctx.db.query.user({ where: { id: studentID } });
+    const coursePage = await ctx.db.query.coursePage({
+      where: { id: args.id }
+    });
+    console.log(user, coursePage);
+    const notification = await client.sendEmail({
+      From: "Mikhail@savvvy.app",
+      To: user.email,
+      Subject: "Savvy App: доступ к курсу открыт!",
+      HtmlBody: NotificationEmail(user.name, coursePage.title, coursePage.id)
+    });
+
     return updatedCoursePage;
   },
   async deleteCoursePage(parent, args, ctx, info) {

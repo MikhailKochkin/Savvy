@@ -7,7 +7,6 @@ import {
   ENROLL_COURSE_MUTATION
 } from "../../EnrollCoursePage";
 import { CURRENT_USER_QUERY } from "../../User";
-import { ALL_COURSE_PAGES_QUERY } from "../../course/Courses";
 
 const DELETE_APPLICATION_MUTATION = gql`
   mutation DELETE_APPLICATION_MUTATION($id: ID!) {
