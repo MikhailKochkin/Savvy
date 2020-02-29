@@ -163,7 +163,6 @@ type Mutation {
   ): Sandbox!
   deleteSandbox(id: ID!): Sandbox
   createSandboxPageGoal(goal: String!, sandboxPageID: ID!): SandboxPageGoal!
-  deleteCoursePage(id: ID!): CoursePage
   createTextEditor(
     name: String!
     text: String!

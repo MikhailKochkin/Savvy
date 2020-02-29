@@ -295,21 +295,6 @@ const Mutations = {
       info
     );
   },
-  async deleteCoursePage(parent, args, ctx, info) {
-    const where = { id: args.id };
-    //1. find the case
-    const coursePage = await ctx.db.query.coursePage(
-      { where },
-      `{ id title user { id }}`
-    );
-    //2. check if they own the case or have the permissions
-    const ownscoursePage = coursePage.user.id === ctx.request.userId;
-    if (!ownscoursePage) {
-      throw new Error("К сожалению, у вас нет полномочий на это.");
-    }
-    //3. Delete it
-    return ctx.db.mutation.deleteCoursePage({ where }, info);
-  },
   async createLesson(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const coursePageID = args.coursePageID;
@@ -1037,7 +1022,7 @@ const Mutations = {
     const coursePage = await ctx.db.query.coursePage({
       where: { id: args.id }
     });
-    console.log(user, coursePage);
+
     const notification = await client.sendEmail({
       From: "Mikhail@savvvy.app",
       To: user.email,
@@ -1046,27 +1031,6 @@ const Mutations = {
     });
 
     return updatedCoursePage;
-  },
-  async deleteCoursePage(parent, args, ctx, info) {
-    const where = { id: args.id };
-    //1. find the case
-    const coursePage = await ctx.db.query.coursePage(
-      { where },
-      `{ id title user { id }}`
-    );
-    //2. check if they own the case or have the permissions
-    //TODO
-    const ownsCoursePage = coursePage.user.id === ctx.request.userId;
-    const hasPermissions = ctx.request.user.permissions.some(permission =>
-      ["ADMIN", "CASEDELETE"].includes(permission)
-    );
-    if (!ownsCoursePage && !hasPermissions) {
-      throw new Error(
-        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
-      );
-    }
-    //3. Delete it
-    return ctx.db.mutation.deleteCoursePage({ where }, info);
   },
   async signup(parent, args, ctx, info) {
     // lower the email
