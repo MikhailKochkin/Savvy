@@ -47,7 +47,7 @@ class Courses extends Component {
           <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-and-network">
             {({ data, error, loading, fetchMore }) => {
               if (error) return <p>Error: {error.message}</p>;
-              // if (loading) return <LoadingDummy />;
+              if (loading) return <p>Загрузка...</p>;
               const coursePages = data.coursePages;
               let eng = coursePages.filter(c => c.tags.includes("Английский"));
               let exam = coursePages.filter(c => c.tags.includes("Экзамен"));
