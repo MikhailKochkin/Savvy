@@ -1,204 +1,73 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import dynamic from "next/dynamic";
-import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
-import CareerCoursesList from "./courseLists/CareerCoursesList";
-import ForMoneyCoursesList from "./courseLists/ForMoneyCoursesList";
-import FreeCoursesList from "./courseLists/FreeCoursesList";
-import Vacancies from "./courseLists/Vacancies";
-import Articles from "../article/Articles";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+import EnglishCourses from "./courseLists/EnglishCourses";
+import ExamCourses from "./courseLists/ExamCourses";
+import InterviewCourses from "./courseLists/InterviewCourses";
+import JuniorCourses from "./courseLists/JuniorCourses";
 import Landing from "./Landing";
 import User from "../User";
+
+const COURSE_PAGES_QUERY = gql`
+  query COURSE_PAGES_QUERY {
+    coursePages(orderBy: createdAt_DESC) {
+      id
+      title
+      description
+      image
+      tags
+      user {
+        id
+        name
+        status
+        company {
+          id
+          name
+        }
+        uni {
+          id
+          title
+        }
+      }
+    }
+  }
+`;
 
 const Container = styled.div`
   padding: 2% 4%;
   border: none;
 `;
 
-const Title = styled.div`
-  font-size: 1.8rem;
-  margin: 1% 0;
-  margin-top: 2.5%;
-  font-weight: 700;
-  @media (max-width: 850px) {
-    margin-left: 10px;
-    /* width: 50%; */
-  }
-`;
-
-const DynamicTour = dynamic(import("reactour"), {
-  ssr: false
-});
-
 class Courses extends Component {
-  state = {
-    width: 1,
-    height: 1,
-    isTourOpen: false,
-    times: 0,
-    page: "register"
-  };
-
-  onResize = (width, height) => {
-    this.setState({ width, height });
-  };
-
-  open = () => {
-    this.setState({ isTourOpen: true });
-  };
-  closeTour = () => {
-    this.setState({ isTourOpen: false });
-  };
-
-  myCallback = data => {
-    this.setState({
-      isTourOpen: true
-    });
-  };
-
   render() {
-    const steps = [
-      // {
-      //   selector: '[data-tut="zero-step"]',
-      //   content: function DemoHelperComponent0() {
-      //     return (
-      //       <>
-      //         <p>Можно рассказать вам, как работает Savvy.app?</p>
-      //       </>
-      //     );
-      //   }
-      // },
-      // {
-      //   selector: '[data-tut="first-step"]',
-      //   content: function DemoHelperComponent1() {
-      //     return (
-      //       <>
-      //         <p>
-      //           При регистрации вы выбираете <b>карьерный трек</b>.
-      //         </p>
-      //         <div>
-      //           Карьерный трек – это пошаговый план по развитию в одной из
-      //           юридических отраслей. Он подскажет, какие темы вам необходимо
-      //           изучить, где получить знания и с помощью каких курсов развить
-      //           практические навыки.
-      //         </div>
-      //       </>
-      //     );
-      //   }
-      // },
-      // {
-      //   selector: '[data-tut="first-step"]',
-      //   content: function DemoHelperComponent1() {
-      //     return (
-      //       <>
-      //         <p>На Savvvy App есть очень много курсов. </p>
-      //         <div>
-      //           Сейчас подскажем, как найти для вас наиболее подходящие.
-      //         </div>
-      //       </>
-      //     );
-      //   }
-      // },
-      {
-        selector: '[data-tut="second-step"]',
-        content: function DemoHelperComponent2() {
-          return (
-            <>
-              <p>На Savvy App есть очень много курсов.</p>
-              <div>
-                Большинство курсов – платные. Стоимость курса обычно варьируется
-                от 1800 до 3600 рублей. Каждый курс направлен на оттачивание
-                практических навыков юристов. Для этого мы постоянно
-                разрабатываем новые онлайн тренажеры и привлекаем крутых
-                специалистов для создания курсов.
-              </div>
-            </>
-          );
-        }
-      },
-      {
-        selector: '[data-tut="third-step"]',
-        content: function DemoHelperComponent3() {
-          return (
-            <>
-              <p>
-                Тем не менее, есть и <b>бесплатные курсы</b>, которые создают
-                наши партнеры или университеты.
-              </p>
-              <div>
-                Для доступа к бесплатным курсам достаточно на них
-                зарегистрироваться. На курс университета необходимо отправить
-                заявку, которая должна быть одобрена преподавателем. К курсам
-                университетов можно попасть с помощью специальной вкладки
-                "Курсы" на верху страницы.
-              </div>
-            </>
-          );
-        }
-      },
-      {
-        selector: '[data-tut="fourth-step"]',
-        content: function DemoHelperComponent4() {
-          return (
-            <>
-              <p>
-                Читайте наши <b>статьи</b>!
-              </p>
-              <div>
-                В статьях даются практические рекомендации по развитию карьеры и
-                ссылки на скачивание материалов, которые мы готовим специально
-                для вас.
-              </div>
-            </>
-          );
-        }
-      },
-      {
-        selector: '[data-tut="fifth-step"]',
-        content: function DemoHelperComponent5() {
-          return (
-            <>
-              <p>
-                Чтобы получить доступ к курсам и статьям, надо
-                зарегистрироваться! Это можно сделать в верхнем правом углу
-                каждой страницы.
-              </p>
-              <div>
-                Если у вас уже есть аккаунт, войдите в него. Мы дадим вам новые
-                возможности для совершенствования юрижических навыков.
-              </div>
-            </>
-          );
-        }
-      }
-    ];
-    const disableBody = target => disableBodyScroll(target);
-    const enableBody = target => enableBodyScroll(target);
     return (
       <User>
         {({ data: { me } }) => (
-          <Container>
-            <Landing getTour={this.myCallback} />
-            {/* {me && me.careerTrackID && <CareerTrackMenu me={me} />} */}
-            {/* <Title>Вакансии</Title> */}
-            <Vacancies me={me} />
-            {me && me.careerTrackID && <CareerCoursesList me={me} />}
-            <Title> Платные курсы </Title>
-            <ForMoneyCoursesList me={me} />
-            <Title> Бесплатные курсы </Title>
-            <FreeCoursesList me={me} />
-            <Title> Юридический английский. Полезные статьи. </Title>
-            <Articles me={me} />
-            <DynamicTour
-              onAfterOpen={this.state.width > 600 ? disableBody : null}
-              onBeforeClose={this.state.width > 600 ? enableBody : null}
-              disableDotsNavigation={false}
-              steps={steps}
-              isOpen={this.state.isTourOpen}
-              onRequestClose={this.closeTour}
-              closeWithMask={true}
-            />
-          </Container>
+          <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-and-network">
+            {({ data, error, loading, fetchMore }) => {
+              if (error) return <p>Error: {error.message}</p>;
+              // if (loading) return <LoadingDummy />;
+              const coursePages = data.coursePages;
+              let eng = coursePages.filter(c => c.tags.includes("Английский"));
+              let exam = coursePages.filter(c => c.tags.includes("Экзамен"));
+              let interview = coursePages.filter(c =>
+                c.tags.includes("Собеседование")
+              );
+              let junior = coursePages.filter(c => c.tags.includes("Джуниор"));
+              return (
+                <>
+                  <Landing />
+                  <Container>
+                    <EnglishCourses courses={eng} me={me} />
+                    <ExamCourses courses={exam} me={me} />
+                    <InterviewCourses courses={interview} me={me} />
+                    <JuniorCourses courses={junior} me={me} />
+                  </Container>
+                </>
+              );
+            }}
+          </Query>
         )}
       </User>
     );

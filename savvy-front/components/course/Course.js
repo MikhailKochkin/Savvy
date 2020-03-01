@@ -47,23 +47,13 @@ const CaseCard = styled.div`
   border: 1px solid #edefed;
   border-radius: 10px;
   margin: 2%;
-  width: 285px;
+  width: 305px;
   line-height: 1.2;
-  @media (max-width: 1000px) {
-    width: 205px;
+  @media (max-width: 800px) {
+    width: 85%;
     button {
       padding: 4px 6px;
     }
-  }
-  @media (max-width: 650px) {
-    padding: 2%;
-    width: 158px;
-    button {
-      padding: 4px 6px;
-    }
-  }
-  @media (max-width: 374px) {
-    width: 150px;
   }
 `;
 
@@ -81,7 +71,6 @@ const Img = styled.img`
   border-top-right-radius: 5px;
   @media (max-width: 950px) {
     object-fit: cover;
-    height: 100px;
   }
 `;
 
