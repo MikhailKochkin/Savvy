@@ -236,6 +236,7 @@ class UpdateCoursePage extends Component {
   render() {
     return (
       <Width>
+        <div id="root"></div>
         <User>
           {({ data: { me } }) => (
             <Query
@@ -407,7 +408,6 @@ class UpdateCoursePage extends Component {
             </Query>
           )}
         </User>
-        <div id="root"></div>
       </Width>
     );
   }
