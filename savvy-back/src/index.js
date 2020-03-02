@@ -47,7 +47,11 @@ const start = () => {
           process.env.FRONTEND_URL3,
           process.env.FRONTEND_URL4,
           process.env.FRONTEND_URL5,
-          process.env.FRONTEND_URL6
+          process.env.FRONTEND_URL6,
+          process.env.FRONTEND_URL7,
+          process.env.FRONTEND_URL8,
+          process.env.FRONTEND_URL9,
+          process.env.FRONTEND_URL10
         ]
       }
     },
