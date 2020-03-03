@@ -1052,9 +1052,9 @@ const Mutations = {
           uni: {
             connect: { id: uniID }
           },
-          // company: {
-          //   connect: { id: company }
-          // },
+          company: {
+            connect: { id: company }
+          },
           careerTrack: {
             connect: { id: careerTrackID }
           }
