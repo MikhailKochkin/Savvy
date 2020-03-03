@@ -10,7 +10,7 @@ import RegisterCard from "./coursePageCards/RegisterCard";
 import StudentCard from "./coursePageCards/StudentCard";
 import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
-import ApplicationCard from "./coursePageCards/ApplicationCard";
+import Loading from "../Loading";
 import ExamAnswer from "./ExamAnswer";
 import ExamQuestion from "./ExamQuestion";
 import UpdateExamQuestion from "./UpdateExamQuestion";
@@ -87,6 +87,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       user {
         id
         name
+        surname
         description
         status
         uni {
@@ -264,7 +265,7 @@ const Details = styled.div`
   font-size: 1.6rem;
   .yellow {
     padding: 4%;
-    background: rgba(169, 210, 255, 0.35);
+    background: rgba(169, 210, 255, 0.3);
     margin-top: 2%;
     width: 100%;
     @media (max-width: 800px) {
@@ -273,7 +274,7 @@ const Details = styled.div`
   }
   .green {
     padding: 4%;
-    background: rgba(210, 246, 252, 0.35);
+    background: rgba(210, 246, 252, 0.3);
     width: 100%;
     @media (max-width: 800px) {
       padding: 20px;
@@ -281,7 +282,7 @@ const Details = styled.div`
   }
   .blue {
     padding: 4%;
-    background: rgba(121, 132, 238, 0.25);
+    background: rgba(121, 132, 238, 0.15);
     margin-bottom: 4%;
     width: 100%;
     @media (max-width: 800px) {
@@ -341,7 +342,7 @@ class CoursePage extends Component {
               }}
             >
               {({ data: data2, error: error2, loading: loading2 }) => {
-                if (loading2) return <p>Loading...</p>;
+                if (loading2) return <Loading />;
                 if (error2) return <p>Error: {error2.message}</p>;
                 return (
                   <Query
@@ -404,9 +405,9 @@ class CoursePage extends Component {
                                     {coursePage.description}
                                   </p>
                                   <p className="name">
-                                    {me.surname
-                                      ? `${me.name} ${me.surname}`
-                                      : me.name}{" "}
+                                    {coursePage.user.surname
+                                      ? `${coursePage.user.name} ${coursePage.user.surname}`
+                                      : coursePage.user.name}{" "}
                                     из{" "}
                                     {coursePage.user.status === "HR" ||
                                     coursePage.user.status === "AUTHOR"

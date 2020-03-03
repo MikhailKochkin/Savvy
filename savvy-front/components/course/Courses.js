@@ -8,6 +8,7 @@ import InterviewCourses from "./courseLists/InterviewCourses";
 import JuniorCourses from "./courseLists/JuniorCourses";
 import Landing from "./Landing";
 import User from "../User";
+import Loading from "../Loading";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
@@ -47,7 +48,7 @@ class Courses extends Component {
           <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-and-network">
             {({ data, error, loading, fetchMore }) => {
               if (error) return <p>Error: {error.message}</p>;
-              if (loading) return <p>Загрузка...</p>;
+              if (loading) return <Loading />;
               const coursePages = data.coursePages;
               let eng = coursePages.filter(c => c.tags.includes("Английский"));
               let exam = coursePages.filter(c => c.tags.includes("Экзамен"));
