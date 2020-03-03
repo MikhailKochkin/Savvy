@@ -94,9 +94,9 @@ class Uni extends Component {
   render() {
     const { me } = this.props;
     let price;
-    if (me.company.paidMonths == null) {
+    if (me.company && me.company.paidMonths == null) {
       price = 0;
-    } else if (me.company.paidMonths) {
+    } else if (me.company && me.company.paidMonths) {
       price = me.company.paidMonths;
     }
     return (

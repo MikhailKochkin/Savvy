@@ -353,7 +353,7 @@ class CoursePage extends Component {
                   >
                     {({ error, loading, data }) => {
                       if (error) return <Error error={error} />;
-                      if (loading) return <p>Loading...</p>;
+                      if (loading) return <Loading />;
                       const coursePage = data.coursePage;
                       const student_list = [];
                       coursePage.new_students.map(ns =>
