@@ -143,51 +143,87 @@ class Teach extends Component {
       <PleaseSignIn>
         <Styles>
           <User>
-            {({ data: { me } }) =>
-              me && (
-                <>
-                  <Query
-                    query={MY_COURSES_QUERY}
-                    variables={{
-                      id: me.id
-                    }}
-                  >
-                    {({ data, error, loading, fetchMore }) => {
-                      if (loading) return <p>Loading...</p>;
-                      if (error) return <p>Error: {error.message}</p>;
-                      let publishedCourses = data.coursePages.filter(
-                        coursePage => coursePage.published === true
-                      );
-                      let developedCourses = data.coursePages.filter(
-                        coursePage => coursePage.published === false
-                      );
-                      const uni = me.uni;
-                      let isPaid;
-                      if (uni.capacity > 0 && uni.capacity <= 2) {
-                        isPaid = true;
-                      } else if (
-                        uni.capacity > 2 &&
-                        uni.capacity >= uni.uniCoursePages.length &&
-                        uni.paidMonths > 0
-                      ) {
-                        isPaid = true;
-                      } else {
-                        isPaid = false;
-                      }
-                      let status = uni.capacity <= 2 || uni.paidMonths > 0;
-                      return (
-                        <>
-                          <EducatorImage />
-                          <Container>
-                            <Uni me={me} />
-                            <Courses>
-                              <Title primary> Опубликованные курсы </Title>
-                              <Row>
-                                {status && publishedCourses.length === 0 && (
-                                  <p>У вас еще нет запущенных курсов.</p>
-                                )}
-                                {status &&
-                                  publishedCourses.map(coursePage => (
+            {({ data: { me } }) => (
+              <>
+                {me && (
+                  <>
+                    <Query
+                      query={MY_COURSES_QUERY}
+                      variables={{
+                        id: me.id
+                      }}
+                    >
+                      {({ data, error, loading, fetchMore }) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error: {error.message}</p>;
+                        let publishedCourses = data.coursePages.filter(
+                          coursePage => coursePage.published === true
+                        );
+                        let developedCourses = data.coursePages.filter(
+                          coursePage => coursePage.published === false
+                        );
+                        const uni = me.uni;
+                        let isPaid;
+                        if (uni.capacity > 0 && uni.capacity <= 2) {
+                          isPaid = true;
+                        } else if (
+                          uni.capacity > 2 &&
+                          uni.capacity >= uni.uniCoursePages.length &&
+                          uni.paidMonths > 0
+                        ) {
+                          isPaid = true;
+                        } else {
+                          isPaid = false;
+                        }
+                        let status = uni.capacity <= 2 || uni.paidMonths > 0;
+                        return (
+                          <>
+                            <EducatorImage />
+                            <Container>
+                              <Uni me={me} />
+                              <Courses>
+                                <Title primary> Опубликованные курсы </Title>
+                                <Row>
+                                  {status && publishedCourses.length === 0 && (
+                                    <p>У вас еще нет запущенных курсов.</p>
+                                  )}
+                                  {status &&
+                                    publishedCourses.map(coursePage => (
+                                      <Course
+                                        key={coursePage.id}
+                                        id={coursePage.id}
+                                        coursePage={coursePage}
+                                        me={me}
+                                      />
+                                    ))}
+                                  {!status &&
+                                    "Нет доступа к управлению курсами"}
+                                </Row>
+                              </Courses>
+                              <Courses>
+                                <Title primary> Курсы в разработке </Title>
+                                <Row>
+                                  <CaseCard>
+                                    <Additional>
+                                      <>
+                                        <Img />
+                                        <Title2>Ваш новый курс</Title2>
+                                        <Author>
+                                          {me.surname
+                                            ? `${me.name} ${me.surname}`
+                                            : me.name}
+                                        </Author>
+                                      </>
+                                      <>
+                                        <Link prefetch href="/create">
+                                          <Button>
+                                            <a>Создать курс</a>
+                                          </Button>
+                                        </Link>
+                                      </>
+                                    </Additional>
+                                  </CaseCard>
+                                  {developedCourses.map(coursePage => (
                                     <Course
                                       key={coursePage.id}
                                       id={coursePage.id}
@@ -195,51 +231,18 @@ class Teach extends Component {
                                       me={me}
                                     />
                                   ))}
+                                </Row>
                                 {!status && "Нет доступа к управлению курсами"}
-                              </Row>
-                            </Courses>
-                            <Courses>
-                              <Title primary> Курсы в разработке </Title>
-                              <Row>
-                                <CaseCard>
-                                  <Additional>
-                                    <>
-                                      <Img />
-                                      <Title2>Ваш новый курс</Title2>
-                                      <Author>
-                                        {me.surname
-                                          ? `${me.name} ${me.surname}`
-                                          : me.name}
-                                      </Author>
-                                    </>
-                                    <>
-                                      <Link prefetch href="/create">
-                                        <Button>
-                                          <a>Создать курс</a>
-                                        </Button>
-                                      </Link>
-                                    </>
-                                  </Additional>
-                                </CaseCard>
-                                {developedCourses.map(coursePage => (
-                                  <Course
-                                    key={coursePage.id}
-                                    id={coursePage.id}
-                                    coursePage={coursePage}
-                                    me={me}
-                                  />
-                                ))}
-                              </Row>
-                              {!status && "Нет доступа к управлению курсами"}
-                            </Courses>
-                          </Container>
-                        </>
-                      );
-                    }}
-                  </Query>
-                </>
-              )
-            }
+                              </Courses>
+                            </Container>
+                          </>
+                        );
+                      }}
+                    </Query>
+                  </>
+                )}
+              </>
+            )}
           </User>
         </Styles>
       </PleaseSignIn>
