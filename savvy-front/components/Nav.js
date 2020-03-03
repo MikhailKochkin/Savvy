@@ -189,6 +189,8 @@ const StyledModal = Modal.styled`
     max-width: 90%;
     min-width: 200px;
     margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 `;
 
@@ -309,7 +311,6 @@ class Nav extends Component {
                         </Link>
                       ) : null}
                       {me ? <Signout /> : null}
-
                       {!me && (
                         <Button onClick={this.toggleModal}>
                           <a>Войти</a>

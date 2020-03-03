@@ -52,7 +52,7 @@ export const Unis = [
 ];
 
 export const Companies = [
-  { "Выберите компанию": "ck6mn2jhf009z07570hftqn7p" },
   { "Tomashevskaya & Partners": "ck2eobfn204s80785xo66ybzw" },
-  { Другая: "ck6mn2jhf009z07570hftqn7p" }
+  { "CyberLaw School": "ck7bx160b019x0797w0wlhp6q" },
+  { Другая: "ck7bwx7ga019o07974cz3lss6" }
 ];

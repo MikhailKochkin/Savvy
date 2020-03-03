@@ -94,10 +94,10 @@ class Uni extends Component {
   render() {
     const { me } = this.props;
     let price;
-    if (me.uni.paidMonths == null) {
+    if (me.company.paidMonths == null) {
       price = 0;
-    } else {
-      price = me.uni.paidMonths;
+    } else if (me.company.paidMonths) {
+      price = me.company.paidMonths;
     }
     return (
       <UniInfo>
@@ -106,14 +106,14 @@ class Uni extends Component {
         ) : (
           <Title primary>Кабинет преподавателя</Title>
         )}
-        <Title>{me.name}</Title>
+        <Title>{me.surname ? `${me.name} ${me.surname}` : me.name}</Title>
         <Box>
-          {me.status === "HR" ? (
+          {me.status === "HR" || me.status === "AUTHOR" ? (
             <div className="div1"> {me.company.name}</div>
           ) : (
             <div className="div1"> {me.uni.title}</div>
           )}
-          {me.status === "HR" ? null : (
+          {me.status === "HR" || me.status === "AUTHOR" ? null : (
             <div className="div2">Лимит новых курсов: {me.uni.capacity}</div>
           )}
           <div className="div3">Оплачено месяцев: {price}</div>

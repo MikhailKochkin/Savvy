@@ -33,6 +33,7 @@ const CURRENT_USER_QUERY = gql`
       company {
         id
         name
+        paidMonths
       }
       status
       lessonResults {

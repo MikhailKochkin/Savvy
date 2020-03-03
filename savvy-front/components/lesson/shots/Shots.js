@@ -145,7 +145,7 @@ class Shots extends Component {
         {this.state.page === "show" && (
           <>
             <Title>
-              <span>Раскадровка:</span> {title}
+              <span>Алгоритм:</span> {title}
             </Title>
             <>
               <Text>

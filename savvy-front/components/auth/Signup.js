@@ -19,6 +19,7 @@ const SIGNUP_MUTATION = gql`
     $password: String!
     $isFamiliar: Boolean!
     $status: Status!
+    $company: ID
     $uniID: ID
     $careerTrackID: ID
   ) {
@@ -29,6 +30,7 @@ const SIGNUP_MUTATION = gql`
       password: $password
       isFamiliar: $isFamiliar
       status: $status
+      company: $company
       uniID: $uniID
       careerTrackID: $careerTrackID
     ) {
@@ -42,6 +44,7 @@ const SIGNUP_MUTATION = gql`
 const Form = styled.form`
   min-width: 400px;
   font-size: 1.6rem;
+  line-height: 1.5;
   @media (max-width: 800px) {
     min-width: 100px;
     max-width: 100%;
@@ -63,7 +66,7 @@ const Fieldset = styled.fieldset`
     margin-top: 4%;
   }
   #standard-select-currency {
-    width: 50%;
+    width: 87%;
     font-size: 1.6rem;
     font-family: Montserrat;
   }
@@ -76,17 +79,26 @@ const Title = styled.div`
   font-size: 1.8rem;
   font-weight: 900;
   margin-bottom: 10px;
+  @media (max-width: 800px) {
+    margin-bottom: 0px;
+  }
 `;
 
-const Comment = styled.div`
-  font-size: 1.2rem;
-  color: #767676;
-  padding: 0 1%;
-  line-height: 1.4;
-  margin-bottom: 5px;
-  a {
-    color: #112a62;
-    font-weight: 600;
+const Input = styled.input`
+  width: 100%;
+  background: none;
+  font-size: 1.6rem;
+  border: none;
+  font-family: Montserrat;
+  outline: 0;
+  border-bottom: 1px solid #949494;
+  padding-bottom: 1%;
+  margin-bottom: 15px;
+  &:hover {
+    border-bottom: 1px solid #1a2a81;
+  }
+  &:focus {
+    border-bottom: 2px solid #1a2a81;
   }
 `;
 
@@ -103,16 +115,16 @@ const Transit = styled.div`
 const useStyles = makeStyles({
   button: {
     width: "100%",
-    marginBottom: "2%",
+    margin: "2% 0",
     fontSize: "1.4rem",
     textTransform: "none"
   },
   root: {
-    marginBottom: "4%",
     width: "100%"
   },
   labelRoot: {
-    fontSize: "1.5rem"
+    fontSize: "1.5rem",
+    width: "100%"
   },
   formControl: {
     fontSize: "1.5rem"
@@ -126,7 +138,7 @@ const Signup = props => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("LAWYER");
   const [uniID, setUniID] = useState("cjyimfz2e00lp07174jpder3m");
-  const [company, setCompany] = useState("ck6mn2jhf009z07570hftqn7p");
+  const [company, setCompany] = useState("ck7bwx7ga019o07974cz3lss6");
   const [careerTrackID, setCareerTrackID] = useState(
     "cjwx78u7700rb07121pelqctm"
   );
@@ -149,6 +161,7 @@ const Signup = props => {
         email: email,
         status: status,
         uniID: uniID,
+        company: company,
         careerTrackID: careerTrackID,
         isFamiliar: isFamiliar
       }}
@@ -186,23 +199,15 @@ const Signup = props => {
           >
             <Title>Зарегистрируйтесь на Savvy App</Title>
             <Error error={error} />
-            <TextField
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot
-                }
-              }}
+            <Input
               className="name"
               type="text"
               name="name"
               placeholder="Имя"
               value={name}
               onChange={e => setName(e.target.value)}
-              id="standard-basic"
-              label="Имя"
             />
-            <TextField
+            <Input
               className={classes.root}
               InputLabelProps={{
                 classes: {
@@ -216,15 +221,8 @@ const Signup = props => {
               value={surname}
               onChange={e => setSurname(e.target.value)}
               id="standard-basic"
-              label="Фамилия"
             />
-            <TextField
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot
-                }
-              }}
+            <Input
               className="email"
               type="email"
               name="email"
@@ -234,13 +232,7 @@ const Signup = props => {
               id="standard-basic"
               label="Электронная почта"
             />
-            <TextField
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot
-                }
-              }}
+            <Input
               className="password"
               type="password"
               name="password"
@@ -250,6 +242,7 @@ const Signup = props => {
               id="standard-basic"
               label="Пароль"
             />
+            <div className="condition">Выберите ваш статутс на сайте:</div>
             <TextField
               className={classes.root}
               InputLabelProps={{
@@ -262,7 +255,6 @@ const Signup = props => {
               label="Select"
               value={status}
               onChange={e => setStatus(e.target.value)}
-              // helperText="Выберите свой статус"
             >
               <MenuItem key="STUDENT" value="STUDENT">
                 Студент
@@ -278,32 +270,34 @@ const Signup = props => {
               </MenuItem>
             </TextField>
 
-            {status === "HR" && (
-              <TextField
-                className="company"
-                name="company"
-                className={classes.root}
-                InputLabelProps={{
-                  classes: {
-                    root: classes.labelRoot
-                  }
-                }}
-                id="standard-select-currency"
-                select
-                label="Select"
-                value={company}
-                onChange={e => setCompany(e.target.value)}
-                helperText="Из какой вы компании?"
-              >
-                {Companies.map(co => (
-                  <MenuItem
-                    key={Object.values(co)[0]}
-                    value={Object.values(co)[0]}
-                  >
-                    {Object.keys(co)[0]}
-                  </MenuItem>
-                ))}
-              </TextField>
+            {(status === "HR" || status === "AUTHOR") && (
+              <>
+                <div className="condition">Из какой вы компании?</div>
+                <TextField
+                  className="company"
+                  name="company"
+                  className={classes.root}
+                  InputLabelProps={{
+                    classes: {
+                      root: classes.labelRoot
+                    }
+                  }}
+                  id="standard-select-currency"
+                  select
+                  label="Select"
+                  value={company}
+                  onChange={e => setCompany(e.target.value)}
+                >
+                  {Companies.map(co => (
+                    <MenuItem
+                      key={Object.values(co)[0]}
+                      value={Object.values(co)[0]}
+                    >
+                      {Object.keys(co)[0]}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </>
             )}
 
             {status === "STUDENT" && (
@@ -332,6 +326,10 @@ const Signup = props => {
                     </MenuItem>
                   ))}
                 </TextField>
+                <div className="condition">
+                  Выберите направление, в котором
+                  <br /> вы хотите развивать карьеру.
+                </div>
                 <TextField
                   className="careerTrackID"
                   name="careerTrackID"
@@ -354,14 +352,14 @@ const Signup = props => {
                     Право и технологии
                   </MenuItem>
                 </TextField>
-                <Comment>
+                {/* <Comment>
                   Карьерный трек необходим для составления плана карьерного
                   развития, поиска курсов и предложений работы.
-                </Comment>
+                </Comment> */}
               </>
             )}
             <div className="condition">
-              Согласие на обработку персональных данных
+              Согласие на обработку персональных данных:
             </div>
             <TextField
               name="isFamiliar"

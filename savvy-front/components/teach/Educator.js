@@ -206,7 +206,11 @@ class Teach extends Component {
                                     <>
                                       <Img />
                                       <Title2>Ваш новый курс</Title2>
-                                      <Author>{me.name}</Author>
+                                      <Author>
+                                        {me.surname
+                                          ? `${me.name} ${me.surname}`
+                                          : me.name}
+                                      </Author>
                                     </>
                                     <>
                                       <Link prefetch href="/create">

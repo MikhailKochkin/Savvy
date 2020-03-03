@@ -264,7 +264,7 @@ const Details = styled.div`
   font-size: 1.6rem;
   .yellow {
     padding: 4%;
-    background: rgba(253, 173, 18, 0.05);
+    background: rgba(169, 210, 255, 0.35);
     margin-top: 2%;
     width: 100%;
     @media (max-width: 800px) {
@@ -273,7 +273,7 @@ const Details = styled.div`
   }
   .green {
     padding: 4%;
-    background: rgba(50, 172, 102, 0.05);
+    background: rgba(210, 246, 252, 0.35);
     width: 100%;
     @media (max-width: 800px) {
       padding: 20px;
@@ -281,7 +281,7 @@ const Details = styled.div`
   }
   .blue {
     padding: 4%;
-    background: rgba(36, 101, 255, 0.1);
+    background: rgba(121, 132, 238, 0.25);
     margin-bottom: 4%;
     width: 100%;
     @media (max-width: 800px) {
@@ -404,8 +404,12 @@ class CoursePage extends Component {
                                     {coursePage.description}
                                   </p>
                                   <p className="name">
-                                    {coursePage.user.name} из{" "}
-                                    {coursePage.user.status === "HR"
+                                    {me.surname
+                                      ? `${me.name} ${me.surname}`
+                                      : me.name}{" "}
+                                    из{" "}
+                                    {coursePage.user.status === "HR" ||
+                                    coursePage.user.status === "AUTHOR"
                                       ? coursePage.user.company.name
                                       : coursePage.user.uni.title}
                                   </p>
@@ -475,7 +479,7 @@ class CoursePage extends Component {
                                       </div>
                                       <iframe
                                         src={data.coursePage.video}
-                                        allowfullscreen
+                                        allowFullScreen
                                       />
                                     </Video>
                                   )}
@@ -644,15 +648,18 @@ class CoursePage extends Component {
                                   </div>
                                 )}
                               </Details>
-                              <RegisterCard
-                                me={me}
-                                coursePage={coursePage}
-                                price={price}
-                                discountPrice={coursePage.discountPrice}
-                                promocode={coursePage.promocode[0]}
-                                studentsArray={studentsArray}
-                                subjectArray={subjectArray}
-                              />
+                              {(!subjectArray.includes(coursePage.id) ||
+                                !new_subjectArray.includes(coursePage.id)) && (
+                                <RegisterCard
+                                  me={me}
+                                  coursePage={coursePage}
+                                  price={price}
+                                  discountPrice={coursePage.discountPrice}
+                                  // promocode={coursePage.promocode[0]}
+                                  studentsArray={studentsArray}
+                                  subjectArray={subjectArray}
+                                />
+                              )}
                               {data.coursePage.reviews.length > 0 && (
                                 <Reviews>
                                   {data.coursePage.reviews.map(post =>

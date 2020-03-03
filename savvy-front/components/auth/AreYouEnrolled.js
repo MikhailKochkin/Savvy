@@ -62,7 +62,8 @@ const AreYouEnrolled = props =>
           if (
             !data.me.subjects.includes(props.subject) &&
             !subj_list.includes(props.subject) &&
-            !data.me.permissions.includes("ADMIN")
+            !data.me.permissions.includes("ADMIN") &&
+            !arr1.includes(props.subject)
           ) {
             return (
               <Styles>

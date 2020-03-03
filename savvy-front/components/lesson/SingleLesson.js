@@ -974,7 +974,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Раскадровка{" "}
+                                        Алгоритм{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1104,7 +1104,7 @@ class SingleLesson extends Component {
                                           name="createShot"
                                           onClick={this.onSwitch}
                                         >
-                                          Новая раскадровка
+                                          Новый алгоритм
                                         </ChooseButton>
                                       </ButtonZone>
 

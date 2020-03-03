@@ -282,6 +282,12 @@ class LessonHeader extends Component {
                           l => l.student.id === me.id
                         ).length === 0 && (
                           <>
+                            {
+                              (me.id,
+                              author,
+                              me.permissions.includes("ADMIN"),
+                              lesson.id === openLesson)
+                            }
                             {me &&
                             lesson &&
                             (me.id === author ||
@@ -316,6 +322,7 @@ class LessonHeader extends Component {
                               (students.includes(me.id) ||
                                 new_students.includes(me.id)) &&
                               !me.permissions.includes("ADMIN") &&
+                              lesson.id !== openLesson &&
                               this.state.published && (
                                 <Link
                                   // The user hasn't visited the lesson page before. Create the lesson visit node.
