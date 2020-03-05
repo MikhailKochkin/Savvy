@@ -139,7 +139,7 @@ const Signup = props => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("LAWYER");
   const [uniID, setUniID] = useState("cjyimfz2e00lp07174jpder3m");
-  const [company, setCompany] = useState("ck7bwx7ga019o07974cz3lss6");
+  const [company, setCompany] = useState("ck7f4ooa201ro0736gzahsdhn");
   const [careerTrackID, setCareerTrackID] = useState(
     "cjwx78u7700rb07121pelqctm"
   );
