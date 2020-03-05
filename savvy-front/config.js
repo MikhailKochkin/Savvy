@@ -56,3 +56,8 @@ export const Companies = [
   { "CyberLaw School": "ck7bx160b019x0797w0wlhp6q" },
   { Другая: "ck7bwx7ga019o07974cz3lss6" }
 ];
+
+export const Tracks = [
+  { "Корпоративное право": "cjwx78u7700rb07121pelqctm" },
+  { "Право и технологии": "cjwx79iaj00rk0712tz12j7vi" }
+];

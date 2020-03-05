@@ -130,7 +130,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             student {
               id
             }
-            revealed
+            correct
+            guess
+            wrong
             attempts
             textEditor {
               id

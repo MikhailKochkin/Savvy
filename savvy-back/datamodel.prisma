@@ -425,13 +425,13 @@ type ProblemResult {
 
 type TextEditorResult {
   id: ID! @id
-  student: User! @relation(name: "UserTextEditorResults")
+  student: User! @relation( name: "UserTextEditorResults")
   attempts: Int
-  revealed: [Json] @scalarList(strategy: RELATION)
-  lesson: Lesson @relation(name: "TextEditorResults")
-  lessonID: ID
+  wrong: String!
+  correct: String!
+  guess: String!
+  lesson: Lesson @relation( name: "TextEditorResults")
   textEditor: TextEditor @relation(name: "SingleTextEditorResults")
-  textEditorID: ID
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

@@ -3,7 +3,6 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
@@ -35,6 +34,24 @@ const Fieldset = styled.fieldset`
   input {
     font-size: 1.6rem;
     font-family: Montserrat;
+  }
+`;
+
+const Input = styled.input`
+  width: 100%;
+  background: none;
+  font-size: 1.4rem;
+  border: none;
+  font-family: Montserrat;
+  outline: 0;
+  border-bottom: 1px solid #949494;
+  padding-bottom: 1%;
+  margin-bottom: 15px;
+  &:hover {
+    border-bottom: 1px solid #1a2a81;
+  }
+  &:focus {
+    border-bottom: 2px solid #1a2a81;
   }
 `;
 
@@ -96,32 +113,21 @@ const Signin = props => {
           <Fieldset disabled={loading} aria-busy={loading}>
             <Title>Войдите на Savvy App</Title>
             <Error error={error} />
-            <TextField
+            <Input
               type="email"
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot
-                }
-              }}
               value={email}
               onChange={e => setEmail(e.target.value)}
               id="standard-basic"
               name="email"
+              placeholder="Электронная почта"
               label="Электронная почта"
             />
-            <TextField
+            <Input
               type="password"
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot
-                }
-              }}
-              id="standard-basic"
               name="password"
               label="Пароль"
               value={password}
+              placeholder="Пароль"
               onChange={e => setPassword(e.target.value)}
             />
             <Button

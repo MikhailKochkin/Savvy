@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import styled, { consolidateStreamedStyles } from "styled-components";
+import styled from "styled-components";
+import PropTypes from "prop-types";
 import renderHTML from "react-render-html";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -13,15 +14,19 @@ import { CURRENT_USER_QUERY } from "../../User";
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
     $attempts: Int
-    $revealed: [Json]
-    $lessonID: ID
-    $textEditorID: ID
+    $wrong: String!
+    $correct: String!
+    $guess: String!
+    $lesson: ID
+    $textEditor: ID
   ) {
     createTextEditorResult(
       attempts: $attempts
-      revealed: $revealed
-      lessonID: $lessonID
-      textEditorID: $textEditorID
+      wrong: $wrong
+      correct: $correct
+      guess: $guess
+      lesson: $lesson
+      textEditor: $textEditor
     ) {
       id
     }
@@ -136,25 +141,10 @@ class SingleTextEditor extends Component {
     correct_option: "",
     wrong_option: "",
     show: false,
-    revealed: [],
     attempts: 0,
-    answers: [],
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text,
     update: false
-  };
-
-  onCheck = e => {
-    let a = {
-      wrong_variant: this.state.wrong_option,
-      student_variant: this.state.answer,
-      correct_variant: this.state.correct_option
-    };
-    this.setState(prevState => ({
-      show: !prevState.show,
-      answers: [...prevState.answers, this.state.answer],
-      revealed: [...prevState.revealed, a]
-    }));
   };
 
   onTest = e => {
@@ -172,6 +162,7 @@ class SingleTextEditor extends Component {
     this.setState({
       shown: true,
       show: false,
+      answer: "",
       correct_option: e.target.getAttribute("data"),
       wrong_option: e.target.innerHTML
     });
@@ -208,7 +199,7 @@ class SingleTextEditor extends Component {
     );
   }
   render() {
-    const { textEditor, me, userData } = this.props;
+    const { textEditor, me, userData, lesson } = this.props;
     const data = userData
       .filter(result => result.textEditor.id === textEditor.id)
       .filter(result => result.student.id === me.id);
@@ -245,8 +236,44 @@ class SingleTextEditor extends Component {
                       this.state.total === undefined) &&
                       this.state.correct_option}
                   </div>
+
                   {this.state.total > 0 && (
-                    <button onClick={this.onCheck}>Ответить</button>
+                    <Mutation
+                      mutation={CREATE_TEXTEDITORRESULT_MUTATION}
+                      variables={{
+                        lesson: lesson,
+                        textEditor: this.props.textEditor.id,
+                        attempts: this.state.attempts,
+                        correct: this.state.correct_option,
+                        wrong: this.state.wrong_option,
+                        guess: this.state.answer
+                      }}
+                      refetchQueries={() => [
+                        {
+                          query: SINGLE_LESSON_QUERY,
+                          variables: { id: this.props.lessonID }
+                        },
+                        {
+                          query: CURRENT_USER_QUERY
+                        }
+                      ]}
+                    >
+                      {(createTextEditorResult, { loading, error }) => (
+                        <button
+                          onClick={async e => {
+                            e.preventDefault();
+                            this.state.answer !== ""
+                              ? this.setState(prevState => ({
+                                  show: !prevState.show
+                                }))
+                              : alert("Дайте свой вариант!");
+                            const res = await createTextEditorResult();
+                          }}
+                        >
+                          Ответить
+                        </button>
+                      )}
+                    </Mutation>
                   )}
                   <button onClick={this.onConceal}>Скрыть подсказку</button>
                 </Hint>
@@ -259,40 +286,10 @@ class SingleTextEditor extends Component {
               </EditText>
             </TextBar>
             <Buttons>
-              {data.length === 0 && (
-                <Mutation
-                  mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-                  variables={{
-                    lessonID: this.props.lessonID,
-                    attempts: this.state.attempts,
-                    revealed: this.state.revealed,
-                    textEditorID: this.props.textEditor.id
-                  }}
-                  refetchQueries={() => [
-                    {
-                      query: SINGLE_LESSON_QUERY,
-                      variables: { id: this.props.lessonID }
-                    },
-                    {
-                      query: CURRENT_USER_QUERY
-                    }
-                  ]}
-                >
-                  {(createTextEditorResult, { loading, error }) => (
-                    <StyledButton
-                      variant="contained"
-                      color="primary"
-                      onClick={async e => {
-                        e.preventDefault();
-                        this.onShow();
-                        const res = await createTextEditorResult();
-                      }}
-                    >
-                      {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
-                    </StyledButton>
-                  )}
-                </Mutation>
-              )}
+              <Button onClick={this.onShow}>
+                {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
+              </Button>
+
               {data.length > 0 && (
                 <StyledButton
                   onClick={this.onShow}
@@ -332,5 +329,13 @@ class SingleTextEditor extends Component {
     );
   }
 }
+
+SingleTextEditor.propTypes = {
+  lesson: PropTypes.string.isRequired,
+  textEditor: PropTypes.object.isRequired,
+  key: PropTypes.string.isRequired,
+  me: PropTypes.object.isRequired,
+  userData: PropTypes.object.isRequired
+};
 
 export default SingleTextEditor;

@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
-import Router from "next/router";
 import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 
@@ -13,28 +14,6 @@ const SIGNIN_MUTATION = gql`
       email
       name
     }
-  }
-`;
-
-const SubmitButton = styled.button`
-  background-color: #84bc9c;
-  border: 1px solid white;
-  border-radius: 6px;
-  color: white;
-  padding: 2%;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1.4rem;
-  font-weight: 600;
-  width: 100%;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    border: 1px solid black;
-  }
-  @media (max-width: 800px) {
-    margin-top: 1%;
   }
 `;
 
@@ -55,31 +34,22 @@ const Fieldset = styled.fieldset`
   padding: 15px;
 `;
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: repeat(2 70px);
-  .email {
-    grid-area: first;
+const Input = styled.input`
+  width: 100%;
+  background: none;
+  font-size: 1.4rem;
+  border: none;
+  font-family: Montserrat;
+  outline: 0;
+  border-bottom: 1px solid #949494;
+  padding-bottom: 1%;
+  margin-bottom: 15px;
+  &:hover {
+    border-bottom: 1px solid #1a2a81;
   }
-  .password {
-    grid-area: second;
+  &:focus {
+    border-bottom: 2px solid #1a2a81;
   }
-  input {
-    width: 100%;
-    /* font-size: ${props => (props.primary ? "2.2rem" : "1.6rem")}; */
-    border: ${props =>
-      props.primary ? "2px solid #84BC9C" : "1px solid #ccc"};
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    padding: 1.5%;
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    outline: 0;
-  }
-  grid-template-areas:
-    "first   "
-    "second   ";
 `;
 
 const Buttons = styled.div`
@@ -102,15 +72,6 @@ const Buttons = styled.div`
   }
 `;
 
-const LoggedIn = styled.p`
-  background-color: #00ff7f;
-  font-size: 1.8rem;
-  padding: 1% 2%;
-  border-radius: 10px;
-  width: 45%;
-  text-align: center;
-`;
-
 const Title = styled.div`
   font-size: 1.8rem;
   font-weight: 900;
@@ -127,81 +88,73 @@ const Transit = styled.div`
   }
 `;
 
-class WideSignin extends Component {
-  state = {
-    password: "",
-    email: "",
-    loggedIn: true
-  };
-  saveToStateEmail = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  saveToState = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  switch = e => {
-    const name = e.target.getAttribute("name");
-    this.props.getData(name);
-  };
-  render() {
-    return (
-      <Mutation
-        mutation={SIGNIN_MUTATION}
-        variables={this.state}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {(signin, { error, loading }) => (
-          <Form
-            method="post"
-            onSubmit={async e => {
-              e.preventDefault();
-              await signin();
-              this.setState({ email: "", password: "", loggedIn: true });
-            }}
-          >
-            <Fieldset disabled={loading} aria-busy={loading}>
-              <Title>Войдите на Savvy App</Title>
-              <Error error={error} />
-              {/* {this.state.loggedIn && <LoggedIn>Вы вошли в аккаунт!</LoggedIn>} */}
-              <Container>
-                <input
-                  primary={this.state.loggedIn}
-                  type="email"
-                  name="email"
-                  placeholder="Электронная почта"
-                  value={this.state.email}
-                  onChange={this.saveToStateEmail}
-                />
+const WideSignin = props => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const classes = useStyles();
+  const change = e => props.getData(e.target.getAttribute("name"));
+  return (
+    <Mutation
+      mutation={SIGNIN_MUTATION}
+      variables={{
+        email: email,
+        password: password
+      }}
+      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+    >
+      {(signin, { error, loading }) => (
+        <Form
+          onSubmit={async e => {
+            e.preventDefault();
+            await signin();
+            setPassword("");
+            setEmail("");
+          }}
+        >
+          <Fieldset disabled={loading} aria-busy={loading}>
+            <Title>Войдите на Savvy App</Title>
+            <Error error={error} />
+            <input
+              primary={this.state.loggedIn}
+              type="email"
+              name="email"
+              placeholder="Электронная почта"
+              value={this.state.email}
+              onChange={this.saveToStateEmail}
+            />
 
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Пароль"
-                  value={this.state.password}
-                  onChange={this.saveToState}
-                />
-              </Container>
-              <Buttons>
-                <SubmitButton type="submit">
-                  {loading ? "Вхожу" : "Войти"}
-                </SubmitButton>
-                <div name="reset" onClick={this.switch}>
+            <input
+              type="password"
+              name="password"
+              placeholder="Пароль"
+              value={this.state.password}
+              onChange={this.saveToState}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              {loading ? "Вхожу" : "Войти"}
+            </Button>
+            <Transit>
+              <div>
+                <span name="reset" onClick={change}>
                   Забыли пароль?
-                </div>
-              </Buttons>
-              <Transit>
-                Ещё не зарегистрированы на Savvy?{" "}
-                <span name="signup" onClick={this.switch}>
-                  Зарегистрироваться
                 </span>
-              </Transit>
-            </Fieldset>
-          </Form>
-        )}
-      </Mutation>
-    );
-  }
-}
+              </div>
+              Ещё не зарегистрированы на Savvy?{" "}
+              <span name="signup" onClick={change}>
+                Зарегистрироваться
+              </span>
+            </Transit>
+          </Fieldset>
+        </Form>
+      )}
+    </Mutation>
+  );
+};
 
 export default WideSignin;
 export { SIGNIN_MUTATION };

@@ -45,6 +45,12 @@ const Button = styled.button`
   }
 `;
 
+const Block = styled.div`
+  padding-bottom: 2%;
+  margin-bottom: 3%;
+  border-bottom: 1px solid #edefed;
+`;
+
 const StyledModal = Modal.styled`
   display: flex;
   flex-direction: column;
@@ -87,6 +93,9 @@ class TexteditorModal extends Component {
           <Text>
             <b>Редактор: </b>
             {renderHTML(texteditor.text.substring(0, 200) + "...")}
+            <Button onClick={this.toggleModal}>
+              <a>Развернуть</a>
+            </Button>
           </Text>
           <StyledModal
             isOpen={this.state.isOpen}
@@ -95,38 +104,21 @@ class TexteditorModal extends Component {
           >
             {renderHTML(texteditor.text)}
           </StyledModal>
-          <Button onClick={this.toggleModal}>
-            <a>Развернуть</a>
-          </Button>
         </TextBox>
         <div className="column">
           {texteditor.textEditorResults.filter(t => t.student.id === student.id)
             .length > 0
             ? texteditor.textEditorResults
                 .filter(t => t.student.id === student.id)
-                .map(t => <div>Попыток: {t.attempts} </div>)
-            : null}
-
-          <div>Всего ошибок: {texteditor.totalMistakes}</div>
-        </div>
-
-        <div className="column">
-          {texteditor.textEditorResults.filter(t => t.student.id === student.id)
-            .length > 0 ? (
-            texteditor.textEditorResults
-              .filter(t => t.student.id === student.id)
-              .map(t =>
-                t.revealed.map(el => (
-                  <div className="mistake">
-                    <div>Ошибка в тексте: {el.wrong_variant}</div>
-                    <div>Вариант ученика: {el.student_variant}</div>
-                    <div>Правильный вариант: {el.correct_variant}</div>
-                  </div>
+                .map(t => (
+                  <Block>
+                    <div>⛔️: {t.wrong} </div>
+                    <div>✅: {t.correct} </div>
+                    <div>❓: {t.guess} </div>
+                    <div>Попытка {t.attempts} </div>
+                  </Block>
                 ))
-              )
-          ) : (
-            <span>Не отредактирован</span>
-          )}
+            : null}
         </div>
       </Box>
     );

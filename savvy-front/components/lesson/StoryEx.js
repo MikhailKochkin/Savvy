@@ -112,7 +112,7 @@ class StoryEx extends Component {
       item = (
         <SingleTextEditor
           key={el.id}
-          lessonID={lesson.id}
+          lesson={lesson.id}
           textEditor={el}
           me={me}
           userData={lesson.textEditorResults}

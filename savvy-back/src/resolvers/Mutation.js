@@ -601,10 +601,10 @@ const Mutations = {
   },
   async createTextEditorResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
-    const lessonID = args.lessonID;
-    const textEditorID = args.textEditorID;
-    const revealed = args.revealed;
-    delete args.revealed;
+    const lesson = args.lesson;
+    const textEditor = args.textEditor;
+    delete args.lesson;
+    delete args.textEditor;
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -617,13 +617,10 @@ const Mutations = {
             connect: { id: ctx.request.userId }
           },
           textEditor: {
-            connect: { id: textEditorID }
+            connect: { id: textEditor }
           },
           lesson: {
-            connect: { id: lessonID }
-          },
-          revealed: {
-            set: [...revealed]
+            connect: { id: lesson }
           },
           ...args
         }

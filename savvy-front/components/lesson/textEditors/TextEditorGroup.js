@@ -64,12 +64,6 @@ class TextEditorGroup extends Component {
     const textEditor = this.props.textEditors[this.state.num];
     return (
       <>
-        {/* <Advice>
-          <b>Совет</b>: чтобы увидеть, правильно ли вы нашли все риски ю ошибки,
-          вам нужно сначала постараться самим найти все ошибки. После того, как
-          вы найдете все существующие, по вашему мнению, ошибки, вы можете
-          нажать на кнопку "Показать све ошибки".{" "}
-        </Advice> */}
         <Box>
           <Title>
             Редактор {this.state.num + 1} из {this.props.textEditors.length}
@@ -80,7 +74,7 @@ class TextEditorGroup extends Component {
         {textEditor && (
           <SingleTextEditor
             key={textEditor.id}
-            lessonID={this.props.lessonID}
+            lesson={this.props.lesson}
             textEditor={textEditor}
             me={this.props.me}
             userData={userData}

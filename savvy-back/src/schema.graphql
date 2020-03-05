@@ -104,9 +104,11 @@ type Mutation {
   ): ProblemResult!
   createTextEditorResult(
     attempts: Int
-    revealed: [Json]
-    lessonID: ID
-    textEditorID: ID
+    wrong: String!
+    correct: String!
+    guess: String!
+    lesson: ID
+    textEditor: ID
   ): TextEditorResult!
   updateTextEditor(
     id: ID!

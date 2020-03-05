@@ -9,7 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
-import { Unis, Companies } from "../../config";
+import { Unis, Companies, Tracks } from "../../config";
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -64,6 +64,7 @@ const Fieldset = styled.fieldset`
     font-size: 1.4rem;
     line-height: 1.4;
     margin-top: 4%;
+    color: #787878;
   }
   #standard-select-currency {
     width: 87%;
@@ -87,7 +88,7 @@ const Title = styled.div`
 const Input = styled.input`
   width: 100%;
   background: none;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   border: none;
   font-family: Montserrat;
   outline: 0;
@@ -208,19 +209,12 @@ const Signup = props => {
               onChange={e => setName(e.target.value)}
             />
             <Input
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot
-                }
-              }}
               className="surname"
               type="text"
               name="surname"
               placeholder="Фамилия"
               value={surname}
               onChange={e => setSurname(e.target.value)}
-              id="standard-basic"
             />
             <Input
               className="email"
@@ -229,7 +223,6 @@ const Signup = props => {
               placeholder="Почта"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              id="standard-basic"
               label="Электронная почта"
             />
             <Input
@@ -239,7 +232,6 @@ const Signup = props => {
               placeholder="Пароль"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              id="standard-basic"
               label="Пароль"
             />
             <div className="condition">Выберите ваш статутс на сайте:</div>
@@ -345,17 +337,15 @@ const Signup = props => {
                   value={careerTrackID}
                   onChange={e => setCareerTrackID(e.target.value)}
                 >
-                  <MenuItem value="cjwx78u7700rb07121pelqctm">
-                    Корпоративное право
-                  </MenuItem>
-                  <MenuItem value="cjwx79iaj00rk0712tz12j7vi">
-                    Право и технологии
-                  </MenuItem>
+                  {Tracks.map(track => (
+                    <MenuItem
+                      key={Object.values(track)[0]}
+                      value={Object.values(track)[0]}
+                    >
+                      {Object.keys(track)[0]}
+                    </MenuItem>
+                  ))}
                 </TextField>
-                {/* <Comment>
-                  Карьерный трек необходим для составления плана карьерного
-                  развития, поиска курсов и предложений работы.
-                </Comment> */}
               </>
             )}
             <div className="condition">

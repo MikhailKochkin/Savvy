@@ -18081,11 +18081,11 @@ type TextEditorResult {
   id: ID!
   student: User!
   attempts: Int
-  revealed: [Json!]!
+  wrong: String!
+  correct: String!
+  guess: String!
   lesson: Lesson
-  lessonID: ID
   textEditor: TextEditor
-  textEditorID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -18100,11 +18100,11 @@ input TextEditorResultCreateInput {
   id: ID
   student: UserCreateOneWithoutTextEditorResultsInput!
   attempts: Int
-  revealed: TextEditorResultCreaterevealedInput
+  wrong: String!
+  correct: String!
+  guess: String!
   lesson: LessonCreateOneWithoutTextEditorResultsInput
-  lessonID: ID
   textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
-  textEditorID: ID
 }
 
 input TextEditorResultCreateManyWithoutLessonInput {
@@ -18122,38 +18122,34 @@ input TextEditorResultCreateManyWithoutTextEditorInput {
   connect: [TextEditorResultWhereUniqueInput!]
 }
 
-input TextEditorResultCreaterevealedInput {
-  set: [Json!]
-}
-
 input TextEditorResultCreateWithoutLessonInput {
   id: ID
   student: UserCreateOneWithoutTextEditorResultsInput!
   attempts: Int
-  revealed: TextEditorResultCreaterevealedInput
-  lessonID: ID
+  wrong: String!
+  correct: String!
+  guess: String!
   textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
-  textEditorID: ID
 }
 
 input TextEditorResultCreateWithoutStudentInput {
   id: ID
   attempts: Int
-  revealed: TextEditorResultCreaterevealedInput
+  wrong: String!
+  correct: String!
+  guess: String!
   lesson: LessonCreateOneWithoutTextEditorResultsInput
-  lessonID: ID
   textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
-  textEditorID: ID
 }
 
 input TextEditorResultCreateWithoutTextEditorInput {
   id: ID
   student: UserCreateOneWithoutTextEditorResultsInput!
   attempts: Int
-  revealed: TextEditorResultCreaterevealedInput
+  wrong: String!
+  correct: String!
+  guess: String!
   lesson: LessonCreateOneWithoutTextEditorResultsInput
-  lessonID: ID
-  textEditorID: ID
 }
 
 type TextEditorResultEdge {
@@ -18166,10 +18162,12 @@ enum TextEditorResultOrderByInput {
   id_DESC
   attempts_ASC
   attempts_DESC
-  lessonID_ASC
-  lessonID_DESC
-  textEditorID_ASC
-  textEditorID_DESC
+  wrong_ASC
+  wrong_DESC
+  correct_ASC
+  correct_DESC
+  guess_ASC
+  guess_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -18179,9 +18177,9 @@ enum TextEditorResultOrderByInput {
 type TextEditorResultPreviousValues {
   id: ID!
   attempts: Int
-  revealed: [Json!]!
-  lessonID: ID
-  textEditorID: ID
+  wrong: String!
+  correct: String!
+  guess: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -18209,34 +18207,48 @@ input TextEditorResultScalarWhereInput {
   attempts_lte: Int
   attempts_gt: Int
   attempts_gte: Int
-  lessonID: ID
-  lessonID_not: ID
-  lessonID_in: [ID!]
-  lessonID_not_in: [ID!]
-  lessonID_lt: ID
-  lessonID_lte: ID
-  lessonID_gt: ID
-  lessonID_gte: ID
-  lessonID_contains: ID
-  lessonID_not_contains: ID
-  lessonID_starts_with: ID
-  lessonID_not_starts_with: ID
-  lessonID_ends_with: ID
-  lessonID_not_ends_with: ID
-  textEditorID: ID
-  textEditorID_not: ID
-  textEditorID_in: [ID!]
-  textEditorID_not_in: [ID!]
-  textEditorID_lt: ID
-  textEditorID_lte: ID
-  textEditorID_gt: ID
-  textEditorID_gte: ID
-  textEditorID_contains: ID
-  textEditorID_not_contains: ID
-  textEditorID_starts_with: ID
-  textEditorID_not_starts_with: ID
-  textEditorID_ends_with: ID
-  textEditorID_not_ends_with: ID
+  wrong: String
+  wrong_not: String
+  wrong_in: [String!]
+  wrong_not_in: [String!]
+  wrong_lt: String
+  wrong_lte: String
+  wrong_gt: String
+  wrong_gte: String
+  wrong_contains: String
+  wrong_not_contains: String
+  wrong_starts_with: String
+  wrong_not_starts_with: String
+  wrong_ends_with: String
+  wrong_not_ends_with: String
+  correct: String
+  correct_not: String
+  correct_in: [String!]
+  correct_not_in: [String!]
+  correct_lt: String
+  correct_lte: String
+  correct_gt: String
+  correct_gte: String
+  correct_contains: String
+  correct_not_contains: String
+  correct_starts_with: String
+  correct_not_starts_with: String
+  correct_ends_with: String
+  correct_not_ends_with: String
+  guess: String
+  guess_not: String
+  guess_in: [String!]
+  guess_not_in: [String!]
+  guess_lt: String
+  guess_lte: String
+  guess_gt: String
+  guess_gte: String
+  guess_contains: String
+  guess_not_contains: String
+  guess_starts_with: String
+  guess_not_starts_with: String
+  guess_ends_with: String
+  guess_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -18279,25 +18291,25 @@ input TextEditorResultSubscriptionWhereInput {
 input TextEditorResultUpdateInput {
   student: UserUpdateOneRequiredWithoutTextEditorResultsInput
   attempts: Int
-  revealed: TextEditorResultUpdaterevealedInput
+  wrong: String
+  correct: String
+  guess: String
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
-  lessonID: ID
   textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
-  textEditorID: ID
 }
 
 input TextEditorResultUpdateManyDataInput {
   attempts: Int
-  revealed: TextEditorResultUpdaterevealedInput
-  lessonID: ID
-  textEditorID: ID
+  wrong: String
+  correct: String
+  guess: String
 }
 
 input TextEditorResultUpdateManyMutationInput {
   attempts: Int
-  revealed: TextEditorResultUpdaterevealedInput
-  lessonID: ID
-  textEditorID: ID
+  wrong: String
+  correct: String
+  guess: String
 }
 
 input TextEditorResultUpdateManyWithoutLessonInput {
@@ -18341,35 +18353,31 @@ input TextEditorResultUpdateManyWithWhereNestedInput {
   data: TextEditorResultUpdateManyDataInput!
 }
 
-input TextEditorResultUpdaterevealedInput {
-  set: [Json!]
-}
-
 input TextEditorResultUpdateWithoutLessonDataInput {
   student: UserUpdateOneRequiredWithoutTextEditorResultsInput
   attempts: Int
-  revealed: TextEditorResultUpdaterevealedInput
-  lessonID: ID
+  wrong: String
+  correct: String
+  guess: String
   textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
-  textEditorID: ID
 }
 
 input TextEditorResultUpdateWithoutStudentDataInput {
   attempts: Int
-  revealed: TextEditorResultUpdaterevealedInput
+  wrong: String
+  correct: String
+  guess: String
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
-  lessonID: ID
   textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
-  textEditorID: ID
 }
 
 input TextEditorResultUpdateWithoutTextEditorDataInput {
   student: UserUpdateOneRequiredWithoutTextEditorResultsInput
   attempts: Int
-  revealed: TextEditorResultUpdaterevealedInput
+  wrong: String
+  correct: String
+  guess: String
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
-  lessonID: ID
-  textEditorID: ID
 }
 
 input TextEditorResultUpdateWithWhereUniqueWithoutLessonInput {
@@ -18429,36 +18437,50 @@ input TextEditorResultWhereInput {
   attempts_lte: Int
   attempts_gt: Int
   attempts_gte: Int
+  wrong: String
+  wrong_not: String
+  wrong_in: [String!]
+  wrong_not_in: [String!]
+  wrong_lt: String
+  wrong_lte: String
+  wrong_gt: String
+  wrong_gte: String
+  wrong_contains: String
+  wrong_not_contains: String
+  wrong_starts_with: String
+  wrong_not_starts_with: String
+  wrong_ends_with: String
+  wrong_not_ends_with: String
+  correct: String
+  correct_not: String
+  correct_in: [String!]
+  correct_not_in: [String!]
+  correct_lt: String
+  correct_lte: String
+  correct_gt: String
+  correct_gte: String
+  correct_contains: String
+  correct_not_contains: String
+  correct_starts_with: String
+  correct_not_starts_with: String
+  correct_ends_with: String
+  correct_not_ends_with: String
+  guess: String
+  guess_not: String
+  guess_in: [String!]
+  guess_not_in: [String!]
+  guess_lt: String
+  guess_lte: String
+  guess_gt: String
+  guess_gte: String
+  guess_contains: String
+  guess_not_contains: String
+  guess_starts_with: String
+  guess_not_starts_with: String
+  guess_ends_with: String
+  guess_not_ends_with: String
   lesson: LessonWhereInput
-  lessonID: ID
-  lessonID_not: ID
-  lessonID_in: [ID!]
-  lessonID_not_in: [ID!]
-  lessonID_lt: ID
-  lessonID_lte: ID
-  lessonID_gt: ID
-  lessonID_gte: ID
-  lessonID_contains: ID
-  lessonID_not_contains: ID
-  lessonID_starts_with: ID
-  lessonID_not_starts_with: ID
-  lessonID_ends_with: ID
-  lessonID_not_ends_with: ID
   textEditor: TextEditorWhereInput
-  textEditorID: ID
-  textEditorID_not: ID
-  textEditorID_in: [ID!]
-  textEditorID_not_in: [ID!]
-  textEditorID_lt: ID
-  textEditorID_lte: ID
-  textEditorID_gt: ID
-  textEditorID_gte: ID
-  textEditorID_contains: ID
-  textEditorID_not_contains: ID
-  textEditorID_starts_with: ID
-  textEditorID_not_starts_with: ID
-  textEditorID_ends_with: ID
-  textEditorID_not_ends_with: ID
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
