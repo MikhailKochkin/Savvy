@@ -88,6 +88,21 @@ const Transit = styled.div`
   }
 `;
 
+const useStyles = makeStyles({
+  button: {
+    width: "100%",
+    marginBottom: "2%",
+    fontSize: "1.4rem",
+    textTransform: "none"
+  },
+  root: {
+    marginBottom: "4%"
+  },
+  labelRoot: {
+    fontSize: "1.5rem"
+  }
+});
+
 const WideSignin = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -114,21 +129,22 @@ const WideSignin = props => {
           <Fieldset disabled={loading} aria-busy={loading}>
             <Title>Войдите на Savvy App</Title>
             <Error error={error} />
-            <input
-              primary={this.state.loggedIn}
+            <Input
               type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              id="standard-basic"
               name="email"
               placeholder="Электронная почта"
-              value={this.state.email}
-              onChange={this.saveToStateEmail}
             />
-
-            <input
+            <Input
               type="password"
+              id="standard-basic"
               name="password"
+              label="Пароль"
+              value={password}
               placeholder="Пароль"
-              value={this.state.password}
-              onChange={this.saveToState}
+              onChange={e => setPassword(e.target.value)}
             />
             <Button
               type="submit"
