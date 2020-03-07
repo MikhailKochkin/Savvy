@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import styled from "styled-components";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { el } from "date-fns/locale";
 
 const COURSE_VISITS_QUERY = gql`
   query COURSE_VISITS_QUERY($day: DateTime, $nextday: DateTime) {

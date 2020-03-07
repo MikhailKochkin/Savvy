@@ -1,7 +1,8 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TakeMyMoney from "../../TakeMyMoney";
 import EnrollCoursePage from "../../EnrollCoursePage";
+import moment from "moment";
 import BuyDummy from "../BuyDummy";
 
 const Data = styled.div`
@@ -58,6 +59,10 @@ const Header = styled.div`
   background: rgba(36, 101, 255, 0.1);
   margin: 0;
   text-align: center;
+  .crossed {
+    text-decoration: line-through;
+    font-size: 1.8rem;
+  }
 `;
 
 const Input = styled.input`
@@ -145,165 +150,217 @@ const GridContainer = styled.div`
   }
 `;
 
-class RegisterCard extends Component {
-  state = {
-    price: this.props.price,
-    used: false
-  };
-  change = async e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+const Time = styled.div`
+  /* border: 1px solid #e4e4e4; */
+  width: 100%;
+  background: #dce35b; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #45b649,
+    #dce35b
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #45b649,
+    #dce35b
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-  promo = () => {
-    const promo = [];
-    let discount;
-    const res = this.props.promocode.map(el => promo.push(Object.keys(el)[0]));
-    if (promo.includes(this.state.promo) && !this.state.used) {
-      this.props.promocode.map(el =>
-        Object.keys(el)[0] === this.state.promo
-          ? (discount = Object.values(el)[0])
-          : null
-      );
-      this.setState(prev => ({
-        price: prev.price * discount
-      }));
-      this.setState({
-        used: true
-      });
-    }
-  };
+  color: white;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  text-align: center;
+  padding: 0.5%;
+`;
 
-  scroll = () => {
-    window.scrollTo(0, document.body.scrollHeight);
-  };
+const calculateTimeLeft = () => {
+  moment.locale("ru");
+  let now = moment(new Date());
+  let then = new Date("2020-03-10 06:00:00");
+  const difference = then - now;
+  let timeLeft = {};
 
-  handleInputChange = event => {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-    this.setState({
-      [name]: value,
-      used: false
-    });
-  };
-  render() {
-    const { coursePage, me, price, studentsArray, subjectArray } = this.props;
-    let applied;
-    me &&
-    coursePage.applications.filter(ap => ap.applicantId === me.id).length > 0
-      ? (applied = true)
-      : (applied = false);
-    return (
-      <Data>
-        <Description>
-          <div className="title">Выберите подходящий тариф и получите:</div>
-          <div>- пожизненный доступ</div>
-          <div>- доступ сразу после оплаты</div>
-          <div>- полный комплекс услуг по выбранному тарифу</div>
-          <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
-          <div>- эксклюзивные карьерные возможности от Savvy App</div>
-        </Description>
-        <Payment>
-          <Header>
-            {this.state.price !== "Бесплатно"
-              ? `${this.state.price} ₽`
-              : this.state.price}{" "}
-          </Header>
-          <Text>
-            <Part1>
-              {(coursePage.courseType === "PUBLIC" ||
-                coursePage.courseType === "CHALLENGE") && (
-                <>
-                  <div className="message">
-                    Это открытый курс, но вам необходимо на него
-                    зарегистрироваться, нажав на кнопку ниже, чтобы получить
-                    доступ к урокам.
-                  </div>
-                </>
-              )}
-              {coursePage.courseType === "PRIVATE" && (
-                <div className="message">
-                  Это закрытый курс. Вам необходимо подать заявку на регистрацию
-                  и преподаватель откроет вам доступ.
-                </div>
-              )}
-              {coursePage.courseType === "FORMONEY" && (
-                <>
-                  <GridContainer>
-                    <div className="Title">Выберите тариф:</div>
-                    <div />
-                    <div className="Self">
-                      🏎 <span>Базовый</span>
-                    </div>
-                    <input
-                      className="Price1"
-                      type="radio"
-                      value={price}
-                      name="price"
-                      onChange={this.handleInputChange}
-                    />
-                    <div className="Teacher">🚀 Продвинутый</div>
-                    <input
-                      className="Price2"
-                      type="radio"
-                      name="price"
-                      value={price * 1.75}
-                      onChange={this.handleInputChange}
-                    />
-                  </GridContainer>
-                </>
-              )}
-            </Part1>
-            <Part2>
-              {this.props.promocode && this.props.promocode.length > 0 && (
-                <>
-                  <Input
-                    name="promo"
-                    onChange={this.change}
-                    placeholder="Введите промокод"
-                  />
-                  <SmallButton onClick={this.promo}>Применить</SmallButton>
-                </>
-              )}
-              {applied && (
-                <Paid>
-                  Мы получили вашу заявку. Если оплата прошла, то скоро откроем
-                  доступ. Если оплата не прошла, вы можете провести ее еще раз и
-                  мы откроем доступ.
-                </Paid>
-              )}
-              {!me && <BuyDummy onClick={this.toggleModal}>Войти</BuyDummy>}
-              {me && (
-                <>
-                  {coursePage.courseType === "FORMONEY" && (
-                    <TakeMyMoney
-                      coursePage={coursePage}
-                      coursePageID={coursePage.id}
-                      name={me.name}
-                      user={me.id}
-                      price={parseInt(this.state.price)}
-                    >
-                      Купить
-                    </TakeMyMoney>
-                  )}
-                  {coursePage.courseType !== "FORMONEY" && (
-                    <EnrollCoursePage
-                      coursePage={coursePage}
-                      studentsArray={studentsArray}
-                      subjectArray={subjectArray}
-                      meData={me}
-                    />
-                  )}
-                </>
-              )}
-            </Part2>
-          </Text>
-        </Payment>
-      </Data>
-    );
+  if (difference > 0) {
+    timeLeft = [
+      Math.floor(difference / (1000 * 60 * 60 * 24)),
+      String(Math.floor((difference / (1000 * 60 * 60)) % 24)).padStart(2, "0"),
+      String(Math.floor((difference / 1000 / 60) % 60)).padStart(2, "0"),
+      String(Math.floor((difference / 1000) % 60)).padStart(2, "0")
+    ];
   }
-}
+
+  return timeLeft;
+};
+
+const RegisterCard = props => {
+  const [price, setPrice] = useState(props.price);
+  const [discountPrice, setDiscountPrice] = useState(props.discountPrice);
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+  });
+
+  let day;
+  if (timeLeft[0] > 1) {
+    day = "дня";
+  } else if (timeLeft[0] === 1) {
+    day = "день";
+  } else if (timeLeft[0] === 0) {
+    day = "дней";
+  }
+
+  let left;
+  if (timeLeft[0] > 1) {
+    left = "Осталось";
+  } else if (timeLeft[0] === 1) {
+    left = "Остался";
+  } else if (timeLeft[0] === 0) {
+    left = "Осталось";
+  }
+
+  const { coursePage, me, studentsArray, subjectArray } = props;
+  let applied;
+  me &&
+  coursePage.applications.filter(ap => ap.applicantId === me.id).length > 0
+    ? (applied = true)
+    : (applied = false);
+  return (
+    <Data>
+      <Description>
+        <div className="title">Выберите подходящий тариф и получите:</div>
+        <div>- пожизненный доступ</div>
+        <div>- доступ сразу после оплаты</div>
+        <div>- полный комплекс услуг по выбранному тарифу</div>
+        <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
+        <div>- эксклюзивные карьерные возможности от Savvy App</div>
+      </Description>
+      <Payment>
+        <Header>
+          {discountPrice ? (
+            <>
+              <span className="crossed">{`${price}`}</span>
+              {"        "}
+              {`${discountPrice} ₽`}
+            </>
+          ) : (
+            <>{`${price} ₽`}</>
+          )}
+        </Header>
+        <Text>
+          <Part1>
+            {(coursePage.courseType === "PUBLIC" ||
+              coursePage.courseType === "CHALLENGE") && (
+              <>
+                <div className="message">
+                  Это открытый курс, но вам необходимо на него
+                  зарегистрироваться, нажав на кнопку ниже, чтобы получить
+                  доступ к урокам.
+                </div>
+              </>
+            )}
+            {coursePage.courseType === "PRIVATE" && (
+              <div className="message">
+                Это закрытый курс. Вам необходимо подать заявку на регистрацию и
+                преподаватель откроет вам доступ.
+              </div>
+            )}
+            {coursePage.courseType === "FORMONEY" && (
+              <>
+                {coursePage.tags.includes("Английский") && (
+                  <Time>
+                    {timeLeft.length ? (
+                      `${left} ${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+                    ) : (
+                      <span>
+                        Время вышло! Уберем скидку в течение нескольких часов!
+                      </span>
+                    )}
+                  </Time>
+                )}
+                <GridContainer>
+                  <div className="Title">Выберите тариф:</div>
+                  <div />
+                  <div className="Self">
+                    🏎 <span>Базовый</span>
+                  </div>
+                  <input
+                    className="Price1"
+                    type="radio"
+                    value={props.price}
+                    name="price"
+                    onChange={e => {
+                      setPrice(props.price),
+                        setDiscountPrice(props.discountPrice);
+                    }}
+                  />
+                  <div className="Teacher">🚀 Продвинутый</div>
+                  <input
+                    className="Price2"
+                    type="radio"
+                    name="price"
+                    value={props.price * 1.75}
+                    onChange={e => {
+                      setPrice(props.price * 1.75),
+                        setDiscountPrice(props.discountPrice * 1.75);
+                    }}
+                  />
+                </GridContainer>
+              </>
+            )}
+          </Part1>
+          <Part2>
+            {props.promocode && props.promocode.length > 0 && (
+              <>
+                <Input
+                  name="promo"
+                  onChange={e => setPromo(e.target.value)}
+                  placeholder="Введите промокод"
+                />
+                <SmallButton onClick={e => handlePromo()}>
+                  Применить
+                </SmallButton>
+              </>
+            )}
+            {applied && (
+              <Paid>
+                Мы получили вашу заявку. Если оплата прошла, то скоро откроем
+                доступ. Если оплата не прошла, вы можете провести ее еще раз и
+                мы откроем доступ.
+              </Paid>
+            )}
+            {!me && <BuyDummy>Войти</BuyDummy>}
+            {me && (
+              <>
+                {coursePage.courseType === "FORMONEY" && (
+                  <TakeMyMoney
+                    coursePage={coursePage}
+                    coursePageID={coursePage.id}
+                    name={me.name}
+                    user={me.id}
+                    price={
+                      discountPrice ? parseInt(discountPrice) : parseInt(price)
+                    }
+                  >
+                    Купить
+                  </TakeMyMoney>
+                )}
+                {coursePage.courseType !== "FORMONEY" && (
+                  <EnrollCoursePage
+                    coursePage={coursePage}
+                    studentsArray={studentsArray}
+                    subjectArray={subjectArray}
+                    meData={me}
+                  />
+                )}
+              </>
+            )}
+          </Part2>
+        </Text>
+      </Payment>
+    </Data>
+  );
+};
 
 export default RegisterCard;

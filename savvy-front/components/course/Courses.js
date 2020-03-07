@@ -7,6 +7,8 @@ import ExamCourses from "./courseLists/ExamCourses";
 import InterviewCourses from "./courseLists/InterviewCourses";
 import JuniorCourses from "./courseLists/JuniorCourses";
 import Landing from "./Landing";
+import Ad from "../Ad";
+import Reviews from "./Reviews";
 import User from "../User";
 import Loading from "../Loading";
 
@@ -45,7 +47,7 @@ class Courses extends Component {
     return (
       <User>
         {({ data: { me } }) => (
-          <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-and-network">
+          <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-first">
             {({ data, error, loading, fetchMore }) => {
               if (error) return <p>Error: {error.message}</p>;
               if (loading) return <Loading />;
@@ -64,7 +66,9 @@ class Courses extends Component {
                     <ExamCourses courses={exam} me={me} />
                     <InterviewCourses courses={interview} me={me} />
                     <JuniorCourses courses={junior} me={me} />
+                    <Reviews />
                   </Container>
+                  <Ad />
                 </>
               );
             }}
