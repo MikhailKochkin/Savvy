@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import ReactResizeDetector from "react-resize-detector";
 
 const Banner = styled.div`
   width: 100%;
@@ -73,7 +74,10 @@ const calculateTimeLeft = () => {
 
 const Ad = () => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
+  const [width, setWidth] = useState(0);
+  const onResize = width => {
+    setWidth(width);
+  };
   useEffect(() => {
     setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
@@ -90,15 +94,24 @@ const Ad = () => {
   }
   return (
     <Banner>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="name">
         🇬🇧 Весенние скидки на все курсы по юридическому английскому!
       </div>
       <div className="discount">20%</div>
       <div className="time">
-        {timeLeft.length ? (
-          `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+        {width > 800 ? (
+          <>
+            {timeLeft.length ? (
+              `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+            ) : (
+              <span>
+                Время вышло! Уберем скидку в течение нескольких часов!
+              </span>
+            )}
+          </>
         ) : (
-          <span>Время вышло! Уберем скидку в течение нескольких часов!</span>
+          "До утра 10 марта!"
         )}
       </div>
     </Banner>

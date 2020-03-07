@@ -4,6 +4,7 @@ import TakeMyMoney from "../../TakeMyMoney";
 import EnrollCoursePage from "../../EnrollCoursePage";
 import moment from "moment";
 import BuyDummy from "../BuyDummy";
+import ReactResizeDetector from "react-resize-detector";
 
 const Data = styled.div`
   display: flex;
@@ -195,6 +196,10 @@ const RegisterCard = props => {
   const [price, setPrice] = useState(props.price);
   const [discountPrice, setDiscountPrice] = useState(props.discountPrice);
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [width, setWidth] = useState(0);
+  const onResize = width => {
+    setWidth(width);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -228,6 +233,7 @@ const RegisterCard = props => {
     : (applied = false);
   return (
     <Data>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <Description>
         <div className="title">Выберите подходящий тариф и получите:</div>
         <div>- пожизненный доступ</div>
@@ -270,12 +276,19 @@ const RegisterCard = props => {
               <>
                 {coursePage.tags.includes("Английский") && (
                   <Time>
-                    {timeLeft.length ? (
-                      `${left} ${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+                    {width > 800 ? (
+                      <>
+                        {timeLeft.length ? (
+                          `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+                        ) : (
+                          <span>
+                            Время вышло! Уберем скидку в течение нескольких
+                            часов!
+                          </span>
+                        )}
+                      </>
                     ) : (
-                      <span>
-                        Время вышло! Уберем скидку в течение нескольких часов!
-                      </span>
+                      "До утра 10 марта!"
                     )}
                   </Time>
                 )}
