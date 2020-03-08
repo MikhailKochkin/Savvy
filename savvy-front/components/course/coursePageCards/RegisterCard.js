@@ -285,7 +285,6 @@ const RegisterCard = props => {
                         </span>
                       )}
                     </>
-                    )
                   </Time>
                 )}
                 <GridContainer>
