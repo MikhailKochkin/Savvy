@@ -276,20 +276,16 @@ const RegisterCard = props => {
               <>
                 {coursePage.tags.includes("Английский") && (
                   <Time>
-                    {width > 800 ? (
-                      <>
-                        {timeLeft.length ? (
-                          `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
-                        ) : (
-                          <span>
-                            Время вышло! Уберем скидку в течение нескольких
-                            часов!
-                          </span>
-                        )}
-                      </>
-                    ) : (
-                      "До утра 10 марта!"
-                    )}
+                    <>
+                      {timeLeft.length ? (
+                        `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+                      ) : (
+                        <span>
+                          Время вышло! Уберем скидку в течение нескольких часов!
+                        </span>
+                      )}
+                    </>
+                    )
                   </Time>
                 )}
                 <GridContainer>

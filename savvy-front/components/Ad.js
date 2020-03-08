@@ -50,13 +50,17 @@ const Banner = styled.div`
     @media (max-width: 1210px) {
       font-size: 2.4rem;
     }
+    div {
+      font-size: 1.8rem;
+      line-height: 1.5;
+    }
   }
 `;
 
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("03/10/2020 06:00:00");
+  let then = new Date("01/10/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -100,19 +104,13 @@ const Ad = () => {
       </div>
       <div className="discount">20%</div>
       <div className="time">
-        {width > 800 ? (
-          <>
-            {timeLeft.length ? (
-              `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
-            ) : (
-              <span>
-                Время вышло! Уберем скидку в течение нескольких часов!
-              </span>
-            )}
-          </>
-        ) : (
-          "До утра 10 марта!"
-        )}
+        <>
+          {timeLeft.length ? (
+            `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+          ) : (
+            <div>Время вышло! Уберем скидку в течение нескольких часов!</div>
+          )}
+        </>
       </div>
     </Banner>
   );
