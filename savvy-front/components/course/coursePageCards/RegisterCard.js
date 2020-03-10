@@ -274,7 +274,7 @@ const RegisterCard = props => {
             )}
             {coursePage.courseType === "FORMONEY" && (
               <>
-                {coursePage.tags.includes("Английский") && (
+                {/* {coursePage.tags.includes("Английский") && (
                   <Time>
                     <>
                       {timeLeft.length ? (
@@ -286,7 +286,7 @@ const RegisterCard = props => {
                       )}
                     </>
                   </Time>
-                )}
+                )} */}
                 <GridContainer>
                   <div className="Title">Выберите тариф:</div>
                   <div />

@@ -111,7 +111,7 @@ const RegisterCard = props => {
                 <div className="Title">
                   Урок {l.number}. {l.name}
                 </div>
-                <div>{renderHTML(l.description)}</div>
+                <div>{l.description ? renderHTML(l.description) : null}</div>
               </Part1>
               <Part2>
                 <Link

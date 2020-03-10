@@ -68,7 +68,7 @@ class Courses extends Component {
                     <JuniorCourses courses={junior} me={me} />
                     <Reviews />
                   </Container>
-                  <Ad />
+                  {/* <Ad /> */}
                 </>
               );
             }}
