@@ -7,6 +7,8 @@ import ExamCourses from "./courseLists/ExamCourses";
 import InterviewCourses from "./courseLists/InterviewCourses";
 import JuniorCourses from "./courseLists/JuniorCourses";
 import Landing from "./Landing";
+import Contact from "../Contact";
+import Tech from "../Tech";
 import Ad from "../Ad";
 import Reviews from "./Reviews";
 import User from "../User";
@@ -66,8 +68,10 @@ class Courses extends Component {
                     <ExamCourses courses={exam} me={me} />
                     <InterviewCourses courses={interview} me={me} />
                     <JuniorCourses courses={junior} me={me} />
-                    <Reviews />
                   </Container>
+                  <Reviews />
+                  <Tech />
+                  <Contact />
                   {/* <Ad /> */}
                 </>
               );

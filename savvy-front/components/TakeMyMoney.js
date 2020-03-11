@@ -20,6 +20,7 @@ const CREATE_ORDER_MUTATION = gql`
 `;
 
 const Button = styled.button`
+  transition: all 0.2s ease;
   background: #0846d8;
   border-radius: 5px;
   width: 100%;

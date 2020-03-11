@@ -9,7 +9,7 @@ const Block = styled.div`
   display: flex;
   flex-direction: row;
   margin: 4% 0;
-  @media (max-width: 800px) {
+  @media (max-width: 600px) {
     flex-direction: column;
     height: auto;
   }
@@ -25,7 +25,7 @@ const Img = styled.img`
     width: 40%;
     height: none;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 600px) {
     width: 100%;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -45,7 +45,7 @@ const Text = styled.div`
     font-weight: bold;
   }
   @media (max-width: 1100px) {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   @media (max-width: 800px) {
     padding: 5%;
@@ -57,6 +57,7 @@ const Text = styled.div`
     }
   }
   button {
+    transition: all 0.2s ease;
     background: #165bdc;
     border-radius: 5px;
     color: white;

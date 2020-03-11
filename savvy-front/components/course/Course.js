@@ -49,7 +49,7 @@ const CaseCard = styled.div`
   margin: 2%;
   width: 305px;
   line-height: 1.2;
-  @media (max-width: 800px) {
+  @media (max-width: 600px) {
     width: 85%;
     button {
       padding: 4px 6px;

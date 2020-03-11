@@ -121,7 +121,7 @@ const StyledHeader = styled.header`
   }
   .logo {
     width: 110px;
-    @media (max-width: 750px) {
+    @media (max-width: 990px) {
       padding-top: 15px;
       margin-right: 10px;
       width: 80%;

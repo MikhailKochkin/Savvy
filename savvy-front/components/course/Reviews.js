@@ -5,10 +5,36 @@ import ReactResizeDetector from "react-resize-detector";
 import Carousel from "nuka-carousel";
 import { userCircleO } from "react-icons-kit/fa/userCircleO";
 
-const Title = styled.div`
-  font-size: 2rem;
-  font-weight: bold;
+const Blue = styled.div`
+  font-size: 2.4rem;
+  color: white;
+  height: 23vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: #0068e5;
   margin-bottom: 5%;
+  @media (max-width: 900px) {
+    height: 13vh;
+    font-size: 2.2rem;
+    padding: 0 22px;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.8rem;
+    padding: 0 22px;
+    text-align: center;
+  }
+`;
+
+const Styles = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3%;
 `;
 
 const Circle = styled.button`
@@ -34,14 +60,16 @@ const Block = styled.div`
   justify-content: center;
   align-items: center;
   overflow: auto;
-  width: 100%;
+  width: 90%;
   @media (max-width: 1100px) {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
 const Review = styled.div`
-  background: #f5f5f5;
+  background: #f0f8ff;
   border-radius: 5px;
   margin-left: 3%;
   width: 90%;
@@ -49,7 +77,7 @@ const Review = styled.div`
   margin-left: 5%;
   text-align: center;
   @media (max-width: 1100px) {
-    width: 95%;
+    width: 90%;
     margin: 0;
     margin-bottom: 5%;
     padding: 15px;
@@ -70,17 +98,17 @@ const Reviews = () => {
     setWidth(width);
   };
   let slides;
-  if (width > 650) {
+  if (width > 850) {
     slides = 3;
-  } else if (width < 650 && width > 400) {
+  } else if (width < 850 && width > 600) {
     slides = 2;
-  } else if (width < 400) {
+  } else if (width < 600) {
     slides = 1;
   }
   return (
-    <>
+    <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <Title>Что говорят пользователи про наши курсы:</Title>
+      <Blue>328 студентов прошли наши курсы. Вот, что они говорят:</Blue>
       <Block>
         <Carousel
           slidesToShow={slides}
@@ -197,7 +225,7 @@ const Reviews = () => {
           </Review>
         </Carousel>
       </Block>
-    </>
+    </Styles>
   );
 };
 

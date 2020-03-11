@@ -1,0 +1,72 @@
+import React, { useState } from "react";
+import styled from "styled-components";
+
+const Styles = styled.div`
+  width: 100%;
+  min-height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #00204e;
+  padding-bottom: 2%;
+`;
+
+const Box = styled.div`
+  width: 50%;
+  padding-top: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  div {
+    color: white;
+    font-size: 1.8rem;
+    text-align: center;
+    @media (max-width: 600px) {
+      font-size: 1.5rem;
+      margin-bottom: 3%;
+    }
+  }
+  @media (max-width: 600px) {
+    width: 85%;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+`;
+
+const Button = styled.a`
+  transition: all 0.2s ease;
+  background: #0068e5;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.8rem;
+  padding: 1.5% 4%;
+  margin-top: 5%;
+  &:hover {
+    background: white;
+    color: #0068e5;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const Contact = () => {
+  return (
+    <Styles>
+      <Box>
+        <div>
+          Остались вопросы? Не знаете, подойдет ли курс именно вам? Хотите
+          больше узнать о программе или стать автором? Напишите, мы подскажем.
+        </div>
+        <Button href="https://www.facebook.com/misha.kochkin" target="_blank">
+          Написать
+        </Button>
+      </Box>
+    </Styles>
+  );
+};
+
+export default Contact;
