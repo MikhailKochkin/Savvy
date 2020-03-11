@@ -202,7 +202,9 @@ const RegisterCard = props => {
   // });
 
   const promos = [];
-  props.coursePage.promocode[0].map(el => promos.push(Object.keys(el)[0]));
+  if (props.coursePage.promocode) {
+    props.coursePage.promocode[0].map(el => promos.push(Object.keys(el)[0]));
+  }
   const handlePromo = p => {
     if (promos.includes(p) && !used) {
       let pro = props.coursePage.promocode[0].filter(
