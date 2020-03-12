@@ -95,7 +95,7 @@ const Label = styled.div`
 
   input#text {
     padding: 2%;
-    width: 85%;
+    width: 50%;
     border: none;
     border-bottom: 1px solid grey;
     white-space: nowrap;
@@ -136,7 +136,7 @@ class SingleConstructor extends Component {
     answerState: "",
     type: this.props.construction.type,
     attempts: 1,
-    inputs: ""
+    inputs: []
   };
 
   answerState = "";
@@ -201,7 +201,22 @@ class SingleConstructor extends Component {
       element.style.border = "1px solid #84BC9C";
     });
     this.setState({ answerState: "right" });
-    document.querySelector(".button").disabled = true;
+    document.querySelector(".c").disabled = true;
+
+    const texts = document.querySelectorAll("#text");
+    let p;
+    texts.forEach(element => {
+      p = document.createElement("SPAN");
+      p.style.color = "#00008B";
+      p.innerHTML = element.getAttribute("name");
+      element.parentElement.insertBefore(p, element);
+    });
+    let inputs = [];
+    elements.forEach(element => {
+      console.log(element);
+      inputs.push(element);
+    });
+    this.setState({ inputs: elements });
   };
 
   check = () => {
@@ -279,7 +294,7 @@ class SingleConstructor extends Component {
             </>
           ))}
         </Variants>
-        <Answers>
+        <Answers className="answer">
           <Title>{construction.name}</Title>
           {this.state.received.map((option, index) => (
             <Label className="Var" key={index + 1}>

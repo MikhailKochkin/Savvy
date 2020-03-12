@@ -84,16 +84,6 @@ const Part1 = styled.div`
 
 const Part2 = styled.div``;
 
-const SmallButton = styled.div`
-  border: none;
-  background: none;
-  color: #112a62;
-  padding: 10px 0;
-  font-size: 1.4rem;
-  cursor: pointer;
-  outline: 0;
-`;
-
 const Text = styled.div`
   margin: 4% 4%;
 `;
@@ -255,15 +245,15 @@ const RegisterCard = props => {
         </Description>
         <Payment>
           <Header>
-            {discountPrice ? (
+            {price === "Бесплатно" && price}
+            {discountPrice && price !== "Бесплатно" && (
               <>
                 <span className="crossed">{`${price}`}</span>
                 {"        "}
                 {`${discountPrice} ₽`}
               </>
-            ) : (
-              <>{`${price} ₽`}</>
             )}
+            {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
           </Header>
           <Text>
             <Part1>
@@ -272,8 +262,8 @@ const RegisterCard = props => {
                 <>
                   <div className="message">
                     Это открытый курс, но вам необходимо на него
-                    зарегистрироваться, нажав на кнопку ниже, чтобы получить
-                    доступ к урокам.
+                    зарегистрироваться, чтобы получить доступ к урокам. Для
+                    этого нажмите кнопку ниже.
                   </div>
                 </>
               )}
@@ -334,17 +324,14 @@ const RegisterCard = props => {
               )}
             </Part1>
             <Part2>
-              <>
-                <Input
-                  name="promo"
-                  onChange={e => handlePromo(e.target.value)}
-                  placeholder="Введите промокод"
-                />
-                {/* <SmallButton onClick={e => handlePromo()}>
-                    Применить
-                  </SmallButton> */}
-              </>
-
+              {coursePage.courseType !== "PUBLIC" &&
+                coursePage.courseType !== "CHALLENGE" && (
+                  <Input
+                    name="promo"
+                    onChange={e => handlePromo(e.target.value)}
+                    placeholder="Введите промокод"
+                  />
+                )}
               {applied && (
                 <Paid>
                   Мы получили вашу заявку. Если оплата прошла, то скоро откроем

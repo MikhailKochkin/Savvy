@@ -71,22 +71,12 @@ const Frame = styled.div`
   }
 `;
 
-const Advice = styled.span`
-  display: inline;
-  font-size: 1.6rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 1%;
-  margin: 5px 0 15px 0;
-  @media (max-width: 850px) {
-    width: 100%;
-  }
-`;
-
 const ButtonGroup = styled.div`
   margin-bottom: 10px;
+`;
+
+const Buttons = styled.div`
+  pointer-events: ${props => (props.block ? "none" : "auto")};
 `;
 
 const StyledButton = withStyles({
@@ -166,6 +156,7 @@ class SingleProblem extends Component {
       .filter(result => result.student.id === me.id);
     return (
       <>
+        <div id="root"></div>
         <TextBar>
           {renderHTML(problem.text)}
           {problem.nodeID && (
@@ -173,7 +164,6 @@ class SingleProblem extends Component {
           )}
           {data.length > 0 && (
             <ButtonGroup>
-              {/* <Advice>Эта задача уже выполнена.</Advice> */}
               <StyledButton
                 variant="contained"
                 color="primary"
@@ -225,27 +215,28 @@ class SingleProblem extends Component {
                 ]}
               >
                 {(createProblemResult, { loading, error }) => (
-                  <StyledButton
-                    variant="contained"
-                    color="primary"
-                    onClick={async e => {
-                      // Stop the form from submitting
-                      e.preventDefault();
-                      // call the mutation
-                      if (this.state.answer !== "") {
-                        const res = await createProblemResult();
-                        document.querySelector(".button").disabled = true;
-                        const res2 = await this.setState({
-                          revealAnswer: true
-                        });
-                        console.log("Yes");
-                      } else {
-                        console.log("No");
-                      }
-                    }}
-                  >
-                    {loading ? "В процессе..." : "Ответить"}
-                  </StyledButton>
+                  <Buttons block={this.state.revealAnswer}>
+                    <StyledButton
+                      variant="contained"
+                      color="primary"
+                      onClick={async e => {
+                        // Stop the form from submitting
+                        e.preventDefault();
+                        // call the mutation
+                        if (this.state.answer !== "") {
+                          const res = await createProblemResult();
+                          const res2 = await this.setState({
+                            revealAnswer: true
+                          });
+                          console.log("Yes");
+                        } else {
+                          console.log("No");
+                        }
+                      }}
+                    >
+                      {loading ? "В процессе..." : "Ответить"}
+                    </StyledButton>
+                  </Buttons>
                 )}
               </Mutation>
             </>
@@ -257,7 +248,6 @@ class SingleProblem extends Component {
             />
           ) : null}
         </TextBar>
-        <div id="root"></div>
       </>
     );
   }

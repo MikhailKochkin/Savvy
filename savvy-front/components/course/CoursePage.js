@@ -407,12 +407,13 @@ class CoursePage extends Component {
                                     {coursePage.description}
                                   </p>
                                   <p className="name">
-                                    {coursePage.user.surname
+                                    {coursePage.user && coursePage.user.surname
                                       ? `${coursePage.user.name} ${coursePage.user.surname}`
                                       : coursePage.user.name}{" "}
                                     из{" "}
-                                    {coursePage.user.status === "HR" ||
-                                    coursePage.user.status === "AUTHOR"
+                                    {coursePage.user &&
+                                    (coursePage.user.status === "HR" ||
+                                      coursePage.user.status === "AUTHOR")
                                       ? coursePage.user.company.name
                                       : coursePage.user.uni.title}
                                   </p>

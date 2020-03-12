@@ -233,7 +233,8 @@ class SingleTextEditor extends Component {
                       </>
                     )}
                     {(this.state.total === 0 ||
-                      this.state.total === undefined) &&
+                      this.state.total === undefined ||
+                      this.state.total === null) &&
                       this.state.correct_option}
                   </div>
 
@@ -286,9 +287,9 @@ class SingleTextEditor extends Component {
               </EditText>
             </TextBar>
             <Buttons>
-              <Button onClick={this.onShow}>
+              <StyledButton onClick={this.onShow}>
                 {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
-              </Button>
+              </StyledButton>
 
               {data.length > 0 && (
                 <StyledButton

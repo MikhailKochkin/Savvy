@@ -190,7 +190,6 @@ class SingleQuiz extends Component {
   };
 
   onAnswer = async e => {
-    console.log("here");
     this.setState({ progress: "true" });
     let data1 = {
       sentence1: this.props.answer.toLowerCase(),

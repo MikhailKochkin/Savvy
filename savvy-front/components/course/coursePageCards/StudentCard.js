@@ -18,7 +18,6 @@ const Payment = styled.div`
   }
   .results {
     padding: 3% 0;
-    border-bottom: 1px solid #e4e4e4;
   }
   .news {
     padding: 3% 0;

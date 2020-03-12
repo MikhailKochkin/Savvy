@@ -209,7 +209,7 @@ class Teach extends Component {
                                         <Img />
                                         <Title2>Ваш новый курс</Title2>
                                         <Author>
-                                          {me.surname
+                                          {me && me.surname
                                             ? `${me.name} ${me.surname}`
                                             : me.name}
                                         </Author>

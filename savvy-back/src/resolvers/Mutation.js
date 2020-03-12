@@ -372,7 +372,7 @@ const Mutations = {
   async deleteLesson(parent, args, ctx, info) {
     const where = { id: args.id };
     // 1. find the lesson
-    const lesson = await ctx.db.query.lesson({ where }, `{ id }`);
+    const lesson = await ctx.db.query.lesson({ where }, `{ id, user { id } }`);
     // 2. check permissions
     const ownsLesson = lesson.user.id === ctx.request.userId;
     if (!ownsLesson) {
@@ -701,7 +701,7 @@ const Mutations = {
   async deleteNewTest(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const test = await ctx.db.query.newTest({ where }, `{ id }`);
+    const test = await ctx.db.query.newTest({ where }, `{ id, user { id } }`);
 
     const ownsTest = test.user.id === ctx.request.userId;
     if (!ownsTest) {
@@ -713,7 +713,7 @@ const Mutations = {
   async deleteQuiz(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const quiz = await ctx.db.query.quiz({ where }, `{ id }`);
+    const quiz = await ctx.db.query.quiz({ where }, `{ id, user { id } }`);
     const ownsQuiz = quiz.user.id === ctx.request.userId;
     if (!ownsQuiz) {
       throw new Error("К сожалению, у вас нет полномочий на это.");
@@ -765,12 +765,15 @@ const Mutations = {
   async deleteProblem(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
+
+    const problem = await ctx.db.query.problem(
+      { where },
+      `{ id, user { id } }`
+    );
     const ownsProblem = problem.user.id === ctx.request.userId;
     if (!ownsProblem) {
       throw new Error("К сожалению, у вас нет полномочий на это.");
-    }
-    const problem = await ctx.db.query.problem({ where }, `{ id }`);
-    //3. Delete it
+    } //3. Delete it
     return ctx.db.mutation.deleteProblem({ where }, info);
   },
   async createConstruction(parent, args, ctx, info) {
@@ -811,7 +814,10 @@ const Mutations = {
   async deleteConstruction(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const construction = await ctx.db.query.construction({ where }, `{ id }`);
+    const construction = await ctx.db.query.construction(
+      { where },
+      `{ id, user { id } }`
+    );
     const ownsConstruction = construction.user.id === ctx.request.userId;
     if (!ownsConstruction) {
       throw new Error("К сожалению, у вас нет полномочий на это.");
@@ -1390,8 +1396,7 @@ const Mutations = {
   async deleteNote(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-
-    const note = await ctx.db.query.note({ where }, `{ id }`);
+    const note = await ctx.db.query.note({ where }, `{ id, user { id } }`);
     const ownsNote = note.user.id === ctx.request.userId;
     if (!ownsNote) {
       throw new Error("У вас нет на это полномочий!");
@@ -1502,7 +1507,7 @@ const Mutations = {
   async deleteExam(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const exam = await ctx.db.query.exam({ where }, `{ id }`);
+    const exam = await ctx.db.query.exam({ where }, `{ id, user { id } }`);
     const ownsExam = exam.user.id === ctx.request.userId;
     if (!ownsExam) {
       throw new Error("У вас нет на это полномочий!");
@@ -1559,7 +1564,10 @@ const Mutations = {
   async deleteDocument(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const document = await ctx.db.query.clause({ where }, `{ id }`);
+    const document = await ctx.db.query.clause(
+      { where },
+      `{ id, user { id } }`
+    );
     const ownsDoc = document.user.id === ctx.request.userId;
     if (!ownsDoc) {
       throw new Error("У вас нет на это полномочий!");
@@ -1600,7 +1608,7 @@ const Mutations = {
   async deleteClause(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const clause = await ctx.db.query.clause({ where }, `{ id }`);
+    const clause = await ctx.db.query.clause({ where }, `{ id, user { id } }`);
     const ownsClause = clause.user.id === ctx.request.userId;
     if (!ownsClause) {
       throw new Error("У вас нет на это полномочий!");
