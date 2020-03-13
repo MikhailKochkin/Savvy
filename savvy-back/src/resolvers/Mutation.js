@@ -781,7 +781,6 @@ const Mutations = {
     const lessonID = args.lessonID;
     variants = args.variants;
     answer = args.answer;
-    delete args.id;
     delete args.answer;
     delete args.variants;
     if (!ctx.request.userId) {
@@ -1564,7 +1563,7 @@ const Mutations = {
   async deleteDocument(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
-    const document = await ctx.db.query.clause(
+    const document = await ctx.db.query.document(
       { where },
       `{ id, user { id } }`
     );

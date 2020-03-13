@@ -287,19 +287,13 @@ class SingleTextEditor extends Component {
               </EditText>
             </TextBar>
             <Buttons>
-              <StyledButton onClick={this.onShow}>
-                {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
+              <StyledButton
+                onClick={this.onShow}
+                variant="contained"
+                color="primary"
+              >
+                {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
               </StyledButton>
-
-              {data.length > 0 && (
-                <StyledButton
-                  onClick={this.onShow}
-                  variant="contained"
-                  color="primary"
-                >
-                  {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
-                </StyledButton>
-              )}
               {me && me.id === textEditor.user.id ? (
                 <DeleteSingleTextEditor
                   id={this.props.textEditor.id}

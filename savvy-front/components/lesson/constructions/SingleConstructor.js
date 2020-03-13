@@ -56,9 +56,9 @@ const Box = styled.div`
   border-radius: 10px;
   /* padding: 0 4%; */
   margin-bottom: 4%;
-  input {
+  /* input {
     pointer-events: none;
-  }
+  } */
   .box {
     padding: 0 15px;
   }
@@ -118,6 +118,10 @@ const Advice = styled.p`
   width: 100%;
 `;
 
+const Buttons = styled.div`
+  pointer-events: ${props => (props.blocked ? "none" : "auto")};
+`;
+
 const StyledButton = withStyles({
   root: {
     margin: "4% 0",
@@ -136,7 +140,8 @@ class SingleConstructor extends Component {
     answerState: "",
     type: this.props.construction.type,
     attempts: 1,
-    inputs: []
+    inputs: [],
+    answered: false
   };
 
   answerState = "";
@@ -200,23 +205,48 @@ class SingleConstructor extends Component {
     elements.forEach(element => {
       element.style.border = "1px solid #84BC9C";
     });
-    this.setState({ answerState: "right" });
-    document.querySelector(".c").disabled = true;
+    this.setState({ answerState: "right", answered: true });
 
     const texts = document.querySelectorAll("#text");
+
     let p;
+    let v;
+    let space;
     texts.forEach(element => {
+      space = document.createElement("SPAN");
+      space.innerHTML = " / ";
+      v = document.createElement("SPAN");
+      v.innerHTML = element.value;
+      v.style.color = "#00008B";
       p = document.createElement("SPAN");
-      p.style.color = "#00008B";
       p.innerHTML = element.getAttribute("name");
+      p.style.color = "green";
+      element.parentElement.insertBefore(v, element);
+      element.parentElement.insertBefore(space, element);
       element.parentElement.insertBefore(p, element);
+      element.remove();
     });
+
+    // const paragraphs = document.getElementsByTagName("p");
+    // for (var i = 0; i < paragraphs.length; i++) {
+    //   console.log(paragraphs[i]); //second console output
+    // }
+    // paragraphs.forEach(el => console.log(el));
+
     let inputs = [];
-    elements.forEach(element => {
-      console.log(element);
+
+    const results = document.querySelectorAll(".Var");
+    let nums = document.querySelectorAll(".l");
+    nums.forEach(el => el.remove());
+    console.log(results);
+
+    results.forEach(element => {
+      // element.style = null;
       inputs.push(element);
+      this.setState(prevState => ({
+        inputs: [...prevState.inputs, element.innerHTML]
+      }));
     });
-    this.setState({ inputs: elements });
   };
 
   check = () => {
@@ -248,13 +278,6 @@ class SingleConstructor extends Component {
         this.showWrong();
       }
     }
-
-    //4. Save the input data
-    const data = [];
-    Object.entries(this.state)
-      .filter(text => text[0].includes("Ввод"))
-      .map(t => data.push(t[1]));
-    this.setState({ inputs: data });
   };
 
   handleChange = e => {
@@ -265,13 +288,6 @@ class SingleConstructor extends Component {
   componentDidMount() {
     const vars = this.shuffle(this.props.variants);
     this.setState({ variants: vars });
-  }
-
-  componentDidUpdate() {
-    const elements = document.querySelectorAll("#text");
-    elements.forEach(element => {
-      element.addEventListener("change", this.handleChange);
-    });
   }
 
   render() {
@@ -311,29 +327,28 @@ class SingleConstructor extends Component {
             mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
             variables={{
               lessonID,
-              answer: "Drafted",
+              // answer: "Drafted",
               attempts: this.state.attempts,
               constructionID: this.props.construction.id,
               inputs: this.state.inputs
             }}
           >
             {(createConstructionResult, { loading, error }) => (
-              <StyledButton
-                variant="contained"
-                color="primary"
-                className="button"
-                onClick={async e => {
-                  e.preventDefault();
-                  const res = await this.check();
-                  if (data.length === 0) {
+              <Buttons blocked={this.state.answered}>
+                <StyledButton
+                  variant="contained"
+                  color="primary"
+                  onClick={async e => {
+                    e.preventDefault();
+                    const res = await this.check();
                     if (this.state.answerState === "right") {
                       const res2 = await createConstructionResult();
                     }
-                  }
-                }}
-              >
-                Проверить
-              </StyledButton>
+                  }}
+                >
+                  Проверить
+                </StyledButton>
+              </Buttons>
             )}
           </Mutation>
           {this.state.answerState === "wrong" ? (
