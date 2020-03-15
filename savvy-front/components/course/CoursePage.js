@@ -652,18 +652,19 @@ class CoursePage extends Component {
                                   </div>
                                 )}
                               </Details>
-                              {(!subjectArray.includes(coursePage.id) ||
-                                !new_subjectArray.includes(coursePage.id)) && (
-                                <RegisterCard
-                                  me={me}
-                                  coursePage={coursePage}
-                                  price={price}
-                                  discountPrice={coursePage.discountPrice}
-                                  promocode={coursePage.promocode}
-                                  studentsArray={studentsArray}
-                                  subjectArray={subjectArray}
-                                />
-                              )}
+
+                              {!subjectArray.includes(coursePage.id) &&
+                                !new_subjectArray.includes(coursePage.id) && (
+                                  <RegisterCard
+                                    me={me}
+                                    coursePage={coursePage}
+                                    price={price}
+                                    discountPrice={coursePage.discountPrice}
+                                    promocode={coursePage.promocode}
+                                    studentsArray={studentsArray}
+                                    subjectArray={subjectArray}
+                                  />
+                                )}
                               {data.coursePage.reviews.length > 0 && (
                                 <Reviews>
                                   {data.coursePage.reviews.map(post =>

@@ -1,7 +1,16 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import styled from "styled-components";
-import { DELETE_APPLICATION_MUTATION } from "./AcceptApplication";
+import gql from "graphql-tag";
+import { PAGE_ORDERS_QUERY } from "../../PaidApplications";
+
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($id: ID!, $isPaid: Boolean!) {
+    updateOrder(id: $id, isPaid: $isPaid) {
+      id
+    }
+  }
+`;
 
 const Button = styled.button`
   background: ${props => props.theme.red};
@@ -21,32 +30,31 @@ const Button = styled.button`
   }
 `;
 
-class RejectApplication extends Component {
-  removeApplication = () => {
-    this.props.getData(true);
-  };
-  onClick = async (e, deleteApplication) => {
+const RejectApplication = props => {
+  const onClick = async (e, updateOrder) => {
     e.preventDefault();
-    this.props.getData("reject");
-    deleteApplication({
+    props.getData("reject");
+    updateOrder({
       variables: {
-        id: this.props.applicationId
+        id: props.orderID,
+        isPaid: false
       }
     });
   };
-  render() {
-    return (
-      <div>
-        <Mutation mutation={DELETE_APPLICATION_MUTATION}>
-          {deleteApplication => (
-            <Button red onClick={e => this.onClick(e, deleteApplication)}>
-              Отклонить
-            </Button>
-          )}
-        </Mutation>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Mutation
+        mutation={UPDATE_ORDER}
+        refetchQueries={[{ query: PAGE_ORDERS_QUERY }]}
+      >
+        {updateOrder => (
+          <Button red onClick={e => onClick(e, updateOrder)}>
+            Отклонить
+          </Button>
+        )}
+      </Mutation>
+    </div>
+  );
+};
 
 export default RejectApplication;

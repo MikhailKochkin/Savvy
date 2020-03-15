@@ -2,15 +2,12 @@ import React, { Component } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import {
-  ADD_USER_TO_COURSEPAGE,
-  ENROLL_COURSE_MUTATION
-} from "../../EnrollCoursePage";
+import { ENROLL_COURSE_MUTATION } from "../../EnrollCoursePage";
 import { CURRENT_USER_QUERY } from "../../User";
 
-const DELETE_APPLICATION_MUTATION = gql`
-  mutation DELETE_APPLICATION_MUTATION($id: ID!) {
-    deleteApplication(id: $id) {
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($id: ID!, $isPaid: Boolean!) {
+    updateOrder(id: $id, isPaid: $isPaid) {
       id
     }
   }
@@ -34,82 +31,41 @@ const Button = styled.button`
   }
 `;
 
-class AcceptApplication extends Component {
-  state = {
-    subjects: this.props.subjects,
-    students: this.props.students
-  };
-  acceptApplication = () => {
-    this.props.getData(true);
-  };
-  onClick = async (
-    e,
-    enrollOnCourse,
-    addUserToCoursePage,
-    deleteApplication
-  ) => {
+const AcceptApplication = props => {
+  const onClick = async (e, enrollOnCourse, updateOrder) => {
     e.preventDefault();
-    const newSubjects = this.state.subjects.concat(this.props.coursePageId);
-    const newStudents = this.state.students.concat(this.props.applicantId);
-    const res = await this.setState({
-      subjects: newSubjects,
-      students: newStudents
-    });
     enrollOnCourse({
       variables: {
-        id: this.props.applicantId,
-        coursePageID: this.props.coursePageId,
-        ...this.state
+        id: props.user.id,
+        coursePage: props.coursePageID
       }
     });
-    addUserToCoursePage({
+    updateOrder({
       variables: {
-        id: this.props.coursePageId,
-        ...this.state
+        id: props.orderID,
+        isPaid: true
       }
     });
-    deleteApplication({
-      variables: {
-        id: this.props.applicationId
-      }
-    });
-    this.props.getData("accept");
+    props.getData("accept");
   };
-  render() {
-    return (
-      <div>
-        <Mutation
-          mutation={ENROLL_COURSE_MUTATION}
-          refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-          //   refetchQueries={[{ query: ALL_COURSE_PAGES_QUERY }]}
-        >
-          {enrollOnCourse => (
-            <Mutation mutation={ADD_USER_TO_COURSEPAGE}>
-              {addUserToCoursePage => (
-                <Mutation mutation={DELETE_APPLICATION_MUTATION}>
-                  {deleteApplication => (
-                    <Button
-                      onClick={e =>
-                        this.onClick(
-                          e,
-                          enrollOnCourse,
-                          addUserToCoursePage,
-                          deleteApplication
-                        )
-                      }
-                    >
-                      Принять
-                    </Button>
-                  )}
-                </Mutation>
-              )}
-            </Mutation>
-          )}
-        </Mutation>
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Mutation
+        mutation={ENROLL_COURSE_MUTATION}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      >
+        {enrollOnCourse => (
+          <Mutation mutation={UPDATE_ORDER}>
+            {(updateOrder, { loading, error }) => (
+              <Button onClick={e => onClick(e, enrollOnCourse, updateOrder)}>
+                Принять
+              </Button>
+            )}
+          </Mutation>
+        )}
+      </Mutation>
+    </div>
+  );
+};
 
 export default AcceptApplication;
-export { DELETE_APPLICATION_MUTATION };

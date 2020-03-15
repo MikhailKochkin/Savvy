@@ -93,6 +93,7 @@ const Paid = styled.div`
   padding: 1% 3%;
   border-radius: 5px;
   font-size: 1.4rem;
+  margin-top: 2%;
 `;
 
 const GridContainer = styled.div`
@@ -227,8 +228,7 @@ const RegisterCard = props => {
 
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
-  me &&
-  coursePage.applications.filter(ap => ap.applicantId === me.id).length > 0
+  me && me.orders.filter(o => o.coursePage.id === coursePage.id).length > 0
     ? (applied = true)
     : (applied = false);
   return (
@@ -316,7 +316,9 @@ const RegisterCard = props => {
                       onChange={e => {
                         setPrice(props.price * 1.75),
                           setUsed(false),
-                          setDiscountPrice(props.discountPrice * 1.75);
+                          props.discountPrice
+                            ? setDiscountPrice(props.discountPrice * 1.75)
+                            : null;
                       }}
                     />
                   </GridContainer>

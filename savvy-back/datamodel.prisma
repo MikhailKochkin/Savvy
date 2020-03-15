@@ -336,19 +336,17 @@ type Application {
   updatedAt: DateTime! @updatedAt
 }
 
-type Order {
-  id: ID! @id
-  paymentId: String
-  coursePage: CoursePage! @relation(name: "CoursePageOrders")
-  coursePageID: ID!
-  price: Int!
-  paid: Boolean @default(value: false)
-  user: User! @relation(name: "OrderToUser")
-  userID: ID
-  clientID: ID
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
+  type Order {
+    id: ID! @id
+    user: User! @relation(name: "OrderToUser")
+    paymentID: String
+    coursePage: CoursePage! @relation(name: "CoursePageOrders")
+    price: Int
+    promocode: String
+    isPaid: Boolean
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+  }
 
 type PointA {
   id: ID! @id

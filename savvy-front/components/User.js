@@ -51,6 +51,12 @@ const CURRENT_USER_QUERY = gql`
           id
         }
       }
+      orders {
+        id
+        coursePage {
+          id
+        }
+      }
       examAnswers {
         id
         examQuestion {

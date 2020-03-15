@@ -11564,14 +11564,12 @@ input NoteWhereUniqueInput {
 
 type Order {
   id: ID!
-  paymentId: String
-  coursePage: CoursePage!
-  coursePageID: ID!
-  price: Int!
-  paid: Boolean
   user: User!
-  userID: ID
-  clientID: ID
+  paymentID: String
+  coursePage: CoursePage!
+  price: Int
+  promocode: String
+  isPaid: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -11584,14 +11582,12 @@ type OrderConnection {
 
 input OrderCreateInput {
   id: ID
-  paymentId: String
-  coursePage: CoursePageCreateOneWithoutOrdersInput!
-  coursePageID: ID!
-  price: Int!
-  paid: Boolean
   user: UserCreateOneWithoutOrdersInput!
-  userID: ID
-  clientID: ID
+  paymentID: String
+  coursePage: CoursePageCreateOneWithoutOrdersInput!
+  price: Int
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderCreateManyWithoutCoursePageInput {
@@ -11606,24 +11602,20 @@ input OrderCreateManyWithoutUserInput {
 
 input OrderCreateWithoutCoursePageInput {
   id: ID
-  paymentId: String
-  coursePageID: ID!
-  price: Int!
-  paid: Boolean
   user: UserCreateOneWithoutOrdersInput!
-  userID: ID
-  clientID: ID
+  paymentID: String
+  price: Int
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderCreateWithoutUserInput {
   id: ID
-  paymentId: String
+  paymentID: String
   coursePage: CoursePageCreateOneWithoutOrdersInput!
-  coursePageID: ID!
-  price: Int!
-  paid: Boolean
-  userID: ID
-  clientID: ID
+  price: Int
+  promocode: String
+  isPaid: Boolean
 }
 
 type OrderEdge {
@@ -11634,18 +11626,14 @@ type OrderEdge {
 enum OrderOrderByInput {
   id_ASC
   id_DESC
-  paymentId_ASC
-  paymentId_DESC
-  coursePageID_ASC
-  coursePageID_DESC
+  paymentID_ASC
+  paymentID_DESC
   price_ASC
   price_DESC
-  paid_ASC
-  paid_DESC
-  userID_ASC
-  userID_DESC
-  clientID_ASC
-  clientID_DESC
+  promocode_ASC
+  promocode_DESC
+  isPaid_ASC
+  isPaid_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -11654,12 +11642,10 @@ enum OrderOrderByInput {
 
 type OrderPreviousValues {
   id: ID!
-  paymentId: String
-  coursePageID: ID!
-  price: Int!
-  paid: Boolean
-  userID: ID
-  clientID: ID
+  paymentID: String
+  price: Int
+  promocode: String
+  isPaid: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -11679,34 +11665,20 @@ input OrderScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  paymentId: String
-  paymentId_not: String
-  paymentId_in: [String!]
-  paymentId_not_in: [String!]
-  paymentId_lt: String
-  paymentId_lte: String
-  paymentId_gt: String
-  paymentId_gte: String
-  paymentId_contains: String
-  paymentId_not_contains: String
-  paymentId_starts_with: String
-  paymentId_not_starts_with: String
-  paymentId_ends_with: String
-  paymentId_not_ends_with: String
-  coursePageID: ID
-  coursePageID_not: ID
-  coursePageID_in: [ID!]
-  coursePageID_not_in: [ID!]
-  coursePageID_lt: ID
-  coursePageID_lte: ID
-  coursePageID_gt: ID
-  coursePageID_gte: ID
-  coursePageID_contains: ID
-  coursePageID_not_contains: ID
-  coursePageID_starts_with: ID
-  coursePageID_not_starts_with: ID
-  coursePageID_ends_with: ID
-  coursePageID_not_ends_with: ID
+  paymentID: String
+  paymentID_not: String
+  paymentID_in: [String!]
+  paymentID_not_in: [String!]
+  paymentID_lt: String
+  paymentID_lte: String
+  paymentID_gt: String
+  paymentID_gte: String
+  paymentID_contains: String
+  paymentID_not_contains: String
+  paymentID_starts_with: String
+  paymentID_not_starts_with: String
+  paymentID_ends_with: String
+  paymentID_not_ends_with: String
   price: Int
   price_not: Int
   price_in: [Int!]
@@ -11715,36 +11687,22 @@ input OrderScalarWhereInput {
   price_lte: Int
   price_gt: Int
   price_gte: Int
-  paid: Boolean
-  paid_not: Boolean
-  userID: ID
-  userID_not: ID
-  userID_in: [ID!]
-  userID_not_in: [ID!]
-  userID_lt: ID
-  userID_lte: ID
-  userID_gt: ID
-  userID_gte: ID
-  userID_contains: ID
-  userID_not_contains: ID
-  userID_starts_with: ID
-  userID_not_starts_with: ID
-  userID_ends_with: ID
-  userID_not_ends_with: ID
-  clientID: ID
-  clientID_not: ID
-  clientID_in: [ID!]
-  clientID_not_in: [ID!]
-  clientID_lt: ID
-  clientID_lte: ID
-  clientID_gt: ID
-  clientID_gte: ID
-  clientID_contains: ID
-  clientID_not_contains: ID
-  clientID_starts_with: ID
-  clientID_not_starts_with: ID
-  clientID_ends_with: ID
-  clientID_not_ends_with: ID
+  promocode: String
+  promocode_not: String
+  promocode_in: [String!]
+  promocode_not_in: [String!]
+  promocode_lt: String
+  promocode_lte: String
+  promocode_gt: String
+  promocode_gte: String
+  promocode_contains: String
+  promocode_not_contains: String
+  promocode_starts_with: String
+  promocode_not_starts_with: String
+  promocode_ends_with: String
+  promocode_not_ends_with: String
+  isPaid: Boolean
+  isPaid_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -11785,32 +11743,26 @@ input OrderSubscriptionWhereInput {
 }
 
 input OrderUpdateInput {
-  paymentId: String
-  coursePage: CoursePageUpdateOneRequiredWithoutOrdersInput
-  coursePageID: ID
-  price: Int
-  paid: Boolean
   user: UserUpdateOneRequiredWithoutOrdersInput
-  userID: ID
-  clientID: ID
+  paymentID: String
+  coursePage: CoursePageUpdateOneRequiredWithoutOrdersInput
+  price: Int
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderUpdateManyDataInput {
-  paymentId: String
-  coursePageID: ID
+  paymentID: String
   price: Int
-  paid: Boolean
-  userID: ID
-  clientID: ID
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderUpdateManyMutationInput {
-  paymentId: String
-  coursePageID: ID
+  paymentID: String
   price: Int
-  paid: Boolean
-  userID: ID
-  clientID: ID
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderUpdateManyWithoutCoursePageInput {
@@ -11843,23 +11795,19 @@ input OrderUpdateManyWithWhereNestedInput {
 }
 
 input OrderUpdateWithoutCoursePageDataInput {
-  paymentId: String
-  coursePageID: ID
-  price: Int
-  paid: Boolean
   user: UserUpdateOneRequiredWithoutOrdersInput
-  userID: ID
-  clientID: ID
+  paymentID: String
+  price: Int
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderUpdateWithoutUserDataInput {
-  paymentId: String
+  paymentID: String
   coursePage: CoursePageUpdateOneRequiredWithoutOrdersInput
-  coursePageID: ID
   price: Int
-  paid: Boolean
-  userID: ID
-  clientID: ID
+  promocode: String
+  isPaid: Boolean
 }
 
 input OrderUpdateWithWhereUniqueWithoutCoursePageInput {
@@ -11899,35 +11847,22 @@ input OrderWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  paymentId: String
-  paymentId_not: String
-  paymentId_in: [String!]
-  paymentId_not_in: [String!]
-  paymentId_lt: String
-  paymentId_lte: String
-  paymentId_gt: String
-  paymentId_gte: String
-  paymentId_contains: String
-  paymentId_not_contains: String
-  paymentId_starts_with: String
-  paymentId_not_starts_with: String
-  paymentId_ends_with: String
-  paymentId_not_ends_with: String
+  user: UserWhereInput
+  paymentID: String
+  paymentID_not: String
+  paymentID_in: [String!]
+  paymentID_not_in: [String!]
+  paymentID_lt: String
+  paymentID_lte: String
+  paymentID_gt: String
+  paymentID_gte: String
+  paymentID_contains: String
+  paymentID_not_contains: String
+  paymentID_starts_with: String
+  paymentID_not_starts_with: String
+  paymentID_ends_with: String
+  paymentID_not_ends_with: String
   coursePage: CoursePageWhereInput
-  coursePageID: ID
-  coursePageID_not: ID
-  coursePageID_in: [ID!]
-  coursePageID_not_in: [ID!]
-  coursePageID_lt: ID
-  coursePageID_lte: ID
-  coursePageID_gt: ID
-  coursePageID_gte: ID
-  coursePageID_contains: ID
-  coursePageID_not_contains: ID
-  coursePageID_starts_with: ID
-  coursePageID_not_starts_with: ID
-  coursePageID_ends_with: ID
-  coursePageID_not_ends_with: ID
   price: Int
   price_not: Int
   price_in: [Int!]
@@ -11936,37 +11871,22 @@ input OrderWhereInput {
   price_lte: Int
   price_gt: Int
   price_gte: Int
-  paid: Boolean
-  paid_not: Boolean
-  user: UserWhereInput
-  userID: ID
-  userID_not: ID
-  userID_in: [ID!]
-  userID_not_in: [ID!]
-  userID_lt: ID
-  userID_lte: ID
-  userID_gt: ID
-  userID_gte: ID
-  userID_contains: ID
-  userID_not_contains: ID
-  userID_starts_with: ID
-  userID_not_starts_with: ID
-  userID_ends_with: ID
-  userID_not_ends_with: ID
-  clientID: ID
-  clientID_not: ID
-  clientID_in: [ID!]
-  clientID_not_in: [ID!]
-  clientID_lt: ID
-  clientID_lte: ID
-  clientID_gt: ID
-  clientID_gte: ID
-  clientID_contains: ID
-  clientID_not_contains: ID
-  clientID_starts_with: ID
-  clientID_not_starts_with: ID
-  clientID_ends_with: ID
-  clientID_not_ends_with: ID
+  promocode: String
+  promocode_not: String
+  promocode_in: [String!]
+  promocode_not_in: [String!]
+  promocode_lt: String
+  promocode_lte: String
+  promocode_gt: String
+  promocode_gte: String
+  promocode_contains: String
+  promocode_not_contains: String
+  promocode_starts_with: String
+  promocode_not_starts_with: String
+  promocode_ends_with: String
+  promocode_not_ends_with: String
+  isPaid: Boolean
+  isPaid_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

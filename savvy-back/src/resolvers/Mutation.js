@@ -857,28 +857,6 @@ const Mutations = {
     );
     return ConstructionResult;
   },
-  async createApplication(parent, args, ctx, info) {
-    // TODO: Check if they are logged in
-    const coursePageID = args.coursePageID;
-    delete args.id;
-    if (!ctx.request.userId) {
-      throw new Error(
-        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
-      );
-    }
-    const application = await ctx.db.mutation.createApplication(
-      {
-        data: {
-          coursePage: {
-            connect: { id: coursePageID }
-          },
-          ...args
-        }
-      },
-      info
-    );
-    return application;
-  },
   async deleteApplication(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the case
@@ -985,11 +963,8 @@ const Mutations = {
     const enrolledUser = await ctx.db.mutation.updateUser(
       {
         data: {
-          subjects: {
-            set: [...args.subjects]
-          },
           new_subjects: {
-            connect: { id: args.coursePageID }
+            connect: { id: args.coursePage }
           }
         },
         where: {
@@ -998,41 +973,7 @@ const Mutations = {
       },
       info
     );
-
     return enrolledUser;
-  },
-  async addUserToCoursePage(parent, args, ctx, info) {
-    let studentID = args.students[args.students.length - 1];
-    const updatedCoursePage = await ctx.db.mutation.updateCoursePage(
-      {
-        data: {
-          students: {
-            set: [...args.students]
-          },
-          new_students: {
-            connect: { id: studentID }
-          }
-        },
-        where: {
-          id: args.id
-        }
-      },
-      info
-    );
-
-    const user = await ctx.db.query.user({ where: { id: studentID } });
-    const coursePage = await ctx.db.query.coursePage({
-      where: { id: args.id }
-    });
-
-    const notification = await client.sendEmail({
-      From: "Mikhail@savvvy.app",
-      To: user.email,
-      Subject: "Savvy App: доступ к курсу открыт!",
-      HtmlBody: NotificationEmail(user.name, coursePage.title, coursePage.id)
-    });
-
-    return updatedCoursePage;
   },
   async signup(parent, args, ctx, info) {
     // lower the email
@@ -1134,6 +1075,7 @@ const Mutations = {
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
     // const idempotenceKey = '3ww8c4329-a6849-rt9219db-891e-f24532we10d29r7qd211';
+    console.log(args);
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -1160,23 +1102,22 @@ const Mutations = {
       httpOnly: false
     });
 
-    const paymentId = result.id;
-    const user = await ctx.db.query.user({ where: { id: args.userID } });
+    const paymentID = result.id;
+    const user = await ctx.db.query.user({ where: { id: args.user } });
     const coursePage = await ctx.db.query.coursePage({
-      where: { id: args.coursePageID }
+      where: { id: args.coursePage }
     });
 
     const order = await ctx.db.mutation.createOrder({
       data: {
-        coursePageID: args.coursePageID,
         price: args.price,
-        paymentId: paymentId,
-        userID: args.userID,
+        paymentID: paymentID,
+        promocode: args.promocode,
         user: {
-          connect: { id: ctx.request.userId }
+          connect: { id: user.id }
         },
         coursePage: {
-          connect: { id: args.coursePageID }
+          connect: { id: args.coursePage }
         }
       },
       info
@@ -1195,6 +1136,70 @@ const Mutations = {
       )
     });
     return order;
+  },
+  async createPrivateOrder(parent, args, ctx, info) {
+    // 1. TODO: Check if they are logged in
+    // const idempotenceKey = '3ww8c4329-a6849-rt9219db-891e-f24532we10d29r7qd211';
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const user = await ctx.db.query.user({ where: { id: args.user } });
+    const coursePage = await ctx.db.query.coursePage({
+      where: { id: args.coursePage }
+    });
+
+    const order = await ctx.db.mutation.createOrder({
+      data: {
+        promocode: args.promocode,
+        user: {
+          connect: { id: user.id }
+        },
+        coursePage: {
+          connect: { id: args.coursePage }
+        }
+      },
+      info
+    });
+
+    const newOrderMail = await client.sendEmail({
+      From: "Mikhail@savvvy.app",
+      To: "Mi.Kochkin@ya.ru",
+      Subject: "Новый клиент",
+      HtmlBody: newOrderEmail(user.name, coursePage.title, " закрытый курс")
+    });
+
+    return order;
+  },
+  async updateOrder(parent, args, ctx, info) {
+    if (args.isPaid === true) {
+      const order = await ctx.db.query.order(
+        { where: { id: args.id } },
+        `{ id, user { name, email}, coursePage {id, title} }`
+      );
+      const notification = await client.sendEmail({
+        From: "Mikhail@savvvy.app",
+        To: order.user.email,
+        Subject: "Savvy App: доступ к курсу открыт!",
+        HtmlBody: NotificationEmail(
+          order.user.name,
+          order.coursePage.title,
+          order.coursePage.id
+        )
+      });
+    }
+    return ctx.db.mutation.updateOrder(
+      {
+        data: {
+          isPaid: args.isPaid
+        },
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
   },
   async deleteOrder(parent, args, ctx, info) {
     const where = { id: args.id };

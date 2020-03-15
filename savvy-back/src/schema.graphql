@@ -196,8 +196,7 @@ type Mutation {
   familiarize(id: ID!): User
   likePost(id: ID!, likes: Int): Sandbox
   addToFavourites(id: ID!, favourites: [ID]): User
-  enrollOnCourse(id: ID!, subjects: [ID], coursePageID: ID): User
-  addUserToCoursePage(id: ID!, students: [ID]): CoursePage
+  enrollOnCourse(id: ID!, coursePage: ID): User
   updateUser(
     id: ID!
     name: String
@@ -217,7 +216,9 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
-  createOrder(coursePageID: ID!, userID: ID, price: Int!): Order!
+  createOrder(coursePage: ID!, user: ID, price: Int, promocode: String): Order!
+  createPrivateOrder(coursePage: ID!, user: ID, promocode: String): Order!
+  updateOrder(id: ID!, isPaid: Boolean!): Order!
   deleteOrder(id: ID!): Order
   createExamAnswer(examQuestionID: ID!, answer: String!): ExamAnswer!
   createExamQuestion(coursePageID: ID!, question: String!): ExamQuestion!
