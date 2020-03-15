@@ -238,43 +238,55 @@ class SingleConstructor extends Component {
     const results = document.querySelectorAll(".Var");
     let nums = document.querySelectorAll(".l");
     nums.forEach(el => el.remove());
-    console.log(results);
 
     results.forEach(element => {
-      // element.style = null;
-      inputs.push(element);
-      this.setState(prevState => ({
-        inputs: [...prevState.inputs, element.innerHTML]
-      }));
+      inputs.push(element.innerHTML);
     });
+    // this.setState(prevState => ({
+    //   inputs: [...prevState.inputs, element.innerHTML]
+    // }));
+    this.setState({ inputs: inputs });
   };
 
   check = () => {
     // 0.
     // 1. Find out the rule for checking the answer
+    console.log(this.state.type === "include");
     if (this.state.type === "include") {
       let res;
       // 2. Check if all the answers have been given
       if (new Set(this.state.received).size !== this.state.received.length) {
         // If not, show that the answer is wrong
+        console.log("Неправильно 0");
         this.showWrong();
       } else {
         // 3. Check if all the correct variants are included into the answer, order does not matter
+        let correct = 0;
         this.state.received.map(item => {
           if (this.state.answer.includes(item)) {
-            this.showRight();
+            correct = correct + 1;
           } else {
-            this.showWrong();
+            correct = correct;
           }
         });
+        if (correct === this.state.answer.length) {
+          console.log("Правильно 1");
+          this.showRight();
+        } else {
+          console.log("Неправильно 1");
+
+          this.showWrong();
+        }
       }
     } else if (this.state.type === "equal") {
       // 3. Check if all the correct variants are included into the answer, order does matter
       if (
         JSON.stringify(this.state.answer) == JSON.stringify(this.state.received)
       ) {
+        console.log("Правильно 2");
         this.showRight();
       } else {
+        console.log("Неправильно 2");
         this.showWrong();
       }
     }
