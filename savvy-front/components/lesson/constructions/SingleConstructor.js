@@ -188,7 +188,6 @@ class SingleConstructor extends Component {
     elements.forEach(element => {
       element.style.border = "1px solid #DE6B48";
     });
-    // console.log("weo");
     this.setState({ answerState: "wrong" });
     this.setState(prevState => ({
       attempts: prevState.attempts + 1
@@ -226,13 +225,6 @@ class SingleConstructor extends Component {
       element.parentElement.insertBefore(p, element);
       element.remove();
     });
-
-    // const paragraphs = document.getElementsByTagName("p");
-    // for (var i = 0; i < paragraphs.length; i++) {
-    //   console.log(paragraphs[i]); //second console output
-    // }
-    // paragraphs.forEach(el => console.log(el));
-
     let inputs = [];
 
     const results = document.querySelectorAll(".Var");
@@ -242,22 +234,17 @@ class SingleConstructor extends Component {
     results.forEach(element => {
       inputs.push(element.innerHTML);
     });
-    // this.setState(prevState => ({
-    //   inputs: [...prevState.inputs, element.innerHTML]
-    // }));
     this.setState({ inputs: inputs });
   };
 
   check = () => {
     // 0.
     // 1. Find out the rule for checking the answer
-    console.log(this.state.type === "include");
     if (this.state.type === "include") {
       let res;
       // 2. Check if all the answers have been given
       if (new Set(this.state.received).size !== this.state.received.length) {
         // If not, show that the answer is wrong
-        console.log("Неправильно 0");
         this.showWrong();
       } else {
         // 3. Check if all the correct variants are included into the answer, order does not matter
@@ -270,11 +257,8 @@ class SingleConstructor extends Component {
           }
         });
         if (correct === this.state.answer.length) {
-          console.log("Правильно 1");
           this.showRight();
         } else {
-          console.log("Неправильно 1");
-
           this.showWrong();
         }
       }
@@ -283,10 +267,8 @@ class SingleConstructor extends Component {
       if (
         JSON.stringify(this.state.answer) == JSON.stringify(this.state.received)
       ) {
-        console.log("Правильно 2");
         this.showRight();
       } else {
-        console.log("Неправильно 2");
         this.showWrong();
       }
     }
