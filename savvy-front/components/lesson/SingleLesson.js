@@ -596,6 +596,7 @@ class SingleLesson extends Component {
                       openLesson={lesson.coursePage.openLesson}
                       lesson={lesson.id}
                     >
+                      <div id="root"></div>
                       <Container>
                         <ReactResizeDetector
                           handleWidth
@@ -1171,7 +1172,6 @@ class SingleLesson extends Component {
                           )}
                         </LessonStyles>
                       </Container>
-                      <div id="root"></div>
                     </AreYouEnrolled>
                   </>
                 );

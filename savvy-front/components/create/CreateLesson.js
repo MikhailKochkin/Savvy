@@ -161,6 +161,7 @@ export default class CreateLesson extends Component {
       <PleaseSignIn>
         <AreYouATeacher subject={this.props.id}>
           <Width>
+            <div id="root"></div>
             <Container>
               <Title>Новый урок</Title>
               <input
@@ -230,7 +231,6 @@ export default class CreateLesson extends Component {
                 )}
               </Mutation>
             </Container>
-            <div id="root"></div>
           </Width>
         </AreYouATeacher>
       </PleaseSignIn>

@@ -434,6 +434,7 @@ const SingleLesson = props => {
                         open={lesson.id === lesson.coursePage.openLesson}
                         subject={lesson.coursePage.id}
                       >
+                        <div id="root"></div>
                         <Container>
                           <ReactResizeDetector
                             handleWidth
@@ -555,7 +556,6 @@ const SingleLesson = props => {
                             }
                           />
                         </Container>{" "}
-                        <div id="root"></div>
                       </AreYouEnrolled>
                     </>
                   )}
