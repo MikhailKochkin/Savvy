@@ -40,6 +40,7 @@ const SINGLE_LESSON_QUERY = gql`
       number
       description
       open
+      type
       createdAt
       map
       user {

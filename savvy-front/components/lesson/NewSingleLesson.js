@@ -45,6 +45,7 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
         clauses {
+          id
           number
           commentary
           keywords
@@ -489,7 +490,7 @@ const SingleLesson = props => {
                               </Head2>
                             )}
                           <Header>
-                            Глава {activeStep + 1} из{" "}
+                            Раздел {activeStep + 1} из{" "}
                             {data.lesson.map[0].length}
                           </Header>
                           <LessonPart>

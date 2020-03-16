@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
 const Styles = styled.div`
   width: 100%;
@@ -21,7 +22,8 @@ const Box = styled.div`
   align-items: center;
   div {
     color: white;
-    font-size: 1.8rem;
+    font-weight: 800;
+    font-size: 2rem;
     text-align: center;
     @media (max-width: 600px) {
       font-size: 1.5rem;
@@ -40,6 +42,7 @@ const Button = styled.a`
   background: #0068e5;
   border-radius: 6px;
   color: white;
+  font-weight: 800;
   cursor: pointer;
   font-size: 1.8rem;
   padding: 1.5% 4%;
@@ -58,12 +61,17 @@ const Contact = () => {
     <Styles>
       <Box>
         <div>
-          Остались вопросы? Не знаете, подойдет ли курс именно вам? Хотите
-          больше узнать о программе или стать автором? Напишите, мы подскажем.
+          Думаете о том, чтобы создать свой онлайн курс? <br />
+          Подробно рассказываем, как это сделать.
         </div>
-        <Button href="https://www.facebook.com/misha.kochkin" target="_blank">
-          Написать
-        </Button>
+        <Link
+          href={{
+            pathname: "/coursePage",
+            query: { id: "ck1srkdul00l20763ut2aicn9" }
+          }}
+        >
+          <Button>Узнать</Button>
+        </Link>
       </Box>
     </Styles>
   );

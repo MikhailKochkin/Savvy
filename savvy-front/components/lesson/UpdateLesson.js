@@ -29,6 +29,7 @@ const UPDATE_LESSON_MUTATION = gql`
       number
       name
       text
+      type
       description
     }
   }
