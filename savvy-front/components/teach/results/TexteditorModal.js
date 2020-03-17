@@ -8,15 +8,15 @@ const Box = styled.div`
   justify-content: row;
   margin-bottom: 1%;
   div {
-    flex: 50%;
     &.column {
       padding-left: 2%;
       border-left: 1px solid #edefed;
+      flex-basis: 33.3%;
     }
-    &.mistake {
-      border-bottom: 1px solid #edefed;
+    &.box {
       padding-bottom: 10px;
       margin-bottom: 10px;
+      flex-basis: 66.6%;
     }
   }
 `;
@@ -35,7 +35,6 @@ const Button = styled.button`
   border: 1px solid #112a62;
   border-radius: 5px;
   cursor: pointer;
-  width: 90%;
   outline: 0;
   margin: 1% 0;
   color: #112a62;
@@ -89,7 +88,7 @@ class TexteditorModal extends Component {
     const { texteditor, student } = this.props;
     return (
       <Box>
-        <TextBox>
+        <TextBox className="box">
           <Text>
             <b>Редактор: </b>
             {renderHTML(texteditor.text.substring(0, 200) + "...")}
@@ -107,18 +106,20 @@ class TexteditorModal extends Component {
         </TextBox>
         <div className="column">
           {texteditor.textEditorResults.filter(t => t.student.id === student.id)
-            .length > 0
-            ? texteditor.textEditorResults
-                .filter(t => t.student.id === student.id)
-                .map(t => (
-                  <Block>
-                    <div>⛔️: {t.wrong} </div>
-                    <div>✅: {t.correct} </div>
-                    <div>❓: {t.guess} </div>
-                    <div>Попытка {t.attempts} </div>
-                  </Block>
-                ))
-            : null}
+            .length > 0 ? (
+            texteditor.textEditorResults
+              .filter(t => t.student.id === student.id)
+              .map(t => (
+                <Block>
+                  <div>⛔️: {t.wrong} </div>
+                  <div>✅: {t.correct} </div>
+                  <div>❓: {t.guess} </div>
+                  <div>Попытка {t.attempts} </div>
+                </Block>
+              ))
+          ) : (
+            <div>Ответов нет</div>
+          )}
         </div>
       </Box>
     );

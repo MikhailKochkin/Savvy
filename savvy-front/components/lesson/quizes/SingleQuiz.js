@@ -255,9 +255,11 @@ class SingleQuiz extends Component {
   };
   render() {
     const { me, user, userData, exam, story } = this.props;
-    const data = userData
-      .filter(el => el.quiz.id === this.props.id)
-      .filter(el => el.student.id === me.id);
+    if (me) {
+      const data = userData
+        .filter(el => el.quiz.id === this.props.id)
+        .filter(el => el.student.id === me.id);
+    }
     return (
       <Styles story={story}>
         <Buttons>

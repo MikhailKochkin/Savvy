@@ -6,7 +6,6 @@ class Exams extends Component {
   render() {
     return (
       <div>
-        {console.log(this.props.lesson.exams)}
         {this.props.lesson.exams.map(ex => (
           <Exam
             key={ex.id}

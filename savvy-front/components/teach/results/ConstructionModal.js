@@ -76,7 +76,7 @@ const ConstructionModal = props => {
     <Box>
       <div>{renderHTML("<b>Конструктор</b> " + construction.name)}</div>
       <div className="column">
-        {results.length > 0 ? (
+        {results && results.length > 0 ? (
           results.map(t => <li>Количество попыток: {t.attempts}</li>)
         ) : (
           <span>Не составлен</span>
@@ -91,7 +91,7 @@ const ConstructionModal = props => {
           onBackgroundClick={e => setIsOpen(false)}
           onEscapeKeydown={e => setIsOpen(false)}
         >
-          {results.length > 0 ? (
+          {results && results.length > 0 ? (
             results.map(t => (
               <Block>{t.inputs.map(input => renderHTML(input))}</Block>
             ))
