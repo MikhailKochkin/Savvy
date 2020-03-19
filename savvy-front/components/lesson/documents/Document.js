@@ -7,6 +7,7 @@ import Clause from "./Clause";
 import DeleteDocument from "../../delete/DeleteDocument";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import renderHTML from "react-render-html";
 
 const CREATE_DOCUMENTRESULT_MUTATION = gql`
   mutation CREATE_DOCUMENTRESULT_MUTATION(
@@ -71,6 +72,7 @@ const Document = props => {
   const [draft, setDraft] = useState([]);
   const [results, setResults] = useState("");
   const [drafts, setDrafts] = useState("");
+  const [reveal, setReveal] = useState(false);
 
   const getData = (data, name) => {
     data = {
@@ -150,6 +152,7 @@ const Document = props => {
                   e.preventDefault();
                   const res = await save();
                   const res2 = await createDocumentResult();
+                  setReveal(true);
                   alert(
                     "Документ сохранен. Можете перейти к следующему заданию."
                   );
@@ -165,6 +168,7 @@ const Document = props => {
                 />
               ) : null}
             </Buttons>
+            {reveal && <div>{clauses.map(cl => renderHTML(cl.sample))}</div>}
           </>
         )}
       </Mutation>

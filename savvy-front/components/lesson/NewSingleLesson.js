@@ -320,7 +320,7 @@ const LessonPart = styled.div`
   display: flex;
   border: 1px solid #edefed;
   padding: 0.5% 2%;
-  width: 40%;
+  width: ${props => (props.task ? "55%" : "40%")};
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
@@ -328,8 +328,8 @@ const LessonPart = styled.div`
     padding-top: 2%;
     padding-left: 2%;
   }
-  @media (max-width: 1200px) {
-    width: 50%;
+  @media (max-width: 1300px) {
+    width: ${props => (props.task ? "70%" : "50%")};
   }
   @media (max-width: 800px) {
     margin: 1%;
@@ -360,11 +360,11 @@ const Header = styled.div`
   color: white;
   margin-top: 4%;
   border-bottom: 0;
-  width: 40%;
+  width: ${props => (props.task ? "55%" : "40%")};
   text-align: left;
   padding: 5px 0px 5px 2%;
   @media (max-width: 1200px) {
-    width: 50%;
+    width: ${props => (props.task ? "70%" : "50%")};
   }
   @media (max-width: 800px) {
     width: 90%;
@@ -405,14 +405,18 @@ const SingleLesson = props => {
   const classes = useStyles();
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
+  const [task, setTask] = useState("");
 
-  const handleNext = () => {
+  const handleNext = tasks => {
+    setTask(tasks[activeStep + 1]);
     setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
 
-  const handleBack = () => {
+  const handleBack = tasks => {
+    setTask(tasks[activeStep - 1]);
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
+
   return (
     <PleaseSignIn>
       <User>
@@ -427,6 +431,8 @@ const SingleLesson = props => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
+              let tasks = [];
+              lesson.map[0].map(task => tasks.push(Object.keys(task)[0]));
               return (
                 <>
                   {lesson && (
@@ -455,7 +461,7 @@ const SingleLesson = props => {
                                 >
                                   <span>
                                     <Icon
-                                      size={"10%"}
+                                      size={"2em"}
                                       icon={arrowLeft}
                                       id="back"
                                     />
@@ -489,11 +495,11 @@ const SingleLesson = props => {
                                 )}
                               </Head2>
                             )}
-                          <Header>
+                          <Header task={task === "construction"}>
                             Раздел {activeStep + 1} из{" "}
                             {data.lesson.map[0].length}
                           </Header>
-                          <LessonPart>
+                          <LessonPart task={task === "construction"}>
                             <ReactCSSTransitionGroup
                               transitionName="example"
                               transitionEnterTimeout={5500}
@@ -520,7 +526,7 @@ const SingleLesson = props => {
                               <Button
                                 size="small"
                                 variant="text"
-                                onClick={handleNext}
+                                onClick={e => handleNext(tasks)}
                                 classes={{
                                   textSizeSmall: classes.textSizeSmall
                                 }}
@@ -541,7 +547,7 @@ const SingleLesson = props => {
                               <Button
                                 size="small"
                                 variant="text"
-                                onClick={handleBack}
+                                onClick={e => handleBack(tasks)}
                                 classes={{
                                   textSizeSmall: classes.textSizeSmall
                                 }}

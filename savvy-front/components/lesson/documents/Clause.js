@@ -75,7 +75,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 const Clause = props => {
   const [text, setText] = useState("");
   const [show, setShow] = useState(false);
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState();
   const [checked, setChecked] = useState(false);
   const [progress, setProgress] = useState(false);
 
@@ -91,11 +91,12 @@ const Clause = props => {
       setShow(true);
       let data = {
         answer: text,
+        model: props.sample,
         keywords: props.keywords
       };
-      // https://dry-plains-91452.herokuapp.com
-      // http://localhost:5000/
-      const r = await fetch("https://dry-plains-91452.herokuapp.com/check", {
+      // https://dry-plains-91452.herokuapp.com/check
+      // http://localhost:5000/text/
+      const r = await fetch("http://localhost:5000/text/", {
         method: "POST", // or 'PUT'
         headers: {
           "Content-Type": "application/json"
@@ -104,6 +105,7 @@ const Clause = props => {
       })
         .then(response => response.json())
         .then(res => {
+          console.log(res);
           setComments(res);
           setProgress(false);
         })
@@ -129,7 +131,31 @@ const Clause = props => {
         <Progress display={progress}>
           <CircularProgress />
         </Progress>
-        {comments.map(com => {
+        {comments &&
+          (comments.final > 0.65 ? (
+            <>
+              <div>
+                Вау, нам кажется, у вас получилось отлично! Двигаемся дальше.
+                Сделайте документ до конца, чтобы увидеть вариант автора курса.
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                Этот текст еще можно доработать. В качестве подсказки
+                используйте ключевые слова:
+              </div>
+              <div>
+                {keywords.map(el => (
+                  <li>{el}</li>
+                ))}
+              </div>
+              <div>
+                Сделайте документ до конца, чтобы увидеть вариант автора курса.
+              </div>
+            </>
+          ))}
+        {/* {comments.map(com => {
           if (Object.keys(com)[0] === "spellcheck") {
             return Object.values(com)[0].length > 0 ? (
               <>
@@ -187,7 +213,7 @@ const Clause = props => {
               <div>Мы не нашли структурных проблем.</div>
             );
           }
-        })}
+        })} */}
       </Comments>
       <Buttons>
         {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>}
@@ -196,7 +222,9 @@ const Clause = props => {
             Дальше
           </StyledButton>
         ) : (
-          <div>Конец документа</div>
+          <div>
+            Конец документа. Сохраните, чтобы открыть вариант автора курса.
+          </div>
         )}
       </Buttons>
     </Styles>

@@ -128,7 +128,7 @@ const Buttons = styled.div`
 
 const Button = styled.button`
   padding: 1% 2%;
-  background: ${props => props.theme.green};
+  background: ${props => .theme.green};
   width: 20%;
   border-radius: 5px;
   color: white;

@@ -144,9 +144,9 @@ const CourseMenu = styled.div`
   }
   a {
     padding-bottom: 19px;
-    &:hover {
+    /* &:hover {
       border-bottom: 1px solid #112a62;
-    }
+    } */
   }
 `;
 
@@ -290,12 +290,12 @@ class Nav extends Component {
                           )}
                         </>
                       ) : null}
-                      <Button
+                      {/* <Button
                         onMouseEnter={this.mouseEnter}
                         onClick={this.menuShow}
                       >
                         <a>Курсы</a>
-                      </Button>
+                      </Button> */}
                     </CourseMenu>
                     <UserData>
                       {me ? (

@@ -215,7 +215,7 @@ class SingleTextEditor extends Component {
                       <>
                         {!this.state.show && (
                           <>
-                            Да, это ошибка. Исправьте её:
+                            Ваш вариант:
                             <Input
                               type="text"
                               name="answer"
