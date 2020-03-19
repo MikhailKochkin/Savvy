@@ -15,6 +15,7 @@ import ExamAnswer from "./ExamAnswer";
 import ExamQuestion from "./ExamQuestion";
 import UpdateExamQuestion from "./UpdateExamQuestion";
 import Feedback from "./Feedback";
+import Forum from "./forum/Forum";
 
 const AGGREGATE_PAGE_LESSONS_QUERY = gql`
   query AGGREGATE_PAGE_LESSONS_QUERY($id: ID!) {
@@ -85,6 +86,32 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       examQuestion {
         id
         question
+      }
+      topics {
+        id
+        name
+        createdAt
+        user {
+          id
+          name
+          surname
+        }
+        coursePage {
+          id
+          user {
+            id
+          }
+        }
+        statements {
+          id
+          text
+          user {
+            id
+            name
+            surname
+          }
+          createdAt
+        }
       }
       user {
         id
@@ -224,6 +251,9 @@ const Button = styled.button`
   padding-bottom: 10px;
   border-bottom: ${props =>
     props.primary ? "1px solid black" : "1px solid white"};
+  &#forum {
+    font-weight: bold;
+  }
 `;
 
 const Reviews = styled.div`
@@ -319,6 +349,15 @@ const Video = styled.div`
   }
 `;
 
+const Comment = styled.div`
+  font-size: 1.6rem;
+  background: #0268e6;
+  color: white;
+  padding: 2% 3%;
+  margin-top: 3%;
+  text-align: center;
+`;
+
 class CoursePage extends Component {
   state = {
     page: "lessons",
@@ -334,356 +373,379 @@ class CoursePage extends Component {
   };
   render() {
     return (
-      <User>
-        {({ data: { me } }) => (
-          <>
-            <Query
-              query={AGGREGATE_PAGE_LESSONS_QUERY}
-              variables={{
-                id: this.props.id
-              }}
-            >
-              {({ data: data2, error: error2, loading: loading2 }) => {
-                if (loading2) return <Loading />;
-                if (error2) return <p>Error: {error2.message}</p>;
-                return (
-                  <Query
-                    query={SINGLE_COURSEPAGE_QUERY}
-                    variables={{
-                      id: this.props.id
-                    }}
-                  >
-                    {({ error, loading, data }) => {
-                      if (error) return <Error error={error} />;
-                      if (loading) return <Loading />;
-                      const coursePage = data.coursePage;
-                      const student_list = [];
-                      coursePage.new_students.map(ns =>
-                        student_list.push(ns.id)
-                      );
-                      let price;
-                      if (coursePage.price === null) {
-                        price = "Бесплатно";
-                      } else {
-                        price = coursePage.price;
-                      }
-                      const studentsArray = [];
-                      coursePage.students.map(student =>
-                        studentsArray.push(student)
-                      );
-
-                      const subjectArray = [];
-                      const new_subjectArray = [];
-                      me &&
-                        me.subjects.map(subject => subjectArray.push(subject));
-                      me &&
-                        me.new_subjects.map(new_subject =>
-                          new_subjectArray.push(new_subject.id)
+      <>
+        <div id="root"></div>
+        <User>
+          {({ data: { me } }) => (
+            <>
+              <Query
+                query={AGGREGATE_PAGE_LESSONS_QUERY}
+                variables={{
+                  id: this.props.id
+                }}
+              >
+                {({ data: data2, error: error2, loading: loading2 }) => {
+                  if (loading2) return <Loading />;
+                  if (error2) return <p>Error: {error2.message}</p>;
+                  return (
+                    <Query
+                      query={SINGLE_COURSEPAGE_QUERY}
+                      variables={{
+                        id: this.props.id
+                      }}
+                    >
+                      {({ error, loading, data }) => {
+                        if (error) return <Error error={error} />;
+                        if (loading) return <Loading />;
+                        const coursePage = data.coursePage;
+                        const student_list = [];
+                        coursePage.new_students.map(ns =>
+                          student_list.push(ns.id)
                         );
-                      const applicationsList = [];
-                      coursePage.applications.map(application =>
-                        applicationsList.push(application.applicantId)
-                      );
+                        let price;
+                        if (coursePage.price === null) {
+                          price = "Бесплатно";
+                        } else {
+                          price = coursePage.price;
+                        }
+                        const studentsArray = [];
+                        coursePage.students.map(student =>
+                          studentsArray.push(student)
+                        );
 
-                      let lessonsList = [];
-                      coursePage.lessons.map(l => lessonsList.push(l.id));
+                        const subjectArray = [];
+                        const new_subjectArray = [];
+                        me &&
+                          me.subjects.map(subject =>
+                            subjectArray.push(subject)
+                          );
+                        me &&
+                          me.new_subjects.map(new_subject =>
+                            new_subjectArray.push(new_subject.id)
+                          );
+                        const applicationsList = [];
+                        coursePage.applications.map(application =>
+                          applicationsList.push(application.applicantId)
+                        );
 
-                      const openLesson = coursePage.lessons.filter(
-                        c => c.id === coursePage.openLesson
-                      );
-                      return (
-                        <>
-                          <Container>
-                            <LessonImage
-                              src={
-                                "https://cdn.pixabay.com/photo/2014/01/30/18/26/singapore-river-255116_1280.jpg"
-                              }
-                            />
-                            <LessonStyles>
-                              <CourseInfo>
-                                <Data>
-                                  <Header>{coursePage.title}</Header>
-                                  <p className="track2">
-                                    {coursePage.description}
-                                  </p>
-                                  <p className="name">
-                                    {coursePage.user && coursePage.user.surname
-                                      ? `${coursePage.user.name} ${coursePage.user.surname}`
-                                      : coursePage.user.name}{" "}
-                                    из{" "}
-                                    {coursePage.user &&
-                                    (coursePage.user.status === "HR" ||
-                                      coursePage.user.status === "AUTHOR")
-                                      ? coursePage.user.company.name
-                                      : coursePage.user.uni.title}
-                                  </p>
-                                  <p className="track2">
-                                    {coursePage.user.description}
-                                  </p>
-                                </Data>
-                                <PayBox>
-                                  {/* Карточка регистрации на сайте */}
-                                  {!me && <SignInCard />}
-                                  {/* Карточка первого урока */}
-                                  {me &&
-                                    me.id !== coursePage.user.id &&
-                                    // !applicationsList.includes(me.id) &&
-                                    !subjectArray.includes(coursePage.id) &&
-                                    !new_subjectArray.includes(coursePage.id) &&
-                                    !me.permissions.includes("ADMIN") && (
-                                      <FirstLesson lesson={openLesson} />
-                                    )}
-                                  {/* Карточка первого урока */}
-                                  {/* {me &&
+                        let lessonsList = [];
+                        coursePage.lessons.map(l => lessonsList.push(l.id));
+
+                        const openLesson = coursePage.lessons.filter(
+                          c => c.id === coursePage.openLesson
+                        );
+                        return (
+                          <>
+                            <Container>
+                              <LessonImage
+                                src={
+                                  "https://cdn.pixabay.com/photo/2014/01/30/18/26/singapore-river-255116_1280.jpg"
+                                }
+                              />
+                              <LessonStyles>
+                                <CourseInfo>
+                                  <Data>
+                                    <Header>{coursePage.title}</Header>
+                                    <p className="track2">
+                                      {coursePage.description}
+                                    </p>
+                                    <p className="name">
+                                      {coursePage.user &&
+                                      coursePage.user.surname
+                                        ? `${coursePage.user.name} ${coursePage.user.surname}`
+                                        : coursePage.user.name}{" "}
+                                      из{" "}
+                                      {coursePage.user &&
+                                      (coursePage.user.status === "HR" ||
+                                        coursePage.user.status === "AUTHOR")
+                                        ? coursePage.user.company.name
+                                        : coursePage.user.uni.title}
+                                    </p>
+                                    <p className="track2">
+                                      {coursePage.user.description}
+                                    </p>
+                                  </Data>
+                                  <PayBox>
+                                    {/* Карточка регистрации на сайте */}
+                                    {!me && <SignInCard />}
+                                    {/* Карточка первого урока */}
+                                    {me &&
+                                      me.id !== coursePage.user.id &&
+                                      // !applicationsList.includes(me.id) &&
+                                      !subjectArray.includes(coursePage.id) &&
+                                      !new_subjectArray.includes(
+                                        coursePage.id
+                                      ) &&
+                                      !me.permissions.includes("ADMIN") && (
+                                        <FirstLesson lesson={openLesson} />
+                                      )}
+                                    {/* Карточка первого урока */}
+                                    {/* {me &&
                                     me.id !== coursePage.user.id &&
                                     !me.permissions.includes("ADMIN") &&
                                     applicationsList.includes(me.id) && (
                                       <FirstLesson lesson={openLesson} />
                                     )} */}
-                                  {/* Карточка преподавателя */}
-                                  {me &&
-                                    (me.id === coursePage.user.id ||
-                                      me.permissions.includes("ADMIN")) && (
-                                      <TeacherCard
-                                        id={coursePage.id}
-                                        coursePage={coursePage}
-                                      />
-                                    )}
-                                  {/* Карточка ученика */}
-                                  {me &&
-                                    (subjectArray.includes(coursePage.id) ||
-                                      new_subjectArray.includes(
-                                        coursePage.id
-                                      )) &&
-                                    !me.permissions.includes("ADMIN") && (
-                                      <StudentCard
-                                        coursePage={coursePage}
-                                        me={me}
-                                      />
-                                    )}
-                                </PayBox>
-                              </CourseInfo>
-                              <Details>
-                                {data.coursePage.audience && (
-                                  <div className="yellow">
-                                    <div className="header">
-                                      🙋🏻‍♀ Кому нужен этот курс?
-                                    </div>
-                                    <div>
-                                      {renderHTML(data.coursePage.audience)}
-                                    </div>
-                                  </div>
-                                )}
-                                {data.coursePage.video &&
-                                  data.coursePage.video !== "" && (
-                                    <Video>
-                                      <div className="header">
-                                        Посмотрите презентацию курса от его
-                                        автора:
-                                      </div>
-                                      <iframe
-                                        src={data.coursePage.video}
-                                        allowFullScreen
-                                      />
-                                    </Video>
-                                  )}
-                                {data.coursePage.methods && (
-                                  <div className="green">
-                                    <div className="header">
-                                      👨🏻‍🏫 👩🏼‍🏫 Об авторе курса и его подходах
-                                    </div>
-                                    <div>
-                                      {renderHTML(data.coursePage.methods)}
-                                    </div>
-                                  </div>
-                                )}
-                                {openLesson.length > 0 && (
-                                  <div className="openLesson">
-                                    <div className="header">
-                                      Посмотрите первый открытый урок уже
-                                      сейчас!
-                                    </div>
-                                    {!me && (
-                                      <>
-                                        <p>
-                                          Войдите или зарегистрируйтесь, чтобы
-                                          это сделать.
-                                        </p>
-                                        <SignInButton onClick={this.scroll}>
-                                          Войти
-                                        </SignInButton>
-                                      </>
-                                    )}
+                                    {/* Карточка преподавателя */}
                                     {me &&
-                                      openLesson.map((lesson, index) => (
-                                        <LessonHeader
-                                          me={me}
-                                          key={lesson.id}
-                                          name={lesson.name}
-                                          lesson={lesson}
-                                          coursePageId={this.props.id}
-                                          students={coursePage.students}
-                                          openLesson={coursePage.openLesson}
-                                          new_students={student_list}
-                                          open={index + 1 === 1}
-                                          index={index + 1}
+                                      (me.id === coursePage.user.id ||
+                                        me.permissions.includes("ADMIN")) && (
+                                        <TeacherCard
+                                          id={coursePage.id}
+                                          coursePage={coursePage}
                                         />
-                                      ))}
-                                  </div>
-                                )}
-                                {data.coursePage.result && (
-                                  <div className="blue">
-                                    <div className="header">
-                                      🎁 Что вы получите в результате
-                                      прохождения курса?
+                                      )}
+                                    {/* Карточка ученика */}
+                                    {me &&
+                                      (subjectArray.includes(coursePage.id) ||
+                                        new_subjectArray.includes(
+                                          coursePage.id
+                                        )) &&
+                                      !me.permissions.includes("ADMIN") && (
+                                        <StudentCard
+                                          coursePage={coursePage}
+                                          me={me}
+                                        />
+                                      )}
+                                  </PayBox>
+                                </CourseInfo>
+                                <Details>
+                                  {data.coursePage.audience && (
+                                    <div className="yellow">
+                                      <div className="header">
+                                        🙋🏻‍♀ Кому нужен этот курс?
+                                      </div>
+                                      <div>
+                                        {renderHTML(data.coursePage.audience)}
+                                      </div>
                                     </div>
-                                    <div>
-                                      {renderHTML(data.coursePage.result)}
+                                  )}
+                                  {data.coursePage.video &&
+                                    data.coursePage.video !== "" && (
+                                      <Video>
+                                        <div className="header">
+                                          Посмотрите презентацию курса от его
+                                          автора:
+                                        </div>
+                                        <iframe
+                                          src={data.coursePage.video}
+                                          allowFullScreen
+                                        />
+                                      </Video>
+                                    )}
+                                  {data.coursePage.methods && (
+                                    <div className="green">
+                                      <div className="header">
+                                        👨🏻‍🏫 👩🏼‍🏫 Об авторе курса и его подходах
+                                      </div>
+                                      <div>
+                                        {renderHTML(data.coursePage.methods)}
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
-                              </Details>
-                              <LessonsInfo>
-                                <Buttons>
-                                  <Button
-                                    primary={this.state.page === "lessons"}
-                                    name="lessons"
-                                    onClick={this.switch}
-                                  >
-                                    Уроки
-                                  </Button>
-
-                                  <Button
-                                    primary={this.state.page === "feedback"}
-                                    name="feedback"
-                                    onClick={this.switch}
-                                  >
-                                    Обратная связь
-                                  </Button>
-                                </Buttons>
-                                {this.state.page === "lessons" && (
-                                  <>
-                                    <Total>
-                                      Всего:{" "}
-                                      {data2.lessonsConnection.aggregate.count}
-                                    </Total>
-                                    {coursePage.lessons
-                                      .sort((a, b) =>
-                                        a.number > b.number ? 1 : -1
-                                      )
-                                      .map((lesson, index) => (
+                                  )}
+                                  {openLesson.length > 0 && (
+                                    <div className="openLesson">
+                                      <div className="header">
+                                        Посмотрите первый открытый урок уже
+                                        сейчас!
+                                      </div>
+                                      {!me && (
                                         <>
-                                          {(index + 3) % 3 === 0 && (
-                                            <div className="week">
-                                              Неделя {(index + 3) / 3}
-                                            </div>
-                                          )}
+                                          <p>
+                                            Войдите или зарегистрируйтесь, чтобы
+                                            это сделать.
+                                          </p>
+                                          <SignInButton onClick={this.scroll}>
+                                            Войти
+                                          </SignInButton>
+                                        </>
+                                      )}
+                                      {me &&
+                                        openLesson.map((lesson, index) => (
                                           <LessonHeader
                                             me={me}
                                             key={lesson.id}
                                             name={lesson.name}
                                             lesson={lesson}
-                                            coursePage={this.props.id}
-                                            author={coursePage.user.id}
+                                            coursePageId={this.props.id}
                                             students={coursePage.students}
                                             openLesson={coursePage.openLesson}
                                             new_students={student_list}
                                             open={index + 1 === 1}
                                             index={index + 1}
                                           />
-                                        </>
-                                      ))}
-                                  </>
-                                )}
-                                {this.state.page === "feedback" && me && (
-                                  <>
-                                    {me.studentFeedback.filter(feed =>
-                                      lessonsList.includes(feed.lesson.id)
-                                    ).length === 0 ? (
-                                      <p>Обратной связи нет</p>
-                                    ) : null}
-                                    {me.studentFeedback
-                                      .filter(feed =>
-                                        lessonsList.includes(feed.lesson.id)
-                                      )
-                                      .map(feedback => (
-                                        <Feedback feedback={feedback} />
-                                      ))}
-                                  </>
-                                )}
-                                {this.state.page === "finals" && (
-                                  <>
-                                    {me &&
-                                      (me.id === coursePage.user.id ||
-                                        me.permissions.includes("ADMIN")) &&
-                                      (coursePage.examQuestion ? (
-                                        <UpdateExamQuestion
-                                          id={this.props.id}
-                                        />
-                                      ) : (
-                                        <ExamQuestion id={this.props.id} />
-                                      ))}
-                                    {me &&
-                                      me.id !== coursePage.user.id &&
-                                      !me.permissions.includes("ADMIN") &&
-                                      (coursePage.examQuestion ? (
-                                        <ExamAnswer
-                                          id={this.props.id}
-                                          question={coursePage.examQuestion}
-                                        />
-                                      ) : (
-                                        <p>
-                                          На этом курсе пока нет финального
-                                          задания
-                                        </p>
-                                      ))}
-                                  </>
-                                )}
-                              </LessonsInfo>
-                              <Details>
-                                {data.coursePage.tariffs && (
-                                  <div className="yellow">
-                                    <div className="header">
-                                      📚Как проходит обучение на разных тарифах?
+                                        ))}
                                     </div>
-                                    <div>
-                                      {renderHTML(data.coursePage.tariffs)}
-                                    </div>
-                                  </div>
-                                )}
-                              </Details>
-
-                              {!subjectArray.includes(coursePage.id) &&
-                                !new_subjectArray.includes(coursePage.id) && (
-                                  <RegisterCard
-                                    me={me}
-                                    coursePage={coursePage}
-                                    price={price}
-                                    discountPrice={coursePage.discountPrice}
-                                    promocode={coursePage.promocode}
-                                    studentsArray={studentsArray}
-                                    subjectArray={subjectArray}
-                                  />
-                                )}
-                              {data.coursePage.reviews.length > 0 && (
-                                <Reviews>
-                                  {data.coursePage.reviews.map(post =>
-                                    renderHTML(post)
                                   )}
-                                </Reviews>
-                              )}
-                            </LessonStyles>
-                          </Container>
-                        </>
-                      );
-                    }}
-                  </Query>
-                );
-              }}
-            </Query>
-          </>
-        )}
-      </User>
+                                  {data.coursePage.result && (
+                                    <div className="blue">
+                                      <div className="header">
+                                        🎁 Что вы получите в результате
+                                        прохождения курса?
+                                      </div>
+                                      <div>
+                                        {renderHTML(data.coursePage.result)}
+                                      </div>
+                                    </div>
+                                  )}
+                                </Details>
+                                <LessonsInfo>
+                                  <Buttons>
+                                    <Button
+                                      primary={this.state.page === "lessons"}
+                                      name="lessons"
+                                      onClick={this.switch}
+                                    >
+                                      Уроки
+                                    </Button>
+
+                                    <Button
+                                      primary={this.state.page === "forum"}
+                                      name="forum"
+                                      id="forum"
+                                      onClick={this.switch}
+                                    >
+                                      Форум
+                                    </Button>
+
+                                    <Button
+                                      primary={this.state.page === "feedback"}
+                                      name="feedback"
+                                      onClick={this.switch}
+                                    >
+                                      Обратная связь
+                                    </Button>
+                                  </Buttons>
+                                  {this.state.page === "lessons" && (
+                                    <>
+                                      <Total>
+                                        Всего:{" "}
+                                        {
+                                          data2.lessonsConnection.aggregate
+                                            .count
+                                        }
+                                      </Total>
+                                      {coursePage.lessons
+                                        .sort((a, b) =>
+                                          a.number > b.number ? 1 : -1
+                                        )
+                                        .map((lesson, index) => (
+                                          <>
+                                            {(index + 3) % 3 === 0 && (
+                                              <div className="week">
+                                                Неделя {(index + 3) / 3}
+                                              </div>
+                                            )}
+                                            <LessonHeader
+                                              me={me}
+                                              key={lesson.id}
+                                              name={lesson.name}
+                                              lesson={lesson}
+                                              coursePage={this.props.id}
+                                              author={coursePage.user.id}
+                                              students={coursePage.students}
+                                              openLesson={coursePage.openLesson}
+                                              new_students={student_list}
+                                              open={index + 1 === 1}
+                                              index={index + 1}
+                                            />
+                                          </>
+                                        ))}
+                                    </>
+                                  )}
+
+                                  {this.state.page === "forum" &&
+                                    (subjectArray.includes(coursePage.id) ||
+                                    new_subjectArray.includes(coursePage.id) ? (
+                                      me && (
+                                        <>
+                                          <Forum
+                                            coursePage={coursePage}
+                                            me={me}
+                                          />
+                                        </>
+                                      )
+                                    ) : (
+                                      <Comment>
+                                        Зарегистрируйтесь на курс, чтобы
+                                        получить доступ к форуму.
+                                      </Comment>
+                                    ))}
+
+                                  {this.state.page === "feedback" &&
+                                    (me &&
+                                    (subjectArray.includes(coursePage.id) ||
+                                      new_subjectArray.includes(
+                                        coursePage.id
+                                      )) ? (
+                                      <>
+                                        {me.studentFeedback.filter(feed =>
+                                          lessonsList.includes(feed.lesson.id)
+                                        ).length === 0 ? (
+                                          <p>Обратной связи нет</p>
+                                        ) : null}
+                                        {me.studentFeedback
+                                          .filter(feed =>
+                                            lessonsList.includes(feed.lesson.id)
+                                          )
+                                          .map(feedback => (
+                                            <Feedback feedback={feedback} />
+                                          ))}
+                                      </>
+                                    ) : (
+                                      <Comment>
+                                        Зарегистрируйтесь на курс по
+                                        продвинутому тарифу, чтобы получать
+                                        обратную связь по выполненным заданиям.
+                                      </Comment>
+                                    ))}
+                                </LessonsInfo>
+                                <Details>
+                                  {data.coursePage.tariffs && (
+                                    <div className="yellow">
+                                      <div className="header">
+                                        📚Как проходит обучение на разных
+                                        тарифах?
+                                      </div>
+                                      <div>
+                                        {renderHTML(data.coursePage.tariffs)}
+                                      </div>
+                                    </div>
+                                  )}
+                                </Details>
+
+                                {!subjectArray.includes(coursePage.id) &&
+                                  !new_subjectArray.includes(coursePage.id) && (
+                                    <RegisterCard
+                                      me={me}
+                                      coursePage={coursePage}
+                                      price={price}
+                                      discountPrice={coursePage.discountPrice}
+                                      promocode={coursePage.promocode}
+                                      studentsArray={studentsArray}
+                                      subjectArray={subjectArray}
+                                    />
+                                  )}
+                                {data.coursePage.reviews.length > 0 && (
+                                  <Reviews>
+                                    {data.coursePage.reviews.map(post =>
+                                      renderHTML(post)
+                                    )}
+                                  </Reviews>
+                                )}
+                              </LessonStyles>
+                            </Container>
+                          </>
+                        );
+                      }}
+                    </Query>
+                  );
+                }}
+              </Query>
+            </>
+          )}
+        </User>
+      </>
     );
   }
 }

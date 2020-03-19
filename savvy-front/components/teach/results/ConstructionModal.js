@@ -71,7 +71,6 @@ const ConstructionModal = props => {
         t => t.student.id === student.id
       ))
     : null;
-  console.log(results);
   return (
     <Box>
       <div>{renderHTML("<b>Конструктор</b> " + construction.name)}</div>

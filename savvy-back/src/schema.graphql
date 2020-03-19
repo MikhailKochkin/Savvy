@@ -280,6 +280,9 @@ type Mutation {
     lesson: ID
     document: ID
   ): DocumentResult!
+  createTopic(name: String, coursePage: ID): Topic!
+  createStatement(text: String, topic: ID): Statement!
+  deleteStatement(id: ID!): Statement!
 }
 
 type Query {

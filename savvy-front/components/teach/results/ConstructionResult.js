@@ -20,7 +20,6 @@ const Container = styled.div`
 class ConstructionResult extends Component {
   render() {
     const { constructions, student } = this.props;
-    console.log(constructions);
     return (
       <Container>
         {constructions.length > 0 &&

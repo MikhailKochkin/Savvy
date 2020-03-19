@@ -1655,6 +1655,76 @@ const Mutations = {
       info
     );
     return DocumentResult;
+  },
+  async createTopic(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const coursePage = args.coursePage;
+    const name = args.name;
+    delete args;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Topic = await ctx.db.mutation.createTopic(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          coursePage: {
+            connect: { id: coursePage }
+          },
+          name: name
+        }
+      },
+      info
+    );
+    return Topic;
+  },
+  async createStatement(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const topic = args.topic;
+    const text = args.text;
+    delete args;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Statement = await ctx.db.mutation.createStatement(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId }
+          },
+          topic: {
+            connect: { id: topic }
+          },
+          text: text
+        }
+      },
+      info
+    );
+    return Statement;
+  },
+  async deleteStatement(parent, args, ctx, info) {
+    const where = { id: args.id };
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const statement = await ctx.db.query.statement(
+      { where },
+      `{ id, user { id } }`
+    );
+    const ownsStatement = statement.user.id === ctx.request.userId;
+    if (!ownsStatement) {
+      throw new Error("К сожалению, у вас нет полномочий на это.");
+    }
+    //3. Delete it
+    return ctx.db.mutation.deleteStatement({ where }, info);
   }
 };
 

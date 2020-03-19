@@ -80,6 +80,8 @@ type User {
   notes: [Note] @relation(link: TABLE, name: "NoteToUser", onDelete: CASCADE)
   teacherFeedback: [Feedback] @relation(link: TABLE, name: "TeacherFeedback")
   studentFeedback: [Feedback] @relation(link: TABLE, name: "StudentFeedback")
+  topics: [Topic] @relation(link: TABLE, name: "UserTopics", onDelete: CASCADE)
+  statements: [Statement] @relation(link: TABLE, name: "UserStatements", onDelete: CASCADE)
   courseVisits: [CourseVisit] @relation(link: TABLE, name: "UserCourseVisits")
   examResults: [ExamResult] @relation(link: TABLE, name: "ExamResultToUser")
   exams: [Exam] @relation(link: TABLE, name: "ExamToUser")
@@ -130,6 +132,7 @@ type CoursePage {
   company: Company @relation(name: "CompanyCoursePage")
   promocode: [Json] @scalarList(strategy: RELATION)
   visits: [CourseVisit] @relation(link: TABLE, name: "CourseVisits" onDelete: CASCADE)
+  topics: [Topic] @relation(link: TABLE, name: "CoursePageTopics")
   audience: String
   result: String
   tariffs: String
@@ -621,6 +624,25 @@ type DocumentResult {
   drafts: [String] @scalarList(strategy: RELATION)
   lesson: Lesson @relation( name: "LessonDocumentResults")
   document: Document @relation( name: "DocumentResults")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Topic {
+  id: ID! @id
+  name: String
+  coursePage: CoursePage @relation( name: "CoursePageTopics")
+  user: User @relation( name: "UserTopics")
+  statements: [Statement] @relation(link: TABLE, name: "TopicStatements" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Statement {
+  id: ID! @id
+  text: String
+  topic: Topic @relation( name: "TopicStatements")
+  user: User @relation( name: "UserStatements")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

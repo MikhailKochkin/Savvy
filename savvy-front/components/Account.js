@@ -358,7 +358,6 @@ class Account extends Component {
                     <Button
                       onClick={async e => {
                         e.preventDefault();
-                        console.log("!!!");
                         // this.setState({ show: true });
                         this.updateUser(e, updateUser);
                       }}
