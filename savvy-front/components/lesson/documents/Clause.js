@@ -96,7 +96,7 @@ const Clause = props => {
       };
       // https://dry-plains-91452.herokuapp.com/check
       // http://localhost:5000/text/
-      const r = await fetch("http://localhost:5000/text/", {
+      const r = await fetch("https://dry-plains-91452.herokuapp.com/text/", {
         method: "POST", // or 'PUT'
         headers: {
           "Content-Type": "application/json"
