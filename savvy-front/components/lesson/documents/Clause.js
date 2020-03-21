@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import renderHTML from "react-render-html";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import UpdateClause from "./UpdateClause";
 
 const Styles = styled.div`
   margin-top: 2%;
@@ -73,6 +74,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 });
 
 const Clause = props => {
+  const [type, setType] = useState("test");
   const [text, setText] = useState("");
   const [show, setShow] = useState(false);
   const [comments, setComments] = useState();
@@ -94,9 +96,9 @@ const Clause = props => {
         model: props.sample,
         keywords: props.keywords
       };
-      // https://dry-plains-91452.herokuapp.com/check
-      // http://localhost:5000/text/
-      const r = await fetch("https://dry-plains-91452.herokuapp.com/text/", {
+      // http://localhost:5000/
+      // https://dry-plains-91452.herokuapp.com/
+      const r = await fetch("https://dry-plains-91452.herokuapp.com/text", {
         method: "POST", // or 'PUT'
         headers: {
           "Content-Type": "application/json"
@@ -116,46 +118,59 @@ const Clause = props => {
     setChecked(true);
   };
 
-  const { index, total, getNumber, commentary, keywords, story } = props;
+  const {
+    id,
+    index,
+    total,
+    getNumber,
+    commentary,
+    keywords,
+    story,
+    sample
+  } = props;
   return (
     <Styles size={story}>
-      <div>
-        {" "}
-        Пункт {index}. {renderHTML(commentary)}
-      </div>
-      <Frame>
-        <DynamicLoadedEditor getEditorText={myCallback} />
-      </Frame>
-      <Comments display={show}>
-        <p>Комментарии:</p>
-        <Progress display={progress}>
-          <CircularProgress />
-        </Progress>
-        {comments &&
-          (comments.final > 0.65 ? (
-            <>
-              <div>
-                Вау, нам кажется, у вас получилось отлично! Двигаемся дальше.
-                Сделайте документ до конца, чтобы увидеть вариант автора курса.
-              </div>
-            </>
-          ) : (
-            <>
-              <div>
-                Этот текст еще можно доработать. В качестве подсказки
-                используйте ключевые слова:
-              </div>
-              <div>
-                {keywords.map(el => (
-                  <li>{el}</li>
-                ))}
-              </div>
-              <div>
-                Сделайте документ до конца, чтобы увидеть вариант автора курса.
-              </div>
-            </>
-          ))}
-        {/* {comments.map(com => {
+      {type === "test" && (
+        <>
+          <div>
+            {" "}
+            Пункт {index}. {renderHTML(commentary)}
+          </div>
+          <Frame>
+            <DynamicLoadedEditor getEditorText={myCallback} />
+          </Frame>
+          <Comments display={show}>
+            <p>Комментарии:</p>
+            <Progress display={progress}>
+              <CircularProgress />
+            </Progress>
+            {comments &&
+              (comments > 0.65 ? (
+                <>
+                  <div>
+                    Класс, нам кажется, у вас получилось отлично! Двигаемся
+                    дальше. Составьте все части документа, чтобы увидеть
+                    вариант, составленный автором курса.
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    Этот текст еще можно доработать. Опирайтесь на следующие
+                    слова / идеи:
+                  </div>
+                  <div>
+                    {keywords.map(el => (
+                      <li>{el}</li>
+                    ))}
+                  </div>
+                  <div>
+                    Составьте все части документа, чтобы увидеть вариант автора
+                    курса.
+                  </div>
+                </>
+              ))}
+            {/* {comments.map(com => {
           if (Object.keys(com)[0] === "spellcheck") {
             return Object.values(com)[0].length > 0 ? (
               <>
@@ -214,19 +229,35 @@ const Clause = props => {
             );
           }
         })} */}
-      </Comments>
-      <Buttons>
-        {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>}
-        {index !== total ? (
-          <StyledButton onClick={e => getNumber(index + 1)}>
-            Дальше
-          </StyledButton>
-        ) : (
-          <div>
-            Конец документа. Сохраните, чтобы открыть вариант автора курса.
-          </div>
-        )}
-      </Buttons>
+          </Comments>
+          <Buttons>
+            {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>}
+            {props.me.id === props.userID && (
+              <StyledButton onClick={e => setType("update")}>
+                Изменить
+              </StyledButton>
+            )}
+            {index !== total ? (
+              <StyledButton onClick={e => getNumber(index + 1)}>
+                Дальше
+              </StyledButton>
+            ) : (
+              <div>Конец документа.</div>
+            )}
+          </Buttons>
+        </>
+      )}
+      {type === "update" && (
+        <>
+          <UpdateClause
+            id={id}
+            sample={sample}
+            commentary={commentary}
+            keywords={keywords}
+          />
+          {<StyledButton onClick={e => setType("test")}>Изменить</StyledButton>}
+        </>
+      )}
     </Styles>
   );
 };

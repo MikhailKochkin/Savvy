@@ -47,6 +47,9 @@ const SINGLE_LESSON_QUERY = gql`
         clauses {
           id
           number
+          user {
+            id
+          }
           commentary
           keywords
           sample

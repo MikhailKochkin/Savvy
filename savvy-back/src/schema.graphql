@@ -273,6 +273,12 @@ type Mutation {
     keywords: [String]
     document: ID
   ): Clause!
+  updateClause(
+    id: ID!
+    commentary: String
+    sample: String
+    keywords: [String]
+  ): Clause!
   deleteClause(id: ID!): Clause!
   createDocumentResult(
     answers: [String]

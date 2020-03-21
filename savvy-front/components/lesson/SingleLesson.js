@@ -143,6 +143,10 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
         clauses {
+          id
+          user {
+            id
+          }
           number
           commentary
           keywords

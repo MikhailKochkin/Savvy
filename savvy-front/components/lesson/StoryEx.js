@@ -147,7 +147,6 @@ class StoryEx extends Component {
           documentID={el.id}
           user={lesson.user.id}
           lessonID={lesson.id}
-          // userData={lesson.documentResults}
           story={true}
         />
       );

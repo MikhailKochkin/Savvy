@@ -131,6 +131,7 @@ const Document = props => {
             {clauses.slice(0, clausesTotal).map((clause, index) => (
               <>
                 <Clause
+                  id={clause.id}
                   key={clause.sample}
                   index={index + 1}
                   commentary={clause.commentary}
@@ -141,6 +142,8 @@ const Document = props => {
                   getText={getData}
                   getDraft={getDraft}
                   story={story}
+                  me={me}
+                  userID={clause.user.id}
                 />
               </>
             ))}

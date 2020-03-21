@@ -195,7 +195,8 @@ class SingleQuiz extends Component {
       sentence1: this.props.answer.toLowerCase(),
       sentence2: this.state.answer.toLowerCase()
     };
-    const r = await fetch("https://dry-plains-91452.herokuapp.com/", {
+
+    const r = await fetch("https://dry-plains-91452.herokuapp.com", {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json"
@@ -255,8 +256,9 @@ class SingleQuiz extends Component {
   };
   render() {
     const { me, user, userData, exam, story } = this.props;
+    let data;
     if (me) {
-      const data = userData
+      data = userData
         .filter(el => el.quiz.id === this.props.id)
         .filter(el => el.student.id === me.id);
     }

@@ -71,6 +71,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             }
             answer
             test {
+              id
               question
             }
           }

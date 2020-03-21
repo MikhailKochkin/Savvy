@@ -656,7 +656,8 @@ class CoursePage extends Component {
 
                                   {this.state.page === "forum" &&
                                     (subjectArray.includes(coursePage.id) ||
-                                    new_subjectArray.includes(coursePage.id) ? (
+                                    new_subjectArray.includes(coursePage.id) ||
+                                    me.permissions.includes("ADMIN") ? (
                                       me && (
                                         <>
                                           <Forum
@@ -677,7 +678,8 @@ class CoursePage extends Component {
                                     (subjectArray.includes(coursePage.id) ||
                                       new_subjectArray.includes(
                                         coursePage.id
-                                      )) ? (
+                                      ) ||
+                                      me.permissions.includes("ADMIN")) ? (
                                       <>
                                         {me.studentFeedback.filter(feed =>
                                           lessonsList.includes(feed.lesson.id)

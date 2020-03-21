@@ -1609,6 +1609,23 @@ const Mutations = {
     );
     return Clause;
   },
+  async updateClause(parent, args, ctx, info) {
+    return ctx.db.mutation.updateClause(
+      {
+        data: {
+          keywords: {
+            set: [...args.keywords]
+          },
+          commentary: args.commentary,
+          sample: args.sample
+        },
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+  },
   async deleteClause(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson
