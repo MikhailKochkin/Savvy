@@ -100,7 +100,7 @@ const GridContainer = styled.div`
   display: grid;
   max-width: 280px;
   grid-template-columns: 90% 10%;
-  grid-template-areas: "Title ." "Self Price1" "Teacher Price2";
+  grid-template-areas: "Title ." "Self Price1" "Teacher Price2" "Friend1 Price3" "Friend2 Price4";
   div {
     padding-bottom: 15px;
   }
@@ -115,10 +115,23 @@ const GridContainer = styled.div`
     span {
       text-decoration: underline;
     }
-    /* &:hover {
+  }
+  .Friend1 {
+    grid-area: Friend1;
+    padding-right: 10px;
+    font-size: 1.8rem;
+    span {
       text-decoration: underline;
-      transition: all ease-in-out 1s;
-    } */
+    }
+  }
+
+  .Friend2 {
+    grid-area: Friend2;
+    padding-right: 10px;
+    font-size: 1.8rem;
+    span {
+      text-decoration: underline;
+    }
   }
 
   .Self {
@@ -132,6 +145,14 @@ const GridContainer = styled.div`
   .Price2 {
     margin-top: 10px;
     grid-area: Price2;
+  }
+  .Price3 {
+    margin-top: 10px;
+    grid-area: Price3;
+  }
+  .Price4 {
+    margin-top: 10px;
+    grid-area: Price4;
   }
 `;
 
@@ -152,7 +173,7 @@ const Time = styled.div`
 
   color: white;
   margin-bottom: 20px;
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-align: center;
   padding: 0.5%;
 `;
@@ -160,7 +181,7 @@ const Time = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("03/10/2020 06:00:00");
+  let then = new Date("03/30/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -186,11 +207,11 @@ const RegisterCard = props => {
     setWidth(width);
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setTimeLeft(calculateTimeLeft());
-  //   }, 1000);
-  // });
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+  });
 
   const promos = [];
   if (props.coursePage.promocode[0]) {
@@ -208,23 +229,23 @@ const RegisterCard = props => {
     }
   };
 
-  // let day;
-  // if (timeLeft[0] > 1) {
-  //   day = "дня";
-  // } else if (timeLeft[0] === 1) {
-  //   day = "день";
-  // } else if (timeLeft[0] === 0) {
-  //   day = "дней";
-  // }
+  let day;
+  if (timeLeft[0] > 1) {
+    day = "дня";
+  } else if (timeLeft[0] === 1) {
+    day = "день";
+  } else if (timeLeft[0] === 0) {
+    day = "дней";
+  }
 
-  // let left;
-  // if (timeLeft[0] > 1) {
-  //   left = "Осталось";
-  // } else if (timeLeft[0] === 1) {
-  //   left = "Остался";
-  // } else if (timeLeft[0] === 0) {
-  //   left = "Осталось";
-  // }
+  let left;
+  if (timeLeft[0] > 1) {
+    left = "Осталось";
+  } else if (timeLeft[0] === 1) {
+    left = "Остался";
+  } else if (timeLeft[0] === 0) {
+    left = "Осталось";
+  }
 
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
@@ -253,7 +274,24 @@ const RegisterCard = props => {
                 {`${discountPrice} ₽`}
               </>
             )}
-            {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
+            {/* Временно */}
+            {price === 9576 && (
+              <>
+                <span className="crossed">11970</span>
+                {"        "}
+                {`${price} ₽`}
+              </>
+            )}
+            {price === 7182 && (
+              <>
+                <span className="crossed">7980</span>
+                {"        "}
+                {`${price} ₽`}
+              </>
+            )}
+            {!discountPrice && price !== "Бесплатно" && price < 5000 && (
+              <>{`${price} ₽`}</>
+            )}
           </Header>
           <Text>
             <Part1>
@@ -275,7 +313,7 @@ const RegisterCard = props => {
               )}
               {coursePage.courseType === "FORMONEY" && (
                 <>
-                  {/* {coursePage.tags.includes("Английский") && (
+                  {coursePage.id === "ck6mc531p02z20748kwpqnt7z" && (
                     <Time>
                       <>
                         {timeLeft.length ? (
@@ -288,7 +326,7 @@ const RegisterCard = props => {
                         )}
                       </>
                     </Time>
-                  )} */}
+                  )}
 
                   <GridContainer>
                     <div className="Title">Выберите тариф:</div>
@@ -321,6 +359,34 @@ const RegisterCard = props => {
                             : null;
                       }}
                     />
+                    {coursePage.id === "ck6mc531p02z20748kwpqnt7z" && (
+                      <>
+                        <div className="Friend1">👩🏻‍🦱 Продвинутый с другом</div>
+                        <input
+                          className="Price3"
+                          type="radio"
+                          name="price"
+                          value={props.price * 1.75 * 0.9 * 2}
+                          onChange={e => {
+                            setPrice(props.price * 1.75 * 0.9 * 2),
+                              setUsed(false);
+                          }}
+                        />{" "}
+                        <div className="Friend2">
+                          👩🏻‍🤝‍👨🏼 Продвинутый с 2 друзьями
+                        </div>
+                        <input
+                          className="Price4"
+                          type="radio"
+                          name="price"
+                          value={props.price * 1.75 * 0.8 * 3}
+                          onChange={e => {
+                            setPrice(props.price * 1.75 * 0.8 * 3),
+                              setUsed(false);
+                          }}
+                        />{" "}
+                      </>
+                    )}
                   </GridContainer>
                 </>
               )}
