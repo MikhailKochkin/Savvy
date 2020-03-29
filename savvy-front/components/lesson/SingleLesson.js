@@ -130,6 +130,8 @@ const SINGLE_LESSON_QUERY = gql`
         id
         question
         type
+        ifRight
+        ifWrong
         answer
         next
         user {
@@ -158,6 +160,8 @@ const SINGLE_LESSON_QUERY = gql`
         answers
         correct
         type
+        ifRight
+        ifWrong
         next
         question
         user {

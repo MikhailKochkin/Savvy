@@ -10994,6 +10994,8 @@ type NewTest {
   lesson: Lesson
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -11023,6 +11025,8 @@ input NewTestCreateInput {
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestCreateManyWithoutLessonInput {
@@ -11054,6 +11058,8 @@ input NewTestCreateWithoutLessonInput {
   user: UserCreateOneWithoutNewTestsInput!
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestCreateWithoutTestResultsInput {
@@ -11066,6 +11072,8 @@ input NewTestCreateWithoutTestResultsInput {
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestCreateWithoutUserInput {
@@ -11078,6 +11086,8 @@ input NewTestCreateWithoutUserInput {
   lesson: LessonCreateOneWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 type NewTestEdge {
@@ -11094,6 +11104,10 @@ enum NewTestOrderByInput {
   lessonID_DESC
   next_ASC
   next_DESC
+  ifRight_ASC
+  ifRight_DESC
+  ifWrong_ASC
+  ifWrong_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -11108,6 +11122,8 @@ type NewTestPreviousValues {
   type: TaskType
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -11145,6 +11161,34 @@ input NewTestScalarWhereInput {
   lessonID_not_starts_with: ID
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
+  ifRight: String
+  ifRight_not: String
+  ifRight_in: [String!]
+  ifRight_not_in: [String!]
+  ifRight_lt: String
+  ifRight_lte: String
+  ifRight_gt: String
+  ifRight_gte: String
+  ifRight_contains: String
+  ifRight_not_contains: String
+  ifRight_starts_with: String
+  ifRight_not_starts_with: String
+  ifRight_ends_with: String
+  ifRight_not_ends_with: String
+  ifWrong: String
+  ifWrong_not: String
+  ifWrong_in: [String!]
+  ifWrong_not_in: [String!]
+  ifWrong_lt: String
+  ifWrong_lte: String
+  ifWrong_gt: String
+  ifWrong_gte: String
+  ifWrong_contains: String
+  ifWrong_not_contains: String
+  ifWrong_starts_with: String
+  ifWrong_not_starts_with: String
+  ifWrong_ends_with: String
+  ifWrong_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -11202,6 +11246,8 @@ input NewTestUpdateInput {
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestUpdateManyDataInput {
@@ -11211,6 +11257,8 @@ input NewTestUpdateManyDataInput {
   type: TaskType
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestUpdateManyMutationInput {
@@ -11220,6 +11268,8 @@ input NewTestUpdateManyMutationInput {
   type: TaskType
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestUpdateManyWithoutLessonInput {
@@ -11273,6 +11323,8 @@ input NewTestUpdateWithoutLessonDataInput {
   user: UserUpdateOneRequiredWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestUpdateWithoutTestResultsDataInput {
@@ -11284,6 +11336,8 @@ input NewTestUpdateWithoutTestResultsDataInput {
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestUpdateWithoutUserDataInput {
@@ -11295,6 +11349,8 @@ input NewTestUpdateWithoutUserDataInput {
   lesson: LessonUpdateOneWithoutNewTestsInput
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input NewTestUpdateWithWhereUniqueWithoutLessonInput {
@@ -11362,6 +11418,34 @@ input NewTestWhereInput {
   lessonID_not_starts_with: ID
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
+  ifRight: String
+  ifRight_not: String
+  ifRight_in: [String!]
+  ifRight_not_in: [String!]
+  ifRight_lt: String
+  ifRight_lte: String
+  ifRight_gt: String
+  ifRight_gte: String
+  ifRight_contains: String
+  ifRight_not_contains: String
+  ifRight_starts_with: String
+  ifRight_not_starts_with: String
+  ifRight_ends_with: String
+  ifRight_not_ends_with: String
+  ifWrong: String
+  ifWrong_not: String
+  ifWrong_in: [String!]
+  ifWrong_not_in: [String!]
+  ifWrong_lt: String
+  ifWrong_lte: String
+  ifWrong_gt: String
+  ifWrong_gte: String
+  ifWrong_contains: String
+  ifWrong_not_contains: String
+  ifWrong_starts_with: String
+  ifWrong_not_starts_with: String
+  ifWrong_ends_with: String
+  ifWrong_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -14215,6 +14299,8 @@ type Quiz {
   lesson: Lesson
   quizResults(where: QuizResultWhereInput, orderBy: QuizResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuizResult!]
   next: Json
+  ifRight: String
+  ifWrong: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -14235,6 +14321,8 @@ input QuizCreateInput {
   lesson: LessonCreateOneWithoutQuizesInput
   quizResults: QuizResultCreateManyWithoutQuizInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizCreateManyWithoutLessonInput {
@@ -14261,6 +14349,8 @@ input QuizCreateWithoutLessonInput {
   lessonID: ID
   quizResults: QuizResultCreateManyWithoutQuizInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizCreateWithoutQuizResultsInput {
@@ -14272,6 +14362,8 @@ input QuizCreateWithoutQuizResultsInput {
   lessonID: ID
   lesson: LessonCreateOneWithoutQuizesInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizCreateWithoutUserInput {
@@ -14283,6 +14375,8 @@ input QuizCreateWithoutUserInput {
   lesson: LessonCreateOneWithoutQuizesInput
   quizResults: QuizResultCreateManyWithoutQuizInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 type QuizEdge {
@@ -14303,6 +14397,10 @@ enum QuizOrderByInput {
   lessonID_DESC
   next_ASC
   next_DESC
+  ifRight_ASC
+  ifRight_DESC
+  ifWrong_ASC
+  ifWrong_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -14316,6 +14414,8 @@ type QuizPreviousValues {
   type: TaskType
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -14768,6 +14868,34 @@ input QuizScalarWhereInput {
   lessonID_not_starts_with: ID
   lessonID_ends_with: ID
   lessonID_not_ends_with: ID
+  ifRight: String
+  ifRight_not: String
+  ifRight_in: [String!]
+  ifRight_not_in: [String!]
+  ifRight_lt: String
+  ifRight_lte: String
+  ifRight_gt: String
+  ifRight_gte: String
+  ifRight_contains: String
+  ifRight_not_contains: String
+  ifRight_starts_with: String
+  ifRight_not_starts_with: String
+  ifRight_ends_with: String
+  ifRight_not_ends_with: String
+  ifWrong: String
+  ifWrong_not: String
+  ifWrong_in: [String!]
+  ifWrong_not_in: [String!]
+  ifWrong_lt: String
+  ifWrong_lte: String
+  ifWrong_gt: String
+  ifWrong_gte: String
+  ifWrong_contains: String
+  ifWrong_not_contains: String
+  ifWrong_starts_with: String
+  ifWrong_not_starts_with: String
+  ifWrong_ends_with: String
+  ifWrong_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -14816,6 +14944,8 @@ input QuizUpdateInput {
   lesson: LessonUpdateOneWithoutQuizesInput
   quizResults: QuizResultUpdateManyWithoutQuizInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizUpdateManyDataInput {
@@ -14824,6 +14954,8 @@ input QuizUpdateManyDataInput {
   type: TaskType
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizUpdateManyMutationInput {
@@ -14832,6 +14964,8 @@ input QuizUpdateManyMutationInput {
   type: TaskType
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizUpdateManyWithoutLessonInput {
@@ -14880,6 +15014,8 @@ input QuizUpdateWithoutLessonDataInput {
   lessonID: ID
   quizResults: QuizResultUpdateManyWithoutQuizInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizUpdateWithoutQuizResultsDataInput {
@@ -14890,6 +15026,8 @@ input QuizUpdateWithoutQuizResultsDataInput {
   lessonID: ID
   lesson: LessonUpdateOneWithoutQuizesInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizUpdateWithoutUserDataInput {
@@ -14900,6 +15038,8 @@ input QuizUpdateWithoutUserDataInput {
   lesson: LessonUpdateOneWithoutQuizesInput
   quizResults: QuizResultUpdateManyWithoutQuizInput
   next: Json
+  ifRight: String
+  ifWrong: String
 }
 
 input QuizUpdateWithWhereUniqueWithoutLessonInput {
@@ -14995,6 +15135,34 @@ input QuizWhereInput {
   quizResults_every: QuizResultWhereInput
   quizResults_some: QuizResultWhereInput
   quizResults_none: QuizResultWhereInput
+  ifRight: String
+  ifRight_not: String
+  ifRight_in: [String!]
+  ifRight_not_in: [String!]
+  ifRight_lt: String
+  ifRight_lte: String
+  ifRight_gt: String
+  ifRight_gte: String
+  ifRight_contains: String
+  ifRight_not_contains: String
+  ifRight_starts_with: String
+  ifRight_not_starts_with: String
+  ifRight_ends_with: String
+  ifRight_not_ends_with: String
+  ifWrong: String
+  ifWrong_not: String
+  ifWrong_in: [String!]
+  ifWrong_not_in: [String!]
+  ifWrong_lt: String
+  ifWrong_lte: String
+  ifWrong_gt: String
+  ifWrong_gte: String
+  ifWrong_contains: String
+  ifWrong_not_contains: String
+  ifWrong_starts_with: String
+  ifWrong_not_starts_with: String
+  ifWrong_ends_with: String
+  ifWrong_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

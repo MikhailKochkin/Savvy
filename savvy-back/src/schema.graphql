@@ -73,6 +73,8 @@ type Mutation {
     question: [String!]
     answers: [String!]
     correct: [Boolean!]
+    ifRight: String
+    ifWrong: String
     lessonID: ID
   ): NewTest!
   updateNewTest(
@@ -124,8 +126,21 @@ type Mutation {
     constructionID: ID
   ): ConstructionResult!
   deleteNewTest(id: ID!): NewTest
-  createQuiz(question: String!, answer: String, lessonID: ID): Quiz!
-  updateQuiz(id: ID!, question: String, answer: String, next: Json): Quiz!
+  createQuiz(
+    question: String!
+    answer: String
+    lessonID: ID
+    ifRight: String
+    ifWrong: String
+  ): Quiz!
+  updateQuiz(
+    id: ID!
+    question: String
+    answer: String
+    next: Json
+    ifRight: String
+    ifWrong: String
+  ): Quiz!
   deleteQuiz(id: ID!): Quiz
   createPointATest(
     question: String!
@@ -145,8 +160,8 @@ type Mutation {
     lessonID: ID!
     nodeID: ID
     nodeType: String
-  ): Test!
-  updateProblem(text: String, nodeID: ID, nodeType: String): Test!
+  ): Problem!
+  updateProblem(id: ID!, text: String, nodeID: ID, nodeType: String): Problem
   deleteProblem(id: ID!): Problem
   createConstruction(
     name: String!

@@ -9,14 +9,12 @@ import BoldMark from "./BoldMark";
 import HeaderMark from "./HeaderMark";
 import ItalicMark from "./ItalicMark";
 import LinkMark from "./Link";
-import CommentStyle from "./CommentStyle";
 import FormatToolBar from "./FormatToolbar";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
 import { link } from "react-icons-kit/fa/link";
 import { image } from "react-icons-kit/fa/image";
-import { commentO } from "react-icons-kit/fa/commentO";
 import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
@@ -32,7 +30,7 @@ const HintBlock = styled.div`
 
 const Img = styled.img`
   display: block;
-  max-width: 100%;
+  width: 100%;
   max-height: 20em;
   box-shadow: "0 0 0 2px blue;";
 `;
@@ -137,6 +135,14 @@ const rules = [
           object: "block",
           type: type,
           data: {
+            "data-text":
+              Array.from(el.attributes).find(
+                ({ name }) => name == "data-text"
+              ) !== undefined
+                ? Array.from(el.attributes).find(
+                    ({ name }) => name == "data-text"
+                  ).value
+                : null,
             className: el.src
           },
           nodes: next(el.childNodes)

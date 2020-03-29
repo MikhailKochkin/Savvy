@@ -75,6 +75,8 @@ class Interactive extends Component {
           key={el.id}
           question={el.question}
           answer={el.answer}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           me={this.props.me}
           type={el.type}
           hidden={true}
@@ -109,6 +111,8 @@ class Interactive extends Component {
           id={el.id}
           question={el.question}
           answers={el.answers}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           true={el.correct}
           user={el.user.id}
           type={el.type}
@@ -180,18 +184,20 @@ class Interactive extends Component {
   };
   show = () => this.setState(prev => ({ display: !prev.display }));
   componentDidMount = () => {
-    let newQuiz;
+    let item;
     let el;
     if (this.props.exam.nodeType === "quiz") {
       el = this.props.lesson.quizes.find(
         quiz => quiz.id === this.props.exam.nodeID
       );
-      newQuiz = (
+      item = (
         <SingleQuiz
           index={1}
           key={el.id}
           question={el.question}
           answer={el.answer}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           me={this.props.me}
           type={el.type}
           hidden={true}
@@ -205,9 +211,35 @@ class Interactive extends Component {
           story={true}
         />
       );
+    } else if (this.props.exam.nodeType === "newTest") {
+      el = this.props.lesson.newTests.find(
+        test => test.id === this.props.exam.nodeID
+      );
+      item = (
+        <SingleTest
+          key={el.id}
+          id={el.id}
+          question={el.question}
+          answers={el.answers}
+          true={el.correct}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
+          user={el.user.id}
+          type={el.type}
+          me={this.props.me}
+          userData={this.props.lesson.testResults}
+          lessonID={this.props.lesson.id}
+          length={Array(el.correct.length).fill(false)}
+          userData={this.props.lesson.testResults}
+          getData={this.updateArray}
+          next={el.next}
+          story={true}
+          exam={true}
+        />
+      );
     }
     this.setState(state => {
-      const componentList = [...state.componentList, newQuiz];
+      const componentList = [...state.componentList, item];
       return {
         componentList
       };

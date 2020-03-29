@@ -71,7 +71,7 @@ const DynamicLoadedEditor = dynamic(import("../editor/ProblemEditor"), {
 const CreateProblem = props => {
   const [text, setText] = React.useState("");
   const [nodeID, setNodeID] = React.useState("");
-  const [nodeType, setNodeType] = React.useState("quiz");
+  const [nodeType, setNodeType] = React.useState("");
   const classes = useStyles();
 
   const handleChange = (e, type) => {
@@ -98,12 +98,28 @@ const CreateProblem = props => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={nodeID}
+          value={nodeType === "quiz" ? nodeID : null}
           type="quiz"
           onChange={e => handleChange(e, "quiz")}
         >
           {lesson.quizes.map(q => (
             <MenuItem value={q.id}>{q.question}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-simple-select-label" className={classes.label}>
+          Тест
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={nodeType === "newTest" ? nodeID : null}
+          type="quiz"
+          onChange={e => handleChange(e, "newTest")}
+        >
+          {lesson.newTests.map(q => (
+            <MenuItem value={q.id}>{q.question[0]}</MenuItem>
           ))}
         </Select>
       </FormControl>

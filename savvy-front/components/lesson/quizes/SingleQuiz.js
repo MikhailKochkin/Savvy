@@ -55,8 +55,7 @@ const Question = styled.div`
 const Textarea = styled.textarea`
   height: 150px;
   width: 100%;
-  border: 1px solid;
-  border-color: ${props => props.inputColor};
+  border: 1px solid #c4c4c4;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   outline: 0;
@@ -72,7 +71,6 @@ const Textarea = styled.textarea`
 
 const Answer = styled.div`
   border: 1px solid #84bc9c;
-  border-color: ${props => props.inputColor};
   border-radius: 5px;
   width: 100%;
   color: black;
@@ -90,14 +88,15 @@ const Group = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  background: ${props => props.inputColor};
   width: 100%;
   border: 1px solid #c4c4c4;
   border-radius: 5px;
   pointer-events: ${props => (props.progress === "true" ? "none" : "auto")};
   padding: 0.5%;
+  margin-bottom: 3%;
   div {
     border: none;
-    background: none;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -170,7 +169,7 @@ class SingleQuiz extends Component {
     testFormat: false,
     answer: "",
     correct: "",
-    inputColor: "#c4c4c4",
+    inputColor: "none",
     update: false,
     sent: false,
     move: false,
@@ -207,10 +206,16 @@ class SingleQuiz extends Component {
       .then(res => {
         console.log(res);
         if (res > 0.59) {
-          this.setState({ correct: "true", inputColor: "#32AC66" });
+          this.setState({
+            correct: "true",
+            inputColor: "rgba(50, 172, 102, 0.25)"
+          });
           this.move("true");
         } else {
-          this.setState({ correct: "false", inputColor: "#DE6B48" });
+          this.setState({
+            correct: "false",
+            inputColor: "rgba(222, 107, 72, 0.5)"
+          });
           this.move("false");
         }
       })
@@ -255,7 +260,7 @@ class SingleQuiz extends Component {
     this.setState({ [name]: value });
   };
   render() {
-    const { me, user, userData, exam, story } = this.props;
+    const { me, user, userData, exam, story, ifWrong, ifRight } = this.props;
     let data;
     if (me) {
       data = userData
@@ -281,7 +286,6 @@ class SingleQuiz extends Component {
             <Question story={story}>
               {this.props.question}
               <Textarea
-                inputColor={this.state.inputColor}
                 type="text"
                 className="answer"
                 name="answer"
@@ -293,7 +297,10 @@ class SingleQuiz extends Component {
             <Progress display={this.state.progress}>
               <CircularProgress />
             </Progress>
-            <Group progress={this.state.progress}>
+            <Group
+              progress={this.state.progress}
+              inputColor={this.state.inputColor}
+            >
               <Mutation
                 mutation={CREATE_QUIZRESULT_MUTATION}
                 variables={{
@@ -336,6 +343,10 @@ class SingleQuiz extends Component {
               inputColor={this.state.inputColor}
             >
               {this.props.answer}
+              <div>
+                {this.state.correct === "true" && ifRight}
+                {this.state.correct === "false" && ifWrong}
+              </div>
             </Answer>
             {this.props.exam && (
               <Block display={this.state.move.toString()}>
@@ -358,6 +369,8 @@ class SingleQuiz extends Component {
             lessonID={this.props.lessonID}
             answer={this.props.answer}
             question={this.props.question}
+            ifRight={ifRight}
+            ifWrong={ifWrong}
             notes={this.props.notes}
             next={this.props.next}
             quizes={this.props.quizes.filter(q => q.id !== this.props.quizID)}

@@ -261,6 +261,8 @@ type NewTest {
   lesson: Lesson @relation(name: "LessonNewTests")
   lessonID: ID
   next: Json
+  ifRight: String
+  ifWrong: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -275,6 +277,8 @@ type Quiz {
   lesson: Lesson @relation(name: "LessonQuizes")
   quizResults: [QuizResult] @relation(link: TABLE, name: "NewQuizResults" onDelete: CASCADE)
   next: Json
+  ifRight: String
+  ifWrong: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

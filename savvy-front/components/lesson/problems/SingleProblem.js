@@ -10,6 +10,7 @@ import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
 import Interactive from "./Interactive";
+import UpdateProblem from "./UpdateProblem";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -100,7 +101,8 @@ class SingleProblem extends Component {
     upload: false,
     answer: "",
     revealAnswer: false,
-    revealed: []
+    revealed: [],
+    update: false
   };
 
   handleChange = e => {
@@ -157,97 +159,126 @@ class SingleProblem extends Component {
     return (
       <>
         <div id="root"></div>
-        <TextBar>
-          {renderHTML(problem.text)}
-          {problem.nodeID && (
-            <Interactive lesson={lesson} me={me} exam={problem} />
-          )}
-          {data.length > 0 && (
-            <ButtonGroup>
-              <StyledButton
-                variant="contained"
-                color="primary"
-                onClick={async e => {
-                  e.preventDefault();
-                  const res2 = await this.setState(prev => ({
-                    revealAnswer: !prev.revealAnswer
-                  }));
-                }}
-              >
-                {this.state.revealAnswer ? "Закрыть ответы" : "Открыть ответы"}
-              </StyledButton>
-            </ButtonGroup>
-          )}
-          {this.state.revealAnswer && data.length > 0 && (
-            <Frame>
-              <p>
-                <b>Ваш ответ:</b>
-              </p>{" "}
-              {renderHTML(data[0].answer)}
-            </Frame>
-          )}
-          {data.length === 0 && (
-            <>
+        {!this.state.update && (
+          <TextBar>
+            {renderHTML(problem.text)}
+            {problem.nodeID && (
+              <Interactive lesson={lesson} me={me} exam={problem} />
+            )}
+            {data.length > 0 && (
+              <ButtonGroup>
+                <StyledButton
+                  variant="contained"
+                  color="primary"
+                  onClick={async e => {
+                    e.preventDefault();
+                    const res2 = await this.setState(prev => ({
+                      revealAnswer: !prev.revealAnswer
+                    }));
+                  }}
+                >
+                  {this.state.revealAnswer
+                    ? "Закрыть ответы"
+                    : "Открыть ответы"}
+                </StyledButton>
+              </ButtonGroup>
+            )}
+            {this.state.revealAnswer && data.length > 0 && (
               <Frame>
-                <DynamicLoadedEditor
-                  index={1}
-                  name="answer"
-                  getEditorText={this.myCallback}
-                  placeholder={``}
-                />
+                <p>
+                  <b>Ваш ответ:</b>
+                </p>{" "}
+                {renderHTML(data[0].answer)}
               </Frame>
-              <Mutation
-                mutation={CREATE_PROBLEMRESULT_MUTATION}
-                variables={{
-                  lessonID: this.props.lessonID,
-                  answer: this.state.answer,
-                  revealed: this.state.revealed,
-                  problemID: this.props.problem.id
-                }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: this.props.lessonID }
-                  },
-                  {
-                    query: CURRENT_USER_QUERY
-                  }
-                ]}
-              >
-                {(createProblemResult, { loading, error }) => (
-                  <Buttons block={this.state.revealAnswer}>
-                    <StyledButton
-                      variant="contained"
-                      color="primary"
-                      onClick={async e => {
-                        // Stop the form from submitting
-                        e.preventDefault();
-                        // call the mutation
-                        if (this.state.answer !== "") {
-                          const res = await createProblemResult();
-                          const res2 = await this.setState({
-                            revealAnswer: true
-                          });
-                          console.log("Yes");
-                        } else {
-                          console.log("No");
-                        }
-                      }}
-                    >
-                      {loading ? "В процессе..." : "Ответить"}
-                    </StyledButton>
-                  </Buttons>
-                )}
-              </Mutation>
-            </>
-          )}
-          {me && me.id === problem.user.id ? (
-            <DeleteSingleProblem
+            )}
+            {data.length === 0 && (
+              <>
+                <Frame>
+                  <DynamicLoadedEditor
+                    index={1}
+                    name="answer"
+                    getEditorText={this.myCallback}
+                    placeholder={``}
+                  />
+                </Frame>
+                <Mutation
+                  mutation={CREATE_PROBLEMRESULT_MUTATION}
+                  variables={{
+                    lessonID: this.props.lessonID,
+                    answer: this.state.answer,
+                    revealed: this.state.revealed,
+                    problemID: this.props.problem.id
+                  }}
+                  refetchQueries={() => [
+                    {
+                      query: SINGLE_LESSON_QUERY,
+                      variables: { id: this.props.lessonID }
+                    },
+                    {
+                      query: CURRENT_USER_QUERY
+                    }
+                  ]}
+                >
+                  {(createProblemResult, { loading, error }) => (
+                    <Buttons block={this.state.revealAnswer}>
+                      <StyledButton
+                        variant="contained"
+                        color="primary"
+                        onClick={async e => {
+                          // Stop the form from submitting
+                          e.preventDefault();
+                          // call the mutation
+                          if (this.state.answer !== "") {
+                            const res = await createProblemResult();
+                            const res2 = await this.setState({
+                              revealAnswer: true
+                            });
+                            console.log("Yes");
+                          } else {
+                            console.log("No");
+                          }
+                        }}
+                      >
+                        {loading ? "В процессе..." : "Ответить"}
+                      </StyledButton>
+                      {me && me.id === problem.user.id && (
+                        <StyledButton
+                          onClick={e => this.setState({ update: true })}
+                        >
+                          Изменить
+                        </StyledButton>
+                      )}
+                    </Buttons>
+                  )}
+                </Mutation>
+              </>
+            )}
+            {me && me.id === problem.user.id ? (
+              <DeleteSingleProblem
+                id={problem.id}
+                lessonId={this.props.lessonID}
+              />
+            ) : null}
+          </TextBar>
+        )}
+        {this.state.update && (
+          <>
+            <UpdateProblem
               id={problem.id}
-              lessonId={this.props.lessonID}
+              text={problem.text}
+              lessonID={this.props.lessonID}
+              nodeID={problem.nodeID}
+              nodeType={problem.nodeType}
+              quizes={lesson.quizes}
+              newTests={lesson.newTests}
             />
-          ) : null}
-        </TextBar>
+            {me && me.id === problem.user.id && (
+              <StyledButton onClick={e => this.setState({ update: false })}>
+                Изменить
+              </StyledButton>
+            )}
+          </>
+        )}
       </>
     );
   }

@@ -162,7 +162,7 @@ class Account extends Component {
     uniID: this.props.me.uniID || "cjyimfz2e00lp07174jpder3m",
     company: this.props.me.company
       ? this.props.me.company.id
-      : "ck2eobt3u04sh078578d6jhqb",
+      : "ck7f4ooa201ro0736gzahsdhn",
     status: this.props.me.status
   };
   handleChange = e => {

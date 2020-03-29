@@ -129,6 +129,8 @@ const SINGLE_LESSON_QUERY = gql`
       quizes {
         id
         question
+        ifRight
+        ifWrong
         answer
         type
         next
@@ -140,6 +142,8 @@ const SINGLE_LESSON_QUERY = gql`
         id
         answers
         type
+        ifRight
+        ifWrong
         correct
         question
         next
@@ -366,7 +370,7 @@ const Header = styled.div`
   width: ${props => (props.task ? "55%" : "40%")};
   text-align: left;
   padding: 5px 0px 5px 2%;
-  @media (max-width: 1200px) {
+  @media (max-width: 1300px) {
     width: ${props => (props.task ? "70%" : "50%")};
   }
   @media (max-width: 800px) {

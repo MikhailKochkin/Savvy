@@ -11,8 +11,17 @@ const UPDATE_QUIZ_MUTATION = gql`
     $question: String
     $answer: String
     $next: Json
+    $ifRight: String
+    $ifWrong: String
   ) {
-    updateQuiz(id: $id, question: $question, answer: $answer, next: $next) {
+    updateQuiz(
+      id: $id
+      question: $question
+      answer: $answer
+      next: $next
+      ifRight: $ifRight
+      ifWrong: $ifWrong
+    ) {
       id
     }
   }
@@ -87,6 +96,8 @@ const Button = styled.button`
 const UpdateQuiz = props => {
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
+  const [ifRight, setIfRight] = useState(props.ifRight);
+  const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [trueVal, setTrueVal] = useState(
     props.next && props.next.true ? props.next.true : ""
   );
@@ -117,6 +128,26 @@ const UpdateQuiz = props => {
         defaultValue={answer}
         onChange={e => setAnswer(e.target.value)}
       />
+      <textarea
+        cols={60}
+        rows={6}
+        spellCheck={true}
+        id="answer"
+        name="answer"
+        placeholder="Комментарий в случае правильного ответа"
+        defaultValue={ifRight}
+        onChange={e => setIfRight(e.target.value)}
+      />
+      <textarea
+        cols={60}
+        rows={6}
+        spellCheck={true}
+        id="answer"
+        name="answer"
+        placeholder="Комментарий в случае  неправильного ответа"
+        defaultValue={ifWrong}
+        onChange={e => setIfWrong(e.target.value)}
+      />
       <h2>Выберите задания для формата "Экзамен":</h2>
       <h3>Заметки:</h3>
       {notes.map(note => (
@@ -136,6 +167,8 @@ const UpdateQuiz = props => {
           id: quizID,
           question: question,
           answer: answer,
+          ifRight: ifRight,
+          ifWrong: ifWrong,
           next: {
             true: trueVal,
             false: falseVal

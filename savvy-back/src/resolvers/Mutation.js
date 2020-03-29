@@ -434,7 +434,9 @@ const Mutations = {
       },
       question: {
         set: [...question]
-      }
+      },
+      ifRight: args.ifRight,
+      ifWrong: args.ifWrong
     };
 
     const test = await ctx.db.mutation.createNewTest({ data }, info);
@@ -1075,7 +1077,6 @@ const Mutations = {
   async createOrder(parent, args, ctx, info) {
     // 1. TODO: Check if they are logged in
     // const idempotenceKey = '3ww8c4329-a6849-rt9219db-891e-f24532we10d29r7qd211';
-    console.log(args);
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"

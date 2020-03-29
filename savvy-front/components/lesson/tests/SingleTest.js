@@ -62,8 +62,8 @@ const Group = styled.div`
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
-  border: 1px solid;
-  border-color: ${props => props.inputColor};
+  border: 1px solid #c4c4c4;
+  background: ${props => props.inputColor};
   border-radius: 5px;
   padding: 0.5%;
   margin: 3% 0;
@@ -75,12 +75,6 @@ const Group = styled.div`
   #but1 {
     flex: 50%;
     text-align: center;
-  }
-  .but2 {
-    flex: 50%;
-    text-align: center;
-    border-left: 1px solid;
-    border-left-color: ${props => props.inputColor};
   }
 `;
 const MiniButton = styled.div`
@@ -115,13 +109,19 @@ const Dots = styled.div`
   }
 `;
 
+const Comment = styled.div`
+  border: 1px solid #c4c4c4;
+  padding: 2%;
+  border-radius: 5px;
+`;
+
 class SingleTest extends Component {
   state = {
     answerState: "think",
     answerOptions: this.props.length,
     answer: [],
     attempts: 0,
-    inputColor: "#c4c4c4",
+    inputColor: "none",
     update: false,
     sent: false
   };
@@ -149,7 +149,10 @@ class SingleTest extends Component {
   };
 
   onSend = async () => {
-    this.setState({ answerState: "right", inputColor: "#84BC9C" });
+    this.setState({
+      answerState: "right",
+      inputColor: "rgba(50, 172, 102, 0.25)"
+    });
   };
 
   onCheck = async () => {
@@ -161,7 +164,10 @@ class SingleTest extends Component {
         JSON.stringify(this.state.answerOptions) ==
         JSON.stringify(this.props.true)
       ) {
-        this.setState({ answerState: "right", inputColor: "#84BC9C" });
+        this.setState({
+          answerState: "right",
+          inputColor: "rgba(50, 172, 102, 0.25)"
+        });
         // 1. if the data is sent for the first time
         if (!this.state.sent) {
           // 2. and if this quiz is a part of an exam
@@ -178,7 +184,10 @@ class SingleTest extends Component {
             : null;
         }
       } else {
-        this.setState({ answerState: "wrong", inputColor: "#DE6B48" });
+        this.setState({
+          answerState: "wrong",
+          inputColor: "rgba(222, 107, 72, 0.5)"
+        });
         // 1. if the data is sent for the first time
         if (!this.state.sent) {
           // 2. and if this quiz is a part of an exam
@@ -204,7 +213,7 @@ class SingleTest extends Component {
   };
 
   render() {
-    const { exam, story } = this.props;
+    const { exam, story, ifWrong, ifRight } = this.props;
     const mes = _.zip(this.props.answers, this.props.true);
     let userData;
     this.props.me
@@ -281,6 +290,12 @@ class SingleTest extends Component {
                 )}
               </Mutation>
             </Group>
+            {ifRight && this.state.answerState === "right" && (
+              <Comment>{ifRight}</Comment>
+            )}
+            {ifWrong && this.state.answerState === "wrong" && (
+              <Comment>{ifWrong}</Comment>
+            )}
           </TextBar>
         )}
         {this.state.update && (

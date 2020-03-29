@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -10,8 +10,16 @@ const CREATE_QUIZ_MUTATION = gql`
     $question: String!
     $answer: String!
     $lessonID: ID!
+    $ifRight: String
+    $ifWrong: String
   ) {
-    createQuiz(question: $question, answer: $answer, lessonID: $lessonID) {
+    createQuiz(
+      question: $question
+      answer: $answer
+      lessonID: $lessonID
+      ifRight: $ifRight
+      ifWrong: $ifWrong
+    ) {
       id
     }
   }
@@ -71,94 +79,108 @@ const Button = styled.button`
   }
 `;
 
-class CreateQuiz extends Component {
-  state = {
-    question: "",
-    answer: ""
-  };
-  handleChange = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-  render() {
-    const { lessonID } = this.props;
-    return (
-      <>
-        <Mutation
-          mutation={CREATE_QUIZ_MUTATION}
-          variables={{
-            lessonID: lessonID,
-            ...this.state
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID }
-            }
-          ]}
-          awaitRefetchQueries={true}
-        >
-          {(createQuiz, { loading, error }) => (
-            <Form
-              onSubmit={async e => {
-                e.preventDefault();
-                this.setState({ question: "", answer: "" });
-                document.getElementById("Message").style.display = "block";
-                setTimeout(function() {
-                  document.getElementById("Message")
-                    ? (document.getElementById("Message").style.display =
-                        "none")
-                    : "none";
-                }, 1500);
+const CreateQuiz = props => {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [ifRight, setIfRight] = useState("");
+  const [ifWrong, setIfWrong] = useState("");
 
-                const res = await createQuiz();
-              }}
-            >
-              <fieldset>
-                <Answers>
-                  <Advice>
-                    Создайте новый вопрос. Введите сам вопрос и ответ на него.
-                    Все очень просто.
-                  </Advice>
+  const { lessonID } = props;
+  return (
+    <>
+      <Mutation
+        mutation={CREATE_QUIZ_MUTATION}
+        variables={{
+          lessonID: lessonID,
+          answer: answer,
+          question: question,
+          ifRight: ifRight,
+          ifWrong: ifWrong
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID }
+          }
+        ]}
+        awaitRefetchQueries={true}
+      >
+        {(createQuiz, { loading, error }) => (
+          <Form
+            onSubmit={async e => {
+              e.preventDefault();
+              document.getElementById("Message").style.display = "block";
+              setTimeout(function() {
+                document.getElementById("Message")
+                  ? (document.getElementById("Message").style.display = "none")
+                  : "none";
+              }, 1500);
 
-                  <AnswerOption>
-                    <textarea
-                      cols={60}
-                      rows={6}
-                      id="question"
-                      name="question"
-                      required
-                      placeholder="Вопрос"
-                      value={this.state.question}
-                      onChange={this.handleChange}
-                    />
+              const res = await createQuiz();
+            }}
+          >
+            <fieldset>
+              <Answers>
+                <Advice>
+                  Создайте новый вопрос. Введите сам вопрос и ответ на него. Все
+                  очень просто.
+                </Advice>
 
-                    <textarea
-                      cols={60}
-                      rows={6}
-                      spellCheck={true}
-                      id="answer"
-                      name="answer"
-                      placeholder="Ответ"
-                      required
-                      value={this.state.answer}
-                      onChange={this.handleChange}
-                    />
-                  </AnswerOption>
+                <AnswerOption>
+                  <textarea
+                    cols={60}
+                    rows={6}
+                    id="question"
+                    name="question"
+                    required
+                    placeholder="Вопрос"
+                    value={question}
+                    onChange={e => setQuestion(e.target.value)}
+                  />
+                  <textarea
+                    cols={60}
+                    rows={6}
+                    spellCheck={true}
+                    id="answer"
+                    name="answer"
+                    placeholder="Ответ"
+                    required
+                    value={answer}
+                    onChange={e => setAnswer(e.target.value)}
+                  />
+                  <textarea
+                    cols={60}
+                    rows={6}
+                    spellCheck={true}
+                    id="answer"
+                    name="answer"
+                    placeholder="Комментарий в случае правильного ответа"
+                    value={ifRight}
+                    onChange={e => setIfRight(e.target.value)}
+                  />
+                  <textarea
+                    cols={60}
+                    rows={6}
+                    spellCheck={true}
+                    id="answer"
+                    name="answer"
+                    placeholder="Комментарий в случае  неправильного ответа"
+                    value={ifWrong}
+                    onChange={e => setIfWrong(e.target.value)}
+                  />
+                </AnswerOption>
 
-                  <Button type="submit">
-                    {loading ? "Сохраняем..." : "Сохранить"}
-                  </Button>
-                  <Message id="Message">Вы создали новый вопрос!</Message>
-                </Answers>
-              </fieldset>
-            </Form>
-          )}
-        </Mutation>
-      </>
-    );
-  }
-}
+                <Button type="submit">
+                  {loading ? "Сохраняем..." : "Сохранить"}
+                </Button>
+                <Message id="Message">Вы создали новый вопрос!</Message>
+              </Answers>
+            </fieldset>
+          </Form>
+        )}
+      </Mutation>
+    </>
+  );
+};
 
 export default CreateQuiz;

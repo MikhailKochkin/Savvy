@@ -43,6 +43,8 @@ class QuizGroup extends Component {
               num={index + 1}
               getQuizData={this.myCallback}
               me={this.props.me}
+              ifRight={quiz.ifRight}
+              ifWrong={quiz.ifWrong}
               lessonID={this.props.lessonID}
               quizID={quiz.id}
               user={quiz.user.id}

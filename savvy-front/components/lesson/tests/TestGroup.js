@@ -29,6 +29,8 @@ class TestGroup extends Component {
                 answers={test.answers}
                 true={test.correct}
                 length={arr}
+                ifRight={test.ifRight}
+                ifWrong={test.ifWrong}
                 next={test.next}
                 user={test.user.id}
                 me={this.props.me}
