@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import renderHTML from "react-render-html";
 
 const StyledButton = styled.div`
   display: inline-block;
@@ -9,6 +10,16 @@ const StyledButton = styled.div`
   cursor: pointer;
   margin-right: 3%;
   margin-bottom: 2%;
+  img {
+    display: block;
+    margin: 2% 0;
+    max-width: 100%;
+    max-height: 20em;
+    @media (max-width: 750px) {
+      width: 100%;
+      height: auto;
+    }
+  }
 `;
 
 class AnswerOption extends Component {
@@ -33,7 +44,7 @@ class AnswerOption extends Component {
         choose={this.state.choose}
         onClick={this.change}
       >
-        <span>{this.props.answer}</span>
+        {renderHTML(this.props.answer)}
       </StyledButton>
     );
   }

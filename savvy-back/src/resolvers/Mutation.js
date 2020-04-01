@@ -21,6 +21,19 @@ const makeANiceEmail = text => `
   </div>
 `;
 
+const newFeedbackNotification = (name, title, id, lesson) => `
+  <div className="email" style="
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+  <h4>${name}, добрый день!</h4>
+  <p>Преподаватель по курсу "${title}" оставил обратную связь по уроку "${lesson}" </p>
+  <p>Посмотрите, что написал преподаватель, <a href="https://savvvy.app/coursePage?id=${id}">по этой ссылке</a> в разделе "Обратная связь".</p>
+  </div>
+`;
+
 const newOrderEmail = (client, surname, email, course, price) => `
   <div className="email" style="
     padding: 20px;
@@ -1416,6 +1429,27 @@ const Mutations = {
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
       );
     }
+
+    const user = await ctx.db.query.user({ where: { id: args.student } });
+    const coursePages = await ctx.db.query.coursePages({
+      where: { lessons_some: { id: args.lesson } }
+    });
+    const lesson = await ctx.db.query.lesson({ where: { id: args.lesson } });
+
+    console.log(user.name, coursePages[0].title, lesson.name);
+
+    const FeedbackNotification = await client.sendEmail({
+      From: "Mikhail@savvvy.app",
+      To: user.email,
+      Subject: "BeSavvy: преподаватель проверил вашу работу",
+      HtmlBody: newFeedbackNotification(
+        user.name,
+        coursePages[0].title,
+        coursePages[0].id,
+        lesson.name
+      )
+    });
+
     const Feedback = await ctx.db.mutation.createFeedback(
       {
         data: {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import dynamic from "next/dynamic";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
@@ -83,11 +84,11 @@ const AnswerOption = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2% 0;
-  textarea {
+  .question {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
     width: 80%;
-    height: 100px;
+    min-height: 100px;
     padding: 1.5%;
     font-size: 1.4rem;
     outline: 0;
@@ -141,6 +142,11 @@ const Question = styled.div`
   }
 `;
 
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false
+});
+
 const CreateNewTest = props => {
   const [num, setNum] = useState(2);
   const [ifRight, setIfRight] = useState("");
@@ -183,6 +189,10 @@ const CreateNewTest = props => {
     val === "true" ? (value = true) : (value = false);
     arr[i] = value;
     return setCorrect(arr);
+  };
+
+  const myCallback = (dataFromChild, name) => {
+    handleArray(dataFromChild, name);
   };
 
   const { lessonID } = props;
@@ -273,11 +283,14 @@ const CreateNewTest = props => {
                 let answer = `answer${i + 1}`;
                 return (
                   <AnswerOption id={answer}>
-                    <textarea
-                      name={answer}
-                      placeholder={`Ответ ${i + 1}`}
-                      onChange={e => handleArray(e.target.value, i)}
-                    />
+                    <div className="question">
+                      <DynamicLoadedEditor
+                        index={i + 1}
+                        name={i}
+                        placeholder={`Вариант ответа ${i + 1}`}
+                        getEditorText={myCallback}
+                      />
+                    </div>
                     <select
                       defaultValue={false}
                       onChange={e => handleCorrect(e.target.value, i)}

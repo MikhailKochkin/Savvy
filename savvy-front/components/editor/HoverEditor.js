@@ -1,4 +1,5 @@
 import { Editor } from "slate-react";
+import styled from "styled-components";
 import Html from "slate-html-serializer";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -8,6 +9,16 @@ import Icon from "react-icons-kit";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
 import { pencil } from "react-icons-kit/fa/pencil";
+import { strikethrough } from "react-icons-kit/fa/strikethrough";
+import { underline } from "react-icons-kit/fa/underline";
+import { image } from "react-icons-kit/fa/image";
+
+const Img = styled.img`
+  display: block;
+  max-width: 100%;
+  max-height: 20em;
+  box-shadow: "0 0 0 2px blue;";
+`;
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",
@@ -35,7 +46,8 @@ const INLINE_TAGS = {
 const MARK_TAGS = {
   i: "italic",
   strong: "bold",
-  header: "header"
+  header: "header",
+  u: "u"
 };
 
 const rules = [
@@ -58,6 +70,10 @@ const rules = [
         switch (obj.type) {
           case "paragraph":
             return <p className={obj.data.get("className")}>{children}</p>;
+          case "image":
+            return (
+              <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
+            );
         }
       }
     }
@@ -81,6 +97,10 @@ const rules = [
             return <strong>{children}</strong>;
           case "italic":
             return <i>{children}</i>;
+          case "del":
+            return <del>{children}</del>;
+          case "u":
+            return <u>{children}</u>;
         }
       }
     }
@@ -150,6 +170,24 @@ const wrapInput = (editor, src) => {
   editor.moveToEnd();
 };
 
+const insertImage = (editor, src, target) => {
+  if (target) {
+    editor.select(target);
+  }
+
+  editor.insertBlock({
+    type: "image",
+    data: { src }
+  });
+};
+
+const onClickImage = (event, editor) => {
+  event.preventDefault();
+  const src = window.prompt("Enter the URL of the image:");
+  if (!src) return;
+  editor.command(insertImage, src);
+};
+
 const onClickLink = (event, editor) => {
   event.preventDefault();
   const src = window.prompt("Enter the URL of the image:");
@@ -167,6 +205,25 @@ const InputButton = ({ editor, type, icon }) => {
       onMouseDown={event => {
         event.preventDefault();
         onClickLink(event, editor);
+      }}
+    >
+      <IconBlock>
+        <Icon icon={icon} />
+      </IconBlock>
+    </Button>
+  );
+};
+
+const ImageButton = ({ editor, type, icon }) => {
+  const { value } = editor;
+  const isActive = value.activeMarks.some(mark => mark.type === type);
+  return (
+    <Button
+      reversed
+      active={isActive}
+      onMouseDown={event => {
+        event.preventDefault();
+        onClickImage(event, editor);
       }}
     >
       <IconBlock>
@@ -196,7 +253,10 @@ const HoverMenu = React.forwardRef(({ editor }, ref) => {
     >
       <MarkButton editor={editor} type="bold" icon={bold} />
       <MarkButton editor={editor} type="italic" icon={italic} />
+      <MarkButton editor={editor} type="del" icon={strikethrough} />
+      <MarkButton editor={editor} type="u" icon={underline} />
       <InputButton editor={editor} type="pencil" icon={pencil} />
+      <ImageButton editor={editor} type="image" icon={image} />
     </Menu>,
     root
   );
@@ -328,7 +388,9 @@ class HoveringMenu extends React.Component {
         return <code {...attributes}>{children}</code>;
       case "italic":
         return <em {...attributes}>{children}</em>;
-      case "underlined":
+      case "del":
+        return <del {...attributes}>{children}</del>;
+      case "u":
         return <u {...attributes}>{children}</u>;
       default:
         return next();
@@ -341,6 +403,10 @@ class HoveringMenu extends React.Component {
     switch (node.type) {
       case "paragraph":
         return <p {...attributes}>{children}</p>;
+      case "image": {
+        const src = node.data.get("src");
+        return <Img {...attributes} src={src} />;
+      }
       default: {
         return next();
       }
