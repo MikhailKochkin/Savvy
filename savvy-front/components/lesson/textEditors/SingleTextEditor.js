@@ -249,15 +249,15 @@ class SingleTextEditor extends Component {
                         wrong: this.state.wrong_option,
                         guess: this.state.answer
                       }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_LESSON_QUERY,
-                          variables: { id: this.props.lessonID }
-                        },
-                        {
-                          query: CURRENT_USER_QUERY
-                        }
-                      ]}
+                      // refetchQueries={() => [
+                      //   {
+                      //     query: SINGLE_LESSON_QUERY,
+                      //     variables: { id: this.props.lessonID }
+                      //   },
+                      //   {
+                      //     query: CURRENT_USER_QUERY
+                      //   }
+                      // ]}
                     >
                       {(createTextEditorResult, { loading, error }) => (
                         <button

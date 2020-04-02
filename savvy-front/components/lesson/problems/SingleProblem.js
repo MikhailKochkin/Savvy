@@ -209,15 +209,15 @@ class SingleProblem extends Component {
                     revealed: this.state.revealed,
                     problemID: this.props.problem.id
                   }}
-                  refetchQueries={() => [
-                    {
-                      query: SINGLE_LESSON_QUERY,
-                      variables: { id: this.props.lessonID }
-                    },
-                    {
-                      query: CURRENT_USER_QUERY
-                    }
-                  ]}
+                  // refetchQueries={() => [
+                  //   {
+                  //     query: SINGLE_LESSON_QUERY,
+                  //     variables: { id: this.props.lessonID }
+                  //   },
+                  //   {
+                  //     query: CURRENT_USER_QUERY
+                  //   }
+                  // ]}
                 >
                   {(createProblemResult, { loading, error }) => (
                     <Buttons block={this.state.revealAnswer}>

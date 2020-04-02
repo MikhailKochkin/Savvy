@@ -439,7 +439,8 @@ const SingleLesson = props => {
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
               let tasks = [];
-              lesson.map[0].map(task => tasks.push(Object.keys(task)[0]));
+              lesson &&
+                lesson.map[0].map(task => tasks.push(Object.keys(task)[0]));
               return (
                 <>
                   {lesson && (
@@ -468,7 +469,7 @@ const SingleLesson = props => {
                                 >
                                   <span>
                                     <Icon
-                                      size={"2em"}
+                                      size={"1.5em"}
                                       icon={arrowLeft}
                                       id="back"
                                     />

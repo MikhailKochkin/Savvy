@@ -26,6 +26,7 @@ const Description = styled.div`
   box-sizing: border-box;
   width: 350px;
   min-height: 290px;
+  max-height: 400px;
   .title {
     font-weight: bold;
     font-size: 1.7rem;
@@ -111,7 +112,7 @@ const GridContainer = styled.div`
   .Teacher {
     grid-area: Teacher;
     padding-right: 10px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     span {
       text-decoration: underline;
     }
@@ -119,7 +120,7 @@ const GridContainer = styled.div`
   .Friend1 {
     grid-area: Friend1;
     padding-right: 10px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     span {
       text-decoration: underline;
     }
@@ -128,7 +129,7 @@ const GridContainer = styled.div`
   .Friend2 {
     grid-area: Friend2;
     padding-right: 10px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     span {
       text-decoration: underline;
     }
@@ -136,7 +137,7 @@ const GridContainer = styled.div`
 
   .Self {
     grid-area: Self;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   .Price1 {
     margin-top: 10px;
@@ -181,7 +182,7 @@ const Time = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("03/30/2020 06:00:00");
+  let then = new Date("04/06/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -252,6 +253,12 @@ const RegisterCard = props => {
   me && me.orders.filter(o => o.coursePage.id === coursePage.id).length > 0
     ? (applied = true)
     : (applied = false);
+
+  let theOne = [
+    "cjtreu3md00fp0897ga13aktp",
+    "ck4n47a2j01jg0790gspxqxju",
+    "ck78sx36r00vi0700zxlzs1a5"
+  ].includes(coursePage.id);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -266,31 +273,32 @@ const RegisterCard = props => {
         </Description>
         <Payment>
           <Header>
-            {price === "Бесплатно" && price}
-            {discountPrice && price !== "Бесплатно" && (
+            {!theOne && price === "Бесплатно" && price}
+            {!theOne && discountPrice && price !== "Бесплатно" && (
               <>
                 <span className="crossed">{`${price}`}</span>
                 {"        "}
                 {`${discountPrice} ₽`}
               </>
             )}
-            {/* Временно */}
-            {price === 9576 && (
-              <>
-                <span className="crossed">11970</span>
-                {"        "}
-                {`${price} ₽`}
-              </>
-            )}
-            {price === 7182 && (
-              <>
-                <span className="crossed">7980</span>
-                {"        "}
-                {`${price} ₽`}
-              </>
-            )}
-            {!discountPrice && price !== "Бесплатно" && price < 5000 && (
+            {!theOne && !discountPrice && price !== "Бесплатно" && (
               <>{`${price} ₽`}</>
+            )}
+            {/* Временно */}
+            {theOne && price !== 999 && price !== 1499 && <>{`${price} ₽`}</>}
+            {theOne && price === 999 && (
+              <>
+                <span className="crossed">1260</span>
+                {"        "}
+                {`${price} ₽`}
+              </>
+            )}
+            {theOne && price === 1499 && (
+              <>
+                <span className="crossed">1890</span>
+                {"        "}
+                {`${price} ₽`}
+              </>
             )}
           </Header>
           <Text>
@@ -313,7 +321,7 @@ const RegisterCard = props => {
               )}
               {coursePage.courseType === "FORMONEY" && (
                 <>
-                  {coursePage.id === "ck6mc531p02z20748kwpqnt7z" && (
+                  {theOne && (
                     <Time>
                       <>
                         {timeLeft.length ? (
@@ -359,30 +367,30 @@ const RegisterCard = props => {
                             : null;
                       }}
                     />
-                    {coursePage.id === "ck6mc531p02z20748kwpqnt7z" && (
+                    {theOne && (
                       <>
-                        <div className="Friend1">👩🏻‍🦱 Продвинутый с другом</div>
+                        <div className="Friend1">
+                          🥈 +1 курс по подготовке к экзаменам
+                        </div>
                         <input
                           className="Price3"
                           type="radio"
                           name="price"
-                          value={props.price * 1.75 * 0.9 * 2}
+                          value={999}
                           onChange={e => {
-                            setPrice(props.price * 1.75 * 0.9 * 2),
-                              setUsed(false);
+                            setPrice(999), setUsed(false);
                           }}
                         />{" "}
                         <div className="Friend2">
-                          👩🏻‍🤝‍👨🏼 Продвинутый с 2 друзьями
+                          🥉 +2 курса по подготовке к экзаменам
                         </div>
                         <input
                           className="Price4"
                           type="radio"
                           name="price"
-                          value={props.price * 1.75 * 0.8 * 3}
+                          value={1499}
                           onChange={e => {
-                            setPrice(props.price * 1.75 * 0.8 * 3),
-                              setUsed(false);
+                            setPrice(1499), setUsed(false);
                           }}
                         />{" "}
                       </>
