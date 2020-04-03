@@ -99,7 +99,7 @@ const Paid = styled.div`
 
 const GridContainer = styled.div`
   display: grid;
-  max-width: 280px;
+  max-width: 320px;
   grid-template-columns: 90% 10%;
   grid-template-areas: "Title ." "Self Price1" "Teacher Price2" "Friend1 Price3" "Friend2 Price4";
   div {
@@ -202,6 +202,7 @@ const RegisterCard = props => {
   const [price, setPrice] = useState(props.price);
   const [discountPrice, setDiscountPrice] = useState(props.discountPrice);
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [pack, setPack] = useState(2);
   const [width, setWidth] = useState(0);
   const [used, setUsed] = useState(false);
   const onResize = width => {
@@ -257,7 +258,8 @@ const RegisterCard = props => {
   let theOne = [
     "cjtreu3md00fp0897ga13aktp",
     "ck4n47a2j01jg0790gspxqxju",
-    "ck78sx36r00vi0700zxlzs1a5"
+    "ck78sx36r00vi0700zxlzs1a5",
+    "ck3e1vo65002307638xcx7wkd"
   ].includes(coursePage.id);
   return (
     <>
@@ -273,31 +275,41 @@ const RegisterCard = props => {
         </Description>
         <Payment>
           <Header>
-            {!theOne && price === "Бесплатно" && price}
-            {!theOne && discountPrice && price !== "Бесплатно" && (
+            {!theOne && (
               <>
-                <span className="crossed">{`${price}`}</span>
-                {"        "}
-                {`${discountPrice} ₽`}
+                {discountPrice && price !== "Бесплатно" && (
+                  <>
+                    <span className="crossed">{`${price}`}</span>
+                    {"        "}
+                    {`${discountPrice} ₽`}
+                  </>
+                )}
+                {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
+                {!discountPrice && price === "Бесплатно" && <>{`Бесплатно`}</>}
               </>
             )}
-            {!theOne && !discountPrice && price !== "Бесплатно" && (
-              <>{`${price} ₽`}</>
-            )}
+
             {/* Временно */}
-            {theOne && price !== 999 && price !== 1499 && <>{`${price} ₽`}</>}
-            {theOne && price === 999 && (
+
+            {theOne && (
               <>
-                <span className="crossed">1260</span>
-                {"        "}
-                {`${price} ₽`}
-              </>
-            )}
-            {theOne && price === 1499 && (
-              <>
-                <span className="crossed">1890</span>
-                {"        "}
-                {`${price} ₽`}
+                {pack === 0 && discountPrice && price !== "Бесплатно" && (
+                  <>
+                    <span className="crossed">{`${price}`}</span>
+                    {"        "}
+                    {`${discountPrice} ₽`}
+                  </>
+                )}
+                {pack === 0 && !discountPrice && price !== "Бесплатно" && (
+                  <>{`${price} ₽`}</>
+                )}
+                {pack > 1 && !discountPrice && price !== "Бесплатно" && (
+                  <>
+                    <span className="crossed">{630 * parseInt(pack)}</span>
+                    {"        "}
+                    {`${price} ₽`}
+                  </>
+                )}
               </>
             )}
           </Header>
@@ -348,7 +360,9 @@ const RegisterCard = props => {
                       value={props.price}
                       name="price"
                       onChange={e => {
-                        setPrice(props.price),
+                        console.log(props.price);
+                        setPack(0),
+                          setPrice(props.price),
                           setUsed(false),
                           setDiscountPrice(props.discountPrice);
                       }}
@@ -360,7 +374,8 @@ const RegisterCard = props => {
                       name="price"
                       value={props.price * 1.75}
                       onChange={e => {
-                        setPrice(props.price * 1.75),
+                        setPack(0),
+                          setPrice(props.price * 1.75),
                           setUsed(false),
                           props.discountPrice
                             ? setDiscountPrice(props.discountPrice * 1.75)
@@ -370,27 +385,43 @@ const RegisterCard = props => {
                     {theOne && (
                       <>
                         <div className="Friend1">
-                          🥈 +1 курс по подготовке к экзаменам
+                          📦 Купить курсы пакетом:{"   "}
+                          <select
+                            value={pack}
+                            onChange={e => {
+                              setPack(e.target.value);
+                              if (e.target.value === "2") {
+                                setPrice(550 * parseInt(e.target.value));
+                              } else if (e.target.value === "3") {
+                                setPrice(510 * parseInt(e.target.value));
+                              } else if (e.target.value === "4") {
+                                setPrice(470 * parseInt(e.target.value));
+                              }
+                            }}
+                          >
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                          </select>
                         </div>
                         <input
                           className="Price3"
                           type="radio"
                           name="price"
-                          value={999}
+                          value={550}
                           onChange={e => {
-                            setPrice(999), setUsed(false);
-                          }}
-                        />{" "}
-                        <div className="Friend2">
-                          🥉 +2 курса по подготовке к экзаменам
-                        </div>
-                        <input
-                          className="Price4"
-                          type="radio"
-                          name="price"
-                          value={1499}
-                          onChange={e => {
-                            setPrice(1499), setUsed(false);
+                            setUsed(false);
+                            if (pack == 0) {
+                              console.log(0);
+                              setPrice(550 * 2), setPack(2);
+                            } else if (pack > "1") {
+                              console.log(">1");
+                              console.log(pack);
+                              if (pack == 2) {
+                                console.log(">1", parseInt(e.target.value));
+                                setPrice(550 * 2);
+                              }
+                            }
                           }}
                         />{" "}
                       </>
