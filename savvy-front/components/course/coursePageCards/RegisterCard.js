@@ -220,7 +220,7 @@ const RegisterCard = props => {
     props.coursePage.promocode[0].map(el => promos.push(Object.keys(el)[0]));
   }
   const handlePromo = p => {
-    if (promos.includes(p) && !used) {
+    if (promos.includes(p) && !used && price < 1000) {
       let pro = props.coursePage.promocode[0].filter(
         el => Object.keys(el)[0] === p
       );
@@ -412,13 +412,9 @@ const RegisterCard = props => {
                           onChange={e => {
                             setUsed(false);
                             if (pack == 0) {
-                              console.log(0);
                               setPrice(550 * 2), setPack(2);
                             } else if (pack > "1") {
-                              console.log(">1");
-                              console.log(pack);
                               if (pack == 2) {
-                                console.log(">1", parseInt(e.target.value));
                                 setPrice(550 * 2);
                               }
                             }

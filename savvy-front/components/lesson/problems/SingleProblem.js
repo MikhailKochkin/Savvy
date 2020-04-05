@@ -233,6 +233,9 @@ class SingleProblem extends Component {
                             const res2 = await this.setState({
                               revealAnswer: true
                             });
+                            alert(
+                              "Ваш ответ сохранен! Вы можете посмотреть вариант преподавателя и перейти к следующему заданию."
+                            );
                             console.log("Yes");
                           } else {
                             console.log("No");
