@@ -220,7 +220,7 @@ const RegisterCard = props => {
     props.coursePage.promocode[0].map(el => promos.push(Object.keys(el)[0]));
   }
   const handlePromo = p => {
-    if (promos.includes(p) && !used && price < 1000) {
+    if (promos.includes(p) && !used) {
       let pro = props.coursePage.promocode[0].filter(
         el => Object.keys(el)[0] === p
       );
