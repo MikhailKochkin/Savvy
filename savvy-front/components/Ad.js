@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import Link from "next/link";
 import ReactResizeDetector from "react-resize-detector";
 
 const Banner = styled.div`
   width: 100%;
-  height: 8vh;
+  height: 10vh;
   background: #1488cc; /* fallback for old browsers */
   color: white;
   position: -webkit-sticky;
@@ -22,8 +23,8 @@ const Banner = styled.div`
   }
   .name {
     padding-left: 40px;
-    font-size: 2rem;
-    flex-basis: 60%;
+    font-size: 1.7rem;
+    flex-basis: 50%;
     @media (max-width: 1380px) {
       font-size: 1.8rem;
     }
@@ -31,24 +32,50 @@ const Banner = styled.div`
       font-size: 1.6rem;
     }
     @media (max-width: 1040px) {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       text-align: center;
       padding: 0 5px;
+      margin-bottom: 10px;
     }
   }
   .discount {
-    font-size: 3.6rem;
-    flex-basis: 15%;
+    font-size: 1.7rem;
+    flex-basis: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    a {
+      background: #ff6b35;
+      color: white;
+      border-radius: 5px;
+      padding: 1% 5%;
+      cursor: pointer;
+      &:hover {
+        background: #cc5803;
+      }
+    }
     @media (max-width: 1210px) {
-      font-size: 2.8rem;
+      font-size: 1.7rem;
       text-align: center;
+      width: 30%;
+    }
+    @media (max-width: 800px) {
+      font-size: 1.7rem;
+      text-align: center;
+      width: 60%;
+      margin-bottom: 10px;
     }
   }
   .time {
-    font-size: 3rem;
+    font-size: 2.6rem;
     flex-basis: 25%;
     @media (max-width: 1210px) {
       font-size: 2.4rem;
+    }
+    @media (max-width: 800px) {
+      font-size: 2rem;
     }
     div {
       font-size: 1.8rem;
@@ -60,7 +87,7 @@ const Banner = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("03/10/2020 06:00:00");
+  let then = new Date("04/9/2020 23:59:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -100,9 +127,19 @@ const Ad = () => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="name">
-        🇬🇧 Весенние скидки на все курсы по юридическому английскому!
+        📊 Запускаем поток по корпоративному праву. Скидки до четверга!
       </div>
-      <div className="discount">20%</div>
+      <div className="discount">
+        <Link
+          href={{
+            pathname: "/coursePage",
+            query: { id: "ck587y4kp00lf07152t0tyywl" }
+          }}
+          prefetch
+        >
+          <a>Узнать больше</a>
+        </Link>
+      </div>
       <div className="time">
         <>
           {timeLeft.length ? (

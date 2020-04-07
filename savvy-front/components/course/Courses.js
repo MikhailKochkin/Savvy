@@ -72,7 +72,7 @@ class Courses extends Component {
                   <Reviews />
                   <Tech />
                   <Contact />
-                  {/* <Ad /> */}
+                  <Ad />
                 </>
               );
             }}

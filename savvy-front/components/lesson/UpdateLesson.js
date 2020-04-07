@@ -3,7 +3,7 @@ import { Mutation, Query } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import StoryUpdate from "./StoryUpdate";
@@ -177,8 +177,10 @@ export default class UpdateLesson extends Component {
               defaultValue={lesson.type}
               onChange={this.handleName}
             >
-              <option value="REGULAR">Обычный</option>
-              <option value="STORY">История</option>
+              <option value="REGULAR">
+                Режим при открытии урока – Разработка
+              </option>
+              <option value="STORY">Режим при открытии урока – История</option>
             </select>
             <Frame>
               <DynamicHoverEditor
@@ -202,8 +204,8 @@ export default class UpdateLesson extends Component {
               }}
               refetchQueries={() => [
                 {
-                  query: SINGLE_COURSEPAGE_QUERY,
-                  variables: { id: lesson.coursePage.id }
+                  query: SINGLE_LESSON_QUERY,
+                  variables: { id: lessonID }
                 }
               ]}
             >

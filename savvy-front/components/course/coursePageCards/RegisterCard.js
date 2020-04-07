@@ -182,7 +182,7 @@ const Time = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/06/2020 06:00:00");
+  let then = new Date("04/9/2020 23:59:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -220,7 +220,7 @@ const RegisterCard = props => {
     props.coursePage.promocode[0].map(el => promos.push(Object.keys(el)[0]));
   }
   const handlePromo = p => {
-    if (promos.includes(p) && !used) {
+    if (promos.includes(p) && !used && price < 1000) {
       let pro = props.coursePage.promocode[0].filter(
         el => Object.keys(el)[0] === p
       );
@@ -255,12 +255,7 @@ const RegisterCard = props => {
     ? (applied = true)
     : (applied = false);
 
-  let theOne = [
-    "cjtreu3md00fp0897ga13aktp",
-    "ck4n47a2j01jg0790gspxqxju",
-    "ck78sx36r00vi0700zxlzs1a5",
-    "ck3e1vo65002307638xcx7wkd"
-  ].includes(coursePage.id);
+  let theOne = ["ck587y4kp00lf07152t0tyywl"].includes(coursePage.id);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -275,7 +270,7 @@ const RegisterCard = props => {
         </Description>
         <Payment>
           <Header>
-            {!theOne && (
+            {
               <>
                 {discountPrice && price !== "Бесплатно" && (
                   <>
@@ -287,11 +282,11 @@ const RegisterCard = props => {
                 {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
                 {!discountPrice && price === "Бесплатно" && <>{`Бесплатно`}</>}
               </>
-            )}
+            }
 
             {/* Временно */}
 
-            {theOne && (
+            {/* {theOne && (
               <>
                 {pack === 0 && discountPrice && price !== "Бесплатно" && (
                   <>
@@ -311,7 +306,7 @@ const RegisterCard = props => {
                   </>
                 )}
               </>
-            )}
+            )} */}
           </Header>
           <Text>
             <Part1>
@@ -382,7 +377,7 @@ const RegisterCard = props => {
                             : null;
                       }}
                     />
-                    {theOne && (
+                    {/* {theOne && (
                       <>
                         <div className="Friend1">
                           📦 Купить курсы пакетом:{"   "}
@@ -421,7 +416,7 @@ const RegisterCard = props => {
                           }}
                         />{" "}
                       </>
-                    )}
+                    )} */}
                   </GridContainer>
                 </>
               )}
