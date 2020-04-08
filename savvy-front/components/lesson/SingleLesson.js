@@ -28,6 +28,7 @@ import AreYouEnrolled from "../auth/AreYouEnrolled";
 import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import User from "../User";
+import HowTo from "./HowTo";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 
@@ -581,6 +582,10 @@ class SingleLesson extends Component {
   closeNav = () => {
     document.getElementById("mySidenav2").style.width = "0";
   };
+
+  getLink = dataFromChild => {
+    this.setState({ page: dataFromChild });
+  };
   render() {
     return (
       <PleaseSignIn number={this.props.number}>
@@ -629,7 +634,7 @@ class SingleLesson extends Component {
                                   onClick={this.onSwitchMob}
                                 >
                                   {" "}
-                                  Урок{" "}
+                                  Модель урок{" "}
                                 </ChooseButton>
                               </ButtonZone>
                               {lesson.notes.length > 0 && (
@@ -639,18 +644,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Заметки{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.documents.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="document"
-                                    onClick={this.onSwitch}
-                                  >
-                                    {" "}
-                                    Документы{" "}
+                                    Лонгриды{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -706,6 +700,17 @@ class SingleLesson extends Component {
                                   >
                                     {" "}
                                     Редакторы{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
+                              {lesson.documents.length > 0 && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="document"
+                                    onClick={this.onSwitch}
+                                  >
+                                    {" "}
+                                    Документы{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -773,7 +778,7 @@ class SingleLesson extends Component {
                                   <span
                                     onClick={() =>
                                       alert(
-                                        `Формат истории не создан, это можно сделать в настройках.`
+                                        `Структура урока не задана, это можно сделать в настройках`
                                       )
                                     }
                                   >
@@ -788,6 +793,7 @@ class SingleLesson extends Component {
                           <LessonPart>
                             {this.state.page === "lesson" && (
                               <TextBar>
+                                <HowTo getLink={this.getLink} />
                                 <Text>{renderHTML(lesson.text)}</Text>
                               </TextBar>
                             )}
@@ -974,20 +980,9 @@ class SingleLesson extends Component {
                                       onClick={this.onSwitch}
                                     >
                                       {" "}
-                                      Урок{" "}
+                                      Модель урока{" "}
                                     </ChooseButton>
                                   </ButtonZone>
-                                  {lesson.shots.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="shots"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        Алгоритм{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
                                   {lesson.notes.length > 0 && (
                                     <ButtonZone>
                                       <ChooseButton
@@ -995,10 +990,22 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Заметки{" "}
+                                        Лонгриды{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
+                                  {lesson.shots.length > 0 && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="shots"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Алгоритмы{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+
                                   {lesson.documents.length > 0 && (
                                     <ButtonZone>
                                       <ChooseButton
@@ -1083,29 +1090,19 @@ class SingleLesson extends Component {
                                     me.permissions.includes("ADMIN")) && (
                                     <TeacherPart>
                                       <ButtonZone>
-                                        <ChooseButton
-                                          name="createTest"
-                                          onClick={this.onSwitch}
-                                        >
-                                          Новый тест
-                                        </ChooseButton>
-                                      </ButtonZone>
-
-                                      <ButtonZone>
+                                        <ButtonZone>
+                                          <ChooseButton
+                                            name="updateLesson"
+                                            onClick={this.onSwitch}
+                                          >
+                                            Изменить урок
+                                          </ChooseButton>
+                                        </ButtonZone>
                                         <ChooseButton
                                           name="createNote"
                                           onClick={this.onSwitch}
                                         >
-                                          Новая заметка
-                                        </ChooseButton>
-                                      </ButtonZone>
-
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createDocument"
-                                          onClick={this.onSwitch}
-                                        >
-                                          Новый документ
+                                          Новый лонгрид
                                         </ChooseButton>
                                       </ButtonZone>
 
@@ -1115,6 +1112,15 @@ class SingleLesson extends Component {
                                           onClick={this.onSwitch}
                                         >
                                           Новый алгоритм
+                                        </ChooseButton>
+                                      </ButtonZone>
+
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createTest"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Новый тест
                                         </ChooseButton>
                                       </ButtonZone>
 
@@ -1153,18 +1159,18 @@ class SingleLesson extends Component {
                                       </ButtonZone>
                                       <ButtonZone>
                                         <ChooseButton
-                                          name="createExam"
+                                          name="createDocument"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый экзамен
+                                          Новый документ
                                         </ChooseButton>
                                       </ButtonZone>
                                       <ButtonZone>
                                         <ChooseButton
-                                          name="updateLesson"
+                                          name="createExam"
                                           onClick={this.onSwitch}
                                         >
-                                          Изменить урок
+                                          Новый экзамен
                                         </ChooseButton>
                                       </ButtonZone>
 

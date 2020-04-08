@@ -3,6 +3,7 @@ import Element from "./Element";
 import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: ID!, $map: [Json]) {
@@ -28,8 +29,25 @@ const Button = styled.button`
   }
 `;
 
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2%;
+`;
+
 const Block = styled.div`
   /* border-bottom: 1px solid black; */
+`;
+
+const Advice = styled.p`
+  font-size: 1.5rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 0;
+  width: 80%;
 `;
 
 class StoryUpdate extends Component {
@@ -65,11 +83,27 @@ class StoryUpdate extends Component {
             id: lesson.id,
             map: this.state.list
           }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lesson.id }
+            }
+          ]}
         >
           {(updateLesson, { loading, error }) => (
             <>
-              <h2>Выстроить структуру урока</h2>
-              <h3>Список заданий</h3>
+              <Advice>
+                <div>
+                  Урок строится из последовательности материалов и заданий. Вам
+                  эту последовательность нужно задать самостоятельно. Для этого
+                  поочередно нажимайте на кнопку "Выбрать" под соответствующими
+                  заданиями. Выберите только те задания, которые вам нужны в
+                  уроке. Для вашего удобства, выбранные уроки исчезают. Если
+                  допустили ошибку, просто откройте вкладку "Модель урока", а
+                  затем вернитесь во вкладку "Изменить урок".
+                </div>
+              </Advice>
+              <Title>Выстроить структуру урока</Title>
               <Block>
                 {lesson.notes.map(t => (
                   <Element data={t} getData={this.myCallback} />
@@ -121,7 +155,9 @@ class StoryUpdate extends Component {
                   e.preventDefault();
                   // call the mutation
                   const res = await updateLesson();
-                  alert("Последовательность сохранена!");
+                  alert(
+                    "Готово! Перейдите в режим истории и посмотрите, что у вас получилось."
+                  );
                   // change the page to the single case page
                 }}
               >

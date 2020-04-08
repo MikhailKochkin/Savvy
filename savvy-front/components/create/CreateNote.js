@@ -60,6 +60,17 @@ const Editor = styled.div`
   margin-top: 1%;
 `;
 
+const Advice = styled.p`
+  font-size: 1.5rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 0;
+  width: 80%;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false
@@ -80,7 +91,12 @@ export default class CreateSingleNote extends Component {
     const { lessonID } = this.props;
     return (
       <Container>
-        <Title>Новый текст</Title>
+        <Advice>
+          Напишите новый лонгрид. Количество лонгридов внутри одного урока не
+          ограничено. В лонгрид можно добавлять текст, картинки, таблицы и
+          видео. Картинки и видео добавляются только по ссылкам!
+        </Advice>
+        <Title>Новый лонгрид</Title>
         <Editor>
           <DynamicLoadedEditor getEditorText={this.myCallback} />
         </Editor>

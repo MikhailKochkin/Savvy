@@ -10,6 +10,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
+import Icon from "react-icons-kit";
 
 const useStyles = makeStyles({
   button: {
@@ -54,13 +56,28 @@ const CREATE_PROBLEM_MUTATION = gql`
   }
 `;
 
-const Title = styled.p`
-  font-size: 1.6rem;
-  font-weight: 600;
-`;
-
 const Styles = styled.div`
   margin-top: 2%;
+`;
+
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2%;
+`;
+
+const Advice = styled.p`
+  font-size: 1.5rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 0;
+  width: 80%;
+  div {
+    margin-bottom: 1.5%;
+  }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/ProblemEditor"), {
@@ -86,7 +103,29 @@ const CreateProblem = props => {
   const { lessonID, lesson } = props;
   return (
     <Styles>
-      <Title>Создайте новую задачу для вашего урока</Title>
+      <Advice>
+        <div>
+          Задача состоит из двух частей. К первой части относятся{" "}
+          <b>текст задачи, подсказки и ответ</b>. Ко второй –{" "}
+          <b>поэтапное решение задачи</b>.
+        </div>{" "}
+        <div>
+          Чтобы задать подсказки и ответ, необходимо выделить текст, нажать на
+          кнопку <Icon icon={eyeSlash} /> и задать название этого куска текста.
+          Название может быть любым: "Подсказка", "Комментарий", "Источник" и
+          так далее. Ограничения есть только для ответа. Он может иметь только
+          три названия: "Ответ", "Ответ." или "Ответ:". Это важно, потому что
+          текст с таким названием будет открываться только после того, как
+          ученик сдаст свой ответ.
+        </div>
+        <div>
+          Чтобы задать этапы решения задач, нужно выбрать тест или вопрос, с
+          которого начнется решение задачи. Его нужно заранее создать в
+          соответствующем разделе. Дальнейшие указания на этапы нужно внести в
+          самих вопросах, тестах и лонгридах.
+        </div>
+      </Advice>
+      <Title>Новая задача</Title>
       <DynamicLoadedEditor getEditorText={myCallback} />
       <h3>
         Выберите первый вопрос, с которого начнется объяснение решения задачи.

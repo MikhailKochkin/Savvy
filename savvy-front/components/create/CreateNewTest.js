@@ -119,7 +119,7 @@ const AnswerOption = styled.div`
 `;
 
 const Advice = styled.p`
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin: 1% 4%;
   background: #fdf3c8;
   border: 1px solid #c4c4c4;
@@ -127,6 +127,12 @@ const Advice = styled.p`
   padding: 2%;
   margin: 30px 0;
   width: 80%;
+`;
+
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2%;
 `;
 
 const Question = styled.div`
@@ -245,9 +251,10 @@ const CreateNewTest = props => {
             }}
           >
             <Advice>
-              Создайте новый тестовый вопрос. Введите сам вопрос, 2-9 вариантов
-              ответа. Количество правильных ответов может быть любым.
+              Создайте новый тест. Введите сам вопрос, 2-9 вариантов ответа.
+              Количество правильных ответов может быть любым.
             </Advice>
+            <Title>Новый тест</Title>
             <CustomSelect1>
               Вариантов ответа:
               <span></span>

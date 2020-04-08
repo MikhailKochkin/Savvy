@@ -39,7 +39,7 @@ const Answers = styled.div`
 `;
 
 const Advice = styled.p`
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   margin: 1% 4%;
   background: #fdf3c8;
   border: 1px solid #c4c4c4;
@@ -77,6 +77,12 @@ const Button = styled.button`
   &:active {
     background: ${props => props.theme.darkGreen};
   }
+`;
+
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2%;
 `;
 
 const CreateQuiz = props => {
@@ -122,10 +128,11 @@ const CreateQuiz = props => {
             <fieldset>
               <Answers>
                 <Advice>
-                  Создайте новый вопрос. Введите сам вопрос и ответ на него. Все
-                  очень просто.
+                  Создайте новый вопрос. Введите сам вопрос, ответ на него, а
+                  также (при необходимости) пояснения на случай правильного и
+                  неправильного ответов.
                 </Advice>
-
+                <Title>Новый вопрос</Title>
                 <AnswerOption>
                   <textarea
                     cols={60}

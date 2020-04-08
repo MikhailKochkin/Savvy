@@ -30,7 +30,7 @@ const TestCreate = styled.div`
   flex-direction: column;
   width: 100%;
   padding: 1% 2%;
-  margin: 5% 0;
+  margin-bottom: 5%;
   input {
     align-self: flex-start;
     margin-bottom: 3%;
@@ -57,6 +57,7 @@ const Frame = styled.div`
   border-radius: 10px;
   width: 90%;
   margin-bottom: 3%;
+  padding: 0 1%;
   .com {
     border-top: 1px solid #c4c4c4;
   }
@@ -92,7 +93,7 @@ const Remove = styled.div`
   }
 `;
 
-const Save = styled.button`
+const Save = styled.div`
   padding: 1.5% 3%;
   align-self: flex-start;
   margin-top: 2.5%;
@@ -107,6 +108,24 @@ const Save = styled.button`
   &:active {
     background: ${props => props.theme.darkGreen};
   }
+`;
+
+const Advice = styled.p`
+  font-size: 1.5rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 2%;
+  width: 80%;
+`;
+
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  padding: 2%;
+  padding-top: 0;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
@@ -179,13 +198,13 @@ class CreateShot extends Component {
               index={i + 1}
               name={part}
               getEditorText={this.myCallback}
-              placeholder={`<p>Часть ${i + 1} документа...</p>`}
+              placeholder={`Часть ${i + 1}`}
             />
             <div className="com">
               <DynamicLoadedEditor
                 index={i + 1}
                 name={comment}
-                placeholder={`<p>Комментарий к части ${i + 1}...</p>`}
+                placeholder={`Комментарий к части ${i + 1}`}
                 getEditorText={this.myCallback}
               />
             </div>
@@ -194,64 +213,72 @@ class CreateShot extends Component {
       );
     });
     return (
-      <Mutation
-        mutation={CREATE_SHOTS_MUTATION}
-        variables={{
-          lessonID: this.props.lessonID,
-          parts: this.state.final_p,
-          comments: this.state.final_c,
-          title: this.state.title
-        }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: this.props.lessonID }
-          }
-        ]}
-        awaitRefetchQueries={true}
-      >
-        {(createShot, { loading, error }) => (
-          <TestCreate>
-            <input
-              id="title"
-              name="title"
-              spellCheck={true}
-              placeholder="Название документа"
-              autoFocus
-              required
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-            {rows.map(row => row)}
-            <More onClick={this.more}>Новый блок</More>
-            <Remove onClick={this.remove}>Убрать блок</Remove>
-            <Save
-              onClick={async e => {
-                e.preventDefault();
-                document.getElementById("Message").style.display = "block";
-                setTimeout(function() {
-                  document.getElementById("Message")
-                    ? (document.getElementById("Message").style.display =
-                        "none")
-                    : "none";
-                }, 2500);
-                if (
-                  this.state.comment1 === undefined ||
-                  this.state.part1 === undefined
-                ) {
-                  alert("В вашем документе недостаточно частей");
-                } else {
-                  const res = await this.save();
-                  const res2 = await createShot();
-                }
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </Save>
-            <Message id="Message">Вы создали новый вопрос!</Message>
-          </TestCreate>
-        )}
-      </Mutation>
+      <>
+        <Advice>
+          Составьте алгоритм. Для этого опишите каждый его элемент в разделе
+          "Часть". Объяснить особенности каждого элемента можно в разделе
+          "Комментарий". Количество элементов не ограничено.
+        </Advice>
+        <Title>Новый алгоритм</Title>
+        <Mutation
+          mutation={CREATE_SHOTS_MUTATION}
+          variables={{
+            lessonID: this.props.lessonID,
+            parts: this.state.final_p,
+            comments: this.state.final_c,
+            title: this.state.title
+          }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: this.props.lessonID }
+            }
+          ]}
+          awaitRefetchQueries={true}
+        >
+          {(createShot, { loading, error }) => (
+            <TestCreate>
+              <input
+                id="title"
+                name="title"
+                spellCheck={true}
+                placeholder="Название документа"
+                autoFocus
+                required
+                value={this.state.title}
+                onChange={this.handleChange}
+              />
+              {rows.map(row => row)}
+              <More onClick={this.more}>Новый блок</More>
+              <Remove onClick={this.remove}>Убрать блок</Remove>
+              <Save
+                onClick={async e => {
+                  e.preventDefault();
+                  document.getElementById("Message").style.display = "block";
+                  setTimeout(function() {
+                    document.getElementById("Message")
+                      ? (document.getElementById("Message").style.display =
+                          "none")
+                      : "none";
+                  }, 2500);
+                  if (
+                    this.state.comment1 === undefined ||
+                    this.state.part1 === undefined
+                  ) {
+                    alert("В вашем документе недостаточно частей");
+                  } else {
+                    const res = await this.save();
+                    const res2 = await createShot();
+                  }
+                }}
+              >
+                {loading ? "Сохраняем..." : "Сохранить"}
+              </Save>
+              <Message id="Message">Вы создали новый вопрос!</Message>
+            </TestCreate>
+          )}
+        </Mutation>
+      </>
     );
   }
 }

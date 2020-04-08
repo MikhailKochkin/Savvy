@@ -5,6 +5,9 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { commentO } from "react-icons-kit/fa/commentO";
+import { commentingO } from "react-icons-kit/fa/commentingO";
+import Icon from "react-icons-kit";
 
 const CREATE_TEXTEDITOR_MUTATION = gql`
   mutation CREATE_TEXTEDITOR_MUTATION(
@@ -69,9 +72,23 @@ const Label = styled.label`
 `;
 
 const Title = styled.p`
-  font-size: 1.6rem;
+  font-size: 2.2rem;
   font-weight: 600;
   margin-top: 2%;
+`;
+
+const Advice = styled.div`
+  font-size: 1.5rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 0;
+  width: 90%;
+  div {
+    margin-bottom: 1.5%;
+  }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/TextEditor"), {
@@ -100,7 +117,20 @@ export default class CreateTextEditor extends Component {
     const { lessonID } = this.props;
     return (
       <Width>
-        <Title>Составьте свой редактор документа</Title>
+        <Advice>
+          <div>
+            В редактор можно поместить два типа ошибок. Если выделить ошибку,
+            нажав на кнопку <Icon icon={commentO} /> , то можно во всплывающем
+            окне записать правильный вариант, а ученику впоследствии эта ошибка
+            видна в тексте <b>не будет</b>.
+          </div>{" "}
+          <div>
+            Если же выделить текст, нажав на кнопку <Icon icon={commentingO} />,
+            то вы сможете записать свой комментарий, а на экране ученика этот
+            текст <b>будет выделен жирным</b>.{" "}
+          </div>
+        </Advice>
+        <Title>Составьте редактор</Title>
         <Label>
           <p>Всего ошибок / рисков: </p>
           <input

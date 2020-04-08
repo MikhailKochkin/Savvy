@@ -195,6 +195,26 @@ const Variants = styled.div`
   flex-wrap: wrap;
 `;
 
+const Advice = styled.p`
+  font-size: 1.5rem;
+  margin: 1% 4%;
+  background: #fdf3c8;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  padding: 2%;
+  margin: 30px 0;
+  width: 80%;
+  div {
+    margin-bottom: 1.5%;
+  }
+`;
+
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 2%;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false
@@ -312,6 +332,17 @@ class CreateConstructor extends Component {
       <PleaseSignIn>
         <AreYouATeacher subject={lessonID}>
           <Center>
+            <Advice>
+              <div>
+                Обращаем внимание. В конструкторе надо указать, важен ли порядок
+                его частей при ответе. Например, если вы просите составить
+                договор, очевидно, что порядок частей будет важен. Если же вы
+                просите выбрать характеристики какого-то понятия, то там порядок
+                не будет важен.
+              </div>{" "}
+              <div>Количество частей конструктора не ограничено.</div>
+            </Advice>
+            <Title>Новый конструктор</Title>
             <Header>
               <ChooseTag>
                 <p> Метод проверки </p>
@@ -333,10 +364,10 @@ class CreateConstructor extends Component {
             <Box>
               <Textarea
                 type="text"
-                placeholder="Название документа"
+                placeholder="Название конструктора"
                 spellCheck={true}
                 name="name"
-                placeholder="Название документа. Например: Договор оказания медицинских услуг"
+                placeholder="Название конструктора. Например: Договор оказания медицинских услуг"
                 onChange={this.saveToState}
               />
             </Box>
@@ -352,7 +383,7 @@ class CreateConstructor extends Component {
                 rows={1}
                 spellCheck={true}
                 name="answersNumber"
-                placeholder="Запишите правильные ответы. Используйте только цифры и запишите
+                placeholder="Запишите номера верных частей конструктора. Используйте только цифры и запишите
                 их через запятые, без пробелов: 1,2,3,4"
                 onChange={this.saveToState}
               />
@@ -364,7 +395,7 @@ class CreateConstructor extends Component {
                 rows={1}
                 spellCheck={true}
                 name="hint"
-                placeholder="Запишите подсказку или пояснение к документу."
+                placeholder="Запишите подсказку или пояснение к конструктору"
                 onChange={this.saveToState}
               />
             </Box>

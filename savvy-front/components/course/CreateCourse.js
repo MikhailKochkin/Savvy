@@ -6,16 +6,13 @@ import dynamic from "next/dynamic";
 import Error from "../ErrorMessage";
 import Router from "next/router";
 import User from "../User";
+import HowTo from "./HowTo";
 
 const CREATE_COURSE_MUTATION = gql`
   mutation CREATE_COURSE_MUTATION(
     $title: String!
     $description: String!
     $image: String
-    $audience: String
-    $result: String
-    $tariffs: String
-    $methods: String
     $courseType: CourseType
     $published: Boolean
     $uniID: ID
@@ -24,10 +21,6 @@ const CREATE_COURSE_MUTATION = gql`
       title: $title
       description: $description
       image: $image
-      audience: $audience
-      result: $result
-      tariffs: $tariffs
-      methods: $methods
       courseType: $courseType
       published: $published
       uniID: $uniID
@@ -62,6 +55,8 @@ const Fieldset = styled.fieldset`
   border: none;
   display: flex;
   flex-direction: column;
+  padding: 0;
+  margin-top: 2%;
   select {
     width: 30%;
     font-size: 1.6rem;
@@ -104,19 +99,12 @@ const Buttons = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-top: 2%;
-  padding: 3%;
-  border-top: solid 1px #f0f0f0;
+  padding: 3% 0 0 3%;
 `;
 
 const Title = styled.div`
   font-size: 2.2rem;
   font-weight: 600;
-`;
-
-const Img = styled.img`
-  width: 300px;
-  object-fit: cover;
-  margin-top: 3%;
 `;
 
 const Button = styled.button`
@@ -138,28 +126,11 @@ const Button = styled.button`
   }
 `;
 
-const Frame = styled.div`
-  height: 60%;
-  width: 100%;
-  margin-bottom: 15px;
-  border: 1px solid #e5e5e5;
-  border-radius: 3.5px;
-  padding-left: 1%;
-  font-size: 1.6rem;
-  outline: 0;
-  p {
-    margin-left: 0.6%;
-  }
+const Img = styled.img`
+  width: 300px;
+  object-fit: cover;
+  margin-top: 3%;
 `;
-
-const Header = styled.div`
-  margin-bottom: 1.5%;
-`;
-
-const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
-  loading: () => <p>...</p>,
-  ssr: false
-});
 
 export default class CreateCourse extends Component {
   state = {
@@ -171,23 +142,12 @@ export default class CreateCourse extends Component {
     published: false,
     upload: false
   };
+
   handleChange = e => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  handleTagChange = e => {
-    const checkbox = e.target;
-    // take a copy of the current permissions
-    let updatedTags = [...this.state.tags];
-    // figure out if we need to remove or add this permission
-    if (checkbox.checked) {
-      // add it in!
-      updatedTags.push(checkbox.value);
-    } else {
-      updatedTags = updatedTags.filter(tag => tag !== checkbox.value);
-    }
-    this.setState({ tags: updatedTags });
-  };
+
   uploadFile = async e => {
     this.setState({
       upload: "pending",
@@ -211,16 +171,10 @@ export default class CreateCourse extends Component {
     });
   };
 
-  myCallback = (dataFromChild, name) => {
-    let st = name;
-    this.setState({
-      [st]: dataFromChild
-    });
-  };
-
   render() {
     return (
       <>
+        <HowTo />
         <User>
           {({ data: { me } }) => (
             <>
@@ -241,10 +195,7 @@ export default class CreateCourse extends Component {
                         onSubmit={async e => {
                           // Stop the form from submitting
                           e.preventDefault();
-                          const res =
-                            (await me.uni.title) !== "Savvvy App"
-                              ? this.setState({ courseType: "PRIVATE" })
-                              : this.setState({ courseType: "PUBLIC" });
+                          this.setState({ courseType: "PRIVATE" });
                           const res1 = await this.setState({
                             uniID: me.uni.id
                           });
@@ -257,7 +208,7 @@ export default class CreateCourse extends Component {
                         }}
                       >
                         <Error error={error} />
-                        <Title>Создайте страницу нового курса!</Title>
+                        <Title>Новый курс:</Title>
                         <Fieldset disabled={loading} aria-busy={loading}>
                           <input
                             className="second"
@@ -279,38 +230,6 @@ export default class CreateCourse extends Component {
                             value={this.state.description}
                             onChange={this.handleChange}
                           />
-                          <Frame>
-                            <DynamicLoadedEditor
-                              index={1}
-                              name="result"
-                              getEditorText={this.myCallback}
-                              placeholder="Результаты студентов по итогам курса..."
-                            />
-                          </Frame>
-                          <Frame>
-                            <DynamicLoadedEditor
-                              index={1}
-                              name="methods"
-                              getEditorText={this.myCallback}
-                              placeholder="Методики преподавания..."
-                            />
-                          </Frame>
-                          <Frame>
-                            <DynamicLoadedEditor
-                              index={1}
-                              name="audience"
-                              getEditorText={this.myCallback}
-                              placeholder="Для кого этот курс..."
-                            />
-                          </Frame>
-                          <Frame>
-                            <DynamicLoadedEditor
-                              index={1}
-                              name="tariffs"
-                              getEditorText={this.myCallback}
-                              placeholder="Как работают тарифы на курсе..."
-                            />
-                          </Frame>
                           <label for="file">
                             <div className="upload">
                               {this.state.upload === false

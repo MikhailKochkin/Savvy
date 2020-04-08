@@ -114,6 +114,12 @@ const Frame = styled.div`
   }
 `;
 
+const Title = styled.div`
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-top: 4%;
+`;
+
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false
@@ -155,6 +161,7 @@ export default class UpdateLesson extends Component {
     return (
       <PleaseSignIn>
         <AreYouATeacher subject={lessonID}>
+          <Title>Изменить урок</Title>
           <Container>
             <input
               type="text"
