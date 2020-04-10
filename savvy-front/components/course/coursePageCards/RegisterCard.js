@@ -182,7 +182,7 @@ const Time = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/9/2020 23:59:00");
+  let then = new Date("04/10/2020 23:59:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -191,21 +191,21 @@ const calculateTimeLeft = () => {
       Math.floor(difference / (1000 * 60 * 60 * 24)),
       String(Math.floor((difference / (1000 * 60 * 60)) % 24)).padStart(2, "0"),
       String(Math.floor((difference / 1000 / 60) % 60)).padStart(2, "0"),
-      String(Math.floor((difference / 1000) % 60)).padStart(2, "0")
+      String(Math.floor((difference / 1000) % 60)).padStart(2, "0"),
     ];
   }
 
   return timeLeft;
 };
 
-const RegisterCard = props => {
+const RegisterCard = (props) => {
   const [price, setPrice] = useState(props.price);
   const [discountPrice, setDiscountPrice] = useState(props.discountPrice);
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [pack, setPack] = useState(2);
   const [width, setWidth] = useState(0);
   const [used, setUsed] = useState(false);
-  const onResize = width => {
+  const onResize = (width) => {
     setWidth(width);
   };
 
@@ -217,12 +217,12 @@ const RegisterCard = props => {
 
   const promos = [];
   if (props.coursePage.promocode[0]) {
-    props.coursePage.promocode[0].map(el => promos.push(Object.keys(el)[0]));
+    props.coursePage.promocode[0].map((el) => promos.push(Object.keys(el)[0]));
   }
-  const handlePromo = p => {
+  const handlePromo = (p) => {
     if (promos.includes(p) && !used && price < 1000) {
       let pro = props.coursePage.promocode[0].filter(
-        el => Object.keys(el)[0] === p
+        (el) => Object.keys(el)[0] === p
       );
       setPrice(price * Object.values(pro[0])[0]);
       setUsed(true);
@@ -251,7 +251,7 @@ const RegisterCard = props => {
 
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
-  me && me.orders.filter(o => o.coursePage.id === coursePage.id).length > 0
+  me && me.orders.filter((o) => o.coursePage.id === coursePage.id).length > 0
     ? (applied = true)
     : (applied = false);
 
@@ -354,7 +354,7 @@ const RegisterCard = props => {
                       type="radio"
                       value={props.price}
                       name="price"
-                      onChange={e => {
+                      onChange={(e) => {
                         console.log(props.price);
                         setPack(0),
                           setPrice(props.price),
@@ -368,7 +368,7 @@ const RegisterCard = props => {
                       type="radio"
                       name="price"
                       value={props.price * 1.75}
-                      onChange={e => {
+                      onChange={(e) => {
                         setPack(0),
                           setPrice(props.price * 1.75),
                           setUsed(false),
@@ -426,7 +426,7 @@ const RegisterCard = props => {
                 coursePage.courseType !== "CHALLENGE" && (
                   <Input
                     name="promo"
-                    onChange={e => handlePromo(e.target.value)}
+                    onChange={(e) => handlePromo(e.target.value)}
                     placeholder="Введите промокод"
                   />
                 )}

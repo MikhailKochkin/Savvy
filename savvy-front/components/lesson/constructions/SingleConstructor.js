@@ -119,7 +119,7 @@ const Advice = styled.p`
 `;
 
 const Buttons = styled.div`
-  pointer-events: ${props => (props.blocked ? "none" : "auto")};
+  pointer-events: ${(props) => (props.blocked ? "none" : "auto")};
 `;
 
 const StyledButton = withStyles({
@@ -128,8 +128,8 @@ const StyledButton = withStyles({
     marginRight: "2%",
     fontSize: "1.6rem",
     textTransform: "none",
-    width: "40%"
-  }
+    width: "50%",
+  },
 })(Button);
 
 class SingleConstructor extends Component {
@@ -141,12 +141,13 @@ class SingleConstructor extends Component {
     type: this.props.construction.type,
     attempts: 1,
     inputs: [],
-    answered: false
+    answered: false,
+    answerReveal: false,
   };
 
   answerState = "";
 
-  shuffle = array => {
+  shuffle = (array) => {
     var m = array.length,
       t,
       i;
@@ -159,14 +160,14 @@ class SingleConstructor extends Component {
     return array;
   };
 
-  handleSteps = e => {
+  handleSteps = (e) => {
     e.preventDefault();
     // 1. Get the user variant for a particular article
     const { value } = e.target;
     // 2. Get the number of the article
     const article_number = e.target.getAttribute("data");
     // 3. Save to state the user data
-    this.setState(state => {
+    this.setState((state) => {
       const received = state.received.map((item, index) => {
         if (index === article_number - 1) {
           if (this.state.variants[value - 1] === undefined) {
@@ -185,15 +186,15 @@ class SingleConstructor extends Component {
   showWrong = () => {
     const elements = document.querySelectorAll(".Var");
 
-    elements.forEach(element => {
+    elements.forEach((element) => {
       element.style.border = "1px solid #DE6B48";
     });
     this.setState({ answerState: "wrong" });
-    this.setState(prevState => ({
-      attempts: prevState.attempts + 1
+    this.setState((prevState) => ({
+      attempts: prevState.attempts + 1,
     }));
-    setTimeout(function() {
-      elements.forEach(element => {
+    setTimeout(function () {
+      elements.forEach((element) => {
         element.style.border = "1px solid #c4c4c4 ";
       });
     }, 3000);
@@ -201,7 +202,7 @@ class SingleConstructor extends Component {
 
   showRight = () => {
     const elements = document.querySelectorAll(".Var");
-    elements.forEach(element => {
+    elements.forEach((element) => {
       element.style.border = "1px solid #84BC9C";
     });
     this.setState({ answerState: "right", answered: true });
@@ -211,7 +212,7 @@ class SingleConstructor extends Component {
     let p;
     let v;
     let space;
-    texts.forEach(element => {
+    texts.forEach((element) => {
       space = document.createElement("SPAN");
       space.innerHTML = " / ";
       v = document.createElement("SPAN");
@@ -229,9 +230,9 @@ class SingleConstructor extends Component {
 
     const results = document.querySelectorAll(".Var");
     let nums = document.querySelectorAll(".l");
-    nums.forEach(el => el.remove());
+    nums.forEach((el) => el.remove());
 
-    results.forEach(element => {
+    results.forEach((element) => {
       inputs.push(element.innerHTML);
     });
     this.setState({ inputs: inputs });
@@ -249,7 +250,7 @@ class SingleConstructor extends Component {
       } else {
         // 3. Check if all the correct variants are included into the answer, order does not matter
         let correct = 0;
-        this.state.received.map(item => {
+        this.state.received.map((item) => {
           if (this.state.answer.includes(item)) {
             correct = correct + 1;
           } else {
@@ -274,7 +275,7 @@ class SingleConstructor extends Component {
     }
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -287,8 +288,8 @@ class SingleConstructor extends Component {
   render() {
     const { me, lessonID, construction, userData } = this.props;
     const data = userData
-      .filter(result => result.construction.id === construction.id)
-      .filter(result => result.student.id === this.props.me.id);
+      .filter((result) => result.construction.id === construction.id)
+      .filter((result) => result.student.id === this.props.me.id);
     return (
       <Styles>
         <Variants>
@@ -324,7 +325,7 @@ class SingleConstructor extends Component {
               // answer: "Drafted",
               attempts: this.state.attempts,
               constructionID: this.props.construction.id,
-              inputs: this.state.inputs
+              inputs: this.state.inputs,
             }}
           >
             {(createConstructionResult, { loading, error }) => (
@@ -332,7 +333,7 @@ class SingleConstructor extends Component {
                 <StyledButton
                   variant="contained"
                   color="primary"
-                  onClick={async e => {
+                  onClick={async (e) => {
                     e.preventDefault();
                     const res = await this.check();
                     if (this.state.answerState === "right") {
@@ -346,7 +347,22 @@ class SingleConstructor extends Component {
             )}
           </Mutation>
           {this.state.answerState === "wrong" ? (
-            <Advice>Подсказка: {construction.hint}</Advice>
+            <>
+              {construction.hint && (
+                <Advice>Подсказка: {construction.hint}</Advice>
+              )}
+              <StyledButton
+                onClick={(e) =>
+                  this.setState((prev) => ({
+                    answerReveal: !prev.answerReveal,
+                  }))
+                }
+              >
+                {this.state.answerReveal ? "Скрыть ответ" : "Открыть ответ"}
+              </StyledButton>
+              {this.state.answerReveal &&
+                this.state.answer.map((el) => renderHTML(el))}
+            </>
           ) : null}
           {me && me.id === construction.user.id ? (
             <DeleteSingleConstructor id={construction.id} lessonID={lessonID} />

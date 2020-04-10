@@ -87,7 +87,7 @@ const Banner = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/9/2020 23:59:00");
+  let then = new Date("04/10/2020 23:59:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -96,7 +96,7 @@ const calculateTimeLeft = () => {
       Math.floor(difference / (1000 * 60 * 60 * 24)),
       String(Math.floor((difference / (1000 * 60 * 60)) % 24)).padStart(2, "0"),
       String(Math.floor((difference / 1000 / 60) % 60)).padStart(2, "0"),
-      String(Math.floor((difference / 1000) % 60)).padStart(2, "0")
+      String(Math.floor((difference / 1000) % 60)).padStart(2, "0"),
     ];
   }
 
@@ -106,7 +106,7 @@ const calculateTimeLeft = () => {
 const Ad = () => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [width, setWidth] = useState(0);
-  const onResize = width => {
+  const onResize = (width) => {
     setWidth(width);
   };
   useEffect(() => {
@@ -127,13 +127,13 @@ const Ad = () => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="name">
-        📊 Запускаем поток по корпоративному праву. Скидки до четверга!
+        📊 Запускаем поток по корпоративному праву. Скидки до пятницы!
       </div>
       <div className="discount">
         <Link
           href={{
             pathname: "/coursePage",
-            query: { id: "ck587y4kp00lf07152t0tyywl" }
+            query: { id: "ck587y4kp00lf07152t0tyywl" },
           }}
           prefetch
         >
