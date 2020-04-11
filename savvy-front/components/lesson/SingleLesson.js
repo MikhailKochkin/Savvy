@@ -436,7 +436,7 @@ const MenuPart = styled.div`
   margin-left: 1rem;
   border-radius: 2px;
   @media (max-width: 800px) {
-    display: ${props => (props.shown ? "block" : "none")};
+    display: ${(props) => (props.shown ? "block" : "none")};
     order: 1;
     margin: 1%;
     position: absolute;
@@ -550,27 +550,27 @@ class SingleLesson extends Component {
   state = {
     page: "lesson",
     shown: false,
-    width: 0
+    width: 0,
   };
 
-  onSwitch = e => {
+  onSwitch = (e) => {
     e.preventDefault();
     const name = e.target.getAttribute("name");
 
     this.setState({ page: name });
-    this.setState(prevState => ({ shown: !prevState.shown }));
+    this.setState((prevState) => ({ shown: !prevState.shown }));
   };
 
-  onSwitchMob = e => {
+  onSwitchMob = (e) => {
     e.preventDefault();
     const name = e.target.getAttribute("name");
 
     this.setState({ page: name });
-    this.setState(prevState => ({ shown: !prevState.shown }));
+    this.setState((prevState) => ({ shown: !prevState.shown }));
     this.closeNav();
   };
 
-  onResize = width => {
+  onResize = (width) => {
     this.setState({ width });
   };
 
@@ -583,7 +583,7 @@ class SingleLesson extends Component {
     document.getElementById("mySidenav2").style.width = "0";
   };
 
-  getLink = dataFromChild => {
+  getLink = (dataFromChild) => {
     this.setState({ page: dataFromChild });
   };
   render() {
@@ -594,7 +594,7 @@ class SingleLesson extends Component {
             <Query
               query={SINGLE_LESSON_QUERY}
               variables={{
-                id: this.props.id
+                id: this.props.id,
               }}
               fetchPolicy="cache-first"
             >
@@ -736,12 +736,16 @@ class SingleLesson extends Component {
                               href={{
                                 pathname: "/coursePage",
                                 query: {
-                                  id: lesson.coursePage.id
-                                }
+                                  id: lesson.coursePage.id,
+                                },
                               }}
                             >
                               <span>
-                                <Icon size={"10%"} icon={arrowLeft} id="back" />
+                                <Icon
+                                  size={"1.5em"}
+                                  icon={arrowLeft}
+                                  id="back"
+                                />
                               </span>
                             </Link>
                           ) : (
@@ -765,8 +769,8 @@ class SingleLesson extends Component {
                                       pathname: "/lesson",
                                       query: {
                                         id: lesson.id,
-                                        type: "story"
-                                      }
+                                        type: "story",
+                                      },
                                     }}
                                   >
                                     <span> Переключить</span>
@@ -798,7 +802,7 @@ class SingleLesson extends Component {
                               </TextBar>
                             )}
                             {this.state.page === "note" &&
-                              lesson.notes.map(note => (
+                              lesson.notes.map((note) => (
                                 <Note
                                   text={note.text}
                                   me={me}
@@ -813,7 +817,7 @@ class SingleLesson extends Component {
                                 />
                               ))}
                             {this.state.page === "document" &&
-                              lesson.documents.map(doc => (
+                              lesson.documents.map((doc) => (
                                 <Document
                                   clauses={doc.clauses}
                                   title={doc.title}

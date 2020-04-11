@@ -182,7 +182,7 @@ const Time = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/10/2020 23:59:00");
+  let then = new Date("04/13/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -255,7 +255,7 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
-  let theOne = ["ck587y4kp00lf07152t0tyywl"].includes(coursePage.id);
+  let theOne = ["cjwaz2l0300dc0729d02opkzb"].includes(coursePage.id);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -355,7 +355,6 @@ const RegisterCard = (props) => {
                       value={props.price}
                       name="price"
                       onChange={(e) => {
-                        console.log(props.price);
                         setPack(0),
                           setPrice(props.price),
                           setUsed(false),

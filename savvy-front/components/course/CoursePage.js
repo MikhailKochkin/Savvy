@@ -249,7 +249,7 @@ const Button = styled.button`
   cursor: pointer;
   font-family: Montserrat;
   padding-bottom: 10px;
-  border-bottom: ${props =>
+  border-bottom: ${(props) =>
     props.primary ? "1px solid black" : "1px solid white"};
   &#forum {
     font-weight: bold;
@@ -279,7 +279,7 @@ const SignInButton = styled.button`
     background: rgba(8, 70, 216, 0.85);
   }
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {
@@ -373,9 +373,9 @@ class CoursePage extends Component {
   state = {
     page: "lessons",
     primary1: true,
-    primary2: false
+    primary2: false,
   };
-  switch = e => {
+  switch = (e) => {
     const { name } = e.target;
     this.setState({ page: name });
   };
@@ -392,7 +392,7 @@ class CoursePage extends Component {
               <Query
                 query={AGGREGATE_PAGE_LESSONS_QUERY}
                 variables={{
-                  id: this.props.id
+                  id: this.props.id,
                 }}
               >
                 {({ data: data2, error: error2, loading: loading2 }) => {
@@ -402,7 +402,7 @@ class CoursePage extends Component {
                     <Query
                       query={SINGLE_COURSEPAGE_QUERY}
                       variables={{
-                        id: this.props.id
+                        id: this.props.id,
                       }}
                     >
                       {({ error, loading, data }) => {
@@ -410,7 +410,7 @@ class CoursePage extends Component {
                         if (loading) return <Loading />;
                         const coursePage = data.coursePage;
                         const student_list = [];
-                        coursePage.new_students.map(ns =>
+                        coursePage.new_students.map((ns) =>
                           student_list.push(ns.id)
                         );
                         let price;
@@ -420,30 +420,30 @@ class CoursePage extends Component {
                           price = coursePage.price;
                         }
                         const studentsArray = [];
-                        coursePage.students.map(student =>
+                        coursePage.students.map((student) =>
                           studentsArray.push(student)
                         );
 
                         const subjectArray = [];
                         const new_subjectArray = [];
                         me &&
-                          me.subjects.map(subject =>
+                          me.subjects.map((subject) =>
                             subjectArray.push(subject)
                           );
                         me &&
-                          me.new_subjects.map(new_subject =>
+                          me.new_subjects.map((new_subject) =>
                             new_subjectArray.push(new_subject.id)
                           );
                         const applicationsList = [];
-                        coursePage.applications.map(application =>
+                        coursePage.applications.map((application) =>
                           applicationsList.push(application.applicantId)
                         );
 
                         let lessonsList = [];
-                        coursePage.lessons.map(l => lessonsList.push(l.id));
+                        coursePage.lessons.map((l) => lessonsList.push(l.id));
 
                         const openLesson = coursePage.lessons.filter(
-                          c => c.id === coursePage.openLesson
+                          (c) => c.id === coursePage.openLesson
                         );
                         return (
                           <>
@@ -603,8 +603,52 @@ class CoursePage extends Component {
                                     "ck587y4kp00lf07152t0tyywl" && (
                                     <div className="red">
                                       <div className="header">
-                                        🏋🏻‍♂️ Запускаем 13 апреля трехнедельный
-                                        живой поток!
+                                        🏋🏻‍♂️ Запускаем 13 апреля 3-недельный живой
+                                        поток!
+                                      </div>
+                                      <div>
+                                        А это значит, что у вас будет
+                                        возможность совместить онлайн обучение и
+                                        живую работу с преподавателем! Живой
+                                        поток включает:
+                                      </div>
+                                      <div>
+                                        <ul>
+                                          <li>
+                                            Прохождение интерактивного курса
+                                          </li>
+                                          <li>
+                                            Общение в чате с преподавателем по
+                                            любым вопросам
+                                          </li>
+
+                                          <li>
+                                            Решение финального кейса (его текст
+                                            можно найти в открытом уроке) и
+                                            фидбэк по нему от преподавателя
+                                          </li>
+                                          <li>
+                                            Два вебинара: по развитию карьеры в
+                                            сфере корпоративного права и по
+                                            финальному кейсу
+                                          </li>
+                                        </ul>
+                                        <div>
+                                          Зарегистрироваться на курс можно,
+                                          оплатив продвинутый тариф. До четверга
+                                          на него действует скидка 10%! Вопросы
+                                          можно задать нам в социальных сетях по
+                                          ссылкам внизу страницы.
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {data.coursePage.id ===
+                                    "cjwaz2l0300dc0729d02opkzb" && (
+                                    <div className="red">
+                                      <div className="header">
+                                        🏋🏻‍♂️ Запускаем 20 апреля 4-недельный живой
+                                        поток!
                                       </div>
                                       <div>
                                         А это значит, что у вас будет
@@ -622,20 +666,19 @@ class CoursePage extends Component {
                                             любым вопросам
                                           </li>
                                           <li>
-                                            Решение финального кейса (его текст
-                                            можно найти в открытом уроке) и
-                                            фидбэк по нему от преподавателя
+                                            Личная проверка преподавателем
+                                            каждого вашего урока и комментарии /
+                                            советы по итогу его прохождения
                                           </li>
                                           <li>
-                                            Два вебинара: по развитию карьеры в
-                                            сфере корпоративного права и по
-                                            финальному кейсу
+                                            Финальное испытание на знание
+                                            грамматики с подробным фидбэком
                                           </li>
                                         </ul>
                                         <div>
                                           Зарегистрироваться на курс можно,
-                                          оплатив продвинутый тариф. До четверга
-                                          на него действует скидка 10%! Вопросы
+                                          оплатив продвинутый тариф. Сейчас на
+                                          него действует скидка 15%! Вопросы
                                           можно задать нам в социальных сетях по
                                           ссылкам внизу страницы.
                                         </div>
@@ -707,19 +750,19 @@ class CoursePage extends Component {
                                         ))}
                                     </>
                                   )}
-
                                   {this.state.page === "forum" &&
+                                    (me &&
                                     (subjectArray.includes(coursePage.id) ||
-                                    new_subjectArray.includes(coursePage.id) ||
-                                    me.permissions.includes("ADMIN") ? (
-                                      me && (
-                                        <>
-                                          <Forum
-                                            coursePage={coursePage}
-                                            me={me}
-                                          />
-                                        </>
-                                      )
+                                      new_subjectArray.includes(
+                                        coursePage.id
+                                      ) ||
+                                      me.permissions.includes("ADMIN")) ? (
+                                      <>
+                                        <Forum
+                                          coursePage={coursePage}
+                                          me={me}
+                                        />
+                                      </>
                                     ) : (
                                       <Comment>
                                         Зарегистрируйтесь на курс, чтобы
@@ -735,16 +778,16 @@ class CoursePage extends Component {
                                       ) ||
                                       me.permissions.includes("ADMIN")) ? (
                                       <>
-                                        {me.studentFeedback.filter(feed =>
+                                        {me.studentFeedback.filter((feed) =>
                                           lessonsList.includes(feed.lesson.id)
                                         ).length === 0 ? (
                                           <p>Обратной связи нет</p>
                                         ) : null}
                                         {me.studentFeedback
-                                          .filter(feed =>
+                                          .filter((feed) =>
                                             lessonsList.includes(feed.lesson.id)
                                           )
-                                          .map(feedback => (
+                                          .map((feedback) => (
                                             <Feedback feedback={feedback} />
                                           ))}
                                       </>
@@ -784,7 +827,7 @@ class CoursePage extends Component {
                                   )}
                                 {data.coursePage.reviews.length > 0 && (
                                   <Reviews>
-                                    {data.coursePage.reviews.map(post =>
+                                    {data.coursePage.reviews.map((post) =>
                                       renderHTML(post)
                                     )}
                                   </Reviews>

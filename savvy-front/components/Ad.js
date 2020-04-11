@@ -87,7 +87,7 @@ const Banner = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/10/2020 23:59:00");
+  let then = new Date("04/13/2020 6:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -127,13 +127,14 @@ const Ad = () => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="name">
-        📊 Запускаем поток по корпоративному праву. Скидки до пятницы!
+        📊 Запускаем поток по грамматике для legal writing. Скидка 15% до
+        воскресенья!
       </div>
       <div className="discount">
         <Link
           href={{
             pathname: "/coursePage",
-            query: { id: "ck587y4kp00lf07152t0tyywl" },
+            query: { id: "cjwaz2l0300dc0729d02opkzb" },
           }}
           prefetch
         >
