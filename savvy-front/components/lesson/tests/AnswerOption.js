@@ -4,7 +4,7 @@ import renderHTML from "react-render-html";
 
 const StyledButton = styled.div`
   display: inline-block;
-  border: ${props =>
+  border: ${(props) =>
     props.choose ? "1.5px solid #122A62" : "1px solid #c4c4c4"};
   padding: 5px 15px;
   cursor: pointer;
@@ -20,17 +20,20 @@ const StyledButton = styled.div`
       height: auto;
     }
   }
+  p {
+    margin: 0;
+  }
 `;
 
 class AnswerOption extends Component {
   state = {
-    choose: false
+    choose: false,
   };
 
-  change = e => {
+  change = (e) => {
     this.props.onAnswerSelected(this.props.number, this.props.answer);
-    this.setState(prev => ({
-      choose: !prev.choose
+    this.setState((prev) => ({
+      choose: !prev.choose,
     }));
   };
 
