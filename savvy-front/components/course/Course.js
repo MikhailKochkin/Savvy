@@ -138,19 +138,19 @@ export default class Course extends Component {
   state = {
     revealApplication: false,
     isOpen: false,
-    auth: "signin"
+    auth: "signin",
   };
   static propTypes = {
-    coursePage: PropTypes.object.isRequired
+    coursePage: PropTypes.object.isRequired,
   };
 
-  toggleModal = e => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  toggleModal = (e) => {
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
 
-  changeState = dataFromChild => {
+  changeState = (dataFromChild) => {
     this.setState({
-      auth: dataFromChild
+      auth: dataFromChild,
     });
   };
 
@@ -172,14 +172,31 @@ export default class Course extends Component {
               </Author>
             )}
             {!me && (
-              <SignUpButton onClick={this.toggleModal}>Войти</SignUpButton>
+              // <SignUpButton onClick={this.toggleModal}>Войти</SignUpButton>
+              <Link
+                href={{
+                  pathname: "/coursePage",
+                  query: { id },
+                }}
+                prefetch
+              >
+                <a>
+                  <Button
+                    onClick={() => {
+                      console.log(0);
+                    }}
+                  >
+                    Перейти
+                  </Button>
+                </a>
+              </Link>
             )}
             {me && (
               <Query
                 query={SINGLE_COURSE_VISIT_QUERY}
                 variables={{
                   coursePage: id,
-                  student: me.id
+                  student: me.id,
                 }}
               >
                 {({ data, error, loading }) => {
@@ -193,16 +210,16 @@ export default class Course extends Component {
                           mutation={CREATE_COURSE_VISIT_MUTATION}
                           variables={{
                             coursePage: id,
-                            visitsNumber: 1
+                            visitsNumber: 1,
                           }}
                           refetchQueries={() => [
                             {
                               query: SINGLE_COURSE_VISIT_QUERY,
                               variables: {
                                 coursePage: id,
-                                student: me.id
-                              }
-                            }
+                                student: me.id,
+                              },
+                            },
                           ]}
                         >
                           {(createCourseVisit, { loading, error }) => {
@@ -213,7 +230,7 @@ export default class Course extends Component {
                                     <Link
                                       href={{
                                         pathname: "/coursePage",
-                                        query: { id }
+                                        query: { id },
                                       }}
                                       prefetch
                                     >
@@ -240,16 +257,16 @@ export default class Course extends Component {
                           mutation={UPDATE_COURSE_VISIT_MUTATION}
                           variables={{
                             id: data.courseVisits[0].id,
-                            visitsNumber: data.courseVisits[0].visitsNumber + 1
+                            visitsNumber: data.courseVisits[0].visitsNumber + 1,
                           }}
                           refetchQueries={() => [
                             {
                               query: SINGLE_COURSE_VISIT_QUERY,
                               variables: {
                                 coursePage: id,
-                                student: me.id
-                              }
-                            }
+                                student: me.id,
+                              },
+                            },
                           ]}
                         >
                           {(updateCourseVisit, { loading, error }) => {
@@ -259,7 +276,7 @@ export default class Course extends Component {
                                 <Link
                                   href={{
                                     pathname: "/coursePage",
-                                    query: { id }
+                                    query: { id },
                                   }}
                                   prefetch
                                 >
@@ -286,9 +303,9 @@ export default class Course extends Component {
             )}
           </>
         </Additional>
-        <StyledModal
+        {/* <StyledModal
           isOpen={this.state.isOpen}
-          onBackgroundClick={this.toggleModal}
+          onBackgroundClick={this.c}
           onEscapeKeydown={this.toggleModal}
         >
           {this.state.auth === "signin" && (
@@ -300,7 +317,7 @@ export default class Course extends Component {
           {this.state.auth === "reset" && (
             <RequestReset getData={this.changeState} />
           )}
-        </StyledModal>
+        </StyledModal> */}
       </CaseCard>
     );
   }

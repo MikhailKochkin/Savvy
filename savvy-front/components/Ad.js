@@ -23,7 +23,7 @@ const Banner = styled.div`
   }
   .name {
     padding-left: 40px;
-    font-size: 1.7rem;
+    font-size: 2rem;
     flex-basis: 50%;
     @media (max-width: 1380px) {
       font-size: 1.8rem;
@@ -87,7 +87,7 @@ const Banner = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/13/2020 6:00:00");
+  let then = new Date("04/21/2020 6:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -116,7 +116,9 @@ const Ad = () => {
   });
 
   let day;
-  if (timeLeft[0] > 1) {
+  if (timeLeft[0] >= 5) {
+    day = "дней";
+  } else if (timeLeft[0] > 1 && timeLeft[0] < 5) {
     day = "дня";
   } else if (timeLeft[0] === 1) {
     day = "день";
@@ -127,8 +129,7 @@ const Ad = () => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="name">
-        📊 Запускаем поток по грамматике для legal writing. Скидка 15% до
-        воскресенья!
+        📊 Запускаем поток по базовой грамматике для legal writing!
       </div>
       <div className="discount">
         <Link

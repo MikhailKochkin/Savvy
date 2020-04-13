@@ -255,7 +255,7 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
-  let theOne = ["cjwaz2l0300dc0729d02opkzb"].includes(coursePage.id);
+  let theOne = [""].includes(coursePage.id);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />

@@ -11,9 +11,6 @@ import StudentCard from "./coursePageCards/StudentCard";
 import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
-import ExamAnswer from "./ExamAnswer";
-import ExamQuestion from "./ExamQuestion";
-import UpdateExamQuestion from "./UpdateExamQuestion";
 import Feedback from "./Feedback";
 import Forum from "./forum/Forum";
 
