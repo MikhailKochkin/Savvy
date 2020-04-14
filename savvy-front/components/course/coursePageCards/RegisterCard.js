@@ -182,7 +182,7 @@ const Time = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/13/2020 06:00:00");
+  let then = new Date("04/21/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -220,7 +220,7 @@ const RegisterCard = (props) => {
     props.coursePage.promocode[0].map((el) => promos.push(Object.keys(el)[0]));
   }
   const handlePromo = (p) => {
-    if (promos.includes(p) && !used && price < 1000) {
+    if (promos.includes(p) && !used && price < 5000) {
       let pro = props.coursePage.promocode[0].filter(
         (el) => Object.keys(el)[0] === p
       );
@@ -255,7 +255,7 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
-  let theOne = [""].includes(coursePage.id);
+  let theOne = ["cjwaz2l0300dc0729d02opkzb"].includes(coursePage.id);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -376,26 +376,23 @@ const RegisterCard = (props) => {
                             : null;
                       }}
                     />
-                    {/* {theOne && (
+                    {theOne && (
                       <>
                         <div className="Friend1">
-                          📦 Купить курсы пакетом:{"   "}
+                          📦 Купить курсы c другом:{"   "}
                           <select
                             value={pack}
-                            onChange={e => {
+                            onChange={(e) => {
                               setPack(e.target.value);
                               if (e.target.value === "2") {
-                                setPrice(550 * parseInt(e.target.value));
+                                setPrice(3192 * parseInt(e.target.value));
                               } else if (e.target.value === "3") {
-                                setPrice(510 * parseInt(e.target.value));
-                              } else if (e.target.value === "4") {
-                                setPrice(470 * parseInt(e.target.value));
+                                setPrice(2992 * parseInt(e.target.value));
                               }
                             }}
                           >
                             <option value={2}>2</option>
                             <option value={3}>3</option>
-                            <option value={4}>4</option>
                           </select>
                         </div>
                         <input
@@ -403,19 +400,19 @@ const RegisterCard = (props) => {
                           type="radio"
                           name="price"
                           value={550}
-                          onChange={e => {
+                          onChange={(e) => {
                             setUsed(false);
                             if (pack == 0) {
-                              setPrice(550 * 2), setPack(2);
+                              setPrice(3190 * 2), setPack(2);
                             } else if (pack > "1") {
                               if (pack == 2) {
-                                setPrice(550 * 2);
+                                setPrice(3190 * 2);
                               }
                             }
                           }}
                         />{" "}
                       </>
-                    )} */}
+                    )}
                   </GridContainer>
                 </>
               )}
