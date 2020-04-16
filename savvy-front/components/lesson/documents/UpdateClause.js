@@ -68,16 +68,16 @@ const useStyles = makeStyles({
     // width: "40%",
     margin: "4% 0",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 });
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const UpdateClause = props => {
+const UpdateClause = (props) => {
   const [commentary, setCommentary] = useState(props.commentary);
   const [sample, setSample] = useState(props.sample);
   const [keywords, setKeywords] = useState(props.keywords);
@@ -90,7 +90,6 @@ const UpdateClause = props => {
   };
   const classes = useStyles();
   const { index } = props;
-  console.log(commentary);
   return (
     <>
       <div id="title">Условия документа:</div>
@@ -101,7 +100,7 @@ const UpdateClause = props => {
             id: props.id,
             commentary,
             sample,
-            keywords
+            keywords,
           }}
         >
           {(updateClause, { loading, error }) => (
@@ -125,14 +124,14 @@ const UpdateClause = props => {
               <div>
                 <Input
                   defaultValue={[...keywords]}
-                  onChange={e => setKeywords(event.target.value.split(", "))}
+                  onChange={(e) => setKeywords(event.target.value.split(", "))}
                 />
               </div>
               <Button
                 className={classes.button}
                 variant="contained"
                 color="primary"
-                onClick={async e => {
+                onClick={async (e) => {
                   e.preventDefault();
                   const res = await updateClause();
                   alert("Изменили!");

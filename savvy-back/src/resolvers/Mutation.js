@@ -7,7 +7,7 @@ const { hasPermission } = require("../utils");
 const yandex = require("../yandexCheckout");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
-const makeANiceEmail = text => `
+const makeANiceEmail = (text) => `
   <div className="email" style="
     padding: 20px;
     font-family: sans-serif;
@@ -80,20 +80,20 @@ const Mutations = {
     const updatedUser = await ctx.db.mutation.updateUser(
       {
         where: {
-          id
+          id,
         },
         data: {
           careerTrack: {
-            connect: { id: careerID }
+            connect: { id: careerID },
           },
           uni: {
-            connect: { id: uniID }
+            connect: { id: uniID },
           },
           company: {
-            connect: { id: company }
+            connect: { id: company },
           },
-          ...updates
-        }
+          ...updates,
+        },
       },
       info
     );
@@ -111,7 +111,7 @@ const Mutations = {
     const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
     const res = await ctx.db.mutation.updateUser({
       where: { email: args.email },
-      data: { resetToken, resetTokenExpiry }
+      data: { resetToken, resetTokenExpiry },
     });
     // 3. Email them that reset token
     const mailRes = await client.sendEmail({
@@ -120,7 +120,9 @@ const Mutations = {
       Subject: "Смена пароля",
       HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
           \n\n
-          <a href="${process.env.FRONTEND_URL2}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`)
+          <a href="${
+            process.env.FRONTEND_URL2
+          }/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
     });
     // 4. Return the message
     return { message: "Спасибо!" };
@@ -135,8 +137,8 @@ const Mutations = {
     const [user] = await ctx.db.query.users({
       where: {
         resetToken: args.resetToken,
-        resetTokenExpiry_gte: Date.now() - 3600000
-      }
+        resetTokenExpiry_gte: Date.now() - 3600000,
+      },
     });
     if (!user) {
       throw new Error("Это неправильный или устаревший токен!");
@@ -149,14 +151,14 @@ const Mutations = {
       data: {
         password,
         resetToken: null,
-        resetTokenExpiry: null
-      }
+        resetTokenExpiry: null,
+      },
     });
     // 6. Generate JWT
     const token = jwt.sign({ userId: updatedUser.id }, process.env.APP_SECRET);
     // 7. Set the JWT cookie
     ctx.response.cookie("token", token, {
-      maxAge: 1000 * 60 * 60 * 24 * 365
+      maxAge: 1000 * 60 * 60 * 24 * 365,
     });
     // 8. return the new user
     return updatedUser;
@@ -175,16 +177,16 @@ const Mutations = {
         data: {
           user: {
             connect: {
-              id: ctx.request.userId
-            }
+              id: ctx.request.userId,
+            },
           },
           uni: {
             connect: {
-              id: uniID
-            }
+              id: uniID,
+            },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -201,11 +203,11 @@ const Mutations = {
     const updatedUni = await ctx.db.mutation.updateUni(
       {
         where: {
-          id: args.id
+          id: args.id,
         },
         data: {
-          ...updates
-        }
+          ...updates,
+        },
       },
       info
     );
@@ -224,13 +226,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           coursePage: {
-            connect: { id: coursePageID }
+            connect: { id: coursePageID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -246,8 +248,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -260,13 +262,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -279,8 +281,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -302,8 +304,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -322,13 +324,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           coursePage: {
-            connect: { id: coursePageID }
+            connect: { id: coursePageID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -345,12 +347,12 @@ const Mutations = {
         {
           data: {
             map: {
-              set: [[...args.map]]
-            }
+              set: [[...args.map]],
+            },
           },
           where: {
-            id: args.id
-          }
+            id: args.id,
+          },
         },
         info
       );
@@ -359,8 +361,8 @@ const Mutations = {
         {
           data: updates,
           where: {
-            id: args.id
-          }
+            id: args.id,
+          },
         },
         info
       );
@@ -374,8 +376,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -408,13 +410,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -434,22 +436,22 @@ const Mutations = {
 
     const data = {
       user: {
-        connect: { id: ctx.request.userId }
+        connect: { id: ctx.request.userId },
       },
       lesson: {
-        connect: { id: lessonID }
+        connect: { id: lessonID },
       },
       answers: {
-        set: [...answers]
+        set: [...answers],
       },
       correct: {
-        set: [...correct]
+        set: [...correct],
       },
       question: {
-        set: [...question]
+        set: [...question],
       },
       ifRight: args.ifRight,
-      ifWrong: args.ifWrong
+      ifWrong: args.ifWrong,
     };
 
     const test = await ctx.db.mutation.createNewTest({ data }, info);
@@ -469,19 +471,19 @@ const Mutations = {
       {
         data: {
           answers: {
-            set: [...answers]
+            set: [...answers],
           },
           correct: {
-            set: [...correct]
+            set: [...correct],
           },
           question: {
-            set: [...question]
+            set: [...question],
           },
-          ...updates
+          ...updates,
         },
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -499,16 +501,16 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           test: {
-            connect: { id: testID }
+            connect: { id: testID },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -525,13 +527,13 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -545,8 +547,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -566,16 +568,16 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
           quiz: {
-            connect: { id: quiz }
+            connect: { id: quiz },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -596,19 +598,19 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           problem: {
-            connect: { id: problemID }
+            connect: { id: problemID },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
           revealed: {
-            set: [...revealed]
+            set: [...revealed],
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -629,16 +631,16 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           textEditor: {
-            connect: { id: textEditor }
+            connect: { id: textEditor },
           },
           lesson: {
-            connect: { id: lesson }
+            connect: { id: lesson },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -658,13 +660,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -680,8 +682,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -700,13 +702,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           coursePage: {
-            connect: { id: coursePageID }
+            connect: { id: coursePageID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -749,13 +751,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -771,8 +773,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -807,19 +809,19 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
           variants: {
-            set: [...variants]
+            set: [...variants],
           },
           answer: {
-            set: [...answer]
+            set: [...answer],
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -854,19 +856,19 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
           construction: {
-            connect: { id: constructionID }
+            connect: { id: constructionID },
           },
           inputs: {
-            set: [...inputs]
+            set: [...inputs],
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -892,13 +894,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           sandboxPage: {
-            connect: { id: sandboxPageID }
+            connect: { id: sandboxPageID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -929,13 +931,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           sandboxPage: {
-            connect: { id: sandboxPageID }
+            connect: { id: sandboxPageID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -949,8 +951,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -962,12 +964,12 @@ const Mutations = {
       {
         data: {
           favourites: {
-            set: [...args.favourites]
-          }
+            set: [...args.favourites],
+          },
         },
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -979,12 +981,12 @@ const Mutations = {
       {
         data: {
           new_subjects: {
-            connect: { id: args.coursePage }
-          }
+            connect: { id: args.coursePage },
+          },
         },
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1008,15 +1010,15 @@ const Mutations = {
           password,
           permissions: { set: ["USER"] },
           uni: {
-            connect: { id: uniID }
+            connect: { id: uniID },
           },
           company: {
-            connect: { id: company }
+            connect: { id: company },
           },
           careerTrack: {
-            connect: { id: careerTrackID }
-          }
-        }
+            connect: { id: careerTrackID },
+          },
+        },
       },
       info
     );
@@ -1025,7 +1027,7 @@ const Mutations = {
     // we set the jwt as a cookie on the response
     ctx.response.cookie("token", token, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year cookie
     });
     // return the user to the browser
     return user;
@@ -1046,7 +1048,7 @@ const Mutations = {
     // 4. Set the cookie with the token
     ctx.response.cookie("token", token, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365
+      maxAge: 1000 * 60 * 60 * 24 * 365,
     });
     // 5. Return the user
     return user;
@@ -1064,8 +1066,8 @@ const Mutations = {
     const currentUser = await ctx.db.query.user(
       {
         where: {
-          id: ctx.request.userId
-        }
+          id: ctx.request.userId,
+        },
       },
       info
     );
@@ -1077,12 +1079,12 @@ const Mutations = {
         data: {
           permissions: {
             //special prisma syntax for enum
-            set: args.permissions
-          }
+            set: args.permissions,
+          },
         },
         where: {
-          id: args.userId
-        }
+          id: args.userId,
+        },
       },
       info
     );
@@ -1099,27 +1101,27 @@ const Mutations = {
     const result = await yandex.createPayment({
       amount: {
         value: args.price,
-        currency: "RUB"
+        currency: "RUB",
       },
       payment_method_data: {
-        type: "bank_card"
+        type: "bank_card",
       },
       confirmation: {
         type: "redirect",
-        return_url: "https://www.savvvy.app/"
+        return_url: "https://www.savvvy.app/",
       },
-      capture: true
+      capture: true,
     });
 
     ctx.response.cookie("url", result.confirmation.confirmation_url, {
       domain: ".savvvy.app",
-      httpOnly: false
+      httpOnly: false,
     });
 
     const paymentID = result.id;
     const user = await ctx.db.query.user({ where: { id: args.user } });
     const coursePage = await ctx.db.query.coursePage({
-      where: { id: args.coursePage }
+      where: { id: args.coursePage },
     });
 
     const order = await ctx.db.mutation.createOrder({
@@ -1128,13 +1130,13 @@ const Mutations = {
         paymentID: paymentID,
         promocode: args.promocode,
         user: {
-          connect: { id: user.id }
+          connect: { id: user.id },
         },
         coursePage: {
-          connect: { id: args.coursePage }
-        }
+          connect: { id: args.coursePage },
+        },
       },
-      info
+      info,
     });
 
     const newOrderMail = await client.sendEmail({
@@ -1147,7 +1149,7 @@ const Mutations = {
         user.email,
         coursePage.title,
         args.price
-      )
+      ),
     });
     return order;
   },
@@ -1161,27 +1163,27 @@ const Mutations = {
     }
     const user = await ctx.db.query.user({ where: { id: args.user } });
     const coursePage = await ctx.db.query.coursePage({
-      where: { id: args.coursePage }
+      where: { id: args.coursePage },
     });
 
     const order = await ctx.db.mutation.createOrder({
       data: {
         promocode: args.promocode,
         user: {
-          connect: { id: user.id }
+          connect: { id: user.id },
         },
         coursePage: {
-          connect: { id: args.coursePage }
-        }
+          connect: { id: args.coursePage },
+        },
       },
-      info
+      info,
     });
 
     const newOrderMail = await client.sendEmail({
       From: "Mikhail@savvvy.app",
       To: "Mi.Kochkin@ya.ru",
       Subject: "Новый клиент",
-      HtmlBody: newOrderEmail(user.name, coursePage.title, " закрытый курс")
+      HtmlBody: newOrderEmail(user.name, coursePage.title, " закрытый курс"),
     });
 
     return order;
@@ -1200,17 +1202,17 @@ const Mutations = {
           order.user.name,
           order.coursePage.title,
           order.coursePage.id
-        )
+        ),
       });
     }
     return ctx.db.mutation.updateOrder(
       {
         data: {
-          isPaid: args.isPaid
+          isPaid: args.isPaid,
         },
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1234,10 +1236,10 @@ const Mutations = {
       {
         data: {
           coursePage: {
-            connect: { id: coursePageID }
+            connect: { id: coursePageID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1253,8 +1255,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1271,13 +1273,13 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           examQuestion: {
-            connect: { id: examQuestionID }
+            connect: { id: examQuestionID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1286,7 +1288,7 @@ const Mutations = {
   async createArticle(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const IDList = [];
-    args.coursePageIDs.map(item => IDList.append({ id: { item } }));
+    args.coursePageIDs.map((item) => IDList.append({ id: { item } }));
     delete args.coursePageIDs;
     if (!ctx.request.userId) {
       throw new Error(
@@ -1297,13 +1299,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           coursePages: {
-            set: [...IDList]
+            set: [...IDList],
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1323,19 +1325,19 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: args.lessonID }
+            connect: { id: args.lessonID },
           },
           parts: {
-            set: [...parts]
+            set: [...parts],
           },
           comments: {
-            set: [...comments]
+            set: [...comments],
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1359,16 +1361,16 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: args.lessonID }
+            connect: { id: args.lessonID },
           },
           shot: {
-            connect: { id: args.shotID }
+            connect: { id: args.shotID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1386,13 +1388,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lessonID }
+            connect: { id: lessonID },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1405,8 +1407,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1432,11 +1434,9 @@ const Mutations = {
 
     const user = await ctx.db.query.user({ where: { id: args.student } });
     const coursePages = await ctx.db.query.coursePages({
-      where: { lessons_some: { id: args.lesson } }
+      where: { lessons_some: { id: args.lesson } },
     });
     const lesson = await ctx.db.query.lesson({ where: { id: args.lesson } });
-
-    console.log(user.name, coursePages[0].title, lesson.name);
 
     const FeedbackNotification = await client.sendEmail({
       From: "Mikhail@savvvy.app",
@@ -1447,23 +1447,23 @@ const Mutations = {
         coursePages[0].title,
         coursePages[0].id,
         lesson.name
-      )
+      ),
     });
 
     const Feedback = await ctx.db.mutation.createFeedback(
       {
         data: {
           teacher: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           student: {
-            connect: { id: args.student }
+            connect: { id: args.student },
           },
           lesson: {
-            connect: { id: args.lesson }
+            connect: { id: args.lesson },
           },
-          text: args.text
-        }
+          text: args.text,
+        },
       },
       info
     );
@@ -1481,13 +1481,13 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           coursePage: {
-            connect: { id }
+            connect: { id },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1501,8 +1501,8 @@ const Mutations = {
       {
         data: updates,
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1516,13 +1516,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lesson }
+            connect: { id: lesson },
           },
-          ...args
-        }
+          ...args,
+        },
       },
       info
     );
@@ -1534,11 +1534,11 @@ const Mutations = {
     return ctx.db.mutation.updateExam(
       {
         data: {
-          ...updates
+          ...updates,
         },
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1559,18 +1559,18 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           answers: {
-            set: [...args.answers]
+            set: [...args.answers],
           },
           lesson: {
-            connect: { id: args.lesson }
+            connect: { id: args.lesson },
           },
           exam: {
-            connect: { id: args.exam }
-          }
-        }
+            connect: { id: args.exam },
+          },
+        },
       },
       info
     );
@@ -1588,13 +1588,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: args.lesson }
+            connect: { id: args.lesson },
           },
-          title: args.title
-        }
+          title: args.title,
+        },
       },
       info
     );
@@ -1627,18 +1627,18 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           document: {
-            connect: { id: args.document }
+            connect: { id: args.document },
           },
           keywords: {
-            set: [...args.keywords]
+            set: [...args.keywords],
           },
           commentary: args.commentary,
           sample: args.sample,
-          number: args.number
-        }
+          number: args.number,
+        },
       },
       info
     );
@@ -1649,14 +1649,14 @@ const Mutations = {
       {
         data: {
           keywords: {
-            set: [...args.keywords]
+            set: [...args.keywords],
           },
           commentary: args.commentary,
-          sample: args.sample
+          sample: args.sample,
         },
         where: {
-          id: args.id
-        }
+          id: args.id,
+        },
       },
       info
     );
@@ -1688,21 +1688,21 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           lesson: {
-            connect: { id: lesson }
+            connect: { id: lesson },
           },
           document: {
-            connect: { id: document }
+            connect: { id: document },
           },
           answers: {
-            set: [...answers]
+            set: [...answers],
           },
           drafts: {
-            set: [...drafts]
-          }
-        }
+            set: [...drafts],
+          },
+        },
       },
       info
     );
@@ -1722,13 +1722,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           coursePage: {
-            connect: { id: coursePage }
+            connect: { id: coursePage },
           },
-          name: name
-        }
+          name: name,
+        },
       },
       info
     );
@@ -1748,13 +1748,13 @@ const Mutations = {
       {
         data: {
           user: {
-            connect: { id: ctx.request.userId }
+            connect: { id: ctx.request.userId },
           },
           topic: {
-            connect: { id: topic }
+            connect: { id: topic },
           },
-          text: text
-        }
+          text: text,
+        },
       },
       info
     );
@@ -1777,7 +1777,7 @@ const Mutations = {
     }
     //3. Delete it
     return ctx.db.mutation.deleteStatement({ where }, info);
-  }
+  },
 };
 
 module.exports = Mutations;

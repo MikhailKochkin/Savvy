@@ -87,7 +87,7 @@ const Banner = styled.div`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/21/2020 6:00:00");
+  let then = new Date("04/20/2020 6:00:00");
   const difference = then - now;
   let timeLeft = {};
 

@@ -76,33 +76,33 @@ const useStyles = makeStyles({
     width: "100%",
     marginBottom: "2%",
     fontSize: "1.4rem",
-    textTransform: "none"
+    textTransform: "none",
   },
   root: {
-    marginBottom: "4%"
+    marginBottom: "4%",
   },
   labelRoot: {
-    fontSize: "1.5rem"
-  }
+    fontSize: "1.5rem",
+  },
 });
 
-const Signin = props => {
+const Signin = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const classes = useStyles();
-  const change = e => props.getData(e.target.getAttribute("name"));
+  const change = (e) => props.getData(e.target.getAttribute("name"));
   return (
     <Mutation
       mutation={SIGNIN_MUTATION}
       variables={{
         email: email,
-        password: password
+        password: password,
       }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
       {(signin, { error, loading }) => (
         <Form
-          onSubmit={async e => {
+          onSubmit={async (e) => {
             e.preventDefault();
             await signin();
             props.closeNavBar(true);
@@ -111,12 +111,12 @@ const Signin = props => {
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>Войдите на Savvy App</Title>
+            <Title>Войдите на BeSavvy App</Title>
             <Error error={error} />
             <Input
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               id="standard-basic"
               name="email"
               placeholder="Электронная почта"
@@ -128,7 +128,7 @@ const Signin = props => {
               label="Пароль"
               value={password}
               placeholder="Пароль"
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               type="submit"

@@ -102,7 +102,7 @@ const NavButton = styled.div`
 `;
 
 const DynamicTour = dynamic(import("reactour"), {
-  ssr: false
+  ssr: false,
 });
 
 class LandingPage extends Component {
@@ -111,7 +111,7 @@ class LandingPage extends Component {
     height: 1,
     isTourOpen: false,
     times: 0,
-    page: "register"
+    page: "register",
   };
 
   onResize = (width, height) => {
@@ -125,24 +125,24 @@ class LandingPage extends Component {
     this.setState({ isTourOpen: false });
   };
 
-  onSwitch = e => {
+  onSwitch = (e) => {
     const page = e.target.getAttribute("name");
     this.setState({ page });
   };
 
-  onScroll = e => {
+  onScroll = (e) => {
     e.target.scrollingElement.scrollHeight /
       e.target.scrollingElement.scrollTop <
     7
-      ? this.setState(prevState => ({
-          times: prevState.times + 1
+      ? this.setState((prevState) => ({
+          times: prevState.times + 1,
         }))
       : null;
 
     if (this.state.times === 1) {
       this.setState({ isTourOpen: true });
-      this.setState(prevState => ({
-        times: prevState.times + 1
+      this.setState((prevState) => ({
+        times: prevState.times + 1,
       }));
     }
   };
@@ -161,7 +161,7 @@ class LandingPage extends Component {
               <p>Можно рассказать вам, как работает Savvy.app?</p>
             </>
           );
-        }
+        },
       },
       {
         selector: '[data-tut="first-step"]',
@@ -179,7 +179,7 @@ class LandingPage extends Component {
               </div>
             </>
           );
-        }
+        },
       },
       {
         selector: '[data-tut="second-step"]',
@@ -199,7 +199,7 @@ class LandingPage extends Component {
               </div>
             </>
           );
-        }
+        },
       },
       {
         selector: '[data-tut="third-step"]',
@@ -219,7 +219,7 @@ class LandingPage extends Component {
               </div>
             </>
           );
-        }
+        },
       },
       {
         selector: '[data-tut="fourth-step"]',
@@ -236,7 +236,7 @@ class LandingPage extends Component {
               </div>
             </>
           );
-        }
+        },
       },
       {
         selector: '[data-tut="fifth-step"]',
@@ -253,11 +253,11 @@ class LandingPage extends Component {
               </div>
             </>
           );
-        }
-      }
+        },
+      },
     ];
-    const disableBody = target => disableBodyScroll(target);
-    const enableBody = target => enableBodyScroll(target);
+    const disableBody = (target) => disableBodyScroll(target);
+    const enableBody = (target) => enableBodyScroll(target);
     return (
       <User>
         {({ data: { me } }) => (
@@ -267,7 +267,7 @@ class LandingPage extends Component {
               handleHeight
               onResize={this.onResize}
             />
-            <Logo>Savvy App</Logo>
+            <Logo>BeSavvy App</Logo>
             <Nav>
               {!me && this.state.page === "register" && (
                 <span>

@@ -4,9 +4,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
-import Signup from "../auth/Signup";
-import Signin from "../auth/Signin";
-import RequestReset from "../auth/RequestReset";
 import Modal from "styled-react-modal";
 
 const SINGLE_COURSE_VISIT_QUERY = gql`
@@ -47,7 +44,7 @@ const CaseCard = styled.div`
   border: 1px solid #edefed;
   border-radius: 10px;
   margin: 2%;
-  width: 305px;
+  max-width: 275px;
   line-height: 1.2;
   @media (max-width: 600px) {
     width: 85%;

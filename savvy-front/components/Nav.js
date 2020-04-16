@@ -120,7 +120,7 @@ const StyledHeader = styled.header`
     justify-content: space-between;
   }
   .logo {
-    width: 110px;
+    width: 150px;
     @media (max-width: 990px) {
       padding-top: 15px;
       margin-right: 10px;
@@ -203,10 +203,10 @@ class Nav extends Component {
   state = {
     menuShown: false,
     isOpen: false,
-    auth: "signin"
+    auth: "signin",
   };
 
-  onResize = width => {
+  onResize = (width) => {
     this.setState({ width });
   };
 
@@ -221,8 +221,8 @@ class Nav extends Component {
     document.getElementById("mySidenav").style.paddingTop = "0";
   };
 
-  toggleModal = e => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  toggleModal = (e) => {
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
 
   mouseEnter = () => {
@@ -233,14 +233,14 @@ class Nav extends Component {
   };
 
   menuShow = () => {
-    this.setState(prevState => ({
-      menuShown: !prevState.menuShown
+    this.setState((prevState) => ({
+      menuShown: !prevState.menuShown,
     }));
   };
 
-  changeState = dataFromChild => {
+  changeState = (dataFromChild) => {
     this.setState({
-      auth: dataFromChild
+      auth: dataFromChild,
     });
   };
 
@@ -261,7 +261,7 @@ class Nav extends Component {
                     <CourseMenu>
                       <Link prefetch href="/">
                         <div className="logo">
-                          <a>Savvy App</a>
+                          <a>BeSavvy App</a>
                         </div>
                       </Link>
 
@@ -302,7 +302,7 @@ class Nav extends Component {
                         <Link
                           href={{
                             pathname: "/account",
-                            query: { id: me.id }
+                            query: { id: me.id },
                           }}
                         >
                           <a className="name">
@@ -366,7 +366,7 @@ class Nav extends Component {
                         <Link
                           href={{
                             pathname: "/account",
-                            query: { id: me.id }
+                            query: { id: me.id },
                           }}
                         >
                           <a className="name">
@@ -407,7 +407,7 @@ class Nav extends Component {
                       )}
                       <Link
                         href={{
-                          pathname: "/courses"
+                          pathname: "/courses",
                         }}
                       >
                         <button onClick={this.closeNav}>
@@ -416,7 +416,7 @@ class Nav extends Component {
                       </Link>
                       <Link
                         href={{
-                          pathname: "/communities"
+                          pathname: "/communities",
                         }}
                       >
                         <button onClick={this.closeNav}>
