@@ -10,6 +10,7 @@ const CURRENT_USER_QUERY = gql`
       name
       surname
       permissions
+      image
       subjects
       teacherFeedback {
         id
@@ -88,18 +89,18 @@ const CURRENT_USER_QUERY = gql`
   }
 `;
 
-const User = props => (
+const User = (props) => (
   <Query
     {...props}
     query={CURRENT_USER_QUERY}
     fetchPolicy={"cache-and-network"}
   >
-    {payload => props.children(payload)}
+    {(payload) => props.children(payload)}
   </Query>
 );
 
 User.propTypes = {
-  children: PropTypes.func.isRequired
+  children: PropTypes.func.isRequired,
 };
 
 export default User;

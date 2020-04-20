@@ -7,8 +7,6 @@ import dynamic from "next/dynamic";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { CURRENT_USER_QUERY } from "../../User";
 import Interactive from "./Interactive";
 import UpdateProblem from "./UpdateProblem";
 
@@ -77,7 +75,7 @@ const ButtonGroup = styled.div`
 `;
 
 const Buttons = styled.div`
-  pointer-events: ${props => (props.block ? "none" : "auto")};
+  pointer-events: ${(props) => (props.block ? "none" : "auto")};
 `;
 
 const StyledButton = withStyles({
@@ -86,13 +84,13 @@ const StyledButton = withStyles({
     marginRight: "2%",
     fontSize: "1.6rem",
     textTransform: "none",
-    width: "40%"
-  }
+    width: "40%",
+  },
 })(Button);
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class SingleProblem extends Component {
@@ -102,10 +100,10 @@ class SingleProblem extends Component {
     answer: "",
     revealAnswer: false,
     revealed: [],
-    update: false
+    update: false,
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -114,19 +112,19 @@ class SingleProblem extends Component {
   myCallback = (dataFromChild, name) => {
     let st = name;
     this.setState({
-      [st]: dataFromChild
+      [st]: dataFromChild,
     });
   };
 
-  onCheck = data => {
+  onCheck = (data) => {
     if (!this.state.revealed.includes(data)) {
-      this.setState(prevState => ({
-        revealed: [...prevState.revealed, data]
+      this.setState((prevState) => ({
+        revealed: [...prevState.revealed, data],
       }));
     }
   };
 
-  onMouseClick = e => {
+  onMouseClick = (e) => {
     let answer = e.target.innerHTML.toLowerCase().trim();
     if (
       (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:") ||
@@ -142,7 +140,7 @@ class SingleProblem extends Component {
   componentDidMount() {
     const elements = document.querySelectorAll("#conceal");
     let p;
-    elements.forEach(element => {
+    elements.forEach((element) => {
       p = document.createElement("P");
       p.innerHTML = element.getAttribute("data-text");
       p.setAttribute("class", "hint");
@@ -154,8 +152,8 @@ class SingleProblem extends Component {
   render() {
     const { problem, me, userData, lesson } = this.props;
     const data = userData
-      .filter(result => result.problem.id === problem.id)
-      .filter(result => result.student.id === me.id);
+      .filter((result) => result.problem.id === problem.id)
+      .filter((result) => result.student.id === me.id);
     return (
       <>
         <div id="root"></div>
@@ -170,10 +168,10 @@ class SingleProblem extends Component {
                 <StyledButton
                   variant="contained"
                   color="primary"
-                  onClick={async e => {
+                  onClick={async (e) => {
                     e.preventDefault();
-                    const res2 = await this.setState(prev => ({
-                      revealAnswer: !prev.revealAnswer
+                    const res2 = await this.setState((prev) => ({
+                      revealAnswer: !prev.revealAnswer,
                     }));
                   }}
                 >
@@ -207,7 +205,7 @@ class SingleProblem extends Component {
                     lessonID: this.props.lessonID,
                     answer: this.state.answer,
                     revealed: this.state.revealed,
-                    problemID: this.props.problem.id
+                    problemID: this.props.problem.id,
                   }}
                   // refetchQueries={() => [
                   //   {
@@ -224,14 +222,14 @@ class SingleProblem extends Component {
                       <StyledButton
                         variant="contained"
                         color="primary"
-                        onClick={async e => {
+                        onClick={async (e) => {
                           // Stop the form from submitting
                           e.preventDefault();
                           // call the mutation
                           if (this.state.answer !== "") {
                             const res = await createProblemResult();
                             const res2 = await this.setState({
-                              revealAnswer: true
+                              revealAnswer: true,
                             });
                             alert(
                               "Ваш ответ сохранен! Вы можете посмотреть вариант преподавателя и перейти к следующему заданию."
@@ -244,17 +242,15 @@ class SingleProblem extends Component {
                       >
                         {loading ? "В процессе..." : "Ответить"}
                       </StyledButton>
-                      {me && me.id === problem.user.id && (
-                        <StyledButton
-                          onClick={e => this.setState({ update: true })}
-                        >
-                          Изменить
-                        </StyledButton>
-                      )}
                     </Buttons>
                   )}
                 </Mutation>
               </>
+            )}
+            {me && me.id === problem.user.id && (
+              <StyledButton onClick={(e) => this.setState({ update: true })}>
+                Изменить
+              </StyledButton>
             )}
             {me && me.id === problem.user.id ? (
               <DeleteSingleProblem
@@ -276,7 +272,7 @@ class SingleProblem extends Component {
               newTests={lesson.newTests}
             />
             {me && me.id === problem.user.id && (
-              <StyledButton onClick={e => this.setState({ update: false })}>
+              <StyledButton onClick={(e) => this.setState({ update: false })}>
                 Изменить
               </StyledButton>
             )}

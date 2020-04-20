@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import _ from "lodash";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import renderHTML from "react-render-html";
 import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
@@ -15,8 +16,8 @@ const StyledButton = withStyles({
     height: "45px",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
 const CREATE_TESTRESULT_MUTATION = gql`
@@ -42,7 +43,7 @@ const Options = styled.div`
 `;
 
 const TextBar = styled.div`
-  width: ${props => (props.story ? "100%" : "95%")};
+  width: ${(props) => (props.story ? "100%" : "95%")};
   font-size: 1.6rem;
   padding-top: 2%;
   padding-bottom: 2%;
@@ -63,7 +64,7 @@ const Group = styled.div`
   justify-content: space-around;
   width: 100%;
   border: 1px solid #c4c4c4;
-  background: ${props => props.inputColor};
+  background: ${(props) => props.inputColor};
   border-radius: 5px;
   padding: 0.5%;
   margin: 3% 0;
@@ -78,7 +79,8 @@ const Group = styled.div`
   }
 `;
 const MiniButton = styled.div`
-  pointer-events: ${props => (props.answerState === "right" ? "none" : "auto")};
+  pointer-events: ${(props) =>
+    props.answerState === "right" ? "none" : "auto"};
   border: none;
   background: none;
   cursor: pointer;
@@ -123,7 +125,7 @@ class SingleTest extends Component {
     attempts: 0,
     inputColor: "none",
     update: false,
-    sent: false
+    sent: false,
   };
 
   answerState = "";
@@ -144,20 +146,20 @@ class SingleTest extends Component {
     const res = await change();
     const res1 = await this.setState({
       answerOptions: answerVar,
-      answer: answerText
+      answer: answerText,
     });
   };
 
   onSend = async () => {
     this.setState({
       answerState: "right",
-      inputColor: "rgba(50, 172, 102, 0.25)"
+      inputColor: "rgba(50, 172, 102, 0.25)",
     });
   };
 
   onCheck = async () => {
-    const res1 = await this.setState(prevState => ({
-      attempts: prevState.attempts + 1
+    const res1 = await this.setState((prevState) => ({
+      attempts: prevState.attempts + 1,
     }));
     const res = () => {
       if (
@@ -166,7 +168,7 @@ class SingleTest extends Component {
       ) {
         this.setState({
           answerState: "right",
-          inputColor: "rgba(50, 172, 102, 0.25)"
+          inputColor: "rgba(50, 172, 102, 0.25)",
         });
         // 1. if the data is sent for the first time
         if (!this.state.sent) {
@@ -186,7 +188,7 @@ class SingleTest extends Component {
       } else {
         this.setState({
           answerState: "wrong",
-          inputColor: "rgba(222, 107, 72, 0.5)"
+          inputColor: "rgba(222, 107, 72, 0.5)",
         });
         // 1. if the data is sent for the first time
         if (!this.state.sent) {
@@ -209,7 +211,7 @@ class SingleTest extends Component {
     this.setState({ sent: true });
   };
   switch = () => {
-    this.setState(prev => ({ update: !prev.update }));
+    this.setState((prev) => ({ update: !prev.update }));
   };
 
   render() {
@@ -218,8 +220,8 @@ class SingleTest extends Component {
     let userData;
     this.props.me
       ? (userData = this.props.userData
-          .filter(el => el.testID === this.props.id)
-          .filter(el => el.student.id === this.props.me.id))
+          .filter((el) => el.testID === this.props.id)
+          .filter((el) => el.student.id === this.props.me.id))
       : (userData = 1);
     return (
       <>
@@ -240,7 +242,7 @@ class SingleTest extends Component {
           )}
         {!this.state.update && (
           <TextBar className="Test" story={story}>
-            <Question>{this.props.question}</Question>
+            <Question>{renderHTML(this.props.question[0])}</Question>
             <Options>
               {mes.map((answer, index) => (
                 <AnswerOption
@@ -258,7 +260,7 @@ class SingleTest extends Component {
                 variables={{
                   testID: this.props.id,
                   lessonID: this.props.lessonID,
-                  answer: this.state.answer.join(", ")
+                  answer: this.state.answer.join(", "),
                 }}
               >
                 {(createTestResult, { loading, error }) => (
@@ -267,7 +269,7 @@ class SingleTest extends Component {
                     block={this.state.block}
                     className="button"
                     id="but1"
-                    onClick={async e => {
+                    onClick={async (e) => {
                       // Stop the form from submitting
                       e.preventDefault();
                       // call the mutation
@@ -291,10 +293,10 @@ class SingleTest extends Component {
               </Mutation>
             </Group>
             {ifRight && this.state.answerState === "right" && (
-              <Comment>{ifRight}</Comment>
+              <Comment>{renderHTML(ifRight)}</Comment>
             )}
             {ifWrong && this.state.answerState === "wrong" && (
-              <Comment>{ifWrong}</Comment>
+              <Comment>{renderHTML(ifWrong)}</Comment>
             )}
           </TextBar>
         )}
@@ -308,6 +310,8 @@ class SingleTest extends Component {
             correct={this.props.true}
             mes={mes}
             next={this.props.next}
+            ifRight={ifRight}
+            ifWrong={ifWrong}
             notes={this.props.notes}
             tests={this.props.tests}
           />

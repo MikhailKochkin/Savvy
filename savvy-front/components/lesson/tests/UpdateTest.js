@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import Option from "../Option";
+import dynamic from "next/dynamic";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
@@ -12,6 +13,8 @@ const UPDATE_TEST_MUTATION = gql`
     $question: [String!]
     $answers: [String!]
     $correct: [Boolean!]
+    $ifRight: String
+    $ifWrong: String
   ) {
     updateNewTest(
       id: $id
@@ -19,6 +22,8 @@ const UPDATE_TEST_MUTATION = gql`
       question: $question
       answers: $answers
       correct: $correct
+      ifRight: $ifRight
+      ifWrong: $ifWrong
     ) {
       id
     }
@@ -27,7 +32,7 @@ const UPDATE_TEST_MUTATION = gql`
 
 const Button = styled.button`
   padding: 1% 2%;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   width: 20%;
   border-radius: 5px;
   color: white;
@@ -37,7 +42,7 @@ const Button = styled.button`
   cursor: pointer;
   outline: 0;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -64,11 +69,11 @@ const AnswerOption = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2% 0;
-  textarea {
+  .question {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
     width: 80%;
-    height: 100px;
+    min-height: 100px;
     padding: 1.5%;
     font-size: 1.4rem;
     outline: 0;
@@ -105,10 +110,28 @@ const Grid = styled.div`
   justify-content: space-between;
 `;
 
-const UpdateTest = props => {
+const Comment = styled.div`
+  margin-top: 3%;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  width: 80%;
+  height: 100px;
+  padding: 1.5%;
+  font-size: 1.4rem;
+  outline: 0;
+`;
+
+const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
+const UpdateTest = (props) => {
   const [answers, setAnswers] = useState(props.answers);
   const [correct, setCorrect] = useState(props.correct);
   const [question, setQuestion] = useState(props.question[0]);
+  const [ifRight, setIfRight] = useState(props.ifRight);
+  const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [trueVal, setTrueVal] = useState(
     props.next && props.next.true ? props.next.true : ""
   );
@@ -134,36 +157,44 @@ const UpdateTest = props => {
     return type === true ? setTrueVal(data) : setFalseVal(data);
   };
 
+  const setIf = (dataFromChild, name) => {
+    if (name === "ifRight") {
+      setIfRight(dataFromChild);
+    } else if (name === "ifWrong") {
+      setIfWrong(dataFromChild);
+    } else if (name === "question") {
+      setQuestion(dataFromChild);
+    }
+  };
+
   const { testID, tests, quizes, notes, mes, lessonID } = props;
   return (
     <div>
-      <Question>
-        <textarea
+      <Comment>
+        <DynamicLoadedEditor
           id="question"
           name="question"
-          spellCheck={true}
           placeholder="Вопрос"
-          autoFocus
-          required
-          defaultValue={question}
-          onChange={e => setQuestion(e.target.value)}
+          value={question}
+          getEditorText={setIf}
         />
-      </Question>
+      </Comment>
       <Answers>
         {mes.map((answer, i) => {
           let an = `answer${i + 1}`;
           return (
             <AnswerOption id={an}>
-              <textarea
-                name={an}
-                placeholder={`Ответ ${i + 1}`}
-                required
-                defaultValue={answer[0]}
-                onChange={e => handleArray(e.target.value, i)}
-              />
+              <div className="question">
+                <DynamicLoadedEditor
+                  index={i + 1}
+                  name={i}
+                  value={answer[0]}
+                  getEditorText={handleArray}
+                />
+              </div>
               <select
                 defaultValue={answer[1]}
-                onChange={e => handleCorrect(e.target.value, i)}
+                onChange={(e) => handleCorrect(e.target.value, i)}
               >
                 <option value={true}>Правильно</option>
                 <option value={false}>Ошибочно</option>
@@ -172,22 +203,39 @@ const UpdateTest = props => {
           );
         })}
       </Answers>
+      <Comment>
+        <DynamicLoadedEditor
+          id="ifRight"
+          name="ifRight"
+          value={ifRight}
+          placeholder={`Комментарий в случае правильного ответа`}
+          getEditorText={setIf}
+        />
+      </Comment>
+      <Comment>
+        <DynamicLoadedEditor
+          id="ifWrong"
+          value={ifWrong}
+          placeholder={`Комментарий в случае правильного ответа`}
+          getEditorText={setIf}
+        />
+      </Comment>
       <h2>Выберите задания для формата "Экзамен" и "Задача":</h2>
       <h3>Вопросы:</h3>
       <Grid>
-        {quizes.map(quiz => (
+        {quizes.map((quiz) => (
           <Option key={quiz.id} quiz={quiz} getData={myCallback} />
         ))}
       </Grid>
       <h3>Заметки:</h3>
       <Grid>
-        {notes.map(note => (
+        {notes.map((note) => (
           <Option key={note.id} note={note} getData={myCallback} />
         ))}
       </Grid>
       <h3>Тесты:</h3>
       <Grid>
-        {tests.map(test => (
+        {tests.map((test) => (
           <Option key={test.id} test={test} getData={myCallback} />
         ))}
       </Grid>
@@ -196,8 +244,8 @@ const UpdateTest = props => {
         refetchQueries={() => [
           {
             query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID }
-          }
+            variables: { id: lessonID },
+          },
         ]}
         variables={{
           id: testID,
@@ -206,13 +254,15 @@ const UpdateTest = props => {
           correct: correct,
           next: {
             true: trueVal,
-            false: falseVal
-          }
+            false: falseVal,
+          },
+          ifRight: ifRight,
+          ifWrong: ifWrong,
         }}
       >
         {(updateNewTest, { loading, error }) => (
           <Button
-            onClick={async e => {
+            onClick={async (e) => {
               // Stop the form from submitting
               e.preventDefault();
               updateNewTest();

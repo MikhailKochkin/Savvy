@@ -34,6 +34,7 @@ const Button = styled.button`
   padding: 1% 2%;
   width: 125px;
   border-radius: 5px;
+  margin: 3% 0;
   font-size: 1.6rem;
   color: white;
 `;
@@ -135,25 +136,29 @@ const Title = styled.div`
   margin-bottom: 2%;
 `;
 
-const Question = styled.div`
+const Comment = styled.div`
   margin-top: 3%;
-  textarea {
-    border-radius: 5px;
-    border: 1px solid #c4c4c4;
-    width: 80%;
-    height: 100px;
-    padding: 1.5%;
-    font-size: 1.4rem;
-    outline: 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  width: 80%;
+  height: 100px;
+  padding: 1.5%;
+  font-size: 1.4rem;
+  outline: 0;
+  &#ifRight {
+    border: 1px solid #84bc9c;
+  }
+  &#ifWrong {
+    border: 1px solid #de6b48;
   }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const CreateNewTest = props => {
+const CreateNewTest = (props) => {
   const [num, setNum] = useState(2);
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
@@ -167,7 +172,7 @@ const CreateNewTest = props => {
     "",
     "",
     "",
-    ""
+    "",
   ]);
   const [correct, setCorrect] = useState([
     false,
@@ -179,7 +184,7 @@ const CreateNewTest = props => {
     false,
     false,
     false,
-    false
+    false,
   ]);
   const [question, setQuestion] = useState();
 
@@ -201,6 +206,16 @@ const CreateNewTest = props => {
     handleArray(dataFromChild, name);
   };
 
+  const setIf = (dataFromChild, name) => {
+    if (name === "ifRight") {
+      setIfRight(dataFromChild);
+    } else if (name === "ifWrong") {
+      setIfWrong(dataFromChild);
+    } else if (name === "question") {
+      setQuestion(dataFromChild);
+    }
+  };
+
   const { lessonID } = props;
   return (
     <TestCreate>
@@ -212,42 +227,25 @@ const CreateNewTest = props => {
           answers: answers,
           correct: correct,
           ifRight: ifRight,
-          ifWrong: ifWrong
+          ifWrong: ifWrong,
         }}
         refetchQueries={() => [
           {
             query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID }
-          }
+            variables: { id: lessonID },
+          },
         ]}
-        awaitRefetchQueries={true}
       >
         {(createNewTest, { loading, error }) => (
           <Form
-            onSubmit={async e => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              const res = await setAnswers(answers.filter(an => an !== ""));
+              const res = await setAnswers(answers.filter((an) => an !== ""));
               let arr = correct;
-              arr.length = answers.filter(an => an !== "").length;
+              arr.length = answers.filter((an) => an !== "").length;
               const res2 = await setCorrect(arr);
               createNewTest();
               alert("Готово!");
-              setIfRight("");
-              setIfWrong("");
-              setQuestion("");
-              setAnswers(["", "", "", "", "", "", "", "", "", ""]);
-              setCorrect([
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false
-              ]);
             }}
           >
             <Advice>
@@ -257,10 +255,9 @@ const CreateNewTest = props => {
             <Title>Новый тест</Title>
             <CustomSelect1>
               Вариантов ответа:
-              <span></span>
               <select
                 name="answerNumber"
-                onChange={e => setNum(e.target.value)}
+                onChange={(e) => setNum(e.target.value)}
               >
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -272,22 +269,18 @@ const CreateNewTest = props => {
                 <option value="9">9</option>
               </select>
             </CustomSelect1>
-
-            <Question>
-              <textarea
+            <Comment>
+              <DynamicLoadedEditor
                 id="question"
                 name="question"
-                spellCheck={true}
                 placeholder="Вопрос"
-                autoFocus
-                required
-                value={question}
-                onChange={e => setQuestion(e.target.value)}
+                getEditorText={setIf}
               />
-            </Question>
+            </Comment>
             <Answers>
-              {_.times(num, i => {
+              {_.times(num, (i) => {
                 let answer = `answer${i + 1}`;
+                let val = answers[i];
                 return (
                   <AnswerOption id={answer}>
                     <div className="question">
@@ -295,12 +288,13 @@ const CreateNewTest = props => {
                         index={i + 1}
                         name={i}
                         placeholder={`Вариант ответа ${i + 1}`}
+                        value={val}
                         getEditorText={myCallback}
                       />
                     </div>
                     <select
                       defaultValue={false}
-                      onChange={e => handleCorrect(e.target.value, i)}
+                      onChange={(e) => handleCorrect(e.target.value, i)}
                     >
                       <option value={true}>Правильно</option>
                       <option value={false}>Ошибочно</option>
@@ -309,28 +303,23 @@ const CreateNewTest = props => {
                 );
               })}
             </Answers>
-            <Question>
-              <textarea
+            <Comment id="ifRight">
+              <DynamicLoadedEditor
                 id="ifRight"
                 name="ifRight"
-                spellCheck={true}
-                placeholder="Комментарий в случае правильного ответа"
-                autoFocus
-                value={ifRight}
-                onChange={e => setIfRight(e.target.value)}
+                placeholder={`Комментарий в случае правильного ответа`}
+                getEditorText={setIf}
               />
-            </Question>
-            <Question>
-              <textarea
-                id="ifRight"
-                name="ifRight"
-                spellCheck={true}
-                placeholder="Комментарий в случае неправильного ответа"
-                autoFocus
-                value={ifWrong}
-                onChange={e => setIfWrong(e.target.value)}
+            </Comment>
+            <Comment id="ifWrong">
+              <DynamicLoadedEditor
+                id="ifWrong"
+                name="ifWrong"
+                placeholder={`Комментарий в случае неправильного ответа`}
+                getEditorText={setIf}
               />
-            </Question>
+            </Comment>
+            {/* <button onClick={e => }>refresh</button> */}
             <Button type="submit">
               {loading ? "Сохраняем..." : "Сохранить"}
             </Button>

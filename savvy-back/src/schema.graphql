@@ -82,6 +82,8 @@ type Mutation {
     question: [String!]
     answers: [String!]
     correct: [Boolean!]
+    ifRight: String
+    ifWrong: String
     next: Json
   ): NewTest
   createLessonResult(visitsNumber: Int, lessonID: ID): LessonResult!
@@ -505,6 +507,7 @@ type User {
   name: String!
   surname: String
   email: String!
+  image: String
   description: String
   permissions: [Permission!]!
   isFamiliar: Boolean!

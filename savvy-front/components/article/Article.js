@@ -5,7 +5,6 @@ import renderHTML from "react-render-html";
 import styled from "styled-components";
 import User from "../User";
 import Error from "../ErrorMessage";
-import ReactResizeDetector from "react-resize-detector";
 import Course from "../course/Course";
 
 const ARTICLE_QUERY = gql`
@@ -124,7 +123,7 @@ class Article extends Component {
             query={ARTICLE_QUERY}
             returnPartialData={true}
             variables={{
-              id: this.props.id
+              id: this.props.id,
             }}
           >
             {({ data, loading, error }) => {
@@ -143,7 +142,7 @@ class Article extends Component {
                       <Recom>
                         <div>Чем заняться дальше?</div>
                         <Courses>
-                          {article.coursePages.map(coursePage => (
+                          {article.coursePages.map((coursePage) => (
                             <Course
                               key={coursePage.id}
                               id={coursePage.id}

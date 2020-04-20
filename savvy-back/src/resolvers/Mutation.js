@@ -479,6 +479,8 @@ const Mutations = {
           question: {
             set: [...question],
           },
+          ifRight: args.ifRight,
+          ifWrong: args.ifWrong,
           ...updates,
         },
         where: {

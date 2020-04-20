@@ -38,10 +38,10 @@ class StoryEx extends Component {
     let el;
     let item;
     if (Object.keys(m)[0] === "note") {
-      el = lesson.notes.find(note => note.id === Object.values(m)[0]);
+      el = lesson.notes.find((note) => note.id === Object.values(m)[0]);
       item = <Note text={el.text} me={me} story={true} note={el} />;
     } else if (Object.keys(m)[0] === "newTest") {
-      el = lesson.newTests.find(test => test.id === Object.values(m)[0]);
+      el = lesson.newTests.find((test) => test.id === Object.values(m)[0]);
       item = (
         <SingleTest
           key={el.id}
@@ -51,6 +51,8 @@ class StoryEx extends Component {
           true={el.correct}
           user={el.user.id}
           type={el.type}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           me={me}
           userData={lesson.testResults}
           lessonID={lesson.id}
@@ -60,13 +62,15 @@ class StoryEx extends Component {
         />
       );
     } else if (Object.keys(m)[0] === "quiz") {
-      el = lesson.quizes.find(quiz => quiz.id === Object.values(m)[0]);
+      el = lesson.quizes.find((quiz) => quiz.id === Object.values(m)[0]);
       item = (
         <SingleQuiz
           key={el.id}
           question={el.question}
           answer={el.answer}
           me={me}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           type={el.type}
           hidden={true}
           userData={lesson.quizResults}
@@ -77,7 +81,7 @@ class StoryEx extends Component {
         />
       );
     } else if (Object.keys(m)[0] === "shot") {
-      el = lesson.shots.find(shot => shot.id === Object.values(m)[0]);
+      el = lesson.shots.find((shot) => shot.id === Object.values(m)[0]);
       item = (
         <Shots
           key={el.id}
@@ -93,7 +97,9 @@ class StoryEx extends Component {
         />
       );
     } else if (Object.keys(m)[0] === "problem") {
-      el = lesson.problems.find(problem => problem.id === Object.values(m)[0]);
+      el = lesson.problems.find(
+        (problem) => problem.id === Object.values(m)[0]
+      );
       item = (
         <SingleProblem
           key={el.id}
@@ -107,7 +113,7 @@ class StoryEx extends Component {
       );
     } else if (Object.keys(m)[0] === "texteditor") {
       el = lesson.texteditors.find(
-        texteditor => texteditor.id === Object.values(m)[0]
+        (texteditor) => texteditor.id === Object.values(m)[0]
       );
       item = (
         <SingleTextEditor
@@ -120,7 +126,7 @@ class StoryEx extends Component {
         />
       );
     } else if (Object.keys(m)[0] === "construction") {
-      el = lesson.constructions.find(con => con.id === Object.values(m)[0]);
+      el = lesson.constructions.find((con) => con.id === Object.values(m)[0]);
       item = (
         <SingleConstructor
           key={el.id}
@@ -134,10 +140,10 @@ class StoryEx extends Component {
         />
       );
     } else if (Object.keys(m)[0] === "exam") {
-      el = lesson.exams.find(con => con.id === Object.values(m)[0]);
+      el = lesson.exams.find((con) => con.id === Object.values(m)[0]);
       item = <Exam lesson={lesson} me={this.props.me} exam={el} story={true} />;
     } else if (Object.keys(m)[0] === "document") {
-      el = lesson.documents.find(con => con.id === Object.values(m)[0]);
+      el = lesson.documents.find((con) => con.id === Object.values(m)[0]);
       item = (
         <Document
           key={el.id}

@@ -19882,6 +19882,7 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolio
   uni: Uni
@@ -19955,6 +19956,7 @@ input UserCreateInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20223,6 +20225,7 @@ input UserCreateWithoutArticlesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20283,6 +20286,7 @@ input UserCreateWithoutCareerTrackInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20343,6 +20347,7 @@ input UserCreateWithoutClausesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20403,6 +20408,7 @@ input UserCreateWithoutCompanyInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20463,6 +20469,7 @@ input UserCreateWithoutConstructionInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20523,6 +20530,7 @@ input UserCreateWithoutConstructionResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20583,6 +20591,7 @@ input UserCreateWithoutCoursePagesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20643,6 +20652,7 @@ input UserCreateWithoutCourseVisitsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20703,6 +20713,7 @@ input UserCreateWithoutDocumentResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20763,6 +20774,7 @@ input UserCreateWithoutDocumentsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20823,6 +20835,7 @@ input UserCreateWithoutExamAnswersInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20883,6 +20896,7 @@ input UserCreateWithoutExamResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -20943,6 +20957,7 @@ input UserCreateWithoutExamsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21003,6 +21018,7 @@ input UserCreateWithoutLegalPortfolioInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   uni: UniCreateOneWithoutTeachersInput
   company: CompanyCreateOneWithoutHrsInput
@@ -21063,6 +21079,7 @@ input UserCreateWithoutLessonResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21123,6 +21140,7 @@ input UserCreateWithoutLessonsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21183,6 +21201,7 @@ input UserCreateWithoutNew_subjectsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21243,6 +21262,7 @@ input UserCreateWithoutNewTestsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21303,6 +21323,7 @@ input UserCreateWithoutNotesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21363,6 +21384,7 @@ input UserCreateWithoutOrdersInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21423,6 +21445,7 @@ input UserCreateWithoutPointATestsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21483,6 +21506,7 @@ input UserCreateWithoutPointsAInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21543,6 +21567,7 @@ input UserCreateWithoutProblemResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21603,6 +21628,7 @@ input UserCreateWithoutProblemsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21663,6 +21689,7 @@ input UserCreateWithoutQuizesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21723,6 +21750,7 @@ input UserCreateWithoutQuizResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21783,6 +21811,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21843,6 +21872,7 @@ input UserCreateWithoutSandboxPagesInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21903,6 +21933,7 @@ input UserCreateWithoutShotResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -21963,6 +21994,7 @@ input UserCreateWithoutShotsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22023,6 +22055,7 @@ input UserCreateWithoutStatementsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22083,6 +22116,7 @@ input UserCreateWithoutStudentFeedbackInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22143,6 +22177,7 @@ input UserCreateWithoutTeacherFeedbackInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22203,6 +22238,7 @@ input UserCreateWithoutTestResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22263,6 +22299,7 @@ input UserCreateWithoutTestsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22323,6 +22360,7 @@ input UserCreateWithoutTextEditorInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22383,6 +22421,7 @@ input UserCreateWithoutTextEditorResultsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22443,6 +22482,7 @@ input UserCreateWithoutTopicsInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   uni: UniCreateOneWithoutTeachersInput
@@ -22503,6 +22543,7 @@ input UserCreateWithoutUniInput {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
   company: CompanyCreateOneWithoutHrsInput
@@ -22575,6 +22616,8 @@ enum UserOrderByInput {
   resetToken_DESC
   resetTokenExpiry_ASC
   resetTokenExpiry_DESC
+  image_ASC
+  image_DESC
   status_ASC
   status_DESC
   uniID_ASC
@@ -22603,6 +22646,7 @@ type UserPreviousValues {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   uniID: ID
   description: String
@@ -22711,6 +22755,20 @@ input UserScalarWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   status: Status
   status_not: Status
   status_in: [Status!]
@@ -22837,6 +22895,7 @@ input UserUpdateInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -22897,6 +22956,7 @@ input UserUpdateManyDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   uniID: ID
   description: String
@@ -22917,6 +22977,7 @@ input UserUpdateManyMutationInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   uniID: ID
   description: String
@@ -23254,6 +23315,7 @@ input UserUpdateWithoutArticlesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23313,6 +23375,7 @@ input UserUpdateWithoutCareerTrackDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23372,6 +23435,7 @@ input UserUpdateWithoutClausesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23431,6 +23495,7 @@ input UserUpdateWithoutCompanyDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23490,6 +23555,7 @@ input UserUpdateWithoutConstructionDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23549,6 +23615,7 @@ input UserUpdateWithoutConstructionResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23608,6 +23675,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23667,6 +23735,7 @@ input UserUpdateWithoutCourseVisitsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23726,6 +23795,7 @@ input UserUpdateWithoutDocumentResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23785,6 +23855,7 @@ input UserUpdateWithoutDocumentsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23844,6 +23915,7 @@ input UserUpdateWithoutExamAnswersDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23903,6 +23975,7 @@ input UserUpdateWithoutExamResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -23962,6 +24035,7 @@ input UserUpdateWithoutExamsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24021,6 +24095,7 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   uni: UniUpdateOneWithoutTeachersInput
   company: CompanyUpdateOneWithoutHrsInput
@@ -24080,6 +24155,7 @@ input UserUpdateWithoutLessonResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24139,6 +24215,7 @@ input UserUpdateWithoutLessonsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24198,6 +24275,7 @@ input UserUpdateWithoutNew_subjectsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24257,6 +24335,7 @@ input UserUpdateWithoutNewTestsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24316,6 +24395,7 @@ input UserUpdateWithoutNotesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24375,6 +24455,7 @@ input UserUpdateWithoutOrdersDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24434,6 +24515,7 @@ input UserUpdateWithoutPointATestsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24493,6 +24575,7 @@ input UserUpdateWithoutPointsADataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24552,6 +24635,7 @@ input UserUpdateWithoutProblemResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24611,6 +24695,7 @@ input UserUpdateWithoutProblemsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24670,6 +24755,7 @@ input UserUpdateWithoutQuizesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24729,6 +24815,7 @@ input UserUpdateWithoutQuizResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24788,6 +24875,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24847,6 +24935,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24906,6 +24995,7 @@ input UserUpdateWithoutShotResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -24965,6 +25055,7 @@ input UserUpdateWithoutShotsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25024,6 +25115,7 @@ input UserUpdateWithoutStatementsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25083,6 +25175,7 @@ input UserUpdateWithoutStudentFeedbackDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25142,6 +25235,7 @@ input UserUpdateWithoutTeacherFeedbackDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25201,6 +25295,7 @@ input UserUpdateWithoutTestResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25260,6 +25355,7 @@ input UserUpdateWithoutTestsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25319,6 +25415,7 @@ input UserUpdateWithoutTextEditorDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25378,6 +25475,7 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25437,6 +25535,7 @@ input UserUpdateWithoutTopicsDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   uni: UniUpdateOneWithoutTeachersInput
@@ -25496,6 +25595,7 @@ input UserUpdateWithoutUniDataInput {
   password: String
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status
   legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
   company: CompanyUpdateOneWithoutHrsInput
@@ -25854,6 +25954,20 @@ input UserWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  image: String
+  image_not: String
+  image_in: [String!]
+  image_not_in: [String!]
+  image_lt: String
+  image_lte: String
+  image_gt: String
+  image_gte: String
+  image_contains: String
+  image_not_contains: String
+  image_starts_with: String
+  image_not_starts_with: String
+  image_ends_with: String
+  image_not_ends_with: String
   status: Status
   status_not: Status
   status_in: [Status!]

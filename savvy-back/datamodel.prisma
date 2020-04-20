@@ -37,6 +37,7 @@ type User {
   password: String!
   resetToken: String
   resetTokenExpiry: Float
+  image: String
   status: Status @default(value: STUDENT)
   legalPortfolio: LegalPortfolio @relation(link: TABLE, name: "UserPortfolio", onDelete: CASCADE)
   uni: Uni @relation(link: TABLE, name: "UniToUser")

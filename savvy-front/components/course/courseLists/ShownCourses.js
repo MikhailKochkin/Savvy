@@ -27,6 +27,7 @@ const COURSE_PAGES_QUERY = gql`
           id
           title
         }
+        image
       }
     }
   }
@@ -80,7 +81,7 @@ const ShownCourses = (props) => {
     <Styles>
       <Header>Вам могут быть интересны:</Header>
       <Container>
-        <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-and-network">
+        <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-first">
           {({ data, error, loading }) => {
             if (error) return <p>Error: {error.message}</p>;
             if (loading) return <LoadingDummy />;

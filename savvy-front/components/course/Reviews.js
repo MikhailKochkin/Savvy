@@ -8,7 +8,7 @@ import { userCircleO } from "react-icons-kit/fa/userCircleO";
 const Blue = styled.div`
   font-size: 2.4rem;
   color: white;
-  height: 23vh;
+  height: 13vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -55,17 +55,8 @@ const Circle = styled.button`
 `;
 
 const Block = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
   overflow: auto;
   width: 90%;
-  @media (max-width: 1100px) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
 `;
 
 const Review = styled.div`
@@ -79,7 +70,7 @@ const Review = styled.div`
   @media (max-width: 1100px) {
     width: 90%;
     margin: 0;
-    margin-bottom: 5%;
+    margin: 5% 0 5% 5%;
     padding: 15px;
   }
   .icons {
@@ -94,7 +85,7 @@ const Review = styled.div`
 
 const Reviews = () => {
   const [width, setWidth] = useState(0);
-  const onResize = width => {
+  const onResize = (width) => {
     setWidth(width);
   };
   let slides;
@@ -108,7 +99,7 @@ const Reviews = () => {
   return (
     <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <Blue>328 студентов прошли наши курсы. Вот, что они говорят:</Blue>
+      <Blue>347 студентов прошли наши курсы. Вот, что они говорят:</Blue>
       <Block>
         <Carousel
           slidesToShow={slides}
