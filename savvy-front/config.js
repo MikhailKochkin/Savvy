@@ -1,6 +1,6 @@
 export const endpoint = `http://localhost:4444`;
 export const prodEndpoint =
-  `https://api.savvvy.app` || `https://api.besavvy.app`;
+  `https://api.besavvy.app` || `https://api.savvvy.app`;
 export const CoursePerPage = 6;
 export const SandboxPerPage = 6;
 export const MaterialPerPage = 5;
@@ -48,16 +48,16 @@ export const Unis = [
   { ЮГУ: "cjysmafq103xp071997iaod4z" },
   { ЮУрГУ: "cjysmak2803xy0719n0d5ylws" },
   { ЮФУ: "cjysmaoeh03y707197hmfj0dn" },
-  { Другой: "cjyimfz2e00lp07174jpder3m" }
+  { Другой: "cjyimfz2e00lp07174jpder3m" },
 ];
 
 export const Companies = [
   { "Tomashevskaya & Partners": "ck2eobfn204s80785xo66ybzw" },
   { "CyberLaw School": "ck7f4o0zf01re0736df2ivhhw" },
-  { Другая: "ck7f4ooa201ro0736gzahsdhn" }
+  { Другая: "ck7f4ooa201ro0736gzahsdhn" },
 ];
 
 export const Tracks = [
   { "Корпоративное право": "cjwx78u7700rb07121pelqctm" },
-  { "Право и технологии": "cjwx79iaj00rk0712tz12j7vi" }
+  { "Право и технологии": "cjwx79iaj00rk0712tz12j7vi" },
 ];
