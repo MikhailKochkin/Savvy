@@ -318,7 +318,7 @@ class Nav extends Component {
                       )}
                     </UserData>
                   </StyledHeader>
-                  <Query
+                  {/* <Query
                     query={ALL_COURSE_PAGES_QUERY}
                     fetchPolicy="cache-first"
                   >
@@ -330,7 +330,7 @@ class Nav extends Component {
                         </div>
                       ) : null;
                     }}
-                  </Query>
+                  </Query> */}
 
                   <StyledModal
                     isOpen={this.state.isOpen}

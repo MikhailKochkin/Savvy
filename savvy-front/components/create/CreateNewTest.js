@@ -141,7 +141,7 @@ const Comment = styled.div`
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   width: 80%;
-  height: 100px;
+  min-height: 100px;
   padding: 1.5%;
   font-size: 1.4rem;
   outline: 0;
@@ -319,7 +319,6 @@ const CreateNewTest = (props) => {
                 getEditorText={setIf}
               />
             </Comment>
-            {/* <button onClick={e => }>refresh</button> */}
             <Button type="submit">
               {loading ? "Сохраняем..." : "Сохранить"}
             </Button>

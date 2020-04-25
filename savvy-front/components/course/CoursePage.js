@@ -748,7 +748,8 @@ class CoursePage extends Component {
                                   )}
                                   {this.state.page === "forum" &&
                                     (me &&
-                                    (subjectArray.includes(coursePage.id) ||
+                                    (me.id === coursePage.user.id ||
+                                      subjectArray.includes(coursePage.id) ||
                                       new_subjectArray.includes(
                                         coursePage.id
                                       ) ||
@@ -768,7 +769,8 @@ class CoursePage extends Component {
 
                                   {this.state.page === "feedback" &&
                                     (me &&
-                                    (subjectArray.includes(coursePage.id) ||
+                                    (me.id === coursePage.user.id ||
+                                      subjectArray.includes(coursePage.id) ||
                                       new_subjectArray.includes(
                                         coursePage.id
                                       ) ||

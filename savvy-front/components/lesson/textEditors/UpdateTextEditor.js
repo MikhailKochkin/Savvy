@@ -60,7 +60,7 @@ const Container = styled.div`
 
 const Button = styled.button`
   padding: 0.5% 1%;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   width: 25%;
   border-radius: 5px;
   color: white;
@@ -70,7 +70,7 @@ const Button = styled.button`
   cursor: pointer;
   outline: 0;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -103,15 +103,15 @@ const Label = styled.label`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../../editor/TextEditor"), {
+const DynamicLoadedEditor = dynamic(import("../../editor/UpdateTextEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const UpdateTextEditor = props => {
+const UpdateTextEditor = (props) => {
   const [text, setText] = useState(props.text);
   const [mistakes, setMistakes] = useState(props.totalMistakes);
-  const getText = d => setText(d);
+  const getText = (d) => setText(d);
   const { id, lessonID } = props;
   return (
     <>
@@ -125,7 +125,7 @@ const UpdateTextEditor = props => {
             id="totalMistakes"
             name="totalMistakes"
             defaultValue={mistakes}
-            onChange={e => setMistakes(e.target.value)}
+            onChange={(e) => setMistakes(e.target.value)}
           />
         </Label>
         <DynamicLoadedEditor getEditorText={getText} previousText={text} />
@@ -134,18 +134,18 @@ const UpdateTextEditor = props => {
           variables={{
             id: id,
             text: text,
-            totalMistakes: parseInt(mistakes)
+            totalMistakes: parseInt(mistakes),
           }}
           refetchQueries={() => [
             {
               query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID }
-            }
+              variables: { id: lessonID },
+            },
           ]}
         >
           {(updateTextEditor, { loading, error }) => (
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation

@@ -9,26 +9,6 @@ import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import { CURRENT_USER_QUERY } from "../User";
 
-const CREATE_LESSON_MUTATION = gql`
-  mutation CREATE_LESSON_MUTATION(
-    $name: String!
-    $number: Int
-    $text: String!
-    $description: String!
-    $coursePageID: ID!
-  ) {
-    createLesson(
-      name: $name
-      number: $number
-      text: $text
-      description: $description
-      coursePageID: $coursePageID
-    ) {
-      id
-    }
-  }
-`;
-
 const Width = styled.div`
   display: flex;
   flex-direction: column;
@@ -75,13 +55,13 @@ const Button = styled.button`
   width: 23%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 850px) {
     width: 40%;
@@ -114,12 +94,12 @@ const Frame = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 export default class CreateLesson extends Component {
@@ -128,30 +108,31 @@ export default class CreateLesson extends Component {
     text: "",
     description: "",
     number: 0,
-    published: false
+    published: false,
+    page: "lesson",
   };
-  handleName = e => {
+  handleName = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  handleNumber = e => {
+  handleNumber = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     const val = Math.round(value);
     this.setState({ [name]: val });
   };
 
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
 
   myCallback2 = (dataFromChild, name) => {
     let st = name;
     this.setState({
-      [st]: dataFromChild
+      [st]: dataFromChild,
     });
   };
 
@@ -163,73 +144,17 @@ export default class CreateLesson extends Component {
           <Width>
             <div id="root"></div>
             <Container>
-              <Title>Новый урок</Title>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Название"
-                value={this.state.name}
-                onChange={this.handleName}
-              />
-
-              <input
-                type="number"
-                id="number"
-                name="number"
-                placeholder="Номер"
-                onChange={this.handleNumber}
-              />
-
-              <Frame>
-                <DynamicHoverEditor
-                  index={1}
-                  name="description"
-                  getEditorText={this.myCallback2}
-                  placeholder="Описание"
-                />
-              </Frame>
-
-              <Editor>
-                <DynamicLoadedEditor getEditorText={this.myCallback} />
-              </Editor>
-              <Mutation
-                mutation={CREATE_LESSON_MUTATION}
-                variables={{
-                  coursePageID: id,
-                  ...this.state
-                }}
-                refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-                awaitRefetchQueries={true}
-              >
-                {(createLesson, { loading, error }) => (
-                  <Buttons>
-                    <Button
-                      onClick={async e => {
-                        e.preventDefault();
-                        const res = await createLesson();
-                        Router.push({
-                          pathname: "/lesson",
-                          query: {
-                            id: res.data.createLesson.id,
-                            type: "regular"
-                          }
-                        });
-                      }}
-                    >
-                      {loading ? "Сохраняем..." : "Cохранить"}
-                    </Button>
-                    <Link
-                      href={{
-                        pathname: "/coursePage",
-                        query: { id }
-                      }}
-                    >
-                      <div>Вернуться на страницу урока</div>
-                    </Link>
-                  </Buttons>
-                )}
-              </Mutation>
+              <Title>
+                <span onClick={(e) => this.setState({ page: "lesson" })}>
+                  Новый урок
+                </span>{" "}
+                /{" "}
+                <span onClick={(e) => this.setState({ page: "challenge" })}>
+                  Новое испытание
+                </span>
+              </Title>
+              {this.state.page === "lesson" && <CreateLes />}
+              {this.state.page === "challenge" && <CreateChallenge />}
             </Container>
           </Width>
         </AreYouATeacher>

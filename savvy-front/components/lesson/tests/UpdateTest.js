@@ -115,10 +115,16 @@ const Comment = styled.div`
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   width: 80%;
-  height: 100px;
+  min-height: 100px;
   padding: 1.5%;
   font-size: 1.4rem;
   outline: 0;
+  &#ifRight {
+    border: 1px solid #84bc9c;
+  }
+  &#ifWrong {
+    border: 1px solid #de6b48;
+  }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
@@ -215,8 +221,9 @@ const UpdateTest = (props) => {
       <Comment>
         <DynamicLoadedEditor
           id="ifWrong"
+          name="ifWrong"
           value={ifWrong}
-          placeholder={`Комментарий в случае правильного ответа`}
+          placeholder={`Комментарий в случае неправильного ответа`}
           getEditorText={setIf}
         />
       </Comment>

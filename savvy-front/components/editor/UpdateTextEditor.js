@@ -112,7 +112,7 @@ const BLOCK_TAGS = {
 
 const INLINE_TAGS = {
   a: "link",
-  span: "translation",
+  //   span: "translation",
   span: "comment",
 };
 
@@ -269,14 +269,14 @@ const rules = [
                 {children}
               </LinkStyle>
             );
-          case "translation":
-            return (
-              <b>
-                <span id="id" data={object.data._root.entries[0][1]}>
-                  {children}
-                </span>
-              </b>
-            );
+          //   case "translation":
+          //     return (
+          //       <b>
+          //         <span id="id" data={object.data._root.entries[0][1]}>
+          //           {children}
+          //         </span>
+          //       </b>
+          //     );
           case "comment":
             return (
               <CommentStyle2 id="id" data={object.data._root.entries[0][1]}>
@@ -709,27 +709,7 @@ class App extends React.Component {
     if (event.key != "b" || !event.ctrlKey) return next();
 
     event.preventDefault();
-
-    // Determine whether any of the currently selected blocks are code blocks.
-    // const isCode = this.editor.value.blocks.some(block => block.type == 'code')
     editor.setBlocks("code");
-
-    // let mark
-    // if (isBoldHotkey(event)) {
-    //   mark = 'bold'
-    // } else if (isItalicHotkey(event)) {
-    //   mark = 'italic'
-    // } else if (isUnderlinedHotkey(event)) {
-    //   mark = 'header'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'code'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'quote'
-    // } else {
-    //   return next()
-    // }
-    // event.preventDefault()
-    // if(mark !== undefined){this.editor.toggleMark(mark)}
   };
   onChange = ({ value }) => {
     this.setState({ value });
