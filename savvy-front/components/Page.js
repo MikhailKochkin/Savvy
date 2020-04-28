@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { withRouter } from "next/router";
 import { ModalProvider } from "styled-react-modal";
+import dynamic from "next/dynamic";
 
 import Nav from "./Nav";
 import Meta from "./Meta";
@@ -20,12 +21,16 @@ const theme = {
   darkRed: "#ac2c05",
   green: "#84BC9C",
   darkGreen: "#294d4a",
-  yellow: "#FDF3C8"
+  yellow: "#FDF3C8",
 };
+
+const DynamicComponent = dynamic(import("./Alert"), {
+  ssr: false,
+});
 
 const StyledPage = styled.div`
   background: #fff;
-  color: ${props => props.theme.black};
+  color: ${(props) => props.theme.black};
 `;
 
 const Inner = styled.div`
@@ -82,6 +87,7 @@ const Page = ({ children, router }) => {
               <Meta />
               <Layout>
                 <ModalProvider backgroundComponent={SpecialModalBackground}>
+                  <DynamicComponent />
                   <Header />
                   <Nav />
                   <Inner>{children}</Inner>

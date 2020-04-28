@@ -5,6 +5,7 @@ import gql from "graphql-tag";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
+import absoluteUrl from "next-absolute-url";
 import User from "./User";
 import Menu from "./Menu";
 import Signup from "./auth/Signup";
@@ -26,6 +27,8 @@ const ALL_COURSE_PAGES_QUERY = gql`
     }
   }
 `;
+
+// const { origin } = absoluteUrl(req);
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -243,7 +246,6 @@ class Nav extends Component {
       auth: dataFromChild,
     });
   };
-
   render() {
     return (
       <User>
@@ -318,20 +320,6 @@ class Nav extends Component {
                       )}
                     </UserData>
                   </StyledHeader>
-                  {/* <Query
-                    query={ALL_COURSE_PAGES_QUERY}
-                    fetchPolicy="cache-first"
-                  >
-                    {({ data, error, loading }) => {
-                      if (error) return <p>Error: {error.message}</p>;
-                      return this.state.menuShown ? (
-                        <div onMouseLeave={this.mouseLeave}>
-                          <Menu courses={data.coursePages} />
-                        </div>
-                      ) : null;
-                    }}
-                  </Query> */}
-
                   <StyledModal
                     isOpen={this.state.isOpen}
                     onBackgroundClick={this.toggleModal}
