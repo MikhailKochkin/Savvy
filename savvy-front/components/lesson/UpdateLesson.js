@@ -202,7 +202,7 @@ export default class UpdateLesson extends Component {
             </select>
             <select
               name="open"
-              defaultValue={lesson.open}
+              defaultValue={lesson.open === true}
               onChange={this.handleBoolean}
             >
               <option value={true}>Открытый урок</option>

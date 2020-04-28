@@ -86,18 +86,17 @@ const Frame = styled.div`
   }
 `;
 
+const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>Загрузка...</p>,
+  ssr: false,
+});
+
 const CreateLes = (props) => {
   const [name, setName] = useState("");
-  const [text, setText] = useState("");
   const [number, setNumber] = useState(0);
   const [description, setDescription] = useState("");
-  description;
 
-  myCallback = (dataFromChild) => {
-    setText(dataFromChild);
-  };
-
-  myCallback2 = (dataFromChild, name) => {
+  const myCallback2 = (dataFromChild, name) => {
     setDescription(dataFromChild);
   };
 
@@ -130,15 +129,14 @@ const CreateLes = (props) => {
             placeholder="Описание"
           />
         </Frame>
-
-        <Editor>
-          <DynamicLoadedEditor getEditorText={myCallback} />
-        </Editor>
         <Mutation
           mutation={CREATE_LESSON_MUTATION}
           variables={{
             coursePageID: props.id,
-            //   ...this.state,
+            name: name,
+            description: description,
+            number: parseInt(number),
+            text: "Введение",
           }}
           refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         >
