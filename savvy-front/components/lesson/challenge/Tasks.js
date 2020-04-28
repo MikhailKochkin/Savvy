@@ -78,8 +78,7 @@ const LessonPart = styled.div`
     padding-left: 2%;
   }
   @media (max-width: 800px) {
-    margin: 1%;
-    width: 90%;
+    width: 100%;
   }
   .example-enter {
     opacity: 0.01;
@@ -113,7 +112,7 @@ const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   @media (max-width: 800px) {
-    width: 90%;
+    width: 100%;
   }
 `;
 
@@ -123,7 +122,7 @@ const Block = styled.div`
   color: black;
   width: 100%;
   @media (max-width: 800px) {
-    width: 90%;
+    width: 100%;
   }
 `;
 

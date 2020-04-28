@@ -123,6 +123,9 @@ const Container = styled.div`
 
 const Box = styled.div`
   width: 40%;
+  @media (max-width: 850px) {
+    width: 95%;
+  }
 `;
 
 const Head = styled.div`

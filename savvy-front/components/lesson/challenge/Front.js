@@ -28,8 +28,7 @@ const LessonPart = styled.div`
     box-shadow: "0 0 0 2px blue;";
   }
   @media (max-width: 800px) {
-    margin: 1%;
-    width: 90%;
+    width: 100%;
   }
   .example-enter {
     opacity: 0.01;
@@ -63,7 +62,8 @@ const Header = styled.div`
   flex-direction: row;
   justify-content: space-between;
   @media (max-width: 800px) {
-    width: 90%;
+    width: 100%;
+    margin-top: 10px;
   }
 `;
 
@@ -91,7 +91,6 @@ const Front = (props) => {
     }
     return r.time - n.time;
   });
-  console.log(props.results, results);
   return (
     <>
       <Header>
