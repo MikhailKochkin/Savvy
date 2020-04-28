@@ -49,8 +49,12 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       lessons {
         id
         name
+        open
         number
         type
+        coursePage {
+          id
+        }
         description
         published
         user {
@@ -810,7 +814,6 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
-
                                 {!subjectArray.includes(coursePage.id) &&
                                   !new_subjectArray.includes(coursePage.id) && (
                                     <RegisterCard

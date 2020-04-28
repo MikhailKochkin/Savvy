@@ -118,22 +118,22 @@ const Button = styled.button`
 
 class ChooseCareer extends Component {
   state = {
-    careerTrackID: ""
+    careerTrackID: "",
   };
   updateUser = async (e, updateUser) => {
     e.preventDefault();
     const res = await updateUser({
       variables: {
         id: this.props.me.id,
-        careerTrackID: this.state.careerTrackID
-      }
+        careerTrackID: this.state.careerTrackID,
+      },
     });
   };
   render() {
     return (
       <Styles>
         <Header>
-          Чтобы получить максимальную пользу от Savvvy, выберите свой карьерный
+          Чтобы получить максимальную пользу от BeSavvy, выберите свой карьерный
           трек:{" "}
         </Header>
         <User>
@@ -150,10 +150,10 @@ class ChooseCareer extends Component {
                       <div>
                         <p>Технологии и дизайн в работе юриста</p>
                         <Button
-                          onClick={async e => {
+                          onClick={async (e) => {
                             e.preventDefault();
                             const res1 = await this.setState({
-                              careerTrackID: "cjymywj43tg8c0b36c762ii0w"
+                              careerTrackID: "cjymywj43tg8c0b36c762ii0w",
                             });
                             const res2 = await this.updateUser(e, updateUser);
                             Router.push({ pathname: "/courses" });
@@ -168,10 +168,10 @@ class ChooseCareer extends Component {
                       <div>
                         <p>Корпоративный юрист</p>
                         <Button
-                          onClick={async e => {
+                          onClick={async (e) => {
                             e.preventDefault();
                             const res1 = await this.setState({
-                              careerTrackID: "cjymyvxjqqsoh0b53wtdnpzkk"
+                              careerTrackID: "cjymyvxjqqsoh0b53wtdnpzkk",
                             });
                             const res2 = await this.updateUser(e, updateUser);
                             Router.push({ pathname: "/courses" });

@@ -104,12 +104,12 @@ const Comment = styled.div`
 
 class RequestReset extends Component {
   state = {
-    email: ""
+    email: "",
   };
-  saveToState = e => {
+  saveToState = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  switch = e => {
+  switch = (e) => {
     const name = e.target.getAttribute("name");
     this.props.getData(name);
   };
@@ -120,7 +120,7 @@ class RequestReset extends Component {
           <Form
             method="post"
             data-test="form"
-            onSubmit={async e => {
+            onSubmit={async (e) => {
               e.preventDefault();
               await reset();
               this.setState({ email: "" });
@@ -130,7 +130,7 @@ class RequestReset extends Component {
               <Title>Восстановите пароль</Title>
               <Message>
                 Введите адрес электронной почты, связанный с вашим аккаунтом на
-                Savvvy, и мы вышлем вам ссылку для изменения пароля.
+                BeSavvy, и мы вышлем вам ссылку для изменения пароля.
               </Message>
               <Container>
                 <Error error={error} />

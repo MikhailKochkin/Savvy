@@ -317,7 +317,7 @@ class LandingPage extends Component {
             <Image />
             <FYI>
               <NavButton onClick={this.open} data-tut="zero-step">
-                Тур по Savvvy.app
+                Тур по BeSavvy.app
               </NavButton>
               <LandingCareerTrack width={this.state.width} />
             </FYI>

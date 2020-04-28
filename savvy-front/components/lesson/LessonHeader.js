@@ -187,10 +187,10 @@ class LessonHeader extends Component {
     <p>Привет!</p>
     <p>В уроке разбираются, такие вопросы, как ...</p>
     <p>Вы научитесь, считать, писать или читать!</p>
-    <p>Обязателен для тех, кто хочет получить отметку 5.</p>`
+    <p>Обязателен для тех, кто хочет получить отметку 5.</p>`,
   };
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
     const name = target.name;
@@ -199,7 +199,7 @@ class LessonHeader extends Component {
   };
 
   toggle = () => {
-    this.setState(prev => ({ reveal: !prev.reveal }));
+    this.setState((prev) => ({ reveal: !prev.reveal }));
   };
 
   render() {
@@ -211,9 +211,7 @@ class LessonHeader extends Component {
       coursePageId,
       students,
       me,
-      openLesson
     } = this.props;
-
     return (
       <>
         <TextBar>
@@ -232,13 +230,13 @@ class LessonHeader extends Component {
                   mutation={UPDATE_PUBLISHED_MUTATION}
                   variables={{
                     id: lesson.id,
-                    published: !this.state.published
+                    published: !this.state.published,
                   }}
                   refetchQueries={() => [
                     {
                       query: SINGLE_COURSEPAGE_QUERY,
-                      variables: { id: coursePageId }
-                    }
+                      variables: { id: coursePageId },
+                    },
                   ]}
                 >
                   {(updatePublished, { loading, error }) => (
@@ -248,7 +246,7 @@ class LessonHeader extends Component {
                           name="published"
                           type="checkbox"
                           checked={this.state.published}
-                          onChange={async e => {
+                          onChange={async (e) => {
                             updatePublished();
                             this.handleInputChange(e);
                           }}
@@ -266,41 +264,35 @@ class LessonHeader extends Component {
                   mutation={CREATE_LESSONRESULT_MUTATION}
                   variables={{
                     lessonID: lesson.id,
-                    visitsNumber: 1
+                    visitsNumber: 1,
                   }}
                   refetchQueries={() => [
                     {
                       query: SINGLE_COURSEPAGE_QUERY,
-                      variables: { id: coursePageId }
-                    }
+                      variables: { id: coursePageId },
+                    },
                   ]}
                 >
                   {(createLessonResult, { loading, error }) => {
                     return (
                       <>
                         {lesson.lessonResults.filter(
-                          l => l.student.id === me.id
+                          (l) => l.student.id === me.id
                         ).length === 0 && (
                           <>
-                            {
-                              (me.id,
-                              author,
-                              me.permissions.includes("ADMIN"),
-                              lesson.id === openLesson)
-                            }
                             {me &&
                             lesson &&
                             (me.id === author ||
                               me.permissions.includes("ADMIN") ||
-                              lesson.id === openLesson) ? (
+                              lesson.open) ? (
                               <Link
                                 // The user is the teacher or the admin or it is an openLesson.
                                 href={{
                                   pathname: "/lesson",
                                   query: {
                                     id: lesson.id,
-                                    type: lesson.type.toLowerCase()
-                                  }
+                                    type: lesson.type.toLowerCase(),
+                                  },
                                 }}
                               >
                                 <A>
@@ -322,7 +314,7 @@ class LessonHeader extends Component {
                               (students.includes(me.id) ||
                                 new_students.includes(me.id)) &&
                               !me.permissions.includes("ADMIN") &&
-                              lesson.id !== openLesson &&
+                              !lesson.open &&
                               this.state.published && (
                                 <Link
                                   // The user hasn't visited the lesson page before. Create the lesson visit node.
@@ -330,8 +322,8 @@ class LessonHeader extends Component {
                                     pathname: "/lesson",
                                     query: {
                                       id: lesson.id,
-                                      type: lesson.type.toLowerCase()
-                                    }
+                                      type: lesson.type.toLowerCase(),
+                                    },
                                   }}
                                 >
                                   <A>
@@ -352,19 +344,19 @@ class LessonHeader extends Component {
                     );
                   }}
                 </Mutation>
-                {lesson.lessonResults.filter(l => l.student.id === me.id)
+                {lesson.lessonResults.filter((l) => l.student.id === me.id)
                   .length > 0 && (
                   <Mutation
                     mutation={UPDATE_LESSONRESULT_MUTATION}
                     variables={{
                       id: lesson.lessonResults[0].id,
-                      visitsNumber: lesson.lessonResults[0].visitsNumber + 1
+                      visitsNumber: lesson.lessonResults[0].visitsNumber + 1,
                     }}
                     refetchQueries={() => [
                       {
                         query: SINGLE_COURSEPAGE_QUERY,
-                        variables: { id: coursePageId }
-                      }
+                        variables: { id: coursePageId },
+                      },
                     ]}
                   >
                     {(updateLessonResult, { loading, error }) => {
@@ -374,15 +366,15 @@ class LessonHeader extends Component {
                           lesson &&
                           (me.id === author ||
                             me.permissions.includes("ADMIN") ||
-                            lesson.id === openLesson) ? (
+                            lesson.open) ? (
                             <Link
                               // The user is the teacher or the admin or it is an openLesson.
                               href={{
                                 pathname: "/lesson",
                                 query: {
                                   id: lesson.id,
-                                  type: lesson.type.toLowerCase()
-                                }
+                                  type: lesson.type.toLowerCase(),
+                                },
                               }}
                             >
                               <A>
@@ -411,8 +403,8 @@ class LessonHeader extends Component {
                                   pathname: "/lesson",
                                   query: {
                                     id: lesson.id,
-                                    type: lesson.type.toLowerCase()
-                                  }
+                                    type: lesson.type.toLowerCase(),
+                                  },
                                 }}
                               >
                                 <A>

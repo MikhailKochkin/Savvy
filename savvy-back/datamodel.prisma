@@ -22,6 +22,7 @@ enum Status {
 enum Type {
   STORY
   REGULAR
+  CHALLENGE
 }
 
 enum TaskType {
@@ -89,6 +90,7 @@ type User {
   documents: [Document] @relation(link: TABLE, name: "DocumentToUser")
   documentResults: [DocumentResult] @relation(link: TABLE, name: "DocumentResultToUser", onDelete: CASCADE)
   clauses: [Clause] @relation(link: TABLE, name: "ClauseToUser")
+  challengeResults: [ChallengeResult] @relation(link: TABLE, name: "UserChallengeResults", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -188,6 +190,7 @@ type Lesson {
   constructions: [Construction] @relation(link: TABLE, name: "LessonConstructions" onDelete: CASCADE)
   texteditors: [TextEditor] @relation(link: TABLE, name: "LessonTextEditors" onDelete: CASCADE)
   lessonResults: [LessonResult] @relation(link: TABLE, name: "LessonResults" onDelete: CASCADE)
+  challengeResults: [ChallengeResult] @relation(link: TABLE, name: "ChallengeResults" onDelete: CASCADE)
   testResults: [TestResult] @relation(link: TABLE, name: "TestResults" onDelete: CASCADE)
   quizResults: [QuizResult] @relation(link: TABLE, name: "QuizResults" onDelete: CASCADE)
   textEditorResults: [TextEditorResult] @relation(link: TABLE, name: "TextEditorResults" onDelete: CASCADE)
@@ -648,6 +651,17 @@ type Statement {
   text: String
   topic: Topic @relation( name: "TopicStatements")
   user: User @relation( name: "UserStatements")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type ChallengeResult {
+  id: ID! @id
+  student: User! @relation( name: "UserChallengeResults")
+  correct: Int
+  wrong: Int
+  time: Int
+  lesson: Lesson! @relation( name: "ChallengeResults")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

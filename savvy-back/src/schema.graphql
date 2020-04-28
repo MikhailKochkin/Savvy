@@ -43,6 +43,12 @@ type Mutation {
     description: String
     coursePageID: ID!
   ): Lesson!
+  createChallengeResult(
+    correct: Int
+    wrong: Int
+    time: Int
+    lesson: ID
+  ): ChallengeResult
   updateLesson(
     id: ID!
     name: String
@@ -50,6 +56,7 @@ type Mutation {
     text: String
     description: String
     type: Type
+    open: Boolean
     map: [Json]
   ): Lesson
   updatePublished(id: ID!, published: Boolean): Lesson

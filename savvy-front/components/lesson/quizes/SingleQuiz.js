@@ -23,7 +23,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${props => (props.story ? "100%" : "95%")};
+  width: ${(props) => (props.story ? "100%" : "95%")};
   margin-bottom: 3%;
   font-size: 1.6rem;
   @media (max-width: 800px) {
@@ -36,7 +36,7 @@ const Question = styled.div`
   flex-direction: column;
   flex: 50%;
   margin-bottom: 3%;
-  margin-top: ${props => (props.story ? "2%" : "0%")};
+  margin-top: ${(props) => (props.story ? "2%" : "0%")};
   button {
     width: 30%;
     padding: 2%;
@@ -76,7 +76,7 @@ const Answer = styled.div`
   color: black;
   padding: 2%;
   min-height: 150px;
-  display: ${props => (props.display === "true" ? "none" : "block")};
+  display: ${(props) => (props.display === "true" ? "none" : "block")};
   margin: 3% 0;
   @media (max-width: 800px) {
     width: 100%;
@@ -88,11 +88,11 @@ const Group = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  background: ${props => props.inputColor};
+  background: ${(props) => props.inputColor};
   width: 100%;
   border: 1px solid #c4c4c4;
   border-radius: 5px;
-  pointer-events: ${props => (props.progress === "true" ? "none" : "auto")};
+  pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
   padding: 0.5%;
   margin-bottom: 3%;
   div {
@@ -135,7 +135,7 @@ const Dots = styled.div`
 `;
 
 const Progress = styled.div`
-  display: ${props => (props.display === "true" ? "flex" : "none")};
+  display: ${(props) => (props.display === "true" ? "flex" : "none")};
   flex-direction: row;
   justify-content: center;
   width: 100%;
@@ -152,12 +152,12 @@ const StyledButton = withStyles({
     margin: "4% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
 const Block = styled.div`
-  display: ${props => (props.display === "true" ? "block" : "none")};
+  display: ${(props) => (props.display === "true" ? "block" : "none")};
   #comment {
     margin-bottom: 2%;
   }
@@ -173,12 +173,12 @@ class SingleQuiz extends Component {
     update: false,
     sent: false,
     move: false,
-    progress: "false"
+    progress: "false",
   };
 
-  onShow = e => {
+  onShow = (e) => {
     if (this.state.correct !== "") {
-      this.setState(prevState => ({ hidden: !prevState.hidden }));
+      this.setState((prevState) => ({ hidden: !prevState.hidden }));
     } else {
       alert("Сначала дайте свой ответ!");
     }
@@ -188,74 +188,73 @@ class SingleQuiz extends Component {
     document.querySelector(".button").disabled = true;
   };
 
-  onAnswer = async e => {
+  onAnswer = async (e) => {
     this.setState({ progress: "true" });
     let data1 = {
       sentence1: this.props.answer.toLowerCase(),
-      sentence2: this.state.answer.toLowerCase()
+      sentence2: this.state.answer.toLowerCase(),
     };
 
     const r = await fetch("https://dry-plains-91452.herokuapp.com", {
       method: "POST", // or 'PUT'
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data1)
+      body: JSON.stringify(data1),
     })
-      .then(response => response.json())
-      .then(res => {
+      .then((response) => response.json())
+      .then((res) => {
         console.log(res);
         if (res > 0.59) {
           this.setState({
             correct: "true",
-            inputColor: "rgba(50, 172, 102, 0.25)"
+            inputColor: "rgba(50, 172, 102, 0.25)",
           });
           this.move("true");
         } else {
           this.setState({
             correct: "false",
-            inputColor: "rgba(222, 107, 72, 0.5)"
+            inputColor: "rgba(222, 107, 72, 0.5)",
           });
           this.move("false");
         }
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
     this.setState({ progress: "false" });
   };
 
-  move = result => {
+  move = (result) => {
     // 1. if the data is sent for the first time
     if (!this.state.sent) {
       // 2. and if we get the right answer
-      if (result === "true") {
+      if (result === "true" && this.props.getData) {
         // 3. and if this quiz is a part of an exam
-        if (this.props.exam) {
-          // 4. we transfer the "true" data to the exam component
-          this.props.getData(
-            this.props.next ? this.props.next.true : { finish: 0 },
-            "true"
-          );
-        }
-        // 2. and if we get the wrong answer
-      } else if (result === "false") {
-        // 3. and if this quiz is a part of an exam
-        if (this.props.exam) {
-          // 4. we transfer the "false" data to the exam component
-          this.props.getData(
-            this.props.next ? this.props.next.false : { finish: 0 },
-            "false"
-          );
-        }
+        this.props.getData(
+          this.props.next
+            ? [true, this.props.next.true]
+            : [true, { finish: "finish" }],
+          "true"
+        );
       }
+      // 2. and if we get the wrong answer
+      else if (result === "false") {
+        // 3. and if this quiz is a part of an exam
+        // 4. we transfer the "false" data to the exam component
+        this.props.getData(
+          this.props.next
+            ? [false, this.props.next.false]
+            : [false, { finish: "finish" }]
+        );
+      }
+      this.setState({ sent: true });
     }
-    this.setState({ sent: true });
   };
 
   switch = () => {
-    this.setState(prev => ({ update: !prev.update }));
+    this.setState((prev) => ({ update: !prev.update }));
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -264,8 +263,8 @@ class SingleQuiz extends Component {
     let data;
     if (me) {
       data = userData
-        .filter(el => el.quiz.id === this.props.id)
-        .filter(el => el.student.id === me.id);
+        .filter((el) => el.quiz.id === this.props.id)
+        .filter((el) => el.student.id === me.id);
     }
     return (
       <Styles story={story}>
@@ -306,14 +305,14 @@ class SingleQuiz extends Component {
                 variables={{
                   quiz: this.props.quizID,
                   lessonID: this.props.lessonID,
-                  answer: this.state.answer
+                  answer: this.state.answer,
                 }}
               >
                 {(createQuizResult, { loading, error }) => (
                   <div
                     id="but1"
                     className="button"
-                    onClick={async e => {
+                    onClick={async (e) => {
                       e.preventDefault();
                       if (this.props.type === "FORM") {
                         const res1 = await this.onSend();
@@ -373,7 +372,7 @@ class SingleQuiz extends Component {
             ifWrong={ifWrong}
             notes={this.props.notes}
             next={this.props.next}
-            quizes={this.props.quizes.filter(q => q.id !== this.props.quizID)}
+            quizes={this.props.quizes.filter((q) => q.id !== this.props.quizID)}
             tests={this.props.tests}
           />
         )}

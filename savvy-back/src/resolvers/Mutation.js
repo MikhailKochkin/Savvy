@@ -30,7 +30,7 @@ const newFeedbackNotification = (name, title, id, lesson) => `
   ">
   <h4>${name}, добрый день!</h4>
   <p>Преподаватель по курсу "${title}" оставил обратную связь по уроку "${lesson}" </p>
-  <p>Посмотрите, что написал преподаватель, <a href="https://savvvy.app/coursePage?id=${id}">по этой ссылке</a> в разделе "Обратная связь".</p>
+  <p>Посмотрите, что написал преподаватель, <a href="https://besavvy.app/coursePage?id=${id}">по этой ссылке</a> в разделе "Обратная связь".</p>
   </div>
 `;
 
@@ -56,8 +56,8 @@ const NotificationEmail = (name, course, coursePageID) => `
     font-size: 20px;
   ">
     <h2>${name}, здравствуйте!</h2>
-    <p>Вам открыт доступ к курсу ${course} на сайте savvvy.app.</p>
-    <p>Переходите к курсу <a href="https://savvvy.app/coursePage?id=${coursePageID}">по ссылке.</a> </p>
+    <p>Вам открыт доступ к курсу ${course} на сайте besavvy.app.</p>
+    <p>Переходите к курсу <a href="https://besavvy.app/coursePage?id=${coursePageID}">по ссылке.</a> </p>
     <p>Если вы не покупали ничего на сайте, то просто проигнорируйте это письмо.</p>
   </div>
 `;
@@ -115,7 +115,7 @@ const Mutations = {
     });
     // 3. Email them that reset token
     const mailRes = await client.sendEmail({
-      From: "Mikhail@savvvy.app",
+      From: "Mikhail@besavvy.app",
       To: user.email,
       Subject: "Смена пароля",
       HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
@@ -540,6 +540,32 @@ const Mutations = {
       info
     );
     return LessonResult;
+  },
+  async createChallengeResult(parent, args, ctx, info) {
+    let lesson = args.lesson;
+    delete args.lesson;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const ChallengeResult = await ctx.db.mutation.createChallengeResult(
+      {
+        data: {
+          student: {
+            connect: { id: ctx.request.userId },
+          },
+          lesson: {
+            connect: { id: lesson },
+          },
+          correct: args.correct,
+          wrong: args.wrong,
+          time: args.time,
+        },
+      },
+      info
+    );
+    return ChallengeResult;
   },
   async updateLessonResult(parent, args, ctx, info) {
     const updates = { ...args };
@@ -1110,13 +1136,13 @@ const Mutations = {
       },
       confirmation: {
         type: "redirect",
-        return_url: "https://www.savvvy.app/",
+        return_url: "https://www.besavvy.app/",
       },
       capture: true,
     });
 
     ctx.response.cookie("url", result.confirmation.confirmation_url, {
-      domain: ".savvvy.app",
+      domain: ".besavvy.app",
       httpOnly: false,
     });
 
@@ -1142,7 +1168,7 @@ const Mutations = {
     });
 
     const newOrderMail = await client.sendEmail({
-      From: "Mikhail@savvvy.app",
+      From: "Mikhail@besavvy.app",
       To: "Mi.Kochkin@ya.ru",
       Subject: "Новый клиент",
       HtmlBody: newOrderEmail(
@@ -1182,7 +1208,7 @@ const Mutations = {
     });
 
     const newOrderMail = await client.sendEmail({
-      From: "Mikhail@savvvy.app",
+      From: "Mikhail@besavvy.app",
       To: "Mi.Kochkin@ya.ru",
       Subject: "Новый клиент",
       HtmlBody: newOrderEmail(user.name, coursePage.title, " закрытый курс"),
@@ -1197,7 +1223,7 @@ const Mutations = {
         `{ id, user { name, email}, coursePage {id, title} }`
       );
       const notification = await client.sendEmail({
-        From: "Mikhail@savvvy.app",
+        From: "Mikhail@besavvy.app",
         To: order.user.email,
         Subject: "Savvy App: доступ к курсу открыт!",
         HtmlBody: NotificationEmail(
@@ -1441,7 +1467,7 @@ const Mutations = {
     const lesson = await ctx.db.query.lesson({ where: { id: args.lesson } });
 
     const FeedbackNotification = await client.sendEmail({
-      From: "Mikhail@savvvy.app",
+      From: "Mikhail@besavvy.app",
       To: user.email,
       Subject: "BeSavvy: преподаватель проверил вашу работу",
       HtmlBody: newFeedbackNotification(

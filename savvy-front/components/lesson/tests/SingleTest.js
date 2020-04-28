@@ -171,19 +171,16 @@ class SingleTest extends Component {
           inputColor: "rgba(50, 172, 102, 0.25)",
         });
         // 1. if the data is sent for the first time
-        if (!this.state.sent) {
+        if (!this.state.sent && this.props.getData) {
           // 2. and if this quiz is a part of an exam
-          this.props.exam
-            ? //3. we transfer the "true" data to the exam component
-              this.props.getData(
-                this.props.next &&
-                  this.props.next.true &&
-                  Object.values(this.props.next.true)[0] !== null
-                  ? this.props.next.true
-                  : { finish: 0 },
-                "true"
-              )
-            : null;
+          this.props.getData(
+            this.props.next
+              ? [true, this.props.next.true]
+              : [true, { finish: "finish" }],
+            "true"
+          );
+
+          document.querySelector(".button").disabled = true;
         }
       } else {
         this.setState({
@@ -191,19 +188,13 @@ class SingleTest extends Component {
           inputColor: "rgba(222, 107, 72, 0.5)",
         });
         // 1. if the data is sent for the first time
-        if (!this.state.sent) {
+        if (!this.state.sent && this.props.getData) {
           // 2. and if this quiz is a part of an exam
-          this.props.exam
-            ? // 3. we transfer the "false" data to the exam component
-              this.props.getData(
-                this.props.next &&
-                  this.props.next.false &&
-                  Object.values(this.props.next.false)[0] !== null
-                  ? this.props.next.false
-                  : { finish: 1 },
-                "false"
-              )
-            : null;
+          this.props.getData(
+            this.props.next
+              ? [false, this.props.next.false]
+              : [false, { finish: "finish" }]
+          );
         }
       }
     };

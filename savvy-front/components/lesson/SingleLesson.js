@@ -108,7 +108,6 @@ const SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
-        openLesson
       }
       shots {
         id
@@ -762,35 +761,44 @@ class SingleLesson extends Component {
                             me.permissions.includes("ADMIN")) && (
                             <Head2>
                               {lesson.map.length > 0 ? (
-                                <div>
-                                  Режим разработки →
-                                  <Link
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: "story",
-                                      },
-                                    }}
-                                  >
-                                    <span> Переключить</span>
-                                  </Link>
-                                </div>
+                                <Link
+                                  href={{
+                                    pathname: "/lesson",
+                                    query: {
+                                      id: lesson.id,
+                                      type: "story",
+                                    },
+                                  }}
+                                >
+                                  <span>{`История `}</span>
+                                </Link>
                               ) : (
-                                <div>
-                                  Режим разработки →
-                                  <span
-                                    onClick={() =>
-                                      alert(
-                                        `Структура урока не задана, это можно сделать в настройках`
-                                      )
-                                    }
-                                  >
-                                    {" "}
-                                    Переключить
-                                  </span>
-                                </div>
+                                <span
+                                  onClick={() =>
+                                    alert(
+                                      `Структура урока не задана, это можно сделать в настройках.`
+                                    )
+                                  }
+                                >
+                                  {" "}
+                                  История
+                                </span>
                               )}
+                              <>
+                                {" "}
+                                <span>{` |  `}</span>
+                              </>
+                              <Link
+                                href={{
+                                  pathname: "/lesson",
+                                  query: {
+                                    id: lesson.id,
+                                    type: "challenge",
+                                  },
+                                }}
+                              >
+                                <span> Испытание</span>
+                              </Link>
                             </Head2>
                           )}
                         <LessonStyles>

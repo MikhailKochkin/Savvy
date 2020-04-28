@@ -16,6 +16,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $text: String
     $description: String
     $type: Type
+    $open: Boolean
   ) {
     updateLesson(
       id: $id
@@ -24,6 +25,7 @@ const UPDATE_LESSON_MUTATION = gql`
       text: $text
       description: $description
       type: $type
+      open: $open
     ) {
       id
       number
@@ -31,6 +33,7 @@ const UPDATE_LESSON_MUTATION = gql`
       text
       type
       description
+      open
     }
   }
 `;
@@ -86,7 +89,7 @@ const Container = styled.div`
 
 const Button = styled.button`
   padding: 1% 2%;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   width: 20%;
   border-radius: 5px;
   color: white;
@@ -96,7 +99,7 @@ const Button = styled.button`
   cursor: pointer;
   outline: 0;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -122,37 +125,42 @@ const Title = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 export default class UpdateLesson extends Component {
   state = {};
-  handleName = e => {
+  handleName = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
-  handleNumber = e => {
+  handleBoolean = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    this.setState({ [name]: value === "true" });
+  };
+  handleNumber = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     const val = Math.round(value);
     this.setState({ [name]: val });
   };
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
 
   myCallback2 = (dataFromChild, name) => {
     let st = name;
     this.setState({
-      [st]: dataFromChild
+      [st]: dataFromChild,
     });
   };
 
@@ -188,6 +196,17 @@ export default class UpdateLesson extends Component {
                 Режим при открытии урока – Разработка
               </option>
               <option value="STORY">Режим при открытии урока – История</option>
+              <option value="CHALLENGE">
+                Режим при открытии урока – Испытание
+              </option>
+            </select>
+            <select
+              name="open"
+              defaultValue={lesson.open}
+              onChange={this.handleBoolean}
+            >
+              <option value={true}>Открытый урок</option>
+              <option value={false}>Закрытый урок</option>
             </select>
             <Frame>
               <DynamicHoverEditor
@@ -207,18 +226,18 @@ export default class UpdateLesson extends Component {
               mutation={UPDATE_LESSON_MUTATION}
               variables={{
                 id: lessonID,
-                ...this.state
+                ...this.state,
               }}
               refetchQueries={() => [
                 {
                   query: SINGLE_LESSON_QUERY,
-                  variables: { id: lessonID }
-                }
+                  variables: { id: lessonID },
+                },
               ]}
             >
               {(updateLesson, { loading, error }) => (
                 <Button
-                  onClick={async e => {
+                  onClick={async (e) => {
                     // Stop the form from submitting
                     e.preventDefault();
                     // call the mutation
