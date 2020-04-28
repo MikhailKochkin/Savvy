@@ -46,7 +46,7 @@ const Title = styled.div`
   }
 `;
 
-const AreYouEnrolled = props =>
+const AreYouEnrolled = (props) =>
   props.open ? (
     props.children
   ) : (
@@ -56,13 +56,14 @@ const AreYouEnrolled = props =>
         if (!data.me) return null;
         const arr1 = [];
         const subj_list = [];
-        data.me.new_subjects.map(sbj => subj_list.push(sbj.id));
-        data.me.coursePages.map(obj => arr1.push(Object.values(obj)[0]));
+        data.me.new_subjects.map((sbj) => subj_list.push(sbj.id));
+        data.me.coursePages.map((obj) => arr1.push(Object.values(obj)[0]));
         if (data.me) {
           if (
             !data.me.subjects.includes(props.subject) &&
             !subj_list.includes(props.subject) &&
             !data.me.permissions.includes("ADMIN") &&
+            !props.openLesson &&
             !arr1.includes(props.subject)
           ) {
             return (
@@ -75,7 +76,7 @@ const AreYouEnrolled = props =>
                   <Link
                     href={{
                       pathname: "/coursePage",
-                      query: { id: props.subject }
+                      query: { id: props.subject },
                     }}
                   >
                     <a>К странице курса</a>

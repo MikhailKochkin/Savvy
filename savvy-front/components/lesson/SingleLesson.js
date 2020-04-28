@@ -606,7 +606,7 @@ class SingleLesson extends Component {
                   <>
                     <AreYouEnrolled
                       subject={lesson.coursePage.id}
-                      openLesson={lesson.coursePage.openLesson}
+                      openLesson={lesson.open}
                       lesson={lesson.id}
                     >
                       <div id="root"></div>

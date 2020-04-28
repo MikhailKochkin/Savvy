@@ -26,6 +26,7 @@ const SINGLE_LESSON_QUERY = gql`
       number
       type
       map
+      open
       createdAt
       user {
         id
@@ -327,7 +328,7 @@ const LessonPart = styled.div`
   display: flex;
   border: 1px solid #edefed;
   padding: 0.5% 2%;
-  width: ${props => (props.task ? "55%" : "40%")};
+  width: ${(props) => (props.task ? "55%" : "40%")};
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
@@ -336,7 +337,7 @@ const LessonPart = styled.div`
     padding-left: 2%;
   }
   @media (max-width: 1300px) {
-    width: ${props => (props.task ? "70%" : "50%")};
+    width: ${(props) => (props.task ? "70%" : "50%")};
   }
   @media (max-width: 800px) {
     margin: 1%;
@@ -367,61 +368,61 @@ const Header = styled.div`
   color: white;
   margin-top: 4%;
   border-bottom: 0;
-  width: ${props => (props.task ? "55%" : "40%")};
+  width: ${(props) => (props.task ? "55%" : "40%")};
   text-align: left;
   padding: 5px 0px 5px 2%;
   @media (max-width: 1300px) {
-    width: ${props => (props.task ? "70%" : "50%")};
+    width: ${(props) => (props.task ? "70%" : "50%")};
   }
   @media (max-width: 800px) {
     width: 90%;
   }
 `;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 600,
     width: 600,
     [theme.breakpoints.down("sm")]: {
-      width: 315
+      width: 315,
     },
     flexGrow: 1,
     background: "white",
-    marginBottom: "2%"
+    marginBottom: "2%",
   },
   progress: {
     width: 350,
     [theme.breakpoints.down("sm")]: {
-      width: 100
-    }
+      width: 100,
+    },
   },
   textSizeSmall: {
     fontSize: "1.7rem",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1.5rem"
+      fontSize: "1.5rem",
     },
     textTransform: "none",
-    fontFamily: "Montserrat"
-  }
+    fontFamily: "Montserrat",
+  },
 }));
 
-const SingleLesson = props => {
+const SingleLesson = (props) => {
   const [width, setWidth] = useState(0);
-  const onResize = width => setWidth(width);
+  const onResize = (width) => setWidth(width);
 
   const classes = useStyles();
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const [task, setTask] = useState("");
 
-  const handleNext = tasks => {
+  const handleNext = (tasks) => {
     setTask(tasks[activeStep + 1]);
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = tasks => {
+  const handleBack = (tasks) => {
     setTask(tasks[activeStep - 1]);
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   return (
@@ -431,7 +432,7 @@ const SingleLesson = props => {
           <Query
             query={SINGLE_LESSON_QUERY}
             variables={{
-              id: props.id
+              id: props.id,
             }}
           >
             {({ data, error, loading }) => {
@@ -440,13 +441,13 @@ const SingleLesson = props => {
               const lesson = data.lesson;
               let tasks = [];
               lesson &&
-                lesson.map[0].map(task => tasks.push(Object.keys(task)[0]));
+                lesson.map[0].map((task) => tasks.push(Object.keys(task)[0]));
               return (
                 <>
                   {lesson && (
                     <>
                       <AreYouEnrolled
-                        open={lesson.id === lesson.coursePage.openLesson}
+                        openLesson={lesson.open}
                         subject={lesson.coursePage.id}
                       >
                         <div id="root"></div>
@@ -463,8 +464,8 @@ const SingleLesson = props => {
                                   href={{
                                     pathname: "/coursePage",
                                     query: {
-                                      id: lesson.coursePage.id
-                                    }
+                                      id: lesson.coursePage.id,
+                                    },
                                   }}
                                 >
                                   <span>
@@ -493,8 +494,8 @@ const SingleLesson = props => {
                                         pathname: "/lesson",
                                         query: {
                                           id: lesson.id,
-                                          type: "regular"
-                                        }
+                                          type: "regular",
+                                        },
                                       }}
                                     >
                                       <span> Переключить</span>
@@ -528,15 +529,15 @@ const SingleLesson = props => {
                             activeStep={activeStep}
                             classes={{
                               root: classes.root, // class name, e.g. `classes-nesting-root-x`
-                              progress: classes.progress // class name, e.g. `classes-nesting-label-x`
+                              progress: classes.progress, // class name, e.g. `classes-nesting-label-x`
                             }}
                             nextButton={
                               <Button
                                 size="small"
                                 variant="text"
-                                onClick={e => handleNext(tasks)}
+                                onClick={(e) => handleNext(tasks)}
                                 classes={{
-                                  textSizeSmall: classes.textSizeSmall
+                                  textSizeSmall: classes.textSizeSmall,
                                 }}
                                 disabled={
                                   activeStep ===
@@ -555,9 +556,9 @@ const SingleLesson = props => {
                               <Button
                                 size="small"
                                 variant="text"
-                                onClick={e => handleBack(tasks)}
+                                onClick={(e) => handleBack(tasks)}
                                 classes={{
-                                  textSizeSmall: classes.textSizeSmall
+                                  textSizeSmall: classes.textSizeSmall,
                                 }}
                                 disabled={activeStep === 0}
                               >

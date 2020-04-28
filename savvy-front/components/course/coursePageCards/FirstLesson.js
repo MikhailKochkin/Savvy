@@ -70,7 +70,7 @@ const Button = styled.button`
     background: rgba(8, 70, 216, 0.85);
   }
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {
@@ -79,8 +79,8 @@ const Button = styled.button`
   }
 `;
 
-const RegisterCard = props => {
-  let l = props.lesson[0];
+const RegisterCard = (props) => {
+  let l = props.lesson;
   return (
     <>
       <Payment>
@@ -97,7 +97,7 @@ const RegisterCard = props => {
               </Part1>
               <Part2>
                 <Button>
-                  <a href="mailto:mikhailvkochkin@gmail.com">Перейти</a>
+                  <a href="mailto:mikhail@besavvy.com">Перейти</a>
                 </Button>
               </Part2>
             </Text>
@@ -119,8 +119,8 @@ const RegisterCard = props => {
                     pathname: "/lesson",
                     query: {
                       id: l.id,
-                      type: l.type.toLowerCase()
-                    }
+                      type: l.type.toLowerCase(),
+                    },
                   }}
                 >
                   <Button

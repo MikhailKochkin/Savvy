@@ -8,6 +8,7 @@ import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import AreYouEnrolled from "../../auth/AreYouEnrolled";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Front from "./Front";
 import Tasks from "./Tasks";
@@ -35,6 +36,7 @@ const SINGLE_LESSON_QUERY = gql`
       id
       text
       name
+      open
       number
       type
       user {
@@ -228,7 +230,7 @@ const Challenge = (props) => {
               const lesson = data.lesson;
               const all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
                 0,
-                2
+                10
               );
               let completed = [];
               if (me) {
@@ -237,7 +239,11 @@ const Challenge = (props) => {
                 );
               }
               return (
-                <>
+                <AreYouEnrolled
+                  subject={lesson.coursePage.id}
+                  openLesson={lesson.open}
+                  lesson={lesson.id}
+                >
                   {lesson && (
                     <>
                       <Container>
@@ -311,7 +317,7 @@ const Challenge = (props) => {
                       </Container>{" "}
                     </>
                   )}
-                </>
+                </AreYouEnrolled>
               );
             }}
           </Query>

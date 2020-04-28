@@ -444,8 +444,8 @@ class CoursePage extends Component {
                         coursePage.lessons.map((l) => lessonsList.push(l.id));
 
                         const openLesson = coursePage.lessons.filter(
-                          (c) => c.id === coursePage.openLesson
-                        );
+                          (c) => c.open === true
+                        )[0];
                         return (
                           <>
                             <Container>
@@ -490,14 +490,14 @@ class CoursePage extends Component {
                                       ) &&
                                       !me.permissions.includes("ADMIN") && (
                                         <FirstLesson lesson={openLesson} />
-                                      )}
+                                      )}{" "}
                                     {/* Карточка первого урока */}
-                                    {/* {me &&
-                                    me.id !== coursePage.user.id &&
-                                    !me.permissions.includes("ADMIN") &&
-                                    applicationsList.includes(me.id) && (
-                                      <FirstLesson lesson={openLesson} />
-                                    )} */}
+                                    {me &&
+                                      me.id !== coursePage.user.id &&
+                                      !me.permissions.includes("ADMIN") &&
+                                      applicationsList.includes(me.id) && (
+                                        <FirstLesson lesson={openLesson} />
+                                      )}
                                     {/* Карточка преподавателя */}
                                     {me &&
                                       (me.id === coursePage.user.id ||
@@ -555,7 +555,7 @@ class CoursePage extends Component {
                                       </div>
                                     </div>
                                   )}
-                                  {openLesson.length > 0 && (
+                                  {/* {openLesson.length > 0 && (
                                     <div className="openLesson">
                                       <div className="header">
                                         Посмотрите первый открытый урок уже
@@ -588,7 +588,7 @@ class CoursePage extends Component {
                                           />
                                         ))}
                                     </div>
-                                  )}
+                                  )} */}
                                   {data.coursePage.result && (
                                     <div className="blue">
                                       <div className="header">
@@ -741,7 +741,6 @@ class CoursePage extends Component {
                                               coursePage={this.props.id}
                                               author={coursePage.user.id}
                                               students={coursePage.students}
-                                              openLesson={coursePage.openLesson}
                                               new_students={student_list}
                                               open={index + 1 === 1}
                                               index={index + 1}
