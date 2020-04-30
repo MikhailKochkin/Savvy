@@ -12,22 +12,22 @@ const StyledButton = withStyles({
     height: "45px",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
 const Container = styled.div`
-  width: ${props => (props.story ? "100%" : "95%")};
+  width: ${(props) => (props.story ? "100%" : "95%")};
   font-size: 1.6rem;
   margin: 20px 0;
 `;
 
 const NoteStyles = styled.div`
-  width: ${props => (props.story ? "100%" : "95%")};
+  width: ${(props) => (props.story ? "100%" : "95%")};
   margin: 2% 0 0 0;
   padding: 0% 2%;
   font-size: 1.6rem;
-  border: ${props => (props.story ? null : "1px solid #e4e4e4")};
+  border: ${(props) => (props.story ? null : "1px solid #e4e4e4")};
   border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
@@ -123,13 +123,13 @@ const MiniButton = styled.div`
   }
 `;
 
-const Note = props => {
+const Note = (props) => {
   const [update, setUpdate] = useState(false);
 
   const push = () => {
-    props.exam
-      ? props.getData(props.next ? props.next.true : { finish: 0 }, "true")
-      : null;
+    props.getData(
+      props.next ? [true, props.next.true] : [true, { finish: "finish" }]
+    );
   };
 
   const {
@@ -144,13 +144,13 @@ const Note = props => {
     id,
     user,
     getData,
-    lessonID
+    lessonID,
   } = props;
   return (
     <>
       <Buttons>
         {!exam && !story && me.id === note.user.id && (
-          <StyledButton onClick={e => setUpdate(!update)}>
+          <StyledButton onClick={(e) => setUpdate(!update)}>
             {!update ? "Настройки" : "Заметка"}
           </StyledButton>
         )}
