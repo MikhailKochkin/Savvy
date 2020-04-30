@@ -21,7 +21,7 @@ const Styles = styled.div`
 `;
 
 const Questions = styled.div`
-  display: ${props => (props.display ? `display` : `none`)};
+  display: ${(props) => (props.display ? `display` : `none`)};
   width: 100%;
   margin-top: 2%;
 `;
@@ -59,16 +59,16 @@ class Interactive extends Component {
     new: "",
     results: [],
     answers: [],
-    display: false
+    display: false,
   };
   updateArray = (data, type) => {
     let newQuiz;
     let newNote;
     let newTest;
     let finish;
-    if (Object.keys(data)[0] === "quiz" && Object.values(data)[0] !== null) {
+    if (Object.keys(data[1])[0] === "quiz") {
       let el = this.props.lesson.quizes.filter(
-        q => q.id === Object.values(data)[0]
+        (q) => q.id === Object.values(data[1])[0]
       )[0];
       newQuiz = (
         <SingleQuiz
@@ -91,18 +91,18 @@ class Interactive extends Component {
         />
       );
 
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, newQuiz];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
-    if (Object.keys(data)[0] === "newTest" && Object.values(data)[0] !== null) {
+    if (Object.keys(data[1])[0] === "newTest") {
       let el = this.props.lesson.newTests.filter(
-        n => n.id === Object.values(data)[0]
+        (n) => n.id === Object.values(data[1])[0]
       )[0];
       newTest = (
         <SingleTest
@@ -127,18 +127,18 @@ class Interactive extends Component {
           story={true}
         />
       );
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, newTest];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
-    if (Object.keys(data)[0] === "note" && Object.values(data)[0] !== null) {
+    if (Object.keys(data[1])[0] === "note") {
       let el = this.props.lesson.notes.filter(
-        q => q.id === Object.values(data)[0]
+        (q) => q.id === Object.values(data[1])[0]
       )[0];
       newNote = (
         <Note
@@ -154,41 +154,41 @@ class Interactive extends Component {
           story={true}
         />
       );
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, newNote];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
-    if (Object.keys(data)[0] === "finish" || Object.values(data)[0] == null) {
+    if (Object.keys(data[1])[0] === "finish") {
       finish = (
         <Final>
           {" "}
           Теперь запишите ответ на задачу на основе наводящих вопросов📝
         </Final>
       );
-      this.setState(state => {
+      this.setState((state) => {
         if (!(finish in this.state.componentList)) {
           const componentList = [...state.componentList, finish];
           const results = [...state.results, type];
           return {
             componentList,
-            results
+            results,
           };
         }
       });
     }
   };
-  show = () => this.setState(prev => ({ display: !prev.display }));
+  show = () => this.setState((prev) => ({ display: !prev.display }));
   componentDidMount = () => {
     let item;
     let el;
     if (this.props.exam.nodeType === "quiz") {
       el = this.props.lesson.quizes.find(
-        quiz => quiz.id === this.props.exam.nodeID
+        (quiz) => quiz.id === this.props.exam.nodeID
       );
       item = (
         <SingleQuiz
@@ -213,7 +213,7 @@ class Interactive extends Component {
       );
     } else if (this.props.exam.nodeType === "newTest") {
       el = this.props.lesson.newTests.find(
-        test => test.id === this.props.exam.nodeID
+        (test) => test.id === this.props.exam.nodeID
       );
       item = (
         <SingleTest
@@ -238,10 +238,10 @@ class Interactive extends Component {
         />
       );
     }
-    this.setState(state => {
+    this.setState((state) => {
       const componentList = [...state.componentList, item];
       return {
-        componentList
+        componentList,
       };
     });
   };
@@ -257,7 +257,7 @@ class Interactive extends Component {
           </Button>
         </div>
         <Questions display={this.state.display}>
-          {this.state.componentList.map(el => el)}
+          {this.state.componentList.map((el) => el)}
         </Questions>
       </Styles>
     );
@@ -267,7 +267,7 @@ class Interactive extends Component {
 Interactive.propTypes = {
   lesson: PropTypes.object.isRequired,
   me: PropTypes.object.isRequired,
-  exam: PropTypes.object.isRequired
+  exam: PropTypes.object.isRequired,
 };
 
 export default Interactive;
