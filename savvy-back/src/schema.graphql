@@ -58,6 +58,7 @@ type Mutation {
     type: Type
     open: Boolean
     map: [Json]
+    structure: Json
   ): Lesson
   updatePublished(id: ID!, published: Boolean): Lesson
   updateUni(id: ID!, capacity: Int, paidMonths: Int): Uni
@@ -310,8 +311,11 @@ type Mutation {
     lesson: ID
     document: ID
   ): DocumentResult!
-  createTopic(name: String, coursePage: ID): Topic!
-  createStatement(text: String, topic: ID): Statement!
+  createForum(text: String, lesson: ID): Forum!
+  updateForum(id: ID!, text: String): Forum
+  createRating(rating: Int, forum: ID): Rating!
+  updateRating(rating: Int, id: ID): Rating
+  createStatement(text: String, forum: ID): Statement!
   deleteStatement(id: ID!): Statement!
 }
 

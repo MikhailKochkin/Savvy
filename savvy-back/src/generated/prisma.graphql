@@ -70,6 +70,10 @@ type AggregateFeedback {
   count: Int!
 }
 
+type AggregateForum {
+  count: Int!
+}
+
 type AggregateLegalPortfolio {
   count: Int!
 }
@@ -118,6 +122,10 @@ type AggregateQuizResult {
   count: Int!
 }
 
+type AggregateRating {
+  count: Int!
+}
+
 type AggregateSandbox {
   count: Int!
 }
@@ -155,10 +163,6 @@ type AggregateTextEditor {
 }
 
 type AggregateTextEditorResult {
-  count: Int!
-}
-
-type AggregateTopic {
   count: Int!
 }
 
@@ -3407,7 +3411,6 @@ type CoursePage {
   company: Company
   promocode: [Json!]!
   visits(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseVisit!]
-  topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic!]
   audience: String
   result: String
   tariffs: String
@@ -3454,7 +3457,6 @@ input CoursePageCreateInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3529,11 +3531,6 @@ input CoursePageCreateOneWithoutPointsAInput {
   connect: CoursePageWhereUniqueInput
 }
 
-input CoursePageCreateOneWithoutTopicsInput {
-  create: CoursePageCreateWithoutTopicsInput
-  connect: CoursePageWhereUniqueInput
-}
-
 input CoursePageCreateOneWithoutVisitsInput {
   create: CoursePageCreateWithoutVisitsInput
   connect: CoursePageWhereUniqueInput
@@ -3583,7 +3580,6 @@ input CoursePageCreateWithoutApplicationsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3621,7 +3617,6 @@ input CoursePageCreateWithoutArticlesInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3659,7 +3654,6 @@ input CoursePageCreateWithoutCareerTrackInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3697,7 +3691,6 @@ input CoursePageCreateWithoutCompanyInput {
   orders: OrderCreateManyWithoutCoursePageInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3735,7 +3728,6 @@ input CoursePageCreateWithoutExamQuestionInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3773,7 +3765,6 @@ input CoursePageCreateWithoutLessonsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3811,7 +3802,6 @@ input CoursePageCreateWithoutNew_studentsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3849,7 +3839,6 @@ input CoursePageCreateWithoutOrdersInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3887,7 +3876,6 @@ input CoursePageCreateWithoutPointATestsInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -3906,45 +3894,6 @@ input CoursePageCreateWithoutPointsAInput {
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
-  applications: ApplicationCreateManyWithoutCoursePageInput
-  pointATests: PointATestCreateManyWithoutCoursePageInput
-  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
-  numInCareerTrack: Int
-  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
-  published: Boolean
-  uni: UniCreateOneWithoutUniCoursePagesInput
-  uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
-  tags: CoursePageCreatetagsInput
-  courseType: CourseType
-  students: CoursePageCreatestudentsInput
-  new_students: UserCreateManyWithoutNew_subjectsInput
-  price: Int
-  discountPrice: Int
-  orders: OrderCreateManyWithoutCoursePageInput
-  company: CompanyCreateOneWithoutCoursePagesInput
-  promocode: CoursePageCreatepromocodeInput
-  visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
-  audience: String
-  result: String
-  tariffs: String
-  methods: String
-  reviews: CoursePageCreatereviewsInput
-  openLesson: ID
-  video: String
-}
-
-input CoursePageCreateWithoutTopicsInput {
-  id: ID
-  title: String!
-  description: String!
-  image: String!
-  banner: String
-  news: String
-  user: UserCreateOneWithoutCoursePagesInput!
-  lessons: LessonCreateManyWithoutCoursePageInput
-  pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
@@ -4001,7 +3950,6 @@ input CoursePageCreateWithoutUniInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4039,7 +3987,6 @@ input CoursePageCreateWithoutUserInput {
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
   visits: CourseVisitCreateManyWithoutCoursePageInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4077,7 +4024,6 @@ input CoursePageCreateWithoutVisitsInput {
   orders: OrderCreateManyWithoutCoursePageInput
   company: CompanyCreateOneWithoutCoursePagesInput
   promocode: CoursePageCreatepromocodeInput
-  topics: TopicCreateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4442,7 +4388,6 @@ input CoursePageUpdateDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4480,7 +4425,6 @@ input CoursePageUpdateInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4678,15 +4622,6 @@ input CoursePageUpdateOneWithoutPointATestsInput {
   connect: CoursePageWhereUniqueInput
 }
 
-input CoursePageUpdateOneWithoutTopicsInput {
-  create: CoursePageCreateWithoutTopicsInput
-  update: CoursePageUpdateWithoutTopicsDataInput
-  upsert: CoursePageUpsertWithoutTopicsInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: CoursePageWhereUniqueInput
-}
-
 input CoursePageUpdatepromocodeInput {
   set: [Json!]
 }
@@ -4730,7 +4665,6 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4767,7 +4701,6 @@ input CoursePageUpdateWithoutArticlesDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4804,7 +4737,6 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4841,7 +4773,6 @@ input CoursePageUpdateWithoutCompanyDataInput {
   orders: OrderUpdateManyWithoutCoursePageInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4878,7 +4809,6 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4915,7 +4845,6 @@ input CoursePageUpdateWithoutLessonsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4952,7 +4881,6 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -4989,7 +4917,6 @@ input CoursePageUpdateWithoutOrdersDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -5026,7 +4953,6 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -5044,44 +4970,6 @@ input CoursePageUpdateWithoutPointsADataInput {
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
-  applications: ApplicationUpdateManyWithoutCoursePageInput
-  pointATests: PointATestUpdateManyWithoutCoursePageInput
-  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
-  numInCareerTrack: Int
-  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
-  published: Boolean
-  uni: UniUpdateOneWithoutUniCoursePagesInput
-  uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
-  tags: CoursePageUpdatetagsInput
-  courseType: CourseType
-  students: CoursePageUpdatestudentsInput
-  new_students: UserUpdateManyWithoutNew_subjectsInput
-  price: Int
-  discountPrice: Int
-  orders: OrderUpdateManyWithoutCoursePageInput
-  company: CompanyUpdateOneWithoutCoursePagesInput
-  promocode: CoursePageUpdatepromocodeInput
-  visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
-  audience: String
-  result: String
-  tariffs: String
-  methods: String
-  reviews: CoursePageUpdatereviewsInput
-  openLesson: ID
-  video: String
-}
-
-input CoursePageUpdateWithoutTopicsDataInput {
-  title: String
-  description: String
-  image: String
-  banner: String
-  news: String
-  user: UserUpdateOneRequiredWithoutCoursePagesInput
-  lessons: LessonUpdateManyWithoutCoursePageInput
-  pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
@@ -5137,7 +5025,6 @@ input CoursePageUpdateWithoutUniDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -5174,7 +5061,6 @@ input CoursePageUpdateWithoutUserDataInput {
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
   visits: CourseVisitUpdateManyWithoutCoursePageInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -5211,7 +5097,6 @@ input CoursePageUpdateWithoutVisitsDataInput {
   orders: OrderUpdateManyWithoutCoursePageInput
   company: CompanyUpdateOneWithoutCoursePagesInput
   promocode: CoursePageUpdatepromocodeInput
-  topics: TopicUpdateManyWithoutCoursePageInput
   audience: String
   result: String
   tariffs: String
@@ -5284,11 +5169,6 @@ input CoursePageUpsertWithoutPointATestsInput {
 input CoursePageUpsertWithoutPointsAInput {
   update: CoursePageUpdateWithoutPointsADataInput!
   create: CoursePageCreateWithoutPointsAInput!
-}
-
-input CoursePageUpsertWithoutTopicsInput {
-  update: CoursePageUpdateWithoutTopicsDataInput!
-  create: CoursePageCreateWithoutTopicsInput!
 }
 
 input CoursePageUpsertWithoutVisitsInput {
@@ -5498,9 +5378,6 @@ input CoursePageWhereInput {
   visits_every: CourseVisitWhereInput
   visits_some: CourseVisitWhereInput
   visits_none: CourseVisitWhereInput
-  topics_every: TopicWhereInput
-  topics_some: TopicWhereInput
-  topics_none: TopicWhereInput
   audience: String
   audience_not: String
   audience_in: [String!]
@@ -8136,6 +8013,351 @@ input FeedbackWhereUniqueInput {
   id: ID
 }
 
+type Forum {
+  id: ID!
+  text: String
+  lesson: Lesson
+  user: User
+  rating(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rating!]
+  statements(where: StatementWhereInput, orderBy: StatementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statement!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ForumConnection {
+  pageInfo: PageInfo!
+  edges: [ForumEdge]!
+  aggregate: AggregateForum!
+}
+
+input ForumCreateInput {
+  id: ID
+  text: String
+  lesson: LessonCreateOneWithoutForumInput
+  user: UserCreateOneWithoutForumsInput
+  rating: RatingCreateManyWithoutForumInput
+  statements: StatementCreateManyWithoutForumInput
+}
+
+input ForumCreateManyWithoutUserInput {
+  create: [ForumCreateWithoutUserInput!]
+  connect: [ForumWhereUniqueInput!]
+}
+
+input ForumCreateOneWithoutLessonInput {
+  create: ForumCreateWithoutLessonInput
+  connect: ForumWhereUniqueInput
+}
+
+input ForumCreateOneWithoutRatingInput {
+  create: ForumCreateWithoutRatingInput
+  connect: ForumWhereUniqueInput
+}
+
+input ForumCreateOneWithoutStatementsInput {
+  create: ForumCreateWithoutStatementsInput
+  connect: ForumWhereUniqueInput
+}
+
+input ForumCreateWithoutLessonInput {
+  id: ID
+  text: String
+  user: UserCreateOneWithoutForumsInput
+  rating: RatingCreateManyWithoutForumInput
+  statements: StatementCreateManyWithoutForumInput
+}
+
+input ForumCreateWithoutRatingInput {
+  id: ID
+  text: String
+  lesson: LessonCreateOneWithoutForumInput
+  user: UserCreateOneWithoutForumsInput
+  statements: StatementCreateManyWithoutForumInput
+}
+
+input ForumCreateWithoutStatementsInput {
+  id: ID
+  text: String
+  lesson: LessonCreateOneWithoutForumInput
+  user: UserCreateOneWithoutForumsInput
+  rating: RatingCreateManyWithoutForumInput
+}
+
+input ForumCreateWithoutUserInput {
+  id: ID
+  text: String
+  lesson: LessonCreateOneWithoutForumInput
+  rating: RatingCreateManyWithoutForumInput
+  statements: StatementCreateManyWithoutForumInput
+}
+
+type ForumEdge {
+  node: Forum!
+  cursor: String!
+}
+
+enum ForumOrderByInput {
+  id_ASC
+  id_DESC
+  text_ASC
+  text_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ForumPreviousValues {
+  id: ID!
+  text: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ForumScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ForumScalarWhereInput!]
+  OR: [ForumScalarWhereInput!]
+  NOT: [ForumScalarWhereInput!]
+}
+
+type ForumSubscriptionPayload {
+  mutation: MutationType!
+  node: Forum
+  updatedFields: [String!]
+  previousValues: ForumPreviousValues
+}
+
+input ForumSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ForumWhereInput
+  AND: [ForumSubscriptionWhereInput!]
+  OR: [ForumSubscriptionWhereInput!]
+  NOT: [ForumSubscriptionWhereInput!]
+}
+
+input ForumUpdateInput {
+  text: String
+  lesson: LessonUpdateOneWithoutForumInput
+  user: UserUpdateOneWithoutForumsInput
+  rating: RatingUpdateManyWithoutForumInput
+  statements: StatementUpdateManyWithoutForumInput
+}
+
+input ForumUpdateManyDataInput {
+  text: String
+}
+
+input ForumUpdateManyMutationInput {
+  text: String
+}
+
+input ForumUpdateManyWithoutUserInput {
+  create: [ForumCreateWithoutUserInput!]
+  delete: [ForumWhereUniqueInput!]
+  connect: [ForumWhereUniqueInput!]
+  set: [ForumWhereUniqueInput!]
+  disconnect: [ForumWhereUniqueInput!]
+  update: [ForumUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [ForumUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [ForumScalarWhereInput!]
+  updateMany: [ForumUpdateManyWithWhereNestedInput!]
+}
+
+input ForumUpdateManyWithWhereNestedInput {
+  where: ForumScalarWhereInput!
+  data: ForumUpdateManyDataInput!
+}
+
+input ForumUpdateOneWithoutLessonInput {
+  create: ForumCreateWithoutLessonInput
+  update: ForumUpdateWithoutLessonDataInput
+  upsert: ForumUpsertWithoutLessonInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ForumWhereUniqueInput
+}
+
+input ForumUpdateOneWithoutRatingInput {
+  create: ForumCreateWithoutRatingInput
+  update: ForumUpdateWithoutRatingDataInput
+  upsert: ForumUpsertWithoutRatingInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ForumWhereUniqueInput
+}
+
+input ForumUpdateOneWithoutStatementsInput {
+  create: ForumCreateWithoutStatementsInput
+  update: ForumUpdateWithoutStatementsDataInput
+  upsert: ForumUpsertWithoutStatementsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ForumWhereUniqueInput
+}
+
+input ForumUpdateWithoutLessonDataInput {
+  text: String
+  user: UserUpdateOneWithoutForumsInput
+  rating: RatingUpdateManyWithoutForumInput
+  statements: StatementUpdateManyWithoutForumInput
+}
+
+input ForumUpdateWithoutRatingDataInput {
+  text: String
+  lesson: LessonUpdateOneWithoutForumInput
+  user: UserUpdateOneWithoutForumsInput
+  statements: StatementUpdateManyWithoutForumInput
+}
+
+input ForumUpdateWithoutStatementsDataInput {
+  text: String
+  lesson: LessonUpdateOneWithoutForumInput
+  user: UserUpdateOneWithoutForumsInput
+  rating: RatingUpdateManyWithoutForumInput
+}
+
+input ForumUpdateWithoutUserDataInput {
+  text: String
+  lesson: LessonUpdateOneWithoutForumInput
+  rating: RatingUpdateManyWithoutForumInput
+  statements: StatementUpdateManyWithoutForumInput
+}
+
+input ForumUpdateWithWhereUniqueWithoutUserInput {
+  where: ForumWhereUniqueInput!
+  data: ForumUpdateWithoutUserDataInput!
+}
+
+input ForumUpsertWithoutLessonInput {
+  update: ForumUpdateWithoutLessonDataInput!
+  create: ForumCreateWithoutLessonInput!
+}
+
+input ForumUpsertWithoutRatingInput {
+  update: ForumUpdateWithoutRatingDataInput!
+  create: ForumCreateWithoutRatingInput!
+}
+
+input ForumUpsertWithoutStatementsInput {
+  update: ForumUpdateWithoutStatementsDataInput!
+  create: ForumCreateWithoutStatementsInput!
+}
+
+input ForumUpsertWithWhereUniqueWithoutUserInput {
+  where: ForumWhereUniqueInput!
+  update: ForumUpdateWithoutUserDataInput!
+  create: ForumCreateWithoutUserInput!
+}
+
+input ForumWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  lesson: LessonWhereInput
+  user: UserWhereInput
+  rating_every: RatingWhereInput
+  rating_some: RatingWhereInput
+  rating_none: RatingWhereInput
+  statements_every: StatementWhereInput
+  statements_some: StatementWhereInput
+  statements_none: StatementWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ForumWhereInput!]
+  OR: [ForumWhereInput!]
+  NOT: [ForumWhereInput!]
+}
+
+input ForumWhereUniqueInput {
+  id: ID
+}
+
 scalar Json
 
 type LegalPortfolio {
@@ -8356,6 +8578,7 @@ type Lesson {
   user: User!
   type: Type
   map: [Json!]!
+  structure: Json
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   shots(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Shot!]
   shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult!]
@@ -8374,6 +8597,7 @@ type Lesson {
   problemResults(where: ProblemResultWhereInput, orderBy: ProblemResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ProblemResult!]
   constructionResults(where: ConstructionResultWhereInput, orderBy: ConstructionResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ConstructionResult!]
   lessonFeedback(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback!]
+  forum: Forum
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8400,6 +8624,7 @@ input LessonCreateInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8418,6 +8643,7 @@ input LessonCreateInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8474,6 +8700,11 @@ input LessonCreateOneWithoutExamResultsInput {
 
 input LessonCreateOneWithoutExamsInput {
   create: LessonCreateWithoutExamsInput
+  connect: LessonWhereUniqueInput
+}
+
+input LessonCreateOneWithoutForumInput {
+  create: LessonCreateWithoutForumInput
   connect: LessonWhereUniqueInput
 }
 
@@ -8555,6 +8786,7 @@ input LessonCreateWithoutChallengeResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8572,6 +8804,7 @@ input LessonCreateWithoutChallengeResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8590,6 +8823,7 @@ input LessonCreateWithoutConstructionResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8607,6 +8841,7 @@ input LessonCreateWithoutConstructionResultsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8625,6 +8860,7 @@ input LessonCreateWithoutConstructionsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8642,6 +8878,7 @@ input LessonCreateWithoutConstructionsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8660,6 +8897,7 @@ input LessonCreateWithoutCoursePageInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8677,6 +8915,7 @@ input LessonCreateWithoutCoursePageInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8695,6 +8934,7 @@ input LessonCreateWithoutDocumentResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8713,6 +8953,7 @@ input LessonCreateWithoutDocumentResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8730,6 +8971,7 @@ input LessonCreateWithoutDocumentsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8748,6 +8990,7 @@ input LessonCreateWithoutDocumentsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8765,6 +9008,81 @@ input LessonCreateWithoutExamResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  lessonResults: LessonResultCreateManyWithoutLessonInput
+  challengeResults: ChallengeResultCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+  description: String
+  exams: ExamCreateManyWithoutLessonInput
+  documents: DocumentCreateManyWithoutLessonInput
+  documentResults: DocumentResultCreateManyWithoutLessonInput
+}
+
+input LessonCreateWithoutExamsInput {
+  id: ID
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  structure: Json
+  notes: NoteCreateManyWithoutLessonInput
+  shots: ShotCreateManyWithoutLessonInput
+  shotResults: ShotResultCreateManyWithoutLessonInput
+  coursePage: CoursePageCreateOneWithoutLessonsInput!
+  tests: TestCreateManyWithoutLessonInput
+  newTests: NewTestCreateManyWithoutLessonInput
+  quizes: QuizCreateManyWithoutLessonInput
+  problems: ProblemCreateManyWithoutLessonInput
+  constructions: ConstructionCreateManyWithoutLessonInput
+  texteditors: TextEditorCreateManyWithoutLessonInput
+  lessonResults: LessonResultCreateManyWithoutLessonInput
+  challengeResults: ChallengeResultCreateManyWithoutLessonInput
+  testResults: TestResultCreateManyWithoutLessonInput
+  quizResults: QuizResultCreateManyWithoutLessonInput
+  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
+  problemResults: ProblemResultCreateManyWithoutLessonInput
+  constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
+  open: Boolean
+  coursePageID: ID!
+  published: Boolean
+  description: String
+  examResults: ExamResultCreateManyWithoutLessonInput
+  documents: DocumentCreateManyWithoutLessonInput
+  documentResults: DocumentResultCreateManyWithoutLessonInput
+}
+
+input LessonCreateWithoutForumInput {
+  id: ID
+  name: String!
+  number: Int
+  text: String!
+  user: UserCreateOneWithoutLessonsInput!
+  type: Type
+  map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8788,40 +9106,6 @@ input LessonCreateWithoutExamResultsInput {
   published: Boolean
   description: String
   exams: ExamCreateManyWithoutLessonInput
-  documents: DocumentCreateManyWithoutLessonInput
-  documentResults: DocumentResultCreateManyWithoutLessonInput
-}
-
-input LessonCreateWithoutExamsInput {
-  id: ID
-  name: String!
-  number: Int
-  text: String!
-  user: UserCreateOneWithoutLessonsInput!
-  type: Type
-  map: LessonCreatemapInput
-  notes: NoteCreateManyWithoutLessonInput
-  shots: ShotCreateManyWithoutLessonInput
-  shotResults: ShotResultCreateManyWithoutLessonInput
-  coursePage: CoursePageCreateOneWithoutLessonsInput!
-  tests: TestCreateManyWithoutLessonInput
-  newTests: NewTestCreateManyWithoutLessonInput
-  quizes: QuizCreateManyWithoutLessonInput
-  problems: ProblemCreateManyWithoutLessonInput
-  constructions: ConstructionCreateManyWithoutLessonInput
-  texteditors: TextEditorCreateManyWithoutLessonInput
-  lessonResults: LessonResultCreateManyWithoutLessonInput
-  challengeResults: ChallengeResultCreateManyWithoutLessonInput
-  testResults: TestResultCreateManyWithoutLessonInput
-  quizResults: QuizResultCreateManyWithoutLessonInput
-  textEditorResults: TextEditorResultCreateManyWithoutLessonInput
-  problemResults: ProblemResultCreateManyWithoutLessonInput
-  constructionResults: ConstructionResultCreateManyWithoutLessonInput
-  lessonFeedback: FeedbackCreateManyWithoutLessonInput
-  open: Boolean
-  coursePageID: ID!
-  published: Boolean
-  description: String
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
@@ -8835,6 +9119,7 @@ input LessonCreateWithoutLessonFeedbackInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8852,6 +9137,7 @@ input LessonCreateWithoutLessonFeedbackInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8870,6 +9156,7 @@ input LessonCreateWithoutLessonResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8887,6 +9174,7 @@ input LessonCreateWithoutLessonResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8905,6 +9193,7 @@ input LessonCreateWithoutNewTestsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8922,6 +9211,7 @@ input LessonCreateWithoutNewTestsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8940,6 +9230,7 @@ input LessonCreateWithoutNotesInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
@@ -8957,6 +9248,7 @@ input LessonCreateWithoutNotesInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -8975,6 +9267,7 @@ input LessonCreateWithoutProblemResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -8992,6 +9285,7 @@ input LessonCreateWithoutProblemResultsInput {
   textEditorResults: TextEditorResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9010,6 +9304,7 @@ input LessonCreateWithoutProblemsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9027,6 +9322,7 @@ input LessonCreateWithoutProblemsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9045,6 +9341,7 @@ input LessonCreateWithoutQuizesInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9062,6 +9359,7 @@ input LessonCreateWithoutQuizesInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9080,6 +9378,7 @@ input LessonCreateWithoutQuizResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9097,6 +9396,7 @@ input LessonCreateWithoutQuizResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9115,6 +9415,7 @@ input LessonCreateWithoutShotResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
@@ -9132,6 +9433,7 @@ input LessonCreateWithoutShotResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9150,6 +9452,7 @@ input LessonCreateWithoutShotsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
   coursePage: CoursePageCreateOneWithoutLessonsInput!
@@ -9167,6 +9470,7 @@ input LessonCreateWithoutShotsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9185,6 +9489,7 @@ input LessonCreateWithoutTestResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9202,6 +9507,7 @@ input LessonCreateWithoutTestResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9220,6 +9526,7 @@ input LessonCreateWithoutTestsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9237,6 +9544,7 @@ input LessonCreateWithoutTestsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9255,6 +9563,7 @@ input LessonCreateWithoutTextEditorResultsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9272,6 +9581,7 @@ input LessonCreateWithoutTextEditorResultsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9290,6 +9600,7 @@ input LessonCreateWithoutTexteditorsInput {
   user: UserCreateOneWithoutLessonsInput!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9307,6 +9618,7 @@ input LessonCreateWithoutTexteditorsInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9324,6 +9636,7 @@ input LessonCreateWithoutUserInput {
   text: String!
   type: Type
   map: LessonCreatemapInput
+  structure: Json
   notes: NoteCreateManyWithoutLessonInput
   shots: ShotCreateManyWithoutLessonInput
   shotResults: ShotResultCreateManyWithoutLessonInput
@@ -9342,6 +9655,7 @@ input LessonCreateWithoutUserInput {
   problemResults: ProblemResultCreateManyWithoutLessonInput
   constructionResults: ConstructionResultCreateManyWithoutLessonInput
   lessonFeedback: FeedbackCreateManyWithoutLessonInput
+  forum: ForumCreateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9368,6 +9682,8 @@ enum LessonOrderByInput {
   text_DESC
   type_ASC
   type_DESC
+  structure_ASC
+  structure_DESC
   open_ASC
   open_DESC
   coursePageID_ASC
@@ -9389,6 +9705,7 @@ type LessonPreviousValues {
   text: String!
   type: Type
   map: [Json!]!
+  structure: Json
   open: Boolean
   coursePageID: ID!
   published: Boolean
@@ -9824,6 +10141,7 @@ input LessonUpdateInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -9842,6 +10160,7 @@ input LessonUpdateInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -9858,6 +10177,7 @@ input LessonUpdateManyDataInput {
   text: String
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -9870,6 +10190,7 @@ input LessonUpdateManyMutationInput {
   text: String
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -9985,6 +10306,15 @@ input LessonUpdateOneWithoutExamResultsInput {
   connect: LessonWhereUniqueInput
 }
 
+input LessonUpdateOneWithoutForumInput {
+  create: LessonCreateWithoutForumInput
+  update: LessonUpdateWithoutForumDataInput
+  upsert: LessonUpsertWithoutForumInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: LessonWhereUniqueInput
+}
+
 input LessonUpdateOneWithoutLessonFeedbackInput {
   create: LessonCreateWithoutLessonFeedbackInput
   update: LessonUpdateWithoutLessonFeedbackDataInput
@@ -10091,6 +10421,7 @@ input LessonUpdateWithoutChallengeResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10108,6 +10439,7 @@ input LessonUpdateWithoutChallengeResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10125,6 +10457,7 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10142,6 +10475,7 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10159,6 +10493,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10176,6 +10511,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10193,6 +10529,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10210,6 +10547,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10227,6 +10565,7 @@ input LessonUpdateWithoutDocumentResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10245,6 +10584,7 @@ input LessonUpdateWithoutDocumentResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10261,6 +10601,7 @@ input LessonUpdateWithoutDocumentsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10279,6 +10620,7 @@ input LessonUpdateWithoutDocumentsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10295,6 +10637,79 @@ input LessonUpdateWithoutExamResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  lessonResults: LessonResultUpdateManyWithoutLessonInput
+  challengeResults: ChallengeResultUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+  description: String
+  exams: ExamUpdateManyWithoutLessonInput
+  documents: DocumentUpdateManyWithoutLessonInput
+  documentResults: DocumentResultUpdateManyWithoutLessonInput
+}
+
+input LessonUpdateWithoutExamsDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  structure: Json
+  notes: NoteUpdateManyWithoutLessonInput
+  shots: ShotUpdateManyWithoutLessonInput
+  shotResults: ShotResultUpdateManyWithoutLessonInput
+  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
+  tests: TestUpdateManyWithoutLessonInput
+  newTests: NewTestUpdateManyWithoutLessonInput
+  quizes: QuizUpdateManyWithoutLessonInput
+  problems: ProblemUpdateManyWithoutLessonInput
+  constructions: ConstructionUpdateManyWithoutLessonInput
+  texteditors: TextEditorUpdateManyWithoutLessonInput
+  lessonResults: LessonResultUpdateManyWithoutLessonInput
+  challengeResults: ChallengeResultUpdateManyWithoutLessonInput
+  testResults: TestResultUpdateManyWithoutLessonInput
+  quizResults: QuizResultUpdateManyWithoutLessonInput
+  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
+  problemResults: ProblemResultUpdateManyWithoutLessonInput
+  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
+  open: Boolean
+  coursePageID: ID
+  published: Boolean
+  description: String
+  examResults: ExamResultUpdateManyWithoutLessonInput
+  documents: DocumentUpdateManyWithoutLessonInput
+  documentResults: DocumentResultUpdateManyWithoutLessonInput
+}
+
+input LessonUpdateWithoutForumDataInput {
+  name: String
+  number: Int
+  text: String
+  user: UserUpdateOneRequiredWithoutLessonsInput
+  type: Type
+  map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10318,39 +10733,6 @@ input LessonUpdateWithoutExamResultsDataInput {
   published: Boolean
   description: String
   exams: ExamUpdateManyWithoutLessonInput
-  documents: DocumentUpdateManyWithoutLessonInput
-  documentResults: DocumentResultUpdateManyWithoutLessonInput
-}
-
-input LessonUpdateWithoutExamsDataInput {
-  name: String
-  number: Int
-  text: String
-  user: UserUpdateOneRequiredWithoutLessonsInput
-  type: Type
-  map: LessonUpdatemapInput
-  notes: NoteUpdateManyWithoutLessonInput
-  shots: ShotUpdateManyWithoutLessonInput
-  shotResults: ShotResultUpdateManyWithoutLessonInput
-  coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
-  tests: TestUpdateManyWithoutLessonInput
-  newTests: NewTestUpdateManyWithoutLessonInput
-  quizes: QuizUpdateManyWithoutLessonInput
-  problems: ProblemUpdateManyWithoutLessonInput
-  constructions: ConstructionUpdateManyWithoutLessonInput
-  texteditors: TextEditorUpdateManyWithoutLessonInput
-  lessonResults: LessonResultUpdateManyWithoutLessonInput
-  challengeResults: ChallengeResultUpdateManyWithoutLessonInput
-  testResults: TestResultUpdateManyWithoutLessonInput
-  quizResults: QuizResultUpdateManyWithoutLessonInput
-  textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
-  problemResults: ProblemResultUpdateManyWithoutLessonInput
-  constructionResults: ConstructionResultUpdateManyWithoutLessonInput
-  lessonFeedback: FeedbackUpdateManyWithoutLessonInput
-  open: Boolean
-  coursePageID: ID
-  published: Boolean
-  description: String
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
@@ -10363,6 +10745,7 @@ input LessonUpdateWithoutLessonFeedbackDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10380,6 +10763,7 @@ input LessonUpdateWithoutLessonFeedbackDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10397,6 +10781,7 @@ input LessonUpdateWithoutLessonResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10414,6 +10799,7 @@ input LessonUpdateWithoutLessonResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10431,6 +10817,7 @@ input LessonUpdateWithoutNewTestsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10448,6 +10835,7 @@ input LessonUpdateWithoutNewTestsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10465,6 +10853,7 @@ input LessonUpdateWithoutNotesDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
@@ -10482,6 +10871,7 @@ input LessonUpdateWithoutNotesDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10499,6 +10889,7 @@ input LessonUpdateWithoutProblemResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10516,6 +10907,7 @@ input LessonUpdateWithoutProblemResultsDataInput {
   textEditorResults: TextEditorResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10533,6 +10925,7 @@ input LessonUpdateWithoutProblemsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10550,6 +10943,7 @@ input LessonUpdateWithoutProblemsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10567,6 +10961,7 @@ input LessonUpdateWithoutQuizesDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10584,6 +10979,7 @@ input LessonUpdateWithoutQuizesDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10601,6 +10997,7 @@ input LessonUpdateWithoutQuizResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10618,6 +11015,7 @@ input LessonUpdateWithoutQuizResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10635,6 +11033,7 @@ input LessonUpdateWithoutShotResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
@@ -10652,6 +11051,7 @@ input LessonUpdateWithoutShotResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10669,6 +11069,7 @@ input LessonUpdateWithoutShotsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
   coursePage: CoursePageUpdateOneRequiredWithoutLessonsInput
@@ -10686,6 +11087,7 @@ input LessonUpdateWithoutShotsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10703,6 +11105,7 @@ input LessonUpdateWithoutTestResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10720,6 +11123,7 @@ input LessonUpdateWithoutTestResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10737,6 +11141,7 @@ input LessonUpdateWithoutTestsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10754,6 +11159,7 @@ input LessonUpdateWithoutTestsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10771,6 +11177,7 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10788,6 +11195,7 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10805,6 +11213,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   user: UserUpdateOneRequiredWithoutLessonsInput
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10822,6 +11231,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10838,6 +11248,7 @@ input LessonUpdateWithoutUserDataInput {
   text: String
   type: Type
   map: LessonUpdatemapInput
+  structure: Json
   notes: NoteUpdateManyWithoutLessonInput
   shots: ShotUpdateManyWithoutLessonInput
   shotResults: ShotResultUpdateManyWithoutLessonInput
@@ -10856,6 +11267,7 @@ input LessonUpdateWithoutUserDataInput {
   problemResults: ProblemResultUpdateManyWithoutLessonInput
   constructionResults: ConstructionResultUpdateManyWithoutLessonInput
   lessonFeedback: FeedbackUpdateManyWithoutLessonInput
+  forum: ForumUpdateOneWithoutLessonInput
   open: Boolean
   coursePageID: ID
   published: Boolean
@@ -10909,6 +11321,11 @@ input LessonUpsertWithoutExamResultsInput {
 input LessonUpsertWithoutExamsInput {
   update: LessonUpdateWithoutExamsDataInput!
   create: LessonCreateWithoutExamsInput!
+}
+
+input LessonUpsertWithoutForumInput {
+  update: LessonUpdateWithoutForumDataInput!
+  create: LessonCreateWithoutForumInput!
 }
 
 input LessonUpsertWithoutLessonFeedbackInput {
@@ -11101,6 +11518,7 @@ input LessonWhereInput {
   lessonFeedback_every: FeedbackWhereInput
   lessonFeedback_some: FeedbackWhereInput
   lessonFeedback_none: FeedbackWhereInput
+  forum: ForumWhereInput
   open: Boolean
   open_not: Boolean
   coursePageID: ID
@@ -11281,6 +11699,12 @@ type Mutation {
   upsertFeedback(where: FeedbackWhereUniqueInput!, create: FeedbackCreateInput!, update: FeedbackUpdateInput!): Feedback!
   deleteFeedback(where: FeedbackWhereUniqueInput!): Feedback
   deleteManyFeedbacks(where: FeedbackWhereInput): BatchPayload!
+  createForum(data: ForumCreateInput!): Forum!
+  updateForum(data: ForumUpdateInput!, where: ForumWhereUniqueInput!): Forum
+  updateManyForums(data: ForumUpdateManyMutationInput!, where: ForumWhereInput): BatchPayload!
+  upsertForum(where: ForumWhereUniqueInput!, create: ForumCreateInput!, update: ForumUpdateInput!): Forum!
+  deleteForum(where: ForumWhereUniqueInput!): Forum
+  deleteManyForums(where: ForumWhereInput): BatchPayload!
   createLegalPortfolio(data: LegalPortfolioCreateInput!): LegalPortfolio!
   updateLegalPortfolio(data: LegalPortfolioUpdateInput!, where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
   updateManyLegalPortfolios(data: LegalPortfolioUpdateManyMutationInput!, where: LegalPortfolioWhereInput): BatchPayload!
@@ -11353,6 +11777,12 @@ type Mutation {
   upsertQuizResult(where: QuizResultWhereUniqueInput!, create: QuizResultCreateInput!, update: QuizResultUpdateInput!): QuizResult!
   deleteQuizResult(where: QuizResultWhereUniqueInput!): QuizResult
   deleteManyQuizResults(where: QuizResultWhereInput): BatchPayload!
+  createRating(data: RatingCreateInput!): Rating!
+  updateRating(data: RatingUpdateInput!, where: RatingWhereUniqueInput!): Rating
+  updateManyRatings(data: RatingUpdateManyMutationInput!, where: RatingWhereInput): BatchPayload!
+  upsertRating(where: RatingWhereUniqueInput!, create: RatingCreateInput!, update: RatingUpdateInput!): Rating!
+  deleteRating(where: RatingWhereUniqueInput!): Rating
+  deleteManyRatings(where: RatingWhereInput): BatchPayload!
   createSandbox(data: SandboxCreateInput!): Sandbox!
   updateSandbox(data: SandboxUpdateInput!, where: SandboxWhereUniqueInput!): Sandbox
   updateManySandboxes(data: SandboxUpdateManyMutationInput!, where: SandboxWhereInput): BatchPayload!
@@ -11413,12 +11843,6 @@ type Mutation {
   upsertTextEditorResult(where: TextEditorResultWhereUniqueInput!, create: TextEditorResultCreateInput!, update: TextEditorResultUpdateInput!): TextEditorResult!
   deleteTextEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
   deleteManyTextEditorResults(where: TextEditorResultWhereInput): BatchPayload!
-  createTopic(data: TopicCreateInput!): Topic!
-  updateTopic(data: TopicUpdateInput!, where: TopicWhereUniqueInput!): Topic
-  updateManyTopics(data: TopicUpdateManyMutationInput!, where: TopicWhereInput): BatchPayload!
-  upsertTopic(where: TopicWhereUniqueInput!, create: TopicCreateInput!, update: TopicUpdateInput!): Topic!
-  deleteTopic(where: TopicWhereUniqueInput!): Topic
-  deleteManyTopics(where: TopicWhereInput): BatchPayload!
   createUni(data: UniCreateInput!): Uni!
   updateUni(data: UniUpdateInput!, where: UniWhereUniqueInput!): Uni
   updateManyUnis(data: UniUpdateManyMutationInput!, where: UniWhereInput): BatchPayload!
@@ -14670,6 +15094,9 @@ type Query {
   feedback(where: FeedbackWhereUniqueInput!): Feedback
   feedbacks(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback]!
   feedbacksConnection(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedbackConnection!
+  forum(where: ForumWhereUniqueInput!): Forum
+  forums(where: ForumWhereInput, orderBy: ForumOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Forum]!
+  forumsConnection(where: ForumWhereInput, orderBy: ForumOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ForumConnection!
   legalPortfolio(where: LegalPortfolioWhereUniqueInput!): LegalPortfolio
   legalPortfolios(where: LegalPortfolioWhereInput, orderBy: LegalPortfolioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [LegalPortfolio]!
   legalPortfoliosConnection(where: LegalPortfolioWhereInput, orderBy: LegalPortfolioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LegalPortfolioConnection!
@@ -14706,6 +15133,9 @@ type Query {
   quizResult(where: QuizResultWhereUniqueInput!): QuizResult
   quizResults(where: QuizResultWhereInput, orderBy: QuizResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [QuizResult]!
   quizResultsConnection(where: QuizResultWhereInput, orderBy: QuizResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): QuizResultConnection!
+  rating(where: RatingWhereUniqueInput!): Rating
+  ratings(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rating]!
+  ratingsConnection(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RatingConnection!
   sandbox(where: SandboxWhereUniqueInput!): Sandbox
   sandboxes(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Sandbox]!
   sandboxesConnection(where: SandboxWhereInput, orderBy: SandboxOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SandboxConnection!
@@ -14736,9 +15166,6 @@ type Query {
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
   textEditorResults(where: TextEditorResultWhereInput, orderBy: TextEditorResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditorResult]!
   textEditorResultsConnection(where: TextEditorResultWhereInput, orderBy: TextEditorResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TextEditorResultConnection!
-  topic(where: TopicWhereUniqueInput!): Topic
-  topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic]!
-  topicsConnection(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TopicConnection!
   uni(where: UniWhereUniqueInput!): Uni
   unis(where: UniWhereInput, orderBy: UniOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Uni]!
   unisConnection(where: UniWhereInput, orderBy: UniOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UniConnection!
@@ -15644,6 +16071,260 @@ input QuizWhereInput {
 }
 
 input QuizWhereUniqueInput {
+  id: ID
+}
+
+type Rating {
+  id: ID!
+  rating: Int
+  forum: Forum
+  user: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type RatingConnection {
+  pageInfo: PageInfo!
+  edges: [RatingEdge]!
+  aggregate: AggregateRating!
+}
+
+input RatingCreateInput {
+  id: ID
+  rating: Int
+  forum: ForumCreateOneWithoutRatingInput
+  user: UserCreateOneWithoutRatingsInput
+}
+
+input RatingCreateManyWithoutForumInput {
+  create: [RatingCreateWithoutForumInput!]
+  connect: [RatingWhereUniqueInput!]
+}
+
+input RatingCreateManyWithoutUserInput {
+  create: [RatingCreateWithoutUserInput!]
+  connect: [RatingWhereUniqueInput!]
+}
+
+input RatingCreateWithoutForumInput {
+  id: ID
+  rating: Int
+  user: UserCreateOneWithoutRatingsInput
+}
+
+input RatingCreateWithoutUserInput {
+  id: ID
+  rating: Int
+  forum: ForumCreateOneWithoutRatingInput
+}
+
+type RatingEdge {
+  node: Rating!
+  cursor: String!
+}
+
+enum RatingOrderByInput {
+  id_ASC
+  id_DESC
+  rating_ASC
+  rating_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type RatingPreviousValues {
+  id: ID!
+  rating: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input RatingScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  rating: Int
+  rating_not: Int
+  rating_in: [Int!]
+  rating_not_in: [Int!]
+  rating_lt: Int
+  rating_lte: Int
+  rating_gt: Int
+  rating_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [RatingScalarWhereInput!]
+  OR: [RatingScalarWhereInput!]
+  NOT: [RatingScalarWhereInput!]
+}
+
+type RatingSubscriptionPayload {
+  mutation: MutationType!
+  node: Rating
+  updatedFields: [String!]
+  previousValues: RatingPreviousValues
+}
+
+input RatingSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: RatingWhereInput
+  AND: [RatingSubscriptionWhereInput!]
+  OR: [RatingSubscriptionWhereInput!]
+  NOT: [RatingSubscriptionWhereInput!]
+}
+
+input RatingUpdateInput {
+  rating: Int
+  forum: ForumUpdateOneWithoutRatingInput
+  user: UserUpdateOneWithoutRatingsInput
+}
+
+input RatingUpdateManyDataInput {
+  rating: Int
+}
+
+input RatingUpdateManyMutationInput {
+  rating: Int
+}
+
+input RatingUpdateManyWithoutForumInput {
+  create: [RatingCreateWithoutForumInput!]
+  delete: [RatingWhereUniqueInput!]
+  connect: [RatingWhereUniqueInput!]
+  set: [RatingWhereUniqueInput!]
+  disconnect: [RatingWhereUniqueInput!]
+  update: [RatingUpdateWithWhereUniqueWithoutForumInput!]
+  upsert: [RatingUpsertWithWhereUniqueWithoutForumInput!]
+  deleteMany: [RatingScalarWhereInput!]
+  updateMany: [RatingUpdateManyWithWhereNestedInput!]
+}
+
+input RatingUpdateManyWithoutUserInput {
+  create: [RatingCreateWithoutUserInput!]
+  delete: [RatingWhereUniqueInput!]
+  connect: [RatingWhereUniqueInput!]
+  set: [RatingWhereUniqueInput!]
+  disconnect: [RatingWhereUniqueInput!]
+  update: [RatingUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [RatingUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [RatingScalarWhereInput!]
+  updateMany: [RatingUpdateManyWithWhereNestedInput!]
+}
+
+input RatingUpdateManyWithWhereNestedInput {
+  where: RatingScalarWhereInput!
+  data: RatingUpdateManyDataInput!
+}
+
+input RatingUpdateWithoutForumDataInput {
+  rating: Int
+  user: UserUpdateOneWithoutRatingsInput
+}
+
+input RatingUpdateWithoutUserDataInput {
+  rating: Int
+  forum: ForumUpdateOneWithoutRatingInput
+}
+
+input RatingUpdateWithWhereUniqueWithoutForumInput {
+  where: RatingWhereUniqueInput!
+  data: RatingUpdateWithoutForumDataInput!
+}
+
+input RatingUpdateWithWhereUniqueWithoutUserInput {
+  where: RatingWhereUniqueInput!
+  data: RatingUpdateWithoutUserDataInput!
+}
+
+input RatingUpsertWithWhereUniqueWithoutForumInput {
+  where: RatingWhereUniqueInput!
+  update: RatingUpdateWithoutForumDataInput!
+  create: RatingCreateWithoutForumInput!
+}
+
+input RatingUpsertWithWhereUniqueWithoutUserInput {
+  where: RatingWhereUniqueInput!
+  update: RatingUpdateWithoutUserDataInput!
+  create: RatingCreateWithoutUserInput!
+}
+
+input RatingWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  rating: Int
+  rating_not: Int
+  rating_in: [Int!]
+  rating_not_in: [Int!]
+  rating_lt: Int
+  rating_lte: Int
+  rating_gt: Int
+  rating_gte: Int
+  forum: ForumWhereInput
+  user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [RatingWhereInput!]
+  OR: [RatingWhereInput!]
+  NOT: [RatingWhereInput!]
+}
+
+input RatingWhereUniqueInput {
   id: ID
 }
 
@@ -17562,7 +18243,7 @@ input ShotWhereUniqueInput {
 type Statement {
   id: ID!
   text: String
-  topic: Topic
+  forum: Forum
   user: User
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -17577,12 +18258,12 @@ type StatementConnection {
 input StatementCreateInput {
   id: ID
   text: String
-  topic: TopicCreateOneWithoutStatementsInput
+  forum: ForumCreateOneWithoutStatementsInput
   user: UserCreateOneWithoutStatementsInput
 }
 
-input StatementCreateManyWithoutTopicInput {
-  create: [StatementCreateWithoutTopicInput!]
+input StatementCreateManyWithoutForumInput {
+  create: [StatementCreateWithoutForumInput!]
   connect: [StatementWhereUniqueInput!]
 }
 
@@ -17591,7 +18272,7 @@ input StatementCreateManyWithoutUserInput {
   connect: [StatementWhereUniqueInput!]
 }
 
-input StatementCreateWithoutTopicInput {
+input StatementCreateWithoutForumInput {
   id: ID
   text: String
   user: UserCreateOneWithoutStatementsInput
@@ -17600,7 +18281,7 @@ input StatementCreateWithoutTopicInput {
 input StatementCreateWithoutUserInput {
   id: ID
   text: String
-  topic: TopicCreateOneWithoutStatementsInput
+  forum: ForumCreateOneWithoutStatementsInput
 }
 
 type StatementEdge {
@@ -17696,7 +18377,7 @@ input StatementSubscriptionWhereInput {
 
 input StatementUpdateInput {
   text: String
-  topic: TopicUpdateOneWithoutStatementsInput
+  forum: ForumUpdateOneWithoutStatementsInput
   user: UserUpdateOneWithoutStatementsInput
 }
 
@@ -17708,14 +18389,14 @@ input StatementUpdateManyMutationInput {
   text: String
 }
 
-input StatementUpdateManyWithoutTopicInput {
-  create: [StatementCreateWithoutTopicInput!]
+input StatementUpdateManyWithoutForumInput {
+  create: [StatementCreateWithoutForumInput!]
   delete: [StatementWhereUniqueInput!]
   connect: [StatementWhereUniqueInput!]
   set: [StatementWhereUniqueInput!]
   disconnect: [StatementWhereUniqueInput!]
-  update: [StatementUpdateWithWhereUniqueWithoutTopicInput!]
-  upsert: [StatementUpsertWithWhereUniqueWithoutTopicInput!]
+  update: [StatementUpdateWithWhereUniqueWithoutForumInput!]
+  upsert: [StatementUpsertWithWhereUniqueWithoutForumInput!]
   deleteMany: [StatementScalarWhereInput!]
   updateMany: [StatementUpdateManyWithWhereNestedInput!]
 }
@@ -17737,19 +18418,19 @@ input StatementUpdateManyWithWhereNestedInput {
   data: StatementUpdateManyDataInput!
 }
 
-input StatementUpdateWithoutTopicDataInput {
+input StatementUpdateWithoutForumDataInput {
   text: String
   user: UserUpdateOneWithoutStatementsInput
 }
 
 input StatementUpdateWithoutUserDataInput {
   text: String
-  topic: TopicUpdateOneWithoutStatementsInput
+  forum: ForumUpdateOneWithoutStatementsInput
 }
 
-input StatementUpdateWithWhereUniqueWithoutTopicInput {
+input StatementUpdateWithWhereUniqueWithoutForumInput {
   where: StatementWhereUniqueInput!
-  data: StatementUpdateWithoutTopicDataInput!
+  data: StatementUpdateWithoutForumDataInput!
 }
 
 input StatementUpdateWithWhereUniqueWithoutUserInput {
@@ -17757,10 +18438,10 @@ input StatementUpdateWithWhereUniqueWithoutUserInput {
   data: StatementUpdateWithoutUserDataInput!
 }
 
-input StatementUpsertWithWhereUniqueWithoutTopicInput {
+input StatementUpsertWithWhereUniqueWithoutForumInput {
   where: StatementWhereUniqueInput!
-  update: StatementUpdateWithoutTopicDataInput!
-  create: StatementCreateWithoutTopicInput!
+  update: StatementUpdateWithoutForumDataInput!
+  create: StatementCreateWithoutForumInput!
 }
 
 input StatementUpsertWithWhereUniqueWithoutUserInput {
@@ -17798,7 +18479,7 @@ input StatementWhereInput {
   text_not_starts_with: String
   text_ends_with: String
   text_not_ends_with: String
-  topic: TopicWhereInput
+  forum: ForumWhereInput
   user: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
@@ -17852,6 +18533,7 @@ type Subscription {
   examQuestion(where: ExamQuestionSubscriptionWhereInput): ExamQuestionSubscriptionPayload
   examResult(where: ExamResultSubscriptionWhereInput): ExamResultSubscriptionPayload
   feedback(where: FeedbackSubscriptionWhereInput): FeedbackSubscriptionPayload
+  forum(where: ForumSubscriptionWhereInput): ForumSubscriptionPayload
   legalPortfolio(where: LegalPortfolioSubscriptionWhereInput): LegalPortfolioSubscriptionPayload
   lesson(where: LessonSubscriptionWhereInput): LessonSubscriptionPayload
   lessonResult(where: LessonResultSubscriptionWhereInput): LessonResultSubscriptionPayload
@@ -17864,6 +18546,7 @@ type Subscription {
   problemResult(where: ProblemResultSubscriptionWhereInput): ProblemResultSubscriptionPayload
   quiz(where: QuizSubscriptionWhereInput): QuizSubscriptionPayload
   quizResult(where: QuizResultSubscriptionWhereInput): QuizResultSubscriptionPayload
+  rating(where: RatingSubscriptionWhereInput): RatingSubscriptionPayload
   sandbox(where: SandboxSubscriptionWhereInput): SandboxSubscriptionPayload
   sandboxPage(where: SandboxPageSubscriptionWhereInput): SandboxPageSubscriptionPayload
   sandboxPageGoal(where: SandboxPageGoalSubscriptionWhereInput): SandboxPageGoalSubscriptionPayload
@@ -17874,7 +18557,6 @@ type Subscription {
   testResult(where: TestResultSubscriptionWhereInput): TestResultSubscriptionPayload
   textEditor(where: TextEditorSubscriptionWhereInput): TextEditorSubscriptionPayload
   textEditorResult(where: TextEditorResultSubscriptionWhereInput): TextEditorResultSubscriptionPayload
-  topic(where: TopicSubscriptionWhereInput): TopicSubscriptionPayload
   uni(where: UniSubscriptionWhereInput): UniSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
@@ -19790,314 +20472,6 @@ input TextEditorWhereUniqueInput {
   id: ID
 }
 
-type Topic {
-  id: ID!
-  name: String
-  coursePage: CoursePage
-  user: User
-  statements(where: StatementWhereInput, orderBy: StatementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statement!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type TopicConnection {
-  pageInfo: PageInfo!
-  edges: [TopicEdge]!
-  aggregate: AggregateTopic!
-}
-
-input TopicCreateInput {
-  id: ID
-  name: String
-  coursePage: CoursePageCreateOneWithoutTopicsInput
-  user: UserCreateOneWithoutTopicsInput
-  statements: StatementCreateManyWithoutTopicInput
-}
-
-input TopicCreateManyWithoutCoursePageInput {
-  create: [TopicCreateWithoutCoursePageInput!]
-  connect: [TopicWhereUniqueInput!]
-}
-
-input TopicCreateManyWithoutUserInput {
-  create: [TopicCreateWithoutUserInput!]
-  connect: [TopicWhereUniqueInput!]
-}
-
-input TopicCreateOneWithoutStatementsInput {
-  create: TopicCreateWithoutStatementsInput
-  connect: TopicWhereUniqueInput
-}
-
-input TopicCreateWithoutCoursePageInput {
-  id: ID
-  name: String
-  user: UserCreateOneWithoutTopicsInput
-  statements: StatementCreateManyWithoutTopicInput
-}
-
-input TopicCreateWithoutStatementsInput {
-  id: ID
-  name: String
-  coursePage: CoursePageCreateOneWithoutTopicsInput
-  user: UserCreateOneWithoutTopicsInput
-}
-
-input TopicCreateWithoutUserInput {
-  id: ID
-  name: String
-  coursePage: CoursePageCreateOneWithoutTopicsInput
-  statements: StatementCreateManyWithoutTopicInput
-}
-
-type TopicEdge {
-  node: Topic!
-  cursor: String!
-}
-
-enum TopicOrderByInput {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type TopicPreviousValues {
-  id: ID!
-  name: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-input TopicScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [TopicScalarWhereInput!]
-  OR: [TopicScalarWhereInput!]
-  NOT: [TopicScalarWhereInput!]
-}
-
-type TopicSubscriptionPayload {
-  mutation: MutationType!
-  node: Topic
-  updatedFields: [String!]
-  previousValues: TopicPreviousValues
-}
-
-input TopicSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: TopicWhereInput
-  AND: [TopicSubscriptionWhereInput!]
-  OR: [TopicSubscriptionWhereInput!]
-  NOT: [TopicSubscriptionWhereInput!]
-}
-
-input TopicUpdateInput {
-  name: String
-  coursePage: CoursePageUpdateOneWithoutTopicsInput
-  user: UserUpdateOneWithoutTopicsInput
-  statements: StatementUpdateManyWithoutTopicInput
-}
-
-input TopicUpdateManyDataInput {
-  name: String
-}
-
-input TopicUpdateManyMutationInput {
-  name: String
-}
-
-input TopicUpdateManyWithoutCoursePageInput {
-  create: [TopicCreateWithoutCoursePageInput!]
-  delete: [TopicWhereUniqueInput!]
-  connect: [TopicWhereUniqueInput!]
-  set: [TopicWhereUniqueInput!]
-  disconnect: [TopicWhereUniqueInput!]
-  update: [TopicUpdateWithWhereUniqueWithoutCoursePageInput!]
-  upsert: [TopicUpsertWithWhereUniqueWithoutCoursePageInput!]
-  deleteMany: [TopicScalarWhereInput!]
-  updateMany: [TopicUpdateManyWithWhereNestedInput!]
-}
-
-input TopicUpdateManyWithoutUserInput {
-  create: [TopicCreateWithoutUserInput!]
-  delete: [TopicWhereUniqueInput!]
-  connect: [TopicWhereUniqueInput!]
-  set: [TopicWhereUniqueInput!]
-  disconnect: [TopicWhereUniqueInput!]
-  update: [TopicUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [TopicUpsertWithWhereUniqueWithoutUserInput!]
-  deleteMany: [TopicScalarWhereInput!]
-  updateMany: [TopicUpdateManyWithWhereNestedInput!]
-}
-
-input TopicUpdateManyWithWhereNestedInput {
-  where: TopicScalarWhereInput!
-  data: TopicUpdateManyDataInput!
-}
-
-input TopicUpdateOneWithoutStatementsInput {
-  create: TopicCreateWithoutStatementsInput
-  update: TopicUpdateWithoutStatementsDataInput
-  upsert: TopicUpsertWithoutStatementsInput
-  delete: Boolean
-  disconnect: Boolean
-  connect: TopicWhereUniqueInput
-}
-
-input TopicUpdateWithoutCoursePageDataInput {
-  name: String
-  user: UserUpdateOneWithoutTopicsInput
-  statements: StatementUpdateManyWithoutTopicInput
-}
-
-input TopicUpdateWithoutStatementsDataInput {
-  name: String
-  coursePage: CoursePageUpdateOneWithoutTopicsInput
-  user: UserUpdateOneWithoutTopicsInput
-}
-
-input TopicUpdateWithoutUserDataInput {
-  name: String
-  coursePage: CoursePageUpdateOneWithoutTopicsInput
-  statements: StatementUpdateManyWithoutTopicInput
-}
-
-input TopicUpdateWithWhereUniqueWithoutCoursePageInput {
-  where: TopicWhereUniqueInput!
-  data: TopicUpdateWithoutCoursePageDataInput!
-}
-
-input TopicUpdateWithWhereUniqueWithoutUserInput {
-  where: TopicWhereUniqueInput!
-  data: TopicUpdateWithoutUserDataInput!
-}
-
-input TopicUpsertWithoutStatementsInput {
-  update: TopicUpdateWithoutStatementsDataInput!
-  create: TopicCreateWithoutStatementsInput!
-}
-
-input TopicUpsertWithWhereUniqueWithoutCoursePageInput {
-  where: TopicWhereUniqueInput!
-  update: TopicUpdateWithoutCoursePageDataInput!
-  create: TopicCreateWithoutCoursePageInput!
-}
-
-input TopicUpsertWithWhereUniqueWithoutUserInput {
-  where: TopicWhereUniqueInput!
-  update: TopicUpdateWithoutUserDataInput!
-  create: TopicCreateWithoutUserInput!
-}
-
-input TopicWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  coursePage: CoursePageWhereInput
-  user: UserWhereInput
-  statements_every: StatementWhereInput
-  statements_some: StatementWhereInput
-  statements_none: StatementWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [TopicWhereInput!]
-  OR: [TopicWhereInput!]
-  NOT: [TopicWhereInput!]
-}
-
-input TopicWhereUniqueInput {
-  id: ID
-}
-
 enum Type {
   STORY
   REGULAR
@@ -20387,7 +20761,8 @@ type User {
   notes(where: NoteWhereInput, orderBy: NoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Note!]
   teacherFeedback(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback!]
   studentFeedback(where: FeedbackWhereInput, orderBy: FeedbackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feedback!]
-  topics(where: TopicWhereInput, orderBy: TopicOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Topic!]
+  forums(where: ForumWhereInput, orderBy: ForumOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Forum!]
+  ratings(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rating!]
   statements(where: StatementWhereInput, orderBy: StatementOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Statement!]
   courseVisits(where: CourseVisitWhereInput, orderBy: CourseVisitOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CourseVisit!]
   examResults(where: ExamResultWhereInput, orderBy: ExamResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamResult!]
@@ -20462,7 +20837,8 @@ input UserCreateInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -20553,6 +20929,11 @@ input UserCreateOneWithoutExamsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutForumsInput {
+  create: UserCreateWithoutForumsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutLegalPortfolioInput {
   create: UserCreateWithoutLegalPortfolioInput
   connect: UserWhereUniqueInput
@@ -20613,6 +20994,11 @@ input UserCreateOneWithoutQuizResultsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutRatingsInput {
+  create: UserCreateWithoutRatingsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutSandboxPageGoalsInput {
   create: UserCreateWithoutSandboxPageGoalsInput
   connect: UserWhereUniqueInput
@@ -20665,11 +21051,6 @@ input UserCreateOneWithoutTextEditorInput {
 
 input UserCreateOneWithoutTextEditorResultsInput {
   create: UserCreateWithoutTextEditorResultsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutTopicsInput {
-  create: UserCreateWithoutTopicsInput
   connect: UserWhereUniqueInput
 }
 
@@ -20736,7 +21117,8 @@ input UserCreateWithoutArticlesInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -20798,7 +21180,8 @@ input UserCreateWithoutCareerTrackInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -20861,7 +21244,8 @@ input UserCreateWithoutChallengeResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -20923,7 +21307,8 @@ input UserCreateWithoutClausesInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -20984,7 +21369,8 @@ input UserCreateWithoutCompanyInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21046,7 +21432,8 @@ input UserCreateWithoutConstructionInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21108,7 +21495,8 @@ input UserCreateWithoutConstructionResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21170,7 +21558,8 @@ input UserCreateWithoutCoursePagesInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21233,7 +21622,8 @@ input UserCreateWithoutCourseVisitsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   examResults: ExamResultCreateManyWithoutUserInput
   exams: ExamCreateManyWithoutUserInput
@@ -21295,7 +21685,8 @@ input UserCreateWithoutDocumentResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21357,7 +21748,8 @@ input UserCreateWithoutDocumentsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21418,7 +21810,8 @@ input UserCreateWithoutExamAnswersInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21481,7 +21874,8 @@ input UserCreateWithoutExamResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   exams: ExamCreateManyWithoutUserInput
@@ -21543,10 +21937,74 @@ input UserCreateWithoutExamsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
+  documents: DocumentCreateManyWithoutUserInput
+  documentResults: DocumentResultCreateManyWithoutUserInput
+  clauses: ClauseCreateManyWithoutUserInput
+  challengeResults: ChallengeResultCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutForumsInput {
+  id: ID
+  name: String!
+  surname: String
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserCreatesandboxesInput
+  new_sandboxes: SandboxCreateManyInput
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  pointATests: PointATestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  ratings: RatingCreateManyWithoutUserInput
+  statements: StatementCreateManyWithoutUserInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+  examResults: ExamResultCreateManyWithoutUserInput
+  exams: ExamCreateManyWithoutUserInput
   documents: DocumentCreateManyWithoutUserInput
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
@@ -21604,7 +22062,8 @@ input UserCreateWithoutLegalPortfolioInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21666,7 +22125,8 @@ input UserCreateWithoutLessonResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21728,7 +22188,8 @@ input UserCreateWithoutLessonsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21790,7 +22251,8 @@ input UserCreateWithoutNew_subjectsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21852,7 +22314,8 @@ input UserCreateWithoutNewTestsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21914,7 +22377,8 @@ input UserCreateWithoutNotesInput {
   shotResults: ShotResultCreateManyWithoutStudentInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -21976,7 +22440,8 @@ input UserCreateWithoutOrdersInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22038,7 +22503,8 @@ input UserCreateWithoutPointATestsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22100,7 +22566,8 @@ input UserCreateWithoutPointsAInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22162,7 +22629,8 @@ input UserCreateWithoutProblemResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22224,7 +22692,8 @@ input UserCreateWithoutProblemsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22286,7 +22755,8 @@ input UserCreateWithoutQuizesInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22348,7 +22818,71 @@ input UserCreateWithoutQuizResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
+  statements: StatementCreateManyWithoutUserInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+  examResults: ExamResultCreateManyWithoutUserInput
+  exams: ExamCreateManyWithoutUserInput
+  documents: DocumentCreateManyWithoutUserInput
+  documentResults: DocumentResultCreateManyWithoutUserInput
+  clauses: ClauseCreateManyWithoutUserInput
+  challengeResults: ChallengeResultCreateManyWithoutStudentInput
+}
+
+input UserCreateWithoutRatingsInput {
+  id: ID
+  name: String!
+  surname: String
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserCreatesandboxesInput
+  new_sandboxes: SandboxCreateManyInput
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  pointATests: PointATestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  forums: ForumCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22410,7 +22944,8 @@ input UserCreateWithoutSandboxPageGoalsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22472,7 +23007,8 @@ input UserCreateWithoutSandboxPagesInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22534,7 +23070,8 @@ input UserCreateWithoutShotResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22596,7 +23133,8 @@ input UserCreateWithoutShotsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22659,7 +23197,8 @@ input UserCreateWithoutStatementsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
   exams: ExamCreateManyWithoutUserInput
@@ -22720,7 +23259,8 @@ input UserCreateWithoutStudentFeedbackInput {
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22782,7 +23322,8 @@ input UserCreateWithoutTeacherFeedbackInput {
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22844,7 +23385,8 @@ input UserCreateWithoutTestResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22906,7 +23448,8 @@ input UserCreateWithoutTestsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -22968,7 +23511,8 @@ input UserCreateWithoutTextEditorInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -23030,69 +23574,8 @@ input UserCreateWithoutTextEditorResultsInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
-  statements: StatementCreateManyWithoutUserInput
-  courseVisits: CourseVisitCreateManyWithoutStudentInput
-  examResults: ExamResultCreateManyWithoutUserInput
-  exams: ExamCreateManyWithoutUserInput
-  documents: DocumentCreateManyWithoutUserInput
-  documentResults: DocumentResultCreateManyWithoutUserInput
-  clauses: ClauseCreateManyWithoutUserInput
-  challengeResults: ChallengeResultCreateManyWithoutStudentInput
-}
-
-input UserCreateWithoutTopicsInput {
-  id: ID
-  name: String!
-  surname: String
-  email: String!
-  password: String!
-  resetToken: String
-  resetTokenExpiry: Float
-  image: String
-  status: Status
-  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
-  uni: UniCreateOneWithoutTeachersInput
-  company: CompanyCreateOneWithoutHrsInput
-  uniID: ID
-  description: String
-  resume: String
-  coverLetter: String
-  careerTrack: CareerTrackCreateOneWithoutMembersInput
-  careerTrackID: ID
-  sandboxes: UserCreatesandboxesInput
-  new_sandboxes: SandboxCreateManyInput
-  favourites: UserCreatefavouritesInput
-  subjects: UserCreatesubjectsInput
-  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
-  permissions: UserCreatepermissionsInput
-  coursePages: CoursePageCreateManyWithoutUserInput
-  sandboxPages: SandboxPageCreateManyWithoutUserInput
-  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
-  lessons: LessonCreateManyWithoutUserInput
-  tests: TestCreateManyWithoutUserInput
-  newTests: NewTestCreateManyWithoutUserInput
-  quizes: QuizCreateManyWithoutUserInput
-  lessonResults: LessonResultCreateManyWithoutStudentInput
-  testResults: TestResultCreateManyWithoutStudentInput
-  quizResults: QuizResultCreateManyWithoutStudentInput
-  problemResults: ProblemResultCreateManyWithoutStudentInput
-  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
-  constructionResults: ConstructionResultCreateManyWithoutStudentInput
-  pointsA: PointACreateManyWithoutUserInput
-  pointATests: PointATestCreateManyWithoutUserInput
-  problems: ProblemCreateManyWithoutUserInput
-  construction: ConstructionCreateManyWithoutUserInput
-  orders: OrderCreateManyWithoutUserInput
-  textEditor: TextEditorCreateManyWithoutUserInput
-  isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
-  examAnswers: ExamAnswerCreateManyWithoutStudentInput
-  shots: ShotCreateManyWithoutUserInput
-  shotResults: ShotResultCreateManyWithoutStudentInput
-  notes: NoteCreateManyWithoutUserInput
-  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
-  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -23154,7 +23637,8 @@ input UserCreateWithoutUniInput {
   notes: NoteCreateManyWithoutUserInput
   teacherFeedback: FeedbackCreateManyWithoutTeacherInput
   studentFeedback: FeedbackCreateManyWithoutStudentInput
-  topics: TopicCreateManyWithoutUserInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
   statements: StatementCreateManyWithoutUserInput
   courseVisits: CourseVisitCreateManyWithoutStudentInput
   examResults: ExamResultCreateManyWithoutUserInput
@@ -23508,7 +23992,8 @@ input UserUpdateInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -23846,6 +24331,15 @@ input UserUpdateOneWithoutExamResultsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutForumsInput {
+  create: UserCreateWithoutForumsInput
+  update: UserUpdateWithoutForumsDataInput
+  upsert: UserUpsertWithoutForumsInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutNotesInput {
   create: UserCreateWithoutNotesInput
   update: UserUpdateWithoutNotesDataInput
@@ -23855,19 +24349,19 @@ input UserUpdateOneWithoutNotesInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutStatementsInput {
-  create: UserCreateWithoutStatementsInput
-  update: UserUpdateWithoutStatementsDataInput
-  upsert: UserUpsertWithoutStatementsInput
+input UserUpdateOneWithoutRatingsInput {
+  create: UserCreateWithoutRatingsInput
+  update: UserUpdateWithoutRatingsDataInput
+  upsert: UserUpsertWithoutRatingsInput
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneWithoutTopicsInput {
-  create: UserCreateWithoutTopicsInput
-  update: UserUpdateWithoutTopicsDataInput
-  upsert: UserUpsertWithoutTopicsInput
+input UserUpdateOneWithoutStatementsInput {
+  create: UserCreateWithoutStatementsInput
+  update: UserUpdateWithoutStatementsDataInput
+  upsert: UserUpsertWithoutStatementsInput
   delete: Boolean
   disconnect: Boolean
   connect: UserWhereUniqueInput
@@ -23935,7 +24429,8 @@ input UserUpdateWithoutArticlesDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -23996,7 +24491,8 @@ input UserUpdateWithoutCareerTrackDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24058,7 +24554,8 @@ input UserUpdateWithoutChallengeResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24119,7 +24616,8 @@ input UserUpdateWithoutClausesDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24179,7 +24677,8 @@ input UserUpdateWithoutCompanyDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24240,7 +24739,8 @@ input UserUpdateWithoutConstructionDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24301,7 +24801,8 @@ input UserUpdateWithoutConstructionResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24362,7 +24863,8 @@ input UserUpdateWithoutCoursePagesDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24424,7 +24926,8 @@ input UserUpdateWithoutCourseVisitsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   examResults: ExamResultUpdateManyWithoutUserInput
   exams: ExamUpdateManyWithoutUserInput
@@ -24485,7 +24988,8 @@ input UserUpdateWithoutDocumentResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24546,7 +25050,8 @@ input UserUpdateWithoutDocumentsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24606,7 +25111,8 @@ input UserUpdateWithoutExamAnswersDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24668,7 +25174,8 @@ input UserUpdateWithoutExamResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   exams: ExamUpdateManyWithoutUserInput
@@ -24729,10 +25236,73 @@ input UserUpdateWithoutExamsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
+  documents: DocumentUpdateManyWithoutUserInput
+  documentResults: DocumentResultUpdateManyWithoutUserInput
+  clauses: ClauseUpdateManyWithoutUserInput
+  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutForumsDataInput {
+  name: String
+  surname: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserUpdatesandboxesInput
+  new_sandboxes: SandboxUpdateManyInput
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  pointATests: PointATestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  ratings: RatingUpdateManyWithoutUserInput
+  statements: StatementUpdateManyWithoutUserInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+  examResults: ExamResultUpdateManyWithoutUserInput
+  exams: ExamUpdateManyWithoutUserInput
   documents: DocumentUpdateManyWithoutUserInput
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
@@ -24789,7 +25359,8 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24850,7 +25421,8 @@ input UserUpdateWithoutLessonResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24911,7 +25483,8 @@ input UserUpdateWithoutLessonsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -24972,7 +25545,8 @@ input UserUpdateWithoutNew_subjectsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25033,7 +25607,8 @@ input UserUpdateWithoutNewTestsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25094,7 +25669,8 @@ input UserUpdateWithoutNotesDataInput {
   shotResults: ShotResultUpdateManyWithoutStudentInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25155,7 +25731,8 @@ input UserUpdateWithoutOrdersDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25216,7 +25793,8 @@ input UserUpdateWithoutPointATestsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25277,7 +25855,8 @@ input UserUpdateWithoutPointsADataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25338,7 +25917,8 @@ input UserUpdateWithoutProblemResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25399,7 +25979,8 @@ input UserUpdateWithoutProblemsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25460,7 +26041,8 @@ input UserUpdateWithoutQuizesDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25521,7 +26103,70 @@ input UserUpdateWithoutQuizResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
+  statements: StatementUpdateManyWithoutUserInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+  examResults: ExamResultUpdateManyWithoutUserInput
+  exams: ExamUpdateManyWithoutUserInput
+  documents: DocumentUpdateManyWithoutUserInput
+  documentResults: DocumentResultUpdateManyWithoutUserInput
+  clauses: ClauseUpdateManyWithoutUserInput
+  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+}
+
+input UserUpdateWithoutRatingsDataInput {
+  name: String
+  surname: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserUpdatesandboxesInput
+  new_sandboxes: SandboxUpdateManyInput
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  pointATests: PointATestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  forums: ForumUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25582,7 +26227,8 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25643,7 +26289,8 @@ input UserUpdateWithoutSandboxPagesDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25704,7 +26351,8 @@ input UserUpdateWithoutShotResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25765,7 +26413,8 @@ input UserUpdateWithoutShotsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25827,7 +26476,8 @@ input UserUpdateWithoutStatementsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
   exams: ExamUpdateManyWithoutUserInput
@@ -25887,7 +26537,8 @@ input UserUpdateWithoutStudentFeedbackDataInput {
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -25948,7 +26599,8 @@ input UserUpdateWithoutTeacherFeedbackDataInput {
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -26009,7 +26661,8 @@ input UserUpdateWithoutTestResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -26070,7 +26723,8 @@ input UserUpdateWithoutTestsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -26131,7 +26785,8 @@ input UserUpdateWithoutTextEditorDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -26192,68 +26847,8 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
-  statements: StatementUpdateManyWithoutUserInput
-  courseVisits: CourseVisitUpdateManyWithoutStudentInput
-  examResults: ExamResultUpdateManyWithoutUserInput
-  exams: ExamUpdateManyWithoutUserInput
-  documents: DocumentUpdateManyWithoutUserInput
-  documentResults: DocumentResultUpdateManyWithoutUserInput
-  clauses: ClauseUpdateManyWithoutUserInput
-  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
-}
-
-input UserUpdateWithoutTopicsDataInput {
-  name: String
-  surname: String
-  email: String
-  password: String
-  resetToken: String
-  resetTokenExpiry: Float
-  image: String
-  status: Status
-  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
-  uni: UniUpdateOneWithoutTeachersInput
-  company: CompanyUpdateOneWithoutHrsInput
-  uniID: ID
-  description: String
-  resume: String
-  coverLetter: String
-  careerTrack: CareerTrackUpdateOneWithoutMembersInput
-  careerTrackID: ID
-  sandboxes: UserUpdatesandboxesInput
-  new_sandboxes: SandboxUpdateManyInput
-  favourites: UserUpdatefavouritesInput
-  subjects: UserUpdatesubjectsInput
-  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
-  permissions: UserUpdatepermissionsInput
-  coursePages: CoursePageUpdateManyWithoutUserInput
-  sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
-  lessons: LessonUpdateManyWithoutUserInput
-  tests: TestUpdateManyWithoutUserInput
-  newTests: NewTestUpdateManyWithoutUserInput
-  quizes: QuizUpdateManyWithoutUserInput
-  lessonResults: LessonResultUpdateManyWithoutStudentInput
-  testResults: TestResultUpdateManyWithoutStudentInput
-  quizResults: QuizResultUpdateManyWithoutStudentInput
-  problemResults: ProblemResultUpdateManyWithoutStudentInput
-  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
-  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
-  pointsA: PointAUpdateManyWithoutUserInput
-  pointATests: PointATestUpdateManyWithoutUserInput
-  problems: ProblemUpdateManyWithoutUserInput
-  construction: ConstructionUpdateManyWithoutUserInput
-  orders: OrderUpdateManyWithoutUserInput
-  textEditor: TextEditorUpdateManyWithoutUserInput
-  isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
-  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
-  shots: ShotUpdateManyWithoutUserInput
-  shotResults: ShotResultUpdateManyWithoutStudentInput
-  notes: NoteUpdateManyWithoutUserInput
-  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
-  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -26314,7 +26909,8 @@ input UserUpdateWithoutUniDataInput {
   notes: NoteUpdateManyWithoutUserInput
   teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
   studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  topics: TopicUpdateManyWithoutUserInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
   statements: StatementUpdateManyWithoutUserInput
   courseVisits: CourseVisitUpdateManyWithoutStudentInput
   examResults: ExamResultUpdateManyWithoutUserInput
@@ -26405,6 +27001,11 @@ input UserUpsertWithoutExamsInput {
   create: UserCreateWithoutExamsInput!
 }
 
+input UserUpsertWithoutForumsInput {
+  update: UserUpdateWithoutForumsDataInput!
+  create: UserCreateWithoutForumsInput!
+}
+
 input UserUpsertWithoutLegalPortfolioInput {
   update: UserUpdateWithoutLegalPortfolioDataInput!
   create: UserCreateWithoutLegalPortfolioInput!
@@ -26465,6 +27066,11 @@ input UserUpsertWithoutQuizResultsInput {
   create: UserCreateWithoutQuizResultsInput!
 }
 
+input UserUpsertWithoutRatingsInput {
+  update: UserUpdateWithoutRatingsDataInput!
+  create: UserCreateWithoutRatingsInput!
+}
+
 input UserUpsertWithoutSandboxPageGoalsInput {
   update: UserUpdateWithoutSandboxPageGoalsDataInput!
   create: UserCreateWithoutSandboxPageGoalsInput!
@@ -26518,11 +27124,6 @@ input UserUpsertWithoutTextEditorInput {
 input UserUpsertWithoutTextEditorResultsInput {
   update: UserUpdateWithoutTextEditorResultsDataInput!
   create: UserCreateWithoutTextEditorResultsInput!
-}
-
-input UserUpsertWithoutTopicsInput {
-  update: UserUpdateWithoutTopicsDataInput!
-  create: UserCreateWithoutTopicsInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutCompanyInput {
@@ -26814,9 +27415,12 @@ input UserWhereInput {
   studentFeedback_every: FeedbackWhereInput
   studentFeedback_some: FeedbackWhereInput
   studentFeedback_none: FeedbackWhereInput
-  topics_every: TopicWhereInput
-  topics_some: TopicWhereInput
-  topics_none: TopicWhereInput
+  forums_every: ForumWhereInput
+  forums_some: ForumWhereInput
+  forums_none: ForumWhereInput
+  ratings_every: RatingWhereInput
+  ratings_some: RatingWhereInput
+  ratings_none: RatingWhereInput
   statements_every: StatementWhereInput
   statements_some: StatementWhereInput
   statements_none: StatementWhereInput

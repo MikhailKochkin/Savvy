@@ -8,6 +8,7 @@ import SingleQuiz from "./quizes/SingleQuiz";
 import SingleProblem from "./problems/SingleProblem";
 import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
+import Forum from "./forum/Forum";
 import Document from "./documents/Document";
 import Exam from "./exams/Exam";
 
@@ -33,15 +34,14 @@ const Container = styled.div`
 
 class StoryEx extends Component {
   render() {
-    const { m, me, lesson } = this.props;
-    let arr = [];
+    const { task, me, lesson } = this.props;
     let el;
     let item;
-    if (Object.keys(m)[0] === "note") {
-      el = lesson.notes.find((note) => note.id === Object.values(m)[0]);
+    if (task.type === "Note") {
+      el = lesson.notes.find((note) => note.id === task.id);
       item = <Note text={el.text} me={me} story={true} note={el} />;
-    } else if (Object.keys(m)[0] === "newTest") {
-      el = lesson.newTests.find((test) => test.id === Object.values(m)[0]);
+    } else if (task.type === "NewTest") {
+      el = lesson.newTests.find((test) => test.id === task.id);
       item = (
         <SingleTest
           key={el.id}
@@ -61,8 +61,8 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (Object.keys(m)[0] === "quiz") {
-      el = lesson.quizes.find((quiz) => quiz.id === Object.values(m)[0]);
+    } else if (task.type === "Quiz") {
+      el = lesson.quizes.find((quiz) => quiz.id === task.id);
       item = (
         <SingleQuiz
           key={el.id}
@@ -80,8 +80,8 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (Object.keys(m)[0] === "shot") {
-      el = lesson.shots.find((shot) => shot.id === Object.values(m)[0]);
+    } else if (task.type === "Shot") {
+      el = lesson.shots.find((shot) => shot.id === task.id);
       item = (
         <Shots
           key={el.id}
@@ -96,10 +96,8 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (Object.keys(m)[0] === "problem") {
-      el = lesson.problems.find(
-        (problem) => problem.id === Object.values(m)[0]
-      );
+    } else if (task.type === "Problem") {
+      el = lesson.problems.find((problem) => problem.id === task.id);
       item = (
         <SingleProblem
           key={el.id}
@@ -111,10 +109,8 @@ class StoryEx extends Component {
           lesson={lesson}
         />
       );
-    } else if (Object.keys(m)[0] === "texteditor") {
-      el = lesson.texteditors.find(
-        (texteditor) => texteditor.id === Object.values(m)[0]
-      );
+    } else if (task.type === "TextEditor") {
+      el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
       item = (
         <SingleTextEditor
           key={el.id}
@@ -125,8 +121,8 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (Object.keys(m)[0] === "construction") {
-      el = lesson.constructions.find((con) => con.id === Object.values(m)[0]);
+    } else if (task.type === "Construction") {
+      el = lesson.constructions.find((con) => con.id === task.id);
       item = (
         <SingleConstructor
           key={el.id}
@@ -139,11 +135,11 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (Object.keys(m)[0] === "exam") {
-      el = lesson.exams.find((con) => con.id === Object.values(m)[0]);
+    } else if (task.type === "Exam") {
+      el = lesson.exams.find((con) => con.id === task.id);
       item = <Exam lesson={lesson} me={this.props.me} exam={el} story={true} />;
-    } else if (Object.keys(m)[0] === "document") {
-      el = lesson.documents.find((con) => con.id === Object.values(m)[0]);
+    } else if (task.type === "Document") {
+      el = lesson.documents.find((con) => con.id === task.id);
       item = (
         <Document
           key={el.id}
@@ -154,6 +150,20 @@ class StoryEx extends Component {
           user={lesson.user.id}
           lessonID={lesson.id}
           story={true}
+        />
+      );
+    } else if (task.type === "Forum") {
+      el = lesson.forum;
+      item = (
+        <Forum
+          key={el.id}
+          text={el.text}
+          forum={el}
+          me={me}
+          id={el.id}
+          lesson={lesson.id}
+          result={el.rating.filter((r) => r.user.id == me.id)[0]}
+          statements={el.statements}
         />
       );
     }

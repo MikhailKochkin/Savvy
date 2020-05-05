@@ -82,7 +82,8 @@ type User {
   notes: [Note] @relation(link: TABLE, name: "NoteToUser", onDelete: CASCADE)
   teacherFeedback: [Feedback] @relation(link: TABLE, name: "TeacherFeedback")
   studentFeedback: [Feedback] @relation(link: TABLE, name: "StudentFeedback")
-  topics: [Topic] @relation(link: TABLE, name: "UserTopics", onDelete: CASCADE)
+  forums: [Forum] @relation(link: TABLE, name: "UserForums", onDelete: CASCADE)
+  ratings: [Rating] @relation(link: TABLE, name: "UserRating", onDelete: CASCADE) 
   statements: [Statement] @relation(link: TABLE, name: "UserStatements", onDelete: CASCADE)
   courseVisits: [CourseVisit] @relation(link: TABLE, name: "UserCourseVisits")
   examResults: [ExamResult] @relation(link: TABLE, name: "ExamResultToUser")
@@ -135,7 +136,6 @@ type CoursePage {
   company: Company @relation(name: "CompanyCoursePage")
   promocode: [Json] @scalarList(strategy: RELATION)
   visits: [CourseVisit] @relation(link: TABLE, name: "CourseVisits" onDelete: CASCADE)
-  topics: [Topic] @relation(link: TABLE, name: "CoursePageTopics")
   audience: String
   result: String
   tariffs: String
@@ -179,6 +179,7 @@ type Lesson {
   user: User! @relation(name: "LessonToUser")
   type: Type @default(value: REGULAR)
   map: [Json] @scalarList(strategy: RELATION)
+  structure: Json 
   notes: [Note] @relation(link: TABLE, name: "LessonNotes", onDelete: CASCADE)
   shots: [Shot] @relation(link: TABLE, name: "LessonShots", onDelete: CASCADE)
   shotResults: [ShotResult] @relation(link: TABLE, name: "ShotLessonResults" onDelete: CASCADE)
@@ -197,6 +198,7 @@ type Lesson {
   problemResults: [ProblemResult] @relation(link: TABLE, name: "ProblemResults" onDelete: CASCADE)
   constructionResults: [ConstructionResult] @relation(link: TABLE, name: "ConstructionResults" onDelete: CASCADE)
   lessonFeedback: [Feedback] @relation(link: TABLE, name: "LessonFeedback" onDelete: CASCADE)
+  forum: Forum @relation(link: TABLE, name: "LessonForum")
   open: Boolean @default(value: false)
   coursePageID: ID!
   published: Boolean @default(value: false)
@@ -636,12 +638,22 @@ type DocumentResult {
   updatedAt: DateTime! @updatedAt
 }
 
-type Topic {
+type Forum {
   id: ID! @id
-  name: String
-  coursePage: CoursePage @relation( name: "CoursePageTopics")
-  user: User @relation( name: "UserTopics")
-  statements: [Statement] @relation(link: TABLE, name: "TopicStatements" onDelete: CASCADE)
+  text: String
+  lesson: Lesson @relation( name: "LessonForum")
+  user: User @relation( name: "UserForums")
+  rating: [Rating] @relation(link: TABLE, name: "ForumRating" onDelete: CASCADE)
+  statements: [Statement] @relation(link: TABLE, name: "ForumStatements" onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Rating {
+  id: ID! @id
+  rating: Int
+  forum: Forum @relation(name: "ForumRating")
+  user: User @relation( name: "UserRating")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -649,7 +661,7 @@ type Topic {
 type Statement {
   id: ID! @id
   text: String
-  topic: Topic @relation( name: "TopicStatements")
+  forum: Forum @relation( name: "ForumStatements")
   user: User @relation( name: "UserStatements")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt

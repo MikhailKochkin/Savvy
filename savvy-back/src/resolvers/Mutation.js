@@ -62,6 +62,19 @@ const NotificationEmail = (name, course, coursePageID) => `
   </div>
 `;
 
+const AuthorNotification = (lesson, course, lessonID) => `
+  <div className="email" style="
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>Привет!</h2>
+    <p>Пришел новый вопрос по уроку "${lesson}" курса "${course}"</p>
+    <button><a href="https://besavvy.app/lesson?id=${lessonID}&type=regular">Перейти</a></button>
+  </div>
+`;
+
 const Mutations = {
   async updateUser(parent, args, ctx, info) {
     //run the update method
@@ -1736,35 +1749,9 @@ const Mutations = {
     );
     return DocumentResult;
   },
-  async createTopic(parent, args, ctx, info) {
+  async createForum(parent, args, ctx, info) {
     // TODO: Check if they are logged in
-    const coursePage = args.coursePage;
-    const name = args.name;
-    delete args;
-    if (!ctx.request.userId) {
-      throw new Error(
-        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
-      );
-    }
-    const Topic = await ctx.db.mutation.createTopic(
-      {
-        data: {
-          user: {
-            connect: { id: ctx.request.userId },
-          },
-          coursePage: {
-            connect: { id: coursePage },
-          },
-          name: name,
-        },
-      },
-      info
-    );
-    return Topic;
-  },
-  async createStatement(parent, args, ctx, info) {
-    // TODO: Check if they are logged in
-    const topic = args.topic;
+    const lesson = args.lesson;
     const text = args.text;
     delete args;
     if (!ctx.request.userId) {
@@ -1772,14 +1759,121 @@ const Mutations = {
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
       );
     }
+    const Forum = await ctx.db.mutation.createForum(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId },
+          },
+          lesson: {
+            connect: { id: lesson },
+          },
+          text: text,
+        },
+      },
+      info
+    );
+    return Forum;
+  },
+  async updateForum(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args }; //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateForum(
+      {
+        data: updates,
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+  },
+  async createRating(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    const rating = args.rating;
+    const forum = args.forum;
+    delete args;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const Rating = await ctx.db.mutation.createRating(
+      {
+        data: {
+          user: {
+            connect: { id: ctx.request.userId },
+          },
+          forum: {
+            connect: { id: forum },
+          },
+          rating: rating,
+        },
+      },
+      info
+    );
+    return Rating;
+  },
+  async updateRating(parent, args, ctx, info) {
+    //first take a copy of the updates
+    const updates = { ...args }; //remove the ID from updates
+    delete updates.id;
+    //run the update method
+    return ctx.db.mutation.updateRating(
+      {
+        data: updates,
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+  },
+  async createStatement(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+
+    const forum = args.forum;
+    const text = args.text;
+    delete args;
+
+    const author = await ctx.db.query.users({
+      where: { forums_some: { id: args.forum } },
+    });
+    // const order = await ctx.db.query.order(
+    //   { where: { id: args.id } },
+    //   `{ id, user { name, email}, coursePage {id, title} }`
+    // );
+    const lesson = await ctx.db.query.lessons(
+      { where: { forum: { id: args.forum } } },
+      `{id, coursePage {id, title}, name}`
+    );
+    const newMail = await client.sendEmail({
+      From: "Mikhail@besavvy.app",
+      To: author[0].email,
+      Subject: "Новое сообщение на форуме",
+      HtmlBody: AuthorNotification(
+        lesson[0].name,
+        lesson[0].coursePage.title,
+        lesson[0].id
+      ),
+    });
+
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+
     const Statement = await ctx.db.mutation.createStatement(
       {
         data: {
           user: {
             connect: { id: ctx.request.userId },
           },
-          topic: {
-            connect: { id: topic },
+          forum: {
+            connect: { id: forum },
           },
           text: text,
         },

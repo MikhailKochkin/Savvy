@@ -27,6 +27,7 @@ const SINGLE_LESSON_QUERY = gql`
       type
       map
       open
+      structure
       createdAt
       user {
         id
@@ -63,6 +64,45 @@ const SINGLE_LESSON_QUERY = gql`
         comments
         user {
           id
+        }
+      }
+      forum {
+        id
+        text
+        rating {
+          id
+          rating
+          user {
+            id
+          }
+        }
+        statements {
+          id
+          text
+          createdAt
+          user {
+            id
+            name
+            surname
+          }
+          forum {
+            id
+            rating {
+              id
+              rating
+            }
+          }
+        }
+        lesson {
+          id
+          user {
+            id
+          }
+        }
+        user {
+          id
+          name
+          surname
         }
       }
       shotResults {
@@ -283,7 +323,7 @@ const Head = styled.div`
     cursor: pointer;
   }
   @media (max-width: 800px) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     justify-content: space-between;
     align-items: center;
     margin: 0 1%;
@@ -314,7 +354,7 @@ const Head2 = styled.div`
     }
   }
   @media (max-width: 800px) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     justify-content: space-between;
     padding: 2% 15px;
     div {
@@ -415,13 +455,11 @@ const SingleLesson = (props) => {
   const [activeStep, setActiveStep] = useState(0);
   const [task, setTask] = useState("");
 
-  const handleNext = (tasks) => {
-    setTask(tasks[activeStep + 1]);
+  const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = (tasks) => {
-    setTask(tasks[activeStep - 1]);
+  const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -439,9 +477,6 @@ const SingleLesson = (props) => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
-              let tasks = [];
-              lesson &&
-                lesson.map[0].map((task) => tasks.push(Object.keys(task)[0]));
               return (
                 <>
                   {lesson && (
@@ -486,7 +521,7 @@ const SingleLesson = (props) => {
                             (lesson.user.id === me.id ||
                               me.permissions.includes("ADMIN")) && (
                               <Head2>
-                                {lesson.map.length > 0 && (
+                                {lesson.structure.length > 0 && (
                                   <div>
                                     Режим истории →
                                     <Link
@@ -505,8 +540,7 @@ const SingleLesson = (props) => {
                               </Head2>
                             )}
                           <Header task={task === "construction"}>
-                            Раздел {activeStep + 1} из{" "}
-                            {data.lesson.map[0].length}
+                            Раздел {activeStep + 1} из {lesson.structure.length}
                           </Header>
                           <LessonPart task={task === "construction"}>
                             <ReactCSSTransitionGroup
@@ -515,7 +549,7 @@ const SingleLesson = (props) => {
                               transitionLeaveTimeout={3300}
                             >
                               <StoryEx
-                                m={data.lesson.map[0][activeStep]}
+                                task={lesson.structure[activeStep]}
                                 me={me}
                                 lesson={lesson}
                                 step={activeStep}
@@ -524,7 +558,7 @@ const SingleLesson = (props) => {
                           </LessonPart>
                           <MobileStepper
                             variant="progress"
-                            steps={data.lesson.map[0].length}
+                            steps={lesson.structure.length}
                             position="static"
                             activeStep={activeStep}
                             classes={{
@@ -535,13 +569,12 @@ const SingleLesson = (props) => {
                               <Button
                                 size="small"
                                 variant="text"
-                                onClick={(e) => handleNext(tasks)}
+                                onClick={handleNext}
                                 classes={{
                                   textSizeSmall: classes.textSizeSmall,
                                 }}
                                 disabled={
-                                  activeStep ===
-                                  parseInt(data.lesson.map[0].length - 1)
+                                  activeStep === parseInt(lesson.structure - 1)
                                 }
                               >
                                 Вперёд
@@ -556,7 +589,7 @@ const SingleLesson = (props) => {
                               <Button
                                 size="small"
                                 variant="text"
-                                onClick={(e) => handleBack(tasks)}
+                                onClick={handleBack}
                                 classes={{
                                   textSizeSmall: classes.textSizeSmall,
                                 }}

@@ -29,6 +29,8 @@ import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import UpdateLesson from "./UpdateLesson";
 import User from "../User";
 import HowTo from "./HowTo";
+import Forum from "./forum/Forum";
+import ChangeForum from "./forum/ChangeForum";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 
@@ -44,8 +46,48 @@ const SINGLE_LESSON_QUERY = gql`
       type
       createdAt
       map
+      structure
       user {
         id
+      }
+      forum {
+        id
+        text
+        rating {
+          id
+          rating
+          user {
+            id
+          }
+        }
+        statements {
+          id
+          text
+          createdAt
+          user {
+            id
+            name
+            surname
+          }
+          forum {
+            id
+            rating {
+              id
+              rating
+            }
+          }
+        }
+        lesson {
+          id
+          user {
+            id
+          }
+        }
+        user {
+          id
+          name
+          surname
+        }
       }
       testResults {
         id
@@ -322,7 +364,7 @@ const Head = styled.div`
     cursor: pointer;
   }
   @media (max-width: 800px) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     justify-content: space-between;
     align-items: center;
     margin: 0 1%;
@@ -353,7 +395,7 @@ const Head2 = styled.div`
     }
   }
   @media (max-width: 800px) {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     justify-content: space-between;
     padding: 2% 15px;
     div {
@@ -647,6 +689,17 @@ class SingleLesson extends Component {
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
+                              {lesson.forum && (
+                                <ButtonZone>
+                                  <ChooseButton
+                                    name="forum"
+                                    onClick={this.onSwitch}
+                                  >
+                                    {" "}
+                                    Чат{" "}
+                                  </ChooseButton>
+                                </ButtonZone>
+                              )}
                               {lesson.newTests.length > 0 && (
                                 <ButtonZone>
                                   <ChooseButton
@@ -824,6 +877,25 @@ class SingleLesson extends Component {
                                   lessonID={lesson.id}
                                 />
                               ))}
+                            {this.state.page === "forum" && me && (
+                              <>
+                                {lesson.forum && (
+                                  <Forum
+                                    me={me}
+                                    forum={lesson.forum}
+                                    lesson={lesson.id}
+                                    text={lesson.forum.text}
+                                    result={
+                                      lesson.forum.rating.filter(
+                                        (r) => r.user.id == me.id
+                                      )[0]
+                                    }
+                                    id={lesson.forum.id}
+                                    statements={lesson.forum.statements}
+                                  />
+                                )}
+                              </>
+                            )}
                             {this.state.page === "document" &&
                               lesson.documents.map((doc) => (
                                 <Document
@@ -940,6 +1012,12 @@ class SingleLesson extends Component {
                             {this.state.page === "createTest" && (
                               <CreateNewTest lessonID={lesson.id} />
                             )}
+                            {this.state.page === "createForum" && (
+                              <ChangeForum
+                                lesson={lesson.id}
+                                forum={lesson.forum}
+                              />
+                            )}
                             {this.state.page === "createNote" && (
                               <CreateNote lessonID={lesson.id} />
                             )}
@@ -1014,6 +1092,17 @@ class SingleLesson extends Component {
                                       >
                                         {" "}
                                         Алгоритмы{" "}
+                                      </ChooseButton>
+                                    </ButtonZone>
+                                  )}
+                                  {lesson.forum && (
+                                    <ButtonZone>
+                                      <ChooseButton
+                                        name="forum"
+                                        onClick={this.onSwitch}
+                                      >
+                                        {" "}
+                                        Чат{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1124,6 +1213,15 @@ class SingleLesson extends Component {
                                           onClick={this.onSwitch}
                                         >
                                           Новый алгоритм
+                                        </ChooseButton>
+                                      </ButtonZone>
+
+                                      <ButtonZone>
+                                        <ChooseButton
+                                          name="createForum"
+                                          onClick={this.onSwitch}
+                                        >
+                                          Включить чат
                                         </ChooseButton>
                                       </ButtonZone>
 

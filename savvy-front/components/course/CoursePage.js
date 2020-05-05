@@ -12,7 +12,6 @@ import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
-import Forum from "./forum/Forum";
 
 const AGGREGATE_PAGE_LESSONS_QUERY = gql`
   query AGGREGATE_PAGE_LESSONS_QUERY($id: ID!) {
@@ -88,32 +87,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         question
       }
-      topics {
-        id
-        name
-        createdAt
-        user {
-          id
-          name
-          surname
-        }
-        coursePage {
-          id
-          user {
-            id
-          }
-        }
-        statements {
-          id
-          text
-          user {
-            id
-            name
-            surname
-          }
-          createdAt
-        }
-      }
+
       user {
         id
         name
@@ -695,16 +669,6 @@ class CoursePage extends Component {
                                     >
                                       Уроки
                                     </Button>
-
-                                    <Button
-                                      primary={this.state.page === "forum"}
-                                      name="forum"
-                                      id="forum"
-                                      onClick={this.switch}
-                                    >
-                                      Форум
-                                    </Button>
-
                                     <Button
                                       primary={this.state.page === "feedback"}
                                       name="feedback"
