@@ -813,7 +813,7 @@ class SingleLesson extends Component {
                           (lesson.user.id === me.id ||
                             me.permissions.includes("ADMIN")) && (
                             <Head2>
-                              {lesson.map.length > 0 ? (
+                              {lesson.structure.length > 0 ? (
                                 <Link
                                   href={{
                                     pathname: "/lesson",

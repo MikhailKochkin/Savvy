@@ -64,21 +64,21 @@ const Block = (props) => {
     <>
       {props.i !== 0 && <Icon size={"2.5em"} icon={arrowDown} id="back" />}
       <Styles>
-        {value.type === "NewTest" ? (
+        {value.type && value.type.toLowerCase() === "newtest" ? (
           <Title>
             <div className="type">
               Тест: {tests.filter((t) => t.id === value.id)[0].question}
             </div>
           </Title>
         ) : null}
-        {value.type === "Quiz" ? (
+        {value.type && value.type.toLowerCase() === "quiz" ? (
           <Title>
             <div className="type">
               Вопрос: {quizes.filter((q) => q.id === value.id)[0].question}
             </div>
           </Title>
         ) : null}
-        {value.type === "Note" ? (
+        {value.type && value.type.toLowerCase() === "note" ? (
           <Title>
             <div className="type">
               Лонгрид:{" "}
@@ -88,14 +88,14 @@ const Block = (props) => {
             </div>
           </Title>
         ) : null}
-        {value.type === "Shot" ? (
+        {value.type && value.type.toLowerCase() === "shot" ? (
           <Title>
             <div className="type">
               Алгоритм: {shots.filter((q) => q.id === value.id)[0].title}
             </div>
           </Title>
         ) : null}
-        {value.type === "TextEditor" ? (
+        {value.type && value.type.toLowerCase() === "texteditor" ? (
           <Title>
             <div className="type">
               Редактор:{" "}
@@ -107,7 +107,7 @@ const Block = (props) => {
             </div>
           </Title>
         ) : null}
-        {value.type === "Construction" ? (
+        {value.type && value.type.toLowerCase() === "construction" ? (
           <Title>
             <div className="type">
               Конструктор:{" "}
@@ -115,7 +115,7 @@ const Block = (props) => {
             </div>
           </Title>
         ) : null}
-        {value.type === "Problem" ? (
+        {value.type && value.type.toLowerCase() === "problem" ? (
           <Title>
             <div className="type">
               Задача:{" "}
@@ -127,46 +127,50 @@ const Block = (props) => {
             </div>
           </Title>
         ) : null}
-        {value.type === "Document" ? (
+        {value.type && value.type.toLowerCase() === "document" ? (
           <Title>
             <div className="type">
               Документ: {documents.filter((q) => q.id === value.id)[0].title}
             </div>
           </Title>
         ) : null}
-        {value.type === "Exam" ? (
+        {value.type && value.type.toLowerCase() === "exam" ? (
           <Title>
             <div className="type">
               Экзамен: {exams.filter((q) => q.id === value.id)[0].name}
             </div>
           </Title>
         ) : null}
-        {value.type === "Forum" ? (
+        {value.type && value.type.toLowerCase() === "forum" ? (
           <Title>
             <div className="type">
               Чат: {renderHTML(forum.text.substring(0, 100))}
             </div>
           </Title>
         ) : null}
-
         <div>
-          Тип задания:{" "}
           <select name="task" onChange={(e) => setTask(e.target.value)}>
             <option value="---">---</option>
-            {notes && <option value="Note">Лонгриды</option>}
-            {shots && <option value="Shot">Алгоритмы</option>}
-            {tests && <option value="NewTest">Тесты</option>}
-            {quizes && <option value="Quiz">Вопросы</option>}
-            {problems && <option value="Problem">Задачи</option>}
-            {texteditors && <option value="TextEditor">Редакторы</option>}
-            {constructions && <option value="Construction">Констукторы</option>}
-            {exams && <option value="Exam">Экзамены</option>}
-            {documents && <option value="Document">Документы</option>}
-            {forum && <option value="Forum">Форум</option>}
+            {notes.length > 0 && <option value="note">Лонгриды</option>}
+            {shots.length > 0 && <option value="shot">Алгоритмы</option>}
+            {tests.length > 0 && <option value="newTest">Тесты</option>}
+            {quizes.length > 0 && <option value="quiz">Вопросы</option>}
+            {problems.length > 0 && <option value="problem">Задачи</option>}
+            {texteditors.length > 0 && (
+              <option value="textEditor">Редакторы</option>
+            )}
+            {constructions.length > 0 && (
+              <option value="construction">Констукторы</option>
+            )}
+            {exams.length > 0 && <option value="exam">Экзамены</option>}
+            {documents.length > 0 && (
+              <option value="document">Документы</option>
+            )}
+            {forum && <option value="forum">Форум</option>}
           </select>
         </div>
         <Variants>
-          {task === "NewTest" && (
+          {task === "newTest" && (
             <Section>
               <h4>Тесты:</h4>
               {tests.map((t) => (
@@ -185,7 +189,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Quiz" && (
+          {task === "quiz" && (
             <Section>
               <h4>Вопросы:</h4>
               {quizes.map((q) => (
@@ -204,7 +208,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Note" && (
+          {task === "note" && (
             <Section>
               <h4>Лонгриды:</h4>
               {notes.map((n) => (
@@ -223,7 +227,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Shot" && (
+          {task === "shot" && (
             <Section>
               <h4>Алгоритмы:</h4>
               {shots.map((s) => (
@@ -242,7 +246,7 @@ const Block = (props) => {
               ))}{" "}
             </Section>
           )}
-          {task === "TextEditor" && (
+          {task === "texteditor" && (
             <Section>
               <h4>Редакторы:</h4>
               {texteditors.map((s) => (
@@ -261,7 +265,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Construction" && (
+          {task === "construction" && (
             <Section>
               <h4>Конструкторы:</h4>
               {constructions.map((s) => (
@@ -280,7 +284,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Problem" && (
+          {task === "problem" && (
             <Section>
               <h4>Задачи:</h4>
               {problems.map((s) => (
@@ -299,7 +303,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Exam" && (
+          {task === "exam" && (
             <Section>
               <h4>Экзамены:</h4>
               {exams.map((s) => (
@@ -318,7 +322,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Document" && (
+          {task === "document" && (
             <Section>
               <h4>Документы:</h4>
               {documents.map((s) => (
@@ -337,7 +341,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "Forum" && (
+          {task === "forum" && (
             <Section>
               <h4>Чат:</h4>
 

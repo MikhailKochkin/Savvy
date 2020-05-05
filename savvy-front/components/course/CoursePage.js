@@ -708,6 +708,7 @@ class CoursePage extends Component {
                                               new_students={student_list}
                                               open={index + 1 === 1}
                                               index={index + 1}
+                                              coursePageId={coursePage.id}
                                             />
                                           </>
                                         ))}

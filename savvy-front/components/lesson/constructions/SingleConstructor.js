@@ -42,10 +42,12 @@ const Styles = styled.div`
 
 const Variants = styled.div`
   flex-basis: 45%;
+  max-width: 45%;
 `;
 
 const Answers = styled.div`
   flex-basis: 45%;
+  max-width: 45%;
   display: flex;
   flex-direction: column;
   align-items: left;

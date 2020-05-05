@@ -539,10 +539,21 @@ const SingleLesson = (props) => {
                                 )}
                               </Head2>
                             )}
-                          <Header task={task === "construction"}>
+
+                          <Header
+                            task={
+                              lesson.structure[activeStep].type ===
+                              "construction"
+                            }
+                          >
                             Раздел {activeStep + 1} из {lesson.structure.length}
                           </Header>
-                          <LessonPart task={task === "construction"}>
+                          <LessonPart
+                            task={
+                              lesson.structure[activeStep].type ===
+                              "construction"
+                            }
+                          >
                             <ReactCSSTransitionGroup
                               transitionName="example"
                               transitionEnterTimeout={5500}

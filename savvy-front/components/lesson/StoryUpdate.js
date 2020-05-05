@@ -54,10 +54,7 @@ const StoryUpdate = (props) => {
 
   const plus1 = () => {
     let res = [...list];
-    console.log(res);
     let newRes = ["el", ...res];
-    console.log(newRes);
-
     setList(newRes);
   };
 
