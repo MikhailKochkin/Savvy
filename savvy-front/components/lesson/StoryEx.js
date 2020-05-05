@@ -37,10 +37,10 @@ class StoryEx extends Component {
     const { task, me, lesson } = this.props;
     let el;
     let item;
-    if (task.type === "Note") {
+    if (task.type.toLowerCase() === "note") {
       el = lesson.notes.find((note) => note.id === task.id);
       item = <Note text={el.text} me={me} story={true} note={el} />;
-    } else if (task.type === "NewTest") {
+    } else if (task.type.toLowerCase() === "newtest") {
       el = lesson.newTests.find((test) => test.id === task.id);
       item = (
         <SingleTest
@@ -61,7 +61,7 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (task.type === "Quiz") {
+    } else if (task.type.toLowerCase() === "quiz") {
       el = lesson.quizes.find((quiz) => quiz.id === task.id);
       item = (
         <SingleQuiz
@@ -80,7 +80,7 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (task.type === "Shot") {
+    } else if (task.type.toLowerCase() === "shot") {
       el = lesson.shots.find((shot) => shot.id === task.id);
       item = (
         <Shots
@@ -96,7 +96,7 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (task.type === "Problem") {
+    } else if (task.type.toLowerCase() === "problem") {
       el = lesson.problems.find((problem) => problem.id === task.id);
       item = (
         <SingleProblem
@@ -109,7 +109,7 @@ class StoryEx extends Component {
           lesson={lesson}
         />
       );
-    } else if (task.type === "TextEditor") {
+    } else if (task.type.toLowerCase() === "texteditor") {
       el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
       item = (
         <SingleTextEditor
@@ -121,7 +121,7 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (task.type === "Construction") {
+    } else if (task.type.toLowerCase() === "construction") {
       el = lesson.constructions.find((con) => con.id === task.id);
       item = (
         <SingleConstructor
@@ -135,10 +135,10 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (task.type === "Exam") {
+    } else if (task.type.toLowerCase() === "exam") {
       el = lesson.exams.find((con) => con.id === task.id);
       item = <Exam lesson={lesson} me={this.props.me} exam={el} story={true} />;
-    } else if (task.type === "Document") {
+    } else if (task.type.toLowerCase() === "document") {
       el = lesson.documents.find((con) => con.id === task.id);
       item = (
         <Document
@@ -152,7 +152,7 @@ class StoryEx extends Component {
           story={true}
         />
       );
-    } else if (task.type === "Forum") {
+    } else if (task.type.toLowerCase() === "forum") {
       el = lesson.forum;
       item = (
         <Forum
