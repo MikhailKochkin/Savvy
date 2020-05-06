@@ -30,6 +30,11 @@ enum TaskType {
   FORM
 }
 
+enum Level {
+  STANDARD
+  ADVANCED
+}
+
 type User {
   id: ID! @id
   name: String!
@@ -143,6 +148,7 @@ type CoursePage {
   reviews: [String] @scalarList(strategy: RELATION)
   openLesson: ID
   video: String
+  package: [CoursePage] @scalarList(strategy: RELATION)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -357,6 +363,8 @@ type Application {
     price: Int
     promocode: String
     isPaid: Boolean
+    level: Level
+    comment: String
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
   }

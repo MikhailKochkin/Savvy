@@ -241,7 +241,13 @@ type Mutation {
     password: String!
     confirmPassword: String!
   ): User!
-  createOrder(coursePage: ID!, user: ID, price: Int, promocode: String): Order!
+  createOrder(
+    coursePage: ID!
+    user: ID
+    price: Int
+    promocode: String
+    comment: String
+  ): Order!
   createPrivateOrder(coursePage: ID!, user: ID, promocode: String): Order!
   updateOrder(id: ID!, isPaid: Boolean!): Order!
   deleteOrder(id: ID!): Order

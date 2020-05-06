@@ -1170,6 +1170,7 @@ const Mutations = {
         price: args.price,
         paymentID: paymentID,
         promocode: args.promocode,
+        comment: args.comment,
         user: {
           connect: { id: user.id },
         },

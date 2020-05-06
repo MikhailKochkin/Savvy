@@ -3418,6 +3418,7 @@ type CoursePage {
   reviews: [String!]!
   openLesson: ID
   video: String
+  package(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -3464,6 +3465,7 @@ input CoursePageCreateInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateManyInput {
@@ -3587,6 +3589,7 @@ input CoursePageCreateWithoutApplicationsInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutArticlesInput {
@@ -3624,6 +3627,7 @@ input CoursePageCreateWithoutArticlesInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutCareerTrackInput {
@@ -3661,6 +3665,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutCompanyInput {
@@ -3698,6 +3703,7 @@ input CoursePageCreateWithoutCompanyInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutExamQuestionInput {
@@ -3735,6 +3741,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutLessonsInput {
@@ -3772,6 +3779,7 @@ input CoursePageCreateWithoutLessonsInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutNew_studentsInput {
@@ -3809,6 +3817,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutOrdersInput {
@@ -3846,6 +3855,7 @@ input CoursePageCreateWithoutOrdersInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutPointATestsInput {
@@ -3883,6 +3893,7 @@ input CoursePageCreateWithoutPointATestsInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutPointsAInput {
@@ -3920,6 +3931,7 @@ input CoursePageCreateWithoutPointsAInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutUniInput {
@@ -3957,6 +3969,7 @@ input CoursePageCreateWithoutUniInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutUserInput {
@@ -3994,6 +4007,7 @@ input CoursePageCreateWithoutUserInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 input CoursePageCreateWithoutVisitsInput {
@@ -4031,6 +4045,7 @@ input CoursePageCreateWithoutVisitsInput {
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageCreateManyInput
 }
 
 type CoursePageEdge {
@@ -4395,6 +4410,7 @@ input CoursePageUpdateDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateInput {
@@ -4432,6 +4448,7 @@ input CoursePageUpdateInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateManyDataInput {
@@ -4672,6 +4689,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutArticlesDataInput {
@@ -4708,6 +4726,7 @@ input CoursePageUpdateWithoutArticlesDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutCareerTrackDataInput {
@@ -4744,6 +4763,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutCompanyDataInput {
@@ -4780,6 +4800,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutExamQuestionDataInput {
@@ -4816,6 +4837,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutLessonsDataInput {
@@ -4852,6 +4874,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutNew_studentsDataInput {
@@ -4888,6 +4911,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutOrdersDataInput {
@@ -4924,6 +4948,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutPointATestsDataInput {
@@ -4960,6 +4985,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutPointsADataInput {
@@ -4996,6 +5022,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutUniDataInput {
@@ -5032,6 +5059,7 @@ input CoursePageUpdateWithoutUniDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutUserDataInput {
@@ -5068,6 +5096,7 @@ input CoursePageUpdateWithoutUserDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithoutVisitsDataInput {
@@ -5104,6 +5133,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
+  package: CoursePageUpdateManyInput
 }
 
 input CoursePageUpdateWithWhereUniqueNestedInput {
@@ -5462,6 +5492,9 @@ input CoursePageWhereInput {
   video_not_starts_with: String
   video_ends_with: String
   video_not_ends_with: String
+  package_every: CoursePageWhereInput
+  package_some: CoursePageWhereInput
+  package_none: CoursePageWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -11588,6 +11621,11 @@ input LessonWhereUniqueInput {
   id: ID
 }
 
+enum Level {
+  STANDARD
+  ADVANCED
+}
+
 scalar Long
 
 type Mutation {
@@ -12681,6 +12719,8 @@ type Order {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -12699,6 +12739,8 @@ input OrderCreateInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderCreateManyWithoutCoursePageInput {
@@ -12718,6 +12760,8 @@ input OrderCreateWithoutCoursePageInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderCreateWithoutUserInput {
@@ -12727,6 +12771,8 @@ input OrderCreateWithoutUserInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 type OrderEdge {
@@ -12745,6 +12791,10 @@ enum OrderOrderByInput {
   promocode_DESC
   isPaid_ASC
   isPaid_DESC
+  level_ASC
+  level_DESC
+  comment_ASC
+  comment_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -12757,6 +12807,8 @@ type OrderPreviousValues {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -12814,6 +12866,24 @@ input OrderScalarWhereInput {
   promocode_not_ends_with: String
   isPaid: Boolean
   isPaid_not: Boolean
+  level: Level
+  level_not: Level
+  level_in: [Level!]
+  level_not_in: [Level!]
+  comment: String
+  comment_not: String
+  comment_in: [String!]
+  comment_not_in: [String!]
+  comment_lt: String
+  comment_lte: String
+  comment_gt: String
+  comment_gte: String
+  comment_contains: String
+  comment_not_contains: String
+  comment_starts_with: String
+  comment_not_starts_with: String
+  comment_ends_with: String
+  comment_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -12860,6 +12930,8 @@ input OrderUpdateInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderUpdateManyDataInput {
@@ -12867,6 +12939,8 @@ input OrderUpdateManyDataInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderUpdateManyMutationInput {
@@ -12874,6 +12948,8 @@ input OrderUpdateManyMutationInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderUpdateManyWithoutCoursePageInput {
@@ -12911,6 +12987,8 @@ input OrderUpdateWithoutCoursePageDataInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderUpdateWithoutUserDataInput {
@@ -12919,6 +12997,8 @@ input OrderUpdateWithoutUserDataInput {
   price: Int
   promocode: String
   isPaid: Boolean
+  level: Level
+  comment: String
 }
 
 input OrderUpdateWithWhereUniqueWithoutCoursePageInput {
@@ -12998,6 +13078,24 @@ input OrderWhereInput {
   promocode_not_ends_with: String
   isPaid: Boolean
   isPaid_not: Boolean
+  level: Level
+  level_not: Level
+  level_in: [Level!]
+  level_not_in: [Level!]
+  comment: String
+  comment_not: String
+  comment_in: [String!]
+  comment_not_in: [String!]
+  comment_lt: String
+  comment_lte: String
+  comment_gt: String
+  comment_gte: String
+  comment_contains: String
+  comment_not_contains: String
+  comment_starts_with: String
+  comment_not_starts_with: String
+  comment_ends_with: String
+  comment_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

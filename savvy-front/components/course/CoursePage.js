@@ -39,6 +39,13 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       tariffs
       methods
       reviews
+      package {
+        id
+        price
+        title
+        image
+        description
+      }
       promocode
       openLesson
       published

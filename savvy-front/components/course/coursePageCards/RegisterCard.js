@@ -4,7 +4,9 @@ import TakeMyMoney from "../../TakeMyMoney";
 import EnrollCoursePage from "../../EnrollCoursePage";
 import moment from "moment";
 import BuyDummy from "../BuyDummy";
+import Package from "./Package";
 import ReactResizeDetector from "react-resize-detector";
+import Modal from "styled-react-modal";
 
 const Data = styled.div`
   display: flex;
@@ -105,6 +107,12 @@ const GridContainer = styled.div`
   div {
     padding-bottom: 15px;
   }
+  .Package {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .Title {
     grid-area: Title;
     font-size: 1.6rem;
@@ -179,6 +187,23 @@ const Time = styled.div`
   padding: 0.5%;
 `;
 
+const StyledModal = Modal.styled`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 70%;
+  min-width: 1100px;
+  height: 80%;
+  @media (max-width: 800px) {
+    min-width: 90%;
+    min-height: 90%;
+    margin: 10px;
+  }
+`;
+
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
@@ -205,6 +230,8 @@ const RegisterCard = (props) => {
   const [pack, setPack] = useState(2);
   const [width, setWidth] = useState(0);
   const [used, setUsed] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const onResize = (width) => {
     setWidth(width);
   };
@@ -362,6 +389,21 @@ const RegisterCard = (props) => {
                       }}
                     />
                     <div className="Teacher">🚀 Продвинутый</div>
+                    {console.log(coursePage.package)}
+                    {coursePage.package.length > 0 && (
+                      <div
+                        className="Package"
+                        onClick={(e) => {
+                          if (me) {
+                            setIsOpen(!isOpen);
+                          } else {
+                            alert("Необходимо зарегистрироваться");
+                          }
+                        }}
+                      >
+                        Купить пакетом:
+                      </div>
+                    )}
                     <input
                       className="Price2"
                       type="radio"
@@ -465,6 +507,13 @@ const RegisterCard = (props) => {
           </Text>
         </Payment>
       </Data>
+      <StyledModal
+        isOpen={isOpen}
+        onBackgroundClick={(e) => setIsOpen(!isOpen)}
+        onEscapeKeydown={(e) => setIsOpen(!isOpen)}
+      >
+        <Package coursePage={coursePage} me={me} />
+      </StyledModal>
     </>
   );
 };

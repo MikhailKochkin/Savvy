@@ -14,12 +14,14 @@ const CREATE_ORDER_MUTATION = gql`
     $user: ID!
     $price: Int!
     $promocode: String
+    $comment: String
   ) {
     createOrder(
       coursePage: $coursePage
       price: $price
       user: $user
       promocode: $promocode
+      comment: $comment
     ) {
       id
     }
@@ -44,7 +46,7 @@ const Button = styled.button`
     background: rgba(8, 70, 216, 0.85);
   }
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {
@@ -57,7 +59,7 @@ const Message = styled.div`
   margin-top: 4%;
 `;
 
-const TakeMyMoney = props => {
+const TakeMyMoney = (props) => {
   const [loading, setLoading] = useState(false);
   return (
     <Mutation
@@ -67,15 +69,16 @@ const TakeMyMoney = props => {
         coursePage: props.coursePage.id,
         price: props.price,
         user: props.user,
-        promocode: props.promocode
+        promocode: props.promocode,
+        comment: props.comment,
       }}
     >
-      {createOrder => (
+      {(createOrder) => (
         <>
           {!loading && (
             <Button
               disabled={loading}
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault;
                 setLoading(true);
                 const res2 = await createOrder();
