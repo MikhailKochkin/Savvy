@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import _ from "lodash";
@@ -64,13 +64,13 @@ const Button = styled.button`
   margin-top: 3%;
   width: 20%;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -174,6 +174,10 @@ const TextBox = styled.div`
   padding: 2%;
   font-size: 1.6rem;
   margin-top: 3%;
+  .header {
+    border-bottom: 1px solid #c4c4c4;
+    width: 100%;
+  }
   @media (max-width: 800px) {
     width: 350px;
   }
@@ -217,220 +221,164 @@ const Title = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
-class CreateConstructor extends Component {
-  state = {
-    name: "12",
-    partsNumber: 1,
-    lessonID: this.props.lessonID,
-    type: "equal",
-    variants: "",
-    answer: "",
-    answersNumber: "",
-    hint: ""
-  };
-  handleChange = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    const val = parseInt(value);
-    this.setState({ [name]: val });
+const CreateConstructor = (props) => {
+  const [name, setName] = useState("");
+  const [variants, setVariants] = useState(["c"]);
+  const [answer, setAnswer] = useState("");
+  const [answersNumber, setAnswersNumber] = useState("");
+  const [hint, setHint] = useState("");
+  const [type, setType] = useState("equal");
+
+  const myCallback = (dataFromChild, index) => {
+    let arr = [...variants];
+    arr[index] = dataFromChild;
+    setVariants(arr);
   };
 
-  handleAnswer = e => {
-    e.preventDefault();
-    const { name, value, id } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  handleName = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  saveToState = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  myCallback = (dataFromChild, name) => {
-    let st = name;
-    this.setState({
-      [st]: dataFromChild
-    });
-  };
-
-  more = () => {
-    this.setState(prev => ({ partsNumber: prev.partsNumber + 1 }));
-  };
-
-  remove = () => {
-    if (this.state.partsNumber > 1) {
-      this.setState({
-        [`doc${this.state.partsNumber}`]: undefined
-      });
-      this.setState(prev => ({ partsNumber: prev.partsNumber - 1 }));
+  const myCallback2 = (dataFromChild, name) => {
+    if (name == "hint") {
+      setHint(dataFromChild);
     }
   };
 
-  generate = () => {
-    // 1. Get the variants of every article of the document and put them into state
-    let articles = [];
-    Object.entries(this.state)
-      .filter(text => text[0].includes("doc"))
-      .filter(text => text[1] !== undefined)
-      .map(t => articles.push(t[1]));
-    this.setState({ variants: articles });
-    // 2. Get the order of the correct variants
-    const data = this.state.answersNumber;
-    const data1 = data
-      .trim()
+  const generate = () => {
+    let correct = [];
+    let nums = answersNumber
       .split(",")
-      .map(item => parseInt(item) - 1);
-    const answer = [];
-    let option;
-
-    // 3. Get the articles of the document in a correct order and save them to state
-    const data2 = data1.map(i => {
-      option = articles[i];
-      answer.push(option);
+      .map((el) => (el = parseInt(el)))
+      .filter((el) => !Object.is(el, NaN));
+    nums.map((num) => {
+      correct.push(variants[num - 1]);
     });
-    this.setState({ answer: answer });
-
-    // 4. Show the "Created" message
-    document.getElementById("Message").style.display = "block";
-    setTimeout(function() {
-      document.getElementById("Message")
-        ? (document.getElementById("Message").style.display = "none")
-        : "none";
-    }, 4000);
+    setAnswer(correct);
   };
 
-  render() {
-    let card = [];
-    let index;
-    let text;
-    _.times(this.state.partsNumber, i => {
-      index = `doc${i + 1}`;
-      text = `${i + 1}.`;
-      card.push(
-        <TextBox>
-          <DynamicLoadedEditor
-            index={i + 1}
-            name={index}
-            getEditorText={this.myCallback}
-            placeholder={text}
-          />
-        </TextBox>
-      );
-    });
-    const { lessonID } = this.props;
-    return (
-      <PleaseSignIn>
-        <AreYouATeacher subject={lessonID}>
-          <Center>
-            <Advice>
-              <div>
-                Обращаем внимание. В конструкторе надо указать, важен ли порядок
-                его частей при ответе. Например, если вы просите составить
-                договор, очевидно, что порядок частей будет важен. Если же вы
-                просите выбрать характеристики какого-то понятия, то там порядок
-                не будет важен.
-              </div>{" "}
-              <div>Количество частей конструктора не ограничено.</div>
-            </Advice>
-            <Title>Новый конструктор</Title>
-            <Header>
-              <ChooseTag>
-                <p> Метод проверки </p>
-                <select
-                  className="type"
-                  name="type"
-                  value={this.state.type}
-                  onChange={this.handleAnswer}
-                >
-                  <option value="equal">
-                    Важна последовательность ответов
-                  </option>
-                  <option value="include">
-                    Не важна последовательность ответов
-                  </option>{" "}
-                </select>
-              </ChooseTag>
-            </Header>
-            <Box>
-              <Textarea
-                type="text"
-                placeholder="Название конструктора"
-                spellCheck={true}
-                name="name"
-                placeholder="Название конструктора. Например: Договор оказания медицинских услуг"
-                onChange={this.saveToState}
+  let text;
+  const { lessonID } = props;
+  return (
+    <Center>
+      <Advice>
+        <div>
+          Обращаем внимание. В конструкторе надо указать, важен ли порядок его
+          частей при ответе. Например, если вы просите составить договор,
+          очевидно, что порядок частей будет важен. Если же вы просите выбрать
+          характеристики какого-то понятия, то там порядок не будет важен.
+        </div>{" "}
+        <div>Количество частей конструктора не ограничено.</div>
+      </Advice>
+      <Title>Новый конструктор</Title>
+      <Header>
+        <ChooseTag>
+          <p> Метод проверки </p>
+          <select
+            className="type"
+            name="type"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option value="equal">Важна последовательность ответов</option>
+            <option value="include">
+              Не важна последовательность ответов
+            </option>{" "}
+          </select>
+        </ChooseTag>
+      </Header>
+      <Box>
+        <Textarea
+          type="text"
+          placeholder="Название конструктора"
+          spellCheck={true}
+          name="name"
+          placeholder="Название конструктора. Например: Договор оказания медицинских услуг"
+          onChange={(e) => setName(e.target.value)}
+        />
+      </Box>
+      <Variants>
+        {_.times(variants.length, (i) => {
+          text = `${i + 1}.`;
+          return (
+            <TextBox>
+              <div className="header">{i + 1}.</div>
+              <DynamicLoadedEditor
+                index={i}
+                name={i}
+                getEditorText={myCallback}
+                placeholder={""}
               />
-            </Box>
-            <Variants>{card.map(item => item)}</Variants>
-            <Buttons>
-              <MoreButton onClick={this.remove}>-</MoreButton>
-              <MoreButton onClick={this.more}>+</MoreButton>
-            </Buttons>
-            <Box>
-              <Textarea
-                type="text"
-                cols={60}
-                rows={1}
-                spellCheck={true}
-                name="answersNumber"
-                placeholder="Запишите номера верных частей конструктора. Используйте только цифры и запишите
+            </TextBox>
+          );
+        })}
+      </Variants>
+      <Buttons>
+        <MoreButton
+          onClick={(e) => {
+            let arr = variants;
+            arr.pop();
+            setVariants([...arr]);
+          }}
+        >
+          -
+        </MoreButton>
+        <MoreButton onClick={(e) => setVariants([...variants, "c"])}>
+          +
+        </MoreButton>
+      </Buttons>
+      <Box>
+        <Textarea
+          type="text"
+          cols={60}
+          rows={1}
+          spellCheck={true}
+          name="answersNumber"
+          placeholder="Запишите номера верных частей конструктора. Используйте только цифры и запишите
                 их через запятые, без пробелов: 1,2,3,4"
-                onChange={this.saveToState}
-              />
-            </Box>
-            <Box>
-              <Textarea
-                type="text"
-                cols={60}
-                rows={1}
-                spellCheck={true}
-                name="hint"
-                placeholder="Запишите подсказку или пояснение к конструктору"
-                onChange={this.saveToState}
-              />
-            </Box>
-            <Mutation
-              mutation={CREATE_CONSTRUCTION_MUTATION}
-              variables={{
-                lessonID,
-                ...this.state
-              }}
-              refetchQueries={() => [
-                {
-                  query: SINGLE_LESSON_QUERY,
-                  variables: { id: lessonID }
-                }
-              ]}
-              awaitRefetchQueries={true}
-            >
-              {(createConstruction, { loading, error }) => (
-                <Button
-                  onClick={async e => {
-                    e.preventDefault();
-                    const res0 = await this.generate();
-                    const res = await createConstruction();
-                  }}
-                >
-                  {loading ? "Сохраняем..." : "Сохранить"}
-                </Button>
-              )}
-            </Mutation>
-            <Message id="Message">Готово!</Message>
-          </Center>
-        </AreYouATeacher>
-      </PleaseSignIn>
-    );
-  }
-}
+          onChange={(e) => setAnswersNumber(e.target.value)}
+        />
+      </Box>
+      <TextBox>
+        <DynamicLoadedEditor
+          name="hint"
+          getEditorText={myCallback2}
+          value={hint}
+          placeholder="Запишите подсказку или пояснение к конструктору"
+        />
+      </TextBox>
+      <Mutation
+        mutation={CREATE_CONSTRUCTION_MUTATION}
+        variables={{
+          lessonID,
+          answer,
+          variants,
+          name,
+          hint,
+          type,
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID },
+          },
+        ]}
+      >
+        {(createConstruction, { loading, error }) => (
+          <Button
+            onClick={async (e) => {
+              e.preventDefault();
+              const res0 = await generate();
+              const res = await createConstruction();
+              alert("Создали!");
+            }}
+          >
+            {loading ? "Сохраняем..." : "Сохранить"}
+          </Button>
+        )}
+      </Mutation>
+      <Message id="Message">Готово!</Message>
+    </Center>
+  );
+};
 
 export default CreateConstructor;

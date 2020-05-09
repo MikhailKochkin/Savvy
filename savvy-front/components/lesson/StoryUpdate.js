@@ -51,7 +51,6 @@ const StoryUpdate = (props) => {
   const [list, setList] = useState(
     props.lesson.structure ? props.lesson.structure : ["el"]
   );
-
   const plus1 = () => {
     let res = [...list];
     let newRes = ["el", ...res];

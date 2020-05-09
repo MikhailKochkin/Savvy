@@ -181,6 +181,14 @@ type Mutation {
     type: String!
     lessonID: ID!
   ): Construction!
+  updateConstruction(
+    id: ID!
+    name: String
+    variants: [String!]
+    answer: [String!]
+    hint: String
+    type: String
+  ): Construction!
   deleteConstruction(id: ID!): Construction
   createSandbox(
     text: String!

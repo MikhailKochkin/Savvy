@@ -73,39 +73,36 @@ const Box = styled.div`
   }
 `;
 
-class TextEditorGroup extends Component {
+class ConstructorGroup extends Component {
   state = {
     shown: false,
-    num: 0
+    num: 0,
+    update: true,
   };
   onNext = () => {
     if (this.state.num < this.props.constructions.length - 1) {
-      this.setState(prevState => ({
-        num: prevState.num + 1
+      this.setState((prevState) => ({
+        num: prevState.num + 1,
       }));
     }
   };
   onPrev = () => {
     if (this.state.num > 0) {
-      this.setState(prevState => ({
-        num: prevState.num - 1
+      this.setState((prevState) => ({
+        num: prevState.num - 1,
       }));
     }
   };
 
   render() {
-    const userData = this.props.constructionResults.filter(
-      result => result.student.id === this.props.me.id
-    );
-    let arr;
+    // const userData = this.props.constructionResults.filter(
+    //   (result) => result.student.id === this.props.me.id
+    // );
     const construction = this.props.constructions[this.state.num];
 
+    let arr;
     return (
       <>
-        {/* <Advice>
-          <b>Совет</b>: не забудьте нажать на кнопку "Сохранить" после
-          выполнения задания.{" "}
-        </Advice> */}
         <Box>
           <Title>
             Конструктор {this.state.num + 1} из{" "}
@@ -124,7 +121,7 @@ class TextEditorGroup extends Component {
               variants={construction.variants}
               me={this.props.me}
               arr={arr}
-              userData={userData}
+              // userData={userData}
             />
           </>
         )}
@@ -133,4 +130,4 @@ class TextEditorGroup extends Component {
   }
 }
 
-export default TextEditorGroup;
+export default ConstructorGroup;

@@ -868,6 +868,27 @@ const Mutations = {
     );
     return construction;
   },
+  async updateConstruction(parent, args, ctx, info) {
+    return ctx.db.mutation.updateConstruction(
+      {
+        data: {
+          variants: {
+            set: [...args.variants],
+          },
+          answer: {
+            set: [...args.answer],
+          },
+          name: args.name,
+          hint: args.hint,
+          type: args.type,
+        },
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+  },
   async deleteConstruction(parent, args, ctx, info) {
     const where = { id: args.id };
     //1. find the lesson

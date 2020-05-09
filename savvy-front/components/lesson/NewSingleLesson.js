@@ -585,7 +585,8 @@ const SingleLesson = (props) => {
                                   textSizeSmall: classes.textSizeSmall,
                                 }}
                                 disabled={
-                                  activeStep === parseInt(lesson.structure - 1)
+                                  activeStep ===
+                                  parseInt(lesson.structure.length - 1)
                                 }
                               >
                                 Вперёд

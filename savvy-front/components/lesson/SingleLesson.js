@@ -223,8 +223,8 @@ const SINGLE_LESSON_QUERY = gql`
       constructions {
         id
         name
-        answer
         variants
+        answer
         hint
         type
         user {
@@ -813,7 +813,8 @@ class SingleLesson extends Component {
                           (lesson.user.id === me.id ||
                             me.permissions.includes("ADMIN")) && (
                             <Head2>
-                              {lesson.structure.length > 0 ? (
+                              {lesson.structure &&
+                              lesson.structure.length > 0 ? (
                                 <Link
                                   href={{
                                     pathname: "/lesson",

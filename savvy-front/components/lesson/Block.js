@@ -67,14 +67,20 @@ const Block = (props) => {
         {value.type && value.type.toLowerCase() === "newtest" ? (
           <Title>
             <div className="type">
-              Тест: {tests.filter((t) => t.id === value.id)[0].question}
+              Тест:{" "}
+              {tests.filter((q) => q.id === value.id).length > 0
+                ? tests.filter((q) => q.id === value.id)[0].question
+                : "Тест был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
         {value.type && value.type.toLowerCase() === "quiz" ? (
           <Title>
             <div className="type">
-              Вопрос: {quizes.filter((q) => q.id === value.id)[0].question}
+              Вопрос:{" "}
+              {quizes.filter((q) => q.id === value.id).length > 0
+                ? quizes.filter((q) => q.id === value.id)[0].question
+                : "Вопрос был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
@@ -82,9 +88,13 @@ const Block = (props) => {
           <Title>
             <div className="type">
               Лонгрид:{" "}
-              {renderHTML(
-                notes.filter((q) => q.id === value.id)[0].text.substring(0, 100)
-              )}
+              {notes.filter((q) => q.id === value.id).length > 0
+                ? renderHTML(
+                    notes
+                      .filter((q) => q.id === value.id)[0]
+                      .text.substring(0, 100)
+                  )
+                : "Лонгрид был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
@@ -157,7 +167,7 @@ const Block = (props) => {
             {quizes.length > 0 && <option value="quiz">Вопросы</option>}
             {problems.length > 0 && <option value="problem">Задачи</option>}
             {texteditors.length > 0 && (
-              <option value="textEditor">Редакторы</option>
+              <option value="texteditor">Редакторы</option>
             )}
             {constructions.length > 0 && (
               <option value="construction">Констукторы</option>

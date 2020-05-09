@@ -7,6 +7,7 @@ import renderHTML from "react-render-html";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
+import UpdateConstruction from "./UpdateConstruction";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -145,6 +146,7 @@ class SingleConstructor extends Component {
     inputs: [],
     answered: false,
     answerReveal: false,
+    update: false,
   };
 
   answerState = "";
@@ -289,88 +291,112 @@ class SingleConstructor extends Component {
 
   render() {
     const { me, lessonID, construction, userData } = this.props;
-    const data = userData
-      .filter((result) => result.construction.id === construction.id)
-      .filter((result) => result.student.id === this.props.me.id);
+    // const data = userData
+    //   .filter((result) => result.construction.id === construction.id)
+    //   .filter((result) => result.student.id === this.props.me.id);
+    const data = [];
     return (
-      <Styles>
-        <Variants>
-          <Title>Конструктор</Title>
-          {this.state.variants.map((option, index) => (
-            <>
-              <Box>
-                <div key={index}>
-                  <div className="number">{index + 1}. </div>
-                  <div className="box">{renderHTML(option)} </div>
-                </div>
-              </Box>
-            </>
-          ))}
-        </Variants>
-        <Answers className="answer">
-          <Title>{construction.name}</Title>
-          {this.state.received.map((option, index) => (
-            <Label className="Var" key={index + 1}>
-              <input
-                className="l"
-                data={index + 1}
-                type="number"
-                onChange={this.handleSteps}
-              />
-              {renderHTML(this.state.received[index])}
-            </Label>
-          ))}
-          <Mutation
-            mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
-            variables={{
-              lessonID,
-              // answer: "Drafted",
-              attempts: this.state.attempts,
-              constructionID: this.props.construction.id,
-              inputs: this.state.inputs,
-            }}
-          >
-            {(createConstructionResult, { loading, error }) => (
-              <Buttons blocked={this.state.answered}>
-                <StyledButton
-                  variant="contained"
-                  color="primary"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    const res = await this.check();
-                    if (this.state.answerState === "right") {
-                      const res2 = await createConstructionResult();
-                    }
-                  }}
-                >
-                  Проверить
-                </StyledButton>
-              </Buttons>
-            )}
-          </Mutation>
-          {this.state.answerState === "wrong" ? (
-            <>
-              {construction.hint && (
-                <Advice>Подсказка: {construction.hint}</Advice>
-              )}
-              <StyledButton
-                onClick={(e) =>
-                  this.setState((prev) => ({
-                    answerReveal: !prev.answerReveal,
-                  }))
-                }
+      <>
+        <StyledButton
+          onClick={(e) => this.setState((prev) => ({ update: !prev.update }))}
+        >
+          {this.state.update ? "К конструктору" : "Изменить"}
+        </StyledButton>
+        {!this.state.update && (
+          <Styles>
+            <Variants>
+              <Title>Конструктор</Title>
+              {this.state.variants.map((option, index) => (
+                <>
+                  <Box>
+                    <div key={index}>
+                      <div className="number">{index + 1}. </div>
+                      <div className="box">{renderHTML(option)} </div>
+                    </div>
+                  </Box>
+                </>
+              ))}
+            </Variants>
+            <Answers className="answer">
+              <Title>{construction.name}</Title>
+              {this.state.received.map((option, index) => (
+                <Label className="Var" key={index + 1}>
+                  <input
+                    className="l"
+                    data={index + 1}
+                    type="number"
+                    onChange={this.handleSteps}
+                  />
+                  {renderHTML(this.state.received[index])}
+                </Label>
+              ))}
+              <Mutation
+                mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
+                variables={{
+                  lessonID,
+                  // answer: "Drafted",
+                  attempts: this.state.attempts,
+                  constructionID: this.props.construction.id,
+                  inputs: this.state.inputs,
+                }}
               >
-                {this.state.answerReveal ? "Скрыть ответ" : "Открыть ответ"}
-              </StyledButton>
-              {this.state.answerReveal &&
-                this.state.answer.map((el) => renderHTML(el))}
-            </>
-          ) : null}
-          {me && me.id === construction.user.id ? (
-            <DeleteSingleConstructor id={construction.id} lessonID={lessonID} />
-          ) : null}
-        </Answers>
-      </Styles>
+                {(createConstructionResult, { loading, error }) => (
+                  <Buttons blocked={this.state.answered}>
+                    <StyledButton
+                      variant="contained"
+                      color="primary"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        const res = await this.check();
+                        if (this.state.answerState === "right") {
+                          const res2 = await createConstructionResult();
+                        }
+                      }}
+                    >
+                      Проверить
+                    </StyledButton>
+                  </Buttons>
+                )}
+              </Mutation>
+              {this.state.answerState === "wrong" ? (
+                <>
+                  {construction.hint && (
+                    <Advice>Подсказка: {renderHTML(construction.hint)}</Advice>
+                  )}
+                  <StyledButton
+                    onClick={(e) =>
+                      this.setState((prev) => ({
+                        answerReveal: !prev.answerReveal,
+                      }))
+                    }
+                  >
+                    {this.state.answerReveal ? "Скрыть ответ" : "Открыть ответ"}
+                  </StyledButton>
+                  {this.state.answerReveal &&
+                    this.state.answer.map((el) => renderHTML(el))}
+                </>
+              ) : null}
+              {me && me.id === construction.user.id ? (
+                <DeleteSingleConstructor
+                  id={construction.id}
+                  lessonID={lessonID}
+                />
+              ) : null}
+            </Answers>
+          </Styles>
+        )}
+        {this.state.update && (
+          <UpdateConstruction
+            id={construction.id}
+            hint={construction.hint}
+            name={construction.name}
+            type={construction.type}
+            variants={construction.variants}
+            answer={construction.answer}
+            lessonID={lessonID}
+          />
+        )}
+      </>
     );
   }
 }
