@@ -129,8 +129,8 @@ const StyledButton = withStyles({
     margin: "4% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
 class SingleTextEditor extends Component {
@@ -144,16 +144,16 @@ class SingleTextEditor extends Component {
     attempts: 0,
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text,
-    update: false
+    update: false,
   };
 
-  onTest = e => {
-    this.setState(prevState => ({
-      attempts: prevState.attempts + 1
+  onTest = (e) => {
+    this.setState((prevState) => ({
+      attempts: prevState.attempts + 1,
     }));
   };
 
-  onMouseClick = e => {
+  onMouseClick = (e) => {
     if (this.state.total !== null && this.state.total > 0) {
       e.target.style.backgroundColor = "#FDF3C8";
       e.target.style.padding = "0.8%";
@@ -164,45 +164,47 @@ class SingleTextEditor extends Component {
       show: false,
       answer: "",
       correct_option: e.target.getAttribute("data"),
-      wrong_option: e.target.innerHTML
+      wrong_option: e.target.innerHTML,
     });
   };
 
-  onConceal = e => {
+  onConceal = (e) => {
     this.setState({
       shown: false,
-      show: false
+      show: false,
     });
     e.currentTarget.style.textDecorationLine = null;
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
   onShow = () => {
     const mistakes = document.querySelectorAll("#id");
-    this.setState(prevState => ({ mistakesShown: !prevState.mistakesShown }));
+    this.setState((prevState) => ({ mistakesShown: !prevState.mistakesShown }));
     if (!this.state.mistakesShown) {
-      mistakes.forEach(mistake => (mistake.style.backgroundColor = "#F0C40F"));
-      mistakes.forEach(mistake => (mistake.style.padding = "0.8%"));
-      mistakes.forEach(mistake => (mistake.style.borderRadius = "8px"));
+      mistakes.forEach(
+        (mistake) => (mistake.style.backgroundColor = "#F0C40F")
+      );
+      mistakes.forEach((mistake) => (mistake.style.padding = "0.8%"));
+      mistakes.forEach((mistake) => (mistake.style.borderRadius = "8px"));
     } else if (this.state.mistakesShown) {
-      mistakes.forEach(mistake => (mistake.style = null));
+      mistakes.forEach((mistake) => (mistake.style = null));
     }
   };
   componentDidMount() {
     const elements = document.querySelectorAll("#id");
-    elements.forEach(element =>
+    elements.forEach((element) =>
       element.addEventListener("click", this.onMouseClick)
     );
   }
   render() {
     const { textEditor, me, userData, lesson } = this.props;
     const data = userData
-      .filter(result => result.textEditor.id === textEditor.id)
-      .filter(result => result.student.id === me.id);
+      .filter((result) => result.textEditor.id === textEditor.id)
+      .filter((result) => result.student.id === me.id);
     return (
       <>
         {!this.state.update && (
@@ -247,7 +249,7 @@ class SingleTextEditor extends Component {
                         attempts: this.state.attempts,
                         correct: this.state.correct_option,
                         wrong: this.state.wrong_option,
-                        guess: this.state.answer
+                        guess: this.state.answer,
                       }}
                       // refetchQueries={() => [
                       //   {
@@ -261,11 +263,11 @@ class SingleTextEditor extends Component {
                     >
                       {(createTextEditorResult, { loading, error }) => (
                         <button
-                          onClick={async e => {
+                          onClick={async (e) => {
                             e.preventDefault();
                             this.state.answer !== ""
-                              ? this.setState(prevState => ({
-                                  show: !prevState.show
+                              ? this.setState((prevState) => ({
+                                  show: !prevState.show,
                                 }))
                               : alert("Дайте свой вариант!");
                             const res = await createTextEditorResult();
@@ -302,8 +304,8 @@ class SingleTextEditor extends Component {
               ) : null}
               {me && me.id === textEditor.user.id && (
                 <StyledButton
-                  onClick={e =>
-                    this.setState(prev => ({ update: !prev.update }))
+                  onClick={(e) =>
+                    this.setState((prev) => ({ update: !prev.update }))
                   }
                 >
                   Изменить
@@ -330,7 +332,7 @@ SingleTextEditor.propTypes = {
   textEditor: PropTypes.object.isRequired,
   key: PropTypes.string.isRequired,
   me: PropTypes.object.isRequired,
-  userData: PropTypes.object.isRequired
+  userData: PropTypes.object.isRequired,
 };
 
 export default SingleTextEditor;

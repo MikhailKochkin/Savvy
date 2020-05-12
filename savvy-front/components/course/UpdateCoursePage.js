@@ -15,6 +15,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       image
       audience
       result
+      batch
       tariffs
       methods
       video
@@ -36,6 +37,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $result: String
     $tariffs: String
     $methods: String
+    $batch: String
     $image: String
     $video: String
   ) {
@@ -48,6 +50,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       result: $result
       tariffs: $tariffs
       methods: $methods
+      batch: $batch
       image: $image
       video: $video
     ) {
@@ -139,13 +142,13 @@ const Button = styled.button`
   width: 20%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 800px) {
     width: 40%;
@@ -181,14 +184,14 @@ const Frame = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class UpdateCoursePage extends Component {
   state = {
-    upload: false
+    upload: false,
   };
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -198,15 +201,15 @@ class UpdateCoursePage extends Component {
     const res = await updateCoursePage({
       variables: {
         id: this.props.id,
-        ...this.state
-      }
+        ...this.state,
+      },
     });
   };
 
-  uploadFile = async e => {
+  uploadFile = async (e) => {
     this.setState({
       upload: "pending",
-      image: ""
+      image: "",
     });
     const files = e.target.files;
     const data = new FormData();
@@ -216,20 +219,20 @@ class UpdateCoursePage extends Component {
       "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
       {
         method: "POST",
-        body: data
+        body: data,
       }
     );
     const file = await res.json();
     this.setState({
       image: file.secure_url,
-      upload: true
+      upload: true,
     });
   };
 
   myCallback = (dataFromChild, name) => {
     let st = name;
     this.setState({
-      [st]: dataFromChild
+      [st]: dataFromChild,
     });
   };
 
@@ -242,7 +245,7 @@ class UpdateCoursePage extends Component {
             <Query
               query={SINGLE_COURSEPAGE_QUERY}
               variables={{
-                id: this.props.id
+                id: this.props.id,
               }}
             >
               {({ data, loading }) => {
@@ -261,7 +264,7 @@ class UpdateCoursePage extends Component {
                       >
                         {(updateCoursePage, { loading, error }) => (
                           <Form
-                            onSubmit={e =>
+                            onSubmit={(e) =>
                               this.updateCoursePage(e, updateCoursePage)
                             }
                           >
@@ -346,7 +349,15 @@ class UpdateCoursePage extends Component {
                                   placeholder="Как работают тарифы на курсе..."
                                 />
                               </Frame>
-
+                              <Frame>
+                                <DynamicLoadedEditor
+                                  index={1}
+                                  name="batch"
+                                  getEditorText={this.myCallback}
+                                  value={coursePage.batch}
+                                  placeholder="Информация о следующем потоке"
+                                />
+                              </Frame>
                               <label for="file">
                                 <div className="upload">
                                   {this.state.upload === false
@@ -389,7 +400,7 @@ class UpdateCoursePage extends Component {
                                 <Link
                                   href={{
                                     pathname: "/coursePage",
-                                    query: { id: coursePage.id }
+                                    query: { id: coursePage.id },
                                   }}
                                 >
                                   <div>Вернуться на страницу урока</div>

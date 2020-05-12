@@ -41,25 +41,25 @@ const Box = styled.div`
 class TextEditorGroup extends Component {
   state = {
     shown: false,
-    num: 0
+    num: 0,
   };
   onNext = () => {
     if (this.state.num < this.props.textEditors.length - 1) {
-      this.setState(prevState => ({
-        num: prevState.num + 1
+      this.setState((prevState) => ({
+        num: prevState.num + 1,
       }));
     }
   };
   onPrev = () => {
     if (this.state.num > 0) {
-      this.setState(prevState => ({
-        num: prevState.num - 1
+      this.setState((prevState) => ({
+        num: prevState.num - 1,
       }));
     }
   };
   render() {
     const userData = this.props.textEditorResults.filter(
-      result => result.student.id === this.props.me.id
+      (result) => result.student.id === this.props.me.id
     );
     const textEditor = this.props.textEditors[this.state.num];
     return (
@@ -78,6 +78,7 @@ class TextEditorGroup extends Component {
             textEditor={textEditor}
             me={this.props.me}
             userData={userData}
+            lessonID={this.props.lessonID}
           />
         )}
       </>

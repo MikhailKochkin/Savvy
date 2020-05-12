@@ -997,7 +997,7 @@ class SingleLesson extends Component {
                             {this.state.page === "textEditor" &&
                               (lesson.texteditors.length > 0 ? (
                                 <TextEditorGroup
-                                  lesson={lesson.id}
+                                  lessonID={lesson.id}
                                   textEditors={lesson.texteditors}
                                   me={me}
                                   textEditorResults={lesson.textEditorResults}

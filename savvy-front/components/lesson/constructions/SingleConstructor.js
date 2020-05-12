@@ -297,11 +297,13 @@ class SingleConstructor extends Component {
     const data = [];
     return (
       <>
-        <StyledButton
-          onClick={(e) => this.setState((prev) => ({ update: !prev.update }))}
-        >
-          {this.state.update ? "К конструктору" : "Изменить"}
-        </StyledButton>
+        {me.id === construction.user.id && (
+          <StyledButton
+            onClick={(e) => this.setState((prev) => ({ update: !prev.update }))}
+          >
+            {this.state.update ? "К конструктору" : "Изменить"}
+          </StyledButton>
+        )}
         {!this.state.update && (
           <Styles>
             <Variants>

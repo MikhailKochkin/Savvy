@@ -145,6 +145,7 @@ type CoursePage {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: [String] @scalarList(strategy: RELATION)
   openLesson: ID
   video: String

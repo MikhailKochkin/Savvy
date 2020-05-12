@@ -33,6 +33,7 @@ type Mutation {
     video: String
     image: String
     banner: String
+    batch: String
     courseType: CourseType
     published: Boolean
   ): CoursePage

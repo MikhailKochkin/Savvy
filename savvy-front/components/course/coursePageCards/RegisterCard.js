@@ -389,7 +389,6 @@ const RegisterCard = (props) => {
                       }}
                     />
                     <div className="Teacher">🚀 Продвинутый</div>
-                    {console.log(coursePage.package)}
                     {coursePage.package.length > 0 && (
                       <div
                         className="Package"

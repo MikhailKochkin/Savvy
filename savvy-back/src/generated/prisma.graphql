@@ -3415,6 +3415,7 @@ type CoursePage {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: [String!]!
   openLesson: ID
   video: String
@@ -3462,6 +3463,7 @@ input CoursePageCreateInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3586,6 +3588,7 @@ input CoursePageCreateWithoutApplicationsInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3624,6 +3627,7 @@ input CoursePageCreateWithoutArticlesInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3662,6 +3666,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3700,6 +3705,7 @@ input CoursePageCreateWithoutCompanyInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3738,6 +3744,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3776,6 +3783,7 @@ input CoursePageCreateWithoutLessonsInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3814,6 +3822,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3852,6 +3861,7 @@ input CoursePageCreateWithoutOrdersInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3890,6 +3900,7 @@ input CoursePageCreateWithoutPointATestsInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3928,6 +3939,7 @@ input CoursePageCreateWithoutPointsAInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -3966,6 +3978,7 @@ input CoursePageCreateWithoutUniInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -4004,6 +4017,7 @@ input CoursePageCreateWithoutUserInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -4042,6 +4056,7 @@ input CoursePageCreateWithoutVisitsInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageCreatereviewsInput
   openLesson: ID
   video: String
@@ -4086,6 +4101,8 @@ enum CoursePageOrderByInput {
   tariffs_DESC
   methods_ASC
   methods_DESC
+  batch_ASC
+  batch_DESC
   openLesson_ASC
   openLesson_DESC
   video_ASC
@@ -4116,6 +4133,7 @@ type CoursePagePreviousValues {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: [String!]!
   openLesson: ID
   video: String
@@ -4308,6 +4326,20 @@ input CoursePageScalarWhereInput {
   methods_not_starts_with: String
   methods_ends_with: String
   methods_not_ends_with: String
+  batch: String
+  batch_not: String
+  batch_in: [String!]
+  batch_not_in: [String!]
+  batch_lt: String
+  batch_lte: String
+  batch_gt: String
+  batch_gte: String
+  batch_contains: String
+  batch_not_contains: String
+  batch_starts_with: String
+  batch_not_starts_with: String
+  batch_ends_with: String
+  batch_not_ends_with: String
   openLesson: ID
   openLesson_not: ID
   openLesson_in: [ID!]
@@ -4407,6 +4439,7 @@ input CoursePageUpdateDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4445,6 +4478,7 @@ input CoursePageUpdateInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4470,6 +4504,7 @@ input CoursePageUpdateManyDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4506,6 +4541,7 @@ input CoursePageUpdateManyMutationInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4686,6 +4722,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4723,6 +4760,7 @@ input CoursePageUpdateWithoutArticlesDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4760,6 +4798,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4797,6 +4836,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4834,6 +4874,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4871,6 +4912,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4908,6 +4950,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4945,6 +4988,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -4982,6 +5026,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -5019,6 +5064,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -5056,6 +5102,7 @@ input CoursePageUpdateWithoutUniDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -5093,6 +5140,7 @@ input CoursePageUpdateWithoutUserDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -5130,6 +5178,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   result: String
   tariffs: String
   methods: String
+  batch: String
   reviews: CoursePageUpdatereviewsInput
   openLesson: ID
   video: String
@@ -5464,6 +5513,20 @@ input CoursePageWhereInput {
   methods_not_starts_with: String
   methods_ends_with: String
   methods_not_ends_with: String
+  batch: String
+  batch_not: String
+  batch_in: [String!]
+  batch_not_in: [String!]
+  batch_lt: String
+  batch_lte: String
+  batch_gt: String
+  batch_gte: String
+  batch_contains: String
+  batch_not_contains: String
+  batch_starts_with: String
+  batch_not_starts_with: String
+  batch_ends_with: String
+  batch_not_ends_with: String
   openLesson: ID
   openLesson_not: ID
   openLesson_in: [ID!]

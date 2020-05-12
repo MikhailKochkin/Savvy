@@ -14,7 +14,7 @@ const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
     $id: ID!
     $text: String
-    $nodeID: ID!
+    $nodeID: ID
     $nodeType: String
   ) {
     updateProblem(id: $id, text: $text, nodeID: $nodeID, nodeType: $nodeType) {
@@ -28,24 +28,24 @@ const useStyles = makeStyles({
     width: "30%",
     margin: "2% 0",
     fontSize: "1.4rem",
-    textTransform: "none"
+    textTransform: "none",
   },
   root: {
-    marginBottom: "4%"
+    marginBottom: "4%",
   },
   formControl: {
     width: "70%",
     fontSize: "2.4rem",
-    padding: "1% 0"
+    padding: "1% 0",
   },
   label: {
     fontSize: "1.5rem",
     fontFamily: "Montserrat",
-    marginBottom: "1%"
+    marginBottom: "1%",
   },
   labelRoot: {
-    fontSize: "1.5rem"
-  }
+    fontSize: "1.5rem",
+  },
 });
 
 const Container = styled.div`
@@ -84,7 +84,7 @@ const Container = styled.div`
 
 const Button = styled.button`
   padding: 0.5% 1%;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   width: 25%;
   border-radius: 5px;
   color: white;
@@ -94,21 +94,21 @@ const Button = styled.button`
   cursor: pointer;
   outline: 0;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/ProblemEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const UpdateProblem = props => {
+const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
   const [nodeID, setNodeID] = useState(props.nodeID);
   const [nodeType, setNodeType] = useState(props.nodeType);
 
-  const getText = d => setText(d);
+  const getText = (d) => setText(d);
 
   const handleChange = (e, type) => {
     setNodeID(e.target.value);
@@ -132,9 +132,9 @@ const UpdateProblem = props => {
             id="demo-simple-select"
             value={nodeType === "quiz" ? nodeID : null}
             type="quiz"
-            onChange={e => handleChange(e, "quiz")}
+            onChange={(e) => handleChange(e, "quiz")}
           >
-            {quizes.map(q => (
+            {quizes.map((q) => (
               <MenuItem value={q.id}>{q.question}</MenuItem>
             ))}
           </Select>
@@ -148,9 +148,9 @@ const UpdateProblem = props => {
             id="demo-simple-select"
             value={nodeType === "newTest" ? nodeID : null}
             type="test"
-            onChange={e => handleChange(e, "newTest")}
+            onChange={(e) => handleChange(e, "newTest")}
           >
-            {newTests.map(q => (
+            {newTests.map((q) => (
               <MenuItem value={q.id}>{q.question[0]}</MenuItem>
             ))}
           </Select>
@@ -162,18 +162,18 @@ const UpdateProblem = props => {
             id: id,
             text: text,
             nodeID: nodeID,
-            nodeType: nodeType
+            nodeType: nodeType,
           }}
           refetchQueries={() => [
             {
               query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID }
-            }
+              variables: { id: lessonID },
+            },
           ]}
         >
           {(updateProblem, { loading, error }) => (
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation
