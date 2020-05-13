@@ -276,8 +276,8 @@ const Challenge = (props) => {
                             Урок {lesson.number}. {lesson.name}
                           </span>
                         </Head>
-                        {(me && lesson.user.id === me.id) ||
-                          (me.permissions.includes("ADMIN") && (
+                        {(me && (lesson.user.id === me.id) ||
+                          me.permissions.includes("ADMIN")) && (
                             <Head2>
                               <div>
                                 Режим разработки →
