@@ -352,6 +352,7 @@ const Mutations = {
   async updateLesson(parent, args, ctx, info) {
     //first take a copy of the updates
     const updates = { ...args };
+    console.log(updates);
     //remove the ID from updates
     delete updates.id;
     //run the update method

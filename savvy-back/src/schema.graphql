@@ -58,6 +58,7 @@ type Mutation {
     description: String
     type: Type
     open: Boolean
+    challenge_num: Int
     map: [Json]
     structure: Json
   ): Lesson

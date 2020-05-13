@@ -37,6 +37,7 @@ const SINGLE_LESSON_QUERY = gql`
       text
       name
       open
+      challenge_num
       number
       type
       user {
@@ -231,9 +232,10 @@ const Challenge = (props) => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
+              console.log(lesson.challenge_num);
               const all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
                 0,
-                10
+                lesson.challenge_num
               );
               let completed = [];
               if (me) {
@@ -274,24 +276,25 @@ const Challenge = (props) => {
                             Урок {lesson.number}. {lesson.name}
                           </span>
                         </Head>
-                        {me && lesson.user.id === me.id && (
-                          <Head2>
-                            <div>
-                              Режим разработки →
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: "regular",
-                                  },
-                                }}
-                              >
-                                <span> Переключить</span>
-                              </Link>
-                            </div>
-                          </Head2>
-                        )}
+                        {(me && lesson.user.id === me.id) ||
+                          (me.permissions.includes("ADMIN") && (
+                            <Head2>
+                              <div>
+                                Режим разработки →
+                                <Link
+                                  href={{
+                                    pathname: "/lesson",
+                                    query: {
+                                      id: lesson.id,
+                                      type: "regular",
+                                    },
+                                  }}
+                                >
+                                  <span> Переключить</span>
+                                </Link>
+                              </div>
+                            </Head2>
+                          ))}
                         <Box>
                           <ReactCSSTransitionGroup
                             transitionName="example"

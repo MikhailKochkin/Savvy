@@ -16,6 +16,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $text: String
     $description: String
     $type: Type
+    $challenge_num: Int
     $open: Boolean
   ) {
     updateLesson(
@@ -25,6 +26,7 @@ const UPDATE_LESSON_MUTATION = gql`
       text: $text
       description: $description
       type: $type
+      challenge_num: $challenge_num
       open: $open
     ) {
       id
@@ -134,7 +136,10 @@ const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
 });
 
 export default class UpdateLesson extends Component {
-  state = {};
+  state = {
+    challenge_num: this.props.lesson.challenge_num,
+    type: this.props.lesson.type,
+  };
   handleName = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -187,6 +192,7 @@ export default class UpdateLesson extends Component {
               defaultValue={lesson.number}
               onChange={this.handleNumber}
             />
+
             <select
               name="type"
               defaultValue={lesson.type}
@@ -200,6 +206,16 @@ export default class UpdateLesson extends Component {
                 Режим при открытии урока – Испытание
               </option>
             </select>
+            {this.state.type === "CHALLENGE" && (
+              <input
+                type="number"
+                id="challenge_num"
+                name="challenge_num"
+                placeholder="Количество заданий"
+                defaultValue={this.state.challenge_num}
+                onChange={this.handleNumber}
+              />
+            )}
             <select
               name="open"
               defaultValue={lesson.open === true}

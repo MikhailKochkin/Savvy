@@ -45,6 +45,7 @@ const SINGLE_LESSON_QUERY = gql`
       open
       type
       createdAt
+      challenge_num
       map
       structure
       user {

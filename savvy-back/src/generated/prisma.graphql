@@ -8702,6 +8702,7 @@ type Lesson {
   examResults(where: ExamResultWhereInput, orderBy: ExamResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamResult!]
   documents(where: DocumentWhereInput, orderBy: DocumentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Document!]
   documentResults(where: DocumentResultWhereInput, orderBy: DocumentResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DocumentResult!]
+  challenge_num: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -8748,6 +8749,7 @@ input LessonCreateInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateManyWithoutCoursePageInput {
@@ -8909,6 +8911,7 @@ input LessonCreateWithoutChallengeResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutConstructionResultsInput {
@@ -8946,6 +8949,7 @@ input LessonCreateWithoutConstructionResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutConstructionsInput {
@@ -8983,6 +8987,7 @@ input LessonCreateWithoutConstructionsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutCoursePageInput {
@@ -9020,6 +9025,7 @@ input LessonCreateWithoutCoursePageInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutDocumentResultsInput {
@@ -9057,6 +9063,7 @@ input LessonCreateWithoutDocumentResultsInput {
   exams: ExamCreateManyWithoutLessonInput
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutDocumentsInput {
@@ -9094,6 +9101,7 @@ input LessonCreateWithoutDocumentsInput {
   exams: ExamCreateManyWithoutLessonInput
   examResults: ExamResultCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutExamResultsInput {
@@ -9131,6 +9139,7 @@ input LessonCreateWithoutExamResultsInput {
   exams: ExamCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutExamsInput {
@@ -9168,6 +9177,7 @@ input LessonCreateWithoutExamsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutForumInput {
@@ -9205,6 +9215,7 @@ input LessonCreateWithoutForumInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutLessonFeedbackInput {
@@ -9242,6 +9253,7 @@ input LessonCreateWithoutLessonFeedbackInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutLessonResultsInput {
@@ -9279,6 +9291,7 @@ input LessonCreateWithoutLessonResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutNewTestsInput {
@@ -9316,6 +9329,7 @@ input LessonCreateWithoutNewTestsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutNotesInput {
@@ -9353,6 +9367,7 @@ input LessonCreateWithoutNotesInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutProblemResultsInput {
@@ -9390,6 +9405,7 @@ input LessonCreateWithoutProblemResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutProblemsInput {
@@ -9427,6 +9443,7 @@ input LessonCreateWithoutProblemsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutQuizesInput {
@@ -9464,6 +9481,7 @@ input LessonCreateWithoutQuizesInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutQuizResultsInput {
@@ -9501,6 +9519,7 @@ input LessonCreateWithoutQuizResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutShotResultsInput {
@@ -9538,6 +9557,7 @@ input LessonCreateWithoutShotResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutShotsInput {
@@ -9575,6 +9595,7 @@ input LessonCreateWithoutShotsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutTestResultsInput {
@@ -9612,6 +9633,7 @@ input LessonCreateWithoutTestResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutTestsInput {
@@ -9649,6 +9671,7 @@ input LessonCreateWithoutTestsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutTextEditorResultsInput {
@@ -9686,6 +9709,7 @@ input LessonCreateWithoutTextEditorResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutTexteditorsInput {
@@ -9723,6 +9747,7 @@ input LessonCreateWithoutTexteditorsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonCreateWithoutUserInput {
@@ -9760,6 +9785,7 @@ input LessonCreateWithoutUserInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 type LessonEdge {
@@ -9788,6 +9814,8 @@ enum LessonOrderByInput {
   published_DESC
   description_ASC
   description_DESC
+  challenge_num_ASC
+  challenge_num_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -9806,6 +9834,7 @@ type LessonPreviousValues {
   coursePageID: ID!
   published: Boolean
   description: String
+  challenge_num: Int
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -10191,6 +10220,14 @@ input LessonScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  challenge_num: Int
+  challenge_num_not: Int
+  challenge_num_in: [Int!]
+  challenge_num_not_in: [Int!]
+  challenge_num_lt: Int
+  challenge_num_lte: Int
+  challenge_num_gt: Int
+  challenge_num_gte: Int
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -10265,6 +10302,7 @@ input LessonUpdateInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateManyDataInput {
@@ -10278,6 +10316,7 @@ input LessonUpdateManyDataInput {
   coursePageID: ID
   published: Boolean
   description: String
+  challenge_num: Int
 }
 
 input LessonUpdateManyMutationInput {
@@ -10291,6 +10330,7 @@ input LessonUpdateManyMutationInput {
   coursePageID: ID
   published: Boolean
   description: String
+  challenge_num: Int
 }
 
 input LessonUpdateManyWithoutCoursePageInput {
@@ -10544,6 +10584,7 @@ input LessonUpdateWithoutChallengeResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutConstructionResultsDataInput {
@@ -10580,6 +10621,7 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutConstructionsDataInput {
@@ -10616,6 +10658,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutCoursePageDataInput {
@@ -10652,6 +10695,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutDocumentResultsDataInput {
@@ -10688,6 +10732,7 @@ input LessonUpdateWithoutDocumentResultsDataInput {
   exams: ExamUpdateManyWithoutLessonInput
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutDocumentsDataInput {
@@ -10724,6 +10769,7 @@ input LessonUpdateWithoutDocumentsDataInput {
   exams: ExamUpdateManyWithoutLessonInput
   examResults: ExamResultUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutExamResultsDataInput {
@@ -10760,6 +10806,7 @@ input LessonUpdateWithoutExamResultsDataInput {
   exams: ExamUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutExamsDataInput {
@@ -10796,6 +10843,7 @@ input LessonUpdateWithoutExamsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutForumDataInput {
@@ -10832,6 +10880,7 @@ input LessonUpdateWithoutForumDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutLessonFeedbackDataInput {
@@ -10868,6 +10917,7 @@ input LessonUpdateWithoutLessonFeedbackDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutLessonResultsDataInput {
@@ -10904,6 +10954,7 @@ input LessonUpdateWithoutLessonResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutNewTestsDataInput {
@@ -10940,6 +10991,7 @@ input LessonUpdateWithoutNewTestsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutNotesDataInput {
@@ -10976,6 +11028,7 @@ input LessonUpdateWithoutNotesDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutProblemResultsDataInput {
@@ -11012,6 +11065,7 @@ input LessonUpdateWithoutProblemResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutProblemsDataInput {
@@ -11048,6 +11102,7 @@ input LessonUpdateWithoutProblemsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutQuizesDataInput {
@@ -11084,6 +11139,7 @@ input LessonUpdateWithoutQuizesDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutQuizResultsDataInput {
@@ -11120,6 +11176,7 @@ input LessonUpdateWithoutQuizResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutShotResultsDataInput {
@@ -11156,6 +11213,7 @@ input LessonUpdateWithoutShotResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutShotsDataInput {
@@ -11192,6 +11250,7 @@ input LessonUpdateWithoutShotsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutTestResultsDataInput {
@@ -11228,6 +11287,7 @@ input LessonUpdateWithoutTestResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutTestsDataInput {
@@ -11264,6 +11324,7 @@ input LessonUpdateWithoutTestsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutTextEditorResultsDataInput {
@@ -11300,6 +11361,7 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutTexteditorsDataInput {
@@ -11336,6 +11398,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithoutUserDataInput {
@@ -11372,6 +11435,7 @@ input LessonUpdateWithoutUserDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  challenge_num: Int
 }
 
 input LessonUpdateWithWhereUniqueWithoutCoursePageInput {
@@ -11659,6 +11723,14 @@ input LessonWhereInput {
   documentResults_every: DocumentResultWhereInput
   documentResults_some: DocumentResultWhereInput
   documentResults_none: DocumentResultWhereInput
+  challenge_num: Int
+  challenge_num_not: Int
+  challenge_num_in: [Int!]
+  challenge_num_not_in: [Int!]
+  challenge_num_lt: Int
+  challenge_num_lte: Int
+  challenge_num_gt: Int
+  challenge_num_gte: Int
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

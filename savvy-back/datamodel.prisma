@@ -214,6 +214,7 @@ type Lesson {
   examResults: [ExamResult] @relation(link: TABLE, name: "LessonExamResults" onDelete: CASCADE)
   documents: [Document] @relation(link: TABLE, name: "LessonDocuments" onDelete: CASCADE)
   documentResults: [DocumentResult] @relation(link: TABLE, name: "LessonDocumentResults" onDelete: CASCADE)
+  challenge_num: Int @default(value: 10)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

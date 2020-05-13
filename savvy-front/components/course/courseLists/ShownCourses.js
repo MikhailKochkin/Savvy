@@ -91,19 +91,28 @@ const ShownCourses = (props) => {
                 c.published &&
                 (c.courseType === "FORMONEY" || c.courseType === "PUBLIC")
             );
-            if (props.topic && props.topic !== "Any") {
+            console.log("Изначально: ", displayed);
+            if (props.topic && props.topic !== "All") {
               displayed = coursePages.filter((c) =>
                 c.tags.includes(props.topic)
               );
             }
+            console.log("С темой: ", displayed);
             if (props.teacher) {
               displayed = displayed.filter((c) =>
                 c.tags.includes(props.teacher)
               );
             }
-            if (props.level && props.level !== "All") {
-              displayed = displayed.filter((c) => c.tags.includes(props.level));
+            console.log("С учителем: ", displayed);
+
+            if (props.level === "All") {
+              displayed = displayed;
+            } else if (props.level) {
+              displayed = displayed.filter(
+                (c) => c.tags.includes(props.level) || c.tags.includes("All")
+              );
             }
+            console.log("С уровнем: ", displayed);
             return (
               <>
                 {displayed.length === 0 && (

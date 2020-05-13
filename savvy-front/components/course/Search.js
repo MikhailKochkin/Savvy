@@ -254,13 +254,13 @@ const Search = (props) => {
             </div>
             <div className="subject">
               <select onChange={(e) => setTeacher(e.target.value)}>
-                <option value="Teacher">С сопровождением</option>
                 <option value="NoTeacher">Без сопровождения</option>
+                <option value="Teacher">С сопровождением</option>
               </select>
             </div>
             <div className="level">
               <select onChange={(e) => setLevel(e.target.value)}>
-                <option value="All">Для всех</option>
+                <option value="All">Любой уровень</option>
                 <option value="Student">Для студентов</option>
                 <option value="Junior">Для младших юристов</option>
                 <option value="Senior">Для юристов</option>
