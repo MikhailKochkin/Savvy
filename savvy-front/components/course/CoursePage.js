@@ -797,6 +797,12 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
+                                {console.log(
+                                  !subjectArray.includes(coursePage.id),
+                                  !new_subjectArray.includes(coursePage.id),
+                                  me && me.permissions.includes("ADMIN")
+                                )}
+
                                 {(!subjectArray.includes(coursePage.id) &&
                                   !new_subjectArray.includes(coursePage.id)) ||
                                   (me.permissions.includes("ADMIN") && (
@@ -810,6 +816,17 @@ class CoursePage extends Component {
                                       subjectArray={subjectArray}
                                     />
                                   ))}
+                                {!me && (
+                                  <RegisterCard
+                                    me={me}
+                                    coursePage={coursePage}
+                                    price={price}
+                                    discountPrice={coursePage.discountPrice}
+                                    promocode={coursePage.promocode}
+                                    studentsArray={studentsArray}
+                                    subjectArray={subjectArray}
+                                  />
+                                )}
 
                                 {my_reviews[0] && (
                                   <>
