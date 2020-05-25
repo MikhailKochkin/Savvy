@@ -22,7 +22,8 @@ const Name = styled.div`
 `;
 
 const Statement = styled.div`
-  background: ${props => (props.color ? "rgba(50, 172, 102, 0.1)" : "#f0f8ff")};
+  background: ${(props) =>
+    props.color ? "rgba(50, 172, 102, 0.1)" : "#f0f8ff"};
   padding: 1.5% 2%;
   padding-top: 1%;
   margin-bottom: 2%;
@@ -39,20 +40,15 @@ const Statement = styled.div`
   }
 `;
 
-const Topic = props => {
+const Topic = (props) => {
   moment.locale("ru");
   return (
     <Top>
       <Name>{props.topic.name}</Name>
       {props.topic.statements.length > 0 ? (
         <>
-          {props.topic.statements.map(s => (
+          {props.topic.statements.map((s) => (
             <Statement color={props.topic.coursePage.user.id === s.user.id}>
-              {console.log(
-                props.topic.coursePage.user.id === s.user.id,
-                props.topic.coursePage.user.id,
-                s.user.id
-              )}
               <div className="text">{renderHTML(s.text)}</div>
               <div className="name">
                 {s.user.surname

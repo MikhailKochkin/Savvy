@@ -645,7 +645,6 @@ class SingleLesson extends Component {
                 if (loading) return <p>Loading...</p>;
                 if (data === null) return <p>Нет урока</p>;
                 const lesson = data.lesson;
-                console.log(lesson);
                 return (
                   <>
                     <AreYouEnrolled

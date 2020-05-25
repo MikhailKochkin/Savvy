@@ -235,13 +235,11 @@ class SingleTextEditor extends Component {
   render() {
     const { textEditor, me, userData, lesson } = this.props;
     let data;
-    console.log(userData);
     me
       ? (data = userData
           .filter((result) => result.textEditor.id === textEditor.id)
           .filter((result) => result.student.id === me.id))
       : (data = [""]);
-    console.log(data);
     return (
       <>
         {!this.state.update && (

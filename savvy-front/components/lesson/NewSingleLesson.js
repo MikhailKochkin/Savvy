@@ -621,10 +621,12 @@ const SingleLesson = (props) => {
                               </Button>
                             }
                           />
-                          <Panel
-                            level={me.level.level}
-                            change={lesson.change}
-                          />
+                          {me && (
+                            <Panel
+                              level={me.level.level}
+                              change={lesson.change}
+                            />
+                          )}
                         </Container>{" "}
                       </AreYouEnrolled>
                     </>

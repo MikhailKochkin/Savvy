@@ -268,13 +268,12 @@ class SingleQuiz extends Component {
   render() {
     const { me, user, userData, exam, story, ifWrong, ifRight } = this.props;
     let data;
-    console.log(userData, this.props.id);
+    userData, this.props.id;
     if (me) {
       data = userData
         .filter((el) => el.quiz.id === this.props.id)
         .filter((el) => el.student.id === me.id);
     }
-    console.log(data);
     return (
       <Styles story={story}>
         <Buttons>

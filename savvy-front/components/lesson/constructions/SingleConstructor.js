@@ -293,13 +293,11 @@ class SingleConstructor extends Component {
   render() {
     const { me, lessonID, construction, userData } = this.props;
     let data;
-    console.log(userData);
     me
       ? (data = userData
           .filter((result) => result.construction.id === construction.id)
           .filter((result) => result.student.id === this.props.me.id))
       : (data = [""]);
-    console.log(data);
     return (
       <>
         {me.id === construction.user.id && (
@@ -360,10 +358,8 @@ class SingleConstructor extends Component {
                       onClick={async (e) => {
                         e.preventDefault();
                         const res = await this.check();
-                        console.log(data.length);
                         if (data.length == 0) {
                           if (this.state.answerState === "right") {
-                            console.log(1);
                             const res2 = await createConstructionResult();
                           }
                         }
