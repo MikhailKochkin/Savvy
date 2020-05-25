@@ -638,13 +638,14 @@ class SingleLesson extends Component {
               variables={{
                 id: this.props.id,
               }}
-              fetchPolicy="cache-first"
+              fetchPolicy="cache-and-network"
             >
               {({ data, error, loading }) => {
                 if (error) return <Error error={error} />;
                 if (loading) return <p>Loading...</p>;
                 if (data === null) return <p>Нет урока</p>;
                 const lesson = data.lesson;
+                console.log(lesson);
                 return (
                   <>
                     <AreYouEnrolled

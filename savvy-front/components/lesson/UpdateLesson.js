@@ -16,6 +16,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $text: String
     $description: String
     $type: Type
+    $change: String
     $challenge_num: Int
     $open: Boolean
   ) {
@@ -26,6 +27,7 @@ const UPDATE_LESSON_MUTATION = gql`
       text: $text
       description: $description
       type: $type
+      change: $change
       challenge_num: $challenge_num
       open: $open
     ) {
@@ -36,6 +38,7 @@ const UPDATE_LESSON_MUTATION = gql`
       type
       description
       open
+      change
     }
   }
 `;
@@ -170,7 +173,7 @@ export default class UpdateLesson extends Component {
   };
 
   render() {
-    const { lessonID, description, lesson } = this.props;
+    const { lessonID, description, lesson, change } = this.props;
     return (
       <PleaseSignIn>
         <AreYouATeacher subject={lessonID}>
@@ -231,6 +234,15 @@ export default class UpdateLesson extends Component {
                 getEditorText={this.myCallback2}
                 placeholder="Описание"
                 value={description}
+              />
+            </Frame>
+            <Frame>
+              <DynamicHoverEditor
+                index={1}
+                name="change"
+                getEditorText={this.myCallback2}
+                placeholder="Как измениться ученик после прохождения урока"
+                value={change}
               />
             </Frame>
             <DynamicLoadedEditor

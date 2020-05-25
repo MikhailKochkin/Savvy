@@ -230,6 +230,7 @@ const Challenge = (props) => {
             variables={{
               id: props.id,
             }}
+            fetchPolicy="cache-and-network"
           >
             {({ data, error, loading }) => {
               if (error) return <Error error={error} />;

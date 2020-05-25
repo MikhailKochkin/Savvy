@@ -121,7 +121,7 @@ class ConstructorGroup extends Component {
               variants={construction.variants}
               me={this.props.me}
               arr={arr}
-              // userData={userData}
+              userData={this.props.constructionResults}
             />
           </>
         )}

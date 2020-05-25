@@ -27,8 +27,9 @@ const SINGLE_LESSON_QUERY = gql`
       number
       type
       map
-      open
       structure
+      change
+      open
       createdAt
       user {
         id
@@ -121,10 +122,10 @@ const SINGLE_LESSON_QUERY = gql`
         student {
           id
         }
+        testID
         test {
           id
         }
-        testID
         answer
         attempts
       }
@@ -169,14 +170,13 @@ const SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
-        openLesson
       }
       quizes {
         id
         question
+        answer
         ifRight
         ifWrong
-        answer
         type
         next
         user {
@@ -187,9 +187,9 @@ const SINGLE_LESSON_QUERY = gql`
         id
         answers
         type
+        correct
         ifRight
         ifWrong
-        correct
         question
         next
         user {
@@ -476,11 +476,13 @@ const SingleLesson = (props) => {
             variables={{
               id: props.id,
             }}
+            fetchPolicy="cache-and-network"
           >
             {({ data, error, loading }) => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
-              const lesson = data.lesson;
+              console.log(data);
+              let lesson = data.lesson;
               return (
                 <>
                   {lesson && (

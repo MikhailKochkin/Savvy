@@ -34,8 +34,9 @@ const UPDATE_LESSONRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  display: grid;
-  grid-template-columns: 65% 35%;
+  display: flex;
+  flex-direction: row;
+  /* grid-template-columns: 65% 35%; */
   width: 100%;
   font-size: 1.6rem;
   margin-bottom: 15px;
@@ -43,7 +44,7 @@ const TextBar = styled.div`
   border-color: ${(props) => props.color};
   padding: 2%;
   padding-left: 2%;
-  background: ${(props) => (props.open ? "#F0F8FF" : "none")};
+  /* background: ${(props) => (props.open ? "#F0F8FF" : "none")}; */
   span {
     cursor: pointer;
     &:hover {
@@ -64,6 +65,8 @@ const A = styled.a`
 `;
 
 const Text = styled.div`
+  flex-basis: 65%;
+  /* background: red; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -79,7 +82,7 @@ const Text = styled.div`
 const Button = styled.button`
   font-size: 1.6rem;
   padding: 5%;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #112a62;
   color: #112a62;
   box-sizing: border-box;
@@ -88,16 +91,26 @@ const Button = styled.button`
   height: 40px;
   cursor: pointer;
   outline: 0;
+  transition: all 0.4s;
+  &:hover {
+    border: 1px solid #f6511d;
+    color: #f6511d;
+  }
   @media (max-width: 800px) {
     font-size: 1.4rem;
   }
 `;
 
 const Buttons = styled.div`
+  flex-basis: 35%;
+  /* background: yellow; */
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   width: 100%;
+  @media (max-width: 800px) {
+    justify-content: flex-start;
+  }
 `;
 
 const InProgress = styled.p`
@@ -130,6 +143,7 @@ const ToggleQuestion = styled.div`
   /* The switch - the box around the slider */
   justify-self: center;
   align-self: center;
+  margin-right: 45%;
   .switch {
     position: relative;
     display: inline-block;
@@ -259,7 +273,7 @@ class LessonHeader extends Component {
 
     return (
       <>
-        <TextBar color={color} open={lesson.open}>
+        <TextBar color={color}>
           <Text>
             <div>
               {lesson.number}. {name}{" "}
@@ -482,7 +496,6 @@ class LessonHeader extends Component {
             ) : null}
           </Buttons>
         </TextBar>
-
         {lesson.description && this.state.reveal && (
           <Info>{renderHTML(lesson.description)}</Info>
         )}

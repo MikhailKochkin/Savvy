@@ -12,6 +12,7 @@ import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
+import { Reviews } from "../../config";
 
 const AGGREGATE_PAGE_LESSONS_QUERY = gql`
   query AGGREGATE_PAGE_LESSONS_QUERY($id: ID!) {
@@ -250,6 +251,11 @@ const Header = styled.div`
   line-height: 1.4;
 `;
 
+const Header2 = styled.div`
+  font-size: 2rem;
+  padding-top: 4%;
+`;
+
 const Total = styled.div`
   font-size: 1.6rem;
   margin: 1.5% 0;
@@ -274,38 +280,58 @@ const Button = styled.button`
   }
 `;
 
-const Reviews = styled.div`
+const ReviewsStyles = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: space-between;
+  flex-wrap: wrap;
+  margin: 2% 0;
+  .header {
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  .post {
+    width: 45%;
+    flex-basis: 45%;
+    background: #fff;
+    margin-bottom: 3%;
+    border: 2px solid #32ac66;
+    border-radius: 15px;
+    padding: 2%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .source {
+      & {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #000;
+        line-height: 0.1em;
+        margin: 20px 0 20px;
+      }
 
-const SignInButton = styled.button`
-  background: #0846d8;
-  border-radius: 5px;
-  width: 20%;
-  height: 38px;
-  outline: 0;
-  color: white;
-  font-weight: 600;
-  font-size: 1.4rem;
-  outline: none;
-  cursor: pointer;
-  border: none;
-  margin-top: 10px;
-  &:hover {
-    background: rgba(8, 70, 216, 0.85);
-  }
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
-  }
-  &:disabled {
-    &:hover {
-      background-color: #84bc9c;
+      & span {
+        background: #fff;
+        padding: 0 30px;
+      }
+    }
+    .text {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
   @media (max-width: 800px) {
-    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .post {
+      width: 95%;
+      padding: 4%;
+    }
   }
 `;
 
@@ -401,6 +427,8 @@ class CoursePage extends Component {
     window.scrollTo(0, 0);
   };
   render() {
+    let my_reviews;
+    my_reviews = Reviews.filter((r) => r.coursePage === this.props.id);
     return (
       <>
         <div id="root"></div>
@@ -525,7 +553,13 @@ class CoursePage extends Component {
                                         coursePage.id
                                       ) &&
                                       !me.permissions.includes("ADMIN") && (
-                                        <FirstLesson lesson={openLesson} />
+                                        <FirstLesson
+                                          lesson={
+                                            coursePage.lessons.filter(
+                                              (l) => l.open === true
+                                            )[0]
+                                          }
+                                        />
                                       )}{" "}
                                     {/* Карточка первого урока */}
                                     {me &&
@@ -763,8 +797,9 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
-                                {!subjectArray.includes(coursePage.id) &&
-                                  !new_subjectArray.includes(coursePage.id) && (
+                                {(!subjectArray.includes(coursePage.id) &&
+                                  !new_subjectArray.includes(coursePage.id)) ||
+                                  (me.permissions.includes("ADMIN") && (
                                     <RegisterCard
                                       me={me}
                                       coursePage={coursePage}
@@ -774,20 +809,33 @@ class CoursePage extends Component {
                                       studentsArray={studentsArray}
                                       subjectArray={subjectArray}
                                     />
-                                  )}
-                                {coursePage.reviews && (
-                                  <Reviews>
-                                    {coursePage.reviews.map((post) => (
-                                      <div>
-                                        <a
-                                          href={post.comment_src}
-                                          target="_blank"
-                                        >
-                                          <img src={post.img_src} />
-                                        </a>
-                                      </div>
-                                    ))}
-                                  </Reviews>
+                                  ))}
+
+                                {my_reviews[0] && (
+                                  <>
+                                    <Header2>
+                                      Что ученики говорят про этот курс?
+                                    </Header2>
+                                    <ReviewsStyles>
+                                      {my_reviews[0].reviews.map((post, i) => (
+                                        <div className="post">
+                                          <div>
+                                            <div className="header">
+                                              {post.author}
+                                            </div>
+                                            <a href={post.link} target="_blank">
+                                              <div className="text">
+                                                {post.text}
+                                              </div>
+                                            </a>
+                                          </div>
+                                          <div className="source">
+                                            <span>{post.source}</span>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </ReviewsStyles>
+                                  </>
                                 )}
                               </LessonStyles>
                             </Container>
