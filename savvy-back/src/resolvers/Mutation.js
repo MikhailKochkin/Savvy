@@ -530,6 +530,35 @@ const Mutations = {
       },
       info
     );
+    const test = await ctx.db.query.newTest(
+      { where: { id: testID } },
+      `{ id, answers, correct}`
+    );
+
+    let checker = [];
+    test.correct.map((el, index) => {
+      if (el === true) {
+        checker.push(test.answers[index]);
+      }
+    });
+
+    if (checker.join(", ") === args.answer) {
+      const user = await ctx.db.query.user(
+        { where: { id: ctx.request.userId } },
+        `{ id, level {id, level} }`
+      );
+      const updateUserLevel = await ctx.db.mutation.updateUserLevel(
+        {
+          data: {
+            level: user.level.level + 1,
+          },
+          where: {
+            id: user.level.id,
+          },
+        },
+        info
+      );
+    }
     return TestResult;
   },
   async createLessonResult(parent, args, ctx, info) {
@@ -623,6 +652,28 @@ const Mutations = {
       },
       info
     );
+
+    console.log(args.correct);
+
+    if (args.correct === true) {
+      const user = await ctx.db.query.user(
+        { where: { id: ctx.request.userId } },
+        `{ id, level {id, level} }`
+      );
+      console.log(user.level.level + 2);
+      const updateUserLevel = await ctx.db.mutation.updateUserLevel(
+        {
+          data: {
+            level: user.level.level + 2,
+          },
+          where: {
+            id: user.level.id,
+          },
+        },
+        info
+      );
+    }
+
     return QuizResult;
   },
   async createProblemResult(parent, args, ctx, info) {
@@ -686,6 +737,27 @@ const Mutations = {
       },
       info
     );
+
+    console.log(args.result);
+
+    if (args.result === true) {
+      const user = await ctx.db.query.user(
+        { where: { id: ctx.request.userId } },
+        `{ id, level {id, level} }`
+      );
+      console.log(user.level.level + 0.25);
+      const updateUserLevel = await ctx.db.mutation.updateUserLevel(
+        {
+          data: {
+            level: user.level.level + 0.25,
+          },
+          where: {
+            id: user.level.id,
+          },
+        },
+        info
+      );
+    }
     return TextEditorResult;
   },
   async createQuiz(parent, args, ctx, info) {
@@ -935,6 +1007,30 @@ const Mutations = {
       },
       info
     );
+
+    console.log("!");
+
+    console.log(ctx.request.userId);
+
+    const user = await ctx.db.query.user(
+      { where: { id: ctx.request.userId } },
+      `{ id, level {id, level} }`
+    );
+
+    console.log(user);
+
+    const updateUserLevel = await ctx.db.mutation.updateUserLevel(
+      {
+        data: {
+          level: user.level.level + 3,
+        },
+        where: {
+          id: user.level.id,
+        },
+      },
+      info
+    );
+
     return ConstructionResult;
   },
   async deleteApplication(parent, args, ctx, info) {
@@ -1085,6 +1181,19 @@ const Mutations = {
       },
       info
     );
+
+    const UserLevel = await ctx.db.mutation.createUserLevel(
+      {
+        data: {
+          user: {
+            connect: { id: user.id },
+          },
+          level: 0,
+        },
+      },
+      info
+    );
+
     //create the JWT token for them
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     // we set the jwt as a cookie on the response
@@ -1922,6 +2031,27 @@ const Mutations = {
     }
     //3. Delete it
     return ctx.db.mutation.deleteStatement({ where }, info);
+  },
+  async createUserLevel(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
+    delete args;
+    if (!ctx.request.userId) {
+      throw new Error(
+        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
+      );
+    }
+    const UserLevel = await ctx.db.mutation.createUserLevel(
+      {
+        data: {
+          user: {
+            connect: { id: args.user },
+          },
+          level: args.level,
+        },
+      },
+      info
+    );
+    return UserLevel;
   },
 };
 

@@ -8,7 +8,6 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
@@ -19,6 +18,7 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
     $guess: String!
     $lesson: ID
     $textEditor: ID
+    $result: Boolean
   ) {
     createTextEditorResult(
       attempts: $attempts
@@ -27,6 +27,7 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
       guess: $guess
       lesson: $lesson
       textEditor: $textEditor
+      result: $result
     ) {
       id
     }
@@ -145,6 +146,37 @@ class SingleTextEditor extends Component {
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text,
     update: false,
+    recieved: [],
+  };
+
+  check = async () => {
+    let data = {
+      sentence1: this.state.answer.toLowerCase(),
+      sentence2: this.state.correct_option.toLowerCase(),
+    };
+    const r = await fetch("https://dry-plains-91452.herokuapp.com/", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res);
+        if (res > 0.59) {
+          this.setState({
+            result: true,
+            inputColor: "rgba(50, 172, 102, 0.5)",
+          });
+        } else {
+          this.setState({
+            result: false,
+            inputColor: "rgba(222, 107, 72, 0.5)",
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   onTest = (e) => {
@@ -202,9 +234,14 @@ class SingleTextEditor extends Component {
   }
   render() {
     const { textEditor, me, userData, lesson } = this.props;
-    const data = userData
-      .filter((result) => result.textEditor.id === textEditor.id)
-      .filter((result) => result.student.id === me.id);
+    let data;
+    console.log(userData);
+    me
+      ? (data = userData
+          .filter((result) => result.textEditor.id === textEditor.id)
+          .filter((result) => result.student.id === me.id))
+      : (data = [""]);
+    console.log(data);
     return (
       <>
         {!this.state.update && (
@@ -250,16 +287,13 @@ class SingleTextEditor extends Component {
                         correct: this.state.correct_option,
                         wrong: this.state.wrong_option,
                         guess: this.state.answer,
+                        result: this.state.result,
                       }}
-                      // refetchQueries={() => [
-                      //   {
-                      //     query: SINGLE_LESSON_QUERY,
-                      //     variables: { id: this.props.lessonID }
-                      //   },
-                      //   {
-                      //     query: CURRENT_USER_QUERY
-                      //   }
-                      // ]}
+                      refetchQueries={() => [
+                        {
+                          query: CURRENT_USER_QUERY,
+                        },
+                      ]}
                     >
                       {(createTextEditorResult, { loading, error }) => (
                         <button
@@ -270,7 +304,22 @@ class SingleTextEditor extends Component {
                                   show: !prevState.show,
                                 }))
                               : alert("Дайте свой вариант!");
-                            const res = await createTextEditorResult();
+                            console.log(1);
+                            const res0 = await this.check();
+                            if (
+                              data.length === 0 &&
+                              !this.state.recieved.includes(this.state.answer)
+                            ) {
+                              console.log(2);
+                              const res = await createTextEditorResult();
+                            }
+                            this.setState((prevState) => ({
+                              recieved: [
+                                ...prevState.recieved,
+                                this.state.answer.toLowerCase(),
+                              ],
+                            }));
+                            console.log(3);
                           }}
                         >
                           Ответить

@@ -7,14 +7,21 @@ import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
+import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
     $answer: String
     $quiz: ID
     $lessonID: ID
+    $correct: Boolean
   ) {
-    createQuizResult(answer: $answer, quiz: $quiz, lessonID: $lessonID) {
+    createQuizResult(
+      answer: $answer
+      quiz: $quiz
+      lessonID: $lessonID
+      correct: $correct
+    ) {
       id
     }
   }
@@ -261,11 +268,13 @@ class SingleQuiz extends Component {
   render() {
     const { me, user, userData, exam, story, ifWrong, ifRight } = this.props;
     let data;
+    console.log(userData, this.props.id);
     if (me) {
       data = userData
         .filter((el) => el.quiz.id === this.props.id)
         .filter((el) => el.student.id === me.id);
     }
+    console.log(data);
     return (
       <Styles story={story}>
         <Buttons>
@@ -306,7 +315,9 @@ class SingleQuiz extends Component {
                   quiz: this.props.quizID,
                   lessonID: this.props.lessonID,
                   answer: this.state.answer,
+                  correct: this.state.correct === "true",
                 }}
+                refetchQueries={[{ query: CURRENT_USER_QUERY }]}
               >
                 {(createQuizResult, { loading, error }) => (
                   <div

@@ -10,7 +10,7 @@ class TestGroup extends Component {
   state = {
     tests: this.props.tests,
     completed: 0,
-    handIn: false
+    handIn: false,
   };
 
   render() {

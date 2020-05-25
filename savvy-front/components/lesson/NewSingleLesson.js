@@ -16,6 +16,7 @@ import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import StoryEx from "./StoryEx";
 import User from "../User";
+import Panel from "./Panel";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -118,6 +119,9 @@ const SINGLE_LESSON_QUERY = gql`
       testResults {
         id
         student {
+          id
+        }
+        test {
           id
         }
         testID
@@ -539,7 +543,6 @@ const SingleLesson = (props) => {
                                 )}
                               </Head2>
                             )}
-
                           <Header
                             task={
                               lesson.structure[activeStep].type ===
@@ -615,6 +618,10 @@ const SingleLesson = (props) => {
                                 Назад
                               </Button>
                             }
+                          />
+                          <Panel
+                            level={me.level.level}
+                            change={lesson.change}
                           />
                         </Container>{" "}
                       </AreYouEnrolled>

@@ -9,6 +9,7 @@ import renderHTML from "react-render-html";
 import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
+import { CURRENT_USER_QUERY } from "../../User";
 
 const StyledButton = withStyles({
   root: {
@@ -211,7 +212,7 @@ class SingleTest extends Component {
     let userData;
     this.props.me
       ? (userData = this.props.userData
-          .filter((el) => el.testID === this.props.id)
+          .filter((el) => el.test.id === this.props.id)
           .filter((el) => el.student.id === this.props.me.id))
       : (userData = 1);
     return (
@@ -253,6 +254,7 @@ class SingleTest extends Component {
                   lessonID: this.props.lessonID,
                   answer: this.state.answer.join(", "),
                 }}
+                refetchQueries={[{ query: CURRENT_USER_QUERY }]}
               >
                 {(createTestResult, { loading, error }) => (
                   <MiniButton

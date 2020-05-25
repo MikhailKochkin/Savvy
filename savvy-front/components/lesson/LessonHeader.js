@@ -39,6 +39,11 @@ const TextBar = styled.div`
   width: 100%;
   font-size: 1.6rem;
   margin-bottom: 15px;
+  border-left: 2px solid;
+  border-color: ${(props) => props.color};
+  padding: 2%;
+  padding-left: 2%;
+  background: ${(props) => (props.open ? "#F0F8FF" : "none")};
   span {
     cursor: pointer;
     &:hover {
@@ -212,9 +217,49 @@ class LessonHeader extends Component {
       students,
       me,
     } = this.props;
+
+    let tests = [];
+    let quizes = [];
+    let problems = [];
+    let color;
+
+    if (me) {
+      let visits = lesson.lessonResults.filter((l) => l.student.id === me.id);
+      // console.log(lesson.quizes, lesson.quizes.length > 0);
+      if (lesson.quizes.length > 0) {
+        lesson.quizes.map((l) => quizes.push(...l.quizResults));
+      }
+      quizes = quizes.filter((q) => q.student.id === me.id);
+      if (lesson.newTests.length > 0) {
+        lesson.newTests.map((l) => tests.push(...l.testResults));
+      }
+      tests = tests.filter((l) => l.student.id === me.id);
+      if (lesson.problems.length > 0) {
+        lesson.problems.map((l) => problems.push(...l.problemResults));
+      }
+      problems = problems.filter((l) => l.student.id === me.id);
+      if (
+        visits.length > 0 &&
+        tests.length === 0 &&
+        problems.length === 0 &&
+        quizes.length === 0
+      ) {
+        color = "#FFD836";
+      } else if (
+        visits.length > 0 &&
+        (tests.length > 0 || problems.length > 0 || quizes.length > 0)
+      ) {
+        color = "#32AC66";
+      } else {
+        color = "white";
+      }
+    } else {
+      color = "white";
+    }
+
     return (
       <>
-        <TextBar>
+        <TextBar color={color} open={lesson.open}>
           <Text>
             <div>
               {lesson.number}. {name}{" "}

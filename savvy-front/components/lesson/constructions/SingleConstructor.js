@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
 import UpdateConstruction from "./UpdateConstruction";
+import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -291,10 +292,14 @@ class SingleConstructor extends Component {
 
   render() {
     const { me, lessonID, construction, userData } = this.props;
-    // const data = userData
-    //   .filter((result) => result.construction.id === construction.id)
-    //   .filter((result) => result.student.id === this.props.me.id);
-    const data = [];
+    let data;
+    console.log(userData);
+    me
+      ? (data = userData
+          .filter((result) => result.construction.id === construction.id)
+          .filter((result) => result.student.id === this.props.me.id))
+      : (data = [""]);
+    console.log(data);
     return (
       <>
         {me.id === construction.user.id && (
@@ -341,6 +346,11 @@ class SingleConstructor extends Component {
                   constructionID: this.props.construction.id,
                   inputs: this.state.inputs,
                 }}
+                refetchQueries={() => [
+                  {
+                    query: CURRENT_USER_QUERY,
+                  },
+                ]}
               >
                 {(createConstructionResult, { loading, error }) => (
                   <Buttons blocked={this.state.answered}>
@@ -350,8 +360,12 @@ class SingleConstructor extends Component {
                       onClick={async (e) => {
                         e.preventDefault();
                         const res = await this.check();
-                        if (this.state.answerState === "right") {
-                          const res2 = await createConstructionResult();
+                        console.log(data.length);
+                        if (data.length == 0) {
+                          if (this.state.answerState === "right") {
+                            console.log(1);
+                            const res2 = await createConstructionResult();
+                          }
                         }
                       }}
                     >

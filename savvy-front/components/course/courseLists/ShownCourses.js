@@ -15,6 +15,16 @@ const COURSE_PAGES_QUERY = gql`
       tags
       published
       courseType
+      lessons {
+        id
+        forum {
+          id
+          rating {
+            id
+            rating
+          }
+        }
+      }
       user {
         id
         name
@@ -91,19 +101,16 @@ const ShownCourses = (props) => {
                 c.published &&
                 (c.courseType === "FORMONEY" || c.courseType === "PUBLIC")
             );
-            console.log("Изначально: ", displayed);
             if (props.topic && props.topic !== "All") {
               displayed = coursePages.filter((c) =>
                 c.tags.includes(props.topic)
               );
             }
-            console.log("С темой: ", displayed);
             if (props.teacher) {
               displayed = displayed.filter((c) =>
                 c.tags.includes(props.teacher)
               );
             }
-            console.log("С учителем: ", displayed);
 
             if (props.level === "All") {
               displayed = displayed;
@@ -112,7 +119,6 @@ const ShownCourses = (props) => {
                 (c) => c.tags.includes(props.level) || c.tags.includes("All")
               );
             }
-            console.log("С уровнем: ", displayed);
             return (
               <>
                 {displayed.length === 0 && (

@@ -12,6 +12,10 @@ const CURRENT_USER_QUERY = gql`
       permissions
       image
       subjects
+      level {
+        id
+        level
+      }
       teacherFeedback {
         id
         text

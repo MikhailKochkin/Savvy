@@ -174,6 +174,10 @@ type AggregateUser {
   count: Int!
 }
 
+type AggregateUserLevel {
+  count: Int!
+}
+
 type Application {
   id: ID!
   applicantId: ID!
@@ -3416,7 +3420,7 @@ type CoursePage {
   tariffs: String
   methods: String
   batch: String
-  reviews: [String!]!
+  reviews: Json
   openLesson: ID
   video: String
   package(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
@@ -3464,7 +3468,7 @@ input CoursePageCreateInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3544,10 +3548,6 @@ input CoursePageCreatepromocodeInput {
   set: [Json!]
 }
 
-input CoursePageCreatereviewsInput {
-  set: [String!]
-}
-
 input CoursePageCreatestudentsInput {
   set: [ID!]
 }
@@ -3589,7 +3589,7 @@ input CoursePageCreateWithoutApplicationsInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3628,7 +3628,7 @@ input CoursePageCreateWithoutArticlesInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3667,7 +3667,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3706,7 +3706,7 @@ input CoursePageCreateWithoutCompanyInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3745,7 +3745,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3784,7 +3784,7 @@ input CoursePageCreateWithoutLessonsInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3823,7 +3823,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3862,7 +3862,7 @@ input CoursePageCreateWithoutOrdersInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3901,7 +3901,7 @@ input CoursePageCreateWithoutPointATestsInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3940,7 +3940,7 @@ input CoursePageCreateWithoutPointsAInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -3979,7 +3979,7 @@ input CoursePageCreateWithoutUniInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -4018,7 +4018,7 @@ input CoursePageCreateWithoutUserInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -4057,7 +4057,7 @@ input CoursePageCreateWithoutVisitsInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageCreatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageCreateManyInput
@@ -4103,6 +4103,8 @@ enum CoursePageOrderByInput {
   methods_DESC
   batch_ASC
   batch_DESC
+  reviews_ASC
+  reviews_DESC
   openLesson_ASC
   openLesson_DESC
   video_ASC
@@ -4134,7 +4136,7 @@ type CoursePagePreviousValues {
   tariffs: String
   methods: String
   batch: String
-  reviews: [String!]!
+  reviews: Json
   openLesson: ID
   video: String
   createdAt: DateTime!
@@ -4440,7 +4442,7 @@ input CoursePageUpdateDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4479,7 +4481,7 @@ input CoursePageUpdateInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4505,7 +4507,7 @@ input CoursePageUpdateManyDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
 }
@@ -4542,7 +4544,7 @@ input CoursePageUpdateManyMutationInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
 }
@@ -4679,10 +4681,6 @@ input CoursePageUpdatepromocodeInput {
   set: [Json!]
 }
 
-input CoursePageUpdatereviewsInput {
-  set: [String!]
-}
-
 input CoursePageUpdatestudentsInput {
   set: [ID!]
 }
@@ -4723,7 +4721,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4761,7 +4759,7 @@ input CoursePageUpdateWithoutArticlesDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4799,7 +4797,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4837,7 +4835,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4875,7 +4873,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4913,7 +4911,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4951,7 +4949,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -4989,7 +4987,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -5027,7 +5025,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -5065,7 +5063,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -5103,7 +5101,7 @@ input CoursePageUpdateWithoutUniDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -5141,7 +5139,7 @@ input CoursePageUpdateWithoutUserDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -5179,7 +5177,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   tariffs: String
   methods: String
   batch: String
-  reviews: CoursePageUpdatereviewsInput
+  reviews: Json
   openLesson: ID
   video: String
   package: CoursePageUpdateManyInput
@@ -8702,6 +8700,7 @@ type Lesson {
   examResults(where: ExamResultWhereInput, orderBy: ExamResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamResult!]
   documents(where: DocumentWhereInput, orderBy: DocumentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Document!]
   documentResults(where: DocumentResultWhereInput, orderBy: DocumentResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DocumentResult!]
+  change: String
   challenge_num: Int
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -8749,6 +8748,7 @@ input LessonCreateInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -8911,6 +8911,7 @@ input LessonCreateWithoutChallengeResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -8949,6 +8950,7 @@ input LessonCreateWithoutConstructionResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -8987,6 +8989,7 @@ input LessonCreateWithoutConstructionsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9025,6 +9028,7 @@ input LessonCreateWithoutCoursePageInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9063,6 +9067,7 @@ input LessonCreateWithoutDocumentResultsInput {
   exams: ExamCreateManyWithoutLessonInput
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9101,6 +9106,7 @@ input LessonCreateWithoutDocumentsInput {
   exams: ExamCreateManyWithoutLessonInput
   examResults: ExamResultCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9139,6 +9145,7 @@ input LessonCreateWithoutExamResultsInput {
   exams: ExamCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9177,6 +9184,7 @@ input LessonCreateWithoutExamsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9215,6 +9223,7 @@ input LessonCreateWithoutForumInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9253,6 +9262,7 @@ input LessonCreateWithoutLessonFeedbackInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9291,6 +9301,7 @@ input LessonCreateWithoutLessonResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9329,6 +9340,7 @@ input LessonCreateWithoutNewTestsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9367,6 +9379,7 @@ input LessonCreateWithoutNotesInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9405,6 +9418,7 @@ input LessonCreateWithoutProblemResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9443,6 +9457,7 @@ input LessonCreateWithoutProblemsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9481,6 +9496,7 @@ input LessonCreateWithoutQuizesInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9519,6 +9535,7 @@ input LessonCreateWithoutQuizResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9557,6 +9574,7 @@ input LessonCreateWithoutShotResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9595,6 +9613,7 @@ input LessonCreateWithoutShotsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9633,6 +9652,7 @@ input LessonCreateWithoutTestResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9671,6 +9691,7 @@ input LessonCreateWithoutTestsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9709,6 +9730,7 @@ input LessonCreateWithoutTextEditorResultsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9747,6 +9769,7 @@ input LessonCreateWithoutTexteditorsInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9785,6 +9808,7 @@ input LessonCreateWithoutUserInput {
   examResults: ExamResultCreateManyWithoutLessonInput
   documents: DocumentCreateManyWithoutLessonInput
   documentResults: DocumentResultCreateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -9814,6 +9838,8 @@ enum LessonOrderByInput {
   published_DESC
   description_ASC
   description_DESC
+  change_ASC
+  change_DESC
   challenge_num_ASC
   challenge_num_DESC
   createdAt_ASC
@@ -9834,6 +9860,7 @@ type LessonPreviousValues {
   coursePageID: ID!
   published: Boolean
   description: String
+  change: String
   challenge_num: Int
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -10220,6 +10247,20 @@ input LessonScalarWhereInput {
   description_not_starts_with: String
   description_ends_with: String
   description_not_ends_with: String
+  change: String
+  change_not: String
+  change_in: [String!]
+  change_not_in: [String!]
+  change_lt: String
+  change_lte: String
+  change_gt: String
+  change_gte: String
+  change_contains: String
+  change_not_contains: String
+  change_starts_with: String
+  change_not_starts_with: String
+  change_ends_with: String
+  change_not_ends_with: String
   challenge_num: Int
   challenge_num_not: Int
   challenge_num_in: [Int!]
@@ -10302,6 +10343,7 @@ input LessonUpdateInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10316,6 +10358,7 @@ input LessonUpdateManyDataInput {
   coursePageID: ID
   published: Boolean
   description: String
+  change: String
   challenge_num: Int
 }
 
@@ -10330,6 +10373,7 @@ input LessonUpdateManyMutationInput {
   coursePageID: ID
   published: Boolean
   description: String
+  change: String
   challenge_num: Int
 }
 
@@ -10584,6 +10628,7 @@ input LessonUpdateWithoutChallengeResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10621,6 +10666,7 @@ input LessonUpdateWithoutConstructionResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10658,6 +10704,7 @@ input LessonUpdateWithoutConstructionsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10695,6 +10742,7 @@ input LessonUpdateWithoutCoursePageDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10732,6 +10780,7 @@ input LessonUpdateWithoutDocumentResultsDataInput {
   exams: ExamUpdateManyWithoutLessonInput
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10769,6 +10818,7 @@ input LessonUpdateWithoutDocumentsDataInput {
   exams: ExamUpdateManyWithoutLessonInput
   examResults: ExamResultUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10806,6 +10856,7 @@ input LessonUpdateWithoutExamResultsDataInput {
   exams: ExamUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10843,6 +10894,7 @@ input LessonUpdateWithoutExamsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10880,6 +10932,7 @@ input LessonUpdateWithoutForumDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10917,6 +10970,7 @@ input LessonUpdateWithoutLessonFeedbackDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10954,6 +11008,7 @@ input LessonUpdateWithoutLessonResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -10991,6 +11046,7 @@ input LessonUpdateWithoutNewTestsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11028,6 +11084,7 @@ input LessonUpdateWithoutNotesDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11065,6 +11122,7 @@ input LessonUpdateWithoutProblemResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11102,6 +11160,7 @@ input LessonUpdateWithoutProblemsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11139,6 +11198,7 @@ input LessonUpdateWithoutQuizesDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11176,6 +11236,7 @@ input LessonUpdateWithoutQuizResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11213,6 +11274,7 @@ input LessonUpdateWithoutShotResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11250,6 +11312,7 @@ input LessonUpdateWithoutShotsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11287,6 +11350,7 @@ input LessonUpdateWithoutTestResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11324,6 +11388,7 @@ input LessonUpdateWithoutTestsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11361,6 +11426,7 @@ input LessonUpdateWithoutTextEditorResultsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11398,6 +11464,7 @@ input LessonUpdateWithoutTexteditorsDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11435,6 +11502,7 @@ input LessonUpdateWithoutUserDataInput {
   examResults: ExamResultUpdateManyWithoutLessonInput
   documents: DocumentUpdateManyWithoutLessonInput
   documentResults: DocumentResultUpdateManyWithoutLessonInput
+  change: String
   challenge_num: Int
 }
 
@@ -11723,6 +11791,20 @@ input LessonWhereInput {
   documentResults_every: DocumentResultWhereInput
   documentResults_some: DocumentResultWhereInput
   documentResults_none: DocumentResultWhereInput
+  change: String
+  change_not: String
+  change_in: [String!]
+  change_not_in: [String!]
+  change_lt: String
+  change_lte: String
+  change_gt: String
+  change_gte: String
+  change_contains: String
+  change_not_contains: String
+  change_starts_with: String
+  change_not_starts_with: String
+  change_ends_with: String
+  change_not_ends_with: String
   challenge_num: Int
   challenge_num_not: Int
   challenge_num_in: [Int!]
@@ -12028,6 +12110,12 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createUserLevel(data: UserLevelCreateInput!): UserLevel!
+  updateUserLevel(data: UserLevelUpdateInput!, where: UserLevelWhereUniqueInput!): UserLevel
+  updateManyUserLevels(data: UserLevelUpdateManyMutationInput!, where: UserLevelWhereInput): BatchPayload!
+  upsertUserLevel(where: UserLevelWhereUniqueInput!, create: UserLevelCreateInput!, update: UserLevelUpdateInput!): UserLevel!
+  deleteUserLevel(where: UserLevelWhereUniqueInput!): UserLevel
+  deleteManyUserLevels(where: UserLevelWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -15405,6 +15493,9 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  userLevel(where: UserLevelWhereUniqueInput!): UserLevel
+  userLevels(where: UserLevelWhereInput, orderBy: UserLevelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserLevel]!
+  userLevelsConnection(where: UserLevelWhereInput, orderBy: UserLevelOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserLevelConnection!
   node(id: ID!): Node
 }
 
@@ -15544,6 +15635,7 @@ type QuizResult {
   student: User!
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: Quiz
   lesson: Lesson
   lessonID: ID
@@ -15562,6 +15654,7 @@ input QuizResultCreateInput {
   student: UserCreateOneWithoutQuizResultsInput!
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: QuizCreateOneWithoutQuizResultsInput
   lesson: LessonCreateOneWithoutQuizResultsInput
   lessonID: ID
@@ -15587,6 +15680,7 @@ input QuizResultCreateWithoutLessonInput {
   student: UserCreateOneWithoutQuizResultsInput!
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: QuizCreateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -15596,6 +15690,7 @@ input QuizResultCreateWithoutQuizInput {
   student: UserCreateOneWithoutQuizResultsInput!
   answer: String
   attempts: Int
+  correct: Boolean
   lesson: LessonCreateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -15604,6 +15699,7 @@ input QuizResultCreateWithoutStudentInput {
   id: ID
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: QuizCreateOneWithoutQuizResultsInput
   lesson: LessonCreateOneWithoutQuizResultsInput
   lessonID: ID
@@ -15621,6 +15717,8 @@ enum QuizResultOrderByInput {
   answer_DESC
   attempts_ASC
   attempts_DESC
+  correct_ASC
+  correct_DESC
   lessonID_ASC
   lessonID_DESC
   createdAt_ASC
@@ -15633,6 +15731,7 @@ type QuizResultPreviousValues {
   id: ID!
   answer: String
   attempts: Int
+  correct: Boolean
   lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -15675,6 +15774,8 @@ input QuizResultScalarWhereInput {
   attempts_lte: Int
   attempts_gt: Int
   attempts_gte: Int
+  correct: Boolean
+  correct_not: Boolean
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]
@@ -15732,6 +15833,7 @@ input QuizResultUpdateInput {
   student: UserUpdateOneRequiredWithoutQuizResultsInput
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: QuizUpdateOneWithoutQuizResultsInput
   lesson: LessonUpdateOneWithoutQuizResultsInput
   lessonID: ID
@@ -15740,12 +15842,14 @@ input QuizResultUpdateInput {
 input QuizResultUpdateManyDataInput {
   answer: String
   attempts: Int
+  correct: Boolean
   lessonID: ID
 }
 
 input QuizResultUpdateManyMutationInput {
   answer: String
   attempts: Int
+  correct: Boolean
   lessonID: ID
 }
 
@@ -15794,6 +15898,7 @@ input QuizResultUpdateWithoutLessonDataInput {
   student: UserUpdateOneRequiredWithoutQuizResultsInput
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: QuizUpdateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -15802,6 +15907,7 @@ input QuizResultUpdateWithoutQuizDataInput {
   student: UserUpdateOneRequiredWithoutQuizResultsInput
   answer: String
   attempts: Int
+  correct: Boolean
   lesson: LessonUpdateOneWithoutQuizResultsInput
   lessonID: ID
 }
@@ -15809,6 +15915,7 @@ input QuizResultUpdateWithoutQuizDataInput {
 input QuizResultUpdateWithoutStudentDataInput {
   answer: String
   attempts: Int
+  correct: Boolean
   quiz: QuizUpdateOneWithoutQuizResultsInput
   lesson: LessonUpdateOneWithoutQuizResultsInput
   lessonID: ID
@@ -15885,6 +15992,8 @@ input QuizResultWhereInput {
   attempts_lte: Int
   attempts_gt: Int
   attempts_gte: Int
+  correct: Boolean
+  correct_not: Boolean
   quiz: QuizWhereInput
   lesson: LessonWhereInput
   lessonID: ID
@@ -18792,6 +18901,7 @@ type Subscription {
   textEditorResult(where: TextEditorResultSubscriptionWhereInput): TextEditorResultSubscriptionPayload
   uni(where: UniSubscriptionWhereInput): UniSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  userLevel(where: UserLevelSubscriptionWhereInput): UserLevelSubscriptionPayload
 }
 
 enum TaskType {
@@ -19968,6 +20078,7 @@ type TextEditorResult {
   wrong: String!
   correct: String!
   guess: String!
+  result: Boolean
   lesson: Lesson
   textEditor: TextEditor
   createdAt: DateTime!
@@ -19987,6 +20098,7 @@ input TextEditorResultCreateInput {
   wrong: String!
   correct: String!
   guess: String!
+  result: Boolean
   lesson: LessonCreateOneWithoutTextEditorResultsInput
   textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
 }
@@ -20013,6 +20125,7 @@ input TextEditorResultCreateWithoutLessonInput {
   wrong: String!
   correct: String!
   guess: String!
+  result: Boolean
   textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
 }
 
@@ -20022,6 +20135,7 @@ input TextEditorResultCreateWithoutStudentInput {
   wrong: String!
   correct: String!
   guess: String!
+  result: Boolean
   lesson: LessonCreateOneWithoutTextEditorResultsInput
   textEditor: TextEditorCreateOneWithoutTextEditorResultsInput
 }
@@ -20033,6 +20147,7 @@ input TextEditorResultCreateWithoutTextEditorInput {
   wrong: String!
   correct: String!
   guess: String!
+  result: Boolean
   lesson: LessonCreateOneWithoutTextEditorResultsInput
 }
 
@@ -20052,6 +20167,8 @@ enum TextEditorResultOrderByInput {
   correct_DESC
   guess_ASC
   guess_DESC
+  result_ASC
+  result_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -20064,6 +20181,7 @@ type TextEditorResultPreviousValues {
   wrong: String!
   correct: String!
   guess: String!
+  result: Boolean
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -20133,6 +20251,8 @@ input TextEditorResultScalarWhereInput {
   guess_not_starts_with: String
   guess_ends_with: String
   guess_not_ends_with: String
+  result: Boolean
+  result_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -20178,6 +20298,7 @@ input TextEditorResultUpdateInput {
   wrong: String
   correct: String
   guess: String
+  result: Boolean
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
   textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
 }
@@ -20187,6 +20308,7 @@ input TextEditorResultUpdateManyDataInput {
   wrong: String
   correct: String
   guess: String
+  result: Boolean
 }
 
 input TextEditorResultUpdateManyMutationInput {
@@ -20194,6 +20316,7 @@ input TextEditorResultUpdateManyMutationInput {
   wrong: String
   correct: String
   guess: String
+  result: Boolean
 }
 
 input TextEditorResultUpdateManyWithoutLessonInput {
@@ -20243,6 +20366,7 @@ input TextEditorResultUpdateWithoutLessonDataInput {
   wrong: String
   correct: String
   guess: String
+  result: Boolean
   textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
 }
 
@@ -20251,6 +20375,7 @@ input TextEditorResultUpdateWithoutStudentDataInput {
   wrong: String
   correct: String
   guess: String
+  result: Boolean
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
   textEditor: TextEditorUpdateOneWithoutTextEditorResultsInput
 }
@@ -20261,6 +20386,7 @@ input TextEditorResultUpdateWithoutTextEditorDataInput {
   wrong: String
   correct: String
   guess: String
+  result: Boolean
   lesson: LessonUpdateOneWithoutTextEditorResultsInput
 }
 
@@ -20363,6 +20489,8 @@ input TextEditorResultWhereInput {
   guess_not_starts_with: String
   guess_ends_with: String
   guess_not_ends_with: String
+  result: Boolean
+  result_not: Boolean
   lesson: LessonWhereInput
   textEditor: TextEditorWhereInput
   createdAt: DateTime
@@ -21004,6 +21132,7 @@ type User {
   documentResults(where: DocumentResultWhereInput, orderBy: DocumentResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [DocumentResult!]
   clauses(where: ClauseWhereInput, orderBy: ClauseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Clause!]
   challengeResults(where: ChallengeResultWhereInput, orderBy: ChallengeResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeResult!]
+  level: UserLevel
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -21080,6 +21209,7 @@ input UserCreateInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateManyWithoutCompanyInput {
@@ -21179,6 +21309,11 @@ input UserCreateOneWithoutLessonResultsInput {
 
 input UserCreateOneWithoutLessonsInput {
   create: UserCreateWithoutLessonsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutLevelInput {
+  create: UserCreateWithoutLevelInput
   connect: UserWhereUniqueInput
 }
 
@@ -21360,6 +21495,7 @@ input UserCreateWithoutArticlesInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutCareerTrackInput {
@@ -21423,6 +21559,7 @@ input UserCreateWithoutCareerTrackInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutChallengeResultsInput {
@@ -21486,6 +21623,7 @@ input UserCreateWithoutChallengeResultsInput {
   documents: DocumentCreateManyWithoutUserInput
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutClausesInput {
@@ -21549,6 +21687,7 @@ input UserCreateWithoutClausesInput {
   documents: DocumentCreateManyWithoutUserInput
   documentResults: DocumentResultCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutCompanyInput {
@@ -21612,6 +21751,7 @@ input UserCreateWithoutCompanyInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutConstructionInput {
@@ -21675,6 +21815,7 @@ input UserCreateWithoutConstructionInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutConstructionResultsInput {
@@ -21738,6 +21879,7 @@ input UserCreateWithoutConstructionResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutCoursePagesInput {
@@ -21801,6 +21943,7 @@ input UserCreateWithoutCoursePagesInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutCourseVisitsInput {
@@ -21864,6 +22007,7 @@ input UserCreateWithoutCourseVisitsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutDocumentResultsInput {
@@ -21927,6 +22071,7 @@ input UserCreateWithoutDocumentResultsInput {
   documents: DocumentCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutDocumentsInput {
@@ -21990,6 +22135,7 @@ input UserCreateWithoutDocumentsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutExamAnswersInput {
@@ -22053,6 +22199,7 @@ input UserCreateWithoutExamAnswersInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutExamResultsInput {
@@ -22116,6 +22263,7 @@ input UserCreateWithoutExamResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutExamsInput {
@@ -22179,6 +22327,7 @@ input UserCreateWithoutExamsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutForumsInput {
@@ -22242,6 +22391,7 @@ input UserCreateWithoutForumsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutLegalPortfolioInput {
@@ -22305,6 +22455,7 @@ input UserCreateWithoutLegalPortfolioInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutLessonResultsInput {
@@ -22368,6 +22519,7 @@ input UserCreateWithoutLessonResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutLessonsInput {
@@ -22398,6 +22550,71 @@ input UserCreateWithoutLessonsInput {
   coursePages: CoursePageCreateManyWithoutUserInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  pointATests: PointATestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
+  statements: StatementCreateManyWithoutUserInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+  examResults: ExamResultCreateManyWithoutUserInput
+  exams: ExamCreateManyWithoutUserInput
+  documents: DocumentCreateManyWithoutUserInput
+  documentResults: DocumentResultCreateManyWithoutUserInput
+  clauses: ClauseCreateManyWithoutUserInput
+  challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
+}
+
+input UserCreateWithoutLevelInput {
+  id: ID
+  name: String!
+  surname: String
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserCreatesandboxesInput
+  new_sandboxes: SandboxCreateManyInput
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
   newTests: NewTestCreateManyWithoutUserInput
   quizes: QuizCreateManyWithoutUserInput
@@ -22494,6 +22711,7 @@ input UserCreateWithoutNew_subjectsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutNewTestsInput {
@@ -22557,6 +22775,7 @@ input UserCreateWithoutNewTestsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutNotesInput {
@@ -22620,6 +22839,7 @@ input UserCreateWithoutNotesInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutOrdersInput {
@@ -22683,6 +22903,7 @@ input UserCreateWithoutOrdersInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutPointATestsInput {
@@ -22746,6 +22967,7 @@ input UserCreateWithoutPointATestsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutPointsAInput {
@@ -22809,6 +23031,7 @@ input UserCreateWithoutPointsAInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutProblemResultsInput {
@@ -22872,6 +23095,7 @@ input UserCreateWithoutProblemResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutProblemsInput {
@@ -22935,6 +23159,7 @@ input UserCreateWithoutProblemsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutQuizesInput {
@@ -22998,6 +23223,7 @@ input UserCreateWithoutQuizesInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutQuizResultsInput {
@@ -23061,6 +23287,7 @@ input UserCreateWithoutQuizResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutRatingsInput {
@@ -23124,6 +23351,7 @@ input UserCreateWithoutRatingsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutSandboxPageGoalsInput {
@@ -23187,6 +23415,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -23250,6 +23479,7 @@ input UserCreateWithoutSandboxPagesInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutShotResultsInput {
@@ -23313,6 +23543,7 @@ input UserCreateWithoutShotResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutShotsInput {
@@ -23376,6 +23607,7 @@ input UserCreateWithoutShotsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutStatementsInput {
@@ -23439,6 +23671,7 @@ input UserCreateWithoutStatementsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutStudentFeedbackInput {
@@ -23502,6 +23735,7 @@ input UserCreateWithoutStudentFeedbackInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutTeacherFeedbackInput {
@@ -23565,6 +23799,7 @@ input UserCreateWithoutTeacherFeedbackInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutTestResultsInput {
@@ -23628,6 +23863,7 @@ input UserCreateWithoutTestResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -23691,6 +23927,7 @@ input UserCreateWithoutTestsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutTextEditorInput {
@@ -23754,6 +23991,7 @@ input UserCreateWithoutTextEditorInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutTextEditorResultsInput {
@@ -23817,6 +24055,7 @@ input UserCreateWithoutTextEditorResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 input UserCreateWithoutUniInput {
@@ -23880,11 +24119,159 @@ input UserCreateWithoutUniInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
 }
 
 type UserEdge {
   node: User!
   cursor: String!
+}
+
+type UserLevel {
+  id: ID!
+  level: Float
+  user: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UserLevelConnection {
+  pageInfo: PageInfo!
+  edges: [UserLevelEdge]!
+  aggregate: AggregateUserLevel!
+}
+
+input UserLevelCreateInput {
+  id: ID
+  level: Float
+  user: UserCreateOneWithoutLevelInput
+}
+
+input UserLevelCreateOneWithoutUserInput {
+  create: UserLevelCreateWithoutUserInput
+  connect: UserLevelWhereUniqueInput
+}
+
+input UserLevelCreateWithoutUserInput {
+  id: ID
+  level: Float
+}
+
+type UserLevelEdge {
+  node: UserLevel!
+  cursor: String!
+}
+
+enum UserLevelOrderByInput {
+  id_ASC
+  id_DESC
+  level_ASC
+  level_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type UserLevelPreviousValues {
+  id: ID!
+  level: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type UserLevelSubscriptionPayload {
+  mutation: MutationType!
+  node: UserLevel
+  updatedFields: [String!]
+  previousValues: UserLevelPreviousValues
+}
+
+input UserLevelSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserLevelWhereInput
+  AND: [UserLevelSubscriptionWhereInput!]
+  OR: [UserLevelSubscriptionWhereInput!]
+  NOT: [UserLevelSubscriptionWhereInput!]
+}
+
+input UserLevelUpdateInput {
+  level: Float
+  user: UserUpdateOneWithoutLevelInput
+}
+
+input UserLevelUpdateManyMutationInput {
+  level: Float
+}
+
+input UserLevelUpdateOneWithoutUserInput {
+  create: UserLevelCreateWithoutUserInput
+  update: UserLevelUpdateWithoutUserDataInput
+  upsert: UserLevelUpsertWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserLevelWhereUniqueInput
+}
+
+input UserLevelUpdateWithoutUserDataInput {
+  level: Float
+}
+
+input UserLevelUpsertWithoutUserInput {
+  update: UserLevelUpdateWithoutUserDataInput!
+  create: UserLevelCreateWithoutUserInput!
+}
+
+input UserLevelWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  level: Float
+  level_not: Float
+  level_in: [Float!]
+  level_not_in: [Float!]
+  level_lt: Float
+  level_lte: Float
+  level_gt: Float
+  level_gte: Float
+  user: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [UserLevelWhereInput!]
+  OR: [UserLevelWhereInput!]
+  NOT: [UserLevelWhereInput!]
+}
+
+input UserLevelWhereUniqueInput {
+  id: ID
 }
 
 enum UserOrderByInput {
@@ -24235,6 +24622,7 @@ input UserUpdateInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateManyDataInput {
@@ -24573,6 +24961,15 @@ input UserUpdateOneWithoutForumsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneWithoutLevelInput {
+  create: UserCreateWithoutLevelInput
+  update: UserUpdateWithoutLevelDataInput
+  upsert: UserUpsertWithoutLevelInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateOneWithoutNotesInput {
   create: UserCreateWithoutNotesInput
   update: UserUpdateWithoutNotesDataInput
@@ -24672,6 +25069,7 @@ input UserUpdateWithoutArticlesDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutCareerTrackDataInput {
@@ -24734,6 +25132,7 @@ input UserUpdateWithoutCareerTrackDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutChallengeResultsDataInput {
@@ -24796,6 +25195,7 @@ input UserUpdateWithoutChallengeResultsDataInput {
   documents: DocumentUpdateManyWithoutUserInput
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutClausesDataInput {
@@ -24858,6 +25258,7 @@ input UserUpdateWithoutClausesDataInput {
   documents: DocumentUpdateManyWithoutUserInput
   documentResults: DocumentResultUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutCompanyDataInput {
@@ -24920,6 +25321,7 @@ input UserUpdateWithoutCompanyDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutConstructionDataInput {
@@ -24982,6 +25384,7 @@ input UserUpdateWithoutConstructionDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutConstructionResultsDataInput {
@@ -25044,6 +25447,7 @@ input UserUpdateWithoutConstructionResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutCoursePagesDataInput {
@@ -25106,6 +25510,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutCourseVisitsDataInput {
@@ -25168,6 +25573,7 @@ input UserUpdateWithoutCourseVisitsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutDocumentResultsDataInput {
@@ -25230,6 +25636,7 @@ input UserUpdateWithoutDocumentResultsDataInput {
   documents: DocumentUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutDocumentsDataInput {
@@ -25292,6 +25699,7 @@ input UserUpdateWithoutDocumentsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutExamAnswersDataInput {
@@ -25354,6 +25762,7 @@ input UserUpdateWithoutExamAnswersDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutExamResultsDataInput {
@@ -25416,6 +25825,7 @@ input UserUpdateWithoutExamResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutExamsDataInput {
@@ -25478,6 +25888,7 @@ input UserUpdateWithoutExamsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutForumsDataInput {
@@ -25540,6 +25951,7 @@ input UserUpdateWithoutForumsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutLegalPortfolioDataInput {
@@ -25602,6 +26014,7 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutLessonResultsDataInput {
@@ -25664,6 +26077,7 @@ input UserUpdateWithoutLessonResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutLessonsDataInput {
@@ -25693,6 +26107,70 @@ input UserUpdateWithoutLessonsDataInput {
   coursePages: CoursePageUpdateManyWithoutUserInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  pointATests: PointATestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  articles: ArticleUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
+  statements: StatementUpdateManyWithoutUserInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+  examResults: ExamResultUpdateManyWithoutUserInput
+  exams: ExamUpdateManyWithoutUserInput
+  documents: DocumentUpdateManyWithoutUserInput
+  documentResults: DocumentResultUpdateManyWithoutUserInput
+  clauses: ClauseUpdateManyWithoutUserInput
+  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
+}
+
+input UserUpdateWithoutLevelDataInput {
+  name: String
+  surname: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserUpdatesandboxesInput
+  new_sandboxes: SandboxUpdateManyInput
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
   newTests: NewTestUpdateManyWithoutUserInput
   quizes: QuizUpdateManyWithoutUserInput
@@ -25788,6 +26266,7 @@ input UserUpdateWithoutNew_subjectsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutNewTestsDataInput {
@@ -25850,6 +26329,7 @@ input UserUpdateWithoutNewTestsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutNotesDataInput {
@@ -25912,6 +26392,7 @@ input UserUpdateWithoutNotesDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutOrdersDataInput {
@@ -25974,6 +26455,7 @@ input UserUpdateWithoutOrdersDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutPointATestsDataInput {
@@ -26036,6 +26518,7 @@ input UserUpdateWithoutPointATestsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutPointsADataInput {
@@ -26098,6 +26581,7 @@ input UserUpdateWithoutPointsADataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutProblemResultsDataInput {
@@ -26160,6 +26644,7 @@ input UserUpdateWithoutProblemResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutProblemsDataInput {
@@ -26222,6 +26707,7 @@ input UserUpdateWithoutProblemsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutQuizesDataInput {
@@ -26284,6 +26770,7 @@ input UserUpdateWithoutQuizesDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutQuizResultsDataInput {
@@ -26346,6 +26833,7 @@ input UserUpdateWithoutQuizResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutRatingsDataInput {
@@ -26408,6 +26896,7 @@ input UserUpdateWithoutRatingsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutSandboxPageGoalsDataInput {
@@ -26470,6 +26959,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -26532,6 +27022,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutShotResultsDataInput {
@@ -26594,6 +27085,7 @@ input UserUpdateWithoutShotResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutShotsDataInput {
@@ -26656,6 +27148,7 @@ input UserUpdateWithoutShotsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutStatementsDataInput {
@@ -26718,6 +27211,7 @@ input UserUpdateWithoutStatementsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutStudentFeedbackDataInput {
@@ -26780,6 +27274,7 @@ input UserUpdateWithoutStudentFeedbackDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutTeacherFeedbackDataInput {
@@ -26842,6 +27337,7 @@ input UserUpdateWithoutTeacherFeedbackDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutTestResultsDataInput {
@@ -26904,6 +27400,7 @@ input UserUpdateWithoutTestResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -26966,6 +27463,7 @@ input UserUpdateWithoutTestsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutTextEditorDataInput {
@@ -27028,6 +27526,7 @@ input UserUpdateWithoutTextEditorDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutTextEditorResultsDataInput {
@@ -27090,6 +27589,7 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithoutUniDataInput {
@@ -27152,6 +27652,7 @@ input UserUpdateWithoutUniDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
 }
 
 input UserUpdateWithWhereUniqueWithoutCompanyInput {
@@ -27252,6 +27753,11 @@ input UserUpsertWithoutLessonResultsInput {
 input UserUpsertWithoutLessonsInput {
   update: UserUpdateWithoutLessonsDataInput!
   create: UserCreateWithoutLessonsInput!
+}
+
+input UserUpsertWithoutLevelInput {
+  update: UserUpdateWithoutLevelDataInput!
+  create: UserCreateWithoutLevelInput!
 }
 
 input UserUpsertWithoutNewTestsInput {
@@ -27678,6 +28184,7 @@ input UserWhereInput {
   challengeResults_every: ChallengeResultWhereInput
   challengeResults_some: ChallengeResultWhereInput
   challengeResults_none: ChallengeResultWhereInput
+  level: UserLevelWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

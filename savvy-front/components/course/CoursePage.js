@@ -67,12 +67,43 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         user {
           id
         }
+        forum {
+          id
+          rating {
+            id
+            rating
+          }
+        }
         lessonResults {
           id
           visitsNumber
           lessonID
           student {
             id
+          }
+        }
+        newTests {
+          testResults {
+            id
+            student {
+              id
+            }
+          }
+        }
+        quizes {
+          quizResults {
+            id
+            student {
+              id
+            }
+          }
+        }
+        problems {
+          problemResults {
+            id
+            student {
+              id
+            }
           }
         }
       }
@@ -174,11 +205,15 @@ const Data = styled.div`
     padding-top: 4%;
     padding-bottom: 4%;
   }
+  .rating {
+    padding-bottom: 4%;
+    font-size: 1.6rem;
+  }
   .track2 {
     font-size: 1.6rem;
     line-height: 1.4;
     padding-top: 0%;
-    padding-bottom: 4%;
+    padding-bottom: 2%;
   }
   .trackName {
     font-weight: 600;
@@ -425,9 +460,23 @@ class CoursePage extends Component {
                         let lessonsList = [];
                         coursePage.lessons.map((l) => lessonsList.push(l.id));
 
-                        const openLesson = coursePage.lessons.filter(
-                          (c) => c.open === true
-                        )[0];
+                        let forums = [];
+                        let ratings = [];
+                        let average;
+                        if (coursePage && coursePage.lessons) {
+                          coursePage.lessons.map((l) =>
+                            forums.push(l.forum ? [...l.forum.rating] : null)
+                          );
+                          forums = forums
+                            .filter((f) => f !== null)
+                            .filter((f) => f.length !== 0);
+                          forums.map((f) =>
+                            f.map((r) => ratings.push(r.rating))
+                          );
+                          average = (
+                            ratings.reduce((a, b) => a + b, 0) / ratings.length
+                          ).toFixed(2);
+                        }
                         return (
                           <>
                             <Container>
@@ -443,6 +492,11 @@ class CoursePage extends Component {
                                     <p className="track2">
                                       {coursePage.description}
                                     </p>
+                                    {average >= 0 ? (
+                                      <div className="rating">
+                                        Оценка курса учениками: <b>{average}</b>
+                                      </div>
+                                    ) : null}
                                     <p className="name">
                                       {coursePage.user &&
                                       coursePage.user.surname
@@ -721,11 +775,18 @@ class CoursePage extends Component {
                                       subjectArray={subjectArray}
                                     />
                                   )}
-                                {data.coursePage.reviews.length > 0 && (
+                                {coursePage.reviews && (
                                   <Reviews>
-                                    {data.coursePage.reviews.map((post) =>
-                                      renderHTML(post)
-                                    )}
+                                    {coursePage.reviews.map((post) => (
+                                      <div>
+                                        <a
+                                          href={post.comment_src}
+                                          target="_blank"
+                                        >
+                                          <img src={post.img_src} />
+                                        </a>
+                                      </div>
+                                    ))}
                                   </Reviews>
                                 )}
                               </LessonStyles>

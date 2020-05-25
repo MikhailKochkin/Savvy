@@ -93,42 +93,116 @@ import dynamic from "next/dynamic";
 
 // export default paidApplications;
 
-const FOR_MONEY_COURSE_PAGES_QUERY = gql`
-  query FOR_MONEY_COURSE_PAGES_QUERY(
-    $type: CourseType!
-    $boolean: Boolean = true
-  ) {
-    coursePages(where: { courseType: $type, published: $boolean }) {
+const CP_QUERY = gql`
+  query CP_QUERY {
+    users {
       id
-      title
+      name
     }
   }
 `;
 
-const DynamicComponent = dynamic(import("../components/ActiveUsers"), {
-  ssr: false,
-});
+const UL_MUTATION = gql`
+  mutation UL_MUTATION($id: ID!, $level: Int) {
+    createUserLevel(user: $id, level: $level) {
+      id
+    }
+  }
+`;
 
-const PaidApplicationsPage = () => (
-  <>
-    <DynamicComponent />
-    <Query
-      query={FOR_MONEY_COURSE_PAGES_QUERY}
-      returnPartialData={true}
-      fetchPolicy="cache-first"
-      variables={{
-        type: "FORMONEY",
-      }}
-    >
-      {({ data, loading, error }) => {
-        if (loading) return <p>Загрузка...</p>;
-        if (error) return <p>Error: {error.message}</p>;
-        return data.coursePages.map((coursePage) => (
-          <PaidApplications id={coursePage.id} title={coursePage.title} />
-        ));
-      }}
-    </Query>
-  </>
-);
+const paidApplications = () => {
+  return (
+    <div>
+      <button onClick={(e) => update()}>Click</button>
+      <Query
+        query={CP_QUERY}
+        // variables={{
+        //   id: "ck1szsvx101la0763o02vwv94",
+        // }}
+      >
+        {({ data, loading, fetchMore }) => {
+          if (loading) return "...";
+          console.log(data.users);
+          return (
+            <>
+              <p>sddfsdf</p>
+              {data.users.map((u, i) => (
+                <>
+                  <li>
+                    {u.id},{u.name}, {i + 1}
+                  </li>
+                  <Mutation
+                    mutation={UL_MUTATION}
+                    variables={{
+                      id: u.id,
+                      level: 1,
+                    }}
+                  >
+                    {(createUserLevel, { loading, error }) => (
+                      <>
+                        <>
+                          {" "}
+                          <button
+                            onClick={async (e) => {
+                              createUserLevel();
+                              console.log(u.name, " !");
+                            }}
+                          >
+                            {loading ? "Сохраняем..." : "Сохранить"}
+                          </button>
+                        </>
+                        <br />
+                      </>
+                    )}
+                  </Mutation>
+                </>
+              ))}
+            </>
+          );
+        }}
+      </Query>
+    </div>
+  );
+};
 
-export default PaidApplicationsPage;
+export default paidApplications;
+
+// const FOR_MONEY_COURSE_PAGES_QUERY = gql`
+//   query FOR_MONEY_COURSE_PAGES_QUERY(
+//     $type: CourseType!
+//     $boolean: Boolean = true
+//   ) {
+//     coursePages(where: { courseType: $type, published: $boolean }) {
+//       id
+//       title
+//     }
+//   }
+// `;
+
+// const DynamicComponent = dynamic(import("../components/ActiveUsers"), {
+//   ssr: false,
+// });
+
+// const PaidApplicationsPage = () => (
+//   <>
+//     <DynamicComponent />
+//     <Query
+//       query={FOR_MONEY_COURSE_PAGES_QUERY}
+//       returnPartialData={true}
+//       fetchPolicy="cache-first"
+//       variables={{
+//         type: "FORMONEY",
+//       }}
+//     >
+//       {({ data, loading, error }) => {
+//         if (loading) return <p>Загрузка...</p>;
+//         if (error) return <p>Error: {error.message}</p>;
+//         return data.coursePages.map((coursePage) => (
+//           <PaidApplications id={coursePage.id} title={coursePage.title} />
+//         ));
+//       }}
+//     </Query>
+//   </>
+// );
+
+// export default PaidApplicationsPage;

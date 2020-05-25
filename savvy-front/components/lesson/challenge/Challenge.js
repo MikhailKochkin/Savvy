@@ -67,6 +67,9 @@ const SINGLE_LESSON_QUERY = gql`
         student {
           id
         }
+        test {
+          id
+        }
         testID
         answer
         attempts
@@ -232,7 +235,6 @@ const Challenge = (props) => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
-              console.log(lesson.challenge_num);
               const all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
                 0,
                 lesson.challenge_num

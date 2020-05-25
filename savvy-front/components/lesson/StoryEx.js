@@ -66,6 +66,7 @@ class StoryEx extends Component {
       item = (
         <SingleQuiz
           key={el.id}
+          id={el.id}
           question={el.question}
           answer={el.answer}
           me={me}

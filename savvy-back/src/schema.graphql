@@ -59,6 +59,7 @@ type Mutation {
     type: Type
     open: Boolean
     challenge_num: Int
+    change: String
     map: [Json]
     structure: Json
   ): Lesson
@@ -108,6 +109,7 @@ type Mutation {
     answer: String
     attempts: Int
     lessonID: ID
+    correct: Boolean
     quiz: ID
   ): QuizResult!
   createProblemResult(
@@ -122,6 +124,7 @@ type Mutation {
     correct: String!
     guess: String!
     lesson: ID
+    result: Boolean
     textEditor: ID
   ): TextEditorResult!
   updateTextEditor(
@@ -333,6 +336,8 @@ type Mutation {
   updateRating(rating: Int, id: ID): Rating
   createStatement(text: String, forum: ID): Statement!
   deleteStatement(id: ID!): Statement!
+  createUserLevel(level: Int, user: ID): UserLevel!
+  updateUserLevel(id: ID, level: Int): UserLevel
 }
 
 type Query {
@@ -430,7 +435,7 @@ type Query {
   problemsConnection(where: ProblemWhereInput): ProblemConnection!
   me: User
   user(where: UserWhereUniqueInput!): User
-  users(where: UserWhereInput!): [User]!
+  users(where: UserWhereInput): [User]!
   order(where: OrderWhereUniqueInput!): Order
   orders(where: OrderWhereInput): [Order]!
   careerTrack(where: CareerTrackWhereUniqueInput!): CareerTrack
@@ -553,6 +558,7 @@ type User {
   uni: Uni
   uniID: ID
   company: Company
+  level: UserLevel
   testResults: [TestResult]
   quizResults: [QuizResult]
   problemResults: [ProblemResult]

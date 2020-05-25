@@ -373,15 +373,15 @@ const CaseCard = styled.div`
     /* height: 100%; */
   }
   .title {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     margin-bottom: 20px;
   }
   .name {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     margin-bottom: 5px;
   }
   .company {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     display: inline-block;
   }
   @media (max-width: 800px) {
@@ -430,6 +430,15 @@ const Box = styled.div`
       justify-content: center;
       margin-left: 10px;
     }
+    .rating {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      .num {
+        margin-left: 15px;
+      }
+    }
   }
   button {
     background: #00c3ff;
@@ -471,6 +480,19 @@ export default class Course extends Component {
 
   render() {
     const { coursePage, id, me } = this.props;
+    let forums = [];
+    let ratings = [];
+    let average;
+    if (coursePage && coursePage.lessons) {
+      coursePage.lessons.map((l) =>
+        forums.push(l.forum ? [...l.forum.rating] : null)
+      );
+      forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
+      forums.map((f) => f.map((r) => ratings.push(r.rating)));
+      average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
+        2
+      );
+    }
     return (
       <CaseCard>
         <img src={coursePage.image} />
@@ -491,6 +513,12 @@ export default class Course extends Component {
                   </div>
                 </div>
               </div>
+              {average >= 0 ? (
+                <div className="rating">
+                  <div>Оценка курса: </div>
+                  <div className="num">{average}</div>
+                </div>
+              ) : null}
             </div>
             <div>
               {!me && (

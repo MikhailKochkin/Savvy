@@ -200,6 +200,7 @@ const Tasks = (props) => {
         true={task.correct}
         user={task.user.id}
         type={task.type}
+        test={task}
         me={props.me}
         userData={props.lesson.testResults}
         lessonID={props.lesson.id}
@@ -214,6 +215,7 @@ const Tasks = (props) => {
     item = (
       <SingleQuiz
         key={task.id}
+        id={task.id}
         question={task.question}
         answer={task.answer}
         me={props.me}

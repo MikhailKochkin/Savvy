@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import Link from "next/link";
-import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
-import absoluteUrl from "next-absolute-url";
 import User from "./User";
 import Menu from "./Menu";
 import Signup from "./auth/Signup";
@@ -308,7 +306,9 @@ class Nav extends Component {
                           }}
                         >
                           <a className="name">
-                            {me.surname ? `${me.name} ${me.surname}` : me.name}
+                            {me.surname
+                              ? `${me.name} ${me.surname} ${me.level.level}`
+                              : `${me.name} ${me.level.level}`}
                           </a>
                         </Link>
                       ) : null}
