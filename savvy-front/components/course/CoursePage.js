@@ -134,6 +134,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         surname
         description
         status
+        image
         uni {
           id
           title
@@ -189,12 +190,26 @@ const Data = styled.div`
   p {
     margin: 0;
   }
+  img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50px;
+    object-fit: cover;
+  }
   .name {
+    display: flex;
+    flex-direction: row;
     font-size: 1.6rem;
     font-weight: bold;
     padding-bottom: 4%;
     padding-top: 4%;
     border-top: 1px solid #e4e4e4;
+    p {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 4%;
+    }
   }
   .company {
     font-size: 1.6rem;
@@ -215,6 +230,7 @@ const Data = styled.div`
     line-height: 1.4;
     padding-top: 0%;
     padding-bottom: 2%;
+    margin-top: 3%;
   }
   .trackName {
     font-weight: 600;
@@ -244,16 +260,33 @@ const LessonImage = styled.img`
   }
 `;
 
-const Header = styled.div`
+const Header = styled.span`
   font-size: 2.4rem;
-  padding-bottom: 4%;
-  padding-top: 4%;
-  line-height: 1.4;
+  margin: 4% 0;
+  padding: 1%;
+  padding-right: 1.5%;
+  font-style: italic;
+  -webkit-box-decoration-break: clone;
+  -o-box-decoration-break: clone;
+  box-decoration-break: clone;
+  line-height: 1.8;
+  font-weight: bold;
+  background: #ffe066;
+  transform: skew(-5deg);
+  -webkit-transform: skew(-5deg);
+  -moz-transform: skew(-5deg);
+  -o-transform: skew(-5deg);
+  /* transform: skew(10deg, 10deg); */
 `;
 
 const Header2 = styled.div`
   font-size: 2rem;
   padding-top: 4%;
+  margin-bottom: 3%;
+  @media (max-width: 800px) {
+    font-size: 1.8rem;
+    margin-bottom: 6%;
+  }
 `;
 
 const Total = styled.div`
@@ -291,86 +324,73 @@ const ReviewsStyles = styled.div`
     font-size: 1.8rem;
     font-weight: bold;
   }
-  .post {
-    width: 45%;
-    flex-basis: 45%;
-    background: #fff;
-    margin-bottom: 3%;
-    border: 2px solid #32ac66;
-    border-radius: 15px;
-    padding: 2%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    .source {
-      & {
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid #000;
-        line-height: 0.1em;
-        margin: 20px 0 20px;
-      }
-
-      & span {
-        background: #fff;
-        padding: 0 30px;
-      }
-    }
-    .text {
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
   @media (max-width: 800px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    .post {
-      width: 95%;
-      padding: 4%;
+  }
+`;
+
+const Post = styled.div`
+  width: 45%;
+  border-top: 3px solid #02b3e4;
+  box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, 0.2);
+  flex-basis: 45%;
+  background: #fff;
+  margin-bottom: 3%;
+  border-radius: 15px;
+  padding: 2%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .source {
+    & {
+      width: 100%;
+      text-align: center;
+      border-bottom: 1px solid #000;
+      line-height: 0.1em;
+      margin: 20px 0 20px;
     }
+
+    & span {
+      background: #fff;
+      padding: 0 30px;
+    }
+  }
+  .text {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  @media (max-width: 800px) {
+    width: 95%;
+    padding: 4%;
   }
 `;
 
 const Details = styled.div`
   margin: 3% 0;
-  padding: 0 2%;
+  padding: 2%;
   font-size: 1.6rem;
-
+  background: #fafbfc;
   .red {
     padding: 4%;
     background: #6c4ae0;
     color: white;
-    margin-top: 2%;
+    margin: 2% 0;
     width: 100%;
     @media (max-width: 800px) {
       padding: 20px;
     }
   }
-  .yellow {
+  .info {
     padding: 4%;
-    background: rgba(169, 210, 255, 0.3);
-    margin-top: 2%;
-    width: 100%;
-    @media (max-width: 800px) {
-      padding: 20px;
-    }
-  }
-  .green {
-    padding: 4%;
-    background: rgba(210, 246, 252, 0.3);
-    width: 100%;
-    @media (max-width: 800px) {
-      padding: 20px;
-    }
-  }
-  .blue {
-    padding: 4%;
-    background: rgba(121, 132, 238, 0.15);
-    margin-bottom: 4%;
+    background: #fff;
+    box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, 0.2);
+    border-radius: 0.375rem;
+    margin: 2% 0;
     width: 100%;
     @media (max-width: 800px) {
       padding: 20px;
@@ -378,8 +398,15 @@ const Details = styled.div`
   }
   .header {
     font-size: 1.8rem;
-    font-weight: bold;
     margin-bottom: 1%;
+    text-align: center;
+    display: inline-block;
+    padding: 0 5%;
+    background-image: linear-gradient(90deg, #02b3e4 0, #02ccba);
+    color: white;
+    -webkit-transform: skew(-5deg);
+    -moz-transform: skew(-5deg);
+    -o-transform: skew(-5deg);
     @media (max-width: 800px) {
       font-size: 1.6rem;
     }
@@ -416,8 +443,6 @@ const Comment = styled.div`
 class CoursePage extends Component {
   state = {
     page: "lessons",
-    primary1: true,
-    primary2: false,
   };
   switch = (e) => {
     const { name } = e.target;
@@ -525,18 +550,16 @@ class CoursePage extends Component {
                                         Оценка курса учениками: <b>{average}</b>
                                       </div>
                                     ) : null}
-                                    <p className="name">
-                                      {coursePage.user &&
-                                      coursePage.user.surname
-                                        ? `${coursePage.user.name} ${coursePage.user.surname}`
-                                        : coursePage.user.name}{" "}
-                                      из{" "}
-                                      {coursePage.user &&
-                                      (coursePage.user.status === "HR" ||
-                                        coursePage.user.status === "AUTHOR")
-                                        ? coursePage.user.company.name
-                                        : coursePage.user.uni.title}
-                                    </p>
+                                    <div className="name">
+                                      <img src={coursePage.user.image} />
+                                      <p>
+                                        {coursePage.user &&
+                                        coursePage.user.surname
+                                          ? `${coursePage.user.name} ${coursePage.user.surname}`
+                                          : coursePage.user.name}{" "}
+                                        из {coursePage.user.company.name}
+                                      </p>
+                                    </div>
                                     <p className="track2">
                                       {coursePage.user.description}
                                     </p>
@@ -593,9 +616,9 @@ class CoursePage extends Component {
                                 </CourseInfo>
                                 <Details>
                                   {data.coursePage.audience && (
-                                    <div className="yellow">
+                                    <div className="info">
                                       <div className="header">
-                                        🙋🏻‍♀ Кому нужен этот курс?
+                                        <span>Кому нужен этот курс?</span>
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.audience)}
@@ -616,54 +639,20 @@ class CoursePage extends Component {
                                       </Video>
                                     )}
                                   {data.coursePage.methods && (
-                                    <div className="green">
+                                    <div className="info">
                                       <div className="header">
-                                        👨🏻‍🏫 👩🏼‍🏫 Об авторе курса и его подходах
+                                        Об авторе курса и его подходах
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.methods)}
                                       </div>
                                     </div>
                                   )}
-                                  {/* {openLesson.length > 0 && (
-                                    <div className="openLesson">
-                                      <div className="header">
-                                        Посмотрите первый открытый урок уже
-                                        сейчас!
-                                      </div>
-                                      {!me && (
-                                        <>
-                                          <p>
-                                            Войдите или зарегистрируйтесь, чтобы
-                                            это сделать.
-                                          </p>
-                                          <SignInButton onClick={this.scroll}>
-                                            Войти
-                                          </SignInButton>
-                                        </>
-                                      )}
-                                      {me &&
-                                        openLesson.map((lesson, index) => (
-                                          <LessonHeader
-                                            me={me}
-                                            key={lesson.id}
-                                            name={lesson.name}
-                                            lesson={lesson}
-                                            coursePageId={this.props.id}
-                                            students={coursePage.students}
-                                            openLesson={coursePage.openLesson}
-                                            new_students={student_list}
-                                            open={index + 1 === 1}
-                                            index={index + 1}
-                                          />
-                                        ))}
-                                    </div>
-                                  )} */}
                                   {data.coursePage.result && (
-                                    <div className="blue">
+                                    <div className="info">
                                       <div className="header">
-                                        🎁 Что вы получите в результате
-                                        прохождения курса?
+                                        Что вы получите в результате прохождения
+                                        курса?
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.result)}
@@ -673,7 +662,7 @@ class CoursePage extends Component {
                                   {data.coursePage.batch && (
                                     <div className="red">
                                       <div className="header">
-                                        🏋🏻‍♂️ Информация о следующем живом потоке
+                                        Информация о следующем живом потоке
                                       </div>
                                       {renderHTML(data.coursePage.batch)}
                                     </div>
@@ -786,7 +775,7 @@ class CoursePage extends Component {
                                 </LessonsInfo>
                                 <Details>
                                   {data.coursePage.tariffs && (
-                                    <div className="yellow">
+                                    <div className="info">
                                       <div className="header">
                                         📚Как проходит обучение на разных
                                         тарифах?
@@ -835,7 +824,7 @@ class CoursePage extends Component {
                                     </Header2>
                                     <ReviewsStyles>
                                       {my_reviews[0].reviews.map((post, i) => (
-                                        <div className="post">
+                                        <Post color={i + 1}>
                                           <div>
                                             <div className="header">
                                               {post.author}
@@ -849,7 +838,7 @@ class CoursePage extends Component {
                                           <div className="source">
                                             <span>{post.source}</span>
                                           </div>
-                                        </div>
+                                        </Post>
                                       ))}
                                     </ReviewsStyles>
                                   </>

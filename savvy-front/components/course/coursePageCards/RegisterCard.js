@@ -185,6 +185,9 @@ const Time = styled.div`
   font-size: 2rem;
   text-align: center;
   padding: 0.5%;
+  .comment {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledModal = Modal.styled`
@@ -207,7 +210,7 @@ const StyledModal = Modal.styled`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("04/21/2020 06:00:00");
+  let then = new Date("05/30/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -282,7 +285,7 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
-  let theOne = ["cjwaz2l0300dc0729d02opkzb"].includes(coursePage.id);
+  let theOne = ["ck0pdit6900rt0704h6c5zmer"].includes(coursePage.id);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -356,18 +359,20 @@ const RegisterCard = (props) => {
               {coursePage.courseType === "FORMONEY" && (
                 <>
                   {theOne && (
-                    <Time>
-                      <>
-                        {timeLeft.length ? (
-                          `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
-                        ) : (
-                          <span>
-                            Время вышло! Уберем скидку в течение нескольких
-                            часов!
-                          </span>
-                        )}
-                      </>
-                    </Time>
+                    <>
+                      <Time>
+                        <>
+                          <div className="comment">
+                            Курс по английской лексике в подарок!
+                          </div>
+                          {timeLeft.length ? (
+                            `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
+                          ) : (
+                            <span>Время вышло!</span>
+                          )}
+                        </>
+                      </Time>
+                    </>
                   )}
 
                   <GridContainer>
@@ -417,7 +422,7 @@ const RegisterCard = (props) => {
                             : null;
                       }}
                     />
-                    {theOne && (
+                    {/* {theOne && (
                       <>
                         <div className="Friend1">
                           📦 Купить курсы c другом:{"   "}
@@ -453,7 +458,7 @@ const RegisterCard = (props) => {
                           }}
                         />{" "}
                       </>
-                    )}
+                    )} */}
                   </GridContainer>
                 </>
               )}

@@ -37,7 +37,8 @@ const Header = styled.div`
 `;
 
 const SmallButton = styled.button`
-  background: ${props => props.theme.green};
+  transition: all 0.2s ease;
+  background: #0846d8;
   border-radius: 5px;
   width: 100%;
   height: 38px;
@@ -48,12 +49,12 @@ const SmallButton = styled.button`
   outline: none;
   cursor: pointer;
   border: none;
-  margin: 10px 0;
-  &:active {
-    background-color: ${props => props.theme.darkGreen};
-  }
+  margin-top: 10px;
   &:hover {
-    background-color: #32ac66;
+    background: rgba(8, 70, 216, 0.85);
+  }
+  &:active {
+    background-color: ${(props) => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {
@@ -78,16 +79,16 @@ const StyledModal = Modal.styled`
 class RegisterCard extends Component {
   state = {
     isOpen: false,
-    auth: "signin"
+    auth: "signin",
   };
 
-  toggleModal = e => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  toggleModal = (e) => {
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
 
-  changeState = dataFromChild => {
+  changeState = (dataFromChild) => {
     this.setState({
-      auth: dataFromChild
+      auth: dataFromChild,
     });
   };
 
@@ -99,7 +100,7 @@ class RegisterCard extends Component {
             👏🏻Мы восхищаемся вашим стремлением узнать что-то новое!
           </Header>
           Но, пожалуйста, войдите в свой аккаунт или зарегистрируйтесь на сайте,
-          чтобы получить <span>доступ к открытому уроку.</span>{" "}
+          чтобы получить <span>доступ к открытым урокам.</span>{" "}
           <SmallButton onClick={this.toggleModal}>Войти</SmallButton>
         </Payment>
         <StyledModal

@@ -18,6 +18,9 @@ const Payment = styled.div`
     border-bottom: 1px solid #e4e4e4;
     padding-bottom: 15px;
   }
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Header = styled.div`
