@@ -424,8 +424,7 @@ class LessonHeader extends Component {
                           {me &&
                           lesson &&
                           (me.id === author ||
-                            me.permissions.includes("ADMIN") ||
-                            lesson.open) ? (
+                            me.permissions.includes("ADMIN")) ? (
                             <Link
                               // The user is the teacher or the admin or it is an openLesson.
                               href={{

@@ -371,7 +371,7 @@ const Post = styled.div`
 `;
 
 const Details = styled.div`
-  margin: 3% 0;
+  margin: 0;
   padding: 2%;
   font-size: 1.6rem;
   background: #fafbfc;
@@ -553,6 +553,7 @@ class CoursePage extends Component {
                                     <div className="name">
                                       <img src={coursePage.user.image} />
                                       <p>
+                                        {console.log(coursePage.user)}
                                         {coursePage.user &&
                                         coursePage.user.surname
                                           ? `${coursePage.user.name} ${coursePage.user.surname}`
@@ -570,7 +571,6 @@ class CoursePage extends Component {
                                     {/* Карточка первого урока */}
                                     {me &&
                                       me.id !== coursePage.user.id &&
-                                      // !applicationsList.includes(me.id) &&
                                       !subjectArray.includes(coursePage.id) &&
                                       !new_subjectArray.includes(
                                         coursePage.id
@@ -585,12 +585,18 @@ class CoursePage extends Component {
                                         />
                                       )}{" "}
                                     {/* Карточка первого урока */}
-                                    {me &&
+                                    {/* {me &&
                                       me.id !== coursePage.user.id &&
                                       !me.permissions.includes("ADMIN") &&
                                       applicationsList.includes(me.id) && (
-                                        <FirstLesson lesson={openLesson} />
-                                      )}
+                                        <FirstLesson
+                                          lesson={
+                                            coursePage.lessons.filter(
+                                              (l) => l.open === true
+                                            )[0]
+                                          }
+                                        />
+                                      )} */}
                                     {/* Карточка преподавателя */}
                                     {me &&
                                       (me.id === coursePage.user.id ||
