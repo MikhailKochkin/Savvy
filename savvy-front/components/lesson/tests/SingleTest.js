@@ -10,6 +10,7 @@ import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
+import { SINGLE_LESSON_QUERY } from "../NewSingleLesson";
 
 const StyledButton = withStyles({
   root: {

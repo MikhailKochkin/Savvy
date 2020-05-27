@@ -109,15 +109,17 @@ const Group = styled.div`
       text-decoration: underline;
     }
   }
-  #but1 {
-    flex: 50%;
-    text-align: center;
-  }
   #but2 {
     flex: 50%;
     text-align: center;
     border-left: 1px solid #c4c4c4;
   }
+`;
+
+const But1 = styled.div`
+  flex: 50%;
+  text-align: center;
+  pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
 `;
 
 const Dots = styled.div`
@@ -189,10 +191,6 @@ class SingleQuiz extends Component {
     } else {
       alert("Сначала дайте свой ответ!");
     }
-  };
-
-  onSend = async () => {
-    document.querySelector(".button").disabled = true;
   };
 
   onAnswer = async (e) => {
@@ -275,53 +273,51 @@ class SingleQuiz extends Component {
         .filter((el) => el.student.id === me.id);
     }
     return (
-      <Styles story={story}>
-        <Buttons>
-          {!exam && !story && (
-            <StyledButton onClick={this.switch}>Настройки</StyledButton>
-          )}
-          {me && me.id === user && !this.props.exam && !this.props.story ? (
-            <DeleteSingleQuiz
-              id={me.id}
-              quizID={this.props.quizID}
-              lessonID={this.props.lessonID}
-            />
-          ) : null}
-        </Buttons>
-        {!this.state.update && (
-          <>
-            <Question story={story}>
-              {this.props.question}
-              <Textarea
-                type="text"
-                className="answer"
-                name="answer"
-                required
-                onChange={this.handleChange}
-                placeholder="Ответ на вопрос..."
-              />
-            </Question>
-            <Progress display={this.state.progress}>
-              <CircularProgress />
-            </Progress>
-            <Group
-              progress={this.state.progress}
-              inputColor={this.state.inputColor}
-            >
-              <Mutation
-                mutation={CREATE_QUIZRESULT_MUTATION}
-                variables={{
-                  quiz: this.props.quizID,
-                  lessonID: this.props.lessonID,
-                  answer: this.state.answer,
-                  correct: this.state.correct === "true",
-                }}
-                refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-              >
-                {(createQuizResult, { loading, error }) => (
-                  <div
-                    id="but1"
-                    className="button"
+      <Mutation
+        mutation={CREATE_QUIZRESULT_MUTATION}
+        variables={{
+          quiz: this.props.quizID,
+          lessonID: this.props.lessonID,
+          answer: this.state.answer,
+          correct: this.state.correct === "true",
+        }}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      >
+        {(createQuizResult, { loading, error }) => (
+          <Styles story={story}>
+            <Buttons>
+              {!exam && !story && (
+                <StyledButton onClick={this.switch}>Настройки</StyledButton>
+              )}
+              {me && me.id === user && !this.props.exam && !this.props.story ? (
+                <DeleteSingleQuiz
+                  id={me.id}
+                  quizID={this.props.quizID}
+                  lessonID={this.props.lessonID}
+                />
+              ) : null}
+            </Buttons>
+            {!this.state.update && (
+              <>
+                <Question story={story}>
+                  {this.props.question}
+                  <Textarea
+                    type="text"
+                    className="answer"
+                    name="answer"
+                    required
+                    onChange={this.handleChange}
+                    placeholder="Ответ на вопрос..."
+                  />
+                </Question>
+                <Progress display={this.state.progress}>
+                  <CircularProgress />
+                </Progress>
+                <Group
+                  progress={this.state.progress}
+                  inputColor={this.state.inputColor}
+                >
+                  <But1
                     onClick={async (e) => {
                       e.preventDefault();
                       if (this.props.type === "FORM") {
@@ -334,68 +330,58 @@ class SingleQuiz extends Component {
                         const res0 = await createQuizResult();
                       }
                     }}
+                    correct={this.state.correct}
                   >
                     {this.props.type === "FORM" ? "Ответить" : "Проверить"}
-                  </div>
-                )}
-              </Mutation>
-              {this.props.type !== "FORM" && (
-                <div onClick={this.onShow} id="but2">
-                  {this.state.hidden === true
-                    ? "Открыть ответ"
-                    : "Скрыть ответ"}
-                </div>
-              )}
-            </Group>
-            <Answer
-              display={this.state.hidden.toString()}
-              inputColor={this.state.inputColor}
-            >
-              {this.props.answer}
-              <div>
-                {this.state.correct === "true" && ifRight}
-                {this.state.correct === "false" && ifWrong}
-              </div>
-            </Answer>
-            {this.props.exam && (
-              <Block display={this.state.move.toString()}>
-                <div id="comment">Ваш ответ совпадает с нашим?</div>
-                <Group className="move">
-                  <div id="but1" onClick={this.move} name="true">
-                    Да ✅
-                  </div>
-                  <div id="but2" onClick={this.move} name="false">
-                    Нет ⛔️
-                  </div>
+                  </But1>
+                  {this.props.type !== "FORM" && (
+                    <div onClick={this.onShow} id="but2">
+                      {this.state.hidden === true
+                        ? "Открыть ответ"
+                        : "Скрыть ответ"}
+                    </div>
+                  )}
                 </Group>
-              </Block>
+                <Answer
+                  display={this.state.hidden.toString()}
+                  inputColor={this.state.inputColor}
+                >
+                  {this.props.answer}
+                  <div>
+                    {this.state.correct === "true" && ifRight}
+                    {this.state.correct === "false" && ifWrong}
+                  </div>
+                </Answer>
+              </>
             )}
-          </>
+            {this.state.update && (
+              <UpdateQuiz
+                quizID={this.props.quizID}
+                lessonID={this.props.lessonID}
+                answer={this.props.answer}
+                question={this.props.question}
+                ifRight={ifRight}
+                ifWrong={ifWrong}
+                notes={this.props.notes}
+                next={this.props.next}
+                quizes={this.props.quizes.filter(
+                  (q) => q.id !== this.props.quizID
+                )}
+                tests={this.props.tests}
+              />
+            )}
+            {this.props.exam && (
+              <Dots>
+                <div className="group">
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
+              </Dots>
+            )}
+          </Styles>
         )}
-        {this.state.update && (
-          <UpdateQuiz
-            quizID={this.props.quizID}
-            lessonID={this.props.lessonID}
-            answer={this.props.answer}
-            question={this.props.question}
-            ifRight={ifRight}
-            ifWrong={ifWrong}
-            notes={this.props.notes}
-            next={this.props.next}
-            quizes={this.props.quizes.filter((q) => q.id !== this.props.quizID)}
-            tests={this.props.tests}
-          />
-        )}
-        {this.props.exam && (
-          <Dots>
-            <div className="group">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-            </div>
-          </Dots>
-        )}
-      </Styles>
+      </Mutation>
     );
   }
 }

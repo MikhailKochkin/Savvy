@@ -304,6 +304,9 @@ class SingleTextEditor extends Component {
                               : alert("Дайте свой вариант!");
                             console.log(1);
                             const res0 = await this.check();
+                            console.log(
+                              this.state.recieved.includes(this.state.answer)
+                            );
                             if (
                               data.length === 0 &&
                               !this.state.recieved.includes(this.state.answer)
