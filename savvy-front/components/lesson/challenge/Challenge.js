@@ -14,6 +14,7 @@ import Front from "./Front";
 import Tasks from "./Tasks";
 import PleaseSignIn from "../../auth/PleaseSignIn";
 import User from "../../User";
+import Reload from "../Reload";
 
 const useStyles = makeStyles({
   button: {
@@ -67,9 +68,6 @@ const SINGLE_LESSON_QUERY = gql`
         student {
           id
         }
-        test {
-          id
-        }
         testID
         answer
         attempts
@@ -84,7 +82,6 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
       }
-
       coursePage {
         id
       }
@@ -230,21 +227,26 @@ const Challenge = (props) => {
             variables={{
               id: props.id,
             }}
-            fetchPolicy="cache-and-network"
+            fetchPolicy="no-cache"
           >
             {({ data, error, loading }) => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
-              const all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
-                0,
-                lesson.challenge_num
-              );
+              console.log(lesson);
+              if (lesson === undefined) return <Reload />;
+              let all;
               let completed = [];
-              if (me) {
-                completed = lesson.challengeResults.filter(
-                  (c) => c.student.id === me.id
+              if (lesson) {
+                all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
+                  0,
+                  lesson.challenge_num
                 );
+                if (me) {
+                  completed = lesson.challengeResults.filter(
+                    (c) => c.student.id === me.id
+                  );
+                }
               }
               return (
                 <AreYouEnrolled

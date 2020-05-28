@@ -195,6 +195,7 @@ const Tasks = (props) => {
       <SingleTest
         key={task.id}
         id={task.id}
+        testID={task.id}
         question={task.question}
         answers={task.answers}
         true={task.correct}

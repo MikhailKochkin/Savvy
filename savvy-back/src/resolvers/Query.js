@@ -9,6 +9,7 @@ const Query = {
   sandboxPages: forwardTo("db"),
   sandboxPage: forwardTo("db"),
   lesson: forwardTo("db"),
+  lessons: forwardTo("db"),
   test: forwardTo("db"),
   quiz: forwardTo("db"),
   test: forwardTo("db"),
@@ -36,20 +37,20 @@ const Query = {
   note: forwardTo("db"),
   exams: forwardTo("db"),
   documentResults: forwardTo("db"),
-  lessons(parent, args, ctx, info) {
-    const pageId = args.where.coursePageID;
-    return ctx.db.query.lessons(
-      {
-        where: { coursePageID: pageId }
-      },
-      info
-    );
-  },
+  // lessons(parent, args, ctx, info) {
+  //   const pageId = args.where.coursePageID;
+  //   return ctx.db.query.lessons(
+  //     {
+  //       where: { coursePageID: pageId }
+  //     },
+  //     info
+  //   );
+  // },
   tests(parent, args, ctx, info) {
     const c = args.where.lessonID;
     return ctx.db.query.tests(
       {
-        where: { lessonID: lesID }
+        where: { lessonID: lesID },
       },
       info
     );
@@ -58,7 +59,7 @@ const Query = {
     const courseType = args.where.courseType;
     return ctx.db.query.newTests(
       {
-        where: { lessonID: lesID }
+        where: { lessonID: lesID },
       },
       info
     );
@@ -67,7 +68,7 @@ const Query = {
     const lesID = args.where.lessonID;
     return ctx.db.query.newTests(
       {
-        where: { lessonID: lesID }
+        where: { lessonID: lesID },
       },
       info
     );
@@ -76,7 +77,7 @@ const Query = {
     const coursePageID = args.where.coursePageID;
     return ctx.db.query.pointATests(
       {
-        where: { coursePageID: coursePageID }
+        where: { coursePageID: coursePageID },
       },
       info
     );
@@ -85,7 +86,7 @@ const Query = {
     const lesID = args.where.lessonID;
     return ctx.db.query.problems(
       {
-        where: { lessonID: lesID }
+        where: { lessonID: lesID },
       },
       info
     );
@@ -94,7 +95,7 @@ const Query = {
     const lesID = args.where.lessonID;
     return ctx.db.query.textEditors(
       {
-        where: { lessonID: lesID }
+        where: { lessonID: lesID },
       },
       info
     );
@@ -106,7 +107,7 @@ const Query = {
     const pageId = args.where.sandboxPageID;
     return ctx.db.query.sandboxes(
       {
-        where: { sandboxPageID: pageId }
+        where: { sandboxPageID: pageId },
       },
       info
     );
@@ -115,7 +116,7 @@ const Query = {
     const pageId = args.where.sandboxPageID;
     return ctx.db.query.sandboxPageGoals(
       {
-        where: { sandboxPageID: pageId }
+        where: { sandboxPageID: pageId },
       },
       info
     );
@@ -127,7 +128,7 @@ const Query = {
     }
     return ctx.db.query.user(
       {
-        where: { id: ctx.request.userId }
+        where: { id: ctx.request.userId },
       },
       info
     );
@@ -145,7 +146,7 @@ const Query = {
   },
   async pointAs(parent, args, ctx, info) {
     return ctx.db.query.pointAs({}, info);
-  }
+  },
 };
 
 module.exports = Query;

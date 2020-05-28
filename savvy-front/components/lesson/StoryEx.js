@@ -41,11 +41,12 @@ class StoryEx extends Component {
       el = lesson.notes.find((note) => note.id === task.id);
       item = <Note text={el.text} me={me} story={true} note={el} />;
     } else if (task.type.toLowerCase() === "newtest") {
-      el = lesson.newTests.find((test) => test.id === task.id);
+      el = lesson.newTests.find((t) => t.id === task.id);
       item = (
         <SingleTest
           key={el.id}
           id={el.id}
+          testID={el.id}
           question={el.question}
           answers={el.answers}
           true={el.correct}

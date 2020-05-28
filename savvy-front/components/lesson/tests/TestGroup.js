@@ -23,6 +23,7 @@ class TestGroup extends Component {
             <>
               <SingleTest
                 id={test.id}
+                testID={test.id}
                 question={test.question}
                 num={index + 1}
                 type={test.type}

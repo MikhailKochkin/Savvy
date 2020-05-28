@@ -33,6 +33,7 @@ import Forum from "./forum/Forum";
 import ChangeForum from "./forum/ChangeForum";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
+import Reload from "./Reload";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -96,9 +97,6 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
         answer
-        test {
-          id
-        }
       }
       shotResults {
         id
@@ -643,8 +641,8 @@ class SingleLesson extends Component {
               {({ data, error, loading }) => {
                 if (error) return <Error error={error} />;
                 if (loading) return <p>Loading...</p>;
-                if (data === null) return <p>Нет урока</p>;
                 const lesson = data.lesson;
+                if (lesson === undefined) return <Reload />;
                 return (
                   <>
                     <AreYouEnrolled

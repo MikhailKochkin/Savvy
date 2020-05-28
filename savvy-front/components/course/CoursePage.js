@@ -553,7 +553,6 @@ class CoursePage extends Component {
                                     <div className="name">
                                       <img src={coursePage.user.image} />
                                       <p>
-                                        {console.log(coursePage.user)}
                                         {coursePage.user &&
                                         coursePage.user.surname
                                           ? `${coursePage.user.name} ${coursePage.user.surname}`
@@ -792,12 +791,6 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
-                                {console.log(
-                                  !subjectArray.includes(coursePage.id),
-                                  !new_subjectArray.includes(coursePage.id),
-                                  me && me.permissions.includes("ADMIN")
-                                )}
-
                                 {(!subjectArray.includes(coursePage.id) &&
                                   !new_subjectArray.includes(coursePage.id)) ||
                                   (me.permissions.includes("ADMIN") && (

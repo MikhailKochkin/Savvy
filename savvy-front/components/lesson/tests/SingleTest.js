@@ -213,7 +213,7 @@ class SingleTest extends Component {
     let userData;
     this.props.me
       ? (userData = this.props.userData
-          .filter((el) => el.test.id === this.props.id)
+          .filter((el) => el.testID === this.props.id)
           .filter((el) => el.student.id === this.props.me.id))
       : (userData = 1);
     return (
