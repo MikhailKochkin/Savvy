@@ -791,9 +791,15 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
-                                {(!subjectArray.includes(coursePage.id) &&
-                                  !new_subjectArray.includes(coursePage.id)) ||
-                                  (me.permissions.includes("ADMIN") && (
+                                {console.log(
+                                  me &&
+                                    !subjectArray.includes(coursePage.id) &&
+                                    !new_subjectArray.includes(coursePage.id)
+                                )}
+
+                                {me &&
+                                  !subjectArray.includes(coursePage.id) &&
+                                  !new_subjectArray.includes(coursePage.id) && (
                                     <RegisterCard
                                       me={me}
                                       coursePage={coursePage}
@@ -803,7 +809,20 @@ class CoursePage extends Component {
                                       studentsArray={studentsArray}
                                       subjectArray={subjectArray}
                                     />
-                                  ))}
+                                  )}
+
+                                {me && me.permissions.includes("ADMIN") && (
+                                  <RegisterCard
+                                    me={me}
+                                    coursePage={coursePage}
+                                    price={price}
+                                    discountPrice={coursePage.discountPrice}
+                                    promocode={coursePage.promocode}
+                                    studentsArray={studentsArray}
+                                    subjectArray={subjectArray}
+                                  />
+                                )}
+
                                 {!me && (
                                   <RegisterCard
                                     me={me}
