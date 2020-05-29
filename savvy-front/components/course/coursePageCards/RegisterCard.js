@@ -108,6 +108,10 @@ const GridContainer = styled.div`
     padding-bottom: 15px;
   }
   .Package {
+    margin-bottom: 1%;
+    padding: 1%;
+    font-weight: bold;
+    display: inline-block;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -202,7 +206,7 @@ const StyledModal = Modal.styled`
   height: 80%;
   @media (max-width: 800px) {
     min-width: 90%;
-    min-height: 90%;
+    height: 75%;
     margin: 10px;
   }
 `;
@@ -210,7 +214,7 @@ const StyledModal = Modal.styled`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("05/30/2020 06:00:00");
+  let then = new Date("06/2/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -405,7 +409,7 @@ const RegisterCard = (props) => {
                           }
                         }}
                       >
-                        Купить пакетом:
+                        Купить пакетом
                       </div>
                     )}
                     <input

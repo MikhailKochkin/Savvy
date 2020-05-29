@@ -92,6 +92,8 @@ const List = styled.div`
   overflow-y: scroll;
   @media (max-width: 800px) {
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     overflow-y: scroll;
   }
   img {
@@ -129,8 +131,8 @@ const PriceSection = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  margin-top: 20px;
+  width: 90%;
+  margin: 20px 0;
   div {
     width: 60%;
     display: flex;
@@ -201,7 +203,7 @@ const Package = (props) => {
       } else if (courses.length + 1 === 2) {
         coef = 0.9;
       } else if (courses.length + 1 === 3) {
-        coef = 0.8;
+        coef = 0.7;
       }
       setCourses([...c, e.target.id]);
       setInitial((courses.length + 1) * props.coursePage.price);
