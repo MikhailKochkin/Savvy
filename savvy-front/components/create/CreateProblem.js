@@ -12,30 +12,31 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import Icon from "react-icons-kit";
+import ProblemBuilder from "./ProblemBuilder";
 
 const useStyles = makeStyles({
   button: {
     width: "30%",
     margin: "2% 0",
     fontSize: "1.4rem",
-    textTransform: "none"
+    textTransform: "none",
   },
   root: {
-    marginBottom: "4%"
+    marginBottom: "4%",
   },
   formControl: {
     width: "70%",
     fontSize: "2.4rem",
-    padding: "1% 0"
+    padding: "1% 0",
   },
   label: {
     fontSize: "1.5rem",
     fontFamily: "Montserrat",
-    marginBottom: "1%"
+    marginBottom: "1%",
   },
   labelRoot: {
-    fontSize: "1.5rem"
-  }
+    fontSize: "1.5rem",
+  },
 });
 
 const CREATE_PROBLEM_MUTATION = gql`
@@ -82,25 +83,26 @@ const Advice = styled.p`
 
 const DynamicLoadedEditor = dynamic(import("../editor/ProblemEditor"), {
   loading: () => <p>Загрузка редактора...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const CreateProblem = props => {
+const CreateProblem = (props) => {
   const [text, setText] = React.useState("");
   const [nodeID, setNodeID] = React.useState("");
   const [nodeType, setNodeType] = React.useState("");
   const classes = useStyles();
-
-  const handleChange = (e, type) => {
-    setNodeID(e.target.value);
-    setNodeType(type);
-  };
-
-  const myCallback = dataFromChild => {
+  const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
 
   const { lessonID, lesson } = props;
+  const elements = [...lesson.quizes, ...lesson.newTests, ...lesson.notes];
+
+  const getNode = (type, id) => {
+    setNodeID(id);
+    setNodeType(type);
+  };
+
   return (
     <Styles>
       <Advice>
@@ -130,73 +132,43 @@ const CreateProblem = props => {
       <h3>
         Выберите первый вопрос, с которого начнется объяснение решения задачи.
       </h3>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label" className={classes.label}>
-          Вопрос
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={nodeType === "quiz" ? nodeID : null}
-          type="quiz"
-          onChange={e => handleChange(e, "quiz")}
+      <ProblemBuilder lesson={lesson} elements={elements} getNode={getNode} />
+      {nodeID && (
+        <Mutation
+          mutation={CREATE_PROBLEM_MUTATION}
+          variables={{
+            lessonID: lessonID,
+            text: text,
+            nodeID: nodeID,
+            nodeType: nodeType,
+          }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lessonID },
+            },
+          ]}
+          awaitRefetchQueries={true}
         >
-          {lesson.quizes.map(q => (
-            <MenuItem value={q.id}>{q.question}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label" className={classes.label}>
-          Тест
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={nodeType === "newTest" ? nodeID : null}
-          type="quiz"
-          onChange={e => handleChange(e, "newTest")}
-        >
-          {lesson.newTests.map(q => (
-            <MenuItem value={q.id}>{q.question[0]}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <br />
-      <Mutation
-        mutation={CREATE_PROBLEM_MUTATION}
-        variables={{
-          lessonID: lessonID,
-          text: text,
-          nodeID: nodeID,
-          nodeType: nodeType
-        }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID }
-          }
-        ]}
-        awaitRefetchQueries={true}
-      >
-        {(createProblem, { loading, error }) => (
-          <>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={async e => {
-                e.preventDefault();
-                const res = await createProblem();
-                alert("Создали!");
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
-          </>
-        )}
-      </Mutation>
+          {(createProblem, { loading, error }) => (
+            <>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const res = await createProblem();
+                  alert("Создали!");
+                }}
+              >
+                {loading ? "Сохраняем..." : "Сохранить"}
+              </Button>
+            </>
+          )}
+        </Mutation>
+      )}
     </Styles>
   );
 };

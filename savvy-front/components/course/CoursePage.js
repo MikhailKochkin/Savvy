@@ -791,13 +791,14 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
-                                {console.log(
+                                {/* {console.log(
                                   me &&
                                     !subjectArray.includes(coursePage.id) &&
                                     !new_subjectArray.includes(coursePage.id)
-                                )}
+                                )} */}
 
                                 {me &&
+                                  !me.permissions.includes("ADMIN") &&
                                   !subjectArray.includes(coursePage.id) &&
                                   !new_subjectArray.includes(coursePage.id) && (
                                     <RegisterCard

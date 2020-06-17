@@ -591,6 +591,8 @@ type CourseVisit {
   student: User! @relation( name: "UserCourseVisits")
   visitsNumber: Int @default(value: 0)
   coursePage: CoursePage! @relation( name: "CourseVisits")
+  reminders: [DateTime] @scalarList(strategy: RELATION)
+  finish: DateTime
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

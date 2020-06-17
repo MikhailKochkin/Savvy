@@ -94,32 +94,42 @@ const Answer = styled.div`
 const Group = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   background: ${(props) => props.inputColor};
   width: 100%;
-  border: 1px solid #c4c4c4;
-  border-radius: 5px;
   pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
   padding: 0.5%;
   margin-bottom: 3%;
   div {
-    border: none;
+    border: 1px solid #c4c4c4;
+    border-radius: 5px;
+    padding: 0.5%;
     cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
   }
   #but2 {
-    flex: 50%;
+    width: 45%;
+    font-size: 1.6rem;
     text-align: center;
-    border-left: 1px solid #c4c4c4;
+    &:hover {
+      -webkit-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+    }
   }
 `;
 
-const But1 = styled.div`
-  flex: 50%;
+const Button1 = styled.div`
+  width: 45%;
+  background: ${(props) => props.inputColor};
   text-align: center;
+  font-size: 1.6rem;
   pointer-events: ${(props) => (props.correct === "true" ? "none" : "auto")};
+
+  &:hover {
+    -webkit-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 const Dots = styled.div`
@@ -235,9 +245,9 @@ class SingleQuiz extends Component {
       if (result === "true" && this.props.getData) {
         // 3. and if this quiz is a part of an exam
         this.props.getData(
-          this.props.next
+          this.props.next && this.props.next.true
             ? [true, this.props.next.true]
-            : [true, { finish: "finish" }],
+            : [true, { type: "finish" }],
           "true"
         );
       }
@@ -246,9 +256,9 @@ class SingleQuiz extends Component {
         // 3. and if this quiz is a part of an exam
         // 4. we transfer the "false" data to the exam component
         this.props.getData(
-          this.props.next
+          this.props.next && this.props.next.false
             ? [false, this.props.next.false]
-            : [false, { finish: "finish" }]
+            : [false, { type: "finish" }]
         );
       }
       this.setState({ sent: true });
@@ -266,12 +276,13 @@ class SingleQuiz extends Component {
   render() {
     const { me, user, userData, exam, story, ifWrong, ifRight } = this.props;
     let data;
-    userData, this.props.id;
+    console.log(this.props.id);
     if (me) {
       data = userData
         .filter((el) => el.quiz.id === this.props.id)
         .filter((el) => el.student.id === me.id);
     }
+    console.log(userData, data);
     return (
       <Mutation
         mutation={CREATE_QUIZRESULT_MUTATION}
@@ -313,11 +324,9 @@ class SingleQuiz extends Component {
                 <Progress display={this.state.progress}>
                   <CircularProgress />
                 </Progress>
-                <Group
-                  progress={this.state.progress}
-                  inputColor={this.state.inputColor}
-                >
-                  <But1
+                <Group progress={this.state.progress}>
+                  <Button1
+                    inputColor={this.state.inputColor}
                     onClick={async (e) => {
                       e.preventDefault();
                       if (this.props.type === "FORM") {
@@ -333,7 +342,7 @@ class SingleQuiz extends Component {
                     correct={this.state.correct}
                   >
                     {this.props.type === "FORM" ? "Ответить" : "Проверить"}
-                  </But1>
+                  </Button1>
                   {this.props.type !== "FORM" && (
                     <div onClick={this.onShow} id="but2">
                       {this.state.hidden === true

@@ -66,13 +66,14 @@ class Interactive extends Component {
     let newNote;
     let newTest;
     let finish;
-    if (Object.keys(data[1])[0] === "quiz") {
+    if (data[1].type === "quiz") {
       let el = this.props.lesson.quizes.filter(
-        (q) => q.id === Object.values(data[1])[0]
+        (q) => q.id === data[1].value
       )[0];
       newQuiz = (
         <SingleQuiz
           key={el.id}
+          id={el.id}
           question={el.question}
           answer={el.answer}
           ifRight={el.ifRight}
@@ -100,15 +101,15 @@ class Interactive extends Component {
         };
       });
     }
-    if (Object.keys(data[1])[0] === "newTest") {
+    if (data[1].type && data[1].type.toLowerCase() === "newtest") {
       let el = this.props.lesson.newTests.filter(
-        (n) => n.id === Object.values(data[1])[0]
+        (n) => n.id === data[1].value
       )[0];
       newTest = (
         <SingleTest
           index={this.state.componentList.length + 1}
           key={el.id}
-          id={el.id}
+          testID={el.id}
           question={el.question}
           answers={el.answers}
           ifRight={el.ifRight}
@@ -136,12 +137,11 @@ class Interactive extends Component {
         };
       });
     }
-    if (Object.keys(data[1])[0] === "note") {
-      let el = this.props.lesson.notes.filter(
-        (q) => q.id === Object.values(data[1])[0]
-      )[0];
+    if (data[1].type === "note") {
+      let el = this.props.lesson.notes.filter((q) => q.id === data[1].value)[0];
       newNote = (
         <Note
+          id={el.id}
           index={this.state.componentList.length + 1}
           key={el.id}
           text={el.text}
@@ -163,7 +163,12 @@ class Interactive extends Component {
         };
       });
     }
-    if (Object.keys(data[1])[0] === "finish") {
+    if (
+      data[1].type === "finish" ||
+      data[1].type === null ||
+      data[1].value === null ||
+      data[1].value === ""
+    ) {
       finish = (
         <Final>
           {" "}
@@ -192,6 +197,7 @@ class Interactive extends Component {
       );
       item = (
         <SingleQuiz
+          id={el.id}
           index={1}
           key={el.id}
           question={el.question}
@@ -211,14 +217,14 @@ class Interactive extends Component {
           story={true}
         />
       );
-    } else if (this.props.exam.nodeType === "newTest") {
+    } else if (this.props.exam.nodeType.toLowerCase() === "newtest") {
       el = this.props.lesson.newTests.find(
         (test) => test.id === this.props.exam.nodeID
       );
       item = (
         <SingleTest
           key={el.id}
-          id={el.id}
+          testID={el.id}
           question={el.question}
           answers={el.answers}
           true={el.correct}

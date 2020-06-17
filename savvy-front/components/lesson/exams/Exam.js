@@ -22,7 +22,7 @@ class Exam extends Component {
     componentList: [],
     new: "",
     results: [],
-    answers: []
+    answers: [],
   };
   updateArray = (data, type) => {
     let newQuiz;
@@ -31,7 +31,7 @@ class Exam extends Component {
     let finish;
     if (Object.keys(data)[0] === "quiz") {
       let el = this.props.lesson.quizes.filter(
-        q => q.id === Object.values(data)[0]
+        (q) => q.id === Object.values(data)[0]
       )[0];
       newQuiz = (
         <SingleQuiz
@@ -52,24 +52,24 @@ class Exam extends Component {
         />
       );
 
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, newQuiz];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
     if (Object.keys(data)[0] === "newTest") {
       let el = this.props.lesson.newTests.filter(
-        n => n.id === Object.values(data)[0]
+        (n) => n.id === Object.values(data)[0]
       )[0];
       newTest = (
         <SingleTest
           index={this.state.componentList.length + 1}
           key={el.id}
-          id={el.id}
+          testID={el.id}
           question={el.question}
           answers={el.answers}
           true={el.correct}
@@ -85,18 +85,18 @@ class Exam extends Component {
           exam={true}
         />
       );
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, newTest];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
     if (Object.keys(data)[0] === "note") {
       let el = this.props.lesson.notes.filter(
-        q => q.id === Object.values(data)[0]
+        (q) => q.id === Object.values(data)[0]
       )[0];
       newNote = (
         <Note
@@ -111,12 +111,12 @@ class Exam extends Component {
           exam={true}
         />
       );
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, newNote];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
@@ -129,12 +129,12 @@ class Exam extends Component {
           lesson={this.props.lesson.id}
         />
       );
-      this.setState(state => {
+      this.setState((state) => {
         const componentList = [...state.componentList, finish];
         const results = [...state.results, type];
         return {
           componentList,
-          results
+          results,
         };
       });
     }
@@ -144,7 +144,7 @@ class Exam extends Component {
     let el;
     if (this.props.exam.nodeType === "quiz") {
       el = this.props.lesson.quizes.find(
-        quiz => quiz.id === this.props.exam.nodeID
+        (quiz) => quiz.id === this.props.exam.nodeID
       );
       newQuiz = (
         <SingleQuiz
@@ -166,17 +166,19 @@ class Exam extends Component {
         />
       );
     }
-    this.setState(state => {
+    this.setState((state) => {
       const componentList = [...state.componentList, newQuiz];
       return {
-        componentList
+        componentList,
       };
     });
   };
   render() {
     return (
       <Styles>
-        {this.props.me && this.props.me.id === this.props.exam.user.id ? (
+        {this.props.me &&
+        this.props.me.id === this.props.exam.user.id &&
+        !this.props.story ? (
           <DeleteExam
             id={this.props.me.id}
             examID={this.props.exam.id}
@@ -185,7 +187,7 @@ class Exam extends Component {
         ) : null}
         <Title>{this.props.exam.name}</Title>
         <p>{this.props.exam.question}</p>
-        {this.state.componentList.map(el => el)}
+        {this.state.componentList.map((el) => el)}
       </Styles>
     );
   }
@@ -194,7 +196,7 @@ class Exam extends Component {
 Exam.propTypes = {
   lesson: PropTypes.object.isRequired,
   me: PropTypes.object.isRequired,
-  exam: PropTypes.object.isRequired
+  exam: PropTypes.object.isRequired,
 };
 
 export default Exam;

@@ -32,7 +32,7 @@ const Buttons = styled.div`
 `;
 
 const Button = styled.button`
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border-radius: 5px;
   width: 200px;
   height: 38px;
@@ -45,7 +45,7 @@ const Button = styled.button`
   border: none;
   margin-top: 10px;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -78,7 +78,7 @@ class TeacherCard extends Component {
           <Link
             href={{
               pathname: "/createLesson",
-              query: { id: this.props.id }
+              query: { id: this.props.id },
             }}
           >
             <a>
@@ -88,7 +88,7 @@ class TeacherCard extends Component {
           <Link
             href={{
               pathname: "/updateCoursePage",
-              query: { id }
+              query: { id },
             }}
           >
             <a>
@@ -101,12 +101,12 @@ class TeacherCard extends Component {
               pathname: "/analytics",
               query: {
                 id,
-                name: "stats"
-              }
+                name: "stats",
+              },
             }}
           >
             <a>
-              <Button2>Статистика</Button2>
+              <Button2>Результаты</Button2>
             </a>
           </Link>
           {coursePage.courseType === "PEIVATE" && (
@@ -115,8 +115,8 @@ class TeacherCard extends Component {
                 pathname: "/analytics",
                 query: {
                   id,
-                  name: "applications"
-                }
+                  name: "applications",
+                },
               }}
             >
               <a>

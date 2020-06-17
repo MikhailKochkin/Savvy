@@ -38,13 +38,13 @@ const Button = styled.button`
   width: 20%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -93,22 +93,22 @@ const Advice = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/TextEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 export default class CreateTextEditor extends Component {
   state = {
     name: "Test",
     text: "",
-    totalMistakes: 0
+    totalMistakes: 0,
   };
 
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
@@ -149,19 +149,19 @@ export default class CreateTextEditor extends Component {
             lessonID: lessonID,
             totalMistakes: parseInt(this.state.totalMistakes),
             text: this.state.text,
-            name: this.state.name
+            name: this.state.name,
           }}
           refetchQueries={() => [
             {
               query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID }
-            }
+              variables: { id: lessonID },
+            },
           ]}
           awaitRefetchQueries={true}
         >
           {(createTextEditor, { loading, error }) => (
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 // Stop the form from submitting
                 e.preventDefault();
                 document.getElementById("Message").style.display = "block";

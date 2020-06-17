@@ -5,6 +5,10 @@ const { randomBytes } = require("crypto");
 const { promisify } = require("util");
 const { hasPermission } = require("../utils");
 const yandex = require("../yandexCheckout");
+const WelcomeEmail = require("../emails/Welcome");
+const PurchaseEmail = require("../emails/Purchase");
+const ReminderEmail = require("../emails/Reminder");
+const FinishEmail = require("../emails/Finish");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 const makeANiceEmail = (text) => `
@@ -504,6 +508,22 @@ const Mutations = {
       info
     );
   },
+  async updateTestForProblem(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    console.log(updates, args.id);
+    return ctx.db.mutation.updateNewTest(
+      {
+        data: {
+          ...updates,
+        },
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+  },
   async createTestResult(parent, args, ctx, info) {
     // TODO: Check if they are logged in
     const testID = args.testID;
@@ -791,6 +811,8 @@ const Mutations = {
     const updates = { ...args };
     //remove the ID from updates
     delete updates.id;
+    console.log(updates);
+
     //run the update method
     return ctx.db.mutation.updateQuiz(
       {
@@ -1135,7 +1157,6 @@ const Mutations = {
     return updatedUser;
   },
   async enrollOnCourse(parent, args, ctx, info) {
-    //run the update method
     const enrolledUser = await ctx.db.mutation.updateUser(
       {
         data: {
@@ -1149,6 +1170,34 @@ const Mutations = {
       },
       info
     );
+
+    const courseVisits = await ctx.db.query.courseVisits(
+      {
+        where: {
+          student: { id: args.id },
+          coursePage: { id: args.coursePage },
+        },
+      },
+      `{ student { id, name, email } }`
+    );
+
+    if (courseVisits.length === 0) {
+      const CourseVisit = await ctx.db.mutation.createCourseVisit(
+        {
+          data: {
+            student: {
+              connect: { id: args.id },
+            },
+            coursePage: {
+              connect: { id: args.coursePage },
+            },
+            visitsNumber: 1,
+          },
+        },
+        info
+      );
+    }
+
     return enrolledUser;
   },
   async signup(parent, args, ctx, info) {
@@ -1181,6 +1230,13 @@ const Mutations = {
       },
       info
     );
+
+    const newEmail = await client.sendEmail({
+      From: "Mikhail@besavvy.app",
+      To: args.email,
+      Subject: "Расскажу о возможностях BeSavvy",
+      HtmlBody: WelcomeEmail.WelcomeEmail(args.name),
+    });
 
     const UserLevel = await ctx.db.mutation.createUserLevel(
       {
@@ -1370,8 +1426,8 @@ const Mutations = {
       const notification = await client.sendEmail({
         From: "Mikhail@besavvy.app",
         To: order.user.email,
-        Subject: "Savvy App: доступ к курсу открыт!",
-        HtmlBody: NotificationEmail(
+        Subject: "🎆 BeSavvy: доступ к курсу открыт!",
+        HtmlBody: PurchaseEmail.PurchaseEmail(
           order.user.name,
           order.coursePage.title,
           order.coursePage.id
@@ -1644,7 +1700,8 @@ const Mutations = {
   },
   async createCourseVisit(parent, args, ctx, info) {
     const id = args.coursePage;
-    delete args.coursePage;
+    console.log(args);
+    // delete args.coursePage;
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
@@ -1654,12 +1711,12 @@ const Mutations = {
       {
         data: {
           student: {
-            connect: { id: ctx.request.userId },
+            connect: { id: args.student },
           },
           coursePage: {
-            connect: { id },
+            connect: { id: args.coursePage },
           },
-          ...args,
+          visitsNumber: 0,
         },
       },
       info
@@ -1679,6 +1736,87 @@ const Mutations = {
       },
       info
     );
+    return CourseVisit;
+  },
+  async updateFinish(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    //run the update method
+    const CourseVisit = await ctx.db.mutation.updateCourseVisit(
+      {
+        data: updates,
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+
+    const users = await ctx.db.query.users({
+      where: { courseVisits_some: { id: args.id } },
+    });
+
+    const courseVisits = await ctx.db.query.courseVisits(
+      {
+        where: { id: args.id },
+      },
+      `{ id, coursePage {id, title} }`
+    );
+
+    const Finish = await client.sendEmail({
+      From: "Mikhail@besavvy.app",
+      To: users[0].email,
+      Subject: "🥇 Курс окончен! Фантастический результат!",
+      HtmlBody: FinishEmail.FinishEmail(
+        users[0].name,
+        courseVisits[0].coursePage.title,
+        courseVisits[0].coursePage.id
+      ),
+    });
+
+    return CourseVisit;
+  },
+  async updateReminder(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    delete updates.reminders;
+    console.log(args.reminders);
+    //run the update method
+    const CourseVisit = await ctx.db.mutation.updateCourseVisit(
+      {
+        data: {
+          reminders: {
+            set: args.reminders,
+          },
+          ...updates,
+        },
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+    const users = await ctx.db.query.users({
+      where: { courseVisits_some: { id: args.id } },
+    });
+
+    const courseVisits = await ctx.db.query.courseVisits(
+      {
+        where: { id: args.id },
+      },
+      `{ id, coursePage {id, title} }`
+    );
+
+    const Reminder = await client.sendEmail({
+      From: "Mikhail@besavvy.app",
+      To: users[0].email,
+      Subject: "🥇 Только 4% заканчивают курс онлайн. Будешь среди них?",
+      HtmlBody: ReminderEmail.ReminderEmail(
+        users[0].name,
+        courseVisits[0].coursePage.title,
+        courseVisits[0].coursePage.id
+      ),
+    });
     return CourseVisit;
   },
   async createExam(parent, args, ctx, info) {

@@ -57,6 +57,12 @@ const TextBar = styled.div`
       height: auto;
     }
   }
+  #conceal {
+    margin: 16px 0;
+    cursor: pointer;
+    color: rgb(51, 58, 138);
+    text-decoration: underline;
+  }
 `;
 
 const Frame = styled.div`
@@ -95,8 +101,6 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 
 class SingleProblem extends Component {
   state = {
-    num: 0,
-    upload: false,
     answer: "",
     revealAnswer: false,
     revealed: [],
@@ -127,38 +131,46 @@ class SingleProblem extends Component {
   onMouseClick = (e) => {
     let answer = e.target.innerHTML.toLowerCase().trim();
     if (
-      (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:") ||
-      this.state.revealAnswer === true
+      e.target.getAttribute("concealed") === "true" &&
+      ((answer !== "ответ" && answer !== "ответ." && answer !== "ответ:") ||
+        this.state.revealAnswer)
     ) {
-      e.target.nextSibling.toggleAttribute("hidden");
-    } else {
-      console.log("Запрещено");
+      e.target.id = "no-conceal";
+      e.target.innerHTML = e.target.getAttribute("data");
+      e.target.setAttribute("concealed", "false");
+      this.onCheck(e.target.innerHTML);
+    } else if (e.target.parentElement.getAttribute("concealed") === "false") {
+      e.target.parentElement.id = "conceal";
+      e.target.parentElement.setAttribute("concealed", "true");
+      e.target.parentElement.innerHTML = e.target.parentElement.getAttribute(
+        "data-text"
+      );
     }
-    this.onCheck(e.target.innerHTML);
   };
 
   componentDidMount() {
-    const elements = document.querySelectorAll("#conceal");
+    const elements = document
+      .getElementById(this.props.problem.id)
+      .querySelectorAll("#conceal");
     let p;
     elements.forEach((element) => {
-      p = document.createElement("P");
-      p.innerHTML = element.getAttribute("data-text");
-      p.setAttribute("class", "hint");
-      element.setAttribute("hidden", "");
-      element.parentElement.insertBefore(p, element);
-      p.addEventListener("click", this.onMouseClick);
+      let data = element.innerHTML;
+      let hint = element.getAttribute("data-text");
+      element.innerHTML = hint;
+      element.setAttribute("data", data);
+      element.setAttribute("concealed", true);
+      element.addEventListener("click", this.onMouseClick);
     });
   }
   render() {
-    const { problem, me, userData, lesson } = this.props;
+    const { problem, me, userData, lesson, story } = this.props;
     const data = userData
       .filter((result) => result.problem.id === problem.id)
       .filter((result) => result.student.id === me.id);
     return (
       <>
-        <div id="root"></div>
         {!this.state.update && (
-          <TextBar>
+          <TextBar id={problem.id}>
             {renderHTML(problem.text)}
             {problem.nodeID && (
               <Interactive lesson={lesson} me={me} exam={problem} />
@@ -207,15 +219,6 @@ class SingleProblem extends Component {
                     revealed: this.state.revealed,
                     problemID: this.props.problem.id,
                   }}
-                  // refetchQueries={() => [
-                  //   {
-                  //     query: SINGLE_LESSON_QUERY,
-                  //     variables: { id: this.props.lessonID }
-                  //   },
-                  //   {
-                  //     query: CURRENT_USER_QUERY
-                  //   }
-                  // ]}
                 >
                   {(createProblemResult, { loading, error }) => (
                     <Buttons block={this.state.revealAnswer}>
@@ -247,12 +250,12 @@ class SingleProblem extends Component {
                 </Mutation>
               </>
             )}
-            {me && me.id === problem.user.id && (
+            {me && me.id === problem.user.id && !story && (
               <StyledButton onClick={(e) => this.setState({ update: true })}>
                 Изменить
               </StyledButton>
             )}
-            {me && me.id === problem.user.id ? (
+            {me && me.id === problem.user.id && !story ? (
               <DeleteSingleProblem
                 id={problem.id}
                 lessonId={this.props.lessonID}
@@ -270,12 +273,13 @@ class SingleProblem extends Component {
               nodeType={problem.nodeType}
               quizes={lesson.quizes}
               newTests={lesson.newTests}
+              notes={lesson.notes}
             />
-            {me && me.id === problem.user.id && (
+            {/* {me && me.id === problem.user.id && !story && (
               <StyledButton onClick={(e) => this.setState({ update: false })}>
                 Изменить
               </StyledButton>
-            )}
+            )} */}
           </>
         )}
       </>

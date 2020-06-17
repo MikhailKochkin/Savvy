@@ -18,6 +18,14 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         email
         resume
         coverLetter
+        courseVisits {
+          id
+          reminders
+          visitsNumber
+          coursePage {
+            id
+          }
+        }
         studentFeedback {
           id
           text
@@ -244,15 +252,15 @@ const Container = styled.div`
 
 const DynamicUserAnalytics = dynamic(import("./UserAnalytics"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class Analytics extends Component {
   state = {
-    page: this.props.name
+    page: this.props.name,
   };
 
-  onSwitch = e => {
+  onSwitch = (e) => {
     e.preventDefault();
     const name = e.target.getAttribute("name");
     this.setState({ page: name });
@@ -265,7 +273,7 @@ class Analytics extends Component {
         <Query
           query={SINGLE_COURSEPAGE_QUERY}
           variables={{
-            id: this.props.id
+            id: this.props.id,
           }}
         >
           {({ data: data2, error: error2, loading: loading2 }) => {

@@ -12,8 +12,10 @@ const Query = {
   lessons: forwardTo("db"),
   test: forwardTo("db"),
   quiz: forwardTo("db"),
+  quizzes: forwardTo("db"),
   test: forwardTo("db"),
   newTest: forwardTo("db"),
+  newTests: forwardTo("db"),
   problem: forwardTo("db"),
   textEditor: forwardTo("db"),
   careerTrack: forwardTo("db"),
@@ -35,6 +37,7 @@ const Query = {
   applications: forwardTo("db"),
   courseVisits: forwardTo("db"),
   note: forwardTo("db"),
+  notes: forwardTo("db"),
   exams: forwardTo("db"),
   documentResults: forwardTo("db"),
   // lessons(parent, args, ctx, info) {
@@ -55,24 +58,15 @@ const Query = {
       info
     );
   },
-  newTests(parent, args, ctx, info) {
-    const courseType = args.where.courseType;
-    return ctx.db.query.newTests(
-      {
-        where: { lessonID: lesID },
-      },
-      info
-    );
-  },
-  quizzes(parent, args, ctx, info) {
-    const lesID = args.where.lessonID;
-    return ctx.db.query.newTests(
-      {
-        where: { lessonID: lesID },
-      },
-      info
-    );
-  },
+  // newTests(parent, args, ctx, info) {
+  //   const courseType = args.where.courseType;
+  //   return ctx.db.query.newTests(
+  //     {
+  //       where: { lessonID: lesID },
+  //     },
+  //     info
+  //   );
+  // },
   pointATests(parent, args, ctx, info) {
     const coursePageID = args.where.coursePageID;
     return ctx.db.query.pointATests(

@@ -10,7 +10,6 @@ import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
-import { SINGLE_LESSON_QUERY } from "../NewSingleLesson";
 
 const StyledButton = withStyles({
   root: {
@@ -64,7 +63,7 @@ const Group = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  width: 100%;
+  width: 40%;
   border: 1px solid #c4c4c4;
   background: ${(props) => props.inputColor};
   border-radius: 5px;
@@ -79,16 +78,15 @@ const Group = styled.div`
     flex: 50%;
     text-align: center;
   }
+  &:hover {
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+  }
 `;
 const MiniButton = styled.div`
   pointer-events: ${(props) =>
     props.answerState === "right" ? "none" : "auto"};
   border: none;
-  background: none;
   cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 const Dots = styled.div`
@@ -178,7 +176,7 @@ class SingleTest extends Component {
           this.props.getData(
             this.props.next
               ? [true, this.props.next.true]
-              : [true, { finish: "finish" }],
+              : [true, { type: "finish" }],
             "true"
           );
 
@@ -195,7 +193,7 @@ class SingleTest extends Component {
           this.props.getData(
             this.props.next
               ? [false, this.props.next.false]
-              : [false, { finish: "finish" }]
+              : [false, { type: "finish" }]
           );
         }
       }

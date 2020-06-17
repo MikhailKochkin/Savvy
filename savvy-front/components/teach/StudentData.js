@@ -1,8 +1,27 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import moment from "moment";
 import LessonData from "./LessonData";
+
+const UPDATE_COURSE_VISIT_MUTATION = gql`
+  mutation UPDATE_COURSE_VISIT_MUTATION($id: ID!, $reminders: [DateTime]) {
+    updateReminder(id: $id, reminders: $reminders) {
+      id
+    }
+  }
+`;
+
+const UPDATE_FINISH_MUTATION = gql`
+  mutation UPDATE_FINISH_MUTATION($id: ID!, $finish: DateTime) {
+    updateFinish(id: $id, finish: $finish) {
+      id
+    }
+  }
+`;
 
 const Name = styled.div`
   font-size: 1.6rem;
@@ -16,11 +35,11 @@ const Square = styled.div`
   text-align: center;
   width: 70px;
   height: 30px;
-  background: ${props => props.inputColor || "palevioletred"};
+  background: ${(props) => props.inputColor || "palevioletred"};
 `;
 
 const Open = styled.div`
-  display: ${props => (props.secret ? "none" : "block")};
+  display: ${(props) => (props.secret ? "none" : "block")};
 `;
 
 const Header = styled.div`
@@ -61,7 +80,7 @@ const SendButton = styled.div`
   text-align: center;
   background: #ffffff;
   border: 1px solid;
-  border-color: ${props => (props.green ? "#84BC9C" : "#112a62")};
+  border-color: ${(props) => (props.green ? "#84BC9C" : "#112a62")};
   box-sizing: border-box;
   border-radius: 5px;
   cursor: pointer;
@@ -134,34 +153,34 @@ const StyledButton = withStyles({
     margin: "1% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
 class Person extends Component {
   state = {
     secret: true,
-    page: "results"
+    page: "results",
   };
   onShow = () => {
-    this.setState(prevState => ({
-      secret: !prevState.secret
+    this.setState((prevState) => ({
+      secret: !prevState.secret,
     }));
   };
 
-  onSwitch = e => {
+  onSwitch = (e) => {
     this.setState({ page: e.target.getAttribute("name") });
   };
   render() {
-    let { student, lessons, coursePage } = this.props;
+    let { student, lessons, coursePage, courseVisit } = this.props;
     let mail = `mailto:${student.email}`;
     let color;
     // Step 1. We filter the lessons to see if the lessons have been
     // visited by the student. For that we check if the lesson results of the student include the
     // results of the lessons of this course
     let lesson_list = [];
-    lessons.map(l => lesson_list.push(l.id));
-    let lesson_results = student.lessonResults.filter(l =>
+    lessons.map((l) => lesson_list.push(l.id));
+    let lesson_results = student.lessonResults.filter((l) =>
       lesson_list.includes(l.lesson.id)
     );
 
@@ -212,12 +231,56 @@ class Person extends Component {
               <SendButton onClick={this.onSwitch} name="results">
                 Результаты
               </SendButton>
-              <SendButton onClick={this.onSwitch} name="CV">
+              {courseVisit && (
+                <Mutation
+                  mutation={UPDATE_COURSE_VISIT_MUTATION}
+                  variables={{
+                    id: courseVisit.id,
+                    reminders: [...courseVisit.reminders, new Date()],
+                  }}
+                >
+                  {(updateReminder, { loading, error }) => {
+                    return (
+                      <SendButton
+                        onClick={(e) => {
+                          const data = updateReminder();
+                          alert("Отправлено!");
+                        }}
+                        name="CV"
+                      >
+                        Напомнить
+                      </SendButton>
+                    );
+                  }}
+                </Mutation>
+              )}
+              {/* {courseVisit && (
+                <Mutation
+                  mutation={UPDATE_FINISH_MUTATION}
+                  variables={{
+                    id: courseVisit.id,
+                    reminders: new Date(),
+                  }}
+                >
+                  {(updateFinish, { loading, error }) => {
+                    return (
+                      <SendButton
+                        onClick={(e) => {
+                          const data = updateFinish();
+                        }}
+                      >
+                        Закончить
+                      </SendButton>
+                    );
+                  }}
+                </Mutation>
+              )} */}
+              {/* <SendButton onClick={this.onSwitch} name="CV">
                 CV
               </SendButton>
               <SendButton onClick={this.onSwitch} name="resume">
                 Резюме
-              </SendButton>
+              </SendButton> */}
               <SendButton name="mail">
                 <a href={mail}>Написать</a>
               </SendButton>

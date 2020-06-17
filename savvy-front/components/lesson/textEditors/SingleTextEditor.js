@@ -90,9 +90,10 @@ const Hint = styled.div`
   position: -webkit-sticky;
   position: sticky;
   padding: 1.5% 3%;
-  margin: 0 2% 0 0%;
+  margin: 20px 2% 0 0%;
   background: white;
   top: 20px;
+  z-index: 3;
   border: 1px solid #c0d6df;
   border-radius: 10px;
   width: 100%;
@@ -114,6 +115,8 @@ const Hint = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
 `;
 
 const Input = styled.input`
@@ -127,7 +130,6 @@ const Input = styled.input`
 
 const StyledButton = withStyles({
   root: {
-    margin: "4% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
     textTransform: "none",
@@ -186,18 +188,22 @@ class SingleTextEditor extends Component {
   };
 
   onMouseClick = (e) => {
-    if (this.state.total !== null && this.state.total > 0) {
-      e.target.style.backgroundColor = "#FDF3C8";
-      e.target.style.padding = "0.8%";
-      e.target.style.borderRadius = "8px";
+    console.log(e.target.className, this.props.textEditor.id);
+    if (e.target.className === this.props.textEditor.id) {
+      if (this.state.total !== null && this.state.total > 0) {
+        e.target.style.backgroundColor = "#FDF3C8";
+        e.target.style.padding = "0.8%";
+        e.target.style.borderRadius = "8px";
+      }
+      // console.log(this.props.textEditor.text, !this.state.shown);
+      this.setState({
+        shown: true,
+        show: false,
+        answer: "",
+        correct_option: e.target.getAttribute("data"),
+        wrong_option: e.target.innerHTML,
+      });
     }
-    this.setState({
-      shown: true,
-      show: false,
-      answer: "",
-      correct_option: e.target.getAttribute("data"),
-      wrong_option: e.target.innerHTML,
-    });
   };
 
   onConceal = (e) => {
@@ -214,7 +220,9 @@ class SingleTextEditor extends Component {
   };
 
   onShow = () => {
-    const mistakes = document.querySelectorAll("#id");
+    const mistakes = document
+      .getElementById(this.props.textEditor.id)
+      .querySelectorAll("#id");
     this.setState((prevState) => ({ mistakesShown: !prevState.mistakesShown }));
     if (!this.state.mistakesShown) {
       mistakes.forEach(
@@ -227,13 +235,18 @@ class SingleTextEditor extends Component {
     }
   };
   componentDidMount() {
-    const elements = document.querySelectorAll("#id");
-    elements.forEach((element) =>
-      element.addEventListener("click", this.onMouseClick)
+    const elements = document
+      .getElementById(this.props.textEditor.id + 1)
+      .querySelectorAll("#id");
+    elements.forEach(
+      (element) => (
+        (element.className = this.props.textEditor.id),
+        element.addEventListener("click", this.onMouseClick)
+      )
     );
   }
   render() {
-    const { textEditor, me, userData, lesson } = this.props;
+    const { textEditor, me, userData, lesson, story } = this.props;
     let data;
     me
       ? (data = userData
@@ -241,10 +254,10 @@ class SingleTextEditor extends Component {
           .filter((result) => result.student.id === me.id))
       : (data = [""]);
     return (
-      <>
+      <div id={textEditor.id + 1}>
         {!this.state.update && (
           <>
-            <TextBar>
+            <TextBar id={textEditor.id}>
               {this.state.shown && (
                 <Hint>
                   <div>
@@ -304,9 +317,6 @@ class SingleTextEditor extends Component {
                               : alert("Дайте свой вариант!");
                             console.log(1);
                             const res0 = await this.check();
-                            console.log(
-                              this.state.recieved.includes(this.state.answer)
-                            );
                             if (
                               data.length === 0 &&
                               !this.state.recieved.includes(this.state.answer)
@@ -328,7 +338,7 @@ class SingleTextEditor extends Component {
                       )}
                     </Mutation>
                   )}
-                  <button onClick={this.onConceal}>Скрыть подсказку</button>
+                  <button onClick={this.onConceal}>Скрыть</button>
                 </Hint>
               )}
               <EditText>
@@ -339,20 +349,22 @@ class SingleTextEditor extends Component {
               </EditText>
             </TextBar>
             <Buttons>
-              <StyledButton
-                onClick={this.onShow}
-                variant="contained"
-                color="primary"
-              >
-                {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
-              </StyledButton>
-              {me && me.id === textEditor.user.id ? (
+              {this.state.total > 1 && (
+                <StyledButton
+                  onClick={this.onShow}
+                  variant="contained"
+                  color="primary"
+                >
+                  {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
+                </StyledButton>
+              )}
+              {me && me.id === textEditor.user.id && !story ? (
                 <DeleteSingleTextEditor
                   id={this.props.textEditor.id}
                   lessonID={this.props.lessonID}
                 />
               ) : null}
-              {me && me.id === textEditor.user.id && (
+              {me && me.id === textEditor.user.id && !story && (
                 <StyledButton
                   onClick={(e) =>
                     this.setState((prev) => ({ update: !prev.update }))
@@ -372,7 +384,7 @@ class SingleTextEditor extends Component {
             totalMistakes={this.state.total}
           />
         )}
-      </>
+      </div>
     );
   }
 }

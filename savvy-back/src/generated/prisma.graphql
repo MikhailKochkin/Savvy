@@ -5594,6 +5594,8 @@ type CourseVisit {
   student: User!
   visitsNumber: Int
   coursePage: CoursePage!
+  reminders: [DateTime!]!
+  finish: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -5609,6 +5611,8 @@ input CourseVisitCreateInput {
   student: UserCreateOneWithoutCourseVisitsInput!
   visitsNumber: Int
   coursePage: CoursePageCreateOneWithoutVisitsInput!
+  reminders: CourseVisitCreateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitCreateManyWithoutCoursePageInput {
@@ -5621,16 +5625,24 @@ input CourseVisitCreateManyWithoutStudentInput {
   connect: [CourseVisitWhereUniqueInput!]
 }
 
+input CourseVisitCreateremindersInput {
+  set: [DateTime!]
+}
+
 input CourseVisitCreateWithoutCoursePageInput {
   id: ID
   student: UserCreateOneWithoutCourseVisitsInput!
   visitsNumber: Int
+  reminders: CourseVisitCreateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitCreateWithoutStudentInput {
   id: ID
   visitsNumber: Int
   coursePage: CoursePageCreateOneWithoutVisitsInput!
+  reminders: CourseVisitCreateremindersInput
+  finish: DateTime
 }
 
 type CourseVisitEdge {
@@ -5643,6 +5655,8 @@ enum CourseVisitOrderByInput {
   id_DESC
   visitsNumber_ASC
   visitsNumber_DESC
+  finish_ASC
+  finish_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -5652,6 +5666,8 @@ enum CourseVisitOrderByInput {
 type CourseVisitPreviousValues {
   id: ID!
   visitsNumber: Int
+  reminders: [DateTime!]!
+  finish: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -5679,6 +5695,14 @@ input CourseVisitScalarWhereInput {
   visitsNumber_lte: Int
   visitsNumber_gt: Int
   visitsNumber_gte: Int
+  finish: DateTime
+  finish_not: DateTime
+  finish_in: [DateTime!]
+  finish_not_in: [DateTime!]
+  finish_lt: DateTime
+  finish_lte: DateTime
+  finish_gt: DateTime
+  finish_gte: DateTime
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -5722,14 +5746,20 @@ input CourseVisitUpdateInput {
   student: UserUpdateOneRequiredWithoutCourseVisitsInput
   visitsNumber: Int
   coursePage: CoursePageUpdateOneRequiredWithoutVisitsInput
+  reminders: CourseVisitUpdateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitUpdateManyDataInput {
   visitsNumber: Int
+  reminders: CourseVisitUpdateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitUpdateManyMutationInput {
   visitsNumber: Int
+  reminders: CourseVisitUpdateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitUpdateManyWithoutCoursePageInput {
@@ -5761,14 +5791,22 @@ input CourseVisitUpdateManyWithWhereNestedInput {
   data: CourseVisitUpdateManyDataInput!
 }
 
+input CourseVisitUpdateremindersInput {
+  set: [DateTime!]
+}
+
 input CourseVisitUpdateWithoutCoursePageDataInput {
   student: UserUpdateOneRequiredWithoutCourseVisitsInput
   visitsNumber: Int
+  reminders: CourseVisitUpdateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitUpdateWithoutStudentDataInput {
   visitsNumber: Int
   coursePage: CoursePageUpdateOneRequiredWithoutVisitsInput
+  reminders: CourseVisitUpdateremindersInput
+  finish: DateTime
 }
 
 input CourseVisitUpdateWithWhereUniqueWithoutCoursePageInput {
@@ -5818,6 +5856,14 @@ input CourseVisitWhereInput {
   visitsNumber_gt: Int
   visitsNumber_gte: Int
   coursePage: CoursePageWhereInput
+  finish: DateTime
+  finish_not: DateTime
+  finish_in: [DateTime!]
+  finish_not_in: [DateTime!]
+  finish_lt: DateTime
+  finish_lte: DateTime
+  finish_gt: DateTime
+  finish_gte: DateTime
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

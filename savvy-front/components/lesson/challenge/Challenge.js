@@ -233,7 +233,6 @@ const Challenge = (props) => {
               if (error) return <Error error={error} />;
               if (loading) return <p>Loading...</p>;
               const lesson = data.lesson;
-              console.log(lesson);
               if (lesson === undefined) return <Reload />;
               let all;
               let completed = [];

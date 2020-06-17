@@ -25,12 +25,14 @@ const Container = styled.div`
 const NoteStyles = styled.div`
   width: ${(props) => (props.story ? "100%" : "95%")};
   margin: 2% 0 0 0;
-  padding: 0% 2%;
   font-size: 1.6rem;
   border: ${(props) => (props.story ? null : "1px solid #e4e4e4")};
   border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
+  }
+  h2 {
+    font-size: 3rem;
   }
   img {
     display: block;
@@ -128,7 +130,7 @@ const Note = (props) => {
 
   const push = () => {
     props.getData(
-      props.next ? [true, props.next.true] : [true, { finish: "finish" }]
+      props.next ? [true, props.next.true] : [true, { type: "finish" }]
     );
   };
 

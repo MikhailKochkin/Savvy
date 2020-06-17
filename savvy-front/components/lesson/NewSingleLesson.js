@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
+import styled from "styled-components";
 import { Query } from "react-apollo";
+import ReactResizeDetector from "react-resize-detector";
+import Link from "next/link";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Icon } from "react-icons-kit";
+import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import PleaseSignIn from "../auth/PleaseSignIn";
+import AreYouEnrolled from "../auth/AreYouEnrolled";
+import StoryEx from "./StoryEx";
 import User from "../User";
-import NSL from "./NSL";
+import Panel from "./Panel";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: ID!) {
@@ -209,6 +218,20 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
+        lessons {
+          id
+          number
+          type
+          published
+          lessonResults {
+            id
+            visitsNumber
+            lessonID
+            student {
+              id
+            }
+          }
+        }
       }
       exams {
         id
@@ -224,10 +247,147 @@ const NEW_SINGLE_LESSON_QUERY = gql`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 50vh;
+`;
+
+const Head = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  min-height: 10vh;
+  background: #1a2980; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #26d0ce,
+    #1a2980
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #26d0ce, #1a2980);
+  width: 100%;
+  font-size: 2rem;
+  span {
+    margin: 0 3%;
+    margin-right: 3%;
+  }
+  #back {
+    &:hover {
+      color: #e4e4e4;
+    }
+    cursor: pointer;
+  }
+  @media (max-width: 800px) {
+    font-size: 1.6rem;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 1%;
+  }
+`;
+
+const Head2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0;
+  background: #1a2980; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #26d0ce,
+    #1a2980
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #26d0ce, #1a2980);
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 1.8rem;
+  span {
+    color: #3ddc97;
+    cursor: pointer;
+    &:hover {
+      color: #139a43;
+    }
+  }
+  @media (max-width: 800px) {
+    font-size: 1.6rem;
+    justify-content: space-between;
+    padding: 2% 15px;
+    div {
+      flex: 85%;
+      text-align: right;
+    }
+  }
+`;
+
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70vh;
+  margin: 0 0 2% 0;
+`;
+
+const LessonPart = styled.div`
+  display: flex;
+  /* border: 1px solid #edefed; */
+  padding: 0.5% 2%;
+  width: 40%;
+  flex-direction: column;
+  border-radius: 2px;
+  margin: 0 0 20px 0;
+  a {
+    padding-top: 2%;
+    padding-left: 2%;
+  }
+  @media (max-width: 1500px) {
+    width: 55%;
+  }
+  @media (max-width: 1000px) {
+    margin: 1%;
+    width: 90%;
+  }
+  .example-enter {
+    opacity: 0.01;
+  }
+
+  .example-enter.example-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+
+  .example-leave {
+    opacity: 1;
+  }
+
+  .example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+  }
+`;
+
 const NewSingleLesson = (props) => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [width, setWidth] = useState(0);
+  const onResize = (width) => setWidth(width);
+
+  const compare = (a, b) => {
+    let comparison = 0;
+    if (a.number > b.number) {
+      comparison = 1;
+    } else if (a.number < b.number) {
+      comparison = -1;
+    } else {
+      comparison = 1;
+    }
+    return comparison;
+  };
   return (
     <PleaseSignIn>
+      <div id="root"></div>
       <User>
         {({ data: { me } }) => (
           <Query
@@ -240,13 +400,101 @@ const NewSingleLesson = (props) => {
           >
             {({ data, error, loading }) => {
               if (error) return <Error error={error} />;
-              if (loading) return <p>Loading...</p>;
+              if (loading)
+                return (
+                  <Progress>
+                    <CircularProgress />
+                  </Progress>
+                );
               let lesson = data.lesson;
-              console.log(lesson);
               // if (lesson === undefined) return <Reload />;
+              let next = lesson.coursePage.lessons.find(
+                (l) => l.number === lesson.number + 1
+              );
               return (
                 <>
-                  <NSL me={me} lesson={lesson} />
+                  {lesson && (
+                    <AreYouEnrolled
+                      openLesson={lesson.open}
+                      subject={lesson.coursePage.id}
+                    >
+                      <Container>
+                        <ReactResizeDetector
+                          handleWidth
+                          handleHeight
+                          onResize={onResize}
+                        />
+
+                        <Head>
+                          {width > 800 && (
+                            <Link
+                              href={{
+                                pathname: "/coursePage",
+                                query: {
+                                  id: lesson.coursePage.id,
+                                },
+                              }}
+                            >
+                              <span>
+                                <Icon
+                                  size={"1.5em"}
+                                  icon={arrowLeft}
+                                  id="back"
+                                />
+                              </span>
+                            </Link>
+                          )}
+                          <span>
+                            Урок {lesson.number}. {lesson.name}
+                          </span>
+                        </Head>
+
+                        {me &&
+                          (lesson.user.id === me.id ||
+                            me.permissions.includes("ADMIN")) && (
+                            <Head2>
+                              {lesson.structure.length > 0 && (
+                                <div>
+                                  Режим истории →
+                                  <Link
+                                    href={{
+                                      pathname: "/lesson",
+                                      query: {
+                                        id: lesson.id,
+                                        type: "regular",
+                                      },
+                                    }}
+                                  >
+                                    <span> Переключить</span>
+                                  </Link>
+                                </div>
+                              )}
+                            </Head2>
+                          )}
+                        <LessonPart>
+                          <ReactCSSTransitionGroup
+                            transitionName="example"
+                            transitionEnterTimeout={5500}
+                            transitionLeaveTimeout={3300}
+                          >
+                            <StoryEx
+                              tasks={lesson.structure}
+                              me={me}
+                              lesson={lesson}
+                              next={next}
+                              coursePageID={lesson.coursePage.id}
+                            />
+                          </ReactCSSTransitionGroup>
+                        </LessonPart>
+                        {me && (
+                          <Panel
+                            level={me.level.level}
+                            change={lesson.change}
+                          />
+                        )}
+                      </Container>{" "}
+                    </AreYouEnrolled>
+                  )}
                 </>
               );
             }}

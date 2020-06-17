@@ -27,12 +27,17 @@ class UserAnalytics extends Component {
     return (
       <Styles>
         <Header>Участники: {students.length}</Header>
-        {students.map(student => (
+        {students.map((student) => (
           <>
             <StudentData
               coursePage={coursePage.id}
               student={student}
               lessons={coursePage.lessons}
+              courseVisit={
+                student.courseVisits.filter(
+                  (c) => c.coursePage.id === coursePage.id
+                )[0]
+              }
             />
           </>
         ))}

@@ -588,7 +588,7 @@ const Text = styled.div`
 
 class SingleLesson extends Component {
   state = {
-    page: "lesson",
+    page: "problem",
     shown: false,
     width: 0,
   };
@@ -629,6 +629,7 @@ class SingleLesson extends Component {
   render() {
     return (
       <PleaseSignIn number={this.props.number}>
+        <div id="root"></div>
         <User>
           {({ data: { me } }) => (
             <Query
@@ -636,7 +637,7 @@ class SingleLesson extends Component {
               variables={{
                 id: this.props.id,
               }}
-              fetchPolicy="cache-and-network"
+              fetchPolicy="no-cache"
             >
               {({ data, error, loading }) => {
                 if (error) return <Error error={error} />;
@@ -650,7 +651,6 @@ class SingleLesson extends Component {
                       openLesson={lesson.open}
                       lesson={lesson.id}
                     >
-                      <div id="root"></div>
                       <Container>
                         <ReactResizeDetector
                           handleWidth

@@ -34,12 +34,14 @@ const Styles = styled.div`
   width: 100%;
   padding-right: 4%;
   display: flex;
-  margin-bottom: 4%;
   flex-direction: row;
   justify-content: space-between;
   @media (max-width: 800px) {
     font-size: 1.4rem;
   }
+`;
+const Text = styled.div`
+  width: 100%;
 `;
 
 const Variants = styled.div`
@@ -86,7 +88,6 @@ const Label = styled.div`
   padding: 4%;
   border-radius: 10px;
   margin-bottom: 4%;
-
   input.l {
     padding: 2%;
     width: 22%;
@@ -112,13 +113,14 @@ const Label = styled.div`
 `;
 
 const Advice = styled.p`
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   margin: 1% 4%;
+  margin-bottom: 20px;
   background: #fdf3c8;
   border: 1px solid #c4c4c4;
   border-radius: 10px;
   padding: 2% 3%;
-  margin: 30px 0;
+  margin-top: 30px;
   width: 100%;
 `;
 
@@ -189,7 +191,9 @@ class SingleConstructor extends Component {
   };
 
   showWrong = () => {
-    const elements = document.querySelectorAll(".Var");
+    const elements = document
+      .getElementById(this.props.construction.id)
+      .querySelectorAll(".Var");
 
     elements.forEach((element) => {
       element.style.border = "1px solid #DE6B48";
@@ -206,13 +210,17 @@ class SingleConstructor extends Component {
   };
 
   showRight = () => {
-    const elements = document.querySelectorAll(".Var");
+    const elements = document
+      .getElementById(this.props.construction.id)
+      .querySelectorAll(".Var");
     elements.forEach((element) => {
       element.style.border = "1px solid #84BC9C";
     });
     this.setState({ answerState: "right", answered: true });
 
-    const texts = document.querySelectorAll("#text");
+    const texts = document
+      .getElementById(this.props.construction.id)
+      .querySelectorAll("#text");
 
     let p;
     let v;
@@ -233,8 +241,12 @@ class SingleConstructor extends Component {
     });
     let inputs = [];
 
-    const results = document.querySelectorAll(".Var");
-    let nums = document.querySelectorAll(".l");
+    const results = document
+      .getElementById(this.props.construction.id)
+      .querySelectorAll(".Var");
+    let nums = document
+      .getElementById(this.props.construction.id)
+      .querySelectorAll(".l");
     nums.forEach((el) => el.remove());
 
     results.forEach((element) => {
@@ -291,7 +303,7 @@ class SingleConstructor extends Component {
   }
 
   render() {
-    const { me, lessonID, construction, userData } = this.props;
+    const { me, lessonID, construction, userData, story } = this.props;
     let data;
     me
       ? (data = userData
@@ -300,7 +312,7 @@ class SingleConstructor extends Component {
       : (data = [""]);
     return (
       <>
-        {me.id === construction.user.id && (
+        {me.id === construction.user.id && !story && (
           <StyledButton
             onClick={(e) => this.setState((prev) => ({ update: !prev.update }))}
           >
@@ -308,18 +320,16 @@ class SingleConstructor extends Component {
           </StyledButton>
         )}
         {!this.state.update && (
-          <Styles>
+          <Styles id={construction.id}>
             <Variants>
               <Title>Конструктор</Title>
               {this.state.variants.map((option, index) => (
-                <>
-                  <Box>
-                    <div key={index}>
-                      <div className="number">{index + 1}. </div>
-                      <div className="box">{renderHTML(option)} </div>
-                    </div>
-                  </Box>
-                </>
+                <Box key={index}>
+                  <div>
+                    <div className="number">{index + 1}. </div>
+                    <div className="box">{renderHTML(option)} </div>
+                  </div>
+                </Box>
               ))}
             </Variants>
             <Answers className="answer">
@@ -372,9 +382,6 @@ class SingleConstructor extends Component {
               </Mutation>
               {this.state.answerState === "wrong" ? (
                 <>
-                  {construction.hint && (
-                    <Advice>Подсказка: {renderHTML(construction.hint)}</Advice>
-                  )}
                   <StyledButton
                     onClick={(e) =>
                       this.setState((prev) => ({
@@ -384,11 +391,9 @@ class SingleConstructor extends Component {
                   >
                     {this.state.answerReveal ? "Скрыть ответ" : "Открыть ответ"}
                   </StyledButton>
-                  {this.state.answerReveal &&
-                    this.state.answer.map((el) => renderHTML(el))}
                 </>
               ) : null}
-              {me && me.id === construction.user.id ? (
+              {me && me.id === construction.user.id && !story ? (
                 <DeleteSingleConstructor
                   id={construction.id}
                   lessonID={lessonID}
@@ -396,6 +401,21 @@ class SingleConstructor extends Component {
               ) : null}
             </Answers>
           </Styles>
+        )}
+        {this.state.answerReveal && (
+          <Text>
+            <h4>Ответ:</h4>
+            <ol>
+              {this.state.answer.map((el) => (
+                <li>{renderHTML(el)}</li>
+              ))}
+            </ol>
+          </Text>
+        )}
+        {this.state.answerState === "wrong" && (
+          <Advice>
+            <b>Подсказка:</b> {renderHTML(construction.hint)}
+          </Advice>
         )}
         {this.state.update && (
           <UpdateConstruction

@@ -9,6 +9,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import ProblemBuilder from "./ProblemBuilder";
 
 const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
@@ -117,73 +118,23 @@ const UpdateProblem = (props) => {
 
   const classes = useStyles();
 
-  const { id, quizes, lessonID, newTests } = props;
+  const { id, quizes, lessonID, newTests, notes } = props;
   return (
     <>
       <Container>
         <DynamicLoadedEditor getEditorText={getText} previousText={text} />
         <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label" className={classes.label}>
-            Вопрос
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={nodeType === "quiz" ? nodeID : null}
-            type="quiz"
-            onChange={(e) => handleChange(e, "quiz")}
-          >
-            {quizes.map((q) => (
-              <MenuItem value={q.id}>{q.question}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <InputLabel id="demo-simple-select-label" className={classes.label}>
-            Тест
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={nodeType === "newTest" ? nodeID : null}
-            type="test"
-            onChange={(e) => handleChange(e, "newTest")}
-          >
-            {newTests.map((q) => (
-              <MenuItem value={q.id}>{q.question[0]}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <Mutation
-          mutation={UPDATE_PROBLEM_MUTATION}
-          variables={{
-            id: id,
-            text: text,
-            nodeID: nodeID,
-            nodeType: nodeType,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-        >
-          {(updateProblem, { loading, error }) => (
-            <Button
-              onClick={async (e) => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                const res = await updateProblem();
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
-          )}
-        </Mutation>
+        {nodeID && (
+          <ProblemBuilder
+            elements={[...newTests, ...quizes, ...notes]}
+            quizes={quizes}
+            newTests={newTests}
+            notes={notes}
+            nodeType={nodeType}
+            nodeID={nodeID}
+            lessonID={lessonID}
+          />
+        )}
       </Container>
     </>
   );

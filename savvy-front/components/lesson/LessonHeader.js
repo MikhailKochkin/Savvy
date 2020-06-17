@@ -424,7 +424,8 @@ class LessonHeader extends Component {
                           {me &&
                           lesson &&
                           (me.id === author ||
-                            me.permissions.includes("ADMIN")) ? (
+                            me.permissions.includes("ADMIN") ||
+                            lesson.open) ? (
                             <Link
                               // The user is the teacher or the admin or it is an openLesson.
                               href={{
@@ -504,3 +505,5 @@ class LessonHeader extends Component {
 }
 
 export default LessonHeader;
+export { CREATE_LESSONRESULT_MUTATION };
+export { UPDATE_LESSONRESULT_MUTATION };

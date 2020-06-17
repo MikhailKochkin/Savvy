@@ -97,6 +97,7 @@ type Mutation {
     ifWrong: String
     next: Json
   ): NewTest
+  updateTestForProblem(id: ID, next: Json): NewTest
   createLessonResult(visitsNumber: Int, lessonID: ID): LessonResult!
   updateLessonResult(id: ID!, visitsNumber: Int): LessonResult!
   createTestResult(
@@ -296,8 +297,18 @@ type Mutation {
   updateNote(id: ID!, text: String, next: Json): Note
   deleteNote(id: ID!): Note
   createFeedback(text: String!, lesson: ID, student: ID): Feedback!
-  createCourseVisit(visitsNumber: Int, coursePage: ID): CourseVisit!
-  updateCourseVisit(id: ID!, visitsNumber: Int): CourseVisit!
+  createCourseVisit(
+    visitsNumber: Int
+    coursePage: ID
+    student: ID
+  ): CourseVisit!
+  updateCourseVisit(
+    id: ID!
+    visitsNumber: Int
+    reminders: [DateTime]
+  ): CourseVisit
+  updateReminder(id: ID!, reminders: [DateTime]): CourseVisit
+  updateFinish(id: ID!, finish: DateTime): CourseVisit
   createExam(
     lesson: ID
     name: String
@@ -494,6 +505,16 @@ type Query {
     last: Int
   ): [CourseVisit]!
   note(where: NoteWhereUniqueInput!): Note
+  notes(
+    where: NoteWhereInput
+    orderBy: NoteOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [Note!]
+
   exams(
     where: ExamWhereInput
     orderBy: ExamOrderByInput
@@ -550,6 +571,7 @@ type User {
   lessons: [Lesson]!
   orders: [Order]!
   careerTrack: CareerTrack
+  courseVisits: [CourseVisit]
   visitedLessons: [String]
   careerTrackID: ID
   status: Status

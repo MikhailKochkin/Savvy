@@ -6,13 +6,14 @@ const FormatToolbarStyles = {
   background: "white",
   padding: "2%",
   margin: "0 0 10px 0",
-  position: "-webkit-sticky",
-  position: "sticky",
+  // position: "-webkit-sticky",
+  // position: "sticky",
   top: "20px",
-  border: "1px solid #EDEFED"
+  zIndex: "3",
+  border: "1px solid #EDEFED",
 };
 
-const FormatToolBar = props => (
+const FormatToolBar = (props) => (
   <div style={FormatToolbarStyles}>{props.children}</div>
 );
 
