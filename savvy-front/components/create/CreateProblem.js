@@ -133,42 +133,42 @@ const CreateProblem = (props) => {
         Выберите первый вопрос, с которого начнется объяснение решения задачи.
       </h3>
       <ProblemBuilder lesson={lesson} elements={elements} getNode={getNode} />
-      {nodeID && (
-        <Mutation
-          mutation={CREATE_PROBLEM_MUTATION}
-          variables={{
-            lessonID: lessonID,
-            text: text,
-            nodeID: nodeID,
-            nodeType: nodeType,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-          awaitRefetchQueries={true}
-        >
-          {(createProblem, { loading, error }) => (
-            <>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={async (e) => {
-                  e.preventDefault();
-                  const res = await createProblem();
-                  alert("Создали!");
-                }}
-              >
-                {loading ? "Сохраняем..." : "Сохранить"}
-              </Button>
-            </>
-          )}
-        </Mutation>
-      )}
+      {/* {nodeID && ( */}
+      <Mutation
+        mutation={CREATE_PROBLEM_MUTATION}
+        variables={{
+          lessonID: lessonID,
+          text: text,
+          nodeID: nodeID,
+          nodeType: nodeType,
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID },
+          },
+        ]}
+        awaitRefetchQueries={true}
+      >
+        {(createProblem, { loading, error }) => (
+          <>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={async (e) => {
+                e.preventDefault();
+                const res = await createProblem();
+                alert("Создали!");
+              }}
+            >
+              {loading ? "Сохраняем..." : "Сохранить"}
+            </Button>
+          </>
+        )}
+      </Mutation>
+      {/* )} */}
     </Styles>
   );
 };

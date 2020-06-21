@@ -7,6 +7,7 @@ import BuyDummy from "../BuyDummy";
 import Package from "./Package";
 import ReactResizeDetector from "react-resize-detector";
 import Modal from "styled-react-modal";
+import { Specials } from "../../../config";
 
 const Data = styled.div`
   display: flex;
@@ -289,7 +290,7 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
-  let theOne = ["ck0pdit6900rt0704h6c5zmer"].includes(coursePage.id);
+  let the1 = Specials.find((el) => el.courses.includes(coursePage.id));
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -362,7 +363,7 @@ const RegisterCard = (props) => {
               )}
               {coursePage.courseType === "FORMONEY" && (
                 <>
-                  {theOne && (
+                  {/* {the1 && (
                     <>
                       <Time>
                         <>
@@ -377,7 +378,7 @@ const RegisterCard = (props) => {
                         </>
                       </Time>
                     </>
-                  )}
+                  )} */}
 
                   <GridContainer>
                     <div className="Title">Выберите тариф:</div>
@@ -398,7 +399,7 @@ const RegisterCard = (props) => {
                       }}
                     />
                     <div className="Teacher">🚀 Продвинутый</div>
-                    {coursePage.package.length > 0 && (
+                    {the1 && (
                       <div
                         className="Package"
                         onClick={(e) => {
@@ -520,7 +521,12 @@ const RegisterCard = (props) => {
         onBackgroundClick={(e) => setIsOpen(!isOpen)}
         onEscapeKeydown={(e) => setIsOpen(!isOpen)}
       >
-        <Package coursePage={coursePage} me={me} />
+        <Package
+          coursePage={coursePage}
+          me={me}
+          teacher={the1.teacher}
+          discounts={the1.discounts}
+        />
       </StyledModal>
     </>
   );

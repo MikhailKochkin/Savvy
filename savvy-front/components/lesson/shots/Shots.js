@@ -81,6 +81,7 @@ const Styles = styled.div`
   box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
   margin: 30px 0;
   padding: 2%;
+  width: 100%;
 `;
 
 const Circle = styled.button`

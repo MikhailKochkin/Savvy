@@ -268,6 +268,7 @@ const UpdateConstruction = (props) => {
   };
 
   const { lessonID } = props;
+  console.log(props);
   return (
     <Center>
       <Advice>
@@ -346,11 +347,6 @@ const UpdateConstruction = (props) => {
                 их через запятые, без пробелов: 1,2,3,4"
           onChange={(e) => {
             let val = e.target.value;
-            // console.log(val);
-            // let val2 = val.split(" ");
-            // console.log(val2);
-            // let val3 = val2.map((el) => (el = parseInt(el)));
-            // console.log(val3);
             setAnswersNumber(val);
           }}
         />

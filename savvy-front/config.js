@@ -62,6 +62,27 @@ export const Tracks = [
   { "Право и технологии": "cjwx79iaj00rk0712tz12j7vi" },
 ];
 
+export const Specials = [
+  {
+    courses: [
+      "cjtreu3md00fp0897ga13aktp",
+      "ck4n47a2j01jg0790gspxqxju",
+      "ck89zsn5200790701jcpqxmiu",
+    ],
+    discounts: [1, 0.9, 0.8],
+    teacher: false,
+  },
+  {
+    courses: [
+      "ck0pdit6900rt0704h6c5zmer",
+      "ck2f2nk4007dw0785lhixfppw",
+      "ck587y4kp00lf07152t0tyywl",
+    ],
+    discounts: [1, 1, 0.76],
+    teacher: true,
+  },
+];
+
 export const Levels = [
   {
     level: 500,

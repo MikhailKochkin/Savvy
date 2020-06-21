@@ -140,7 +140,7 @@ const PriceSection = styled.div`
     justify-content: space-between;
 
     .price {
-      flex-basis: 25%;
+      flex-basis: 30%;
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -176,39 +176,84 @@ const PriceSection = styled.div`
 `;
 
 const Package = (props) => {
-  const [price, setPrice] = useState(props.coursePage.price);
-  const [courses, setCourses] = useState([props.coursePage.id]);
+  const [price, setPrice] = useState(
+    props.teacher ? props.coursePage.price * 1.75 : props.coursePage.price
+  );
+  const [courses, setCourses] = useState([props.coursePage]);
   const [comment, setComment] = useState([props.coursePage.title]);
-  const [initial, setInitial] = useState(props.coursePage.price);
+  const [initial, setInitial] = useState(
+    props.teacher ? props.coursePage.price * 1.75 : props.coursePage.price
+  );
   const { coursePage, me } = props;
   const content = [coursePage, ...coursePage.package];
   const set = async (e) => {
-    let c = [...courses];
-    let coef = 1;
-    if (courses.includes(e.target.id)) {
-      if (courses.length - 1 < 1) {
-        coef = 1;
-      } else if (courses.length - 1 === 2) {
-        coef = 0.9;
-      } else if (courses.length - 1 === 3) {
-        coef = 0.8;
+    if (props.teacher) {
+      let newEl = content.find((el) => el.id === e.target.id);
+      //- курс
+      if (courses.includes(newEl)) {
+        console.log(1);
+        let all = courses.filter((co) => co.id !== newEl.id);
+        let num = all.length > 0 ? all.length : 1;
+        setPrice(
+          parseInt(
+            all.map((el) => el.price * 1.75).reduce((a, b) => a + b, 0) *
+              props.discounts[num - 1]
+          )
+        );
+        setInitial(
+          parseInt(all.map((el) => el.price * 1.75).reduce((a, b) => a + b, 0))
+        );
+        setCourses(courses.filter((co) => co.id !== newEl.id));
+        // setComment(comment.filter((co) => co !== e.target.name));
+      } else {
+        // + курс
+        console.log(2);
+        let all = [...courses, newEl];
+        let num = all.length > 0 ? all.length : 0;
+        setPrice(
+          parseInt(
+            all.map((el) => el.price * 1.75).reduce((a, b) => a + b, 0) *
+              props.discounts[num - 1]
+          )
+        );
+        setInitial(
+          parseInt(all.map((el) => el.price * 1.75).reduce((a, b) => a + b, 0))
+        );
+        setCourses([...courses, newEl]);
       }
-      setCourses(c.filter((co) => co !== e.target.id));
-      setInitial((courses.length - 1) * props.coursePage.price);
-      setComment(comment.filter((co) => co !== e.target.name));
-      setPrice((courses.length - 1) * props.coursePage.price * coef);
     } else {
-      if (courses.length + 1 === 1) {
-        coef = 1;
-      } else if (courses.length + 1 === 2) {
-        coef = 0.9;
-      } else if (courses.length + 1 === 3) {
-        coef = 0.7;
+      if (courses.includes(newEl)) {
+        let newEl = content.find((el) => el.id === e.target.id);
+        // + курс
+        console.log(3);
+        let all = courses.filter((co) => co.id !== newEl.id);
+        let num = all.length > 0 ? all.length : 0;
+        setPrice(
+          parseInt(
+            all.map((el) => el.price).reduce((a, b) => a + b, 0) *
+              props.discounts[num - 1]
+          )
+        );
+        setInitial(
+          parseInt(all.map((el) => el.price).reduce((a, b) => a + b, 0))
+        );
+        setCourses(courses.filter((co) => co.id !== newEl.id));
+      } else {
+        // - курс
+        console.log(4);
+        let all = [...courses, newEl];
+        let num = all.length > 0 ? all.length : 0;
+        setPrice(
+          parseInt(
+            all.map((el) => el.price).reduce((a, b) => a + b, 0) *
+              props.discounts[num - 1]
+          )
+        );
+        setInitial(
+          parseInt(all.map((el) => el.price).reduce((a, b) => a + b, 0))
+        );
+        setCourses([...courses, newEl]);
       }
-      setCourses([...c, e.target.id]);
-      setInitial((courses.length + 1) * props.coursePage.price);
-      setComment([...comment, e.target.name]);
-      setPrice((courses.length + 1) * props.coursePage.price * coef);
     }
   };
 
@@ -230,7 +275,7 @@ const Package = (props) => {
                   </div>
                 </div>
                 <button id={el.id} name={el.title} onClick={(e) => set(e)}>
-                  {courses.includes(el.id) ? "Удалить" : "Выбрать"}
+                  {courses.includes(el) ? "Удалить" : "Выбрать"}
                 </button>
               </div>
             </Box>

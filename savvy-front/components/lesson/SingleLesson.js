@@ -637,7 +637,7 @@ class SingleLesson extends Component {
               variables={{
                 id: this.props.id,
               }}
-              fetchPolicy="no-cache"
+              fetchPolicy="cache-and-network"
             >
               {({ data, error, loading }) => {
                 if (error) return <Error error={error} />;

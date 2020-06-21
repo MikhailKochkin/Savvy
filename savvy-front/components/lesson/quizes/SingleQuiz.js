@@ -276,13 +276,11 @@ class SingleQuiz extends Component {
   render() {
     const { me, user, userData, exam, story, ifWrong, ifRight } = this.props;
     let data;
-    console.log(this.props.id);
     if (me) {
       data = userData
         .filter((el) => el.quiz.id === this.props.id)
         .filter((el) => el.student.id === me.id);
     }
-    console.log(userData, data);
     return (
       <Mutation
         mutation={CREATE_QUIZRESULT_MUTATION}

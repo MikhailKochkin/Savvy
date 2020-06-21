@@ -135,6 +135,34 @@ const UpdateProblem = (props) => {
             lessonID={lessonID}
           />
         )}
+        <Mutation
+          mutation={UPDATE_PROBLEM_MUTATION}
+          variables={{
+            id: id,
+            text: text,
+            nodeID: nodeID,
+            nodeType: nodeType,
+          }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lessonID },
+            },
+          ]}
+        >
+          {(updateProblem, { loading, error }) => (
+            <Button
+              onClick={async (e) => {
+                // Stop the form from submitting
+                e.preventDefault();
+                // call the mutation
+                const res = await updateProblem();
+              }}
+            >
+              {loading ? "Сохраняем..." : "Сохранить"}
+            </Button>
+          )}
+        </Mutation>
       </Container>
     </>
   );

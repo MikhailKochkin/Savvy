@@ -29,9 +29,9 @@ class Exam extends Component {
     let newNote;
     let newTest;
     let finish;
-    if (Object.keys(data)[0] === "quiz") {
+    if (data[1].type === "quiz") {
       let el = this.props.lesson.quizes.filter(
-        (q) => q.id === Object.values(data)[0]
+        (q) => q.id === data[1].value
       )[0];
       newQuiz = (
         <SingleQuiz
@@ -39,6 +39,8 @@ class Exam extends Component {
           id={el.id}
           question={el.question}
           answer={el.answer}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           me={this.props.me}
           type={el.type}
           hidden={true}
@@ -49,6 +51,7 @@ class Exam extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
+          story={true}
         />
       );
 
@@ -61,9 +64,9 @@ class Exam extends Component {
         };
       });
     }
-    if (Object.keys(data)[0] === "newTest") {
+    if (data[1].type && data[1].type.toLowerCase() === "newtest") {
       let el = this.props.lesson.newTests.filter(
-        (n) => n.id === Object.values(data)[0]
+        (n) => n.id === data[1].value
       )[0];
       newTest = (
         <SingleTest
@@ -72,6 +75,8 @@ class Exam extends Component {
           testID={el.id}
           question={el.question}
           answers={el.answers}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           true={el.correct}
           user={el.user.id}
           type={el.type}
@@ -83,6 +88,7 @@ class Exam extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
+          story={true}
         />
       );
       this.setState((state) => {
@@ -94,12 +100,11 @@ class Exam extends Component {
         };
       });
     }
-    if (Object.keys(data)[0] === "note") {
-      let el = this.props.lesson.notes.filter(
-        (q) => q.id === Object.values(data)[0]
-      )[0];
+    if (data[1].type === "note") {
+      let el = this.props.lesson.notes.filter((q) => q.id === data[1].value)[0];
       newNote = (
         <Note
+          id={el.id}
           index={this.state.componentList.length + 1}
           key={el.id}
           text={el.text}
@@ -109,6 +114,7 @@ class Exam extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
+          story={true}
         />
       );
       this.setState((state) => {
@@ -120,7 +126,12 @@ class Exam extends Component {
         };
       });
     }
-    if (Object.keys(data)[0] === "finish") {
+    if (
+      data[1].type === "finish" ||
+      data[1].type === null ||
+      data[1].value === null ||
+      data[1].value === ""
+    ) {
       finish = (
         <Finish
           key={1}
@@ -130,29 +141,33 @@ class Exam extends Component {
         />
       );
       this.setState((state) => {
-        const componentList = [...state.componentList, finish];
-        const results = [...state.results, type];
-        return {
-          componentList,
-          results,
-        };
+        if (!(finish in this.state.componentList)) {
+          const componentList = [...state.componentList, finish];
+          const results = [...state.results, type];
+          return {
+            componentList,
+            results,
+          };
+        }
       });
     }
   };
   componentDidMount = () => {
-    let newQuiz;
+    let item;
     let el;
     if (this.props.exam.nodeType === "quiz") {
       el = this.props.lesson.quizes.find(
         (quiz) => quiz.id === this.props.exam.nodeID
       );
-      newQuiz = (
+      item = (
         <SingleQuiz
-          index={1}
           id={el.id}
+          index={1}
           key={el.id}
           question={el.question}
           answer={el.answer}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
           me={this.props.me}
           type={el.type}
           hidden={true}
@@ -163,11 +178,38 @@ class Exam extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
+          story={true}
+        />
+      );
+    } else if (this.props.exam.nodeType.toLowerCase() === "newtest") {
+      el = this.props.lesson.newTests.find(
+        (test) => test.id === this.props.exam.nodeID
+      );
+      item = (
+        <SingleTest
+          key={el.id}
+          testID={el.id}
+          question={el.question}
+          answers={el.answers}
+          true={el.correct}
+          ifRight={el.ifRight}
+          ifWrong={el.ifWrong}
+          user={el.user.id}
+          type={el.type}
+          me={this.props.me}
+          userData={this.props.lesson.testResults}
+          lessonID={this.props.lesson.id}
+          length={Array(el.correct.length).fill(false)}
+          userData={this.props.lesson.testResults}
+          getData={this.updateArray}
+          next={el.next}
+          story={true}
+          exam={true}
         />
       );
     }
     this.setState((state) => {
-      const componentList = [...state.componentList, newQuiz];
+      const componentList = [...state.componentList, item];
       return {
         componentList,
       };

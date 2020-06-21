@@ -258,8 +258,10 @@ class SingleConstructor extends Component {
   check = () => {
     // 0.
     // 1. Find out the rule for checking the answer
+    console.log(this.state.type);
     if (this.state.type === "include") {
       let res;
+      console.log(this.state.received);
       // 2. Check if all the answers have been given
       if (new Set(this.state.received).size !== this.state.received.length) {
         // If not, show that the answer is wrong
@@ -282,6 +284,10 @@ class SingleConstructor extends Component {
       }
     } else if (this.state.type === "equal") {
       // 3. Check if all the correct variants are included into the answer, order does matter
+      console.log(this.state.answer),
+        console.log(this.state.received),
+        console.log(JSON.stringify(this.state.answer)),
+        console.log(JSON.stringify(this.state.received));
       if (
         JSON.stringify(this.state.answer) == JSON.stringify(this.state.received)
       ) {
@@ -367,8 +373,11 @@ class SingleConstructor extends Component {
                       color="primary"
                       onClick={async (e) => {
                         e.preventDefault();
+                        console.log(1);
                         const res = await this.check();
+                        console.log(2);
                         if (data.length == 0) {
+                          console.log(3);
                           if (this.state.answerState === "right") {
                             const res2 = await createConstructionResult();
                           }
@@ -412,11 +421,11 @@ class SingleConstructor extends Component {
             </ol>
           </Text>
         )}
-        {this.state.answerState === "wrong" && (
+        {/* {this.state.answerState === "wrong" && (
           <Advice>
             <b>Подсказка:</b> {renderHTML(construction.hint)}
           </Advice>
-        )}
+        )} */}
         {this.state.update && (
           <UpdateConstruction
             id={construction.id}
