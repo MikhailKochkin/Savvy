@@ -524,8 +524,8 @@ const RegisterCard = (props) => {
         <Package
           coursePage={coursePage}
           me={me}
-          teacher={the1.teacher}
-          discounts={the1.discounts}
+          teacher={the1 ? the1.teacher : null}
+          discounts={the1 ? the1.discounts : null}
         />
       </StyledModal>
     </>
