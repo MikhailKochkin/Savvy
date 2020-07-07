@@ -8,7 +8,7 @@ const Styles = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  display: ${props => (props.hide ? "none" : "block")};
+  display: ${(props) => (props.hide ? "none" : "block")};
 `;
 
 const Buttons = styled.div`
@@ -23,18 +23,20 @@ const Buttons = styled.div`
 
 class ApplicationBox extends Component {
   state = {
-    accept: "no"
+    accept: "no",
   };
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      accept: dataFromChild
+      accept: dataFromChild,
     });
   };
   render() {
     return (
       <Styles>
         <>
-          <h3>{this.props.user.name}</h3>
+          <h3>
+            {this.props.user.name} {this.props.user.surname}
+          </h3>
           <div>Номер платежа: {this.props.paymentID}</div>
           <div>Номер заявки: {this.props.orderID}</div>
           <div>Оплачено: {this.props.isPaid}</div>

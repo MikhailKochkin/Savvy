@@ -26,8 +26,6 @@ const NoteStyles = styled.div`
   width: ${(props) => (props.story ? "100%" : "95%")};
   margin: 2% 0 0 0;
   font-size: 1.6rem;
-  border: ${(props) => (props.story ? null : "1px solid #e4e4e4")};
-  border-radius: 8px;
   @media (max-width: 800px) {
     font-size: 1.4rem;
   }
@@ -36,8 +34,8 @@ const NoteStyles = styled.div`
   }
   img {
     display: block;
-    max-width: 100%;
-    max-height: 20em;
+    width: 100%;
+    max-height: 50em;
     box-shadow: "0 0 0 2px blue;";
   }
   iframe {
@@ -53,6 +51,15 @@ const NoteStyles = styled.div`
     &:hover {
       text-decoration: underline;
     }
+  }
+  .mark {
+    color: #008489;
+    font-size: 2rem;
+    width: 100%;
+    margin: 3% 0;
+    padding: 3% 8%;
+    background-color: #f2fafb;
+    border-radius: 5px;
   }
   pre {
     background: #282c34;

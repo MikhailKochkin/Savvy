@@ -9,6 +9,7 @@ const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
 const FinishEmail = require("../emails/Finish");
+const NextWeekEmail = require("../emails/nextWeek");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 const makeANiceEmail = (text) => `
@@ -1810,8 +1811,51 @@ const Mutations = {
     const Reminder = await client.sendEmail({
       From: "Mikhail@besavvy.app",
       To: users[0].email,
-      Subject: "🥇 Только 4% заканчивают курс онлайн. Будешь среди них?",
+      Subject: "🥇 Только 4% заканчивают онлайн-курс. Будешь среди них?",
       HtmlBody: ReminderEmail.ReminderEmail(
+        users[0].name,
+        courseVisits[0].coursePage.title,
+        courseVisits[0].coursePage.id
+      ),
+    });
+    return CourseVisit;
+  },
+  async newWeek(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    delete updates.reminders;
+    console.log(args.reminders);
+    //run the update method
+    const CourseVisit = await ctx.db.mutation.updateCourseVisit(
+      {
+        data: {
+          reminders: {
+            set: args.reminders,
+          },
+          ...updates,
+        },
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
+    const users = await ctx.db.query.users({
+      where: { courseVisits_some: { id: args.id } },
+    });
+
+    const courseVisits = await ctx.db.query.courseVisits(
+      {
+        where: { id: args.id },
+      },
+      `{ id, coursePage {id, title} }`
+    );
+
+    const NextWeek = await client.sendEmail({
+      From: "Mikhail@besavvy.app",
+      To: users[0].email,
+      Subject: "Новая неделя курса. Готовы?",
+      HtmlBody: NextWeekEmail.NextWeekEmail(
         users[0].name,
         courseVisits[0].coursePage.title,
         courseVisits[0].coursePage.id

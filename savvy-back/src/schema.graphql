@@ -308,6 +308,7 @@ type Mutation {
     reminders: [DateTime]
   ): CourseVisit
   updateReminder(id: ID!, reminders: [DateTime]): CourseVisit
+  newWeek(id: ID!, reminders: [DateTime]): CourseVisit
   updateFinish(id: ID!, finish: DateTime): CourseVisit
   createExam(
     lesson: ID

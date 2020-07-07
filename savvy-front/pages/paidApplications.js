@@ -5,44 +5,45 @@ import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import ChangeForum from "../components/lesson/forum/ChangeForum";
 
-// const CP_QUERY = gql`
-//   query CP_QUERY($id: ID!) {
-//     coursePage(where: { id: $id }) {
-//       id
-//       lessons {
-//         name
-//         id
-//         map
-//       }
-//       new_students {
-//         id
-//         name
-//         courseVisits {
-//           id
-//           coursePage {
-//             id
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
+const CP_QUERY = gql`
+  query CP_QUERY($id: ID!) {
+    coursePage(where: { id: $id }) {
+      id
+      lessons {
+        name
+        id
+        map
+      }
+      new_students {
+        id
+        name
+        surname
+        courseVisits {
+          id
+          coursePage {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
 
-// const CREATE_COURSE_VISIT_MUTATION = gql`
-//   mutation CREATE_COURSE_VISIT_MUTATION(
-//     $visitsNumber: Int
-//     $coursePage: ID
-//     $student: ID
-//   ) {
-//     createCourseVisit(
-//       visitsNumber: $visitsNumber
-//       coursePage: $coursePage
-//       student: $student
-//     ) {
-//       id
-//     }
-//   }
-// `;
+const CREATE_COURSE_VISIT_MUTATION = gql`
+  mutation CREATE_COURSE_VISIT_MUTATION(
+    $visitsNumber: Int
+    $coursePage: ID
+    $student: ID
+  ) {
+    createCourseVisit(
+      visitsNumber: $visitsNumber
+      coursePage: $coursePage
+      student: $student
+    ) {
+      id
+    }
+  }
+`;
 
 // const paidApplications = () => {
 //   return (
@@ -51,7 +52,7 @@ import ChangeForum from "../components/lesson/forum/ChangeForum";
 //         query={CP_QUERY}
 //         fetchPolicy="network-only"
 //         variables={{
-//           id: "cjzmohli302sg0732tba2svs3",
+//           id: "ck0pdit6900rt0704h6c5zmer",
 //         }}
 //       >
 //         {({ data, loading, fetchMore }) => {
@@ -62,20 +63,20 @@ import ChangeForum from "../components/lesson/forum/ChangeForum";
 //               {data.coursePage.new_students.map((s) => (
 //                 <>
 //                   <div>
-//                     {s.name} {s.id}{" "}
+//                     {s.name} {s.surname} {s.id}{" "}
 //                     {
 //                       s.courseVisits.filter(
-//                         (c) => c.coursePage.id === "cjzmohli302sg0732tba2svs3"
+//                         (c) => c.coursePage.id === "ck0pdit6900rt0704h6c5zmer"
 //                       ).length
 //                     }
 //                   </div>
 //                   {s.courseVisits.filter(
-//                     (c) => c.coursePage.id === "cjzmohli302sg0732tba2svs3"
+//                     (c) => c.coursePage.id === "ck0pdit6900rt0704h6c5zmer"
 //                   ).length === 0 && (
 //                     <Mutation
 //                       mutation={CREATE_COURSE_VISIT_MUTATION}
 //                       variables={{
-//                         coursePage: "cjzmohli302sg0732tba2svs3",
+//                         coursePage: "ck0pdit6900rt0704h6c5zmer",
 //                         visitsNumber: 0,
 //                         student: s.id,
 //                       }}

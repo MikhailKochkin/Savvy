@@ -187,9 +187,11 @@ const Package = (props) => {
   const { coursePage, me } = props;
   const content = [coursePage, ...coursePage.package];
   const set = async (e) => {
+    console.log(0);
+    let newEl = content.find((el) => el.id === e.target.id);
+    //- курс
+    console.log(newEl);
     if (props.teacher) {
-      let newEl = content.find((el) => el.id === e.target.id);
-      //- курс
       if (courses.includes(newEl)) {
         console.log(1);
         let all = courses.filter((co) => co.id !== newEl.id);

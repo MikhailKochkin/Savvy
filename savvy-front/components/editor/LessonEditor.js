@@ -17,6 +17,7 @@ import { image } from "react-icons-kit/fa/image";
 import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
 import { table } from "react-icons-kit/fa/table";
+import { flag } from "react-icons-kit/fa/flag";
 
 import DeepTable from "slate-deep-table";
 
@@ -25,6 +26,16 @@ const plugins = [DeepTable()];
 const LinkStyle = styled.a`
   text-decoration: underline;
   color: #800000;
+`;
+
+const Mark = styled.div`
+  color: #008489;
+  font-size: 2rem;
+  width: 100%;
+  margin: 3% 0;
+  padding: 3% 8%;
+  background-color: #f2fafb;
+  border-radius: 5px;
 `;
 
 const Pre = styled.pre`
@@ -111,6 +122,7 @@ const BLOCK_TAGS = {
   code: "code",
   ol: "numbered-list",
   li: "list-item",
+  div: "highlight",
 };
 
 const INLINE_TAGS = {
@@ -192,6 +204,8 @@ const rules = [
                 <code>{children}</code>
               </pre>
             );
+          case "highlight":
+            return <Mark className="mark">{children}</Mark>;
           case "video":
             return (
               <iframe
@@ -230,6 +244,8 @@ const rules = [
             return <h2>{children}</h2>;
           case "code":
             return <code>{children}</code>;
+          case "highlight":
+            return <div className="highlight">{children}</div>;
         }
       }
     },
@@ -334,6 +350,23 @@ class App extends React.Component {
     editor.unwrapInline("code");
   };
 
+  hasHighlight = () => {
+    const { value } = this.state;
+    return value.inlines.some((inline) => inline.type === "highlight");
+  };
+
+  wrapHighlight = (editor) => {
+    console.log("!");
+    editor.wrapInline({
+      type: "highlight",
+    });
+    editor.moveToEnd();
+  };
+
+  unwrapHighlight = (editor) => {
+    editor.unwrapInline("highlight");
+  };
+
   // Store a reference to the `editor`.
   ref = (editor) => {
     this.editor = editor;
@@ -355,6 +388,7 @@ class App extends React.Component {
           <ButtonStyle onMouseDown={(event) => this.onClickLink(event)}>
             <Icon icon={link} />
           </ButtonStyle>
+          {this.renderHintBlockButton("highlight", flag)}
           <ButtonStyle onMouseDown={(event) => this.onClickImage(event)}>
             <Icon icon={image} />
           </ButtonStyle>
@@ -384,6 +418,7 @@ class App extends React.Component {
   // Render a Slate block.
   renderBlock = (props, editor, next) => {
     const { attributes, node, isFocused, children } = props;
+    console.log(node.type);
     switch (node.type) {
       case "paragraph":
         return <p {...attributes}>{children}</p>;
@@ -395,6 +430,8 @@ class App extends React.Component {
         const src = node.data.get("src");
         return <Img {...attributes} src={src} />;
       }
+      case "highlight":
+        return <Mark>{children}</Mark>;
       case "code":
         return (
           <Pre>
@@ -489,6 +526,14 @@ class App extends React.Component {
     );
   };
 
+  renderHintBlockButton = (type, icon) => {
+    return (
+      <ButtonStyle onMouseDown={(event) => this.onClickHintBlock(event, type)}>
+        <Icon icon={icon} />
+      </ButtonStyle>
+    );
+  };
+
   renderTableToolbar = () => {
     return (
       <div className="buttons">
@@ -556,6 +601,17 @@ class App extends React.Component {
       this.editor.unwrapBlock("code");
     } else {
       this.editor.wrapBlock("code");
+    }
+  };
+
+  onClickFlag = (event) => {
+    event.preventDefault();
+    const isCode = this.hasCodeBlock("mark");
+    console.log(isCode);
+    if (isCode) {
+      this.editor.unwrapBlock("mark");
+    } else {
+      this.editor.wrapBlock("mark");
     }
   };
 
@@ -636,9 +692,28 @@ class App extends React.Component {
     }
   };
 
+  onClickHintBlock = (event, type) => {
+    event.preventDefault();
+
+    const { editor } = this;
+    const { value } = editor;
+    const { document } = value;
+    // Handle everything but list buttons.
+    // if (type !== "highlight") {
+    const isActive = this.hasBlock(type);
+    const isHint = this.hasBlock("paragraph");
+    if (isHint) {
+      editor.setBlocks(isActive ? DEFAULT_NODE : type);
+      // .unwrapBlock('bulleted-list')
+    } else {
+      editor.setBlocks(isActive ? DEFAULT_NODE : type);
+    }
+  };
+
   onChange = ({ value }) => {
     this.setState({ value });
     this.props.getEditorText(html.serialize(this.state.value));
+    console.log(html.serialize(this.state.value));
   };
 }
 

@@ -17,6 +17,7 @@ const PAGE_ORDERS_QUERY = gql`
       price
       user {
         name
+        surname
         id
       }
     }
@@ -39,11 +40,11 @@ const Width = styled.div`
 
 class PaidApplications extends Component {
   state = {
-    show: false
+    show: false,
   };
   toggle = () => {
-    this.setState(prevState => ({
-      show: !prevState.show
+    this.setState((prevState) => ({
+      show: !prevState.show,
     }));
   };
   render() {
@@ -54,7 +55,7 @@ class PaidApplications extends Component {
             <Query
               query={PAGE_ORDERS_QUERY}
               variables={{
-                id: this.props.id
+                id: this.props.id,
               }}
             >
               {({ data, error, loading }) => {
@@ -67,7 +68,7 @@ class PaidApplications extends Component {
                       <p>По этому курсу нет заявок!</p>
                     ) : (
                       <div>
-                        {data.orders.map(order => (
+                        {data.orders.map((order) => (
                           <ApplicationBox
                             key={order.paymentID}
                             applicantId={order.user.id}

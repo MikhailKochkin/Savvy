@@ -34,9 +34,9 @@ const Block = styled.div`
 `;
 
 const Search = styled.div`
-  border-bottom: 1px solid grey;
   padding: 2%;
   width: 100%;
+  text-align: center;
   select {
     margin-left: 15px;
   }
@@ -146,21 +146,8 @@ const Feed = (props) => {
   } else {
     visited = [];
   }
-  console.log(props.next);
   return (
     <Styles>
-      <Search>
-        Перейти к конкретному разделу:
-        <select
-          id="num"
-          name="num"
-          onChange={(e) => search(parseInt(e.target.value))}
-        >
-          {props.components.map((el, i) => (
-            <option value={i - 1}>{i + 1}</option>
-          ))}
-        </select>
-      </Search>
       {props.components.slice(0, num + 2).map((c, i) => (
         <Block
           show={i === num + 1 ? "final" : "no"}
@@ -188,6 +175,20 @@ const Feed = (props) => {
         <div>
           {num + 1} из {props.components.length}
         </div>
+        {/* {props.components.length > num + 1 && ( */}
+        <Search>
+          Перейти к разделу:
+          <select
+            id="num"
+            name="num"
+            onChange={(e) => search(parseInt(e.target.value))}
+          >
+            {props.components.map((el, i) => (
+              <option value={i - 1}>{i + 1}</option>
+            ))}
+          </select>
+        </Search>
+        {/* )} */}
         {props.me &&
           props.components.length === num + 1 &&
           props.next &&

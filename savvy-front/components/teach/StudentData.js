@@ -15,6 +15,14 @@ const UPDATE_COURSE_VISIT_MUTATION = gql`
   }
 `;
 
+const UPDATE_COURSE_VISIT_MUTATION2 = gql`
+  mutation UPDATE_COURSE_VISIT_MUTATION2($id: ID!, $reminders: [DateTime]) {
+    newWeek(id: $id, reminders: $reminders) {
+      id
+    }
+  }
+`;
+
 const UPDATE_FINISH_MUTATION = gql`
   mutation UPDATE_FINISH_MUTATION($id: ID!, $finish: DateTime) {
     updateFinish(id: $id, finish: $finish) {
@@ -254,6 +262,30 @@ class Person extends Component {
                   }}
                 </Mutation>
               )}
+              {courseVisit && (
+                <Mutation
+                  mutation={UPDATE_COURSE_VISIT_MUTATION2}
+                  variables={{
+                    id: courseVisit.id,
+                    reminders: [...courseVisit.reminders, new Date()],
+                  }}
+                >
+                  {(newWeek, { loading, error }) => {
+                    return (
+                      <SendButton
+                        onClick={(e) => {
+                          const data = newWeek();
+                          alert("Отправлено!");
+                        }}
+                        name="CV"
+                      >
+                        Новая неделя
+                      </SendButton>
+                    );
+                  }}
+                </Mutation>
+              )}
+              {console.log(courseVisit.reminders)}
               {/* {courseVisit && (
                 <Mutation
                   mutation={UPDATE_FINISH_MUTATION}
