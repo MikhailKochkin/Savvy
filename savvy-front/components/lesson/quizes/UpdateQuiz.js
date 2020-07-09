@@ -48,9 +48,10 @@ const Container = styled.div`
     width: 100%;
     height: 100px;
     outline: 0;
+    font-family: Montserrat;
     border: 1px solid #ccc;
     border-radius: 3.5px;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
   select {
     width: 100%;
@@ -79,7 +80,7 @@ const Container = styled.div`
 
 const Button = styled.button`
   padding: 1% 2%;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   width: 20%;
   border-radius: 5px;
   color: white;
@@ -89,11 +90,11 @@ const Button = styled.button`
   cursor: pointer;
   outline: 0;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
-const UpdateQuiz = props => {
+const UpdateQuiz = (props) => {
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
   const [ifRight, setIfRight] = useState(props.ifRight);
@@ -118,7 +119,7 @@ const UpdateQuiz = props => {
         required
         placeholder="Вопрос"
         defaultValue={question}
-        onChange={e => setQuestion(e.target.value)}
+        onChange={(e) => setQuestion(e.target.value)}
       />
       <textarea
         id="answer"
@@ -126,7 +127,7 @@ const UpdateQuiz = props => {
         required
         placeholder="Ответ"
         defaultValue={answer}
-        onChange={e => setAnswer(e.target.value)}
+        onChange={(e) => setAnswer(e.target.value)}
       />
       <textarea
         cols={60}
@@ -136,7 +137,7 @@ const UpdateQuiz = props => {
         name="answer"
         placeholder="Комментарий в случае правильного ответа"
         defaultValue={ifRight}
-        onChange={e => setIfRight(e.target.value)}
+        onChange={(e) => setIfRight(e.target.value)}
       />
       <textarea
         cols={60}
@@ -146,9 +147,9 @@ const UpdateQuiz = props => {
         name="answer"
         placeholder="Комментарий в случае  неправильного ответа"
         defaultValue={ifWrong}
-        onChange={e => setIfWrong(e.target.value)}
+        onChange={(e) => setIfWrong(e.target.value)}
       />
-      <h2>Выберите задания для формата "Экзамен":</h2>
+      {/* <h2>Выберите задания для формата "Экзамен":</h2>
       <h3>Заметки:</h3>
       {notes.map(note => (
         <Option key={note.id} note={note} getData={myCallback} />
@@ -160,7 +161,7 @@ const UpdateQuiz = props => {
       <h3>Тесты:</h3>
       {tests.map(test => (
         <Option key={test.id} test={test} getData={myCallback} />
-      ))}
+      ))} */}
       <Mutation
         mutation={UPDATE_QUIZ_MUTATION}
         variables={{
@@ -171,19 +172,19 @@ const UpdateQuiz = props => {
           ifWrong: ifWrong,
           next: {
             true: trueVal,
-            false: falseVal
-          }
+            false: falseVal,
+          },
         }}
         refetchQueries={() => [
           {
             query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID }
-          }
+            variables: { id: lessonID },
+          },
         ]}
       >
         {(updateQuiz, { loading, error }) => (
           <Button
-            onClick={async e => {
+            onClick={async (e) => {
               // Stop the form from submitting
               e.preventDefault();
               // call the mutation

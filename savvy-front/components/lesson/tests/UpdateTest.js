@@ -227,7 +227,7 @@ const UpdateTest = (props) => {
           getEditorText={setIf}
         />
       </Comment>
-      <h2>Выберите задания для формата "Экзамен" и "Задача":</h2>
+      {/* <h2>Выберите задания для формата "Экзамен" и "Задача":</h2>
       <h3>Вопросы:</h3>
       <Grid>
         {quizes.map((quiz) => (
@@ -245,7 +245,7 @@ const UpdateTest = (props) => {
         {tests.map((test) => (
           <Option key={test.id} test={test} getData={myCallback} />
         ))}
-      </Grid>
+      </Grid> */}
       <Mutation
         mutation={UPDATE_TEST_MUTATION}
         refetchQueries={() => [

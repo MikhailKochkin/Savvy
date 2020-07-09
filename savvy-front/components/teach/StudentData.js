@@ -285,7 +285,7 @@ class Person extends Component {
                   }}
                 </Mutation>
               )}
-              {console.log(courseVisit.reminders)}
+              {/* {console.log(courseVisit.reminders)} */}
               {/* {courseVisit && (
                 <Mutation
                   mutation={UPDATE_FINISH_MUTATION}

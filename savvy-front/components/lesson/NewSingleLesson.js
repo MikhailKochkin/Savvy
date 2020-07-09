@@ -336,7 +336,7 @@ const LessonPart = styled.div`
   display: flex;
   /* border: 1px solid #edefed; */
   padding: 0.5% 2%;
-  width: 40%;
+  width: 45%;
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;

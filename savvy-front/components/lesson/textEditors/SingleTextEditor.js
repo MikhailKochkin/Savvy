@@ -133,6 +133,7 @@ const StyledButton = withStyles({
     marginRight: "2%",
     fontSize: "1.6rem",
     textTransform: "none",
+    maxHeight: "40px",
   },
 })(Button);
 
@@ -292,7 +293,7 @@ class SingleTextEditor extends Component {
                     <Mutation
                       mutation={CREATE_TEXTEDITORRESULT_MUTATION}
                       variables={{
-                        lesson: lesson,
+                        lesson: this.props.lessonID,
                         textEditor: this.props.textEditor.id,
                         attempts: this.state.attempts,
                         correct: this.state.correct_option,

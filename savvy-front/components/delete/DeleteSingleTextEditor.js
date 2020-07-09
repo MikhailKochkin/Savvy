@@ -15,13 +15,13 @@ const DELETE_TEXTEDITOR_MUTATION = gql`
 
 const useStyles = makeStyles({
   button: {
-    margin: "4% 0",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+    maxHeight: "40px",
+  },
 });
 
-const DeleteSingleProblem = props => {
+const DeleteSingleProblem = (props) => {
   const classes = useStyles();
   const { lessonID, id } = props;
   return (
@@ -31,8 +31,8 @@ const DeleteSingleProblem = props => {
       refetchQueries={() => [
         {
           query: SINGLE_LESSON_QUERY,
-          variables: { id: lessonID }
-        }
+          variables: { id: lessonID },
+        },
       ]}
     >
       {(deleteTextEditor, { loading, error }) => (
@@ -45,7 +45,7 @@ const DeleteSingleProblem = props => {
                 "Вы точно хотите удалить эту запись? Запись исчезнет после перезагрузки страницы."
               )
             ) {
-              deleteTextEditor().catch(error => {
+              deleteTextEditor().catch((error) => {
                 alert(error.message);
               });
             }

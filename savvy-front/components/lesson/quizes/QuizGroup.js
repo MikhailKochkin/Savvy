@@ -11,21 +11,21 @@ class QuizGroup extends Component {
     tests: this.props.quizes,
     completed: 0,
     handIn: false,
-    data: [this.props.quizes]
+    data: [this.props.quizes],
   };
 
   myCallback = () => {
-    this.setState(prevState => ({ completed: prevState.completed + 1 }));
+    this.setState((prevState) => ({ completed: prevState.completed + 1 }));
   };
 
-  updateArray = data => {
+  updateArray = (data) => {
     const newQuiz = this.props.quizes.filter(
-      q => q.id === Object.values(data)[0]
+      (q) => q.id === Object.values(data)[0]
     )[0];
-    this.setState(state => {
+    this.setState((state) => {
       const data = [...state.data, newQuiz];
       return {
-        data
+        data,
       };
     });
   };
@@ -56,7 +56,6 @@ class QuizGroup extends Component {
               next={quiz.next}
               getData={this.updateArray}
             />
-            <hr />
           </>
         ))}
       </Styles>

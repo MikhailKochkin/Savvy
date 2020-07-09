@@ -588,7 +588,7 @@ const Text = styled.div`
 
 class SingleLesson extends Component {
   state = {
-    page: "problem",
+    page: "lesson",
     shown: false,
     width: 0,
   };
@@ -674,7 +674,7 @@ class SingleLesson extends Component {
                                   onClick={this.onSwitchMob}
                                 >
                                   {" "}
-                                  Модель урок{" "}
+                                  Модель урока{" "}
                                 </ChooseButton>
                               </ButtonZone>
                               {lesson.notes.length > 0 && (
