@@ -4,6 +4,7 @@ import { Query } from "react-apollo";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Applications from "./applications/Applications";
+import Exercises from "./Exercises";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
@@ -46,9 +47,29 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         problemResults {
           id
           answer
+          problem {
+            id
+          }
           lesson {
             id
           }
+        }
+        testResults {
+          id
+          answer
+          test {
+            id
+          }
+        }
+        quizResults {
+          id
+          student {
+            id
+          }
+          quiz {
+            id
+          }
+          answer
         }
       }
       examQuestion {
@@ -67,11 +88,24 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         text
         name
+        number
+        structure
+        coursePage {
+          id
+        }
+        forum {
+          id
+          rating {
+            id
+            rating
+          }
+        }
         newTests {
           id
           question
           answers
           correct
+          next
           testResults {
             id
             student {
@@ -88,9 +122,13 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           question
           answer
+          next
           quizResults {
             id
             student {
+              id
+            }
+            quiz {
               id
             }
             answer
@@ -111,9 +149,16 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             drafts
           }
         }
+        notes {
+          id
+          text
+          next
+        }
         problems {
           id
           text
+          nodeID
+          nodeType
           problemResults {
             id
             student {
@@ -257,7 +302,7 @@ const DynamicUserAnalytics = dynamic(import("./UserAnalytics"), {
 
 class Analytics extends Component {
   state = {
-    page: this.props.name,
+    page: "exercises_results",
   };
 
   onSwitch = (e) => {
@@ -285,10 +330,17 @@ class Analytics extends Component {
                   <div className="menu">
                     <div
                       className="button"
-                      name="stats"
+                      name="student_results"
                       onClick={this.onSwitch}
                     >
-                      Аналитика
+                      Студенты{" "}
+                    </div>
+                    <div
+                      className="button"
+                      name="exercises_results"
+                      onClick={this.onSwitch}
+                    >
+                      Задания{" "}
                     </div>
                     {coursePage.courseType !== "FORMONEY" && (
                       <div
@@ -301,8 +353,14 @@ class Analytics extends Component {
                     )}
                   </div>
                   <div className="data">
-                    {this.state.page === "stats" && (
+                    {this.state.page === "student_results" && (
                       <DynamicUserAnalytics
+                        coursePage={coursePage}
+                        students={coursePage.new_students}
+                      />
+                    )}
+                    {this.state.page === "exercises_results" && (
+                      <Exercises
                         coursePage={coursePage}
                         students={coursePage.new_students}
                       />

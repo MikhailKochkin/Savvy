@@ -19,13 +19,15 @@ class Feedback extends Component {
   render() {
     moment.locale("ru");
     const { feedback, lesson } = this.props;
-    const final_feedback = feedback.filter(f => f.lesson.id === lesson);
+    const final_feedback = feedback.filter((f) => f.lesson.id === lesson);
     return (
       <AllStyles>
-        <div className="header">Отправленная обратная связь:</div>
+        <div className="header">
+          Отправленная обратная связь по этому уроку:
+        </div>
         {final_feedback.length === 0 ? <div>Нет обратной связи</div> : null}
         {final_feedback.length > 0
-          ? final_feedback.map(m => (
+          ? final_feedback.map((m) => (
               <Styles>
                 {renderHTML(m.text)}
                 {moment(m.createdAt).format("LLL")}

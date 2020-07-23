@@ -24,8 +24,9 @@ const Styles = styled.div`
 `;
 
 const TextBox = styled.div`
+  margin: 1% 0;
   font-size: 1.6rem;
-  width: 65%;
+  width: 95%;
   border: 1px solid #c4c4c4;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -45,29 +46,29 @@ const Button = styled.button`
   width: 7%;
   color: #fffdf7;
   text-align: center;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class CreateFeedback extends Component {
   state = {
-    text: ""
+    text: "",
   };
 
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
 
@@ -83,18 +84,18 @@ class CreateFeedback extends Component {
           variables={{
             lesson,
             student,
-            text: this.state.text
+            text: this.state.text,
           }}
           refetchQueries={() => [
             {
               query: SINGLE_COURSEPAGE_QUERY,
-              variables: { id: this.props.coursePage }
-            }
+              variables: { id: this.props.coursePage },
+            },
           ]}
         >
           {(createFeedback, { loading, error }) => (
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault();
                 const res = await createFeedback();
               }}

@@ -285,7 +285,7 @@ class Person extends Component {
                   }}
                 </Mutation>
               )}
-              {/* {console.log(courseVisit.reminders)} */}
+
               {/* {courseVisit && (
                 <Mutation
                   mutation={UPDATE_FINISH_MUTATION}
@@ -317,6 +317,9 @@ class Person extends Component {
                 <a href={mail}>Написать</a>
               </SendButton>
             </Buttons>
+            {courseVisit.reminders.map((r) => (
+              <li>{r}</li>
+            ))}
             {this.state.page === "results" &&
               lessons.map((lesson, index) => (
                 <LessonData
