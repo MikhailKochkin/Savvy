@@ -100,13 +100,13 @@ const Save = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -130,34 +130,34 @@ const Title = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class CreateShot extends Component {
   state = {
     final_p: [],
     final_c: [],
-    steps: 1
+    steps: 1,
   };
 
   myCallback = (dataFromChild, name) => {
     let st = name;
     this.setState({
-      [st]: dataFromChild
+      [st]: dataFromChild,
     });
   };
 
   more = () => {
-    this.setState(prev => ({ steps: prev.steps + 1 }));
+    this.setState((prev) => ({ steps: prev.steps + 1 }));
   };
 
   remove = () => {
     if (this.state.steps > 1) {
       this.setState({
         [`comment${this.state.steps}`]: undefined,
-        [`part${this.state.steps}`]: undefined
+        [`part${this.state.steps}`]: undefined,
       });
-      this.setState(prev => ({ steps: prev.steps - 1 }));
+      this.setState((prev) => ({ steps: prev.steps - 1 }));
     }
   };
 
@@ -165,20 +165,20 @@ class CreateShot extends Component {
     let parts = [];
     let comments = [];
     Object.entries(this.state)
-      .filter(text => text[0].includes("part"))
-      .map(t => parts.push(t[1]));
+      .filter((text) => text[0].includes("part"))
+      .map((t) => parts.push(t[1]));
     Object.entries(this.state)
-      .filter(text => text[0].includes("comment"))
-      .map(t => comments.push(t[1]));
-    parts = parts.filter(el => el !== undefined);
-    comments = comments.filter(el => el !== undefined);
+      .filter((text) => text[0].includes("comment"))
+      .map((t) => comments.push(t[1]));
+    parts = parts.filter((el) => el !== undefined);
+    comments = comments.filter((el) => el !== undefined);
     this.setState({
       final_p: parts,
-      final_c: comments
+      final_c: comments,
     });
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -188,7 +188,7 @@ class CreateShot extends Component {
     let rows = [];
     let part;
     let comment;
-    _.times(this.state.steps, i => {
+    _.times(this.state.steps, (i) => {
       part = `part${i + 1}`;
       comment = `comment${i + 1}`;
       rows.push(
@@ -226,13 +226,13 @@ class CreateShot extends Component {
             lessonID: this.props.lessonID,
             parts: this.state.final_p,
             comments: this.state.final_c,
-            title: this.state.title
+            title: this.state.title,
           }}
           refetchQueries={() => [
             {
               query: SINGLE_LESSON_QUERY,
-              variables: { id: this.props.lessonID }
-            }
+              variables: { id: this.props.lessonID },
+            },
           ]}
           awaitRefetchQueries={true}
         >
@@ -248,14 +248,14 @@ class CreateShot extends Component {
                 value={this.state.title}
                 onChange={this.handleChange}
               />
-              {rows.map(row => row)}
+              {rows.map((row) => row)}
               <More onClick={this.more}>Новый блок</More>
               <Remove onClick={this.remove}>Убрать блок</Remove>
               <Save
-                onClick={async e => {
+                onClick={async (e) => {
                   e.preventDefault();
                   document.getElementById("Message").style.display = "block";
-                  setTimeout(function() {
+                  setTimeout(function () {
                     document.getElementById("Message")
                       ? (document.getElementById("Message").style.display =
                           "none")

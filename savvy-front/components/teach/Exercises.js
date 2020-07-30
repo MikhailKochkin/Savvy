@@ -10,9 +10,7 @@ const Styles = styled.div`
 `;
 
 const Exercises = (props) => {
-  const lessons = props.coursePage.lessons.sort((a, b) =>
-    a.number > b.number ? 1 : -1
-  );
+  const lessons = props.lessons.sort((a, b) => (a.number > b.number ? 1 : -1));
   return (
     <Styles>
       {lessons.map((el, i) => (

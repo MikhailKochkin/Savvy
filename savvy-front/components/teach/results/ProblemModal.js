@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
-import Pdf from "react-to-pdf";
 import Modal from "styled-react-modal";
-import { IoLogoYahoo } from "react-icons/io";
 
 const Box = styled.div`
   display: flex;
@@ -58,10 +56,10 @@ const Button = styled.button`
 
 class ProblemModal extends Component {
   state = {
-    isOpen: false
+    isOpen: false,
   };
-  toggleModal = e => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  toggleModal = (e) => {
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
   render() {
     const { problem, student } = this.props;
@@ -75,23 +73,24 @@ class ProblemModal extends Component {
           </div>
           <div className="column">
             <div>Открытые подсказки:</div>
+
             <div>
-              {problem.problemResults.filter(t => t.student.id === student.id)
+              {student.problemResults.filter((t) => t.problem.id === problem.id)
                 .length > 0 ? (
-                problem.problemResults
-                  .filter(t => t.student.id === student.id)[0]
-                  .revealed.map(t => <li>{t}</li>)
+                student.problemResults
+                  .filter((t) => t.problem.id === problem.id)[0]
+                  .revealed.map((t) => <li>{t}</li>)
               ) : (
                 <span>Не выполнена</span>
               )}
             </div>
           </div>
           <div className="column">
-            {problem.problemResults.filter(t => t.student.id === student.id)
+            {student.problemResults.filter((t) => t.problem.id === problem.id)
               .length > 0 ? (
-              problem.problemResults
-                .filter(t => t.student.id === student.id)
-                .map(t => (
+              student.problemResults
+                .filter((t) => t.problem.id === problem.id)
+                .map((t) => (
                   <>
                     {t.answer.length < 200 ? (
                       <span>{renderHTML(t.answer)}</span>
@@ -115,11 +114,11 @@ class ProblemModal extends Component {
           onBackgroundClick={this.toggleModal}
           onEscapeKeydown={this.toggleModal}
         >
-          {problem.problemResults.filter(t => t.student.id === student.id)
+          {student.problemResults.filter((t) => t.problem.id === problem.id)
             .length > 0 ? (
-            problem.problemResults
-              .filter(t => t.student.id === student.id)
-              .map(t => {
+            student.problemResults
+              .filter((t) => t.problem.id === problem.id)
+              .map((t) => {
                 return (
                   <Modal2>
                     <div id="toCopy">{renderHTML(t.answer)}</div>

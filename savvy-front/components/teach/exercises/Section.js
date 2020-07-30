@@ -25,30 +25,30 @@ const Section = (props) => {
   let average;
   let ratings = [];
   let num;
-  if (props.lesson.forum) {
-    props.lesson.forum.rating.map((a) => ratings.push(a.rating));
-    if (ratings.length === 0) {
-      average = "Нет оценок";
-      num = 0;
-    } else {
-      average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
-        2
-      );
-      num = ratings.length;
-    }
-  } else {
-    average = "Нет формы оценки урока";
-    num = 0;
-  }
+  // if (props.lesson.forum) {
+  //   props.lesson.forum.rating.map((a) => ratings.push(a.rating));
+  //   if (ratings.length === 0) {
+  //     average = "Нет оценок";
+  //     num = 0;
+  //   } else {
+  //     average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
+  //       2
+  //     );
+  //     num = ratings.length;
+  //   }
+  // } else {
+  //   average = "Нет формы оценки урока";
+  //   num = 0;
+  // }
   return (
     <Styles>
       <div className="header">
-        Урок {props.index}. {props.lesson.name} - {average} / оценки: {num}
-        {props.lesson.problems.length > 0 && (
-          <button onClick={(e) => setReveal(!reveal)}>
-            {reveal ? "Закрыть" : "Открыть"}
-          </button>
-        )}
+        Урок {props.index}. {props.lesson.name}
+        {/* - {average} / оценки: {num}
+        {props.lesson.problems.length > 0  */}
+        <button onClick={(e) => setReveal(!reveal)}>
+          {reveal ? "Закрыть" : "Открыть"}
+        </button>
       </div>
       {reveal &&
         props.lesson.problems &&

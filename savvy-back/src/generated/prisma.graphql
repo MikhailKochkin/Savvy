@@ -3392,6 +3392,7 @@ type CoursePage {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: User!
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
@@ -3440,6 +3441,7 @@ input CoursePageCreateInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3562,6 +3564,7 @@ input CoursePageCreateWithoutApplicationsInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3601,6 +3604,7 @@ input CoursePageCreateWithoutArticlesInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3640,6 +3644,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3679,6 +3684,7 @@ input CoursePageCreateWithoutCompanyInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3718,6 +3724,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3757,6 +3764,7 @@ input CoursePageCreateWithoutLessonsInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -3796,6 +3804,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3835,6 +3844,7 @@ input CoursePageCreateWithoutOrdersInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3874,6 +3884,7 @@ input CoursePageCreateWithoutPointATestsInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3913,6 +3924,7 @@ input CoursePageCreateWithoutPointsAInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3952,6 +3964,7 @@ input CoursePageCreateWithoutUniInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -3991,6 +4004,7 @@ input CoursePageCreateWithoutUserInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
@@ -4030,6 +4044,7 @@ input CoursePageCreateWithoutVisitsInput {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
   lessons: LessonCreateManyWithoutCoursePageInput
@@ -4079,6 +4094,8 @@ enum CoursePageOrderByInput {
   image_DESC
   banner_ASC
   banner_DESC
+  weeks_ASC
+  weeks_DESC
   news_ASC
   news_DESC
   numInCareerTrack_ASC
@@ -4121,6 +4138,7 @@ type CoursePagePreviousValues {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String
   numInCareerTrack: Int
   published: Boolean
@@ -4214,6 +4232,14 @@ input CoursePageScalarWhereInput {
   banner_not_starts_with: String
   banner_ends_with: String
   banner_not_ends_with: String
+  weeks: Int
+  weeks_not: Int
+  weeks_in: [Int!]
+  weeks_not_in: [Int!]
+  weeks_lt: Int
+  weeks_lte: Int
+  weeks_gt: Int
+  weeks_gte: Int
   news: String
   news_not: String
   news_in: [String!]
@@ -4414,6 +4440,7 @@ input CoursePageUpdateDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4453,6 +4480,7 @@ input CoursePageUpdateInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4492,6 +4520,7 @@ input CoursePageUpdateManyDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   numInCareerTrack: Int
   published: Boolean
@@ -4529,6 +4558,7 @@ input CoursePageUpdateManyMutationInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   numInCareerTrack: Int
   published: Boolean
@@ -4694,6 +4724,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4732,6 +4763,7 @@ input CoursePageUpdateWithoutArticlesDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4770,6 +4802,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4808,6 +4841,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4846,6 +4880,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4884,6 +4919,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -4922,6 +4958,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4960,6 +4997,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -4998,6 +5036,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -5036,6 +5075,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -5074,6 +5114,7 @@ input CoursePageUpdateWithoutUniDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -5112,6 +5153,7 @@ input CoursePageUpdateWithoutUserDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
@@ -5150,6 +5192,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   description: String
   image: String
   banner: String
+  weeks: Int
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
@@ -5366,6 +5409,14 @@ input CoursePageWhereInput {
   banner_not_starts_with: String
   banner_ends_with: String
   banner_not_ends_with: String
+  weeks: Int
+  weeks_not: Int
+  weeks_in: [Int!]
+  weeks_not_in: [Int!]
+  weeks_lt: Int
+  weeks_lte: Int
+  weeks_gt: Int
+  weeks_gte: Int
   news: String
   news_not: String
   news_in: [String!]

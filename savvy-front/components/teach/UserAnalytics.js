@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import StudentData from "./StudentData";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const Styles = styled.div`
   border: 2px solid #edefed;
@@ -21,29 +22,33 @@ const Header = styled.p`
   border-top-left-radius: 5px;
 `;
 
-class UserAnalytics extends Component {
-  render() {
-    const { coursePage, students } = this.props;
-    return (
-      <Styles>
-        <Header>Участники: {students.length}</Header>
-        {students.map((student) => (
-          <>
-            <StudentData
-              coursePage={coursePage.id}
-              student={student}
-              lessons={coursePage.lessons}
-              courseVisit={
-                student.courseVisits.filter(
-                  (c) => c.coursePage.id === coursePage.id
-                )[0]
-              }
-            />
-          </>
-        ))}
-      </Styles>
-    );
-  }
-}
+const UserAnalytics = (props) => {
+  const { coursePageID, students, lessons } = props;
+  return (
+    <Styles>
+      <Header>Участники</Header>
+      {students.map((student) => (
+        <>
+          <StudentData
+            coursePage={coursePageID}
+            student={student}
+            lessons={lessons}
+            courseVisit={
+              student.courseVisits.filter(
+                (c) => c.coursePage.id === coursePageID
+              )[0]
+            }
+          />
+        </>
+      ))}
+    </Styles>
+  );
+};
+
+UserAnalytics.propTypes = {
+  lessons: PropTypes.object.isRequired,
+  students: PropTypes.object.isRequired,
+  coursePageID: PropTypes.string.isRequired,
+};
 
 export default UserAnalytics;

@@ -340,10 +340,10 @@ const LessonPart = styled.div`
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
-  a {
+  /* a {
     padding-top: 2%;
     padding-left: 2%;
-  }
+  } */
   @media (max-width: 1500px) {
     width: 55%;
   }

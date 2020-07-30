@@ -49,7 +49,7 @@ class TestResult extends Component {
           </span>
         )} */}
         {newTests.length > 0 &&
-          newTests.map(test => (
+          newTests.map((test) => (
             <Box>
               <div>
                 <b>Тест: </b>
@@ -57,18 +57,18 @@ class TestResult extends Component {
               </div>
               <div className="column">
                 Правильный ответ:
-                {this.getAllIndexes(test.correct, true).map(i => (
+                {this.getAllIndexes(test.correct, true).map((i) => (
                   <li>{test.answers[i]}</li>
                 ))}
               </div>
               <div className="column">
                 <div>Полученные ответы</div>
-                {test.testResults.filter(t => t.student.id === student.id)
+                {student.testResults.filter((t) => t.test.id === test.id)
                   .length > 0 ? (
-                  test.testResults
-                    .filter(t => t.student.id === student.id)[0]
+                  student.testResults
+                    .filter((t) => t.test.id === test.id)[0]
                     .answer.split(", ")
-                    .map(t => <li>{t}</li>)
+                    .map((t) => <li>{t}</li>)
                 ) : (
                   <span>Не выполнен</span>
                 )}

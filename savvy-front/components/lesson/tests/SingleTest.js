@@ -151,10 +151,39 @@ class SingleTest extends Component {
   };
 
   onSend = async () => {
-    this.setState({
-      answerState: "right",
-      inputColor: "rgba(50, 172, 102, 0.25)",
-    });
+    console.log(2);
+    const res = () => {
+      if (
+        JSON.stringify(this.state.answerOptions) ==
+        JSON.stringify(this.props.true)
+      ) {
+        // 1. if the data is sent for the first time
+        if (!this.state.sent && this.props.getData) {
+          // 2. and if this quiz is a part of an exam
+          console.log(1);
+          this.props.getData(
+            this.props.next
+              ? [true, this.props.next.true]
+              : [true, { type: "finish" }],
+            "true"
+          );
+
+          document.querySelector(".button").disabled = true;
+        }
+      } else {
+        // 1. if the data is sent for the first time
+        if (!this.state.sent && this.props.getData) {
+          // 2. and if this quiz is a part of an exam
+          console.log(2);
+          this.props.getData(
+            this.props.next
+              ? [false, this.props.next.false]
+              : [false, { type: "finish" }]
+          );
+        }
+      }
+    };
+    const res2 = await res();
   };
 
   onCheck = async () => {
@@ -269,8 +298,10 @@ class SingleTest extends Component {
                         alert("Выберите хотя бы один ответ!");
                       } else {
                         if (this.props.type === "FORM") {
+                          console.log(0);
                           const res1 = await this.onSend();
                         } else {
+                          console.log(1);
                           const res = await this.onCheck();
                         }
                         if (userData.length === 0) {

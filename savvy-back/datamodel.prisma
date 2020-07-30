@@ -119,6 +119,7 @@ type CoursePage {
   description: String!
   image: String!
   banner: String
+  weeks: Int
   news: String @default(value: "Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)

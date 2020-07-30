@@ -90,12 +90,12 @@ const StudentProblemResult = (props) => {
               ))}{" "}
             <Answer>
               <b>Финальный ответ:</b>
-              {props.problem.problemResults.filter(
-                (p) => p.student.id === props.student.id
+              {props.student.problemResults.filter(
+                (p) => p.problem.id === props.problem.id
               )[0] &&
                 renderHTML(
-                  props.problem.problemResults.filter(
-                    (p) => p.student.id === props.student.id
+                  props.student.problemResults.filter(
+                    (p) => p.problem.id === props.problem.id
                   )[0].answer
                 )}
             </Answer>

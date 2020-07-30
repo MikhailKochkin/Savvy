@@ -41,23 +41,36 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           lesson {
             id
           }
+          student {
+            id
+            email
+          }
           createdAt
           updatedAt
         }
         problemResults {
           id
           answer
-          problem {
-            id
-          }
           lesson {
             id
+          }
+          revealed
+          problem {
+            id
+            text
+            lesson {
+              id
+            }
           }
         }
         testResults {
           id
           answer
           test {
+            id
+            question
+          }
+          student {
             id
           }
         }
@@ -95,10 +108,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         }
         forum {
           id
-          rating {
-            id
-            rating
-          }
+          # rating {
+          #   id
+          #   rating
+          # }
         }
         newTests {
           id
@@ -106,48 +119,37 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           answers
           correct
           next
-          testResults {
-            id
-            student {
-              id
-            }
-            answer
-            test {
-              id
-              question
-            }
-          }
         }
         quizes {
           id
           question
           answer
           next
-          quizResults {
-            id
-            student {
-              id
-            }
-            quiz {
-              id
-            }
-            answer
-          }
+          # quizResults {
+          #   id
+          #   student {
+          #     id
+          #   }
+          #   quiz {
+          #     id
+          #   }
+          #   answer
+          # }
         }
         documents {
           id
           title
-          documentResults {
-            id
-            user {
-              id
-            }
-            document {
-              id
-            }
-            answers
-            drafts
-          }
+          # documentResults {
+          #   id
+          #   user {
+          #     id
+          #   }
+          #   document {
+          #     id
+          #   }
+          #   answers
+          #   drafts
+          # }
         }
         notes {
           id
@@ -159,83 +161,63 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           text
           nodeID
           nodeType
-          problemResults {
-            id
-            student {
-              id
-            }
-            answer
-            revealed
-            problem {
-              id
-              text
-              lesson {
-                id
-              }
-            }
-          }
+          # problemResults {
+          #   id
+          #   student {
+          #     id
+          #   }
+          #   answer
+          #   revealed
+          #   problem {
+          #     id
+          #     text
+          #     lesson {
+          #       id
+          #     }
+          #   }
+          # }
         }
         texteditors {
           id
           text
           totalMistakes
-          textEditorResults {
-            id
-            student {
-              id
-            }
-            correct
-            guess
-            wrong
-            attempts
-            textEditor {
-              id
-              text
-              totalMistakes
-            }
-          }
+          # textEditorResults {
+          #   id
+          #   student {
+          #     id
+          #   }
+          #   correct
+          #   guess
+          #   wrong
+          #   attempts
+          #   textEditor {
+          #     id
+          #     text
+          #     totalMistakes
+          #   }
+          # }
         }
         constructions {
           id
           name
           variants
           answer
-          constructionResults {
-            id
-            student {
-              id
-            }
-            inputs
-            attempts
-            answer
-            construction {
-              id
-              name
-            }
-          }
+          # constructionResults {
+          #   id
+          #   student {
+          #     id
+          #   }
+          #   inputs
+          #   attempts
+          #   answer
+          #   construction {
+          #     id
+          #     name
+          #   }
+          # }
         }
         user {
           id
-        }
-        lessonResults {
-          id
-          student {
-            id
-            email
-          }
-          visitsNumber
-          createdAt
-          updatedAt
-        }
-        problemResults {
-          id
-          answer
-          lesson {
-            id
-          }
-          student {
-            id
-          }
         }
       }
     }
@@ -302,7 +284,7 @@ const DynamicUserAnalytics = dynamic(import("./UserAnalytics"), {
 
 class Analytics extends Component {
   state = {
-    page: "exercises_results",
+    page: "student_results",
   };
 
   onSwitch = (e) => {
@@ -323,7 +305,9 @@ class Analytics extends Component {
         >
           {({ data: data2, error: error2, loading: loading2 }) => {
             if (loading2) return <p>Loading...</p>;
+            if (error2) return <p>Ошибка!</p>;
             let coursePage = data2.coursePage;
+            g(coursePage);
             return (
               <Styles>
                 <Container>
@@ -355,13 +339,14 @@ class Analytics extends Component {
                   <div className="data">
                     {this.state.page === "student_results" && (
                       <DynamicUserAnalytics
-                        coursePage={coursePage}
+                        coursePageID={coursePage.id}
+                        lessons={coursePage.lessons}
                         students={coursePage.new_students}
                       />
                     )}
                     {this.state.page === "exercises_results" && (
                       <Exercises
-                        coursePage={coursePage}
+                        lessons={coursePage.lessons}
                         students={coursePage.new_students}
                       />
                     )}

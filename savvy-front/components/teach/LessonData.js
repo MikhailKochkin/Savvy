@@ -71,56 +71,37 @@ const StyledButton = withStyles({
     margin: "1% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
-const LessonData = props => {
+const LessonData = (props) => {
   const [show, setShow] = useState(false);
-  const { index, lesson, student, coursePage } = props;
+  const { index, lesson, student, coursePageID } = props;
   moment.locale("ru");
+  let res = student.lessonResults.filter(
+    (result) => result.lesson.id === lesson.id
+  );
   return (
     <>
       <Data>
         <Name>
           {index + 1}. {lesson.name}
         </Name>
-        <StyledButton onClick={e => setShow(!show)}>
+        <StyledButton onClick={(e) => setShow(!show)}>
           {show ? "Скрыть" : "Подробнее"}
         </StyledButton>
       </Data>
-      {lesson.lessonResults.filter(result => result.student.id === student.id)
-        .length > 0 ? (
+      {res.length > 0 ? (
         <Box>
-          <div className="div1">
-            Заходов на урок:{" "}
-            {
-              lesson.lessonResults.filter(
-                result => result.student.id === student.id
-              )[0].visitsNumber
-            }{" "}
-          </div>
+          <div className="div1">Заходов на урок: {res[0].visitsNumber} </div>
           <div className="div2">
-            Первый заход:{" "}
-            {moment(
-              lesson.lessonResults.filter(
-                result => result.student.id === student.id
-              )[0].createdAt
-            ).format("LLL")}
+            Первый заход: {moment(res[0].createdAt).format("LLL")}
           </div>
           <div className="div3">
-            Последний заход:{" "}
-            {moment(
-              lesson.lessonResults.filter(
-                result => result.student.id === student.id
-              )[0].updatedAt
-            ).format("LLL")}
+            Последний заход: {moment(res[0].updatedAt).format("LLL")}
             {"–"}
-            {moment(
-              lesson.lessonResults.filter(
-                result => result.student.id === student.id
-              )[0].updatedAt
-            ).fromNow()}
+            {moment(res[0].updatedAt).fromNow()}
           </div>
         </Box>
       ) : (
@@ -131,7 +112,7 @@ const LessonData = props => {
           <TestResult newTests={lesson.newTests} student={student} />
           <QuizResult quizes={lesson.quizes} student={student} />
           <ProblemResult problems={lesson.problems} student={student} />
-          <ConstructionResult
+          {/* <ConstructionResult
             constructions={lesson.constructions}
             student={student}
           />
@@ -139,9 +120,9 @@ const LessonData = props => {
             texteditors={lesson.texteditors}
             student={student}
           />
-          <DocumentResult documents={lesson.documents} student={student} />
+          <DocumentResult documents={lesson.documents} student={student} /> */}
           <CreateFeedback
-            coursePage={coursePage}
+            coursePage={coursePageID}
             lesson={lesson.id}
             student={student.id}
           />

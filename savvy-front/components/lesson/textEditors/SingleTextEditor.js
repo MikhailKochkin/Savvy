@@ -189,13 +189,12 @@ class SingleTextEditor extends Component {
   };
 
   onMouseClick = (e) => {
-    console.log(e.target.className, this.props.textEditor.id);
     if (e.target.className === this.props.textEditor.id) {
-      if (this.state.total !== null && this.state.total > 0) {
-        e.target.style.backgroundColor = "#FDF3C8";
-        e.target.style.padding = "0.8%";
-        e.target.style.borderRadius = "8px";
-      }
+      // if (this.state.total !== null && this.state.total > 0) {
+      e.target.style.backgroundColor = "#FDF3C8";
+      e.target.style.padding = "0.8%";
+      e.target.style.borderRadius = "8px";
+      // }
       // console.log(this.props.textEditor.text, !this.state.shown);
       this.setState({
         shown: true,
@@ -350,15 +349,15 @@ class SingleTextEditor extends Component {
               </EditText>
             </TextBar>
             <Buttons>
-              {this.state.total > 1 && (
-                <StyledButton
-                  onClick={this.onShow}
-                  variant="contained"
-                  color="primary"
-                >
-                  {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
-                </StyledButton>
-              )}
+              {/* {this.state.total > 1 && ( */}
+              <StyledButton
+                onClick={this.onShow}
+                variant="contained"
+                color="primary"
+              >
+                {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
+              </StyledButton>
+              {/* )} */}
               {me && me.id === textEditor.user.id && !story ? (
                 <DeleteSingleTextEditor
                   id={this.props.textEditor.id}
@@ -391,9 +390,9 @@ class SingleTextEditor extends Component {
 }
 
 SingleTextEditor.propTypes = {
-  lesson: PropTypes.string.isRequired,
+  lessonID: PropTypes.string.isRequired,
   textEditor: PropTypes.object.isRequired,
-  key: PropTypes.string.isRequired,
+  // id: PropTypes.string.isRequired,
   me: PropTypes.object.isRequired,
   userData: PropTypes.object.isRequired,
 };

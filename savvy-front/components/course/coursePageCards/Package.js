@@ -190,7 +190,6 @@ const Package = (props) => {
     console.log(0);
     let newEl = content.find((el) => el.id === e.target.id);
     //- курс
-    console.log(newEl);
     if (props.teacher) {
       if (courses.includes(newEl)) {
         console.log(1);

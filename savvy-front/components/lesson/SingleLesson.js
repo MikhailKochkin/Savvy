@@ -343,7 +343,7 @@ const Head = styled.div`
   justify-content: space-between;
   align-items: center;
   color: white;
-  height: 10vh;
+  min-height: 10vh;
   background: #1a2980; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
@@ -352,7 +352,7 @@ const Head = styled.div`
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #26d0ce, #1a2980);
   width: 100%;
-  font-size: 2.3rem;
+  font-size: 2rem;
   span {
     margin: 0 3%;
   }
@@ -459,10 +459,10 @@ const LessonPart = styled.div`
   flex-direction: column;
   /* background: white; */
   border-radius: 2px;
-  a {
+  /* a {
     padding-top: 2%;
     padding-left: 2%;
-  }
+  } */
   @media (max-width: 800px) {
     order: 2;
     margin: 1%;

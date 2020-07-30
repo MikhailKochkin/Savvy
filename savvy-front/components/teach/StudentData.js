@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+// import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
@@ -180,7 +181,7 @@ class Person extends Component {
     this.setState({ page: e.target.getAttribute("name") });
   };
   render() {
-    let { student, lessons, coursePage, courseVisit } = this.props;
+    let { student, lessons, courseVisit, coursePageID } = this.props;
     let mail = `mailto:${student.email}`;
     let color;
     // Step 1. We filter the lessons to see if the lessons have been
@@ -317,18 +318,18 @@ class Person extends Component {
                 <a href={mail}>Написать</a>
               </SendButton>
             </Buttons>
-            {courseVisit.reminders.map((r) => (
-              <li>{r}</li>
-            ))}
+            {courseVisit && courseVisit.reminders.map((r) => <li>{r}</li>)}
             {this.state.page === "results" &&
-              lessons.map((lesson, index) => (
-                <LessonData
-                  lesson={lesson}
-                  index={index}
-                  coursePage={coursePage}
-                  student={student}
-                />
-              ))}
+              lessons
+                .sort((a, b) => (a.number > b.number ? 1 : -1))
+                .map((lesson, index) => (
+                  <LessonData
+                    lesson={lesson}
+                    index={index}
+                    coursePageID={coursePageID}
+                    student={student}
+                  />
+                ))}
             {this.state.page === "CV" && (
               <StyledCV>
                 {student.coverLetter ? (
@@ -363,5 +364,11 @@ class Person extends Component {
     );
   }
 }
+
+// UserAnalytics.Person = {
+//   student: PropTypes.object.isRequired,
+//   lessons: PropTypes.object.isRequired,
+//   courseVisit: PropTypes.object.isRequired,
+// };
 
 export default Person;

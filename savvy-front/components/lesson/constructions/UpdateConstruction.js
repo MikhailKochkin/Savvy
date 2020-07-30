@@ -268,7 +268,6 @@ const UpdateConstruction = (props) => {
   };
 
   const { lessonID } = props;
-  console.log(props);
   return (
     <Center>
       <Advice>

@@ -258,10 +258,8 @@ class SingleConstructor extends Component {
   check = () => {
     // 0.
     // 1. Find out the rule for checking the answer
-    console.log(this.state.type);
     if (this.state.type === "include") {
       let res;
-      console.log(this.state.received);
       // 2. Check if all the answers have been given
       if (new Set(this.state.received).size !== this.state.received.length) {
         // If not, show that the answer is wrong
@@ -284,10 +282,6 @@ class SingleConstructor extends Component {
       }
     } else if (this.state.type === "equal") {
       // 3. Check if all the correct variants are included into the answer, order does matter
-      console.log(this.state.answer),
-        console.log(this.state.received),
-        console.log(JSON.stringify(this.state.answer)),
-        console.log(JSON.stringify(this.state.received));
       if (
         JSON.stringify(this.state.answer) == JSON.stringify(this.state.received)
       ) {

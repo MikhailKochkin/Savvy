@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import Course from "../Course";
 import LoadingDummy from "../LoadingDummy";
+import { element } from "prop-types";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
@@ -28,6 +29,7 @@ const COURSE_PAGES_QUERY = gql`
       user {
         id
         name
+        surname
         status
         company {
           id
@@ -96,28 +98,38 @@ const ShownCourses = (props) => {
             if (error) return <p>Error: {error.message}</p>;
             if (loading) return <LoadingDummy />;
             const coursePages = data.coursePages;
-            let displayed = coursePages.filter(
-              (c) =>
-                c.published &&
-                (c.courseType === "FORMONEY" || c.courseType === "PUBLIC")
-            );
-            if (props.topic && props.topic !== "All") {
-              displayed = coursePages.filter((c) =>
-                c.tags.includes(props.topic)
+            let displayed;
+            if (
+              props.topic === "" &&
+              props.teacher === "" &&
+              props.level === ""
+            ) {
+              displayed = coursePages.filter((c) => c.tags.includes("Initial"));
+            } else {
+              displayed = coursePages.filter(
+                (c) =>
+                  c.published &&
+                  (c.courseType === "FORMONEY" || c.courseType === "PUBLIC")
               );
-            }
-            if (props.teacher) {
-              displayed = displayed.filter((c) =>
-                c.tags.includes(props.teacher)
-              );
-            }
+              if (props.topic && props.topic !== "Any") {
+                displayed = coursePages.filter((c) =>
+                  c.tags.includes(props.topic)
+                );
+              }
+              if (props.teacher) {
+                displayed = displayed.filter((c) =>
+                  c.tags.includes(props.teacher)
+                );
+              }
 
-            if (props.level === "All") {
-              displayed = displayed;
-            } else if (props.level) {
-              displayed = displayed.filter(
-                (c) => c.tags.includes(props.level) || c.tags.includes("All")
-              );
+              if (props.level === "All") {
+                displayed = displayed;
+              } else if (props.level) {
+                displayed = displayed.filter(
+                  (c) => c.tags.includes(props.level) || c.tags.includes("All")
+                );
+              }
+              console.log(1);
             }
             return (
               <>

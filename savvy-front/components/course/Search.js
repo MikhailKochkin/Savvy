@@ -212,7 +212,7 @@ const Proof = styled.div`
 `;
 
 const Search = (props) => {
-  const [topic, setTopic] = useState("Английский");
+  const [topic, setTopic] = useState("");
   const [teacher, setTeacher] = useState("");
   const [level, setLevel] = useState("");
 
@@ -242,6 +242,7 @@ const Search = (props) => {
                 <option value="Английский">Юридический английский</option>
                 <option value="Гражданское право">Гражданское право</option>
                 <option value="Корпоративное право">Корпоративное право</option>
+                <option value="IP/IT">IP/IT</option>
                 <option value="Гражданский процесс">Гражданский процесс</option>
                 <option value="Административный процесс">
                   Административный процесс

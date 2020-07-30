@@ -109,6 +109,7 @@ class Interactive extends Component {
         <SingleTest
           index={this.state.componentList.length + 1}
           key={el.id}
+          id={el.id}
           testID={el.id}
           question={el.question}
           answers={el.answers}
@@ -224,6 +225,7 @@ class Interactive extends Component {
       item = (
         <SingleTest
           key={el.id}
+          id={el.id}
           testID={el.id}
           question={el.question}
           answers={el.answers}

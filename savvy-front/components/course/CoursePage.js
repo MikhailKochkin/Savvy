@@ -34,6 +34,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       price
       discountPrice
       video
+      weeks
       audience
       result
       tags
@@ -72,6 +73,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           rating {
             id
+            user {
+              id
+            }
             rating
           }
         }
@@ -479,8 +483,11 @@ class CoursePage extends Component {
                       {({ error, loading, data }) => {
                         if (error) return <Error error={error} />;
                         if (loading) return <Loading />;
+
                         const coursePage = data.coursePage;
+                        if (coursePage === undefined) return <p>Done</p>;
                         const student_list = [];
+
                         coursePage.new_students.map((ns) =>
                           student_list.push(ns.id)
                         );
@@ -494,6 +501,13 @@ class CoursePage extends Component {
                         coursePage.students.map((student) =>
                           studentsArray.push(student)
                         );
+
+                        let weeks;
+                        if (coursePage.weeks) {
+                          weeks = coursePage.weeks;
+                        } else {
+                          weeks = 3;
+                        }
 
                         const subjectArray = [];
                         const new_subjectArray = [];
@@ -530,6 +544,7 @@ class CoursePage extends Component {
                             ratings.reduce((a, b) => a + b, 0) / ratings.length
                           ).toFixed(2);
                         }
+
                         return (
                           <>
                             <Container>
@@ -705,9 +720,9 @@ class CoursePage extends Component {
                                         )
                                         .map((lesson, index) => (
                                           <>
-                                            {(index + 3) % 3 === 0 && (
+                                            {(index + weeks) % weeks === 0 && (
                                               <div className="week">
-                                                Неделя {(index + 3) / 3}
+                                                Неделя {(index + weeks) / weeks}
                                               </div>
                                             )}
                                             <LessonHeader
@@ -791,12 +806,6 @@ class CoursePage extends Component {
                                     </div>
                                   )}
                                 </Details>
-                                {/* {console.log(
-                                  me &&
-                                    !subjectArray.includes(coursePage.id) &&
-                                    !new_subjectArray.includes(coursePage.id)
-                                )} */}
-
                                 {me &&
                                   !me.permissions.includes("ADMIN") &&
                                   !subjectArray.includes(coursePage.id) &&

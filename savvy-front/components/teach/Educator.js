@@ -17,9 +17,15 @@ const MY_COURSES_QUERY = gql`
       user {
         id
         name
+        surname
+        image
         uni {
           id
           title
+        }
+        company {
+          id
+          name
         }
       }
       description
@@ -150,17 +156,17 @@ class Teach extends Component {
                     <Query
                       query={MY_COURSES_QUERY}
                       variables={{
-                        id: me.id
+                        id: me.id,
                       }}
                     >
                       {({ data, error, loading, fetchMore }) => {
                         if (loading) return <p>Loading...</p>;
                         if (error) return <p>Error: {error.message}</p>;
                         let publishedCourses = data.coursePages.filter(
-                          coursePage => coursePage.published === true
+                          (coursePage) => coursePage.published === true
                         );
                         let developedCourses = data.coursePages.filter(
-                          coursePage => coursePage.published === false
+                          (coursePage) => coursePage.published === false
                         );
                         const uni = me.uni;
                         let isPaid;
@@ -188,7 +194,7 @@ class Teach extends Component {
                                     <p>У вас еще нет запущенных курсов.</p>
                                   )}
                                   {status &&
-                                    publishedCourses.map(coursePage => (
+                                    publishedCourses.map((coursePage) => (
                                       <Course
                                         key={coursePage.id}
                                         id={coursePage.id}
@@ -223,7 +229,7 @@ class Teach extends Component {
                                       </>
                                     </Additional>
                                   </CaseCard>
-                                  {developedCourses.map(coursePage => (
+                                  {developedCourses.map((coursePage) => (
                                     <Course
                                       key={coursePage.id}
                                       id={coursePage.id}
