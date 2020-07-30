@@ -307,7 +307,6 @@ class Analytics extends Component {
             if (loading2) return <p>Loading...</p>;
             if (error2) return <p>Ошибка!</p>;
             let coursePage = data2.coursePage;
-            g(coursePage);
             return (
               <Styles>
                 <Container>
