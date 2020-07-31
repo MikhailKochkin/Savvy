@@ -57,6 +57,14 @@ const TextBar = styled.div`
       height: auto;
     }
   }
+  iframe {
+    width: 100%;
+    height: 400px;
+    @media (max-width: 800px) {
+      width: 100%;
+      height: auto;
+    }
+  }
   #conceal {
     margin: 16px 0;
     cursor: pointer;
