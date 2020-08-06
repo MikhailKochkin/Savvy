@@ -8,14 +8,14 @@ const Meta = () => (
       <meta property="og:title" content="BeSavvy App" />
       <meta
         property="og:description"
-        content="Интерактивные онлайн-курсы для юристов и актуальные вакансии"
+        content="Интерактивные онлайн-курсы для юристов"
       />
-      <meta property="og:image" content="/static/mini-computer.jpg" />
+      <meta property="og:image" content="/static/computer_mini.jpg" />
       <meta property="og:url" content="https://besavvy.app" />
-      <meta name="twitter:card" content="/static/mini-computer.jpg" />
+      <meta name="twitter:card" content="/static/computer_mini.jpg" />
       <link rel="shortcut icon" href="/static/favicon.ico" />
       <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-      <title>Savvy – платформа для управления юридическими знаниями</title>
+      <title>BeSavvy – интерактивные онлайн-курсы для юристов</title>
     </Head>
   </>
 );
