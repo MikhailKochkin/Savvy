@@ -141,6 +141,9 @@ const Blog = (props) => {
           )}
           <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
+              if (loading) {
+                <p>Загрузка...</p>;
+              }
               return (
                 <>
                   {data.posts.map((d, index) => (
