@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Course from "../Course";
-import Articles from "../../article/Articles";
 
 const Block = styled.div`
   background: rgba(210, 246, 252, 0.35);
@@ -103,7 +102,7 @@ const Title = styled.div`
   }
 `;
 
-const EnglishCourses = props => {
+const EnglishCourses = (props) => {
   const [show, setShow] = useState(false);
   const { courses, me } = props;
   return (
@@ -117,7 +116,7 @@ const EnglishCourses = props => {
             письмо, составление документов и перевод) и прорабатываем их онлайн
             на упражнениях, близких к реальным задачам.
           </div>
-          <button onClick={e => setShow(!show)}>
+          <button onClick={(e) => setShow(!show)}>
             {show ? "Скрыть курсы" : "Смотреть курсы"}
           </button>
         </Text>
@@ -126,7 +125,7 @@ const EnglishCourses = props => {
         <>
           <RowStyles>
             {courses &&
-              courses.map(coursePage => (
+              courses.map((coursePage) => (
                 <Course
                   key={coursePage.id}
                   id={coursePage.id}
@@ -136,7 +135,6 @@ const EnglishCourses = props => {
               ))}
           </RowStyles>
           <Title>Полезные статьи</Title>
-          <Articles me={me} />
         </>
       )}
     </>

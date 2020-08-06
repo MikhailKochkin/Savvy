@@ -5,7 +5,6 @@ import styled from "styled-components";
 import CareerTrackList from "./career/CareerTrackList";
 import ForMoneyCoursesList from "./course/courseLists/ForMoneyCoursesList";
 import FreeCoursesList from "./course/courseLists/FreeCoursesList";
-import Articles from "./article/Articles";
 
 const CAREER_TRACK_QUERY = gql`
   query CAREER_TRACK_QUERY($id: ID!) {
@@ -17,7 +16,6 @@ const CAREER_TRACK_QUERY = gql`
         title
         topics
         img
-        articles
         coursePages {
           id
           title
@@ -60,7 +58,7 @@ const Group = styled.div``;
 class LandingCareerTrack extends Component {
   state = {
     isTourOpen: false,
-    times: 0
+    times: 0,
   };
   open = () => {
     this.setState({ isTourOpen: true });
@@ -75,7 +73,7 @@ class LandingCareerTrack extends Component {
           <Query
             query={CAREER_TRACK_QUERY}
             variables={{
-              id: "cjwx78u7700rb07121pelqctm"
+              id: "cjwx78u7700rb07121pelqctm",
             }}
           >
             {({ data, error, loading }) => {
@@ -97,7 +95,6 @@ class LandingCareerTrack extends Component {
                   </Group>
                   <ForMoneyCoursesList />
                   <FreeCoursesList />
-                  <Articles />
                 </>
               );
             }}
