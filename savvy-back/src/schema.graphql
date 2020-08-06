@@ -249,6 +249,7 @@ type Mutation {
     visitedLessons: [String]
     isFamiliar: Boolean
   ): User
+  updateUserInterests(id: ID!, interests: [String]): User
   requestReset(email: String!): SuccessMessage
   resetPassword(
     resetToken: String!
@@ -273,12 +274,8 @@ type Mutation {
     portfolioIDs: [ID]
     resume: String
   ): LegalPortfolio!
-  createArticle(
-    tag: String
-    title: String
-    text: String
-    coursePageIDs: [ID]
-  ): Article!
+  createPost(title: String, text: String): Post!
+  updatePost(id: ID!, title: String, text: String, likes: Int): Post
   createShot(
     title: String!
     parts: [String!]
@@ -486,16 +483,16 @@ type Query {
     first: Int
     last: Int
   ): [ExamQuestion]!
-  article(where: ArticleWhereUniqueInput!): Article
-  articles(
-    where: ArticleWhereInput
-    orderBy: ArticleOrderByInput
+  post(where: PostWhereUniqueInput!): Post
+  posts(
+    where: PostWhereInput
+    orderBy: PostOrderByInput
     skip: Int
     after: String
     before: String
     first: Int
     last: Int
-  ): [Article]!
+  ): [Post]!
   courseVisits(
     where: CourseVisitWhereInput
     orderBy: CourseVisitOrderByInput
@@ -562,6 +559,7 @@ type User {
   surname: String
   email: String!
   image: String
+  interests: [String]
   description: String
   permissions: [Permission!]!
   isFamiliar: Boolean!

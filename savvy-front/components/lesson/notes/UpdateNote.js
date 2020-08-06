@@ -3,7 +3,6 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import Option from "../Option";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_NOTE_MUTATION = gql`
@@ -104,19 +103,6 @@ const UpdateNote = (props) => {
     <>
       <Container>
         <DynamicLoadedEditor getEditorText={getText} previousText={text} />
-        {/* <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
-        <h3>Вопросы:</h3>
-        {quizes.map(quiz => (
-          <Option quiz={quiz} getData={myCallback} />
-        ))}
-        <h3>Заметки:</h3>
-        {notes.map(note => (
-          <Option note={note} getData={myCallback} />
-        ))}
-        <h3>Тесты:</h3>
-        {tests.map(test => (
-          <Option key={test.id} test={test} getData={myCallback} />
-        ))} */}
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
           variables={{

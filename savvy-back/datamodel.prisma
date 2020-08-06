@@ -80,7 +80,7 @@ type User {
   orders: [Order]! @relation(link: TABLE, name: "OrderToUser")
   textEditor: [TextEditor]! @relation(link: TABLE, name: "TextEditorToUser")
   isFamiliar: Boolean! @default(value: false)
-  articles: [Article] @relation(link: TABLE, name: "UserArticles")
+  posts: [Post] @relation(link: TABLE, name: "UserPosts")
   examAnswers: [ExamAnswer] @relation(link: TABLE, name: "UserExamAnswer")
   shots: [Shot] @relation(link: TABLE, name: "ShotToUser")
   shotResults: [ShotResult] @relation(link: TABLE, name: "ShotResultToUser", onDelete: CASCADE)
@@ -97,7 +97,8 @@ type User {
   documentResults: [DocumentResult] @relation(link: TABLE, name: "DocumentResultToUser", onDelete: CASCADE)
   clauses: [Clause] @relation(link: TABLE, name: "ClauseToUser")
   challengeResults: [ChallengeResult] @relation(link: TABLE, name: "UserChallengeResults", onDelete: CASCADE)
-  level: UserLevel @relation(link: TABLE, name: "UserLevel", onDelete: CASCADE) 
+  level: UserLevel @relation(link: TABLE, name: "UserLevel", onDelete: CASCADE)
+  interests: [String]  @scalarList(strategy: RELATION)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -132,7 +133,7 @@ type CoursePage {
   published: Boolean @default(value: false)
   uni: Uni @relation(link: TABLE, name: "UniCoursePage")
   uniID: ID
-  articles: [Article] @relation(link: TABLE, name: "ArticleCoursePages")
+  posts: [Post] @relation(link: TABLE, name: "PostCoursePages")
   tags: [String] @scalarList(strategy: RELATION)
   courseType: CourseType
   students: [ID] @scalarList(strategy: RELATION)
@@ -518,15 +519,14 @@ type LegalPortfolio {
   updatedAt: DateTime! @updatedAt
 }
 
-type Article {
+type Post {
   id: ID! @id
-  user: User!@relation(name: "UserArticles")
-  tag: String
-  img: String
+  user: User! @relation(name: "UserPosts")
+  tags: [String] @scalarList(strategy: RELATION)
   title: String
   text: String
-  coursePages: [CoursePage]@relation(name: "ArticleCoursePages")
-  coursePageIDs: [ID]@scalarList(strategy: RELATION)
+  likes: Int @default(value: 1)
+  coursePages: [CoursePage] @relation(name: "PostCoursePages")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

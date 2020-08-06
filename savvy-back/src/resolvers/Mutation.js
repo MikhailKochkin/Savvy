@@ -117,6 +117,24 @@ const Mutations = {
     );
     return updatedUser;
   },
+  async updateUserInterests(parent, args, ctx, info) {
+    //run the update method
+    //run the update method
+    const updateUserInterests = await ctx.db.mutation.updateUser(
+      {
+        where: {
+          id: args.id,
+        },
+        data: {
+          interests: {
+            set: [...args.interests],
+          },
+        },
+      },
+      info
+    );
+    return updateUserInterests;
+  },
   async requestReset(parent, args, ctx, info) {
     // 1. Check if this is a real user
     const user = await ctx.db.query.user({ where: { email: args.email } });
@@ -357,7 +375,6 @@ const Mutations = {
   async updateLesson(parent, args, ctx, info) {
     //first take a copy of the updates
     const updates = { ...args };
-    console.log(updates);
     //remove the ID from updates
     delete updates.id;
     //run the update method
@@ -512,7 +529,6 @@ const Mutations = {
   async updateTestForProblem(parent, args, ctx, info) {
     const updates = { ...args };
     delete updates.id;
-    console.log(updates, args.id);
     return ctx.db.mutation.updateNewTest(
       {
         data: {
@@ -674,14 +690,11 @@ const Mutations = {
       info
     );
 
-    console.log(args.correct);
-
     if (args.correct === true) {
       const user = await ctx.db.query.user(
         { where: { id: ctx.request.userId } },
         `{ id, level {id, level} }`
       );
-      console.log(user.level.level + 2);
       const updateUserLevel = await ctx.db.mutation.updateUserLevel(
         {
           data: {
@@ -759,14 +772,11 @@ const Mutations = {
       info
     );
 
-    console.log(args.result);
-
     if (args.result === true) {
       const user = await ctx.db.query.user(
         { where: { id: ctx.request.userId } },
         `{ id, level {id, level} }`
       );
-      console.log(user.level.level + 0.25);
       const updateUserLevel = await ctx.db.mutation.updateUserLevel(
         {
           data: {
@@ -812,7 +822,6 @@ const Mutations = {
     const updates = { ...args };
     //remove the ID from updates
     delete updates.id;
-    console.log(updates);
 
     //run the update method
     return ctx.db.mutation.updateQuiz(
@@ -1031,16 +1040,10 @@ const Mutations = {
       info
     );
 
-    console.log("!");
-
-    console.log(ctx.request.userId);
-
     const user = await ctx.db.query.user(
       { where: { id: ctx.request.userId } },
       `{ id, level {id, level} }`
     );
-
-    console.log(user);
 
     const updateUserLevel = await ctx.db.mutation.updateUserLevel(
       {
@@ -1515,31 +1518,25 @@ const Mutations = {
     );
     return examAnswer;
   },
-  async createArticle(parent, args, ctx, info) {
+  async createPost(parent, args, ctx, info) {
     // TODO: Check if they are logged in
-    const IDList = [];
-    args.coursePageIDs.map((item) => IDList.append({ id: { item } }));
-    delete args.coursePageIDs;
     if (!ctx.request.userId) {
       throw new Error(
         "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
       );
     }
-    const Article = await ctx.db.mutation.createArticle(
+    const Post = await ctx.db.mutation.createPost(
       {
         data: {
           user: {
             connect: { id: ctx.request.userId },
-          },
-          coursePages: {
-            set: [...IDList],
           },
           ...args,
         },
       },
       info
     );
-    return Article;
+    return Post;
   },
   async createShot(parent, args, ctx, info) {
     const parts = args.parts;
@@ -1701,7 +1698,6 @@ const Mutations = {
   },
   async createCourseVisit(parent, args, ctx, info) {
     const id = args.coursePage;
-    console.log(args);
     // delete args.coursePage;
     if (!ctx.request.userId) {
       throw new Error(
@@ -1781,7 +1777,6 @@ const Mutations = {
     const updates = { ...args };
     delete updates.id;
     delete updates.reminders;
-    console.log(args.reminders);
     //run the update method
     const CourseVisit = await ctx.db.mutation.updateCourseVisit(
       {
@@ -1824,7 +1819,6 @@ const Mutations = {
     const updates = { ...args };
     delete updates.id;
     delete updates.reminders;
-    console.log(args.reminders);
     //run the update method
     const CourseVisit = await ctx.db.mutation.updateCourseVisit(
       {
@@ -2234,6 +2228,19 @@ const Mutations = {
       info
     );
     return UserLevel;
+  },
+  async updatePost(parent, args, ctx, info) {
+    const updates = { ...args };
+    delete updates.id;
+    return ctx.db.mutation.updatePost(
+      {
+        data: updates,
+        where: {
+          id: args.id,
+        },
+      },
+      info
+    );
   },
 };
 

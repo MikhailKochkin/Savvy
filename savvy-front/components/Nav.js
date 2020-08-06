@@ -264,7 +264,11 @@ class Nav extends Component {
                           <a>BeSavvy App</a>
                         </div>
                       </Link>
-
+                      <Link prefetch href="/blog">
+                        <div>
+                          <a>Блог</a>
+                        </div>
+                      </Link>
                       {me && me !== null ? (
                         <>
                           {me.status && me.status === "AUTHOR" && (
@@ -399,16 +403,16 @@ class Nav extends Component {
                         }}
                       >
                         <button onClick={this.closeNav}>
-                          <a>Курсы Savvy App</a>
+                          <a>Курсы</a>
                         </button>
                       </Link>
                       <Link
                         href={{
-                          pathname: "/communities",
+                          pathname: "/blog",
                         }}
                       >
                         <button onClick={this.closeNav}>
-                          <a>Курсы вузов и сообществ</a>
+                          <a>Блог</a>
                         </button>
                       </Link>
                       {me ? <Signout /> : null}

@@ -22,7 +22,7 @@ const Button = styled.button`
     background: rgba(8, 70, 216, 0.85);
   }
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {
@@ -51,14 +51,14 @@ class BuyDummy extends React.Component {
   state = {
     loading: false,
     isOpen: false,
-    auth: "signin"
+    auth: "signin",
   };
   toggleModal = () => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
-  changeState = dataFromChild => {
+  changeState = (dataFromChild) => {
     this.setState({
-      auth: dataFromChild
+      auth: dataFromChild,
     });
   };
   render() {

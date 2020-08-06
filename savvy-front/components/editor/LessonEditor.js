@@ -214,7 +214,9 @@ const rules = [
                 tabindex="0"
                 allow="autoplay"
                 data-translatedyoutubelang="ru"
-                allowFullScreen
+                allowfullscreen="true"
+                mozallowfullscreen="true"
+                webkitallowfullscreen="true"
               />
             );
         }
@@ -356,7 +358,6 @@ class App extends React.Component {
   };
 
   wrapHighlight = (editor) => {
-    console.log("!");
     editor.wrapInline({
       type: "highlight",
     });
@@ -418,7 +419,6 @@ class App extends React.Component {
   // Render a Slate block.
   renderBlock = (props, editor, next) => {
     const { attributes, node, isFocused, children } = props;
-    console.log(node.type);
     switch (node.type) {
       case "paragraph":
         return <p {...attributes}>{children}</p>;
@@ -448,7 +448,9 @@ class App extends React.Component {
             tabindex="0"
             allow="autoplay"
             data-translatedyoutubelang="ru"
-            allowFullScreen
+            allowfullscreen="true"
+            mozallowfullscreen="true"
+            webkitallowfullscreen="true"
           />
         );
       }
@@ -607,7 +609,6 @@ class App extends React.Component {
   onClickFlag = (event) => {
     event.preventDefault();
     const isCode = this.hasCodeBlock("mark");
-    console.log(isCode);
     if (isCode) {
       this.editor.unwrapBlock("mark");
     } else {
@@ -713,7 +714,6 @@ class App extends React.Component {
   onChange = ({ value }) => {
     this.setState({ value });
     this.props.getEditorText(html.serialize(this.state.value));
-    console.log(html.serialize(this.state.value));
   };
 }
 

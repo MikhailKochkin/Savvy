@@ -2,10 +2,6 @@ type AggregateApplication {
   count: Int!
 }
 
-type AggregateArticle {
-  count: Int!
-}
-
 type AggregateCareerTrack {
   count: Int!
 }
@@ -103,6 +99,10 @@ type AggregatePointA {
 }
 
 type AggregatePointATest {
+  count: Int!
+}
+
+type AggregatePost {
   count: Int!
 }
 
@@ -510,412 +510,6 @@ input ApplicationWhereInput {
 }
 
 input ApplicationWhereUniqueInput {
-  id: ID
-}
-
-type Article {
-  id: ID!
-  user: User!
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
-  coursePageIDs: [ID!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-type ArticleConnection {
-  pageInfo: PageInfo!
-  edges: [ArticleEdge]!
-  aggregate: AggregateArticle!
-}
-
-input ArticleCreatecoursePageIDsInput {
-  set: [ID!]
-}
-
-input ArticleCreateInput {
-  id: ID
-  user: UserCreateOneWithoutArticlesInput!
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePages: CoursePageCreateManyWithoutArticlesInput
-  coursePageIDs: ArticleCreatecoursePageIDsInput
-}
-
-input ArticleCreateManyWithoutCoursePagesInput {
-  create: [ArticleCreateWithoutCoursePagesInput!]
-  connect: [ArticleWhereUniqueInput!]
-}
-
-input ArticleCreateManyWithoutUserInput {
-  create: [ArticleCreateWithoutUserInput!]
-  connect: [ArticleWhereUniqueInput!]
-}
-
-input ArticleCreateWithoutCoursePagesInput {
-  id: ID
-  user: UserCreateOneWithoutArticlesInput!
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePageIDs: ArticleCreatecoursePageIDsInput
-}
-
-input ArticleCreateWithoutUserInput {
-  id: ID
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePages: CoursePageCreateManyWithoutArticlesInput
-  coursePageIDs: ArticleCreatecoursePageIDsInput
-}
-
-type ArticleEdge {
-  node: Article!
-  cursor: String!
-}
-
-enum ArticleOrderByInput {
-  id_ASC
-  id_DESC
-  tag_ASC
-  tag_DESC
-  img_ASC
-  img_DESC
-  title_ASC
-  title_DESC
-  text_ASC
-  text_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type ArticlePreviousValues {
-  id: ID!
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePageIDs: [ID!]!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-}
-
-input ArticleScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  tag: String
-  tag_not: String
-  tag_in: [String!]
-  tag_not_in: [String!]
-  tag_lt: String
-  tag_lte: String
-  tag_gt: String
-  tag_gte: String
-  tag_contains: String
-  tag_not_contains: String
-  tag_starts_with: String
-  tag_not_starts_with: String
-  tag_ends_with: String
-  tag_not_ends_with: String
-  img: String
-  img_not: String
-  img_in: [String!]
-  img_not_in: [String!]
-  img_lt: String
-  img_lte: String
-  img_gt: String
-  img_gte: String
-  img_contains: String
-  img_not_contains: String
-  img_starts_with: String
-  img_not_starts_with: String
-  img_ends_with: String
-  img_not_ends_with: String
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  text: String
-  text_not: String
-  text_in: [String!]
-  text_not_in: [String!]
-  text_lt: String
-  text_lte: String
-  text_gt: String
-  text_gte: String
-  text_contains: String
-  text_not_contains: String
-  text_starts_with: String
-  text_not_starts_with: String
-  text_ends_with: String
-  text_not_ends_with: String
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [ArticleScalarWhereInput!]
-  OR: [ArticleScalarWhereInput!]
-  NOT: [ArticleScalarWhereInput!]
-}
-
-type ArticleSubscriptionPayload {
-  mutation: MutationType!
-  node: Article
-  updatedFields: [String!]
-  previousValues: ArticlePreviousValues
-}
-
-input ArticleSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: ArticleWhereInput
-  AND: [ArticleSubscriptionWhereInput!]
-  OR: [ArticleSubscriptionWhereInput!]
-  NOT: [ArticleSubscriptionWhereInput!]
-}
-
-input ArticleUpdatecoursePageIDsInput {
-  set: [ID!]
-}
-
-input ArticleUpdateInput {
-  user: UserUpdateOneRequiredWithoutArticlesInput
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePages: CoursePageUpdateManyWithoutArticlesInput
-  coursePageIDs: ArticleUpdatecoursePageIDsInput
-}
-
-input ArticleUpdateManyDataInput {
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePageIDs: ArticleUpdatecoursePageIDsInput
-}
-
-input ArticleUpdateManyMutationInput {
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePageIDs: ArticleUpdatecoursePageIDsInput
-}
-
-input ArticleUpdateManyWithoutCoursePagesInput {
-  create: [ArticleCreateWithoutCoursePagesInput!]
-  delete: [ArticleWhereUniqueInput!]
-  connect: [ArticleWhereUniqueInput!]
-  set: [ArticleWhereUniqueInput!]
-  disconnect: [ArticleWhereUniqueInput!]
-  update: [ArticleUpdateWithWhereUniqueWithoutCoursePagesInput!]
-  upsert: [ArticleUpsertWithWhereUniqueWithoutCoursePagesInput!]
-  deleteMany: [ArticleScalarWhereInput!]
-  updateMany: [ArticleUpdateManyWithWhereNestedInput!]
-}
-
-input ArticleUpdateManyWithoutUserInput {
-  create: [ArticleCreateWithoutUserInput!]
-  delete: [ArticleWhereUniqueInput!]
-  connect: [ArticleWhereUniqueInput!]
-  set: [ArticleWhereUniqueInput!]
-  disconnect: [ArticleWhereUniqueInput!]
-  update: [ArticleUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [ArticleUpsertWithWhereUniqueWithoutUserInput!]
-  deleteMany: [ArticleScalarWhereInput!]
-  updateMany: [ArticleUpdateManyWithWhereNestedInput!]
-}
-
-input ArticleUpdateManyWithWhereNestedInput {
-  where: ArticleScalarWhereInput!
-  data: ArticleUpdateManyDataInput!
-}
-
-input ArticleUpdateWithoutCoursePagesDataInput {
-  user: UserUpdateOneRequiredWithoutArticlesInput
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePageIDs: ArticleUpdatecoursePageIDsInput
-}
-
-input ArticleUpdateWithoutUserDataInput {
-  tag: String
-  img: String
-  title: String
-  text: String
-  coursePages: CoursePageUpdateManyWithoutArticlesInput
-  coursePageIDs: ArticleUpdatecoursePageIDsInput
-}
-
-input ArticleUpdateWithWhereUniqueWithoutCoursePagesInput {
-  where: ArticleWhereUniqueInput!
-  data: ArticleUpdateWithoutCoursePagesDataInput!
-}
-
-input ArticleUpdateWithWhereUniqueWithoutUserInput {
-  where: ArticleWhereUniqueInput!
-  data: ArticleUpdateWithoutUserDataInput!
-}
-
-input ArticleUpsertWithWhereUniqueWithoutCoursePagesInput {
-  where: ArticleWhereUniqueInput!
-  update: ArticleUpdateWithoutCoursePagesDataInput!
-  create: ArticleCreateWithoutCoursePagesInput!
-}
-
-input ArticleUpsertWithWhereUniqueWithoutUserInput {
-  where: ArticleWhereUniqueInput!
-  update: ArticleUpdateWithoutUserDataInput!
-  create: ArticleCreateWithoutUserInput!
-}
-
-input ArticleWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  user: UserWhereInput
-  tag: String
-  tag_not: String
-  tag_in: [String!]
-  tag_not_in: [String!]
-  tag_lt: String
-  tag_lte: String
-  tag_gt: String
-  tag_gte: String
-  tag_contains: String
-  tag_not_contains: String
-  tag_starts_with: String
-  tag_not_starts_with: String
-  tag_ends_with: String
-  tag_not_ends_with: String
-  img: String
-  img_not: String
-  img_in: [String!]
-  img_not_in: [String!]
-  img_lt: String
-  img_lte: String
-  img_gt: String
-  img_gte: String
-  img_contains: String
-  img_not_contains: String
-  img_starts_with: String
-  img_not_starts_with: String
-  img_ends_with: String
-  img_not_ends_with: String
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  text: String
-  text_not: String
-  text_in: [String!]
-  text_not_in: [String!]
-  text_lt: String
-  text_lte: String
-  text_gt: String
-  text_gte: String
-  text_contains: String
-  text_not_contains: String
-  text_starts_with: String
-  text_not_starts_with: String
-  text_ends_with: String
-  text_not_ends_with: String
-  coursePages_every: CoursePageWhereInput
-  coursePages_some: CoursePageWhereInput
-  coursePages_none: CoursePageWhereInput
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  AND: [ArticleWhereInput!]
-  OR: [ArticleWhereInput!]
-  NOT: [ArticleWhereInput!]
-}
-
-input ArticleWhereUniqueInput {
   id: ID
 }
 
@@ -3405,7 +2999,7 @@ type CoursePage {
   published: Boolean
   uni: Uni
   uniID: ID
-  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   tags: [String!]!
   courseType: CourseType
   students: [ID!]!
@@ -3454,7 +3048,7 @@ input CoursePageCreateInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3481,11 +3075,6 @@ input CoursePageCreateManyInput {
   connect: [CoursePageWhereUniqueInput!]
 }
 
-input CoursePageCreateManyWithoutArticlesInput {
-  create: [CoursePageCreateWithoutArticlesInput!]
-  connect: [CoursePageWhereUniqueInput!]
-}
-
 input CoursePageCreateManyWithoutCareerTrackInput {
   create: [CoursePageCreateWithoutCareerTrackInput!]
   connect: [CoursePageWhereUniqueInput!]
@@ -3498,6 +3087,11 @@ input CoursePageCreateManyWithoutCompanyInput {
 
 input CoursePageCreateManyWithoutNew_studentsInput {
   create: [CoursePageCreateWithoutNew_studentsInput!]
+  connect: [CoursePageWhereUniqueInput!]
+}
+
+input CoursePageCreateManyWithoutPostsInput {
+  create: [CoursePageCreateWithoutPostsInput!]
   connect: [CoursePageWhereUniqueInput!]
 }
 
@@ -3576,47 +3170,7 @@ input CoursePageCreateWithoutApplicationsInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
-  tags: CoursePageCreatetagsInput
-  courseType: CourseType
-  students: CoursePageCreatestudentsInput
-  new_students: UserCreateManyWithoutNew_subjectsInput
-  price: Int
-  discountPrice: Int
-  orders: OrderCreateManyWithoutCoursePageInput
-  company: CompanyCreateOneWithoutCoursePagesInput
-  promocode: CoursePageCreatepromocodeInput
-  visits: CourseVisitCreateManyWithoutCoursePageInput
-  audience: String
-  result: String
-  tariffs: String
-  methods: String
-  batch: String
-  reviews: Json
-  openLesson: ID
-  video: String
-  package: CoursePageCreateManyInput
-}
-
-input CoursePageCreateWithoutArticlesInput {
-  id: ID
-  title: String!
-  description: String!
-  image: String!
-  banner: String
-  weeks: Int
-  news: String
-  user: UserCreateOneWithoutCoursePagesInput!
-  lessons: LessonCreateManyWithoutCoursePageInput
-  pointsA: PointACreateManyWithoutCoursePageInput
-  applications: ApplicationCreateManyWithoutCoursePageInput
-  pointATests: PointATestCreateManyWithoutCoursePageInput
-  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
-  numInCareerTrack: Int
-  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
-  published: Boolean
-  uni: UniCreateOneWithoutUniCoursePagesInput
-  uniID: ID
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3656,7 +3210,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3697,7 +3251,7 @@ input CoursePageCreateWithoutCompanyInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3736,7 +3290,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3776,7 +3330,7 @@ input CoursePageCreateWithoutLessonsInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3817,7 +3371,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3857,7 +3411,7 @@ input CoursePageCreateWithoutOrdersInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3896,7 +3450,7 @@ input CoursePageCreateWithoutPointATestsInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3936,7 +3490,47 @@ input CoursePageCreateWithoutPointsAInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  new_students: UserCreateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  batch: String
+  reviews: Json
+  openLesson: ID
+  video: String
+  package: CoursePageCreateManyInput
+}
+
+input CoursePageCreateWithoutPostsInput {
+  id: ID
+  title: String!
+  description: String!
+  image: String!
+  banner: String
+  weeks: Int
+  news: String
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniCreateOneWithoutUniCoursePagesInput
+  uniID: ID
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -3976,7 +3570,7 @@ input CoursePageCreateWithoutUniInput {
   examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
   published: Boolean
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -4016,7 +3610,7 @@ input CoursePageCreateWithoutUserInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -4057,7 +3651,7 @@ input CoursePageCreateWithoutVisitsInput {
   published: Boolean
   uni: UniCreateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleCreateManyWithoutCoursePagesInput
+  posts: PostCreateManyWithoutCoursePagesInput
   tags: CoursePageCreatetagsInput
   courseType: CourseType
   students: CoursePageCreatestudentsInput
@@ -4453,7 +4047,7 @@ input CoursePageUpdateDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4493,7 +4087,7 @@ input CoursePageUpdateInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4579,18 +4173,6 @@ input CoursePageUpdateManyMutationInput {
   video: String
 }
 
-input CoursePageUpdateManyWithoutArticlesInput {
-  create: [CoursePageCreateWithoutArticlesInput!]
-  delete: [CoursePageWhereUniqueInput!]
-  connect: [CoursePageWhereUniqueInput!]
-  set: [CoursePageWhereUniqueInput!]
-  disconnect: [CoursePageWhereUniqueInput!]
-  update: [CoursePageUpdateWithWhereUniqueWithoutArticlesInput!]
-  upsert: [CoursePageUpsertWithWhereUniqueWithoutArticlesInput!]
-  deleteMany: [CoursePageScalarWhereInput!]
-  updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
-}
-
 input CoursePageUpdateManyWithoutCareerTrackInput {
   create: [CoursePageCreateWithoutCareerTrackInput!]
   delete: [CoursePageWhereUniqueInput!]
@@ -4623,6 +4205,18 @@ input CoursePageUpdateManyWithoutNew_studentsInput {
   disconnect: [CoursePageWhereUniqueInput!]
   update: [CoursePageUpdateWithWhereUniqueWithoutNew_studentsInput!]
   upsert: [CoursePageUpsertWithWhereUniqueWithoutNew_studentsInput!]
+  deleteMany: [CoursePageScalarWhereInput!]
+  updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
+}
+
+input CoursePageUpdateManyWithoutPostsInput {
+  create: [CoursePageCreateWithoutPostsInput!]
+  delete: [CoursePageWhereUniqueInput!]
+  connect: [CoursePageWhereUniqueInput!]
+  set: [CoursePageWhereUniqueInput!]
+  disconnect: [CoursePageWhereUniqueInput!]
+  update: [CoursePageUpdateWithWhereUniqueWithoutPostsInput!]
+  upsert: [CoursePageUpsertWithWhereUniqueWithoutPostsInput!]
   deleteMany: [CoursePageScalarWhereInput!]
   updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
 }
@@ -4736,46 +4330,7 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
-  tags: CoursePageUpdatetagsInput
-  courseType: CourseType
-  students: CoursePageUpdatestudentsInput
-  new_students: UserUpdateManyWithoutNew_subjectsInput
-  price: Int
-  discountPrice: Int
-  orders: OrderUpdateManyWithoutCoursePageInput
-  company: CompanyUpdateOneWithoutCoursePagesInput
-  promocode: CoursePageUpdatepromocodeInput
-  visits: CourseVisitUpdateManyWithoutCoursePageInput
-  audience: String
-  result: String
-  tariffs: String
-  methods: String
-  batch: String
-  reviews: Json
-  openLesson: ID
-  video: String
-  package: CoursePageUpdateManyInput
-}
-
-input CoursePageUpdateWithoutArticlesDataInput {
-  title: String
-  description: String
-  image: String
-  banner: String
-  weeks: Int
-  news: String
-  user: UserUpdateOneRequiredWithoutCoursePagesInput
-  lessons: LessonUpdateManyWithoutCoursePageInput
-  pointsA: PointAUpdateManyWithoutCoursePageInput
-  applications: ApplicationUpdateManyWithoutCoursePageInput
-  pointATests: PointATestUpdateManyWithoutCoursePageInput
-  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
-  numInCareerTrack: Int
-  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
-  published: Boolean
-  uni: UniUpdateOneWithoutUniCoursePagesInput
-  uniID: ID
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4814,7 +4369,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4854,7 +4409,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4892,7 +4447,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4931,7 +4486,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -4971,7 +4526,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5010,7 +4565,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5048,7 +4603,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5087,7 +4642,46 @@ input CoursePageUpdateWithoutPointsADataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  new_students: UserUpdateManyWithoutNew_subjectsInput
+  price: Int
+  discountPrice: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  batch: String
+  reviews: Json
+  openLesson: ID
+  video: String
+  package: CoursePageUpdateManyInput
+}
+
+input CoursePageUpdateWithoutPostsDataInput {
+  title: String
+  description: String
+  image: String
+  banner: String
+  weeks: Int
+  news: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniUpdateOneWithoutUniCoursePagesInput
+  uniID: ID
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5126,7 +4720,7 @@ input CoursePageUpdateWithoutUniDataInput {
   examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
   published: Boolean
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5165,7 +4759,7 @@ input CoursePageUpdateWithoutUserDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5205,7 +4799,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   published: Boolean
   uni: UniUpdateOneWithoutUniCoursePagesInput
   uniID: ID
-  articles: ArticleUpdateManyWithoutCoursePagesInput
+  posts: PostUpdateManyWithoutCoursePagesInput
   tags: CoursePageUpdatetagsInput
   courseType: CourseType
   students: CoursePageUpdatestudentsInput
@@ -5231,11 +4825,6 @@ input CoursePageUpdateWithWhereUniqueNestedInput {
   data: CoursePageUpdateDataInput!
 }
 
-input CoursePageUpdateWithWhereUniqueWithoutArticlesInput {
-  where: CoursePageWhereUniqueInput!
-  data: CoursePageUpdateWithoutArticlesDataInput!
-}
-
 input CoursePageUpdateWithWhereUniqueWithoutCareerTrackInput {
   where: CoursePageWhereUniqueInput!
   data: CoursePageUpdateWithoutCareerTrackDataInput!
@@ -5249,6 +4838,11 @@ input CoursePageUpdateWithWhereUniqueWithoutCompanyInput {
 input CoursePageUpdateWithWhereUniqueWithoutNew_studentsInput {
   where: CoursePageWhereUniqueInput!
   data: CoursePageUpdateWithoutNew_studentsDataInput!
+}
+
+input CoursePageUpdateWithWhereUniqueWithoutPostsInput {
+  where: CoursePageWhereUniqueInput!
+  data: CoursePageUpdateWithoutPostsDataInput!
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutUniInput {
@@ -5302,12 +4896,6 @@ input CoursePageUpsertWithWhereUniqueNestedInput {
   create: CoursePageCreateInput!
 }
 
-input CoursePageUpsertWithWhereUniqueWithoutArticlesInput {
-  where: CoursePageWhereUniqueInput!
-  update: CoursePageUpdateWithoutArticlesDataInput!
-  create: CoursePageCreateWithoutArticlesInput!
-}
-
 input CoursePageUpsertWithWhereUniqueWithoutCareerTrackInput {
   where: CoursePageWhereUniqueInput!
   update: CoursePageUpdateWithoutCareerTrackDataInput!
@@ -5324,6 +4912,12 @@ input CoursePageUpsertWithWhereUniqueWithoutNew_studentsInput {
   where: CoursePageWhereUniqueInput!
   update: CoursePageUpdateWithoutNew_studentsDataInput!
   create: CoursePageCreateWithoutNew_studentsInput!
+}
+
+input CoursePageUpsertWithWhereUniqueWithoutPostsInput {
+  where: CoursePageWhereUniqueInput!
+  update: CoursePageUpdateWithoutPostsDataInput!
+  create: CoursePageCreateWithoutPostsInput!
 }
 
 input CoursePageUpsertWithWhereUniqueWithoutUniInput {
@@ -5473,9 +5067,9 @@ input CoursePageWhereInput {
   uniID_not_starts_with: ID
   uniID_ends_with: ID
   uniID_not_ends_with: ID
-  articles_every: ArticleWhereInput
-  articles_some: ArticleWhereInput
-  articles_none: ArticleWhereInput
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
   courseType: CourseType
   courseType_not: CourseType
   courseType_in: [CourseType!]
@@ -11949,12 +11543,6 @@ type Mutation {
   upsertApplication(where: ApplicationWhereUniqueInput!, create: ApplicationCreateInput!, update: ApplicationUpdateInput!): Application!
   deleteApplication(where: ApplicationWhereUniqueInput!): Application
   deleteManyApplications(where: ApplicationWhereInput): BatchPayload!
-  createArticle(data: ArticleCreateInput!): Article!
-  updateArticle(data: ArticleUpdateInput!, where: ArticleWhereUniqueInput!): Article
-  updateManyArticles(data: ArticleUpdateManyMutationInput!, where: ArticleWhereInput): BatchPayload!
-  upsertArticle(where: ArticleWhereUniqueInput!, create: ArticleCreateInput!, update: ArticleUpdateInput!): Article!
-  deleteArticle(where: ArticleWhereUniqueInput!): Article
-  deleteManyArticles(where: ArticleWhereInput): BatchPayload!
   createCareerTrack(data: CareerTrackCreateInput!): CareerTrack!
   updateCareerTrack(data: CareerTrackUpdateInput!, where: CareerTrackWhereUniqueInput!): CareerTrack
   updateManyCareerTracks(data: CareerTrackUpdateManyMutationInput!, where: CareerTrackWhereInput): BatchPayload!
@@ -12105,6 +11693,12 @@ type Mutation {
   upsertPointATest(where: PointATestWhereUniqueInput!, create: PointATestCreateInput!, update: PointATestUpdateInput!): PointATest!
   deletePointATest(where: PointATestWhereUniqueInput!): PointATest
   deleteManyPointATests(where: PointATestWhereInput): BatchPayload!
+  createPost(data: PostCreateInput!): Post!
+  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
+  updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
+  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
+  deletePost(where: PostWhereUniqueInput!): Post
+  deleteManyPosts(where: PostWhereInput): BatchPayload!
   createProblem(data: ProblemCreateInput!): Problem!
   updateProblem(data: ProblemUpdateInput!, where: ProblemWhereUniqueInput!): Problem
   updateManyProblems(data: ProblemUpdateManyMutationInput!, where: ProblemWhereInput): BatchPayload!
@@ -14438,6 +14032,360 @@ input PointAWhereUniqueInput {
   id: ID
 }
 
+type Post {
+  id: ID!
+  user: User!
+  tags: [String!]!
+  title: String
+  text: String
+  likes: Int
+  coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PostConnection {
+  pageInfo: PageInfo!
+  edges: [PostEdge]!
+  aggregate: AggregatePost!
+}
+
+input PostCreateInput {
+  id: ID
+  user: UserCreateOneWithoutPostsInput!
+  tags: PostCreatetagsInput
+  title: String
+  text: String
+  likes: Int
+  coursePages: CoursePageCreateManyWithoutPostsInput
+}
+
+input PostCreateManyWithoutCoursePagesInput {
+  create: [PostCreateWithoutCoursePagesInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PostCreateManyWithoutUserInput {
+  create: [PostCreateWithoutUserInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PostCreatetagsInput {
+  set: [String!]
+}
+
+input PostCreateWithoutCoursePagesInput {
+  id: ID
+  user: UserCreateOneWithoutPostsInput!
+  tags: PostCreatetagsInput
+  title: String
+  text: String
+  likes: Int
+}
+
+input PostCreateWithoutUserInput {
+  id: ID
+  tags: PostCreatetagsInput
+  title: String
+  text: String
+  likes: Int
+  coursePages: CoursePageCreateManyWithoutPostsInput
+}
+
+type PostEdge {
+  node: Post!
+  cursor: String!
+}
+
+enum PostOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  text_ASC
+  text_DESC
+  likes_ASC
+  likes_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PostPreviousValues {
+  id: ID!
+  tags: [String!]!
+  title: String
+  text: String
+  likes: Int
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input PostScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  likes: Int
+  likes_not: Int
+  likes_in: [Int!]
+  likes_not_in: [Int!]
+  likes_lt: Int
+  likes_lte: Int
+  likes_gt: Int
+  likes_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [PostScalarWhereInput!]
+  OR: [PostScalarWhereInput!]
+  NOT: [PostScalarWhereInput!]
+}
+
+type PostSubscriptionPayload {
+  mutation: MutationType!
+  node: Post
+  updatedFields: [String!]
+  previousValues: PostPreviousValues
+}
+
+input PostSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PostWhereInput
+  AND: [PostSubscriptionWhereInput!]
+  OR: [PostSubscriptionWhereInput!]
+  NOT: [PostSubscriptionWhereInput!]
+}
+
+input PostUpdateInput {
+  user: UserUpdateOneRequiredWithoutPostsInput
+  tags: PostUpdatetagsInput
+  title: String
+  text: String
+  likes: Int
+  coursePages: CoursePageUpdateManyWithoutPostsInput
+}
+
+input PostUpdateManyDataInput {
+  tags: PostUpdatetagsInput
+  title: String
+  text: String
+  likes: Int
+}
+
+input PostUpdateManyMutationInput {
+  tags: PostUpdatetagsInput
+  title: String
+  text: String
+  likes: Int
+}
+
+input PostUpdateManyWithoutCoursePagesInput {
+  create: [PostCreateWithoutCoursePagesInput!]
+  delete: [PostWhereUniqueInput!]
+  connect: [PostWhereUniqueInput!]
+  set: [PostWhereUniqueInput!]
+  disconnect: [PostWhereUniqueInput!]
+  update: [PostUpdateWithWhereUniqueWithoutCoursePagesInput!]
+  upsert: [PostUpsertWithWhereUniqueWithoutCoursePagesInput!]
+  deleteMany: [PostScalarWhereInput!]
+  updateMany: [PostUpdateManyWithWhereNestedInput!]
+}
+
+input PostUpdateManyWithoutUserInput {
+  create: [PostCreateWithoutUserInput!]
+  delete: [PostWhereUniqueInput!]
+  connect: [PostWhereUniqueInput!]
+  set: [PostWhereUniqueInput!]
+  disconnect: [PostWhereUniqueInput!]
+  update: [PostUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [PostUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [PostScalarWhereInput!]
+  updateMany: [PostUpdateManyWithWhereNestedInput!]
+}
+
+input PostUpdateManyWithWhereNestedInput {
+  where: PostScalarWhereInput!
+  data: PostUpdateManyDataInput!
+}
+
+input PostUpdatetagsInput {
+  set: [String!]
+}
+
+input PostUpdateWithoutCoursePagesDataInput {
+  user: UserUpdateOneRequiredWithoutPostsInput
+  tags: PostUpdatetagsInput
+  title: String
+  text: String
+  likes: Int
+}
+
+input PostUpdateWithoutUserDataInput {
+  tags: PostUpdatetagsInput
+  title: String
+  text: String
+  likes: Int
+  coursePages: CoursePageUpdateManyWithoutPostsInput
+}
+
+input PostUpdateWithWhereUniqueWithoutCoursePagesInput {
+  where: PostWhereUniqueInput!
+  data: PostUpdateWithoutCoursePagesDataInput!
+}
+
+input PostUpdateWithWhereUniqueWithoutUserInput {
+  where: PostWhereUniqueInput!
+  data: PostUpdateWithoutUserDataInput!
+}
+
+input PostUpsertWithWhereUniqueWithoutCoursePagesInput {
+  where: PostWhereUniqueInput!
+  update: PostUpdateWithoutCoursePagesDataInput!
+  create: PostCreateWithoutCoursePagesInput!
+}
+
+input PostUpsertWithWhereUniqueWithoutUserInput {
+  where: PostWhereUniqueInput!
+  update: PostUpdateWithoutUserDataInput!
+  create: PostCreateWithoutUserInput!
+}
+
+input PostWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  text: String
+  text_not: String
+  text_in: [String!]
+  text_not_in: [String!]
+  text_lt: String
+  text_lte: String
+  text_gt: String
+  text_gte: String
+  text_contains: String
+  text_not_contains: String
+  text_starts_with: String
+  text_not_starts_with: String
+  text_ends_with: String
+  text_not_ends_with: String
+  likes: Int
+  likes_not: Int
+  likes_in: [Int!]
+  likes_not_in: [Int!]
+  likes_lt: Int
+  likes_lte: Int
+  likes_gt: Int
+  likes_gte: Int
+  coursePages_every: CoursePageWhereInput
+  coursePages_some: CoursePageWhereInput
+  coursePages_none: CoursePageWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [PostWhereInput!]
+  OR: [PostWhereInput!]
+  NOT: [PostWhereInput!]
+}
+
+input PostWhereUniqueInput {
+  id: ID
+}
+
 type Problem {
   id: ID!
   text: String!
@@ -15461,9 +15409,6 @@ type Query {
   application(where: ApplicationWhereUniqueInput!): Application
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application]!
   applicationsConnection(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ApplicationConnection!
-  article(where: ArticleWhereUniqueInput!): Article
-  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article]!
-  articlesConnection(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ArticleConnection!
   careerTrack(where: CareerTrackWhereUniqueInput!): CareerTrack
   careerTracks(where: CareerTrackWhereInput, orderBy: CareerTrackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CareerTrack]!
   careerTracksConnection(where: CareerTrackWhereInput, orderBy: CareerTrackOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CareerTrackConnection!
@@ -15539,6 +15484,9 @@ type Query {
   pointATest(where: PointATestWhereUniqueInput!): PointATest
   pointATests(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointATest]!
   pointATestsConnection(where: PointATestWhereInput, orderBy: PointATestOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PointATestConnection!
+  post(where: PostWhereUniqueInput!): Post
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
+  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
   problem(where: ProblemWhereUniqueInput!): Problem
   problems(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Problem]!
   problemsConnection(where: ProblemWhereInput, orderBy: ProblemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProblemConnection!
@@ -18955,7 +18903,6 @@ enum Status {
 
 type Subscription {
   application(where: ApplicationSubscriptionWhereInput): ApplicationSubscriptionPayload
-  article(where: ArticleSubscriptionWhereInput): ArticleSubscriptionPayload
   careerTrack(where: CareerTrackSubscriptionWhereInput): CareerTrackSubscriptionPayload
   careerTrackUnit(where: CareerTrackUnitSubscriptionWhereInput): CareerTrackUnitSubscriptionPayload
   challengeResult(where: ChallengeResultSubscriptionWhereInput): ChallengeResultSubscriptionPayload
@@ -18981,6 +18928,7 @@ type Subscription {
   order(where: OrderSubscriptionWhereInput): OrderSubscriptionPayload
   pointA(where: PointASubscriptionWhereInput): PointASubscriptionPayload
   pointATest(where: PointATestSubscriptionWhereInput): PointATestSubscriptionPayload
+  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   problem(where: ProblemSubscriptionWhereInput): ProblemSubscriptionPayload
   problemResult(where: ProblemResultSubscriptionWhereInput): ProblemResultSubscriptionPayload
   quiz(where: QuizSubscriptionWhereInput): QuizSubscriptionPayload
@@ -21212,7 +21160,7 @@ type User {
   orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order!]
   textEditor(where: TextEditorWhereInput, orderBy: TextEditorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TextEditor!]
   isFamiliar: Boolean!
-  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   examAnswers(where: ExamAnswerWhereInput, orderBy: ExamAnswerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ExamAnswer!]
   shots(where: ShotWhereInput, orderBy: ShotOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Shot!]
   shotResults(where: ShotResultWhereInput, orderBy: ShotResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ShotResult!]
@@ -21230,6 +21178,7 @@ type User {
   clauses(where: ClauseWhereInput, orderBy: ClauseOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Clause!]
   challengeResults(where: ChallengeResultWhereInput, orderBy: ChallengeResultOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ChallengeResult!]
   level: UserLevel
+  interests: [String!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -21289,7 +21238,7 @@ input UserCreateInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21307,6 +21256,11 @@ input UserCreateInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
+}
+
+input UserCreateinterestsInput {
+  set: [String!]
 }
 
 input UserCreateManyWithoutCompanyInput {
@@ -21322,11 +21276,6 @@ input UserCreateManyWithoutNew_subjectsInput {
 input UserCreateManyWithoutUniInput {
   create: [UserCreateWithoutUniInput!]
   connect: [UserWhereUniqueInput!]
-}
-
-input UserCreateOneWithoutArticlesInput {
-  create: UserCreateWithoutArticlesInput
-  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutCareerTrackInput {
@@ -21439,6 +21388,11 @@ input UserCreateOneWithoutPointsAInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutPostsInput {
+  create: UserCreateWithoutPostsInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateOneWithoutProblemResultsInput {
   create: UserCreateWithoutProblemResultsInput
   connect: UserWhereUniqueInput
@@ -21531,70 +21485,6 @@ input UserCreatesubjectsInput {
   set: [ID!]
 }
 
-input UserCreateWithoutArticlesInput {
-  id: ID
-  name: String!
-  surname: String
-  email: String!
-  password: String!
-  resetToken: String
-  resetTokenExpiry: Float
-  image: String
-  status: Status
-  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
-  uni: UniCreateOneWithoutTeachersInput
-  company: CompanyCreateOneWithoutHrsInput
-  uniID: ID
-  description: String
-  resume: String
-  coverLetter: String
-  careerTrack: CareerTrackCreateOneWithoutMembersInput
-  careerTrackID: ID
-  sandboxes: UserCreatesandboxesInput
-  new_sandboxes: SandboxCreateManyInput
-  favourites: UserCreatefavouritesInput
-  subjects: UserCreatesubjectsInput
-  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
-  permissions: UserCreatepermissionsInput
-  coursePages: CoursePageCreateManyWithoutUserInput
-  sandboxPages: SandboxPageCreateManyWithoutUserInput
-  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
-  lessons: LessonCreateManyWithoutUserInput
-  tests: TestCreateManyWithoutUserInput
-  newTests: NewTestCreateManyWithoutUserInput
-  quizes: QuizCreateManyWithoutUserInput
-  lessonResults: LessonResultCreateManyWithoutStudentInput
-  testResults: TestResultCreateManyWithoutStudentInput
-  quizResults: QuizResultCreateManyWithoutStudentInput
-  problemResults: ProblemResultCreateManyWithoutStudentInput
-  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
-  constructionResults: ConstructionResultCreateManyWithoutStudentInput
-  pointsA: PointACreateManyWithoutUserInput
-  pointATests: PointATestCreateManyWithoutUserInput
-  problems: ProblemCreateManyWithoutUserInput
-  construction: ConstructionCreateManyWithoutUserInput
-  orders: OrderCreateManyWithoutUserInput
-  textEditor: TextEditorCreateManyWithoutUserInput
-  isFamiliar: Boolean
-  examAnswers: ExamAnswerCreateManyWithoutStudentInput
-  shots: ShotCreateManyWithoutUserInput
-  shotResults: ShotResultCreateManyWithoutStudentInput
-  notes: NoteCreateManyWithoutUserInput
-  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
-  studentFeedback: FeedbackCreateManyWithoutStudentInput
-  forums: ForumCreateManyWithoutUserInput
-  ratings: RatingCreateManyWithoutUserInput
-  statements: StatementCreateManyWithoutUserInput
-  courseVisits: CourseVisitCreateManyWithoutStudentInput
-  examResults: ExamResultCreateManyWithoutUserInput
-  exams: ExamCreateManyWithoutUserInput
-  documents: DocumentCreateManyWithoutUserInput
-  documentResults: DocumentResultCreateManyWithoutUserInput
-  clauses: ClauseCreateManyWithoutUserInput
-  challengeResults: ChallengeResultCreateManyWithoutStudentInput
-  level: UserLevelCreateOneWithoutUserInput
-}
-
 input UserCreateWithoutCareerTrackInput {
   id: ID
   name: String!
@@ -21639,7 +21529,7 @@ input UserCreateWithoutCareerTrackInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21657,6 +21547,7 @@ input UserCreateWithoutCareerTrackInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutChallengeResultsInput {
@@ -21704,7 +21595,7 @@ input UserCreateWithoutChallengeResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21721,6 +21612,7 @@ input UserCreateWithoutChallengeResultsInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutClausesInput {
@@ -21768,7 +21660,7 @@ input UserCreateWithoutClausesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21785,6 +21677,7 @@ input UserCreateWithoutClausesInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutCompanyInput {
@@ -21831,7 +21724,7 @@ input UserCreateWithoutCompanyInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21849,6 +21742,7 @@ input UserCreateWithoutCompanyInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutConstructionInput {
@@ -21895,7 +21789,7 @@ input UserCreateWithoutConstructionInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21913,6 +21807,7 @@ input UserCreateWithoutConstructionInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutConstructionResultsInput {
@@ -21959,7 +21854,7 @@ input UserCreateWithoutConstructionResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -21977,6 +21872,7 @@ input UserCreateWithoutConstructionResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutCoursePagesInput {
@@ -22023,7 +21919,7 @@ input UserCreateWithoutCoursePagesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22041,6 +21937,7 @@ input UserCreateWithoutCoursePagesInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutCourseVisitsInput {
@@ -22088,7 +21985,7 @@ input UserCreateWithoutCourseVisitsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22105,6 +22002,7 @@ input UserCreateWithoutCourseVisitsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutDocumentResultsInput {
@@ -22152,7 +22050,7 @@ input UserCreateWithoutDocumentResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22169,6 +22067,7 @@ input UserCreateWithoutDocumentResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutDocumentsInput {
@@ -22216,7 +22115,7 @@ input UserCreateWithoutDocumentsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22233,6 +22132,7 @@ input UserCreateWithoutDocumentsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutExamAnswersInput {
@@ -22280,7 +22180,7 @@ input UserCreateWithoutExamAnswersInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
@@ -22297,6 +22197,7 @@ input UserCreateWithoutExamAnswersInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutExamResultsInput {
@@ -22344,7 +22245,7 @@ input UserCreateWithoutExamResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22361,6 +22262,7 @@ input UserCreateWithoutExamResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutExamsInput {
@@ -22408,7 +22310,7 @@ input UserCreateWithoutExamsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22425,6 +22327,7 @@ input UserCreateWithoutExamsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutForumsInput {
@@ -22472,7 +22375,7 @@ input UserCreateWithoutForumsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22489,6 +22392,7 @@ input UserCreateWithoutForumsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutLegalPortfolioInput {
@@ -22535,7 +22439,7 @@ input UserCreateWithoutLegalPortfolioInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22553,6 +22457,7 @@ input UserCreateWithoutLegalPortfolioInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutLessonResultsInput {
@@ -22599,7 +22504,7 @@ input UserCreateWithoutLessonResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22617,6 +22522,7 @@ input UserCreateWithoutLessonResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutLessonsInput {
@@ -22663,7 +22569,7 @@ input UserCreateWithoutLessonsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22681,6 +22587,7 @@ input UserCreateWithoutLessonsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutLevelInput {
@@ -22728,7 +22635,7 @@ input UserCreateWithoutLevelInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22745,6 +22652,7 @@ input UserCreateWithoutLevelInput {
   documentResults: DocumentResultCreateManyWithoutUserInput
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutNew_subjectsInput {
@@ -22791,7 +22699,7 @@ input UserCreateWithoutNew_subjectsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22809,6 +22717,7 @@ input UserCreateWithoutNew_subjectsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutNewTestsInput {
@@ -22855,7 +22764,7 @@ input UserCreateWithoutNewTestsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22873,6 +22782,7 @@ input UserCreateWithoutNewTestsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutNotesInput {
@@ -22920,7 +22830,7 @@ input UserCreateWithoutNotesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -22937,6 +22847,7 @@ input UserCreateWithoutNotesInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutOrdersInput {
@@ -22983,7 +22894,7 @@ input UserCreateWithoutOrdersInput {
   construction: ConstructionCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23001,6 +22912,7 @@ input UserCreateWithoutOrdersInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutPointATestsInput {
@@ -23047,7 +22959,7 @@ input UserCreateWithoutPointATestsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23065,6 +22977,7 @@ input UserCreateWithoutPointATestsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutPointsAInput {
@@ -23111,7 +23024,7 @@ input UserCreateWithoutPointsAInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23129,6 +23042,72 @@ input UserCreateWithoutPointsAInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
+}
+
+input UserCreateWithoutPostsInput {
+  id: ID
+  name: String!
+  surname: String
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserCreatesandboxesInput
+  new_sandboxes: SandboxCreateManyInput
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  pointATests: PointATestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
+  statements: StatementCreateManyWithoutUserInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+  examResults: ExamResultCreateManyWithoutUserInput
+  exams: ExamCreateManyWithoutUserInput
+  documents: DocumentCreateManyWithoutUserInput
+  documentResults: DocumentResultCreateManyWithoutUserInput
+  clauses: ClauseCreateManyWithoutUserInput
+  challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutProblemResultsInput {
@@ -23175,7 +23154,7 @@ input UserCreateWithoutProblemResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23193,6 +23172,7 @@ input UserCreateWithoutProblemResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutProblemsInput {
@@ -23239,7 +23219,7 @@ input UserCreateWithoutProblemsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23257,6 +23237,7 @@ input UserCreateWithoutProblemsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutQuizesInput {
@@ -23303,7 +23284,7 @@ input UserCreateWithoutQuizesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23321,6 +23302,7 @@ input UserCreateWithoutQuizesInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutQuizResultsInput {
@@ -23367,7 +23349,7 @@ input UserCreateWithoutQuizResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23385,6 +23367,7 @@ input UserCreateWithoutQuizResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutRatingsInput {
@@ -23432,7 +23415,7 @@ input UserCreateWithoutRatingsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23449,6 +23432,7 @@ input UserCreateWithoutRatingsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutSandboxPageGoalsInput {
@@ -23495,7 +23479,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23513,6 +23497,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutSandboxPagesInput {
@@ -23559,7 +23544,7 @@ input UserCreateWithoutSandboxPagesInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23577,6 +23562,7 @@ input UserCreateWithoutSandboxPagesInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutShotResultsInput {
@@ -23624,7 +23610,7 @@ input UserCreateWithoutShotResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   notes: NoteCreateManyWithoutUserInput
@@ -23641,6 +23627,7 @@ input UserCreateWithoutShotResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutShotsInput {
@@ -23688,7 +23675,7 @@ input UserCreateWithoutShotsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shotResults: ShotResultCreateManyWithoutStudentInput
   notes: NoteCreateManyWithoutUserInput
@@ -23705,6 +23692,7 @@ input UserCreateWithoutShotsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutStatementsInput {
@@ -23752,7 +23740,7 @@ input UserCreateWithoutStatementsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23769,6 +23757,7 @@ input UserCreateWithoutStatementsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutStudentFeedbackInput {
@@ -23816,7 +23805,7 @@ input UserCreateWithoutStudentFeedbackInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23833,6 +23822,7 @@ input UserCreateWithoutStudentFeedbackInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutTeacherFeedbackInput {
@@ -23880,7 +23870,7 @@ input UserCreateWithoutTeacherFeedbackInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23897,6 +23887,7 @@ input UserCreateWithoutTeacherFeedbackInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutTestResultsInput {
@@ -23943,7 +23934,7 @@ input UserCreateWithoutTestResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -23961,6 +23952,7 @@ input UserCreateWithoutTestResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutTestsInput {
@@ -24007,7 +23999,7 @@ input UserCreateWithoutTestsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -24025,6 +24017,7 @@ input UserCreateWithoutTestsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutTextEditorInput {
@@ -24071,7 +24064,7 @@ input UserCreateWithoutTextEditorInput {
   construction: ConstructionCreateManyWithoutUserInput
   orders: OrderCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -24089,6 +24082,7 @@ input UserCreateWithoutTextEditorInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutTextEditorResultsInput {
@@ -24135,7 +24129,7 @@ input UserCreateWithoutTextEditorResultsInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -24153,6 +24147,7 @@ input UserCreateWithoutTextEditorResultsInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 input UserCreateWithoutUniInput {
@@ -24199,7 +24194,7 @@ input UserCreateWithoutUniInput {
   orders: OrderCreateManyWithoutUserInput
   textEditor: TextEditorCreateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleCreateManyWithoutUserInput
+  posts: PostCreateManyWithoutUserInput
   examAnswers: ExamAnswerCreateManyWithoutStudentInput
   shots: ShotCreateManyWithoutUserInput
   shotResults: ShotResultCreateManyWithoutStudentInput
@@ -24217,6 +24212,7 @@ input UserCreateWithoutUniInput {
   clauses: ClauseCreateManyWithoutUserInput
   challengeResults: ChallengeResultCreateManyWithoutStudentInput
   level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
 }
 
 type UserEdge {
@@ -24428,6 +24424,7 @@ type UserPreviousValues {
   subjects: [ID!]!
   permissions: [Permission!]!
   isFamiliar: Boolean!
+  interests: [String!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -24702,7 +24699,7 @@ input UserUpdateInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -24720,6 +24717,11 @@ input UserUpdateInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
+}
+
+input UserUpdateinterestsInput {
+  set: [String!]
 }
 
 input UserUpdateManyDataInput {
@@ -24741,6 +24743,7 @@ input UserUpdateManyDataInput {
   subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   isFamiliar: Boolean
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateManyMutationInput {
@@ -24762,6 +24765,7 @@ input UserUpdateManyMutationInput {
   subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   isFamiliar: Boolean
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateManyWithoutCompanyInput {
@@ -24803,13 +24807,6 @@ input UserUpdateManyWithoutUniInput {
 input UserUpdateManyWithWhereNestedInput {
   where: UserScalarWhereInput!
   data: UserUpdateManyDataInput!
-}
-
-input UserUpdateOneRequiredWithoutArticlesInput {
-  create: UserCreateWithoutArticlesInput
-  update: UserUpdateWithoutArticlesDataInput
-  upsert: UserUpsertWithoutArticlesInput
-  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneRequiredWithoutChallengeResultsInput {
@@ -24921,6 +24918,13 @@ input UserUpdateOneRequiredWithoutPointsAInput {
   create: UserCreateWithoutPointsAInput
   update: UserUpdateWithoutPointsADataInput
   upsert: UserUpsertWithoutPointsAInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateOneRequiredWithoutPostsInput {
+  create: UserCreateWithoutPostsInput
+  update: UserUpdateWithoutPostsDataInput
+  upsert: UserUpsertWithoutPostsInput
   connect: UserWhereUniqueInput
 }
 
@@ -25106,69 +25110,6 @@ input UserUpdatesubjectsInput {
   set: [ID!]
 }
 
-input UserUpdateWithoutArticlesDataInput {
-  name: String
-  surname: String
-  email: String
-  password: String
-  resetToken: String
-  resetTokenExpiry: Float
-  image: String
-  status: Status
-  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
-  uni: UniUpdateOneWithoutTeachersInput
-  company: CompanyUpdateOneWithoutHrsInput
-  uniID: ID
-  description: String
-  resume: String
-  coverLetter: String
-  careerTrack: CareerTrackUpdateOneWithoutMembersInput
-  careerTrackID: ID
-  sandboxes: UserUpdatesandboxesInput
-  new_sandboxes: SandboxUpdateManyInput
-  favourites: UserUpdatefavouritesInput
-  subjects: UserUpdatesubjectsInput
-  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
-  permissions: UserUpdatepermissionsInput
-  coursePages: CoursePageUpdateManyWithoutUserInput
-  sandboxPages: SandboxPageUpdateManyWithoutUserInput
-  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
-  lessons: LessonUpdateManyWithoutUserInput
-  tests: TestUpdateManyWithoutUserInput
-  newTests: NewTestUpdateManyWithoutUserInput
-  quizes: QuizUpdateManyWithoutUserInput
-  lessonResults: LessonResultUpdateManyWithoutStudentInput
-  testResults: TestResultUpdateManyWithoutStudentInput
-  quizResults: QuizResultUpdateManyWithoutStudentInput
-  problemResults: ProblemResultUpdateManyWithoutStudentInput
-  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
-  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
-  pointsA: PointAUpdateManyWithoutUserInput
-  pointATests: PointATestUpdateManyWithoutUserInput
-  problems: ProblemUpdateManyWithoutUserInput
-  construction: ConstructionUpdateManyWithoutUserInput
-  orders: OrderUpdateManyWithoutUserInput
-  textEditor: TextEditorUpdateManyWithoutUserInput
-  isFamiliar: Boolean
-  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
-  shots: ShotUpdateManyWithoutUserInput
-  shotResults: ShotResultUpdateManyWithoutStudentInput
-  notes: NoteUpdateManyWithoutUserInput
-  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
-  studentFeedback: FeedbackUpdateManyWithoutStudentInput
-  forums: ForumUpdateManyWithoutUserInput
-  ratings: RatingUpdateManyWithoutUserInput
-  statements: StatementUpdateManyWithoutUserInput
-  courseVisits: CourseVisitUpdateManyWithoutStudentInput
-  examResults: ExamResultUpdateManyWithoutUserInput
-  exams: ExamUpdateManyWithoutUserInput
-  documents: DocumentUpdateManyWithoutUserInput
-  documentResults: DocumentResultUpdateManyWithoutUserInput
-  clauses: ClauseUpdateManyWithoutUserInput
-  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
-  level: UserLevelUpdateOneWithoutUserInput
-}
-
 input UserUpdateWithoutCareerTrackDataInput {
   name: String
   surname: String
@@ -25212,7 +25153,7 @@ input UserUpdateWithoutCareerTrackDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25230,6 +25171,7 @@ input UserUpdateWithoutCareerTrackDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutChallengeResultsDataInput {
@@ -25276,7 +25218,7 @@ input UserUpdateWithoutChallengeResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25293,6 +25235,7 @@ input UserUpdateWithoutChallengeResultsDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutClausesDataInput {
@@ -25339,7 +25282,7 @@ input UserUpdateWithoutClausesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25356,6 +25299,7 @@ input UserUpdateWithoutClausesDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutCompanyDataInput {
@@ -25401,7 +25345,7 @@ input UserUpdateWithoutCompanyDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25419,6 +25363,7 @@ input UserUpdateWithoutCompanyDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutConstructionDataInput {
@@ -25464,7 +25409,7 @@ input UserUpdateWithoutConstructionDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25482,6 +25427,7 @@ input UserUpdateWithoutConstructionDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutConstructionResultsDataInput {
@@ -25527,7 +25473,7 @@ input UserUpdateWithoutConstructionResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25545,6 +25491,7 @@ input UserUpdateWithoutConstructionResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutCoursePagesDataInput {
@@ -25590,7 +25537,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25608,6 +25555,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutCourseVisitsDataInput {
@@ -25654,7 +25602,7 @@ input UserUpdateWithoutCourseVisitsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25671,6 +25619,7 @@ input UserUpdateWithoutCourseVisitsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutDocumentResultsDataInput {
@@ -25717,7 +25666,7 @@ input UserUpdateWithoutDocumentResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25734,6 +25683,7 @@ input UserUpdateWithoutDocumentResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutDocumentsDataInput {
@@ -25780,7 +25730,7 @@ input UserUpdateWithoutDocumentsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25797,6 +25747,7 @@ input UserUpdateWithoutDocumentsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutExamAnswersDataInput {
@@ -25843,7 +25794,7 @@ input UserUpdateWithoutExamAnswersDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
@@ -25860,6 +25811,7 @@ input UserUpdateWithoutExamAnswersDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutExamResultsDataInput {
@@ -25906,7 +25858,7 @@ input UserUpdateWithoutExamResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25923,6 +25875,7 @@ input UserUpdateWithoutExamResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutExamsDataInput {
@@ -25969,7 +25922,7 @@ input UserUpdateWithoutExamsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -25986,6 +25939,7 @@ input UserUpdateWithoutExamsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutForumsDataInput {
@@ -26032,7 +25986,7 @@ input UserUpdateWithoutForumsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26049,6 +26003,7 @@ input UserUpdateWithoutForumsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutLegalPortfolioDataInput {
@@ -26094,7 +26049,7 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26112,6 +26067,7 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutLessonResultsDataInput {
@@ -26157,7 +26113,7 @@ input UserUpdateWithoutLessonResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26175,6 +26131,7 @@ input UserUpdateWithoutLessonResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutLessonsDataInput {
@@ -26220,7 +26177,7 @@ input UserUpdateWithoutLessonsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26238,6 +26195,7 @@ input UserUpdateWithoutLessonsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutLevelDataInput {
@@ -26284,7 +26242,7 @@ input UserUpdateWithoutLevelDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26301,6 +26259,7 @@ input UserUpdateWithoutLevelDataInput {
   documentResults: DocumentResultUpdateManyWithoutUserInput
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutNew_subjectsDataInput {
@@ -26346,7 +26305,7 @@ input UserUpdateWithoutNew_subjectsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26364,6 +26323,7 @@ input UserUpdateWithoutNew_subjectsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutNewTestsDataInput {
@@ -26409,7 +26369,7 @@ input UserUpdateWithoutNewTestsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26427,6 +26387,7 @@ input UserUpdateWithoutNewTestsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutNotesDataInput {
@@ -26473,7 +26434,7 @@ input UserUpdateWithoutNotesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26490,6 +26451,7 @@ input UserUpdateWithoutNotesDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutOrdersDataInput {
@@ -26535,7 +26497,7 @@ input UserUpdateWithoutOrdersDataInput {
   construction: ConstructionUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26553,6 +26515,7 @@ input UserUpdateWithoutOrdersDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutPointATestsDataInput {
@@ -26598,7 +26561,7 @@ input UserUpdateWithoutPointATestsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26616,6 +26579,7 @@ input UserUpdateWithoutPointATestsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutPointsADataInput {
@@ -26661,7 +26625,7 @@ input UserUpdateWithoutPointsADataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26679,6 +26643,71 @@ input UserUpdateWithoutPointsADataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
+}
+
+input UserUpdateWithoutPostsDataInput {
+  name: String
+  surname: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserUpdatesandboxesInput
+  new_sandboxes: SandboxUpdateManyInput
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  pointATests: PointATestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
+  statements: StatementUpdateManyWithoutUserInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+  examResults: ExamResultUpdateManyWithoutUserInput
+  exams: ExamUpdateManyWithoutUserInput
+  documents: DocumentUpdateManyWithoutUserInput
+  documentResults: DocumentResultUpdateManyWithoutUserInput
+  clauses: ClauseUpdateManyWithoutUserInput
+  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutProblemResultsDataInput {
@@ -26724,7 +26753,7 @@ input UserUpdateWithoutProblemResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26742,6 +26771,7 @@ input UserUpdateWithoutProblemResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutProblemsDataInput {
@@ -26787,7 +26817,7 @@ input UserUpdateWithoutProblemsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26805,6 +26835,7 @@ input UserUpdateWithoutProblemsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutQuizesDataInput {
@@ -26850,7 +26881,7 @@ input UserUpdateWithoutQuizesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26868,6 +26899,7 @@ input UserUpdateWithoutQuizesDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutQuizResultsDataInput {
@@ -26913,7 +26945,7 @@ input UserUpdateWithoutQuizResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26931,6 +26963,7 @@ input UserUpdateWithoutQuizResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutRatingsDataInput {
@@ -26977,7 +27010,7 @@ input UserUpdateWithoutRatingsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -26994,6 +27027,7 @@ input UserUpdateWithoutRatingsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutSandboxPageGoalsDataInput {
@@ -27039,7 +27073,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27057,6 +27091,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutSandboxPagesDataInput {
@@ -27102,7 +27137,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27120,6 +27155,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutShotResultsDataInput {
@@ -27166,7 +27202,7 @@ input UserUpdateWithoutShotResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   notes: NoteUpdateManyWithoutUserInput
@@ -27183,6 +27219,7 @@ input UserUpdateWithoutShotResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutShotsDataInput {
@@ -27229,7 +27266,7 @@ input UserUpdateWithoutShotsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
   notes: NoteUpdateManyWithoutUserInput
@@ -27246,6 +27283,7 @@ input UserUpdateWithoutShotsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutStatementsDataInput {
@@ -27292,7 +27330,7 @@ input UserUpdateWithoutStatementsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27309,6 +27347,7 @@ input UserUpdateWithoutStatementsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutStudentFeedbackDataInput {
@@ -27355,7 +27394,7 @@ input UserUpdateWithoutStudentFeedbackDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27372,6 +27411,7 @@ input UserUpdateWithoutStudentFeedbackDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutTeacherFeedbackDataInput {
@@ -27418,7 +27458,7 @@ input UserUpdateWithoutTeacherFeedbackDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27435,6 +27475,7 @@ input UserUpdateWithoutTeacherFeedbackDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutTestResultsDataInput {
@@ -27480,7 +27521,7 @@ input UserUpdateWithoutTestResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27498,6 +27539,7 @@ input UserUpdateWithoutTestResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutTestsDataInput {
@@ -27543,7 +27585,7 @@ input UserUpdateWithoutTestsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27561,6 +27603,7 @@ input UserUpdateWithoutTestsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutTextEditorDataInput {
@@ -27606,7 +27649,7 @@ input UserUpdateWithoutTextEditorDataInput {
   construction: ConstructionUpdateManyWithoutUserInput
   orders: OrderUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27624,6 +27667,7 @@ input UserUpdateWithoutTextEditorDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutTextEditorResultsDataInput {
@@ -27669,7 +27713,7 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27687,6 +27731,7 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithoutUniDataInput {
@@ -27732,7 +27777,7 @@ input UserUpdateWithoutUniDataInput {
   orders: OrderUpdateManyWithoutUserInput
   textEditor: TextEditorUpdateManyWithoutUserInput
   isFamiliar: Boolean
-  articles: ArticleUpdateManyWithoutUserInput
+  posts: PostUpdateManyWithoutUserInput
   examAnswers: ExamAnswerUpdateManyWithoutStudentInput
   shots: ShotUpdateManyWithoutUserInput
   shotResults: ShotResultUpdateManyWithoutStudentInput
@@ -27750,6 +27795,7 @@ input UserUpdateWithoutUniDataInput {
   clauses: ClauseUpdateManyWithoutUserInput
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
 }
 
 input UserUpdateWithWhereUniqueWithoutCompanyInput {
@@ -27765,11 +27811,6 @@ input UserUpdateWithWhereUniqueWithoutNew_subjectsInput {
 input UserUpdateWithWhereUniqueWithoutUniInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutUniDataInput!
-}
-
-input UserUpsertWithoutArticlesInput {
-  update: UserUpdateWithoutArticlesDataInput!
-  create: UserCreateWithoutArticlesInput!
 }
 
 input UserUpsertWithoutCareerTrackInput {
@@ -27880,6 +27921,11 @@ input UserUpsertWithoutPointATestsInput {
 input UserUpsertWithoutPointsAInput {
   update: UserUpdateWithoutPointsADataInput!
   create: UserCreateWithoutPointsAInput!
+}
+
+input UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput!
+  create: UserCreateWithoutPostsInput!
 }
 
 input UserUpsertWithoutProblemResultsInput {
@@ -28230,9 +28276,9 @@ input UserWhereInput {
   textEditor_none: TextEditorWhereInput
   isFamiliar: Boolean
   isFamiliar_not: Boolean
-  articles_every: ArticleWhereInput
-  articles_some: ArticleWhereInput
-  articles_none: ArticleWhereInput
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
   examAnswers_every: ExamAnswerWhereInput
   examAnswers_some: ExamAnswerWhereInput
   examAnswers_none: ExamAnswerWhereInput

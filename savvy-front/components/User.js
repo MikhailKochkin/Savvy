@@ -9,6 +9,7 @@ const CURRENT_USER_QUERY = gql`
       email
       name
       surname
+      interests
       permissions
       image
       subjects
@@ -88,7 +89,6 @@ const CURRENT_USER_QUERY = gql`
       careerTrack {
         id
       }
-      careerTrackID
     }
   }
 `;

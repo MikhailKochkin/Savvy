@@ -49,6 +49,7 @@ const Styles = styled.div`
   display: flex;
   flex-direction: column;
   width: 75%;
+  margin-bottom: 3%;
   @media (max-width: 800px) {
     width: 95%;
     padding: 20px 0;
@@ -60,6 +61,9 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
+  @media (max-width: 1340px) {
+    justify-content: space-around;
+  }
   @media (max-width: 800px) {
     flex-direction: row;
     align-items: flex-start;
@@ -71,7 +75,7 @@ const Header = styled.div`
   /* font-weight: bold; */
   font-size: 2rem;
   font-weight: bold;
-  margin: 30px 0 0 0;
+  margin: 30px 0 0 20px;
   @media (max-width: 800px) {
     font-size: 2rem;
     margin: 0 0 30px 0;

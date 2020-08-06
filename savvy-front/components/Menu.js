@@ -34,28 +34,28 @@ class Menu extends Component {
         <Box>
           <Link
             href={{
-              pathname: "/courses"
+              pathname: "/courses",
             }}
           >
-            <a>Курсы Savvy App</a>
+            <a>Курсы</a>
           </Link>
         </Box>
-        <Box>
+        {/* <Box>
           <Link
             href={{
               pathname: "/communities"
             }}
           >
-            <a>Курсы вузов и сообществ</a>
+            <a>Курсы вузов</a>
           </Link>
-        </Box>
+        </Box> */}
         <Box>
           <Link
             href={{
-              pathname: "/challenges"
+              pathname: "/blog",
             }}
           >
-            <a>Испытания</a>
+            <a>Блог</a>
           </Link>
         </Box>
       </MenuStyle>
