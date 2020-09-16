@@ -8,7 +8,7 @@ import { element } from "prop-types";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
-    coursePages(orderBy: createdAt_DESC) {
+    coursePages(where: { published: true }, orderBy: createdAt_DESC) {
       id
       title
       description
@@ -72,7 +72,6 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  /* font-weight: bold; */
   font-size: 2rem;
   font-weight: bold;
   margin: 30px 0 0 20px;

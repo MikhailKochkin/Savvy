@@ -8,7 +8,9 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
+
 import { CURRENT_USER_QUERY } from "../../User";
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -80,36 +82,48 @@ const TextBar = styled.div`
       width: 5%;
     }
   }
+  .edit {
+    background: red;
+    width: 100%;
+    font-size: 1.6rem;
+    line-height: 1.8;
+    font-family: Montserrat;
+    border: none;
+    background: none;
+    outline: 0;
+    resize: none;
+    color: #393939;
+    overflow: hidden;
+    height: auto;
+    background: #bef1ed;
+    padding: 3px 3px;
+  }
+  .mini_button {
+    color: #6d7578;
+    border: 1px solid #6d7578;
+    font-family: Montserrat;
+    background: none;
+    outline: 0;
+    border-radius: 3px;
+    padding: 4px 7px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    &:focus {
+      color: white;
+      background: #6d7578;
+    }
+  }
 `;
 
 const EditText = styled.div`
-  /* font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;  */
-`;
-
-const Hint = styled.div`
-  position: -webkit-sticky;
-  position: sticky;
-  padding: 1.5% 3%;
-  margin: 20px 2% 0 0%;
-  background: white;
-  top: 20px;
-  z-index: 3;
-  border: 1px solid #c0d6df;
-  border-radius: 10px;
-  width: 100%;
-  button {
-    background: none;
-    border: none;
-    outline: 0;
-    cursor: pointer;
-    font-size: 1.4rem;
-    padding: 0;
-    margin: 0;
-    margin-right: 10px;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  color: rgb(17, 17, 17);
+  max-width: 740px;
+  background: rgb(255, 255, 255);
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  padding: 5% 8%;
+  margin: 55px auto 45px;
 `;
 
 const Buttons = styled.div`
@@ -149,37 +163,63 @@ class SingleTextEditor extends Component {
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text,
     update: false,
+    result: false,
+    inputColor: "#c0d6df",
+    open: true,
     recieved: [],
   };
 
-  check = async () => {
+  check = async (e) => {
+    this.setState({ shown: true });
     let data = {
-      sentence1: this.state.answer.toLowerCase(),
-      sentence2: this.state.correct_option.toLowerCase(),
+      answer1: this.state.correct_option.toLowerCase(),
+      answer2: this.state.answer.toLowerCase(),
     };
-    const r = await fetch("https://dry-plains-91452.herokuapp.com/", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
+    let el = document.querySelectorAll(
+      `[data-initial='${this.state.correct_option}']`
+    )[0];
+    const r = await fetch(
+      "http://bessavvy-checker-api.eba-3mdjdip5.us-east-1.elasticbeanstalk.com/checker",
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    )
       .then((response) => response.json())
       .then((res) => {
         console.log(res);
-        if (res > 0.59) {
+        if (
+          !e.target.nextSibling ||
+          (e.target.nextSibling &&
+            e.target.nextSibling.innerHTML !== "Показать")
+        ) {
+          let button2 = document.createElement("button");
+          button2.innerHTML = "Показать";
+          button2.className = "mini_button";
+          button2.addEventListener("click", this.show);
+          e.target.after(button2);
+        }
+        if (parseFloat(res.res) > 69) {
           this.setState({
             result: true,
-            inputColor: "rgba(50, 172, 102, 0.5)",
           });
+          el.style.background = "#D9EAD3";
         } else {
           this.setState({
             result: false,
-            inputColor: "rgba(222, 107, 72, 0.5)",
           });
+          el.style.background = "#FCE5CD";
+          if (res.comment) {
+            alert(res.comment);
+          }
+          setTimeout(() => (el.style.background = "#bef1ed"), 3000);
         }
       })
       .catch((err) => console.log(err));
+    this.setState({ shown: false });
   };
 
   onTest = (e) => {
@@ -189,62 +229,69 @@ class SingleTextEditor extends Component {
   };
 
   onMouseClick = (e) => {
-    if (e.target.className === this.props.textEditor.id) {
-      // if (this.state.total !== null && this.state.total > 0) {
-      e.target.style.backgroundColor = "#FDF3C8";
-      e.target.style.padding = "0.8%";
-      e.target.style.borderRadius = "8px";
-      // }
-      // console.log(this.props.textEditor.text, !this.state.shown);
-      this.setState({
-        shown: true,
-        show: false,
-        answer: "",
-        correct_option: e.target.getAttribute("data"),
-        wrong_option: e.target.innerHTML,
-      });
+    let z = document.createElement("span");
+    z.contentEditable = true;
+    z.innerHTML = e.target.innerHTML;
+    z.className = "edit";
+    z.setAttribute("data-initial", e.target.getAttribute("data"));
+    z.addEventListener("input", this.changeState);
+    let n = e.target.parentNode.replaceChild(z, e.target);
+
+    let button = document.createElement("button");
+    button.innerHTML = "Проверить";
+    button.className = "mini_button";
+    button.addEventListener("click", this.check);
+    z.after(button);
+
+    this.setState({
+      answer: "",
+      correct_option: e.target.getAttribute("data"),
+      wrong_option: e.target.innerHTML,
+    });
+  };
+
+  changeState = (e) => {
+    this.setState({ answer: e.target.innerHTML });
+  };
+
+  onReveal = (e) => {
+    let span = document.createElement("span");
+    span.innerHTML = ` (${e.target.getAttribute("data")})`;
+    console.log(e.target.nextSibling);
+    if (
+      e.target.nextSibling == null ||
+      (e.target.nextSibling &&
+        span.innerHTML !== e.target.nextSibling.innerHTML)
+    ) {
+      e.target.after(span);
     }
   };
 
-  onConceal = (e) => {
-    this.setState({
-      shown: false,
-      show: false,
-    });
-    e.currentTarget.style.textDecorationLine = null;
-  };
-
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  show = (e) => {
+    e.target.previousSibling.previousSibling.innerHTML = e.target.previousSibling.previousSibling.getAttribute(
+      "data-initial"
+    );
+    e.target.style.pointerEvents = "none";
+    e.target.previousSibling.style.display = "none";
+    e.target.style.display = "none";
+    e.target.previousSibling.previousSibling.contentEditable = false;
+    e.target.previousSibling.previousSibling.style.pointerEvents = "none";
   };
 
   onShow = () => {
-    const mistakes = document
-      .getElementById(this.props.textEditor.id)
-      .querySelectorAll("#id");
-    this.setState((prevState) => ({ mistakesShown: !prevState.mistakesShown }));
-    if (!this.state.mistakesShown) {
-      mistakes.forEach(
-        (mistake) => (mistake.style.backgroundColor = "#F0C40F")
-      );
-      mistakes.forEach((mistake) => (mistake.style.padding = "0.8%"));
-      mistakes.forEach((mistake) => (mistake.style.borderRadius = "8px"));
-    } else if (this.state.mistakesShown) {
-      mistakes.forEach((mistake) => (mistake.style = null));
+    const elements = document.querySelectorAll("#id");
+    if (this.state.mistakesShown) {
+      elements.forEach((element) => {
+        element.classList.remove("edit");
+      });
+    } else {
+      elements.forEach((element) => {
+        element.className = "edit";
+      });
     }
+    this.setState((prev) => ({ mistakesShown: !prev.mistakesShown }));
   };
-  componentDidMount() {
-    const elements = document
-      .getElementById(this.props.textEditor.id + 1)
-      .querySelectorAll("#id");
-    elements.forEach(
-      (element) => (
-        (element.className = this.props.textEditor.id),
-        element.addEventListener("click", this.onMouseClick)
-      )
-    );
-  }
+
   render() {
     const { textEditor, me, userData, lesson, story } = this.props;
     let data;
@@ -258,106 +305,64 @@ class SingleTextEditor extends Component {
         {!this.state.update && (
           <>
             <TextBar id={textEditor.id}>
-              {this.state.shown && (
-                <Hint>
-                  <div>
-                    {this.state.total > 0 && (
-                      <>
-                        {!this.state.show && (
-                          <>
-                            Ваш вариант:
-                            <Input
-                              type="text"
-                              name="answer"
-                              required
-                              onChange={this.handleChange}
-                            />
-                          </>
-                        )}
-                        {this.state.show && (
-                          <span>
-                            Правильный ответ:{" "}
-                            {this.state.show && this.state.correct_option}
-                          </span>
-                        )}
-                      </>
-                    )}
-                    {(this.state.total === 0 ||
-                      this.state.total === undefined ||
-                      this.state.total === null) &&
-                      this.state.correct_option}
-                  </div>
-
-                  {this.state.total > 0 && (
-                    <Mutation
-                      mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-                      variables={{
-                        lesson: this.props.lessonID,
-                        textEditor: this.props.textEditor.id,
-                        attempts: this.state.attempts,
-                        correct: this.state.correct_option,
-                        wrong: this.state.wrong_option,
-                        guess: this.state.answer,
-                        result: this.state.result,
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: CURRENT_USER_QUERY,
-                        },
-                      ]}
-                    >
-                      {(createTextEditorResult, { loading, error }) => (
-                        <button
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            this.state.answer !== ""
-                              ? this.setState((prevState) => ({
-                                  show: !prevState.show,
-                                }))
-                              : alert("Дайте свой вариант!");
-                            console.log(1);
-                            const res0 = await this.check();
-                            if (
-                              data.length === 0 &&
-                              !this.state.recieved.includes(this.state.answer)
-                            ) {
-                              console.log(2);
-                              const res = await createTextEditorResult();
-                            }
-                            this.setState((prevState) => ({
-                              recieved: [
-                                ...prevState.recieved,
-                                this.state.answer.toLowerCase(),
-                              ],
-                            }));
-                            console.log(3);
-                          }}
-                        >
-                          Ответить
-                        </button>
-                      )}
-                    </Mutation>
-                  )}
-                  <button onClick={this.onConceal}>Скрыть</button>
-                </Hint>
-              )}
               <EditText>
-                <div onClick={this.onTest}>{renderHTML(this.state.text)}</div>
-                {this.state.total === this.state.revealed ? (
-                  <Right>Задание выполнено!</Right>
-                ) : null}
+                <Mutation
+                  mutation={CREATE_TEXTEDITORRESULT_MUTATION}
+                  variables={{
+                    lesson: this.props.lesson,
+                    textEditor: this.props.textEditor.id,
+                    attempts: this.state.attempts,
+                    correct: this.state.correct_option,
+                    wrong: this.state.wrong_option,
+                    guess: this.state.answer,
+                    result: this.state.result,
+                  }}
+                  refetchQueries={() => [
+                    {
+                      query: SINGLE_LESSON_QUERY,
+                      variables: { id: this.props.lesson },
+                    },
+                    {
+                      query: CURRENT_USER_QUERY,
+                    },
+                  ]}
+                >
+                  {(createTextEditorResult, { loading, error }) => (
+                    <div
+                      onClick={async (e) => {
+                        const res1 = this.onTest();
+                        if (e.target.id === "id") {
+                          if (this.state.total > 0) {
+                            const res2 = await this.onMouseClick(e);
+                          } else if (
+                            this.state.total == 0 ||
+                            this.state.total == null
+                          ) {
+                            const res3 = await this.onReveal(e);
+                          }
+                        }
+                        if (this.state.shown) {
+                          setTimeout(() => {
+                            console.log("Save");
+                            const res2 = createTextEditorResult();
+                          }, 3000);
+                        }
+                      }}
+                    >
+                      {renderHTML(this.state.text)}
+                    </div>
+                  )}
+                </Mutation>
               </EditText>
             </TextBar>
             <Buttons>
-              {/* {this.state.total > 1 && ( */}
               <StyledButton
                 onClick={this.onShow}
                 variant="contained"
                 color="primary"
               >
-                {this.state.mistakesShown ? "Скрыть ошибки" : "Проверить"}
+                {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
               </StyledButton>
-              {/* )} */}
               {me && me.id === textEditor.user.id && !story ? (
                 <DeleteSingleTextEditor
                   id={this.props.textEditor.id}

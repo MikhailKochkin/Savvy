@@ -50,7 +50,7 @@ const Footer = () => (
         <Link
           href={{
             pathname: "/legal",
-            query: { name: "terms" }
+            query: { name: "terms" },
           }}
         >
           <a>Пользовательское соглашение</a>
@@ -60,7 +60,7 @@ const Footer = () => (
         <Link
           href={{
             pathname: "/legal",
-            query: { name: "privacy" }
+            query: { name: "privacy" },
           }}
         >
           <a>Политика обработки персональных данных</a>
@@ -70,7 +70,7 @@ const Footer = () => (
         <Link
           href={{
             pathname: "/legal",
-            query: { name: "offer" }
+            query: { name: "offer" },
           }}
         >
           <a>Оферта</a>
@@ -79,7 +79,7 @@ const Footer = () => (
     </div>
     <div className="mini">
       <div>
-        <a target="_blank" href="https://vk.com/savvy_university">
+        <a target="_blank" href="https://vk.com/besavvylawyer">
           Вконтакте
         </a>
       </div>

@@ -162,30 +162,8 @@ const CreateNewTest = (props) => {
   const [num, setNum] = useState(2);
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
-  const [answers, setAnswers] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
-  const [correct, setCorrect] = useState([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [answers, setAnswers] = useState(["", ""]);
+  const [correct, setCorrect] = useState([false, false]);
   const [question, setQuestion] = useState();
 
   const handleArray = (val, i) => {
@@ -237,25 +215,27 @@ const CreateNewTest = (props) => {
         ]}
       >
         {(createNewTest, { loading, error }) => (
-          <Form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const res = await setAnswers(answers.filter((an) => an !== ""));
-              let arr = correct;
-              arr.length = answers.filter((an) => an !== "").length;
-              const res2 = await setCorrect(arr);
-              createNewTest();
-              alert("Готово!");
-            }}
-          >
+          <div>
             <Advice>
               Создайте новый тест. Введите сам вопрос, 2-9 вариантов ответа.
               Количество правильных ответов может быть любым.
             </Advice>
             <Title>Новый тест</Title>
             <CustomSelect1>
-              Вариантов ответа:
-              <select
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNum(num + 1);
+                  let old_answers = answers;
+                  let old_correct = correct;
+                  console.log(old_answers, old_correct);
+                  setAnswers([...old_answers, ""]);
+                  setCorrect([...old_correct, false]);
+                }}
+              >
+                +1 вариант ответа
+              </button>
+              {/* <select
                 name="answerNumber"
                 onChange={(e) => setNum(e.target.value)}
               >
@@ -267,7 +247,7 @@ const CreateNewTest = (props) => {
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
-              </select>
+              </select> */}
             </CustomSelect1>
             <Comment>
               <DynamicLoadedEditor
@@ -319,11 +299,23 @@ const CreateNewTest = (props) => {
                 getEditorText={setIf}
               />
             </Comment>
-            <Button type="submit">
+            <Button
+              onClick={async (e) => {
+                console.log(0);
+                e.preventDefault();
+                const res = await setAnswers(answers.filter((an) => an !== ""));
+                let arr = correct;
+                arr.length = answers.filter((an) => an !== "").length;
+                const res2 = await setCorrect(arr);
+                createNewTest();
+                console.log(1);
+                alert("Готово!");
+              }}
+            >
               {loading ? "Сохраняем..." : "Сохранить"}
             </Button>
             <Message id="Message">Вы создали новый тестовый вопрос!</Message>
-          </Form>
+          </div>
         )}
       </Mutation>
     </TestCreate>

@@ -87,30 +87,30 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             id
           }
         }
-        newTests {
-          testResults {
-            id
-            student {
-              id
-            }
-          }
-        }
-        quizes {
-          quizResults {
-            id
-            student {
-              id
-            }
-          }
-        }
-        problems {
-          problemResults {
-            id
-            student {
-              id
-            }
-          }
-        }
+        # newTests {
+        #   testResults {
+        #     id
+        #     student {
+        #       id
+        #     }
+        #   }
+        # }
+        # quizes {
+        #   quizResults {
+        #     id
+        #     student {
+        #       id
+        #     }
+        #   }
+        # }
+        # problems {
+        #   problemResults {
+        #     id
+        #     student {
+        #       id
+        #     }
+        #   }
+        # }
       }
       description
       courseType
@@ -131,7 +131,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         question
       }
-
       user {
         id
         name

@@ -60,13 +60,14 @@ const Question = styled.div`
 `;
 
 const Textarea = styled.textarea`
-  height: 150px;
+  height: 140px;
   width: 100%;
   border: 1px solid #c4c4c4;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
   outline: 0;
-  padding: 2%;
+  resize: none;
+  padding: 3% 4%;
+  line-height: 1.8;
   font-family: Montserrat;
   font-size: 1.6rem;
   margin-top: 3%;
@@ -78,11 +79,10 @@ const Textarea = styled.textarea`
 
 const Answer = styled.div`
   border: 1px solid #84bc9c;
-  border-radius: 5px;
   width: 100%;
   color: black;
   padding: 2%;
-  min-height: 150px;
+  height: 140px;
   display: ${(props) => (props.display === "true" ? "none" : "block")};
   margin: 3% 0;
   @media (max-width: 800px) {
@@ -98,12 +98,11 @@ const Group = styled.div`
   background: ${(props) => props.inputColor};
   width: 100%;
   pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
-  padding: 0.5%;
+  padding: 0.5% 0;
   margin-bottom: 3%;
   div {
     border: 1px solid #c4c4c4;
-    border-radius: 5px;
-    padding: 0.5%;
+    padding: 0.5% 0;
     cursor: pointer;
   }
   #but2 {
@@ -206,31 +205,38 @@ class SingleQuiz extends Component {
   onAnswer = async (e) => {
     this.setState({ progress: "true" });
     let data1 = {
-      sentence1: this.props.answer.toLowerCase(),
-      sentence2: this.state.answer.toLowerCase(),
+      answer1: this.props.answer.toLowerCase(),
+      answer2: this.state.answer.toLowerCase(),
     };
 
-    const r = await fetch("https://dry-plains-91452.herokuapp.com", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data1),
-    })
+    const r = await fetch(
+      "http://bessavvy-checker-api.eba-3mdjdip5.us-east-1.elasticbeanstalk.com/checker",
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data1),
+      }
+    )
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
-        if (res > 0.59) {
+        if (parseFloat(res.res) > 69) {
+          console.log(1);
           this.setState({
             correct: "true",
             inputColor: "rgba(50, 172, 102, 0.25)",
           });
           this.move("true");
         } else {
+          console.log(2);
           this.setState({
             correct: "false",
             inputColor: "rgba(222, 107, 72, 0.5)",
           });
+          if (res.comment) {
+            alert(res.comment);
+          }
           this.move("false");
         }
       })
@@ -252,7 +258,7 @@ class SingleQuiz extends Component {
         );
       }
       // 2. and if we get the wrong answer
-      else if (result === "false") {
+      else if (result === "false" && this.props.getData) {
         // 3. and if this quiz is a part of an exam
         // 4. we transfer the "false" data to the exam component
         this.props.getData(

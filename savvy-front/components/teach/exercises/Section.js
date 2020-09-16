@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Problem from "./Problem";
+import Document from "./Document";
 
 const Styles = styled.div`
   margin: 0 1%;
@@ -50,18 +51,31 @@ const Section = (props) => {
           {reveal ? "Закрыть" : "Открыть"}
         </button>
       </div>
-      {reveal &&
-        props.lesson.problems &&
-        props.lesson.problems.map((p, i) => (
-          <Problem
-            parts={parts}
-            index={i + 1}
-            coursePage={props.lesson.coursePage.id}
-            problem={p}
-            students={props.students}
-            lesson={props.lesson.id}
-          />
-        ))}
+      {reveal && (
+        <>
+          {props.lesson.problems &&
+            props.lesson.problems.map((p, i) => (
+              <Problem
+                parts={parts}
+                index={i + 1}
+                coursePage={props.lesson.coursePage.id}
+                problem={p}
+                students={props.students}
+                lesson={props.lesson.id}
+              />
+            ))}
+          {props.lesson.documents &&
+            props.lesson.documents.map((d, i) => (
+              <Document
+                index={i + 1}
+                coursePage={props.lesson.coursePage.id}
+                document={d}
+                students={props.students}
+                lesson={props.lesson.id}
+              />
+            ))}
+        </>
+      )}
     </Styles>
   );
 };

@@ -239,6 +239,7 @@ const Search = (props) => {
           <Table>
             <div className="subject">
               <select onChange={(e) => setTopic(e.target.value)}>
+                <option value="Any">Любой курс</option>
                 <option value="Английский">Юридический английский</option>
                 <option value="Гражданское право">Гражданское право</option>
                 <option value="Корпоративное право">Корпоративное право</option>
@@ -250,7 +251,6 @@ const Search = (props) => {
                 <option value="Legal Tech">Legal Tech</option>
                 <option value="Уголовное право">Уголовное право</option>
                 <option value="Земельное право">Земельное право</option>
-                <option value="Any">Любой курс</option>
               </select>
             </div>
             <div className="subject">

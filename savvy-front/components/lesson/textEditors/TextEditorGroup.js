@@ -78,7 +78,7 @@ class TextEditorGroup extends Component {
             textEditor={textEditor}
             me={this.props.me}
             userData={userData}
-            lessonID={this.props.lessonID}
+            lesson={this.props.lessonID}
           />
         )}
       </>

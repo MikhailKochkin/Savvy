@@ -523,7 +523,7 @@ const NextWeekEmail = (name, course, coursePageID) => `
                           <strong>P.S.</strong> Если возникнут какие-то проблемы, я могу помочь. Можешь ответить на это
                           письмо или написать нам
                           <a
-                            href="https://vk.com/savvy_university"
+                            href="https://vk.com/besavvylawyer"
                             target="_blank"
                             >в социальных сетях</a
                           >.

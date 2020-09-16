@@ -590,7 +590,7 @@ const WelcomeEmail = (name) => `
                           получается, я могу помочь. Можете ответить на это
                           письмо или написать нам
                           <a
-                            href="https://vk.com/savvy_university"
+                            href="https://vk.com/besavvylawyer"
                             target="_blank"
                             >в социальных сетях</a
                           >.

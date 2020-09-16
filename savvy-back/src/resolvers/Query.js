@@ -32,6 +32,7 @@ const Query = {
   lessonsConnection: forwardTo("db"),
   problemsConnection: forwardTo("db"),
   testsConnection: forwardTo("db"),
+  usersConnection: forwardTo("db"),
   post: forwardTo("db"),
   posts: forwardTo("db"),
   applications: forwardTo("db"),

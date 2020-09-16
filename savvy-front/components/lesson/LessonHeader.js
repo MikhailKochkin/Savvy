@@ -237,40 +237,40 @@ class LessonHeader extends Component {
     let problems = [];
     let color;
 
-    if (me) {
-      let visits = lesson.lessonResults.filter((l) => l.student.id === me.id);
-      // console.log(lesson.quizes, lesson.quizes.length > 0);
-      if (lesson.quizes.length > 0) {
-        lesson.quizes.map((l) => quizes.push(...l.quizResults));
-      }
-      quizes = quizes.filter((q) => q.student.id === me.id);
-      if (lesson.newTests.length > 0) {
-        lesson.newTests.map((l) => tests.push(...l.testResults));
-      }
-      tests = tests.filter((l) => l.student.id === me.id);
-      if (lesson.problems.length > 0) {
-        lesson.problems.map((l) => problems.push(...l.problemResults));
-      }
-      problems = problems.filter((l) => l.student.id === me.id);
-      if (
-        visits.length > 0 &&
-        tests.length === 0 &&
-        problems.length === 0 &&
-        quizes.length === 0
-      ) {
-        color = "#FFD836";
-      } else if (
-        visits.length > 0 &&
-        (tests.length > 0 || problems.length > 0 || quizes.length > 0)
-      ) {
-        color = "#32AC66";
-      } else {
-        color = "white";
-      }
-    } else {
-      color = "white";
-    }
-
+    // if (me) {
+    //   let visits = lesson.lessonResults.filter((l) => l.student.id === me.id);
+    //   // console.log(lesson.quizes, lesson.quizes.length > 0);
+    //   if (lesson.quizes.length > 0) {
+    //     lesson.quizes.map((l) => quizes.push(...l.quizResults));
+    //   }
+    //   quizes = quizes.filter((q) => q.student.id === me.id);
+    //   if (lesson.newTests.length > 0) {
+    //     lesson.newTests.map((l) => tests.push(...l.testResults));
+    //   }
+    //   tests = tests.filter((l) => l.student.id === me.id);
+    //   if (lesson.problems.length > 0) {
+    //     lesson.problems.map((l) => problems.push(...l.problemResults));
+    //   }
+    //   problems = problems.filter((l) => l.student.id === me.id);
+    //   if (
+    //     visits.length > 0 &&
+    //     tests.length === 0 &&
+    //     problems.length === 0 &&
+    //     quizes.length === 0
+    //   ) {
+    //     color = "#FFD836";
+    //   } else if (
+    //     visits.length > 0 &&
+    //     (tests.length > 0 || problems.length > 0 || quizes.length > 0)
+    //   ) {
+    //     color = "#32AC66";
+    //   } else {
+    //     color = "white";
+    //   }
+    // } else {
+    //   color = "white";
+    // }
+    color = "white";
     return (
       <>
         <TextBar color={color}>

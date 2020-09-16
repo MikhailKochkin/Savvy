@@ -84,6 +84,18 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           }
           answer
         }
+        documentResults {
+          id
+          user {
+            id
+          }
+          document {
+            id
+          }
+          answers
+          drafts
+          createdAt
+        }
       }
       examQuestion {
         id
@@ -108,10 +120,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         }
         forum {
           id
-          # rating {
-          #   id
-          #   rating
-          # }
         }
         newTests {
           id
@@ -125,31 +133,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           question
           answer
           next
-          # quizResults {
-          #   id
-          #   student {
-          #     id
-          #   }
-          #   quiz {
-          #     id
-          #   }
-          #   answer
-          # }
         }
         documents {
           id
           title
-          # documentResults {
-          #   id
-          #   user {
-          #     id
-          #   }
-          #   document {
-          #     id
-          #   }
-          #   answers
-          #   drafts
-          # }
         }
         notes {
           id
@@ -161,60 +148,17 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           text
           nodeID
           nodeType
-          # problemResults {
-          #   id
-          #   student {
-          #     id
-          #   }
-          #   answer
-          #   revealed
-          #   problem {
-          #     id
-          #     text
-          #     lesson {
-          #       id
-          #     }
-          #   }
-          # }
         }
         texteditors {
           id
           text
           totalMistakes
-          # textEditorResults {
-          #   id
-          #   student {
-          #     id
-          #   }
-          #   correct
-          #   guess
-          #   wrong
-          #   attempts
-          #   textEditor {
-          #     id
-          #     text
-          #     totalMistakes
-          #   }
-          # }
         }
         constructions {
           id
           name
           variants
           answer
-          # constructionResults {
-          #   id
-          #   student {
-          #     id
-          #   }
-          #   inputs
-          #   attempts
-          #   answer
-          #   construction {
-          #     id
-          #     name
-          #   }
-          # }
         }
         user {
           id

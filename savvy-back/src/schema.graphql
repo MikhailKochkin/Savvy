@@ -420,6 +420,7 @@ type Query {
   coursePagesConnection(where: CoursePageWhereInput): CoursePageConnection!
   lessonsConnection(where: LessonWhereInput): LessonConnection!
   testsConnection(where: TestWhereInput): TestConnection!
+  usersConnection(where: UserWhereInput): UserConnection!
   tests(
     where: TestWhereInput
     orderBy: TestOrderByInput
@@ -586,6 +587,7 @@ type User {
   textEditorResults: [TextEditorResult]
   lessonResults: [LessonResult]
   examAnswers: [ExamAnswer]
+  documentResults: [DocumentResult]
   studentFeedback: [Feedback]
   teacherFeedback: [Feedback]
 }

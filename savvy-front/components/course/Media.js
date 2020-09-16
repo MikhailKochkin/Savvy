@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import Icon from "react-icons-kit";
 import { instagram } from "react-icons-kit/fa/instagram";
 import { graduationCap } from "react-icons-kit/fa/graduationCap";
@@ -107,7 +108,13 @@ const Media = () => {
                 <Icon size={30} icon={graduationCap} />
               </div>
               <span>
-                <a> Наш блог</a>
+                <Link
+                  href={{
+                    pathname: "/blog",
+                  }}
+                >
+                  <a> Наш блог</a>
+                </Link>
               </span>
             </Header>
             <Img src="https://images.unsplash.com/photo-1515378960530-7c0da6231fb1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1650&q=80" />
