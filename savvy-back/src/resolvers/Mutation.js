@@ -53,20 +53,6 @@ const newOrderEmail = (client, surname, email, course, price) => `
   </div>
 `;
 
-const NotificationEmail = (name, course, coursePageID) => `
-  <div className="email" style="
-    padding: 20px;
-    font-family: sans-serif;
-    line-height: 2;
-    font-size: 20px;
-  ">
-    <h2>${name}, здравствуйте!</h2>
-    <p>Вам открыт доступ к курсу ${course} на сайте besavvy.app.</p>
-    <p>Переходите к курсу <a href="https://besavvy.app/coursePage?id=${coursePageID}">по ссылке.</a> </p>
-    <p>Если вы не покупали ничего на сайте, то просто проигнорируйте это письмо.</p>
-  </div>
-`;
-
 const AuthorNotification = (lesson, course, lessonID) => `
   <div className="email" style="
     padding: 20px;

@@ -178,16 +178,13 @@ class SingleTextEditor extends Component {
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
     )[0];
-    const r = await fetch(
-      "http://bessavvy-checker-api.eba-3mdjdip5.us-east-1.elasticbeanstalk.com/checker",
-      {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    )
+    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
       .then((response) => response.json())
       .then((res) => {
         console.log(res);

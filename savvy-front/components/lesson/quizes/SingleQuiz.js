@@ -209,16 +209,13 @@ class SingleQuiz extends Component {
       answer2: this.state.answer.toLowerCase(),
     };
 
-    const r = await fetch(
-      "http://bessavvy-checker-api.eba-3mdjdip5.us-east-1.elasticbeanstalk.com/checker",
-      {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data1),
-      }
-    )
+    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data1),
+    })
       .then((response) => response.json())
       .then((res) => {
         if (parseFloat(res.res) > 69) {
