@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { Query } from "react-apollo";
@@ -13,6 +13,7 @@ import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
 import User from "../User";
 import Panel from "./Panel";
+import smoothscroll from "smoothscroll-polyfill";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: ID!) {
@@ -373,6 +374,11 @@ const LessonPart = styled.div`
 const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
+
+  useEffect(() => {
+    // kick off the polyfill!
+    smoothscroll.polyfill();
+  });
 
   const compare = (a, b) => {
     let comparison = 0;

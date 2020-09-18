@@ -16,7 +16,7 @@ import { Reviews } from "../../config";
 
 const AGGREGATE_PAGE_LESSONS_QUERY = gql`
   query AGGREGATE_PAGE_LESSONS_QUERY($id: ID!) {
-    lessonsConnection(where: { coursePageID: $id }) {
+    lessonsConnection(where: { coursePage: { id: $id } }) {
       aggregate {
         count
       }

@@ -108,7 +108,7 @@ const TextBar = styled.div`
     padding: 4px 7px;
     margin: 0 5px;
     transition: all 0.3s ease;
-    &:focus {
+    &:hover {
       color: white;
       background: #6d7578;
     }
@@ -178,6 +178,8 @@ class SingleTextEditor extends Component {
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
     )[0];
+    console.log(this.state.correct_option);
+    console.log(el);
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -237,6 +239,7 @@ class SingleTextEditor extends Component {
     let button = document.createElement("button");
     button.innerHTML = "Проверить";
     button.className = "mini_button";
+    button.tabIndex = 0;
     button.addEventListener("click", this.check);
     z.after(button);
 
@@ -276,7 +279,9 @@ class SingleTextEditor extends Component {
   };
 
   onShow = () => {
-    const elements = document.querySelectorAll("#id");
+    const elements = document
+      .getElementById(this.props.textEditor.id + 1)
+      .querySelectorAll("#id");
     if (this.state.mistakesShown) {
       elements.forEach((element) => {
         element.classList.remove("edit");
@@ -328,6 +333,13 @@ class SingleTextEditor extends Component {
                     <div
                       onClick={async (e) => {
                         const res1 = this.onTest();
+                        if (e.target.getAttribute("data-initial")) {
+                          this.setState({
+                            correct_option: e.target.getAttribute(
+                              "data-initial"
+                            ),
+                          });
+                        }
                         if (e.target.id === "id") {
                           if (this.state.total > 0) {
                             const res2 = await this.onMouseClick(e);

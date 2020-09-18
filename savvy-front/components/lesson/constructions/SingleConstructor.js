@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
 import UpdateConstruction from "./UpdateConstruction";
 import { CURRENT_USER_QUERY } from "../../User";
+import Box from "./Box";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -31,66 +32,67 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  width: 100%;
+  width: 75vw;
   padding-right: 4%;
   display: flex;
+  margin-bottom: 4%;
+  font-size: 1.4rem;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   @media (max-width: 800px) {
     font-size: 1.4rem;
+    width: 100%;
+    flex-direction: column;
   }
-`;
-const Text = styled.div`
-  width: 100%;
 `;
 
 const Variants = styled.div`
-  flex-basis: 45%;
-  max-width: 45%;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 35%;
+  margin-top: 55px;
+  overflow: auto;
+  max-height: 95vh;
 `;
 
 const Answers = styled.div`
-  flex-basis: 45%;
-  max-width: 45%;
+  flex-basis: 65%;
   display: flex;
   flex-direction: column;
   align-items: left;
-`;
-
-const Box = styled.div`
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  /* padding: 0 4%; */
-  margin-bottom: 4%;
-  /* input {
-    pointer-events: none;
-  } */
-  .box {
-    padding: 0 15px;
+  background: rgb(255, 255, 255);
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  padding: 3% 5%;
+  margin: 55px 5% 45px 2%;
+  .next {
+    margin-bottom: 5px;
   }
-  .number {
-    width: 100%;
-    border-radius: 10px 10px 0 0;
-    padding: 0 15px;
-    background: #edefed;
+  @media (max-width: 800px) {
+    margin-bottom: 15px;
   }
 `;
 
-const Title = styled.p`
-  font-size: 1.6rem;
+const Title = styled.h2`
+  font-size: 2rem;
+  margin-bottom: 30px;
 `;
 
 const Label = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 2%;
-  border: 1px dashed #c4c4c4;
-  padding: 4%;
+  border: ${(props) => (props.data ? "none" : "1px dashed #c4c4c4")};
+  padding: ${(props) => (props.data ? 0 : "4%")};
   border-radius: 10px;
-  margin-bottom: 4%;
+  margin-top: ${(props) => (props.data ? 0 : "2%")};
+  margin-bottom: ${(props) => (props.data ? 0 : "6%")};
+
   input.l {
     padding: 2%;
-    width: 22%;
+    width: 12%;
     border: none;
     border-bottom: 1px solid grey;
     white-space: nowrap;
@@ -110,18 +112,6 @@ const Label = styled.div`
   input:focus {
     outline: none;
   }
-`;
-
-const Advice = styled.p`
-  font-size: 1.4rem;
-  margin: 1% 4%;
-  margin-bottom: 20px;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2% 3%;
-  margin-top: 30px;
-  width: 100%;
 `;
 
 const Buttons = styled.div`
@@ -193,61 +183,36 @@ class SingleConstructor extends Component {
   showWrong = () => {
     const elements = document
       .getElementById(this.props.construction.id)
-      .querySelectorAll(".Var");
-
-    elements.forEach((element) => {
+      .getElementsByClassName("l");
+    console.log(elements);
+    for (let element of elements) {
       element.style.border = "1px solid #DE6B48";
-    });
+    }
     this.setState({ answerState: "wrong" });
     this.setState((prevState) => ({
       attempts: prevState.attempts + 1,
     }));
     setTimeout(function () {
-      elements.forEach((element) => {
-        element.style.border = "1px solid #c4c4c4 ";
-      });
+      for (let element of elements) {
+        element.style.border = "none";
+        element.style.borderBottom = "1px solid grey ";
+      }
     }, 3000);
   };
 
   showRight = () => {
     const elements = document
       .getElementById(this.props.construction.id)
-      .querySelectorAll(".Var");
-    elements.forEach((element) => {
+      .getElementsByClassName("l");
+    for (let element of elements) {
       element.style.border = "1px solid #84BC9C";
-    });
+    }
     this.setState({ answerState: "right", answered: true });
 
-    const texts = document
-      .getElementById(this.props.construction.id)
-      .querySelectorAll("#text");
-
-    let p;
-    let v;
-    let space;
-    texts.forEach((element) => {
-      space = document.createElement("SPAN");
-      space.innerHTML = " / ";
-      v = document.createElement("SPAN");
-      v.innerHTML = element.value;
-      v.style.color = "#00008B";
-      p = document.createElement("SPAN");
-      p.innerHTML = element.getAttribute("name");
-      p.style.color = "green";
-      element.parentElement.insertBefore(v, element);
-      element.parentElement.insertBefore(space, element);
-      element.parentElement.insertBefore(p, element);
-      element.remove();
-    });
+    const texts = document.querySelectorAll("#text");
     let inputs = [];
 
-    const results = document
-      .getElementById(this.props.construction.id)
-      .querySelectorAll(".Var");
-    let nums = document
-      .getElementById(this.props.construction.id)
-      .querySelectorAll(".l");
-    nums.forEach((el) => el.remove());
+    const results = document.querySelectorAll(".Var");
 
     results.forEach((element) => {
       inputs.push(element.innerHTML);
@@ -321,35 +286,38 @@ class SingleConstructor extends Component {
         )}
         {!this.state.update && (
           <Styles id={construction.id}>
-            <Variants>
-              <Title>Конструктор</Title>
-              {this.state.variants.map((option, index) => (
-                <Box key={index}>
-                  <div>
-                    <div className="number">{index + 1}. </div>
-                    <div className="box">{renderHTML(option)} </div>
-                  </div>
-                </Box>
-              ))}
-            </Variants>
             <Answers className="answer">
               <Title>{construction.name}</Title>
-              {this.state.received.map((option, index) => (
-                <Label className="Var" key={index + 1}>
-                  <input
-                    className="l"
-                    data={index + 1}
-                    type="number"
-                    onChange={this.handleSteps}
-                  />
-                  {renderHTML(this.state.received[index])}
-                </Label>
-              ))}
+              {!this.state.answerReveal && (
+                <>
+                  {this.state.received.map((option, index) => (
+                    <Label
+                      className="Var"
+                      key={index + 1}
+                      data={this.state.received[index] !== ""}
+                    >
+                      <input
+                        className="l"
+                        data={index + 1}
+                        type="number"
+                        onChange={this.handleSteps}
+                      />
+                      {renderHTML(this.state.received[index])}
+                    </Label>
+                  ))}
+                </>
+              )}
+              {this.state.answerReveal && (
+                <ol>
+                  {this.state.answer.map((el) => (
+                    <li className="next">{renderHTML(el)}</li>
+                  ))}
+                </ol>
+              )}
               <Mutation
                 mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
                 variables={{
                   lessonID,
-                  // answer: "Drafted",
                   attempts: this.state.attempts,
                   constructionID: this.props.construction.id,
                   inputs: this.state.inputs,
@@ -367,11 +335,8 @@ class SingleConstructor extends Component {
                       color="primary"
                       onClick={async (e) => {
                         e.preventDefault();
-                        console.log(1);
                         const res = await this.check();
-                        console.log(2);
                         if (data.length == 0) {
-                          console.log(3);
                           if (this.state.answerState === "right") {
                             const res2 = await createConstructionResult();
                           }
@@ -403,23 +368,13 @@ class SingleConstructor extends Component {
                 />
               ) : null}
             </Answers>
+            <Variants>
+              {this.state.variants.map((option, index) => (
+                <Box index={index} option={option} id={construction.id} />
+              ))}
+            </Variants>
           </Styles>
         )}
-        {this.state.answerReveal && (
-          <Text>
-            <h4>Ответ:</h4>
-            <ol>
-              {this.state.answer.map((el) => (
-                <li>{renderHTML(el)}</li>
-              ))}
-            </ol>
-          </Text>
-        )}
-        {/* {this.state.answerState === "wrong" && (
-          <Advice>
-            <b>Подсказка:</b> {renderHTML(construction.hint)}
-          </Advice>
-        )} */}
         {this.state.update && (
           <UpdateConstruction
             id={construction.id}

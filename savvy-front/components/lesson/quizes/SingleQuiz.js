@@ -208,6 +208,10 @@ class SingleQuiz extends Component {
       answer1: this.props.answer.toLowerCase(),
       answer2: this.state.answer.toLowerCase(),
     };
+    console.log(
+      this.props.answer.toLowerCase(),
+      this.state.answer.toLowerCase()
+    );
 
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
