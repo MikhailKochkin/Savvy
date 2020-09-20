@@ -100,28 +100,6 @@ const Buttons = styled.div`
   margin-top: 3%;
 `;
 
-const Dots = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  height: 90px;
-  width: 100%;
-  margin-bottom: 5%;
-  .group {
-    display: flex;
-    flex-direction: column;
-    align-items: space-between;
-    justify-content: space-between;
-    margin-top: 5%;
-  }
-  .dot {
-    width: 12px;
-    height: 12px;
-    background: #c4c4c4;
-    border-radius: 50%;
-  }
-`;
-
 const MiniButton = styled.div`
   border: none;
   background: none;
@@ -182,15 +160,6 @@ const Note = (props) => {
           />
         )}
       </Container>
-      {exam && (
-        <Dots>
-          <div className="group">
-            <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-          </div>
-        </Dots>
-      )}
     </>
   );
 };

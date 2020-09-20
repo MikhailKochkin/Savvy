@@ -55,6 +55,7 @@ class StoryEx extends Component {
             answers={el.answers}
             true={el.correct}
             user={el.user.id}
+            user_name={el.user}
             type={el.type}
             ifRight={el.ifRight}
             ifWrong={el.ifWrong}
@@ -85,6 +86,7 @@ class StoryEx extends Component {
             quizID={el.id}
             user={el.user.id}
             story={true}
+            user_name={el.user}
           />
         );
         components.push(item);

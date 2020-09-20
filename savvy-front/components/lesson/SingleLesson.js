@@ -177,6 +177,8 @@ const SINGLE_LESSON_QUERY = gql`
         next
         user {
           id
+          name
+          surname
         }
       }
       documents {
@@ -207,6 +209,8 @@ const SINGLE_LESSON_QUERY = gql`
         question
         user {
           id
+          name
+          surname
         }
       }
       problems {

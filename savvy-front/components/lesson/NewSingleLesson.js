@@ -49,6 +49,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         next
         user {
           id
+          name
+          surname
         }
       }
       newTests {
@@ -62,6 +64,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         user {
           id
+          name
+          surname
         }
       }
       problems {

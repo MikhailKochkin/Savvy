@@ -4,9 +4,10 @@ import renderHTML from "react-render-html";
 
 const StyledButton = styled.div`
   display: inline-block;
+  vertical-align: middle;
   border: ${(props) =>
     props.choose ? "1.5px solid #122A62" : "1px solid #c4c4c4"};
-  padding: 5px 15px;
+  padding: 10px 15px;
   cursor: pointer;
   margin-right: 3%;
   margin-bottom: 2%;

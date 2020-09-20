@@ -85,6 +85,7 @@ class Interactive extends Component {
           lessonID={this.props.lesson.id}
           quizID={el.id}
           user={el.user.id}
+          user_name={el.user}
           next={el.next}
           getData={this.updateArray}
           exam={true}
@@ -117,6 +118,7 @@ class Interactive extends Component {
           ifWrong={el.ifWrong}
           true={el.correct}
           user={el.user.id}
+          user_name={el.user}
           type={el.type}
           me={this.props.me}
           userData={this.props.lesson.testResults}
@@ -212,6 +214,7 @@ class Interactive extends Component {
           lessonID={this.props.lesson.id}
           quizID={el.id}
           user={el.user.id}
+          user_name={el.user}
           next={el.next}
           getData={this.updateArray}
           exam={true}
@@ -233,6 +236,7 @@ class Interactive extends Component {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           user={el.user.id}
+          user_name={el.user}
           type={el.type}
           me={this.props.me}
           userData={this.props.lesson.testResults}

@@ -48,6 +48,7 @@ class QuizGroup extends Component {
               lessonID={this.props.lessonID}
               quizID={quiz.id}
               user={quiz.user.id}
+              user_name={quiz.user}
               userData={this.props.quizResults}
               quizes={this.props.quizes}
               notes={this.props.notes}
