@@ -374,12 +374,25 @@ const SingleQuiz = (props) => {
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
+                {correct === "true" && ifRight && ifRight !== "<p></p>" && (
+                  <div className="question">
+                    <div className="question_text">{renderHTML(ifRight)}</div>
+                    <div className="question_name">{author_name}</div>
+                  </div>
+                )}
                 {correct === "false" && (
                   <div className="question">
                     <div className="question_text">Не совсем...</div>
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
+                {correct === "false" && ifWrong && ifWrong !== "<p></p>" && (
+                  <div className="question">
+                    <div className="question_text">{renderHTML(ifWrong)}</div>
+                    <div className="question_name">{author_name}</div>
+                  </div>
+                )}
+
                 {hint !== null && hint !== 0 && (
                   <div className="question">
                     <div className="question_text">
