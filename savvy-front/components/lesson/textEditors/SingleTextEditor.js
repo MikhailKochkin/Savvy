@@ -257,13 +257,14 @@ class SingleTextEditor extends Component {
   onReveal = (e) => {
     let span = document.createElement("span");
     span.innerHTML = ` (${e.target.getAttribute("data")})`;
-    console.log(e.target.nextSibling);
     if (
       e.target.nextSibling == null ||
       (e.target.nextSibling &&
         span.innerHTML !== e.target.nextSibling.innerHTML)
     ) {
+      e.target.className = "edit";
       e.target.after(span);
+      span.className = "edit";
     }
   };
 
