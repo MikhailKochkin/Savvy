@@ -121,6 +121,7 @@ type CoursePage {
   image: String!
   banner: String
   weeks: Int
+  subscription: Boolean @default(value: false)
   news: String @default(value: "Добро пожаловать на курс! Проходите уроки, выполняйте задания и выполняйте финальное задание!")
   user: User! @relation(name: "UserCoursePage")
   lessons: [Lesson]! @relation(name: "LessonsOnCoursePage" onDelete: CASCADE)
@@ -139,6 +140,7 @@ type CoursePage {
   students: [ID] @scalarList(strategy: RELATION)
   new_students: [ User ] @relation(name: "UserSubjects")
   price: Int
+  subscriptionPrice: Int
   discountPrice: Int
   orders: [Order] @relation(link: TABLE, name: "CoursePageOrders" onDelete: CASCADE)
   company: Company @relation(name: "CompanyCoursePage")
