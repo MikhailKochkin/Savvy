@@ -318,30 +318,6 @@ const RegisterCard = (props) => {
                 {!discountPrice && price === "Бесплатно" && <>{`Бесплатно`}</>}
               </>
             }
-
-            {/* Временно */}
-
-            {/* {theOne && (
-              <>
-                {pack === 0 && discountPrice && price !== "Бесплатно" && (
-                  <>
-                    <span className="crossed">{`${price}`}</span>
-                    {"        "}
-                    {`${discountPrice} ₽`}
-                  </>
-                )}
-                {pack === 0 && !discountPrice && price !== "Бесплатно" && (
-                  <>{`${price} ₽`}</>
-                )}
-                {pack > 1 && !discountPrice && price !== "Бесплатно" && (
-                  <>
-                    <span className="crossed">{630 * parseInt(pack)}</span>
-                    {"        "}
-                    {`${price} ₽`}
-                  </>
-                )}
-              </>
-            )} */}
           </Header>
           <Text>
             <Part1>
@@ -363,23 +339,6 @@ const RegisterCard = (props) => {
               )}
               {coursePage.courseType === "FORMONEY" && (
                 <>
-                  {/* {the1 && (
-                    <>
-                      <Time>
-                        <>
-                          <div className="comment">
-                            Курс по английской лексике в подарок!
-                          </div>
-                          {timeLeft.length ? (
-                            `${timeLeft[0]} ${day} ${timeLeft[1]}:${timeLeft[2]}:${timeLeft[3]} `
-                          ) : (
-                            <span>Время вышло!</span>
-                          )}
-                        </>
-                      </Time>
-                    </>
-                  )} */}
-
                   <GridContainer>
                     <div className="Title">Выберите тариф:</div>
                     <div />
@@ -398,8 +357,15 @@ const RegisterCard = (props) => {
                           setDiscountPrice(props.discountPrice);
                       }}
                     />
-                    <div className="Teacher">🚀 Продвинутый</div>
-                    {the1 && (
+                    {props.subscriptionPrice && (
+                      <div className="Teacher">
+                        🚀{" "}
+                        {props.subscription
+                          ? "Подписка на 4 курса"
+                          : "Продвинутый"}
+                      </div>
+                    )}
+                    {/* {the1 && (
                       <div
                         className="Package"
                         onClick={(e) => {
@@ -412,58 +378,23 @@ const RegisterCard = (props) => {
                       >
                         Купить пакетом
                       </div>
-                    )}
-                    <input
-                      className="Price2"
-                      type="radio"
-                      name="price"
-                      value={props.price * 1.75}
-                      onChange={(e) => {
-                        setPack(0),
-                          setPrice(props.price * 1.75),
-                          setUsed(false),
-                          props.discountPrice
-                            ? setDiscountPrice(props.discountPrice * 1.75)
-                            : null;
-                      }}
-                    />
-                    {/* {theOne && (
-                      <>
-                        <div className="Friend1">
-                          📦 Купить курсы c другом:{"   "}
-                          <select
-                            value={pack}
-                            onChange={(e) => {
-                              setPack(e.target.value);
-                              if (e.target.value === "2") {
-                                setPrice(3192 * parseInt(e.target.value));
-                              } else if (e.target.value === "3") {
-                                setPrice(2992 * parseInt(e.target.value));
-                              }
-                            }}
-                          >
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                          </select>
-                        </div>
-                        <input
-                          className="Price3"
-                          type="radio"
-                          name="price"
-                          value={550}
-                          onChange={(e) => {
-                            setUsed(false);
-                            if (pack == 0) {
-                              setPrice(3190 * 2), setPack(2);
-                            } else if (pack > "1") {
-                              if (pack == 2) {
-                                setPrice(3190 * 2);
-                              }
-                            }
-                          }}
-                        />{" "}
-                      </>
                     )} */}
+                    {props.subscriptionPrice && (
+                      <input
+                        className="Price2"
+                        type="radio"
+                        name="price"
+                        value={props.subscriptionPrice}
+                        onChange={(e) => {
+                          setPack(0),
+                            setPrice(props.subscriptionPrice),
+                            setUsed(false),
+                            props.discountPrice
+                              ? setDiscountPrice(props.discountPrice * 1.75)
+                              : null;
+                        }}
+                      />
+                    )}
                   </GridContainer>
                 </>
               )}

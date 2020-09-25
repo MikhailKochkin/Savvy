@@ -12,6 +12,8 @@ import { pencil } from "react-icons-kit/fa/pencil";
 import { strikethrough } from "react-icons-kit/fa/strikethrough";
 import { underline } from "react-icons-kit/fa/underline";
 import { image } from "react-icons-kit/fa/image";
+import { commentO } from "react-icons-kit/fa/commentO";
+import CommentStyle from "./CommentStyle";
 
 const Img = styled.img`
   display: block;
@@ -20,12 +22,17 @@ const Img = styled.img`
   box-shadow: "0 0 0 2px blue;";
 `;
 
+const CommentStyle2 = styled.span`
+  color: green;
+  background: yellow;
+`;
+
 const AppStyles = {
   color: "rgb(17, 17, 17)",
   padding: "0 5px",
   maxWidth: "840px",
   width: "100%",
-  fontSize: "1.5rem"
+  fontSize: "1.5rem",
 };
 
 const DEFAULT_NODE = "paragraph";
@@ -35,19 +42,20 @@ const BLOCK_TAGS = {
   img: "image",
   iframe: "video",
   ol: "numbered-list",
-  li: "list-item"
+  li: "list-item",
 };
 
 const INLINE_TAGS = {
   a: "link",
-  input: "input"
+  input: "input",
+  span: "comment",
 };
 
 const MARK_TAGS = {
   i: "italic",
   strong: "bold",
   header: "header",
-  u: "u"
+  u: "u",
 };
 
 const rules = [
@@ -59,9 +67,9 @@ const rules = [
           object: "block",
           type: type,
           data: {
-            className: el.src
+            className: el.src,
           },
-          nodes: next(el.childNodes)
+          nodes: next(el.childNodes),
         };
       }
     },
@@ -76,7 +84,7 @@ const rules = [
             );
         }
       }
-    }
+    },
   },
   // Add a new rule that handles marks...
   {
@@ -86,7 +94,7 @@ const rules = [
         return {
           object: "mark",
           type: type,
-          nodes: next(el.childNodes)
+          nodes: next(el.childNodes),
         };
       }
     },
@@ -103,14 +111,19 @@ const rules = [
             return <u>{children}</u>;
         }
       }
-    }
+    },
   },
   {
     deserialize(el, next) {
-      if (el.tagName !== "INPUT") {
+      if (el.tagName !== "SPAN") {
         return;
       }
       const type = INLINE_TAGS[el.tagName.toLowerCase()];
+      console.log(type);
+      console.log(
+        Array.from(el.attributes).find(({ name }) => name == "data").value
+      );
+
       if (type) {
         return {
           // inline to show that Inline nodes may contain nested inline nodes and text nodes—just like in the DOM.
@@ -118,39 +131,53 @@ const rules = [
           type: type,
           nodes: next(el.childNodes),
           data: {
+            data:
+              Array.from(el.attributes).find(({ name }) => name == "data") !==
+              undefined
+                ? Array.from(el.attributes).find(({ name }) => name == "data")
+                    .value
+                : null,
             href:
               Array.from(el.attributes).find(({ name }) => name == "href") !==
               undefined
                 ? Array.from(el.attributes).find(({ name }) => name == "href")
                     .value
-                : null
-          }
+                : null,
+          },
         };
       }
     },
-    serialize: function(object, children) {
+    serialize: function (object, children) {
+      console.log(object.object);
+
       if (object.object == "inline") {
         switch (object.type) {
           case "input":
             return <input name={object.data._root.entries[0][1]} id="text" />;
+          case "comment":
+            return (
+              <CommentStyle2 id="id" data={object.data._root.entries[0][1]}>
+                {children}
+              </CommentStyle2>
+            );
         }
       }
-    }
-  }
+    },
+  },
 ];
 
 const html = new Html({
-  rules
+  rules,
 });
 
 const MarkButton = ({ editor, type, icon }) => {
   const { value } = editor;
-  const isActive = value.activeMarks.some(mark => mark.type === type);
+  const isActive = value.activeMarks.some((mark) => mark.type === type);
   return (
     <Button
       reversed
       active={isActive}
-      onMouseDown={event => {
+      onMouseDown={(event) => {
         event.preventDefault();
         editor.toggleMark(type);
       }}
@@ -165,7 +192,7 @@ const MarkButton = ({ editor, type, icon }) => {
 const wrapInput = (editor, src) => {
   editor.wrapInline({
     type: "input",
-    data: { src }
+    data: { src },
   });
   editor.moveToEnd();
 };
@@ -177,7 +204,7 @@ const insertImage = (editor, src, target) => {
 
   editor.insertBlock({
     type: "image",
-    data: { src }
+    data: { src },
   });
 };
 
@@ -195,20 +222,48 @@ const onClickLink = (event, editor) => {
   editor.command(wrapInput(editor, src));
 };
 
+// const hasComments = () => {
+//   const { value } = this.state;
+//   return value.inlines.some((inline) => inline.type === "comment");
+// };
+
+const wrapComment = (editor, comment) => {
+  editor.wrapInline({
+    type: "comment",
+    data: { comment },
+  });
+  editor.moveToEnd();
+};
+
+const onClickComment = (event, editor) => {
+  event.preventDefault();
+  // const hasComments = hasComments();
+  // if (hasComments) {
+  //   editor.command(unwrapComment);
+  // } else if (value.selection.isExpanded) {
+  const comment = window.prompt("Напишите правильный вариант:");
+  if (comment == null) {
+    return;
+  } else {
+    editor.command(wrapComment(editor, comment));
+  }
+};
+// };
+
 const InputButton = ({ editor, type, icon }) => {
   const { value } = editor;
-  const isActive = value.activeMarks.some(mark => mark.type === type);
+  const isActive = value.activeMarks.some((mark) => mark.type === type);
   return (
     <Button
       reversed
       active={isActive}
-      onMouseDown={event => {
+      onMouseDown={(event) => {
         event.preventDefault();
-        onClickLink(event, editor);
+        onClickComment(event, editor);
       }}
     >
       <IconBlock>
-        <Icon icon={icon} />
+        <Icon icon={commentO} />
       </IconBlock>
     </Button>
   );
@@ -216,12 +271,12 @@ const InputButton = ({ editor, type, icon }) => {
 
 const ImageButton = ({ editor, type, icon }) => {
   const { value } = editor;
-  const isActive = value.activeMarks.some(mark => mark.type === type);
+  const isActive = value.activeMarks.some((mark) => mark.type === type);
   return (
     <Button
       reversed
       active={isActive}
-      onMouseDown={event => {
+      onMouseDown={(event) => {
         event.preventDefault();
         onClickImage(event, editor);
       }}
@@ -278,7 +333,7 @@ class HoveringMenu extends React.Component {
   state = {
     value: this.props.value
       ? html.deserialize(this.props.value)
-      : html.deserialize(``)
+      : html.deserialize(``),
   };
 
   menuRef = React.createRef();
@@ -322,10 +377,9 @@ class HoveringMenu extends React.Component {
     menu.style.opacity = 1;
     menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
 
-    menu.style.left = `${rect.left +
-      window.pageXOffset -
-      menu.offsetWidth / 2 +
-      rect.width / 2}px`;
+    menu.style.left = `${
+      rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2
+    }px`;
   };
 
   /**
@@ -418,6 +472,10 @@ class HoveringMenu extends React.Component {
     switch (node.type) {
       case "input":
         return <input id="text" />;
+      case "comment":
+        return (
+          <CommentStyle data={node.data.get("data")}>{children}</CommentStyle>
+        );
       default:
         return next();
     }

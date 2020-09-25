@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
@@ -10,6 +10,7 @@ import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
 import UpdateConstruction from "./UpdateConstruction";
 import { CURRENT_USER_QUERY } from "../../User";
 import Box from "./Box";
+import Article from "./Article";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -32,7 +33,7 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  width: 75vw;
+  width: ${(props) => (props.story ? "75vw" : "100%")};
   padding-right: 4%;
   display: flex;
   margin-bottom: 4%;
@@ -80,6 +81,10 @@ const Title = styled.h2`
   margin-bottom: 30px;
 `;
 
+const Buttons = styled.div`
+  pointer-events: ${(props) => (props.blocked ? "none" : "auto")};
+`;
+
 const Label = styled.div`
   display: flex;
   flex-direction: column;
@@ -114,10 +119,6 @@ const Label = styled.div`
   }
 `;
 
-const Buttons = styled.div`
-  pointer-events: ${(props) => (props.blocked ? "none" : "auto")};
-`;
-
 const StyledButton = withStyles({
   root: {
     margin: "4% 0",
@@ -128,23 +129,22 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-class SingleConstructor extends Component {
-  state = {
-    variants: [],
-    answer: this.props.construction.answer,
-    received: this.props.arr,
-    answerState: "",
-    type: this.props.construction.type,
-    attempts: 1,
-    inputs: [],
-    answered: false,
-    answerReveal: false,
-    update: false,
-  };
+const SingleConstructor = (props) => {
+  const [variants, setVariants] = useState([]);
+  const [answer, setAnswer] = useState(props.construction.answer);
+  const [received, setReceived] = useState(props.arr);
+  const [answerState, setAnswerState] = useState("");
+  const [type, setType] = useState(props.construction.type);
+  const [attempts, setAttempts] = useState(1);
+  const [inputs, setInputs] = useState([]);
+  const [answered, setAnswered] = useState(false);
+  const [answerReveal, setAnswerReveal] = useState(false);
+  const [update, setUpdate] = useState(false);
 
-  answerState = "";
+  // answerState = "";
 
-  shuffle = (array) => {
+  // shuffle article options
+  const shuffle = (array) => {
     var m = array.length,
       t,
       i;
@@ -157,41 +157,41 @@ class SingleConstructor extends Component {
     return array;
   };
 
-  handleSteps = (e) => {
+  const handleSteps = (e) => {
     e.preventDefault();
     // 1. Get the user variant for a particular article
+    console.log(e.target);
     const { value } = e.target;
+    console.log(value);
     // 2. Get the number of the article
     const article_number = e.target.getAttribute("data");
+    console.log(article_number);
     // 3. Save to state the user data
-    this.setState((state) => {
-      const received = state.received.map((item, index) => {
-        if (index === article_number - 1) {
-          if (this.state.variants[value - 1] === undefined) {
-            return (item = "");
-          } else {
-            return (item = this.state.variants[value - 1]);
-          }
+    const d = received.map((item, index) => {
+      if (index === article_number - 1) {
+        if (variants[value - 1] === undefined) {
+          return (item = "");
         } else {
-          return item;
+          return (item = variants[value - 1]);
         }
-      });
-      return { received };
+      } else {
+        return item;
+      }
     });
+    setReceived(d);
   };
 
-  showWrong = () => {
+  const showWrong = () => {
+    console.log(1);
     const elements = document
-      .getElementById(this.props.construction.id)
+      .getElementById(props.construction.id)
       .getElementsByClassName("l");
     console.log(elements);
     for (let element of elements) {
       element.style.border = "1px solid #DE6B48";
     }
-    this.setState({ answerState: "wrong" });
-    this.setState((prevState) => ({
-      attempts: prevState.attempts + 1,
-    }));
+    setAnswerState("wrong");
+    setAttempts(attempts + 1);
     setTimeout(function () {
       for (let element of elements) {
         element.style.border = "none";
@@ -200,195 +200,176 @@ class SingleConstructor extends Component {
     }, 3000);
   };
 
-  showRight = () => {
+  const showRight = () => {
+    console.log(2);
     const elements = document
-      .getElementById(this.props.construction.id)
+      .getElementById(props.construction.id)
       .getElementsByClassName("l");
     for (let element of elements) {
       element.style.border = "1px solid #84BC9C";
     }
-    this.setState({ answerState: "right", answered: true });
-
+    setAnswerState("right");
+    setAnswered(true);
     const texts = document.querySelectorAll("#text");
     let inputs = [];
-
-    const results = document.querySelectorAll(".Var");
-
+    const results = document.querySelectorAll(".article");
     results.forEach((element) => {
       inputs.push(element.innerHTML);
     });
-    this.setState({ inputs: inputs });
+    console.log(inputs);
+    setInputs(inputs);
   };
 
-  check = () => {
+  const check = () => {
     // 0.
     // 1. Find out the rule for checking the answer
-    if (this.state.type === "include") {
+    if (type === "include") {
       let res;
       // 2. Check if all the answers have been given
-      if (new Set(this.state.received).size !== this.state.received.length) {
+      if (new Set(received).size !== received.length) {
         // If not, show that the answer is wrong
-        this.showWrong();
+        showWrong();
       } else {
         // 3. Check if all the correct variants are included into the answer, order does not matter
         let correct = 0;
-        this.state.received.map((item) => {
-          if (this.state.answer.includes(item)) {
+        received.map((item) => {
+          if (answer.includes(item)) {
             correct = correct + 1;
           } else {
             correct = correct;
           }
         });
-        if (correct === this.state.answer.length) {
-          this.showRight();
+        if (correct === answer.length) {
+          showRight();
         } else {
-          this.showWrong();
+          showWrong();
         }
       }
-    } else if (this.state.type === "equal") {
+    } else if (type === "equal") {
       // 3. Check if all the correct variants are included into the answer, order does matter
-      if (
-        JSON.stringify(this.state.answer) == JSON.stringify(this.state.received)
-      ) {
-        this.showRight();
+      if (JSON.stringify(answer) == JSON.stringify(received)) {
+        showRight();
       } else {
-        this.showWrong();
+        showWrong();
       }
     }
   };
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+  useEffect(() => {
+    const vars = shuffle(props.variants);
+    setVariants(vars);
+  }, []);
 
-  componentDidMount() {
-    const vars = this.shuffle(this.props.variants);
-    this.setState({ variants: vars });
-  }
+  const { me, lessonID, construction, userData, story } = props;
+  let data;
+  me
+    ? (data = userData
+        .filter((result) => result.construction.id === construction.id)
+        .filter((result) => result.student.id === props.me.id))
+    : (data = [""]);
 
-  render() {
-    const { me, lessonID, construction, userData, story } = this.props;
-    let data;
-    me
-      ? (data = userData
-          .filter((result) => result.construction.id === construction.id)
-          .filter((result) => result.student.id === this.props.me.id))
-      : (data = [""]);
-    return (
-      <>
-        {me.id === construction.user.id && !story && (
-          <StyledButton
-            onClick={(e) => this.setState((prev) => ({ update: !prev.update }))}
-          >
-            {this.state.update ? "К конструктору" : "Изменить"}
-          </StyledButton>
-        )}
-        {!this.state.update && (
-          <Styles id={construction.id}>
-            <Answers className="answer">
-              <Title>{construction.name}</Title>
-              {!this.state.answerReveal && (
-                <>
-                  {this.state.received.map((option, index) => (
-                    <Label
-                      className="Var"
-                      key={index + 1}
-                      data={this.state.received[index] !== ""}
-                    >
-                      <input
-                        className="l"
-                        data={index + 1}
-                        type="number"
-                        onChange={this.handleSteps}
-                      />
-                      {renderHTML(this.state.received[index])}
-                    </Label>
-                  ))}
-                </>
-              )}
-              {this.state.answerReveal && (
-                <ol>
-                  {this.state.answer.map((el) => (
-                    <li className="next">{renderHTML(el)}</li>
-                  ))}
-                </ol>
-              )}
-              <Mutation
-                mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
-                variables={{
-                  lessonID,
-                  attempts: this.state.attempts,
-                  constructionID: this.props.construction.id,
-                  inputs: this.state.inputs,
-                }}
-                refetchQueries={() => [
-                  {
-                    query: CURRENT_USER_QUERY,
-                  },
-                ]}
-              >
-                {(createConstructionResult, { loading, error }) => (
-                  <Buttons blocked={this.state.answered}>
-                    <StyledButton
-                      variant="contained"
-                      color="primary"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        const res = await this.check();
-                        if (data.length == 0) {
-                          if (this.state.answerState === "right") {
-                            const res2 = await createConstructionResult();
-                          }
-                        }
-                      }}
-                    >
-                      Проверить
-                    </StyledButton>
-                  </Buttons>
-                )}
-              </Mutation>
-              {this.state.answerState === "wrong" ? (
-                <>
-                  <StyledButton
-                    onClick={(e) =>
-                      this.setState((prev) => ({
-                        answerReveal: !prev.answerReveal,
-                      }))
-                    }
+  return (
+    <>
+      {me.id === construction.user.id && !story && (
+        <StyledButton onClick={(e) => setUpdate(!update)}>
+          {update ? "К конструктору" : "Изменить"}
+        </StyledButton>
+      )}
+      {!update && (
+        <Styles id={construction.id} story={story}>
+          <Answers className="answer" id="answers">
+            <Title>{construction.name}</Title>
+            {!answerReveal && (
+              <>
+                {received.map((option, index) => (
+                  <Label
+                    className="Var"
+                    key={index + 1}
+                    //   data={this.state.received[index] !== ""}
                   >
-                    {this.state.answerReveal ? "Скрыть ответ" : "Открыть ответ"}
+                    <input
+                      className="l"
+                      data={index + 1}
+                      type="number"
+                      onChange={(e) => handleSteps(e)}
+                    />
+                    <Article option={option} />
+                  </Label>
+                ))}
+              </>
+            )}
+            {answerReveal && (
+              <ol>
+                {answer.map((el) => (
+                  <li className="next">{renderHTML(el)}</li>
+                ))}
+              </ol>
+            )}
+            <Mutation
+              mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
+              variables={{
+                lessonID,
+                attempts: attempts,
+                constructionID: construction.id,
+                inputs: inputs,
+              }}
+              refetchQueries={() => [
+                {
+                  query: CURRENT_USER_QUERY,
+                },
+              ]}
+            >
+              {(createConstructionResult, { loading, error }) => (
+                <Buttons blocked={answered}>
+                  <StyledButton
+                    variant="contained"
+                    color="primary"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      const res = await check();
+                      createConstructionResult();
+                      console.log("!!!");
+                    }}
+                  >
+                    Проверить
                   </StyledButton>
-                </>
-              ) : null}
-              {me && me.id === construction.user.id && !story ? (
-                <DeleteSingleConstructor
-                  id={construction.id}
-                  lessonID={lessonID}
-                />
-              ) : null}
-            </Answers>
-            <Variants>
-              {this.state.variants.map((option, index) => (
-                <Box index={index} option={option} id={construction.id} />
-              ))}
-            </Variants>
-          </Styles>
-        )}
-        {this.state.update && (
-          <UpdateConstruction
-            id={construction.id}
-            hint={construction.hint}
-            name={construction.name}
-            type={construction.type}
-            variants={construction.variants}
-            answer={construction.answer}
-            lessonID={lessonID}
-          />
-        )}
-      </>
-    );
-  }
-}
+                </Buttons>
+              )}
+            </Mutation>
+            {answerState === "wrong" ? (
+              <>
+                <StyledButton onClick={(e) => setAnswerReveal(!answerReveal)}>
+                  {answerReveal ? "Скрыть ответ" : "Открыть ответ"}
+                </StyledButton>
+              </>
+            ) : null}
+            {me && me.id === construction.user.id && !story ? (
+              <DeleteSingleConstructor
+                id={construction.id}
+                lessonID={lessonID}
+              />
+            ) : null}
+          </Answers>
+          <Variants>
+            {variants.map((option, index) => (
+              <Box index={index} option={option} id={construction.id} />
+            ))}
+          </Variants>
+        </Styles>
+      )}
+      {update && (
+        <UpdateConstruction
+          id={construction.id}
+          hint={construction.hint}
+          name={construction.name}
+          type={construction.type}
+          variants={construction.variants}
+          answer={construction.answer}
+          lessonID={lessonID}
+        />
+      )}
+    </>
+  );
+};
 
 export default SingleConstructor;

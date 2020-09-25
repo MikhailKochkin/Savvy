@@ -32,6 +32,8 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       image
       news
       price
+      subscription
+      subscriptionPrice
       discountPrice
       video
       weeks
@@ -543,7 +545,6 @@ class CoursePage extends Component {
                             ratings.reduce((a, b) => a + b, 0) / ratings.length
                           ).toFixed(2);
                         }
-
                         return (
                           <>
                             <Container>
@@ -813,6 +814,10 @@ class CoursePage extends Component {
                                       me={me}
                                       coursePage={coursePage}
                                       price={price}
+                                      subscription={coursePage.subscription}
+                                      subscriptionPrice={
+                                        coursePage.subscriptionPrice
+                                      }
                                       discountPrice={coursePage.discountPrice}
                                       promocode={coursePage.promocode}
                                       studentsArray={studentsArray}
@@ -825,6 +830,10 @@ class CoursePage extends Component {
                                     me={me}
                                     coursePage={coursePage}
                                     price={price}
+                                    subscription={coursePage.subscription}
+                                    subscriptionPrice={
+                                      coursePage.subscriptionPrice
+                                    }
                                     discountPrice={coursePage.discountPrice}
                                     promocode={coursePage.promocode}
                                     studentsArray={studentsArray}
@@ -837,6 +846,10 @@ class CoursePage extends Component {
                                     me={me}
                                     coursePage={coursePage}
                                     price={price}
+                                    subscription={coursePage.subscription}
+                                    subscriptionPrice={
+                                      coursePage.subscriptionPrice
+                                    }
                                     discountPrice={coursePage.discountPrice}
                                     promocode={coursePage.promocode}
                                     studentsArray={studentsArray}
