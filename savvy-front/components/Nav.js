@@ -11,7 +11,7 @@ import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
 import { IoMdMenu } from "react-icons/io";
-import { i18n, withTranslation } from "../i18n";
+// import { i18n, withTranslation } from "../i18n";
 
 const ALL_COURSE_PAGES_QUERY = gql`
   query ALL_COURSE_PAGES_QUERY {
@@ -26,6 +26,8 @@ const ALL_COURSE_PAGES_QUERY = gql`
     }
   }
 `;
+
+// const { origin } = absoluteUrl(req);
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -140,12 +142,15 @@ const CourseMenu = styled.div`
     flex-direction: row;
   }
   div {
-    min-width: 170px;
+    min-width: 140px;
     display: flex;
     flex-direction: row;
     justify-content: center;
   }
   a {
+    /* &:hover {
+      border-bottom: 1px solid #112a62;
+    } */
   }
 `;
 
@@ -175,6 +180,7 @@ const UserData = styled.div`
     margin: 0;
   }
   .name {
+    /* margin-right: 40px; */
     min-width: 30%;
   }
   .imgGroup {
@@ -204,6 +210,13 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
   max-width: 40%;
   min-width: 400px;
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
   @media (max-width: 800px) {
     max-width: 90%;
     min-width: 200px;
@@ -263,6 +276,7 @@ class Nav extends Component {
     });
   };
   render() {
+    // console.log(i18n.language);
     return (
       <User>
         {({ data: { me } }) => {
@@ -277,36 +291,49 @@ class Nav extends Component {
                 <>
                   <StyledHeader>
                     <CourseMenu>
-                      <Link href="/">
+                      <Link prefetch href="/">
                         <div className="logo">
                           <a>BeSavvy</a>
                         </div>
                       </Link>
-                      <Link href="/blog">
+
+                      <Link prefetch href="/blog">
                         <div>
-                          <a>{this.props.t("blog")}</a>
+                          <a>
+                            {/* {this.props.t("blof")} */}
+                            Блог
+                          </a>
                         </div>
                       </Link>
                       {me && me !== null ? (
                         <>
                           {me.status && me.status === "AUTHOR" && (
-                            <Link href="/educator">
+                            <Link prefetch href="/educator">
                               <div>
-                                <a>{this.props.t("my")}</a>
+                                <a>
+                                  {/* {this.props.t("my")} */}
+                                  Мои курсы
+                                </a>
                               </div>
                             </Link>
                           )}
                           {me.status && me.status === "HR" && (
-                            <Link href="/educator">
+                            <Link prefetch href="/educator">
                               <div>
-                                <a>{this.props.t("my")}</a>
+                                <a>
+                                  {/* {this.props.t("my")} */}
+                                  Мои курсы
+                                </a>
                               </div>
                             </Link>
                           )}
                           {me.status && me.status === "SAVVY_AUTHOR" && (
-                            <Link href="/educator">
+                            <Link prefetch href="/educator">
                               <div>
-                                <a>{this.props.t("my")}</a>
+                                <a>
+                                  {/* {this.props.t("my")} */}
+                                  Мои курсы
+                                </a>
                               </div>
                             </Link>
                           )}
@@ -314,20 +341,20 @@ class Nav extends Component {
                       ) : null}
                     </CourseMenu>
                     <UserData>
-                      <div className="imgGroup">
+                      {/* <div className="imgGroup">
                         <div className="img">
                           <img
-                            src="../static/uk.svg"
+                            src="../../static/uk.svg"
                             onClick={() => i18n.changeLanguage("en")}
                           />
                         </div>
                         <div className="img">
                           <img
-                            src="../static/russia.svg"
+                            src="../../static/russia.svg"
                             onClick={() => i18n.changeLanguage("ru")}
                           />
                         </div>
-                      </div>
+                      </div> */}
                       {me ? (
                         <Link
                           href={{
@@ -345,7 +372,10 @@ class Nav extends Component {
                       {me ? <Signout /> : null}
                       {!me && (
                         <Button onClick={this.toggleModal}>
-                          <a>{this.props.t("signup")}</a>
+                          <a>
+                            {/* {this.props.t("blof")} */}
+                            Войти
+                          </a>
                         </Button>
                       )}
                     </UserData>
@@ -394,7 +424,10 @@ class Nav extends Component {
                       ) : null}
                       {!me && (
                         <Button onClick={this.toggleModal}>
-                          <a>{this.props.t("signup")}</a>
+                          <a>
+                            {/* {this.props.t("signup")} */}
+                            Войти
+                          </a>
                         </Button>
                       )}
                     </div>
@@ -410,16 +443,22 @@ class Nav extends Component {
                         &times;
                       </a>
                       {me && me.status === "AUTHOR" && (
-                        <Link href="/educator">
+                        <Link prefetch href="/educator">
                           <button onClick={this.closeNav}>
-                            <a>{this.props.t("my")}</a>
+                            <a>
+                              {/* {this.props.t("blof")} */}
+                              Мли курсы
+                            </a>
                           </button>
                         </Link>
                       )}
                       {me && me.status === "SAVVY_AUTHOR" && (
-                        <Link href="/educator">
+                        <Link prefetch href="/educator">
                           <button onClick={this.closeNav}>
-                            <a>{this.props.t("my")}</a>
+                            <a>
+                              {/* {this.props.t("blof")} */}
+                              Мои курсы
+                            </a>
                           </button>
                         </Link>
                       )}
@@ -429,7 +468,10 @@ class Nav extends Component {
                         }}
                       >
                         <button onClick={this.closeNav}>
-                          <a>{this.props.t("courses")}</a>
+                          <a>
+                            {/* {this.props.t("blof")} */}
+                            Курсы
+                          </a>
                         </button>
                       </Link>
                       <Link
@@ -438,7 +480,10 @@ class Nav extends Component {
                         }}
                       >
                         <button onClick={this.closeNav}>
-                          <a>{this.props.t("blog")}</a>
+                          <a>
+                            {/* {this.props.t("blof")} */}
+                            Блог
+                          </a>
                         </button>
                       </Link>
                       {me ? <Signout /> : null}
@@ -475,4 +520,5 @@ class Nav extends Component {
   }
 }
 
-export default withTranslation("common")(Nav);
+// export default withTranslation("common")(Nav);
+export default Nav;

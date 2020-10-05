@@ -4,7 +4,7 @@ import Icon from "react-icons-kit";
 import ReactResizeDetector from "react-resize-detector";
 import Carousel from "nuka-carousel";
 import { userCircleO } from "react-icons-kit/fa/userCircleO";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const Blue = styled.div`
   font-size: 2.4rem;
@@ -84,7 +84,7 @@ const Review = styled.div`
   }
 `;
 
-const Reviews = ({ t }) => {
+const Reviews = () => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => {
     setWidth(width);
@@ -100,7 +100,7 @@ const Reviews = ({ t }) => {
   return (
     <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <Blue>{t("reviews")}</Blue>
+      <Blue>347 студентов прошли наши курсы. Вот, что они говорят:</Blue>
       <Block>
         <Carousel
           slidesToShow={slides}
@@ -221,4 +221,5 @@ const Reviews = ({ t }) => {
   );
 };
 
-export default withTranslation("search")(Reviews);
+// export default withTranslation("search")(Reviews);
+export default Reviews;

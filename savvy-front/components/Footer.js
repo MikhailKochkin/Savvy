@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import { withTranslation } from "../i18n";
+// import { withTranslation } from "../i18n";
 
 const FooterStyles = styled.div`
   background-color: #001f4e;
@@ -39,12 +39,12 @@ const FooterStyles = styled.div`
   }
 `;
 
-const Footer = ({ t }) => (
+const Footer = () => (
   <FooterStyles>
     <div className="block">
-      <div>{t("ip")}</div>
-      <div>{t("inn")}</div>
-      <div>{t("ogrnip")}</div>
+      <div>ИП Кочкин Михаил Валерьевич</div>
+      <div>ИНН: 771771639796</div>
+      <div>ОГРНИП: 318774600589944</div>
     </div>
     <div className="block">
       <div>
@@ -54,7 +54,10 @@ const Footer = ({ t }) => (
             query: { name: "terms" },
           }}
         >
-          <a>{t("terms")}</a>
+          <a>
+            {/* {t("terms")} */}
+            Пользовательское соглашение
+          </a>
         </Link>
       </div>
       <div>
@@ -64,7 +67,8 @@ const Footer = ({ t }) => (
             query: { name: "privacy" },
           }}
         >
-          <a>{t("policy")}</a>
+          {/* <a>{t("policy")}</a> */}
+          <a>Политика обработки персональных данных</a>
         </Link>
       </div>
       <div>
@@ -74,7 +78,8 @@ const Footer = ({ t }) => (
             query: { name: "offer" },
           }}
         >
-          <a>{t("offer")}</a>
+          {/* <a>{t("offer")}</a> */}
+          <a>Оферта</a>
         </Link>
       </div>
     </div>
@@ -98,4 +103,5 @@ const Footer = ({ t }) => (
   </FooterStyles>
 );
 
-export default withTranslation("search")(Footer);
+// export default withTranslation("search")(Footer);
+export default Footer;

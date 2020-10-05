@@ -1,6 +1,6 @@
 import User from "../components/User";
 import Courses from "../components/course/Courses";
-import { withTranslation } from "../i18n";
+// import { withTranslation } from "../i18n";
 
 const Index = () => {
   return (
@@ -10,8 +10,8 @@ const Index = () => {
   );
 };
 
-Index.getInitialProps = async () => ({
-  namespacesRequired: ["common", "footer"],
-});
+// Index.getInitialProps = async () => ({
+//   namespacesRequired: ["common", "footer"],
+// });
 
-export default withTranslation("common")(Index);
+export default Index;

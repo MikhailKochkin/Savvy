@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Icon from "react-icons-kit";
 import { ic_forum } from "react-icons-kit/md/ic_forum";
 import { ic_laptop_mac } from "react-icons-kit/md/ic_laptop_mac";
-import { withTranslation } from "../i18n";
+// import { withTranslation } from "../i18n";
 
 const Styles = styled.div`
   width: 100%;
@@ -82,28 +82,38 @@ const Element = styled.div`
   }
 `;
 
-const Tech = ({ t }) => {
+const Tech = () => {
   return (
     <Styles>
       <Blue>
-        <div>{t("tech1")}</div>
+        <div>
+          Мы отличаемся от других платформ, потому что придумываем и развиваем
+          новые форматы отработки юридических навыков онлайн.
+        </div>
       </Blue>
       <Block>
         <Element id="left">
           <div className="icon">
             <Icon size={60} icon={ic_laptop_mac} />
           </div>
-          <div className="text">{t("tech2")}</div>
+          <div className="text">
+            Конструкторы документов, упражнения по редактуре документов,
+            автоматическая проверка письменных работ
+          </div>
         </Element>
         <Element id="right">
           <div className="icon">
             <Icon size={60} icon={ic_forum} />
           </div>
-          <div className="text">{t("tech3")}</div>
+          <div className="text">
+            Решение юридических кейсов с помощью чат-ботов, которые задают
+            наводящие вопросы в формате тестов и открытых вопросов
+          </div>
         </Element>
       </Block>
     </Styles>
   );
 };
 
-export default withTranslation("search")(Tech);
+// export default withTranslation("search")(Tech);
+export default Tech;
