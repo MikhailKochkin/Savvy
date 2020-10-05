@@ -1493,6 +1493,11 @@ input ChallengeResultWhereUniqueInput {
   id: ID
 }
 
+enum CheckType {
+  WORD
+  IDEA
+}
+
 type Clause {
   id: ID!
   user: User!
@@ -15646,6 +15651,7 @@ type Quiz {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -15668,6 +15674,7 @@ input QuizCreateInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizCreateManyWithoutLessonInput {
@@ -15696,6 +15703,7 @@ input QuizCreateWithoutLessonInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizCreateWithoutQuizResultsInput {
@@ -15709,6 +15717,7 @@ input QuizCreateWithoutQuizResultsInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizCreateWithoutUserInput {
@@ -15722,6 +15731,7 @@ input QuizCreateWithoutUserInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 type QuizEdge {
@@ -15746,6 +15756,8 @@ enum QuizOrderByInput {
   ifRight_DESC
   ifWrong_ASC
   ifWrong_DESC
+  check_ASC
+  check_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -15761,6 +15773,7 @@ type QuizPreviousValues {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -16259,6 +16272,10 @@ input QuizScalarWhereInput {
   ifWrong_not_starts_with: String
   ifWrong_ends_with: String
   ifWrong_not_ends_with: String
+  check: CheckType
+  check_not: CheckType
+  check_in: [CheckType!]
+  check_not_in: [CheckType!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -16309,6 +16326,7 @@ input QuizUpdateInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizUpdateManyDataInput {
@@ -16319,6 +16337,7 @@ input QuizUpdateManyDataInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizUpdateManyMutationInput {
@@ -16329,6 +16348,7 @@ input QuizUpdateManyMutationInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizUpdateManyWithoutLessonInput {
@@ -16379,6 +16399,7 @@ input QuizUpdateWithoutLessonDataInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizUpdateWithoutQuizResultsDataInput {
@@ -16391,6 +16412,7 @@ input QuizUpdateWithoutQuizResultsDataInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizUpdateWithoutUserDataInput {
@@ -16403,6 +16425,7 @@ input QuizUpdateWithoutUserDataInput {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType
 }
 
 input QuizUpdateWithWhereUniqueWithoutLessonInput {
@@ -16526,6 +16549,10 @@ input QuizWhereInput {
   ifWrong_not_starts_with: String
   ifWrong_ends_with: String
   ifWrong_not_ends_with: String
+  check: CheckType
+  check_not: CheckType
+  check_in: [CheckType!]
+  check_not_in: [CheckType!]
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

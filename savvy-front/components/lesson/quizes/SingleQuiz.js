@@ -229,30 +229,46 @@ const SingleQuiz = (props) => {
       answer2: answer.toLowerCase(),
     };
 
-    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data1),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (parseFloat(res.res) > 69) {
-          console.log(res);
-          setCorrect("true");
-          setInputColor("rgba(50, 172, 102, 0.25)");
-          onMove("true");
-        } else {
-          setCorrect("false");
-          setInputColor("rgba(222, 107, 72, 0.5)");
-          if (typeof res.comment === "string") {
-            setHint(res.comment);
-          }
-          onMove("false");
+    if (props.check === "WORD") {
+      if (props.answer.toLowerCase() === answer.toLowerCase()) {
+        setCorrect("true");
+        setInputColor("rgba(50, 172, 102, 0.25)");
+        onMove("true");
+      } else {
+        setCorrect("false");
+        setInputColor("rgba(222, 107, 72, 0.5)");
+        onMove("false");
+      }
+    } else {
+      const r = await fetch(
+        "https://arcane-refuge-67529.herokuapp.com/checker",
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data1),
         }
-      })
-      .catch((err) => console.log(err));
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res);
+          if (parseFloat(res.res) > 69) {
+            console.log(res);
+            setCorrect("true");
+            setInputColor("rgba(50, 172, 102, 0.25)");
+            onMove("true");
+          } else {
+            setCorrect("false");
+            setInputColor("rgba(222, 107, 72, 0.5)");
+            if (typeof res.comment === "string") {
+              setHint(res.comment);
+            }
+            onMove("false");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
     setProgress("false");
   };
 
@@ -291,6 +307,7 @@ const SingleQuiz = (props) => {
     story,
     ifWrong,
     ifRight,
+    check,
     user_name,
   } = props;
   let data;
@@ -386,18 +403,17 @@ const SingleQuiz = (props) => {
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
-                {correct === "false" && ifWrong && ifWrong !== "<p></p>" && (
-                  <div className="question">
-                    <div className="question_text">{ifWrong}</div>
-                    <div className="question_name">{author_name}</div>
-                  </div>
-                )}
-
                 {hint !== null && hint !== 0 && (
                   <div className="question">
                     <div className="question_text">
                       {("Есть один комментарий. ", hint)}
                     </div>
+                    <div className="question_name">{author_name}</div>
+                  </div>
+                )}
+                {correct === "false" && ifWrong && ifWrong !== "<p></p>" && (
+                  <div className="question">
+                    <div className="question_text">{ifWrong}</div>
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
@@ -463,6 +479,7 @@ const SingleQuiz = (props) => {
               ifWrong={ifWrong}
               notes={props.notes}
               next={props.next}
+              check={check}
               quizes={props.quizes.filter((q) => q.id !== props.quizID)}
               tests={props.tests}
             />

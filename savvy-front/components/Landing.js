@@ -267,7 +267,7 @@ class LandingPage extends Component {
               handleHeight
               onResize={this.onResize}
             />
-            <Logo>BeSavvy App</Logo>
+            <Logo>BeSavvy</Logo>
             <Nav>
               {!me && this.state.page === "register" && (
                 <span>

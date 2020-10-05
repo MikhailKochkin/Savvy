@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { withTranslation } from "../../i18n";
 
 const Banner = styled.div`
   display: flex;
@@ -41,17 +42,14 @@ const Banner = styled.div`
   }
 `;
 
-const Landing = () => {
+const Landing = ({ t }) => {
   return (
     <>
       <Banner id="banner">
-        <div className="text">
-          Интерактивные юридические онлайн курсы, которые помогают вам
-          приобретать практические навыки.👩🏼‍⚖️
-        </div>
+        <div className="text">{t("motto")}</div>
       </Banner>
     </>
   );
 };
 
-export default Landing;
+export default withTranslation("common")(Landing);

@@ -6,6 +6,7 @@ import { instagram } from "react-icons-kit/fa/instagram";
 import { graduationCap } from "react-icons-kit/fa/graduationCap";
 import { vk } from "react-icons-kit/fa/vk";
 import { telegram } from "react-icons-kit/fa/telegram";
+import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   display: flex;
@@ -93,14 +94,11 @@ const Img = styled.img`
   /* max-height: 200px; */
 `;
 
-const Media = () => {
+const Media = ({ t }) => {
   return (
     <Styles>
       <Container>
-        <div className="title">
-          Посмотрите, что мы рассказываем про юридическую карьеру и задайте свои
-          вопросы там, где удобно!
-        </div>
+        <div className="title">{t("media")}</div>
         <Block>
           <Card>
             <Header>
@@ -192,4 +190,4 @@ const Media = () => {
   );
 };
 
-export default Media;
+export default withTranslation("search")(Media);

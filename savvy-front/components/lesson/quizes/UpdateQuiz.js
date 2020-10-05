@@ -11,6 +11,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $question: String
     $answer: String
     $next: Json
+    $check: CheckType
     $ifRight: String
     $ifWrong: String
   ) {
@@ -19,6 +20,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       question: $question
       answer: $answer
       next: $next
+      check: $check
       ifRight: $ifRight
       ifWrong: $ifWrong
     ) {
@@ -99,6 +101,7 @@ const UpdateQuiz = (props) => {
   const [question, setQuestion] = useState(props.question);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
+  const [check, setCheck] = useState(props.check);
   const [trueVal, setTrueVal] = useState(
     props.next && props.next.true ? props.next.true : ""
   );
@@ -111,8 +114,14 @@ const UpdateQuiz = (props) => {
   };
 
   const { lessonID, quizID, quizes, notes, tests } = props;
+  console.log(check, check === "WORD");
   return (
     <Container>
+      <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
+        <option value={undefined}>Не выбран</option>
+        <option value={"WORD"}>Дословная проверка</option>
+        <option value={"IDEA"}>Смысловая проверка</option>
+      </select>
       <textarea
         id="question"
         name="question"
@@ -170,6 +179,7 @@ const UpdateQuiz = (props) => {
           answer: answer,
           ifRight: ifRight,
           ifWrong: ifWrong,
+          check: check,
           next: {
             true: trueVal,
             false: falseVal,

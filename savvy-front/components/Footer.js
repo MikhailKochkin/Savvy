@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { withTranslation } from "../i18n";
 
 const FooterStyles = styled.div`
   background-color: #001f4e;
@@ -38,12 +39,12 @@ const FooterStyles = styled.div`
   }
 `;
 
-const Footer = () => (
+const Footer = ({ t }) => (
   <FooterStyles>
     <div className="block">
-      <div>ИП Кочкин Михаил Валерьевич</div>
-      <div>ИНН: 771771639796</div>
-      <div>ОГРНИП: 318774600589944 </div>
+      <div>{t("ip")}</div>
+      <div>{t("inn")}</div>
+      <div>{t("ogrnip")}</div>
     </div>
     <div className="block">
       <div>
@@ -53,7 +54,7 @@ const Footer = () => (
             query: { name: "terms" },
           }}
         >
-          <a>Пользовательское соглашение</a>
+          <a>{t("terms")}</a>
         </Link>
       </div>
       <div>
@@ -63,7 +64,7 @@ const Footer = () => (
             query: { name: "privacy" },
           }}
         >
-          <a>Политика обработки персональных данных</a>
+          <a>{t("policy")}</a>
         </Link>
       </div>
       <div>
@@ -73,28 +74,28 @@ const Footer = () => (
             query: { name: "offer" },
           }}
         >
-          <a>Оферта</a>
+          <a>{t("offer")}</a>
         </Link>
       </div>
     </div>
     <div className="mini">
       <div>
         <a target="_blank" href="https://vk.com/besavvylawyer">
-          Вконтакте
+          VK
         </a>
       </div>
       <div>
         <a target="_blank" href="https://www.instagram.com/savvy_legal">
-          Инстаграм
+          Instagram
         </a>
       </div>
       <div>
         <a target="_blank" href="https://t.me/SavvyLive">
-          Телеграм
+          Telegram
         </a>
       </div>
     </div>
   </FooterStyles>
 );
 
-export default Footer;
+export default withTranslation("search")(Footer);

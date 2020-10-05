@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Course from "../Course";
 import LoadingDummy from "../LoadingDummy";
 import { element } from "prop-types";
+import { i18n, withTranslation } from "../../../i18n";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
@@ -94,7 +95,7 @@ const Message = styled.div`
 const ShownCourses = (props) => {
   return (
     <Styles>
-      <Header>Вам могут быть интересны:</Header>
+      <Header>{props.t("interest")}</Header>
       <Container>
         <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-first">
           {({ data, error, loading }) => {
@@ -137,11 +138,7 @@ const ShownCourses = (props) => {
             return (
               <>
                 {displayed.length === 0 && (
-                  <Message>
-                    Курсов с такими характеристиками пока нет. Но мы их уже
-                    делаем. Зарегистрируйтесь на сайте, и мы пришлем вам
-                    сообщение, когда такие курсы появятся.
-                  </Message>
+                  <Message>{props.t("no-course")}</Message>
                 )}
                 {displayed.map((c) => (
                   <Course key={c.id} id={c.id} coursePage={c} me={props.me} />
@@ -155,4 +152,4 @@ const ShownCourses = (props) => {
   );
 };
 
-export default ShownCourses;
+export default withTranslation("Search")(ShownCourses);

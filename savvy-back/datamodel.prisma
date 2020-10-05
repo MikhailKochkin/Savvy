@@ -30,6 +30,11 @@ enum TaskType {
   FORM
 }
 
+enum CheckType {
+  WORD
+  IDEA
+}
+
 enum Level {
   STANDARD
   ADVANCED
@@ -299,6 +304,7 @@ type Quiz {
   next: Json
   ifRight: String
   ifWrong: String
+  check: CheckType @default(value: IDEA)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

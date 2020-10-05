@@ -808,7 +808,7 @@ const Mutations = {
     const updates = { ...args };
     //remove the ID from updates
     delete updates.id;
-
+    console.log(updates);
     //run the update method
     return ctx.db.mutation.updateQuiz(
       {

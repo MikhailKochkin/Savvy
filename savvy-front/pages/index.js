@@ -1,6 +1,17 @@
 import User from "../components/User";
 import Courses from "../components/course/Courses";
+import { withTranslation } from "../i18n";
 
-const Index = () => <User>{({ data: { me } }) => <Courses />}</User>;
+const Index = () => {
+  return (
+    <>
+      <User>{({ data: { me } }) => <Courses />}</User>
+    </>
+  );
+};
 
-export default Index;
+Index.getInitialProps = async () => ({
+  namespacesRequired: ["common", "footer"],
+});
+
+export default withTranslation("common")(Index);

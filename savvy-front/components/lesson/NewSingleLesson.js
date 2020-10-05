@@ -43,6 +43,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
+        check
         ifRight
         ifWrong
         type

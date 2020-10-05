@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ShownCourses from "./courseLists/ShownCourses";
 import smoothscroll from "smoothscroll-polyfill";
+import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   display: flex;
@@ -234,76 +235,73 @@ const Search = (props) => {
   return (
     <Styles>
       <Block>
-        <div className="title">Найдите курс, который подходит именно вам:</div>
+        <div className="title">{props.t("header")}</div>
         <Group>
           <Table>
             <div className="subject">
               <select onChange={(e) => setTopic(e.target.value)}>
-                <option value="Any">Любой курс</option>
-                <option value="Английский">Юридический английский</option>
-                <option value="Гражданское право">Гражданское право</option>
-                <option value="Корпоративное право">Корпоративное право</option>
+                <option value="Any">{props.t("any-course")}</option>
+                <option value="Английский">{props.t("le")}</option>
+                <option value="Гражданское право">
+                  {props.t("civil-law")}
+                </option>
+                <option value="Корпоративное право">
+                  {props.t("corp-law")}
+                </option>
                 <option value="IP/IT">IP/IT</option>
-                <option value="Гражданский процесс">Гражданский процесс</option>
+                <option value="Гражданский процесс">
+                  {props.t("civil-proc")}
+                </option>
                 <option value="Административный процесс">
-                  Административный процесс
+                  {props.t("admin-proc")}
                 </option>
                 <option value="Legal Tech">Legal Tech</option>
-                <option value="Уголовное право">Уголовное право</option>
-                <option value="Земельное право">Земельное право</option>
+                <option value="Уголовное право">{props.t("crim-law")}</option>
+                <option value="Земельное право">{props.t("land-law")}</option>
               </select>
             </div>
             <div className="subject">
               <select onChange={(e) => setTeacher(e.target.value)}>
-                <option value="NoTeacher">Без сопровождения</option>
-                <option value="Teacher">С сопровождением</option>
+                <option value="NoTeacher">{props.t("tutor")}</option>
+                <option value="Teacher">{props.t("sp")}</option>
               </select>
             </div>
             <div className="level">
               <select onChange={(e) => setLevel(e.target.value)}>
-                <option value="All">Любой уровень</option>
-                <option value="Student">Для студентов</option>
-                <option value="Junior">Для младших юристов</option>
-                <option value="Senior">Для юристов</option>
+                <option value="All">{props.t("any-level")}</option>
+                <option value="Student">{props.t("student-level")}</option>
+                <option value="Junior">{props.t("junior-level")}</option>
+                <option value="Senior">{props.t("senior-level")}</option>
               </select>
             </div>
           </Table>
           <button onClick={(e) => move()}>
-            <a>Показать</a>
+            <a>{props.t("button")}</a>
           </button>
         </Group>
         <Proof>
           <div className="div1">
             <img src="../../static/student.svg" />
             <div className="text">
-              <div>Все курсы идут полностью онлайн</div>
+              <div>{props.t("bullet1")}</div>
             </div>
           </div>
           <div className="div2">
             <img src="../../static/information.svg" />
             <div className="text">
-              <div>
-                На каждом курсе есть открытый урок, который покажет вам, как
-                работает курс
-              </div>
+              <div>{props.t("bullet3")}</div>{" "}
             </div>
           </div>
           <div className="div3">
             <img src="../../static/teacher.svg" />
             <div className="text">
-              <div>
-                Вы можете выбрать, как проходить курс: самостоятельно или с
-                сопровождением преподавателя
-              </div>
+              <div>{props.t("bullet2")}</div>
             </div>
           </div>
           <div className="div4">
             <img src="../../static/notebook.svg" />
             <div className="text">
-              <div>
-                Наши курсы отличаются интерактивностью: вы будете составлять
-                документы, решать задачи и вести дела.
-              </div>
+              <div>{props.t("bullet4")}</div>
             </div>
           </div>
         </Proof>
@@ -319,4 +317,4 @@ const Search = (props) => {
   );
 };
 
-export default Search;
+export default withTranslation("search")(Search);

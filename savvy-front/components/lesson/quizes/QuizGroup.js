@@ -39,6 +39,7 @@ class QuizGroup extends Component {
               id={quiz.id}
               question={quiz.question}
               answer={quiz.answer}
+              check={quiz.check}
               type={quiz.type}
               num={index + 1}
               getQuizData={this.myCallback}

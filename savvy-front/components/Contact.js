@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { withTranslation } from "../i18n";
 
 const Styles = styled.div`
   width: 100%;
@@ -56,25 +57,25 @@ const Button = styled.a`
   }
 `;
 
-const Contact = () => {
+const Contact = ({ t }) => {
   return (
     <Styles>
       <Box>
         <div>
-          Думаете о том, чтобы создать свой онлайн курс? <br />
-          Подробно рассказываем, как это сделать.
+          {t("create1")} <br />
+          {t("create2")}
         </div>
         <Link
           href={{
             pathname: "/coursePage",
-            query: { id: "ck1srkdul00l20763ut2aicn9" }
+            query: { id: "ck1srkdul00l20763ut2aicn9" },
           }}
         >
-          <Button>Узнать</Button>
+          <Button>{t("learn")}</Button>
         </Link>
       </Box>
     </Styles>
   );
 };
 
-export default Contact;
+export default withTranslation("search")(Contact);

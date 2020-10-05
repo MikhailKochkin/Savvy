@@ -171,6 +171,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         question
         type
+        check
         ifRight
         ifWrong
         answer
