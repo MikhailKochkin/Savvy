@@ -263,8 +263,6 @@ class Nav extends Component {
     });
   };
   render() {
-    console.log(i18n.language);
-
     return (
       <User>
         {({ data: { me } }) => {
@@ -279,12 +277,12 @@ class Nav extends Component {
                 <>
                   <StyledHeader>
                     <CourseMenu>
-                      <Link prefetch href="/">
+                      <Link href="/">
                         <div className="logo">
                           <a>BeSavvy</a>
                         </div>
                       </Link>
-                      <Link prefetch href="/blog">
+                      <Link href="/blog">
                         <div>
                           <a>{this.props.t("blog")}</a>
                         </div>
@@ -292,21 +290,21 @@ class Nav extends Component {
                       {me && me !== null ? (
                         <>
                           {me.status && me.status === "AUTHOR" && (
-                            <Link prefetch href="/educator">
+                            <Link href="/educator">
                               <div>
                                 <a>{this.props.t("my")}</a>
                               </div>
                             </Link>
                           )}
                           {me.status && me.status === "HR" && (
-                            <Link prefetch href="/educator">
+                            <Link href="/educator">
                               <div>
                                 <a>{this.props.t("my")}</a>
                               </div>
                             </Link>
                           )}
                           {me.status && me.status === "SAVVY_AUTHOR" && (
-                            <Link prefetch href="/educator">
+                            <Link href="/educator">
                               <div>
                                 <a>{this.props.t("my")}</a>
                               </div>
@@ -412,14 +410,14 @@ class Nav extends Component {
                         &times;
                       </a>
                       {me && me.status === "AUTHOR" && (
-                        <Link prefetch href="/educator">
+                        <Link href="/educator">
                           <button onClick={this.closeNav}>
                             <a>{this.props.t("my")}</a>
                           </button>
                         </Link>
                       )}
                       {me && me.status === "SAVVY_AUTHOR" && (
-                        <Link prefetch href="/educator">
+                        <Link href="/educator">
                           <button onClick={this.closeNav}>
                             <a>{this.props.t("my")}</a>
                           </button>

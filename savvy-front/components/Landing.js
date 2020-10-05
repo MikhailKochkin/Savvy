@@ -285,21 +285,21 @@ class LandingPage extends Component {
               )}
               {me && (
                 <span>
-                  <Link prefetch href="/courses">
+                  <Link href="/courses">
                     <a>Курсы</a>
                   </Link>
                 </span>
               )}
               {this.state.height > 1000 && me && me.status === "AUTHOR" && (
                 <span>
-                  <Link prefetch href="/educator">
+                  <Link href="/educator">
                     <a>Кабинет</a>
                   </Link>
                 </span>
               )}
               {this.state.width > 1000 && me && me.status === "SAVVY_AUTHOR" && (
                 <span>
-                  <Link prefetch href="/educator">
+                  <Link href="/educator">
                     <a>Кабинет</a>
                   </Link>
                 </span>

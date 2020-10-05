@@ -104,7 +104,7 @@ const Reviews = ({ t }) => {
       <Block>
         <Carousel
           slidesToShow={slides}
-          renderBottomCenterControls={false}
+          // renderBottomCenterControls={false}
           renderCenterLeftControls={({ previousSlide }) => (
             <Circle onClick={previousSlide}>
               <span>&#8249;</span>

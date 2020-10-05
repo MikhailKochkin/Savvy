@@ -137,7 +137,6 @@ const Ad = () => {
             pathname: "/coursePage",
             query: { id: "cjwaz2l0300dc0729d02opkzb" },
           }}
-          prefetch
         >
           <a>Узнать больше</a>
         </Link>

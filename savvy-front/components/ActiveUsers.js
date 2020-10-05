@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import moment from "moment";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 const COURSE_VISITS_QUERY = gql`
   query COURSE_VISITS_QUERY($day: DateTime, $nextday: DateTime) {
@@ -140,10 +140,10 @@ const ActiveUsers = () => {
                             return (
                               <>
                                 <p>Активные пользователи: {final.length} </p>
-                                <DatePicker
+                                {/* <DatePicker
                                   selected={date}
                                   onChange={handleChange}
-                                />
+                                /> */}
                               </>
                             );
                           }}

@@ -528,7 +528,6 @@ export default class Course extends Component {
                     pathname: "/coursePage",
                     query: { id },
                   }}
-                  prefetch
                 >
                   <a>
                     <button
@@ -582,7 +581,6 @@ export default class Course extends Component {
                                           pathname: "/coursePage",
                                           query: { id },
                                         }}
-                                        prefetch
                                       >
                                         <a>
                                           <button
@@ -629,7 +627,6 @@ export default class Course extends Component {
                                       pathname: "/coursePage",
                                       query: { id },
                                     }}
-                                    prefetch
                                   >
                                     <a>
                                       <button

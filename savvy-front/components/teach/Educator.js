@@ -221,7 +221,7 @@ class Teach extends Component {
                                         </Author>
                                       </>
                                       <>
-                                        <Link prefetch href="/create">
+                                        <Link>
                                           <Button>
                                             <a>Создать курс</a>
                                           </Button>
