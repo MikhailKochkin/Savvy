@@ -11,9 +11,9 @@ import Header from "./Header";
 import Layout from "../components/Layout";
 import User from "./User";
 
-const DynamicComponent = dynamic(import("./Alert"), {
-  ssr: false,
-});
+// const DynamicComponent = dynamic(import("./Alert"), {
+//   ssr: false,
+// });
 
 const theme = {
   blue: "#112A62",
@@ -61,7 +61,7 @@ const Page = ({ children, router }) => {
               <Meta />
               <Layout>
                 <ModalProvider backgroundComponent={SpecialModalBackground}>
-                  <DynamicComponent />
+                  {/* <DynamicComponent /> */}
                   <Header />
                   <Nav />
                   <Inner>{children}</Inner>
