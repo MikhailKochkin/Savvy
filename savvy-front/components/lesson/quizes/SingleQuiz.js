@@ -398,7 +398,7 @@ const SingleQuiz = (props) => {
                 )}
                 {correct === "true" && ifRight && ifRight !== "<p></p>" && (
                   <div className="question">
-                    <div className="question_text">{ifRight}</div>
+                    <div className="question_text">{renderHTML(ifRight)}</div>
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
@@ -418,7 +418,7 @@ const SingleQuiz = (props) => {
                 )}
                 {correct === "false" && ifWrong && ifWrong !== "<p></p>" && (
                   <div className="question">
-                    <div className="question_text">{ifWrong}</div>
+                    <div className="question_text">{renderHTML(ifWrong)}</div>
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}

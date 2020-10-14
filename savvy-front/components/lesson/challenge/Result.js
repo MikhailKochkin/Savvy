@@ -24,7 +24,7 @@ const Span = styled.span`
 `;
 
 const Result = (props) => {
-  const my = props.completed[0];
+  const my = props.completed ? props.completed[0] : undefined;
   let results = props.results.sort((r, n) => {
     let r1 = n.correct - r.correct;
     if (r1 != 0) {
@@ -34,29 +34,31 @@ const Result = (props) => {
   });
   return (
     <Styles>
-      <div className="my">
-        <div className="header">{props.text}</div>
-        <div>
-          Правильных ответов: <b>{my.correct}</b>
+      {my && (
+        <div className="my">
+          <div className="header">{props.text}</div>
+          <div>
+            Правильных ответов: <b>{my.correct}</b>
+          </div>
+          <div>
+            Неправильных ответов: <b>{my.wrong}</b>
+          </div>
+          <div>
+            Время:{" "}
+            <b>
+              {String(Math.floor(my.time / 60)).padStart(2, "0")}:
+              {String(my.time - Math.floor(my.time / 60) * 60).padStart(2, "0")}
+            </b>
+          </div>
         </div>
-        <div>
-          Неправильных ответов: <b>{my.wrong}</b>
-        </div>
-        <div>
-          Время:{" "}
-          <b>
-            {String(Math.floor(my.time / 60)).padStart(2, "0")}:
-            {String(my.time - Math.floor(my.time / 60) * 60).padStart(2, "0")}
-          </b>
-        </div>
-      </div>
+      )}
       <div className="others">
         <div className="header">Рейтинг участников:</div>
         <div>
           <ol>
             {results.map((r) => (
               <li>
-                <Span bold={my.student.id === r.student.id}>
+                <Span bold={my ? my.student.id === r.student.id : false}>
                   {r.student.surname
                     ? `${r.student.name} ${r.student.surname}`
                     : r.student.name}{" "}

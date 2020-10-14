@@ -121,6 +121,7 @@ const Block = styled.div`
   padding: 0.5% 2%;
   color: black;
   width: 100%;
+  padding-top: 4%;
   @media (max-width: 800px) {
     width: 100%;
   }

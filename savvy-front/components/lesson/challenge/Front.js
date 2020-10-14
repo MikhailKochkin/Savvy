@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const LessonPart = styled.div`
   display: flex;
-  border: 1px solid #edefed;
+  /* border: 1px solid #edefed; */
   padding: 0.5% 2%;
   flex-direction: column;
   border-radius: 2px;
@@ -23,7 +23,7 @@ const LessonPart = styled.div`
   img {
     display: block;
     max-width: 100%;
-    max-height: 20em;
+    max-height: 25em;
     margin-top: 2%;
     box-shadow: "0 0 0 2px blue;";
   }
@@ -46,24 +46,6 @@ const LessonPart = styled.div`
   .example-leave.example-leave-active {
     opacity: 0.01;
     transition: opacity 300ms ease-in;
-  }
-`;
-
-const Header = styled.div`
-  border: 1px solid #edefed;
-  background: #1a2980;
-  color: white;
-  margin-top: 40px;
-  border-bottom: 0;
-  width: 100%;
-  text-align: left;
-  padding: 5px 2% 5px 2%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  @media (max-width: 800px) {
-    width: 100%;
-    margin-top: 10px;
   }
 `;
 
@@ -93,9 +75,9 @@ const Front = (props) => {
   });
   return (
     <>
-      <Header>
+      {/* <Header>
         <div>Испытание</div>
-      </Header>
+      </Header> */}
       <LessonPart>
         <div className="intro">{renderHTML(props.text)}</div>
         {!props.completed.length > 0 ? (
@@ -112,6 +94,13 @@ const Front = (props) => {
           <Result
             results={results}
             completed={props.completed}
+            text="Вы уже прошли это испытание. Ваш результат:"
+          />
+        )}
+        {props.me.permissions.includes("ADMIN") && (
+          <Result
+            results={results}
+            // completed={[]}
             text="Вы уже прошли это испытание. Ваш результат:"
           />
         )}

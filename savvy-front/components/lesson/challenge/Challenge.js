@@ -123,7 +123,8 @@ const Container = styled.div`
 `;
 
 const Box = styled.div`
-  width: 40%;
+  width: 50%;
+  margin-top: 5%;
   @media (max-width: 850px) {
     width: 95%;
   }
@@ -308,6 +309,7 @@ const Challenge = (props) => {
                           >
                             {!start && (
                               <Front
+                                me={me}
                                 text={lesson.text}
                                 getStart={getStart}
                                 completed={completed}
