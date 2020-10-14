@@ -74,6 +74,8 @@ class Interactive extends Component {
         <SingleQuiz
           key={el.id}
           id={el.id}
+          type={el.type}
+          check={el.check}
           question={el.question}
           answer={el.answer}
           ifRight={el.ifRight}
@@ -203,6 +205,8 @@ class Interactive extends Component {
           id={el.id}
           index={1}
           key={el.id}
+          type={el.type}
+          check={el.check}
           question={el.question}
           answer={el.answer}
           ifRight={el.ifRight}

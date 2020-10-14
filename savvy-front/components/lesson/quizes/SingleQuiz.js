@@ -232,13 +232,6 @@ const SingleQuiz = (props) => {
       answer1: props.answer.toLowerCase(),
       answer2: answer.toLowerCase(),
     };
-    console.log(
-      props.check,
-      props.check === "WORD",
-      props.answer.toLowerCase(),
-      answer.toLowerCase(),
-      props.answer.toLowerCase() === answer.toLowerCase()
-    );
     if (props.check === "WORD") {
       if (props.answer.toLowerCase() === answer.toLowerCase()) {
         setCorrect("true");

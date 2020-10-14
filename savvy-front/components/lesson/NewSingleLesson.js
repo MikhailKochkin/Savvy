@@ -44,6 +44,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         question
         answer
         check
+        type
         ifRight
         ifWrong
         type

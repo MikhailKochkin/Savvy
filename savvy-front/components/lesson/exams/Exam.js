@@ -33,11 +33,13 @@ class Exam extends Component {
       let el = this.props.lesson.quizes.filter(
         (q) => q.id === data[1].value
       )[0];
+      console.log(el);
       newQuiz = (
         <SingleQuiz
           key={el.id}
           id={el.id}
           question={el.question}
+          type={el.type}
           answer={el.answer}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
@@ -159,11 +161,13 @@ class Exam extends Component {
       el = this.props.lesson.quizes.find(
         (quiz) => quiz.id === this.props.exam.nodeID
       );
+      console.log(el);
       item = (
         <SingleQuiz
           id={el.id}
           index={1}
           key={el.id}
+          type={el.type}
           question={el.question}
           answer={el.answer}
           ifRight={el.ifRight}

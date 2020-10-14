@@ -76,6 +76,8 @@ class StoryEx extends Component {
             id={el.id}
             question={el.question}
             answer={el.answer}
+            type={el.type}
+            check={el.check}
             me={me}
             ifRight={el.ifRight}
             ifWrong={el.ifWrong}
