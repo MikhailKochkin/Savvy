@@ -1,5 +1,4 @@
 import SingleLesson from "../components/lesson/SingleLesson";
-import NewSingleLesson from "../components/lesson/NewSingleLesson";
 import Challenge from "../components/lesson/challenge/Challenge";
 import dynamic from "next/dynamic";
 

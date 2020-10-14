@@ -361,7 +361,7 @@ const RegisterCard = (props) => {
                       <div className="Teacher">
                         🚀{" "}
                         {props.subscription
-                          ? "Подписка на 4 курса"
+                          ? "Подписка на 6 курсов"
                           : "Продвинутый"}
                       </div>
                     )}

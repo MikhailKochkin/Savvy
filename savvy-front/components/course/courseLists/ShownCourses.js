@@ -42,6 +42,20 @@ const COURSE_PAGES_QUERY = gql`
         }
         image
       }
+      authors {
+        id
+        name
+        surname
+        status
+        company {
+          id
+          name
+        }
+        uni {
+          id
+          title
+        }
+      }
     }
   }
 `;

@@ -285,7 +285,7 @@ const SingleConstructor = (props) => {
                   <Label
                     className="Var"
                     key={index + 1}
-                    //   data={this.state.received[index] !== ""}
+                    data={received[index] !== ""}
                   >
                     <input
                       className="l"

@@ -54,9 +54,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       promocode
       openLesson
       published
-      user {
-        id
-      }
       lessons {
         id
         name
@@ -89,30 +86,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
             id
           }
         }
-        # newTests {
-        #   testResults {
-        #     id
-        #     student {
-        #       id
-        #     }
-        #   }
-        # }
-        # quizes {
-        #   quizResults {
-        #     id
-        #     student {
-        #       id
-        #     }
-        #   }
-        # }
-        # problems {
-        #   problemResults {
-        #     id
-        #     student {
-        #       id
-        #     }
-        #   }
-        # }
       }
       description
       courseType
@@ -147,6 +120,20 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         company {
           id
           name
+        }
+      }
+      authors {
+        id
+        name
+        surname
+        status
+        company {
+          id
+          name
+        }
+        uni {
+          id
+          title
         }
       }
     }
@@ -565,16 +552,28 @@ class CoursePage extends Component {
                                         Оценка курса учениками: <b>{average}</b>
                                       </div>
                                     ) : null}
-                                    <div className="name">
-                                      <img src={coursePage.user.image} />
-                                      <p>
-                                        {coursePage.user &&
-                                        coursePage.user.surname
-                                          ? `${coursePage.user.name} ${coursePage.user.surname}`
-                                          : coursePage.user.name}{" "}
-                                        из {coursePage.user.company.name}
-                                      </p>
-                                    </div>
+                                    {coursePage.authors ? (
+                                      coursePage.authors.map((a) => (
+                                        <div className="name">
+                                          <img src={a.image} />
+                                          <p>
+                                            {a.name} {a.surname} из{" "}
+                                            {a.company.name}
+                                          </p>
+                                        </div>
+                                      ))
+                                    ) : (
+                                      <div className="name">
+                                        <img src={coursePage.user.image} />
+                                        <p>
+                                          {coursePage.user &&
+                                          coursePage.user.surname
+                                            ? `${coursePage.user.name} ${coursePage.user.surname}`
+                                            : coursePage.user.name}{" "}
+                                          из {coursePage.user.company.name}
+                                        </p>
+                                      </div>
+                                    )}
                                     <p className="track2">
                                       {coursePage.user.description}
                                     </p>

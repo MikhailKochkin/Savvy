@@ -7,6 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
+import renderHTML from "react-render-html";
 import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
@@ -63,6 +64,9 @@ const Question = styled.div`
   flex: 50%;
   margin-bottom: 3%;
   margin-top: ${(props) => (props.story ? "2%" : "0%")};
+  p {
+    margin: 0;
+  }
   .question {
     display: flex;
     flex-direction: row;
@@ -90,9 +94,9 @@ const Question = styled.div`
     min-width: 40%;
     max-width: 70%;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
   }
   .answer {
     display: flex;
@@ -228,7 +232,13 @@ const SingleQuiz = (props) => {
       answer1: props.answer.toLowerCase(),
       answer2: answer.toLowerCase(),
     };
-
+    console.log(
+      props.check,
+      props.check === "WORD",
+      props.answer.toLowerCase(),
+      answer.toLowerCase(),
+      props.answer.toLowerCase() === answer.toLowerCase()
+    );
     if (props.check === "WORD") {
       if (props.answer.toLowerCase() === answer.toLowerCase()) {
         setCorrect("true");
@@ -369,7 +379,9 @@ const SingleQuiz = (props) => {
             <>
               <Question story={story}>
                 <div className="question">
-                  <div className="question_text">{props.question}</div>
+                  <div className="question_text">
+                    {renderHTML(props.question)}
+                  </div>
                   <div className="question_name">{author_name}</div>
                 </div>
                 <div className="answer">
@@ -441,7 +453,7 @@ const SingleQuiz = (props) => {
                 {!hidden && (
                   <div className="question">
                     <div className="question_text">
-                      Правильный ответ: {props.answer}
+                      Правильный ответ: {renderHTML(props.answer)}
                     </div>
                     <div className="question_name">{author_name}</div>
                   </div>

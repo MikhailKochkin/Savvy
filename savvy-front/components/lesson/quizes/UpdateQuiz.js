@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Option from "../Option";
+import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_QUIZ_MUTATION = gql`
@@ -96,6 +96,28 @@ const Button = styled.button`
   }
 `;
 
+const Comment = styled.div`
+  margin: 3% 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  width: 100%;
+  min-height: 100px;
+  padding: 1.5%;
+  font-size: 1.4rem;
+  outline: 0;
+  &#ifRight {
+    border: 1px solid #84bc9c;
+  }
+  &#ifWrong {
+    border: 1px solid #de6b48;
+  }
+`;
+
+const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
 const UpdateQuiz = (props) => {
   const [answer, setAnswer] = useState(props.answer);
   const [question, setQuestion] = useState(props.question);
@@ -122,55 +144,40 @@ const UpdateQuiz = (props) => {
         <option value={"WORD"}>Дословная проверка</option>
         <option value={"IDEA"}>Смысловая проверка</option>
       </select>
-      <textarea
-        id="question"
-        name="question"
-        required
-        placeholder="Вопрос"
-        defaultValue={question}
-        onChange={(e) => setQuestion(e.target.value)}
-      />
+      <Comment>
+        <DynamicLoadedEditor
+          id="question"
+          name="question"
+          placeholder="Вопрос"
+          value={question}
+          getEditorText={setQuestion}
+        />
+      </Comment>
       <textarea
         id="answer"
         name="answer"
-        required
         placeholder="Ответ"
         defaultValue={answer}
         onChange={(e) => setAnswer(e.target.value)}
       />
-      <textarea
-        cols={60}
-        rows={6}
-        spellCheck={true}
-        id="answer"
-        name="answer"
-        placeholder="Комментарий в случае правильного ответа"
-        defaultValue={ifRight}
-        onChange={(e) => setIfRight(e.target.value)}
-      />
-      <textarea
-        cols={60}
-        rows={6}
-        spellCheck={true}
-        id="answer"
-        name="answer"
-        placeholder="Комментарий в случае  неправильного ответа"
-        defaultValue={ifWrong}
-        onChange={(e) => setIfWrong(e.target.value)}
-      />
-      {/* <h2>Выберите задания для формата "Экзамен":</h2>
-      <h3>Заметки:</h3>
-      {notes.map(note => (
-        <Option key={note.id} note={note} getData={myCallback} />
-      ))}
-      <h3>Вопросы:</h3>
-      {quizes.map(quiz => (
-        <Option key={quiz.id} quiz={quiz} getData={myCallback} />
-      ))}
-      <h3>Тесты:</h3>
-      {tests.map(test => (
-        <Option key={test.id} test={test} getData={myCallback} />
-      ))} */}
+      <Comment>
+        <DynamicLoadedEditor
+          id="answer"
+          name="answer"
+          value={ifRight}
+          placeholder="Комментарий в случае правильного ответа"
+          getEditorText={setIfRight}
+        />
+      </Comment>
+      <Comment>
+        <DynamicLoadedEditor
+          id="answer"
+          name="answer"
+          placeholder="Комментарий в случае правильного ответа"
+          value={ifWrong}
+          getEditorText={setIfWrong}
+        />
+      </Comment>
       <Mutation
         mutation={UPDATE_QUIZ_MUTATION}
         variables={{

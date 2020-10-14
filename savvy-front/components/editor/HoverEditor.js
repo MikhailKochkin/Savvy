@@ -24,7 +24,6 @@ const Img = styled.img`
 
 const CommentStyle2 = styled.span`
   color: green;
-  background: yellow;
 `;
 
 const AppStyles = {

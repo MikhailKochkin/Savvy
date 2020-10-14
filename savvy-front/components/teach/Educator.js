@@ -28,6 +28,30 @@ const MY_COURSES_QUERY = gql`
           name
         }
       }
+      authors {
+        id
+        name
+        surname
+        image
+        uni {
+          id
+          title
+        }
+        company {
+          id
+          name
+        }
+      }
+      lessons {
+        id
+        forum {
+          id
+          rating {
+            id
+            rating
+          }
+        }
+      }
       description
       courseType
       image
@@ -221,7 +245,7 @@ class Teach extends Component {
                                         </Author>
                                       </>
                                       <>
-                                        <Link>
+                                        <Link prefetch href="/create">
                                           <Button>
                                             <a>Создать курс</a>
                                           </Button>

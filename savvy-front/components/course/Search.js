@@ -137,7 +137,6 @@ const Table = styled.div`
       align-items: flex-start;
       img {
         fill: red;
-        background: yellow;
       }
     }
     .level {

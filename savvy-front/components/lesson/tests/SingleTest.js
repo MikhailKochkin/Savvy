@@ -76,11 +76,14 @@ const TextBar = styled.div`
     min-width: 40%;
     max-width: 70%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     p {
       margin: 0;
+    }
+    img {
+      width: 100%;
     }
   }
   .answer {
@@ -144,11 +147,14 @@ const Question = styled.div`
     min-width: 40%;
     max-width: 70%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: flex-start;
     p {
       margin: 0;
+    }
+    img {
+      width: 100%;
     }
   }
 `;
@@ -414,23 +420,23 @@ const SingleTest = (props) => {
           </Group>
         </TextBar>
       )}
-      {/* {this.state.update && (
-          <UpdateTest
-            testID={this.props.id}
-            lessonID={this.props.lessonID}
-            quizes={this.props.quizes}
-            question={this.props.question}
-            answers={this.props.answers}
-            correct={this.props.true}
-            mes={mes}
-            next={this.props.next}
-            ifRight={ifRight}
-            ifWrong={ifWrong}
-            notes={this.props.notes}
-            tests={this.props.tests}
-          />
-        )} */}
-      {/* {this.props.exam && (
+      {update && (
+        <UpdateTest
+          testID={props.id}
+          lessonID={props.lessonID}
+          quizes={props.quizes}
+          question={props.question}
+          answers={props.answers}
+          correct={props.true}
+          mes={mes}
+          next={props.next}
+          ifRight={ifRight}
+          ifWrong={ifWrong}
+          notes={props.notes}
+          tests={props.tests}
+        />
+      )}
+      {/* {props.exam && (
           <Dots>
             <div className="group">
               <div className="dot"></div>

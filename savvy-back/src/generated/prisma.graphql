@@ -2995,6 +2995,7 @@ type CoursePage {
   subscription: Boolean
   news: String
   user: User!
+  authors(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
   pointsA(where: PointAWhereInput, orderBy: PointAOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PointA!]
   applications(where: ApplicationWhereInput, orderBy: ApplicationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Application!]
@@ -3046,6 +3047,7 @@ input CoursePageCreateInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3081,6 +3083,11 @@ input CoursePageCreateInput {
 
 input CoursePageCreateManyInput {
   create: [CoursePageCreateInput!]
+  connect: [CoursePageWhereUniqueInput!]
+}
+
+input CoursePageCreateManyWithoutAuthorsInput {
+  create: [CoursePageCreateWithoutAuthorsInput!]
   connect: [CoursePageWhereUniqueInput!]
 }
 
@@ -3171,8 +3178,52 @@ input CoursePageCreateWithoutApplicationsInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
+  pointATests: PointATestCreateManyWithoutCoursePageInput
+  careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionCreateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniCreateOneWithoutUniCoursePagesInput
+  uniID: ID
+  posts: PostCreateManyWithoutCoursePagesInput
+  tags: CoursePageCreatetagsInput
+  courseType: CourseType
+  students: CoursePageCreatestudentsInput
+  new_students: UserCreateManyWithoutNew_subjectsInput
+  price: Int
+  subscriptionPrice: Int
+  discountPrice: Int
+  orders: OrderCreateManyWithoutCoursePageInput
+  company: CompanyCreateOneWithoutCoursePagesInput
+  promocode: CoursePageCreatepromocodeInput
+  visits: CourseVisitCreateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  batch: String
+  reviews: Json
+  openLesson: ID
+  video: String
+  package: CoursePageCreateManyInput
+}
+
+input CoursePageCreateWithoutAuthorsInput {
+  id: ID
+  title: String!
+  description: String!
+  image: String!
+  banner: String
+  weeks: Int
+  subscription: Boolean
+  news: String
+  user: UserCreateOneWithoutCoursePagesInput!
+  lessons: LessonCreateManyWithoutCoursePageInput
+  pointsA: PointACreateManyWithoutCoursePageInput
+  applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
   careerTrack: CareerTrackCreateManyWithoutCoursePagesInput
   numInCareerTrack: Int
@@ -3213,6 +3264,7 @@ input CoursePageCreateWithoutCareerTrackInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3255,6 +3307,7 @@ input CoursePageCreateWithoutCompanyInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3297,6 +3350,7 @@ input CoursePageCreateWithoutExamQuestionInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3339,6 +3393,7 @@ input CoursePageCreateWithoutLessonsInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
@@ -3381,6 +3436,7 @@ input CoursePageCreateWithoutNew_studentsInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3423,6 +3479,7 @@ input CoursePageCreateWithoutOrdersInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3465,6 +3522,7 @@ input CoursePageCreateWithoutPointATestsInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3507,6 +3565,7 @@ input CoursePageCreateWithoutPointsAInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
   pointATests: PointATestCreateManyWithoutCoursePageInput
@@ -3549,6 +3608,7 @@ input CoursePageCreateWithoutPostsInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3591,6 +3651,7 @@ input CoursePageCreateWithoutUniInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3632,6 +3693,7 @@ input CoursePageCreateWithoutUserInput {
   weeks: Int
   subscription: Boolean
   news: String
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -3675,6 +3737,7 @@ input CoursePageCreateWithoutVisitsInput {
   subscription: Boolean
   news: String
   user: UserCreateOneWithoutCoursePagesInput!
+  authors: UserCreateManyWithoutCo_coursePagesInput
   lessons: LessonCreateManyWithoutCoursePageInput
   pointsA: PointACreateManyWithoutCoursePageInput
   applications: ApplicationCreateManyWithoutCoursePageInput
@@ -4089,6 +4152,7 @@ input CoursePageUpdateDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4131,6 +4195,7 @@ input CoursePageUpdateInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4230,6 +4295,18 @@ input CoursePageUpdateManyMutationInput {
   reviews: Json
   openLesson: ID
   video: String
+}
+
+input CoursePageUpdateManyWithoutAuthorsInput {
+  create: [CoursePageCreateWithoutAuthorsInput!]
+  delete: [CoursePageWhereUniqueInput!]
+  connect: [CoursePageWhereUniqueInput!]
+  set: [CoursePageWhereUniqueInput!]
+  disconnect: [CoursePageWhereUniqueInput!]
+  update: [CoursePageUpdateWithWhereUniqueWithoutAuthorsInput!]
+  upsert: [CoursePageUpsertWithWhereUniqueWithoutAuthorsInput!]
+  deleteMany: [CoursePageScalarWhereInput!]
+  updateMany: [CoursePageUpdateManyWithWhereNestedInput!]
 }
 
 input CoursePageUpdateManyWithoutCareerTrackInput {
@@ -4381,8 +4458,51 @@ input CoursePageUpdateWithoutApplicationsDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
+  pointATests: PointATestUpdateManyWithoutCoursePageInput
+  careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
+  numInCareerTrack: Int
+  examQuestion: ExamQuestionUpdateOneWithoutCoursePageInput
+  published: Boolean
+  uni: UniUpdateOneWithoutUniCoursePagesInput
+  uniID: ID
+  posts: PostUpdateManyWithoutCoursePagesInput
+  tags: CoursePageUpdatetagsInput
+  courseType: CourseType
+  students: CoursePageUpdatestudentsInput
+  new_students: UserUpdateManyWithoutNew_subjectsInput
+  price: Int
+  subscriptionPrice: Int
+  discountPrice: Int
+  orders: OrderUpdateManyWithoutCoursePageInput
+  company: CompanyUpdateOneWithoutCoursePagesInput
+  promocode: CoursePageUpdatepromocodeInput
+  visits: CourseVisitUpdateManyWithoutCoursePageInput
+  audience: String
+  result: String
+  tariffs: String
+  methods: String
+  batch: String
+  reviews: Json
+  openLesson: ID
+  video: String
+  package: CoursePageUpdateManyInput
+}
+
+input CoursePageUpdateWithoutAuthorsDataInput {
+  title: String
+  description: String
+  image: String
+  banner: String
+  weeks: Int
+  subscription: Boolean
+  news: String
+  user: UserUpdateOneRequiredWithoutCoursePagesInput
+  lessons: LessonUpdateManyWithoutCoursePageInput
+  pointsA: PointAUpdateManyWithoutCoursePageInput
+  applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
   careerTrack: CareerTrackUpdateManyWithoutCoursePagesInput
   numInCareerTrack: Int
@@ -4422,6 +4542,7 @@ input CoursePageUpdateWithoutCareerTrackDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4463,6 +4584,7 @@ input CoursePageUpdateWithoutCompanyDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4504,6 +4626,7 @@ input CoursePageUpdateWithoutExamQuestionDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4545,6 +4668,7 @@ input CoursePageUpdateWithoutLessonsDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
@@ -4586,6 +4710,7 @@ input CoursePageUpdateWithoutNew_studentsDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4627,6 +4752,7 @@ input CoursePageUpdateWithoutOrdersDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4668,6 +4794,7 @@ input CoursePageUpdateWithoutPointATestsDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4709,6 +4836,7 @@ input CoursePageUpdateWithoutPointsADataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
   pointATests: PointATestUpdateManyWithoutCoursePageInput
@@ -4750,6 +4878,7 @@ input CoursePageUpdateWithoutPostsDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4791,6 +4920,7 @@ input CoursePageUpdateWithoutUniDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4831,6 +4961,7 @@ input CoursePageUpdateWithoutUserDataInput {
   weeks: Int
   subscription: Boolean
   news: String
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4873,6 +5004,7 @@ input CoursePageUpdateWithoutVisitsDataInput {
   subscription: Boolean
   news: String
   user: UserUpdateOneRequiredWithoutCoursePagesInput
+  authors: UserUpdateManyWithoutCo_coursePagesInput
   lessons: LessonUpdateManyWithoutCoursePageInput
   pointsA: PointAUpdateManyWithoutCoursePageInput
   applications: ApplicationUpdateManyWithoutCoursePageInput
@@ -4908,6 +5040,11 @@ input CoursePageUpdateWithoutVisitsDataInput {
 input CoursePageUpdateWithWhereUniqueNestedInput {
   where: CoursePageWhereUniqueInput!
   data: CoursePageUpdateDataInput!
+}
+
+input CoursePageUpdateWithWhereUniqueWithoutAuthorsInput {
+  where: CoursePageWhereUniqueInput!
+  data: CoursePageUpdateWithoutAuthorsDataInput!
 }
 
 input CoursePageUpdateWithWhereUniqueWithoutCareerTrackInput {
@@ -4979,6 +5116,12 @@ input CoursePageUpsertWithWhereUniqueNestedInput {
   where: CoursePageWhereUniqueInput!
   update: CoursePageUpdateDataInput!
   create: CoursePageCreateInput!
+}
+
+input CoursePageUpsertWithWhereUniqueWithoutAuthorsInput {
+  where: CoursePageWhereUniqueInput!
+  update: CoursePageUpdateWithoutAuthorsDataInput!
+  create: CoursePageCreateWithoutAuthorsInput!
 }
 
 input CoursePageUpsertWithWhereUniqueWithoutCareerTrackInput {
@@ -5113,6 +5256,9 @@ input CoursePageWhereInput {
   news_ends_with: String
   news_not_ends_with: String
   user: UserWhereInput
+  authors_every: UserWhereInput
+  authors_some: UserWhereInput
+  authors_none: UserWhereInput
   lessons_every: LessonWhereInput
   lessons_some: LessonWhereInput
   lessons_none: LessonWhereInput
@@ -21258,6 +21404,7 @@ type User {
   new_subjects(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   permissions: [Permission!]!
   coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
+  co_coursePages(where: CoursePageWhereInput, orderBy: CoursePageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [CoursePage!]
   sandboxPages(where: SandboxPageWhereInput, orderBy: SandboxPageOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPage!]
   sandboxPageGoals(where: SandboxPageGoalWhereInput, orderBy: SandboxPageGoalOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [SandboxPageGoal!]
   lessons(where: LessonWhereInput, orderBy: LessonOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Lesson!]
@@ -21336,6 +21483,7 @@ input UserCreateInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -21378,6 +21526,11 @@ input UserCreateInput {
 
 input UserCreateinterestsInput {
   set: [String!]
+}
+
+input UserCreateManyWithoutCo_coursePagesInput {
+  create: [UserCreateWithoutCo_coursePagesInput!]
+  connect: [UserWhereUniqueInput!]
 }
 
 input UserCreateManyWithoutCompanyInput {
@@ -21627,6 +21780,7 @@ input UserCreateWithoutCareerTrackInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -21693,6 +21847,7 @@ input UserCreateWithoutChallengeResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -21758,6 +21913,7 @@ input UserCreateWithoutClausesInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -21797,6 +21953,72 @@ input UserCreateWithoutClausesInput {
   interests: UserCreateinterestsInput
 }
 
+input UserCreateWithoutCo_coursePagesInput {
+  id: ID
+  name: String!
+  surname: String
+  email: String!
+  password: String!
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioCreateOneWithoutUserInput
+  uni: UniCreateOneWithoutTeachersInput
+  company: CompanyCreateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackCreateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserCreatesandboxesInput
+  new_sandboxes: SandboxCreateManyInput
+  favourites: UserCreatefavouritesInput
+  subjects: UserCreatesubjectsInput
+  new_subjects: CoursePageCreateManyWithoutNew_studentsInput
+  permissions: UserCreatepermissionsInput
+  coursePages: CoursePageCreateManyWithoutUserInput
+  sandboxPages: SandboxPageCreateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
+  lessons: LessonCreateManyWithoutUserInput
+  tests: TestCreateManyWithoutUserInput
+  newTests: NewTestCreateManyWithoutUserInput
+  quizes: QuizCreateManyWithoutUserInput
+  lessonResults: LessonResultCreateManyWithoutStudentInput
+  testResults: TestResultCreateManyWithoutStudentInput
+  quizResults: QuizResultCreateManyWithoutStudentInput
+  problemResults: ProblemResultCreateManyWithoutStudentInput
+  textEditorResults: TextEditorResultCreateManyWithoutStudentInput
+  constructionResults: ConstructionResultCreateManyWithoutStudentInput
+  pointsA: PointACreateManyWithoutUserInput
+  pointATests: PointATestCreateManyWithoutUserInput
+  problems: ProblemCreateManyWithoutUserInput
+  construction: ConstructionCreateManyWithoutUserInput
+  orders: OrderCreateManyWithoutUserInput
+  textEditor: TextEditorCreateManyWithoutUserInput
+  isFamiliar: Boolean
+  posts: PostCreateManyWithoutUserInput
+  examAnswers: ExamAnswerCreateManyWithoutStudentInput
+  shots: ShotCreateManyWithoutUserInput
+  shotResults: ShotResultCreateManyWithoutStudentInput
+  notes: NoteCreateManyWithoutUserInput
+  teacherFeedback: FeedbackCreateManyWithoutTeacherInput
+  studentFeedback: FeedbackCreateManyWithoutStudentInput
+  forums: ForumCreateManyWithoutUserInput
+  ratings: RatingCreateManyWithoutUserInput
+  statements: StatementCreateManyWithoutUserInput
+  courseVisits: CourseVisitCreateManyWithoutStudentInput
+  examResults: ExamResultCreateManyWithoutUserInput
+  exams: ExamCreateManyWithoutUserInput
+  documents: DocumentCreateManyWithoutUserInput
+  documentResults: DocumentResultCreateManyWithoutUserInput
+  clauses: ClauseCreateManyWithoutUserInput
+  challengeResults: ChallengeResultCreateManyWithoutStudentInput
+  level: UserLevelCreateOneWithoutUserInput
+  interests: UserCreateinterestsInput
+}
+
 input UserCreateWithoutCompanyInput {
   id: ID
   name: String!
@@ -21822,6 +22044,7 @@ input UserCreateWithoutCompanyInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -21888,6 +22111,7 @@ input UserCreateWithoutConstructionInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -21953,6 +22177,7 @@ input UserCreateWithoutConstructionResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22017,6 +22242,7 @@ input UserCreateWithoutCoursePagesInput {
   subjects: UserCreatesubjectsInput
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22083,6 +22309,7 @@ input UserCreateWithoutCourseVisitsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22148,6 +22375,7 @@ input UserCreateWithoutDocumentResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22213,6 +22441,7 @@ input UserCreateWithoutDocumentsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22278,6 +22507,7 @@ input UserCreateWithoutExamAnswersInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22343,6 +22573,7 @@ input UserCreateWithoutExamResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22408,6 +22639,7 @@ input UserCreateWithoutExamsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22473,6 +22705,7 @@ input UserCreateWithoutForumsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22537,6 +22770,7 @@ input UserCreateWithoutLegalPortfolioInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22603,6 +22837,7 @@ input UserCreateWithoutLessonResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22668,6 +22903,7 @@ input UserCreateWithoutLessonsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
@@ -22733,6 +22969,7 @@ input UserCreateWithoutLevelInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22797,6 +23034,7 @@ input UserCreateWithoutNew_subjectsInput {
   subjects: UserCreatesubjectsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22863,6 +23101,7 @@ input UserCreateWithoutNewTestsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22928,6 +23167,7 @@ input UserCreateWithoutNotesInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -22993,6 +23233,7 @@ input UserCreateWithoutOrdersInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23058,6 +23299,7 @@ input UserCreateWithoutPointATestsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23123,6 +23365,7 @@ input UserCreateWithoutPointsAInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23188,6 +23431,7 @@ input UserCreateWithoutPostsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23253,6 +23497,7 @@ input UserCreateWithoutProblemResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23318,6 +23563,7 @@ input UserCreateWithoutProblemsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23383,6 +23629,7 @@ input UserCreateWithoutQuizesInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23448,6 +23695,7 @@ input UserCreateWithoutQuizResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23513,6 +23761,7 @@ input UserCreateWithoutRatingsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23578,6 +23827,7 @@ input UserCreateWithoutSandboxPageGoalsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
@@ -23643,6 +23893,7 @@ input UserCreateWithoutSandboxPagesInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
   tests: TestCreateManyWithoutUserInput
@@ -23708,6 +23959,7 @@ input UserCreateWithoutShotResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23773,6 +24025,7 @@ input UserCreateWithoutShotsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23838,6 +24091,7 @@ input UserCreateWithoutStatementsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23903,6 +24157,7 @@ input UserCreateWithoutStudentFeedbackInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -23968,6 +24223,7 @@ input UserCreateWithoutTeacherFeedbackInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -24033,6 +24289,7 @@ input UserCreateWithoutTestResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -24098,6 +24355,7 @@ input UserCreateWithoutTestsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -24163,6 +24421,7 @@ input UserCreateWithoutTextEditorInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -24228,6 +24487,7 @@ input UserCreateWithoutTextEditorResultsInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -24292,6 +24552,7 @@ input UserCreateWithoutUniInput {
   new_subjects: CoursePageCreateManyWithoutNew_studentsInput
   permissions: UserCreatepermissionsInput
   coursePages: CoursePageCreateManyWithoutUserInput
+  co_coursePages: CoursePageCreateManyWithoutAuthorsInput
   sandboxPages: SandboxPageCreateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalCreateManyWithoutUserInput
   lessons: LessonCreateManyWithoutUserInput
@@ -24797,6 +25058,7 @@ input UserUpdateInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -24883,6 +25145,18 @@ input UserUpdateManyMutationInput {
   permissions: UserUpdatepermissionsInput
   isFamiliar: Boolean
   interests: UserUpdateinterestsInput
+}
+
+input UserUpdateManyWithoutCo_coursePagesInput {
+  create: [UserCreateWithoutCo_coursePagesInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCo_coursePagesInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCo_coursePagesInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithoutCompanyInput {
@@ -25251,6 +25525,7 @@ input UserUpdateWithoutCareerTrackDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25316,6 +25591,7 @@ input UserUpdateWithoutChallengeResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25380,6 +25656,7 @@ input UserUpdateWithoutClausesDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25419,6 +25696,71 @@ input UserUpdateWithoutClausesDataInput {
   interests: UserUpdateinterestsInput
 }
 
+input UserUpdateWithoutCo_coursePagesDataInput {
+  name: String
+  surname: String
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: Float
+  image: String
+  status: Status
+  legalPortfolio: LegalPortfolioUpdateOneWithoutUserInput
+  uni: UniUpdateOneWithoutTeachersInput
+  company: CompanyUpdateOneWithoutHrsInput
+  uniID: ID
+  description: String
+  resume: String
+  coverLetter: String
+  careerTrack: CareerTrackUpdateOneWithoutMembersInput
+  careerTrackID: ID
+  sandboxes: UserUpdatesandboxesInput
+  new_sandboxes: SandboxUpdateManyInput
+  favourites: UserUpdatefavouritesInput
+  subjects: UserUpdatesubjectsInput
+  new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
+  permissions: UserUpdatepermissionsInput
+  coursePages: CoursePageUpdateManyWithoutUserInput
+  sandboxPages: SandboxPageUpdateManyWithoutUserInput
+  sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
+  lessons: LessonUpdateManyWithoutUserInput
+  tests: TestUpdateManyWithoutUserInput
+  newTests: NewTestUpdateManyWithoutUserInput
+  quizes: QuizUpdateManyWithoutUserInput
+  lessonResults: LessonResultUpdateManyWithoutStudentInput
+  testResults: TestResultUpdateManyWithoutStudentInput
+  quizResults: QuizResultUpdateManyWithoutStudentInput
+  problemResults: ProblemResultUpdateManyWithoutStudentInput
+  textEditorResults: TextEditorResultUpdateManyWithoutStudentInput
+  constructionResults: ConstructionResultUpdateManyWithoutStudentInput
+  pointsA: PointAUpdateManyWithoutUserInput
+  pointATests: PointATestUpdateManyWithoutUserInput
+  problems: ProblemUpdateManyWithoutUserInput
+  construction: ConstructionUpdateManyWithoutUserInput
+  orders: OrderUpdateManyWithoutUserInput
+  textEditor: TextEditorUpdateManyWithoutUserInput
+  isFamiliar: Boolean
+  posts: PostUpdateManyWithoutUserInput
+  examAnswers: ExamAnswerUpdateManyWithoutStudentInput
+  shots: ShotUpdateManyWithoutUserInput
+  shotResults: ShotResultUpdateManyWithoutStudentInput
+  notes: NoteUpdateManyWithoutUserInput
+  teacherFeedback: FeedbackUpdateManyWithoutTeacherInput
+  studentFeedback: FeedbackUpdateManyWithoutStudentInput
+  forums: ForumUpdateManyWithoutUserInput
+  ratings: RatingUpdateManyWithoutUserInput
+  statements: StatementUpdateManyWithoutUserInput
+  courseVisits: CourseVisitUpdateManyWithoutStudentInput
+  examResults: ExamResultUpdateManyWithoutUserInput
+  exams: ExamUpdateManyWithoutUserInput
+  documents: DocumentUpdateManyWithoutUserInput
+  documentResults: DocumentResultUpdateManyWithoutUserInput
+  clauses: ClauseUpdateManyWithoutUserInput
+  challengeResults: ChallengeResultUpdateManyWithoutStudentInput
+  level: UserLevelUpdateOneWithoutUserInput
+  interests: UserUpdateinterestsInput
+}
+
 input UserUpdateWithoutCompanyDataInput {
   name: String
   surname: String
@@ -25443,6 +25785,7 @@ input UserUpdateWithoutCompanyDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25508,6 +25851,7 @@ input UserUpdateWithoutConstructionDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25572,6 +25916,7 @@ input UserUpdateWithoutConstructionResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25635,6 +25980,7 @@ input UserUpdateWithoutCoursePagesDataInput {
   subjects: UserUpdatesubjectsInput
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25700,6 +26046,7 @@ input UserUpdateWithoutCourseVisitsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25764,6 +26111,7 @@ input UserUpdateWithoutDocumentResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25828,6 +26176,7 @@ input UserUpdateWithoutDocumentsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25892,6 +26241,7 @@ input UserUpdateWithoutExamAnswersDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -25956,6 +26306,7 @@ input UserUpdateWithoutExamResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26020,6 +26371,7 @@ input UserUpdateWithoutExamsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26084,6 +26436,7 @@ input UserUpdateWithoutForumsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26147,6 +26500,7 @@ input UserUpdateWithoutLegalPortfolioDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26212,6 +26566,7 @@ input UserUpdateWithoutLessonResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26276,6 +26631,7 @@ input UserUpdateWithoutLessonsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
@@ -26340,6 +26696,7 @@ input UserUpdateWithoutLevelDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26403,6 +26760,7 @@ input UserUpdateWithoutNew_subjectsDataInput {
   subjects: UserUpdatesubjectsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26468,6 +26826,7 @@ input UserUpdateWithoutNewTestsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26532,6 +26891,7 @@ input UserUpdateWithoutNotesDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26596,6 +26956,7 @@ input UserUpdateWithoutOrdersDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26660,6 +27021,7 @@ input UserUpdateWithoutPointATestsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26724,6 +27086,7 @@ input UserUpdateWithoutPointsADataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26788,6 +27151,7 @@ input UserUpdateWithoutPostsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26852,6 +27216,7 @@ input UserUpdateWithoutProblemResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26916,6 +27281,7 @@ input UserUpdateWithoutProblemsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -26980,6 +27346,7 @@ input UserUpdateWithoutQuizesDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27044,6 +27411,7 @@ input UserUpdateWithoutQuizResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27108,6 +27476,7 @@ input UserUpdateWithoutRatingsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27172,6 +27541,7 @@ input UserUpdateWithoutSandboxPageGoalsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
@@ -27236,6 +27606,7 @@ input UserUpdateWithoutSandboxPagesDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
   tests: TestUpdateManyWithoutUserInput
@@ -27300,6 +27671,7 @@ input UserUpdateWithoutShotResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27364,6 +27736,7 @@ input UserUpdateWithoutShotsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27428,6 +27801,7 @@ input UserUpdateWithoutStatementsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27492,6 +27866,7 @@ input UserUpdateWithoutStudentFeedbackDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27556,6 +27931,7 @@ input UserUpdateWithoutTeacherFeedbackDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27620,6 +27996,7 @@ input UserUpdateWithoutTestResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27684,6 +28061,7 @@ input UserUpdateWithoutTestsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27748,6 +28126,7 @@ input UserUpdateWithoutTextEditorDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27812,6 +28191,7 @@ input UserUpdateWithoutTextEditorResultsDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27875,6 +28255,7 @@ input UserUpdateWithoutUniDataInput {
   new_subjects: CoursePageUpdateManyWithoutNew_studentsInput
   permissions: UserUpdatepermissionsInput
   coursePages: CoursePageUpdateManyWithoutUserInput
+  co_coursePages: CoursePageUpdateManyWithoutAuthorsInput
   sandboxPages: SandboxPageUpdateManyWithoutUserInput
   sandboxPageGoals: SandboxPageGoalUpdateManyWithoutUserInput
   lessons: LessonUpdateManyWithoutUserInput
@@ -27913,6 +28294,11 @@ input UserUpdateWithoutUniDataInput {
   challengeResults: ChallengeResultUpdateManyWithoutStudentInput
   level: UserLevelUpdateOneWithoutUserInput
   interests: UserUpdateinterestsInput
+}
+
+input UserUpdateWithWhereUniqueWithoutCo_coursePagesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutCo_coursePagesDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutCompanyInput {
@@ -28123,6 +28509,12 @@ input UserUpsertWithoutTextEditorInput {
 input UserUpsertWithoutTextEditorResultsInput {
   update: UserUpdateWithoutTextEditorResultsDataInput!
   create: UserCreateWithoutTextEditorResultsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCo_coursePagesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutCo_coursePagesDataInput!
+  create: UserCreateWithoutCo_coursePagesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutCompanyInput {
@@ -28337,6 +28729,9 @@ input UserWhereInput {
   coursePages_every: CoursePageWhereInput
   coursePages_some: CoursePageWhereInput
   coursePages_none: CoursePageWhereInput
+  co_coursePages_every: CoursePageWhereInput
+  co_coursePages_some: CoursePageWhereInput
+  co_coursePages_none: CoursePageWhereInput
   sandboxPages_every: SandboxPageWhereInput
   sandboxPages_some: SandboxPageWhereInput
   sandboxPages_none: SandboxPageWhereInput
