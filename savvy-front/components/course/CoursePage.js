@@ -127,6 +127,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         name
         surname
         status
+        image
         company {
           id
           name
@@ -552,6 +553,7 @@ class CoursePage extends Component {
                                         Оценка курса учениками: <b>{average}</b>
                                       </div>
                                     ) : null}
+                                    {console.log(coursePage.authors)}
                                     {coursePage.authors ? (
                                       coursePage.authors.map((a) => (
                                         <div className="name">
