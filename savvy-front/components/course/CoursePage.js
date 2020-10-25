@@ -538,7 +538,7 @@ class CoursePage extends Component {
                             <Container>
                               <LessonImage
                                 src={
-                                  "https://cdn.pixabay.com/photo/2014/01/30/18/26/singapore-river-255116_1280.jpg"
+                                  "https://cdn.pixabay.com/photo/2016/05/24/16/48/mountains-1412683_1280.png"
                                 }
                               />
                               <LessonStyles>

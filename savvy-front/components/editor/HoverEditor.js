@@ -79,7 +79,11 @@ const rules = [
             return <p className={obj.data.get("className")}>{children}</p>;
           case "image":
             return (
-              <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
+              <img
+                data="data-three"
+                src={obj.data._root.entries[0][1]}
+                alt="caption_goes_here"
+              />
             );
         }
       }
@@ -118,10 +122,6 @@ const rules = [
         return;
       }
       const type = INLINE_TAGS[el.tagName.toLowerCase()];
-      console.log(type);
-      console.log(
-        Array.from(el.attributes).find(({ name }) => name == "data").value
-      );
 
       if (type) {
         return {
@@ -147,8 +147,6 @@ const rules = [
       }
     },
     serialize: function (object, children) {
-      console.log(object.object);
-
       if (object.object == "inline") {
         switch (object.type) {
           case "input":
@@ -457,7 +455,8 @@ class HoveringMenu extends React.Component {
       case "paragraph":
         return <p {...attributes}>{children}</p>;
       case "image": {
-        const src = node.data.get("src");
+        // console.log(node.data._root.entries[0][1]);
+        const src = node.data._root.entries[0][1];
         return <Img {...attributes} src={src} />;
       }
       default: {

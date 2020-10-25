@@ -77,10 +77,10 @@ const TextBar = styled.div`
     max-width: 70%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
     p {
-      margin: 0;
+      margin: 5px 0;
     }
     img {
       width: 100%;
@@ -148,10 +148,10 @@ const Question = styled.div`
     max-width: 70%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
     p {
-      margin: 0;
+      margin: 5px 0;
     }
     img {
       width: 100%;
