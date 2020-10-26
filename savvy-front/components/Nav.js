@@ -5,13 +5,12 @@ import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import User from "./User";
-import Menu from "./Menu";
 import Signup from "./auth/Signup";
 import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
 import { IoMdMenu } from "react-icons/io";
-// import { i18n, withTranslation } from "../i18n";
+import { i18n, withTranslation } from "../i18n";
 
 const ALL_COURSE_PAGES_QUERY = gql`
   query ALL_COURSE_PAGES_QUERY {
@@ -276,7 +275,7 @@ class Nav extends Component {
     });
   };
   render() {
-    // console.log(i18n.language);
+    console.log(i18n.language);
     return (
       <User>
         {({ data: { me } }) => {
@@ -291,18 +290,16 @@ class Nav extends Component {
                 <>
                   <StyledHeader>
                     <CourseMenu>
-                      <Link prefetch href="/">
+                      <Link href="/">
                         <div className="logo">
                           <a>BeSavvy</a>
                         </div>
                       </Link>
 
-                      <Link prefetch href="/blog">
+                      <Link href="/blog">
                         <div>
-                          <a>
-                            {/* {this.props.t("blof")} */}
-                            Блог
-                          </a>
+                          {console.log(this.props.t)}
+                          <a>{this.props.t("blog")}</a>
                         </div>
                       </Link>
                       {me && me !== null ? (
@@ -310,30 +307,21 @@ class Nav extends Component {
                           {me.status && me.status === "AUTHOR" && (
                             <Link prefetch href="/educator">
                               <div>
-                                <a>
-                                  {/* {this.props.t("my")} */}
-                                  Мои курсы
-                                </a>
+                                <a>{this.props.t("my")}</a>
                               </div>
                             </Link>
                           )}
                           {me.status && me.status === "HR" && (
                             <Link prefetch href="/educator">
                               <div>
-                                <a>
-                                  {/* {this.props.t("my")} */}
-                                  Мои курсы
-                                </a>
+                                <a>{this.props.t("my")}</a>
                               </div>
                             </Link>
                           )}
                           {me.status && me.status === "SAVVY_AUTHOR" && (
                             <Link prefetch href="/educator">
                               <div>
-                                <a>
-                                  {/* {this.props.t("my")} */}
-                                  Мои курсы
-                                </a>
+                                <a>{this.props.t("my")}</a>
                               </div>
                             </Link>
                           )}
@@ -341,7 +329,7 @@ class Nav extends Component {
                       ) : null}
                     </CourseMenu>
                     <UserData>
-                      {/* <div className="imgGroup">
+                      <div className="imgGroup">
                         <div className="img">
                           <img
                             src="../../static/uk.svg"
@@ -354,7 +342,7 @@ class Nav extends Component {
                             onClick={() => i18n.changeLanguage("ru")}
                           />
                         </div>
-                      </div> */}
+                      </div>
                       {me ? (
                         <Link
                           href={{
@@ -372,10 +360,7 @@ class Nav extends Component {
                       {me ? <Signout /> : null}
                       {!me && (
                         <Button onClick={this.toggleModal}>
-                          <a>
-                            {/* {this.props.t("blof")} */}
-                            Войти
-                          </a>
+                          <a>{this.props.t("signin")}</a>
                         </Button>
                       )}
                     </UserData>
@@ -425,8 +410,8 @@ class Nav extends Component {
                       {!me && (
                         <Button onClick={this.toggleModal}>
                           <a>
-                            {/* {this.props.t("signup")} */}
-                            Войти
+                            {this.props.t("signup")}
+                            {/* Войти */}
                           </a>
                         </Button>
                       )}
@@ -445,10 +430,7 @@ class Nav extends Component {
                       {me && me.status === "AUTHOR" && (
                         <Link prefetch href="/educator">
                           <button onClick={this.closeNav}>
-                            <a>
-                              {/* {this.props.t("blof")} */}
-                              Мли курсы
-                            </a>
+                            <a>{this.props.t("blog")}</a>
                           </button>
                         </Link>
                       )}
@@ -456,8 +438,8 @@ class Nav extends Component {
                         <Link prefetch href="/educator">
                           <button onClick={this.closeNav}>
                             <a>
-                              {/* {this.props.t("blof")} */}
-                              Мои курсы
+                              {this.props.t("my")}
+                              {/* Мои курсы */}
                             </a>
                           </button>
                         </Link>
@@ -469,8 +451,8 @@ class Nav extends Component {
                       >
                         <button onClick={this.closeNav}>
                           <a>
-                            {/* {this.props.t("blof")} */}
-                            Курсы
+                            {this.props.t("my")}
+                            {/* Курсы */}
                           </a>
                         </button>
                       </Link>
@@ -481,8 +463,8 @@ class Nav extends Component {
                       >
                         <button onClick={this.closeNav}>
                           <a>
-                            {/* {this.props.t("blof")} */}
-                            Блог
+                            {this.props.t("blog")}
+                            {/* Блог */}
                           </a>
                         </button>
                       </Link>
@@ -520,5 +502,4 @@ class Nav extends Component {
   }
 }
 
-// export default withTranslation("common")(Nav);
-export default Nav;
+export default withTranslation("common")(Nav);

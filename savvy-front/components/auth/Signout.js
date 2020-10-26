@@ -3,7 +3,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { CURRENT_USER_QUERY } from "../User";
-// import { withTranslation } from "../../i18n";
+import { withTranslation } from "../../i18n";
 
 const SIGN_OUT_MUTATION = gql`
   mutation SIGN_OUT_MUTATION {
@@ -34,11 +34,10 @@ const Signout = (props) => (
   >
     {(signout) => (
       <Button onClick={signout}>
-        <a>Выйти</a>
+        <a>{props.t("signout")}</a>
       </Button>
     )}
   </Mutation>
 );
 
-export default Signout;
-// export default withTranslation("common")(Signout);
+export default withTranslation("common")(Signout);

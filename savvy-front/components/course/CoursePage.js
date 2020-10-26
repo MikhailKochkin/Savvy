@@ -264,7 +264,7 @@ const Header = styled.span`
   box-decoration-break: clone;
   line-height: 1.8;
   font-weight: bold;
-  background: #ffe066;
+  background: #ffdad7;
   transform: skew(-5deg);
   -webkit-transform: skew(-5deg);
   -moz-transform: skew(-5deg);
@@ -554,7 +554,7 @@ class CoursePage extends Component {
                                       </div>
                                     ) : null}
                                     {console.log(coursePage.authors)}
-                                    {coursePage.authors ? (
+                                    {coursePage.authors.length > 0 ? (
                                       coursePage.authors.map((a) => (
                                         <div className="name">
                                           <img src={a.image} />

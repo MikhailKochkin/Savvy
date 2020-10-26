@@ -4,13 +4,13 @@ const withOptimizedImages = require("next-optimized-images");
 
 module.exports = withOptimizedImages();
 
-// const { nextI18NextRewrites } = require("next-i18next/rewrites");
+const { nextI18NextRewrites } = require("next-i18next/rewrites");
 
-// const localeSubpaths = {};
+const localeSubpaths = {};
 
-// module.exports = {
-//   rewrites: async () => nextI18NextRewrites(localeSubpaths),
-//   publicRuntimeConfig: {
-//     localeSubpaths,
-//   },
-// };
+module.exports = {
+  rewrites: async () => nextI18NextRewrites(localeSubpaths),
+  publicRuntimeConfig: {
+    localeSubpaths,
+  },
+};

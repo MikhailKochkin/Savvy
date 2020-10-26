@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Course from "../Course";
 import LoadingDummy from "../LoadingDummy";
 import { element } from "prop-types";
-// import { i18n, withTranslation } from "../../../i18n";
+import { i18n, withTranslation } from "../../../i18n";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
@@ -109,7 +109,7 @@ const Message = styled.div`
 const ShownCourses = (props) => {
   return (
     <Styles>
-      <Header>Вам могут быть интересны:</Header>
+      <Header>{props.t("interest")}</Header>
       <Container>
         <Query query={COURSE_PAGES_QUERY} fetchPolicy="cache-first">
           {({ data, error, loading }) => {
@@ -166,5 +166,5 @@ const ShownCourses = (props) => {
   );
 };
 
-// export default withTranslation("Search")(ShownCourses);
-export default ShownCourses;
+export default withTranslation("Search")(ShownCourses);
+// export default ShownCourses;

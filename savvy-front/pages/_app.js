@@ -1,7 +1,7 @@
 import React from "react";
 import App from "next/app";
 import { createGlobalStyle } from "styled-components";
-// import { appWithTranslation } from "../i18n";
+import { appWithTranslation } from "../i18n";
 import { ApolloProvider } from "react-apollo";
 import Page from "../components/Page";
 import withData from "../lib/withData";
@@ -78,5 +78,4 @@ class MyApp extends App {
   }
 }
 
-// export default appWithTranslation(withData(MyApp));
-export default withData(MyApp);
+export default appWithTranslation(withData(MyApp));
