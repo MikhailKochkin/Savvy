@@ -185,7 +185,7 @@ export default class Course extends Component {
                   {coursePage.authors.length > 0 ? (
                     <div className="name">
                       {coursePage.authors.map((a, i) => (
-                        <span>
+                        <span key={i + "dfdg"}>
                           {a.name[0].toUpperCase()}. {a.surname}
                           {i + 1 === coursePage.authors.length ? " " : ", "}
                         </span>
@@ -200,7 +200,7 @@ export default class Course extends Component {
                     {coursePage.authors.length > 0 ? (
                       <>
                         {coursePage.authors.map((a, i) => (
-                          <span>
+                          <span key={i + "sdfgv"}>
                             {a.company.name}
                             {i + 1 === coursePage.authors.length ? " " : ", "}
                           </span>

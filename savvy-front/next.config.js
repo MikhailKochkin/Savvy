@@ -1,8 +1,8 @@
 // next.config.js
 const withOptimizedImages = require("next-optimized-images");
-const withCSS = require("@zeit/next-css");
+// const withCSS = require("@zeit/next-css");
 
-module.exports = withOptimizedImages(withCSS());
+module.exports = withOptimizedImages();
 
 // const { nextI18NextRewrites } = require("next-i18next/rewrites");
 
