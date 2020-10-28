@@ -40,11 +40,11 @@ class Problem extends Component {
     }
   }
   render() {
-    let students_who_completed = this.props.students.filter(
-      (s) =>
-        s.problemResults.filter((p) => p.problem.id === this.props.problem.id)
-          .length > 0
-    );
+    // let students_who_completed = this.props.students.filter(
+    //   (s) =>
+    //     s.problemResults.filter((p) => p.problem.id === this.props.problem.id)
+    //       .length > 0
+    // );
     return (
       <Styles>
         <b>Задача {this.props.index}.</b>
@@ -53,7 +53,13 @@ class Problem extends Component {
           <b>Решения:</b>
         </div>
         <ol>
-          {students_who_completed.map((s) => (
+          {this.props.problem.problemResults.map((p, i) => (
+            <div>
+              {i + 1}. {p.student.name}
+              {p.student.surname}:{renderHTML(p.answer)}
+            </div>
+          ))}
+          {/* {students_who_completed.map((s) => (
             <li>
               <StudentProblemResult
                 coursePage={this.props.coursePage}
@@ -63,7 +69,7 @@ class Problem extends Component {
                 components={this.state.components}
               />
             </li>
-          ))}
+          ))} */}
         </ol>
       </Styles>
     );

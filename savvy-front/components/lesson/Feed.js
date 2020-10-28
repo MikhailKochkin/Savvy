@@ -10,6 +10,7 @@ import Link from "next/link";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   display: flex;
@@ -173,11 +174,11 @@ const Feed = (props) => {
           }}
         />
         <div>
-          {num + 1} из {props.components.length}
+          {num + 1} {props.t("out")} {props.components.length}
         </div>
         {/* {props.components.length > num + 1 && ( */}
         <Search>
-          Перейти к разделу:
+          {props.t("another_section")}
           <select
             id="num"
             name="num"
@@ -228,7 +229,7 @@ const Feed = (props) => {
                               console.log(1);
                             }}
                           >
-                            Следующий урок
+                            {props.t("next_lesson")}
                           </Button>
                         </a>
                       </Link>
@@ -269,7 +270,7 @@ const Feed = (props) => {
                               console.log(2);
                             }}
                           >
-                            Следующий урок
+                            {props.t("next_lesson")}
                           </Button>
                         </a>
                       </Link>
@@ -284,4 +285,4 @@ const Feed = (props) => {
   );
 };
 
-export default Feed;
+export default withTranslation("story")(Feed);

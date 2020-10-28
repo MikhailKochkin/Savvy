@@ -1,12 +1,172 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
-// import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import moment from "moment";
 import LessonData from "./LessonData";
+
+// const SINGLE_STUDENT_RESULTS_QUERY = gql`
+//   query SINGLE_STUDENT_RESULTS_QUERY($id: ID!) {
+//     user(where: { new_subjects_some: {id : id} }) {
+//       id
+//       # title
+//       # courseType
+//       # new_students {
+//       #   id
+//       #   name
+//       #   surname
+//       #   email
+//       #   resume
+//       #   coverLetter
+//       #   courseVisits {
+//       #     id
+//       #     reminders
+//       #     visitsNumber
+//       #     coursePage {
+//       #       id
+//       #     }
+//       #   }
+//         # studentFeedback {
+//         #   id
+//         #   text
+//         #   lesson {
+//         #     id
+//         #   }
+//         #   createdAt
+//         # }
+//         # lessonResults {
+//         #   id
+//         #   visitsNumber
+//         #   lesson {
+//         #     id
+//         #   }
+//         #   student {
+//         #     id
+//         #     email
+//         #   }
+//         #   createdAt
+//         #   updatedAt
+//         # }
+//         # problemResults {
+//         #   id
+//         #   answer
+//         #   lesson {
+//         #     id
+//         #   }
+//         #   revealed
+//         #   problem {
+//         #     id
+//         #     text
+//         #     lesson {
+//         #       id
+//         #     }
+//         #   }
+//         # }
+//         # testResults {
+//         #   id
+//         #   answer
+//         #   test {
+//         #     id
+//         #     question
+//         #   }
+//         #   student {
+//         #     id
+//         #   }
+//         # }
+//         # quizResults {
+//         #   id
+//         #   student {
+//         #     id
+//         #   }
+//         #   quiz {
+//         #     id
+//         #   }
+//         #   answer
+//         # }
+//         # documentResults {
+//         #   id
+//         #   user {
+//         #     id
+//         #   }
+//         #   document {
+//         #     id
+//         #   }
+//         #   answers
+//         #   drafts
+//         #   createdAt
+//         # }
+//       }
+//       # examQuestion {
+//       #   id
+//       #   question
+//       #   answers {
+//       #     id
+//       #     answer
+//       #     student {
+//       #       id
+//       #       name
+//       #     }
+//       #   }
+//       # }
+//       # lessons {
+//       #   id
+//       #   text
+//       #   name
+//       #   number
+//       #   structure
+//       #   coursePage {
+//       #     id
+//       #   }
+//       #   forum {
+//       #     id
+//       #   }
+//       #   newTests {
+//       #     id
+//       #     question
+//       #     answers
+//       #     correct
+//       #     next
+//       #   }
+//       #   quizes {
+//       #     id
+//       #     question
+//       #     answer
+//       #     next
+//       #   }
+//       #   documents {
+//       #     id
+//       #     title
+//       #   }
+//       #   notes {
+//       #     id
+//       #     text
+//       #     next
+//       #   }
+//       #   problems {
+//       #     id
+//       #     text
+//       #     nodeID
+//       #     nodeType
+//       #   }
+//       #   texteditors {
+//       #     id
+//       #     text
+//       #     totalMistakes
+//       #   }
+//       #   constructions {
+//       #     id
+//       #     name
+//       #     variants
+//       #     answer
+//       #   }
+//       #   user {
+//       #     id
+//       #   }
+//       # }
+//     }
+//   }
+// `;
 
 const UPDATE_COURSE_VISIT_MUTATION = gql`
   mutation UPDATE_COURSE_VISIT_MUTATION($id: ID!, $reminders: [DateTime]) {
@@ -286,34 +446,6 @@ class Person extends Component {
                   }}
                 </Mutation>
               )}
-
-              {/* {courseVisit && (
-                <Mutation
-                  mutation={UPDATE_FINISH_MUTATION}
-                  variables={{
-                    id: courseVisit.id,
-                    reminders: new Date(),
-                  }}
-                >
-                  {(updateFinish, { loading, error }) => {
-                    return (
-                      <SendButton
-                        onClick={(e) => {
-                          const data = updateFinish();
-                        }}
-                      >
-                        Закончить
-                      </SendButton>
-                    );
-                  }}
-                </Mutation>
-              )} */}
-              {/* <SendButton onClick={this.onSwitch} name="CV">
-                CV
-              </SendButton>
-              <SendButton onClick={this.onSwitch} name="resume">
-                Резюме
-              </SendButton> */}
               <SendButton name="mail">
                 <a href={mail}>Написать</a>
               </SendButton>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import MakePublic from "../MakePublic";
+import { withTranslation } from "../../../i18n";
 
 const Payment = styled.div`
   background: #ffffff;
@@ -73,7 +74,7 @@ class TeacherCard extends Component {
     const { id, coursePage } = this.props;
     return (
       <Payment>
-        <Header>Инструменты преподавателя</Header>
+        <Header>{this.props.t("tools")}</Header>
         <Buttons>
           <Link
             href={{
@@ -82,7 +83,7 @@ class TeacherCard extends Component {
             }}
           >
             <a>
-              <Button>Составить урок</Button>
+              <Button>{this.props.t("create")}</Button>
             </a>
           </Link>
           <Link
@@ -92,7 +93,7 @@ class TeacherCard extends Component {
             }}
           >
             <a>
-              <Button>Изменить</Button>
+              <Button>{this.props.t("change")}</Button>
             </a>
           </Link>
           <MakePublic published={coursePage.published} id={coursePage.id} />
@@ -106,28 +107,13 @@ class TeacherCard extends Component {
             }}
           >
             <a>
-              <Button2>Результаты</Button2>
+              <Button2>{this.props.t("results")}</Button2>
             </a>
           </Link>
-          {coursePage.courseType === "PEIVATE" && (
-            <Link
-              href={{
-                pathname: "/analytics",
-                query: {
-                  id,
-                  name: "applications",
-                },
-              }}
-            >
-              <a>
-                <Button2>Заявки</Button2>
-              </a>
-            </Link>
-          )}
         </Buttons>
       </Payment>
     );
   }
 }
 
-export default TeacherCard;
+export default withTranslation("course")(TeacherCard);

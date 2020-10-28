@@ -5,6 +5,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Applications from "./applications/Applications";
 import Exercises from "./Exercises";
+import Loading from "../Loading";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
@@ -48,66 +49,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           createdAt
           updatedAt
         }
-        problemResults {
-          id
-          answer
-          lesson {
-            id
-          }
-          revealed
-          problem {
-            id
-            text
-            lesson {
-              id
-            }
-          }
-        }
-        testResults {
-          id
-          answer
-          test {
-            id
-            question
-          }
-          student {
-            id
-          }
-        }
-        quizResults {
-          id
-          student {
-            id
-          }
-          quiz {
-            id
-          }
-          answer
-        }
-        documentResults {
-          id
-          user {
-            id
-          }
-          document {
-            id
-          }
-          answers
-          drafts
-          createdAt
-        }
-      }
-      examQuestion {
-        id
-        question
-        answers {
-          id
-          answer
-          student {
-            id
-            name
-          }
-        }
       }
       lessons {
         id
@@ -127,16 +68,54 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           answers
           correct
           next
+          testResults {
+            id
+            answer
+            test {
+              id
+              question
+            }
+            student {
+              id
+              name
+              surname
+            }
+          }
         }
         quizes {
           id
           question
           answer
           next
+          quizResults {
+            id
+            correct
+            student {
+              id
+              name
+              surname
+            }
+            quiz {
+              id
+            }
+            answer
+          }
         }
         documents {
           id
           title
+          documentResults {
+            id
+            user {
+              id
+            }
+            document {
+              id
+            }
+            answers
+            drafts
+            createdAt
+          }
         }
         notes {
           id
@@ -148,6 +127,26 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           text
           nodeID
           nodeType
+          problemResults {
+            id
+            answer
+            lesson {
+              id
+            }
+            student {
+              id
+              name
+              surname
+            }
+            revealed
+            # problem {
+            #   id
+            #   text
+            #   lesson {
+            #     id
+            #   }
+            # }
+          }
         }
         texteditors {
           id
@@ -222,7 +221,7 @@ const Container = styled.div`
 `;
 
 const DynamicUserAnalytics = dynamic(import("./UserAnalytics"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <Loading />,
   ssr: false,
 });
 
@@ -241,68 +240,70 @@ class Analytics extends Component {
     return (
       <>
         <div id="root" />
-        <Query
-          query={SINGLE_COURSEPAGE_QUERY}
-          variables={{
-            id: this.props.id,
-          }}
-        >
-          {({ data: data2, error: error2, loading: loading2 }) => {
-            if (loading2) return <p>Loading...</p>;
-            if (error2) return <p>Ошибка!</p>;
-            let coursePage = data2.coursePage;
-            return (
-              <Styles>
-                <Container>
-                  <div className="menu">
-                    <div
-                      className="button"
-                      name="student_results"
-                      onClick={this.onSwitch}
-                    >
-                      Студенты{" "}
-                    </div>
-                    <div
-                      className="button"
-                      name="exercises_results"
-                      onClick={this.onSwitch}
-                    >
-                      Задания{" "}
-                    </div>
-                    {coursePage.courseType !== "FORMONEY" && (
-                      <div
-                        className="button"
-                        name="applications"
-                        onClick={this.onSwitch}
-                      >
-                        Заявки
-                      </div>
-                    )}
-                  </div>
-                  <div className="data">
-                    {this.state.page === "student_results" && (
-                      <DynamicUserAnalytics
-                        coursePageID={coursePage.id}
-                        lessons={coursePage.lessons}
-                        students={coursePage.new_students}
-                      />
-                    )}
-                    {this.state.page === "exercises_results" && (
-                      <Exercises
-                        lessons={coursePage.lessons}
-                        students={coursePage.new_students}
-                      />
-                    )}
-                    {this.state.page === "applications" &&
-                      coursePage.courseType !== "FORMONEY" && (
-                        <Applications id={coursePage.id} />
+        <Styles>
+          <Container>
+            <div className="menu">
+              <div
+                className="button"
+                name="student_results"
+                onClick={this.onSwitch}
+              >
+                Студенты{" "}
+              </div>
+              <div
+                className="button"
+                name="exercises_results"
+                onClick={this.onSwitch}
+              >
+                Задания{" "}
+              </div>
+              <div
+                className="button"
+                name="applications"
+                onClick={this.onSwitch}
+              >
+                Заявки
+              </div>
+            </div>
+            <div className="data">
+              <Query
+                query={SINGLE_COURSEPAGE_QUERY}
+                variables={{
+                  id: this.props.id,
+                }}
+              >
+                {({ data: data2, error: error2, loading: loading2 }) => {
+                  if (loading2) return <Loading />;
+                  if (error2) return <p>Ошибка!</p>;
+                  let coursePage = data2.coursePage;
+                  console.log(coursePage);
+                  return (
+                    <>
+                      {this.state.page === "student_results" && (
+                        <DynamicUserAnalytics
+                          coursePageID={coursePage.id}
+                          lessons={coursePage.lessons}
+                          students={coursePage.new_students}
+                        />
                       )}
-                  </div>
-                </Container>
-              </Styles>
-            );
-          }}
-        </Query>
+                      {this.state.page === "exercises_results" && (
+                        <Exercises
+                          lessons={coursePage.lessons}
+                          students={coursePage.new_students}
+                        />
+                      )}
+                      {/* 
+                      {this.state.page === "applications" &&
+                        coursePage.courseType !== "FORMONEY" && (
+                          <Applications id={coursePage.id} />
+                        )} */}
+                    </>
+                  );
+                }}
+              </Query>
+            </div>
+          </Container>
+        </Styles>
       </>
     );
   }

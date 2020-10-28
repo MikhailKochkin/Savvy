@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies, Tracks } from "../../config";
+import { withTranslation } from "../../i18n";
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -198,13 +199,13 @@ const Signup = (props) => {
             aria-busy={loading}
             className={classes.root}
           >
-            <Title>Зарегистрируйтесь на BeSavvy App</Title>
+            <Title>{props.t("header2")}</Title>
             <Error error={error} />
             <Input
               className="name"
               type="text"
               name="name"
-              placeholder="Имя"
+              placeholder={props.t("name")}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -212,7 +213,7 @@ const Signup = (props) => {
               className="surname"
               type="text"
               name="surname"
-              placeholder="Фамилия"
+              placeholder={props.t("surname")}
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
             />
@@ -220,7 +221,7 @@ const Signup = (props) => {
               className="email"
               type="email"
               name="email"
-              placeholder="Почта"
+              placeholder={props.t("mail")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               label="Электронная почта"
@@ -229,12 +230,12 @@ const Signup = (props) => {
               className="password"
               type="password"
               name="password"
-              placeholder="Пароль"
+              placeholder={props.t("password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               label="Пароль"
             />
-            <div className="condition">Выберите ваш статутс на сайте:</div>
+            <div className="condition">{props.t("status")}</div>
             <TextField
               className={classes.root}
               InputLabelProps={{
@@ -249,17 +250,17 @@ const Signup = (props) => {
               onChange={(e) => setStatus(e.target.value)}
             >
               <MenuItem key="STUDENT" value="STUDENT">
-                Студент
+                {props.t("student")}
               </MenuItem>
               <MenuItem key="LAWYER" value="LAWYER">
-                Юрист
+                {props.t("lawyer")}
               </MenuItem>
               <MenuItem key="AUTHOR" value="AUTHOR">
-                Преподаватель
+                {props.t("author")}
               </MenuItem>
-              <MenuItem key="HR" value="HR">
+              {/* <MenuItem key="HR" value="HR">
                 HR
-              </MenuItem>
+              </MenuItem> */}
             </TextField>
 
             {(status === "HR" || status === "AUTHOR") && (
@@ -348,9 +349,7 @@ const Signup = (props) => {
                 </TextField>
               </>
             )}
-            <div className="condition">
-              Согласие на обработку персональных данных:
-            </div>
+            <div className="condition">{props.t("privacy")} </div>
             <TextField
               name="isFamiliar"
               className="isFamiliar"
@@ -367,7 +366,7 @@ const Signup = (props) => {
               onChange={(e) => setIsFamiliar(e.target.value)}
             >
               <MenuItem key={23425} value={true}>
-                Да
+                {props.t("yes")}
               </MenuItem>
             </TextField>
             <Button
@@ -376,12 +375,12 @@ const Signup = (props) => {
               color="primary"
               className={classes.button}
             >
-              {loading ? "Регистрируюсь" : "Зарегистрироваться"}
+              {loading ? props.t("signing_up") : props.t("sign_up")}
             </Button>
             <Transit>
-              У вас уже есть аккаунт на Savvy App?{" "}
+              {props.t("already_member")}
               <span name="signin" onClick={move}>
-                Войти
+                {props.t("sign_in")}
               </span>
             </Transit>
           </Fieldset>
@@ -391,5 +390,5 @@ const Signup = (props) => {
   );
 };
 
-export default Signup;
+export default withTranslation("signup")(Signup);
 export { SIGNUP_MUTATION };

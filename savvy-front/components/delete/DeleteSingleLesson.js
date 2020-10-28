@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import Router from "next/router";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import { withTranslation } from "../../i18n";
 
 const DELETE_LESSON_MUTATION = gql`
   mutation DELETE_LESSON_MUTATION($id: ID!) {
@@ -53,25 +54,25 @@ class DeleteSingleLesson extends Component {
         refetchQueries={() => [
           {
             query: SINGLE_COURSEPAGE_QUERY,
-            variables: { id: this.props.coursePageID }
-          }
+            variables: { id: this.props.coursePageID },
+          },
         ]}
       >
         {(DeleteSandbox, { error }) => (
           <Button
             onClick={() => {
               if (confirm("Вы точно хотите удалить этот урок?")) {
-                DeleteSandbox().catch(error => {
+                DeleteSandbox().catch((error) => {
                   alert(error.message);
                 });
                 Router.push({
                   pathname: "/coursePage",
-                  query: { id: this.props.coursePageID }
+                  query: { id: this.props.coursePageID },
                 });
               }
             }}
           >
-            <Delete id="remove">Удалить урок</Delete>
+            <Delete id="remove">{this.props.t("delete_lesson")}</Delete>
           </Button>
         )}
       </Mutation>
@@ -79,4 +80,4 @@ class DeleteSingleLesson extends Component {
   }
 }
 
-export default DeleteSingleLesson;
+export default withTranslation("draft")(DeleteSingleLesson);

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import Modal from "styled-react-modal";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
-import Modal from "styled-react-modal";
+import { withTranslation } from "../../../i18n";
 
 const Payment = styled.div`
   display: flex;
@@ -96,12 +97,12 @@ class RegisterCard extends Component {
     return (
       <>
         <Payment>
-          <Header>
-            👏🏻Мы восхищаемся вашим стремлением узнать что-то новое!
-          </Header>
-          Но, пожалуйста, войдите в свой аккаунт или зарегистрируйтесь на сайте,
-          чтобы получить <span>доступ к открытым урокам.</span>{" "}
-          <SmallButton onClick={this.toggleModal}>Войти</SmallButton>
+          <Header>{this.props.t("you_are_great")}</Header>
+          {this.props.t("signin2")}
+          <span>{this.props.t("access2")}</span>{" "}
+          <SmallButton onClick={this.toggleModal}>
+            {this.props.t("signin")}
+          </SmallButton>
         </Payment>
         <StyledModal
           isOpen={this.state.isOpen}
@@ -123,4 +124,4 @@ class RegisterCard extends Component {
   }
 }
 
-export default RegisterCard;
+export default withTranslation("course")(RegisterCard);

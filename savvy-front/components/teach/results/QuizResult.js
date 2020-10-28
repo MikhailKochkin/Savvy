@@ -43,11 +43,18 @@ class QuizResult extends Component {
               </div>
               <div className="column">{`Правильный ответ: ${q.answer}`}</div>
               <div className="column">
-                {student.quizResults.filter((t) => t.quiz.id === q.id).length >
-                0 ? (
-                  student.quizResults
-                    .filter((t) => t.quiz.id === q.id)
-                    .map((t) => <li>{t.answer}</li>)
+                <div>Полученные ответы:</div>
+                {q.quizResults.filter((t) => t.student.id === student.id)
+                  .length > 0 ? (
+                  q.quizResults
+                    .filter((t) => t.student.id === student.id)
+                    .map((t) => (
+                      <li>
+                        {t.answer}{" "}
+                        {t.correct && (t.correct ? "Правильно" : "Неверно")}
+                        {console.log(t)}
+                      </li>
+                    ))
                 ) : (
                   <span>Не выполнен</span>
                 )}

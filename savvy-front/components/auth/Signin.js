@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
+import { withTranslation } from "../../i18n";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -111,7 +112,7 @@ const Signin = (props) => {
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>Войдите на BeSavvy App</Title>
+            <Title>{props.t("header")}</Title>
             <Error error={error} />
             <Input
               type="email"
@@ -119,7 +120,7 @@ const Signin = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               id="standard-basic"
               name="email"
-              placeholder="Электронная почта"
+              placeholder={props.t("mail")}
               label="Электронная почта"
             />
             <Input
@@ -127,7 +128,7 @@ const Signin = (props) => {
               name="password"
               label="Пароль"
               value={password}
-              placeholder="Пароль"
+              placeholder={props.t("password")}
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
@@ -136,17 +137,17 @@ const Signin = (props) => {
               color="primary"
               className={classes.button}
             >
-              {loading ? "Вхожу" : "Войти"}
+              {loading ? props.t("signing_in") : props.t("sign_in")}
             </Button>
             <Transit>
               <div>
                 <span name="reset" onClick={change}>
-                  Забыли пароль?
+                  {props.t("forgot")}
                 </span>
               </div>
-              Ещё не зарегистрированы на Savvy?{" "}
+              {props.t("not_member")}
               <span name="signup" onClick={change}>
-                Зарегистрироваться
+                {props.t("create")}
               </span>
             </Transit>
           </Fieldset>
@@ -156,5 +157,5 @@ const Signin = (props) => {
   );
 };
 
-export default Signin;
+export default withTranslation("signup")(Signin);
 export { SIGNIN_MUTATION };

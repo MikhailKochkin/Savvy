@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Problem from "./Problem";
 import Document from "./Document";
+import Test from "./Test";
+import Quiz from "./Quiz";
 
 const Styles = styled.div`
   margin: 0 1%;
@@ -53,6 +55,27 @@ const Section = (props) => {
       </div>
       {reveal && (
         <>
+          {props.lesson.newTests &&
+            props.lesson.newTests.map((p, i) => (
+              <Test
+                index={i + 1}
+                coursePage={props.lesson.coursePage.id}
+                test={p}
+                students={props.students}
+                lesson={props.lesson.id}
+              />
+            ))}
+          {props.lesson.quizes &&
+            props.lesson.quizes.map((p, i) => (
+              <Quiz
+                index={i + 1}
+                coursePage={props.lesson.coursePage.id}
+                quiz={p}
+                students={props.students}
+                lesson={props.lesson.id}
+              />
+            ))}
+          {console.log(props.lesson.problems)}
           {props.lesson.problems &&
             props.lesson.problems.map((p, i) => (
               <Problem
@@ -64,7 +87,7 @@ const Section = (props) => {
                 lesson={props.lesson.id}
               />
             ))}
-          {props.lesson.documents &&
+          {/* {props.lesson.documents &&
             props.lesson.documents.map((d, i) => (
               <Document
                 index={i + 1}
@@ -73,7 +96,7 @@ const Section = (props) => {
                 students={props.students}
                 lesson={props.lesson.id}
               />
-            ))}
+            ))} */}
         </>
       )}
     </Styles>

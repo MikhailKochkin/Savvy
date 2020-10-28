@@ -75,10 +75,10 @@ class ProblemModal extends Component {
             <div>Открытые подсказки:</div>
 
             <div>
-              {student.problemResults.filter((t) => t.problem.id === problem.id)
+              {problem.problemResults.filter((t) => t.student.id === student.id)
                 .length > 0 ? (
-                student.problemResults
-                  .filter((t) => t.problem.id === problem.id)[0]
+                problem.problemResults
+                  .filter((t) => t.student.id === student.id)[0]
                   .revealed.map((t) => <li>{t}</li>)
               ) : (
                 <span>Не выполнена</span>
@@ -86,10 +86,10 @@ class ProblemModal extends Component {
             </div>
           </div>
           <div className="column">
-            {student.problemResults.filter((t) => t.problem.id === problem.id)
+            {problem.problemResults.filter((t) => t.student.id === student.id)
               .length > 0 ? (
-              student.problemResults
-                .filter((t) => t.problem.id === problem.id)
+              problem.problemResults
+                .filter((t) => t.student.id === student.id)
                 .map((t) => (
                   <>
                     {t.answer.length < 200 ? (
@@ -114,10 +114,10 @@ class ProblemModal extends Component {
           onBackgroundClick={this.toggleModal}
           onEscapeKeydown={this.toggleModal}
         >
-          {student.problemResults.filter((t) => t.problem.id === problem.id)
+          {problem.problemResults.filter((t) => t.student.id === student.id)
             .length > 0 ? (
-            student.problemResults
-              .filter((t) => t.problem.id === problem.id)
+            problem.problemResults
+              .filter((t) => t.student.id === student.id)
               .map((t) => {
                 return (
                   <Modal2>

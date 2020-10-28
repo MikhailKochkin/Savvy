@@ -43,11 +43,6 @@ class TestResult extends Component {
     const { newTests, student } = this.props;
     return (
       <Container>
-        {/* {newTests.length === 0 && (
-          <span>
-            <b>Тесты</b> не созданы
-          </span>
-        )} */}
         {newTests.length > 0 &&
           newTests.map((test) => (
             <Box>
@@ -62,11 +57,11 @@ class TestResult extends Component {
                 ))}
               </div>
               <div className="column">
-                <div>Полученные ответы</div>
-                {student.testResults.filter((t) => t.test.id === test.id)
+                <div>Полученные ответы:</div>
+                {test.testResults.filter((t) => t.student.id === student.id)
                   .length > 0 ? (
-                  student.testResults
-                    .filter((t) => t.test.id === test.id)[0]
+                  test.testResults
+                    .filter((t) => t.student.id === student.id)[0]
                     .answer.split(", ")
                     .map((t) => <li>{t}</li>)
                 ) : (

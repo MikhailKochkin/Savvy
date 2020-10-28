@@ -3,6 +3,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Error from "../ErrorMessage";
+import { withTranslation } from "../../i18n";
 
 const REQUEST_RESET_MUTATION = gql`
   mutation REQUEST_RESET_MUTATION($email: String!) {
@@ -127,31 +128,31 @@ class RequestReset extends Component {
             }}
           >
             <Fieldset disabled={loading} aria-busy={loading}>
-              <Title>Восстановите пароль</Title>
-              <Message>
-                Введите адрес электронной почты, связанный с вашим аккаунтом на
-                BeSavvy, и мы вышлем вам ссылку для изменения пароля.
-              </Message>
+              <Title>{this.props.t("header3")}</Title>
+              <Message>{this.props.t("reset_instructions")}</Message>
               <Container>
                 <Error error={error} />
                 {!error && !loading && called && (
                   <Comment>
+                    {/* {props.t("found")} */}
                     Нашли! На вашей почте должна быть ссылка для смены пароля!
                   </Comment>
                 )}
                 <input
                   type="email"
                   name="email"
-                  placeholder="Электронная почта"
+                  placeholder={this.props.t("mail")}
                   value={this.state.email}
                   onChange={this.saveToState}
                 />
               </Container>
               <Buttons>
                 <div name="signin" onClick={this.switch}>
-                  Вернуться ко входу
+                  {this.props.t("reset_back")}
                 </div>
-                <SubmitButton type="submit">Отправить ссылку </SubmitButton>
+                <SubmitButton type="submit">
+                  {this.props.t("send_link")}
+                </SubmitButton>
               </Buttons>
             </Fieldset>
           </Form>
@@ -161,5 +162,5 @@ class RequestReset extends Component {
   }
 }
 
-export default RequestReset;
+export default withTranslation("signup")(RequestReset);
 export { REQUEST_RESET_MUTATION };

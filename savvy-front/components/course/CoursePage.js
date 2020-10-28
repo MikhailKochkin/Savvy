@@ -13,6 +13,7 @@ import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
 import { Reviews } from "../../config";
+import { withTranslation } from "../../i18n";
 
 const AGGREGATE_PAGE_LESSONS_QUERY = gql`
   query AGGREGATE_PAGE_LESSONS_QUERY($id: ID!) {
@@ -550,16 +551,17 @@ class CoursePage extends Component {
                                     </p>
                                     {average >= 0 ? (
                                       <div className="rating">
-                                        Оценка курса учениками: <b>{average}</b>
+                                        {this.props.t("rating")}{" "}
+                                        <b>{average}</b>
                                       </div>
                                     ) : null}
-                                    {console.log(coursePage.authors)}
                                     {coursePage.authors.length > 0 ? (
                                       coursePage.authors.map((a) => (
                                         <div className="name">
                                           <img src={a.image} />
                                           <p>
-                                            {a.name} {a.surname} из{" "}
+                                            {a.name} {a.surname}{" "}
+                                            {this.props.t("from")}{" "}
                                             {a.company.name}
                                           </p>
                                         </div>
@@ -572,7 +574,8 @@ class CoursePage extends Component {
                                           coursePage.user.surname
                                             ? `${coursePage.user.name} ${coursePage.user.surname}`
                                             : coursePage.user.name}{" "}
-                                          из {coursePage.user.company.name}
+                                          {this.props.t("from")}{" "}
+                                          {coursePage.user.company.name}
                                         </p>
                                       </div>
                                     )}
@@ -639,7 +642,7 @@ class CoursePage extends Component {
                                   {data.coursePage.audience && (
                                     <div className="info">
                                       <div className="header">
-                                        <span>Кому нужен этот курс?</span>
+                                        <span>{this.props.t("TA")}</span>
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.audience)}
@@ -649,10 +652,10 @@ class CoursePage extends Component {
                                   {data.coursePage.video &&
                                     data.coursePage.video !== "" && (
                                       <Video>
-                                        <div className="header">
+                                        {/* <div className="header">
                                           Посмотрите презентацию курса от его
                                           автора:
-                                        </div>
+                                        </div> */}
                                         <iframe
                                           src={data.coursePage.video}
                                           allowFullScreen
@@ -662,7 +665,7 @@ class CoursePage extends Component {
                                   {data.coursePage.methods && (
                                     <div className="info">
                                       <div className="header">
-                                        Об авторе курса и его подходах
+                                        {this.props.t("author")}
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.methods)}
@@ -672,8 +675,7 @@ class CoursePage extends Component {
                                   {data.coursePage.result && (
                                     <div className="info">
                                       <div className="header">
-                                        Что вы получите в результате прохождения
-                                        курса?
+                                        {this.props.t("result")}
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.result)}
@@ -696,20 +698,20 @@ class CoursePage extends Component {
                                       name="lessons"
                                       onClick={this.switch}
                                     >
-                                      Уроки
+                                      {this.props.t("lessonsPage")}
                                     </Button>
                                     <Button
                                       primary={this.state.page === "feedback"}
                                       name="feedback"
                                       onClick={this.switch}
                                     >
-                                      Обратная связь
+                                      {this.props.t("feedbackPage")}
                                     </Button>
                                   </Buttons>
                                   {this.state.page === "lessons" && (
                                     <>
                                       <Total>
-                                        Всего:{" "}
+                                        {this.props.t("total")}{" "}
                                         {
                                           data2.lessonsConnection.aggregate
                                             .count
@@ -723,7 +725,8 @@ class CoursePage extends Component {
                                           <>
                                             {(index + weeks) % weeks === 0 && (
                                               <div className="week">
-                                                Неделя {(index + weeks) / weeks}
+                                                {this.props.t("week")}{" "}
+                                                {(index + weeks) / weeks}
                                               </div>
                                             )}
                                             <LessonHeader
@@ -743,7 +746,7 @@ class CoursePage extends Component {
                                         ))}
                                     </>
                                   )}
-                                  {this.state.page === "forum" &&
+                                  {/* {this.state.page === "forum" &&
                                     (me &&
                                     (me.id === coursePage.user.id ||
                                       subjectArray.includes(coursePage.id) ||
@@ -759,10 +762,9 @@ class CoursePage extends Component {
                                       </>
                                     ) : (
                                       <Comment>
-                                        Зарегистрируйтесь на курс, чтобы
-                                        получить доступ к форуму.
+                                        {this.props.t("signup")}
                                       </Comment>
-                                    ))}
+                                    ))} */}
 
                                   {this.state.page === "feedback" &&
                                     (me &&
@@ -776,7 +778,7 @@ class CoursePage extends Component {
                                         {me.studentFeedback.filter((feed) =>
                                           lessonsList.includes(feed.lesson.id)
                                         ).length === 0 ? (
-                                          <p>Обратной связи нет</p>
+                                          <p>{this.props.t("no_feedback")}</p>
                                         ) : null}
                                         {me.studentFeedback
                                           .filter((feed) =>
@@ -788,9 +790,7 @@ class CoursePage extends Component {
                                       </>
                                     ) : (
                                       <Comment>
-                                        Зарегистрируйтесь на курс по
-                                        продвинутому тарифу, чтобы получать
-                                        обратную связь по выполненным заданиям.
+                                        {this.props.t("signup")}
                                       </Comment>
                                     ))}
                                 </LessonsInfo>
@@ -798,8 +798,7 @@ class CoursePage extends Component {
                                   {data.coursePage.tariffs && (
                                     <div className="info">
                                       <div className="header">
-                                        📚Как проходит обучение на разных
-                                        тарифах?
+                                        {this.props.t("tariffs")}
                                       </div>
                                       <div>
                                         {renderHTML(data.coursePage.tariffs)}
@@ -860,9 +859,7 @@ class CoursePage extends Component {
 
                                 {my_reviews[0] && (
                                   <>
-                                    <Header2>
-                                      Что ученики говорят про этот курс?
-                                    </Header2>
+                                    <Header2>{this.props.t("reviews")}</Header2>
                                     <ReviewsStyles>
                                       {my_reviews[0].reviews.map((post, i) => (
                                         <Post color={i + 1}>
@@ -901,5 +898,5 @@ class CoursePage extends Component {
   }
 }
 
-export default CoursePage;
+export default withTranslation("course")(CoursePage);
 export { SINGLE_COURSEPAGE_QUERY };

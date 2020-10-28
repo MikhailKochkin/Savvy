@@ -3,12 +3,12 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
+import { Query, Mutation } from "react-apollo";
+import gql from "graphql-tag";
 import CreateFeedback from "./CreateFeedback";
 import TestResult from "./results/TestResult";
 import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
-import ConstructionResult from "./results/ConstructionResult";
-import TexteditorResult from "./results/TexteditorResult";
 import DocumentResult from "./results/DocumentResult";
 import Feedback from "./Feedback";
 
@@ -112,15 +112,15 @@ const LessonData = (props) => {
           <TestResult newTests={lesson.newTests} student={student} />
           <QuizResult quizes={lesson.quizes} student={student} />
           <ProblemResult problems={lesson.problems} student={student} />
-          {/* <ConstructionResult
+          {/*<ConstructionResult
             constructions={lesson.constructions}
             student={student}
           />
           <TexteditorResult
             texteditors={lesson.texteditors}
             student={student}
-          />
-          <DocumentResult documents={lesson.documents} student={student} /> */}
+          /> */}
+          <DocumentResult documents={lesson.documents} student={student} />
           <CreateFeedback
             coursePage={coursePageID}
             lesson={lesson.id}

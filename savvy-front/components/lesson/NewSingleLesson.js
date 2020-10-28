@@ -14,6 +14,7 @@ import StoryEx from "./StoryEx";
 import User from "../User";
 import Panel from "./Panel";
 import smoothscroll from "smoothscroll-polyfill";
+import { withTranslation } from "../../i18n";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: ID!) {
@@ -457,7 +458,7 @@ const NewSingleLesson = (props) => {
                             </Link>
                           )}
                           <span>
-                            Урок {lesson.number}. {lesson.name}
+                            {props.t("lesson")} {lesson.number}. {lesson.name}
                           </span>
                         </Head>
 
@@ -467,7 +468,7 @@ const NewSingleLesson = (props) => {
                             <Head2>
                               {lesson.structure.length > 0 && (
                                 <div>
-                                  Режим истории →
+                                  {props.t("story_mode")} →
                                   <Link
                                     href={{
                                       pathname: "/lesson",
@@ -477,7 +478,7 @@ const NewSingleLesson = (props) => {
                                       },
                                     }}
                                   >
-                                    <span> Переключить</span>
+                                    <span>{props.t("switch")}</span>
                                   </Link>
                                 </div>
                               )}
@@ -517,5 +518,5 @@ const NewSingleLesson = (props) => {
   );
 };
 
-export default NewSingleLesson;
+export default withTranslation("story")(NewSingleLesson);
 export { NEW_SINGLE_LESSON_QUERY };

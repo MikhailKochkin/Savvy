@@ -196,7 +196,7 @@ const UserData = styled.div`
     margin-right: 10px;
   }
   img {
-    width: 30px;
+    width: 25px;
   }
 `;
 
@@ -275,7 +275,6 @@ class Nav extends Component {
     });
   };
   render() {
-    console.log(i18n.language);
     return (
       <User>
         {({ data: { me } }) => {
@@ -298,7 +297,6 @@ class Nav extends Component {
 
                       <Link href="/blog">
                         <div>
-                          {console.log(this.props.t)}
                           <a>{this.props.t("blog")}</a>
                         </div>
                       </Link>

@@ -34,6 +34,7 @@ import ChangeForum from "./forum/ChangeForum";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import Reload from "./Reload";
+import { withTranslation } from "../../i18n";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: ID!) {
@@ -679,7 +680,7 @@ class SingleLesson extends Component {
                                   onClick={this.onSwitchMob}
                                 >
                                   {" "}
-                                  Модель урока{" "}
+                                  {this.props.t("model")}{" "}
                                 </ChooseButton>
                               </ButtonZone>
                               {lesson.notes.length > 0 && (
@@ -689,7 +690,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Лонгриды{" "}
+                                    {this.props.t("longreads")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -700,7 +701,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitch}
                                   >
                                     {" "}
-                                    Чат{" "}
+                                    {this.props.t("chat")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -711,7 +712,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Тесты{" "}
+                                    {this.props.t("tests")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -722,7 +723,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Вопросы{" "}
+                                    {this.props.t("quizzes")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -733,7 +734,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Задачи{" "}
+                                    {this.props.t("problems")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -744,7 +745,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Конструкторы{" "}
+                                    {this.props.t("constructions")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -755,7 +756,7 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitchMob}
                                   >
                                     {" "}
-                                    Редакторы{" "}
+                                    {this.props.t("texteditors")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
@@ -766,11 +767,11 @@ class SingleLesson extends Component {
                                     onClick={this.onSwitch}
                                   >
                                     {" "}
-                                    Документы{" "}
+                                    {this.props.t("documents")}{" "}
                                   </ChooseButton>
                                 </ButtonZone>
                               )}
-                              {lesson.exams.length > 0 && (
+                              {/* {lesson.exams.length > 0 && (
                                 <ButtonZone>
                                   <ChooseButton
                                     name="exam"
@@ -780,7 +781,7 @@ class SingleLesson extends Component {
                                     Экзамены{" "}
                                   </ChooseButton>
                                 </ButtonZone>
-                              )}
+                              )} */}
                             </div>
                             {/* Use any element to open the sidenav */}
                           </>
@@ -810,7 +811,8 @@ class SingleLesson extends Component {
                             )
                           )}
                           <span>
-                            Урок {lesson.number}. {lesson.name}
+                            {this.props.t("lesson")} {lesson.number}.{" "}
+                            {lesson.name}
                           </span>
                         </Head>
                         {me &&
@@ -828,7 +830,7 @@ class SingleLesson extends Component {
                                     },
                                   }}
                                 >
-                                  <span>{`История `}</span>
+                                  <span>{this.props.t("story")}</span>
                                 </Link>
                               ) : (
                                 <span
@@ -839,7 +841,7 @@ class SingleLesson extends Component {
                                   }
                                 >
                                   {" "}
-                                  История
+                                  {this.props.t("story")}
                                 </span>
                               )}
                               <>
@@ -855,7 +857,7 @@ class SingleLesson extends Component {
                                   },
                                 }}
                               >
-                                <span> Испытание</span>
+                                <span> {this.props.t("challenge")}</span>
                               </Link>
                             </Head2>
                           )}
@@ -1064,7 +1066,7 @@ class SingleLesson extends Component {
                               <UpdateShots lessonID={lesson.id} />
                             )}
                           </LessonPart>
-
+                          {console.log(this.props.t("story"))}
                           {this.state.width > 800 && (
                             <MenuPart shown={this.state.shown}>
                               <Sticky>
@@ -1075,7 +1077,7 @@ class SingleLesson extends Component {
                                       onClick={this.onSwitch}
                                     >
                                       {" "}
-                                      Модель урока{" "}
+                                      {this.props.t("model")}{" "}
                                     </ChooseButton>
                                   </ButtonZone>
                                   {lesson.notes.length > 0 && (
@@ -1085,7 +1087,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Лонгриды{" "}
+                                        {this.props.t("longreads")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1096,7 +1098,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Алгоритмы{" "}
+                                        {this.props.t("algos")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1107,7 +1109,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Чат{" "}
+                                        {this.props.t("chat")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1119,7 +1121,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Документы{" "}
+                                        {this.props.t("documents")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1131,7 +1133,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Тесты{" "}
+                                        {this.props.t("tests")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1142,7 +1144,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Вопросы{" "}
+                                        {this.props.t("quizzes")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1153,7 +1155,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Задачи{" "}
+                                        {this.props.t("problems")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1164,7 +1166,7 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Конструкторы{" "}
+                                        {this.props.t("constructions")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
@@ -1175,11 +1177,11 @@ class SingleLesson extends Component {
                                         onClick={this.onSwitch}
                                       >
                                         {" "}
-                                        Редакторы{" "}
+                                        {this.props.t("texteditors")}{" "}
                                       </ChooseButton>
                                     </ButtonZone>
                                   )}
-                                  {lesson.exams.length > 0 && (
+                                  {/* {lesson.exams.length > 0 && (
                                     <ButtonZone>
                                       <ChooseButton
                                         name="exam"
@@ -1189,7 +1191,7 @@ class SingleLesson extends Component {
                                         Экзамены{" "}
                                       </ChooseButton>
                                     </ButtonZone>
-                                  )}
+                                  )} */}
                                 </NavPart>
                                 {me &&
                                   (lesson.user.id === me.id ||
@@ -1201,14 +1203,14 @@ class SingleLesson extends Component {
                                             name="updateLesson"
                                             onClick={this.onSwitch}
                                           >
-                                            Изменить урок
+                                            {this.props.t("change_lesson")}
                                           </ChooseButton>
                                         </ButtonZone>
                                         <ChooseButton
                                           name="createNote"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый лонгрид
+                                          {this.props.t("new_longread")}
                                         </ChooseButton>
                                       </ButtonZone>
 
@@ -1217,7 +1219,7 @@ class SingleLesson extends Component {
                                           name="createShot"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый алгоритм
+                                          {this.props.t("new_algo")}
                                         </ChooseButton>
                                       </ButtonZone>
 
@@ -1226,7 +1228,7 @@ class SingleLesson extends Component {
                                           name="createForum"
                                           onClick={this.onSwitch}
                                         >
-                                          Включить чат
+                                          {this.props.t("new_chat")}
                                         </ChooseButton>
                                       </ButtonZone>
 
@@ -1235,7 +1237,7 @@ class SingleLesson extends Component {
                                           name="createTest"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый тест
+                                          {this.props.t("new_test")}
                                         </ChooseButton>
                                       </ButtonZone>
 
@@ -1244,16 +1246,15 @@ class SingleLesson extends Component {
                                           name="createQuiz"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый вопрос
+                                          {this.props.t("new_quiz")}
                                         </ChooseButton>
                                       </ButtonZone>
-
                                       <ButtonZone>
                                         <ChooseButton
                                           name="createProblem"
                                           onClick={this.onSwitch}
                                         >
-                                          Новая задача
+                                          {this.props.t("new_problem")}
                                         </ChooseButton>
                                       </ButtonZone>
                                       <ButtonZone>
@@ -1261,7 +1262,7 @@ class SingleLesson extends Component {
                                           name="createConstructor"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый конструктор
+                                          {this.props.t("new_construction")}
                                         </ChooseButton>
                                       </ButtonZone>
                                       <ButtonZone>
@@ -1269,7 +1270,7 @@ class SingleLesson extends Component {
                                           name="createTextEditor"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый редактор
+                                          {this.props.t("new_texteditor")}
                                         </ChooseButton>
                                       </ButtonZone>
                                       <ButtonZone>
@@ -1277,17 +1278,17 @@ class SingleLesson extends Component {
                                           name="createDocument"
                                           onClick={this.onSwitch}
                                         >
-                                          Новый документ
+                                          {this.props.t("new_document")}
                                         </ChooseButton>
                                       </ButtonZone>
-                                      <ButtonZone>
+                                      {/* <ButtonZone>
                                         <ChooseButton
                                           name="createExam"
                                           onClick={this.onSwitch}
                                         >
                                           Новый экзамен
                                         </ChooseButton>
-                                      </ButtonZone>
+                                      </ButtonZone> */}
 
                                       <ButtonZone>
                                         <DeleteSingleLesson
@@ -1314,5 +1315,5 @@ class SingleLesson extends Component {
   }
 }
 
-export default SingleLesson;
+export default withTranslation("draft")(SingleLesson);
 export { SINGLE_LESSON_QUERY };

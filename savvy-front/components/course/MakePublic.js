@@ -3,6 +3,7 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_COURSEPAGE_QUERY } from "./CoursePage";
+import { withTranslation } from "../../i18n";
 
 const MAKE_PUBLIC_MUTATION = gql`
   mutation MAKE_PUBLIC_MUTATION($id: ID!, $published: Boolean) {
@@ -13,7 +14,7 @@ const MAKE_PUBLIC_MUTATION = gql`
 `;
 
 const Button = styled.button`
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border-radius: 5px;
   width: 200px;
   height: 38px;
@@ -26,13 +27,13 @@ const Button = styled.button`
   border: none;
   margin-top: 10px;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
 class MakePublic extends Component {
   state = {
-    published: this.props.published
+    published: this.props.published,
   };
   onClick = async (e, updateCoursePage) => {
     e.preventDefault();
@@ -40,8 +41,8 @@ class MakePublic extends Component {
     updateCoursePage({
       variables: {
         id: this.props.id,
-        published: !this.state.published
-      }
+        published: !this.state.published,
+      },
     });
     this.setState({ published: !this.state.published });
   };
@@ -52,13 +53,15 @@ class MakePublic extends Component {
         refetchQueries={() => [
           {
             query: SINGLE_COURSEPAGE_QUERY,
-            variables: { id: this.props.id }
-          }
+            variables: { id: this.props.id },
+          },
         ]}
       >
-        {updateCoursePage => (
-          <Button onClick={e => this.onClick(e, updateCoursePage)}>
-            {this.state.published ? "Отозвать" : "Опубликовать"}
+        {(updateCoursePage) => (
+          <Button onClick={(e) => this.onClick(e, updateCoursePage)}>
+            {this.state.published
+              ? this.props.t("unpublish")
+              : this.props.t("publish")}
           </Button>
         )}
       </Mutation>
@@ -66,4 +69,4 @@ class MakePublic extends Component {
   }
 }
 
-export default MakePublic;
+export default withTranslation("course")(MakePublic);

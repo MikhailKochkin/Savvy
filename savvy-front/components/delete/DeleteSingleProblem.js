@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { withTranslation } from "../../i18n";
 
 const DELETE_PROBLEM_MUTATION = gql`
   mutation DELETE_PROBLEM_MUTATION($id: ID!) {
@@ -17,27 +18,27 @@ const useStyles = makeStyles({
   button: {
     margin: "0",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 });
 
-const DeleteSingleProblem = props => {
+const DeleteSingleProblem = (props) => {
   const update = (cache, payload) => {
     // manually update the cache on the client, so it matches the server
     // 1. Read the cache for the items we want
     const data = cache.readQuery({
       query: SINGLE_LESSON_QUERY,
-      variables: { id: this.props.lessonId }
+      variables: { id: this.props.lessonId },
     });
     // 2. Filter the deleted itemout of the page
     data.lessons = data.lesson.problems.filter(
-      item => item.id !== payload.data.deleteProblem.id
+      (item) => item.id !== payload.data.deleteProblem.id
     );
     // 3. Put the items back!
     cache.writeQuery({
       query: SINGLE_LESSON_QUERY,
       variables: { id: this.props.lessonId },
-      data
+      data,
     });
   };
   const { lessonId, id } = props;
@@ -50,8 +51,8 @@ const DeleteSingleProblem = props => {
       refetchQueries={() => [
         {
           query: SINGLE_LESSON_QUERY,
-          variables: { id: lessonId }
-        }
+          variables: { id: lessonId },
+        },
       ]}
     >
       {(deleteProblem, { loading, error }) => (
@@ -59,18 +60,18 @@ const DeleteSingleProblem = props => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm("Вы точно хотите удалить эту задачу?")) {
-              deleteProblem().catch(error => {
+            if (confirm(props.t("sure"))) {
+              deleteProblem().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? "Удаляем..." : "Удалить"}
+          {loading ? props.t("deleting") : props.t("delete")}
         </Button>
       )}
     </Mutation>
   );
 };
 
-export default DeleteSingleProblem;
+export default withTranslation("update")(DeleteSingleProblem);

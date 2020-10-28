@@ -24,9 +24,9 @@ const Header = styled.p`
 
 const UserAnalytics = (props) => {
   const { coursePageID, students, lessons } = props;
+  console.log(props.student);
   return (
     <Styles>
-      <Header>Участники</Header>
       {students.map((student) => (
         <>
           <StudentData

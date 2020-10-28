@@ -8,6 +8,7 @@ import Package from "./Package";
 import ReactResizeDetector from "react-resize-detector";
 import Modal from "styled-react-modal";
 import { Specials } from "../../../config";
+import { withTranslation } from "../../../i18n";
 
 const Data = styled.div`
   display: flex;
@@ -296,12 +297,12 @@ const RegisterCard = (props) => {
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <Data>
         <Description>
-          <div className="title">Выберите подходящий тариф и получите:</div>
-          <div>- пожизненный доступ</div>
-          <div>- доступ сразу после оплаты</div>
-          <div>- полный комплекс услуг по выбранному тарифу</div>
-          <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
-          <div>- эксклюзивные карьерные возможности от Savvy App</div>
+          <div className="title">{props.t("choose_plan")}</div>
+          <div>{props.t("life")}</div>
+          <div>{props.t("access")}</div>
+          <div>{props.t("services")}</div>
+          <div>{props.t("exclusive")}</div>
+          <div>{props.t("career")}</div>
         </Description>
         <Payment>
           <Header>
@@ -340,10 +341,10 @@ const RegisterCard = (props) => {
               {coursePage.courseType === "FORMONEY" && (
                 <>
                   <GridContainer>
-                    <div className="Title">Выберите тариф:</div>
+                    <div className="Title">{props.t("plan-choose")}</div>
                     <div />
                     <div className="Self">
-                      🏎 <span>Базовый</span>
+                      🏎 <span>{props.t("basic")}</span>
                     </div>
                     <input
                       className="Price1"
@@ -361,8 +362,8 @@ const RegisterCard = (props) => {
                       <div className="Teacher">
                         🚀{" "}
                         {props.subscription
-                          ? "Подписка на 6 курсов"
-                          : "Продвинутый"}
+                          ? props.t("subscription")
+                          : props.t("advanced")}
                       </div>
                     )}
                     {/* {the1 && (
@@ -415,7 +416,7 @@ const RegisterCard = (props) => {
                   мы откроем доступ.
                 </Paid>
               )}
-              {!me && <BuyDummy>Войти</BuyDummy>}
+              {!me && <BuyDummy>{props.t("signin")}</BuyDummy>}
               {me && (
                 <>
                   {coursePage.courseType === "FORMONEY" && (
@@ -430,7 +431,7 @@ const RegisterCard = (props) => {
                           : parseInt(price)
                       }
                     >
-                      Купить
+                      {props.t("buy")}
                     </TakeMyMoney>
                   )}
                   {coursePage.courseType !== "FORMONEY" && (
@@ -463,4 +464,4 @@ const RegisterCard = (props) => {
   );
 };
 
-export default RegisterCard;
+export default withTranslation("course")(RegisterCard);
