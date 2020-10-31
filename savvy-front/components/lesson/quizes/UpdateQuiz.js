@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { withTranslation } from "../../../i18n";
 
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION(
@@ -131,24 +132,19 @@ const UpdateQuiz = (props) => {
     props.next && props.next.false ? props.next.false : ""
   );
 
-  const myCallback = async (type, data) => {
-    return type === true ? setTrueVal(data) : setFalseVal(data);
-  };
-
-  const { lessonID, quizID, quizes, notes, tests } = props;
-  console.log(check, check === "WORD");
+  const { lessonID, quizID } = props;
   return (
     <Container>
       <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
-        <option value={undefined}>Не выбран</option>
-        <option value={"WORD"}>Дословная проверка</option>
-        <option value={"IDEA"}>Смысловая проверка</option>
+        <option value={undefined}>{props.t("not_chosen")}</option>
+        <option value={"WORD"}>{props.t("word")}</option>
+        <option value={"IDEA"}>{props.t("idea")}</option>
       </select>
       <Comment>
         <DynamicLoadedEditor
           id="question"
           name="question"
-          placeholder="Вопрос"
+          placeholder={props.t("quiz")}
           value={question}
           getEditorText={setQuestion}
         />
@@ -156,7 +152,7 @@ const UpdateQuiz = (props) => {
       <textarea
         id="answer"
         name="answer"
-        placeholder="Ответ"
+        placeholder={props.t("answer")}
         defaultValue={answer}
         onChange={(e) => setAnswer(e.target.value)}
       />
@@ -165,7 +161,7 @@ const UpdateQuiz = (props) => {
           id="answer"
           name="answer"
           value={ifRight}
-          placeholder="Комментарий в случае правильного ответа"
+          placeholder={props.t("correct_feedback")}
           getEditorText={setIfRight}
         />
       </Comment>
@@ -173,7 +169,7 @@ const UpdateQuiz = (props) => {
         <DynamicLoadedEditor
           id="answer"
           name="answer"
-          placeholder="Комментарий в случае правильного ответа"
+          placeholder={props.t("wrong_feedback")}
           value={ifWrong}
           getEditorText={setIfWrong}
         />
@@ -208,7 +204,7 @@ const UpdateQuiz = (props) => {
               const res = await updateQuiz();
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? props.t("saving") : props.t("save")}
           </Button>
         )}
       </Mutation>
@@ -216,4 +212,4 @@ const UpdateQuiz = (props) => {
   );
 };
 
-export default UpdateQuiz;
+export default withTranslation("tasks")(UpdateQuiz);

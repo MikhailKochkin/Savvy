@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { withTranslation } from "../../../i18n";
 
 const UPDATE_NOTE_MUTATION = gql`
   mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String, $next: Json) {
@@ -129,7 +130,7 @@ const UpdateNote = (props) => {
                 const res = await updateNote();
               }}
             >
-              {loading ? "Сохраняем..." : "Сохранить"}
+              {loading ? props.t("saving") : props.t("save")}
             </Button>
           )}
         </Mutation>
@@ -138,4 +139,4 @@ const UpdateNote = (props) => {
   );
 };
 
-export default UpdateNote;
+export default withTranslation("tasks")(UpdateNote);

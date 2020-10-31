@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
+import { withTranslation } from "../../../i18n";
 
 const StyledButton = withStyles({
   root: {
@@ -138,7 +139,7 @@ const Note = (props) => {
       <Buttons>
         {!exam && !story && me.id === note.user.id && (
           <StyledButton onClick={(e) => setUpdate(!update)}>
-            {!update ? "Настройки" : "Заметка"}
+            {!update ? props.t("update") : props.t("back")}
           </StyledButton>
         )}
         {me && me.id === user && !props.story && !props.exam && (
@@ -147,7 +148,7 @@ const Note = (props) => {
       </Buttons>
       <Container story={story}>
         {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
-        {getData && <MiniButton onClick={push}>Далее</MiniButton>}
+        {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
         {update && !story && !exam && (
           <UpdateNote
             notes={notes}
@@ -164,4 +165,4 @@ const Note = (props) => {
   );
 };
 
-export default Note;
+export default withTranslation("tasks")(Note);

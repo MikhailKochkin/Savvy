@@ -3,8 +3,8 @@ import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import Option from "../Option";
 import dynamic from "next/dynamic";
+import { withTranslation } from "../../../i18n";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
@@ -202,8 +202,8 @@ const UpdateTest = (props) => {
                 defaultValue={answer[1]}
                 onChange={(e) => handleCorrect(e.target.value, i)}
               >
-                <option value={true}>Правильно</option>
-                <option value={false}>Ошибочно</option>
+                <option value={true}>{props.t("correct")}</option>
+                <option value={false}>{props.t("wrong")}</option>
               </select>
             </AnswerOption>
           );
@@ -214,7 +214,7 @@ const UpdateTest = (props) => {
           id="ifRight"
           name="ifRight"
           value={ifRight}
-          placeholder={`Комментарий в случае правильного ответа`}
+          placeholder={props.t("correct_feedback")}
           getEditorText={setIf}
         />
       </Comment>
@@ -223,29 +223,10 @@ const UpdateTest = (props) => {
           id="ifWrong"
           name="ifWrong"
           value={ifWrong}
-          placeholder={`Комментарий в случае неправильного ответа`}
+          placeholder={props.t("wrong_feedback")}
           getEditorText={setIf}
         />
       </Comment>
-      {/* <h2>Выберите задания для формата "Экзамен" и "Задача":</h2>
-      <h3>Вопросы:</h3>
-      <Grid>
-        {quizes.map((quiz) => (
-          <Option key={quiz.id} quiz={quiz} getData={myCallback} />
-        ))}
-      </Grid>
-      <h3>Заметки:</h3>
-      <Grid>
-        {notes.map((note) => (
-          <Option key={note.id} note={note} getData={myCallback} />
-        ))}
-      </Grid>
-      <h3>Тесты:</h3>
-      <Grid>
-        {tests.map((test) => (
-          <Option key={test.id} test={test} getData={myCallback} />
-        ))}
-      </Grid> */}
       <Mutation
         mutation={UPDATE_TEST_MUTATION}
         refetchQueries={() => [
@@ -275,7 +256,7 @@ const UpdateTest = (props) => {
               updateNewTest();
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? props.t("saving") : props.t("save")}
           </Button>
         )}
       </Mutation>
@@ -283,4 +264,4 @@ const UpdateTest = (props) => {
   );
 };
 
-export default UpdateTest;
+export default withTranslation("tasks")(UpdateTest);

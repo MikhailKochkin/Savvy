@@ -34,7 +34,7 @@ const Button = styled.button`
 
 class DeleteSingleQuiz extends Component {
   render() {
-    const { shotID, lessonID } = this.props;
+    const { shotID, lessonID, t } = this.props;
     return (
       <Mutation
         mutation={DELETE_SHOT_MUTATION}
@@ -49,14 +49,14 @@ class DeleteSingleQuiz extends Component {
         {(deleteShot, { error, loading }) => (
           <Button
             onClick={() => {
-              if (confirm(props.t("sure"))) {
+              if (confirm(t("sure"))) {
                 deleteShot().catch((error) => {
                   alert(error.message);
                 });
               }
             }}
           >
-            {loading ? props.t("deleting") : props.t("delete")}
+            {loading ? t("deleting") : t("delete")}
           </Button>
         )}
       </Mutation>

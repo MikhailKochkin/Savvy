@@ -10,6 +10,7 @@ import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
+import { withTranslation } from "../../../i18n";
 
 const StyledButton = withStyles({
   root: {
@@ -316,7 +317,7 @@ const SingleTest = (props) => {
     <>
       {!exam && story !== true && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {!update ? "Настройки" : "Тест"}
+          {!update ? props.t("update") : props.t("back")}
         </StyledButton>
       )}
       {me && me.id === props.user && !story && !exam && (
@@ -354,7 +355,7 @@ const SingleTest = (props) => {
           )}
           {answerState === "right" && (
             <Question inputColor={inputColor}>
-              <div className="question_text">Правильно!</div>
+              <div className="question_text">{props.t("correct")}!</div>
               <div className="question_name">{author_name}</div>
             </Question>
           )}
@@ -366,7 +367,7 @@ const SingleTest = (props) => {
           )}
           {answerState === "wrong" && (
             <Question inputColor={inputColor}>
-              <div className="question_text">Мимо...</div>
+              <div className="question_text">{props.t("wrong")}...</div>
               <div className="question_name">{author_name}</div>
             </Question>
           )}
@@ -413,7 +414,7 @@ const SingleTest = (props) => {
                     }
                   }}
                 >
-                  Проверить
+                  {props.t("check")}
                 </MiniButton>
               )}
             </Mutation>
@@ -436,17 +437,8 @@ const SingleTest = (props) => {
           tests={props.tests}
         />
       )}
-      {/* {props.exam && (
-          <Dots>
-            <div className="group">
-              <div className="dot"></div>
-              <div className="dot"></div>
-              <div className="dot"></div>
-            </div>
-          </Dots>
-        )} */}
     </>
   );
 };
 
-export default SingleTest;
+export default withTranslation("tasks")(SingleTest);

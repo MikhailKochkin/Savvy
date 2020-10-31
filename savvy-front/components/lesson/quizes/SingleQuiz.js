@@ -9,6 +9,7 @@ import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
 import renderHTML from "react-render-html";
 import { CURRENT_USER_QUERY } from "../../User";
+import { withTranslation } from "../../../i18n";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -357,7 +358,7 @@ const SingleQuiz = (props) => {
           <Buttons>
             {!exam && !story && (
               <StyledButton onClick={(e) => setUpdate(!update)}>
-                Настройки
+                {!update ? props.t("update") : props.t("back")}
               </StyledButton>
             )}
             {me && me.id === user && !props.exam && !props.story ? (
@@ -392,7 +393,7 @@ const SingleQuiz = (props) => {
                 </Progress>
                 {correct === "true" && (
                   <div className="question">
-                    <div className="question_text">Верно!</div>
+                    <div className="question_text">{props.t("correct")}!</div>
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
@@ -404,7 +405,7 @@ const SingleQuiz = (props) => {
                 )}
                 {correct === "false" && (
                   <div className="question">
-                    <div className="question_text">Не совсем...</div>
+                    <div className="question_text">{props.t("wrong")}...</div>
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}
@@ -425,28 +426,27 @@ const SingleQuiz = (props) => {
                 {correct !== "" && (
                   <>
                     <div className="question">
-                      <div className="question_text">
-                        Показать правильный ответ?
-                      </div>
+                      <div className="question_text">{props.t("show")}</div>
                       <div className="question_name">{author_name}</div>
                     </div>
 
                     <div className="answer">
                       <div className="answer_name">{student_name}</div>
                       <Options>
-                        <Option onClick={(e) => setHidden(false)}>Да</Option>
-                        <Option onClick={(e) => setHidden(true)}>Нет</Option>
+                        <Option onClick={(e) => setHidden(false)}>
+                          {props.t("yes")}
+                        </Option>
+                        <Option onClick={(e) => setHidden(true)}>
+                          {props.t("no")}
+                        </Option>
                       </Options>
-                      {/* <div className="answer_test">
-                        <span onClick={(e) => setHidden(!hidden)}>Да</span>
-                      </div> */}
                     </div>
                   </>
                 )}
                 {!hidden && (
                   <div className="question">
                     <div className="question_text">
-                      Правильный ответ: {renderHTML(props.answer)}
+                      {props.t("correct_answer")}: {renderHTML(props.answer)}
                     </div>
                     <div className="question_name">{author_name}</div>
                   </div>
@@ -469,7 +469,7 @@ const SingleQuiz = (props) => {
                   }}
                   correct={correct}
                 >
-                  Ответить
+                  {props.t("check")}
                 </Button1>
               </Group>
             </>
@@ -495,4 +495,4 @@ const SingleQuiz = (props) => {
   );
 };
 
-export default SingleQuiz;
+export default withTranslation("tasks")(SingleQuiz);

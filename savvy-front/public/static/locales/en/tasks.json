@@ -1,0 +1,21 @@
+{
+  "save": "Save",
+  "saving": "Saving...",
+  "back": "Back",
+  "update": "Update",
+  "next": "Next",
+  "correct": "Correct",
+  "wrong": "Wrong",
+  "check": "Check",
+  "correct_feedback": "Feedback if the answer is right",
+  "wrong_feedback": "Feedback if the answer is wrong",
+  "show": "Want to see the right answer?",
+  "yes": "yes",
+  "no": "no",
+  "correct_answer": "Correct answer",
+  "quiz": "Quiz",
+  "answer": "Answer",
+  "not_chosen": "Not chosen",
+  "word": "Word for word check",
+  "idea": "Semantic check"
+}

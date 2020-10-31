@@ -4,8 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import Course from "../Course";
 import LoadingDummy from "../LoadingDummy";
-import { element } from "prop-types";
-import { i18n, withTranslation } from "../../../i18n";
+import { withTranslation } from "../../../i18n";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
