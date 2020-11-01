@@ -18,7 +18,7 @@ const StyledButton = withStyles({
 })(Button);
 
 const Container = styled.div`
-  width: ${(props) => (props.story ? "100%" : "95%")};
+  width: ${(props) => (props.story ? "100%" : "80%")};
   font-size: 1.6rem;
   margin: 20px 0;
 `;
@@ -136,17 +136,17 @@ const Note = (props) => {
   } = props;
   return (
     <>
-      <Buttons>
-        {!exam && !story && me.id === note.user.id && (
-          <StyledButton onClick={(e) => setUpdate(!update)}>
-            {!update ? props.t("update") : props.t("back")}
-          </StyledButton>
-        )}
-        {me && me.id === user && !props.story && !props.exam && (
-          <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
-        )}
-      </Buttons>
       <Container story={story}>
+        <Buttons>
+          {!exam && !story && me.id === note.user.id && (
+            <StyledButton onClick={(e) => setUpdate(!update)}>
+              {!update ? props.t("update") : props.t("back")}
+            </StyledButton>
+          )}
+          {me && me.id === user && !props.story && !props.exam && (
+            <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
+          )}
+        </Buttons>
         {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
         {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
         {update && !story && !exam && (

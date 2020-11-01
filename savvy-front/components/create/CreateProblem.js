@@ -59,6 +59,7 @@ const CREATE_PROBLEM_MUTATION = gql`
 
 const Styles = styled.div`
   margin-top: 2%;
+  max-width: 600px;
 `;
 
 const Title = styled.div`
@@ -96,7 +97,6 @@ const CreateProblem = (props) => {
   };
 
   const { lessonID, lesson } = props;
-  const elements = [...lesson.quizes, ...lesson.newTests, ...lesson.notes];
 
   const getNode = (type, id) => {
     setNodeID(id);
@@ -132,7 +132,13 @@ const CreateProblem = (props) => {
       <h3>
         Выберите первый вопрос, с которого начнется объяснение решения задачи.
       </h3>
-      <ProblemBuilder lesson={lesson} elements={elements} getNode={getNode} />
+      <ProblemBuilder
+        lessonID={lesson.id}
+        getNode={getNode}
+        quizes={lesson.quizes}
+        newTests={lesson.newTests}
+        notes={lesson.notes}
+      />
       {/* {nodeID && ( */}
       <Mutation
         mutation={CREATE_PROBLEM_MUTATION}

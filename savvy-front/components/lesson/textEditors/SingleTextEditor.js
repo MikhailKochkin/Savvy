@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { CURRENT_USER_QUERY } from "../../User";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
@@ -178,8 +178,8 @@ class SingleTextEditor extends Component {
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
     )[0];
-    console.log(this.state.correct_option);
-    console.log(el);
+    e.target.innerHTML = "Проверяю...";
+    e.target.pointerEvents = "none";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -206,11 +206,16 @@ class SingleTextEditor extends Component {
             result: true,
           });
           el.style.background = "#D9EAD3";
+          e.target.innerHTML = "Проверить";
+          e.target.pointerEvents = "auto";
         } else {
           this.setState({
             result: false,
           });
           el.style.background = "#FCE5CD";
+          e.target.innerHTML = "Проверить";
+          e.target.pointerEvents = "auto";
+
           if (res.comment) {
             alert(res.comment);
           }
@@ -218,6 +223,7 @@ class SingleTextEditor extends Component {
         }
       })
       .catch((err) => console.log(err));
+
     this.setState({ shown: false });
   };
 

@@ -4,12 +4,8 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { makeStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import ProblemBuilder from "./ProblemBuilder";
+import ProblemBuilder from "../../create/ProblemBuilder";
 
 const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
@@ -50,15 +46,15 @@ const useStyles = makeStyles({
 });
 
 const Container = styled.div`
-  width: 100%;
-  display: grid;
+  max-width: 600px;
+  /* display: grid; */
   margin: 1% 0 0 0;
   margin-top: 5%;
-  grid-template-columns: 1fr;
+  /* grid-template-columns: 1fr;
   grid-template-rows: repeat(3 70px);
   grid-template-areas:
     "explain"
-    "first   ";
+    "first   "; */
   h4 {
     padding: 0% 5%;
   }
@@ -111,7 +107,7 @@ const UpdateProblem = (props) => {
 
   const getText = (d) => setText(d);
 
-  const handleChange = (e, type) => {
+  const getNode = (e, type) => {
     setNodeID(e.target.value);
     setNodeType(type);
   };
@@ -120,51 +116,49 @@ const UpdateProblem = (props) => {
 
   const { id, quizes, lessonID, newTests, notes } = props;
   return (
-    <>
-      <Container>
-        <DynamicLoadedEditor getEditorText={getText} previousText={text} />
-        <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
-        {nodeID && (
-          <ProblemBuilder
-            elements={[...newTests, ...quizes, ...notes]}
-            quizes={quizes}
-            newTests={newTests}
-            notes={notes}
-            nodeType={nodeType}
-            nodeID={nodeID}
-            lessonID={lessonID}
-          />
+    <Container>
+      <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+      <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
+      {nodeID && (
+        <ProblemBuilder
+          quizes={quizes}
+          newTests={newTests}
+          notes={notes}
+          nodeType={nodeType}
+          nodeID={nodeID}
+          lessonID={lessonID}
+          getNode={getNode}
+        />
+      )}
+      <Mutation
+        mutation={UPDATE_PROBLEM_MUTATION}
+        variables={{
+          id: id,
+          text: text,
+          nodeID: nodeID,
+          nodeType: nodeType,
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID },
+          },
+        ]}
+      >
+        {(updateProblem, { loading, error }) => (
+          <Button
+            onClick={async (e) => {
+              // Stop the form from submitting
+              e.preventDefault();
+              // call the mutation
+              const res = await updateProblem();
+            }}
+          >
+            {loading ? "Сохраняем..." : "Сохранить"}
+          </Button>
         )}
-        <Mutation
-          mutation={UPDATE_PROBLEM_MUTATION}
-          variables={{
-            id: id,
-            text: text,
-            nodeID: nodeID,
-            nodeType: nodeType,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-        >
-          {(updateProblem, { loading, error }) => (
-            <Button
-              onClick={async (e) => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                const res = await updateProblem();
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
-          )}
-        </Mutation>
-      </Container>
-    </>
+      </Mutation>
+    </Container>
   );
 };
 

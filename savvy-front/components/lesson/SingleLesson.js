@@ -263,6 +263,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   /* The side navigation menu */
   .sidenav {
     height: 100%; /* 100% Full-height */
@@ -322,7 +323,7 @@ const TextBar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 90%;
+  width: 100%;
   margin: 2.5% 0;
   font-size: 1.6rem;
   padding: 2% 2% 4% 2%;
@@ -412,8 +413,7 @@ const Head2 = styled.div`
 
 const LessonStyles = styled.div`
   display: flex;
-  width: 65%;
-  max-width: 1000px;
+  width: 70%;
   flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
@@ -460,15 +460,9 @@ const LessonStyles = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
-
   flex-basis: 75%;
   flex-direction: column;
-  /* background: white; */
   border-radius: 2px;
-  /* a {
-    padding-top: 2%;
-    padding-left: 2%;
-  } */
   @media (max-width: 800px) {
     order: 2;
     margin: 1%;
@@ -547,6 +541,9 @@ const ButtonZone = styled.div`
     border-bottom: solid 1px #112a62;
   }
 `;
+const Button = styled.button`
+  margin-top: 10px;
+`;
 
 const ChooseButton = styled.button`
   font-size: 1.5rem;
@@ -597,6 +594,7 @@ class SingleLesson extends Component {
     page: "lesson",
     shown: false,
     width: 0,
+    menu: true,
   };
 
   onSwitch = (e) => {
@@ -861,6 +859,15 @@ class SingleLesson extends Component {
                               </Link>
                             </Head2>
                           )}
+                        <Button
+                          onClick={(e) =>
+                            this.setState((prevState) => ({
+                              menu: !prevState.menu,
+                            }))
+                          }
+                        >
+                          {this.state.menu ? "Скрыть меню" : "Показать меню"}
+                        </Button>
                         <LessonStyles>
                           <LessonPart>
                             {this.state.page === "lesson" && (
@@ -1038,10 +1045,12 @@ class SingleLesson extends Component {
                               <CreateQuiz lessonID={lesson.id} />
                             )}
                             {this.state.page === "createProblem" && (
-                              <CreateProblem
-                                lessonID={lesson.id}
-                                lesson={lesson}
-                              />
+                              <>
+                                <CreateProblem
+                                  lessonID={lesson.id}
+                                  lesson={lesson}
+                                />
+                              </>
                             )}
                             {this.state.page === "createConstructor" && (
                               <CreateConstructor lessonID={lesson.id} />
@@ -1066,8 +1075,7 @@ class SingleLesson extends Component {
                               <UpdateShots lessonID={lesson.id} />
                             )}
                           </LessonPart>
-                          {console.log(this.props.t("story"))}
-                          {this.state.width > 800 && (
+                          {this.state.width > 800 && this.state.menu && (
                             <MenuPart shown={this.state.shown}>
                               <Sticky>
                                 <NavPart>

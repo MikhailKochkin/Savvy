@@ -9,7 +9,8 @@ const FormatToolbarStyles = {
   position: "-webkit-sticky",
   position: "sticky",
   top: "20px",
-  zIndex: "3",
+  zIndex: "1",
+  maxWidth: "700px",
   border: "1px solid #EDEFED",
 };
 

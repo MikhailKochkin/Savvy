@@ -9,7 +9,6 @@ import BoldMark from "./BoldMark";
 import HeaderMark from "./HeaderMark";
 import ItalicMark from "./ItalicMark";
 import LinkMark from "./Link";
-import FormatToolBar from "./FormatToolbar";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
@@ -18,6 +17,16 @@ import { image } from "react-icons-kit/fa/image";
 import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
+
+const FormatToolBar = styled.div`
+  display: flex;
+  background: white;
+  padding: 2%;
+  margin: 0 0 10px 0;
+  top: 20px;
+  max-width: 700px;
+  border: 1px solid #edefed;
+`;
 
 const LinkStyle = styled.a`
   text-decoration: underline;
@@ -60,13 +69,14 @@ const ButtonStyle = styled.button`
 const AppStyles = {
   color: "rgb(17, 17, 17)",
   maxWidth: "840px",
+  minWidth: "540px",
   backgroundColor: "rgb(255, 255, 255)",
   border: "1px solid #EDEFED",
   boxShadow: "rgba(118, 143, 255, 0.1) 0px 16px 24px 0px",
   margin: "25px auto 25px",
   padding: "40px",
   borderRadius: "4.5px",
-  fontSize: "1.6rem"
+  fontSize: "1.6rem",
 };
 
 // Define the default node type.
@@ -79,17 +89,17 @@ const BLOCK_TAGS = {
   code: "code",
   div: "hint",
   ol: "numbered-list",
-  li: "list-item"
+  li: "list-item",
 };
 
 const INLINE_TAGS = {
-  a: "link"
+  a: "link",
 };
 
 const MARK_TAGS = {
   i: "italic",
   strong: "bold",
-  h2: "header"
+  h2: "header",
 };
 
 // A function to determine whether a URL has an image extension.
@@ -111,7 +121,7 @@ function insertImage(editor, src, target) {
 
   editor.insertBlock({
     type: "image",
-    data: { src }
+    data: { src },
   });
 }
 
@@ -122,7 +132,7 @@ function insertVideo(editor, src, target) {
 
   editor.insertBlock({
     type: "video",
-    data: { src }
+    data: { src },
   });
 }
 
@@ -143,9 +153,9 @@ const rules = [
                     ({ name }) => name == "data-text"
                   ).value
                 : null,
-            className: el.src
+            className: el.src,
           },
-          nodes: next(el.childNodes)
+          nodes: next(el.childNodes),
         };
       }
     },
@@ -181,7 +191,7 @@ const rules = [
             );
         }
       }
-    }
+    },
   },
   // Add a new rule that handles marks...
   {
@@ -191,7 +201,7 @@ const rules = [
         return {
           object: "mark",
           type: type,
-          nodes: next(el.childNodes)
+          nodes: next(el.childNodes),
         };
       }
     },
@@ -206,7 +216,7 @@ const rules = [
             return <h2>{children}</h2>;
         }
       }
-    }
+    },
   },
   {
     deserialize(el, next) {
@@ -226,12 +236,12 @@ const rules = [
               undefined
                 ? Array.from(el.attributes).find(({ name }) => name == "href")
                     .value
-                : null
-          }
+                : null,
+          },
         };
       }
     },
-    serialize: function(object, children) {
+    serialize: function (object, children) {
       if (object.object == "inline") {
         switch (object.type) {
           case "link":
@@ -242,12 +252,12 @@ const rules = [
             );
         }
       }
-    }
-  }
+    },
+  },
 ];
 
 const html = new Html({
-  rules
+  rules,
 });
 
 const initialValue = `<p></p>`;
@@ -257,57 +267,57 @@ class App extends React.Component {
   state = {
     value: this.props.previousText
       ? html.deserialize(this.props.previousText)
-      : html.deserialize(initialValue)
+      : html.deserialize(initialValue),
   };
 
   // Check if the current selection has a mark with `type` in it.
 
-  hasMark = type => {
+  hasMark = (type) => {
     const { value } = this.state;
-    return value.activeMarks.some(mark => mark.type === type);
+    return value.activeMarks.some((mark) => mark.type === type);
   };
 
-  hasBlock = type => {
+  hasBlock = (type) => {
     const { value } = this.state;
-    return value.blocks.some(node => node.type === type);
+    return value.blocks.some((node) => node.type === type);
   };
 
   hasLinks = () => {
     const { value } = this.state;
-    return value.inlines.some(inline => inline.type === "link");
+    return value.inlines.some((inline) => inline.type === "link");
   };
 
   wrapLink = (editor, href) => {
     editor.wrapInline({
       type: "link",
-      data: { href }
+      data: { href },
     });
     editor.moveToEnd();
   };
 
-  unwrapLink = editor => {
+  unwrapLink = (editor) => {
     editor.unwrapInline("link");
   };
 
   hasHints = () => {
     const { value } = this.state;
-    return value.inlines.some(inline => inline.type === "hint");
+    return value.inlines.some((inline) => inline.type === "hint");
   };
 
   wrapHint = (editor, hint) => {
     editor.wrapInline({
       type: "hintWrapper",
-      data: { hint }
+      data: { hint },
     });
     editor.moveToEnd();
   };
 
-  unwrapHint = editor => {
+  unwrapHint = (editor) => {
     editor.unwrapInline("hint");
   };
 
   // Store a reference to the `editor`.
-  ref = editor => {
+  ref = (editor) => {
     this.editor = editor;
   };
 
@@ -319,13 +329,13 @@ class App extends React.Component {
           {this.renderMarkButton("italic", italic)}
           {this.renderMarkButton("header", header)}
           {this.renderBlockButton("numbered-list", list)}
-          <ButtonStyle onMouseDown={event => this.onClickLink(event)}>
+          <ButtonStyle onMouseDown={(event) => this.onClickLink(event)}>
             <Icon icon={link} />
           </ButtonStyle>
-          <ButtonStyle onMouseDown={event => this.onClickImage(event)}>
+          <ButtonStyle onMouseDown={(event) => this.onClickImage(event)}>
             <Icon icon={image} />
           </ButtonStyle>
-          <ButtonStyle onMouseDown={event => this.onClickFilm(event)}>
+          <ButtonStyle onMouseDown={(event) => this.onClickFilm(event)}>
             <Icon icon={film} />
           </ButtonStyle>
           {this.renderHintBlockButton("hint", eyeSlash)}
@@ -414,7 +424,7 @@ class App extends React.Component {
   // Render a mark-toggling toolbar button.
   renderMarkButton = (type, icon) => {
     return (
-      <ButtonStyle onClick={event => this.onClickMark(event, type)}>
+      <ButtonStyle onClick={(event) => this.onClickMark(event, type)}>
         <Icon icon={icon} />
       </ButtonStyle>
     );
@@ -422,7 +432,7 @@ class App extends React.Component {
 
   renderBlockButton = (type, icon) => {
     return (
-      <ButtonStyle onMouseDown={event => this.onClickBlock(event, type)}>
+      <ButtonStyle onMouseDown={(event) => this.onClickBlock(event, type)}>
         <Icon icon={icon} />
       </ButtonStyle>
     );
@@ -430,21 +440,21 @@ class App extends React.Component {
 
   renderHintBlockButton = (type, icon) => {
     return (
-      <ButtonStyle onMouseDown={event => this.onClickHintBlock(event, type)}>
+      <ButtonStyle onMouseDown={(event) => this.onClickHintBlock(event, type)}>
         <Icon icon={icon} />
       </ButtonStyle>
     );
   };
 
   // On clicking the image button, prompt for an image and insert it.
-  onClickImage = event => {
+  onClickImage = (event) => {
     event.preventDefault();
     const src = window.prompt("Enter the URL of the image:");
     if (!src) return;
     this.editor.command(insertImage, src);
   };
 
-  onClickFilm = event => {
+  onClickFilm = (event) => {
     event.preventDefault();
     const src = window.prompt("Enter the URL of the video:");
     if (!src) return;
@@ -473,8 +483,11 @@ class App extends React.Component {
     } else {
       // Handle the extra wrapping required for list buttons.
       const isList = this.hasBlock("list-item");
-      const isType = value.blocks.some(block => {
-        return !!document.getClosest(block.key, parent => parent.type === type);
+      const isType = value.blocks.some((block) => {
+        return !!document.getClosest(
+          block.key,
+          (parent) => parent.type === type
+        );
       });
 
       if (isList && isType) {
@@ -512,8 +525,11 @@ class App extends React.Component {
     } else {
       // Handle the extra wrapping required for list buttons.
       const isList = this.hasBlock("paragraph");
-      const isType = value.blocks.some(block => {
-        return !!document.getClosest(block.key, parent => parent.type === type);
+      const isType = value.blocks.some((block) => {
+        return !!document.getClosest(
+          block.key,
+          (parent) => parent.type === type
+        );
       });
 
       if (isList && isType) {
@@ -522,7 +538,7 @@ class App extends React.Component {
       } else if (isList) {
         editor.wrapBlock({
           type: "hint",
-          data: { data }
+          data: { data },
         });
 
         // .wrapBlock('hint', 'hintdata')
@@ -535,7 +551,7 @@ class App extends React.Component {
   //When clicking a link, if the selection has a link in it, remove the link.
   //Otherwise, add a new link with an href and text.
 
-  onClickLink = event => {
+  onClickLink = (event) => {
     event.preventDefault();
     const { editor } = this;
     const { value } = editor;

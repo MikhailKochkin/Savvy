@@ -166,4 +166,3 @@ const ShownCourses = (props) => {
 };
 
 export default withTranslation("Search")(ShownCourses);
-// export default ShownCourses;
