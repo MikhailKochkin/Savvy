@@ -258,12 +258,13 @@ class SingleProblem extends Component {
                 </Mutation>
               </>
             )}
-            {(me && me.id === problem.user.id) ||
-              (me.permissions.includes("ADMIN") && !story && (
+            {me &&
+              (me.id === problem.user.id || me.permissions.includes("ADMIN")) &&
+              !story && (
                 <StyledButton onClick={(e) => this.setState({ update: true })}>
                   Изменить
                 </StyledButton>
-              ))}
+              )}
             {me && me.id === problem.user.id && !story ? (
               <DeleteSingleProblem
                 id={problem.id}
