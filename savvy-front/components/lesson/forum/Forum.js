@@ -8,6 +8,7 @@ import moment from "moment";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateStatement from "./CreateStatement";
 import DeleteStatement from "./DeleteStatement";
+import { withTranslation } from "../../../i18n";
 
 const CREATE_RATING_MUTATION = gql`
   mutation CREATE_RATING_MUTATION($rating: Int, $forum: ID!) {
@@ -68,11 +69,7 @@ const Forum = (props) => {
   return (
     <Styles>
       <p>{renderHTML(text)}</p>
-      <div className="header">
-        Пожалуйста, оцените, насколько полезен был этот урок. Преподаватель
-        увидит оценки в анонимном формате.
-      </div>
-
+      <div className="header">{props.t("rate")}</div>
       {result ? (
         <Mutation
           mutation={UPDATE_RATING_MUTATION}
@@ -99,7 +96,7 @@ const Forum = (props) => {
               changeRating={async (data) => {
                 const res = await setRating(data);
                 const res1 = updateRating();
-                alert("Спасибо!");
+                alert(props.t("thank"));
               }}
             />
           )}
@@ -130,13 +127,13 @@ const Forum = (props) => {
               changeRating={async (data) => {
                 const res = await setRating(data);
                 const res1 = createRating();
-                alert("Спасибо!");
+                alert(props.t("thank"));
               }}
             />
           )}
         </Mutation>
       )}
-      <div className="header2">Чат</div>
+      <div className="header2">{props.t("chat")}</div>
       {statements.length > 0 ? (
         <>
           {statements.map((s) => (
@@ -161,13 +158,11 @@ const Forum = (props) => {
           ))}
         </>
       ) : (
-        <div id="comment">
-          Никто еще ничего не написал по этой теме. Станьте первым!
-        </div>
+        <div id="comment">{props.t("noone")}</div>
       )}
       <CreateStatement forum={id} lesson={lesson} />
     </Styles>
   );
 };
 
-export default Forum;
+export default withTranslation("tasks")(Forum);

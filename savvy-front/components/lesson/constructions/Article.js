@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import { withTranslation } from "../../../i18n";
 
 const Styles = styled.div`
   width: 98%;
@@ -89,10 +90,10 @@ class Article extends Component {
         if (
           !e.target.nextSibling ||
           (e.target.nextSibling &&
-            e.target.nextSibling.innerHTML !== "Показать")
+            e.target.nextSibling.innerHTML !== this.props.t("show"))
         ) {
           let button2 = document.createElement("button");
-          button2.innerHTML = "Показать";
+          button2.innerHTML = this.props.t("show1");
           button2.className = "mini_button";
           button2.addEventListener("click", this.show);
           e.target.after(button2);
@@ -122,7 +123,7 @@ class Article extends Component {
     let n = e.target.parentNode.replaceChild(z, e.target);
 
     let button = document.createElement("button");
-    button.innerHTML = "Проверить";
+    button.innerHTML = this.props.t("check");
     button.className = "mini_button";
     button.tabIndex = 0;
     button.addEventListener("click", this.check);
@@ -153,4 +154,4 @@ class Article extends Component {
   }
 }
 
-export default Article;
+export default withTranslation("tasks")(Article);

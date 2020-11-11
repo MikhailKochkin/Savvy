@@ -28,6 +28,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       structure
       change
       open
+      lessonResults {
+        id
+        student {
+          id
+        }
+        progress
+      }
       createdAt
       user {
         id
@@ -387,17 +394,6 @@ const NewSingleLesson = (props) => {
     smoothscroll.polyfill();
   });
 
-  const compare = (a, b) => {
-    let comparison = 0;
-    if (a.number > b.number) {
-      comparison = 1;
-    } else if (a.number < b.number) {
-      comparison = -1;
-    } else {
-      comparison = 1;
-    }
-    return comparison;
-  };
   return (
     <PleaseSignIn>
       <div id="root"></div>
@@ -420,7 +416,12 @@ const NewSingleLesson = (props) => {
                   </Progress>
                 );
               let lesson = data.lesson;
-              // if (lesson === undefined) return <Reload />;
+              let my_result;
+              if (me) {
+                my_result = lesson.lessonResults.find(
+                  (l) => l.student.id === me.id
+                );
+              }
               let next = lesson.coursePage.lessons.find(
                 (l) => l.number === lesson.number + 1
               );
@@ -495,6 +496,7 @@ const NewSingleLesson = (props) => {
                               me={me}
                               lesson={lesson}
                               next={next}
+                              my_result={my_result}
                               coursePageID={lesson.coursePage.id}
                             />
                           </ReactCSSTransitionGroup>

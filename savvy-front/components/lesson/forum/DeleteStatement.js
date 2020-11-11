@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { withTranslation } from "../../../i18n";
 
 const DELETE_STATEMENT_MUTATION = gql`
   mutation DELETE_STATEMENT_MUTATION($id: ID!) {
@@ -40,18 +41,18 @@ const DeleteStatement = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm("Вы точно хотите удалить это сообщение?")) {
+            if (confirm(props.t("sure"))) {
               deleteStatement().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? "Удаляем..." : "Удалить"}
+          {loading ? props.t("deleting") : props.t("delete")}
         </Button>
       )}
     </Mutation>
   );
 };
 
-export default DeleteStatement;
+export default withTranslation("update")(DeleteStatement);

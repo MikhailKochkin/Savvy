@@ -1,172 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Query, Mutation } from "react-apollo";
+import { Mutation } from "react-apollo";
 import gql from "graphql-tag";
+import moment from "moment";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import LessonData from "./LessonData";
-
-// const SINGLE_STUDENT_RESULTS_QUERY = gql`
-//   query SINGLE_STUDENT_RESULTS_QUERY($id: ID!) {
-//     user(where: { new_subjects_some: {id : id} }) {
-//       id
-//       # title
-//       # courseType
-//       # new_students {
-//       #   id
-//       #   name
-//       #   surname
-//       #   email
-//       #   resume
-//       #   coverLetter
-//       #   courseVisits {
-//       #     id
-//       #     reminders
-//       #     visitsNumber
-//       #     coursePage {
-//       #       id
-//       #     }
-//       #   }
-//         # studentFeedback {
-//         #   id
-//         #   text
-//         #   lesson {
-//         #     id
-//         #   }
-//         #   createdAt
-//         # }
-//         # lessonResults {
-//         #   id
-//         #   visitsNumber
-//         #   lesson {
-//         #     id
-//         #   }
-//         #   student {
-//         #     id
-//         #     email
-//         #   }
-//         #   createdAt
-//         #   updatedAt
-//         # }
-//         # problemResults {
-//         #   id
-//         #   answer
-//         #   lesson {
-//         #     id
-//         #   }
-//         #   revealed
-//         #   problem {
-//         #     id
-//         #     text
-//         #     lesson {
-//         #       id
-//         #     }
-//         #   }
-//         # }
-//         # testResults {
-//         #   id
-//         #   answer
-//         #   test {
-//         #     id
-//         #     question
-//         #   }
-//         #   student {
-//         #     id
-//         #   }
-//         # }
-//         # quizResults {
-//         #   id
-//         #   student {
-//         #     id
-//         #   }
-//         #   quiz {
-//         #     id
-//         #   }
-//         #   answer
-//         # }
-//         # documentResults {
-//         #   id
-//         #   user {
-//         #     id
-//         #   }
-//         #   document {
-//         #     id
-//         #   }
-//         #   answers
-//         #   drafts
-//         #   createdAt
-//         # }
-//       }
-//       # examQuestion {
-//       #   id
-//       #   question
-//       #   answers {
-//       #     id
-//       #     answer
-//       #     student {
-//       #       id
-//       #       name
-//       #     }
-//       #   }
-//       # }
-//       # lessons {
-//       #   id
-//       #   text
-//       #   name
-//       #   number
-//       #   structure
-//       #   coursePage {
-//       #     id
-//       #   }
-//       #   forum {
-//       #     id
-//       #   }
-//       #   newTests {
-//       #     id
-//       #     question
-//       #     answers
-//       #     correct
-//       #     next
-//       #   }
-//       #   quizes {
-//       #     id
-//       #     question
-//       #     answer
-//       #     next
-//       #   }
-//       #   documents {
-//       #     id
-//       #     title
-//       #   }
-//       #   notes {
-//       #     id
-//       #     text
-//       #     next
-//       #   }
-//       #   problems {
-//       #     id
-//       #     text
-//       #     nodeID
-//       #     nodeType
-//       #   }
-//       #   texteditors {
-//       #     id
-//       #     text
-//       #     totalMistakes
-//       #   }
-//       #   constructions {
-//       #     id
-//       #     name
-//       #     variants
-//       #     answer
-//       #   }
-//       #   user {
-//       #     id
-//       #   }
-//       # }
-//     }
-//   }
-// `;
 
 const UPDATE_COURSE_VISIT_MUTATION = gql`
   mutation UPDATE_COURSE_VISIT_MUTATION($id: ID!, $reminders: [DateTime]) {
@@ -212,9 +51,9 @@ const Open = styled.div`
 `;
 
 const Header = styled.div`
-  width: 80%;
+  width: 100%;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 2fr;
   grid-template-rows: 40px;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
@@ -226,6 +65,8 @@ const Header = styled.div`
   }
   .div3 {
     grid-area: 1 / 3 / 2 / 4;
+  }
+  .div4 {
   }
   @media (max-width: 800px) {
     width: 100%;
@@ -242,6 +83,14 @@ const Buttons = styled.div`
   flex-direction: row;
   margin: 2% 0;
   margin-bottom: 3%;
+`;
+
+const RegDate = styled.div`
+  background: ${(props) => (props.date ? "#ade8f4" : null)};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SendButton = styled.div`
@@ -341,7 +190,7 @@ class Person extends Component {
     this.setState({ page: e.target.getAttribute("name") });
   };
   render() {
-    let { student, lessons, courseVisit, coursePageID } = this.props;
+    const { student, lessons, courseVisit, coursePageID } = this.props;
     let mail = `mailto:${student.email}`;
     let color;
     // Step 1. We filter the lessons to see if the lessons have been
@@ -352,6 +201,7 @@ class Person extends Component {
     let lesson_results = student.lessonResults.filter((l) =>
       lesson_list.includes(l.lesson.id)
     );
+    moment.locale("ru");
 
     // Step 2. We create a "completed" array. We will push to this array the lessons which
     // have been visited and whose prooblems have been completed.
@@ -379,6 +229,8 @@ class Person extends Component {
       color = "#84BC9C";
     }
 
+    let two_months_ago = new Date();
+    two_months_ago.setMonth(two_months_ago.getMonth() - 2);
     return (
       <>
         <Styles>
@@ -394,6 +246,18 @@ class Person extends Component {
             <StyledButton className="div3" onClick={this.onShow}>
               {this.state.secret ? "Открыть" : "Закрыть"}
             </StyledButton>
+            <RegDate
+              className="div4"
+              date={
+                courseVisit
+                  ? courseVisit.createdAt > moment(two_months_ago).format()
+                  : false
+              }
+            >
+              {courseVisit
+                ? moment(courseVisit.createdAt).format("Do MMMM YYYY")
+                : "Не определен"}
+            </RegDate>
           </Header>
           <Open secret={this.state.secret}>
             <Buttons>

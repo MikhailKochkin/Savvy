@@ -199,8 +199,11 @@ class StoryEx extends Component {
           <Feed
             components={components}
             next={next}
+            number_of_tasks={tasks.length}
             coursePageID={coursePageID}
             me={me}
+            lessonID={lesson.id}
+            my_result={this.props.my_result}
           />
         </ReactCSSTransitionGroup>
       </Container>

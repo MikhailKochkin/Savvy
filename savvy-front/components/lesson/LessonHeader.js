@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import { withTranslation } from "../../i18n";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: ID!, $published: Boolean) {
@@ -26,8 +27,16 @@ const CREATE_LESSONRESULT_MUTATION = gql`
 `;
 
 const UPDATE_LESSONRESULT_MUTATION = gql`
-  mutation UPDATE_LESSONRESULT_MUTATION($id: ID!, $visitsNumber: Int) {
-    updateLessonResult(id: $id, visitsNumber: $visitsNumber) {
+  mutation UPDATE_LESSONRESULT_MUTATION(
+    $id: ID!
+    $visitsNumber: Int
+    $progress: Int
+  ) {
+    updateLessonResult(
+      id: $id
+      visitsNumber: $visitsNumber
+      progress: $progress
+    ) {
       id
     }
   }
@@ -202,11 +211,6 @@ class LessonHeader extends Component {
   state = {
     published: this.props.lesson.published,
     reveal: false,
-    info: `
-    <p>Привет!</p>
-    <p>В уроке разбираются, такие вопросы, как ...</p>
-    <p>Вы научитесь, считать, писать или читать!</p>
-    <p>Обязателен для тех, кто хочет получить отметку 5.</p>`,
   };
 
   handleInputChange = (event) => {
@@ -232,45 +236,27 @@ class LessonHeader extends Component {
       me,
     } = this.props;
 
-    let tests = [];
-    let quizes = [];
-    let problems = [];
     let color;
 
-    // if (me) {
-    //   let visits = lesson.lessonResults.filter((l) => l.student.id === me.id);
-    //   // console.log(lesson.quizes, lesson.quizes.length > 0);
-    //   if (lesson.quizes.length > 0) {
-    //     lesson.quizes.map((l) => quizes.push(...l.quizResults));
-    //   }
-    //   quizes = quizes.filter((q) => q.student.id === me.id);
-    //   if (lesson.newTests.length > 0) {
-    //     lesson.newTests.map((l) => tests.push(...l.testResults));
-    //   }
-    //   tests = tests.filter((l) => l.student.id === me.id);
-    //   if (lesson.problems.length > 0) {
-    //     lesson.problems.map((l) => problems.push(...l.problemResults));
-    //   }
-    //   problems = problems.filter((l) => l.student.id === me.id);
-    //   if (
-    //     visits.length > 0 &&
-    //     tests.length === 0 &&
-    //     problems.length === 0 &&
-    //     quizes.length === 0
-    //   ) {
-    //     color = "#FFD836";
-    //   } else if (
-    //     visits.length > 0 &&
-    //     (tests.length > 0 || problems.length > 0 || quizes.length > 0)
-    //   ) {
-    //     color = "#32AC66";
-    //   } else {
-    //     color = "white";
-    //   }
-    // } else {
-    //   color = "white";
-    // }
-    color = "white";
+    if (me) {
+      let visit = lesson.lessonResults.find((l) => l.student.id === me.id);
+      let progress;
+      if (visit && visit.lesson.structure) {
+        progress = visit.progress / visit.lesson.structure.length;
+      } else {
+        progress = 0;
+      }
+      if (visit && progress < 0.9) {
+        color = "#FFD836";
+      } else if (visit && progress > 0.9) {
+        color = "#32AC66";
+      } else {
+        color = "white";
+      }
+    } else {
+      color = "white";
+    }
+    // color = "white";
     return (
       <>
         <TextBar color={color}>
@@ -356,17 +342,16 @@ class LessonHeader extends Component {
                               >
                                 <A>
                                   <Button
-                                    onClick={() => {
-                                      createLessonResult();
+                                    onClick={async (e) => {
+                                      let res = await createLessonResult();
                                       console.log(0);
                                     }}
                                   >
-                                    Перейти
+                                    {this.props.t("start")}
                                   </Button>
                                 </A>
                               </Link>
                             ) : null}
-
                             {me &&
                               lesson &&
                               me.id !== lesson.user.id &&
@@ -387,12 +372,12 @@ class LessonHeader extends Component {
                                 >
                                   <A>
                                     <Button
-                                      onClick={() => {
-                                        createLessonResult();
+                                      onClick={async (e) => {
+                                        let res = await createLessonResult();
                                         console.log(1);
                                       }}
                                     >
-                                      Перейти
+                                      {this.props.t("start")}
                                     </Button>
                                   </A>
                                 </Link>
@@ -421,11 +406,11 @@ class LessonHeader extends Component {
                     {(updateLessonResult, { loading, error }) => {
                       return (
                         <>
+                          {/* 1. Button for the teacher (if admin / course owner) */}
                           {me &&
                           lesson &&
                           (me.id === author ||
-                            me.permissions.includes("ADMIN") ||
-                            lesson.open) ? (
+                            me.permissions.includes("ADMIN")) ? (
                             <Link
                               // The user is the teacher or the admin or it is an openLesson.
                               href={{
@@ -443,12 +428,13 @@ class LessonHeader extends Component {
                                     console.log(3);
                                   }}
                                 >
-                                  Перейти
+                                  {this.props.t("start")}
                                 </Button>
                               </A>
                             </Link>
                           ) : null}
 
+                          {/* 2. Button for the student (if registered not admin course owner)  */}
                           {me &&
                             lesson &&
                             me.id !== lesson.user.id &&
@@ -473,7 +459,42 @@ class LessonHeader extends Component {
                                       console.log(4);
                                     }}
                                   >
-                                    Перейти
+                                    {this.props.t("start")}
+                                  </Button>
+                                </A>
+                              </Link>
+                            )}
+                          {/* 3. Button for the open lesson ( if open and not registered / admin) */}
+                          {me &&
+                            lesson &&
+                            lesson.open &&
+                            me.id !== lesson.user.id &&
+                            !me.permissions.includes("ADMIN") &&
+                            !students.includes(me.id) &&
+                            !new_students.includes(me.id) &&
+                            this.state.published && (
+                              <Link
+                                // The user HAS visited the lesson page and we update it now
+                                href={{
+                                  pathname: "/lesson",
+                                  query: {
+                                    id: lesson.id,
+                                    type: lesson.type.toLowerCase(),
+                                  },
+                                }}
+                              >
+                                <A>
+                                  {console.log(
+                                    students.includes(me.id),
+                                    new_students.includes(me.id)
+                                  )}
+                                  <Button
+                                    onClick={() => {
+                                      updateLessonResult();
+                                      console.log(5);
+                                    }}
+                                  >
+                                    {this.props.t("start")}
                                   </Button>
                                 </A>
                               </Link>
@@ -504,6 +525,7 @@ class LessonHeader extends Component {
   }
 }
 
-export default LessonHeader;
+export default withTranslation("course")(LessonHeader);
+
 export { CREATE_LESSONRESULT_MUTATION };
 export { UPDATE_LESSONRESULT_MUTATION };

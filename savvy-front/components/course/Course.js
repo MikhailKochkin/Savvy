@@ -20,8 +20,16 @@ const SINGLE_COURSE_VISIT_QUERY = gql`
 `;
 
 const CREATE_COURSE_VISIT_MUTATION = gql`
-  mutation CREATE_COURSE_VISIT_MUTATION($visitsNumber: Int, $coursePage: ID) {
-    createCourseVisit(visitsNumber: $visitsNumber, coursePage: $coursePage) {
+  mutation CREATE_COURSE_VISIT_MUTATION(
+    $visitsNumber: Int
+    $coursePage: ID
+    $student: ID
+  ) {
+    createCourseVisit(
+      visitsNumber: $visitsNumber
+      coursePage: $coursePage
+      student: $student
+    ) {
       id
     }
   }
@@ -263,6 +271,7 @@ export default class Course extends Component {
                             variables={{
                               coursePage: id,
                               visitsNumber: 1,
+                              student: me.id,
                             }}
                             refetchQueries={() => [
                               {

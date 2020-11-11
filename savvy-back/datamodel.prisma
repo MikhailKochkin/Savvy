@@ -478,6 +478,7 @@ type LessonResult {
   student: User! @relation(name: "UserLessonResults")
   visitsNumber: Int @default(value: 0)
   lesson: Lesson! @relation(name: "LessonResults")
+  progress: Int @default(value: 0)
   lessonID: ID
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt

@@ -24,7 +24,7 @@ class ProblemResults extends Component {
       <>
         <Container>
           {problems.length > 0 &&
-            problems.map(problem => (
+            problems.map((problem) => (
               <ProblemModal problem={problem} student={student} />
             ))}
         </Container>

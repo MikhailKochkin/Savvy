@@ -9,6 +9,7 @@ import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import Interactive from "./Interactive";
 import UpdateProblem from "./UpdateProblem";
+import { withTranslation } from "../../../i18n";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -196,8 +197,8 @@ class SingleProblem extends Component {
                   }}
                 >
                   {this.state.revealAnswer
-                    ? "Закрыть ответы"
-                    : "Открыть ответы"}
+                    ? this.props.t("close")
+                    : this.props.t("open")}
                 </StyledButton>
               </ButtonGroup>
             )}
@@ -242,16 +243,16 @@ class SingleProblem extends Component {
                             const res2 = await this.setState({
                               revealAnswer: true,
                             });
-                            alert(
-                              "Ваш ответ сохранен! Вы можете посмотреть вариант преподавателя и перейти к следующему заданию."
-                            );
+                            alert(this.props.t("saved"));
                             console.log("Yes");
                           } else {
                             console.log("No");
                           }
                         }}
                       >
-                        {loading ? "В процессе..." : "Ответить"}
+                        {loading
+                          ? this.props.t("checking")
+                          : this.props.t("check")}
                       </StyledButton>
                     </Buttons>
                   )}
@@ -262,7 +263,7 @@ class SingleProblem extends Component {
               (me.id === problem.user.id || me.permissions.includes("ADMIN")) &&
               !story && (
                 <StyledButton onClick={(e) => this.setState({ update: true })}>
-                  Изменить
+                  {this.props.t("update")}
                 </StyledButton>
               )}
             {me && me.id === problem.user.id && !story ? (
@@ -285,11 +286,6 @@ class SingleProblem extends Component {
               newTests={lesson.newTests}
               notes={lesson.notes}
             />
-            {/* {me && me.id === problem.user.id && !story && (
-              <StyledButton onClick={(e) => this.setState({ update: false })}>
-                Изменить
-              </StyledButton>
-            )} */}
           </>
         )}
       </>
@@ -297,4 +293,4 @@ class SingleProblem extends Component {
   }
 }
 
-export default SingleProblem;
+export default withTranslation("tasks")(SingleProblem);

@@ -12,25 +12,24 @@ const Styles = styled.div`
 
 const Header = styled.p`
   font-size: 1.8rem;
-  background: #edefed;
+  /* background: #edefed; */
   padding: 0.5% 2%;
   padding-top: 8px;
   margin: 0;
   margin-top: -2px;
-  border: 1px solid #edefed;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  margin-bottom: 5px;
+  border-bottom: 2px solid #edefed;
 `;
 
 const UserAnalytics = (props) => {
   const { coursePageID, students, lessons } = props;
-  console.log(props.student);
   return (
     <Styles>
+      <Header>Всего пользователей: {students.length} </Header>
       {students.map((student) => (
         <>
           <StudentData
-            coursePage={coursePageID}
+            coursePageID={coursePageID}
             student={student}
             lessons={lessons}
             courseVisit={

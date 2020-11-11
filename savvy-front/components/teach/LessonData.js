@@ -7,6 +7,7 @@ import { Query, Mutation } from "react-apollo";
 import gql from "graphql-tag";
 import CreateFeedback from "./CreateFeedback";
 import TestResult from "./results/TestResult";
+import TexteditorResult from "./results/TexteditorResult";
 import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
 import DocumentResult from "./results/DocumentResult";
@@ -115,11 +116,11 @@ const LessonData = (props) => {
           {/*<ConstructionResult
             constructions={lesson.constructions}
             student={student}
-          />
+          /> */}
           <TexteditorResult
             texteditors={lesson.texteditors}
             student={student}
-          /> */}
+          />
           <DocumentResult documents={lesson.documents} student={student} />
           <CreateFeedback
             coursePage={coursePageID}

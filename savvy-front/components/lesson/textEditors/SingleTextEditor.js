@@ -8,9 +8,9 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { CURRENT_USER_QUERY } from "../../User";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { withTranslation } from "../../../i18n";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -178,7 +178,7 @@ class SingleTextEditor extends Component {
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
     )[0];
-    e.target.innerHTML = "Проверяю...";
+    e.target.innerHTML = this.props.t("checking");
     e.target.pointerEvents = "none";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
@@ -193,10 +193,10 @@ class SingleTextEditor extends Component {
         if (
           !e.target.nextSibling ||
           (e.target.nextSibling &&
-            e.target.nextSibling.innerHTML !== "Показать")
+            e.target.nextSibling.innerHTML !== this.props.t("show1"))
         ) {
           let button2 = document.createElement("button");
-          button2.innerHTML = "Показать";
+          button2.innerHTML = this.props.t("show1");
           button2.className = "mini_button";
           button2.addEventListener("click", this.show);
           e.target.after(button2);
@@ -206,14 +206,14 @@ class SingleTextEditor extends Component {
             result: true,
           });
           el.style.background = "#D9EAD3";
-          e.target.innerHTML = "Проверить";
+          e.target.innerHTML = this.props.t("check");
           e.target.pointerEvents = "auto";
         } else {
           this.setState({
             result: false,
           });
           el.style.background = "#FCE5CD";
-          e.target.innerHTML = "Проверить";
+          e.target.innerHTML = this.props.t("check");
           e.target.pointerEvents = "auto";
 
           if (res.comment) {
@@ -243,7 +243,7 @@ class SingleTextEditor extends Component {
     let n = e.target.parentNode.replaceChild(z, e.target);
 
     let button = document.createElement("button");
-    button.innerHTML = "Проверить";
+    button.innerHTML = this.props.t("check");
     button.className = "mini_button";
     button.tabIndex = 0;
     button.addEventListener("click", this.check);
@@ -377,7 +377,9 @@ class SingleTextEditor extends Component {
                 variant="contained"
                 color="primary"
               >
-                {this.state.mistakesShown ? "Скрыть ошибки" : "Показать ошибки"}
+                {this.state.mistakesShown
+                  ? this.props.t("close2")
+                  : this.props.t("open2")}
               </StyledButton>
               {me && me.id === textEditor.user.id && !story ? (
                 <DeleteSingleTextEditor
@@ -391,7 +393,7 @@ class SingleTextEditor extends Component {
                     this.setState((prev) => ({ update: !prev.update }))
                   }
                 >
-                  Изменить
+                  {this.props.t("update")}
                 </StyledButton>
               )}
             </Buttons>
@@ -413,9 +415,8 @@ class SingleTextEditor extends Component {
 SingleTextEditor.propTypes = {
   lessonID: PropTypes.string.isRequired,
   textEditor: PropTypes.object.isRequired,
-  // id: PropTypes.string.isRequired,
   me: PropTypes.object.isRequired,
   userData: PropTypes.object.isRequired,
 };
 
-export default SingleTextEditor;
+export default withTranslation("tasks")(SingleTextEditor);

@@ -99,7 +99,7 @@ type Mutation {
   ): NewTest
   updateTestForProblem(id: ID, next: Json): NewTest
   createLessonResult(visitsNumber: Int, lessonID: ID): LessonResult!
-  updateLessonResult(id: ID!, visitsNumber: Int): LessonResult!
+  updateLessonResult(id: ID!, visitsNumber: Int, progress: Int): LessonResult!
   createTestResult(
     answer: String
     attempts: Int

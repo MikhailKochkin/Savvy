@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SingleTextEditor from "./SingleTextEditor";
 import styled from "styled-components";
+import { withTranslation } from "../../../i18n";
 
 const Advice = styled.p`
   font-size: 1.6rem;
@@ -66,9 +67,10 @@ class TextEditorGroup extends Component {
       <>
         <Box>
           <Title>
-            Редактор {this.state.num + 1} из {this.props.textEditors.length}
-            <button onClick={this.onPrev}>Предыдущий</button>
-            <button onClick={this.onNext}>Следующий</button>
+            {this.state.num + 1} {this.props.t("out")}{" "}
+            {this.props.textEditors.length}
+            <button onClick={this.onPrev}>{this.props.t("prev1")} </button>
+            <button onClick={this.onNext}>{this.props.t("next1")} </button>
           </Title>
         </Box>
         {textEditor && (
@@ -86,4 +88,4 @@ class TextEditorGroup extends Component {
   }
 }
 
-export default TextEditorGroup;
+export default withTranslation("tasks")(TextEditorGroup);

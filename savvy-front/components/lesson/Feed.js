@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import _ from "lodash";
 import Button from "@material-ui/core/Button";
@@ -72,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     width: "100%",
     fontSize: "1.4rem",
+    background: "yellow",
     fontFamily: "Montserrat",
     textTransform: "none",
     textDecoration: "none",
@@ -87,8 +87,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
-  const [num, setNum] = useState(0);
-
+  const [num, setNum] = useState(
+    props.my_result &&
+      props.my_result.progress !== null &&
+      props.my_result.progress !== 0 &&
+      props.my_result.progress / props.number_of_tasks < 0.9
+      ? props.my_result.progress - 1
+      : 0
+  );
+  console.log(props.my_result.progress);
   const classes = useStyles();
 
   const move = async (e) => {
@@ -147,6 +154,34 @@ const Feed = (props) => {
   } else {
     visited = [];
   }
+
+  useEffect(() => {
+    if (
+      props.components.length > num + 1 &&
+      props.my_result &&
+      props.my_result.progress / props.number_of_tasks < 0.9
+    ) {
+      if (props.components.length > num + 2) {
+        var my_element = document.getElementsByClassName("final")[0]
+          .previousSibling;
+        my_element &&
+          my_element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest",
+          });
+      } else if (props.components.length === num + 2) {
+        var my_element = document.getElementsByClassName("no")[
+          document.getElementsByClassName("no").length - 1
+        ];
+        my_element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
+      }
+    }
+  }, [0]);
   return (
     <Styles>
       {props.components.slice(0, num + 2).map((c, i) => (
@@ -155,11 +190,43 @@ const Feed = (props) => {
           className={i === num + 1 ? "final" : "no"}
         >
           {c}
-          {props.components.length > num + 1 && i === num && (
-            <div className="button" onClick={(e) => move()}>
-              <img className="arrow" src="../../static/down-arrow.svg" />
-            </div>
-          )}
+          <Mutation
+            mutation={UPDATE_LESSONRESULT_MUTATION}
+            variables={{
+              id: props.my_result.id,
+              lessonID: props.lessonID,
+              progress: num + 2,
+            }}
+            refetchQueries={() => [
+              {
+                query: SINGLE_COURSEPAGE_QUERY,
+                variables: { id: props.coursePageID },
+              },
+            ]}
+          >
+            {(updateLessonResult, { loading, error }) => {
+              return (
+                <>
+                  {props.components.length > num + 1 && i === num && (
+                    <div
+                      className="button"
+                      onClick={(e) => {
+                        if (props.my_result.progress < num + 2) {
+                          let res = updateLessonResult();
+                        }
+                        let res2 = move();
+                      }}
+                    >
+                      <img
+                        className="arrow"
+                        src="../../static/down-arrow.svg"
+                      />
+                    </div>
+                  )}
+                </>
+              );
+            }}
+          </Mutation>
         </Block>
       ))}
       <Stepper>

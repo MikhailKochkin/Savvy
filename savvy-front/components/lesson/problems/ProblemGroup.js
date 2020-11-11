@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SingleProblem from "./SingleProblem";
 import styled from "styled-components";
+import { withTranslation } from "../../../i18n";
 
 const Title = styled.p`
   font-size: 1.6rem;
@@ -40,40 +41,41 @@ const Advice = styled.div`
 
 class ProblemGroup extends Component {
   state = {
-    num: 0
+    num: 0,
   };
   onNext = () => {
     if (this.state.num < this.props.problems.length - 1) {
-      this.setState(prevState => ({
-        num: prevState.num + 1
+      this.setState((prevState) => ({
+        num: prevState.num + 1,
       }));
     }
   };
   onPrev = () => {
     if (this.state.num > 0) {
-      this.setState(prevState => ({
-        num: prevState.num - 1
+      this.setState((prevState) => ({
+        num: prevState.num - 1,
       }));
     }
   };
   render() {
     const userData = this.props.problemResults.filter(
-      result => result.student.id === this.props.me.id
+      (result) => result.student.id === this.props.me.id
     );
     const problem = this.props.problems[this.state.num];
     return (
       <>
-        <Advice>
+        {/* <Advice>
           <b>Совет</b>: чтобы увидеть ответ на задачу, вам нужно сначала дать
           собственный ответ. Для этого введите его в форму ниже и нажмите на
           кнопку "Ответить". После этого при нажатии на раздел "Ответ", вам
           откроется ответ на задачу.{" "}
-        </Advice>
+        </Advice> */}
         <Box>
           <Title>
-            Задача {this.state.num + 1} из {this.props.problems.length}
-            <button onClick={this.onPrev}>Предыдущая</button>
-            <button onClick={this.onNext}>Следующая</button>
+            {this.props.t("case")} {this.state.num + 1} {this.props.t("out")}{" "}
+            {this.props.problems.length}
+            <button onClick={this.onPrev}>{this.props.t("prev1")} </button>
+            <button onClick={this.onNext}>{this.props.t("next1")} </button>
           </Title>
         </Box>
         {problem && (
@@ -91,4 +93,4 @@ class ProblemGroup extends Component {
   }
 }
 
-export default ProblemGroup;
+export default withTranslation("tasks")(ProblemGroup);

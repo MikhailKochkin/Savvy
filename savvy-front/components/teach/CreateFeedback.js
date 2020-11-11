@@ -79,6 +79,7 @@ class CreateFeedback extends Component {
         <TextBox>
           <DynamicLoadedEditor getEditorText={this.myCallback} name="text" />
         </TextBox>
+        {console.log(this.props.coursePage)}
         <Mutation
           mutation={CREATE_FEEDBACK_MUTATION}
           variables={{

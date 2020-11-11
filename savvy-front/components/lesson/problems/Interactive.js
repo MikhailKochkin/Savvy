@@ -4,6 +4,7 @@ import styled from "styled-components";
 import SingleQuiz from "../quizes/SingleQuiz";
 import SingleTest from "../tests/SingleTest";
 import Note from "../notes/Note";
+import { withTranslation } from "../../../i18n";
 
 const Styles = styled.div`
   width: 100%;
@@ -174,12 +175,7 @@ class Interactive extends Component {
       data[1].value === null ||
       data[1].value === ""
     ) {
-      finish = (
-        <Final>
-          {" "}
-          Теперь запишите ответ на задачу на основе наводящих вопросов📝
-        </Final>
-      );
+      finish = <Final> {this.props.t("final")}📝</Final>;
       this.setState((state) => {
         if (!(finish in this.state.componentList)) {
           const componentList = [...state.componentList, finish];
@@ -265,11 +261,12 @@ class Interactive extends Component {
     return (
       <Styles>
         <div id="suggestion">
-          👩🏼‍🏫<b>Начнем решать задачу вместе?</b> Зададим наводящие вопросы и
-          покажем, как прийти к правильному ответу.
+          👩🏼‍🏫<b>{this.props.t("together")}</b>
           <br />
           <Button onClick={this.show}>
-            {!this.state.display ? "Первый вопрос" : "Закрыть"}
+            {!this.state.display
+              ? this.props.t("first")
+              : this.props.t("close1")}
           </Button>
         </div>
         <Questions display={this.state.display}>
@@ -286,4 +283,4 @@ Interactive.propTypes = {
   exam: PropTypes.object.isRequired,
 };
 
-export default Interactive;
+export default withTranslation("tasks")(Interactive);

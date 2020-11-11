@@ -82,9 +82,14 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         lessonResults {
           id
           visitsNumber
+          progress
           lessonID
           student {
             id
+          }
+          lesson {
+            id
+            structure
           }
         }
       }

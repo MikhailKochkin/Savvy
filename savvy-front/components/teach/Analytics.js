@@ -27,6 +27,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           coursePage {
             id
           }
+          createdAt
         }
         studentFeedback {
           id
@@ -152,6 +153,19 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           text
           totalMistakes
+          textEditorResults {
+            id
+            wrong
+            correct
+            guess
+            attempts
+            student {
+              id
+            }
+            textEditor {
+              id
+            }
+          }
         }
         constructions {
           id
@@ -174,7 +188,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  width: 70%;
+  width: 80%;
   display: flex;
   flex-direction: row;
   .menu {
@@ -276,7 +290,6 @@ class Analytics extends Component {
                   if (loading2) return <Loading />;
                   if (error2) return <p>Ошибка!</p>;
                   let coursePage = data2.coursePage;
-                  console.log(coursePage);
                   return (
                     <>
                       {this.state.page === "student_results" && (

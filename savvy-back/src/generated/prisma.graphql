@@ -9803,6 +9803,7 @@ type LessonResult {
   student: User!
   visitsNumber: Int
   lesson: Lesson!
+  progress: Int
   lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -9819,6 +9820,7 @@ input LessonResultCreateInput {
   student: UserCreateOneWithoutLessonResultsInput!
   visitsNumber: Int
   lesson: LessonCreateOneWithoutLessonResultsInput!
+  progress: Int
   lessonID: ID
 }
 
@@ -9836,6 +9838,7 @@ input LessonResultCreateWithoutLessonInput {
   id: ID
   student: UserCreateOneWithoutLessonResultsInput!
   visitsNumber: Int
+  progress: Int
   lessonID: ID
 }
 
@@ -9843,6 +9846,7 @@ input LessonResultCreateWithoutStudentInput {
   id: ID
   visitsNumber: Int
   lesson: LessonCreateOneWithoutLessonResultsInput!
+  progress: Int
   lessonID: ID
 }
 
@@ -9856,6 +9860,8 @@ enum LessonResultOrderByInput {
   id_DESC
   visitsNumber_ASC
   visitsNumber_DESC
+  progress_ASC
+  progress_DESC
   lessonID_ASC
   lessonID_DESC
   createdAt_ASC
@@ -9867,6 +9873,7 @@ enum LessonResultOrderByInput {
 type LessonResultPreviousValues {
   id: ID!
   visitsNumber: Int
+  progress: Int
   lessonID: ID
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -9895,6 +9902,14 @@ input LessonResultScalarWhereInput {
   visitsNumber_lte: Int
   visitsNumber_gt: Int
   visitsNumber_gte: Int
+  progress: Int
+  progress_not: Int
+  progress_in: [Int!]
+  progress_not_in: [Int!]
+  progress_lt: Int
+  progress_lte: Int
+  progress_gt: Int
+  progress_gte: Int
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]
@@ -9952,16 +9967,19 @@ input LessonResultUpdateInput {
   student: UserUpdateOneRequiredWithoutLessonResultsInput
   visitsNumber: Int
   lesson: LessonUpdateOneRequiredWithoutLessonResultsInput
+  progress: Int
   lessonID: ID
 }
 
 input LessonResultUpdateManyDataInput {
   visitsNumber: Int
+  progress: Int
   lessonID: ID
 }
 
 input LessonResultUpdateManyMutationInput {
   visitsNumber: Int
+  progress: Int
   lessonID: ID
 }
 
@@ -9997,12 +10015,14 @@ input LessonResultUpdateManyWithWhereNestedInput {
 input LessonResultUpdateWithoutLessonDataInput {
   student: UserUpdateOneRequiredWithoutLessonResultsInput
   visitsNumber: Int
+  progress: Int
   lessonID: ID
 }
 
 input LessonResultUpdateWithoutStudentDataInput {
   visitsNumber: Int
   lesson: LessonUpdateOneRequiredWithoutLessonResultsInput
+  progress: Int
   lessonID: ID
 }
 
@@ -10053,6 +10073,14 @@ input LessonResultWhereInput {
   visitsNumber_gt: Int
   visitsNumber_gte: Int
   lesson: LessonWhereInput
+  progress: Int
+  progress_not: Int
+  progress_in: [Int!]
+  progress_not_in: [Int!]
+  progress_lt: Int
+  progress_lte: Int
+  progress_gt: Int
+  progress_gte: Int
   lessonID: ID
   lessonID_not: ID
   lessonID_in: [ID!]

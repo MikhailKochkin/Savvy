@@ -32,5 +32,8 @@
   "change": "Change",
   "publish": "Publish",
   "unpublish": "Unpublish",
-  "results": "Results"
+  "results": "Results",
+  "start": "Start",
+  "promo": "Promocode",
+  "got_application": "We got your application. If payment is successful, we will grant you access to the course soon!"
 }
