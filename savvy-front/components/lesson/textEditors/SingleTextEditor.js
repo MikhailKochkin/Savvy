@@ -117,13 +117,16 @@ const TextBar = styled.div`
 
 const EditText = styled.div`
   color: rgb(17, 17, 17);
-  max-width: 740px;
+  width: ${(props) => (props.story ? "940px" : "740px")};
   background: rgb(255, 255, 255);
   -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   padding: 5% 8%;
   margin: 55px auto 45px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Buttons = styled.div`
@@ -314,7 +317,7 @@ class SingleTextEditor extends Component {
         {!this.state.update && (
           <>
             <TextBar id={textEditor.id}>
-              <EditText>
+              <EditText story={story}>
                 <Mutation
                   mutation={CREATE_TEXTEDITORRESULT_MUTATION}
                   variables={{

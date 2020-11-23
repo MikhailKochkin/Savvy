@@ -34,7 +34,7 @@ const Section = (props) => {
   //     average = "Нет оценок";
   //     num = 0;
   //   } else {
-  //     average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
+  //     average = (ratings.((a, b) => a + b, 0) / ratings.length).toFixed(
   //       2
   //     );
   //     num = ratings.length;

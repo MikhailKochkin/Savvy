@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "2%",
     width: "100%",
     fontSize: "1.4rem",
-    background: "yellow",
+    // background: "yellow",
     fontFamily: "Montserrat",
     textTransform: "none",
     textDecoration: "none",

@@ -22,7 +22,7 @@ import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
 
 const Div = styled.div`
-  color: yellow;
+  /* color: yellow; */
 `;
 const LinkStyle = styled.a`
   font-size: 1.8rem;
