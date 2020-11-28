@@ -96,12 +96,13 @@ const SideMenu = styled.div`
 `;
 
 const StyledHeader = styled.header`
+  margin: 10px 0;
   background-color: white;
   display: grid;
   height: 60px;
   grid-template-areas: "CourseMenu UserData";
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid #e5e5e5;
+  /* border-bottom: 1px solid #e5e5e5; */
   cursor: pointer;
   a,
   button,
