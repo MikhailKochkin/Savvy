@@ -92,6 +92,7 @@ const SINGLE_LESSON_QUERY = gql`
         ifRight
         ifWrong
         type
+        check
         next
         user {
           id

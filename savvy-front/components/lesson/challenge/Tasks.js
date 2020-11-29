@@ -222,6 +222,7 @@ const Tasks = (props) => {
         answer={task.answer}
         me={props.me}
         type={task.type}
+        check={task.check}
         hidden={true}
         userData={props.lesson.quizResults}
         lessonID={props.lesson.id}
