@@ -26,6 +26,21 @@ const Box = styled.div`
     justify-content: space-between;
     width: 30%;
     font-weight: bold;
+    select {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      width: 100%;
+      padding: 3%;
+      outline: 0;
+      height: 60%;
+    }
+    .plan_area {
+      display: flex;
+      width: 70%;
+      flex-direction: column;
+      justify-content: center;
+      align-content: center;
+    }
   }
   .text_area {
     display: flex;
@@ -59,6 +74,36 @@ const Box = styled.div`
     font-size: 2.2rem;
     font-weight: bold;
     border-top: 3px solid #91e9e3;
+  }
+  @media (max-width: 800px) {
+    height: auto;
+    width: 100%;
+    margin: 20px 0;
+    .row {
+      width: 90%;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    .data {
+      height: 45px;
+      /* background: yellow; */
+      margin-bottom: 10px;
+    }
+    .text_area {
+      /* width: 60%; */
+      text-align: left;
+      font-size: 1.3rem;
+    }
+    .data {
+      width: 90%;
+    }
+    .sum {
+      font-size: 1.8rem;
+    }
   }
 `;
 
@@ -98,16 +143,17 @@ const OurCalculator = (props) => {
             <div className="text_area">
               <div>Your plan</div>
             </div>
-            <select
-              defaultValue={plan}
-              onChange={(e) => setPlan(e.target.value)}
-            >
-              <option value={8}>Basic</option>
-              <option value={15}>Business</option>
-            </select>
+            <div className="plan_area">
+              <select
+                defaultValue={plan}
+                onChange={(e) => setPlan(e.target.value)}
+              >
+                <option value={8}>Basic</option>
+                <option value={15}>Business</option>
+              </select>
+            </div>
           </div>
         </div>
-        {/* {console.log(isNaN(salary * hours * employees))} */}
         <div className="sum">
           = up to{" "}
           {isNaN(employees * courses * plan)
@@ -116,7 +162,7 @@ const OurCalculator = (props) => {
                 style: "currency",
                 currency: "EUR",
               }).format(employees * courses * plan)}{" "}
-          Euros / month + 10 hours of your senior employees
+          Euros / month + 10 hours of your senior employees a month
         </div>
       </Box>
     </div>

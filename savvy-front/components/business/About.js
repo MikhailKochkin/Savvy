@@ -2,28 +2,37 @@ import { useState } from "react";
 import styled from "styled-components";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import ReactResizeDetector from "react-resize-detector";
 
 const Styles = styled.div`
-  height: 90vh;
+  height: 80vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   #header {
     width: 80%;
     font-size: 2.8rem;
     font-weight: bold;
     margin-bottom: 1%;
   }
-  /* .carousel-container {
-    background: yellow;
-  }*/
+  @media (max-width: 800px) {
+    height: auto;
+    margin: 50px 0;
+    #header {
+      font-size: 2.2rem;
+      margin: 20px 0;
+    }
+  }
 `;
 
 const Box = styled.div`
   width: 90%;
   padding: 1% 3%;
+  @media (max-width: 800px) {
+    /* border: 1px solid red; */
+  }
 `;
 
 const Slide = styled.div`
@@ -33,7 +42,6 @@ const Slide = styled.div`
   height: 400px;
   display: flex;
   flex-direction: row;
-
   .image {
     display: flex;
     flex-direction: column;
@@ -46,6 +54,31 @@ const Slide = styled.div`
       border-radius: 6px;
     }
   }
+  @media (max-width: 800px) {
+    width: 300px;
+    flex-direction: column;
+    height: auto;
+
+    /* justify-content: center;
+    align-items: center;
+    border: 1px solid grey;
+    width: 100%;
+
+    .image {
+      height: 50%;
+      display: block;
+    } */
+    .image {
+      width: 100%;
+      img {
+        width: 100%;
+
+        /* object-fit: cover; */
+        /* height: 100%; */
+        border-radius: 6px;
+      }
+    }
+  }
 `;
 
 const Text = styled.div`
@@ -55,6 +88,7 @@ const Text = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   .header2 {
     font-size: 2.6rem;
     font-weight: bold;
@@ -81,10 +115,14 @@ const Text = styled.div`
       color: black;
     }
   }
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const About = () => {
-  // const [slide, setSlide] = useState(false);
+  const [width, setWidth] = useState(0);
+  const onResize = (width) => setWidth(width);
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -92,29 +130,26 @@ const About = () => {
       slidesToSlide: 1, // optional, default to 1.
       partialVisibilityGutter: 200,
     },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 2,
-      slidesToSlide: 2, // optional, default to 1.
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-      slidesToSlide: 1, // optional, default to 1.
-    },
+    // tablet: {
+    //   breakpoint: { max: 1024, min: 800 },
+    //   items: 1,
+    //   slidesToSlide: 1, // optional, default to 1.
+    // },
+    // mobile: {
+    //   breakpoint: { max: 800, min: 0 },
+    //   items: 1,
+    //   slidesToSlide: 1, // optional, default to 1.
+    //   partialVisibilityGutter: 0,
+    // },
   };
   return (
     <Styles id="about">
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div id="header">Create simulators for any high skilled job</div>
       <Box>
         <Carousel
           responsive={responsive}
-          // customTransition="all .5"
-          // transitionDuration={500}
-          partialVisible={true}
-          // infinite={true}
-          // showDots={true}
-          // renderDotsOutside={true}
+          partialVisible={width > 800 ? true : false}
         >
           <Slide>
             <Text>

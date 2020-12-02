@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const Styles = styled.div`
-  height: 90vh;
+  height: 60vh;
   width: 100vw;
   background: #f3f0ea;
   display: flex;
@@ -16,10 +16,20 @@ const Styles = styled.div`
     margin-bottom: 3%;
     text-align: center;
   }
+  @media (max-width: 800px) {
+    height: auto;
+    padding-top: 20px;
+    #header {
+      width: 80%;
+      font-size: 2.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
 `;
 
 const Box = styled.div`
-  height: 40%;
+  height: 50%;
   width: 80%;
   background: white;
   border-radius: 6px;
@@ -40,8 +50,9 @@ const Box = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 30%;
+    width: 25%;
     font-weight: bold;
+    margin-right: 20px;
   }
   .text_area {
     display: flex;
@@ -49,7 +60,8 @@ const Box = styled.div`
     flex-direction: column;
     justify-content: center;
     align-content: center;
-    font-size: 1.4rem;
+    text-align: center;
+    font-size: 1.2rem;
   }
   .input_area {
     display: flex;
@@ -76,16 +88,46 @@ const Box = styled.div`
     font-weight: bold;
     border-top: 3px solid #91e9e3;
   }
+  @media (max-width: 800px) {
+    height: auto;
+    margin: 20px 0;
+    .row {
+      width: 90%;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    .data {
+      height: 45px;
+      /* background: yellow; */
+      margin-bottom: 10px;
+    }
+    .text_area {
+      /* width: 60%; */
+      text-align: left;
+      font-size: 1.3rem;
+    }
+    .data {
+      width: 90%;
+    }
+    .sum {
+      font-size: 1.8rem;
+    }
+  }
 `;
 
 const Calculator = () => {
-  const [employees, setEmployees] = useState(0);
-  const [salary, setSalary] = useState(0);
-  const [hours, setHours] = useState(0);
+  const [employees, setEmployees] = useState(50);
+  const [salary, setSalary] = useState(42000);
+  const [hours, setHours] = useState(120);
+  const [days, setDays] = useState(14);
   return (
     <Styles>
       <div id="header">
-        This is how much you spend on training a white-collar employee
+        This is how much you spend on training white-collar employees now
       </div>
       <Box>
         <div className="row">
@@ -103,7 +145,19 @@ const Calculator = () => {
           </div>
           <div className="data">
             <div className="text_area">
-              <div>avg salary before taxes</div>
+              <div>№ of days spent on learning in a year</div>
+            </div>
+            <div className="input_area">
+              <input
+                type="number"
+                defaultValue={days}
+                onChange={(e) => setDays(parseInt(e.target.value))}
+              />
+            </div>
+          </div>
+          <div className="data">
+            <div className="text_area">
+              <div>Average salary before taxes</div>
             </div>
             <div className="input_area">
               <input
@@ -115,7 +169,7 @@ const Calculator = () => {
           </div>
           <div className="data">
             <div className="text_area">
-              <div>hours of seniors spent</div>
+              <div>Hours of seniors spent in a year</div>
             </div>
             <div className="input_area">
               <input
@@ -134,7 +188,10 @@ const Calculator = () => {
             : new Intl.NumberFormat("de-DE", {
                 style: "currency",
                 currency: "EUR",
-              }).format(salary * hours * employees)}{" "}
+              }).format(
+                employees * ((salary / 1920) * days * 8) +
+                  ((salary * 3) / 1920) * hours
+              )}{" "}
           Euros / month
         </div>
       </Box>

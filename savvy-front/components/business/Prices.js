@@ -16,16 +16,23 @@ const Styles = styled.div`
     width: 80%;
     font-size: 2.8rem;
     font-weight: bold;
-    margin-bottom: 3%;
+    margin-bottom: 5%;
     text-align: center;
+  }
+  @media (max-width: 800px) {
+    height: auto;
+    #header {
+      font-size: 2.2rem;
+      margin: 5% 0;
+    }
   }
 `;
 
 const Styles2 = styled.div`
   height: 65vh;
   width: 100vw;
+  background: #f2f0ea;
   display: flex;
-  background: white;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -34,7 +41,16 @@ const Styles2 = styled.div`
     font-size: 2.8rem;
     font-weight: bold;
     margin-bottom: 3%;
-    text-align: left;
+    text-align: center;
+  }
+  #box {
+    width: 80%;
+  }
+  @media (max-width: 800px) {
+    #header {
+      font-size: 2.2rem;
+      margin: 5% 0;
+    }
   }
 `;
 
@@ -45,6 +61,9 @@ const Cards = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
   /* background: #12182d; */
 `;
 
@@ -99,6 +118,10 @@ const Card = styled.div`
   .terms {
     text-align: center;
   }
+  @media (max-width: 800px) {
+    width: 90%;
+    margin-bottom: 20px;
+  }
 `;
 
 const Button = styled.button`
@@ -124,7 +147,7 @@ const Prices = () => {
   return (
     <>
       <Styles>
-        <div id="header">Save this money with us by spending only:</div>
+        <div id="header">Save money with us by spending only:</div>
         <Cards>
           <Card onClick={(e) => setPlan("basic")} chosen={plan === "basic"}>
             <div className="top">
@@ -209,8 +232,10 @@ const Prices = () => {
         </Cards>
       </Styles>
       <Styles2>
-        <div id="header">How much will you spend?</div>
-        <OurCalculator plan={plan} />
+        <div id="header">How much will you spend and save with us?</div>
+        <div id="box">
+          <OurCalculator plan={plan} />
+        </div>
       </Styles2>
     </>
   );

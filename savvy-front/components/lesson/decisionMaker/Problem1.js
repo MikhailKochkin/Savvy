@@ -108,7 +108,7 @@ const Result = styled.div`
 `;
 
 const Simulator = (props) => {
-  const [goal, setGoal] = useState(200);
+  const [goal, setGoal] = useState(160);
   const [result, setResult] = useState(0);
   const [chosenMeans, setChosenMeans] = useState([]);
   const [chosenMeans2, setChosenMeans2] = useState([]);
@@ -241,7 +241,6 @@ const Simulator = (props) => {
       console.log(feedback[c.num][c.num]);
       arr4.push(feedback[c.num][c.num]);
     });
-    console.log(arr2, arr3);
     if (arr_chosen.length > 1) {
       var n = arr_chosen.length;
       var i, j;
@@ -256,7 +255,7 @@ const Simulator = (props) => {
       }
     }
     arr.map((a) => {
-      console.log((val += synergy[a[0]][a[1]]));
+      // console.log((val += synergy[a[0]][a[1]]));
       return (val += synergy[a[0]][a[1]]);
     });
     setResult(val);
@@ -266,8 +265,7 @@ const Simulator = (props) => {
     new_data.datasets[0].data = arr3;
     setData(new_data);
     setAvailableFeedback(arr4);
-    console.log(arr4);
-
+    console.log(val, goal);
     if (val >= goal) {
       props.getData(true, props.index);
     }

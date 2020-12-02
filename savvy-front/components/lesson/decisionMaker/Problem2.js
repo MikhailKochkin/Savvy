@@ -111,12 +111,12 @@ const Result = styled.div`
 const Simulator = (props) => {
   // p * s = goal(h), это приложенные действия
   // y, k = максимальный результат при данных p s
-  const [goal, setGoal] = useState(10000);
+  const [goal, setGoal] = useState(20398);
   const [result, setResult] = useState(100);
   const [index, setIndex] = useState(2);
   const k = 20400;
   const formula =
-    "(-0.0002 * Math.pow(((-0.025 * Math.pow(p - 40, 2) + 40) * s) - goal, 2)) + k";
+    "(-0.0002 * Math.pow(((-0.025 * Math.pow(p - 40, 2) + 40) * s) - 10000, 2)) + k";
   const [data, setData] = useState({
     labels: ["1"],
     datasets: [
@@ -171,7 +171,8 @@ const Simulator = (props) => {
     new_data.datasets[0].data.push(Number(((total * 100) / k).toFixed(2)));
     setData(new_data);
     setIndex(index + 1);
-    if (total >= goal) {
+    console.log(result, goal);
+    if (goal >= result) {
       props.getData(true, props.index);
     }
   };
@@ -204,7 +205,7 @@ const Simulator = (props) => {
             <button onClick={(e) => sum()}>Считать</button>
           </Block>
           <Block>
-            {result === k ? <Result>Решение найдено</Result> : null}
+            {result >= goal ? <Result>Решение найдено</Result> : null}
           </Block>
         </Data>
         <Graphics>

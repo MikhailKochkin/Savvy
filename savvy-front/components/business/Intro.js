@@ -10,9 +10,80 @@ const Styles = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  @media (max-width: 800px) {
+    height: 100%;
+  }
 `;
 
-const Container = styled.div`
+const Containers = styled.div`
+  width: 100%;
+  height: 70%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  @media (max-width: 800px) {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
+`;
+
+const LeftContainer = styled.div`
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  div {
+    height: 50%;
+    img {
+      height: 100%;
+    }
+  }
+  .secret {
+    display: none;
+  }
+  @media (max-width: 800px) {
+    order: 2;
+    margin-top: 20px;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    .secret {
+      display: block;
+    }
+    div {
+      height: 150px;
+    }
+  }
+`;
+
+const RightContainer = styled.div`
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  div {
+    height: 50%;
+    img {
+      height: 100%;
+    }
+  }
+  @media (max-width: 800px) {
+    display: none;
+    width: 100%;
+    div {
+      background: pink;
+      height: 10%;
+    }
+  }
+`;
+
+const CentralContainer = styled.div`
   width: 60%;
   display: flex;
   flex-direction: column;
@@ -101,11 +172,77 @@ const Container = styled.div`
       text-align: center;
     }
   }
+  @media (max-width: 800px) {
+    order: 1;
+    width: 90%;
+    #big {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 6% 0;
+      text-align: center;
+      width: 90%;
+      line-height: 1.4;
+    }
+    #main {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 6%;
+    }
+    #input {
+      flex-direction: column;
+      height: auto;
+      #text {
+        margin-bottom: 10px;
+        border: 2px solid black;
+        border-radius: 6px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        input {
+          height: 70%;
+          width: 100%;
+          font-size: 1.7rem;
+          text-align: center;
+        }
+      }
+      button {
+        width: 100%;
+        border: 2px solid black;
+        border-radius: 6px;
+        padding: 6px;
+        font-size: 1.6rem;
+        text-align: center;
+        &:hover {
+          border: 2px solid black;
+          color: black;
+          background: white;
+        }
+      }
+    }
+    #advantages {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+      .bullet {
+        width: 100%;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+      div {
+        text-align: left;
+      }
+    }
+  }
 `;
 
 const Arrow = styled.div`
   position: absolute;
   bottom: 0;
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
 
 const Intro = () => {
@@ -119,39 +256,54 @@ const Intro = () => {
   };
   return (
     <Styles>
-      <Container>
-        <div id="big">Great training starts here</div>
-        <div id="main">
-          Give your employees an e-mentor and cust costs on internal training by
-          60%.
-        </div>
-        <div id="input">
-          <div id="text">
-            <input />
+      <Containers>
+        <LeftContainer>
+          <div>
+            <img src="../../static/boy.svg" />
           </div>
-          <button>Get Started</button>
-        </div>
-        <div id="advantages">
-          <div className="bullet">
-            <span>
-              <Icon size={25} icon={check} />
-            </span>
-            <div>Unique training simulators </div>
+          <div className="secret">
+            <img src="../../static/girl.svg" />
           </div>
-          <div className="bullet">
-            <span>
-              <Icon size={25} icon={check} />
-            </span>
-            <div>24/7 tech and course development support</div>
+        </LeftContainer>
+        <CentralContainer>
+          <div id="big">Great training starts here</div>
+          <div id="main">
+            Give your employees an e-mentor and cust costs on internal training
+            by 60%.
           </div>
-          <div className="bullet">
-            <span>
-              <Icon size={25} icon={check} />
-            </span>
-            <div>Set up next course in minutes</div>
+          <div id="input">
+            <div id="text">
+              <input placeholder="Mikhail@besavvy.app" />
+            </div>
+            <button>Get Started</button>
           </div>
-        </div>
-      </Container>
+          <div id="advantages">
+            <div className="bullet">
+              <span>
+                <Icon size={25} icon={check} />
+              </span>
+              <div>Unique training simulators </div>
+            </div>
+            <div className="bullet">
+              <span>
+                <Icon size={25} icon={check} />
+              </span>
+              <div>24/7 tech and course development support</div>
+            </div>
+            <div className="bullet">
+              <span>
+                <Icon size={25} icon={check} />
+              </span>
+              <div>Set up next course in minutes</div>
+            </div>
+          </div>
+        </CentralContainer>
+        <RightContainer>
+          <div>
+            <img src="../../static/girl.svg" />
+          </div>
+        </RightContainer>
+      </Containers>
       <Arrow>
         <Icon
           size={75}
