@@ -1,7 +1,19 @@
+import { useState } from "react";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 import styled from "styled-components";
+import Router from "next/router";
 import { check } from "react-icons-kit/fa/check";
 import Icon from "react-icons-kit";
 import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
+import * as EmailValidator from "email-validator";
+const CREATE_CLIENT = gql`
+  mutation createBusinessClient($email: String!) {
+    createBusinessClient(email: $email) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   height: 85vh;
@@ -246,6 +258,8 @@ const Arrow = styled.div`
 `;
 
 const Intro = () => {
+  const [email, setEmail] = useState("");
+
   const slide = () => {
     var my_element = document.getElementById("about");
     my_element.scrollIntoView({
@@ -255,63 +269,84 @@ const Intro = () => {
     });
   };
   return (
-    <Styles>
-      <Containers>
-        <LeftContainer>
-          <div>
-            <img src="../../static/boy.svg" />
-          </div>
-          <div className="secret">
-            <img src="../../static/girl.svg" />
-          </div>
-        </LeftContainer>
-        <CentralContainer>
-          <div id="big">Great training starts here</div>
-          <div id="main">
-            Give your employees an e-mentor and cust costs on internal training
-            by 60%.
-          </div>
-          <div id="input">
-            <div id="text">
-              <input placeholder="Mikhail@besavvy.app" />
-            </div>
-            <button>Get Started</button>
-          </div>
-          <div id="advantages">
-            <div className="bullet">
-              <span>
-                <Icon size={25} icon={check} />
-              </span>
-              <div>Unique training simulators </div>
-            </div>
-            <div className="bullet">
-              <span>
-                <Icon size={25} icon={check} />
-              </span>
-              <div>24/7 tech and course development support</div>
-            </div>
-            <div className="bullet">
-              <span>
-                <Icon size={25} icon={check} />
-              </span>
-              <div>Set up next course in minutes</div>
-            </div>
-          </div>
-        </CentralContainer>
-        <RightContainer>
-          <div>
-            <img src="../../static/girl.svg" />
-          </div>
-        </RightContainer>
-      </Containers>
-      <Arrow>
-        <Icon
-          size={75}
-          icon={ic_keyboard_arrow_down}
-          onClick={(e) => slide()}
-        />
-      </Arrow>
-    </Styles>
+    <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
+      {(createBusinessClient, { error, loading }) => (
+        <Styles>
+          <Containers>
+            <LeftContainer>
+              <div>
+                <img src="../../static/boy.svg" />
+              </div>
+              <div className="secret">
+                <img src="../../static/girl.svg" />
+              </div>
+            </LeftContainer>
+            <CentralContainer>
+              <div id="big">Great training starts here</div>
+              <div id="main">
+                Give your employees an e-mentor and cust costs on internal
+                training by 60%.
+              </div>
+              <div id="input">
+                <div id="text">
+                  <input
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Mikhail@besavvy.app"
+                  />
+                </div>
+                <button
+                  onClick={(e) => {
+                    if (EmailValidator.validate(email)) {
+                      Router.push({
+                        pathname: "/hello",
+                      });
+                      createBusinessClient();
+                    } else {
+                      alert("This is not a correct email");
+                    }
+                  }}
+                >
+                  Get Started
+                </button>
+              </div>
+              <div id="advantages">
+                <div className="bullet">
+                  <span>
+                    <Icon size={25} icon={check} />
+                  </span>
+                  <div>Unique training simulators </div>
+                </div>
+                <div className="bullet">
+                  <span>
+                    <Icon size={25} icon={check} />
+                  </span>
+                  <div>24/7 tech and course development support</div>
+                </div>
+                <div className="bullet">
+                  <span>
+                    <Icon size={25} icon={check} />
+                  </span>
+                  <div>Set up next course in minutes</div>
+                </div>
+              </div>
+            </CentralContainer>
+            <RightContainer>
+              <div>
+                <img src="../../static/girl.svg" />
+              </div>
+            </RightContainer>
+          </Containers>
+          <Arrow>
+            <Icon
+              size={75}
+              icon={ic_keyboard_arrow_down}
+              onClick={(e) => slide()}
+            />
+          </Arrow>
+        </Styles>
+      )}
+    </Mutation>
   );
 };
 

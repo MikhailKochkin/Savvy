@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
+import Router from "next/router";
 import { check } from "react-icons-kit/fa/check";
 import Icon from "react-icons-kit";
 import OurCalculator from "./OurCalculator";
@@ -157,7 +158,15 @@ const Prices = () => {
                 per student, per month,
                 <br /> per course
               </div>
-              <Button>Get Started</Button>
+              <Button
+                onClick={(e) => {
+                  Router.push({
+                    pathname: "/hello",
+                  });
+                }}
+              >
+                Get Started
+              </Button>
             </div>
             <div className="bottom">
               <div className="inner">
@@ -181,7 +190,15 @@ const Prices = () => {
                 per student, per month,
                 <br /> per course
               </div>
-              <Button>Get Started</Button>
+              <Button
+                onClick={(e) => {
+                  Router.push({
+                    pathname: "/hello",
+                  });
+                }}
+              >
+                Get Started
+              </Button>
             </div>
             <div className="bottom">
               <div className="inner">
@@ -212,7 +229,15 @@ const Prices = () => {
               <div className="terms">
                 per student, per month, <br /> per course
               </div>
-              <Button>Get Started</Button>
+              <Button
+                onClick={(e) => {
+                  Router.push({
+                    pathname: "/hello",
+                  });
+                }}
+              >
+                Get Started
+              </Button>
             </div>
             <div className="bottom">
               <div className="inner">

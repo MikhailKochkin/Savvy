@@ -1,10 +1,21 @@
 import { useState } from "react";
+import { Mutation } from "react-apollo";
+import gql from "graphql-tag";
 import styled from "styled-components";
+import * as EmailValidator from "email-validator";
 import Icon from "react-icons-kit";
 import { check } from "react-icons-kit/fa/check";
 import { facebookSquare } from "react-icons-kit/fa/facebookSquare";
 import { linkedinSquare } from "react-icons-kit/fa/linkedinSquare";
 import { instagram } from "react-icons-kit/fa/instagram";
+
+const CREATE_CLIENT = gql`
+  mutation createBusinessClient($email: String!) {
+    createBusinessClient(email: $email) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   height: 80vh;
@@ -16,6 +27,12 @@ const Styles = styled.div`
   @media (max-width: 800px) {
     height: auto;
   }
+`;
+
+const Comment = styled.div`
+  width: 80%;
+  text-align: left;
+  margin-top: 10px;
 `;
 
 const Container = styled.div`
@@ -222,56 +239,78 @@ const Container = styled.div`
 `;
 
 const Newsletter = () => {
+  const [email, setEmail] = useState("");
+  const [comment, setComment] = useState("");
   return (
-    <Styles>
-      <Container>
-        <div className="message">
-          <div id="header">Just looking around?</div>
-          <div id="C2A">
-            Sign up for our newsletter and social media accounts
-          </div>
-          <div className="SM">
-            <span>
-              <Icon size={40} icon={facebookSquare} />
-            </span>
-            <span>
-              <Icon size={40} icon={linkedinSquare} />
-            </span>
-            <span>
-              <Icon size={40} icon={instagram} />
-            </span>
-          </div>
-        </div>
-        <div className="input">
-          <div id="input">
-            <div id="text">
-              <input placeholder="JonhSmith@company.com" />
+    <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
+      {(createBusinessClient, { error, loading }) => (
+        <Styles>
+          <Container>
+            <div className="message">
+              <div id="header">Just looking around?</div>
+              <div id="C2A">
+                Sign up for our newsletter and social media accounts
+              </div>
+              <div className="SM">
+                <span>
+                  <Icon size={40} icon={facebookSquare} />
+                </span>
+                <span>
+                  <Icon size={40} icon={linkedinSquare} />
+                </span>
+                <span>
+                  <Icon size={40} icon={instagram} />
+                </span>
+              </div>
             </div>
-            <button>Sign Up</button>
-          </div>
-          <div id="advantages">
-            <div className="bullet">
-              <span>
-                <Icon size={25} icon={check} />
-              </span>
-              <div>For lawyers</div>
+            <div className="input">
+              <div id="input">
+                <div id="text">
+                  <input
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Mikhail@besavvy.app"
+                  />
+                </div>
+                <button
+                  onClick={(e) => {
+                    if (EmailValidator.validate(email)) {
+                      createBusinessClient();
+                      setComment("We will be in touch!");
+                    } else {
+                      setComment("This is not a correct email");
+                    }
+                  }}
+                >
+                  Sign Up
+                </button>
+              </div>
+              <Comment>{comment}</Comment>
+              <div id="advantages">
+                <div className="bullet">
+                  <span>
+                    <Icon size={25} icon={check} />
+                  </span>
+                  <div>For lawyers</div>
+                </div>
+                <div className="bullet">
+                  <span>
+                    <Icon size={25} icon={check} />
+                  </span>
+                  <div>For bankers</div>
+                </div>
+                <div className="bullet">
+                  <span>
+                    <Icon size={25} icon={check} />
+                  </span>
+                  <div>For consultants</div>
+                </div>
+              </div>
             </div>
-            <div className="bullet">
-              <span>
-                <Icon size={25} icon={check} />
-              </span>
-              <div>For bankers</div>
-            </div>
-            <div className="bullet">
-              <span>
-                <Icon size={25} icon={check} />
-              </span>
-              <div>For consultants</div>
-            </div>
-          </div>
-        </div>
-      </Container>
-    </Styles>
+          </Container>
+        </Styles>
+      )}
+    </Mutation>
   );
 };
 

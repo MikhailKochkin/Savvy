@@ -348,6 +348,7 @@ type Mutation {
   deleteStatement(id: ID!): Statement!
   createUserLevel(level: Int, user: ID): UserLevel!
   updateUserLevel(id: ID, level: Int): UserLevel
+  createBusinessClient(email: String!): BusinessClient!
 }
 
 type Query {

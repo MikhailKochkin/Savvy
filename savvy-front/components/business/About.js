@@ -42,6 +42,7 @@ const Slide = styled.div`
   height: 400px;
   display: flex;
   flex-direction: row;
+  border-radius: 5px;
   .image {
     display: flex;
     flex-direction: column;
@@ -50,8 +51,8 @@ const Slide = styled.div`
     width: 50%;
     img {
       object-fit: cover;
-      height: 100%;
-      border-radius: 6px;
+      width: 100%;
+      /* border-radius: 6px; */
     }
   }
   @media (max-width: 800px) {
@@ -130,17 +131,17 @@ const About = () => {
       slidesToSlide: 1, // optional, default to 1.
       partialVisibilityGutter: 200,
     },
-    // tablet: {
-    //   breakpoint: { max: 1024, min: 800 },
-    //   items: 1,
-    //   slidesToSlide: 1, // optional, default to 1.
-    // },
-    // mobile: {
-    //   breakpoint: { max: 800, min: 0 },
-    //   items: 1,
-    //   slidesToSlide: 1, // optional, default to 1.
-    //   partialVisibilityGutter: 0,
-    // },
+    tablet: {
+      breakpoint: { max: 1024, min: 800 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+    },
+    mobile: {
+      breakpoint: { max: 800, min: 0 },
+      items: 1,
+      slidesToSlide: 1, // optional, default to 1.
+      partialVisibilityGutter: 0,
+    },
   };
   return (
     <Styles id="about">
@@ -156,13 +157,13 @@ const About = () => {
               <div>
                 <div className="header2">Case studies</div>
                 <div className="text">
-                  Our e-mentor can teach how to solve legal & business cases
+                  Learn to solve legal & business cases with our e-mentor
                 </div>
                 <button className="button">Try it</button>
               </div>
             </Text>
             <div className="image">
-              <img src="https://images.unsplash.com/photo-1572662073398-afd34ca1f866?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1100&q=80" />
+              <img src="../../static/CaseStudies.png" />
             </div>
           </Slide>
           <Slide>
@@ -170,13 +171,13 @@ const About = () => {
               <div>
                 <div className="header2">Decision Maker Simulator</div>
                 <div className="text">
-                  Our e-mentor can teach how to solve legal & business cases
+                  Master your decision-making skills using data and dashboards
                 </div>
                 <button className="button">Try it</button>
               </div>
             </Text>
             <div className="image">
-              <img src="https://images.unsplash.com/photo-1572662073398-afd34ca1f866?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1100&q=80" />
+              <img src="../../static/DecisionMaker.png" />
             </div>
           </Slide>
           <Slide>
@@ -184,27 +185,27 @@ const About = () => {
               <div>
                 <div className="header2">Document Builders</div>
                 <div className="text">
-                  Our e-mentor can teach how to solve legal & business cases
+                  Learn to draft complex documents from scratch
                 </div>
                 <button className="button">Try it</button>
               </div>
             </Text>
             <div className="image">
-              <img src="https://images.unsplash.com/photo-1551645120-d70bfe84c826?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80" />
+              <img src="../../static/DocBuilder.png" />
             </div>
           </Slide>
           <Slide>
             <Text>
               <div>
-                <div className="header2">Text Editors</div>
+                <div className="header2">Text Checker</div>
                 <div className="text">
-                  Our e-mentor can teach how to solve legal & business cases
+                  Learn to find mistakes and insights in texts and data
                 </div>
                 <button className="button">Try it</button>
               </div>
             </Text>
             <div className="image">
-              <img src="https://images.unsplash.com/photo-1551645120-d70bfe84c826?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80" />
+              <img src="../../static/TextEditor.png" />
             </div>
           </Slide>
         </Carousel>

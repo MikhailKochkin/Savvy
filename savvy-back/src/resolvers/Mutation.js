@@ -1249,6 +1249,19 @@ const Mutations = {
     // return the user to the browser
     return user;
   },
+  async createBusinessClient(parent, args, ctx, info) {
+    // lower the email
+    args.email = args.email.toLowerCase();
+    const user = await ctx.db.mutation.createBusinessClient(
+      {
+        data: {
+          ...args,
+        },
+      },
+      info
+    );
+    return user;
+  },
   async signin(parent, { email, password }, ctx, info) {
     // 1. check if there is a user with that email
     const user = await ctx.db.query.user({ where: { email } });

@@ -713,3 +713,11 @@ type UserLevel {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
+
+type BusinessClient {
+  id: ID! @id
+  email: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
