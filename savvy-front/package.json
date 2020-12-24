@@ -17,10 +17,6 @@
   "author": "M.Kochkin",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.3.6",
-    "@apollo/link-error": "^2.0.0-beta.3",
-    "@apollo/react-hooks": "^4.0.0",
-    "@apollo/react-ssr": "^4.0.0",
     "@material-ui/core": "^4.8.3",
     "@material-ui/icons": "^4.5.1",
     "@zeit/next-css": "^1.0.1",
