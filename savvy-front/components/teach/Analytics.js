@@ -11,7 +11,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: ID!) {
     coursePage(where: { id: $id }) {
       id
-      title
+      titlea
       courseType
       new_students {
         id

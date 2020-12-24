@@ -28,7 +28,7 @@ const Styles = styled.div`
   .box {
     padding: 0 15px;
     p {
-      margin-bottom: ;
+      margin-bottom: 0;
     }
   }
   .number {

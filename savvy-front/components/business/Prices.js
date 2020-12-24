@@ -152,7 +152,7 @@ const Prices = () => {
         <Cards>
           <Card onClick={(e) => setPlan("basic")} chosen={plan === "basic"}>
             <div className="top">
-              <div className="type">Basic</div>
+              <div className="type">Pilot</div>
               <div className="price">8$</div>
               <div className="terms">
                 per student, per month,

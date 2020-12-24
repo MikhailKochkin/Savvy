@@ -108,12 +108,12 @@ const Block = (props) => {
         {value.type && value.type.toLowerCase() === "texteditor" ? (
           <Title>
             <div className="type">
-              Редактор:{" "}
-              {renderHTML(
+              Редактор: {console.log(texteditors[0].id, value.id)}
+              {/* {renderHTML(
                 texteditors
                   .filter((q) => q.id === value.id)[0]
                   .text.substring(0, 100)
-              )}
+              )} */}
             </div>
           </Title>
         ) : null}

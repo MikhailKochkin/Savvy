@@ -14,7 +14,82 @@ const Styles = styled.div`
     font-size: 2.8rem;
     font-weight: bold;
     margin-bottom: 3%;
-    text-align: center;
+    text-align: left;
+    .animated {
+      text-indent: 8px;
+      border-bottom: 5px solid #91e9e2;
+      /* color: red; */
+      /* transition: all 0,s; */
+    }
+
+    .animated:before {
+      content: "lawyers";
+      opacity: 0;
+      animation: topToBottom 26s infinite 0s;
+    }
+
+    @keyframes topToBottom {
+      0% {
+        opacity: 0;
+        content: "lawyers";
+      }
+      7% {
+        opacity: 1;
+        content: "lawyers";
+      }
+      14% {
+        opacity: 0;
+        content: "lawyers";
+      }
+      21% {
+        opacity: 0;
+        content: "bankers";
+      }
+      28% {
+        opacity: 1;
+        content: "bankers";
+      }
+      35% {
+        opacity: 0;
+        content: "bankers";
+      }
+      42% {
+        opacity: 0;
+        content: "consultants";
+      }
+      49% {
+        opacity: 1;
+        content: "consultants";
+      }
+      56% {
+        opacity: 0;
+        content: "consultants";
+      }
+      63% {
+        opacity: 0;
+        content: "accountants";
+      }
+      70% {
+        opacity: 1;
+        content: "accountants";
+      }
+      77% {
+        opacity: 0;
+        content: "accountants";
+      }
+      84% {
+        opacity: 0;
+        content: "managers";
+      }
+      91% {
+        opacity: 1;
+        content: "managers";
+      }
+      98% {
+        opacity: 0;
+        content: "managers";
+      }
+    }
   }
   @media (max-width: 800px) {
     height: auto;
@@ -127,7 +202,8 @@ const Calculator = () => {
   return (
     <Styles>
       <div id="header">
-        This is how much you spend on training white-collar employees now
+        This is how much you spend on training{" "}
+        <span className="animated"></span>{" "}
       </div>
       <Box>
         <div className="row">

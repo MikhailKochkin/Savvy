@@ -51,7 +51,8 @@ const Slide = styled.div`
     width: 50%;
     img {
       object-fit: cover;
-      width: 100%;
+      max-height: 95%;
+      border: 1px solid;
       /* border-radius: 6px; */
     }
   }

@@ -1045,12 +1045,10 @@ class SingleLesson extends Component {
                               <CreateQuiz lessonID={lesson.id} />
                             )}
                             {this.state.page === "createProblem" && (
-                              <>
-                                <CreateProblem
-                                  lessonID={lesson.id}
-                                  lesson={lesson}
-                                />
-                              </>
+                              <CreateProblem
+                                lessonID={lesson.id}
+                                lesson={lesson}
+                              />
                             )}
                             {this.state.page === "createConstructor" && (
                               <CreateConstructor lessonID={lesson.id} />

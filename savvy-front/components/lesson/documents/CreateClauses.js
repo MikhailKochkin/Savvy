@@ -19,18 +19,18 @@ const Styles = styled.div`
   }
 `;
 
-const CreateClauses = props => {
+const CreateClauses = (props) => {
   const [clauses, setClauses] = useState(1);
   return (
     <Styles>
       <div id="title">Условия документа:</div>
-      <button classNmae="but" onClick={e => setClauses(clauses - 1)}>
+      <button classNmae="but" onClick={(e) => setClauses(clauses - 1)}>
         -1
       </button>
-      <button classNmae="but" onClick={e => setClauses(clauses + 1)}>
+      <button classNmae="but" onClick={(e) => setClauses(clauses + 1)}>
         +1
       </button>
-      {_.times(clauses, i => (
+      {_.times(clauses, (i) => (
         <>
           <CreateClause index={i + 1} document={props.document} />
         </>
@@ -40,7 +40,7 @@ const CreateClauses = props => {
 };
 
 CreateClauses.propTypes = {
-  document: PropTypes.string.isRequired
+  document: PropTypes.string.isRequired,
 };
 
 export default CreateClauses;

@@ -2166,12 +2166,6 @@ const Mutations = {
       ),
     });
 
-    if (!ctx.request.userId) {
-      throw new Error(
-        "Вы должны быть зарегистрированы на сайте, чтобы делать это!"
-      );
-    }
-
     const Statement = await ctx.db.mutation.createStatement(
       {
         data: {
