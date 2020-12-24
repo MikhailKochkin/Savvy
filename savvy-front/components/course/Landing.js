@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { withTranslation } from "../../i18n";
 
 const Banner = styled.div`
   display: flex;
@@ -46,10 +45,10 @@ const Landing = (props) => {
   return (
     <>
       <Banner id="banner">
-        <div className="text">{props.t("motto")}</div>
+        <div className="text">test</div>
       </Banner>
     </>
   );
 };
 
-export default withTranslation("common")(Landing);
+export default Landing;

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Courses from "../components/course/Courses";
-import { gql, useQuery } from "@apollo/client";
+import { Query } from "react-apollo";
+import gql from "graphql-tag";
 
 const GET_DATA = gql`
   query coursePages {
@@ -11,12 +12,17 @@ const GET_DATA = gql`
   }
 `;
 
-const Index = (props) => {
-  const { loading, error, data } = useQuery(GET_DATA);
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
-  console.log(data);
-  return <Courses />;
+const Index = () => {
+  return (
+    <Query query={GET_DATA}>
+      {({ data, error, loading }) => {
+        if (loading) return <p>Loading...</p>;
+        if (error) return <p>Error: {error.message}</p>;
+        console.log(data);
+        return <Courses />;
+      }}
+    </Query>
+  );
 };
 
 export default Index;
