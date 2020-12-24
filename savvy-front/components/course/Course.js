@@ -258,7 +258,7 @@ export default class Course extends Component {
                   query={SINGLE_COURSE_VISIT_QUERY}
                   variables={{
                     coursePageId: id,
-                    student: me.me.id,
+                    student: me.id,
                   }}
                 >
                   {({ data, error, loading }) => {

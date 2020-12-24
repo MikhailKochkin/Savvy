@@ -8,18 +8,18 @@ import User from "../User";
 
 const Courses = () => {
   return (
-    <User>
-      {({ data: me }) => (
-        <>
-          <Landing />
-          <Search me={me} />
-          <Media />
-          <Reviews />
-          <Tech />
-          <Contact />
-        </>
-      )}
-    </User>
+    // <User>
+    //   {({ data: me }) => (
+    <>
+      <Landing />
+      {/* <Search me={me} /> */}
+      <Media />
+      <Reviews />
+      <Tech />
+      <Contact />
+    </>
+    //   )}
+    // </User>
   );
 };
 
