@@ -1,16 +1,22 @@
+import React, { Component } from "react";
 import Courses from "../components/course/Courses";
-import { withTranslation } from "../i18n";
+import { gql, useQuery } from "@apollo/client";
 
-const Index = ({ t }) => {
-  return (
-    <>
-      <Courses />
-    </>
-  );
+const GET_DATA = gql`
+  query coursePages {
+    coursePages {
+      id
+      title
+    }
+  }
+`;
+
+const Index = (props) => {
+  const { loading, error, data } = useQuery(GET_DATA);
+  if (loading) return "Loading...";
+  if (error) return `Error! ${error.message}`;
+  console.log(data);
+  return <Courses />;
 };
 
-Index.getInitialProps = async () => ({
-  namespacesRequired: ["common", "footer"],
-});
-
-export default withTranslation("common")(Index);
+export default Index;

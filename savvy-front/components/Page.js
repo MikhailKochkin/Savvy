@@ -62,6 +62,7 @@ const GlobalStyle = createGlobalStyle`
 
 const Page = ({ children, router }) => {
   const me = useUser();
+  console.log(me);
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
@@ -72,8 +73,8 @@ const Page = ({ children, router }) => {
           <Meta />
           <Layout>
             <ModalProvider>
-              <Header />
-              <Nav />
+              {/* <Header /> */}
+              {/* <Nav /> */}
               <Inner>{children}</Inner>
               <Footer />
             </ModalProvider>

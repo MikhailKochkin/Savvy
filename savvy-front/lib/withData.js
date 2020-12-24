@@ -30,7 +30,15 @@ function createClient({ headers, initialState }) {
         headers,
       }),
     ]),
-    cache: new InMemoryCache().restore(initialState || {}),
+    cache: new InMemoryCache({
+      // typePolicies: {
+      //   Query: {
+      //     fields: {
+      //       allProducts: paginationField(),
+      //     },
+      //   },
+      // },
+    }).restore(initialState || {}),
   });
 }
 
