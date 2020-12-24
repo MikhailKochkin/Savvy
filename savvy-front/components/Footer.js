@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Link from "next/link";
+import { withTranslation } from "../i18n";
 
 const FooterStyles = styled.div`
   background-color: #001f4e;
@@ -37,10 +39,63 @@ const FooterStyles = styled.div`
   }
 `;
 
-const Footer = () => (
+const Footer = ({ t }) => (
   <FooterStyles>
-    <div>Kak dela?</div>
+    <div className="block">
+      <div>{t("ip")}</div>
+      <div>{t("inn")}</div>
+      <div>{t("ogrnip")}</div>
+    </div>
+    <div className="block">
+      <div>
+        <Link
+          href={{
+            pathname: "/legal",
+            query: { name: "terms" },
+          }}
+        >
+          <a>{t("terms")}</a>
+        </Link>
+      </div>
+      <div>
+        <Link
+          href={{
+            pathname: "/legal",
+            query: { name: "privacy" },
+          }}
+        >
+          <a>{t("policy")}</a>
+        </Link>
+      </div>
+      <div>
+        <Link
+          href={{
+            pathname: "/legal",
+            query: { name: "offer" },
+          }}
+        >
+          <a>{t("offer")}</a>
+        </Link>
+      </div>
+    </div>
+    <div className="mini">
+      <div>
+        <a target="_blank" href="https://vk.com/besavvylawyer">
+          VK
+        </a>
+      </div>
+      <div>
+        <a target="_blank" href="https://www.instagram.com/savvy_legal">
+          Instagram
+        </a>
+      </div>
+      <div>
+        <a target="_blank" href="https://t.me/SavvyLive">
+          Telegram
+        </a>
+      </div>
+    </div>
   </FooterStyles>
 );
 
-export default Footer;
+export default withTranslation("search")(Footer);

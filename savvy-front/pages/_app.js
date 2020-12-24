@@ -4,6 +4,7 @@ import { createGlobalStyle } from "styled-components";
 import { ApolloProvider } from "react-apollo";
 import Page from "../components/Page";
 import withData from "../lib/withData";
+import { appWithTranslation } from "../i18n";
 
 const theme = {
   blue: "#112A62",
@@ -73,4 +74,4 @@ class MyApp extends App {
     );
   }
 }
-export default withData(MyApp);
+export default appWithTranslation(withData(MyApp));

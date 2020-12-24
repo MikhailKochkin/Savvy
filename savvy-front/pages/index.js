@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Courses from "../components/course/Courses";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import { withTranslation } from "../i18n";
 
 const GET_DATA = gql`
   query coursePages {
@@ -25,4 +26,8 @@ const Index = () => {
   );
 };
 
-export default Index;
+Index.getInitialProps = async () => ({
+  namespacesRequired: ["common", "footer"],
+});
+
+export default withTranslation("common")(Index);

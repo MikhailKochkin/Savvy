@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Query } from "@apollo/client/react/components";
+import { Query } from "react-apollo";
 import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import Course from "../Course";

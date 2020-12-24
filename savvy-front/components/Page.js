@@ -73,7 +73,7 @@ const Page = ({ children, router }) => {
           <Meta />
           <Layout>
             <ModalProvider>
-              {/* <Header /> */}
+              <Header />
               {/* <Nav /> */}
               <Inner>{children}</Inner>
               <Footer />
