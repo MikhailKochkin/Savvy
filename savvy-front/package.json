@@ -17,7 +17,7 @@
   "author": "M.Kochkin",
   "license": "ISC",
   "dependencies": {
-    "@apollo/client": "^3.3.6",
+    "@apollo/client": "^3.3.4",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-hooks": "^4.0.0",
     "@apollo/react-ssr": "^4.0.0",
