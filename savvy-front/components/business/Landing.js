@@ -11,7 +11,7 @@ const Landing = () => {
   return (
     <div>
       <Intro />
-      <About />
+      {/* <About /> */}
       <Result />
       <Calculator />
       <Prices />

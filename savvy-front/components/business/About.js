@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+// import "react-multi-carousel/lib/styles.css";
 import ReactResizeDetector from "react-resize-detector";
 
 const Styles = styled.div`
