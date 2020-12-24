@@ -8,7 +8,7 @@ import renderHTML from "react-render-html";
 
 const POSTS_QUERY = gql`
   query POSTS_QUERY {
-    posts(orderBy: createdAt_DESC) {
+    posts(orderBy: { createdAt: desc }) {
       id
       title
       text
