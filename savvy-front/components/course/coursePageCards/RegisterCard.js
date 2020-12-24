@@ -7,8 +7,6 @@ import BuyDummy from "../BuyDummy";
 import Package from "./Package";
 import ReactResizeDetector from "react-resize-detector";
 import Modal from "styled-react-modal";
-import { Specials } from "../../../config";
-import { withTranslation } from "../../../i18n";
 
 const Data = styled.div`
   display: flex;
@@ -30,7 +28,6 @@ const Description = styled.div`
   box-sizing: border-box;
   width: 350px;
   min-height: 290px;
-  max-height: 400px;
   .title {
     font-weight: bold;
     font-size: 1.7rem;
@@ -98,22 +95,17 @@ const Paid = styled.div`
   padding: 1% 3%;
   border-radius: 5px;
   font-size: 1.4rem;
-  margin-top: 2%;
 `;
 
 const GridContainer = styled.div`
   display: grid;
-  max-width: 320px;
+  max-width: 280px;
   grid-template-columns: 90% 10%;
-  grid-template-areas: "Title ." "Self Price1" "Teacher Price2" "Friend1 Price3" "Friend2 Price4";
+  grid-template-areas: "Title ." "Self Price1" "Teacher Price2";
   div {
     padding-bottom: 15px;
   }
   .Package {
-    margin-bottom: 1%;
-    padding: 1%;
-    font-weight: bold;
-    display: inline-block;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -126,32 +118,19 @@ const GridContainer = styled.div`
   .Teacher {
     grid-area: Teacher;
     padding-right: 10px;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     span {
       text-decoration: underline;
     }
-  }
-  .Friend1 {
-    grid-area: Friend1;
-    padding-right: 10px;
-    font-size: 1.6rem;
-    span {
+    /* &:hover {
       text-decoration: underline;
-    }
-  }
-
-  .Friend2 {
-    grid-area: Friend2;
-    padding-right: 10px;
-    font-size: 1.6rem;
-    span {
-      text-decoration: underline;
-    }
+      transition: all ease-in-out 1s;
+    } */
   }
 
   .Self {
     grid-area: Self;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
   }
   .Price1 {
     margin-top: 10px;
@@ -160,14 +139,6 @@ const GridContainer = styled.div`
   .Price2 {
     margin-top: 10px;
     grid-area: Price2;
-  }
-  .Price3 {
-    margin-top: 10px;
-    grid-area: Price3;
-  }
-  .Price4 {
-    margin-top: 10px;
-    grid-area: Price4;
   }
 `;
 
@@ -188,12 +159,9 @@ const Time = styled.div`
 
   color: white;
   margin-bottom: 20px;
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-align: center;
   padding: 0.5%;
-  .comment {
-    font-size: 1.6rem;
-  }
 `;
 
 const StyledModal = Modal.styled`
@@ -205,10 +173,9 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
   max-width: 70%;
   min-width: 1100px;
-  height: 80%;
   @media (max-width: 800px) {
-    min-width: 90%;
-    height: 75%;
+    max-width: 90%;
+    min-width: 200px;
     margin: 10px;
   }
 `;
@@ -216,7 +183,7 @@ const StyledModal = Modal.styled`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("06/2/2020 06:00:00");
+  let then = new Date("03/10/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -233,10 +200,10 @@ const calculateTimeLeft = () => {
 };
 
 const RegisterCard = (props) => {
-  const [price, setPrice] = useState(props.price);
+  const [price, setPrice] = useState(props.price ? props.price : "Бесплатно");
+  const [promocode, setPromocode] = useState("");
   const [discountPrice, setDiscountPrice] = useState(props.discountPrice);
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-  const [pack, setPack] = useState(2);
   const [width, setWidth] = useState(0);
   const [used, setUsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -244,81 +211,52 @@ const RegisterCard = (props) => {
   const onResize = (width) => {
     setWidth(width);
   };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-  });
-
   const promos = [];
-  if (props.coursePage.promocode[0]) {
-    props.coursePage.promocode[0].map((el) => promos.push(Object.keys(el)[0]));
-  }
+  // if (props.coursePage.promocode && props.coursePage.promocode[0]) {
+  //   props.coursePage.promocode[0].map((el) => promos.push(Object.keys(el)[0]));
+  // }
   const handlePromo = (p) => {
-    if (promos.includes(p) && !used && price < 5000) {
+    if (promos.includes(p) && !used) {
       let pro = props.coursePage.promocode[0].filter(
         (el) => Object.keys(el)[0] === p
       );
       setPrice(price * Object.values(pro[0])[0]);
+      setPromocode(Object.keys(pro[0])[0]);
       setUsed(true);
     } else {
       null;
     }
   };
 
-  let day;
-  if (timeLeft[0] > 1) {
-    day = "дня";
-  } else if (timeLeft[0] === 1) {
-    day = "день";
-  } else if (timeLeft[0] === 0) {
-    day = "дней";
-  }
-
-  let left;
-  if (timeLeft[0] > 1) {
-    left = "Осталось";
-  } else if (timeLeft[0] === 1) {
-    left = "Остался";
-  } else if (timeLeft[0] === 0) {
-    left = "Осталось";
-  }
-
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
-  me && me.orders.filter((o) => o.coursePage.id === coursePage.id).length > 0
+  me &&
+  coursePage.applications.filter((ap) => ap.applicantId === me.id).length > 0
     ? (applied = true)
     : (applied = false);
-
-  let the1 = Specials.find((el) => el.courses.includes(coursePage.id));
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <Data>
         <Description>
-          <div className="title">{props.t("choose_plan")}</div>
-          <div>{props.t("life")}</div>
-          <div>{props.t("access")}</div>
-          <div>{props.t("services")}</div>
-          <div>{props.t("exclusive")}</div>
-          <div>{props.t("career")}</div>
+          <div className="title">Выберите подходящий тариф и получите:</div>
+          <div>- пожизненный доступ</div>
+          <div>- доступ сразу после оплаты</div>
+          <div>- полный комплекс услуг по выбранному тарифу</div>
+          <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
+          <div>- эксклюзивные карьерные возможности от Savvy App</div>
         </Description>
         <Payment>
           <Header>
-            {
+            {price === "Бесплатно" && price}
+            {discountPrice && price !== "Бесплатно" && (
               <>
-                {discountPrice && price !== "Бесплатно" && (
-                  <>
-                    <span className="crossed">{`${price}`}</span>
-                    {"        "}
-                    {`${discountPrice} ₽`}
-                  </>
-                )}
-                {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
-                {!discountPrice && price === "Бесплатно" && <>{`Бесплатно`}</>}
+                <span className="crossed">{`${price}`}</span>
+                {"        "}
+                {`${discountPrice} ₽`}
               </>
-            }
+            )}
+            {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
           </Header>
           <Text>
             <Part1>
@@ -341,10 +279,10 @@ const RegisterCard = (props) => {
               {coursePage.courseType === "FORMONEY" && (
                 <>
                   <GridContainer>
-                    <div className="Title">{props.t("plan-choose")}</div>
+                    <div className="Title">Выберите тариф:</div>
                     <div />
                     <div className="Self">
-                      🏎 <span>{props.t("basic")}</span>
+                      🏎 <span>Базовый</span>
                     </div>
                     <input
                       className="Price1"
@@ -352,21 +290,13 @@ const RegisterCard = (props) => {
                       value={props.price}
                       name="price"
                       onChange={(e) => {
-                        setPack(0),
-                          setPrice(props.price),
+                        setPrice(props.price),
                           setUsed(false),
                           setDiscountPrice(props.discountPrice);
                       }}
                     />
-                    {props.subscriptionPrice && (
-                      <div className="Teacher">
-                        🚀{" "}
-                        {props.subscription
-                          ? props.t("subscription")
-                          : props.t("advanced")}
-                      </div>
-                    )}
-                    {/* {the1 && (
+                    <div className="Teacher">🚀 Продвинутый</div>
+                    {coursePage.package && (
                       <div
                         className="Package"
                         onClick={(e) => {
@@ -377,25 +307,22 @@ const RegisterCard = (props) => {
                           }
                         }}
                       >
-                        Купить пакетом
+                        Купить пакетом:
                       </div>
-                    )} */}
-                    {props.subscriptionPrice && (
-                      <input
-                        className="Price2"
-                        type="radio"
-                        name="price"
-                        value={props.subscriptionPrice}
-                        onChange={(e) => {
-                          setPack(0),
-                            setPrice(props.subscriptionPrice),
-                            setUsed(false),
-                            props.discountPrice
-                              ? setDiscountPrice(props.discountPrice * 1.75)
-                              : null;
-                        }}
-                      />
                     )}
+                    <input
+                      className="Price2"
+                      type="radio"
+                      name="price"
+                      value={props.price * 1.75}
+                      onChange={(e) => {
+                        setPrice(props.price * 1.75),
+                          setUsed(false),
+                          props.discountPrice
+                            ? setDiscountPrice(props.discountPrice * 1.75)
+                            : null;
+                      }}
+                    />
                   </GridContainer>
                 </>
               )}
@@ -416,7 +343,7 @@ const RegisterCard = (props) => {
                   мы откроем доступ.
                 </Paid>
               )}
-              {!me && <BuyDummy>{props.t("signin")}</BuyDummy>}
+              {!me && <BuyDummy>Войти</BuyDummy>}
               {me && (
                 <>
                   {coursePage.courseType === "FORMONEY" && (
@@ -425,13 +352,14 @@ const RegisterCard = (props) => {
                       coursePageID={coursePage.id}
                       name={me.name}
                       user={me.id}
+                      promocode={promocode}
                       price={
                         discountPrice
                           ? parseInt(discountPrice)
                           : parseInt(price)
                       }
                     >
-                      {props.t("buy")}
+                      Купить
                     </TakeMyMoney>
                   )}
                   {coursePage.courseType !== "FORMONEY" && (
@@ -453,15 +381,10 @@ const RegisterCard = (props) => {
         onBackgroundClick={(e) => setIsOpen(!isOpen)}
         onEscapeKeydown={(e) => setIsOpen(!isOpen)}
       >
-        <Package
-          coursePage={coursePage}
-          me={me}
-          teacher={the1 ? the1.teacher : null}
-          discounts={the1 ? the1.discounts : null}
-        />
+        <Package coursePage={coursePage} me={me} />
       </StyledModal>
     </>
   );
 };
 
-export default withTranslation("course")(RegisterCard);
+export default RegisterCard;

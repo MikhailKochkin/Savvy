@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { Unis } from "../../config";
 import { CURRENT_USER_QUERY } from "../User";
@@ -188,26 +188,26 @@ class LandingRegister extends Component {
   state = {
     status: "STUDENT",
     uniID: "cjyimfz2e00lp07174jpder3m",
-    careerTrackID: "cjwx78u7700rb07121pelqctm"
+    careerTrackID: "cjwx78u7700rb07121pelqctm",
   };
 
-  onSwitch = e => {
+  onSwitch = (e) => {
     e.preventDefault();
     const name = e.target.getAttribute("name");
     this.setState({ status: name });
   };
 
-  saveToState = e => {
+  saveToState = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  saveToStateBoolean = e => {
+  saveToStateBoolean = (e) => {
     if (e.target.value === "true") {
       this.setState({ isFamiliar: true });
     }
   };
 
-  handleSteps = e => {
+  handleSteps = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -219,7 +219,7 @@ class LandingRegister extends Component {
         mutation={SIGNUP_MUTATION}
         variables={{
           isFamiliar: true,
-          ...this.state
+          ...this.state,
         }}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >
@@ -295,7 +295,7 @@ class LandingRegister extends Component {
                     </select>
                   </Label>
                   <SubmitButton
-                    onClick={async e => {
+                    onClick={async (e) => {
                       e.preventDefault();
                       await signup();
                     }}
@@ -350,7 +350,7 @@ class LandingRegister extends Component {
                       value={this.state.uniID}
                       onChange={this.handleSteps}
                     >
-                      {Unis.map(uni => (
+                      {Unis.map((uni) => (
                         <option value={Object.values(uni)[0]}>
                           {Object.keys(uni)[0]}
                         </option>
@@ -366,7 +366,7 @@ class LandingRegister extends Component {
                     </select>
                   </Label>
                   <SubmitButton
-                    onClick={async e => {
+                    onClick={async (e) => {
                       e.preventDefault();
                       await signup();
                       setTimeout(

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";

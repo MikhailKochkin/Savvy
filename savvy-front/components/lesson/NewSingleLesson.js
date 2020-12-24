@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -11,20 +11,17 @@ import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
-import User from "../User";
+import { useUser } from "../User";
 import Panel from "./Panel";
-import smoothscroll from "smoothscroll-polyfill";
-import { withTranslation } from "../../i18n";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
-  query NEW_SINGLE_LESSON_QUERY($id: ID!) {
+  query NEW_SINGLE_LESSON_QUERY($id: String!) {
     lesson(where: { id: $id }) {
       id
       text
       name
       number
       type
-      map
       structure
       change
       open
@@ -51,16 +48,12 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
-        check
-        type
         ifRight
         ifWrong
         type
         next
         user {
           id
-          name
-          surname
         }
       }
       newTests {
@@ -74,8 +67,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         user {
           id
-          name
-          surname
         }
       }
       problems {
@@ -108,23 +99,23 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           id
         }
       }
-      documents {
-        id
-        title
-        user {
-          id
-        }
-        clauses {
-          id
-          number
-          user {
-            id
-          }
-          commentary
-          keywords
-          sample
-        }
-      }
+      # documents {
+      #   id
+      #   title
+      #   user {
+      #     id
+      #   }
+      #   clauses {
+      #     id
+      #     number
+      #     user {
+      #       id
+      #     }
+      #     commentary
+      #     keywords
+      #     sample
+      #   }
+      # }
       shots {
         id
         title
@@ -173,16 +164,16 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           surname
         }
       }
-      shotResults {
-        id
-        student {
-          id
-        }
-        shot {
-          id
-        }
-        answer
-      }
+      # shotResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   shot {
+      #     id
+      #   }
+      #   answer
+      # }
       testResults {
         id
         student {
@@ -190,7 +181,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         }
         testID
         answer
-        attempts
+        # attempts
       }
       quizResults {
         id
@@ -248,16 +239,16 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           }
         }
       }
-      exams {
-        id
-        name
-        question
-        nodeID
-        nodeType
-        user {
-          id
-        }
-      }
+      # exams {
+      #   id
+      #   name
+      #   question
+      #   nodeID
+      #   nodeType
+      #   user {
+      #     id
+      #   }
+      # }
     }
   }
 `;
@@ -376,149 +367,130 @@ const LessonPart = styled.div`
   }
 
   .example-leave {
-    opacity: 1;
+    /* opacity: 1; */
   }
 
   .example-leave.example-leave-active {
-    opacity: 0.01;
-    transition: opacity 300ms ease-in;
+    /* opacity: 0.01; */
+    /* transition: opacity 3000ms ease-in; */
   }
 `;
 
 const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
-
-  useEffect(() => {
-    // kick off the polyfill!
-    smoothscroll.polyfill();
-  });
-
+  const me = useUser();
   return (
     <PleaseSignIn>
       <div id="root"></div>
-      <User>
-        {({ data: { me } }) => (
-          <Query
-            query={NEW_SINGLE_LESSON_QUERY}
-            variables={{
-              id: props.id,
-            }}
-            fetchPolicy="no-cache"
-            returnPartialData={true}
-          >
-            {({ data, error, loading }) => {
-              if (error) return <Error error={error} />;
-              if (loading)
-                return (
-                  <Progress>
-                    <CircularProgress />
-                  </Progress>
-                );
-              let lesson = data.lesson;
-              let my_result;
-              if (me) {
-                my_result = lesson.lessonResults.find(
-                  (l) => l.student.id === me.id
-                );
-              }
-              let next = lesson.coursePage.lessons.find(
-                (l) => l.number === lesson.number + 1
-              );
-              return (
-                <>
-                  {lesson && (
-                    <AreYouEnrolled
-                      openLesson={lesson.open}
-                      subject={lesson.coursePage.id}
-                    >
-                      <Container>
-                        <ReactResizeDetector
-                          handleWidth
-                          handleHeight
-                          onResize={onResize}
-                        />
+      <Query
+        query={NEW_SINGLE_LESSON_QUERY}
+        variables={{
+          id: props.id,
+        }}
+        fetchPolicy="no-cache"
+        returnPartialData={true}
+      >
+        {({ data, error, loading }) => {
+          if (error) return <Error error={error} />;
+          if (loading)
+            return (
+              <Progress>
+                <CircularProgress />
+              </Progress>
+            );
+          let lesson = data.lesson;
+          // if (lesson === undefined) return <Reload />;
+          let next = lesson.coursePage.lessons.find(
+            (l) => l.number === lesson.number + 1
+          );
+          let my_result;
+          if (me) {
+            my_result = lesson.lessonResults.find(
+              (l) => l.student.id === me.id
+            );
+          }
+          return (
+            <>
+              {lesson && (
+                <AreYouEnrolled
+                  openLesson={lesson.open}
+                  subject={lesson.coursePage.id}
+                >
+                  <Container>
+                    <ReactResizeDetector
+                      handleWidth
+                      handleHeight
+                      onResize={onResize}
+                    />
 
-                        <Head>
-                          {width > 800 && (
-                            <Link
-                              href={{
-                                pathname: "/coursePage",
-                                query: {
-                                  id: lesson.coursePage.id,
-                                },
-                              }}
-                            >
-                              <span>
-                                <Icon
-                                  size={"1.5em"}
-                                  icon={arrowLeft}
-                                  id="back"
-                                />
-                              </span>
-                            </Link>
-                          )}
+                    <Head>
+                      {width > 800 && (
+                        <Link
+                          href={{
+                            pathname: "/coursePage",
+                            query: {
+                              id: lesson.coursePage.id,
+                            },
+                          }}
+                        >
                           <span>
-                            {props.t("lesson")} {lesson.number}. {lesson.name}
+                            <Icon size={"1.5em"} icon={arrowLeft} id="back" />
                           </span>
-                        </Head>
+                        </Link>
+                      )}
+                      <span>
+                        Урок {lesson.number}. {lesson.name}
+                      </span>
+                    </Head>
 
-                        {me &&
-                          (lesson.user.id === me.id ||
-                            me.permissions.includes("ADMIN")) && (
-                            <Head2>
-                              {lesson.structure.length > 0 && (
-                                <div>
-                                  {props.t("story_mode")} →
-                                  <Link
-                                    href={{
-                                      pathname: "/lesson",
-                                      query: {
-                                        id: lesson.id,
-                                        type: "regular",
-                                      },
-                                    }}
-                                  >
-                                    <span>{props.t("switch")}</span>
-                                  </Link>
-                                </div>
-                              )}
-                            </Head2>
+                    {me &&
+                      (lesson.user.id === me.id ||
+                        me.permissions.includes("ADMIN")) && (
+                        <Head2>
+                          {lesson.structure.lessonItems.length > 0 && (
+                            <div>
+                              Режим истории →
+                              <Link
+                                href={{
+                                  pathname: "/lesson",
+                                  query: {
+                                    id: lesson.id,
+                                    type: "regular",
+                                  },
+                                }}
+                              >
+                                <span> Переключить</span>
+                              </Link>
+                            </div>
                           )}
-                        <LessonPart>
-                          <ReactCSSTransitionGroup
-                            transitionName="example"
-                            transitionEnterTimeout={5500}
-                            transitionLeaveTimeout={3300}
-                          >
-                            <StoryEx
-                              tasks={lesson.structure}
-                              me={me}
-                              lesson={lesson}
-                              next={next}
-                              my_result={my_result}
-                              coursePageID={lesson.coursePage.id}
-                            />
-                          </ReactCSSTransitionGroup>
-                        </LessonPart>
-                        {me && (
-                          <Panel
-                            level={me.level.level}
-                            change={lesson.change}
-                          />
-                        )}
-                      </Container>{" "}
-                    </AreYouEnrolled>
-                  )}
-                </>
-              );
-            }}
-          </Query>
-        )}
-      </User>
+                        </Head2>
+                      )}
+                    <LessonPart>
+                      <ReactCSSTransitionGroup transitionName="example">
+                        <StoryEx
+                          tasks={lesson.structure.lessonItems}
+                          me={me}
+                          lesson={lesson}
+                          next={next}
+                          my_result={my_result}
+                          coursePageID={lesson.coursePage.id}
+                        />
+                      </ReactCSSTransitionGroup>
+                    </LessonPart>
+                    {/* {me && (
+                      <Panel level={me.level.level} change={lesson.change} />
+                    )} */}
+                  </Container>{" "}
+                </AreYouEnrolled>
+              )}
+            </>
+          );
+        }}
+      </Query>
     </PleaseSignIn>
   );
 };
 
-export default withTranslation("story")(NewSingleLesson);
+export default NewSingleLesson;
 export { NEW_SINGLE_LESSON_QUERY };

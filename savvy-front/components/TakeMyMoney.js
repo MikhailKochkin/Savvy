@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
 import Cookies from "universal-cookie";
 import gql from "graphql-tag";
@@ -10,26 +10,29 @@ const cookies = new Cookies();
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
-    $coursePage: ID!
-    $user: ID!
+    $coursePageId: String!
+    $userId: String!
     $price: Int!
     $promocode: String
     $comment: String
   ) {
     createOrder(
-      coursePage: $coursePage
+      coursePageId: $coursePageId
       price: $price
-      user: $user
+      userId: $userId
       promocode: $promocode
       comment: $comment
     ) {
-      id
+      order {
+        id
+        paymentID
+      }
+      url
     }
   }
 `;
 
 const Button = styled.button`
-  transition: all 0.2s ease;
   background: #0846d8;
   border-radius: 5px;
   width: 100%;
@@ -66,9 +69,9 @@ const TakeMyMoney = (props) => {
       mutation={CREATE_ORDER_MUTATION}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       variables={{
-        coursePage: props.coursePage.id,
+        coursePageId: props.coursePage.id,
         price: props.price,
-        user: props.user,
+        userId: props.user,
         promocode: props.promocode,
         comment: props.comment,
       }}
@@ -81,8 +84,9 @@ const TakeMyMoney = (props) => {
               onClick={async (e) => {
                 e.preventDefault;
                 setLoading(true);
-                const res2 = await createOrder();
-                location.href = cookies.get("url");
+                const res = await createOrder();
+                console.log(res.data.createOrder.url);
+                location.href = res.data.createOrder.url;
                 setLoading(false);
               }}
             >

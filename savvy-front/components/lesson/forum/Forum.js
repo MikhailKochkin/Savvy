@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import renderHTML from "react-render-html";
 import StarRatings from "react-star-ratings";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import moment from "moment";

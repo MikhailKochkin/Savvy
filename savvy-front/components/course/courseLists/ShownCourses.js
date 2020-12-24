@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Query } from "react-apollo";
-import gql from "graphql-tag";
+import { Query } from "@apollo/client/react/components";
+import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import Course from "../Course";
 import LoadingDummy from "../LoadingDummy";
@@ -8,7 +8,10 @@ import { withTranslation } from "../../../i18n";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
-    coursePages(where: { published: true }, orderBy: createdAt_DESC) {
+    coursePages(
+      where: { published: { equals: true } }
+      orderBy: { createdAt: desc }
+    ) {
       id
       title
       description
@@ -146,7 +149,6 @@ const ShownCourses = (props) => {
                   (c) => c.tags.includes(props.level) || c.tags.includes("All")
                 );
               }
-              console.log(1);
             }
             return (
               <>

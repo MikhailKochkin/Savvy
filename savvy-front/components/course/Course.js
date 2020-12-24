@@ -3,12 +3,15 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
 import gql from "graphql-tag";
-import { Mutation, Query } from "react-apollo";
+import { Mutation, Query } from "@apollo/client/react/components";
 
 const SINGLE_COURSE_VISIT_QUERY = gql`
-  query SINGLE_COURSE_VISIT_QUERY($coursePage: ID!, $student: ID!) {
+  query SINGLE_COURSE_VISIT_QUERY($coursePageId: String!, $student: String!) {
     courseVisits(
-      where: { coursePage: { id: $coursePage }, student: { id: $student } }
+      where: {
+        coursePageId: { equals: $coursePageId }
+        student: { id: { equals: $student } }
+      }
     ) {
       id
       visitsNumber
@@ -22,13 +25,11 @@ const SINGLE_COURSE_VISIT_QUERY = gql`
 const CREATE_COURSE_VISIT_MUTATION = gql`
   mutation CREATE_COURSE_VISIT_MUTATION(
     $visitsNumber: Int
-    $coursePage: ID
-    $student: ID
+    $coursePageId: String
   ) {
     createCourseVisit(
       visitsNumber: $visitsNumber
-      coursePage: $coursePage
-      student: $student
+      coursePageId: $coursePageId
     ) {
       id
     }
@@ -36,7 +37,7 @@ const CREATE_COURSE_VISIT_MUTATION = gql`
 `;
 
 const UPDATE_COURSE_VISIT_MUTATION = gql`
-  mutation UPDATE_COURSE_VISIT_MUTATION($id: ID!, $visitsNumber: Int) {
+  mutation UPDATE_COURSE_VISIT_MUTATION($id: String!, $visitsNumber: Int) {
     updateCourseVisit(id: $id, visitsNumber: $visitsNumber) {
       id
     }

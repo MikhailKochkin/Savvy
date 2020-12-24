@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import Router from "next/router";

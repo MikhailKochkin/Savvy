@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import User from "./User";
+import { useUser } from "./User";
 import Account from "./Account";
 import PleaseSignIn from "./auth/PleaseSignIn";
 
@@ -53,44 +53,23 @@ const Data = styled.div`
   flex: 85%;
 `;
 
-class AccountPage extends Component {
-  state = {
-    page: "account"
-  };
-
-  onSwitch = e => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-    this.setState({ page: name });
-  };
-
-  render() {
-    return (
-      <PleaseSignIn>
-        <Styles>
-          <Container>
-            <Menu>
-              <div name="account" onClick={this.onSwitch}>
-                Аккаунт
-              </div>
-              <div name="portfolio" onClick={this.onSwitch}>
-                Портфолио
-              </div>
-            </Menu>
-            <Data>
-              <User>
-                {({ data: { me } }) =>
-                  this.state.page === "account" && (
-                    <Account me={me} id={this.props.id} />
-                  )
-                }
-              </User>
-            </Data>
-          </Container>
-        </Styles>
-      </PleaseSignIn>
-    );
-  }
-}
+const AccountPage = (props) => {
+  const [page, setPage] = useState("account");
+  const me = useUser();
+  return (
+    <PleaseSignIn>
+      <Styles>
+        <Container>
+          <Menu>
+            <div name="account">Аккаунт</div>
+          </Menu>
+          <Data>
+            {page === "account" && me && <Account me={me} id={props.id} />}
+          </Data>
+        </Container>
+      </Styles>
+    </PleaseSignIn>
+  );
+};
 
 export default AccountPage;

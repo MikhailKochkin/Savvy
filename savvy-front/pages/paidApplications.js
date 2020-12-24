@@ -1,6 +1,6 @@
 import PaidApplications from "../components/PaidApplications";
 import React, { useState } from "react";
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import ChangeForum from "../components/lesson/forum/ChangeForum";

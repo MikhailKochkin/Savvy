@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import ProblemBuilder from "../../create/ProblemBuilder";
+import ProblemBuilder from "./ProblemBuilder";
 
 const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
-    $id: ID!
+    $id: String!
     $text: String
-    $nodeID: ID
+    $nodeID: String
     $nodeType: String
   ) {
     updateProblem(id: $id, text: $text, nodeID: $nodeID, nodeType: $nodeType) {
@@ -46,15 +46,15 @@ const useStyles = makeStyles({
 });
 
 const Container = styled.div`
-  max-width: 600px;
-  /* display: grid; */
+  width: 100%;
+  display: grid;
   margin: 1% 0 0 0;
   margin-top: 5%;
-  /* grid-template-columns: 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: repeat(3 70px);
   grid-template-areas:
     "explain"
-    "first   "; */
+    "first   ";
   h4 {
     padding: 0% 5%;
   }
@@ -107,7 +107,7 @@ const UpdateProblem = (props) => {
 
   const getText = (d) => setText(d);
 
-  const getNode = (e, type) => {
+  const handleChange = (e, type) => {
     setNodeID(e.target.value);
     setNodeType(type);
   };
@@ -116,49 +116,53 @@ const UpdateProblem = (props) => {
 
   const { id, quizes, lessonID, newTests, notes } = props;
   return (
-    <Container>
-      <DynamicLoadedEditor getEditorText={getText} previousText={text} />
-      <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
-      {nodeID && (
-        <ProblemBuilder
-          quizes={quizes}
-          newTests={newTests}
-          notes={notes}
-          nodeType={nodeType}
-          nodeID={nodeID}
-          lessonID={lessonID}
-          getNode={getNode}
-        />
-      )}
-      <Mutation
-        mutation={UPDATE_PROBLEM_MUTATION}
-        variables={{
-          id: id,
-          text: text,
-          nodeID: nodeID,
-          nodeType: nodeType,
-        }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID },
-          },
-        ]}
-      >
-        {(updateProblem, { loading, error }) => (
-          <Button
-            onClick={async (e) => {
-              // Stop the form from submitting
-              e.preventDefault();
-              // call the mutation
-              const res = await updateProblem();
-            }}
-          >
-            {loading ? "Сохраняем..." : "Сохранить"}
-          </Button>
+    <>
+      <Container>
+        <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+        <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
+        {nodeID && (
+          <ProblemBuilder
+            elements={[...newTests, ...quizes, ...notes]}
+            quizes={quizes}
+            newTests={newTests}
+            notes={notes}
+            nodeType={nodeType}
+            nodeID={nodeID}
+            lessonID={lessonID}
+            // lesson={lesson}
+            // getNode={getNode}
+          />
         )}
-      </Mutation>
-    </Container>
+        <Mutation
+          mutation={UPDATE_PROBLEM_MUTATION}
+          variables={{
+            id: id,
+            text: text,
+            nodeID: nodeID,
+            nodeType: nodeType,
+          }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lessonID },
+            },
+          ]}
+        >
+          {(updateProblem, { loading, error }) => (
+            <Button
+              onClick={async (e) => {
+                // Stop the form from submitting
+                e.preventDefault();
+                // call the mutation
+                const res = await updateProblem();
+              }}
+            >
+              {loading ? "Сохраняем..." : "Сохранить"}
+            </Button>
+          )}
+        </Mutation>
+      </Container>
+    </>
   );
 };
 

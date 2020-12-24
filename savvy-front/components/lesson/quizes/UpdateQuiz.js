@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
@@ -8,11 +8,10 @@ import { withTranslation } from "../../../i18n";
 
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION(
-    $id: ID!
+    $id: String!
     $question: String
     $answer: String
-    $next: Json
-    $check: CheckType
+    $check: String
     $ifRight: String
     $ifWrong: String
   ) {
@@ -20,7 +19,6 @@ const UPDATE_QUIZ_MUTATION = gql`
       id: $id
       question: $question
       answer: $answer
-      next: $next
       check: $check
       ifRight: $ifRight
       ifWrong: $ifWrong

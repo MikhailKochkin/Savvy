@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import _ from "lodash";
 import Button from "@material-ui/core/Button";
@@ -25,8 +25,8 @@ const StyledButton = withStyles({
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
     $answer: String
-    $testID: ID
-    $lessonID: ID
+    $testID: String
+    $lessonID: String
   ) {
     createTestResult(answer: $answer, testID: $testID, lessonID: $lessonID) {
       id

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
@@ -13,7 +13,7 @@ const DELETE_EXAM_MUTATION = gql`
 `;
 
 const Button = styled.button`
-  background: ${props => props.theme.red};
+  background: ${(props) => props.theme.red};
   width: 120px;
   color: white;
   padding: 1.5% 0;
@@ -25,7 +25,7 @@ const Button = styled.button`
   cursor: pointer;
   outline: none;
   &:active {
-    background-color: ${props => props.theme.darkRed};
+    background-color: ${(props) => props.theme.darkRed};
   }
 `;
 
@@ -39,15 +39,15 @@ class DeleteExam extends Component {
         refetchQueries={() => [
           {
             query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID }
-          }
+            variables: { id: lessonID },
+          },
         ]}
       >
         {(deleteExam, { error, loading }) => (
           <Button
             onClick={() => {
               if (confirm("Вы точно хотите удалить этот экзамен?")) {
-                deleteExam().catch(error => {
+                deleteExam().catch((error) => {
                   alert(error.message);
                 });
               }

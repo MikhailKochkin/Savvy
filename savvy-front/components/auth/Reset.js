@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -109,16 +109,16 @@ const Title = styled.div`
 
 class Reset extends Component {
   static propTypes = {
-    resetToken: PropTypes.string.isRequired
+    resetToken: PropTypes.string.isRequired,
   };
   state = {
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   };
   switch = () => {
     this.props.getData("signin");
   };
-  saveToState = e => {
+  saveToState = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
   render() {
@@ -128,21 +128,21 @@ class Reset extends Component {
         variables={{
           resetToken: this.props.resetToken,
           password: this.state.password,
-          confirmPassword: this.state.confirmPassword
+          confirmPassword: this.state.confirmPassword,
         }}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >
         {(reset, { error, loading, called }) => (
           <Form
             method="post"
-            onSubmit={async e => {
+            onSubmit={async (e) => {
               e.preventDefault();
               this.state.password !== this.state.confirmPassword
                 ? alert("Пароли не совпадают!")
                 : await reset();
               this.setState({ password: "", confirmPassword: "" });
               Router.push({
-                pathname: "/courses"
+                pathname: "/courses",
               });
             }}
           >

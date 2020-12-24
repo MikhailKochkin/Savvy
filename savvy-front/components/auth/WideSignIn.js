@@ -1,11 +1,14 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -121,9 +124,12 @@ const WideSignin = (props) => {
         <Form
           onSubmit={async (e) => {
             e.preventDefault();
-            await signin();
+            const res = await signin();
+            cookies.set("token", res.data.signin.token);
+            props.closeNavBar(true);
             setPassword("");
             setEmail("");
+            console.log(res.data);
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>

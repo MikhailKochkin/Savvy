@@ -13,7 +13,7 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import StoryEx from "./StoryEx";
-import User from "../User";
+import { useUser } from "../User";
 import Panel from "./Panel";
 import Reload from "./Reload";
 

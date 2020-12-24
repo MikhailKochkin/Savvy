@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Front from "./Front";
 import Tasks from "./Tasks";
 import PleaseSignIn from "../../auth/PleaseSignIn";
-import User from "../../User";
+import { useUser } from "../../User";
 import Reload from "../Reload";
 
 const useStyles = makeStyles({

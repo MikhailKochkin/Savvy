@@ -4,7 +4,7 @@ import Link from "next/link";
 import ReactResizeDetector from "react-resize-detector";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import dynamic from "next/dynamic";
-import User from "./User";
+import { useUser } from "./User";
 import LandingCareerTrack from "./LandingCareerTrack";
 import LandingRegister from "./auth/LandingRegister";
 import LandingLogIn from "./auth/LandingLogIn";

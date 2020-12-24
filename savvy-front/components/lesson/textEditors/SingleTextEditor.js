@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import renderHTML from "react-render-html";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
@@ -18,8 +18,8 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
     $wrong: String!
     $correct: String!
     $guess: String!
-    $lesson: ID
-    $textEditor: ID
+    $lessonId: String
+    $textEditorId: String
     $result: Boolean
   ) {
     createTextEditorResult(
@@ -27,8 +27,8 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
       wrong: $wrong
       correct: $correct
       guess: $guess
-      lesson: $lesson
-      textEditor: $textEditor
+      lessonId: $lessonId
+      textEditorId: $textEditorId
       result: $result
     ) {
       id
@@ -305,13 +305,14 @@ class SingleTextEditor extends Component {
   };
 
   render() {
-    const { textEditor, me, userData, lesson, story } = this.props;
+    const { textEditor, me, userData, lessonID, story } = this.props;
     let data;
     me
       ? (data = userData
           .filter((result) => result.textEditor.id === textEditor.id)
           .filter((result) => result.student.id === me.id))
       : (data = [""]);
+
     return (
       <div id={textEditor.id + 1}>
         {!this.state.update && (
@@ -321,8 +322,8 @@ class SingleTextEditor extends Component {
                 <Mutation
                   mutation={CREATE_TEXTEDITORRESULT_MUTATION}
                   variables={{
-                    lesson: this.props.lesson,
-                    textEditor: this.props.textEditor.id,
+                    lessonId: this.props.lessonID,
+                    textEditorId: this.props.textEditor.id,
                     attempts: this.state.attempts,
                     correct: this.state.correct_option,
                     wrong: this.state.wrong_option,
@@ -332,7 +333,7 @@ class SingleTextEditor extends Component {
                   refetchQueries={() => [
                     {
                       query: SINGLE_LESSON_QUERY,
-                      variables: { id: this.props.lesson },
+                      variables: { id: this.props.lessonID },
                     },
                     {
                       query: CURRENT_USER_QUERY,
@@ -364,6 +365,7 @@ class SingleTextEditor extends Component {
                           setTimeout(() => {
                             console.log("Save");
                             const res2 = createTextEditorResult();
+                            console.log(res2);
                           }, 3000);
                         }
                       }}
@@ -404,7 +406,7 @@ class SingleTextEditor extends Component {
         )}
         {this.state.update && (
           <UpdateTextEditor
-            lessonID={this.props.lessonID}
+            lessonID={lessonID}
             id={this.props.textEditor.id}
             text={this.state.text}
             totalMistakes={this.state.total}

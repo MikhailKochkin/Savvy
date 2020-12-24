@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import PropTypes from "prop-types";
 import Clause from "./Clause";
@@ -44,7 +44,7 @@ const Advice = styled.div`
   border-radius: 10px;
   padding: 2%;
   margin: 30px 0 15px 0;
-  width: ${props => (props.story ? "90%" : "100%")};
+  width: ${(props) => (props.story ? "90%" : "100%")};
   @media (max-width: 850px) {
     width: 100%;
   }
@@ -59,13 +59,13 @@ const StyledButton = withStyles({
     margin: "1% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
-const Document = props => {
+const Document = (props) => {
   const [clausesTotal, setClauses] = useState(1);
-  const moreClauses = num => {
+  const moreClauses = (num) => {
     setClauses(num);
   };
   const [result, setResult] = useState([]);
@@ -77,18 +77,18 @@ const Document = props => {
   const getData = (data, name) => {
     data = {
       number: name,
-      text: data
+      text: data,
     };
-    let arr = result.filter(el => el.number !== name);
+    let arr = result.filter((el) => el.number !== name);
     setResult([...arr, data]);
   };
 
   const getDraft = (data, name) => {
     data = {
       number: name,
-      text: data
+      text: data,
     };
-    let drafts = draft.filter(el => el.number !== name);
+    let drafts = draft.filter((el) => el.number !== name);
     setDraft([...drafts, data]);
   };
 
@@ -100,10 +100,10 @@ const Document = props => {
       return a.number - b.number;
     });
     let results = [];
-    r.map(r => results.push(r.text));
+    r.map((r) => results.push(r.text));
     const resu = await setResults(results);
     let drafts = [];
-    d.map(d => drafts.push(d.text));
+    d.map((d) => drafts.push(d.text));
     const resul = await setDrafts(drafts);
   };
   const { me, user, title, clauses, lessonID, documentID, story } = props;
@@ -115,7 +115,7 @@ const Document = props => {
           document: documentID,
           lesson: lessonID,
           drafts: drafts,
-          answers: results
+          answers: results,
         }}
       >
         {(createDocumentResult, { loading, error }) => (
@@ -151,7 +151,7 @@ const Document = props => {
               <StyledButton
                 variant="contained"
                 color="primary"
-                onClick={async e => {
+                onClick={async (e) => {
                   e.preventDefault();
                   const res = await save();
                   const res2 = await createDocumentResult();
@@ -171,7 +171,7 @@ const Document = props => {
                 />
               ) : null}
             </Buttons>
-            {reveal && <div>{clauses.map(cl => renderHTML(cl.sample))}</div>}
+            {reveal && <div>{clauses.map((cl) => renderHTML(cl.sample))}</div>}
           </>
         )}
       </Mutation>

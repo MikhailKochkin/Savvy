@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
@@ -38,13 +38,13 @@ const Button = styled.button`
   width: 23%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 850px) {
     width: 40%;
@@ -73,17 +73,17 @@ const Advice = styled.p`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 export default class CreateSingleNote extends Component {
   state = {
-    text: ""
+    text: "",
   };
 
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
 
@@ -104,23 +104,23 @@ export default class CreateSingleNote extends Component {
           mutation={CREATE_NOTE_MUTATION}
           variables={{
             lessonID: lessonID,
-            ...this.state
+            ...this.state,
           }}
           refetchQueries={() => [
             {
               query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID }
-            }
+              variables: { id: lessonID },
+            },
           ]}
           awaitRefetchQueries={true}
         >
           {(createNote, { loading, error }) => (
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault();
                 const res = await createNote();
                 document.getElementById("Message").style.display = "block";
-                setTimeout(function() {
+                setTimeout(function () {
                   document.getElementById("Message")
                     ? (document.getElementById("Message").style.display =
                         "none")

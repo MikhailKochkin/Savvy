@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
@@ -23,13 +23,13 @@ const Button = styled.button`
   width: 7%;
   color: #fffdf7;
   text-align: center;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 600px) {
     width: 10%;
@@ -56,13 +56,13 @@ const Form = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const CreateStatement = props => {
+const CreateStatement = (props) => {
   const [text, setText] = useState("");
 
-  const myCallback = dataFromChild => setText(dataFromChild);
+  const myCallback = (dataFromChild) => setText(dataFromChild);
 
   return (
     <>
@@ -70,13 +70,13 @@ const CreateStatement = props => {
         mutation={CREATE_STATEMENT_MUTATION}
         variables={{
           topic: props.topic.id,
-          text: text
+          text: text,
         }}
         refetchQueries={() => [
           {
             query: SINGLE_COURSEPAGE_QUERY,
-            variables: { id: props.coursePageID }
-          }
+            variables: { id: props.coursePageID },
+          },
         ]}
       >
         {(createStatement, { loading, error }) => (
@@ -85,7 +85,7 @@ const CreateStatement = props => {
               <DynamicLoadedEditor getEditorText={myCallback} name="text" />{" "}
             </TextBox>
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault();
                 console.log("2");
                 const res = await createStatement();

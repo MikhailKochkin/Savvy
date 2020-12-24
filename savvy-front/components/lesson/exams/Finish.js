@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -25,7 +25,7 @@ const Styles = styled.div`
 `;
 
 const Result = styled.div`
-  display: ${props => (props.display ? "block" : "none")};
+  display: ${(props) => (props.display ? "block" : "none")};
 `;
 
 const Button = styled.button`
@@ -34,12 +34,12 @@ const Button = styled.button`
   border: 1px solid black;
   outline: 0;
   margin-bottom: 3%;
-  display: ${props => (props.display ? "block" : "none")};
+  display: ${(props) => (props.display ? "block" : "none")};
 `;
 
-const Finish = props => {
+const Finish = (props) => {
   const [reveal, show] = useState(false);
-  const rights = props.results.filter(r => r === "true");
+  const rights = props.results.filter((r) => r === "true");
   return (
     <Styles>
       <Mutation
@@ -47,13 +47,13 @@ const Finish = props => {
         variables={{
           lesson: props.lesson.id,
           exam: props.exam,
-          answers: props.results
+          answers: props.results,
         }}
       >
         {(createExamResult, { loading, error }) => (
           <Button
             display={!reveal}
-            onClick={async e => {
+            onClick={async (e) => {
               e.preventDefault();
               show(!reveal);
               const res = await createExamResult();

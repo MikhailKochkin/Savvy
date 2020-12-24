@@ -1,13 +1,14 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import renderHTML from "react-render-html";
 import Link from "next/link";
 import Note from "./notes/Note";
 import Document from "./documents/Document";
-import Exams from "./exams/Exams";
+// import Exams from "./exams/Exams";
+import Forum from "./forum/Forum";
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
 import QuizGroup from "./quizes/QuizGroup";
@@ -22,22 +23,19 @@ import CreateConstructor from "../create/CreateConstructor";
 import CreateTextEditor from "../create/CreateTextEditor";
 import CreateProblem from "../create/CreateProblem";
 import CreateNote from "../create/CreateNote";
-import CreateExam from "../create/CreateExam";
+import ChangeForum from "./forum/ChangeForum";
+import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
+import SingleLesson_Menu from "./SingleLesson_Menu";
 import CreateDocument from "./documents/CreateDocument";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
-import DeleteSingleLesson from "../delete/DeleteSingleLesson";
 import UpdateLesson from "./UpdateLesson";
-import User from "../User";
 import HowTo from "./HowTo";
-import Forum from "./forum/Forum";
-import ChangeForum from "./forum/ChangeForum";
+import { useUser } from "../User";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
-import Reload from "./Reload";
-import { withTranslation } from "../../i18n";
 
 const SINGLE_LESSON_QUERY = gql`
-  query SINGLE_LESSON_QUERY($id: ID!) {
+  query SINGLE_LESSON_QUERY($id: String!) {
     lesson(where: { id: $id }) {
       id
       text
@@ -46,51 +44,12 @@ const SINGLE_LESSON_QUERY = gql`
       description
       open
       type
-      createdAt
       challenge_num
-      map
+      createdAt
       structure
+      change
       user {
         id
-      }
-      forum {
-        id
-        text
-        rating {
-          id
-          rating
-          user {
-            id
-          }
-        }
-        statements {
-          id
-          text
-          createdAt
-          user {
-            id
-            name
-            surname
-          }
-          forum {
-            id
-            rating {
-              id
-              rating
-            }
-          }
-        }
-        lesson {
-          id
-          user {
-            id
-          }
-        }
-        user {
-          id
-          name
-          surname
-        }
       }
       testResults {
         id
@@ -98,6 +57,9 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
         answer
+        test {
+          id
+        }
       }
       shotResults {
         id
@@ -200,6 +162,45 @@ const SINGLE_LESSON_QUERY = gql`
           sample
         }
       }
+      forum {
+        id
+        text
+        rating {
+          id
+          rating
+          user {
+            id
+          }
+        }
+        statements {
+          id
+          text
+          createdAt
+          user {
+            id
+            name
+            surname
+          }
+          forum {
+            id
+            rating {
+              id
+              rating
+            }
+          }
+        }
+        lesson {
+          id
+          user {
+            id
+          }
+        }
+        user {
+          id
+          name
+          surname
+        }
+      }
       newTests {
         id
         answers
@@ -211,8 +212,6 @@ const SINGLE_LESSON_QUERY = gql`
         question
         user {
           id
-          name
-          surname
         }
       }
       problems {
@@ -228,8 +227,8 @@ const SINGLE_LESSON_QUERY = gql`
       constructions {
         id
         name
-        variants
         answer
+        variants
         hint
         type
         user {
@@ -245,16 +244,16 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
       }
-      exams {
-        id
-        name
-        question
-        nodeID
-        nodeType
-        user {
-          id
-        }
-      }
+      # exams {
+      #   id
+      #   name
+      #   question
+      #   nodeID
+      #   nodeType
+      #   user {
+      #     id
+      #   }
+      # }
     }
   }
 `;
@@ -263,7 +262,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   /* The side navigation menu */
   .sidenav {
     height: 100%; /* 100% Full-height */
@@ -323,7 +322,7 @@ const TextBar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
   margin: 2.5% 0;
   font-size: 1.6rem;
   padding: 2% 2% 4% 2%;
@@ -350,7 +349,7 @@ const Head = styled.div`
   justify-content: space-between;
   align-items: center;
   color: white;
-  min-height: 10vh;
+  height: 10vh;
   background: #1a2980; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
@@ -358,8 +357,8 @@ const Head = styled.div`
     #1a2980
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #26d0ce, #1a2980);
-  width: 100%;
-  font-size: 2rem;
+  width: 100vw;
+  font-size: 2.3rem;
   span {
     margin: 0 3%;
   }
@@ -390,7 +389,7 @@ const Head2 = styled.div`
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #26d0ce, #1a2980);
   color: white;
-  width: 100%;
+  width: 100vw;
   text-align: center;
   font-size: 1.8rem;
   span {
@@ -402,7 +401,7 @@ const Head2 = styled.div`
   }
   @media (max-width: 800px) {
     font-size: 1.6rem;
-    justify-content: space-between;
+    justify-content: center;
     padding: 2% 15px;
     div {
       flex: 85%;
@@ -413,7 +412,8 @@ const Head2 = styled.div`
 
 const LessonStyles = styled.div`
   display: flex;
-  width: 70%;
+  width: 75%;
+  max-width: 1400px;
   flex-direction: row;
   @media (max-width: 800px) {
     flex-direction: column;
@@ -460,114 +460,18 @@ const LessonStyles = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
+
   flex-basis: 75%;
   flex-direction: column;
+  /* background: white; */
   border-radius: 2px;
+  a {
+    padding-top: 2%;
+    padding-left: 2%;
+  }
   @media (max-width: 800px) {
     order: 2;
     margin: 1%;
-  }
-`;
-
-const MenuPart = styled.div`
-  display: flex;
-  flex-basis: 25%;
-  flex-direction: column;
-  margin-left: 1rem;
-  border-radius: 2px;
-  @media (max-width: 800px) {
-    display: ${(props) => (props.shown ? "block" : "none")};
-    order: 1;
-    margin: 1%;
-    position: absolute;
-    top: 200px;
-    z-index: 10;
-    margin-right: -100%;
-    width: 100%;
-    animation-name: fadein;
-    animation-duration: 1.5s;
-    @keyframes fadein {
-      from {
-        right: 650px;
-      }
-      to {
-        right: 350px;
-      }
-    }
-  }
-`;
-
-const Sticky = styled.div`
-  position: -webkit-sticky;
-  position: sticky;
-  top: 20px;
-`;
-
-const NavPart = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin: 20px 0;
-  @media (max-width: 800px) {
-    width: 50%;
-    order: 0;
-    background: #112a62;
-    align-items: left;
-    justify-content: left;
-    align-content: left;
-  }
-`;
-
-const TeacherPart = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 1rem;
-  background: white;
-  @media (max-width: 800px) {
-    display: none;
-  }
-`;
-
-const ButtonZone = styled.div`
-  width: 100%;
-  align-content: left;
-  background: white;
-  @media (max-width: 800px) {
-    text-align: center;
-    background: none;
-    align-content: center;
-    padding-top: 3%;
-    border-bottom: solid 1px #112a62;
-  }
-`;
-const Button = styled.button`
-  margin-top: 10px;
-`;
-
-const ChooseButton = styled.button`
-  font-size: 1.5rem;
-  padding: 1%;
-  width: 100%;
-  border: none;
-  border-left: 1px solid white;
-  padding-left: 8%;
-  outline: none;
-  font-family: Montserrat;
-  background: none;
-  text-align: left;
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
-  cursor: pointer;
-  &:hover {
-    border-left: 1px solid #112a62;
-  }
-  @media (max-width: 800px) {
-    border-left: 1px solid #112a62;
-    color: white;
-    &:hover {
-      border-bottom: 1px solid white;
-    }
   }
 `;
 
@@ -589,737 +493,338 @@ const Text = styled.div`
   }
 `;
 
-class SingleLesson extends Component {
-  state = {
-    page: "lesson",
-    shown: false,
-    width: 0,
-    menu: true,
+const SingleLesson = (props) => {
+  const [page, setPage] = useState("lesson");
+  const [shown, setShown] = useState(false);
+  const [width, setWidth] = useState(800);
+
+  const onResize = (width) => {
+    setWidth(width);
   };
 
-  onSwitch = (e) => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-
-    this.setState({ page: name });
-    this.setState((prevState) => ({ shown: !prevState.shown }));
-  };
-
-  onSwitchMob = (e) => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-
-    this.setState({ page: name });
-    this.setState((prevState) => ({ shown: !prevState.shown }));
-    this.closeNav();
-  };
-
-  onResize = (width) => {
-    this.setState({ width });
-  };
-
-  openNav = () => {
-    document.getElementById("mySidenav2").style.width = "180px";
-  };
-
-  /* Set the width of the side navigation to 0 */
-  closeNav = () => {
+  const getData = (data) => setPage(data);
+  const getDataMob = (data) => {
+    setPage(data);
     document.getElementById("mySidenav2").style.width = "0";
   };
 
-  getLink = (dataFromChild) => {
-    this.setState({ page: dataFromChild });
+  const openNav = () => {
+    document.getElementById("mySidenav2").style.width = "180px";
   };
-  render() {
-    return (
-      <PleaseSignIn number={this.props.number}>
-        <div id="root"></div>
-        <User>
-          {({ data: { me } }) => (
-            <Query
-              query={SINGLE_LESSON_QUERY}
-              variables={{
-                id: this.props.id,
-              }}
-              fetchPolicy="cache-and-network"
-            >
-              {({ data, error, loading }) => {
-                if (error) return <Error error={error} />;
-                if (loading) return <p>Loading...</p>;
-                const lesson = data.lesson;
-                if (lesson === undefined) return <Reload />;
-                return (
-                  <>
-                    <AreYouEnrolled
-                      subject={lesson.coursePage.id}
-                      openLesson={lesson.open}
-                      lesson={lesson.id}
-                    >
-                      <Container>
-                        <ReactResizeDetector
-                          handleWidth
-                          handleHeight
-                          onResize={this.onResize}
-                        />
-                        {this.state.width < 800 && (
-                          <>
-                            <div id="mySidenav2" className="sidenav">
-                              <a
-                                href="javascript:void(0)"
-                                className="closebtn"
-                                onClick={this.closeNav}
-                              >
-                                &times;
-                              </a>
 
-                              <ButtonZone>
-                                <ChooseButton
-                                  name="lesson"
-                                  onClick={this.onSwitchMob}
-                                >
-                                  {" "}
-                                  {this.props.t("model")}{" "}
-                                </ChooseButton>
-                              </ButtonZone>
-                              {lesson.notes.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="note"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    {this.props.t("longreads")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.forum && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="forum"
-                                    onClick={this.onSwitch}
-                                  >
-                                    {" "}
-                                    {this.props.t("chat")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.newTests.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="test"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    {this.props.t("tests")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.quizes.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="quiz"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    {this.props.t("quizzes")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.problems.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="problem"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    {this.props.t("problems")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.constructions.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="constructor"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    {this.props.t("constructions")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.texteditors.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="textEditor"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    {this.props.t("texteditors")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {lesson.documents.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="document"
-                                    onClick={this.onSwitch}
-                                  >
-                                    {" "}
-                                    {this.props.t("documents")}{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )}
-                              {/* {lesson.exams.length > 0 && (
-                                <ButtonZone>
-                                  <ChooseButton
-                                    name="exam"
-                                    onClick={this.onSwitchMob}
-                                  >
-                                    {" "}
-                                    Экзамены{" "}
-                                  </ChooseButton>
-                                </ButtonZone>
-                              )} */}
-                            </div>
-                            {/* Use any element to open the sidenav */}
-                          </>
-                        )}
+  const getLink = (dataFromChild) => setPage(dataFromChild);
+  const me = useUser();
+  return (
+    <PleaseSignIn number={props.number}>
+      <Query
+        query={SINGLE_LESSON_QUERY}
+        variables={{
+          id: props.id,
+        }}
+        fetchPolicy="cache-first"
+      >
+        {({ data, error, loading }) => {
+          if (error) return <Error error={error} />;
+          if (loading) return <p>Loading...</p>;
+          if (data === null) return <p>Нет урока</p>;
+          const lesson = data.lesson;
+          return (
+            <>
+              <AreYouEnrolled
+                subject={lesson.coursePage.id}
+                openLesson={lesson.coursePage.openLesson}
+                lesson={lesson.id}
+              >
+                <Container>
+                  <ReactResizeDetector
+                    handleWidth
+                    handleHeight
+                    onResize={onResize}
+                  />
+                  {width < 800 && (
+                    <SingleLesson_MobileMenu
+                      lesson={lesson}
+                      getDataMob={getDataMob}
+                    />
+                  )}
 
-                        <Head>
-                          {this.state.width > 800 ? (
-                            <Link
-                              href={{
-                                pathname: "/coursePage",
-                                query: {
-                                  id: lesson.coursePage.id,
-                                },
-                              }}
-                            >
-                              <span>
-                                <Icon
-                                  size={"1.5em"}
-                                  icon={arrowLeft}
-                                  id="back"
-                                />
-                              </span>
-                            </Link>
-                          ) : (
-                            this.state.width < 800 && (
-                              <span onClick={this.openNav}>Навигация</span>
-                            )
-                          )}
-                          <span>
-                            {this.props.t("lesson")} {lesson.number}.{" "}
-                            {lesson.name}
+                  <Head>
+                    {width > 800 ? (
+                      <Link
+                        href={{
+                          pathname: "/coursePage",
+                          query: {
+                            id: lesson.coursePage.id,
+                          },
+                        }}
+                      >
+                        <span>
+                          <Icon size={"10%"} icon={arrowLeft} id="back" />
+                        </span>
+                      </Link>
+                    ) : (
+                      width < 800 && (
+                        <span onClick={(e) => openNav()}>Навигация</span>
+                      )
+                    )}
+                    <span>
+                      Урок {lesson.number}. {lesson.name}
+                    </span>
+                  </Head>
+                  {me &&
+                    (lesson.user.id === me.id ||
+                      me.permissions.includes("ADMIN")) && (
+                      <Head2>
+                        {lesson ? (
+                          <Link
+                            href={{
+                              pathname: "/lesson",
+                              query: {
+                                id: lesson.id,
+                                type: "story",
+                              },
+                            }}
+                          >
+                            <span>{`История `}</span>
+                          </Link>
+                        ) : (
+                          <span
+                            onClick={() =>
+                              alert(
+                                `Структура урока не задана, это можно сделать в настройках.`
+                              )
+                            }
+                          >
+                            {" "}
+                            История
                           </span>
-                        </Head>
-                        {me &&
-                          (lesson.user.id === me.id ||
-                            me.permissions.includes("ADMIN")) && (
-                            <Head2>
-                              {lesson.structure &&
-                              lesson.structure.length > 0 ? (
-                                <Link
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: {
-                                      id: lesson.id,
-                                      type: "story",
-                                    },
-                                  }}
-                                >
-                                  <span>{this.props.t("story")}</span>
-                                </Link>
-                              ) : (
-                                <span
-                                  onClick={() =>
-                                    alert(
-                                      `Структура урока не задана, это можно сделать в настройках.`
-                                    )
-                                  }
-                                >
-                                  {" "}
-                                  {this.props.t("story")}
-                                </span>
-                              )}
-                              <>
-                                {" "}
-                                <span>{` |  `}</span>
-                              </>
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: "challenge",
-                                  },
-                                }}
-                              >
-                                <span> {this.props.t("challenge")}</span>
-                              </Link>
-                            </Head2>
-                          )}
-                        <Button
-                          onClick={(e) =>
-                            this.setState((prevState) => ({
-                              menu: !prevState.menu,
-                            }))
-                          }
+                        )}
+                        <>
+                          {" "}
+                          <span>{` |  `}</span>
+                        </>
+                        <Link
+                          href={{
+                            pathname: "/lesson",
+                            query: {
+                              id: lesson.id,
+                              type: "challenge",
+                            },
+                          }}
                         >
-                          {this.state.menu ? "Скрыть меню" : "Показать меню"}
-                        </Button>
-                        <LessonStyles>
-                          <LessonPart>
-                            {this.state.page === "lesson" && (
-                              <TextBar>
-                                <HowTo getLink={this.getLink} />
-                                <Text>{renderHTML(lesson.text)}</Text>
-                              </TextBar>
-                            )}
-                            {this.state.page === "note" &&
-                              lesson.notes.map((note) => (
-                                <Note
-                                  text={note.text}
-                                  me={me}
-                                  user={lesson.user.id}
-                                  note={note}
-                                  id={note.id}
-                                  next={note.next}
-                                  quizes={lesson.quizes}
-                                  notes={lesson.notes}
-                                  tests={lesson.newTests}
-                                  lessonID={lesson.id}
-                                />
-                              ))}
-                            {this.state.page === "forum" && me && (
-                              <>
-                                {lesson.forum && (
-                                  <Forum
-                                    me={me}
-                                    forum={lesson.forum}
-                                    lesson={lesson.id}
-                                    text={lesson.forum.text}
-                                    result={
-                                      lesson.forum.rating.filter(
-                                        (r) => r.user.id == me.id
-                                      )[0]
-                                    }
-                                    id={lesson.forum.id}
-                                    statements={lesson.forum.statements}
-                                  />
-                                )}
-                              </>
-                            )}
-                            {this.state.page === "document" &&
-                              lesson.documents.map((doc) => (
-                                <Document
-                                  clauses={doc.clauses}
-                                  title={doc.title}
-                                  me={me}
-                                  documentID={doc.id}
-                                  user={lesson.user.id}
-                                  lessonID={lesson.id}
-                                />
-                              ))}
-                            {this.state.page === "shots" && (
-                              <ShotsGroup
-                                shots={lesson.shots}
-                                me={me}
-                                lessonID={lesson.id}
-                                shotResults={lesson.shotResults}
-                              />
-                            )}
+                          <span> Испытание</span>
+                        </Link>
+                      </Head2>
+                    )}
+                  <LessonStyles>
+                    <LessonPart>
+                      {page === "lesson" && (
+                        <TextBar>
+                          <HowTo getLink={getLink} />
+                          <Text>{renderHTML(lesson.text)}</Text>
+                        </TextBar>
+                      )}
+                      {page === "note" &&
+                        lesson.notes.map((note) => (
+                          <Note
+                            text={note.text}
+                            me={me}
+                            user={lesson.user.id}
+                            note={note}
+                            id={note.id}
+                            next={note.next}
+                            quizes={lesson.quizes}
+                            notes={lesson.notes}
+                            tests={lesson.newTests}
+                            lessonID={lesson.id}
+                          />
+                        ))}
+                      {page === "document" &&
+                        lesson.documents.map((doc) => (
+                          <Document
+                            clauses={doc.clauses}
+                            title={doc.title}
+                            me={me}
+                            documentID={doc.id}
+                            user={lesson.user.id}
+                            lessonID={lesson.id}
+                          />
+                        ))}
+                      {page === "shots" && (
+                        <ShotsGroup
+                          shots={lesson.shots}
+                          me={me}
+                          lessonID={lesson.id}
+                          shotResults={lesson.shotResults}
+                        />
+                      )}
 
-                            {this.state.page === "test" && (
-                              <>
-                                {lesson.newTests.length > 0 ? (
-                                  <TestGroup
-                                    tests={lesson.newTests}
-                                    me={me}
-                                    lessonID={lesson.id}
-                                    testResults={lesson.testResults}
-                                    quizes={lesson.quizes}
-                                    notes={lesson.notes}
-                                    tests={lesson.newTests}
-                                  />
-                                ) : (
-                                  <Center>
-                                    <h2>Тестов по этому уроку нет</h2>
-                                  </Center>
-                                )}
-                              </>
-                            )}
-
-                            {this.state.page === "quiz" && (
-                              <>
-                                {lesson.quizes.length > 0 ? (
-                                  <QuizGroup
-                                    notes={lesson.notes}
-                                    lessonID={lesson.id}
-                                    quizResults={lesson.quizResults}
-                                    me={me}
-                                    quizes={lesson.quizes}
-                                    notes={lesson.notes}
-                                    tests={lesson.newTests}
-                                  />
-                                ) : (
-                                  <Center>
-                                    <h2>Вопросов по этому уроку нет</h2>
-                                  </Center>
-                                )}
-                              </>
-                            )}
-                            {this.state.page === "problem" && (
-                              <>
-                                {lesson.problems.length > 0 ? (
-                                  <ProblemGroup
-                                    lessonID={lesson.id}
-                                    problems={lesson.problems}
-                                    me={me}
-                                    problemResults={lesson.problemResults}
-                                    lesson={lesson}
-                                  />
-                                ) : (
-                                  <Center>
-                                    <h2>Задач пока нет</h2>
-                                  </Center>
-                                )}
-                              </>
-                            )}
-                            {this.state.page === "constructor" && (
-                              <>
-                                {" "}
-                                {lesson.constructions.length > 0 ? (
-                                  <>
-                                    <ConstructorGroup
-                                      constructions={lesson.constructions}
-                                      lessonID={lesson.id}
-                                      me={me}
-                                      constructionResults={
-                                        lesson.constructionResults
-                                      }
-                                    />
-                                  </>
-                                ) : (
-                                  <Center>
-                                    <h2>Конструкторов документов пока нет</h2>
-                                  </Center>
-                                )}{" "}
-                              </>
-                            )}
-                            {this.state.page === "textEditor" &&
-                              (lesson.texteditors.length > 0 ? (
-                                <TextEditorGroup
-                                  lessonID={lesson.id}
-                                  textEditors={lesson.texteditors}
-                                  me={me}
-                                  textEditorResults={lesson.textEditorResults}
-                                />
-                              ) : (
-                                <Center>
-                                  <h2>Редакторов документов пока нет</h2>
-                                </Center>
-                              ))}
-                            {this.state.page === "exam" && (
-                              <Exams lesson={lesson} me={me} />
-                            )}
-                            {this.state.page === "createTest" && (
-                              <CreateNewTest lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createForum" && (
-                              <ChangeForum
-                                lesson={lesson.id}
-                                forum={lesson.forum}
-                              />
-                            )}
-                            {this.state.page === "createNote" && (
-                              <CreateNote lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createDocument" && (
-                              <CreateDocument lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createShot" && (
-                              <CreateShot lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createQuiz" && (
-                              <CreateQuiz lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createProblem" && (
-                              <CreateProblem
-                                lessonID={lesson.id}
-                                lesson={lesson}
-                              />
-                            )}
-                            {this.state.page === "createConstructor" && (
-                              <CreateConstructor lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createTextEditor" && (
-                              <CreateTextEditor lessonID={lesson.id} />
-                            )}
-                            {this.state.page === "createExam" && (
-                              <CreateExam
-                                lessonID={lesson.id}
-                                lesson={lesson}
-                              />
-                            )}
-                            {this.state.page === "updateLesson" && (
-                              <UpdateLesson
-                                lessonID={lesson.id}
-                                description={lesson.description}
-                                lesson={lesson}
-                              />
-                            )}
-                            {this.state.page === "updateShots" && (
-                              <UpdateShots lessonID={lesson.id} />
-                            )}
-                          </LessonPart>
-                          {this.state.width > 800 && this.state.menu && (
-                            <MenuPart shown={this.state.shown}>
-                              <Sticky>
-                                <NavPart>
-                                  <ButtonZone>
-                                    <ChooseButton
-                                      name="lesson"
-                                      onClick={this.onSwitch}
-                                    >
-                                      {" "}
-                                      {this.props.t("model")}{" "}
-                                    </ChooseButton>
-                                  </ButtonZone>
-                                  {lesson.notes.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="note"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("longreads")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {lesson.shots.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="shots"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("algos")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {lesson.forum && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="forum"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("chat")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-
-                                  {lesson.documents.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="document"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("documents")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-
-                                  {lesson.newTests.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="test"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("tests")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {lesson.quizes.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="quiz"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("quizzes")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {lesson.problems.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="problem"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("problems")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {lesson.constructions.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="constructor"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("constructions")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {lesson.texteditors.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="textEditor"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        {this.props.t("texteditors")}{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )}
-                                  {/* {lesson.exams.length > 0 && (
-                                    <ButtonZone>
-                                      <ChooseButton
-                                        name="exam"
-                                        onClick={this.onSwitch}
-                                      >
-                                        {" "}
-                                        Экзамены{" "}
-                                      </ChooseButton>
-                                    </ButtonZone>
-                                  )} */}
-                                </NavPart>
-                                {me &&
-                                  (lesson.user.id === me.id ||
-                                    me.permissions.includes("ADMIN")) && (
-                                    <TeacherPart>
-                                      <ButtonZone>
-                                        <ButtonZone>
-                                          <ChooseButton
-                                            name="updateLesson"
-                                            onClick={this.onSwitch}
-                                          >
-                                            {this.props.t("change_lesson")}
-                                          </ChooseButton>
-                                        </ButtonZone>
-                                        <ChooseButton
-                                          name="createNote"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_longread")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createShot"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_algo")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createForum"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_chat")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createTest"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_test")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createQuiz"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_quiz")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createProblem"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_problem")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createConstructor"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_construction")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createTextEditor"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_texteditor")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-                                      <ButtonZone>
-                                        <ChooseButton
-                                          name="createDocument"
-                                          onClick={this.onSwitch}
-                                        >
-                                          {this.props.t("new_document")}
-                                        </ChooseButton>
-                                      </ButtonZone>
-                                      {/* <ButtonZone>
-                                        <ChooseButton
-                                          name="createExam"
-                                          onClick={this.onSwitch}
-                                        >
-                                          Новый экзамен
-                                        </ChooseButton>
-                                      </ButtonZone> */}
-
-                                      <ButtonZone>
-                                        <DeleteSingleLesson
-                                          id={lesson.id}
-                                          coursePageID={lesson.coursePage.id}
-                                        />
-                                      </ButtonZone>
-                                    </TeacherPart>
-                                  )}
-                              </Sticky>
-                            </MenuPart>
+                      {/* {page === "forum" && me && (
+                        <>
+                          {lesson.forum && (
+                            <Forum
+                              me={me}
+                              forum={lesson.forum}
+                              lesson={lesson.id}
+                              text={lesson.forum.text}
+                              result={
+                                lesson.forum.rating.filter(
+                                  (r) => r.user.id == me.id
+                                )[0]
+                              }
+                              id={lesson.forum.id}
+                              statements={lesson.forum.statements}
+                            />
                           )}
-                        </LessonStyles>
-                      </Container>
-                    </AreYouEnrolled>
-                  </>
-                );
-              }}
-            </Query>
-          )}
-        </User>
-      </PleaseSignIn>
-    );
-  }
-}
+                        </>
+                      )} */}
 
-export default withTranslation("draft")(SingleLesson);
+                      {page === "test" && (
+                        <>
+                          {lesson.newTests.length > 0 ? (
+                            <TestGroup
+                              tests={lesson.newTests}
+                              me={me}
+                              lessonID={lesson.id}
+                              testResults={lesson.testResults}
+                              quizes={lesson.quizes}
+                              notes={lesson.notes}
+                              tests={lesson.newTests}
+                            />
+                          ) : (
+                            <Center>
+                              <h2>Тестов по этому уроку нет</h2>
+                            </Center>
+                          )}
+                        </>
+                      )}
+
+                      {page === "quiz" && (
+                        <>
+                          {lesson.quizes.length > 0 ? (
+                            <QuizGroup
+                              notes={lesson.notes}
+                              lessonID={lesson.id}
+                              quizResults={lesson.quizResults}
+                              me={me}
+                              quizes={lesson.quizes}
+                              notes={lesson.notes}
+                              tests={lesson.newTests}
+                            />
+                          ) : (
+                            <Center>
+                              <h2>Вопросов по этому уроку нет</h2>
+                            </Center>
+                          )}
+                        </>
+                      )}
+                      {page === "problem" && (
+                        <>
+                          {lesson.problems.length > 0 ? (
+                            <ProblemGroup
+                              lessonID={lesson.id}
+                              problems={lesson.problems}
+                              me={me}
+                              problemResults={lesson.problemResults}
+                              lesson={lesson}
+                            />
+                          ) : (
+                            <Center>
+                              <h2>Задач пока нет</h2>
+                            </Center>
+                          )}
+                        </>
+                      )}
+                      {page === "constructor" && (
+                        <>
+                          {" "}
+                          {lesson.constructions.length > 0 ? (
+                            <>
+                              <ConstructorGroup
+                                constructions={lesson.constructions}
+                                lessonID={lesson.id}
+                                me={me}
+                                constructionResults={lesson.constructionResults}
+                              />
+                            </>
+                          ) : (
+                            <Center>
+                              <h2>Конструкторов документов пока нет</h2>
+                            </Center>
+                          )}{" "}
+                        </>
+                      )}
+                      {page === "textEditor" &&
+                        (lesson.texteditors.length > 0 ? (
+                          <TextEditorGroup
+                            lessonID={lesson.id}
+                            textEditors={lesson.texteditors}
+                            me={me}
+                            textEditorResults={lesson.textEditorResults}
+                          />
+                        ) : (
+                          <Center>
+                            <h2>Редакторов документов пока нет</h2>
+                          </Center>
+                        ))}
+                      {/* {page === "exam" && <Exams lesson={lesson} me={me} />} */}
+                      {page === "createTest" && (
+                        <CreateNewTest lessonID={lesson.id} />
+                      )}
+                      {page === "createForum" && (
+                        <ChangeForum lesson={lesson.id} forum={lesson.forum} />
+                      )}
+                      {page === "createNote" && (
+                        <CreateNote lessonID={lesson.id} />
+                      )}
+                      {page === "createDocument" && (
+                        <CreateDocument lessonID={lesson.id} />
+                      )}
+                      {page === "createShot" && (
+                        <CreateShot lessonID={lesson.id} />
+                      )}
+                      {page === "createQuiz" && (
+                        <CreateQuiz lessonID={lesson.id} />
+                      )}
+                      {page === "createProblem" && (
+                        <CreateProblem lessonID={lesson.id} lesson={lesson} />
+                      )}
+                      {page === "createConstructor" && (
+                        <CreateConstructor lessonID={lesson.id} />
+                      )}
+                      {page === "createTextEditor" && (
+                        <CreateTextEditor lessonID={lesson.id} />
+                      )}
+                      {page === "updateLesson" && (
+                        <UpdateLesson
+                          lessonID={lesson.id}
+                          description={lesson.description}
+                          lesson={lesson}
+                          change={lesson.change}
+                        />
+                      )}
+                      {page === "updateShots" && (
+                        <UpdateShots lessonID={lesson.id} />
+                      )}
+                    </LessonPart>
+                    {width > 800 && (
+                      <SingleLesson_Menu
+                        lesson={lesson}
+                        getData={getData}
+                        me={me}
+                      />
+                    )}
+                  </LessonStyles>
+                </Container>
+                <div id="root"></div>
+              </AreYouEnrolled>
+            </>
+          );
+        }}
+      </Query>
+    </PleaseSignIn>
+  );
+};
+
+export default SingleLesson;
 export { SINGLE_LESSON_QUERY };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import Router from "next/router";
@@ -11,6 +11,9 @@ import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies, Tracks } from "../../config";
 import { withTranslation } from "../../i18n";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -20,9 +23,9 @@ const SIGNUP_MUTATION = gql`
     $password: String!
     $isFamiliar: Boolean!
     $status: Status!
-    $company: ID
-    $uniID: ID
-    $careerTrackID: ID
+    $company: String
+    $uniID: String
+    $careerTrackID: String
   ) {
     signup(
       email: $email
@@ -35,9 +38,10 @@ const SIGNUP_MUTATION = gql`
       uniID: $uniID
       careerTrackID: $careerTrackID
     ) {
-      id
-      email
-      name
+      token
+      user {
+        id
+      }
     }
   }
 `;
@@ -184,7 +188,8 @@ const Signup = (props) => {
               alert("Укажите свою фамилию!");
               return;
             }
-            await signup();
+            const res = await signup();
+            cookies.set("token", res.data.signup.token);
             props.closeNavBar(true);
             setEmail("");
             setName("");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Course from "./Course";

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import Router from "next/router";
 import { CURRENT_USER_QUERY } from "../User";
-import User from "../User";
+import { useUser } from "../User";
 
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION(

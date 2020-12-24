@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
@@ -8,8 +8,7 @@ import { withTranslation } from "../../../i18n";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
-    $id: ID!
-    $next: Json
+    $id: String!
     $question: [String!]
     $answers: [String!]
     $correct: [Boolean!]
@@ -18,7 +17,6 @@ const UPDATE_TEST_MUTATION = gql`
   ) {
     updateNewTest(
       id: $id
-      next: $next
       question: $question
       answers: $answers
       correct: $correct
@@ -43,19 +41,6 @@ const Button = styled.button`
   outline: 0;
   &:active {
     background-color: ${(props) => props.theme.darkGreen};
-  }
-`;
-
-const Question = styled.div`
-  margin-top: 3%;
-  textarea {
-    border-radius: 5px;
-    border: 1px solid #c4c4c4;
-    width: 80%;
-    height: 100px;
-    padding: 1.5%;
-    font-size: 1.4rem;
-    outline: 0;
   }
 `;
 
@@ -101,13 +86,6 @@ const AnswerOption = styled.div`
     background-position: right 0.7em top 50%, 0 0;
     background-size: 0.65em auto, 100%;
   }
-`;
-
-const Grid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
 `;
 
 const Comment = styled.div`
@@ -159,10 +137,6 @@ const UpdateTest = (props) => {
     return setCorrect(arr);
   };
 
-  const myCallback = async (type, data) => {
-    return type === true ? setTrueVal(data) : setFalseVal(data);
-  };
-
   const setIf = (dataFromChild, name) => {
     if (name === "ifRight") {
       setIfRight(dataFromChild);
@@ -173,7 +147,7 @@ const UpdateTest = (props) => {
     }
   };
 
-  const { testID, tests, quizes, notes, mes, lessonID } = props;
+  const { testID, mes, lessonID } = props;
   return (
     <div>
       <Comment>

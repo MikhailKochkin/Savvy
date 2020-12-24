@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import DeleteSingleShot from "../../delete/DeleteSingleShot";
 import UpdateShots from "./UpdateShots";

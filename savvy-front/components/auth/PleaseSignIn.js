@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Query } from "react-apollo";
+import React, { useState } from "react";
+import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import { CURRENT_USER_QUERY } from "../User";
 import WideSignIn from "./WideSignIn";
@@ -12,6 +12,7 @@ const Styles = styled.div`
   align-items: center;
   #content {
     pointer-events: none;
+    width: 100%;
   }
 `;
 
@@ -25,45 +26,35 @@ const Title = styled.p`
   }
 `;
 
-class PleaseSignIn extends Component {
-  state = {
-    auth: "signin"
-  };
-  changeState = dataFromChild => {
-    this.setState({
-      auth: dataFromChild
-    });
-  };
-  render() {
-    return (
-      <Query query={CURRENT_USER_QUERY}>
-        {({ data }, loading) => {
-          if (loading) return <p>Loading...</p>;
-          if (!data.me) {
-            return (
-              <Styles>
-                <div id="content">{this.props.children}</div>
-                <Title>
-                  Что-то не получается? Просто зарегистрируйтесь или войдите в
-                  аккаунт и все заработает! 😉
-                </Title>
-                {this.state.auth === "signin" && (
-                  <WideSignIn getData={this.changeState} />
-                )}
-                {this.state.auth === "signup" && (
-                  <WideSignUp getData={this.changeState} />
-                )}
-                {this.state.auth === "reset" && (
-                  <WideRequestReset getData={this.changeState} />
-                )}
-              </Styles>
-            );
-          }
-          return this.props.children;
-        }}
-      </Query>
-    );
-  }
-}
+const PleaseSignIn = (props) => {
+  const [auth, setAuth] = useState("signin");
+  const changeState = (dataFromChild) => setAuth(dataFromChild);
+
+  return (
+    <Query query={CURRENT_USER_QUERY}>
+      {({ data }, loading) => {
+        if (loading) return <p>Loading...</p>;
+        console.log(data);
+        // if (!data.me) {
+        //   return (
+        //     <Styles>
+        //       <div id="content">{props.children}</div>
+        //       <Title>
+        //         Что-то не получается? Просто зарегистрируйтесь или войдите в
+        //         аккаунт и все заработает! 😉
+        //       </Title>
+        //       {auth === "signin" && <WideSignIn getData={changeState} />}
+        //       {auth === "signup" && <WideSignUp getData={changeState} />}
+        //       {this.state.auth === "reset" && (
+        //         <WideRequestReset getData={changeState} />
+        //       )}
+        //     </Styles>
+        //   );
+        // }
+        return props.children;
+      }}
+    </Query>
+  );
+};
 
 export default PleaseSignIn;

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import Link from "next/link";
 import Course from "../course/Course";
-import User from "../User";
+import { useUser } from "../User";
 import Uni from "./Uni";
 import EducatorImage from "./EducatorImage";
 import PleaseSignIn from "../auth/PleaseSignIn";

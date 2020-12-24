@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { CURRENT_USER_QUERY } from "./User";
@@ -7,8 +7,8 @@ import { SINGLE_COURSEPAGE_QUERY } from "./course/CoursePage";
 
 const CREATE_PRIVATE_ORDER_MUTATION = gql`
   mutation createPrivateOrder(
-    $coursePage: ID!
-    $user: ID!
+    $coursePageId: String!
+    $userId: String!
     $promocode: String
   ) {
     createPrivateOrder(
@@ -22,17 +22,17 @@ const CREATE_PRIVATE_ORDER_MUTATION = gql`
 `;
 
 const ENROLL_COURSE_MUTATION = gql`
-  mutation ENROLL_COURSE_MUTATION($id: ID!, $coursePage: ID) {
-    enrollOnCourse(id: $id, coursePage: $coursePage) {
+  mutation ENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    enrollOnCourse(id: $id, coursePageId: $coursePageId) {
       id
     }
   }
 `;
 
 const Button = styled.button`
-  background: #0846d8;
+  background: ${(props) => props.theme.green};
   border-radius: 5px;
-  width: 100%;
+  width: 200px;
   height: 38px;
   outline: 0;
   color: white;
@@ -42,16 +42,8 @@ const Button = styled.button`
   cursor: pointer;
   border: none;
   margin-top: 10px;
-  &:hover {
-    background: rgba(8, 70, 216, 0.85);
-  }
   &:active {
-    background-color: ${props => props.theme.darkGreen};
-  }
-  &:disabled {
-    &:hover {
-      background-color: #84bc9c;
-    }
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -59,11 +51,11 @@ const Comment = styled.div`
   padding-top: 15px;
 `;
 
-const EnrollCoursePage = props => {
+const EnrollCoursePage = (props) => {
   const [show, setShow] = useState(false);
 
   let subj = [];
-  props.meData.new_subjects.map(s => subj.push(s.id));
+  props.meData.new_subjects.map((s) => subj.push(s.id));
   const onClick = async (e, enrollOnCourse) => {
     e.preventDefault();
     if (
@@ -74,12 +66,10 @@ const EnrollCoursePage = props => {
         enrollOnCourse({
           variables: {
             id: props.meData.id,
-            coursePage: props.coursePage.id
-          }
+            coursePage: props.coursePage.id,
+          },
         });
-        alert(
-          "Вы успешно зарегистрировлаись. Уроки откроются в течение нескольких секунд."
-        );
+        alert("Вы успешно зарегистрировлаись. Наслаждайтесь курсом!");
       } else {
         alert("Вы уже зарегистрированы!");
       }
@@ -87,6 +77,7 @@ const EnrollCoursePage = props => {
   };
 
   const { coursePage, meData } = props;
+  console.log(props.coursePage.id);
   return (
     <>
       {(coursePage.courseType === "PUBLIC" ||
@@ -97,13 +88,13 @@ const EnrollCoursePage = props => {
           refetchQueries={() => [
             {
               query: SINGLE_COURSEPAGE_QUERY,
-              variables: { id: coursePage.id }
-            }
+              variables: { id: coursePage.id },
+            },
           ]}
         >
-          {enrollOnCourse =>
+          {(enrollOnCourse) =>
             !subj.includes(coursePage.id) ? (
-              <Button onClick={e => onClick(e, enrollOnCourse)}>
+              <Button onClick={(e) => onClick(e, enrollOnCourse)}>
                 Регистрация
               </Button>
             ) : (
@@ -118,13 +109,13 @@ const EnrollCoursePage = props => {
           variables={{
             coursePage: coursePage.id,
             user: meData.id,
-            promocode: ""
+            promocode: "",
           }}
         >
           {(createPrivateOrder, { loading, error }) =>
             !subj.includes(coursePage.id) ? (
               <Button
-                onClick={async e => {
+                onClick={async (e) => {
                   e.preventDefault;
                   setShow(true);
                   const res = await createPrivateOrder();

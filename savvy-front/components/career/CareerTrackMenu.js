@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import CareerTrackList from "./CareerTrackList";
 
@@ -53,7 +53,7 @@ class CareerTrackMenu extends Component {
           <Query
             query={CAREER_TRACK_QUERY}
             variables={{
-              id: this.props.me.careerTrackID
+              id: this.props.me.careerTrackID,
             }}
           >
             {({ data, error, loading }) => {

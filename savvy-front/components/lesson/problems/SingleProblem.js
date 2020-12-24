@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import renderHTML from "react-render-html";
 import dynamic from "next/dynamic";
@@ -9,19 +9,18 @@ import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import Interactive from "./Interactive";
 import UpdateProblem from "./UpdateProblem";
-import { withTranslation } from "../../../i18n";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
     $answer: String
     $revealed: [String!]
-    $lessonID: ID
-    $problemID: ID
+    $lessonId: String
+    $problemID: String
   ) {
     createProblemResult(
       answer: $answer
       revealed: $revealed
-      lessonID: $lessonID
+      lessonId: $lessonId
       problemID: $problemID
     ) {
       id
@@ -173,6 +172,7 @@ class SingleProblem extends Component {
   }
   render() {
     const { problem, me, userData, lesson, story } = this.props;
+    console.log(problem.id, userData);
     const data = userData
       .filter((result) => result.problem.id === problem.id)
       .filter((result) => result.student.id === me.id);
@@ -197,8 +197,8 @@ class SingleProblem extends Component {
                   }}
                 >
                   {this.state.revealAnswer
-                    ? this.props.t("close")
-                    : this.props.t("open")}
+                    ? "Закрыть ответы"
+                    : "Открыть ответы"}
                 </StyledButton>
               </ButtonGroup>
             )}
@@ -223,7 +223,7 @@ class SingleProblem extends Component {
                 <Mutation
                   mutation={CREATE_PROBLEMRESULT_MUTATION}
                   variables={{
-                    lessonID: this.props.lessonID,
+                    lessonId: this.props.lessonID,
                     answer: this.state.answer,
                     revealed: this.state.revealed,
                     problemID: this.props.problem.id,
@@ -243,29 +243,27 @@ class SingleProblem extends Component {
                             const res2 = await this.setState({
                               revealAnswer: true,
                             });
-                            alert(this.props.t("saved"));
+                            alert(
+                              "Ваш ответ сохранен! Вы можете посмотреть вариант преподавателя и перейти к следующему заданию."
+                            );
                             console.log("Yes");
                           } else {
                             console.log("No");
                           }
                         }}
                       >
-                        {loading
-                          ? this.props.t("checking")
-                          : this.props.t("check")}
+                        {loading ? "В процессе..." : "Ответить"}
                       </StyledButton>
                     </Buttons>
                   )}
                 </Mutation>
               </>
             )}
-            {me &&
-              (me.id === problem.user.id || me.permissions.includes("ADMIN")) &&
-              !story && (
-                <StyledButton onClick={(e) => this.setState({ update: true })}>
-                  {this.props.t("update")}
-                </StyledButton>
-              )}
+            {me && me.id === problem.user.id && !story && (
+              <StyledButton onClick={(e) => this.setState({ update: true })}>
+                Изменить
+              </StyledButton>
+            )}
             {me && me.id === problem.user.id && !story ? (
               <DeleteSingleProblem
                 id={problem.id}
@@ -293,4 +291,4 @@ class SingleProblem extends Component {
   }
 }
 
-export default withTranslation("tasks")(SingleProblem);
+export default SingleProblem;

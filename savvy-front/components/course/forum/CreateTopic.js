@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_COURSEPAGE_QUERY } from "../CoursePage";
@@ -42,13 +42,13 @@ const Button = styled.button`
   width: 7%;
   color: #fffdf7;
   text-align: center;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 600px) {
     width: 10%;
@@ -56,7 +56,7 @@ const Button = styled.button`
   }
 `;
 
-const CreateTopic = props => {
+const CreateTopic = (props) => {
   const [name, setName] = useState("");
   return (
     <>
@@ -64,13 +64,13 @@ const CreateTopic = props => {
         mutation={CREATE_TOPIC_MUTATION}
         variables={{
           coursePage: props.coursePageID,
-          name: name
+          name: name,
         }}
         refetchQueries={() => [
           {
             query: SINGLE_COURSEPAGE_QUERY,
-            variables: { id: props.coursePageID }
-          }
+            variables: { id: props.coursePageID },
+          },
         ]}
       >
         {(createTopic, { loading, error }) => (
@@ -80,10 +80,10 @@ const CreateTopic = props => {
               Кратко опишите вопрос, который вы хотите обсудить с автором курса
               и другими участниками (не больше 60 знаков).
             </div>
-            <input maxlength="60" onChange={e => setName(e.target.value)} />
+            <input maxlength="60" onChange={(e) => setName(e.target.value)} />
             <br />
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault();
                 await createTopic();
               }}

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { useState } from "react";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
@@ -7,13 +7,19 @@ import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import { withTranslation } from "../../i18n";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
     signin(email: $email, password: $password) {
-      id
-      email
-      name
+      user {
+        id
+        email
+        name
+      }
+      token
     }
   }
 `;
@@ -105,10 +111,12 @@ const Signin = (props) => {
         <Form
           onSubmit={async (e) => {
             e.preventDefault();
-            await signin();
+            const res = await signin();
+            cookies.set("token", res.data.signin.token);
             props.closeNavBar(true);
             setPassword("");
             setEmail("");
+            console.log(res.data);
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>

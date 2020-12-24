@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import _ from "lodash";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
@@ -17,15 +17,15 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
     $answer: String
     $attempts: Int
-    $lessonID: ID
-    $constructionID: ID
+    $lessonId: String
+    $constructionId: String
     $inputs: [String]
   ) {
     createConstructionResult(
       answer: $answer
       attempts: $attempts
-      lessonID: $lessonID
-      constructionID: $constructionID
+      lessonId: $lessonId
+      constructionId: $constructionId
       inputs: $inputs
     ) {
       id
@@ -146,7 +146,7 @@ const SingleConstructor = (props) => {
 
   // shuffle article options
   const shuffle = (array) => {
-    var m = array.length,
+    let m = array.length,
       t,
       i;
     while (m) {
@@ -257,7 +257,9 @@ const SingleConstructor = (props) => {
   };
 
   useEffect(() => {
-    const vars = shuffle(props.variants);
+    // const vars = shuffle(props.variants);
+    const vars = props.variants;
+
     setVariants(vars);
   }, []);
 
@@ -309,9 +311,9 @@ const SingleConstructor = (props) => {
             <Mutation
               mutation={CREATE_CONSTRUCTIONRESULT_MUTATION}
               variables={{
-                lessonID,
+                lessonId: lessonID,
                 attempts: attempts,
-                constructionID: construction.id,
+                constructionId: construction.id,
                 inputs: inputs,
               }}
               refetchQueries={() => [

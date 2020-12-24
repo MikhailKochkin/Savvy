@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";

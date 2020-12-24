@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import dynamic from "next/dynamic";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_COURSEPAGE_QUERY } from "./CoursePage";
 
 const Button = styled.button`
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border-radius: 5px;
   width: 200px;
   height: 38px;
@@ -19,7 +19,7 @@ const Button = styled.button`
   border: none;
   margin-top: 10px;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -41,16 +41,16 @@ const CREATE_EXAM_QUESTION_MUTATION = gql`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class ExamQuestion extends Component {
   state = {
-    text: ""
+    text: "",
   };
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
   render() {
@@ -64,18 +64,18 @@ class ExamQuestion extends Component {
           mutation={CREATE_EXAM_QUESTION_MUTATION}
           variables={{
             coursePageID: this.props.id,
-            question: this.state.text
+            question: this.state.text,
           }}
           refetchQueries={() => [
             {
               query: SINGLE_COURSEPAGE_QUERY,
-              variables: { id: this.props.id }
-            }
+              variables: { id: this.props.id },
+            },
           ]}
         >
           {(createExamQuestion, { loading, error }) => (
             <Button
-              onClick={async e => {
+              onClick={async (e) => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation

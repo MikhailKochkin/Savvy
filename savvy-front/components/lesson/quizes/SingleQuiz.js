@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Query, Mutation } from "react-apollo";
+import { useState } from "react";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
@@ -14,14 +14,14 @@ import { withTranslation } from "../../../i18n";
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
     $answer: String
-    $quiz: ID
-    $lessonID: ID
+    $quiz: String
+    $lessonId: String
     $correct: Boolean
   ) {
     createQuizResult(
       answer: $answer
       quiz: $quiz
-      lessonID: $lessonID
+      lessonId: $lessonId
       correct: $correct
     ) {
       id
@@ -347,7 +347,7 @@ const SingleQuiz = (props) => {
       mutation={CREATE_QUIZRESULT_MUTATION}
       variables={{
         quiz: props.quizID,
-        lessonID: props.lessonID,
+        lessonId: props.lessonID,
         answer: answer,
         correct: correct === "true",
       }}
@@ -457,15 +457,17 @@ const SingleQuiz = (props) => {
                   inputColor={inputColor}
                   onClick={async (e) => {
                     e.preventDefault();
+                    console.log("!!!");
                     if (props.type === "FORM") {
                       const res1 = await onSend();
                     } else {
                       const res = await onAnswer();
                     }
                     setProgress("false");
-                    if (data.length === 0) {
-                      const res0 = await createQuizResult();
-                    }
+                    // if (data.length === 0) {
+                    const res0 = await createQuizResult();
+                    console.log(res0);
+                    // }
                   }}
                   correct={correct}
                 >

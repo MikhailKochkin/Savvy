@@ -76,11 +76,11 @@ class TextEditorGroup extends Component {
         {textEditor && (
           <SingleTextEditor
             key={textEditor.id}
-            lesson={this.props.lesson}
+            id={textEditor.id}
             textEditor={textEditor}
             me={this.props.me}
             userData={userData}
-            lesson={this.props.lessonID}
+            lessonID={this.props.lessonID}
           />
         )}
       </>

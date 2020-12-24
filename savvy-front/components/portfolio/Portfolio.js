@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import dynamic from "next/dynamic";
-import User from "../User";
+import { useUser } from "../User";
 import Task from "./Task";
 
 const Styles = styled.div`
@@ -29,26 +29,26 @@ const Career = styled.div`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class Portfolio extends Component {
   state = {
     stage: "2",
     text: "",
-    list: []
+    list: [],
   };
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
 
-  getInfo = dataFromChild => {
-    this.setState(state => {
+  getInfo = (dataFromChild) => {
+    this.setState((state) => {
       const list = [...state.list, dataFromChild];
       return {
-        list
+        list,
       };
     });
   };

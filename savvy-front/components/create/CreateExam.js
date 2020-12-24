@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import gql from "graphql-tag";
@@ -10,7 +10,7 @@ const Box = styled.div`
   padding: 1%;
   padding-bottom: 2%;
   padding-top: 4%;
-  background: ${props =>
+  background: ${(props) =>
     props.color === "true" ? "rgba(50, 172, 102, 0.05)" : "none"};
   .question {
     font-size: 1.6rem;
@@ -23,13 +23,13 @@ const useStyles = makeStyles({
     width: "40%",
     margin: "4% 0",
     fontSize: "1.6rem",
-    textTransform: "none"
+    textTransform: "none",
   },
   miniButton: {
     margin: "2% 0",
     fontSize: "1.4rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 });
 
 const Input = styled.input`
@@ -66,7 +66,7 @@ const CREATE_EXAM_MUTATION = gql`
   }
 `;
 
-const CreateExam = props => {
+const CreateExam = (props) => {
   const [nodeID, setNodeID] = useState("");
   const [nodeType, setNodeType] = useState("");
   const [name, setName] = useState("");
@@ -76,11 +76,14 @@ const CreateExam = props => {
   return (
     <>
       <h3>Тема экзамена:</h3>
-      <Input value={name} onChange={e => setName(event.target.value)} />
+      <Input value={name} onChange={(e) => setName(event.target.value)} />
       <h3>Вводные:</h3>
-      <Input value={question} onChange={e => setQuestion(event.target.value)} />
+      <Input
+        value={question}
+        onChange={(e) => setQuestion(event.target.value)}
+      />
       <h3>Выберите первый вопрос, с которого начнется экзамен.</h3>
-      {lesson.quizes.map(q => (
+      {lesson.quizes.map((q) => (
         <Box key={q.id} color={(nodeID === q.id).toString()}>
           <div className="question">{q.question}</div>
           <div className="answer">{q.answer}</div>
@@ -89,7 +92,7 @@ const CreateExam = props => {
             size="medium"
             className={classes.miniButton}
             color="primary"
-            onClick={e => (setNodeID(q.id), setNodeType("quiz"))}
+            onClick={(e) => (setNodeID(q.id), setNodeType("quiz"))}
           >
             Выбрать
           </Button>
@@ -106,7 +109,7 @@ const CreateExam = props => {
           nodeID,
           nodeType,
           name,
-          question
+          question,
         }}
       >
         {(createExam, { loading, error }) => (
@@ -114,7 +117,7 @@ const CreateExam = props => {
             className={classes.button}
             variant="contained"
             color="primary"
-            onClick={async e => {
+            onClick={async (e) => {
               e.preventDefault();
               const res = await createExam();
               alert("Готово");

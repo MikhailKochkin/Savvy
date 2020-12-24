@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 import SingleProblem from "../components/lesson/problems/SingleProblem";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import { Query } from "react-apollo";
-import User from "../components/User";
+import { Query } from "@apollo/client/react/components";
+import { useUser } from "../components/User";
 
 const SINGLE_PROBLEM_QUERY = gql`
   query SINGLE_PROBLEM_QUERY($id: ID!) {
@@ -28,64 +28,64 @@ const SINGLE_PROBLEM_QUERY = gql`
       createdAt
       lesson {
         notes {
+          id
+          text
+          next
+          user {
             id
-            text
-            next
-            user {
-                id
-            }
+          }
         }
-      quizes {
-        id
-        question
-        answer
-        check
-        ifRight
-        ifWrong
-        type
-        next
-        user {
+        quizes {
           id
-          name
-          surname
+          question
+          answer
+          check
+          ifRight
+          ifWrong
+          type
+          next
+          user {
+            id
+            name
+            surname
+          }
+        }
+        newTests {
+          answers
+          type
+          correct
+          ifRight
+          ifWrong
+          question
+          next
+          id
+          user {
+            id
+            name
+            surname
+          }
+        }
+        testResults {
+          id
+          student {
+            id
+          }
+          testID
+          answer
+          attempts
+        }
+        quizResults {
+          id
+          student {
+            id
+          }
+          answer
+          quiz {
+            id
+          }
         }
       }
-      newTests {
-        answers
-        type
-        correct
-        ifRight
-        ifWrong
-        question
-        next
-        id
-        user {
-          id
-          name
-          surname
-        }
-      }
-      testResults {
-        id
-        student {
-          id
-        }
-        testID
-        answer
-        attempts
-      }
-      quizResults {
-        id
-        student {
-          id
-        }
-        answer
-        quiz {
-          id
-        }
-      }
-  }
-  }
+    }
   }
 `;
 
@@ -104,43 +104,42 @@ const Container = styled.div`
   }
 `;
 
-
 const Problem = (props) => {
-    return (
-      <Styles>
-                <div id="root"></div>
+  return (
+    <Styles>
+      <div id="root"></div>
 
       <Container>
         <User>
-        {({ data: { me } }) => (
-          <Query
-            query={SINGLE_PROBLEM_QUERY}
-            variables={{
-              id: props.query.id,
-            }}
-          >
-            {({ data, error, loading }) => {
-              if (error) return <Error error={error} />;
-              if (loading) return <p>Loading...</p>;
-              let p = data.problem;
+          {({ data: { me } }) => (
+            <Query
+              query={SINGLE_PROBLEM_QUERY}
+              variables={{
+                id: props.query.id,
+              }}
+            >
+              {({ data, error, loading }) => {
+                if (error) return <Error error={error} />;
+                if (loading) return <p>Loading...</p>;
+                let p = data.problem;
                 return (
-                <SingleProblem 
-                  key={p.id}
-                  problem={p}
-                  lessonID={p.lesson.id}
-                  me={me}
-                  userData={p.problemResults}
-                  story={true}
-                  lesson={p.lesson} 
-                />
-        );
-    }}
-  </Query>
-)}
-</User>
-</Container>
-</Styles>
-    );
+                  <SingleProblem
+                    key={p.id}
+                    problem={p}
+                    lessonID={p.lesson.id}
+                    me={me}
+                    userData={p.problemResults}
+                    story={true}
+                    lesson={p.lesson}
+                  />
+                );
+              }}
+            </Query>
+          )}
+        </User>
+      </Container>
+    </Styles>
+  );
 };
 
 export default Problem;

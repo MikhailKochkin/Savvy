@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import ApplicationBox from "./ApplicationBox";
@@ -57,7 +57,7 @@ class Applications extends Component {
         <Query
           query={PAGE_APPLICATIONS_QUERY}
           variables={{
-            id: this.props.id
+            id: this.props.id,
           }}
           fetchPolicy="cache-first"
         >
@@ -71,7 +71,7 @@ class Applications extends Component {
                   <p>По этому курсу нет заявок!</p>
                 ) : null}
                 <div>
-                  {data.applications.map(application => (
+                  {data.applications.map((application) => (
                     <ApplicationBox
                       key={application.applicantId}
                       applicantId={application.applicantId}
@@ -88,7 +88,7 @@ class Applications extends Component {
         <Query
           query={PAGE_ORDERS_QUERY}
           variables={{
-            id: this.props.id
+            id: this.props.id,
           }}
           fetchPolicy="cache-first"
         >

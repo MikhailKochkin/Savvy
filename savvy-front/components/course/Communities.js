@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import User from "../User";
+import { useUser } from "../User";
 import styled from "styled-components";
 import CommunityCourses from "./courseLists/CommunityCourses";
 import UniCourses from "./courseLists/UniCourses";

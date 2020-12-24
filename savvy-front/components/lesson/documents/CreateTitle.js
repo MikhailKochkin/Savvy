@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -42,11 +42,11 @@ const useStyles = makeStyles({
     // width: "40%",
     margin: "4% 0",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 });
 
-const CreateTitle = props => {
+const CreateTitle = (props) => {
   const [value, setValue] = useState("");
   const classes = useStyles();
   return (
@@ -54,20 +54,23 @@ const CreateTitle = props => {
       mutation={CREATE_DOCUMENT_MUTATION}
       variables={{
         lesson: props.id,
-        title: value
+        title: value,
       }}
     >
       {(createDocument, { loading, error }) => (
         <Styles>
           <div id="title">Запишите название нового документа</div>
           <form>
-            <Input value={value} onChange={e => setValue(event.target.value)} />
+            <Input
+              value={value}
+              onChange={(e) => setValue(event.target.value)}
+            />
             <br />
             <Button
               className={classes.button}
               variant="contained"
               color="primary"
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault();
                 const res = await createDocument();
                 props.getStep("clauses", res.data.createDocument.id);
@@ -84,7 +87,7 @@ const CreateTitle = props => {
 
 CreateTitle.propTypes = {
   id: PropTypes.string.isRequired,
-  getStep: PropTypes.func.isRequired
+  getStep: PropTypes.func.isRequired,
 };
 
 export default CreateTitle;

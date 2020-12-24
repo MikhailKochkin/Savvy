@@ -1,7 +1,7 @@
-import { Query } from "react-apollo";
+import { Query } from "@apollo/client/react/components";
 import { CURRENT_USER_QUERY } from "../User";
 
-const AreYouAdmin = props => (
+const AreYouAdmin = (props) => (
   <Query query={CURRENT_USER_QUERY}>
     {({ data }, loading) => {
       if (loading) return <p>Загрузка...</p>;

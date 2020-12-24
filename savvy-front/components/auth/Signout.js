@@ -1,9 +1,11 @@
 import React from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { CURRENT_USER_QUERY } from "../User";
 import { withTranslation } from "../../i18n";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const SIGN_OUT_MUTATION = gql`
   mutation SIGN_OUT_MUTATION {
@@ -33,7 +35,13 @@ const Signout = (props) => (
     refetchQueries={[{ query: CURRENT_USER_QUERY }]}
   >
     {(signout) => (
-      <Button onClick={signout}>
+      <Button
+        onClick={async (e) => {
+          const res = await signout();
+          cookies.remove("token");
+          console.log(1, res);
+        }}
+      >
         <a>{props.t("signout")}</a>
       </Button>
     )}

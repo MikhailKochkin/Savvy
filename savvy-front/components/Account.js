@@ -1,37 +1,29 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import User from "./User";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { CURRENT_USER_QUERY } from "./User";
 import { Unis, Companies } from "../config";
 
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION(
-    $id: ID!
+    $id: String!
     $name: String
+    $surname: String
     $email: String
-    $careerTrackID: ID
-    $uniID: ID
     $status: Status
     $isFamiliar: Boolean
-    $resume: String
-    $coverLetter: String
-    $company: ID
   ) {
     updateUser(
       id: $id
       email: $email
       name: $name
-      careerTrackID: $careerTrackID
-      uniID: $uniID
+      surname: $surname
       status: $status
       isFamiliar: $isFamiliar
-      resume: $resume
-      coverLetter: $coverLetter
-      company: $company
     ) {
       id
+      name
     }
   }
 `;
@@ -60,6 +52,7 @@ const Fieldset = styled.fieldset`
     height: 50%;
     width: 90%;
     border: 1px solid #c4c4c4;
+    font-family: Montserrat;
     box-sizing: border-box;
     border-radius: 5px;
     padding: 1%;
@@ -73,6 +66,7 @@ const Fieldset = styled.fieldset`
     font-size: 1.4rem;
     outline: none;
     line-height: 1.3;
+    font-family: Montserrat;
     padding: 0.6em 1.4em 0.5em 0.8em;
     max-width: 100%;
     box-sizing: border-box;
@@ -128,17 +122,18 @@ const Buttons = styled.div`
 
 const Button = styled.button`
   padding: 1% 2%;
-  background: ${props => props.theme.green};
-  width: 20%;
+  background: ${(props) => props.theme.green};
+  width: 30%;
   border-radius: 5px;
+  border: none;
   color: white;
   font-weight: bold;
   font-size: 1.6rem;
   margin: 2%;
   cursor: pointer;
   outline: 0;
-  &:active {
-    background-color: ${props => props.theme.darkGreen};
+  &:hover {
+    background-color: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 800px) {
     width: 50%;
@@ -152,227 +147,103 @@ const Green = styled.div`
   width: 45%;
   color: white;
   text-align: center;
-  display: ${props => (props.show ? "block" : "none")};
+  display: ${(props) => (props.show ? "block" : "none")};
 `;
 
-class Account extends Component {
-  state = {
-    show: false,
-    careerTrackID: this.props.me.careerTrackID || "cjwx78u7700rb07121pelqctm",
-    uniID: this.props.me.uniID || "cjyimfz2e00lp07174jpder3m",
-    company: this.props.me.company
-      ? this.props.me.company.id
-      : "ck7f4ooa201ro0736gzahsdhn",
-    status: this.props.me.status
-  };
-  handleChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-  updateUser = async (e, updateUser) => {
-    e.preventDefault();
-    const res = await updateUser({
-      variables: {
-        id: this.props.id,
-        ...this.state
-      }
-    });
-  };
-  handleSteps = e => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+const Account = (props) => {
+  const [show, setShow] = useState(false);
+  const [status, setStatus] = useState(props.me.status);
+  const [name, setName] = useState(props.me.name);
+  const [surname, setSurname] = useState(props.me.surname);
+  const [email, setEmail] = useState(props.me.email);
+  // careerTrackID
+  // uniID
+  // company
 
-  handleInputChange = event => {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-
-    this.setState({
-      [name]: value
-    });
-  };
-  render() {
-    const { me } = this.props;
-    return (
-      <>
-        <Mutation
-          mutation={UPDATE_USER_MUTATION}
-          variables={this.state}
-          refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-        >
-          {(updateUser, { error, loading }) => (
-            <Form>
-              <Fieldset disabled={loading} aria-busy={loading}>
-                <>
-                  <div className="Title">Настройки аккаунта</div>
-                  <Green show={this.state.show}>Измнения внесены</Green>
-                  <Container>
-                    <input
-                      className="second"
-                      type="text"
-                      name="name"
-                      placeholder="Имя и фамилия"
-                      required
-                      defaultValue={me.name}
-                      onChange={this.handleChange}
-                    />
-                    <br />
-                    <input
-                      className="second"
-                      type="text"
-                      name="email"
-                      placeholder="Ваша электронная почта"
-                      required
-                      defaultValue={me.email}
-                      onChange={this.handleChange}
-                    />
-                    <br />
-                    <>
-                      <select
-                        name="careerTrackID"
-                        defaultValue={
-                          me.careerTrackID ? me.careerTrackID : "NAN"
-                        }
-                        onChange={this.handleSteps}
-                      >
-                        <option value="NAN">Выберите карьерный трек</option>
-                        <option value="cjymyvxjqqsoh0b53wtdnpzkk">
-                          Старт карьеры. Корпоративное право
-                        </option>
-                        <option value="cjymywj43tg8c0b36c762ii0w">
-                          Старт карьеры. Право и технологии
-                        </option>
-                      </select>
-                      <Comment>
-                        Выбор карьерного трека необходим для составления плана
-                        карьерного развития, поиска курсов и предложений работы.
-                      </Comment>
-                    </>
-                    <>
-                      <select
-                        name="status"
-                        defaultValue={me.status}
-                        value={this.state.status}
-                        onChange={this.handleSteps}
-                      >
-                        <option value="NAN">Не выбран</option>
-                        <option value="STUDENT">Студент</option>
-                        <option value="AUTHOR">Преподаватель</option>
-                        <option value="HR">HR</option>
-                      </select>
-                      <Comment>
-                        Выберите статус, чтобы проходить курсы в качестве
-                        студента, создавать курсы в качестве преподавателя или
-                        искать сотрудников в качестве HR.
-                      </Comment>
-                    </>
-                    {this.state.status === "HR" && (
-                      <>
-                        <select
-                          name="company"
-                          defaultValue={
-                            me.company
-                              ? me.company.id
-                              : "ck2akkofk0bce0919xo8ooxma"
-                          }
-                          value={this.state.company}
-                          onChange={this.handleSteps}
-                        >
-                          {Companies.map(co => (
-                            <option value={Object.values(co)[0]}>
-                              {Object.keys(co)[0]}
-                            </option>
-                          ))}
-                        </select>
-                      </>
-                    )}
-                    {this.state.status !== "HR" && (
-                      <>
-                        <>
-                          <select
-                            name="uniID"
-                            defaultValue={
-                              me.uni ? me.uni.id : "cjymz9pazr0ib0b53v38d401g"
-                            }
-                            value={this.state.uni}
-                            onChange={this.handleSteps}
-                          >
-                            {Unis.map(uni => (
-                              <option value={Object.values(uni)[0]}>
-                                {Object.keys(uni)[0]}
-                              </option>
-                            ))}
-                          </select>
-                          <Comment>
-                            Выберите университет, чтобы получать доступ к курсам
-                            вузов или создавать курсы для вашего вуза.
-                          </Comment>
-                        </>
-
-                        <>
-                          <input
-                            className="second"
-                            type="text"
-                            name="resume"
-                            placeholder="Ссылка на резюме"
-                            defaultValue={me.resume}
-                            onChange={this.handleChange}
-                          />
-                          <br />
-                          <input
-                            className="second"
-                            type="text"
-                            name="coverLetter"
-                            placeholder="Ссылка на сопроводительное письмо"
-                            defaultValue={me.coverLetter}
-                            onChange={this.handleChange}
-                          />
-                          <Comment>
-                            Загрузите документы на Яндекс Диск или Гугл Драйв и
-                            добавьте ссылки в форму выше.
-                          </Comment>
-                        </>
-                      </>
-                    )}
-                    {!me.isFamiliar && (
-                      <>
-                        <p className="first">
-                          Когда вы пользуетесь Savvy, мы собираем ваши
-                          персональные данные. Пожалуйста, дайте нам свое
-                          согласие на это.
-                        </p>
-                        <input
-                          className="checked"
-                          type="checkbox"
-                          name="isFamiliar"
-                          value={true}
-                          checked={this.state.isFamiliar}
-                          onChange={this.handleInputChange}
-                        />
-                      </>
-                    )}
-                  </Container>
-                  <Buttons>
-                    <Button
-                      onClick={async e => {
-                        e.preventDefault();
-                        // this.setState({ show: true });
-                        this.updateUser(e, updateUser);
-                      }}
+  const { me } = props;
+  return (
+    <>
+      <Mutation
+        mutation={UPDATE_USER_MUTATION}
+        variables={{
+          id: props.me.id,
+          email,
+          name,
+          surname,
+          status,
+        }}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      >
+        {(updateUser, { error, loading }) => (
+          <Form>
+            <Fieldset disabled={loading} aria-busy={loading}>
+              <>
+                <div className="Title">Настройки аккаунта</div>
+                <Green show={show}>Измнения внесены</Green>
+                <Container>
+                  <input
+                    className="second"
+                    type="text"
+                    placeholder="Имя"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <br />
+                  <input
+                    className="second"
+                    type="text"
+                    placeholder="Фамилия"
+                    required
+                    value={surname}
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                  <br />
+                  <input
+                    className="second"
+                    type="text"
+                    placeholder="Ваша электронная почта"
+                    required
+                    value={me.email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <br />
+                  <>
+                    <select
+                      defaultValue={me.status}
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
                     >
-                      Изменить
-                    </Button>
-                  </Buttons>
-                </>
-              </Fieldset>
-            </Form>
-          )}
-        </Mutation>
-      </>
-    );
-  }
-}
+                      <option value="NAN">Не выбран</option>
+                      <option value="STUDENT">Студент</option>
+                      <option value="AUTHOR">Преподаватель</option>
+                      <option value="HR">HR</option>
+                    </select>
+                    <Comment>
+                      Выберите статус, чтобы проходить курсы в качестве
+                      студента, создавать курсы в качестве преподавателя или
+                      искать сотрудников в качестве HR.
+                    </Comment>
+                  </>
+                </Container>
+                <Buttons>
+                  <Button
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      const res = await updateUser();
+                      console.log(res);
+                    }}
+                  >
+                    Изменить
+                  </Button>
+                </Buttons>
+              </>
+            </Fieldset>
+          </Form>
+        )}
+      </Mutation>
+    </>
+  );
+};
 
 export default Account;

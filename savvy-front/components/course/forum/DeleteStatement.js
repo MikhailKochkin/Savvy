@@ -1,5 +1,5 @@
 import React from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,11 +17,11 @@ const useStyles = makeStyles({
   button: {
     margin: "0.5% 0",
     fontSize: "1.3rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 });
 
-const DeleteStatement = props => {
+const DeleteStatement = (props) => {
   const classes = useStyles();
   return (
     <Mutation
@@ -30,8 +30,8 @@ const DeleteStatement = props => {
       refetchQueries={() => [
         {
           query: SINGLE_COURSEPAGE_QUERY,
-          variables: { id: props.coursePageID }
-        }
+          variables: { id: props.coursePageID },
+        },
       ]}
     >
       {(deleteStatement, { loading, error }) => (
@@ -40,7 +40,7 @@ const DeleteStatement = props => {
           color="secondary"
           onClick={() => {
             if (confirm("Вы точно хотите удалить этот пост?")) {
-              deleteStatement().catch(error => {
+              deleteStatement().catch((error) => {
                 alert(error.message);
               });
             }

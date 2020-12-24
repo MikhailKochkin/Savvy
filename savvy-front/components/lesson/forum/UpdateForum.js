@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import Button from "@material-ui/core/Button";

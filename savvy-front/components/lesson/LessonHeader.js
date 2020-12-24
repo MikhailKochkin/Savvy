@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { Mutation, Query } from "react-apollo";
+import React, { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
@@ -8,18 +7,15 @@ import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 import { withTranslation } from "../../i18n";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
-  mutation UPDATE_PUBLISHED_MUTATION($id: ID!, $published: Boolean) {
+  mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
     updatePublished(id: $id, published: $published) {
       id
-      number
-      name
-      text
     }
   }
 `;
 
 const CREATE_LESSONRESULT_MUTATION = gql`
-  mutation CREATE_LESSONRESULT_MUTATION($visitsNumber: Int, $lessonID: ID) {
+  mutation CREATE_LESSONRESULT_MUTATION($visitsNumber: Int, $lessonID: String) {
     createLessonResult(visitsNumber: $visitsNumber, lessonID: $lessonID) {
       id
     }
@@ -28,7 +24,7 @@ const CREATE_LESSONRESULT_MUTATION = gql`
 
 const UPDATE_LESSONRESULT_MUTATION = gql`
   mutation UPDATE_LESSONRESULT_MUTATION(
-    $id: ID!
+    $id: String!
     $visitsNumber: Int
     $progress: Int
   ) {
@@ -45,7 +41,6 @@ const UPDATE_LESSONRESULT_MUTATION = gql`
 const TextBar = styled.div`
   display: flex;
   flex-direction: row;
-  /* grid-template-columns: 65% 35%; */
   width: 100%;
   font-size: 1.6rem;
   margin-bottom: 15px;
@@ -53,7 +48,6 @@ const TextBar = styled.div`
   border-color: ${(props) => props.color};
   padding: 2%;
   padding-left: 2%;
-  /* background: ${(props) => (props.open ? "#F0F8FF" : "none")}; */
   span {
     cursor: pointer;
     &:hover {
@@ -75,7 +69,6 @@ const A = styled.a`
 
 const Text = styled.div`
   flex-basis: 65%;
-  /* background: red; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -207,323 +200,300 @@ const ToggleQuestion = styled.div`
   }
 `;
 
-class LessonHeader extends Component {
-  state = {
-    published: this.props.lesson.published,
-    reveal: false,
-  };
+const LessonHeader = (props) => {
+  const [published, setPublished] = useState(props.lesson.published);
+  const [reveal, setReveal] = useState(false);
 
-  handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
+  const [createLessonResult, { create_data }] = useMutation(
+    CREATE_LESSONRESULT_MUTATION
+  );
 
-    this.setState({ [name]: value });
-  };
+  const [updateLessonResult, { update_data }] = useMutation(
+    UPDATE_LESSONRESULT_MUTATION
+  );
 
-  toggle = () => {
-    this.setState((prev) => ({ reveal: !prev.reveal }));
-  };
+  const [updatePublished, { published_data }] = useMutation(
+    UPDATE_PUBLISHED_MUTATION
+  );
 
-  render() {
-    const {
-      lesson,
-      name,
-      author,
-      new_students,
-      coursePageId,
-      students,
-      me,
-    } = this.props;
+  const {
+    lesson,
+    name,
+    author,
+    new_students,
+    coursePageId,
+    students,
+    me,
+  } = props;
 
-    let color;
+  let color;
 
-    if (me) {
-      let visit = lesson.lessonResults.find((l) => l.student.id === me.id);
-      let progress;
-      if (visit && visit.lesson.structure) {
-        progress = visit.progress / visit.lesson.structure.length;
-      } else {
-        progress = 0;
-      }
-      if (visit && progress < 0.9) {
-        color = "#FFD836";
-      } else if (visit && progress > 0.9) {
-        color = "#32AC66";
-      } else {
-        color = "white";
-      }
+  if (me) {
+    let visit = lesson.lessonResults.find((l) => l.student.id === me.id);
+    let progress;
+    if (visit && lesson.structure) {
+      progress = visit.progress / lesson.structure.length;
+    } else {
+      progress = 0;
+    }
+    if (visit && progress < 0.9) {
+      color = "#FFD836";
+    } else if (visit && progress > 0.9) {
+      color = "#32AC66";
     } else {
       color = "white";
     }
-    // color = "white";
-    return (
-      <>
-        <TextBar color={color}>
-          <Text>
-            <div>
-              {lesson.number}. {name}{" "}
-              <span className="arrow" onClick={this.toggle}>
-                {this.state.reveal ? `🔽` : `🔼`}
-              </span>
-            </div>
-          </Text>
-          <Buttons>
-            {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
-              <>
-                <Mutation
-                  mutation={UPDATE_PUBLISHED_MUTATION}
-                  variables={{
-                    id: lesson.id,
-                    published: !this.state.published,
-                  }}
-                  refetchQueries={() => [
-                    {
-                      query: SINGLE_COURSEPAGE_QUERY,
-                      variables: { id: coursePageId },
-                    },
-                  ]}
-                >
-                  {(updatePublished, { loading, error }) => (
-                    <ToggleQuestion>
-                      <label className="switch">
-                        <input
-                          name="published"
-                          type="checkbox"
-                          checked={this.state.published}
-                          onChange={async (e) => {
-                            updatePublished();
-                            this.handleInputChange(e);
-                          }}
-                        />
-                        <span className="slider" />
-                      </label>
-                    </ToggleQuestion>
-                  )}
-                </Mutation>
-              </>
-            ) : null}
-            {me && (
-              <>
-                <Mutation
-                  mutation={CREATE_LESSONRESULT_MUTATION}
-                  variables={{
-                    lessonID: lesson.id,
-                    visitsNumber: 1,
-                  }}
-                  refetchQueries={() => [
-                    {
-                      query: SINGLE_COURSEPAGE_QUERY,
-                      variables: { id: coursePageId },
-                    },
-                  ]}
-                >
-                  {(createLessonResult, { loading, error }) => {
-                    return (
-                      <>
-                        {lesson.lessonResults.filter(
-                          (l) => l.student.id === me.id
-                        ).length === 0 && (
-                          <>
-                            {me &&
-                            lesson &&
-                            (me.id === author ||
-                              me.permissions.includes("ADMIN") ||
-                              lesson.open) ? (
-                              <Link
-                                // The user is the teacher or the admin or it is an openLesson.
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: lesson.type.toLowerCase(),
-                                  },
-                                }}
-                              >
-                                <A>
-                                  <Button
-                                    onClick={async (e) => {
-                                      let res = await createLessonResult();
-                                      console.log(0);
-                                    }}
-                                  >
-                                    {this.props.t("start")}
-                                  </Button>
-                                </A>
-                              </Link>
-                            ) : null}
-                            {me &&
-                              lesson &&
-                              me.id !== lesson.user.id &&
-                              (students.includes(me.id) ||
-                                new_students.includes(me.id)) &&
-                              !me.permissions.includes("ADMIN") &&
-                              !lesson.open &&
-                              this.state.published && (
-                                <Link
-                                  // The user hasn't visited the lesson page before. Create the lesson visit node.
-                                  href={{
-                                    pathname: "/lesson",
-                                    query: {
-                                      id: lesson.id,
-                                      type: lesson.type.toLowerCase(),
-                                    },
-                                  }}
-                                >
-                                  <A>
-                                    <Button
-                                      onClick={async (e) => {
-                                        let res = await createLessonResult();
-                                        console.log(1);
-                                      }}
-                                    >
-                                      {this.props.t("start")}
-                                    </Button>
-                                  </A>
-                                </Link>
-                              )}
-                          </>
-                        )}
-                      </>
-                    );
-                  }}
-                </Mutation>
-                {lesson.lessonResults.filter((l) => l.student.id === me.id)
-                  .length > 0 && (
-                  <Mutation
-                    mutation={UPDATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      id: lesson.lessonResults[0].id,
-                      visitsNumber: lesson.lessonResults[0].visitsNumber + 1,
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: SINGLE_COURSEPAGE_QUERY,
-                        variables: { id: coursePageId },
-                      },
-                    ]}
-                  >
-                    {(updateLessonResult, { loading, error }) => {
-                      return (
-                        <>
-                          {/* 1. Button for the teacher (if admin / course owner) */}
-                          {me &&
-                          lesson &&
-                          (me.id === author ||
-                            me.permissions.includes("ADMIN")) ? (
-                            <Link
-                              // The user is the teacher or the admin or it is an openLesson.
-                              href={{
-                                pathname: "/lesson",
-                                query: {
-                                  id: lesson.id,
-                                  type: lesson.type.toLowerCase(),
-                                },
-                              }}
-                            >
-                              <A>
-                                <Button
-                                  onClick={() => {
-                                    updateLessonResult();
-                                    console.log(3);
-                                  }}
-                                >
-                                  {this.props.t("start")}
-                                </Button>
-                              </A>
-                            </Link>
-                          ) : null}
-
-                          {/* 2. Button for the student (if registered not admin course owner)  */}
-                          {me &&
-                            lesson &&
-                            me.id !== lesson.user.id &&
-                            !me.permissions.includes("ADMIN") &&
-                            (students.includes(me.id) ||
-                              new_students.includes(me.id)) &&
-                            this.state.published && (
-                              <Link
-                                // The user HAS visited the lesson page and we update it now
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: lesson.type.toLowerCase(),
-                                  },
-                                }}
-                              >
-                                <A>
-                                  <Button
-                                    onClick={() => {
-                                      updateLessonResult();
-                                      console.log(4);
-                                    }}
-                                  >
-                                    {this.props.t("start")}
-                                  </Button>
-                                </A>
-                              </Link>
-                            )}
-                          {/* 3. Button for the open lesson ( if open and not registered / admin) */}
-                          {me &&
-                            lesson &&
-                            lesson.open &&
-                            me.id !== lesson.user.id &&
-                            !me.permissions.includes("ADMIN") &&
-                            !students.includes(me.id) &&
-                            !new_students.includes(me.id) &&
-                            this.state.published && (
-                              <Link
-                                // The user HAS visited the lesson page and we update it now
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: lesson.type.toLowerCase(),
-                                  },
-                                }}
-                              >
-                                <A>
-                                  {console.log(
-                                    students.includes(me.id),
-                                    new_students.includes(me.id)
-                                  )}
-                                  <Button
-                                    onClick={() => {
-                                      updateLessonResult();
-                                      console.log(5);
-                                    }}
-                                  >
-                                    {this.props.t("start")}
-                                  </Button>
-                                </A>
-                              </Link>
-                            )}
-                        </>
+  } else {
+    color = "white";
+  }
+  return (
+    <>
+      <TextBar color={color}>
+        <Text>
+          <div>
+            {lesson.number}. {name}{" "}
+            <span className="arrow" onClick={(e) => setRevea(!reveal)}>
+              {reveal ? `🔽` : `🔼`}
+            </span>
+          </div>
+        </Text>
+        <Buttons>
+          {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
+            <>
+              <ToggleQuestion>
+                <label className="switch">
+                  <input
+                    name="published"
+                    type="checkbox"
+                    checked={published}
+                    onChange={async (e) => {
+                      updatePublished({
+                        variables: {
+                          id: lesson.id,
+                          published: !published,
+                        },
+                        // refetchQueries: [
+                        //   {
+                        //     query: SINGLE_COURSEPAGE_QUERY,
+                        //     variables: { id: coursePageId },
+                        //   },
+                        // ],
+                      });
+                      setPublished(
+                        e.target.type === "checkbox"
+                          ? e.target.checked
+                          : e.target.value
                       );
                     }}
-                  </Mutation>
-                )}
-              </>
-            )}
+                  />
+                  <span className="slider" />
+                </label>
+              </ToggleQuestion>
+            </>
+          ) : null}
 
-            {me &&
-            lesson &&
-            me.id !== lesson.user.id &&
-            (students.includes(me.id) || new_students.includes(me.id)) &&
-            !me.permissions.includes("ADMIN") &&
-            !this.state.published ? (
-              <InProgress>В разработке</InProgress>
-            ) : null}
-          </Buttons>
-        </TextBar>
-        {lesson.description && this.state.reveal && (
-          <Info>{renderHTML(lesson.description)}</Info>
-        )}
-      </>
-    );
-  }
-}
+          {me && (
+            <>
+              {lesson.lessonResults.filter((l) => l.student.id === me.id)
+                .length === 0 && (
+                <>
+                  {me &&
+                  lesson &&
+                  (me.id === author ||
+                    me.permissions.includes("ADMIN") ||
+                    lesson.open) ? (
+                    <Link
+                      // The user is the teacher or the admin or it is an openLesson.
+                      href={{
+                        pathname: "/lesson",
+                        query: {
+                          id: lesson.id,
+                          type: lesson.type.toLowerCase(),
+                        },
+                      }}
+                    >
+                      <A>
+                        <Button
+                          onClick={async (e) => {
+                            createLessonResult({
+                              variables: {
+                                lessonID: lesson.id,
+                                visitsNumber: 1,
+                              },
+                            });
+                            console.log(0);
+                          }}
+                        >
+                          {props.t("start")}
+                        </Button>
+                      </A>
+                    </Link>
+                  ) : null}
+                  {me &&
+                    lesson &&
+                    me.id !== lesson.user.id &&
+                    new_students.includes(me.id) &&
+                    !me.permissions.includes("ADMIN") &&
+                    !lesson.open &&
+                    published && (
+                      <Link
+                        // The user hasn't visited the lesson page before. Create the lesson visit node.
+                        href={{
+                          pathname: "/lesson",
+                          query: {
+                            id: lesson.id,
+                            type: lesson.type.toLowerCase(),
+                          },
+                        }}
+                      >
+                        <A>
+                          <Button
+                            onClick={async (e) => {
+                              createLessonResult({
+                                variables: {
+                                  lessonID: lesson.id,
+                                  visitsNumber: 1,
+                                },
+                              });
+                              console.log(1);
+                            }}
+                          >
+                            {props.t("start")}
+                          </Button>
+                        </A>
+                      </Link>
+                    )}
+                </>
+              )}
+              {lesson.lessonResults.filter((l) => l.student.id === me.id)
+                .length > 0 && (
+                <>
+                  {/* 1. Button for the teacher (if admin / course owner) */}
+                  {me &&
+                  lesson &&
+                  (me.id === author || me.permissions.includes("ADMIN")) ? (
+                    <Link
+                      // The user is the teacher or the admin or it is an openLesson.
+                      href={{
+                        pathname: "/lesson",
+                        query: {
+                          id: lesson.id,
+                          type: lesson.type.toLowerCase(),
+                        },
+                      }}
+                    >
+                      <A>
+                        <Button
+                          onClick={() => {
+                            updateLessonResult({
+                              variables: {
+                                id: lesson.lessonResults[0].id,
+                                visitsNumber:
+                                  lesson.lessonResults[0].visitsNumber + 1,
+                              },
+                            });
+                            console.log(3);
+                          }}
+                        >
+                          {props.t("start")}
+                        </Button>
+                      </A>
+                    </Link>
+                  ) : null}
+
+                  {/* 2. Button for the student (if registered not admin course owner)  */}
+                  {me &&
+                    lesson &&
+                    me.id !== lesson.user.id &&
+                    !me.permissions.includes("ADMIN") &&
+                    new_students.includes(me.id) &&
+                    published && (
+                      <Link
+                        // The user HAS visited the lesson page and we update it now
+                        href={{
+                          pathname: "/lesson",
+                          query: {
+                            id: lesson.id,
+                            type: lesson.type.toLowerCase(),
+                          },
+                        }}
+                      >
+                        <A>
+                          <Button
+                            onClick={() => {
+                              updateLessonResult({
+                                variables: {
+                                  id: lesson.lessonResults[0].id,
+                                  visitsNumber:
+                                    lesson.lessonResults[0].visitsNumber + 1,
+                                },
+                              });
+                              console.log(4);
+                            }}
+                          >
+                            {props.t("start")}
+                          </Button>
+                        </A>
+                      </Link>
+                    )}
+                  {/* 3. Button for the open lesson ( if open and not registered / admin) */}
+                  {me &&
+                    lesson &&
+                    lesson.open &&
+                    me.id !== lesson.user.id &&
+                    !me.permissions.includes("ADMIN") &&
+                    !new_students.includes(me.id) &&
+                    published && (
+                      <Link
+                        // The user HAS visited the lesson page and we update it now
+                        href={{
+                          pathname: "/lesson",
+                          query: {
+                            id: lesson.id,
+                            type: lesson.type.toLowerCase(),
+                          },
+                        }}
+                      >
+                        <A>
+                          {console.log(new_students.includes(me.id))}
+                          <Button
+                            onClick={() => {
+                              updateLessonResult({
+                                variables: {
+                                  id: lesson.lessonResults[0].id,
+                                  visitsNumber:
+                                    lesson.lessonResults[0].visitsNumber + 1,
+                                },
+                              });
+                              console.log(5);
+                            }}
+                          >
+                            {props.t("start")}
+                          </Button>
+                        </A>
+                      </Link>
+                    )}
+                </>
+              )}
+            </>
+          )}
+
+          {me &&
+          lesson &&
+          me.id !== lesson.user.id &&
+          new_students.includes(me.id) &&
+          !me.permissions.includes("ADMIN") &&
+          !published ? (
+            <InProgress>В разработке</InProgress>
+          ) : null}
+        </Buttons>
+      </TextBar>
+      {lesson.description && reveal && (
+        <Info>{renderHTML(lesson.description)}</Info>
+      )}
+    </>
+  );
+};
 
 export default withTranslation("course")(LessonHeader);
 

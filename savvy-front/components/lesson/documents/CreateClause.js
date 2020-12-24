@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
@@ -70,16 +70,16 @@ const useStyles = makeStyles({
     // width: "40%",
     margin: "4% 0",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 });
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const CreateClause = props => {
+const CreateClause = (props) => {
   const [number, setNumber] = useState(props.index);
   const [commentary, setCommentary] = useState("Комментарий по условию");
   const [sample, setSample] = useState("Пример условия");
@@ -103,7 +103,7 @@ const CreateClause = props => {
           commentary,
           sample,
           keywords,
-          number
+          number,
         }}
       >
         {(createClause, { loading, error }) => (
@@ -113,7 +113,7 @@ const CreateClause = props => {
               <input
                 type="number"
                 value={number}
-                onChange={e => setNumber(event.target.value)}
+                onChange={(e) => setNumber(event.target.value)}
               />
             </Condition>
             <Frame>
@@ -137,14 +137,14 @@ const CreateClause = props => {
             <div>
               <Input
                 defaultValue="Ключевые слова"
-                onChange={e => setKeywords(event.target.value.split(", "))}
+                onChange={(e) => setKeywords(event.target.value.split(", "))}
               />
             </div>
             <Button
               className={classes.button}
               variant="contained"
               color="primary"
-              onClick={async e => {
+              onClick={async (e) => {
                 e.preventDefault();
                 const res = await createClause();
                 setDisabled(true);
@@ -161,7 +161,7 @@ const CreateClause = props => {
 };
 
 CreateClause.propTypes = {
-  document: PropTypes.string.isRequired
+  document: PropTypes.string.isRequired,
 };
 
 export default CreateClause;

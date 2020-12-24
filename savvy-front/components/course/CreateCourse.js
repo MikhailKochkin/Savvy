@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Error from "../ErrorMessage";
 import Router from "next/router";
-import User from "../User";
+import { useUser } from "../User";
 import HowTo from "./HowTo";
 
 const CREATE_COURSE_MUTATION = gql`
@@ -113,13 +113,13 @@ const Button = styled.button`
   width: 20%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 800px) {
     width: 40%;
@@ -140,18 +140,18 @@ export default class CreateCourse extends Component {
     courseType: "PUBLIC",
     uniID: "",
     published: false,
-    upload: false
+    upload: false,
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name, value } = e.target;
     this.setState({ [name]: value });
   };
 
-  uploadFile = async e => {
+  uploadFile = async (e) => {
     this.setState({
       upload: "pending",
-      image: ""
+      image: "",
     });
     const files = e.target.files;
     const data = new FormData();
@@ -161,13 +161,13 @@ export default class CreateCourse extends Component {
       "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
       {
         method: "POST",
-        body: data
+        body: data,
       }
     );
     const file = await res.json();
     this.setState({
       image: file.secure_url,
-      upload: true
+      upload: true,
     });
   };
 
@@ -187,23 +187,23 @@ export default class CreateCourse extends Component {
                     mutation={UPDATE_UNI_MUTATION}
                     variables={{
                       id: me.uni.id,
-                      capacity: me.uni.capacity - 1
+                      capacity: me.uni.capacity - 1,
                     }}
                   >
                     {(updateUni, { loading, error }) => (
                       <Form
-                        onSubmit={async e => {
+                        onSubmit={async (e) => {
                           // Stop the form from submitting
                           e.preventDefault();
                           this.setState({ courseType: "PRIVATE" });
                           const res1 = await this.setState({
-                            uniID: me.uni.id
+                            uniID: me.uni.id,
                           });
                           const res2 = await createCoursePage();
                           const res3 = await updateUni();
                           Router.push({
                             pathname: "/coursePage",
-                            query: { id: res2.data.createCoursePage.id }
+                            query: { id: res2.data.createCoursePage.id },
                           });
                         }}
                       >

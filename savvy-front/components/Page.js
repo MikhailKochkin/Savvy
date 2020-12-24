@@ -1,22 +1,17 @@
-import React, { Component } from "react";
-import styled, { ThemeProvider } from "styled-components";
+import React from "react";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { withRouter } from "next/router";
 import { ModalProvider } from "styled-react-modal";
-import dynamic from "next/dynamic";
 
 import Nav from "./Nav";
 import Meta from "./Meta";
 import Footer from "./Footer";
 import Header from "./Header";
 import Layout from "../components/Layout";
-import User from "./User";
-
-// const DynamicComponent = dynamic(import("./Alert"), {
-//   ssr: false,
-// });
+import { useUser } from "./User";
 
 const theme = {
-  blue: "#112A62",
+  blue: "#6DAAE1",
   black: "#393939",
   maxWidth: "1200px",
   offWhite: "#EDEDED",
@@ -38,39 +33,54 @@ const Inner = styled.div`
   width: 100%;
 `;
 
-const SpecialModalBackground = styled.div`
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 30;
-  background-color: rgba(0, 0, 0, 0.5);
-  align-items: center;
-  justify-content: center;
+const GlobalStyle = createGlobalStyle`
+      @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap&subset=cyrillic');
+
+    html {
+        font-family: 'Montserrat', sans-serif;
+        box-sizing: border-box;
+        font-size: 10px;
+        height:100%;
+        scroll-behavior: smooth;
+
+    }
+    *, *:after, *:after {
+        box-sizing: inherit;
+    }
+    body {
+        padding: 0;
+        margin: 0;
+        font-size:1.5rem;
+        line-height: 1.8;
+        height:100%;
+    }
+    a {
+        text-decoration: none;
+        color: ${theme.black};
+    }
 `;
 
 const Page = ({ children, router }) => {
+  const me = useUser();
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
-        <User>
-          {({ data: { me } }) => (
-            <>
-              <Meta />
-              <Layout>
-                <ModalProvider backgroundComponent={SpecialModalBackground}>
-                  {/* <DynamicComponent /> */}
-                  <Header />
-                  <Nav />
-                  <Inner>{children}</Inner>
-                  <Footer />
-                </ModalProvider>
-              </Layout>
-            </>
-          )}
-        </User>
+        {/* <User>
+          {({ data: { me } }) => ( */}
+        <>
+          <GlobalStyle />
+          <Meta />
+          <Layout>
+            <ModalProvider>
+              <Header />
+              <Nav />
+              <Inner>{children}</Inner>
+              <Footer />
+            </ModalProvider>
+          </Layout>
+        </>
+        {/* )}
+        </User> */}
       </StyledPage>
     </ThemeProvider>
   );

@@ -1,32 +1,15 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import gql from "graphql-tag";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
-import User from "./User";
+import { useUser } from "./User";
 import Signup from "./auth/Signup";
 import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
 import { IoMdMenu } from "react-icons/io";
 import { i18n, withTranslation } from "../i18n";
-
-const ALL_COURSE_PAGES_QUERY = gql`
-  query ALL_COURSE_PAGES_QUERY {
-    coursePages {
-      id
-      title
-      courseType
-      user {
-        id
-        name
-      }
-    }
-  }
-`;
-
-// const { origin } = absoluteUrl(req);
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -96,13 +79,12 @@ const SideMenu = styled.div`
 `;
 
 const StyledHeader = styled.header`
-  margin: 10px 0;
   background-color: white;
   display: grid;
   height: 60px;
   grid-template-areas: "CourseMenu UserData";
   grid-template-columns: 1fr 1fr;
-  /* border-bottom: 1px solid #e5e5e5; */
+  border-bottom: 1px solid #e5e5e5;
   cursor: pointer;
   a,
   button,
@@ -142,7 +124,7 @@ const CourseMenu = styled.div`
     flex-direction: row;
   }
   div {
-    min-width: 140px;
+    min-width: 200px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -197,7 +179,7 @@ const UserData = styled.div`
     margin-right: 10px;
   }
   img {
-    width: 25px;
+    width: 30px;
   }
 `;
 
@@ -231,274 +213,215 @@ const Span = styled.span`
   padding-top: 15px;
 `;
 
-class Nav extends Component {
-  state = {
-    menuShown: false,
-    isOpen: false,
-    auth: "signin",
+const Nav = (props) => {
+  const [width, setWidth] = useState(800);
+  const [isOpen, setIsOpen] = useState(false);
+  const [auth, setAuth] = useState("signin");
+
+  const onResize = (width) => {
+    setWidth(width);
   };
 
-  onResize = (width) => {
-    this.setState({ width });
-  };
+  const toggleModal = (e) => setIsOpen(!isOpen);
 
-  openNav = () => {
+  const openNav = () => {
     document.getElementById("mySidenav").style.height = "35%";
     document.getElementById("mySidenav").style.paddingTop = "50px";
   };
 
   /* Set the width of the side navigation to 0 */
-  closeNav = () => {
+  const closeNav = () => {
     document.getElementById("mySidenav").style.height = "0%";
     document.getElementById("mySidenav").style.paddingTop = "0";
   };
 
-  toggleModal = (e) => {
-    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
-  };
+  const changeState = (dataFromChild) => setAuth(dataFromChild);
+  const me = useUser();
+  return (
+    <>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+      {width > 800 && (
+        <>
+          <StyledHeader>
+            <CourseMenu>
+              <Link prefetch href="/">
+                <div className="logo">
+                  <a>BeSavvy</a>
+                </div>
+              </Link>
 
-  mouseEnter = () => {
-    this.setState({ menuShown: true });
-  };
-  mouseLeave = () => {
-    this.setState({ menuShown: false });
-  };
-
-  menuShow = () => {
-    this.setState((prevState) => ({
-      menuShown: !prevState.menuShown,
-    }));
-  };
-
-  changeState = (dataFromChild) => {
-    this.setState({
-      auth: dataFromChild,
-    });
-  };
-  render() {
-    return (
-      <User>
-        {({ data: { me } }) => {
-          return (
-            <>
-              <ReactResizeDetector
-                handleWidth
-                handleHeight
-                onResize={this.onResize}
-              />
-              {this.state.width > 800 && (
+              <Link prefetch href="/blog">
+                <div>
+                  <a>{props.t("blog")}</a>
+                </div>
+              </Link>
+              {me && me !== null ? (
                 <>
-                  <StyledHeader>
-                    <CourseMenu>
-                      <Link href="/">
-                        <div className="logo">
-                          <a>BeSavvy</a>
-                        </div>
-                      </Link>
-
-                      <Link href="/blog">
-                        <div>
-                          <a>{this.props.t("blog")}</a>
-                        </div>
-                      </Link>
-                      {me && me !== null ? (
-                        <>
-                          {me.status && me.status === "AUTHOR" && (
-                            <Link prefetch href="/educator">
-                              <div>
-                                <a>{this.props.t("my")}</a>
-                              </div>
-                            </Link>
-                          )}
-                          {me.status && me.status === "HR" && (
-                            <Link prefetch href="/educator">
-                              <div>
-                                <a>{this.props.t("my")}</a>
-                              </div>
-                            </Link>
-                          )}
-                          {me.status && me.status === "SAVVY_AUTHOR" && (
-                            <Link prefetch href="/educator">
-                              <div>
-                                <a>{this.props.t("my")}</a>
-                              </div>
-                            </Link>
-                          )}
-                        </>
-                      ) : null}
-                    </CourseMenu>
-                    <UserData>
-                      <div className="imgGroup">
-                        <div className="img">
-                          <img
-                            src="../../static/uk.svg"
-                            onClick={() => i18n.changeLanguage("en")}
-                          />
-                        </div>
-                        <div className="img">
-                          <img
-                            src="../../static/russia.svg"
-                            onClick={() => i18n.changeLanguage("ru")}
-                          />
-                        </div>
+                  {me.status && me.status === "AUTHOR" && (
+                    <Link prefetch href="/educator">
+                      <div>
+                        <a>{props.t("my")}</a>
                       </div>
-                      {me ? (
-                        <Link
-                          href={{
-                            pathname: "/account",
-                            query: { id: me.id },
-                          }}
-                        >
-                          <a className="name">
-                            {me.surname
-                              ? `${me.name} ${me.surname} ${me.level.level}`
-                              : `${me.name} ${me.level.level}`}
-                          </a>
-                        </Link>
-                      ) : null}
-                      {me ? <Signout /> : null}
-                      {!me && (
-                        <Button onClick={this.toggleModal}>
-                          <a>{this.props.t("signin")}</a>
-                        </Button>
-                      )}
-                    </UserData>
-                  </StyledHeader>
-                  <StyledModal
-                    isOpen={this.state.isOpen}
-                    onBackgroundClick={this.toggleModal}
-                    onEscapeKeydown={this.toggleModal}
-                  >
-                    {this.state.auth === "signin" && (
-                      <Signin
-                        getData={this.changeState}
-                        closeNavBar={this.toggleModal}
-                      />
-                    )}
-                    {this.state.auth === "signup" && (
-                      <Signup
-                        getData={this.changeState}
-                        closeNavBar={this.toggleModal}
-                      />
-                    )}
-                    {this.state.auth === "reset" && (
-                      <RequestReset getData={this.changeState} />
-                    )}
-                  </StyledModal>
+                    </Link>
+                  )}
+                  {me.status && me.status === "HR" && (
+                    <Link prefetch href="/educator">
+                      <div>
+                        <a>{props.t("my")}</a>
+                      </div>
+                    </Link>
+                  )}
+                  {me.status && me.status === "SAVVY_AUTHOR" && (
+                    <Link prefetch href="/educator">
+                      <div>
+                        <a>{props.t("my")}</a>
+                      </div>
+                    </Link>
+                  )}
                 </>
+              ) : null}
+            </CourseMenu>
+            <UserData>
+              <div className="imgGroup">
+                <div className="img">
+                  <img
+                    src="../../static/uk.svg"
+                    onClick={() => i18n.changeLanguage("en")}
+                  />
+                </div>
+                <div className="img">
+                  <img
+                    src="../../static/russia.svg"
+                    onClick={() => i18n.changeLanguage("ru")}
+                  />
+                </div>
+              </div>
+              {me ? (
+                <Link
+                  href={{
+                    pathname: "/account",
+                    query: { id: me.id },
+                  }}
+                >
+                  <a className="name">
+                    {me.surname
+                      ? `${me.name} ${me.surname} ${me.level.level}`
+                      : `${me.name} ${me.level.level}`}
+                    {/* {me.surname ? `${me.name} ${me.surname}` : `${me.name}`} */}
+                  </a>
+                </Link>
+              ) : null}
+              {me ? <Signout /> : null}
+              {!me && (
+                <Button onClick={(e) => toggleModal()}>
+                  <a>{props.t("signup")}</a>
+                </Button>
               )}
-              {this.state.width < 800 && (
-                <>
-                  <StyledHeader>
-                    <Span onClick={this.openNav}>
-                      <IoMdMenu size={32} />
-                    </Span>
-                    <div className="logo">
-                      {me ? (
-                        <Link
-                          href={{
-                            pathname: "/account",
-                            query: { id: me.id },
-                          }}
-                        >
-                          <a className="name">
-                            {me.surname ? `${me.name} ${me.surname}` : me.name}
-                          </a>
-                        </Link>
-                      ) : null}
-                      {!me && (
-                        <Button onClick={this.toggleModal}>
-                          <a>
-                            {this.props.t("signup")}
-                            {/* Войти */}
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  </StyledHeader>
+            </UserData>
+          </StyledHeader>
+          <StyledModal
+            isOpen={isOpen}
+            onBackgroundClick={toggleModal}
+            onEscapeKeydown={toggleModal}
+          >
+            {auth === "signin" && (
+              <Signin getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "signup" && (
+              <Signup getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "reset" && <RequestReset getData={changeState} />}
+          </StyledModal>
+        </>
+      )}
+      {width < 800 && (
+        <>
+          <StyledHeader>
+            <Span onClick={(e) => openNav()}>
+              <IoMdMenu size={32} />
+            </Span>
+            <div className="logo">
+              {me ? (
+                <Link
+                  href={{
+                    pathname: "/account",
+                    query: { id: me.id },
+                  }}
+                >
+                  <a className="name">
+                    {me.surname ? `${me.name} ${me.surname}` : me.name}
+                  </a>
+                </Link>
+              ) : null}
+              {!me && (
+                <Button onClick={(e) => toggleModal()}>
+                  <a>{props.t("signup")}</a>
+                </Button>
+              )}
+            </div>
+          </StyledHeader>
 
-                  <SideMenu>
-                    <div id="mySidenav" class="sidenav">
-                      <a
-                        href="javascript:void(0)"
-                        class="closebtn"
-                        onClick={this.closeNav}
-                      >
-                        &times;
-                      </a>
-                      {me && me.status === "AUTHOR" && (
-                        <Link prefetch href="/educator">
-                          <button onClick={this.closeNav}>
-                            <a>{this.props.t("blog")}</a>
-                          </button>
-                        </Link>
-                      )}
-                      {me && me.status === "SAVVY_AUTHOR" && (
-                        <Link prefetch href="/educator">
-                          <button onClick={this.closeNav}>
-                            <a>
-                              {this.props.t("my")}
-                              {/* Мои курсы */}
-                            </a>
-                          </button>
-                        </Link>
-                      )}
-                      <Link
-                        href={{
-                          pathname: "/courses",
-                        }}
-                      >
-                        <button onClick={this.closeNav}>
-                          <a>
-                            {this.props.t("my")}
-                            {/* Курсы */}
-                          </a>
-                        </button>
-                      </Link>
-                      <Link
-                        href={{
-                          pathname: "/blog",
-                        }}
-                      >
-                        <button onClick={this.closeNav}>
-                          <a>
-                            {this.props.t("blog")}
-                            {/* Блог */}
-                          </a>
-                        </button>
-                      </Link>
-                      {me ? <Signout /> : null}
-                    </div>
-                  </SideMenu>
-                  <StyledModal
-                    isOpen={this.state.isOpen}
-                    onBackgroundClick={this.toggleModal}
-                    onEscapeKeydown={this.toggleModal}
-                  >
-                    {this.state.auth === "signin" && (
-                      <Signin
-                        getData={this.changeState}
-                        closeNavBar={this.toggleModal}
-                      />
-                    )}
-                    {this.state.auth === "signup" && (
-                      <Signup
-                        getData={this.changeState}
-                        closeNavBar={this.toggleModal}
-                      />
-                    )}
-                    {this.state.auth === "reset" && (
-                      <RequestReset getData={this.changeState} />
-                    )}
-                  </StyledModal>
-                </>
+          <SideMenu>
+            <div id="mySidenav" class="sidenav">
+              <a
+                href="javascript:void(0)"
+                class="closebtn"
+                onClick={(e) => closeNav()}
+              >
+                &times;
+              </a>
+              {me && me.status === "AUTHOR" && (
+                <Link prefetch href="/educator">
+                  <button onClick={(e) => closeNav()}>
+                    <a>{props.t("my")}</a>
+                  </button>
+                </Link>
               )}
-            </>
-          );
-        }}
-      </User>
-    );
-  }
-}
+              {me && me.status === "SAVVY_AUTHOR" && (
+                <Link prefetch href="/educator">
+                  <button onClick={(e) => closeNav()}>
+                    <a>{props.t("my")}</a>
+                  </button>
+                </Link>
+              )}
+              <Link
+                href={{
+                  pathname: "/courses",
+                }}
+              >
+                <button onClick={(e) => closeNav()}>
+                  <a>{props.t("my")}</a>
+                </button>
+              </Link>
+              <Link
+                href={{
+                  pathname: "/blog",
+                }}
+              >
+                <button onClick={(e) => closeNav()}>
+                  <a>{props.t("blog")}</a>
+                </button>
+              </Link>
+              {me ? <Signout /> : null}
+            </div>
+          </SideMenu>
+          <StyledModal
+            isOpen={isOpen}
+            onBackgroundClick={toggleModal}
+            onEscapeKeydown={toggleModal}
+          >
+            {auth === "signin" && (
+              <Signin getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "signup" && (
+              <Signup getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "reset" && <RequestReset getData={changeState} />}
+          </StyledModal>
+        </>
+      )}
+    </>
+  );
+};
 
 export default withTranslation("common")(Nav);

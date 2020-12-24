@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import dynamic from "next/dynamic";
-import { Mutation, Query } from "react-apollo";
+import { Mutation, Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Router from "next/router";
@@ -18,13 +18,13 @@ const Button = styled.button`
   width: 30%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 800px) {
     width: 40%;
@@ -51,16 +51,16 @@ const UPDATE_EXAM_QUESTION_MUTATION = gql`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class UpdateExamQuestion extends Component {
   state = {
-    text: ""
+    text: "",
   };
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
   render() {
@@ -70,7 +70,7 @@ class UpdateExamQuestion extends Component {
           <Query
             query={SINGLE_EXAM_QUESTION_QUERY}
             variables={{
-              id: this.props.id
+              id: this.props.id,
             }}
           >
             {({ data, loading }) => {
@@ -86,17 +86,17 @@ class UpdateExamQuestion extends Component {
                     mutation={UPDATE_EXAM_QUESTION_MUTATION}
                     variables={{
                       id: data.examQuestions[0].id,
-                      question: this.state.text
+                      question: this.state.text,
                     }}
                   >
                     {(updateExamQuestion, { loading, error }) => (
                       <Button
-                        onClick={async e => {
+                        onClick={async (e) => {
                           e.preventDefault();
                           const res = await updateExamQuestion();
                           Router.push({
                             pathname: "/coursePage",
-                            query: { id: this.props.id }
+                            query: { id: this.props.id },
                           });
                         }}
                       >

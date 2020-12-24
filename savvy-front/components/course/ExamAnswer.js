@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import dynamic from "next/dynamic";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 
 const Button = styled.button`
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border-radius: 5px;
   width: 200px;
   height: 38px;
@@ -19,7 +19,7 @@ const Button = styled.button`
   border: none;
   margin-top: 10px;
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
 `;
 
@@ -65,17 +65,17 @@ const CREATE_EXAM_ANSWER_MUTATION = gql`
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
-  ssr: false
+  ssr: false,
 });
 
 class ExamAnswer extends Component {
   state = {
     text: "",
-    sent: false
+    sent: false,
   };
-  myCallback = dataFromChild => {
+  myCallback = (dataFromChild) => {
     this.setState({
-      text: dataFromChild
+      text: dataFromChild,
     });
   };
   render() {
@@ -92,13 +92,13 @@ class ExamAnswer extends Component {
             mutation={CREATE_EXAM_ANSWER_MUTATION}
             variables={{
               examQuestionID: question.id,
-              answer: this.state.text
+              answer: this.state.text,
             }}
           >
             {(createExamAnswer, { loading, error }) => (
               <>
                 <Button
-                  onClick={async e => {
+                  onClick={async (e) => {
                     // Stop the form from submitting
                     e.preventDefault();
                     // call the mutation

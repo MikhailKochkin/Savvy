@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { Mutation } from "react-apollo";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import Router from "next/router";
 import { CURRENT_USER_QUERY } from "../User";
@@ -140,13 +140,13 @@ const Name = styled.p`
 class LandingLogIn extends Component {
   state = {
     password: "",
-    email: ""
+    email: "",
   };
-  saveToState = e => {
+  saveToState = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  handleSteps = e => {
+  handleSteps = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -191,7 +191,7 @@ class LandingLogIn extends Component {
                   />
                 </Label>
                 <SubmitButton
-                  onClick={async e => {
+                  onClick={async (e) => {
                     e.preventDefault();
                     await signin();
                   }}
