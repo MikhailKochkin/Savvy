@@ -256,7 +256,7 @@ export default class Course extends Component {
                 <Query
                   query={SINGLE_COURSE_VISIT_QUERY}
                   variables={{
-                    coursePage: id,
+                    coursePageId: id,
                     student: me.id,
                   }}
                 >
@@ -270,7 +270,7 @@ export default class Course extends Component {
                           <Mutation
                             mutation={CREATE_COURSE_VISIT_MUTATION}
                             variables={{
-                              coursePage: id,
+                              coursePageId: id,
                               visitsNumber: 1,
                               student: me.id,
                             }}
@@ -278,7 +278,7 @@ export default class Course extends Component {
                               {
                                 query: SINGLE_COURSE_VISIT_QUERY,
                                 variables: {
-                                  coursePage: id,
+                                  coursePageId: id,
                                   student: me.id,
                                 },
                               },
