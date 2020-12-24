@@ -5,7 +5,7 @@ const TestResult = objectType({
   definition(t) {
     t.model.id();
     t.model.answer();
-    t.model.atttempts();
+    t.model.attempts();
     t.model.lessonID();
     t.model.testID();
     t.model.studentId();
@@ -24,7 +24,7 @@ const QuizResult = objectType({
   definition(t) {
     t.model.id();
     t.model.answer();
-    t.model.atttempts();
+    t.model.attempts();
     t.model.correct();
     t.model.lessonID();
     t.model.quizId();
@@ -47,7 +47,7 @@ const TextEditorResult = objectType({
     t.model.correct();
     t.model.result();
     t.model.guess();
-    t.model.lessonID();
+    // t.model.lessonID();
     t.model.textEditorId();
     t.model.studentId();
     t.model.lessonId();
@@ -64,7 +64,7 @@ const ConstructionResult = objectType({
   definition(t) {
     t.model.id();
     t.model.answer();
-    t.model.atttempts();
+    t.model.attempts();
     t.model.constructionID();
     t.model.inputs();
     t.model.lessonID();
@@ -86,10 +86,10 @@ const ProblemResult = objectType({
     t.model.id();
     t.model.answer();
     t.model.revealed();
-    t.model.shotID();
+    t.model.problemID();
     t.model.lessonID();
     t.model.lessonId();
-    t.model.shotId();
+    t.model.problemId();
     t.model.studentId();
     t.model.lesson();
     t.model.student();
@@ -123,9 +123,9 @@ const DocumentResult = objectType({
     t.model.drafts();
     t.model.lessonId();
     t.model.documentId();
-    t.model.studentId();
+    t.model.userId();
     t.model.lesson();
-    t.model.student();
+    t.model.user();
     t.model.document();
     t.model.createdAt();
     t.model.updatedAt();

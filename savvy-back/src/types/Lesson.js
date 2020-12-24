@@ -24,7 +24,6 @@ const Lesson = objectType({
     t.model.user();
     t.model.lessonResults();
     // t.model.constructionResults();
-    t.model.challengeResults();
     t.model.constructionResults();
     t.model.testResults();
     t.model.shotResults();

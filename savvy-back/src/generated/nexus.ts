@@ -1408,6 +1408,7 @@ export interface NexusGenObjects {
   }
   ConstructionResult: { // root type
     answer?: string | null; // String
+    attempts?: number | null; // Int
     constructionId?: string | null; // String
     constructionID?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -1470,6 +1471,7 @@ export interface NexusGenObjects {
     id: string; // String!
     lessonId?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
   }
   Feedback: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -1585,6 +1587,8 @@ export interface NexusGenObjects {
     id: string; // String!
     lessonId?: string | null; // String
     lessonID?: string | null; // String
+    problemId?: string | null; // String
+    problemID?: string | null; // String
     revealed: string[]; // [String!]!
     studentId: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -1607,6 +1611,7 @@ export interface NexusGenObjects {
   }
   QuizResult: { // root type
     answer?: string | null; // String
+    attempts?: number | null; // Int
     correct?: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -1657,6 +1662,7 @@ export interface NexusGenObjects {
   }
   TestResult: { // root type
     answer?: string | null; // String
+    attempts?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     lessonId?: string | null; // String
@@ -1773,6 +1779,7 @@ export interface NexusGenFieldTypes {
   }
   ConstructionResult: { // field return type
     answer: string | null; // String
+    attempts: number | null; // Int
     construction: NexusGenRootTypes['Construction'] | null; // Construction
     constructionId: string | null; // String
     constructionID: string | null; // String
@@ -1853,6 +1860,8 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
   }
   Feedback: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2071,6 +2080,8 @@ export interface NexusGenFieldTypes {
     lessonId: string | null; // String
     lessonID: string | null; // String
     problem: NexusGenRootTypes['Problem'] | null; // Problem
+    problemId: string | null; // String
+    problemID: string | null; // String
     revealed: string[]; // [String!]!
     student: NexusGenRootTypes['User']; // User!
     studentId: string; // String!
@@ -2116,6 +2127,7 @@ export interface NexusGenFieldTypes {
   }
   QuizResult: { // field return type
     answer: string | null; // String
+    attempts: number | null; // Int
     correct: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -2179,6 +2191,7 @@ export interface NexusGenFieldTypes {
   }
   TestResult: { // field return type
     answer: string | null; // String
+    attempts: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -2306,6 +2319,7 @@ export interface NexusGenFieldTypeNames {
   }
   ConstructionResult: { // field return type name
     answer: 'String'
+    attempts: 'Int'
     construction: 'Construction'
     constructionId: 'String'
     constructionID: 'String'
@@ -2386,6 +2400,8 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonId: 'String'
     updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
   }
   Feedback: { // field return type name
     createdAt: 'DateTime'
@@ -2604,6 +2620,8 @@ export interface NexusGenFieldTypeNames {
     lessonId: 'String'
     lessonID: 'String'
     problem: 'Problem'
+    problemId: 'String'
+    problemID: 'String'
     revealed: 'String'
     student: 'User'
     studentId: 'String'
@@ -2649,6 +2667,7 @@ export interface NexusGenFieldTypeNames {
   }
   QuizResult: { // field return type name
     answer: 'String'
+    attempts: 'Int'
     correct: 'Boolean'
     createdAt: 'DateTime'
     id: 'String'
@@ -2712,6 +2731,7 @@ export interface NexusGenFieldTypeNames {
   }
   TestResult: { // field return type name
     answer: 'String'
+    attempts: 'Int'
     createdAt: 'DateTime'
     id: 'String'
     lesson: 'Lesson'

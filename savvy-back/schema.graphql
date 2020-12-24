@@ -202,6 +202,7 @@ input ConstructionListRelationFilter {
 
 type ConstructionResult {
   answer: String
+  attempts: Int
   construction: Construction
   constructionId: String
   constructionID: String
@@ -518,6 +519,8 @@ type DocumentResult {
   lesson: Lesson
   lessonId: String
   updatedAt: DateTime!
+  user: User
+  userId: String
 }
 
 input DocumentResultListRelationFilter {
@@ -1299,6 +1302,8 @@ type ProblemResult {
   lessonId: String
   lessonID: String
   problem: Problem
+  problemId: String
+  problemID: String
   revealed: [String!]!
   student: User!
   studentId: String!
@@ -1443,6 +1448,7 @@ input QuizOrderByInput {
 
 type QuizResult {
   answer: String
+  attempts: Int
   correct: Boolean
   createdAt: DateTime!
   id: String!
@@ -1732,6 +1738,7 @@ input StringNullableListFilter {
 
 type TestResult {
   answer: String
+  attempts: Int
   createdAt: DateTime!
   id: String!
   lesson: Lesson

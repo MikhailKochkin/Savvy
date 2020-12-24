@@ -48,7 +48,7 @@ const UserLevel = objectType({
   definition(t) {
     t.model.id();
     t.model.level();
-    t.model.userId();
+    // t.model.userId();
     t.model.user();
     t.model.createdAt();
     t.model.updatedAt();

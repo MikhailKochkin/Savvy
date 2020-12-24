@@ -125,7 +125,7 @@ const Forum = objectType({
     t.model.text();
     t.model.user();
     t.model.userId();
-    t.model.lessonId();
+    // t.model.lessonId();
     t.model.lesson();
     t.model.rating();
     t.model.statements();
