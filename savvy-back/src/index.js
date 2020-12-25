@@ -2,7 +2,6 @@ require("dotenv").config({ path: "variables.env" });
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const { createServer, prisma } = require("./createServer");
-
 const throng = require("throng");
 
 const server = createServer();
@@ -39,7 +38,12 @@ const start = () => {
   // 3. CORS middleware
 
   server.express.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://localhost:7777");
+    res.header("Access-Control-Allow-Origin", [
+      "http://localhost:7777",
+      "https://localhost:7777",
+      "https://besavvy.app",
+      "https://www.besavvy.app",
+    ]);
     res.header(
       "Access-Control-Allow-Headers",
       "Origin, X-Requested-With, Content-Type, Accept"

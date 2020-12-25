@@ -263,7 +263,6 @@ export default class Course extends Component {
                   {({ data, error, loading }) => {
                     if (loading) return <p></p>;
                     if (error) return <p>Error: {error.message}</p>;
-                    console.log(data.courseVisits.length, data.courseVisits);
                     return (
                       <>
                         {data.courseVisits.length === 0 && (
