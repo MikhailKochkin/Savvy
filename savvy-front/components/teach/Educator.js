@@ -240,7 +240,7 @@ const Teach = (props) => {
                                 </>
                               )}
                               <>
-                                <Link prefetch href="/create">
+                                <Link href="/create">
                                   <Button>
                                     <a>Создать курс</a>
                                   </Button>

@@ -32,13 +32,17 @@ const Button = styled.div`
 const Signout = (props) => (
   <Mutation
     mutation={SIGN_OUT_MUTATION}
-    refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+    refetchQueries={() => [
+      {
+        query: CURRENT_USER_QUERY,
+      },
+    ]}
   >
     {(signout) => (
       <Button
         onClick={async (e) => {
-          const res = await signout();
           cookies.remove("token");
+          const res = await signout();
           console.log(1, res);
         }}
       >

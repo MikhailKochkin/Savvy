@@ -263,7 +263,7 @@ export default class Course extends Component {
                   {({ data, error, loading }) => {
                     if (loading) return <p></p>;
                     if (error) return <p>Error: {error.message}</p>;
-
+                    console.log(data.courseVisits.length, data.courseVisits);
                     return (
                       <>
                         {data.courseVisits.length === 0 && (
@@ -325,7 +325,7 @@ export default class Course extends Component {
                               {
                                 query: SINGLE_COURSE_VISIT_QUERY,
                                 variables: {
-                                  coursePage: id,
+                                  coursePageId: id,
                                   student: me.id,
                                 },
                               },

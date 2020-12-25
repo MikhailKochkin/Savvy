@@ -272,6 +272,7 @@ const Mutation = mutationType({
         coursePageId: stringArg(),
       },
       resolve: async (_, { visitsNumber, coursePageId }, ctx) => {
+        console.log(coursePageId);
         const courseVisit = await ctx.prisma.courseVisit.create({
           data: {
             coursePage: {

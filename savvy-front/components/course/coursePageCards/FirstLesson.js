@@ -84,10 +84,11 @@ const Button = styled.button`
 
 const RegisterCard = (props) => {
   let l = props.lesson;
+  console.log(l);
   return (
     <>
       <Payment>
-        {!l && (
+        {l.length == 0 && (
           <>
             <Header>🔓 Открытый урок</Header>
             <Text>
@@ -106,7 +107,7 @@ const RegisterCard = (props) => {
             </Text>
           </>
         )}
-        {l && (
+        {l.length > 0 && (
           <>
             <Header>🔓 Открытый урок</Header>
             <Text>

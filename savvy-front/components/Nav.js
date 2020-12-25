@@ -244,13 +244,13 @@ const Nav = (props) => {
         <>
           <StyledHeader>
             <CourseMenu>
-              <Link prefetch href="/">
+              <Link href="/">
                 <div className="logo">
-                  <a>BeSavvy App</a>
+                  <a>BeSavvy</a>
                 </div>
               </Link>
 
-              <Link prefetch href="/blog">
+              <Link href="/blog">
                 <div>
                   <a>
                     {/* {this.props.t("blof")} */}
@@ -261,7 +261,7 @@ const Nav = (props) => {
               {me && me !== null ? (
                 <>
                   {me.status && me.status === "AUTHOR" && (
-                    <Link prefetch href="/educator">
+                    <Link href="/educator">
                       <div>
                         <a>
                           {/* {this.props.t("my")} */}
@@ -271,7 +271,7 @@ const Nav = (props) => {
                     </Link>
                   )}
                   {me.status && me.status === "HR" && (
-                    <Link prefetch href="/educator">
+                    <Link href="/educator">
                       <div>
                         <a>
                           {/* {this.props.t("my")} */}
@@ -281,7 +281,7 @@ const Nav = (props) => {
                     </Link>
                   )}
                   {me.status && me.status === "SAVVY_AUTHOR" && (
-                    <Link prefetch href="/educator">
+                    <Link href="/educator">
                       <div>
                         <a>
                           {/* {this.props.t("my")} */}
@@ -386,7 +386,7 @@ const Nav = (props) => {
                 &times;
               </a>
               {me && me.status === "AUTHOR" && (
-                <Link prefetch href="/educator">
+                <Link href="/educator">
                   <button onClick={(e) => closeNav()}>
                     <a>
                       {/* {this.props.t("blof")} */}
@@ -396,7 +396,7 @@ const Nav = (props) => {
                 </Link>
               )}
               {me && me.status === "SAVVY_AUTHOR" && (
-                <Link prefetch href="/educator">
+                <Link href="/educator">
                   <button onClick={(e) => closeNav()}>
                     <a>
                       {/* {this.props.t("blof")} */}
