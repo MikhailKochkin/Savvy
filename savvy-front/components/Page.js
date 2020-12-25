@@ -8,7 +8,7 @@ import Meta from "./Meta";
 import Footer from "./Footer";
 import Header from "./Header";
 import Layout from "../components/Layout";
-// import { useUser } from "./User";
+import { useUser } from "./User";
 
 const theme = {
   blue: "#6DAAE1",
@@ -61,27 +61,22 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Page = ({ children, router }) => {
-  // const me = useUser();
-  // console.log(me);
+  const me = useUser();
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
-        {/* <User>
-          {({ data: { me } }) => ( */}
         <>
           <GlobalStyle />
           <Meta />
           <Layout>
             <ModalProvider>
               <Header />
-              {/* <Nav /> */}
+              <Nav />
               <Inner>{children}</Inner>
               <Footer />
             </ModalProvider>
           </Layout>
         </>
-        {/* )}
-        </User> */}
       </StyledPage>
     </ThemeProvider>
   );

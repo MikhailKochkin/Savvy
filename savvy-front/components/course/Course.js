@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
 import gql from "graphql-tag";
-import { Mutation, Query } from "react-apollo";
+import { Mutation, Query } from "@apollo/client/react/components";
 
 const SINGLE_COURSE_VISIT_QUERY = gql`
   query SINGLE_COURSE_VISIT_QUERY($coursePageId: String!, $student: String!) {
@@ -166,7 +166,6 @@ export default class Course extends Component {
 
   render() {
     const { coursePage, id, me } = this.props;
-    console.log(me.me.id);
     let forums = [];
     let ratings = [];
     let average;

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
-import User from "./User";
+import { useUser } from "./User";
 import Signup from "./auth/Signup";
 import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
@@ -236,195 +236,220 @@ const Nav = (props) => {
   };
 
   const changeState = (dataFromChild) => setAuth(dataFromChild);
+  const me = useUser();
   return (
-    <User>
-      {({ data: me }) => (
+    <>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+      {width > 800 && (
         <>
-          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-          {width > 800 && (
-            <>
-              <StyledHeader>
-                <CourseMenu>
-                  <Link prefetch href="/">
-                    <div className="logo">
-                      <a>BeSavvy</a>
-                    </div>
-                  </Link>
-
-                  <Link prefetch href="/blog">
-                    <div>
-                      <a>{props.t("blog")}</a>
-                    </div>
-                  </Link>
-                  {me && me !== null ? (
-                    <>
-                      {me.status && me.status === "AUTHOR" && (
-                        <Link prefetch href="/educator">
-                          <div>
-                            <a>{props.t("my")}</a>
-                          </div>
-                        </Link>
-                      )}
-                      {me.status && me.status === "HR" && (
-                        <Link prefetch href="/educator">
-                          <div>
-                            <a>{props.t("my")}</a>
-                          </div>
-                        </Link>
-                      )}
-                      {me.status && me.status === "SAVVY_AUTHOR" && (
-                        <Link prefetch href="/educator">
-                          <div>
-                            <a>{props.t("my")}</a>
-                          </div>
-                        </Link>
-                      )}
-                    </>
-                  ) : null}
-                </CourseMenu>
-                <UserData>
-                  <div className="imgGroup">
-                    <div className="img">
-                      <img
-                        src="../../static/uk.svg"
-                        onClick={() => i18n.changeLanguage("en")}
-                      />
-                    </div>
-                    <div className="img">
-                      <img
-                        src="../../static/russia.svg"
-                        onClick={() => i18n.changeLanguage("ru")}
-                      />
-                    </div>
-                  </div>
-                  {me ? (
-                    <Link
-                      href={{
-                        pathname: "/account",
-                        query: { id: me.id },
-                      }}
-                    >
-                      <a className="name">
-                        {me.surname
-                          ? `${me.name} ${me.surname} ${me.level.level}`
-                          : `${me.name} ${me.level.level}`}
-                        {/* {me.surname ? `${me.name} ${me.surname}` : `${me.name}`} */}
-                      </a>
-                    </Link>
-                  ) : null}
-                  {me ? <Signout /> : null}
-                  {!me && (
-                    <Button onClick={(e) => toggleModal()}>
-                      <a>{props.t("signup")}</a>
-                    </Button>
-                  )}
-                </UserData>
-              </StyledHeader>
-              <StyledModal
-                isOpen={isOpen}
-                onBackgroundClick={toggleModal}
-                onEscapeKeydown={toggleModal}
-              >
-                {auth === "signin" && (
-                  <Signin getData={changeState} closeNavBar={toggleModal} />
-                )}
-                {auth === "signup" && (
-                  <Signup getData={changeState} closeNavBar={toggleModal} />
-                )}
-                {auth === "reset" && <RequestReset getData={changeState} />}
-              </StyledModal>
-            </>
-          )}
-          {width < 800 && (
-            <>
-              <StyledHeader>
-                <Span onClick={(e) => openNav()}>
-                  <IoMdMenu size={32} />
-                </Span>
+          <StyledHeader>
+            <CourseMenu>
+              <Link prefetch href="/">
                 <div className="logo">
-                  {me ? (
-                    <Link
-                      href={{
-                        pathname: "/account",
-                        query: { id: me.id },
-                      }}
-                    >
-                      <a className="name">
-                        {me.surname ? `${me.name} ${me.surname}` : me.name}
-                      </a>
-                    </Link>
-                  ) : null}
-                  {!me && (
-                    <Button onClick={(e) => toggleModal()}>
-                      <a>{props.t("signup")}</a>
-                    </Button>
-                  )}
+                  <a>BeSavvy App</a>
                 </div>
-              </StyledHeader>
+              </Link>
 
-              <SideMenu>
-                <div id="mySidenav" class="sidenav">
-                  <a
-                    href="javascript:void(0)"
-                    class="closebtn"
-                    onClick={(e) => closeNav()}
-                  >
-                    &times;
+              <Link prefetch href="/blog">
+                <div>
+                  <a>
+                    {/* {this.props.t("blof")} */}
+                    Блог
                   </a>
-                  {me && me.status === "AUTHOR" && (
-                    <Link prefetch href="/educator">
-                      <button onClick={(e) => closeNav()}>
-                        <a>{props.t("my")}</a>
-                      </button>
-                    </Link>
-                  )}
-                  {me && me.status === "SAVVY_AUTHOR" && (
-                    <Link prefetch href="/educator">
-                      <button onClick={(e) => closeNav()}>
-                        <a>{props.t("my")}</a>
-                      </button>
-                    </Link>
-                  )}
-                  <Link
-                    href={{
-                      pathname: "/courses",
-                    }}
-                  >
-                    <button onClick={(e) => closeNav()}>
-                      <a>{props.t("my")}</a>
-                    </button>
-                  </Link>
-                  <Link
-                    href={{
-                      pathname: "/blog",
-                    }}
-                  >
-                    <button onClick={(e) => closeNav()}>
-                      <a>{props.t("blog")}</a>
-                    </button>
-                  </Link>
-                  {me ? <Signout /> : null}
                 </div>
-              </SideMenu>
-              <StyledModal
-                isOpen={isOpen}
-                onBackgroundClick={toggleModal}
-                onEscapeKeydown={toggleModal}
-              >
-                {auth === "signin" && (
-                  <Signin getData={changeState} closeNavBar={toggleModal} />
-                )}
-                {auth === "signup" && (
-                  <Signup getData={changeState} closeNavBar={toggleModal} />
-                )}
-                {auth === "reset" && <RequestReset getData={changeState} />}
-              </StyledModal>
-            </>
-          )}
+              </Link>
+              {me && me !== null ? (
+                <>
+                  {me.status && me.status === "AUTHOR" && (
+                    <Link prefetch href="/educator">
+                      <div>
+                        <a>
+                          {/* {this.props.t("my")} */}
+                          Мои курсы
+                        </a>
+                      </div>
+                    </Link>
+                  )}
+                  {me.status && me.status === "HR" && (
+                    <Link prefetch href="/educator">
+                      <div>
+                        <a>
+                          {/* {this.props.t("my")} */}
+                          Мои курсы
+                        </a>
+                      </div>
+                    </Link>
+                  )}
+                  {me.status && me.status === "SAVVY_AUTHOR" && (
+                    <Link prefetch href="/educator">
+                      <div>
+                        <a>
+                          {/* {this.props.t("my")} */}
+                          Мои курсы
+                        </a>
+                      </div>
+                    </Link>
+                  )}
+                </>
+              ) : null}
+            </CourseMenu>
+            <UserData>
+              <div className="imgGroup">
+                <div className="img">
+                  <img
+                    src="../../static/uk.svg"
+                    onClick={() => i18n.changeLanguage("en")}
+                  />
+                </div>
+                <div className="img">
+                  <img
+                    src="../../static/russia.svg"
+                    onClick={() => i18n.changeLanguage("ru")}
+                  />
+                </div>
+              </div>
+              {me ? (
+                <Link
+                  href={{
+                    pathname: "/account",
+                    query: { id: me.id },
+                  }}
+                >
+                  <a className="name">
+                    {me.surname
+                      ? `${me.name} ${me.surname} ${me.level.level}`
+                      : `${me.name} ${me.level.level}`}
+                    {/* {me.surname ? `${me.name} ${me.surname}` : `${me.name}`} */}
+                  </a>
+                </Link>
+              ) : null}
+              {me ? <Signout /> : null}
+              {!me && (
+                <Button onClick={(e) => toggleModal()}>
+                  <a>
+                    {/* {this.props.t("blof")} */}
+                    Войти
+                  </a>
+                </Button>
+              )}
+            </UserData>
+          </StyledHeader>
+          <StyledModal
+            isOpen={isOpen}
+            onBackgroundClick={toggleModal}
+            onEscapeKeydown={toggleModal}
+          >
+            {auth === "signin" && (
+              <Signin getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "signup" && (
+              <Signup getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "reset" && <RequestReset getData={changeState} />}
+          </StyledModal>
         </>
       )}
-    </User>
+      {width < 800 && (
+        <>
+          <StyledHeader>
+            <Span onClick={(e) => openNav()}>
+              <IoMdMenu size={32} />
+            </Span>
+            <div className="logo">
+              {me ? (
+                <Link
+                  href={{
+                    pathname: "/account",
+                    query: { id: me.id },
+                  }}
+                >
+                  <a className="name">
+                    {me.surname ? `${me.name} ${me.surname}` : me.name}
+                  </a>
+                </Link>
+              ) : null}
+              {!me && (
+                <Button onClick={(e) => toggleModal()}>
+                  <a>Войти</a>
+                </Button>
+              )}
+            </div>
+          </StyledHeader>
+
+          <SideMenu>
+            <div id="mySidenav" class="sidenav">
+              <a
+                href="javascript:void(0)"
+                class="closebtn"
+                onClick={(e) => closeNav()}
+              >
+                &times;
+              </a>
+              {me && me.status === "AUTHOR" && (
+                <Link prefetch href="/educator">
+                  <button onClick={(e) => closeNav()}>
+                    <a>
+                      {/* {this.props.t("blof")} */}
+                      Мли курсы
+                    </a>
+                  </button>
+                </Link>
+              )}
+              {me && me.status === "SAVVY_AUTHOR" && (
+                <Link prefetch href="/educator">
+                  <button onClick={(e) => closeNav()}>
+                    <a>
+                      {/* {this.props.t("blof")} */}
+                      Мои курсы
+                    </a>
+                  </button>
+                </Link>
+              )}
+              <Link
+                href={{
+                  pathname: "/courses",
+                }}
+              >
+                <button onClick={(e) => closeNav()}>
+                  <a>
+                    {/* {this.props.t("blof")} */}
+                    Курсы
+                  </a>
+                </button>
+              </Link>
+              <Link
+                href={{
+                  pathname: "/blog",
+                }}
+              >
+                <button onClick={(e) => closeNav()}>
+                  <a>
+                    {/* {this.props.t("blof")} */}
+                    Блог
+                  </a>
+                </button>
+              </Link>
+              {me ? <Signout /> : null}
+            </div>
+          </SideMenu>
+          <StyledModal
+            isOpen={isOpen}
+            onBackgroundClick={toggleModal}
+            onEscapeKeydown={toggleModal}
+          >
+            {auth === "signin" && (
+              <Signin getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "signup" && (
+              <Signup getData={changeState} closeNavBar={toggleModal} />
+            )}
+            {auth === "reset" && <RequestReset getData={changeState} />}
+          </StyledModal>
+        </>
+      )}
+    </>
   );
 };
 
 export default withTranslation("common")(Nav);
+// export default Nav;

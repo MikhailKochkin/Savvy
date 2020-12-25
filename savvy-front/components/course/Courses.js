@@ -1,25 +1,22 @@
-import Landing from "./Landing";
-import Media from "./Media";
-import Reviews from "./Reviews";
 import Search from "./Search";
-import Tech from "../Tech";
+import Landing from "./Landing";
 import Contact from "../Contact";
-import User from "../User";
+import Tech from "../Tech";
+import Reviews from "./Reviews";
+import Media from "./Media";
+import { useUser } from "../User";
 
 const Courses = () => {
+  const me = useUser();
   return (
-    // <User>
-    //   {({ data: me }) => (
     <>
       <Landing />
-      {/* <Search me={me} /> */}
+      <Search me={me} />
       <Media />
       <Reviews />
       <Tech />
       <Contact />
     </>
-    //   )}
-    // </User>
   );
 };
 

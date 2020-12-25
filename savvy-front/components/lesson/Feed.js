@@ -87,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
+  // console.log(props.my_result);
   const [num, setNum] = useState(
     props.my_result &&
       props.my_result.progress !== null &&
@@ -95,7 +96,7 @@ const Feed = (props) => {
       ? props.my_result.progress - 1
       : 0
   );
-  console.log(props.my_result.progress);
+  console.log(props.my_result);
   const classes = useStyles();
 
   const move = async (e) => {
@@ -182,6 +183,7 @@ const Feed = (props) => {
       }
     }
   }, [0]);
+  console.log(props.coursePageID);
   return (
     <Styles>
       {props.components.slice(0, num + 2).map((c, i) => (
