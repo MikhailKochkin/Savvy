@@ -5,17 +5,21 @@ const { DateTimeResolver, JSONObjectResolver } = require("graphql-scalars");
 const { GraphQLScalarType } = require("graphql/type");
 const { makeSchema, connectionPlugin } = require("@nexus/schema");
 const types = require("./types");
+const { ApolloServer } = require("apollo-server");
 
 const prisma = new PrismaClient();
 
+function createContext() {
+  return { prisma };
+}
+
 function createServer() {
-  return new GraphQLServer({
-    context: (request) => {
-      return {
-        ...request,
-        prisma,
-      };
+  return new ApolloServer({
+    cors: {
+      origin: "*", // <- allow request from all domains
+      credentials: true,
     },
+    context: createContext,
     schema: makeSchema({
       types,
       plugins: [
@@ -37,19 +41,6 @@ function createServer() {
         schema: __dirname + "/../schema.graphql",
         typegen: __dirname + "/generated/nexus.ts",
       },
-      // typegenAutoConfig: {
-      //   contextType: "Context.Context",
-      //   sources: [
-      //     {
-      //       source: "@prisma/client",
-      //       alias: "prisma",
-      //     },
-      //     {
-      //       source: require.resolve("./context.js"),
-      //       alias: "context",
-      //     },
-      //   ],
-      // },
     }),
   });
 }
