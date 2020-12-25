@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nexus/schema": "^0.20.1",
-    "@prisma/client": "^2.13.1",
+    "@prisma/client": "^2.11.0",
     "apollo-server": "^2.19.1",
     "apollo-server-express": "^1.4.0",
     "babel-preset-env": "^1.7.0",
