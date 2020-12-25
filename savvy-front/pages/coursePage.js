@@ -1,10 +1,6 @@
 import CoursePage from "../components/course/CoursePage";
 
-const CoursePagePage = (props) => (
-  <div>
-    <CoursePage id={props.query.id} />
-  </div>
-);
+const CoursePagePage = (props) => <CoursePage id={props.query.id} />;
 
 CoursePagePage.getInitialProps = async () => ({
   namespacesRequired: ["search"],
