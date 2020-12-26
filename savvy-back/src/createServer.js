@@ -10,6 +10,7 @@ const types = require("./types");
 const prisma = new PrismaClient();
 
 const server = new ApolloServer({
+  playground: true,
   schema: makeSchema({
     types,
     plugins: [
