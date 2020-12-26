@@ -4,6 +4,7 @@ import { getDataFromTree } from "@apollo/react-ssr";
 import { createUploadLink } from "apollo-upload-client";
 import withApollo from "next-with-apollo";
 import { endpoint, prodEndpoint } from "../config";
+import https from "https";
 
 function createClient({ headers, initialState }) {
   return new ApolloClient({
@@ -21,8 +22,12 @@ function createClient({ headers, initialState }) {
       createUploadLink({
         // uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
         uri: prodEndpoint,
+        // fetchOptions: {
+        //   credentials: "include",
+        // },
         fetchOptions: {
           credentials: "include",
+          // agent: new https.Agent({ rejectUnauthorized: false }),
         },
         // pass the headers along from this request. This enables SSR with logged in state
         headers,
