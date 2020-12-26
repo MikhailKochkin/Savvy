@@ -18,6 +18,7 @@ const start = () => {
       const { userId } = jwt.verify(token, process.env.APP_SECRET);
       // put the userId onto the req for future requests to access
       req.userId = userId;
+      console.log(userId);
     }
     next();
   });
@@ -32,6 +33,8 @@ const start = () => {
       "{ id, permissions, email, name }"
     );
     req.user = user;
+    console.log(user);
+
     next();
   });
 
