@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
 
 const server = new ApolloServer({
   playground: true,
+  introspection: true,
   schema: makeSchema({
     types,
     plugins: [
