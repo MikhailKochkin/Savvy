@@ -10,12 +10,6 @@ const prisma = new PrismaClient();
 
 function createServer() {
   return new GraphQLServer({
-    context: (req) => {
-      return {
-        ...req,
-        prisma,
-      };
-    },
     schema: makeSchema({
       types,
       plugins: [
@@ -36,6 +30,12 @@ function createServer() {
       outputs: {
         schema: __dirname + "/../schema.graphql",
         typegen: __dirname + "/generated/nexus.ts",
+      },
+      context: (req) => {
+        return {
+          ...req,
+          prisma,
+        };
       },
       // typegenAutoConfig: {
       //   contextType: "Context.Context",
