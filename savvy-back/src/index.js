@@ -21,6 +21,7 @@ var corsOptions = {
     process.env.FRONTEND_URL8,
     process.env.FRONTEND_URL9,
     process.env.FRONTEND_URL10,
+    process.env.FRONTEND_URL11,
   ],
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
