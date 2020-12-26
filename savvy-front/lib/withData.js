@@ -15,15 +15,12 @@ function createClient({ headers, initialState }) {
               `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
             )
           );
-        if (networkError)
-          console.log(
-            `[Network error]: ${networkError}. Backend is unreachable. Is it running?`
-          );
+        if (networkError) console.log(`[Network error]: ${networkError}`);
       }),
       // this uses apollo-link-http under the hood, so all the options here come from that package
       createUploadLink({
-        uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
-        // uri: endpoint,
+        // uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
+        uri: prodEndpoint,
         fetchOptions: {
           credentials: "include",
         },

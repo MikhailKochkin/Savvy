@@ -8,6 +8,8 @@ const server = createServer();
 
 const WORKERS = process.env.WEB_CONCURRENCY || 1;
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const start = () => {
   server.express.use(cookieParser());
 
