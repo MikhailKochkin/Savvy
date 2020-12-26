@@ -10,9 +10,9 @@ const prisma = new PrismaClient();
 
 function createServer() {
   return new GraphQLServer({
-    context: (request) => {
+    context: (req) => {
       return {
-        ...request,
+        ...req,
         prisma,
       };
     },
