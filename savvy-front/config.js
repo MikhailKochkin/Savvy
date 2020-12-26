@@ -1,4 +1,4 @@
-export const endpoint = `http://localhost:4444`;
+export const endpoint = `http://localhost:4444/graphql`;
 export const prodEndpoint = `https://savvy-yoga-production.herokuapp.com`;
 // export const prodEndpoint = `https://api.besavvy.app`;
 export const CoursePerPage = 6;
