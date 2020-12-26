@@ -53,6 +53,13 @@ input BoolNullableListFilter {
   equals: [Boolean!]
 }
 
+type BusinessClient {
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  updatedAt: DateTime!
+}
+
 input CareerTrackListRelationFilter {
   every: CareerTrackWhereInput
   none: CareerTrackWhereInput
@@ -878,6 +885,7 @@ enum Level {
 }
 
 type Mutation {
+  createBusinessClient(email: String): BusinessClient
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createConstruction(answer: [String], hint: String, lessonId: String, name: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult

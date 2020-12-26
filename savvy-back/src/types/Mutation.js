@@ -1846,6 +1846,20 @@ const Mutation = mutationType({
         return Feedback;
       },
     });
+    t.field("createBusinessClient", {
+      type: "BusinessClient",
+      args: {
+        email: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const client = await ctx.prisma.businessClient.create({
+          data: {
+            ...args,
+          },
+        });
+        return client;
+      },
+    });
   },
 });
 

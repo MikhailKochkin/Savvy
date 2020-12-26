@@ -55,8 +55,19 @@ const UserLevel = objectType({
   },
 });
 
+const BusinessClient = objectType({
+  name: "BusinessClient",
+  definition(t) {
+    t.model.id();
+    t.model.email();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   User,
   Feedback,
   UserLevel,
+  BusinessClient,
 };

@@ -1378,6 +1378,12 @@ export interface NexusGenObjects {
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
   }
+  BusinessClient: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Clause: { // root type
     commentary: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -1744,6 +1750,12 @@ export interface NexusGenFieldTypes {
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
   }
+  BusinessClient: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Clause: { // field return type
     commentary: string; // String!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -1935,6 +1947,7 @@ export interface NexusGenFieldTypes {
     visitsNumber: number | null; // Int
   }
   Mutation: { // field return type
+    createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
     createConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     createConstructionResult: NexusGenRootTypes['ConstructionResult'] | null; // ConstructionResult
@@ -2284,6 +2297,12 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'User'
   }
+  BusinessClient: { // field return type name
+    createdAt: 'DateTime'
+    email: 'String'
+    id: 'String'
+    updatedAt: 'DateTime'
+  }
   Clause: { // field return type name
     commentary: 'String'
     createdAt: 'DateTime'
@@ -2475,6 +2494,7 @@ export interface NexusGenFieldTypeNames {
     visitsNumber: 'Int'
   }
   Mutation: { // field return type name
+    createBusinessClient: 'BusinessClient'
     createClause: 'Clause'
     createConstruction: 'Construction'
     createConstructionResult: 'ConstructionResult'
@@ -2969,6 +2989,9 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    createBusinessClient: { // args
+      email?: string | null; // String
+    }
     createClause: { // args
       commentary?: string | null; // String
       documentId?: string | null; // String
