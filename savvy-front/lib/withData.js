@@ -4,7 +4,6 @@ import { getDataFromTree } from "@apollo/react-ssr";
 import { createUploadLink } from "apollo-upload-client";
 import withApollo from "next-with-apollo";
 import { endpoint, prodEndpoint } from "../config";
-require("newrelic");
 
 function createClient({ headers, initialState }) {
   return new ApolloClient({
