@@ -21,7 +21,9 @@ function createClient({ headers, initialState }) {
       createUploadLink({
         uri: process.env.NODE_ENV === "development" ? endpoint : prodEndpoint,
         // uri: prodEndpoint,
-        credentials: "include",
+        fetchOptions: {
+          credentials: "include",
+        },
         // pass the headers along from this request. This enables SSR with logged in state
         headers,
       }),

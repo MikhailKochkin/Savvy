@@ -39,45 +39,8 @@ const FooterStyles = styled.div`
   }
 `;
 
-const Footer = ({ t }) => (
+const Footer = () => (
   <FooterStyles>
-    <div className="block">
-      <div>{t("ip")}</div>
-      <div>{t("inn")}</div>
-      <div>{t("ogrnip")}</div>
-    </div>
-    <div className="block">
-      <div>
-        <Link
-          href={{
-            pathname: "/legal",
-            query: { name: "terms" },
-          }}
-        >
-          <a>{t("terms")}</a>
-        </Link>
-      </div>
-      <div>
-        <Link
-          href={{
-            pathname: "/legal",
-            query: { name: "privacy" },
-          }}
-        >
-          <a>{t("policy")}</a>
-        </Link>
-      </div>
-      <div>
-        <Link
-          href={{
-            pathname: "/legal",
-            query: { name: "offer" },
-          }}
-        >
-          <a>{t("offer")}</a>
-        </Link>
-      </div>
-    </div>
     <div className="mini">
       <div>
         <a target="_blank" href="https://vk.com/besavvylawyer">

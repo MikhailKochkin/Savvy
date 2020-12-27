@@ -1,14 +1,10 @@
-import React from "react";
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { withRouter } from "next/router";
-import { ModalProvider } from "styled-react-modal";
 
-import Nav from "./Nav";
+// import Nav from "./Nav";
 import Meta from "./Meta";
-import Footer from "./Footer";
-import Header from "./Header";
-import Layout from "../components/Layout";
-import { useUser } from "./User";
+// import Layout from "../components/Layout";
+// import { useUser } from "./User";
 
 const theme = {
   blue: "#6DAAE1",
@@ -34,10 +30,9 @@ const Inner = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-      @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap&subset=cyrillic');
 
     html {
-        font-family: 'Montserrat', sans-serif;
+        font-family: Gill Sans, sans-serif;
         box-sizing: border-box;
         font-size: 10px;
         height:100%;
@@ -61,21 +56,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Page = ({ children, router }) => {
-  const me = useUser();
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
         <>
           <GlobalStyle />
           <Meta />
-          <Layout>
-            <ModalProvider>
-              <Header />
-              <Nav />
-              <Inner>{children}</Inner>
-              <Footer />
-            </ModalProvider>
-          </Layout>
+          <Inner>{children}</Inner>
         </>
       </StyledPage>
     </ThemeProvider>
