@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import Note from "./notes/Note";
 import Shots from "./shots/Shots";
@@ -191,7 +191,7 @@ class StoryEx extends Component {
     });
     return (
       <Container>
-        <ReactCSSTransitionGroup
+        <CSSTransitionGroup
           transitionName="fade"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={10}
@@ -205,7 +205,7 @@ class StoryEx extends Component {
             lessonID={lesson.id}
             my_result={this.props.my_result}
           />
-        </ReactCSSTransitionGroup>
+        </CSSTransitionGroup>
       </Container>
     );
   }

@@ -11,7 +11,7 @@ import MobileStepper from "@material-ui/core/MobileStepper";
 import Button from "@material-ui/core/Button";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import { CSSTransitionGroup } from "react-transition-group";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
 import Panel from "./Panel";
@@ -310,7 +310,7 @@ const NSL = (props) => {
               <LessonPart
                 task={lesson.structure[activeStep].type === "construction"}
               >
-                <ReactCSSTransitionGroup
+                <CSSTransitionGroup
                   transitionName="example"
                   transitionEnterTimeout={5500}
                   transitionLeaveTimeout={3300}
@@ -321,7 +321,7 @@ const NSL = (props) => {
                     lesson={lesson}
                     step={activeStep}
                   />
-                </ReactCSSTransitionGroup>
+                </CSSTransitionGroup>
               </LessonPart>
               <MobileStepper
                 variant="progress"

@@ -7,7 +7,7 @@ import Link from "next/link";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import { CSSTransitionGroup } from "react-transition-group";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
@@ -164,16 +164,16 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           surname
         }
       }
-      # shotResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   shot {
-      #     id
-      #   }
-      #   answer
-      # }
+      shotResults {
+        id
+        student {
+          id
+        }
+        shot {
+          id
+        }
+        answer
+      }
       testResults {
         id
         student {
@@ -467,7 +467,7 @@ const NewSingleLesson = (props) => {
                         </Head2>
                       )}
                     <LessonPart>
-                      <ReactCSSTransitionGroup transitionName="example">
+                      <CSSTransitionGroup transitionName="example">
                         <StoryEx
                           tasks={lesson.structure.lessonItems}
                           me={me}
@@ -476,7 +476,7 @@ const NewSingleLesson = (props) => {
                           my_result={my_result}
                           coursePageID={lesson.coursePage.id}
                         />
-                      </ReactCSSTransitionGroup>
+                      </CSSTransitionGroup>
                     </LessonPart>
                     {/* {me && (
                       <Panel level={me.level.level} change={lesson.change} />

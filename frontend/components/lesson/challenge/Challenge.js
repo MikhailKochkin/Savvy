@@ -9,7 +9,7 @@ import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import AreYouEnrolled from "../../auth/AreYouEnrolled";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import { CSSTransitionGroup } from "react-transition-group";
 import Front from "./Front";
 import Tasks from "./Tasks";
 import PleaseSignIn from "../../auth/PleaseSignIn";
@@ -303,7 +303,7 @@ const Challenge = (props) => {
                             </Head2>
                           )}
                         <Box>
-                          <ReactCSSTransitionGroup
+                          <CSSTransitionGroup
                             transitionName="example"
                             transitionEnterTimeout={500}
                             transitionLeaveTimeout={300}
@@ -326,7 +326,7 @@ const Challenge = (props) => {
                                 results={lesson.challengeResults}
                               />
                             )}
-                          </ReactCSSTransitionGroup>
+                          </CSSTransitionGroup>
                         </Box>
                       </Container>{" "}
                     </>
