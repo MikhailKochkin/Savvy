@@ -112,7 +112,6 @@ const Signin = (props) => {
           onSubmit={async (e) => {
             e.preventDefault();
             const res = await signin();
-            // cookies.set("token", res.data.signin.token, [{ httpOnly: true }]);
             props.closeNavBar(true);
             setPassword("");
             setEmail("");
