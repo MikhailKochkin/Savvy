@@ -46,12 +46,7 @@ const server = new ApolloServer({
     //   ],
     // },
   }),
-  context: (request) => {
-    return {
-      ...request,
-      prisma,
-    };
-  },
+  context: (req) => ({ ...req, prisma }),
 });
 
 exports.server = server;

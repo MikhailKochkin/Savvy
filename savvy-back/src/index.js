@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
     // put the userId onto the req for future requests to access
     req.userId = userId;
-    console.log(1, req.userId);
+    // console.log(1, req.userId);
   }
   next();
 });
@@ -50,7 +50,7 @@ app.use(async (req, res, next) => {
   );
 
   req.user = user;
-  console.log(2, req.user.id);
+  // console.log(2, req.user.id);
 
   next();
 });
