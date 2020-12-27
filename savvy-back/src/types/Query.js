@@ -30,7 +30,6 @@ const Query = queryType({
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {
-        console.log("me query", ctx.req);
         if (!ctx.res.req.userId) {
           return null;
         }

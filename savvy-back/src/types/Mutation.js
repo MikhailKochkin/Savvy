@@ -121,7 +121,11 @@ const Mutation = mutationType({
         let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
           expiresIn: 1000 * 60 * 60 * 24 * 365,
         });
-        console.log(token);
+        ctx.res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "None",
+        });
         return { user, token };
       },
     });
