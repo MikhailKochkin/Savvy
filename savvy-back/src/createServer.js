@@ -1,5 +1,4 @@
-const { GraphQLServer } = require("graphql-yoga");
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 const { PrismaClient } = require("@prisma/client");
 const { nexusPrisma } = require("nexus-plugin-prisma");
 const { DateTimeResolver, JSONObjectResolver } = require("graphql-scalars");

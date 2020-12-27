@@ -29,6 +29,33 @@ var corsOptions = {
 
 const app = express();
 
+app.use(cookieParser());
+
+app.use(async (req, res, next) => {
+  const { token } = req.cookies;
+  if (token) {
+    const { userId } = jwt.verify(token, process.env.APP_SECRET);
+    // put the userId onto the req for future requests to access
+    req.userId = userId;
+    console.log(1, req.userId);
+  }
+  next();
+});
+
+app.use(async (req, res, next) => {
+  // if they aren't logged in, skip this
+  if (!req.userId) return next();
+  const user = await prisma.user.findUnique(
+    { where: { id: req.userId } },
+    "{ id, permissions, email, name }"
+  );
+
+  req.user = user;
+  console.log(2, req.user.id);
+
+  next();
+});
+
 // app.use((req, res, next) => {
 //   // console.log("req", req);
 //   console.log("куки", req.cookies);

@@ -30,13 +30,12 @@ const Query = queryType({
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {
-        console.log("me query", ctx.request.userId);
-
-        if (!ctx.request.userId) {
+        console.log("me query", ctx.res.req.userId);
+        if (!ctx.res.req.userId) {
           return null;
         }
         const user = await ctx.prisma.user.findUnique({
-          where: { id: ctx.request.userId },
+          where: { id: ctx.res.req.userId },
         });
         return user;
       },
