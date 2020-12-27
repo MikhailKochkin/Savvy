@@ -47,7 +47,6 @@ const server = new ApolloServer({
     // },
   }),
   context: (request) => {
-    console.log(request.res.req.userId);
     return {
       ...request,
       prisma,

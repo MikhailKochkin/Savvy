@@ -31,9 +31,7 @@ app.use(cookieParser());
 
 app.use(async (req, res, next) => {
   const { token } = req.cookies;
-  console.log("req.headers.cookie", req.headers.cookie);
   console.log("req.cookies", req.cookies);
-  console.log("req.signedCookies", req.signedCookies);
   if (token) {
     const { userId } = jwt.verify(token, process.env.APP_SECRET);
     // put the userId onto the req for future requests to access
