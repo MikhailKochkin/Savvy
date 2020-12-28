@@ -3,6 +3,7 @@ import Landing from "../landing/Landing";
 import Contact from "../landing/Contact";
 // import Tech from "../landing/Tech";
 import Reviews from "../landing/Reviews";
+import Search from "../landing/Search";
 import Media from "../landing/Media";
 // import { useUser } from "../User";
 
@@ -11,7 +12,7 @@ const Courses = () => {
   return (
     <>
       <Landing />
-      {/* <Search me={me} /> */}
+      <Search me={null} />
       <Media />
       <Reviews />
       {/* <Tech /> */}

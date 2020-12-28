@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import ShownCourses from "./courseLists/ShownCourses";
+import ShownCourses from "../course/courseLists/ShownCourses";
 import smoothscroll from "smoothscroll-polyfill";
 // import { withTranslation } from "../../i18n";
 
