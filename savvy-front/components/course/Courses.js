@@ -1,6 +1,6 @@
 // import Search from "../landing/Search";
 import Landing from "../landing/Landing";
-// import Contact from "../landing/Contact";
+import Contact from "../landing/Contact";
 // import Tech from "../landing/Tech";
 import Reviews from "../landing/Reviews";
 import Media from "../landing/Media";
@@ -15,7 +15,7 @@ const Courses = () => {
       <Media />
       <Reviews />
       {/* <Tech /> */}
-      {/* <Contact /> */}
+      <Contact />
     </>
   );
 };
