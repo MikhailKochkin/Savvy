@@ -242,7 +242,7 @@ const Nav = (props) => {
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <User>
         {({ data }) => {
-          if (data) {
+          if (data && data.me) {
             me = data.me;
             console.log(me.id, me.name);
           } else {

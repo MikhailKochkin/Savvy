@@ -156,8 +156,8 @@ const Mutation = mutationType({
         console.log(ctx.res.cookie);
         ctx.res.cookie("token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "None",
+          // secure: process.env.NODE_ENV === "production",
+          // sameSite: "None",
         });
         // 4. Return the user and token
         return { user, token };
