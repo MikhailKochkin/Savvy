@@ -3,7 +3,7 @@ import Link from "next/link";
 // import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
-import { useUser } from "./User";
+// import { useUser } from "./User";
 // import Signup from "./auth/Signup";
 // import Signin from "./auth/Signin";
 // import RequestReset from "./auth/RequestReset";
@@ -236,7 +236,8 @@ const Nav = (props) => {
   };
 
   const changeState = (dataFromChild) => setAuth(dataFromChild);
-  const me = useUser();
+  // const me = useUser();
+  const me = null;
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
