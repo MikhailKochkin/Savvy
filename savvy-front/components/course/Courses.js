@@ -5,14 +5,14 @@ import Contact from "../landing/Contact";
 import Reviews from "../landing/Reviews";
 import Search from "../landing/Search";
 import Media from "../landing/Media";
-// import { useUser } from "../User";
+import { useUser } from "../User";
 
 const Courses = () => {
-  // const me = useUser();
+  const me = useUser();
   return (
     <>
       <Landing />
-      <Search me={null} />
+      <Search me={me} />
       <Media />
       <Reviews />
       {/* <Tech /> */}
