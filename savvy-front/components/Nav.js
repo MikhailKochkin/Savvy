@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
