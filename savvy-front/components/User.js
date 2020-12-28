@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import { Query } from "@apollo/client/react/components";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/client";
 
 const CURRENT_USER_QUERY = gql`
   query {
@@ -76,14 +76,11 @@ const CURRENT_USER_QUERY = gql`
   }
 `;
 
-const User = (props) => (
-  <Query {...props} query={CURRENT_USER_QUERY} fetchPolicy={"cache-first"}>
-    {(payload) => {
-      console.log(payload);
-      return props.children(payload);
-    }}
-  </Query>
-);
+function useUser() {
+  const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
+  if (data) {
+    return data.me;
+  }
+}
 
-export default User;
-export { CURRENT_USER_QUERY };
+export { CURRENT_USER_QUERY, useUser };
