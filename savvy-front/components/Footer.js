@@ -1,18 +1,5 @@
 import styled from "styled-components";
 import Link from "next/link";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
-
-const CURRENT_USER_QUERY = gql`
-  query {
-    me {
-      id
-      email
-      name
-      surname
-    }
-  }
-`;
 
 const FooterStyles = styled.div`
   background-color: #001f4e;
@@ -51,8 +38,6 @@ const FooterStyles = styled.div`
 `;
 
 const Footer = () => {
-  const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
-  console.log("footer own query", data);
   return (
     <FooterStyles>
       <div className="block">
