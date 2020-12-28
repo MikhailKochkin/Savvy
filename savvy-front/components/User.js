@@ -77,12 +77,11 @@ const CURRENT_USER_QUERY = gql`
 `;
 
 const User = (props) => (
-  <Query
-    {...props}
-    query={CURRENT_USER_QUERY}
-    fetchPolicy={"cache-and-network"}
-  >
-    {(payload) => props.children(payload)}
+  <Query {...props} query={CURRENT_USER_QUERY} fetchPolicy={"cache-first"}>
+    {(payload) => {
+      console.log(payload);
+      return props.children(payload);
+    }}
   </Query>
 );
 
