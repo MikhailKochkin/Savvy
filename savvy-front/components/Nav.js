@@ -330,7 +330,7 @@ const Nav = (props) => {
                   <Button onClick={(e) => toggleModal()}>
                     <a>
                       {props.t("signup")}
-                      Войти
+                      {/* Войти */}
                     </a>
                   </Button>
                 )}
