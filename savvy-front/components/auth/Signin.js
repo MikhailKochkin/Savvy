@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -116,7 +116,7 @@ const Signin = (props) => {
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>{props.t("header")}</Title>
+            <Title>Войдите на BeSavvy</Title>
             <Error error={error} />
             <Input
               type="email"
@@ -124,7 +124,7 @@ const Signin = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               id="standard-basic"
               name="email"
-              placeholder={props.t("mail")}
+              placeholder="Электронная почта"
               label="Электронная почта"
             />
             <Input
@@ -132,7 +132,7 @@ const Signin = (props) => {
               name="password"
               label="Пароль"
               value={password}
-              placeholder={props.t("password")}
+              placeholder="Пароль"
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
@@ -141,17 +141,17 @@ const Signin = (props) => {
               color="primary"
               className={classes.button}
             >
-              {loading ? props.t("signing_in") : props.t("sign_in")}
+              {loading ? "Вхожу" : "Войти"}
             </Button>
             <Transit>
               <div>
                 <span name="reset" onClick={change}>
-                  {props.t("forgot")}
+                  Забыли пароль?
                 </span>
               </div>
-              {props.t("not_member")}
+              Ещё не зарегистрированы?
               <span name="signup" onClick={change}>
-                {props.t("create")}
+                Зарегистрироваться
               </span>
             </Transit>
           </Fieldset>
@@ -161,5 +161,7 @@ const Signin = (props) => {
   );
 };
 
-export default withTranslation("signup")(Signin);
+// export default withTranslation("signup")(Signin);
+export default Signin;
+
 export { SIGNIN_MUTATION };

@@ -194,7 +194,7 @@ const Signup = (props) => {
             aria-busy={loading}
             className={classes.root}
           >
-            <Title>Зарегистрируйтесь на Savvy App</Title>
+            <Title>Зарегистрируйтесь на BeSavvy</Title>
             <Error error={error} />
             <Input
               className="name"

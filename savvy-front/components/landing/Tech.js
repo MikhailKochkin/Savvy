@@ -2,7 +2,7 @@ import styled from "styled-components";
 // import Icon from "react-icons-kit";
 // import { ic_forum } from "react-icons-kit/md/ic_forum";
 // import { ic_laptop_mac } from "react-icons-kit/md/ic_laptop_mac";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   width: 100%;
@@ -103,5 +103,5 @@ const Tech = (props) => {
   );
 };
 
-export default withTranslation("search")(Tech);
-// export default Tech;
+// export default withTranslation("search")(Tech);
+export default Tech;

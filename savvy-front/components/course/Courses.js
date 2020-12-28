@@ -14,7 +14,7 @@ const Courses = () => {
       {/* <Search me={me} /> */}
       <Media />
       <Reviews />
-      <Tech />
+      {/* <Tech /> */}
       <Contact />
     </>
   );

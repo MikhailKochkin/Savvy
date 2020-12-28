@@ -9,7 +9,7 @@ import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
 // import { IoMdMenu } from "react-icons/io";
-import { i18n, withTranslation } from "../i18n";
+// import { i18n, withTranslation } from "../i18n";
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -294,7 +294,7 @@ const Nav = (props) => {
               ) : null}
             </CourseMenu>
             <UserData>
-              <div className="imgGroup">
+              {/* <div className="imgGroup">
                 <div className="img">
                   <img
                     src="../../static/uk.svg"
@@ -307,7 +307,7 @@ const Nav = (props) => {
                     onClick={() => i18n.changeLanguage("ru")}
                   />
                 </div>
-              </div>
+              </div> */}
               {me ? (
                 <Link
                   href={{
@@ -390,7 +390,7 @@ const Nav = (props) => {
                   <button onClick={(e) => closeNav()}>
                     <a>
                       {/* {this.props.t("blof")} */}
-                      Мли курсы
+                      Мои курсы
                     </a>
                   </button>
                 </Link>
@@ -451,5 +451,5 @@ const Nav = (props) => {
   );
 };
 
-export default withTranslation("common")(Nav);
-// export default Nav;
+// export default withTranslation("common")(Nav);
+export default Nav;

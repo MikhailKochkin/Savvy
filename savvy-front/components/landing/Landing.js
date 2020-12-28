@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const Banner = styled.div`
   display: flex;
@@ -45,10 +45,15 @@ const Landing = (props) => {
   return (
     <>
       <Banner id="banner">
-        <div className="text">{props.t("motto")}</div>
+        <div className="text">
+          {/* {props.t("motto")} */}
+          Интерактивные юридические онлайн курсы, которые помогают вам
+          приобретать практические навыки.👩🏼‍⚖
+        </div>
       </Banner>
     </>
   );
 };
 
-export default withTranslation("common")(Landing);
+export default Landing;
+// export default withTranslation("common")(Landing);

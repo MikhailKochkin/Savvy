@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   width: 100%;
@@ -56,14 +56,15 @@ const Button = styled.a`
   }
 `;
 
-const Contact = ({ t }) => {
+const Contact = () => {
   return (
     <Styles>
       <Box>
         <div>
-          {t("create1")}
+          Думаете о том, чтобы создать свой онлайн курс?
           <br />
-          {t("create2")}
+          {/* {t("create2")} */}
+          Подробно рассказываем, как это сделать.
         </div>
         <Link
           href={{
@@ -71,11 +72,15 @@ const Contact = ({ t }) => {
             query: { id: "ck1srkdul00l20763ut2aicn9" },
           }}
         >
-          <Button>{t("learn")}</Button>
+          <Button>
+            {/* {t("learn")} */}
+            Узнать
+          </Button>
         </Link>
       </Box>
     </Styles>
   );
 };
 
-export default withTranslation("search")(Contact);
+// export default withTranslation("search")(Contact);
+export default Contact;
