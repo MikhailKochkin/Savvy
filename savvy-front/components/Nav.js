@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Link from "next/link";
-// import Modal from "styled-react-modal";
+import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import User from "./User";
 // import Signup from "./auth/Signup";
-// import Signin from "./auth/Signin";
+import Signin from "./auth/Signin";
 // import RequestReset from "./auth/RequestReset";
 // import Signout from "./auth/Signout";
 // import { IoMdMenu } from "react-icons/io";
@@ -183,30 +183,30 @@ const UserData = styled.div`
   }
 `;
 
-// const StyledModal = Modal.styled`
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   background-color: white;
-//   border: 1px solid grey;
-//   border-radius: 10px;
-//   max-width: 40%;
-//   min-width: 400px;
-//   @media (max-width: 1300px) {
-//     max-width: 70%;
-//     min-width: 200px;
-//     margin: 10px;
-//     max-height: 100vh;
-//     overflow-y: scroll;
-//   }
-//   @media (max-width: 800px) {
-//     max-width: 90%;
-//     min-width: 200px;
-//     margin: 10px;
-//     max-height: 100vh;
-//     overflow-y: scroll;
-//   }
-// `;
+const StyledModal = Modal.styled`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 40%;
+  min-width: 400px;
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
 
 const Span = styled.span`
   margin-left: 10px;
@@ -236,68 +236,75 @@ const Nav = (props) => {
   };
 
   const changeState = (dataFromChild) => setAuth(dataFromChild);
-  // const me = useUser();
+  let me;
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <User>
-        {({ data: { me } }) => (
-          <>
-            {width > 800 && (
-              <>
-                <StyledHeader>
-                  <CourseMenu>
-                    <Link href="/">
-                      <div className="logo">
-                        <a>BeSavvy</a>
-                      </div>
-                    </Link>
+        {({ data }) => {
+          if (data) {
+            me = data.me;
+            console.log(me.id, me.name);
+          } else {
+            me = null;
+          }
+          return (
+            <>
+              {width > 800 && (
+                <>
+                  <StyledHeader>
+                    <CourseMenu>
+                      <Link href="/">
+                        <div className="logo">
+                          <a>BeSavvy</a>
+                        </div>
+                      </Link>
 
-                    <Link href="/blog">
-                      <div>
-                        <a>
-                          {/* {this.props.t("blof")} */}
-                          Блог
-                        </a>
-                      </div>
-                    </Link>
-                    {me && me !== null ? (
-                      <>
-                        {me.status && me.status === "AUTHOR" && (
-                          <Link href="/educator">
-                            <div>
-                              <a>
-                                {/* {this.props.t("my")} */}
-                                Мои курсы
-                              </a>
-                            </div>
-                          </Link>
-                        )}
-                        {me.status && me.status === "HR" && (
-                          <Link href="/educator">
-                            <div>
-                              <a>
-                                {/* {this.props.t("my")} */}
-                                Мои курсы
-                              </a>
-                            </div>
-                          </Link>
-                        )}
-                        {me.status && me.status === "SAVVY_AUTHOR" && (
-                          <Link href="/educator">
-                            <div>
-                              <a>
-                                {/* {this.props.t("my")} */}
-                                Мои курсы
-                              </a>
-                            </div>
-                          </Link>
-                        )}
-                      </>
-                    ) : null}
-                  </CourseMenu>
-                  <UserData>
-                    {/* <div className="imgGroup">
+                      <Link href="/blog">
+                        <div>
+                          <a>
+                            {/* {this.props.t("blof")} */}
+                            Блог
+                          </a>
+                        </div>
+                      </Link>
+                      {me && me !== null ? (
+                        <>
+                          {me.status && me.status === "AUTHOR" && (
+                            <Link href="/educator">
+                              <div>
+                                <a>
+                                  {/* {this.props.t("my")} */}
+                                  Мои курсы
+                                </a>
+                              </div>
+                            </Link>
+                          )}
+                          {me.status && me.status === "HR" && (
+                            <Link href="/educator">
+                              <div>
+                                <a>
+                                  {/* {this.props.t("my")} */}
+                                  Мои курсы
+                                </a>
+                              </div>
+                            </Link>
+                          )}
+                          {me.status && me.status === "SAVVY_AUTHOR" && (
+                            <Link href="/educator">
+                              <div>
+                                <a>
+                                  {/* {this.props.t("my")} */}
+                                  Мои курсы
+                                </a>
+                              </div>
+                            </Link>
+                          )}
+                        </>
+                      ) : null}
+                    </CourseMenu>
+                    <UserData>
+                      {/* <div className="imgGroup">
                 <div className="img">
                   <img
                     src="../../static/uk.svg"
@@ -311,147 +318,148 @@ const Nav = (props) => {
                   />
                 </div>
               </div> */}
-                    {me ? (
-                      <Link
-                        href={{
-                          pathname: "/account",
-                          query: { id: me.id },
-                        }}
-                      >
-                        <a className="name">
-                          {me.surname
-                            ? `${me.name} ${me.surname} ${me.level.level}`
-                            : `${me.name} ${me.level.level}`}
-                          {/* {me.surname ? `${me.name} ${me.surname}` : `${me.name}`} */}
-                        </a>
-                      </Link>
-                    ) : null}
-                    {/* {me ? <Signout /> : null} */}
-                    {!me && (
-                      <Button onClick={(e) => toggleModal()}>
-                        <a>
-                          {/* {this.props.t("blof")} */}
-                          Войти
-                        </a>
-                      </Button>
+                      {me ? (
+                        <Link
+                          href={{
+                            pathname: "/account",
+                            query: { id: me.id },
+                          }}
+                        >
+                          <a className="name">
+                            {me.surname
+                              ? `${me.name} ${me.surname} ${me.level.level}`
+                              : `${me.name} ${me.level.level}`}
+                            {/* {me.surname ? `${me.name} ${me.surname}` : `${me.name}`} */}
+                          </a>
+                        </Link>
+                      ) : null}
+                      {/* {me ? <Signout /> : null} */}
+                      {!me && (
+                        <Button onClick={(e) => toggleModal()}>
+                          <a>
+                            {/* {this.props.t("blof")} */}
+                            Войти
+                          </a>
+                        </Button>
+                      )}
+                    </UserData>
+                  </StyledHeader>
+                  <StyledModal
+                    isOpen={isOpen}
+                    onBackgroundClick={toggleModal}
+                    onEscapeKeydown={toggleModal}
+                  >
+                    {auth === "signin" && (
+                      <Signin getData={changeState} closeNavBar={toggleModal} />
                     )}
-                  </UserData>
-                </StyledHeader>
-                {/* <StyledModal
-            isOpen={isOpen}
-            onBackgroundClick={toggleModal}
-            onEscapeKeydown={toggleModal}
-          >
-            {auth === "signin" && (
-              <Signin getData={changeState} closeNavBar={toggleModal} />
-            )}
-            {auth === "signup" && (
+                    {/* {auth === "signup" && (
               <Signup getData={changeState} closeNavBar={toggleModal} />
             )}
-            {auth === "reset" && <RequestReset getData={changeState} />}
-          </StyledModal> */}
-              </>
-            )}
-            {width < 800 && (
-              <>
-                <StyledHeader>
-                  <Span onClick={(e) => openNav()}>
-                    {/* <IoMdMenu size={32} /> */}Меню
-                  </Span>
-                  <div className="logo">
-                    {me ? (
-                      <Link
-                        href={{
-                          pathname: "/account",
-                          query: { id: me.id },
-                        }}
-                      >
-                        <a className="name">
-                          {me.surname ? `${me.name} ${me.surname}` : me.name}
-                        </a>
-                      </Link>
-                    ) : null}
-                    {!me && (
-                      <Button onClick={(e) => toggleModal()}>
-                        <a>Войти</a>
-                      </Button>
-                    )}
-                  </div>
-                </StyledHeader>
+            {auth === "reset" && <RequestReset getData={changeState} />} */}
+                  </StyledModal>
+                </>
+              )}
+              {width < 800 && (
+                <>
+                  <StyledHeader>
+                    <Span onClick={(e) => openNav()}>
+                      {/* <IoMdMenu size={32} /> */}Меню
+                    </Span>
+                    <div className="logo">
+                      {me ? (
+                        <Link
+                          href={{
+                            pathname: "/account",
+                            query: { id: me.id },
+                          }}
+                        >
+                          <a className="name">
+                            {me.surname ? `${me.name} ${me.surname}` : me.name}
+                          </a>
+                        </Link>
+                      ) : null}
+                      {!me && (
+                        <Button onClick={(e) => toggleModal()}>
+                          <a>Войти</a>
+                        </Button>
+                      )}
+                    </div>
+                  </StyledHeader>
 
-                <SideMenu>
-                  <div id="mySidenav" class="sidenav">
-                    <a
-                      href="javascript:void(0)"
-                      class="closebtn"
-                      onClick={(e) => closeNav()}
-                    >
-                      &times;
-                    </a>
-                    {me && me.status === "AUTHOR" && (
-                      <Link href="/educator">
+                  <SideMenu>
+                    <div id="mySidenav" class="sidenav">
+                      <a
+                        href="javascript:void(0)"
+                        class="closebtn"
+                        onClick={(e) => closeNav()}
+                      >
+                        &times;
+                      </a>
+                      {me && me.status === "AUTHOR" && (
+                        <Link href="/educator">
+                          <button onClick={(e) => closeNav()}>
+                            <a>
+                              {/* {this.props.t("blof")} */}
+                              Мои курсы
+                            </a>
+                          </button>
+                        </Link>
+                      )}
+                      {me && me.status === "SAVVY_AUTHOR" && (
+                        <Link href="/educator">
+                          <button onClick={(e) => closeNav()}>
+                            <a>
+                              {/* {this.props.t("blof")} */}
+                              Мои курсы
+                            </a>
+                          </button>
+                        </Link>
+                      )}
+                      <Link
+                        href={{
+                          pathname: "/courses",
+                        }}
+                      >
                         <button onClick={(e) => closeNav()}>
                           <a>
                             {/* {this.props.t("blof")} */}
-                            Мои курсы
+                            Курсы
                           </a>
                         </button>
                       </Link>
-                    )}
-                    {me && me.status === "SAVVY_AUTHOR" && (
-                      <Link href="/educator">
+                      <Link
+                        href={{
+                          pathname: "/blog",
+                        }}
+                      >
                         <button onClick={(e) => closeNav()}>
                           <a>
                             {/* {this.props.t("blof")} */}
-                            Мои курсы
+                            Блог
                           </a>
                         </button>
                       </Link>
+                      {/* {me ? <Signout /> : null} */}
+                    </div>
+                  </SideMenu>
+                  <StyledModal
+                    isOpen={isOpen}
+                    onBackgroundClick={toggleModal}
+                    onEscapeKeydown={toggleModal}
+                  >
+                    {auth === "signin" && (
+                      <Signin getData={changeState} closeNavBar={toggleModal} />
                     )}
-                    <Link
-                      href={{
-                        pathname: "/courses",
-                      }}
-                    >
-                      <button onClick={(e) => closeNav()}>
-                        <a>
-                          {/* {this.props.t("blof")} */}
-                          Курсы
-                        </a>
-                      </button>
-                    </Link>
-                    <Link
-                      href={{
-                        pathname: "/blog",
-                      }}
-                    >
-                      <button onClick={(e) => closeNav()}>
-                        <a>
-                          {/* {this.props.t("blof")} */}
-                          Блог
-                        </a>
-                      </button>
-                    </Link>
-                    {/* {me ? <Signout /> : null} */}
-                  </div>
-                </SideMenu>
-                {/* <StyledModal
-            isOpen={isOpen}
-            onBackgroundClick={toggleModal}
-            onEscapeKeydown={toggleModal}
-          >
-            {auth === "signin" && (
-              <Signin getData={changeState} closeNavBar={toggleModal} />
-            )}
-            {auth === "signup" && (
+                    {/* {auth === "signup" && (
               <Signup getData={changeState} closeNavBar={toggleModal} />
             )}
-            {auth === "reset" && <RequestReset getData={changeState} />}
-          </StyledModal> */}
-              </>
-            )}
-          </>
-        )}
+            {auth === "reset" && <RequestReset getData={changeState} />} */}
+                  </StyledModal>
+                </>
+              )}
+            </>
+          );
+        }}
       </User>
     </>
   );
