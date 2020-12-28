@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 // import Icon from "react-icons-kit";
