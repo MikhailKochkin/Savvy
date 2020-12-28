@@ -1,5 +1,6 @@
 import Router from "next/router";
 import NProgress from "nprogress";
+import Nav from "./Nav.js";
 
 Router.onRouteChangeStart = () => {
   NProgress.start();
@@ -11,6 +12,6 @@ Router.onRouteChangeError = () => {
   NProgress.done();
 };
 
-const Header = () => <div></div>;
+const Header = () => <Nav />;
 
 export default Header;
