@@ -143,7 +143,6 @@ const ChallengeResult = objectType({
     t.model.student();
     t.model.lesson();
     t.model.lessonId();
-    t.model.document();
     t.model.createdAt();
     t.model.updatedAt();
   },
