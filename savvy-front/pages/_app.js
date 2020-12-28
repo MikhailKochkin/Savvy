@@ -3,6 +3,7 @@ import App from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import Page from "../components/Page";
 import withData from "../lib/withData";
+import { appWithTranslation } from "../i18n";
 
 function MyApp({ Component, apollo, pageProps }) {
   useEffect(() => {
@@ -35,4 +36,4 @@ MyApp.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default withData(MyApp);
+export default appWithTranslation(withData(MyApp));

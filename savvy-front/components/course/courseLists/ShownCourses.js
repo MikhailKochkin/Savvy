@@ -62,7 +62,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   @media (max-width: 800px) {
     flex-direction: row;
     align-items: flex-start;

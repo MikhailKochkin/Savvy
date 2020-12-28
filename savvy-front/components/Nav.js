@@ -4,12 +4,12 @@ import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import { useUser } from "./User";
-// import Signup from "./auth/Signup";
+import Signup from "./auth/Signup";
 import Signin from "./auth/Signin";
-// import RequestReset from "./auth/RequestReset";
-// import Signout from "./auth/Signout";
+import RequestReset from "./auth/RequestReset";
+import Signout from "./auth/Signout";
 // import { IoMdMenu } from "react-icons/io";
-// import { i18n, withTranslation } from "../i18n";
+import { i18n, withTranslation } from "../i18n";
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -256,8 +256,8 @@ const Nav = (props) => {
                 <Link href="/blog">
                   <div>
                     <a>
-                      {/* {this.props.t("blof")} */}
-                      Блог
+                      {props.t("blog")}
+                      {/* Блог */}
                     </a>
                   </div>
                 </Link>
@@ -267,8 +267,8 @@ const Nav = (props) => {
                       <Link href="/educator">
                         <div>
                           <a>
-                            {/* {this.props.t("my")} */}
-                            Мои курсы
+                            {props.t("my")}
+                            {/* Мои курсы */}
                           </a>
                         </div>
                       </Link>
@@ -277,8 +277,8 @@ const Nav = (props) => {
                       <Link href="/educator">
                         <div>
                           <a>
-                            {/* {this.props.t("my")} */}
-                            Мои курсы
+                            {props.t("my")}
+                            {/* Мои курсы */}
                           </a>
                         </div>
                       </Link>
@@ -287,8 +287,8 @@ const Nav = (props) => {
                       <Link href="/educator">
                         <div>
                           <a>
-                            {/* {this.props.t("my")} */}
-                            Мои курсы
+                            {props.t("my")}
+                            {/* Мои курсы */}
                           </a>
                         </div>
                       </Link>
@@ -297,20 +297,20 @@ const Nav = (props) => {
                 ) : null}
               </CourseMenu>
               <UserData>
-                {/* <div className="imgGroup">
-                <div className="img">
-                  <img
-                    src="../../static/uk.svg"
-                    onClick={() => i18n.changeLanguage("en")}
-                  />
+                <div className="imgGroup">
+                  <div className="img">
+                    <img
+                      src="../../static/uk.svg"
+                      onClick={() => i18n.changeLanguage("en")}
+                    />
+                  </div>
+                  <div className="img">
+                    <img
+                      src="../../static/russia.svg"
+                      onClick={() => i18n.changeLanguage("ru")}
+                    />
+                  </div>
                 </div>
-                <div className="img">
-                  <img
-                    src="../../static/russia.svg"
-                    onClick={() => i18n.changeLanguage("ru")}
-                  />
-                </div>
-              </div> */}
                 {me ? (
                   <Link
                     href={{
@@ -326,11 +326,11 @@ const Nav = (props) => {
                     </a>
                   </Link>
                 ) : null}
-                {/* {me ? <Signout /> : null} */}
+                {me ? <Signout /> : null}
                 {!me && (
                   <Button onClick={(e) => toggleModal()}>
                     <a>
-                      {/* {this.props.t("blof")} */}
+                      {props.t("signup")}
                       Войти
                     </a>
                   </Button>
@@ -345,10 +345,10 @@ const Nav = (props) => {
               {auth === "signin" && (
                 <Signin getData={changeState} closeNavBar={toggleModal} />
               )}
-              {/* {auth === "signup" && (
-              <Signup getData={changeState} closeNavBar={toggleModal} />
-            )}
-            {auth === "reset" && <RequestReset getData={changeState} />} */}
+              {auth === "signup" && (
+                <Signup getData={changeState} closeNavBar={toggleModal} />
+              )}
+              {auth === "reset" && <RequestReset getData={changeState} />}
             </StyledModal>
           </>
         )}
@@ -373,7 +373,7 @@ const Nav = (props) => {
                 ) : null}
                 {!me && (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>Войти</a>
+                    <a>{props.t("signup")}</a>
                   </Button>
                 )}
               </div>
@@ -392,8 +392,8 @@ const Nav = (props) => {
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>
                       <a>
-                        {/* {this.props.t("blof")} */}
-                        Мои курсы
+                        {props.t("my")}
+                        {/* Мои курсы */}
                       </a>
                     </button>
                   </Link>
@@ -402,24 +402,12 @@ const Nav = (props) => {
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>
                       <a>
-                        {/* {this.props.t("blof")} */}
-                        Мои курсы
+                        {props.t("my")}
+                        {/* Мои курсы */}
                       </a>
                     </button>
                   </Link>
                 )}
-                <Link
-                  href={{
-                    pathname: "/courses",
-                  }}
-                >
-                  <button onClick={(e) => closeNav()}>
-                    <a>
-                      {/* {this.props.t("blof")} */}
-                      Курсы
-                    </a>
-                  </button>
-                </Link>
                 <Link
                   href={{
                     pathname: "/blog",
@@ -427,12 +415,12 @@ const Nav = (props) => {
                 >
                   <button onClick={(e) => closeNav()}>
                     <a>
-                      {/* {this.props.t("blof")} */}
+                      {props.t("blog")}
                       Блог
                     </a>
                   </button>
                 </Link>
-                {/* {me ? <Signout /> : null} */}
+                {me ? <Signout /> : null}
               </div>
             </SideMenu>
             <StyledModal
@@ -443,10 +431,10 @@ const Nav = (props) => {
               {auth === "signin" && (
                 <Signin getData={changeState} closeNavBar={toggleModal} />
               )}
-              {/* {auth === "signup" && (
-              <Signup getData={changeState} closeNavBar={toggleModal} />
-            )}
-            {auth === "reset" && <RequestReset getData={changeState} />} */}
+              {auth === "signup" && (
+                <Signup getData={changeState} closeNavBar={toggleModal} />
+              )}
+              {auth === "reset" && <RequestReset getData={changeState} />}
             </StyledModal>
           </>
         )}
@@ -455,5 +443,5 @@ const Nav = (props) => {
   );
 };
 
-// export default withTranslation("common")(Nav);
-export default Nav;
+export default withTranslation("common")(Nav);
+// export default Nav;
