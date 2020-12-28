@@ -5,7 +5,7 @@ import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import User from "./User";
 // import Signup from "./auth/Signup";
-// import Signin from "./auth/Signin";
+import Signin from "./auth/Signin";
 // import RequestReset from "./auth/RequestReset";
 // import Signout from "./auth/Signout";
 // import { IoMdMenu } from "react-icons/io";
@@ -349,9 +349,9 @@ const Nav = (props) => {
               onBackgroundClick={toggleModal}
               onEscapeKeydown={toggleModal}
             >
-              {/* {auth === "signin" && (
+              {auth === "signin" && (
                 <Signin getData={changeState} closeNavBar={toggleModal} />
-              )} */}
+              )}
               {/* {auth === "signup" && (
               <Signup getData={changeState} closeNavBar={toggleModal} />
             )}
@@ -447,9 +447,9 @@ const Nav = (props) => {
               onBackgroundClick={toggleModal}
               onEscapeKeydown={toggleModal}
             >
-              {/* {auth === "signin" && (
+              {auth === "signin" && (
                 <Signin getData={changeState} closeNavBar={toggleModal} />
-              )} */}
+              )}
               {/* {auth === "signup" && (
               <Signup getData={changeState} closeNavBar={toggleModal} />
             )}

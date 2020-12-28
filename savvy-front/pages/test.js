@@ -3,7 +3,11 @@ import { useUser } from "../components/User";
 
 const test = () => {
   const me = useUser();
-  console.log(me);
+  if (me) {
+    console.log(me.name, me.surname, me.id);
+  } else {
+    console.log(me);
+  }
   return <div>Привет!</div>;
 };
 
