@@ -1,8 +1,8 @@
 import { useUser } from "./User";
 
 const Nav = (props) => {
-  let me = useUser();
-  console.log("nav user", me);
+  // let me = useUser();
+  // console.log("nav user", me);
   return <div>Привет</div>;
 };
 
