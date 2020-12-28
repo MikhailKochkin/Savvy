@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import TakeMyMoney from "../../TakeMyMoney";
-import EnrollCoursePage from "../../EnrollCoursePage";
 
 const Payment = styled.div`
   display: flex;
@@ -67,7 +65,7 @@ const Button = styled.button`
     background: rgba(8, 70, 216, 0.85);
   }
   &:active {
-    background-color: ${props => props.theme.darkGreen};
+    background-color: ${(props) => props.theme.darkGreen};
   }
   &:disabled {
     &:hover {

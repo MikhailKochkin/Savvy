@@ -6,15 +6,14 @@ import renderHTML from "react-render-html";
 import LessonHeader from "../lesson/LessonHeader";
 import { useUser } from "../User";
 import FirstLesson from "./coursePageCards/FirstLesson";
-import RegisterCard from "./coursePageCards/RegisterCard";
+// import RegisterCard from "./coursePageCards/RegisterCard";
 import StudentCard from "./coursePageCards/StudentCard";
 import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
 // import { Reviews } from "../../config";
-import { withTranslation } from "../../i18n";
-
+//
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
     coursePage(where: { id: $id }) {
@@ -484,7 +483,7 @@ const CoursePage = (props) => {
                       {data.coursePage.audience && (
                         <div className="info">
                           <div className="header">
-                            <span>{props.t("TA")}</span>
+                            {/* <span>{props.t("TA")}</span> */}
                           </div>
                           <div>{renderHTML(data.coursePage.audience)}</div>
                         </div>
@@ -500,13 +499,13 @@ const CoursePage = (props) => {
                       )}
                       {data.coursePage.methods && (
                         <div className="info">
-                          <div className="header">{props.t("author")}</div>
+                          {/* <div className="header">{props.t("author")}</div> */}
                           <div>{renderHTML(data.coursePage.methods)}</div>
                         </div>
                       )}
                       {data.coursePage.result && (
                         <div className="info">
-                          <div className="header">{props.t("result")}</div>
+                          {/* <div className="header">{props.t("result")}</div> */}
                           <div>{renderHTML(data.coursePage.result)}</div>
                         </div>
                       )}
@@ -538,7 +537,8 @@ const CoursePage = (props) => {
                         <>
                           <Total>
                             {" "}
-                            {props.t("total")} {lessons.length}
+                            {/* {props.t("total")}  */}
+                            Всего уроков: {lessons.length}
                           </Total>
                           {[...coursePage.lessons]
                             .sort((a, b) => (a.number > b.number ? 1 : -1))
@@ -546,7 +546,8 @@ const CoursePage = (props) => {
                               <>
                                 {(index + weeks) % weeks === 0 && (
                                   <div className="week">
-                                    {props.t("week")} {(index + weeks) / weeks}
+                                    Неделя {/* {props.t("week")}  */}
+                                    {(index + weeks) / weeks}
                                   </div>
                                 )}
                                 <LessonHeader
@@ -594,12 +595,12 @@ const CoursePage = (props) => {
                     <Details>
                       {data.coursePage.tariffs && (
                         <div className="info">
-                          <div className="header">{props.t("tariffs")}</div>
+                          {/* <div className="header">{props.t("tariffs")}</div> */}
                           <div>{renderHTML(data.coursePage.tariffs)}</div>
                         </div>
                       )}
                     </Details>
-                    {me &&
+                    {/* {me &&
                       !me.permissions.includes("ADMIN") &&
                       !new_subjectArray.includes(coursePage.id) && (
                         <RegisterCard
@@ -611,9 +612,9 @@ const CoursePage = (props) => {
                           discountPrice={coursePage.discountPrice}
                           // promocode={coursePage.promocode}
                         />
-                      )}
+                      )} */}
 
-                    {me && me.permissions.includes("ADMIN") && (
+                    {/* {me && me.permissions.includes("ADMIN") && (
                       <RegisterCard
                         me={me}
                         coursePage={coursePage}
@@ -623,9 +624,9 @@ const CoursePage = (props) => {
                         discountPrice={coursePage.discountPrice}
                         // promocode={coursePage.promocode}
                       />
-                    )}
+                    )} */}
 
-                    {!me && (
+                    {/* {!me && (
                       <RegisterCard
                         me={me}
                         coursePage={coursePage}
@@ -635,11 +636,11 @@ const CoursePage = (props) => {
                         discountPrice={coursePage.discountPrice}
                         // promocode={coursePage.promocode}
                       />
-                    )}
+                    )} */}
 
                     {my_reviews[0] && (
                       <>
-                        <Header2>{props.t("reviews")}</Header2>
+                        {/* <Header2>{props.t("reviews")}</Header2> */}
                         <ReviewsStyles>
                           {my_reviews[0].reviews.map((post, i) => (
                             <Post color={i + 1}>
@@ -668,5 +669,7 @@ const CoursePage = (props) => {
   );
 };
 
-export default withTranslation("course")(CoursePage);
+// export default withTranslation("course")(CoursePage);
+export default CoursePage;
+
 export { SINGLE_COURSEPAGE_QUERY };
