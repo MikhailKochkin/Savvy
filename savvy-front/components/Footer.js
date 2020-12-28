@@ -1,7 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 // import { withTranslation } from "../i18n";
+import { useUser } from "./User";
 
 const FooterStyles = styled.div`
   background-color: #001f4e;
@@ -39,82 +39,86 @@ const FooterStyles = styled.div`
   }
 `;
 
-const Footer = ({ t }) => (
-  <FooterStyles>
-    <div className="block">
-      <div>
-        {/* {t("ip")} */}
-        ИП Кочкин Михаил Валерьевич
+const Footer = () => {
+  let me = useUser();
+  console.log("nav user", me);
+  return (
+    <FooterStyles>
+      <div className="block">
+        <div>
+          {/* {t("ip")} */}
+          ИП Кочкин Михаил Валерьевич
+        </div>
+        <div>
+          {/* {t("inn")} */}
+          ИНН: 771771639796
+        </div>
+        <div>
+          {/* {t("ogrnip")} */}
+          ОГРНИП: 318774600589944
+        </div>
       </div>
-      <div>
-        {/* {t("inn")} */}
-        ИНН: 771771639796
+      <div className="block">
+        <div>
+          <Link
+            href={{
+              pathname: "/legal",
+              query: { name: "terms" },
+            }}
+          >
+            <a>
+              {/* {t("terms")} */}
+              Пользовательское соглашение
+            </a>
+          </Link>
+        </div>
+        <div>
+          <Link
+            href={{
+              pathname: "/legal",
+              query: { name: "privacy" },
+            }}
+          >
+            <a>
+              {/* {t("policy")} */}
+              Политика обработки персональных данных
+            </a>
+          </Link>
+        </div>
+        <div>
+          <Link
+            href={{
+              pathname: "/legal",
+              query: { name: "offer" },
+            }}
+          >
+            <a>
+              {/* {t("offer")} */}
+              Оферта
+            </a>
+          </Link>
+        </div>
       </div>
-      <div>
-        {/* {t("ogrnip")} */}
-        ОГРНИП: 318774600589944
-      </div>
-    </div>
-    <div className="block">
-      <div>
-        <Link
-          href={{
-            pathname: "/legal",
-            query: { name: "terms" },
-          }}
-        >
-          <a>
-            {/* {t("terms")} */}
-            Пользовательское соглашение
+      <div className="mini">
+        <div>
+          <a target="_blank" href="https://vk.com/besavvylawyer">
+            VK
           </a>
-        </Link>
-      </div>
-      <div>
-        <Link
-          href={{
-            pathname: "/legal",
-            query: { name: "privacy" },
-          }}
-        >
-          <a>
-            {/* {t("policy")} */}
-            Политика обработки персональных данных
+        </div>
+        <div>
+          <a target="_blank" href="https://www.instagram.com/savvy_legal">
+            Instagram
           </a>
-        </Link>
-      </div>
-      <div>
-        <Link
-          href={{
-            pathname: "/legal",
-            query: { name: "offer" },
-          }}
-        >
-          <a>
-            {/* {t("offer")} */}
-            Оферта
+        </div>
+        <div>
+          <a target="_blank" href="https://t.me/SavvyLive">
+            Telegram
           </a>
-        </Link>
+        </div>
       </div>
-    </div>
-    <div className="mini">
-      <div>
-        <a target="_blank" href="https://vk.com/besavvylawyer">
-          VK
-        </a>
-      </div>
-      <div>
-        <a target="_blank" href="https://www.instagram.com/savvy_legal">
-          Instagram
-        </a>
-      </div>
-      <div>
-        <a target="_blank" href="https://t.me/SavvyLive">
-          Telegram
-        </a>
-      </div>
-    </div>
-  </FooterStyles>
-);
+    </FooterStyles>
+  );
+};
 
 // export default withTranslation("search")(Footer);
 export default Footer;
