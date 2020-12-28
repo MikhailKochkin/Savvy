@@ -36,4 +36,4 @@ MyApp.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default appWithTranslation(withData(MyApp));
+export default withData(appWithTranslation(MyApp));
