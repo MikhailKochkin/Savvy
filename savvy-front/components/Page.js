@@ -1,8 +1,11 @@
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import { withRouter } from "next/router";
+import { ModalProvider } from "styled-react-modal";
 
-// import Nav from "./Nav";
+import Nav from "./Nav";
 import Meta from "./Meta";
+import Footer from "./Footer";
+import Header from "./Header";
 // import Layout from "../components/Layout";
 // import { useUser } from "./User";
 
@@ -32,7 +35,7 @@ const Inner = styled.div`
 const GlobalStyle = createGlobalStyle`
 
     html {
-        font-family: Gill Sans, sans-serif;
+        font-family: 'Montserrat', sans-serif;
         box-sizing: border-box;
         font-size: 10px;
         height:100%;
@@ -62,7 +65,12 @@ const Page = ({ children, router }) => {
         <>
           <GlobalStyle />
           <Meta />
-          <Inner>{children}</Inner>
+          <ModalProvider>
+            <Header />
+            <Nav />
+            <Inner>{children}</Inner>
+            <Footer />
+          </ModalProvider>
         </>
       </StyledPage>
     </ThemeProvider>

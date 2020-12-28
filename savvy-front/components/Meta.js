@@ -14,6 +14,12 @@ const Meta = () => (
     <meta name="twitter:card" content="/computer_mini.jpg" />
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;700&display=swap"
+      rel="stylesheet"
+    />
     <title>BeSavvy – интерактивные онлайн-курсы для юристов</title>
   </Head>
 );
