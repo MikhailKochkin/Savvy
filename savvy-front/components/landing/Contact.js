@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
+import { useUser } from "../User";
 // import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
@@ -57,6 +58,8 @@ const Button = styled.a`
 `;
 
 const Contact = () => {
+  let me = useUser();
+  console.log("contact user", me);
   return (
     <Styles>
       <Box>
