@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Link from "next/link";
-import Modal from "styled-react-modal";
+// import Modal from "styled-react-modal";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import { useUser } from "./User";
-import Signup from "./auth/Signup";
-import Signin from "./auth/Signin";
-import RequestReset from "./auth/RequestReset";
-import Signout from "./auth/Signout";
+// import Signup from "./auth/Signup";
+// import Signin from "./auth/Signin";
+// import RequestReset from "./auth/RequestReset";
+// import Signout from "./auth/Signout";
 // import { IoMdMenu } from "react-icons/io";
 // import { i18n, withTranslation } from "../i18n";
 
@@ -323,7 +323,7 @@ const Nav = (props) => {
                   </a>
                 </Link>
               ) : null}
-              {me ? <Signout /> : null}
+              {/* {me ? <Signout /> : null} */}
               {!me && (
                 <Button onClick={(e) => toggleModal()}>
                   <a>
@@ -334,7 +334,7 @@ const Nav = (props) => {
               )}
             </UserData>
           </StyledHeader>
-          <StyledModal
+          {/* <StyledModal
             isOpen={isOpen}
             onBackgroundClick={toggleModal}
             onEscapeKeydown={toggleModal}
@@ -346,7 +346,7 @@ const Nav = (props) => {
               <Signup getData={changeState} closeNavBar={toggleModal} />
             )}
             {auth === "reset" && <RequestReset getData={changeState} />}
-          </StyledModal>
+          </StyledModal> */}
         </>
       )}
       {width < 800 && (
@@ -429,10 +429,10 @@ const Nav = (props) => {
                   </a>
                 </button>
               </Link>
-              {me ? <Signout /> : null}
+              {/* {me ? <Signout /> : null} */}
             </div>
           </SideMenu>
-          <StyledModal
+          {/* <StyledModal
             isOpen={isOpen}
             onBackgroundClick={toggleModal}
             onEscapeKeydown={toggleModal}
@@ -444,7 +444,7 @@ const Nav = (props) => {
               <Signup getData={changeState} closeNavBar={toggleModal} />
             )}
             {auth === "reset" && <RequestReset getData={changeState} />}
-          </StyledModal>
+          </StyledModal> */}
         </>
       )}
     </>
