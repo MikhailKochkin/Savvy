@@ -319,10 +319,10 @@ const Nav = (props) => {
                     }}
                   >
                     <a className="name">
-                      {me.surname
+                      {/* {me.surname
                         ? `${me.name} ${me.surname} ${me.level.level}`
-                        : `${me.name} ${me.level.level}`}
-                      {/* {me.surname ? `${me.name} ${me.surname}` : `${me.name}`} */}
+                        : `${me.name} ${me.level.level}`} */}
+                      {me.surname ? `${me.name} ${me.surname}` : `${me.name}`}
                     </a>
                   </Link>
                 ) : null}
