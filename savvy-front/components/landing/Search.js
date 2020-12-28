@@ -230,7 +230,6 @@ const Search = (props) => {
       inline: "nearest",
     });
   };
-  console.log("search", props.me);
   return (
     <Styles>
       <Block>

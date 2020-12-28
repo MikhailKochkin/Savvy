@@ -103,6 +103,19 @@ input CareerTrackWhereInput {
   updatedAt: DateTimeFilter
 }
 
+type ChallengeResult {
+  correct: Int
+  createdAt: DateTime!
+  id: String!
+  lesson: Lesson!
+  lessonId: String!
+  student: User!
+  studentId: String!
+  time: Int
+  updatedAt: DateTime!
+  wrong: Int
+}
+
 input ChallengeResultListRelationFilter {
   every: ChallengeResultWhereInput
   none: ChallengeResultWhereInput
@@ -123,6 +136,10 @@ input ChallengeResultWhereInput {
   time: IntNullableFilter
   updatedAt: DateTimeFilter
   wrong: IntNullableFilter
+}
+
+input ChallengeResultWhereUniqueInput {
+  id: String
 }
 
 type Clause {
@@ -740,6 +757,7 @@ input LegalPortfolioWhereInput {
 
 type Lesson {
   challenge_num: Int
+  challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   change: String
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   constructions(after: ConstructionWhereUniqueInput, before: ConstructionWhereUniqueInput, first: Int, last: Int): [Construction!]!

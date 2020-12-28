@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Html from "slate-html-serializer";
 import React from "react";
 import ReactDOM from "react-dom";
-import { css } from "emotion";
+import { css } from "@emotion/css";
 import { Button, IconBlock, Menu } from "./components";
 import Icon from "react-icons-kit";
 import { bold } from "react-icons-kit/fa/bold";

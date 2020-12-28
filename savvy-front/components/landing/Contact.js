@@ -59,7 +59,6 @@ const Button = styled.a`
 
 const Contact = () => {
   let me = useUser();
-  console.log("contact user", me);
   return (
     <Styles>
       <Box>

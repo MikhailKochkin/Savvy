@@ -132,6 +132,23 @@ const DocumentResult = objectType({
   },
 });
 
+const ChallengeResult = objectType({
+  name: "ChallengeResult",
+  definition(t) {
+    t.model.id();
+    t.model.correct();
+    t.model.wrong();
+    t.model.time();
+    t.model.studentId();
+    t.model.student();
+    t.model.lesson();
+    t.model.lessonId();
+    t.model.document();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   TestResult,
   QuizResult,
@@ -140,4 +157,5 @@ module.exports = {
   ProblemResult,
   ShotResult,
   DocumentResult,
+  ChallengeResult,
 };

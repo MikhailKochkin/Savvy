@@ -6,7 +6,7 @@ import renderHTML from "react-render-html";
 import LessonHeader from "../lesson/LessonHeader";
 import { useUser } from "../User";
 import FirstLesson from "./coursePageCards/FirstLesson";
-// import RegisterCard from "./coursePageCards/RegisterCard";
+import RegisterCard from "./coursePageCards/RegisterCard";
 import StudentCard from "./coursePageCards/StudentCard";
 import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
@@ -344,6 +344,7 @@ const Details = styled.div`
     padding: 0 5%;
     background-image: linear-gradient(90deg, #02b3e4 0, #02ccba);
     color: white;
+    transform: skew(-5deg);
     -webkit-transform: skew(-5deg);
     -moz-transform: skew(-5deg);
     -o-transform: skew(-5deg);
@@ -600,7 +601,7 @@ const CoursePage = (props) => {
                         </div>
                       )}
                     </Details>
-                    {/* {me &&
+                    {me &&
                       !me.permissions.includes("ADMIN") &&
                       !new_subjectArray.includes(coursePage.id) && (
                         <RegisterCard
@@ -612,9 +613,9 @@ const CoursePage = (props) => {
                           discountPrice={coursePage.discountPrice}
                           // promocode={coursePage.promocode}
                         />
-                      )} */}
+                      )}
 
-                    {/* {me && me.permissions.includes("ADMIN") && (
+                    {me && me.permissions.includes("ADMIN") && (
                       <RegisterCard
                         me={me}
                         coursePage={coursePage}
@@ -624,9 +625,9 @@ const CoursePage = (props) => {
                         discountPrice={coursePage.discountPrice}
                         // promocode={coursePage.promocode}
                       />
-                    )} */}
+                    )}
 
-                    {/* {!me && (
+                    {!me && (
                       <RegisterCard
                         me={me}
                         coursePage={coursePage}
@@ -636,7 +637,7 @@ const CoursePage = (props) => {
                         discountPrice={coursePage.discountPrice}
                         // promocode={coursePage.promocode}
                       />
-                    )} */}
+                    )}
 
                     {my_reviews[0] && (
                       <>

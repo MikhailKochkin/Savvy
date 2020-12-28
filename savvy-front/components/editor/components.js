@@ -1,5 +1,5 @@
 import React from "react";
-import { cx, css } from "emotion";
+import { cx, css } from "@emotion/css";
 
 export const Button = React.forwardRef(
   ({ className, active, reversed, ...props }, ref) => (
@@ -26,7 +26,7 @@ export const Button = React.forwardRef(
 export const EditorValue = React.forwardRef(
   ({ className, value, ...props }, ref) => {
     const textLines = value.document.nodes
-      .map(node => node.text)
+      .map((node) => node.text)
       .toArray()
       .join("\n");
     return (

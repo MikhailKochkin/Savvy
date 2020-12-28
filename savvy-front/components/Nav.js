@@ -238,7 +238,6 @@ const Nav = (props) => {
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   let me = useUser();
   console.log("nav", me);
-  // let me = null;
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />

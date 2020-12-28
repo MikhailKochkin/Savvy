@@ -243,6 +243,7 @@ const Mutation = mutationType({
     t.field("signout", {
       type: "SignOut",
       resolve: async (_, args, ctx) => {
+        ctx.res.clearCookie("token");
         return { message: "Goodbye!" };
       },
     });
@@ -256,12 +257,12 @@ const Mutation = mutationType({
         published: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(ctx.request.userId);
+        console.log(ctx.res.req.userId);
         const coursePage = await ctx.prisma.coursePage.create({
           data: {
             user: {
               connect: {
-                id: ctx.request.userId,
+                id: ctx.res.req.userId,
               },
             },
             // uni: {
@@ -282,7 +283,6 @@ const Mutation = mutationType({
         coursePageId: stringArg(),
       },
       resolve: async (_, { visitsNumber, coursePageId }, ctx) => {
-        console.log(coursePageId);
         const courseVisit = await ctx.prisma.courseVisit.create({
           data: {
             coursePage: {
@@ -292,7 +292,7 @@ const Mutation = mutationType({
             },
             student: {
               connect: {
-                id: ctx.request.userId,
+                id: ctx.res.req.userId,
               },
             },
             visitsNumber,
@@ -328,7 +328,7 @@ const Mutation = mutationType({
         const Lesson = await ctx.prisma.lesson.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             coursePage: {
               connect: { id: args.coursePageID },
@@ -365,7 +365,7 @@ const Mutation = mutationType({
         const LessonResult = await ctx.prisma.lessonResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: args.lessonID },
@@ -467,7 +467,7 @@ const Mutation = mutationType({
       ) => {
         const new_data = {
           user: {
-            connect: { id: ctx.request.userId },
+            connect: { id: ctx.res.req.userId },
           },
           lesson: {
             connect: { id: lessonId },
@@ -500,7 +500,7 @@ const Mutation = mutationType({
         const TestResult = await ctx.prisma.testResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             test: {
               connect: { id: args.testID },
@@ -526,7 +526,7 @@ const Mutation = mutationType({
         if (checker.join(", ") === args.answer) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.request.userId },
+              where: { id: ctx.res.req.userId },
               include: {
                 level: true,
               },
@@ -584,7 +584,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = test.userId === ctx.request.userId;
+        const ownsTest = test.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -608,7 +608,7 @@ const Mutation = mutationType({
         const Quiz = await ctx.prisma.quiz.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -657,7 +657,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = quiz.userId === ctx.request.userId;
+        const ownsTest = quiz.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -682,7 +682,7 @@ const Mutation = mutationType({
         const QuizResult = await ctx.prisma.quizResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             quiz: {
               connect: { id: quiz },
@@ -697,7 +697,7 @@ const Mutation = mutationType({
         if (args.correct === true) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.request.userId },
+              where: { id: ctx.res.req.userId },
               include: {
                 level: true,
               },
@@ -729,7 +729,7 @@ const Mutation = mutationType({
         const Note = await ctx.prisma.note.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -772,7 +772,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = note.userId === ctx.request.userId;
+        const ownsTest = note.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -794,7 +794,7 @@ const Mutation = mutationType({
         const TE = await ctx.prisma.textEditor.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -836,7 +836,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = TE.userId === ctx.request.userId;
+        const ownsTest = TE.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -856,16 +856,16 @@ const Mutation = mutationType({
         result: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args);
         const lessonId = args.lessonId;
         const textEditorId = args.textEditorId;
         delete args.lessonId;
         delete args.textEditorId;
-        console.log(lessonId, textEditorId);
+        console.log("ctx.res.req.userId", ctx.res.req.userId);
+
         const TextEditorResult = await ctx.prisma.textEditorResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             textEditor: {
               connect: { id: textEditorId },
@@ -880,7 +880,7 @@ const Mutation = mutationType({
         if (args.result === true) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.request.userId },
+              where: { id: ctx.res.req.userId },
               include: {
                 level: true,
               },
@@ -920,7 +920,7 @@ const Mutation = mutationType({
         const construction = await ctx.prisma.construction.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -981,7 +981,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1008,7 +1008,7 @@ const Mutation = mutationType({
         const ConstructionResult = await ctx.prisma.constructionResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             construction: {
               connect: { id: constructionId },
@@ -1026,7 +1026,7 @@ const Mutation = mutationType({
         if (args.result === true) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.request.userId },
+              where: { id: ctx.res.req.userId },
               include: {
                 level: true,
               },
@@ -1059,7 +1059,7 @@ const Mutation = mutationType({
         const problem = await ctx.prisma.problem.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -1103,7 +1103,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1129,7 +1129,7 @@ const Mutation = mutationType({
         const ProblemResult = await ctx.prisma.problemResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             problem: {
               connect: { id: problemID },
@@ -1158,7 +1158,7 @@ const Mutation = mutationType({
         const forum = await ctx.prisma.forum.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -1200,7 +1200,7 @@ const Mutation = mutationType({
         const rating = await ctx.prisma.rating.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             forum: {
               connect: { id: forumId },
@@ -1262,7 +1262,7 @@ const Mutation = mutationType({
         const statement = await ctx.prisma.statement.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             forum: {
               connect: { id: forumId },
@@ -1304,7 +1304,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1330,7 +1330,7 @@ const Mutation = mutationType({
         const Shot = await ctx.prisma.shot.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -1359,7 +1359,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1382,7 +1382,7 @@ const Mutation = mutationType({
         const ShotResult = await ctx.prisma.shotResult.create({
           data: {
             student: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -1408,7 +1408,7 @@ const Mutation = mutationType({
         const Document = await ctx.prisma.document.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: lessonId },
@@ -1432,7 +1432,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1456,7 +1456,7 @@ const Mutation = mutationType({
         const Clause = await ctx.prisma.clause.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             document: {
               connect: { id: documentId },
@@ -1513,7 +1513,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1534,7 +1534,7 @@ const Mutation = mutationType({
         const DocumentResult = await ctx.prisma.documentResult.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             document: {
               connect: { id: documentId },
@@ -1674,7 +1674,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.request.userId;
+        const ownsTest = C.userId === ctx.res.req.userId;
         if (!ownsTest) {
           throw new Error("К сожалению, у вас нет полномочий на это.");
         }
@@ -1692,7 +1692,7 @@ const Mutation = mutationType({
         const post = await ctx.prisma.post.create({
           data: {
             user: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             ...args,
           },
@@ -1837,7 +1837,7 @@ const Mutation = mutationType({
 
         console.log("studentId", args.studentId);
         console.log("lessonId", args.lessonId);
-        console.log("teacherId", ctx.request.userId);
+        console.log("teacherId", ctx.res.req.userId);
 
         const Feedback = await ctx.prisma.feedback.create({
           data: {
@@ -1845,7 +1845,7 @@ const Mutation = mutationType({
               connect: { id: args.studentId },
             },
             teacher: {
-              connect: { id: ctx.request.userId },
+              connect: { id: ctx.res.req.userId },
             },
             lesson: {
               connect: { id: args.lessonId },
