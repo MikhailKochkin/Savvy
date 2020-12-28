@@ -183,30 +183,30 @@ const UserData = styled.div`
   }
 `;
 
-const StyledModal = Modal.styled`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
+// const StyledModal = Modal.styled`
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   background-color: white;
+//   border: 1px solid grey;
+//   border-radius: 10px;
+//   max-width: 40%;
+//   min-width: 400px;
+//   @media (max-width: 1300px) {
+//     max-width: 70%;
+//     min-width: 200px;
+//     margin: 10px;
+//     max-height: 100vh;
+//     overflow-y: scroll;
+//   }
+//   @media (max-width: 800px) {
+//     max-width: 90%;
+//     min-width: 200px;
+//     margin: 10px;
+//     max-height: 100vh;
+//     overflow-y: scroll;
+//   }
+// `;
 
 const Span = styled.span`
   margin-left: 10px;
