@@ -2,8 +2,8 @@
 import Landing from "../landing/Landing";
 // import Contact from "../landing/Contact";
 // import Tech from "../landing/Tech";
-// import Reviews from "../landing/Reviews";
-// import Media from "../landing/Media";
+import Reviews from "../landing/Reviews";
+import Media from "../landing/Media";
 // import { useUser } from "../User";
 
 const Courses = () => {
