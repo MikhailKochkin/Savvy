@@ -37,7 +37,7 @@ const AcceptApplication = (props) => {
     enrollOnCourse({
       variables: {
         id: props.user.id,
-        coursePage: props.coursePageID,
+        coursePageId: props.coursePageID,
       },
     });
     updateOrder({

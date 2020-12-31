@@ -40,6 +40,7 @@ class ApplicationBox extends Component {
           <div>Номер платежа: {this.props.paymentID}</div>
           <div>Номер заявки: {this.props.orderID}</div>
           <div>Оплачено: {this.props.isPaid}</div>
+          <div>{this.props.date}</div>
           <Buttons>
             {this.state.accept === "no" && (
               <>

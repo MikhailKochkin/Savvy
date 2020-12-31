@@ -5,7 +5,7 @@ const AreYouAdmin = (props) => (
   <Query query={CURRENT_USER_QUERY}>
     {({ data }, loading) => {
       if (loading) return <p>Загрузка...</p>;
-      if (!data.me) {
+      if (!data) {
         return (
           <div>
             <p>Вы не имеете прав на просмотр данной страницы!</p>

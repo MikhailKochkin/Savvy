@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { PAGE_ORDERS_QUERY } from "../../PaidApplications";
 
 const UPDATE_ORDER = gql`
-  mutation UPDATE_ORDER($id: Sstring!, $isPaid: Boolean!) {
+  mutation UPDATE_ORDER($id: String!, $isPaid: Boolean!) {
     updateOrder(id: $id, isPaid: $isPaid) {
       id
     }
@@ -43,10 +43,7 @@ const RejectApplication = (props) => {
   };
   return (
     <div>
-      <Mutation
-        mutation={UPDATE_ORDER}
-        refetchQueries={[{ query: PAGE_ORDERS_QUERY }]}
-      >
+      <Mutation mutation={UPDATE_ORDER}>
         {(updateOrder) => (
           <Button red onClick={(e) => onClick(e, updateOrder)}>
             Отклонить

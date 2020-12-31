@@ -252,7 +252,7 @@ const LessonHeader = (props) => {
         <Text>
           <div>
             {lesson.number}. {name}{" "}
-            <span className="arrow" onClick={(e) => setRevea(!reveal)}>
+            <span className="arrow" onClick={(e) => setReveal(!reveal)}>
               {reveal ? `🔽` : `🔼`}
             </span>
           </div>

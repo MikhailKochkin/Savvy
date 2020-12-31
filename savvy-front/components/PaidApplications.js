@@ -6,8 +6,8 @@ import AreYouAdmin from "./auth/AreYouAdmin";
 import ApplicationBox from "./teach/applications/ApplicationBox";
 
 const PAGE_ORDERS_QUERY = gql`
-  query PAGE_ORDERS_QUERY($id: ID!) {
-    orders(where: { coursePage: { id: $id }, isPaid: null }) {
+  query PAGE_ORDERS_QUERY($id: String!) {
+    orders(where: { coursePageId: { equals: $id }, isPaid: { equals: null } }) {
       id
       paymentID
       coursePage {
@@ -20,6 +20,7 @@ const PAGE_ORDERS_QUERY = gql`
         surname
         id
       }
+      createdAt
     }
   }
 `;
@@ -74,6 +75,7 @@ class PaidApplications extends Component {
                             applicantId={order.user.id}
                             coursePageID={order.coursePage.id}
                             user={order.user}
+                            date={order.createdAt}
                             orderID={order.id}
                             paymentID={order.paymentID}
                           />
