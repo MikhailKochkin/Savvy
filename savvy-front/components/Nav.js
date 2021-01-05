@@ -82,9 +82,9 @@ const StyledHeader = styled.header`
   background-color: white;
   display: grid;
   height: 60px;
+  margin-top: 20px;
   grid-template-areas: "CourseMenu UserData";
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid #e5e5e5;
   cursor: pointer;
   a,
   button,
