@@ -13,9 +13,12 @@ const cookies = new Cookies();
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
     signin(email: $email, password: $password) {
-      id
-      email
-      name
+      user {
+        id
+        email
+        name
+      }
+      token
     }
   }
 `;
@@ -52,26 +55,6 @@ const Input = styled.input`
   }
   &:focus {
     border-bottom: 2px solid #1a2a81;
-  }
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2%;
-  padding: 0 3% 2% 3%;
-  border-bottom: solid 1px #f0f0f0;
-  div {
-    font-size: 1.3rem;
-    color: #112a62;
-    font-weight: 900;
-    cursor: pointer;
-    margin-top: 2%;
-  }
-  @media (max-width: 850px) {
-    margin-top: 0.5%;
   }
 `;
 
@@ -125,8 +108,8 @@ const WideSignin = (props) => {
           onSubmit={async (e) => {
             e.preventDefault();
             const res = await signin();
-            cookies.set("token", res.data.signin.token);
-            props.closeNavBar(true);
+            // cookies.set("token", res.data.signin.token);
+            // props.closeNavBar(true);
             setPassword("");
             setEmail("");
             console.log(res.data);

@@ -1,7 +1,6 @@
 const {
   list,
   intArg,
-  objectType,
   booleanArg,
   mutationType,
   stringArg,
@@ -15,7 +14,7 @@ const postmark = require("postmark");
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
-const FinishEmail = require("../emails/Finish");
+// const FinishEmail = require("../emails/Finish");
 const NextWeekEmail = require("../emails/nextWeek");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
@@ -121,11 +120,25 @@ const Mutation = mutationType({
         let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
           expiresIn: 1000 * 60 * 60 * 24 * 365,
         });
-        ctx.res.cookie("token", token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "None",
+        if (process.env.NODE_ENV === "production") {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+          });
+        } else {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+          });
+        }
+
+        const newEmail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: email,
+          Subject: "Расскажу о возможностях BeSavvy",
+          HtmlBody: WelcomeEmail.WelcomeEmail(name),
         });
+
         return { user, token };
       },
     });
@@ -153,12 +166,18 @@ const Mutation = mutationType({
         let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
           expiresIn: 1000 * 60 * 60 * 24 * 365,
         });
-        console.log(ctx.res.cookie);
-        ctx.res.cookie("token", token, {
-          httpOnly: true,
-          // secure: process.env.NODE_ENV === "production",
-          // sameSite: "None",
-        });
+        if (process.env.NODE_ENV === "production") {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+          });
+        } else {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+          });
+        }
+
         // 4. Return the user and token
         return { user, token };
       },

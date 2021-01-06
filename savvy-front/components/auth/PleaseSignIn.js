@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { Query } from "@apollo/client/react/components";
+import { useState } from "react";
 import styled from "styled-components";
-import { CURRENT_USER_QUERY } from "../User";
 import WideSignIn from "./WideSignIn";
 import WideSignUp from "./WideSignUp";
 import WideRequestReset from "./WideRequestReset";
+import { useUser } from "../User";
 
 const Styles = styled.div`
   display: flex;
@@ -29,31 +28,20 @@ const Title = styled.p`
 const PleaseSignIn = (props) => {
   const [auth, setAuth] = useState("signin");
   const changeState = (dataFromChild) => setAuth(dataFromChild);
-
-  return (
-    <Query query={CURRENT_USER_QUERY}>
-      {({ data }, loading) => {
-        if (loading) return <p>Loading...</p>;
-        // if (!data.me) {
-        //   return (
-        //     <Styles>
-        //       <div id="content">{props.children}</div>
-        //       <Title>
-        //         Что-то не получается? Просто зарегистрируйтесь или войдите в
-        //         аккаунт и все заработает! 😉
-        //       </Title>
-        //       {auth === "signin" && <WideSignIn getData={changeState} />}
-        //       {auth === "signup" && <WideSignUp getData={changeState} />}
-        //       {this.state.auth === "reset" && (
-        //         <WideRequestReset getData={changeState} />
-        //       )}
-        //     </Styles>
-        //   );
-        // }
-        return props.children;
-      }}
-    </Query>
-  );
+  const me = useUser();
+  if (!me)
+    return (
+      <Styles>
+        <Title>
+          Что-то не получается? Просто зарегистрируйтесь или войдите в аккаунт и
+          все заработает! 😉
+        </Title>
+        {auth === "signin" && <WideSignIn getData={changeState} />}
+        {auth === "signup" && <WideSignUp getData={changeState} />}
+        {auth === "reset" && <WideRequestReset getData={changeState} />}{" "}
+      </Styles>
+    );
+  return props.children;
 };
 
 export default PleaseSignIn;

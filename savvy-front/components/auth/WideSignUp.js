@@ -19,9 +19,9 @@ const SIGNUP_MUTATION = gql`
     $password: String!
     $isFamiliar: Boolean!
     $status: Status!
-    $company: ID
-    $uniID: ID
-    $careerTrackID: ID
+    $company: String
+    $uniID: String
+    $careerTrackID: String
   ) {
     signup(
       email: $email
@@ -34,13 +34,13 @@ const SIGNUP_MUTATION = gql`
       uniID: $uniID
       careerTrackID: $careerTrackID
     ) {
-      id
-      email
-      name
+      token
+      user {
+        id
+      }
     }
   }
 `;
-
 const Form = styled.form`
   font-size: 1.6rem;
   width: 33%;
@@ -129,17 +129,17 @@ const useStyles = makeStyles({
 });
 
 const WideSignUp = (props) => {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("LAWYER");
-  const [uniID, setUniID] = useState("cjyimfz2e00lp07174jpder3m");
-  const [company, setCompany] = useState("ck7f4ooa201ro0736gzahsdhn");
-  const [careerTrackID, setCareerTrackID] = useState(
-    "cjwx78u7700rb07121pelqctm"
-  );
-  const [isFamiliar, setIsFamiliar] = useState(false);
+  const [state, setState] = useState({
+    name: "",
+    surname: "",
+    password: "",
+    email: "",
+    status: "LAWYER",
+    uniID: "cjyimfz2e00lp07174jpder3m",
+    company: "ck7f4ooa201ro0736gzahsdhn",
+    careerTrackID: "cjwx78u7700rb07121pelqctm",
+    isFamiliar: false,
+  });
 
   const classes = useStyles();
 
@@ -148,19 +148,28 @@ const WideSignUp = (props) => {
     props.getData(name);
   };
 
+  const onChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setState({
+      ...state,
+      [name]: value,
+    });
+  };
+
   return (
     <Mutation
       mutation={SIGNUP_MUTATION}
       variables={{
-        name: name,
-        surname: surname,
-        password: password,
-        email: email,
-        status: status,
-        uniID: uniID,
-        company: company,
-        careerTrackID: careerTrackID,
-        isFamiliar: isFamiliar,
+        name: state.name,
+        surname: state.surname,
+        password: state.password,
+        email: state.email,
+        status: state.status,
+        uniID: state.uniID,
+        company: state.company,
+        careerTrackID: state.careerTrackID,
+        isFamiliar: state.isFamiliar,
       }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
@@ -169,22 +178,18 @@ const WideSignUp = (props) => {
           method="post"
           onSubmit={async (e) => {
             e.preventDefault();
-            if (!isFamiliar) {
+            if (!state.isFamiliar) {
               alert("Не забыли про согласие на обработку персональных данных?");
               return;
-            } else if (status === "") {
+            } else if (state.status === "") {
               alert("Укажите свой статус на сайте!");
               return;
-            } else if (surname === "") {
+            } else if (state.surname === "") {
               alert("Укажите свою фамилию!");
               return;
             }
             await signup();
-            setEmail("");
-            setName("");
-            setSurname("");
-            setPassword("");
-            (status === "AUTHOR" || status === "HR") &&
+            (state.status === "AUTHOR" || state.status === "HR") &&
               setTimeout(() => Router.push({ pathname: "/educator" }), 2000);
           }}
         >
@@ -200,8 +205,8 @@ const WideSignUp = (props) => {
               type="text"
               name="name"
               placeholder="Имя"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={state.name}
+              onChange={onChange}
               label="Имя"
             />
             <Input
@@ -209,8 +214,8 @@ const WideSignUp = (props) => {
               type="text"
               name="surname"
               placeholder="Фамилия"
-              value={surname}
-              onChange={(e) => setSurname(e.target.value)}
+              defaultValue={state.surname}
+              onChange={onChange}
               label="Фамилия"
             />
             <Input
@@ -218,8 +223,8 @@ const WideSignUp = (props) => {
               type="email"
               name="email"
               placeholder="Почта"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              defaultValue={state.email}
+              onChange={onChange}
               label="Электронная почта"
             />
             <Input
@@ -227,8 +232,8 @@ const WideSignUp = (props) => {
               type="password"
               name="password"
               placeholder="Пароль"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              defaultValue={state.password}
+              onChange={onChange}
               label="Пароль"
             />
             <div className="condition">Выберите ваш статутс на сайте:</div>
@@ -242,9 +247,10 @@ const WideSignUp = (props) => {
               }}
               id="standard-select-currency"
               select
+              name="status"
               label="Select"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              value={state.status}
+              onChange={onChange}
             >
               <MenuItem key="STUDENT" value="STUDENT">
                 Студент
@@ -260,7 +266,7 @@ const WideSignUp = (props) => {
               </MenuItem>
             </TextField>
 
-            {(status === "HR" || status === "AUTHOR") && (
+            {(state.status === "HR" || state.status === "AUTHOR") && (
               <>
                 <div className="condition">Из какой вы компании?</div>
                 <TextField
@@ -275,8 +281,8 @@ const WideSignUp = (props) => {
                   id="standard-select-currency"
                   select
                   label="Select"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
+                  value={state.company}
+                  onChange={onChange}
                 >
                   {Companies.map((co) => (
                     <MenuItem
@@ -290,7 +296,7 @@ const WideSignUp = (props) => {
               </>
             )}
 
-            {status === "STUDENT" && (
+            {state.status === "STUDENT" && (
               <>
                 <TextField
                   className="uni"
@@ -304,8 +310,8 @@ const WideSignUp = (props) => {
                   id="standard-select-currency"
                   select
                   label="Select"
-                  value={uniID}
-                  onChange={(e) => setUniID(e.target.value)}
+                  value={state.uniID}
+                  onChange={onChange}
                 >
                   {Unis.map((uni) => (
                     <MenuItem
@@ -332,8 +338,8 @@ const WideSignUp = (props) => {
                   id="standard-select-currency"
                   select
                   label="Select"
-                  value={careerTrackID}
-                  onChange={(e) => setCareerTrackID(e.target.value)}
+                  value={state.careerTrackID}
+                  onChange={onChange}
                 >
                   {Tracks.map((track) => (
                     <MenuItem
@@ -361,8 +367,8 @@ const WideSignUp = (props) => {
               id="standard-select-currency"
               select
               label="Select"
-              value={isFamiliar}
-              onChange={(e) => setIsFamiliar(e.target.value)}
+              value={state.isFamiliar}
+              onChange={onChange}
             >
               <MenuItem key={23425} value={true}>
                 Да
