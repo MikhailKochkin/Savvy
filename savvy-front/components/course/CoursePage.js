@@ -62,7 +62,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         number
         type
         open
-        structure
         description
         published
         coursePage {
