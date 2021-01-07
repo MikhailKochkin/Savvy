@@ -310,7 +310,7 @@ type CoursePage {
   image: String!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   methods: String
-  new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
+  new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, where: UserWhereInput): [User!]!
   news: String
   price: Int
   promocode: [Json!]!
@@ -821,6 +821,17 @@ input LessonResultListRelationFilter {
   every: LessonResultWhereInput
   none: LessonResultWhereInput
   some: LessonResultWhereInput
+}
+
+input LessonResultOrderByInput {
+  createdAt: SortOrder
+  id: SortOrder
+  lessonId: SortOrder
+  lessonID: SortOrder
+  progress: SortOrder
+  studentId: SortOrder
+  updatedAt: SortOrder
+  visitsNumber: SortOrder
 }
 
 input LessonResultWhereInput {
@@ -1412,6 +1423,7 @@ type Query {
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int, orderBy: [CourseVisitOrderByInput!], where: CourseVisitWhereInput): [CourseVisit!]!
   feedbacks(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int, orderBy: [FeedbackOrderByInput!], where: FeedbackWhereInput): [Feedback!]!
   lesson(where: LessonWhereUniqueInput!): Lesson
+  lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int, orderBy: [LessonResultOrderByInput!], where: LessonResultWhereInput): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int, where: LessonWhereInput): [Lesson!]!
   lessonsConnection: Lesson
   me: User

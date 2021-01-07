@@ -538,6 +538,16 @@ export interface NexusGenInputs {
     none?: NexusGenInputs['LessonResultWhereInput'] | null; // LessonResultWhereInput
     some?: NexusGenInputs['LessonResultWhereInput'] | null; // LessonResultWhereInput
   }
+  LessonResultOrderByInput: { // input type
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonID?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    progress?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    visitsNumber?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   LessonResultWhereInput: { // input type
     AND?: NexusGenInputs['LessonResultWhereInput'][] | null; // [LessonResultWhereInput!]
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -2133,6 +2143,7 @@ export interface NexusGenFieldTypes {
     courseVisits: NexusGenRootTypes['CourseVisit'][]; // [CourseVisit!]!
     feedbacks: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     lessonsConnection: NexusGenRootTypes['Lesson'] | null; // Lesson
     me: NexusGenRootTypes['User'] | null; // User
@@ -2693,6 +2704,7 @@ export interface NexusGenFieldTypeNames {
     courseVisits: 'CourseVisit'
     feedbacks: 'Feedback'
     lesson: 'Lesson'
+    lessonResults: 'LessonResult'
     lessons: 'Lesson'
     lessonsConnection: 'Lesson'
     me: 'User'
@@ -2905,6 +2917,7 @@ export interface NexusGenArgTypes {
       before?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
+      where?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     }
   }
   Document: {
@@ -3423,6 +3436,14 @@ export interface NexusGenArgTypes {
     }
     lesson: { // args
       where: NexusGenInputs['LessonWhereUniqueInput']; // LessonWhereUniqueInput!
+    }
+    lessonResults: { // args
+      after?: NexusGenInputs['LessonResultWhereUniqueInput'] | null; // LessonResultWhereUniqueInput
+      before?: NexusGenInputs['LessonResultWhereUniqueInput'] | null; // LessonResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['LessonResultOrderByInput'][] | null; // [LessonResultOrderByInput!]
+      where?: NexusGenInputs['LessonResultWhereInput'] | null; // LessonResultWhereInput
     }
     lessons: { // args
       after?: NexusGenInputs['LessonWhereUniqueInput'] | null; // LessonWhereUniqueInput

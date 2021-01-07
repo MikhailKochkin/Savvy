@@ -19,6 +19,7 @@ const Query = queryType({
     t.crud.problemResults({ ordering: true, filtering: true });
     t.crud.textEditorResults({ ordering: true, filtering: true });
     t.crud.feedbacks({ ordering: true, filtering: true });
+    t.crud.lessonResults({ ordering: true, filtering: true });
     t.field("lessonsConnection", {
       type: "Lesson",
       resolve: async (_, _args, ctx) => {
