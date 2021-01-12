@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import renderHTML from "react-render-html";
 import styled from "styled-components";
-import smoothscroll from "smoothscroll-polyfill";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
 
 const UPDATE_QUIZ_MUTATION = gql`
-  mutation UPDATE_QUIZ_MUTATION($id: ID!, $next: Json) {
+  mutation UPDATE_QUIZ_MUTATION($id: String!, $next: NextType) {
     updateQuiz(id: $id, next: $next) {
       id
     }
@@ -15,7 +14,7 @@ const UPDATE_QUIZ_MUTATION = gql`
 `;
 
 const UPDATE_NOTE_MUTATION = gql`
-  mutation UPDATE_NOTE_MUTATION($id: ID!, $next: Json) {
+  mutation UPDATE_NOTE_MUTATION($id: String!, $next: NextType) {
     updateNote(id: $id, next: $next) {
       id
       next
@@ -24,8 +23,8 @@ const UPDATE_NOTE_MUTATION = gql`
 `;
 
 const UPDATE_TEST_MUTATION = gql`
-  mutation UPDATE_TEST_MUTATION($id: ID!, $next: Json) {
-    updateTestForProblem(id: $id, next: $next) {
+  mutation UPDATE_TEST_MUTATION($id: String!, $next: NextType) {
+    updateNewTest(id: $id, next: $next) {
       id
     }
   }
@@ -105,7 +104,7 @@ const TestBlock = (props) => {
 
   const handleChoice = (el, correct) =>
     props.getNewBlock(el, c, props.color, correct);
-
+  console.log(props.getNode);
   return (
     <Block id={c ? c : props.id} className={c ? c : props.id}>
       <div className="body">

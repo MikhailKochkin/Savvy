@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import { Message } from "../styles/Button";
-import AreYouATeacher from "../auth/AreYouATeacher";
-import PleaseSignIn from "../auth/PleaseSignIn";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const CREATE_CONSTRUCTION_MUTATION = gql`
@@ -16,11 +14,11 @@ const CREATE_CONSTRUCTION_MUTATION = gql`
     $answer: [String!]
     $hint: String
     $type: String!
-    $lessonID: ID!
+    $lessonId: String!
   ) {
     createConstruction(
       name: $name
-      lessonID: $lessonID
+      lessonId: $lessonId
       variants: $variants
       answer: $answer
       hint: $hint
@@ -51,6 +49,7 @@ const Textarea = styled.textarea`
   padding: 2%;
   font-size: 1.6rem;
   margin-top: 3%;
+  font-family: Montserrat;
 
   @media (max-width: 800px) {
     width: 350px;
@@ -349,7 +348,7 @@ const CreateConstructor = (props) => {
       <Mutation
         mutation={CREATE_CONSTRUCTION_MUTATION}
         variables={{
-          lessonID,
+          lessonId: lessonID,
           answer,
           variants,
           name,

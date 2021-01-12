@@ -15,6 +15,7 @@ const User = objectType({
     t.model.level();
     t.model.uni();
     t.model.image();
+    t.model.orders();
     t.model.new_subjects();
     t.model.permissions();
     t.model.courseVisits();

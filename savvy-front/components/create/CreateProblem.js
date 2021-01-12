@@ -6,10 +6,6 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import Icon from "react-icons-kit";
 import ProblemBuilder from "./ProblemBuilder";
@@ -42,13 +38,13 @@ const useStyles = makeStyles({
 const CREATE_PROBLEM_MUTATION = gql`
   mutation CREATE_PROBLEM_MUTATION(
     $text: String!
-    $lessonID: ID!
-    $nodeID: ID!
+    $lessonId: String!
+    $nodeID: String!
     $nodeType: String
   ) {
     createProblem(
       text: $text
-      lessonID: $lessonID
+      lessonId: $lessonId
       nodeID: $nodeID
       nodeType: $nodeType
     ) {
@@ -139,11 +135,10 @@ const CreateProblem = (props) => {
         newTests={lesson.newTests}
         notes={lesson.notes}
       />
-      {/* {nodeID && ( */}
       <Mutation
         mutation={CREATE_PROBLEM_MUTATION}
         variables={{
-          lessonID: lessonID,
+          lessonId: lessonID,
           text: text,
           nodeID: nodeID,
           nodeType: nodeType,
@@ -174,7 +169,6 @@ const CreateProblem = (props) => {
           </>
         )}
       </Mutation>
-      {/* )} */}
     </Styles>
   );
 };

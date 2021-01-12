@@ -244,16 +244,6 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
       }
-      # exams {
-      #   id
-      #   name
-      #   question
-      #   nodeID
-      #   nodeType
-      #   user {
-      #     id
-      #   }
-      # }
     }
   }
 `;
@@ -493,10 +483,15 @@ const Text = styled.div`
   }
 `;
 
+const Button = styled.button`
+  margin-top: 10px;
+`;
+
 const SingleLesson = (props) => {
   const [page, setPage] = useState("lesson");
   const [shown, setShown] = useState(false);
   const [width, setWidth] = useState(800);
+  const [isMenuShown, setIsMenuShown] = useState(true);
 
   const onResize = (width) => {
     setWidth(width);
@@ -616,6 +611,9 @@ const SingleLesson = (props) => {
                         </Link>
                       </Head2>
                     )}
+                  <Button onClick={(e) => setIsMenuShown(!isMenuShown)}>
+                    {isMenuShown ? "Скрыть меню" : "Показать меню"}
+                  </Button>
                   <LessonStyles>
                     <LessonPart>
                       {page === "lesson" && (
@@ -807,7 +805,7 @@ const SingleLesson = (props) => {
                         <UpdateShots lessonID={lesson.id} />
                       )}
                     </LessonPart>
-                    {width > 800 && (
+                    {width > 800 && isMenuShown && (
                       <SingleLesson_Menu
                         lesson={lesson}
                         getData={getData}

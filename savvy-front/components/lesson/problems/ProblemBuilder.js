@@ -1,5 +1,6 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import TestBlock from "./TestBlock";
+import * as _ from "lodash";
 
 const colors = [
   "#0D3B66",
@@ -22,11 +23,11 @@ const colors = [
   "#FFBD00",
 ];
 
-class ProblemBuilder extends Component {
-  state = {
-    components: [],
-  };
-  componentDidMount() {
+const ProblemBuilder = (props) => {
+  const [components, setComponents] = useState([]);
+  const cloned_elements = _.cloneDeep(props.elements);
+
+  useEffect(() => {
     let arr = [];
     let i = 0;
     const recurse2 = (el) => {
@@ -37,7 +38,7 @@ class ProblemBuilder extends Component {
       }
       if (el.next) {
         if (el.next.true) {
-          let next_true = this.props.elements.filter(
+          let next_true = cloned_elements.filter(
             (e) => e.id === el.next.true.value
           )[0];
           if (
@@ -51,7 +52,7 @@ class ProblemBuilder extends Component {
           }
         }
         if (el.next.false) {
-          let next_false = this.props.elements.filter(
+          let next_false = cloned_elements.filter(
             (e) => e.id === el.next.false.value
           )[0];
           if (
@@ -66,7 +67,7 @@ class ProblemBuilder extends Component {
         }
         i++;
         if (el.next.true) {
-          let next_true = this.props.elements.filter(
+          let next_true = cloned_elements.filter(
             (e) => e.id === el.next.true.value
           )[0];
           if (next_true !== undefined && next_true !== null) {
@@ -74,7 +75,7 @@ class ProblemBuilder extends Component {
           }
         }
         if (el.next.false) {
-          let next_false = this.props.elements.filter(
+          let next_false = cloned_elements.filter(
             (e) => e.id === el.next.false.value
           )[0];
           if (next_false !== undefined && next_false !== null) {
@@ -84,77 +85,72 @@ class ProblemBuilder extends Component {
       }
     };
 
-    let first = this.props.elements.filter(
-      (e) => e.id === this.props.nodeID
-    )[0];
+    let first = cloned_elements.filter((e) => e.id === props.nodeID)[0];
+    console.log("first", Object.isExtensible(first));
     recurse2(first);
-    this.setState({ components: arr });
-  }
+    setComponents([...arr]);
+  }, [0]);
 
-  handleNewBlock = (id, root, color) => {
+  const handleNewBlock = (id, root, color) => {
     if (id) {
-      let el = this.props.elements.filter((l) => l.id === id)[0];
-      let source = this.props.elements.filter((l) => l.id === root)[0];
+      let el = props.elements.filter((l) => l.id === id)[0];
+      let source = props.elements.filter((l) => l.id === root)[0];
       // console.log(source.color, colors.indexOf(source.color));
       el.source = source.id;
       el.color = colors[colors.indexOf(source.color) + 1];
       el.sourceColor = source.color;
-      this.setState((prevState) => ({
-        components: [...prevState.components, el],
-      }));
+      setComponents([...components, el]);
     }
   };
 
-  removeBlock = (id) => {
-    let comps = this.state.components;
+  const removeBlock = (id) => {
+    let comps = components;
     comps = comps.filter((c) => c.id !== id);
-    this.setState({ components: comps });
+    setComponents(comps);
   };
-  render() {
-    return (
-      <>
-        {this.state.components.map((el) => (
-          <>
-            <TestBlock
-              id={el ? el.id : "first"}
-              type={el.__typename.toLowerCase()}
-              lessonID={this.props.lessonID}
-              newTests={this.props.newTests}
-              quizes={this.props.quizes}
-              notes={this.props.notes}
-              t={{
-                type:
-                  el.next && el.next.true && el.next.true.type
-                    ? el.next.true.type.toLowerCase()
-                    : null,
-                value:
-                  el.next && el.next.true && el.next.true.value
-                    ? el.next.true.value.toLowerCase()
-                    : null,
-              }}
-              f={{
-                type:
-                  el.next && el.next.false && el.next.false.type
-                    ? el.next.false.type.toLowerCase()
-                    : null,
-                value:
-                  el.next && el.next.false && el.next.false.value
-                    ? el.next.false.value.toLowerCase()
-                    : null,
-              }}
-              value={el ? el : null}
-              source={el.source ? el.source : "null"}
-              getNewBlock={this.handleNewBlock}
-              removeBlock={this.removeBlock}
-              sourceColor={el.sourceColor}
-              color={el.color}
-              fixed={true}
-            />
-          </>
-        ))}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {components.map((el) => (
+        <>
+          <TestBlock
+            id={el ? el.id : "first"}
+            type={el.__typename.toLowerCase()}
+            lessonID={props.lessonID}
+            newTests={props.newTests}
+            quizes={props.quizes}
+            notes={props.notes}
+            t={{
+              type:
+                el.next && el.next.true && el.next.true.type
+                  ? el.next.true.type.toLowerCase()
+                  : null,
+              value:
+                el.next && el.next.true && el.next.true.value
+                  ? el.next.true.value.toLowerCase()
+                  : null,
+            }}
+            f={{
+              type:
+                el.next && el.next.false && el.next.false.type
+                  ? el.next.false.type.toLowerCase()
+                  : null,
+              value:
+                el.next && el.next.false && el.next.false.value
+                  ? el.next.false.value.toLowerCase()
+                  : null,
+            }}
+            value={el ? el : null}
+            source={el.source ? el.source : "null"}
+            getNewBlock={handleNewBlock}
+            removeBlock={removeBlock}
+            sourceColor={el.sourceColor}
+            color={el.color}
+            fixed={true}
+          />
+        </>
+      ))}
+    </>
+  );
+};
 
 export default ProblemBuilder;

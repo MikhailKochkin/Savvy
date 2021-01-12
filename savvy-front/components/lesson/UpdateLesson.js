@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Mutation, Query } from "@apollo/client/react/components";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
@@ -10,12 +10,12 @@ import StoryUpdate from "./StoryUpdate";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION(
-    $id: ID!
+    $id: String!
     $number: Int
     $name: String
     $text: String
     $description: String
-    $type: Type
+    $type: String
     $change: String
     $challenge_num: Int
     $open: Boolean
@@ -32,13 +32,6 @@ const UPDATE_LESSON_MUTATION = gql`
       open: $open
     ) {
       id
-      number
-      name
-      text
-      type
-      description
-      open
-      change
     }
   }
 `;
@@ -159,6 +152,7 @@ export default class UpdateLesson extends Component {
     const val = Math.round(value);
     this.setState({ [name]: val });
   };
+
   myCallback = (dataFromChild) => {
     this.setState({
       text: dataFromChild,
@@ -176,7 +170,7 @@ export default class UpdateLesson extends Component {
     const { lessonID, description, lesson, change } = this.props;
     return (
       <PleaseSignIn>
-        <AreYouATeacher subject={lessonID}>
+        <AreYouATeacher subject={lesson.coursePage.id}>
           <Title>Изменить урок</Title>
           <Container>
             <input

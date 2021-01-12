@@ -201,7 +201,6 @@ const Mutation = mutationType({
         // delete args.permissions;
         const updates = { ...args };
         delete updates.id;
-        console.log(updates);
         const user = await ctx.prisma.user.update({
           data: updates,
           where: {
@@ -219,7 +218,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(-1, args.coursePageId);
         const coursePageId = args.coursePageId;
         delete args.coursePageId;
         const enrolledUser = await ctx.prisma.user.update({
@@ -241,7 +239,6 @@ const Mutation = mutationType({
           },
           `{ student { id, name, email } }`
         );
-        console.log(0);
         if (courseVisits.length === 0) {
           const CourseVisit = await ctx.prisma.courseVisit.create({
             data: {
@@ -276,7 +273,6 @@ const Mutation = mutationType({
         published: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(ctx.res.req.userId);
         const coursePage = await ctx.prisma.coursePage.create({
           data: {
             user: {
@@ -458,7 +454,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
-        console.log(updates);
         delete updates.id;
         const updatedLesson = await ctx.prisma.lesson.update({
           data: updates,
@@ -552,7 +547,6 @@ const Mutation = mutationType({
             },
             `{ id, level {id, level} }`
           );
-          console.log(user);
           const updateUserLevel = await ctx.prisma.userLevel.update({
             data: {
               level: user.level.level + 1,
@@ -597,7 +591,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args);
         const where = { id: args.id };
         const test = await ctx.prisma.newTest.findUnique(
           { where },
@@ -621,7 +614,6 @@ const Mutation = mutationType({
         ifWrong: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args);
         const lessonId = args.lessonId;
         delete args.lessonId;
         const Quiz = await ctx.prisma.quiz.create({
@@ -670,7 +662,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args);
         const where = { id: args.id };
         const quiz = await ctx.prisma.quiz.findUnique(
           { where },
@@ -785,7 +776,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args);
         const where = { id: args.id };
         const note = await ctx.prisma.note.findUnique(
           { where },
@@ -879,7 +869,6 @@ const Mutation = mutationType({
         const textEditorId = args.textEditorId;
         delete args.lessonId;
         delete args.textEditorId;
-        console.log("ctx.res.req.userId", ctx.res.req.userId);
 
         const TextEditorResult = await ctx.prisma.textEditorResult.create({
           data: {
@@ -968,7 +957,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
-        console.log(updates);
         delete updates.id;
         return ctx.prisma.construction.update({
           data: {
@@ -1435,7 +1423,6 @@ const Mutation = mutationType({
             ...args,
           },
         });
-        console.log(Document);
         return Document;
       },
     });
@@ -1646,7 +1633,6 @@ const Mutation = mutationType({
         isPaid: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(1, args.isPaid);
         if (args.isPaid === true) {
           const order = await ctx.prisma.order.findUnique(
             {
@@ -1658,7 +1644,6 @@ const Mutation = mutationType({
             },
             `{ id, user { name, email}, coursePage {id, title} }`
           );
-          console.log(order.user.email);
           const notification = await client.sendEmail({
             From: "Mikhail@besavvy.app",
             To: order.user.email,
@@ -1670,7 +1655,6 @@ const Mutation = mutationType({
             ),
           });
         }
-        console.log(2);
         return ctx.prisma.order.update({
           data: {
             isPaid: args.isPaid,
@@ -1753,8 +1737,6 @@ const Mutation = mutationType({
           where: { courseVisits: { some: { id: { equals: id } } } },
         });
 
-        console.log(users);
-
         const courseVisits = await ctx.prisma.courseVisit.findMany(
           {
             where: { id: id },
@@ -1762,8 +1744,6 @@ const Mutation = mutationType({
           },
           `{ id, coursePage {id, title} }`
         );
-
-        console.log(courseVisits);
 
         const Reminder = await client.sendEmail({
           From: "Mikhail@besavvy.app",
@@ -1799,8 +1779,6 @@ const Mutation = mutationType({
           where: { courseVisits: { some: { id: { equals: id } } } },
         });
 
-        console.log(users);
-
         const courseVisits = await ctx.prisma.courseVisit.findMany(
           {
             where: { id: id },
@@ -1808,9 +1786,6 @@ const Mutation = mutationType({
           },
           `{ id, coursePage {id, title} }`
         );
-
-        console.log(courseVisits);
-
         const NextWeek = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: users[0].email,
@@ -1853,10 +1828,6 @@ const Mutation = mutationType({
             lesson.name
           ),
         });
-
-        console.log("studentId", args.studentId);
-        console.log("lessonId", args.lessonId);
-        console.log("teacherId", ctx.res.req.userId);
 
         const Feedback = await ctx.prisma.feedback.create({
           data: {

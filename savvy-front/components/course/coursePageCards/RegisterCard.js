@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TakeMyMoney from "../../TakeMyMoney";
 import EnrollCoursePage from "../../EnrollCoursePage";
@@ -6,11 +6,13 @@ import moment from "moment";
 import BuyDummy from "../BuyDummy";
 import ReactResizeDetector from "react-resize-detector";
 import Modal from "styled-react-modal";
+import { withTranslation } from "../../../i18n";
 
 const Data = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin: 20px 0;
   @media (max-width: 800px) {
     flex-direction: column;
     width: 100%;
@@ -27,6 +29,7 @@ const Description = styled.div`
   box-sizing: border-box;
   width: 350px;
   min-height: 290px;
+  max-height: 400px;
   .title {
     font-weight: bold;
     font-size: 1.7rem;
@@ -42,7 +45,7 @@ const Description = styled.div`
 const Payment = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   background: #ffffff;
   border: 1px solid #e4e4e4;
   box-sizing: border-box;
@@ -61,6 +64,7 @@ const Header = styled.div`
   background: rgba(36, 101, 255, 0.1);
   margin: 0;
   text-align: center;
+  margin-bottom: 50px;
   .crossed {
     text-decoration: line-through;
     font-size: 1.8rem;
@@ -77,16 +81,27 @@ const Input = styled.input`
 `;
 
 const Part1 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   .message {
     text-align: center;
     margin-bottom: 10%;
   }
 `;
 
-const Part2 = styled.div``;
+const Part2 = styled.div`
+  width: 100%;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Text = styled.div`
-  margin: 4% 4%;
+  /* margin: 4% 4%; */
 `;
 
 const Paid = styled.div`
@@ -94,17 +109,25 @@ const Paid = styled.div`
   padding: 1% 3%;
   border-radius: 5px;
   font-size: 1.4rem;
+  margin-top: 2%;
 `;
 
 const GridContainer = styled.div`
   display: grid;
-  max-width: 280px;
+  width: 320px;
   grid-template-columns: 90% 10%;
-  grid-template-areas: "Title ." "Self Price1" "Teacher Price2";
+  grid-template-areas: "Title ." "Self Price1" "Teacher Price2" "Friend1 Price3" "Friend2 Price4";
+  @media (max-width: 800px) {
+    padding: 0 10px;
+  }
   div {
     padding-bottom: 15px;
   }
   .Package {
+    margin-bottom: 1%;
+    padding: 1%;
+    font-weight: bold;
+    display: inline-block;
     cursor: pointer;
     &:hover {
       text-decoration: underline;
@@ -116,20 +139,43 @@ const GridContainer = styled.div`
   }
   .Teacher {
     grid-area: Teacher;
+    font-size: 1.6rem;
+    padding: 0;
+    margin-bottom: 10px;
+
+    span {
+      height: 100%;
+      padding-left: 5px;
+    }
+  }
+  .Friend1 {
+    grid-area: Friend1;
     padding-right: 10px;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     span {
       text-decoration: underline;
     }
-    /* &:hover {
-      text-decoration: underline;
-      transition: all ease-in-out 1s;
-    } */
   }
-
+  .Friend2 {
+    grid-area: Friend2;
+    padding-right: 10px;
+    font-size: 1.6rem;
+    span {
+      text-decoration: underline;
+    }
+  }
   .Self {
     grid-area: Self;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+    padding: 0;
+    margin-bottom: 10px;
+    span {
+      height: 100%;
+      padding-left: 5px;
+    }
+  }
+  .Emoji {
+    margin-right: 10px;
   }
   .Price1 {
     margin-top: 10px;
@@ -138,6 +184,14 @@ const GridContainer = styled.div`
   .Price2 {
     margin-top: 10px;
     grid-area: Price2;
+  }
+  .Price3 {
+    margin-top: 10px;
+    grid-area: Price3;
+  }
+  .Price4 {
+    margin-top: 10px;
+    grid-area: Price4;
   }
 `;
 
@@ -155,12 +209,14 @@ const Time = styled.div`
     #0083b0,
     #00b4db
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
   color: white;
   margin-bottom: 20px;
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-align: center;
   padding: 0.5%;
+  .comment {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledModal = Modal.styled`
@@ -172,9 +228,10 @@ const StyledModal = Modal.styled`
   border-radius: 10px;
   max-width: 70%;
   min-width: 1100px;
+  height: 80%;
   @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
+    min-width: 90%;
+    height: 75%;
     margin: 10px;
   }
 `;
@@ -182,7 +239,7 @@ const StyledModal = Modal.styled`
 const calculateTimeLeft = () => {
   moment.locale("ru");
   let now = moment(new Date());
-  let then = new Date("03/10/2020 06:00:00");
+  let then = new Date("06/2/2020 06:00:00");
   const difference = then - now;
   let timeLeft = {};
 
@@ -199,10 +256,10 @@ const calculateTimeLeft = () => {
 };
 
 const RegisterCard = (props) => {
-  const [price, setPrice] = useState(props.price ? props.price : "Бесплатно");
-  const [promocode, setPromocode] = useState("");
+  const [price, setPrice] = useState(props.price);
   const [discountPrice, setDiscountPrice] = useState(props.discountPrice);
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [pack, setPack] = useState(2);
   const [width, setWidth] = useState(0);
   const [used, setUsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -210,52 +267,82 @@ const RegisterCard = (props) => {
   const onResize = (width) => {
     setWidth(width);
   };
-  const promos = [];
-  // if (props.coursePage.promocode && props.coursePage.promocode[0]) {
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setTimeLeft(calculateTimeLeft());
+  //   }, 1000);
+  // });
+
+  // if (props.coursePage.promocode) {
   //   props.coursePage.promocode[0].map((el) => promos.push(Object.keys(el)[0]));
   // }
-  const handlePromo = (p) => {
-    if (promos.includes(p) && !used) {
-      let pro = props.coursePage.promocode[0].filter(
-        (el) => Object.keys(el)[0] === p
-      );
-      setPrice(price * Object.values(pro[0])[0]);
-      setPromocode(Object.keys(pro[0])[0]);
-      setUsed(true);
-    } else {
-      null;
-    }
-  };
+  // const handlePromo = (p) => {
+  //   if (promos.includes(p) && !used && price < 5000) {
+  //     let pro = props.coursePage.promocode[0].filter(
+  //       (el) => Object.keys(el)[0] === p
+  //     );
+  //     setPrice(price * Object.values(pro[0])[0]);
+  //     setUsed(true);
+  //   } else {
+  //     null;
+  //   }
+  // };
+
+  let day;
+  if (timeLeft[0] > 1) {
+    day = "дня";
+  } else if (timeLeft[0] === 1) {
+    day = "день";
+  } else if (timeLeft[0] === 0) {
+    day = "дней";
+  }
+
+  let left;
+  if (timeLeft[0] > 1) {
+    left = "Осталось";
+  } else if (timeLeft[0] === 1) {
+    left = "Остался";
+  } else if (timeLeft[0] === 0) {
+    left = "Осталось";
+  }
 
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
   me &&
-  coursePage.applications.filter((ap) => ap.applicantId === me.id).length > 0
+  me.orders.filter(
+    (o) => o.coursePage.id === coursePage.id && o.isPaid === null
+  ).length > 0
     ? (applied = true)
     : (applied = false);
+
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <Data>
         <Description>
-          <div className="title">Выберите подходящий тариф и получите:</div>
-          <div>- пожизненный доступ</div>
-          <div>- доступ сразу после оплаты</div>
-          <div>- полный комплекс услуг по выбранному тарифу</div>
-          <div>- эксклюзивные предложения на другие курсы от Savvy App</div>
-          <div>- эксклюзивные карьерные возможности от Savvy App</div>
+          <div className="title">{props.t("choose_plan")}</div>
+          <div>{props.t("life")}</div>
+          <div>{props.t("access")}</div>
+          <div>{props.t("services")}</div>
+          <div>{props.t("exclusive")}</div>
+          <div>{props.t("career")}</div>
         </Description>
         <Payment>
           <Header>
-            {price === "Бесплатно" && price}
-            {discountPrice && price !== "Бесплатно" && (
+            {
               <>
-                <span className="crossed">{`${price}`}</span>
-                {"        "}
-                {`${discountPrice} ₽`}
+                {discountPrice && price !== "Бесплатно" && (
+                  <>
+                    <span className="crossed">{`${price}`}</span>
+                    {"        "}
+                    {`${discountPrice} ₽`}
+                  </>
+                )}
+                {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
+                {!discountPrice && price === "Бесплатно" && <>{`Бесплатно`}</>}
               </>
-            )}
-            {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
+            }
           </Header>
           <Text>
             <Part1>
@@ -276,51 +363,73 @@ const RegisterCard = (props) => {
                 </div>
               )}
               {coursePage.courseType === "FORMONEY" && (
-                <>
-                  <GridContainer>
-                    <div className="Title">Выберите тариф:</div>
-                    <div />
-                    <div className="Self">
-                      🏎 <span>Базовый</span>
-                    </div>
-                    <input
-                      className="Price1"
-                      type="radio"
-                      value={props.price}
-                      name="price"
-                      onChange={(e) => {
+                <GridContainer>
+                  <div className="Title">{props.t("plan-choose")}</div>
+                  <div />
+                  <div className="Self">
+                    <span className="Emoji">🏹</span>
+                    <span>{props.t("basic")}</span>
+                  </div>
+                  <input
+                    className="Price1"
+                    type="radio"
+                    value={props.price}
+                    name="price"
+                    onChange={(e) => {
+                      setPack(0),
                         setPrice(props.price),
-                          setUsed(false),
-                          setDiscountPrice(props.discountPrice);
-                      }}
-                    />
-                    <div className="Teacher">🚀 Продвинутый</div>
+                        setUsed(false),
+                        setDiscountPrice(props.discountPrice);
+                    }}
+                  />
+                  {props.subscriptionPrice && (
+                    <div className="Teacher">
+                      <span className="Emoji">🚀</span>
+                      <span>{props.t("advanced")}</span>
+                    </div>
+                  )}
+                  {/* {the1 && (
+                      <div
+                        className="Package"
+                        onClick={(e) => {
+                          if (me) {
+                            setIsOpen(!isOpen);
+                          } else {
+                            alert("Необходимо зарегистрироваться");
+                          }
+                        }}
+                      >
+                        Купить пакетом
+                      </div>
+                    )} */}
+                  {props.subscriptionPrice && (
                     <input
                       className="Price2"
                       type="radio"
                       name="price"
-                      value={props.price * 1.75}
+                      value={props.subscriptionPrice}
                       onChange={(e) => {
-                        setPrice(props.price * 1.75),
+                        setPack(0),
+                          setPrice(props.subscriptionPrice),
                           setUsed(false),
                           props.discountPrice
                             ? setDiscountPrice(props.discountPrice * 1.75)
                             : null;
                       }}
                     />
-                  </GridContainer>
-                </>
+                  )}
+                </GridContainer>
               )}
             </Part1>
             <Part2>
-              {coursePage.courseType !== "PUBLIC" &&
+              {/* {coursePage.courseType !== "PUBLIC" &&
                 coursePage.courseType !== "CHALLENGE" && (
                   <Input
                     name="promo"
                     onChange={(e) => handlePromo(e.target.value)}
                     placeholder="Введите промокод"
                   />
-                )}
+                )} */}
               {applied && (
                 <Paid>
                   Мы получили вашу заявку. Если оплата прошла, то скоро откроем
@@ -328,7 +437,7 @@ const RegisterCard = (props) => {
                   мы откроем доступ.
                 </Paid>
               )}
-              {!me && <BuyDummy>Войти</BuyDummy>}
+              {!me && <BuyDummy>{props.t("signin")}</BuyDummy>}
               {me && (
                 <>
                   {coursePage.courseType === "FORMONEY" && (
@@ -337,14 +446,13 @@ const RegisterCard = (props) => {
                       coursePageID={coursePage.id}
                       name={me.name}
                       user={me.id}
-                      promocode={promocode}
                       price={
                         discountPrice
                           ? parseInt(discountPrice)
                           : parseInt(price)
                       }
                     >
-                      Купить
+                      {props.t("buy")}
                     </TakeMyMoney>
                   )}
                   {coursePage.courseType !== "FORMONEY" && (
@@ -365,4 +473,4 @@ const RegisterCard = (props) => {
   );
 };
 
-export default RegisterCard;
+export default withTranslation("course")(RegisterCard);

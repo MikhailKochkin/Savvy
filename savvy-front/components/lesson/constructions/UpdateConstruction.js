@@ -10,7 +10,7 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_CONSTRUCTION_MUTATION = gql`
   mutation UPDATE_CONSTRUCTION_MUTATION(
-    $id: ID!
+    $id: String!
     $variants: [String!]
     $answer: [String!]
     $name: String

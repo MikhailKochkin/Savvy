@@ -35,7 +35,7 @@ const CREATE_ORDER_MUTATION = gql`
 const Button = styled.button`
   background: #0846d8;
   border-radius: 5px;
-  width: 100%;
+  width: 95%;
   height: 38px;
   outline: 0;
   color: white;

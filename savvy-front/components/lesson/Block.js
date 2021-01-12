@@ -56,7 +56,6 @@ const Block = (props) => {
     problems,
     texteditors,
     constructions,
-    exams,
     documents,
     forum,
   } = props;
@@ -108,7 +107,7 @@ const Block = (props) => {
         {value.type && value.type.toLowerCase() === "texteditor" ? (
           <Title>
             <div className="type">
-              Редактор: {console.log(texteditors[0].id, value.id)}
+              Редактор:
               {/* {renderHTML(
                 texteditors
                   .filter((q) => q.id === value.id)[0]
@@ -144,13 +143,13 @@ const Block = (props) => {
             </div>
           </Title>
         ) : null}
-        {value.type && value.type.toLowerCase() === "exam" ? (
+        {/* {value.type && value.type.toLowerCase() === "exam" ? (
           <Title>
             <div className="type">
               Экзамен: {exams.filter((q) => q.id === value.id)[0].name}
             </div>
           </Title>
-        ) : null}
+        ) : null} */}
         {value.type && value.type.toLowerCase() === "forum" ? (
           <Title>
             <div className="type">
@@ -172,7 +171,7 @@ const Block = (props) => {
             {constructions.length > 0 && (
               <option value="construction">Констукторы</option>
             )}
-            {exams.length > 0 && <option value="exam">Экзамены</option>}
+            {/* {exams.length > 0 && <option value="exam">Экзамены</option>} */}
             {documents.length > 0 && (
               <option value="document">Документы</option>
             )}
@@ -313,7 +312,7 @@ const Block = (props) => {
               ))}
             </Section>
           )}
-          {task === "exam" && (
+          {/* {task === "exam" && (
             <Section>
               <h4>Экзамены:</h4>
               {exams.map((s) => (
@@ -331,7 +330,7 @@ const Block = (props) => {
                 </div>
               ))}
             </Section>
-          )}
+          )} */}
           {task === "document" && (
             <Section>
               <h4>Документы:</h4>

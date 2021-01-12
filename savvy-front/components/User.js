@@ -45,6 +45,13 @@ const CURRENT_USER_QUERY = gql`
       lessonResults {
         id
       }
+      orders {
+        id
+        coursePage {
+          id
+        }
+        isPaid
+      }
       uni {
         id
         title

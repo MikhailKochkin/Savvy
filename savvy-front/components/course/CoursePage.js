@@ -51,7 +51,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       tariffs
       methods
       reviews
-      # promocode
+      subscriptionPrice
+      subscription
+      promocode
       published
       user {
         id
@@ -63,6 +65,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         type
         open
         description
+        structure
         published
         coursePage {
           id
@@ -74,6 +77,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           id
           visitsNumber
           lessonID
+          progress
           student {
             id
           }
@@ -318,7 +322,7 @@ const CoursePage = (props) => {
                     <Details>
                       {data.coursePage.tariffs && (
                         <div className="info">
-                          {/* <div className="header">{props.t("tariffs")}</div> */}
+                          <div className="header">{props.t("tariffs")}</div>
                           <div>{renderHTML(data.coursePage.tariffs)}</div>
                         </div>
                       )}

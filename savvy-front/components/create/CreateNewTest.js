@@ -13,7 +13,7 @@ const CREATE_NEWTEST_MUTATION = gql`
     $correct: [Boolean!]
     $ifRight: String
     $ifWrong: String
-    $lessonID: ID!
+    $lessonId: String!
   ) {
     createNewTest(
       question: $question
@@ -21,7 +21,7 @@ const CREATE_NEWTEST_MUTATION = gql`
       correct: $correct
       ifRight: $ifRight
       ifWrong: $ifWrong
-      lessonID: $lessonID
+      lessonId: $lessonId
     ) {
       id
     }
@@ -46,17 +46,6 @@ const TestCreate = styled.div`
   align-items: center;
   width: 100%;
   padding: 1% 2%;
-`;
-
-const Form = styled.form`
-  font-size: 1.6rem;
-  background: white;
-  fieldset {
-    border: none;
-    textarea {
-      font-size: 1.8rem;
-    }
-  }
 `;
 
 const Answers = styled.div`
@@ -200,7 +189,7 @@ const CreateNewTest = (props) => {
       <Mutation
         mutation={CREATE_NEWTEST_MUTATION}
         variables={{
-          lessonID: lessonID,
+          lessonId: lessonID,
           question: [question],
           answers: answers,
           correct: correct,

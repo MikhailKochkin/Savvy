@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -273,7 +273,7 @@ model Lesson {
   user               User                 @relation(fields: [userId], references: [id])
   challengeResults   ChallengeResult[]
   constructions      Construction[]
-  constructionResults ConstructionResult[]
+  constructionResult ConstructionResult[]
   documents          Document[]
   documentResult     DocumentResult[]
   exam               Exam[]
@@ -304,7 +304,7 @@ model LessonResult {
   studentId    String
   lessonId     String
   lesson       Lesson   @relation(fields: [lessonId], references: [id])
-  student      User     @relation(fields: [studentId], references: [id])
+  user         User     @relation(fields: [studentId], references: [id])
 }
 
 model NewTest {
@@ -323,7 +323,7 @@ model NewTest {
   lessonId   String?
   lesson     Lesson?      @relation(fields: [lessonId], references: [id])
   user       User         @relation(fields: [userId], references: [id])
-  testResults TestResult[]
+  testResult TestResult[]
 }
 
 model Note {
@@ -365,7 +365,7 @@ model Post {
   tags       String[]
   userId     String
   user       User         @relation(fields: [userId], references: [id])
-  coursePages CoursePage[] @relation("PostCoursePages")
+  coursePage CoursePage[] @relation("PostCoursePages")
 }
 
 model Problem {
@@ -385,7 +385,7 @@ model Problem {
   lessonId      String
   lesson        Lesson          @relation(fields: [lessonId], references: [id])
   user          User            @relation(fields: [userId], references: [id])
-  problemResults ProblemResult[]
+  problemResult ProblemResult[]
 }
 
 model ProblemResult {
@@ -420,7 +420,7 @@ model Quiz {
   lessonId   String?
   lesson     Lesson?      @relation(fields: [lessonId], references: [id])
   user       User         @relation(fields: [userId], references: [id])
-  quizResults QuizResult[]
+  quizResult QuizResult[]
 }
 
 model QuizResult {
@@ -436,7 +436,7 @@ model QuizResult {
   quizId    String?
   lesson    Lesson?  @relation(fields: [lessonId], references: [id])
   quiz      Quiz?    @relation(fields: [quizId], references: [id])
-  student   User     @relation(fields: [studentId], references: [id])
+  user      User     @relation(fields: [studentId], references: [id])
 }
 
 model Rating {
@@ -462,7 +462,7 @@ model Shot {
   lessonId   String?
   lesson     Lesson?      @relation(fields: [lessonId], references: [id])
   user       User         @relation(fields: [userId], references: [id])
-  shotResults ShotResult[]
+  shotResult ShotResult[]
 }
 
 model ShotResult {
@@ -519,7 +519,7 @@ model TextEditor {
   lessonId         String
   lesson           Lesson             @relation(fields: [lessonId], references: [id])
   user             User               @relation(fields: [userId], references: [id])
-  textEditorResults TextEditorResult[]
+  textEditorResult TextEditorResult[]
 }
 
 model TextEditorResult {
@@ -547,7 +547,7 @@ model Uni {
   createdAt  DateTime     @default(now())
   paidMonths Int?         @default(0)
   coursePage CoursePage[]
-  teachers       User[]
+  user       User[]
 }
 
 model User {

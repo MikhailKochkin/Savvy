@@ -87,6 +87,7 @@ class ProblemBuilder extends Component {
   };
 
   getNode = (type, id) => {
+    console.log(1, id);
     this.props.getNode(type, id);
   };
 
@@ -204,14 +205,12 @@ class ProblemBuilder extends Component {
   };
 
   open = (obj) => <Block obj={obj} />;
-
   componentDidMount = () => {
     let el = [
       ...this.props.newTests,
       ...this.props.quizes,
       ...this.props.notes,
     ].find((el) => el.id == this.props.nodeID);
-    console.log(el);
     if (el) {
       this.setState({
         tree_blocks: {
@@ -230,6 +229,7 @@ class ProblemBuilder extends Component {
               getNewBlock={this.handleNewBlock}
               sourceColor="#FFF"
               color={colors[0]}
+              getNode={this.getNode}
             />
           ),
           nodes: [],

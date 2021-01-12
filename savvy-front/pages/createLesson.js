@@ -1,9 +1,5 @@
-import CreateLesson from '../components/create/CreateLesson';
+import CreateLesson from "../components/create/CreateLesson";
 
-const CreateTextPage  = props => (
-  <div>
-    <CreateLesson id={props.query.id} />
-  </div>
-);
+const CreateTextPage = (props) => <CreateLesson id={props.query.id} />;
 
 export default CreateTextPage;

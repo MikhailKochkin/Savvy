@@ -39,10 +39,27 @@ const LessonStructure = inputObjectType({
   },
 });
 
+const Promocode = inputObjectType({
+  name: "Promocode",
+  definition(t) {
+    t.string("name");
+    t.string("value");
+  },
+});
+
+const PromocodeList = inputObjectType({
+  name: "PromocodeList",
+  definition(t) {
+    t.list.field("promocodes", { type: "Promocode" });
+  },
+});
+
 module.exports = {
   NextType,
   NextTrueType,
   NextFalseType,
   LessonItem,
   LessonStructure,
+  Promocode,
+  PromocodeList,
 };

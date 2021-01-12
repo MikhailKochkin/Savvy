@@ -10,14 +10,14 @@ const CREATE_QUIZ_MUTATION = gql`
   mutation CREATE_QUIZ_MUTATION(
     $question: String!
     $answer: String!
-    $lessonID: ID!
+    $lessonId: String!
     $ifRight: String
     $ifWrong: String
   ) {
     createQuiz(
       question: $question
       answer: $answer
-      lessonID: $lessonID
+      lessonId: $lessonId
       ifRight: $ifRight
       ifWrong: $ifWrong
     ) {
@@ -119,7 +119,7 @@ const CreateQuiz = (props) => {
       <Mutation
         mutation={CREATE_QUIZ_MUTATION}
         variables={{
-          lessonID: lessonID,
+          lessonId: lessonID,
           answer: answer,
           question: question,
           ifRight: ifRight,
@@ -137,14 +137,16 @@ const CreateQuiz = (props) => {
           <Form
             onSubmit={async (e) => {
               e.preventDefault();
+              console.log(1);
               document.getElementById("Message").style.display = "block";
               setTimeout(function () {
                 document.getElementById("Message")
                   ? (document.getElementById("Message").style.display = "none")
                   : "none";
               }, 1500);
-
+              console.log(2);
               const res = await createQuiz();
+              console.log(res);
             }}
           >
             <fieldset>

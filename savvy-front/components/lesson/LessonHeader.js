@@ -227,12 +227,14 @@ const LessonHeader = (props) => {
   } = props;
 
   let color;
+  let progress;
+  let visit;
 
   if (me) {
-    let visit = lesson.lessonResults.find((l) => l.student.id === me.id);
-    let progress;
-    if (visit && lesson.structure) {
-      progress = visit.progress / lesson.structure.length;
+    visit = lesson.lessonResults.find((l) => l.student.id === me.id);
+
+    if (visit && lesson.structure && lesson.structure.lessonItems) {
+      progress = visit.progress / lesson.structure.lessonItems.length;
     } else {
       progress = 0;
     }
@@ -246,14 +248,16 @@ const LessonHeader = (props) => {
   } else {
     color = "white";
   }
+
+  console.log(name, progress);
   return (
     <>
       <TextBar color={color}>
         <Text>
           <div>
-            {lesson.number}. {name}{" "}
+            {lesson.number}. {name}
             <span className="arrow" onClick={(e) => setReveal(!reveal)}>
-              {reveal ? `🔽` : `🔼`}
+              {reveal ? ` 🔽` : ` 🔼`}
             </span>
           </div>
         </Text>

@@ -7,7 +7,7 @@ import Block from "./Block";
 import _ from "lodash";
 
 const UPDATE_LESSON_MUTATION = gql`
-  mutation UPDATE_LESSON_MUTATION($id: ID!, $structure: Json) {
+  mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {
     updateLesson(id: $id, structure: $structure) {
       id
     }
@@ -49,7 +49,7 @@ const Advice = styled.p`
 
 const StoryUpdate = (props) => {
   const [list, setList] = useState(
-    props.lesson.structure ? props.lesson.structure : ["el"]
+    props.lesson.structure ? props.lesson.structure.lessonItems : ["el"]
   );
   const plus1 = () => {
     let res = [...list];
@@ -85,7 +85,7 @@ const StoryUpdate = (props) => {
         mutation={UPDATE_LESSON_MUTATION}
         variables={{
           id: lesson.id,
-          structure: list.filter((el) => el !== "el"),
+          structure: { lessonItems: list.filter((el) => el !== "el") },
         }}
         refetchQueries={() => [
           {

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import ProblemBuilder from "./ProblemBuilder";
+import ProblemBuilder from "../../create/ProblemBuilder";
 
 const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
@@ -107,8 +107,8 @@ const UpdateProblem = (props) => {
 
   const getText = (d) => setText(d);
 
-  const handleChange = (e, type) => {
-    setNodeID(e.target.value);
+  const handleChange = (type, id) => {
+    setNodeID(id);
     setNodeType(type);
   };
 
@@ -130,7 +130,7 @@ const UpdateProblem = (props) => {
             nodeID={nodeID}
             lessonID={lessonID}
             // lesson={lesson}
-            // getNode={getNode}
+            getNode={handleChange}
           />
         )}
         <Mutation

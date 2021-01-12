@@ -10,7 +10,7 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_CONSTRUCTION_MUTATION = gql`
   mutation UPDATE_CONSTRUCTION_MUTATION(
-    $id: ID!
+    $id: String!
     $variants: [String!]
     $answer: [String!]
     $name: String
@@ -257,6 +257,7 @@ const UpdateConstruction = (props) => {
 
   const generate = () => {
     let correct = [];
+    console.log(answersNumber, typeof answersNumber);
     let nums = answersNumber
       .split(",")
       .map((el) => (el = parseInt(el)))
@@ -264,6 +265,7 @@ const UpdateConstruction = (props) => {
     nums.map((num) => {
       correct.push(variants[num - 1]);
     });
+    console.log(correct);
     setAnswer(correct);
   };
 

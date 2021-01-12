@@ -112,7 +112,6 @@ const WideSignin = (props) => {
             // props.closeNavBar(true);
             setPassword("");
             setEmail("");
-            console.log(res.data);
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>

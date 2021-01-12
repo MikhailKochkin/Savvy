@@ -148,6 +148,7 @@ const UpdateTest = (props) => {
   };
 
   const { testID, mes, lessonID } = props;
+  console.log(lessonID);
   return (
     <div>
       <Comment>
