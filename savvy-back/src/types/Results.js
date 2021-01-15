@@ -47,7 +47,6 @@ const TextEditorResult = objectType({
     t.model.correct();
     t.model.result();
     t.model.guess();
-    // t.model.lessonID();
     t.model.textEditorId();
     t.model.studentId();
     t.model.lessonId();

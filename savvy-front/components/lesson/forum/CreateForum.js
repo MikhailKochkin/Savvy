@@ -8,8 +8,8 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 const CREATE_FORUM_MUTATION = gql`
-  mutation createForum($lesson: ID!, $text: String) {
-    createForum(lesson: $lesson, text: $text) {
+  mutation createForum($lessonId: String!, $text: String) {
+    createForum(lessonId: $lessonId, text: $text) {
       id
     }
   }
@@ -70,7 +70,7 @@ const CreateForum = (props) => {
       <Mutation
         mutation={CREATE_FORUM_MUTATION}
         variables={{
-          lesson: props.lesson,
+          lessonId: props.lesson,
           text: text,
         }}
         refetchQueries={() => [

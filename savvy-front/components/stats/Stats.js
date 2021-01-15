@@ -41,19 +41,19 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         # forum {
         #   id
         # }
-        # newTests {
-        #   id
-        #   question
-        #   answers
-        #   correct
-        #   next
-        # }
-        # quizes {
-        #   id
-        #   question
-        #   answer
-        #   next
-        # }
+        newTests {
+          id
+          question
+          answers
+          correct
+          next
+        }
+        quizes {
+          id
+          question
+          answer
+          next
+        }
         # documents {
         #   id
         #   title
@@ -75,23 +75,27 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         #   text
         #   next
         # }
-        # problems {
-        #   id
-        #   text
-        #   nodeID
-        #   nodeType
-        # }
-        # texteditors {
-        #   id
-        #   text
-        #   totalMistakes
-        # }
-        # constructions {
-        #   id
-        #   name
-        #   variants
-        #   answer
-        # }
+        problems {
+          id
+          text
+          nodeID
+          nodeType
+        }
+        texteditors {
+          id
+          text
+          totalMistakes
+        }
+        constructions {
+          id
+          name
+          variants
+          answer
+        }
+        documents {
+          id
+          title
+        }
         # user {
         #   id
         # }

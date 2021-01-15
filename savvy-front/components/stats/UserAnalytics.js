@@ -2,6 +2,7 @@ import StudentData from "./StudentData";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
+import Loading from "../Loading";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($coursePageId: String!) {
@@ -52,7 +53,7 @@ const UserAnalytics = (props) => {
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: { coursePageId: coursePageID },
   });
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <Loading />;
   const results = data.lessonResults;
   // let coursePage = data.coursePage;
   return (

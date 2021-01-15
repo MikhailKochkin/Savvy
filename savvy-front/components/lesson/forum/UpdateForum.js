@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 const UPDATE_FORUM_MUTATION = gql`
-  mutation UPDATE_FORUM_MUTATION($id: ID!, $text: String) {
+  mutation UPDATE_FORUM_MUTATION($id: String!, $text: String) {
     updateForum(id: $id, text: $text) {
       id
     }

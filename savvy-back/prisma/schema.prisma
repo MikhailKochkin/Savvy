@@ -547,7 +547,7 @@ model Uni {
   createdAt  DateTime     @default(now())
   paidMonths Int?         @default(0)
   coursePage CoursePage[]
-  teachers       User[]
+  teachers   User[]
 }
 
 model User {

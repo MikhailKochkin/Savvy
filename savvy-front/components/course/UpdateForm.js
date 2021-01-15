@@ -308,6 +308,7 @@ const UpdateForm = (props) => {
         <Buttons>
           <Button
             onClick={(e) => {
+              e.preventDefault();
               return updateCoursePage({
                 variables: {
                   id: props.coursePage.id,

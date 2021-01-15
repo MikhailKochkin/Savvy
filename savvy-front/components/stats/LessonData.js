@@ -3,113 +3,121 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
-import { useQuery, gql } from "@apollo/client";
-// import CreateFeedback from "./CreateFeedback";
-// import TestResult from "./results/TestResult";
-// import TexteditorResult from "./results/TexteditorResult";
-// import QuizResult from "./results/QuizResult";
-// import ProblemResult from "./results/ProblemResult";
-// import DocumentResult from "./results/DocumentResult";
-// import Feedback from "./Feedback";
+import Loading from "../Loading";
+import { useLazyQuery, gql } from "@apollo/client";
+import CreateFeedback from "./CreateFeedback";
+import TestResult from "./results/TestResult";
+import TexteditorResult from "./results/TexteditorResult";
+import QuizResult from "./results/QuizResult";
+import ProblemResult from "./results/ProblemResult";
+import ConstructionResult from "./results/ConstructionResult";
+import DocumentResult from "./results/DocumentResult";
+import Feedback from "./Feedback";
 
-const GET_TEST_RESULTS = gql`
-  query testResults($lessonId: String!, $userId: String!) {
-    testResults(
-      where: { lessonId: { equals: $lessonId }, studentId: { equals: $userId } }
-    ) {
-      id
-      answer
-      test {
+const GET_RESULTS = gql`
+  query stats($lessonId: String!, $userId: String!) {
+    stats(lessonId: $lessonId, userId: $userId) {
+      testResults {
         id
-        question
+        answer
+        test {
+          id
+          question
+        }
+        student {
+          id
+          name
+          surname
+        }
+        createdAt
       }
-      student {
+      quizResults {
         id
-        name
-        surname
+        correct
+        student {
+          id
+          name
+          surname
+        }
+        quiz {
+          id
+        }
+        answer
+        createdAt
       }
-      createdAt
-    }
-  }
-`;
-
-const GET_QUIZ_RESULTS = gql`
-  query quizResults($lessonId: String!, $userId: String!) {
-    quizResults(
-      where: { lessonId: { equals: $lessonId }, studentId: { equals: $userId } }
-    ) {
-      id
-      correct
-      student {
+      textEditorResults {
         id
-        name
-        surname
+        wrong
+        correct
+        guess
+        attempts
+        student {
+          id
+        }
+        textEditor {
+          id
+        }
+        createdAt
       }
-      quiz {
+      problemResults {
         id
+        answer
+        lesson {
+          id
+        }
+        problem {
+          id
+        }
+        student {
+          id
+          name
+          surname
+        }
+        revealed
+        createdAt
       }
-      answer
-      createdAt
-    }
-  }
-`;
-
-const GET_PROBLEM_RESULTS = gql`
-  query problemResults($lessonId: String!, $userId: String!) {
-    problemResults(
-      where: { lessonId: { equals: $lessonId }, studentId: { equals: $userId } }
-    ) {
-      id
-      answer
-      lesson {
+      constructionResults {
         id
+        answer
+        inputs
+        attempts
+        construction {
+          id
+        }
+        student {
+          id
+          name
+          surname
+        }
+        construction {
+          id
+        }
       }
-      problem {
+      documentResults {
         id
+        user {
+          id
+        }
+        document {
+          id
+        }
+        answers
+        drafts
+        createdAt
       }
-      student {
+      feedbacks {
         id
-        name
-        surname
+        text
+        teacher {
+          id
+          name
+          surname
+        }
+        lesson {
+          id
+        }
+        createdAt
       }
-      revealed
-      createdAt
-    }
-  }
-`;
-
-const GET_EDITOR_RESULTS = gql`
-  query textEditorResults($lessonId: String!, $userId: String!) {
-    textEditorResults(
-      where: { lessonId: { equals: $lessonId }, studentId: { equals: $userId } }
-    ) {
-      id
-      wrong
-      correct
-      guess
-      attempts
-      student {
-        id
-      }
-      textEditor {
-        id
-      }
-      createdAt
-    }
-  }
-`;
-
-const GET_FEEDBACK = gql`
-  query feedbacks($lessonId: String!, $userId: String!) {
-    feedbacks(
-      where: { lessonId: { equals: $lessonId }, studentId: { equals: $userId } }
-    ) {
-      id
-      text
-      lesson {
-        id
-      }
-      createdAt
     }
   }
 `;
@@ -136,7 +144,7 @@ const Box = styled.div`
   grid-template-rows: 0 1fr repeat(3, 0);
   grid-column-gap: 0px;
   grid-row-gap: 0px;
-  margin: 5px 0;
+  margin-bottom: 35px;
   padding: 0.5%;
   div {
     padding: 0 15px;
@@ -187,71 +195,35 @@ const LessonData = (props) => {
   const [show, setShow] = useState(false);
   const { index, lesson, student, coursePageID, res } = props;
   moment.locale("ru");
-  // const {
-  //   loading: test_loading,
-  //   error: test_error,
-  //   data: test_data,
-  // } = useQuery(GET_TEST_RESULTS, {
-  //   variables: { lessonId: lesson.id, userId: student.id },
-  // });
-  // if (test_loading) return "Loading...";
-  // if (test_error) return `Error! ${test_error.message}`;
 
-  // const {
-  //   loading: quiz_loading,
-  //   error: quiz_error,
-  //   data: quiz_data,
-  // } = useQuery(GET_QUIZ_RESULTS, {
-  //   variables: { lessonId: lesson.id, userId: student.id },
-  // });
-  // if (quiz_loading) return "Loading...";
-  // if (quiz_error) return `Error! ${quiz_error.message}`;
-
-  // const {
-  //   loading: problem_loading,
-  //   error: problem_error,
-  //   data: problem_data,
-  // } = useQuery(GET_PROBLEM_RESULTS, {
-  //   variables: { lessonId: lesson.id, userId: student.id },
-  // });
-  // if (problem_loading) return "Загружаю задачи...";
-  // if (problem_error) return `Error! ${problem_error.message}`;
-
-  // const {
-  //   loading: editor_loading,
-  //   error: editor_error,
-  //   data: editor_data,
-  // } = useQuery(GET_EDITOR_RESULTS, {
-  //   variables: { lessonId: lesson.id, userId: student.id },
-  // });
-  // if (editor_loading) return "Загружаю задачи...";
-  // if (editor_error) return `Error! ${editor_error.message}`;
-
-  // const {
-  //   loading: feedback_loading,
-  //   error: feedback_error,
-  //   data: feedback_data,
-  // } = useQuery(GET_FEEDBACK, {
-  //   variables: { lessonId: lesson.id, userId: student.id },
-  // });
-  // if (feedback_loading) return "Загружаю задачи...";
-  // if (feedback_error) return `Error! ${feedback_error.message}`;
+  const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS);
+  if (loading) return <Loading />;
+  if (error) return `Error! ${error.message}`;
   return (
     <>
       <Data>
         <Name>
           {index + 1}. {lesson.name}
         </Name>
-        <StyledButton onClick={(e) => setShow(!show)}>
+        <StyledButton
+          onClick={(e) => {
+            getData({
+              variables: { lessonId: lesson.id, userId: student.id },
+            }),
+              setShow(!show);
+          }}
+        >
           {show ? "Скрыть" : "Подробнее"}
         </StyledButton>
       </Data>
       {res.length > 0 && res[0].lesson.structure ? (
         <Box>
           <div className="div1">
-            {(
-              res[0].progress / res[0].lesson.structure.lessonItems.length
-            ).toFixed(2) * 100}
+            {res[0].lesson.structure &&
+              res[0].lesson.structure.lessonItems &&
+              (
+                res[0].progress / res[0].lesson.structure.lessonItems.length
+              ).toFixed(2) * 100}
             %{" "}
           </div>
           <div className="div2">Заходов: {res[0].visitsNumber} </div>
@@ -269,39 +241,44 @@ const LessonData = (props) => {
           Нет данных по заходам на урок или это был урок-испытание
         </div>
       )}
-      {show && (
+      {show && data !== undefined && (
         <>
-          {/* <TestResult
+          <TestResult
             newTests={lesson.newTests}
-            results={test_data.testResults}
+            results={data.stats.testResults}
             student={student}
           />
           <QuizResult
             quizes={lesson.quizes}
             student={student}
-            results={quiz_data.quizResults}
-          />
-          <ProblemResult
-            problems={lesson.problems}
-            student={student}
-            results={problem_data.problemResults}
+            results={data.stats.quizResults}
           />
           <TexteditorResult
             texteditors={lesson.texteditors}
             student={student}
-            results={editor_data.textEditorResults}
-          /> */}
-          {/*  <ConstructionResult
+            results={data.stats.textEditorResults}
+          />
+          <ProblemResult
+            problems={lesson.problems}
+            student={student}
+            results={data.stats.problemResults}
+          />
+          <ConstructionResult
             constructions={lesson.constructions}
             student={student}
+            results={data.stats.constructionResults}
           />
-          <DocumentResult documents={lesson.documents} student={student} />
+          <DocumentResult
+            documents={lesson.documents}
+            student={student}
+            results={data.stats.documentResults}
+          />
+          <Feedback feedback={data.stats.feedbacks} lesson={lesson.id} />
           <CreateFeedback
             coursePage={coursePageID}
             lesson={lesson.id}
             student={student.id}
           />
-          <Feedback feedback={feedback_data.feedbacks} lesson={lesson.id} /> */}
         </>
       )}
     </>
@@ -309,4 +286,4 @@ const LessonData = (props) => {
 };
 
 export default LessonData;
-export { GET_FEEDBACK };
+export { GET_RESULTS };

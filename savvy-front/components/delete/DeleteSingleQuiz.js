@@ -4,10 +4,9 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { withTranslation } from "../../i18n";
 
 const DELETE_QUIZ_MUTATION = gql`
-  mutation DELETE_QUIZ_MUTATION($id: ID!) {
+  mutation DELETE_QUIZ_MUTATION($id: String!) {
     deleteQuiz(id: $id) {
       id
     }
@@ -41,18 +40,44 @@ const DeleteSingleQuiz = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm(props.t("sure"))) {
+            if (
+              confirm(
+                "Вы точно хотите удалить этот вопрос? Вопрос исчезнет после перезагрузки страницы."
+              )
+            ) {
               deleteQuiz().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? props.t("deleting") : props.t("delete")}
+          {loading ? "Удаляем..." : "Удалить"}
         </Button>
       )}
     </Mutation>
   );
 };
 
-export default withTranslation("update")(DeleteSingleQuiz);
+export default DeleteSingleQuiz;
+
+//   update = async (cache, payload) => {
+//     // manually update the cache on the client, so it matches the server
+//     // 1. Read the cache for the items we want
+//     const data = cache.readQuery({
+//       query: SINGLE_LESSON_QUERY,
+//       variables: { id: this.props.lessonID }
+//     });
+//     console.log(data.lesson.quizes, payload.data.deleteQuiz.id);
+
+//     // 2. Filter the deleted itemout of the page
+//     data.lesson = data.lesson.quizes.filter(
+//       item => item.id !== payload.data.deleteQuiz.id
+//     );
+//     // 3. Put the items back!
+//     console.log(data.lesson);
+//     const res = await cache.writeQuery({
+//       query: SINGLE_LESSON_QUERY,
+//       variables: { id: this.props.lessonID },
+//       data: data.lesson
+//     });
+//   };

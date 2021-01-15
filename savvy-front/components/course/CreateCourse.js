@@ -1,37 +1,35 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Error from "../ErrorMessage";
 import Router from "next/router";
-import { useUser } from "../User";
+import _ from "lodash";
 
 const CREATE_COURSE_MUTATION = gql`
   mutation CREATE_COURSE_MUTATION(
     $title: String!
     $description: String!
     $image: String
-    $courseType: CourseType
-    $published: Boolean
-    $uniID: ID
+    # $audience: String
+    # $result: String
+    # $tariffs: String
+    # $methods: String
+    $courseType: String
+    $published: Boolean # $uniID: ID
   ) {
     createCoursePage(
       title: $title
       description: $description
       image: $image
+      # audience: $audience
+      # result: $result
+      # tariffs: $tariffs
+      # methods: $methods
       courseType: $courseType
-      published: $published
-      uniID: $uniID
+      published: $published # uniID: $uniID
     ) {
-      id
-    }
-  }
-`;
-
-const UPDATE_UNI_MUTATION = gql`
-  mutation UPDATE_UNI_MUTATION($id: ID!, $capacity: Int!) {
-    updateUni(id: $id, capacity: $capacity) {
       id
     }
   }
@@ -54,13 +52,11 @@ const Fieldset = styled.fieldset`
   border: none;
   display: flex;
   flex-direction: column;
-  padding: 0;
-  margin-top: 2%;
   select {
     width: 30%;
     font-size: 1.6rem;
   }
-  input {
+  .input {
     height: 60%;
     width: 100%;
     margin-bottom: 15px;
@@ -72,7 +68,7 @@ const Fieldset = styled.fieldset`
     font-family: Montserrat;
   }
   textarea {
-    height: 60%;
+    min-height: 60%;
     width: 100%;
     margin-bottom: 15px;
     border: 1px solid #e5e5e5;
@@ -98,12 +94,34 @@ const Buttons = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-top: 2%;
-  padding: 3% 0 0 3%;
+  padding: 3%;
+  border-top: solid 1px #f0f0f0;
+`;
+
+const Buttons2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 3%;
+  button {
+    margin-right: 15px;
+    border: none;
+    background: none;
+    border: 1px solid #e5e5e5;
+    border-radius: 3.5px;
+  }
 `;
 
 const Title = styled.div`
   font-size: 2.2rem;
   font-weight: 600;
+  margin-bottom: 2%;
+`;
+
+const Img = styled.img`
+  width: 300px;
+  object-fit: cover;
+  margin-top: 3%;
 `;
 
 const Button = styled.button`
@@ -125,33 +143,60 @@ const Button = styled.button`
   }
 `;
 
-const Img = styled.img`
-  width: 300px;
-  object-fit: cover;
-  margin-top: 3%;
+const Frame = styled.div`
+  height: 60%;
+  width: 100%;
+  margin-bottom: 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3.5px;
+  padding-left: 1%;
+  font-size: 1.6rem;
+  outline: 0;
+  p {
+    margin-left: 0.6%;
+  }
 `;
 
-export default class CreateCourse extends Component {
-  state = {
-    title: "",
-    description: "",
-    image: "",
-    courseType: "PUBLIC",
-    uniID: "",
-    published: false,
-    upload: false,
-  };
+const Comment = styled.div`
+  font-size: 1.5rem;
+  margin-bottom: 2%;
+`;
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+const Option = styled.div`
+  margin-bottom: 1%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  span {
+    font-size: 2rem;
+    flex-basis: 5%;
+    /* background: yellow; */
+  }
+  input {
+    flex-basis: 95%;
+    border: 1px solid #e5e5e5;
+    border-radius: 3.5px;
+    padding: 1%;
+    font-size: 1.6rem;
+    outline: 0;
+    font-family: Montserrat;
+  }
+`;
 
-  uploadFile = async (e) => {
-    this.setState({
-      upload: "pending",
-      image: "",
-    });
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
+const CreateCourse = (props) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [courseType, setCourseType] = useState("PRIVATE");
+  // const [uniID, setUniID] = useState(props.me ? props.me.uni.id : null);
+  const [pending, setPending] = useState(false);
+  const [image, setImage] = useState("");
+  const uploadFile = async (e) => {
+    setPending(true);
     const files = e.target.files;
     const data = new FormData();
     data.append("file", files[0]);
@@ -164,115 +209,88 @@ export default class CreateCourse extends Component {
       }
     );
     const file = await res.json();
-    this.setState({
-      image: file.secure_url,
-      upload: true,
-    });
+    setImage(file.secure_url);
+    setPending(false);
   };
 
-  render() {
-    return (
+  const { me } = props;
+  return (
+    <>
+      <div id="root"></div>
       <>
-        {/* <HowTo /> */}
-        <User>
-          {({ data: { me } }) => (
-            <>
-              <Mutation
-                mutation={CREATE_COURSE_MUTATION}
-                variables={this.state}
-              >
-                {(createCoursePage, { loading, error }) => (
-                  <Mutation
-                    mutation={UPDATE_UNI_MUTATION}
-                    variables={{
-                      id: me.uni.id,
-                      capacity: me.uni.capacity - 1,
+        <Mutation
+          mutation={CREATE_COURSE_MUTATION}
+          variables={{
+            title,
+            description,
+            image,
+            courseType,
+            published: false,
+          }}
+        >
+          {(createCoursePage, { loading, error }) => (
+            <Form>
+              <Error error={error} />
+              <Title>Давайте разработаем ваш курс вместе</Title>
+              <Fieldset>
+                <input
+                  className="input"
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Название курса"
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <input
+                  className="input"
+                  type="text"
+                  id="description"
+                  name="description"
+                  placeholder="Его краткое описание"
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                <label for="file">
+                  <div className="upload">
+                    {!pending && "Загрузите картинку курса"}
+                    {pending && "Идет загрузка..."}
+                  </div>
+                </label>
+                <input
+                  style={{ display: "none" }}
+                  className="second"
+                  type="file"
+                  id="file"
+                  name="file"
+                  placeholder="Загрузите логотип курса..."
+                  onChange={uploadFile}
+                />
+                {image && (
+                  <>
+                    <Img src={image} alt="Upload Preview" />
+                  </>
+                )}
+                <Buttons>
+                  <Button
+                    onClick={async (e) => {
+                      // Stop the form from submitting
+                      e.preventDefault();
+                      const res2 = await createCoursePage();
+                      Router.push({
+                        pathname: "/coursePage",
+                        query: { id: res2.data.createCoursePage.id },
+                      });
                     }}
                   >
-                    {(updateUni, { loading, error }) => (
-                      <Form
-                        onSubmit={async (e) => {
-                          // Stop the form from submitting
-                          e.preventDefault();
-                          this.setState({ courseType: "PRIVATE" });
-                          const res1 = await this.setState({
-                            uniID: me.uni.id,
-                          });
-                          const res2 = await createCoursePage();
-                          const res3 = await updateUni();
-                          Router.push({
-                            pathname: "/coursePage",
-                            query: { id: res2.data.createCoursePage.id },
-                          });
-                        }}
-                      >
-                        <Error error={error} />
-                        <Title>Новый курс:</Title>
-                        <Fieldset disabled={loading} aria-busy={loading}>
-                          <input
-                            className="second"
-                            type="text"
-                            id="title"
-                            name="title"
-                            placeholder="Название курса"
-                            value={this.state.title}
-                            required
-                            onChange={this.handleChange}
-                          />
-                          <input
-                            className="second"
-                            type="text"
-                            id="description"
-                            name="description"
-                            placeholder="Его краткое описание"
-                            required
-                            value={this.state.description}
-                            onChange={this.handleChange}
-                          />
-                          <label for="file">
-                            <div className="upload">
-                              {this.state.upload === false
-                                ? "Загрузите картинку курса"
-                                : null}
-                              {this.state.upload === "pending"
-                                ? "Идет загрузка..."
-                                : null}
-                              {this.state.upload === true
-                                ? "Загрузка прошла успешно!"
-                                : null}
-                            </div>
-                          </label>
-                          <input
-                            style={{ display: "none" }}
-                            className="second"
-                            type="file"
-                            id="file"
-                            name="file"
-                            placeholder="Загрузите логотип курса..."
-                            onChange={this.uploadFile}
-                          />
-                          {this.state.image && (
-                            <>
-                              <Img
-                                src={this.state.image}
-                                alt="Upload Preview"
-                              />
-                            </>
-                          )}
-                          <Buttons>
-                            <Button type="submit">Создать</Button>
-                          </Buttons>
-                        </Fieldset>
-                      </Form>
-                    )}
-                  </Mutation>
-                )}
-              </Mutation>
-            </>
+                    Создать
+                  </Button>
+                </Buttons>
+              </Fieldset>
+            </Form>
           )}
-        </User>
-        <div id="root"></div>
+        </Mutation>
       </>
-    );
-  }
-}
+    </>
+  );
+};
+
+export default CreateCourse;

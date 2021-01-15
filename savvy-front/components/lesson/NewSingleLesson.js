@@ -99,23 +99,23 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           id
         }
       }
-      # documents {
-      #   id
-      #   title
-      #   user {
-      #     id
-      #   }
-      #   clauses {
-      #     id
-      #     number
-      #     user {
-      #       id
-      #     }
-      #     commentary
-      #     keywords
-      #     sample
-      #   }
-      # }
+      documents {
+        id
+        title
+        user {
+          id
+        }
+        clauses {
+          id
+          number
+          user {
+            id
+          }
+          commentary
+          keywords
+          sample
+        }
+      }
       shots {
         id
         title

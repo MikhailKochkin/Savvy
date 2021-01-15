@@ -7,8 +7,8 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { withTranslation } from "../../../i18n";
 
 const UPDATE_NOTE_MUTATION = gql`
-  mutation UPDATE_NOTE_MUTATION($id: ID!, $text: String, $next: Json) {
-    updateNote(id: $id, text: $text, next: $next) {
+  mutation UPDATE_NOTE_MUTATION($id: String!, $text: String) {
+    updateNote(id: $id, text: $text) {
       id
       text
       next
@@ -66,19 +66,6 @@ const Button = styled.button`
   }
 `;
 
-const Button2 = styled.button`
-  font-family: Montserrat;
-  /* color: #112a62; */
-  padding: 0.5% 1%;
-  font-size: 1.6rem;
-  background: #ffffff;
-  /* border: 1px solid #112a62; */
-  border-radius: 5px;
-  outline: 0;
-  margin-top: 3%;
-  width: 25%;
-`;
-
 const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
@@ -99,7 +86,7 @@ const UpdateNote = (props) => {
 
   const getText = (d) => setText(d);
 
-  const { notes, quizes, id, tests, lessonID } = props;
+  const { id, lessonID } = props;
   return (
     <>
       <Container>
@@ -109,10 +96,10 @@ const UpdateNote = (props) => {
           variables={{
             id: id,
             text: text,
-            next: {
-              true: trueVal,
-              false: falseVal,
-            },
+            // next: {
+            //   true: trueVal,
+            //   false: falseVal,
+            // },
           }}
           refetchQueries={() => [
             {

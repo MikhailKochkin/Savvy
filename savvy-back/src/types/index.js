@@ -13,4 +13,5 @@ module.exports = {
   ...require("./Order"),
   ...require("./Enums"),
   ...require("./Post"),
+  ...require("./Stats"),
 };

@@ -1,13 +1,13 @@
-import React from "react";
+import React, { Component } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
+import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { withTranslation } from "../../i18n";
 
 const DELETE_TEST_MUTATION = gql`
-  mutation DELETE_TEST_MUTATION($id: ID!) {
+  mutation DELETE_TEST_MUTATION($id: String!) {
     deleteNewTest(id: $id) {
       id
     }
@@ -41,18 +41,22 @@ const DeleteSingleTest = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm(props.t("sure"))) {
+            if (
+              confirm(
+                "Вы точно хотите удалить этот тест? Тест исчезнет после перезагрузки страницы."
+              )
+            ) {
               deleteTest().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? props.t("deleting") : props.t("delete")}
+          {loading ? "Удаляем..." : "Удалить"}
         </Button>
       )}
     </Mutation>
   );
 };
 
-export default withTranslation("update")(DeleteSingleTest);
+export default DeleteSingleTest;

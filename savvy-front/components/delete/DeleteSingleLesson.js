@@ -3,11 +3,9 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Router from "next/router";
-import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
-import { withTranslation } from "../../i18n";
 
 const DELETE_LESSON_MUTATION = gql`
-  mutation DELETE_LESSON_MUTATION($id: ID!) {
+  mutation DELETE_LESSON_MUTATION($id: String!) {
     deleteLesson(id: $id) {
       id
     }
@@ -19,7 +17,6 @@ const Button = styled.button`
   padding: 1%;
   width: 100%;
   border: none;
-  font-family: Montserrat;
   border-left: 1px solid white;
   padding-left: 8%;
   outline: none;
@@ -51,12 +48,12 @@ class DeleteSingleLesson extends Component {
         mutation={DELETE_LESSON_MUTATION}
         variables={{ id: this.props.id }}
         update={this.update}
-        refetchQueries={() => [
-          {
-            query: SINGLE_COURSEPAGE_QUERY,
-            variables: { id: this.props.coursePageID },
-          },
-        ]}
+        // refetchQueries={() => [
+        //   {
+        //     query: PAGE_LESSONS_QUERY,
+        //     variables: { id: this.props.coursePageID }
+        //   }
+        // ]}
       >
         {(DeleteSandbox, { error }) => (
           <Button
@@ -72,7 +69,7 @@ class DeleteSingleLesson extends Component {
               }
             }}
           >
-            <Delete id="remove">{this.props.t("delete_lesson")}</Delete>
+            <Delete id="remove">Удалить урок</Delete>
           </Button>
         )}
       </Mutation>
@@ -80,4 +77,4 @@ class DeleteSingleLesson extends Component {
   }
 }
 
-export default withTranslation("draft")(DeleteSingleLesson);
+export default DeleteSingleLesson;

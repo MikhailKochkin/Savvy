@@ -3,10 +3,9 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { withTranslation } from "../../i18n";
 
 const DELETE_SHOT_MUTATION = gql`
-  mutation DELETE_SHOT_MUTATION($id: ID!) {
+  mutation DELETE_SHOT_MUTATION($id: String!) {
     deleteShot(id: $id) {
       id
     }
@@ -34,7 +33,7 @@ const Button = styled.button`
 
 class DeleteSingleQuiz extends Component {
   render() {
-    const { shotID, lessonID, t } = this.props;
+    const { shotID, lessonID } = this.props;
     return (
       <Mutation
         mutation={DELETE_SHOT_MUTATION}
@@ -49,14 +48,18 @@ class DeleteSingleQuiz extends Component {
         {(deleteShot, { error, loading }) => (
           <Button
             onClick={() => {
-              if (confirm(t("sure"))) {
+              if (
+                confirm(
+                  "Вы точно хотите удалить эту раскадровку? Она исчезнет после перезагрузки страницы."
+                )
+              ) {
                 deleteShot().catch((error) => {
                   alert(error.message);
                 });
               }
             }}
           >
-            {loading ? t("deleting") : t("delete")}
+            {loading ? "Удаляем..." : "Удалить"}
           </Button>
         )}
       </Mutation>
@@ -64,4 +67,4 @@ class DeleteSingleQuiz extends Component {
   }
 }
 
-export default withTranslation("update")(DeleteSingleQuiz);
+export default DeleteSingleQuiz;

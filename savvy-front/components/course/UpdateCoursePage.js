@@ -39,7 +39,7 @@ const UpdateCoursePage = (props) => {
   return (
     <Width>
       <div id="root"></div>
-      <UpdateForm coursePage={data.coursePage} me={me} />
+      {data && <UpdateForm coursePage={data.coursePage} me={me} />}
     </Width>
   );
 };

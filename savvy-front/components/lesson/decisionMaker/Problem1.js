@@ -151,28 +151,24 @@ const Simulator = (props) => {
     {
       id: "a",
       num: 0,
-      type: "controlled",
       name: "Email",
       value: 20,
     },
     {
       id: "b",
       num: 1,
-      type: "controlled",
       name: "СМИ",
       value: 10,
     },
     {
       id: "c",
       num: 2,
-      type: "controlled",
       name: "SEO",
       value: 20,
     },
     {
       id: "d",
       num: 3,
-      type: "controlled",
       name: "Google",
       value: 40,
     },
@@ -293,7 +289,6 @@ const Simulator = (props) => {
               <Tool
                 key={el.id}
                 num={el.id}
-                type={el.type}
                 name={el.name}
                 value={el.value}
                 means={means}

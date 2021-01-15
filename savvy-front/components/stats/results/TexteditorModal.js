@@ -26,7 +26,7 @@ const TextBox = styled.div`
   flex-direction: column;
   padding: 0 1%;
   #id {
-    color: #dc143c;
+    color: #001f4e;
   }
 `;
 
@@ -46,20 +46,40 @@ const TexteditorModal = (props) => {
   useEffect(() => {
     let res;
     if (results.filter((t) => t.textEditor.id === texteditor.id).length > 0) {
+      if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
+        console.log(results.filter((t) => t.textEditor.id === texteditor.id));
       res = results.filter((t) => t.textEditor.id === texteditor.id);
       const elements = document
         .getElementById(texteditor.id)
         .querySelectorAll("#id");
-      let p;
+      if (texteditor.id == "ck9k4st6j04ys07341ols5zbl") console.log(elements);
       elements.forEach((element) => {
-        if (res.find((r) => r.correct == element.getAttribute("data"))) {
-          console.log(res);
-          var guesses_arr = res.map(function (obj) {
+        if (
+          res.filter((r) => r.correct == element.getAttribute("data")).length >
+          0
+        ) {
+          let answers = res.filter(
+            (r) => r.correct == element.getAttribute("data")
+          );
+          if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
+            console.log(answers);
+          var guesses_arr = answers.map(function (obj) {
             return obj.guess;
           });
-          element.innerHTML = `⛔️: ${res[0].wrong} / ✅: ${
-            res[0].correct
-          } / ❓: ${guesses_arr.join(", ")}`;
+          if (guesses_arr.leength == 0) {
+            guesses_arr = ["––"];
+          }
+          if (texteditor.id == "ck9k4st6j04ys07341ols5zbl") console.log(111);
+          if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
+            console.log(
+              element,
+              `${answers[0].wrong} / ${answers[0].correct} / ${guesses_arr.join(
+                ", "
+              )}`
+            );
+          element.innerHTML = `${answers[0].wrong} / ${
+            answers[0].correct
+          } / ${guesses_arr.join(", ")}`;
         }
       });
     }
@@ -73,7 +93,7 @@ const TexteditorModal = (props) => {
         </Text>
       </TextBox>
       <div className="column">
-        {results.filter((t) => t.textEditor.id === texteditor.id).length > 0
+        {results && results.length > 0
           ? results
               .filter((t) => t.textEditor.id === texteditor.id)
               .map((t) => (

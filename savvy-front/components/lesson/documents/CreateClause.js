@@ -13,14 +13,14 @@ const CREATE_CLAUSE_MUTATION = gql`
     $sample: String!
     $keywords: [String!]
     $number: Int!
-    $document: ID!
+    $documentId: String!
   ) {
     createClause(
       commentary: $commentary
       sample: $sample
       keywords: $keywords
       number: $number
-      document: $document
+      documentId: $documentId
     ) {
       id
     }
@@ -99,7 +99,7 @@ const CreateClause = (props) => {
       <Mutation
         mutation={CREATE_CLAUSE_MUTATION}
         variables={{
-          document,
+          documentId: document,
           commentary,
           sample,
           keywords,

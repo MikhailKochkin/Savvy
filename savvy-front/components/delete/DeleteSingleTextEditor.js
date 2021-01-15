@@ -7,7 +7,7 @@ import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import { withTranslation } from "../../i18n";
 
 const DELETE_TEXTEDITOR_MUTATION = gql`
-  mutation DELETE_TEXTEDITOR_MUTATION($id: ID!) {
+  mutation DELETE_TEXTEDITOR_MUTATION($id: String!) {
     deleteTextEditor(id: $id) {
       id
     }

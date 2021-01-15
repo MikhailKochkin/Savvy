@@ -4,10 +4,9 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { withTranslation } from "../../i18n";
 
 const DELETE_DOCUMENT_MUTATION = gql`
-  mutation DELETE_DOCUMENT_MUTATION($id: ID!) {
+  mutation DELETE_DOCUMENT_MUTATION($id: String!) {
     deleteDocument(id: $id) {
       id
     }
@@ -41,18 +40,22 @@ const DeleteDocument = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm(props.t("sure"))) {
+            if (
+              confirm(
+                "Вы точно хотите удалить этот документ? Документ исчезнет после перезагрузки страницы."
+              )
+            ) {
               deleteDocument().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? props.t("deleting") : props.t("delete")}
+          {loading ? "Удаляем..." : "Удалить"}
         </Button>
       )}
     </Mutation>
   );
 };
 
-export default withTranslation("update")(DeleteDocument);
+export default DeleteDocument;

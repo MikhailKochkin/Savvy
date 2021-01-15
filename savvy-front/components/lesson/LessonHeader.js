@@ -249,7 +249,6 @@ const LessonHeader = (props) => {
     color = "white";
   }
 
-  console.log(name, progress);
   return (
     <>
       <TextBar color={color}>

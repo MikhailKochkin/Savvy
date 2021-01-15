@@ -1,36 +1,43 @@
-import React from "react";
+import React, { Component } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { withTranslation } from "../../i18n";
 
 const DELETE_CONSTRUCTION_MUTATION = gql`
-  mutation DELETE_CONSTRUCTION_MUTATION($id: ID!) {
+  mutation DELETE_CONSTRUCTION_MUTATION($id: String!) {
     deleteConstruction(id: $id) {
       id
     }
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "40%",
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-});
+const Button = styled.button`
+  background: ${(props) => props.theme.red};
+  width: 35%;
+  color: white;
+  padding: 10px 16px;
+  margin-top: 3%;
+  font-size: 1.6rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  &:active {
+    background-color: ${(props) => props.theme.darkRed};
+  }
+  @media (max-width: 800px) {
+    width: 60%;
+  }
+`;
 
-const DeleteSingleConstruction = (props) => {
-  const update = (cache, payload) => {
+class DeleteSingleConstruction extends Component {
+  update = (cache, payload) => {
     // manually update the cache on the client, so it matches the server
     // 1. Read the cache for the items we want
     const data = cache.readQuery({
       query: SINGLE_LESSON_QUERY,
-      variables: { id: props.lessonID },
+      variables: { id: this.props.lessonID },
     });
     // 2. Filter the deleted itemout of the page
     data.lessons = data.lesson.constructions.filter(
@@ -39,40 +46,44 @@ const DeleteSingleConstruction = (props) => {
     // 3. Put the items back!
     cache.writeQuery({
       query: SINGLE_LESSON_QUERY,
-      variables: { id: props.lessonID },
+      variables: { id: this.props.lessonID },
       data,
     });
   };
-  const classes = useStyles();
-  const { id } = props;
-  return (
-    <Mutation
-      mutation={DELETE_CONSTRUCTION_MUTATION}
-      variables={{ id }}
-      refetchQueries={() => [
-        {
-          query: SINGLE_LESSON_QUERY,
-          variables: { id: props.lessonID },
-        },
-      ]}
-    >
-      {(deleteConstruction, { loading, error }) => (
-        <Button
-          className={classes.button}
-          color="secondary"
-          onClick={() => {
-            if (confirm(props.t("sure"))) {
-              deleteConstruction().catch((error) => {
-                alert(error.message);
-              });
-            }
-          }}
-        >
-          {loading ? props.t("deleting") : props.t("delete")}
-        </Button>
-      )}
-    </Mutation>
-  );
-};
+  render() {
+    const { id } = this.props;
+    return (
+      <Mutation
+        mutation={DELETE_CONSTRUCTION_MUTATION}
+        variables={{ id }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: this.props.lessonID },
+          },
+        ]}
+      >
+        {(deleteConstruction, { loading, error }) => (
+          <Button
+            onClick={() => {
+              if (
+                confirm(
+                  "Вы точно хотите удалить этот конструктор? Конструктор исчезнет после перезагрузки страницы."
+                )
+              ) {
+                deleteConstruction().catch((error) => {
+                  alert(error.message);
+                });
+              }
+              console.log("Тут!");
+            }}
+          >
+            {loading ? "Удаляем..." : "Удалить"}
+          </Button>
+        )}
+      </Mutation>
+    );
+  }
+}
 
-export default withTranslation("update")(DeleteSingleConstruction);
+export default DeleteSingleConstruction;

@@ -7,8 +7,8 @@ import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
 const CREATE_NOTE_MUTATION = gql`
-  mutation CREATE_NOTE_MUTATION($text: String!, $lessonID: ID!) {
-    createNote(text: $text, lessonID: $lessonID) {
+  mutation CREATE_NOTE_MUTATION($text: String!, $lessonId: String!) {
+    createNote(text: $text, lessonId: $lessonId) {
       id
     }
   }
@@ -103,7 +103,7 @@ export default class CreateSingleNote extends Component {
         <Mutation
           mutation={CREATE_NOTE_MUTATION}
           variables={{
-            lessonID: lessonID,
+            lessonId: lessonID,
             ...this.state,
           }}
           refetchQueries={() => [
@@ -132,7 +132,7 @@ export default class CreateSingleNote extends Component {
             </Button>
           )}
         </Mutation>
-        <Message id="Message">Вы создали новую заметку!</Message>
+        <Message id="Message">Вы создали новый логрид!</Message>
       </Container>
     );
   }

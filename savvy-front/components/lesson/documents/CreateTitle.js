@@ -7,9 +7,10 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 
 const CREATE_DOCUMENT_MUTATION = gql`
-  mutation CREATE_DOCUMENT_MUTATION($title: String!, $lesson: ID!) {
-    createDocument(title: $title, lesson: $lesson) {
+  mutation CREATE_DOCUMENT_MUTATION($title: String!, $lessonId: String!) {
+    createDocument(title: $title, lessonId: $lessonId) {
       id
+      title
     }
   }
 `;
@@ -53,7 +54,7 @@ const CreateTitle = (props) => {
     <Mutation
       mutation={CREATE_DOCUMENT_MUTATION}
       variables={{
-        lesson: props.id,
+        lessonId: props.id,
         title: value,
       }}
     >

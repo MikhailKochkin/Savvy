@@ -1930,6 +1930,15 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
   }
+  Stats: { // root type
+    constructionResults?: Array<NexusGenRootTypes['ConstructionResult'] | null> | null; // [ConstructionResult]
+    documentResults?: Array<NexusGenRootTypes['DocumentResult'] | null> | null; // [DocumentResult]
+    feedbacks?: Array<NexusGenRootTypes['Feedback'] | null> | null; // [Feedback]
+    problemResults?: Array<NexusGenRootTypes['ProblemResult'] | null> | null; // [ProblemResult]
+    quizResults?: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
+    testResults?: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
+    textEditorResults?: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
+  }
   TestResult: { // root type
     answer?: string | null; // String
     attempts?: number | null; // Int
@@ -2386,15 +2395,18 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
-    lessonsConnection: NexusGenRootTypes['Lesson'] | null; // Lesson
     me: NexusGenRootTypes['User'] | null; // User
     newTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
+    quizResult: NexusGenRootTypes['QuizResult'] | null; // QuizResult
     quizResults: NexusGenRootTypes['QuizResult'][]; // [QuizResult!]!
     quizzes: NexusGenRootTypes['Quiz'][]; // [Quiz!]!
+    stats: NexusGenRootTypes['Stats'] | null; // Stats
+    testResult: NexusGenRootTypes['TestResult'] | null; // TestResult
     testResults: NexusGenRootTypes['TestResult'][]; // [TestResult!]!
+    textEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
     textEditorResults: NexusGenRootTypes['TextEditorResult'][]; // [TextEditorResult!]!
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -2479,6 +2491,15 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
+  }
+  Stats: { // field return type
+    constructionResults: Array<NexusGenRootTypes['ConstructionResult'] | null> | null; // [ConstructionResult]
+    documentResults: Array<NexusGenRootTypes['DocumentResult'] | null> | null; // [DocumentResult]
+    feedbacks: Array<NexusGenRootTypes['Feedback'] | null> | null; // [Feedback]
+    problemResults: Array<NexusGenRootTypes['ProblemResult'] | null> | null; // [ProblemResult]
+    quizResults: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
+    testResults: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
+    textEditorResults: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
   }
   TestResult: { // field return type
     answer: string | null; // String
@@ -2948,15 +2969,18 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonResults: 'LessonResult'
     lessons: 'Lesson'
-    lessonsConnection: 'Lesson'
     me: 'User'
     newTest: 'NewTest'
     orders: 'Order'
     posts: 'Post'
     problemResults: 'ProblemResult'
+    quizResult: 'QuizResult'
     quizResults: 'QuizResult'
     quizzes: 'Quiz'
+    stats: 'Stats'
+    testResult: 'TestResult'
     testResults: 'TestResult'
+    textEditorResult: 'TextEditorResult'
     textEditorResults: 'TextEditorResult'
     users: 'User'
   }
@@ -3041,6 +3065,15 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
+  }
+  Stats: { // field return type name
+    constructionResults: 'ConstructionResult'
+    documentResults: 'DocumentResult'
+    feedbacks: 'Feedback'
+    problemResults: 'ProblemResult'
+    quizResults: 'QuizResult'
+    testResults: 'TestResult'
+    textEditorResults: 'TextEditorResult'
   }
   TestResult: { // field return type name
     answer: 'String'
@@ -3722,6 +3755,9 @@ export interface NexusGenArgTypes {
       orderBy?: NexusGenInputs['ProblemResultOrderByInput'][] | null; // [ProblemResultOrderByInput!]
       where?: NexusGenInputs['ProblemResultWhereInput'] | null; // ProblemResultWhereInput
     }
+    quizResult: { // args
+      where: NexusGenInputs['QuizResultWhereUniqueInput']; // QuizResultWhereUniqueInput!
+    }
     quizResults: { // args
       after?: NexusGenInputs['QuizResultWhereUniqueInput'] | null; // QuizResultWhereUniqueInput
       before?: NexusGenInputs['QuizResultWhereUniqueInput'] | null; // QuizResultWhereUniqueInput
@@ -3738,6 +3774,13 @@ export interface NexusGenArgTypes {
       orderBy?: NexusGenInputs['QuizOrderByInput'][] | null; // [QuizOrderByInput!]
       where?: NexusGenInputs['QuizWhereInput'] | null; // QuizWhereInput
     }
+    stats: { // args
+      lessonId?: string | null; // String
+      userId?: string | null; // String
+    }
+    testResult: { // args
+      where: NexusGenInputs['TestResultWhereUniqueInput']; // TestResultWhereUniqueInput!
+    }
     testResults: { // args
       after?: NexusGenInputs['TestResultWhereUniqueInput'] | null; // TestResultWhereUniqueInput
       before?: NexusGenInputs['TestResultWhereUniqueInput'] | null; // TestResultWhereUniqueInput
@@ -3745,6 +3788,9 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['TestResultOrderByInput'][] | null; // [TestResultOrderByInput!]
       where?: NexusGenInputs['TestResultWhereInput'] | null; // TestResultWhereInput
+    }
+    textEditorResult: { // args
+      where: NexusGenInputs['TextEditorResultWhereUniqueInput']; // TextEditorResultWhereUniqueInput!
     }
     textEditorResults: { // args
       after?: NexusGenInputs['TextEditorResultWhereUniqueInput'] | null; // TextEditorResultWhereUniqueInput

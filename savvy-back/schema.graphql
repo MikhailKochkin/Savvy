@@ -1580,15 +1580,18 @@ type Query {
   lesson(where: LessonWhereUniqueInput!): Lesson
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int, orderBy: [LessonResultOrderByInput!], where: LessonResultWhereInput): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int, where: LessonWhereInput): [Lesson!]!
-  lessonsConnection: Lesson
   me: User
   newTest(where: NewTestWhereUniqueInput!): NewTest
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByInput!], where: OrderWhereInput): [Order!]!
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByInput!], where: PostWhereInput): [Post!]!
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByInput!], where: ProblemResultWhereInput): [ProblemResult!]!
+  quizResult(where: QuizResultWhereUniqueInput!): QuizResult
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int, orderBy: [QuizResultOrderByInput!], where: QuizResultWhereInput): [QuizResult!]!
   quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByInput!], where: QuizWhereInput): [Quiz!]!
+  stats(lessonId: String, userId: String): Stats
+  testResult(where: TestResultWhereUniqueInput!): TestResult
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByInput!], where: TestResultWhereInput): [TestResult!]!
+  textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int, orderBy: [TextEditorResultOrderByInput!], where: TextEditorResultWhereInput): [TextEditorResult!]!
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
 }
@@ -1952,6 +1955,16 @@ input StatementWhereInput {
 
 input StatementWhereUniqueInput {
   id: String
+}
+
+type Stats {
+  constructionResults: [ConstructionResult]
+  documentResults: [DocumentResult]
+  feedbacks: [Feedback]
+  problemResults: [ProblemResult]
+  quizResults: [QuizResult]
+  testResults: [TestResult]
+  textEditorResults: [TextEditorResult]
 }
 
 """The first Star Wars episodes released"""
