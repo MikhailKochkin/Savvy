@@ -77,22 +77,9 @@ const Mutation = mutationType({
         careerTrackID: stringArg(),
         company: stringArg(),
       },
-      resolve: async (
-        _,
-        {
-          name,
-          surname,
-          email,
-          uniID,
-          password,
-          careerTrackID,
-          company,
-          status,
-        },
-        ctx
-      ) => {
+      resolve: async (_, { name, surname, email, password, status }, ctx) => {
         const hashed_password = await bcrypt.hash(password, 10);
-
+        console.log(name, surname, email, password, status);
         const user = await ctx.prisma.user.create({
           data: {
             name,
@@ -298,6 +285,7 @@ const Mutation = mutationType({
         coursePageId: stringArg(),
       },
       resolve: async (_, { visitsNumber, coursePageId }, ctx) => {
+        console.log(ctx.res.req.userId, coursePageId);
         const courseVisit = await ctx.prisma.courseVisit.create({
           data: {
             coursePage: {

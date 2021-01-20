@@ -173,7 +173,7 @@ const CreateQuiz = (props) => {
                     defaultValue={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                   />
-                  <Comment>
+                  <Comment id="ifRight">
                     <DynamicLoadedEditor
                       id="answer"
                       name="answer"
@@ -181,11 +181,11 @@ const CreateQuiz = (props) => {
                       getEditorText={setIfRight}
                     />
                   </Comment>
-                  <Comment>
+                  <Comment id="ifWrong">
                     <DynamicLoadedEditor
                       id="answer"
                       name="answer"
-                      placeholder="Комментарий в случае правильного ответа"
+                      placeholder="Комментарий в случае неправильного ответа"
                       getEditorText={setIfWrong}
                     />
                   </Comment>

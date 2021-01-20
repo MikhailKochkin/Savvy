@@ -173,7 +173,6 @@ class SingleProblem extends Component {
   }
   render() {
     const { problem, me, userData, lesson, story } = this.props;
-    console.log(problem.id, userData);
     const data = userData
       .filter((result) => result.problem.id === problem.id)
       .filter((result) => result.student.id === me.id);
