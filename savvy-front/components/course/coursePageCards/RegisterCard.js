@@ -278,8 +278,12 @@ const RegisterCard = (props) => {
   //   props.coursePage.c[0].map((el) => promos.push(Object.keys(el)[0]));
   // }
   const handlePromo = (p) => {
-    if (props.promocode.some((pr) => pr.name == p) && !used) {
-      let pro = props.promocode.find((pr) => pr.name == p);
+    if (
+      props.promocode &&
+      props.promocode.promocodes.some((pr) => pr.name == p) &&
+      !used
+    ) {
+      let pro = props.promocode.promocodes.find((pr) => pr.name == p);
       setPrice(price * pro.value);
       setUsed(true);
     } else {
