@@ -43,7 +43,7 @@ const Promocode = inputObjectType({
   name: "Promocode",
   definition(t) {
     t.string("name");
-    t.string("value");
+    t.float("value");
   },
 });
 

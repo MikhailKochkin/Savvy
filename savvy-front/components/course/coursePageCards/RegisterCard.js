@@ -93,7 +93,7 @@ const Part1 = styled.div`
 
 const Part2 = styled.div`
   width: 100%;
-  padding: 0 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -275,19 +275,17 @@ const RegisterCard = (props) => {
   // });
 
   // if (props.coursePage.promocode) {
-  //   props.coursePage.promocode[0].map((el) => promos.push(Object.keys(el)[0]));
+  //   props.coursePage.c[0].map((el) => promos.push(Object.keys(el)[0]));
   // }
-  // const handlePromo = (p) => {
-  //   if (promos.includes(p) && !used && price < 5000) {
-  //     let pro = props.coursePage.promocode[0].filter(
-  //       (el) => Object.keys(el)[0] === p
-  //     );
-  //     setPrice(price * Object.values(pro[0])[0]);
-  //     setUsed(true);
-  //   } else {
-  //     null;
-  //   }
-  // };
+  const handlePromo = (p) => {
+    if (props.promocode.some((pr) => pr.name == p) && !used) {
+      let pro = props.promocode.find((pr) => pr.name == p);
+      setPrice(price * pro.value);
+      setUsed(true);
+    } else {
+      null;
+    }
+  };
 
   let day;
   if (timeLeft[0] > 1) {
@@ -306,7 +304,6 @@ const RegisterCard = (props) => {
   } else if (timeLeft[0] === 0) {
     left = "Осталось";
   }
-
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
   me &&
@@ -422,14 +419,14 @@ const RegisterCard = (props) => {
               )}
             </Part1>
             <Part2>
-              {/* {coursePage.courseType !== "PUBLIC" &&
+              {coursePage.courseType !== "PUBLIC" &&
                 coursePage.courseType !== "CHALLENGE" && (
                   <Input
                     name="promo"
                     onChange={(e) => handlePromo(e.target.value)}
                     placeholder="Введите промокод"
                   />
-                )} */}
+                )}
               {applied && (
                 <Paid>
                   Мы получили вашу заявку. Если оплата прошла, то скоро откроем

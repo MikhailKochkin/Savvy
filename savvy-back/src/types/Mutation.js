@@ -405,6 +405,9 @@ const Mutation = mutationType({
         audience: stringArg(),
         result: stringArg(),
         news: stringArg(),
+        promocode: arg({
+          type: "PromocodeList", // name should match the name you provided
+        }),
         tariffs: stringArg(),
         methods: stringArg(),
         image: stringArg(),

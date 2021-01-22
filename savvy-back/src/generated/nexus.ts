@@ -1055,7 +1055,7 @@ export interface NexusGenInputs {
   }
   Promocode: { // input type
     name?: string | null; // String
-    value?: string | null; // String
+    value?: number | null; // Float
   }
   PromocodeList: { // input type
     promocodes?: Array<NexusGenInputs['Promocode'] | null> | null; // [Promocode]
@@ -3558,6 +3558,7 @@ export interface NexusGenArgTypes {
       image?: string | null; // String
       methods?: string | null; // String
       news?: string | null; // String
+      promocode?: NexusGenInputs['PromocodeList'] | null; // PromocodeList
       result?: string | null; // String
       tariffs?: string | null; // String
       title?: string | null; // String

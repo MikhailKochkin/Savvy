@@ -337,7 +337,7 @@ const CoursePage = (props) => {
                           subscription={coursePage.subscription}
                           subscriptionPrice={coursePage.subscriptionPrice}
                           discountPrice={coursePage.discountPrice}
-                          // promocode={coursePage.promocode}
+                          promocode={coursePage.promocode.promocodes}
                         />
                       )}
 
@@ -349,7 +349,7 @@ const CoursePage = (props) => {
                         subscription={coursePage.subscription}
                         subscriptionPrice={coursePage.subscriptionPrice}
                         discountPrice={coursePage.discountPrice}
-                        // promocode={coursePage.promocode}
+                        promocode={coursePage.promocode.promocodes}
                       />
                     )}
 
@@ -361,7 +361,7 @@ const CoursePage = (props) => {
                         subscription={coursePage.subscription}
                         subscriptionPrice={coursePage.subscriptionPrice}
                         discountPrice={coursePage.discountPrice}
-                        // promocode={coursePage.promocode}
+                        promocode={coursePage.promocode.promocodes}
                       />
                     )}
 

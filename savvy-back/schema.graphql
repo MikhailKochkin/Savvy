@@ -1054,7 +1054,7 @@ type Mutation {
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
   updateClause(commentary: String, id: String, keywords: [String], sample: String, text: String): Clause
   updateConstruction(answer: [String], hint: String, id: String, name: String, type: String, variants: [String]): Construction
-  updateCoursePage(audience: String, description: String, id: String, image: String, methods: String, news: String, result: String, tariffs: String, title: String, video: String): CoursePage
+  updateCoursePage(audience: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
   updateLesson(audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
@@ -1564,7 +1564,7 @@ input ProblemWhereUniqueInput {
 
 input Promocode {
   name: String
-  value: String
+  value: Float
 }
 
 input PromocodeList {
