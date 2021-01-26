@@ -143,7 +143,7 @@ class RequestReset extends Component {
                 <input
                   type="email"
                   name="email"
-                  placeholder={this.props.t("mail")}
+                  placeholder={"почта"}
                   value={this.state.email}
                   onChange={this.saveToState}
                 />

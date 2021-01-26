@@ -1787,6 +1787,9 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     visitsNumber?: number | null; // Int
   }
+  Message: { // root type
+    message?: string | null; // String
+  }
   Mutation: {};
   NewTest: { // root type
     answers: string[]; // [String!]!
@@ -2232,6 +2235,9 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     visitsNumber: number | null; // Int
   }
+  Message: { // field return type
+    message: string | null; // String
+  }
   Mutation: { // field return type
     createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
@@ -2274,6 +2280,8 @@ export interface NexusGenFieldTypes {
     enrollOnCourse: NexusGenRootTypes['User'] | null; // User
     newWeek: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     remind: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
+    requestReset: NexusGenRootTypes['Message'] | null; // Message
+    resetPassword: NexusGenRootTypes['User'] | null; // User
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -2806,6 +2814,9 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
     visitsNumber: 'Int'
   }
+  Message: { // field return type name
+    message: 'String'
+  }
   Mutation: { // field return type name
     createBusinessClient: 'BusinessClient'
     createClause: 'Clause'
@@ -2848,6 +2859,8 @@ export interface NexusGenFieldTypeNames {
     enrollOnCourse: 'User'
     newWeek: 'CourseVisit'
     remind: 'CourseVisit'
+    requestReset: 'Message'
+    resetPassword: 'User'
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
@@ -3520,6 +3533,14 @@ export interface NexusGenArgTypes {
     remind: { // args
       id?: string | null; // String
       reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
+    }
+    requestReset: { // args
+      email?: string | null; // String
+    }
+    resetPassword: { // args
+      confirmPassword?: string | null; // String
+      password?: string | null; // String
+      resetToken?: string | null; // String
     }
     signin: { // args
       email?: string | null; // String

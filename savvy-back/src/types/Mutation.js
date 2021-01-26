@@ -10,6 +10,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const yandex = require("../yandexCheckout");
 const postmark = require("postmark");
+const { promisify } = require("util");
+const { randomBytes } = require("crypto");
 
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
@@ -18,6 +20,20 @@ const ReminderEmail = require("../emails/Reminder");
 const NextWeekEmail = require("../emails/nextWeek");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
+
+const makeANiceEmail = (text) => `
+  <div className="email" style="
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 2;
+    font-size: 20px;
+  ">
+    <h2>Привет!</h2>
+    <p>Приятно познакомиться!</p>
+    <p>${text}</p>
+    <p>Основатель BeSavvy,Михаил Кочкин</p>
+  </div>
+`;
 
 const newOrderEmail = (client, surname, email, course, price) => `
   <div className="email" style="
@@ -1852,7 +1868,93 @@ const Mutation = mutationType({
         });
         return client;
       },
-    });
+    }),
+      t.field("requestReset", {
+        type: "Message",
+        args: {
+          email: stringArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          const user = await ctx.prisma.user.findUnique({
+            where: { email: args.email.toLowerCase() },
+          });
+
+          const randomBytesPromiseified = promisify(randomBytes);
+          const resetToken = (await randomBytesPromiseified(20)).toString(
+            "hex"
+          );
+          const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+          const res = await ctx.prisma.user.update({
+            where: { email: args.email.toLowerCase() },
+            data: { resetToken, resetTokenExpiry },
+          });
+          // 3. Email them that reset token
+          const mailRes = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: user.email,
+            Subject: "Смена пароля",
+            HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
+                  \n\n
+                  <a href="${process.env.FRONTEND_URL7}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
+          });
+          // 4. Return the message
+          return { message: "Спасибо!" };
+        },
+      }),
+      t.field("resetPassword", {
+        type: "User",
+        args: {
+          resetToken: stringArg(),
+          password: stringArg(),
+          confirmPassword: stringArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          // 1. check if the passwords match
+          if (args.password !== args.confirmPassword) {
+            throw new Error("Пароли не совпадают!");
+          }
+
+          // 2. check if its a legit reset token
+          // 3. Check if its expired
+
+          const [user] = await ctx.prisma.user.findMany({
+            where: {
+              resetToken: { equals: args.resetToken },
+              // resetTokenExpiry: Date.now() - 3600000,
+            },
+          });
+          if (!user) {
+            throw new Error("Это неправильный или устаревший токен!");
+          }
+
+          // 4. Hash their new password
+          const password = await bcrypt.hash(args.password, 10);
+          // 5. Save the new password to the user and remove old resetToken fields
+          const updatedUser = await ctx.prisma.user.update({
+            where: { email: user.email },
+            data: {
+              password,
+              resetToken: null,
+              resetTokenExpiry: null,
+            },
+          });
+
+          const token = jwt.sign(
+            { userId: updatedUser.id },
+            process.env.APP_SECRET
+          );
+
+          // 7. Set the JWT cookie
+          ctx.res.cookie("token", token, {
+            maxAge: 1000 * 60 * 60 * 24 * 365,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+          });
+          // 8. return the new user
+          return updatedUser;
+        },
+      });
   },
 });
 

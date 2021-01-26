@@ -1007,6 +1007,10 @@ enum Level {
   STANDARD
 }
 
+type Message {
+  message: String
+}
+
 type Mutation {
   createBusinessClient(email: String): BusinessClient
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
@@ -1049,6 +1053,8 @@ type Mutation {
   enrollOnCourse(coursePageId: String, id: String): User
   newWeek(id: String, reminders: [DateTime]): CourseVisit
   remind(id: String, reminders: [DateTime]): CourseVisit
+  requestReset(email: String): Message
+  resetPassword(confirmPassword: String, password: String, resetToken: String): User
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
