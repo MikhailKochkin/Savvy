@@ -24,8 +24,16 @@ const UPDATE_NOTE_MUTATION = gql`
 `;
 
 const UPDATE_TEST_MUTATION = gql`
-  mutation UPDATE_TEST_MUTATION($id: ID!, $next: Json) {
+  mutation UPDATE_TEST_MUTATION($id: String!, $next: Json) {
     updateTestForProblem(id: $id, next: $next) {
+      id
+    }
+  }
+`;
+
+const UPDATE_QUALITY_DECISION_MAKER_MUTATION = gql`
+  mutation UPDATE_QUALITY_DECISION_MAKER_MUTATION($id: String!, $next: Json) {
+    updateQualityDecisionMaker(id: $id, next: $next) {
       id
     }
   }

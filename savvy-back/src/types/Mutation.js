@@ -1474,12 +1474,14 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         text: stringArg(),
+        number: intArg(),
         commentary: stringArg(),
         sample: stringArg(),
         keywords: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
         const id = args.id;
+        console.log(args);
         //remove the ID from updates
         delete args.id;
         //run the update method

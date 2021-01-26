@@ -9,7 +9,7 @@ import UpdateClause from "./UpdateClause";
 
 const Styles = styled.div`
   margin-top: 2%;
-  width: ${props => (props.story ? "90%" : "100%")};
+  width: ${(props) => (props.story ? "90%" : "100%")};
 `;
 
 const Frame = styled.div`
@@ -23,7 +23,7 @@ const Frame = styled.div`
 `;
 
 const Comments = styled.div`
-  display: ${props => (props.display ? "block" : "none")};
+  display: ${(props) => (props.display ? "block" : "none")};
   border: 1px solid #c4c4c4;
   border-radius: 10px;
   margin-bottom: 3%;
@@ -52,7 +52,7 @@ const Buttons = styled.div`
 `;
 
 const Progress = styled.div`
-  display: ${props => (props.display ? "flex" : "none")};
+  display: ${(props) => (props.display ? "flex" : "none")};
   flex-direction: row;
   justify-content: center;
   width: 100%;
@@ -64,16 +64,16 @@ const StyledButton = withStyles({
     margin: "1% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
-    textTransform: "none"
-  }
+    textTransform: "none",
+  },
 })(Button);
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
-  ssr: false
+  ssr: false,
 });
 
-const Clause = props => {
+const Clause = (props) => {
   const [type, setType] = useState("test");
   const [text, setText] = useState("");
   const [show, setShow] = useState(false);
@@ -81,12 +81,12 @@ const Clause = props => {
   const [checked, setChecked] = useState(false);
   const [progress, setProgress] = useState(false);
 
-  const myCallback = dataFromChild => {
+  const myCallback = (dataFromChild) => {
     setText(dataFromChild);
     props.getText(dataFromChild, props.index);
   };
 
-  const checkAnswer = async e => {
+  const checkAnswer = async (e) => {
     if (!checked) {
       setProgress(true);
       props.getDraft(text, props.index);
@@ -94,24 +94,24 @@ const Clause = props => {
       let data = {
         answer: text,
         model: props.sample,
-        keywords: props.keywords
+        keywords: props.keywords,
       };
       // http://localhost:5000/
       // https://dry-plains-91452.herokuapp.com/
       const r = await fetch("https://dry-plains-91452.herokuapp.com/text", {
         method: "POST", // or 'PUT'
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       })
-        .then(response => response.json())
-        .then(res => {
+        .then((response) => response.json())
+        .then((res) => {
           console.log(res);
           setComments(res);
           setProgress(false);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     } else {
       alert("Вы уже проверили этот пункт!");
     }
@@ -122,11 +122,12 @@ const Clause = props => {
     id,
     index,
     total,
+    number,
     getNumber,
     commentary,
     keywords,
     story,
-    sample
+    sample,
   } = props;
   return (
     <Styles size={story}>
@@ -160,7 +161,7 @@ const Clause = props => {
                     слова / идеи:
                   </div>
                   <div>
-                    {keywords.map(el => (
+                    {keywords.map((el) => (
                       <li>{el}</li>
                     ))}
                   </div>
@@ -231,14 +232,14 @@ const Clause = props => {
         })} */}
           </Comments>
           <Buttons>
-            {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>}
+            {/* {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>} */}
             {props.me.id === props.userID && (
-              <StyledButton onClick={e => setType("update")}>
+              <StyledButton onClick={(e) => setType("update")}>
                 Изменить
               </StyledButton>
             )}
             {index !== total ? (
-              <StyledButton onClick={e => getNumber(index + 1)}>
+              <StyledButton onClick={(e) => getNumber(index + 1)}>
                 Дальше
               </StyledButton>
             ) : (
@@ -252,10 +253,15 @@ const Clause = props => {
           <UpdateClause
             id={id}
             sample={sample}
+            number={number}
             commentary={commentary}
             keywords={keywords}
           />
-          {<StyledButton onClick={e => setType("test")}>Изменить</StyledButton>}
+          {
+            <StyledButton onClick={(e) => setType("test")}>
+              Изменить
+            </StyledButton>
+          }
         </>
       )}
     </Styles>

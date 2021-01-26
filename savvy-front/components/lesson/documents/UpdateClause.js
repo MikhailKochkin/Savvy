@@ -9,14 +9,16 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const UPDATE_CLAUSE_MUTATION = gql`
   mutation UPDATE_CLAUSE_MUTATION(
-    $id: ID!
+    $id: String!
     $commentary: String!
+    $number: Int
     $sample: String!
     $keywords: [String!]
   ) {
     updateClause(
       id: $id
       commentary: $commentary
+      number: $number
       sample: $sample
       keywords: $keywords
     ) {
@@ -80,6 +82,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 const UpdateClause = (props) => {
   const [commentary, setCommentary] = useState(props.commentary);
   const [sample, setSample] = useState(props.sample);
+  const [number, setNumber] = useState(props.number);
   const [keywords, setKeywords] = useState(props.keywords);
   const myCallback = (dataFromChild, name) => {
     if (name === "sample") {
@@ -90,6 +93,7 @@ const UpdateClause = (props) => {
   };
   const classes = useStyles();
   const { index } = props;
+  console.log(number);
   return (
     <>
       <div id="title">Условия документа:</div>
@@ -101,6 +105,7 @@ const UpdateClause = (props) => {
             commentary,
             sample,
             keywords,
+            number,
           }}
         >
           {(updateClause, { loading, error }) => (
@@ -123,8 +128,15 @@ const UpdateClause = (props) => {
               </Frame>
               <div>
                 <Input
+                  type="number"
+                  defaultValue={number}
+                  onChange={(e) => setNumber(parseInt(e.target.value))}
+                />
+              </div>
+              <div>
+                <Input
                   defaultValue={[...keywords]}
-                  onChange={(e) => setKeywords(event.target.value.split(", "))}
+                  onChange={(e) => setKeywords(e.target.value.split(", "))}
                 />
               </div>
               <Button

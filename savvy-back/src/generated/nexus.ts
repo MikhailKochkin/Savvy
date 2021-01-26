@@ -3540,6 +3540,7 @@ export interface NexusGenArgTypes {
       commentary?: string | null; // String
       id?: string | null; // String
       keywords?: Array<string | null> | null; // [String]
+      number?: number | null; // Int
       sample?: string | null; // String
       text?: string | null; // String
     }

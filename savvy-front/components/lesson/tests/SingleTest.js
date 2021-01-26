@@ -255,6 +255,7 @@ const SingleTest = (props) => {
 
   const onCheck = async () => {
     const res1 = await setAttempts(attempts + 1);
+    console.log(JSON.stringify(answerOptions), JSON.stringify(props.true));
     const res = () => {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
         setAnswerState("right");

@@ -108,6 +108,7 @@ const UpdateProblem = (props) => {
   const getText = (d) => setText(d);
 
   const handleChange = (type, id) => {
+    console.log(type, id);
     setNodeID(id);
     setNodeType(type);
   };

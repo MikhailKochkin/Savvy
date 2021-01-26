@@ -107,6 +107,7 @@ const Document = (props) => {
     const resul = await setDrafts(drafts);
   };
   const { me, user, title, clauses, lessonID, documentID, story } = props;
+  const sorted_clauses = clauses.slice().sort((a, b) => a.number - b.number);
   return (
     <Styles>
       <Mutation
@@ -128,11 +129,12 @@ const Document = (props) => {
               Сохранить" и их проверит преподаватель.
             </Advice>
             <Header> {title} </Header>
-            {clauses.slice(0, clausesTotal).map((clause, index) => (
+            {sorted_clauses.slice(0, clausesTotal).map((clause, index) => (
               <>
                 <Clause
                   id={clause.id}
                   key={clause.sample}
+                  number={clause.number}
                   index={index + 1}
                   commentary={clause.commentary}
                   sample={clause.sample}
