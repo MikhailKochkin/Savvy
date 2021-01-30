@@ -5,6 +5,7 @@ import renderHTML from "react-render-html";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
+import { htmlToText } from "html-to-text";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
@@ -191,9 +192,17 @@ class SingleTextEditor extends Component {
   check = async (e) => {
     e.target.className = "blocked";
     this.setState({ shown: true });
+    let answer1 = htmlToText(this.state.correct_option.toLowerCase(), {
+      wordwrap: false,
+      uppercase: false,
+    });
+    let answer2 = htmlToText(this.state.answer.toLowerCase(), {
+      wordwrap: false,
+      uppercase: false,
+    }).replace(/\_/g, "");
     let data = {
-      answer1: this.state.correct_option.toLowerCase(),
-      answer2: this.state.answer.toLowerCase(),
+      answer1: answer1,
+      answer2: answer2,
     };
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
@@ -266,11 +275,14 @@ class SingleTextEditor extends Component {
     button.tabIndex = 0;
     button.addEventListener("click", this.check);
     z.after(button);
-
+    let wrong_option = htmlToText(e.target.innerHTML, {
+      wordwrap: false,
+      uppercase: false,
+    });
     this.setState({
       answer: "",
       correct_option: e.target.getAttribute("data"),
-      wrong_option: e.target.innerHTML,
+      wrong_option: wrong_option,
     });
   };
 
@@ -321,7 +333,6 @@ class SingleTextEditor extends Component {
 
   render() {
     const { textEditor, me, userData, lessonID, story } = this.props;
-    console.log("lessonID", lessonID);
     let data;
     me
       ? (data = userData
@@ -343,7 +354,9 @@ class SingleTextEditor extends Component {
                     attempts: this.state.attempts,
                     correct: this.state.correct_option,
                     wrong: this.state.wrong_option,
-                    guess: this.state.answer,
+                    guess: htmlToText(this.state.answer, {
+                      wordwrap: false,
+                    }),
                     result: this.state.result,
                   }}
                   refetchQueries={() => [
@@ -381,7 +394,6 @@ class SingleTextEditor extends Component {
                           setTimeout(() => {
                             console.log("Save");
                             const res2 = createTextEditorResult();
-                            console.log(res2);
                           }, 3000);
                         }
                       }}
