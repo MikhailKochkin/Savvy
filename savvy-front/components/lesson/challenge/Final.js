@@ -12,7 +12,7 @@ const CREATE_CHALLENGERESULT_MUTATION = gql`
     $correct: Int
     $wrong: Int
     $time: Int
-    $lesson: ID
+    $lesson: String
   ) {
     createChallengeResult(
       correct: $correct

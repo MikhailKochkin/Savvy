@@ -159,12 +159,13 @@ const CoursePage = (props) => {
               weeks = 3;
             }
 
-            let lessonsList = [];
-            coursePage.lessons.map((l) => lessonsList.push(l.id));
-
             const openLesson = coursePage.lessons.filter(
               (c) => c.id === coursePage.openLesson
             );
+            const isEnrolled = me.coursePages.some(
+              (c) => c.id == coursePage.id
+            );
+            console.log(me && isEnrolled);
             return (
               <>
                 <Container>
@@ -255,7 +256,7 @@ const CoursePage = (props) => {
                         </Button>
                         <Button
                           primary={page === "feedback"}
-                          onClick={(e) => setPage("forum")}
+                          onClick={(e) => setPage("feedback")}
                         >
                           Обратная связь
                         </Button>
@@ -296,16 +297,16 @@ const CoursePage = (props) => {
                       )}
 
                       {page === "feedback" &&
-                        (me && new_subjectArray.includes(coursePage.id) ? (
+                        (me && isEnrolled ? (
                           <>
-                            {me.studentFeedback.filter((feed) =>
-                              lessonsList.includes(feed.lesson.id)
+                            {me.studentFeedback.filter(
+                              (f) => f.lesson.coursePage.id == coursePage.id
                             ).length === 0 ? (
                               <p>Обратной связи нет</p>
                             ) : null}
                             {me.studentFeedback
-                              .filter((feed) =>
-                                lessonsList.includes(feed.lesson.id)
+                              .filter(
+                                (f) => f.lesson.coursePage.id == coursePage.id
                               )
                               .map((feedback) => (
                                 <Feedback feedback={feedback} />

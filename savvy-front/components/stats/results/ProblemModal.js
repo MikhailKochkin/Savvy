@@ -66,7 +66,9 @@ class ProblemModal extends Component {
         <div className="column">
           <div>Открытые подсказки:</div>
           <div>
-            {results && results.length > 0 ? (
+            {results &&
+            results.length > 0 &&
+            results.filter((r) => r.problem.id === problem.id)[0] ? (
               results
                 .filter((r) => r.problem.id === problem.id)[0]
                 .revealed.map((t) => <div>{renderHTML(t)}</div>)

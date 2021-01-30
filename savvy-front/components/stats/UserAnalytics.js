@@ -19,6 +19,7 @@ const LESSON_RESULTS_QUERY = gql`
         id
         structure
         type
+        number
       }
       student {
         id

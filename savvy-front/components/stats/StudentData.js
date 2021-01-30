@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import LessonData from "./LessonData";
+import Journey from "./Journey";
 
 const UPDATE_COURSE_VISIT_MUTATION = gql`
   mutation UPDATE_COURSE_VISIT_MUTATION($id: String!, $reminders: [DateTime]) {
@@ -30,21 +31,6 @@ const UPDATE_FINISH_MUTATION = gql`
     }
   }
 `;
-
-// lessonResults {
-//           id
-//           visitsNumber
-//           progress
-//           lesson {
-//             id
-//           }
-//           student {
-//             id
-//             email
-//           }
-//           createdAt
-//           updatedAt
-//         }
 
 const Name = styled.div`
   font-size: 1.6rem;
@@ -117,6 +103,9 @@ const Header = styled.div`
 const Styles = styled.div`
   margin-bottom: 0;
   padding: 0.5% 2%;
+  img {
+    max-width: 200px;
+  }
 `;
 
 const Buttons = styled.div`
@@ -305,6 +294,7 @@ const Person = (props) => {
             </Mutation>
           )}
         </Buttons>
+        <Journey student={student} results={results} />
         {courseVisit &&
           courseVisit.reminders.map((r) => <li>{moment(r).format("LLL")}</li>)}
         {page === "results" &&
@@ -322,34 +312,6 @@ const Person = (props) => {
                 />
               );
             })}
-        {/* {page === "CV" && (
-              <StyledCV>
-                {student.coverLetter ? (
-                  <div>
-                    Скачайте сопроводительное письмо{" "}
-                    <a href={student.coverLetter} target="_blank">
-                      по ссылке.
-                    </a>
-                  </div>
-                ) : (
-                  <div>Сопроводительное письмо не загружено.</div>
-                )}
-              </StyledCV>
-            )} */}
-        {/* {page === "resume" && (
-              <StyledCV>
-                {student.resume ? (
-                  <div>
-                    Скачайте резюме{" "}
-                    <a href={student.resume} target="_blank">
-                      по ссылке.
-                    </a>
-                  </div>
-                ) : (
-                  <div>Резюме не загружено.</div>
-                )}
-              </StyledCV>
-            )} */}
       </Open>
     </Styles>
   );

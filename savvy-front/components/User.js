@@ -14,26 +14,29 @@ const CURRENT_USER_QUERY = gql`
         id
         reminders
       }
-      # teacherFeedback {
-      #   id
-      #   text
-      #   lesson {
-      #     id
-      #     name
-      #   }
-      # }
+      teacherFeedback {
+        id
+        text
+        lesson {
+          id
+          name
+        }
+      }
       level {
         id
         level
       }
-      # studentFeedback {
-      #   id
-      #   text
-      #   lesson {
-      #     id
-      #     name
-      #   }
-      # }
+      studentFeedback {
+        id
+        text
+        lesson {
+          id
+          name
+          coursePage {
+            id
+          }
+        }
+      }
       new_subjects {
         id
       }

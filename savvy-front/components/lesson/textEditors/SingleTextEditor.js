@@ -113,6 +113,22 @@ const TextBar = styled.div`
       background: #6d7578;
     }
   }
+  .blocked {
+    pointer-events: none;
+    color: #6d7578;
+    border: 1px solid #6d7578;
+    font-family: Montserrat;
+    background: none;
+    outline: 0;
+    border-radius: 3px;
+    padding: 4px 7px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    &:hover {
+      color: white;
+      background: #6d7578;
+    }
+  }
 `;
 
 const EditText = styled.div`
@@ -173,6 +189,7 @@ class SingleTextEditor extends Component {
   };
 
   check = async (e) => {
+    e.target.className = "blocked";
     this.setState({ shown: true });
     let data = {
       answer1: this.state.correct_option.toLowerCase(),
@@ -182,7 +199,6 @@ class SingleTextEditor extends Component {
       `[data-initial='${this.state.correct_option}']`
     )[0];
     e.target.innerHTML = this.props.t("checking");
-    e.target.pointerEvents = "none";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -210,7 +226,6 @@ class SingleTextEditor extends Component {
           });
           el.style.background = "#D9EAD3";
           e.target.innerHTML = this.props.t("check");
-          e.target.pointerEvents = "auto";
         } else {
           this.setState({
             result: false,
