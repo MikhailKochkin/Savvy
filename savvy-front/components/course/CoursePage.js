@@ -162,9 +162,12 @@ const CoursePage = (props) => {
             const openLesson = coursePage.lessons.filter(
               (c) => c.id === coursePage.openLesson
             );
-            const isEnrolled = me.new_subjects.some(
-              (c) => c.id == coursePage.id
-            );
+            let isEnrolled;
+            if (me) {
+              isEnrolled = me.new_subjects.some((c) => c.id == coursePage.id);
+            } else {
+              isEnrolled = false;
+            }
             return (
               <>
                 <Container>
