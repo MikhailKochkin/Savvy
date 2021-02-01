@@ -50,6 +50,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         answer
         ifRight
         ifWrong
+        check
         type
         next
         user {
