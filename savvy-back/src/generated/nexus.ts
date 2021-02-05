@@ -3381,6 +3381,7 @@ export interface NexusGenArgTypes {
       answers?: Array<string | null> | null; // [String]
       documentId?: string | null; // String
       drafts?: Array<string | null> | null; // [String]
+      lessonId?: string | null; // String
     }
     createFeedback: { // args
       lessonId?: string | null; // String

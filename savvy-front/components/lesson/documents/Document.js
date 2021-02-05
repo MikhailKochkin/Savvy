@@ -13,14 +13,14 @@ const CREATE_DOCUMENTRESULT_MUTATION = gql`
   mutation CREATE_DOCUMENTRESULT_MUTATION(
     $answers: [String]
     $drafts: [String]
-    $lesson: ID
-    $document: ID
+    $lessonId: String
+    $documentId: String
   ) {
     createDocumentResult(
       answers: $answers
       drafts: $drafts
-      lesson: $lesson
-      document: $document
+      lessonId: $lessonId
+      documentId: $documentId
     ) {
       id
     }
@@ -113,8 +113,8 @@ const Document = (props) => {
       <Mutation
         mutation={CREATE_DOCUMENTRESULT_MUTATION}
         variables={{
-          document: documentID,
-          lesson: lessonID,
+          documentId: documentID,
+          lessonId: lessonID,
           drafts: drafts,
           answers: results,
         }}

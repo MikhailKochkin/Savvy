@@ -1540,6 +1540,7 @@ const Mutation = mutationType({
       type: "DocumentResult",
       args: {
         documentId: stringArg(),
+        lessonId: stringArg(),
         answers: list(stringArg()),
         drafts: list(stringArg()),
       },
@@ -1554,11 +1555,14 @@ const Mutation = mutationType({
             document: {
               connect: { id: documentId },
             },
+            lesson: {
+              connect: { id: args.lessonId },
+            },
             answers: {
-              set: [...answers],
+              set: [...args.answers],
             },
             drafts: {
-              set: [...drafts],
+              set: [...args.drafts],
             },
           },
         });

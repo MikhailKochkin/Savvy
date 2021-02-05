@@ -1019,7 +1019,7 @@ type Mutation {
   createCoursePage(courseType: String, description: String, image: String, published: Boolean, title: String): CoursePage
   createCourseVisit(coursePageId: String, visitsNumber: Int): CourseVisit
   createDocument(lessonId: String, title: String): Document
-  createDocumentResult(answers: [String], documentId: String, drafts: [String]): DocumentResult
+  createDocumentResult(answers: [String], documentId: String, drafts: [String], lessonId: String): DocumentResult
   createFeedback(lessonId: String, studentId: String, text: String): Feedback
   createForum(lessonId: String, text: String): Forum
   createLesson(coursePageID: String, description: String, name: String, number: Int, text: String): Lesson
