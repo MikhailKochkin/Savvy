@@ -241,8 +241,7 @@ class SingleTextEditor extends Component {
           });
           el.style.background = "#FCE5CD";
           e.target.innerHTML = this.props.t("check");
-          e.target.pointerEvents = "auto";
-
+          e.target.className = "mini_button";
           if (res.comment) {
             alert(res.comment);
           }

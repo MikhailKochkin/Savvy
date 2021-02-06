@@ -161,12 +161,9 @@ const SingleConstructor = (props) => {
   const handleSteps = (e) => {
     e.preventDefault();
     // 1. Get the user variant for a particular article
-    console.log(e.target);
     const { value } = e.target;
-    console.log(value);
     // 2. Get the number of the article
     const article_number = e.target.getAttribute("data");
-    console.log(article_number);
     // 3. Save to state the user data
     const d = received.map((item, index) => {
       if (index === article_number - 1) {
@@ -187,7 +184,6 @@ const SingleConstructor = (props) => {
     const elements = document
       .getElementById(props.construction.id)
       .getElementsByClassName("l");
-    console.log(elements);
     for (let element of elements) {
       element.style.border = "1px solid #DE6B48";
     }
@@ -217,7 +213,6 @@ const SingleConstructor = (props) => {
     results.forEach((element) => {
       inputs.push(element.innerHTML);
     });
-    console.log(inputs);
     setInputs(inputs);
   };
 
@@ -257,8 +252,8 @@ const SingleConstructor = (props) => {
   };
 
   useEffect(() => {
-    // const vars = shuffle(props.variants);
-    const vars = props.variants;
+    const vars = shuffle(props.variants);
+    // const vars = props.variants;
 
     setVariants(vars);
   }, []);
