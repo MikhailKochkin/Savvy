@@ -18,9 +18,44 @@ const StyledButton = withStyles({
 })(Button);
 
 const Container = styled.div`
-  width: ${(props) => (props.story ? "100%" : "80%")};
+  width: ${(props) => props.width};
   font-size: 1.6rem;
   margin: 20px 0;
+  display: flex;
+  flex-direction: row;
+  .text {
+    flex-basis: 90%;
+    border: 1px solid #f3f3f3;
+    padding: 1% 2%;
+    border-radius: 25px;
+  }
+  .author {
+    flex-basis: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    .icon {
+      margin: 5px;
+      border-radius: 50%;
+      padding: 2%;
+      height: 55px;
+      width: 55px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .name {
+      font-size: 1.2rem;
+      text-align: center;
+      color: #8f93a3;
+    }
+  }
+  @media (max-width: 800px) {
+    flex-direction: row;
+    width: 100%;
+  }
 `;
 
 const NoteStyles = styled.div`
@@ -28,10 +63,16 @@ const NoteStyles = styled.div`
   margin: 2% 0 0 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
+    order: 3;
+    h2 {
+      font-size: 2.2rem;
+      line-height: 1.4;
+    }
   }
   h2 {
-    font-size: 3rem;
+    font-size: 2.6rem;
+    line-height: 1.4;
   }
   img {
     display: block;
@@ -134,33 +175,47 @@ const Note = (props) => {
     getData,
     lessonID,
   } = props;
+  let width;
+  if (props.problem) {
+    width = "50%";
+  } else if (props.story) {
+    width = "50%";
+  } else {
+    width = "100%";
+  }
   return (
     <>
-      <Container story={story}>
-        <Buttons>
-          {!exam && !story && me.id === note.user.id && (
-            <StyledButton onClick={(e) => setUpdate(!update)}>
-              {!update ? props.t("update") : props.t("back")}
-            </StyledButton>
-          )}
-          {me && me.id === user && !props.story && !props.exam && (
-            <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
-          )}
-        </Buttons>
-        {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
-        {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
-        {update && !story && !exam && (
-          <UpdateNote
-            notes={notes}
-            text={text}
-            tests={tests}
-            id={id}
-            quizes={quizes}
-            next={props.next}
-            lessonID={lessonID}
-          />
-        )}
+      <Container width={width}>
+        <div className="text">
+          {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
+          {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
+        </div>
+        <div className="author">
+          <img className="icon" src="../../static/hipster.svg" />
+          <div className="name">BeSavvy</div>
+        </div>
       </Container>
+      <Buttons>
+        {!exam && !story && me.id === note.user.id && (
+          <StyledButton onClick={(e) => setUpdate(!update)}>
+            {!update ? props.t("update") : props.t("back")}
+          </StyledButton>
+        )}
+        {me && me.id === user && !props.story && !props.exam && (
+          <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
+        )}
+      </Buttons>
+      {update && !story && !exam && (
+        <UpdateNote
+          notes={notes}
+          text={text}
+          tests={tests}
+          id={id}
+          quizes={quizes}
+          next={props.next}
+          lessonID={lessonID}
+        />
+      )}
     </>
   );
 };

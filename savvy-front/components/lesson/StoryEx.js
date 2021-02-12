@@ -181,6 +181,7 @@ class StoryEx extends Component {
             forum={el}
             me={me}
             id={el.id}
+            story={true}
             lesson={lesson.id}
             result={el.rating.filter((r) => r.user.id == me.id)[0]}
             statements={el.statements}

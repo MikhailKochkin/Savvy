@@ -7,11 +7,21 @@ import Note from "../notes/Note";
 import { withTranslation } from "../../../i18n";
 
 const Styles = styled.div`
-  width: 100%;
+  width: ${(props) => (props.story ? "100vw" : "100%")};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   #suggestion {
-    background: #f0f8ff;
+    /* background: #f0f8ff; */
+    color: white;
     border-radius: 16px;
-    padding: 3% 5%;
+    padding: 1.5% 3%;
+    width: 50vw;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
   span {
     cursor: pointer;
@@ -19,12 +29,21 @@ const Styles = styled.div`
       text-decoration: underline;
     }
   }
+  @media (max-width: 800px) {
+    #suggestion {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
 `;
 
 const Questions = styled.div`
-  display: ${(props) => (props.display ? `display` : `none`)};
+  display: ${(props) => (props.display ? `flex` : `none`)};
   width: 100%;
   margin-top: 2%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Final = styled.div`
@@ -37,20 +56,20 @@ const Final = styled.div`
 `;
 
 const Button = styled.div`
-  width: 40%;
+  width: 60%;
   text-align: center;
-  border: 1px solid #24315e;
   box-sizing: border-box;
   border-radius: 10px;
-  background: none;
-  padding: 1.5% 3%;
-  margin-top: 2%;
+  background: #f96358;
+  padding: 2% 0;
+  /* margin-top: 2%; */
   cursor: pointer;
   @media (max-width: 800px) {
-    width: 46%;
+    width: 65%;
   }
+  transition: 0.3s;
   &:hover {
-    background: #e3f2ff;
+    background: #e75b52;
   }
 `;
 
@@ -92,7 +111,7 @@ class Interactive extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
-          story={true}
+          problem={true}
         />
       );
 
@@ -131,7 +150,7 @@ class Interactive extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
-          story={true}
+          problem={true}
         />
       );
       this.setState((state) => {
@@ -157,7 +176,7 @@ class Interactive extends Component {
           next={el.next}
           getData={this.updateArray}
           exam={true}
-          story={true}
+          problem={true}
         />
       );
       this.setState((state) => {
@@ -175,7 +194,8 @@ class Interactive extends Component {
       data[1].value === null ||
       data[1].value === ""
     ) {
-      finish = <Final> {this.props.t("final")}📝</Final>;
+      // finish = <Final> {this.props.t("final")}📝</Final>;
+      finish = <div></div>;
       this.setState((state) => {
         if (!(finish in this.state.componentList)) {
           const componentList = [...state.componentList, finish];
@@ -192,9 +212,9 @@ class Interactive extends Component {
   componentDidMount = () => {
     let item;
     let el;
-    if (this.props.exam.nodeType === "quiz") {
+    if (this.props.problem.nodeType === "quiz") {
       el = this.props.lesson.quizes.find(
-        (quiz) => quiz.id === this.props.exam.nodeID
+        (quiz) => quiz.id === this.props.problem.nodeID
       );
       item = (
         <SingleQuiz
@@ -221,9 +241,9 @@ class Interactive extends Component {
           story={true}
         />
       );
-    } else if (this.props.exam.nodeType.toLowerCase() === "newtest") {
+    } else if (this.props.problem.nodeType.toLowerCase() === "newtest") {
       el = this.props.lesson.newTests.find(
-        (test) => test.id === this.props.exam.nodeID
+        (test) => test.id === this.props.problem.nodeID
       );
       item = (
         <SingleTest
@@ -261,8 +281,6 @@ class Interactive extends Component {
     return (
       <Styles>
         <div id="suggestion">
-          👩🏼‍🏫<b>{this.props.t("together")}</b>
-          <br />
           <Button onClick={this.show}>
             {!this.state.display
               ? this.props.t("first")
@@ -270,7 +288,7 @@ class Interactive extends Component {
           </Button>
         </div>
         <Questions display={this.state.display}>
-          {this.state.componentList.map((el) => el)}
+          {[...this.state.componentList].map((el) => el)}
         </Questions>
       </Styles>
     );
@@ -280,7 +298,7 @@ class Interactive extends Component {
 Interactive.propTypes = {
   lesson: PropTypes.object.isRequired,
   me: PropTypes.object.isRequired,
-  exam: PropTypes.object.isRequired,
+  problem: PropTypes.object.isRequired,
 };
 
 export default withTranslation("tasks")(Interactive);

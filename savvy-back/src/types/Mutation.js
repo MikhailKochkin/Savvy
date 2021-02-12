@@ -796,6 +796,32 @@ const Mutation = mutationType({
         return ctx.prisma.note.delete({ where });
       },
     });
+    t.field("createChat", {
+      type: "Chat",
+      args: {
+        name: stringArg(),
+        lessonId: stringArg(),
+        messages: arg({
+          type: "Messages",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const lessonId = args.lessonId;
+        delete args.lessonId;
+        const Chat = await ctx.prisma.chat.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            ...args,
+          },
+        });
+        return Chat;
+      },
+    });
     t.field("createTextEditor", {
       type: "TextEditor",
       args: {

@@ -12,10 +12,10 @@ import { CURRENT_USER_QUERY } from "../../User";
 const CREATE_SHOTRESULT_MUTATION = gql`
   mutation CREATE_SHOTRESULT_MUTATION(
     $answer: String!
-    $lessonID: ID
-    $shotID: ID
+    $lessonId: String
+    $shotId: String
   ) {
-    createShotResult(answer: $answer, lessonID: $lessonID, shotID: $shotID) {
+    createShotResult(answer: $answer, lessonId: $lessonId, shotId: $shotId) {
       id
     }
   }
@@ -81,7 +81,10 @@ const Styles = styled.div`
   box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
   margin: 30px 0;
   padding: 2%;
-  width: 100%;
+  width: ${(props) => props.width};
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Circle = styled.button`
@@ -142,8 +145,17 @@ class Shots extends Component {
     const data = userData
       .filter((result) => result.shot.id === shotID)
       .filter((result) => result.student.id === me.id);
+
+    let width;
+    if (this.props.problem) {
+      width = "50%";
+    } else if (this.props.story) {
+      width = "50%";
+    } else {
+      width = "100%";
+    }
     return (
-      <Styles>
+      <Styles width={width}>
         {this.state.page === "show" && (
           <>
             <Title>
@@ -168,8 +180,8 @@ class Shots extends Component {
               <Mutation
                 mutation={CREATE_SHOTRESULT_MUTATION}
                 variables={{
-                  lessonID,
-                  shotID,
+                  lessonId: lessonID,
+                  shotId: shotID,
                   answer: "Looked through",
                 }}
                 refetchQueries={() => [
@@ -208,7 +220,7 @@ class Shots extends Component {
                 )}
               </Mutation>
             </Buttons>
-            {me && me.id === shotUser && (
+            {me && me.id === shotUser && !this.props.story && (
               <DeleteSingleShot shotID={shotID} lessonID={lessonID} />
             )}
             {/* {me && me.id === shotUser && (

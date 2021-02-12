@@ -341,22 +341,26 @@ const Progress = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
-  /* border: 1px solid #edefed; */
   padding: 0.5% 2%;
-  width: 45%;
+  width: 100%;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 2px;
   margin: 0 0 20px 0;
-  /* a {
-    padding-top: 2%;
-    padding-left: 2%;
-  } */
+  h1 {
+    max-width: 600px;
+    line-height: 1.4;
+  }
   @media (max-width: 1500px) {
     width: 55%;
   }
   @media (max-width: 1000px) {
     margin: 1%;
     width: 90%;
+    h1 {
+      width: 95%;
+    }
   }
   .example-enter {
     opacity: 0.01;
@@ -390,7 +394,6 @@ const NewSingleLesson = (props) => {
           id: props.id,
         }}
         fetchPolicy="no-cache"
-        returnPartialData={true}
       >
         {({ data, error, loading }) => {
           if (error) return <Error error={error} />;
@@ -440,12 +443,32 @@ const NewSingleLesson = (props) => {
                           </span>
                         </Link>
                       )}
+                      {console.log(
+                        lesson.user.id === me.id,
+                        me.permissions.includes("ADMIN")
+                      )}
                       <span>
-                        Урок {lesson.number}. {lesson.name}
+                        {(lesson.user.id === me.id ||
+                          me.permissions.includes("ADMIN")) && (
+                          <div>
+                            {/* Режим истории → */}
+                            <Link
+                              href={{
+                                pathname: "/lesson",
+                                query: {
+                                  id: lesson.id,
+                                  type: "regular",
+                                },
+                              }}
+                            >
+                              <span>Переключить</span>
+                            </Link>
+                          </div>
+                        )}
                       </span>
                     </Head>
 
-                    {me &&
+                    {/* {me &&
                       (lesson.user.id === me.id ||
                         me.permissions.includes("ADMIN")) && (
                         <Head2>
@@ -466,8 +489,11 @@ const NewSingleLesson = (props) => {
                             </div>
                           )}
                         </Head2>
-                      )}
+                      )} */}
                     <LessonPart>
+                      <h1>
+                        Урок {lesson.number}. {lesson.name}
+                      </h1>
                       <CSSTransitionGroup transitionName="example">
                         <StoryEx
                           tasks={lesson.structure.lessonItems}

@@ -226,6 +226,12 @@ const SingleLesson_Menu = (props) => {
             </ButtonZone>
 
             <ButtonZone>
+              <ChooseButton name="createChat" onClick={onSwitch}>
+                Новый диалог
+              </ChooseButton>
+            </ButtonZone>
+
+            <ButtonZone>
               <ChooseButton name="createDocument" onClick={onSwitch}>
                 Новый документ
               </ChooseButton>

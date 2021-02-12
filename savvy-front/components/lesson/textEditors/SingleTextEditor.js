@@ -37,13 +37,17 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   }
 `;
 
+const Styles = styled.div`
+  margin-bottom: 20px;
+`;
+
 const TextBar = styled.div`
   width: 98%;
   font-size: 1.6rem;
   border-radius: 5px;
   @media (max-width: 800px) {
     width: 100%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   img {
     display: block;
@@ -340,7 +344,7 @@ class SingleTextEditor extends Component {
       : (data = [""]);
 
     return (
-      <div id={textEditor.id + 1}>
+      <Styles id={textEditor.id + 1}>
         {!this.state.update && (
           <>
             <TextBar id={textEditor.id}>
@@ -439,7 +443,7 @@ class SingleTextEditor extends Component {
             totalMistakes={this.state.total}
           />
         )}
-      </div>
+      </Styles>
     );
   }
 }

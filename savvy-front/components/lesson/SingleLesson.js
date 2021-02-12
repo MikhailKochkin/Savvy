@@ -23,6 +23,7 @@ import CreateConstructor from "../create/CreateConstructor";
 import CreateTextEditor from "../create/CreateTextEditor";
 import CreateProblem from "../create/CreateProblem";
 import CreateNote from "../create/CreateNote";
+import CreateChat from "./chat/CreateChat";
 import ChangeForum from "./forum/ChangeForum";
 import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import SingleLesson_Menu from "./SingleLesson_Menu";
@@ -774,6 +775,9 @@ const SingleLesson = (props) => {
                       )}
                       {page === "createNote" && (
                         <CreateNote lessonID={lesson.id} />
+                      )}
+                      {page === "createChat" && (
+                        <CreateChat lessonID={lesson.id} />
                       )}
                       {page === "createDocument" && (
                         <CreateDocument lessonID={lesson.id} />

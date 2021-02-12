@@ -4,6 +4,7 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import renderHTML from "react-render-html";
 import dynamic from "next/dynamic";
+import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
@@ -30,15 +31,17 @@ const CREATE_PROBLEMRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  width: 100%;
+  width: ${(props) => (props.story ? "100vw" : "100%")};
   font-size: 1.6rem;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding-top: 2%;
   margin-bottom: 3%;
-  @media (max-width: 800px) {
-    width: 100%;
-    padding: 2%;
-    font-size: 1.4rem;
+  #text {
+    width: ${(props) => (props.story ? "50%" : "100%")};
   }
   .hint {
     color: #333a8a;
@@ -72,16 +75,27 @@ const TextBar = styled.div`
     color: rgb(51, 58, 138);
     text-decoration: underline;
   }
+  @media (max-width: 800px) {
+    width: 100%;
+    padding: 2%;
+    font-size: 1.6rem;
+    #text {
+      width: 100%;
+    }
+  }
 `;
 
 const Frame = styled.div`
   border: 1px solid #c4c4c4;
   border-radius: 10px;
-  width: 100%;
-  margin: 3% 0;
+  width: ${(props) => (props.story ? "50%" : "100%")};
+  margin: 1.5% 0;
   padding: 0% 3%;
   .com {
     border-top: 1px solid #c4c4c4;
+  }
+  @media (max-width: 800px) {
+    width: 100%;
   }
 `;
 
@@ -90,7 +104,11 @@ const ButtonGroup = styled.div`
 `;
 
 const Buttons = styled.div`
+  width: ${(props) => (props.story ? "10%" : "30%")};
   pointer-events: ${(props) => (props.block ? "none" : "auto")};
+  @media (max-width: 800px) {
+    width: 50%;
+  }
 `;
 
 const StyledButton = withStyles({
@@ -99,7 +117,7 @@ const StyledButton = withStyles({
     marginRight: "2%",
     fontSize: "1.6rem",
     textTransform: "none",
-    width: "40%",
+    width: "100%",
   },
 })(Button);
 
@@ -179,10 +197,15 @@ class SingleProblem extends Component {
     return (
       <>
         {!this.state.update && (
-          <TextBar id={problem.id}>
-            {renderHTML(problem.text)}
+          <TextBar id={problem.id} story={story}>
+            <div id="text">{renderHTML(problem.text)}</div>
             {problem.nodeID && (
-              <Interactive lesson={lesson} me={me} exam={problem} />
+              <Interactive
+                lesson={lesson}
+                me={me}
+                problem={problem}
+                story={story}
+              />
             )}
             {data.length > 0 && (
               <ButtonGroup>
@@ -203,7 +226,7 @@ class SingleProblem extends Component {
               </ButtonGroup>
             )}
             {this.state.revealAnswer && data.length > 0 && (
-              <Frame>
+              <Frame story={story}>
                 <p>
                   <b>Ваш ответ:</b>
                 </p>{" "}
@@ -212,7 +235,7 @@ class SingleProblem extends Component {
             )}
             {data.length === 0 && (
               <>
-                <Frame>
+                <Frame story={story}>
                   <HoverEditor
                     index={1}
                     name="answer"
@@ -230,7 +253,7 @@ class SingleProblem extends Component {
                   }}
                 >
                   {(createProblemResult, { loading, error }) => (
-                    <Buttons block={this.state.revealAnswer}>
+                    <Buttons story={story} block={this.state.revealAnswer}>
                       <StyledButton
                         variant="contained"
                         color="primary"
@@ -290,5 +313,14 @@ class SingleProblem extends Component {
     );
   }
 }
+
+SingleProblem.propTypes = {
+  lessonID: PropTypes.string,
+  story: PropTypes.string,
+  problem: PropTypes.object.isRequired,
+  me: PropTypes.object,
+  userData: PropTypes.object,
+  lesson: PropTypes.object,
+};
 
 export default SingleProblem;

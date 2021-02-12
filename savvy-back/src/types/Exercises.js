@@ -1,4 +1,4 @@
-const { objectType } = require("@nexus/schema");
+const { objectType, inputObjectType } = require("@nexus/schema");
 
 const NewTest = objectType({
   name: "NewTest",
@@ -213,9 +213,43 @@ const Clause = objectType({
   },
 });
 
+const MessageElement = inputObjectType({
+  name: "MessageElement",
+  definition(t) {
+    t.int("number");
+    t.string("author");
+    t.string("text");
+    t.string("image");
+  },
+});
+
+const Messages = inputObjectType({
+  name: "Messages",
+  definition(t) {
+    t.list.field("messagesList", { type: "MessageElement" });
+  },
+});
+
+const Chat = objectType({
+  name: "Chat",
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.messages();
+    t.model.lessonId();
+    t.model.lesson();
+    t.model.user();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   NewTest,
   Shot,
+  Chat,
+  Messages,
+  MessageElement,
   Quiz,
   Note,
   TextEditor,

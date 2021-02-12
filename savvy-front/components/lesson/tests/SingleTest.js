@@ -22,6 +22,29 @@ const StyledButton = withStyles({
   },
 })(Button);
 
+const IconBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .icon {
+    margin: 5px;
+    border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #8f93a3;
+    max-width: 80px;
+  }
+`;
+
 const CREATE_TESTRESULT_MUTATION = gql`
   mutation CREATE_TESTRESULT_MUTATION(
     $answer: String
@@ -40,6 +63,13 @@ const Options = styled.div`
   flex-wrap: wrap;
   min-width: 60%;
   max-width: 80%;
+`;
+
+const Styles = styled.div`
+  width: ${(props) => props.width};
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const TextBar = styled.div`
@@ -115,7 +145,6 @@ const TextBar = styled.div`
   }
   @media (max-width: 800px) {
     width: 100%;
-    font-size: 1.5rem;
     padding-left: 5px;
   }
 `;
@@ -166,7 +195,8 @@ const Group = styled.div`
   justify-content: center;
   width: 100%;
   padding: 0.5%;
-  margin: 3% 0;
+  margin: 0;
+  margin-bottom: 3%;
 `;
 
 const MiniButton = styled.div`
@@ -287,35 +317,21 @@ const SingleTest = (props) => {
   const { exam, story, ifWrong, ifRight, me, user_name } = props;
   const mes = _.zip(props.answers, props.true);
   let userData;
-  let student_name;
-  let author_name;
-  if (me) {
-    if (me.name && me.surname) {
-      student_name = (me.name.charAt(0) + me.surname.charAt(0)).toUpperCase();
-    } else {
-      student_name = (me.name.charAt(0) + me.name.charAt(1)).toUpperCase();
-    }
-  } else {
-    student_name = "СТ";
-  }
-  if (user_name && user_name.name && user_name.surname) {
-    author_name = (
-      user_name.name.charAt(0) + user_name.surname.charAt(0)
-    ).toUpperCase();
-  } else if (user_name && user_name.name) {
-    author_name = (
-      user_name.name.charAt(0) + user_name.name.charAt(1)
-    ).toUpperCase();
-  } else {
-    author_name = "НА";
-  }
   me
     ? (userData = props.userData
         .filter((el) => el.testID === props.id)
         .filter((el) => el.student.id === me.id))
     : (userData = 1);
+  let width;
+  if (props.problem) {
+    width = "50%";
+  } else if (props.story) {
+    width = "50%";
+  } else {
+    width = "100%";
+  }
   return (
-    <>
+    <Styles width={width}>
       {!exam && story !== true && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
           {!update ? props.t("update") : props.t("back")}
@@ -332,10 +348,16 @@ const SingleTest = (props) => {
         <TextBar className="Test" story={story}>
           <div className="question">
             <div className="question_text">{renderHTML(props.question[0])}</div>
-            <div className="question_name">{author_name}</div>
+            <IconBlock>
+              <img className="icon" src="../../static/hipster.svg" />
+              <div className="name">BeSavvy</div>
+            </IconBlock>
           </div>
           <div className="answer">
-            <div className="answer_name">{student_name}</div>
+            <IconBlock>
+              <img className="icon" src="../../static/flash.svg" />
+              <div className="name">{me.name}</div>
+            </IconBlock>
             <Options>
               {mes.map((answer, index) => (
                 <AnswerOption
@@ -348,7 +370,7 @@ const SingleTest = (props) => {
               ))}
             </Options>
           </div>
-          {zero && (
+          {/* {zero && (
             <div className="question">
               <div className="question_text">Выберите хотя бы один вариант</div>
               <div className="question_name">{author_name}</div>
@@ -377,7 +399,7 @@ const SingleTest = (props) => {
               <div className="question_text">{renderHTML(ifWrong)}</div>
               <div className="question_name">{author_name}</div>
             </Question>
-          )}
+          )} */}
 
           <Group answerState={answerState}>
             <Mutation
@@ -420,6 +442,37 @@ const SingleTest = (props) => {
               )}
             </Mutation>
           </Group>
+          {zero && (
+            <div className="question">
+              <div className="question_text">Выберите хотя бы один вариант</div>
+              <IconBlock>
+                <img className="icon" src="../../static/hipster.svg" />
+                <div className="name">BeSavvy</div>
+              </IconBlock>
+            </div>
+          )}
+          {answerState === "right" && (
+            <Question inputColor={inputColor}>
+              <div className="question_text">
+                {props.t("correct")}! {renderHTML(ifRight)}
+              </div>
+              <IconBlock>
+                <img className="icon" src="../../static/hipster.svg" />
+                <div className="name">BeSavvy</div>
+              </IconBlock>
+            </Question>
+          )}
+          {answerState === "wrong" && (
+            <Question inputColor={inputColor}>
+              <div className="question_text">
+                {props.t("wrong")}... {renderHTML(ifWrong)}
+              </div>
+              <IconBlock>
+                <img className="icon" src="../../static/hipster.svg" />
+                <div className="name">BeSavvy</div>
+              </IconBlock>
+            </Question>
+          )}
         </TextBar>
       )}
       {update && (
@@ -438,7 +491,7 @@ const SingleTest = (props) => {
           tests={props.tests}
         />
       )}
-    </>
+    </Styles>
   );
 };
 

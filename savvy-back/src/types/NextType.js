@@ -62,4 +62,6 @@ module.exports = {
   LessonStructure,
   Promocode,
   PromocodeList,
+  // Message,
+  // Messages,
 };

@@ -142,6 +142,38 @@ input ChallengeResultWhereUniqueInput {
   id: String
 }
 
+type Chat {
+  createdAt: DateTime!
+  id: String!
+  lesson: Lesson!
+  lessonId: String!
+  messages: Json
+  name: String
+  updatedAt: DateTime!
+  user: User!
+}
+
+input ChatListRelationFilter {
+  every: ChatWhereInput
+  none: ChatWhereInput
+  some: ChatWhereInput
+}
+
+input ChatWhereInput {
+  AND: [ChatWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  messages: JsonNullableFilter
+  name: StringNullableFilter
+  NOT: [ChatWhereInput!]
+  OR: [ChatWhereInput!]
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
 type Clause {
   commentary: String!
   createdAt: DateTime!
@@ -954,6 +986,7 @@ input LessonWhereInput {
   challenge_num: IntNullableFilter
   challengeResults: ChallengeResultListRelationFilter
   change: StringNullableFilter
+  chats: ChatListRelationFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
   coursePage: CoursePageWhereInput
@@ -1011,8 +1044,20 @@ type Message {
   message: String
 }
 
+input MessageElement {
+  author: String
+  image: String
+  number: Int
+  text: String
+}
+
+input Messages {
+  messagesList: [MessageElement]
+}
+
 type Mutation {
   createBusinessClient(email: String): BusinessClient
+  createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createConstruction(answer: [String], hint: String, lessonId: String, name: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
@@ -1272,6 +1317,7 @@ input NoteListRelationFilter {
 
 input NoteWhereInput {
   AND: [NoteWhereInput!]
+  chat: BoolNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
@@ -1831,7 +1877,8 @@ input SandboxWhereInput {
   sandboxPageID: StringFilter
   text: StringFilter
   updatedAt: DateTimeFilter
-  user: UserListRelationFilter
+  User: UserWhereInput
+  userId: StringNullableFilter
   video: StringNullableFilter
 }
 
@@ -2304,7 +2351,6 @@ input UserOrderByInput {
   resetToken: SortOrder
   resetTokenExpiry: SortOrder
   resume: SortOrder
-  sandboxes: SortOrder
   status: SortOrder
   subjects: SortOrder
   surname: SortOrder
@@ -2319,6 +2365,7 @@ input UserWhereInput {
   careerTrackId: StringNullableFilter
   careerTrackID: StringNullableFilter
   challengeResults: ChallengeResultListRelationFilter
+  chats: ChatListRelationFilter
   clauses: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
   company: CompanyWhereInput
@@ -2369,7 +2416,6 @@ input UserWhereInput {
   resetTokenExpiry: FloatNullableFilter
   resume: StringNullableFilter
   sandbox: SandboxListRelationFilter
-  sandboxes: StringNullableListFilter
   sandboxPageGoals: SandboxPageGoalListRelationFilter
   sandboxPages: SandboxPageListRelationFilter
   shotResults: ShotResultListRelationFilter

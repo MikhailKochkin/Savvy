@@ -32,11 +32,12 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: ${(props) => (props.story ? "100%" : "95%")};
+  width: ${(props) => props.width};
   margin-bottom: 3%;
   font-size: 1.6rem;
   @media (max-width: 800px) {
     flex-direction: column;
+    width: 100%;
   }
 `;
 
@@ -57,6 +58,30 @@ const Option = styled.div`
   cursor: pointer;
   margin-right: 3%;
   margin-bottom: 2%;
+  height: 50px;
+`;
+
+const IconBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .icon {
+    margin: 5px;
+    border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #8f93a3;
+    max-width: 80px;
+  }
 `;
 
 const Question = styled.div`
@@ -66,7 +91,7 @@ const Question = styled.div`
   margin-bottom: 3%;
   margin-top: ${(props) => (props.story ? "2%" : "0%")};
   p {
-    margin: 0;
+    margin: 5px 0;
   }
   .question {
     display: flex;
@@ -79,7 +104,7 @@ const Question = styled.div`
     background: #00204e;
     color: white;
     border-radius: 50%;
-    padding: 2%;
+    padding: 2% 3%;
     height: 55px;
     width: 55px;
     display: flex;
@@ -164,6 +189,7 @@ const Group = styled.div`
   pointer-events: ${(props) => (props.progress === "true" ? "none" : "auto")};
   display: ${(props) => (props.correct === "true" ? "none" : "flex")};
   padding: 0.5% 0;
+  margin-bottom: 3%;
   div {
     padding: 0.5% 0;
     cursor: pointer;
@@ -320,27 +346,13 @@ const SingleQuiz = (props) => {
       .filter((el) => el.quiz.id === props.id)
       .filter((el) => el.student.id === me.id);
   }
-  let student_name;
-  let author_name;
-  if (me) {
-    if (me.name && me.surname) {
-      student_name = (me.name.charAt(0) + me.surname.charAt(0)).toUpperCase();
-    } else {
-      student_name = (me.name.charAt(0) + me.name.charAt(1)).toUpperCase();
-    }
+  let width;
+  if (props.problem) {
+    width = "50%";
+  } else if (props.story) {
+    width = "50%";
   } else {
-    student_name = "СТ";
-  }
-  if (user_name && user_name.name && user_name.surname) {
-    author_name = (
-      user_name.name.charAt(0) + user_name.surname.charAt(0)
-    ).toUpperCase();
-  } else if (user_name && user_name.name) {
-    author_name = (
-      user_name.name.charAt(0) + user_name.name.charAt(1)
-    ).toUpperCase();
-  } else {
-    author_name = "НА";
+    width = "100%";
   }
   return (
     <Mutation
@@ -354,7 +366,7 @@ const SingleQuiz = (props) => {
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
       {(createQuizResult, { loading, error }) => (
-        <Styles story={story}>
+        <Styles width={width}>
           <Buttons>
             {!exam && !story && (
               <StyledButton onClick={(e) => setUpdate(!update)}>
@@ -376,10 +388,16 @@ const SingleQuiz = (props) => {
                   <div className="question_text">
                     {renderHTML(props.question)}
                   </div>
-                  <div className="question_name">{author_name}</div>
+                  <IconBlock>
+                    <img className="icon" src="../../static/hipster.svg" />
+                    <div className="name">BeSavvy</div>
+                  </IconBlock>{" "}
                 </div>
                 <div className="answer">
-                  <div className="answer_name">{student_name}</div>
+                  <IconBlock>
+                    <img className="icon" src="../../static/flash.svg" />
+                    <div className="name">{me.name}</div>
+                  </IconBlock>{" "}
                   <Answer_text
                     type="text"
                     required
@@ -391,7 +409,51 @@ const SingleQuiz = (props) => {
                 <Progress display={progress}>
                   <CircularProgress />
                 </Progress>
-                {correct === "true" && (
+                <Group progress={progress} correct={correct}>
+                  <Button1
+                    inputColor={inputColor}
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (props.type === "FORM") {
+                        const res1 = await onSend();
+                      } else {
+                        const res = await onAnswer();
+                      }
+                      setProgress("false");
+                      if (data.length === 0) {
+                        const res0 = await createQuizResult();
+                      }
+                    }}
+                    correct={correct}
+                  >
+                    {props.t("check")}
+                  </Button1>
+                </Group>
+                {correct === "true" && ifRight && ifRight !== "<p></p>" && (
+                  <div className="question">
+                    <div className="question_text">
+                      {props.t("correct")}!{renderHTML(ifRight)}{" "}
+                      {props.t("show")}
+                    </div>
+                    <IconBlock>
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </IconBlock>
+                  </div>
+                )}
+                {correct === "false" && (
+                  <div className="question">
+                    <div className="question_text">
+                      {props.t("wrong")}... {renderHTML(ifWrong)}{" "}
+                      {props.t("show")}
+                    </div>
+                    <IconBlock>
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </IconBlock>
+                  </div>
+                )}
+                {/* {correct === "true" && (
                   <div className="question">
                     <div className="question_text">{props.t("correct")}!</div>
                     <div className="question_name">{author_name}</div>
@@ -422,16 +484,14 @@ const SingleQuiz = (props) => {
                     <div className="question_text">{renderHTML(ifWrong)}</div>
                     <div className="question_name">{author_name}</div>
                   </div>
-                )}
+                )}*/}
                 {correct !== "" && (
                   <>
-                    <div className="question">
-                      <div className="question_text">{props.t("show")}</div>
-                      <div className="question_name">{author_name}</div>
-                    </div>
-
                     <div className="answer">
-                      <div className="answer_name">{student_name}</div>
+                      <IconBlock>
+                        <img className="icon" src="../../static/flash.svg" />
+                        <div className="name">{me.name}</div>
+                      </IconBlock>{" "}
                       <Options>
                         <Option onClick={(e) => setHidden(false)}>
                           {props.t("yes")}
@@ -448,32 +508,13 @@ const SingleQuiz = (props) => {
                     <div className="question_text">
                       {props.t("correct_answer")}: {renderHTML(props.answer)}
                     </div>
-                    <div className="question_name">{author_name}</div>
+                    <IconBlock>
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </IconBlock>{" "}
                   </div>
                 )}
               </Question>
-              <Group progress={progress} correct={correct}>
-                <Button1
-                  inputColor={inputColor}
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    console.log("!!!");
-                    if (props.type === "FORM") {
-                      const res1 = await onSend();
-                    } else {
-                      const res = await onAnswer();
-                    }
-                    setProgress("false");
-                    // if (data.length === 0) {
-                    const res0 = await createQuizResult();
-                    console.log(res0);
-                    // }
-                  }}
-                  correct={correct}
-                >
-                  {props.t("check")}
-                </Button1>
-              </Group>
             </>
           )}
           {update && (

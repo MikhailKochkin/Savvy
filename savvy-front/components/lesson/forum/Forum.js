@@ -27,8 +27,9 @@ const UPDATE_RATING_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  margin-top: 3%;
-  width: 100%;
+  margin: 3% 0;
+  width: ${(props) => (props.story ? "50%" : "100%")};
+  font-size: 1.6rem;
   .header {
     font-weight: bold;
     font-size: 1.6rem;
@@ -38,6 +39,47 @@ const Styles = styled.div`
     font-weight: bold;
     font-size: 1.8rem;
     margin: 3% 0;
+  }
+  .question {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 3%;
+    .question_text {
+      background: #f3f3f3;
+      color: black;
+      border-radius: 25px;
+      padding: 2% 3%;
+      min-width: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+  }
+  @media (max-width: 800px) {
+    width: 90%;
+  }
+`;
+
+const IconBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .icon {
+    margin: 5px;
+    border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #8f93a3;
   }
 `;
 
@@ -65,10 +107,20 @@ const Forum = (props) => {
 
   moment.locale("ru");
 
-  const { text, forum, id, statements, lesson, me, result } = props;
+  const { text, forum, id, statements, lesson, result, story } = props;
   return (
-    <Styles>
-      <p>{renderHTML(text)}</p>
+    <Styles story={story}>
+      <div className="question">
+        <div className="question_text">
+          {text.length > 7
+            ? renderHTML(text)
+            : "На этом все. Увидимся на следующем уроке!"}
+        </div>
+        <IconBlock>
+          <img className="icon" src="../../static/hipster.svg" />
+          <div className="name">BeSavvy</div>
+        </IconBlock>
+      </div>
       <div className="header">{props.t("rate")}</div>
       {result ? (
         <Mutation
@@ -133,8 +185,8 @@ const Forum = (props) => {
           )}
         </Mutation>
       )}
-      <div className="header2">{props.t("chat")}</div>
-      {statements.length > 0 ? (
+      {/* <div className="header2">{props.t("chat")}</div> */}
+      {/* {statements.length > 0 ? (
         <>
           {statements.map((s) => (
             <Statement color={forum.lesson.user.id === s.user.id}>
@@ -159,8 +211,8 @@ const Forum = (props) => {
         </>
       ) : (
         <div id="comment">{props.t("noone")}</div>
-      )}
-      <CreateStatement forum={id} lesson={lesson} />
+      )} */}
+      {/* <CreateStatement forum={id} lesson={lesson} /> */}
     </Styles>
   );
 };
