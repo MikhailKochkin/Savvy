@@ -132,6 +132,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 const CoursePage = (props) => {
   const [page, setPage] = useState("lessons");
   const me = useUser();
+  console.log(me);
   let my_reviews;
   // my_reviews = Reviews.filter((r) => r.coursePage === props.id);
   my_reviews = [];
@@ -159,10 +160,11 @@ const CoursePage = (props) => {
               price = coursePage.price;
             }
             let new_subjectArray = [];
-            me &&
+            if (me && me.new_subjects) {
               me.new_subjects.map((new_subject) =>
                 new_subjectArray.push(new_subject.id)
               );
+            }
 
             const applicationsList = [];
             coursePage.applications.map((application) =>
@@ -180,7 +182,7 @@ const CoursePage = (props) => {
               (c) => c.id === coursePage.openLesson
             );
             let isEnrolled;
-            if (me) {
+            if (me && me.new_subjects) {
               isEnrolled = me.new_subjects.some((c) => c.id == coursePage.id);
             } else {
               isEnrolled = false;
@@ -226,6 +228,7 @@ const CoursePage = (props) => {
                         {!me && <SignInCard />}
                         {/* Карточка первого урока */}
                         {me &&
+                          me.permissions &&
                           me.id !== coursePage.user.id &&
                           !new_subjectArray.includes(coursePage.id) &&
                           !me.permissions.includes("ADMIN") && (
@@ -233,6 +236,7 @@ const CoursePage = (props) => {
                           )}
                         {/* Карточка преподавателя */}
                         {me &&
+                          me.permissions &&
                           (me.id === coursePage.user.id ||
                             me.permissions.includes("ADMIN")) && (
                             <TeacherCard
@@ -242,6 +246,7 @@ const CoursePage = (props) => {
                           )}
                         {/* Карточка ученика */}
                         {me &&
+                          me.permissions &&
                           new_subjectArray.includes(coursePage.id) &&
                           !me.permissions.includes("ADMIN") && (
                             <StudentCard coursePage={coursePage} me={me} />
@@ -369,6 +374,7 @@ const CoursePage = (props) => {
                       )}
                     </Details>
                     {me &&
+                      me.permissions &&
                       !me.permissions.includes("ADMIN") &&
                       !new_subjectArray.includes(coursePage.id) && (
                         <RegisterCard
@@ -382,17 +388,19 @@ const CoursePage = (props) => {
                         />
                       )}
 
-                    {me && me.permissions.includes("ADMIN") && (
-                      <RegisterCard
-                        me={me}
-                        coursePage={coursePage}
-                        price={price}
-                        subscription={coursePage.subscription}
-                        subscriptionPrice={coursePage.subscriptionPrice}
-                        discountPrice={coursePage.discountPrice}
-                        promocode={coursePage.promocode}
-                      />
-                    )}
+                    {me &&
+                      me.permissions &&
+                      me.permissions.includes("ADMIN") && (
+                        <RegisterCard
+                          me={me}
+                          coursePage={coursePage}
+                          price={price}
+                          subscription={coursePage.subscription}
+                          subscriptionPrice={coursePage.subscriptionPrice}
+                          discountPrice={coursePage.discountPrice}
+                          promocode={coursePage.promocode}
+                        />
+                      )}
 
                     {!me && (
                       <RegisterCard
