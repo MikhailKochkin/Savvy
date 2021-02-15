@@ -462,23 +462,24 @@ const NewSingleLesson = (props) => {
                         </Link>
                       )}
                       <span>
-                        {(lesson.user.id === me.id ||
-                          me.permissions.includes("ADMIN")) && (
-                          <div>
-                            {/* Режим истории → */}
-                            <Link
-                              href={{
-                                pathname: "/lesson",
-                                query: {
-                                  id: lesson.id,
-                                  type: "regular",
-                                },
-                              }}
-                            >
-                              <span>Переключить</span>
-                            </Link>
-                          </div>
-                        )}
+                        {me &&
+                          (lesson.user.id === me.id ||
+                            me.permissions.includes("ADMIN")) && (
+                            <div>
+                              {/* Режим истории → */}
+                              <Link
+                                href={{
+                                  pathname: "/lesson",
+                                  query: {
+                                    id: lesson.id,
+                                    type: "regular",
+                                  },
+                                }}
+                              >
+                                <span>Переключить</span>
+                              </Link>
+                            </div>
+                          )}
                       </span>
                     </Head>
 

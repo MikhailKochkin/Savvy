@@ -198,7 +198,7 @@ const CoursePage = (props) => {
                       <Data>
                         <Header>{coursePage.title}</Header>
                         <p className="track2">{coursePage.description}</p>
-                        {coursePage.authors.length > 0 ? (
+                        {coursePage && coursePage.authors.length > 0 ? (
                           coursePage.authors.map((a) => (
                             <div className="name">
                               <img src={a.image} />
