@@ -252,13 +252,11 @@ const SingleConstructor = (props) => {
   };
 
   useEffect(() => {
-    const vars = shuffle(props.variants);
-    // const vars = props.variants;
-
+    const vars = shuffle([...props.variants]);
     setVariants(vars);
   }, []);
 
-  const { me, lessonID, construction, userData, story } = props;
+  const { me, lessonID, construction, userData, story, complexity } = props;
   let data;
   me
     ? (data = userData
@@ -363,6 +361,7 @@ const SingleConstructor = (props) => {
           type={construction.type}
           variants={construction.variants}
           answer={construction.answer}
+          complexity={complexity}
           lessonID={lessonID}
         />
       )}

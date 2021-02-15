@@ -82,6 +82,7 @@ class ProblemGroup extends Component {
           <SingleProblem
             key={problem.id}
             problem={problem}
+            complexity={problem.complexity}
             lessonID={this.props.lessonID}
             me={this.props.me}
             userData={userData}

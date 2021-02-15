@@ -140,7 +140,15 @@ const SingleLesson_Menu = (props) => {
             <ButtonZone>
               <ChooseButton name="note" onClick={(e) => onSwitch(e)}>
                 {" "}
-                Заметки{" "}
+                Лонгриды{" "}
+              </ChooseButton>
+            </ButtonZone>
+          )}
+          {lesson.chats.length > 0 && (
+            <ButtonZone>
+              <ChooseButton name="chat" onClick={(e) => onSwitch(e)}>
+                {" "}
+                Диалоги{" "}
               </ChooseButton>
             </ButtonZone>
           )}

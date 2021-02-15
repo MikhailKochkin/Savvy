@@ -143,6 +143,7 @@ input ChallengeResultWhereUniqueInput {
 }
 
 type Chat {
+  complexity: Int
   createdAt: DateTime!
   id: String!
   lesson: Lesson!
@@ -161,6 +162,7 @@ input ChatListRelationFilter {
 
 input ChatWhereInput {
   AND: [ChatWhereInput!]
+  complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
@@ -172,6 +174,10 @@ input ChatWhereInput {
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
+}
+
+input ChatWhereUniqueInput {
+  id: String
 }
 
 type Clause {
@@ -235,6 +241,7 @@ input CompanyWhereInput {
 
 type Construction {
   answer: [String!]!
+  complexity: Int
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   createdAt: DateTime!
   hint: String
@@ -306,6 +313,7 @@ input ConstructionResultWhereUniqueInput {
 input ConstructionWhereInput {
   AND: [ConstructionWhereInput!]
   answer: StringNullableListFilter
+  complexity: IntNullableFilter
   constructionResults: ConstructionResultListRelationFilter
   createdAt: DateTimeFilter
   hint: StringNullableFilter
@@ -551,6 +559,7 @@ input DateTimeNullableListFilter {
 
 type Document {
   clauses(after: ClauseWhereUniqueInput, before: ClauseWhereUniqueInput, first: Int, last: Int): [Clause!]!
+  complexity: Int
   createdAt: DateTime!
   documentResults(after: DocumentResultWhereUniqueInput, before: DocumentResultWhereUniqueInput, first: Int, last: Int): [DocumentResult!]!
   id: String!
@@ -612,6 +621,7 @@ input DocumentResultWhereUniqueInput {
 input DocumentWhereInput {
   AND: [DocumentWhereInput!]
   clauses: ClauseListRelationFilter
+  complexity: IntNullableFilter
   createdAt: DateTimeFilter
   documentResults: DocumentResultListRelationFilter
   id: StringFilter
@@ -882,6 +892,7 @@ type Lesson {
   challenge_num: Int
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   change: String
+  chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int): [Chat!]!
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   constructions(after: ConstructionWhereUniqueInput, before: ConstructionWhereUniqueInput, first: Int, last: Int): [Construction!]!
   coursePage: CoursePage!
@@ -1104,23 +1115,23 @@ type Mutation {
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
-  updateConstruction(answer: [String], hint: String, id: String, name: String, type: String, variants: [String]): Construction
-  updateCoursePage(audience: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
+  updateConstruction(answer: [String], complexity: Int, hint: String, id: String, name: String, type: String, variants: [String]): Construction
+  updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
   updateLesson(audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
-  updateNewTest(answers: [String], correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
-  updateNote(id: String, next: NextType, text: String): Note
+  updateNewTest(answers: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
+  updateNote(complexity: Int, id: String, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updatePost(id: String, text: String): Post
-  updateProblem(id: String, nodeID: String, nodeType: String, text: String): Problem
+  updateProblem(complexity: Int, id: String, nodeID: String, nodeType: String, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
-  updateQuiz(answer: String, check: String, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
+  updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
   updateStatement(id: String, text: String): Statement
-  updateTextEditor(id: String, name: String, text: String, totalMistakes: Int): TextEditor
-  updateUser(email: String, id: String, isFamiliar: Boolean, name: String, status: Status, surname: String): User
+  updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
+  updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, status: Status, surname: String): User
 }
 
 input NestedBoolFilter {
@@ -1232,6 +1243,7 @@ input NestedStringNullableFilter {
 
 type NewTest {
   answers: [String!]!
+  complexity: Int
   correct: [Boolean!]!
   createdAt: DateTime!
   id: String!
@@ -1258,6 +1270,7 @@ input NewTestListRelationFilter {
 input NewTestWhereInput {
   AND: [NewTestWhereInput!]
   answers: StringNullableListFilter
+  complexity: IntNullableFilter
   correct: BoolNullableListFilter
   createdAt: DateTimeFilter
   id: StringFilter
@@ -1297,6 +1310,7 @@ input NextType {
 }
 
 type Note {
+  complexity: Int
   createdAt: DateTime!
   id: String!
   lesson: Lesson
@@ -1318,6 +1332,7 @@ input NoteListRelationFilter {
 input NoteWhereInput {
   AND: [NoteWhereInput!]
   chat: BoolNullableFilter
+  complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
@@ -1509,6 +1524,7 @@ input PostWhereUniqueInput {
 }
 
 type Problem {
+  complexity: Int
   createdAt: DateTime!
   id: String!
   lesson: Lesson!
@@ -1590,6 +1606,7 @@ input ProblemResultWhereUniqueInput {
 input ProblemWhereInput {
   AND: [ProblemWhereInput!]
   answer: StringNullableFilter
+  complexity: IntNullableFilter
   createdAt: DateTimeFilter
   hints: StringNullableFilter
   hintsList: StringNullableListFilter
@@ -1645,6 +1662,7 @@ type Query {
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByInput!], where: TestResultWhereInput): [TestResult!]!
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int, orderBy: [TextEditorResultOrderByInput!], where: TextEditorResultWhereInput): [TextEditorResult!]!
+  user(where: UserWhereUniqueInput!): User
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
 }
 
@@ -1656,6 +1674,7 @@ enum QueryMode {
 type Quiz {
   answer: String!
   check: String
+  complexity: Int
   createdAt: DateTime!
   id: String!
   ifRight: String
@@ -1681,6 +1700,7 @@ input QuizListRelationFilter {
 input QuizOrderByInput {
   answer: SortOrder
   check: SortOrder
+  complexity: SortOrder
   createdAt: SortOrder
   id: SortOrder
   ifRight: SortOrder
@@ -1756,6 +1776,7 @@ input QuizWhereInput {
   AND: [QuizWhereInput!]
   answer: StringFilter
   check: StringNullableFilter
+  complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   ifRight: StringNullableFilter
@@ -2151,6 +2172,7 @@ input TestWhereInput {
 }
 
 type TextEditor {
+  complexity: Int
   createdAt: DateTime!
   id: String!
   lesson: Lesson!
@@ -2234,6 +2256,7 @@ input TextEditorResultWhereUniqueInput {
 
 input TextEditorWhereInput {
   AND: [TextEditorWhereInput!]
+  complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput

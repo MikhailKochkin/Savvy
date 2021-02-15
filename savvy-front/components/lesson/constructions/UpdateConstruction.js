@@ -13,6 +13,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
     $id: String!
     $variants: [String!]
     $answer: [String!]
+    $complexity: Int
     $name: String
     $hint: String
     $type: String
@@ -22,6 +23,7 @@ const UPDATE_CONSTRUCTION_MUTATION = gql`
       variants: $variants
       answer: $answer
       type: $type
+      complexity: $complexity
       name: $name
       hint: $hint
     ) {
@@ -218,6 +220,20 @@ const Title = styled.div`
   margin-bottom: 2%;
 `;
 
+const Complexity = styled.div`
+  select,
+  option {
+    width: 90%;
+    border-radius: 5px;
+    margin: 3% 0;
+    border: 1px solid #c4c4c4;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 1.5%;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -231,7 +247,9 @@ const UpdateConstruction = (props) => {
   const [answersNumber, setAnswersNumber] = useState();
   const [type, setType] = useState(props.type);
   const [partsNumber, setPartsNumber] = useState("");
-
+  const [complexity, setComplexity] = useState(
+    props.complexity ? props.complexity : 0
+  );
   useEffect(() => {
     let arr = [];
     props.answer.map((n) => {
@@ -307,6 +325,19 @@ const UpdateConstruction = (props) => {
           onChange={(e) => setName(e.target.value)}
         />
       </Box>
+      <Complexity>
+        <select
+          value={complexity}
+          onChange={(e) => setComplexity(parseInt(e.target.value))}
+        >
+          <option value={0}>Выберите сложность</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </select>
+      </Complexity>
       {variants.map((option, index) => (
         <>
           <TextBox>
@@ -366,6 +397,7 @@ const UpdateConstruction = (props) => {
           name: name,
           hint: hint,
           type: type,
+          complexity,
         }}
         refetchQueries={() => [
           {

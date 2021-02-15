@@ -10,6 +10,7 @@ const CURRENT_USER_QUERY = gql`
       surname
       permissions
       interests
+      image
       courseVisits {
         id
         reminders

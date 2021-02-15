@@ -160,16 +160,13 @@ const Note = (props) => {
       props.next ? [true, props.next.true] : [true, { type: "finish" }]
     );
   };
-
   const {
     exam,
     story,
     me,
     text,
-    notes,
     note,
-    tests,
-    quizes,
+    complexity,
     id,
     user,
     getData,
@@ -207,11 +204,9 @@ const Note = (props) => {
       </Buttons>
       {update && !story && !exam && (
         <UpdateNote
-          notes={notes}
           text={text}
-          tests={tests}
+          complexity={complexity}
           id={id}
-          quizes={quizes}
           next={props.next}
           lessonID={lessonID}
         />

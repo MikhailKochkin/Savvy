@@ -12,6 +12,7 @@ const UPDATE_QUIZ_MUTATION = gql`
     $question: String
     $answer: String
     $check: String
+    $complexity: Int
     $ifRight: String
     $ifWrong: String
   ) {
@@ -20,6 +21,7 @@ const UPDATE_QUIZ_MUTATION = gql`
       question: $question
       answer: $answer
       check: $check
+      complexity: $complexity
       ifRight: $ifRight
       ifWrong: $ifWrong
     ) {
@@ -112,6 +114,20 @@ const Comment = styled.div`
   }
 `;
 
+const Complexity = styled.div`
+  select,
+  option {
+    width: 80%;
+    border-radius: 5px;
+    margin-top: 3%;
+    border: 1px solid #c4c4c4;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 1.5%;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -122,6 +138,9 @@ const UpdateQuiz = (props) => {
   const [question, setQuestion] = useState(props.question);
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
+  const [complexity, setComplexity] = useState(
+    props.complexity ? props.complexity : 0
+  );
   const [check, setCheck] = useState(props.check);
   const [trueVal, setTrueVal] = useState(
     props.next && props.next.true ? props.next.true : ""
@@ -138,6 +157,19 @@ const UpdateQuiz = (props) => {
         <option value={"WORD"}>{props.t("word")}</option>
         <option value={"IDEA"}>{props.t("idea")}</option>
       </select>
+      <Complexity>
+        <select
+          value={complexity}
+          onChange={(e) => setComplexity(parseInt(e.target.value))}
+        >
+          <option value={0}>Выберите сложность</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </select>
+      </Complexity>
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -180,6 +212,7 @@ const UpdateQuiz = (props) => {
           answer: answer,
           ifRight: ifRight,
           ifWrong: ifWrong,
+          complexity,
           check: check,
           next: {
             true: trueVal,

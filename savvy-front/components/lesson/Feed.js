@@ -10,6 +10,7 @@ import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 import { withTranslation } from "../../i18n";
+import { assertValidExecutionArguments } from "graphql/execution/execute";
 
 const Styles = styled.div`
   display: flex;
@@ -51,6 +52,11 @@ const Styles = styled.div`
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      .levelup {
+        width: 150px;
+        font-size: 1.8rem;
+        text-align: center;
+      }
       .num {
         margin-top: 10px;
         border: 1px solid #c2c2c2;
@@ -158,7 +164,53 @@ const Stepper = styled.div`
   align-items: center;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+  width: 96vw;
+`;
+
+const Message = styled.div`
+  width: 100vw;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 2.5%;
+  font-size: 1.8rem;
+  #message_text {
+    background: #8a2387; /* fallback for old browsers */
+    width: 32%;
+    background: -webkit-linear-gradient(
+      to right,
+      #f27121,
+      #e94057,
+      #8a2387
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #f27121,
+      #e94057,
+      #8a2387
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    color: white;
+    border-radius: 10px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+    opacity: ${(props) => (props.visible ? 1 : 0)};
+    transition: visibility 0.5s linear, opacity 0.5s linear;
+  }
+  @media (max-width: 800px) {
+    #message_text {
+      width: 90%;
+    }
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -192,7 +244,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
-  // console.log(props.my_result);
   const [num, setNum] = useState(
     props.my_result &&
       props.my_result.progress !== null &&
@@ -201,12 +252,28 @@ const Feed = (props) => {
       ? props.my_result.progress - 1
       : 0
   );
+  const [complexity, setComplexity] = useState(1);
+  const [visible, setVisible] = useState(false);
+
   const classes = useStyles();
 
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
-      //   console.log(document.getElementsByClassName("final")[0].previousSibling);
+      console.log(
+        props.components[num + 1].props.complexity == complexity,
+        props.components[num + 1].props.complexity,
+        complexity
+      );
+      if (props.components[num + 1].props.complexity > complexity) {
+        setComplexity(props.components[num + 1].props.complexity);
+        setVisible(true);
+        setTimeout(function () {
+          setVisible(false);
+        }, 3000);
+      } else if (props.components[num + 1].props.complexity < complexity) {
+        setComplexity(props.components[num + 1].props.complexity);
+      }
       if (props.components.length > num + 2) {
         var my_element = document.getElementsByClassName("final")[0]
           .previousSibling;
@@ -288,189 +355,203 @@ const Feed = (props) => {
     }
   }, [0]);
   let color;
-  console.log(props.components[num].props);
-  if (props.components[num].props.note || props.components[num].props.forum) {
+  if (props.components[num].props.complexity == 1) {
     color = "#55a630";
-  } else if (
-    props.components[num].props.testID ||
-    props.components[num].props.quizID
-  ) {
+  } else if (props.components[num].props.complexity == 2) {
     color = "#3a86ff";
-  } else if (props.components[num].props.textEditor) {
+  } else if (props.components[num].props.complexity == 3) {
     color = "#f4d35e";
-  } else if (props.components[num].props.problem) {
+  } else if (props.components[num].props.complexity == 4) {
     color = "#f95738";
+  } else if (props.components[num].props.complexity == 5) {
+    color = "#201C35";
   } else {
-    color = "#f4d35e";
+    color = "#55a630";
   }
+
+  // let complex_messages = [
+  //   "💪🏻 Усложняем задание",
+  //   "🤟🏻 Давайте попробуем что-то поинтереснее",
+  //   "✈️ Новый уровень сложности",
+  //   "🧨 Немного усложним задачу",
+  //   "🕹 Level up",
+  // ];
+
+  // const randomIntFromInterval = (min, max) => {
+  //   return Math.floor(Math.random() * (max - min + 1) + min);
+  // };
   return (
-    <Styles>
-      <div className="firstColumn">
-        <div className="slider">
-          <Complexity color={color}></Complexity>
-          <div className="bar">
-            <Progress
-              className="progress"
-              progress={
-                parseInt((100 * (num + 1)) / props.components.length) + "%"
-              }
-            ></Progress>
-          </div>
-          {console.log(props.components[num].props.note ? 0 : -1)}
-          <div className="num">
-            <select
-              id="num"
-              name="num"
-              value={num - 1}
-              onChange={(e) => search(parseInt(e.target.value))}
-            >
-              {props.components.map((el, i) => (
-                <option value={i - 1}>{i + 1}</option>
-              ))}
-            </select>
+    <>
+      <Message visible={visible}>
+        <div id="message_text">💪🏻 Немного усложним задачу</div>
+      </Message>
+      <Styles>
+        <div className="firstColumn">
+          <div className="slider">
+            <Complexity color={color}></Complexity>
+            <div className="bar">
+              <Progress
+                className="progress"
+                progress={
+                  parseInt((100 * (num + 1)) / props.components.length) + "%"
+                }
+              ></Progress>
+            </div>
+            <div className="num">
+              <select
+                id="num"
+                name="num"
+                value={num - 1}
+                onChange={(e) => search(parseInt(e.target.value))}
+              >
+                {props.components.map((el, i) => (
+                  <option value={i - 1}>{i + 1}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
-      <Content className="second">
-        {props.components.slice(0, num + 2).map((c, i) => (
-          <Block
-            show={i === num + 1 ? "final" : "no"}
-            className={i === num + 1 ? "final" : "no"}
-          >
-            {c}
-            <Mutation
-              mutation={UPDATE_LESSONRESULT_MUTATION}
-              variables={{
-                id: props.my_result.id,
-                lessonID: props.lessonID,
-                progress: num + 2,
-              }}
-              refetchQueries={() => [
-                {
-                  query: SINGLE_COURSEPAGE_QUERY,
-                  variables: { id: props.coursePageID },
-                },
-              ]}
+        <Content className="second">
+          {props.components.slice(0, num + 2).map((c, i) => (
+            <Block
+              show={i === num + 1 ? "final" : "no"}
+              className={i === num + 1 ? "final" : "no"}
             >
-              {(updateLessonResult, { loading, error }) => {
-                return (
-                  <>
-                    {props.components.length > num + 1 && i === num && (
-                      <div
-                        className="arrow_box"
-                        onClick={(e) => {
-                          if (props.my_result.progress < num + 2) {
-                            let res = updateLessonResult();
-                          }
-                          let res2 = move();
-                        }}
-                      >
-                        <img
-                          className="arrow"
-                          src="../../static/down-arrow.svg"
-                        />
-                      </div>
-                    )}
-                  </>
-                );
-              }}
-            </Mutation>
-          </Block>
-        ))}
-        <Stepper>
-          {props.me &&
-            props.components.length === num + 1 &&
-            props.next &&
-            props.next.published && (
-              <>
-                {visited.length === 0 ? (
-                  <Mutation
-                    mutation={CREATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      lessonID: props.next.id,
-                      visitsNumber: 1,
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: SINGLE_COURSEPAGE_QUERY,
-                        variables: { id: props.coursePageID },
-                      },
-                    ]}
-                  >
-                    {(createLessonResult, { loading, error }) => {
-                      return (
-                        <Link
-                          // The user HAS not yet visited the next lesson page
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: props.next.id,
-                              type: props.next.type.toLowerCase(),
-                            },
+              {c}
+              <Mutation
+                mutation={UPDATE_LESSONRESULT_MUTATION}
+                variables={{
+                  id: props.my_result.id,
+                  lessonID: props.lessonID,
+                  progress: num + 2,
+                }}
+                refetchQueries={() => [
+                  {
+                    query: SINGLE_COURSEPAGE_QUERY,
+                    variables: { id: props.coursePageID },
+                  },
+                ]}
+              >
+                {(updateLessonResult, { loading, error }) => {
+                  return (
+                    <>
+                      {props.components.length > num + 1 && i === num && (
+                        <div
+                          className="arrow_box"
+                          onClick={(e) => {
+                            if (props.my_result.progress < num + 2) {
+                              let res = updateLessonResult();
+                            }
+                            let res2 = move();
                           }}
                         >
-                          <a>
-                            <Button
-                              className={classes.button}
-                              onClick={() => {
-                                createLessonResult();
-                                console.log(1);
-                              }}
-                            >
-                              {props.t("next_lesson")}
-                            </Button>
-                          </a>
-                        </Link>
-                      );
-                    }}
-                  </Mutation>
-                ) : (
-                  <Mutation
-                    mutation={UPDATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      id: visited[0].id,
-                      visitsNumber: visited[0].visitsNumber + 1,
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: SINGLE_COURSEPAGE_QUERY,
-                        variables: { id: props.coursePageID },
-                      },
-                    ]}
-                  >
-                    {(updateLessonResult, { loading, error }) => {
-                      return (
-                        <Link
-                          // The user HAS visited the next lesson page and we update it now
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: props.next.id,
-                              type: props.next.type.toLowerCase(),
-                            },
-                          }}
-                        >
-                          <a>
-                            <Button
-                              className={classes.button}
-                              onClick={() => {
-                                updateLessonResult();
-                                console.log(2);
-                              }}
-                            >
-                              {props.t("next_lesson")}
-                            </Button>
-                          </a>
-                        </Link>
-                      );
-                    }}
-                  </Mutation>
-                )}
-              </>
-            )}
-        </Stepper>
-      </Content>
-    </Styles>
+                          <img
+                            className="arrow"
+                            src="../../static/down-arrow.svg"
+                          />
+                        </div>
+                      )}
+                    </>
+                  );
+                }}
+              </Mutation>
+            </Block>
+          ))}
+          <Stepper>
+            {props.me &&
+              props.components.length === num + 1 &&
+              props.next &&
+              props.next.published && (
+                <>
+                  {visited.length === 0 ? (
+                    <Mutation
+                      mutation={CREATE_LESSONRESULT_MUTATION}
+                      variables={{
+                        lessonID: props.next.id,
+                        visitsNumber: 1,
+                      }}
+                      refetchQueries={() => [
+                        {
+                          query: SINGLE_COURSEPAGE_QUERY,
+                          variables: { id: props.coursePageID },
+                        },
+                      ]}
+                    >
+                      {(createLessonResult, { loading, error }) => {
+                        return (
+                          <Link
+                            // The user HAS not yet visited the next lesson page
+                            href={{
+                              pathname: "/lesson",
+                              query: {
+                                id: props.next.id,
+                                type: props.next.type.toLowerCase(),
+                              },
+                            }}
+                          >
+                            <a>
+                              <Button
+                                className={classes.button}
+                                onClick={() => {
+                                  createLessonResult();
+                                  console.log(1);
+                                }}
+                              >
+                                {props.t("next_lesson")}
+                              </Button>
+                            </a>
+                          </Link>
+                        );
+                      }}
+                    </Mutation>
+                  ) : (
+                    <Mutation
+                      mutation={UPDATE_LESSONRESULT_MUTATION}
+                      variables={{
+                        id: visited[0].id,
+                        visitsNumber: visited[0].visitsNumber + 1,
+                      }}
+                      refetchQueries={() => [
+                        {
+                          query: SINGLE_COURSEPAGE_QUERY,
+                          variables: { id: props.coursePageID },
+                        },
+                      ]}
+                    >
+                      {(updateLessonResult, { loading, error }) => {
+                        return (
+                          <Link
+                            // The user HAS visited the next lesson page and we update it now
+                            href={{
+                              pathname: "/lesson",
+                              query: {
+                                id: props.next.id,
+                                type: props.next.type.toLowerCase(),
+                              },
+                            }}
+                          >
+                            <a>
+                              <Button
+                                className={classes.button}
+                                onClick={() => {
+                                  updateLessonResult();
+                                  console.log(2);
+                                }}
+                              >
+                                {props.t("next_lesson")}
+                              </Button>
+                            </a>
+                          </Link>
+                        );
+                      }}
+                    </Mutation>
+                  )}
+                </>
+              )}
+          </Stepper>
+        </Content>
+      </Styles>
+    </>
   );
 };
 

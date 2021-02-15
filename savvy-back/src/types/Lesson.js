@@ -32,6 +32,7 @@ const Lesson = objectType({
     t.model.textEditorResults();
     t.model.shots();
     t.model.notes();
+    t.model.chats();
     t.model.quizes();
     t.model.documents();
     t.model.forum();

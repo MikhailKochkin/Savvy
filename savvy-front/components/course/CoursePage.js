@@ -97,6 +97,23 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         name
         surname
+        image
+        description
+        status
+        uni {
+          id
+          title
+        }
+        company {
+          id
+          name
+        }
+      }
+      authors {
+        id
+        name
+        surname
+        image
         description
         status
         uni {
@@ -181,6 +198,27 @@ const CoursePage = (props) => {
                       <Data>
                         <Header>{coursePage.title}</Header>
                         <p className="track2">{coursePage.description}</p>
+                        {coursePage.authors.length > 0 ? (
+                          coursePage.authors.map((a) => (
+                            <div className="name">
+                              <img src={a.image} />
+                              <p>
+                                {a.name} {a.surname} {props.t("from")}{" "}
+                                {a.company.name}
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="name">
+                            <img src={coursePage.user.image} />
+                            <p>
+                              {coursePage.user && coursePage.user.surname
+                                ? `${coursePage.user.name} ${coursePage.user.surname}`
+                                : coursePage.user.name}{" "}
+                              {props.t("from")} {coursePage.user.company.name}
+                            </p>
+                          </div>
+                        )}
                         <p className="track2">{coursePage.user.description}</p>
                       </Data>
                       <PayBox>

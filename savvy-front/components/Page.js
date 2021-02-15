@@ -1,5 +1,5 @@
 import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
-import { withRouter } from "next/router";
+import { withRouter, useRouter } from "next/router";
 import { ModalProvider } from "styled-react-modal";
 import dynamic from "next/dynamic";
 
@@ -62,7 +62,8 @@ const DynamicNav = dynamic(import("./Nav"), {
   ssr: false,
 });
 
-const Page = ({ children, router }) => {
+const Page = ({ children }) => {
+  const router = useRouter();
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
@@ -73,7 +74,7 @@ const Page = ({ children, router }) => {
             <Header />
             <DynamicNav />
             <Inner>{children}</Inner>
-            <Footer />
+            {router.pathname !== "/lesson" && <Footer />}
           </ModalProvider>
         </>
       </StyledPage>

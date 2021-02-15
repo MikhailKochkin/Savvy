@@ -128,10 +128,12 @@ const Mutation = mutationType({
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "None",
+            maxAge: 1000 * 60 * 60 * 24 * 365,
           });
         } else {
           ctx.res.cookie("token", token, {
             httpOnly: true,
+            maxAge: 1000 * 60 * 60 * 24 * 365,
           });
         }
 
@@ -192,6 +194,7 @@ const Mutation = mutationType({
         id: stringArg(),
         // permissions: list(stringArg()),
         name: stringArg(),
+        image: stringArg(),
         surname: stringArg(),
         email: stringArg(),
         status: arg({
@@ -204,6 +207,7 @@ const Mutation = mutationType({
         // delete args.permissions;
         const updates = { ...args };
         delete updates.id;
+        console.log(updates);
         const user = await ctx.prisma.user.update({
           data: updates,
           where: {
@@ -421,6 +425,7 @@ const Mutation = mutationType({
         audience: stringArg(),
         result: stringArg(),
         news: stringArg(),
+        authors: stringArg(),
         promocode: arg({
           type: "PromocodeList", // name should match the name you provided
         }),
@@ -576,6 +581,7 @@ const Mutation = mutationType({
         question: list(stringArg()),
         ifRight: stringArg(),
         ifWrong: stringArg(),
+        complexity: intArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
@@ -644,6 +650,7 @@ const Mutation = mutationType({
         question: stringArg(),
         answer: stringArg(),
         lessonId: stringArg(),
+        complexity: intArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
@@ -762,6 +769,7 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         text: stringArg(),
+        complexity: intArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
         }),
@@ -854,6 +862,7 @@ const Mutation = mutationType({
         text: stringArg(),
         name: stringArg(),
         totalMistakes: intArg(),
+        complexity: intArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -987,21 +996,25 @@ const Mutation = mutationType({
         hint: stringArg(),
         variants: list(stringArg()),
         answer: list(stringArg()),
+        complexity: intArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
         delete updates.id;
+        delete updates.variants;
+        delete updates.answer;
+        const variants = args.variants;
+        const answer = args.answer;
+        console.log(updates);
         return ctx.prisma.construction.update({
           data: {
             variants: {
-              set: [...updates.variants],
+              set: [...variants],
             },
             answer: {
-              set: [...updates.answer],
+              set: [...answer],
             },
-            name: updates.name,
-            hint: updates.hint,
-            type: updates.type,
+            ...updates,
           },
           where: {
             id: args.id,
@@ -1117,6 +1130,7 @@ const Mutation = mutationType({
         text: stringArg(),
         nodeID: stringArg(),
         nodeType: stringArg(),
+        complexity: intArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -1280,11 +1294,11 @@ const Mutation = mutationType({
         const forumId = args.forumId;
         delete args.forumId;
         const author = await ctx.prisma.user.findMany({
-          where: { forums_some: { id: args.forum } },
+          where: { forums: { some: { id: { equals: forumId } } } },
         });
         const lesson = await ctx.prisma.lesson.findMany(
           {
-            where: { forum: { id: args.forum } },
+            where: { forumId: forumId },
             include: { coursePage: true },
           },
           `{id, coursePage {id, title}, name}`
@@ -1299,6 +1313,22 @@ const Mutation = mutationType({
             lesson[0].id
           ),
         });
+        console.log(
+          author[0].email.toLowerCase(),
+          author[0].email.toLowerCase() === "mi.kochkin@ya.ru"
+        );
+        if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
+          const newMail2 = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: "mi.kochkin@ya.ru",
+            Subject: "(Другой автор) Новое сообщение на форуме",
+            HtmlBody: AuthorNotification(
+              lesson[0].name,
+              lesson[0].coursePage.title,
+              lesson[0].id
+            ),
+          });
+        }
         const statement = await ctx.prisma.statement.create({
           data: {
             user: {

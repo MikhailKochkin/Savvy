@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import CreateMessage from "./CreateMessage";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const CREATE_CHAT_MUTATION = gql`
   mutation CREATE_CHAT_MUTATION(
@@ -41,10 +40,10 @@ const Input = styled.input`
   }
 `;
 
-const CreateChat = (props) => {
-  const [name, setName] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [num, setNum] = useState(0);
+const UpdateChat = (props) => {
+  const [name, setName] = useState(props.name);
+  const [messages, setMessages] = useState(props.messages.messagesList);
+  const [num, setNum] = useState(props.messages.messagesList.length);
   const [createChat, { data, loading, error }] = useMutation(
     CREATE_CHAT_MUTATION
   );
@@ -66,6 +65,7 @@ const CreateChat = (props) => {
         <>
           <CreateMessage
             index={i + 1}
+            author={props.messages.messagesList[i].author}
             document={props.document}
             getMessage={getMessage}
           />
@@ -86,12 +86,6 @@ const CreateChat = (props) => {
               messages: { messagesList: messages },
               name,
             },
-            refetchQueries: [
-              {
-                query: SINGLE_LESSON_QUERY,
-                variables: { id: props.lessonID },
-              },
-            ],
           });
           console.log(res);
           alert("Готово!");
@@ -103,4 +97,4 @@ const CreateChat = (props) => {
   );
 };
 
-export default CreateChat;
+export default UpdateChat;

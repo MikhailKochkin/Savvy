@@ -12,12 +12,14 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
     $name: String
     $text: String
     $totalMistakes: Int
+    $complexity: Int
   ) {
     updateTextEditor(
       id: $id
       name: $name
       text: $text
       totalMistakes: $totalMistakes
+      complexity: $complexity
     ) {
       id
     }
@@ -103,6 +105,20 @@ const Label = styled.label`
   }
 `;
 
+const Complexity = styled.div`
+  select,
+  option {
+    width: 80%;
+    border-radius: 5px;
+    margin: 3% 0;
+    border: 1px solid #c4c4c4;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 1.5%;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/UpdateTextEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
@@ -111,6 +127,9 @@ const DynamicLoadedEditor = dynamic(import("../../editor/UpdateTextEditor"), {
 const UpdateTextEditor = (props) => {
   const [text, setText] = useState(props.text);
   const [mistakes, setMistakes] = useState(props.totalMistakes);
+  const [complexity, setComplexity] = useState(
+    props.complexity ? props.complexity : 0
+  );
   const getText = (d) => setText(d);
   const { id, lessonID } = props;
   return (
@@ -128,12 +147,26 @@ const UpdateTextEditor = (props) => {
             onChange={(e) => setMistakes(e.target.value)}
           />
         </Label>
+        <Complexity>
+          <select
+            value={complexity}
+            onChange={(e) => setComplexity(parseInt(e.target.value))}
+          >
+            <option value={0}>Выберите сложность</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+          </select>
+        </Complexity>
         <DynamicLoadedEditor getEditorText={getText} previousText={text} />
         <Mutation
           mutation={UPDATE_TEXTEDITOR_MUTATION}
           variables={{
             id: id,
             text: text,
+            complexity,
             totalMistakes: parseInt(mistakes),
           }}
           refetchQueries={() => [

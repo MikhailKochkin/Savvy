@@ -12,6 +12,7 @@ const UPDATE_TEST_MUTATION = gql`
     $question: [String!]
     $answers: [String!]
     $correct: [Boolean!]
+    $complexity: Int
     $ifRight: String
     $ifWrong: String
   ) {
@@ -20,6 +21,7 @@ const UPDATE_TEST_MUTATION = gql`
       question: $question
       answers: $answers
       correct: $correct
+      complexity: $complexity
       ifRight: $ifRight
       ifWrong: $ifWrong
     ) {
@@ -105,6 +107,20 @@ const Comment = styled.div`
   }
 `;
 
+const Complexity = styled.div`
+  select,
+  option {
+    width: 80%;
+    border-radius: 5px;
+    margin: 3% 0;
+    border: 1px solid #c4c4c4;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 1.5%;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
@@ -114,15 +130,11 @@ const UpdateTest = (props) => {
   const [answers, setAnswers] = useState(props.answers);
   const [correct, setCorrect] = useState(props.correct);
   const [question, setQuestion] = useState(props.question[0]);
+  const [complexity, setComplexity] = useState(
+    props.complexity ? props.complexity : 0
+  );
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
-  const [trueVal, setTrueVal] = useState(
-    props.next && props.next.true ? props.next.true : ""
-  );
-  const [falseVal, setFalseVal] = useState(
-    props.next && props.next.false ? props.next.false : ""
-  );
-
   const handleArray = (val, i) => {
     let arr = [...answers];
     arr[i] = val;
@@ -160,6 +172,19 @@ const UpdateTest = (props) => {
           getEditorText={setIf}
         />
       </Comment>
+      <Complexity>
+        <select
+          value={complexity}
+          onChange={(e) => setComplexity(parseInt(e.target.value))}
+        >
+          <option value={0}>Выберите сложность</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </select>
+      </Complexity>
       <Answers>
         {mes.map((answer, i) => {
           let an = `answer${i + 1}`;
@@ -215,10 +240,7 @@ const UpdateTest = (props) => {
           question: [question],
           answers: answers,
           correct: correct,
-          next: {
-            true: trueVal,
-            false: falseVal,
-          },
+          complexity,
           ifRight: ifRight,
           ifWrong: ifWrong,
         }}

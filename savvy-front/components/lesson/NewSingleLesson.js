@@ -39,7 +39,17 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       notes {
         id
         text
+        complexity
         next
+        user {
+          id
+        }
+      }
+      chats {
+        id
+        name
+        complexity
+        messages
         user {
           id
         }
@@ -48,6 +58,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         question
         answer
+        complexity
         ifRight
         ifWrong
         check
@@ -61,6 +72,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         answers
         type
         correct
+        complexity
         ifRight
         ifWrong
         question
@@ -74,6 +86,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         text
         nodeID
+        complexity
         nodeType
         user {
           id
@@ -84,6 +97,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
+        complexity
         variants
         hint
         type
@@ -94,6 +108,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       texteditors {
         id
         name
+        complexity
         text
         totalMistakes
         user {
@@ -103,6 +118,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       documents {
         id
         title
+        complexity
         user {
           id
         }
@@ -259,6 +275,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
+  padding-bottom: 5%;
 `;
 
 const Head = styled.div`
@@ -360,6 +377,7 @@ const LessonPart = styled.div`
     width: 90%;
     h1 {
       width: 95%;
+      font-size: 2.6rem;
     }
   }
   .example-enter {
@@ -442,10 +460,6 @@ const NewSingleLesson = (props) => {
                             <Icon size={"1.5em"} icon={arrowLeft} id="back" />
                           </span>
                         </Link>
-                      )}
-                      {console.log(
-                        lesson.user.id === me.id,
-                        me.permissions.includes("ADMIN")
                       )}
                       <span>
                         {(lesson.user.id === me.id ||

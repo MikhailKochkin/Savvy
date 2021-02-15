@@ -175,6 +175,7 @@ const UpdateForm = (props) => {
   );
 
   const uploadFile = async (e) => {
+    setUpload(true);
     const files = e.target.files;
     const data = new FormData();
     data.append("file", files[0]);
@@ -187,10 +188,8 @@ const UpdateForm = (props) => {
       }
     );
     const file = await res.json();
-    // this.setState({
-    //   image: file.secure_url,
-    //   upload: true,
-    // });
+    setImage(file.secure_url);
+    setUpload(false);
   };
 
   const myCallback = (dataFromChild, name) => {
@@ -288,22 +287,23 @@ const UpdateForm = (props) => {
             placeholder="Как работают тарифы на курсе..."
           />
         </Frame>
-        <label for="file">
+        {/* <label for="file">
           <div className="upload">
             {upload === false ? "Загрузите новый логотип курса" : null}
             {upload === "pending" ? "Идет загрузка..." : null}
-            {upload === true ? "Загрузка прошла успешно!" : null}
+            // {upload === true ? "Загрузка прошла успешно!" : null}
           </div>
-        </label>
+        </label> */}
         <input
-          style={{ display: "none" }}
+          // style={{ display: "none" }}
           className="second"
           type="file"
           id="file"
           name="file"
           placeholder="Загрузите новый логотип курса..."
-          onChange={(e) => uploadFile()}
+          onChange={uploadFile}
         />
+        {upload && "Загружаем.."}
         <Img src={image ? image : coursePage.image} alt="Upload Preview" />
         <Buttons>
           <Button

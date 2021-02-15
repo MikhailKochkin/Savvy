@@ -12,6 +12,7 @@ const UPDATE_USER_MUTATION = gql`
     $surname: String
     $email: String
     $status: Status
+    $image: String
     $isFamiliar: Boolean
   ) {
     updateUser(
@@ -20,6 +21,7 @@ const UPDATE_USER_MUTATION = gql`
       name: $name
       surname: $surname
       status: $status
+      image: $image
       isFamiliar: $isFamiliar
     ) {
       id
@@ -140,6 +142,12 @@ const Button = styled.button`
   }
 `;
 
+const Img = styled.img`
+  height: 200px;
+  object-fit: cover;
+  margin: 3% 0;
+`;
+
 const Green = styled.div`
   background: #4dac44;
   padding: 2%;
@@ -156,9 +164,30 @@ const Account = (props) => {
   const [name, setName] = useState(props.me.name);
   const [surname, setSurname] = useState(props.me.surname);
   const [email, setEmail] = useState(props.me.email);
+  const [image, setImage] = useState(props.me.image ? props.me.image : "");
+  const [upload, setUpload] = useState(false);
+  console.log(props.me);
   // careerTrackID
   // uniID
   // company
+
+  const uploadFile = async (e) => {
+    setUpload(true);
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "savvy-app");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    setImage(file.secure_url);
+    setUpload(false);
+  };
 
   const { me } = props;
   return (
@@ -171,6 +200,7 @@ const Account = (props) => {
           name,
           surname,
           status,
+          image,
         }}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >
@@ -225,6 +255,17 @@ const Account = (props) => {
                       искать сотрудников в качестве HR.
                     </Comment>
                   </>
+                  <input
+                    // style={{ display: "none" }}
+                    className="second"
+                    type="file"
+                    id="file"
+                    name="file"
+                    placeholder="Загрузите свою фотографию..."
+                    onChange={uploadFile}
+                  />
+                  {upload && "Загружаем.."}
+                  <Img src={image} alt="Upload Preview" />
                 </Container>
                 <Buttons>
                   <Button

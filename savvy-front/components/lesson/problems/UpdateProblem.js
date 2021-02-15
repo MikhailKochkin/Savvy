@@ -13,8 +13,15 @@ const UPDATE_PROBLEM_MUTATION = gql`
     $text: String
     $nodeID: String
     $nodeType: String
+    $complexity: Int
   ) {
-    updateProblem(id: $id, text: $text, nodeID: $nodeID, nodeType: $nodeType) {
+    updateProblem(
+      id: $id
+      text: $text
+      nodeID: $nodeID
+      nodeType: $nodeType
+      complexity: $complexity
+    ) {
       id
     }
   }
@@ -95,6 +102,21 @@ const Button = styled.button`
   }
 `;
 
+const Complexity = styled.div`
+  select,
+  option {
+    width: 80%;
+    border-radius: 5px;
+    margin-top: 3%;
+    border: 1px solid #c4c4c4;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 1.5%;
+    margin-bottom: 20px;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/ProblemEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
@@ -104,9 +126,11 @@ const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
   const [nodeID, setNodeID] = useState(props.nodeID);
   const [nodeType, setNodeType] = useState(props.nodeType);
-
+  const [complexity, setComplexity] = useState(
+    props.complexity ? props.complexity : 0
+  );
   const getText = (d) => setText(d);
-
+  console.log(props.complexity);
   const handleChange = (type, id) => {
     console.log(type, id);
     setNodeID(id);
@@ -119,6 +143,19 @@ const UpdateProblem = (props) => {
   return (
     <>
       <Container>
+        <Complexity>
+          <select
+            value={complexity}
+            onChange={(e) => setComplexity(parseInt(e.target.value))}
+          >
+            <option value={0}>Выберите сложность</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+          </select>
+        </Complexity>
         <DynamicLoadedEditor getEditorText={getText} previousText={text} />
         <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
         {nodeID && (
@@ -137,10 +174,11 @@ const UpdateProblem = (props) => {
         <Mutation
           mutation={UPDATE_PROBLEM_MUTATION}
           variables={{
-            id: id,
-            text: text,
-            nodeID: nodeID,
-            nodeType: nodeType,
+            id,
+            text,
+            nodeID,
+            nodeType,
+            complexity,
           }}
           refetchQueries={() => [
             {

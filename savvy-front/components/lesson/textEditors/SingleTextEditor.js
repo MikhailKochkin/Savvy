@@ -335,7 +335,14 @@ class SingleTextEditor extends Component {
   };
 
   render() {
-    const { textEditor, me, userData, lessonID, story } = this.props;
+    const {
+      textEditor,
+      me,
+      userData,
+      lessonID,
+      story,
+      complexity,
+    } = this.props;
     let data;
     me
       ? (data = userData
@@ -440,6 +447,7 @@ class SingleTextEditor extends Component {
             lessonID={lessonID}
             id={this.props.textEditor.id}
             text={this.state.text}
+            complexity={complexity}
             totalMistakes={this.state.total}
           />
         )}

@@ -7,6 +7,7 @@ const NewTest = objectType({
     t.model.ifRight();
     t.model.ifWrong();
     t.model.type();
+    t.model.complexity();
     t.model.lessonID();
     t.model.next();
     t.model.question();
@@ -31,6 +32,7 @@ const Quiz = objectType({
     t.model.answer();
     t.model.type();
     t.model.next();
+    t.model.complexity();
     t.model.ifRight();
     t.model.ifWrong();
     t.model.lessonID();
@@ -52,6 +54,7 @@ const Note = objectType({
     t.model.id();
     t.model.text();
     t.model.next();
+    t.model.complexity();
     t.model.userId();
     t.model.lessonId();
     t.model.lesson();
@@ -68,6 +71,7 @@ const TextEditor = objectType({
     t.model.id();
     t.model.text();
     t.model.name();
+    t.model.complexity();
     t.model.userId();
     t.model.lessonId();
     t.model.lesson();
@@ -87,6 +91,7 @@ const Construction = objectType({
     t.model.hint();
     t.model.name();
     t.model.type();
+    t.model.complexity();
     t.model.variants();
     t.model.answer();
     t.model.userId();
@@ -106,6 +111,7 @@ const Problem = objectType({
     t.model.id();
     t.model.text();
     t.model.nodeType();
+    t.model.complexity();
     t.model.nodeID();
     t.model.userId();
     t.model.lessonId();
@@ -187,6 +193,7 @@ const Document = objectType({
     t.model.title();
     t.model.clauses();
     t.model.userId();
+    t.model.complexity();
     t.model.lessonId();
     t.model.user();
     t.model.lesson();
@@ -235,6 +242,7 @@ const Chat = objectType({
   definition(t) {
     t.model.id();
     t.model.name();
+    t.model.complexity();
     t.model.messages();
     t.model.lessonId();
     t.model.lesson();

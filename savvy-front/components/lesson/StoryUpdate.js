@@ -121,6 +121,7 @@ const StoryUpdate = (props) => {
                   tests={lesson.newTests}
                   quizes={lesson.quizes}
                   notes={lesson.notes}
+                  chats={lesson.chats}
                   shots={lesson.shots}
                   problems={lesson.problems}
                   texteditors={lesson.texteditors}

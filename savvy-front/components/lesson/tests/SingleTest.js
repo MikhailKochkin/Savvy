@@ -42,6 +42,7 @@ const IconBlock = styled.div`
     text-align: center;
     color: #8f93a3;
     max-width: 80px;
+    margin: 0 7px;
   }
 `;
 
@@ -220,6 +221,26 @@ const MiniButton = styled.div`
   }
 `;
 
+const OptionsGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  min-width: 60%;
+  max-width: 80%;
+  margin-bottom: 20px;
+`;
+
+const Option = styled.div`
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #c4c4c4;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin-right: 3%;
+  margin-bottom: 2%;
+  height: 50px;
+`;
+
 const SingleTest = (props) => {
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
@@ -229,6 +250,7 @@ const SingleTest = (props) => {
   const [update, setUpdate] = useState(false);
   const [sent, setSent] = useState(false);
   const [zero, setZero] = useState(false);
+  const [hidden, setHidden] = useState(true);
 
   const getTestData = (number, answer) => {
     handleAnswerSelected(number, answer);
@@ -330,6 +352,7 @@ const SingleTest = (props) => {
   } else {
     width = "100%";
   }
+  console.log(props.true);
   return (
     <Styles width={width}>
       {!exam && story !== true && (
@@ -361,6 +384,8 @@ const SingleTest = (props) => {
             <Options>
               {mes.map((answer, index) => (
                 <AnswerOption
+                  true={props.true[index]}
+                  hidden={hidden}
                   key={index}
                   answer={answer[0]}
                   correct={answer[1]}
@@ -473,6 +498,32 @@ const SingleTest = (props) => {
               </IconBlock>
             </Question>
           )}
+          {answerState == "wrong" && (
+            <>
+              <div className="question">
+                <div className="question_text">Показать правильный ответ?</div>
+                <IconBlock>
+                  <img className="icon" src="../../static/hipster.svg" />
+                  <div className="name">BeSavvy</div>
+                </IconBlock>
+              </div>
+
+              <div className="answer">
+                <IconBlock>
+                  <img className="icon" src="../../static/flash.svg" />
+                  <div className="name">{me.name}</div>
+                </IconBlock>{" "}
+                <OptionsGroup>
+                  <Option onClick={(e) => setHidden(false)}>
+                    {props.t("yes")}
+                  </Option>
+                  <Option onClick={(e) => setHidden(true)}>
+                    {props.t("no")}
+                  </Option>
+                </OptionsGroup>
+              </div>
+            </>
+          )}
         </TextBar>
       )}
       {update && (
@@ -480,6 +531,7 @@ const SingleTest = (props) => {
           testID={props.id}
           lessonID={props.lessonID}
           quizes={props.quizes}
+          complexity={props.complexity}
           question={props.question}
           answers={props.answers}
           correct={props.true}

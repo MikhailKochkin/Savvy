@@ -368,7 +368,7 @@ const RegisterCard = (props) => {
                   <div className="Title">{props.t("plan-choose")}</div>
                   <div />
                   <div className="Self">
-                    <span className="Emoji">🏹</span>
+                    <span className="Emoji">🛩</span>
                     <span>{props.t("basic")}</span>
                   </div>
                   <input

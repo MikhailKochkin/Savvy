@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -94,7 +94,6 @@ model Construction {
   lessonID            String               @default(cuid())
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
-  complexity          Int?                 @default(1)
   hint                String?
   type                String
   variants            String[]
@@ -189,7 +188,6 @@ model CourseVisit {
 model Document {
   id              String           @id @default(cuid())
   title           String
-  complexity      Int?             @default(1)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   userId          String
@@ -316,7 +314,6 @@ model NewTest {
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   type       String?      @default("TEST")
-  complexity Int?         @default(1)
   next       Json?
   ifRight    String?
   ifWrong    String?
@@ -331,18 +328,17 @@ model NewTest {
 }
 
 model Note {
-  id          String   @id @default(cuid())
-  text        String
-  complexity  Int?     @default(1)
-  chat        Boolean?
-  lessonID    String?  @default(cuid())
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-  next        Json?
-  userId      String?
-  lessonId    String?
-  lesson      Lesson?  @relation(fields: [lessonId], references: [id])
-  user        User?    @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  text      String
+  chat      Boolean?
+  lessonID  String?  @default(cuid())
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  next      Json?
+  userId    String?
+  lessonId  String?
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
 }
 
 model Order {
@@ -380,7 +376,6 @@ model Problem {
   hints         String?
   solution      String?
   answer        String?
-  complexity    Int?             @default(1)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   lessonID      String          @default(cuid())
@@ -420,7 +415,6 @@ model Quiz {
   updatedAt  DateTime     @updatedAt
   type       String?      @default("TEST")
   next       Json?
-  complexity Int?         @default(1)
   ifRight    String?
   ifWrong    String?
   check      String?      @default("IDEA")
@@ -519,7 +513,6 @@ model TextEditor {
   id               String             @id @default(cuid())
   name             String
   text             String
-  complexity       Int?               @default(1)
   lessonID         String             @default(cuid())
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
@@ -696,7 +689,6 @@ model Chat {
   id           String       @id @default(cuid())
   name         String?
   messages     Json?
-  complexity   Int?         @default(1)
   updatedAt    DateTime     @updatedAt
   createdAt    DateTime     @default(now())
   userId       String

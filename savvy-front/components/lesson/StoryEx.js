@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Note from "./notes/Note";
 import Shots from "./shots/Shots";
 import SingleTest from "./tests/SingleTest";
+import Chat from "./chat/Chat";
 import SingleQuiz from "./quizes/SingleQuiz";
 import SingleProblem from "./problems/SingleProblem";
 import SingleTextEditor from "./textEditors/SingleTextEditor";
@@ -42,7 +43,15 @@ class StoryEx extends Component {
       let item;
       if (task.type.toLowerCase() === "note") {
         el = lesson.notes.find((note) => note.id === task.id);
-        item = <Note text={el.text} me={me} story={true} note={el} />;
+        item = (
+          <Note
+            text={el.text}
+            me={me}
+            story={true}
+            note={el}
+            complexity={el.complexity}
+          />
+        );
         components.push(item);
       } else if (task.type.toLowerCase() === "newtest") {
         el = lesson.newTests.find((t) => t.id === task.id);
@@ -51,6 +60,7 @@ class StoryEx extends Component {
             key={el.id}
             id={el.id}
             testID={el.id}
+            complexity={el.complexity}
             question={el.question}
             answers={el.answers}
             true={el.correct}
@@ -74,6 +84,7 @@ class StoryEx extends Component {
           <SingleQuiz
             key={el.id}
             id={el.id}
+            complexity={el.complexity}
             question={el.question}
             answer={el.answer}
             type={el.type}
@@ -109,12 +120,29 @@ class StoryEx extends Component {
           />
         );
         components.push(item);
+      } else if (task.type.toLowerCase() === "chat") {
+        el = lesson.chats.find((chat) => chat.id === task.id);
+        item = (
+          <Chat
+            key={el.id}
+            name={el.name}
+            me={me}
+            complexity={el.complexity}
+            messages={el.messages}
+            id={el.id}
+            lessonId={lesson.id}
+            me={me}
+            story={true}
+          />
+        );
+        components.push(item);
       } else if (task.type.toLowerCase() === "problem") {
         el = lesson.problems.find((problem) => problem.id === task.id);
         item = (
           <SingleProblem
             key={el.id}
             problem={el}
+            complexity={el.complexity}
             lessonID={lesson.id}
             me={me}
             userData={lesson.problemResults}
@@ -129,6 +157,7 @@ class StoryEx extends Component {
           <SingleTextEditor
             key={el.id}
             lessonID={lesson.id}
+            complexity={el.complexity}
             textEditor={el}
             me={me}
             userData={lesson.textEditorResults}
@@ -142,6 +171,7 @@ class StoryEx extends Component {
           <SingleConstructor
             key={el.id}
             lessonID={lesson.id}
+            complexity={el.complexity}
             construction={el}
             variants={el.variants}
             me={me}
@@ -163,6 +193,7 @@ class StoryEx extends Component {
           <Document
             key={el.id}
             clauses={el.clauses}
+            complexity={el.complexity}
             title={el.title}
             me={me}
             documentID={el.id}

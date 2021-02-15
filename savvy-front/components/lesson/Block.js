@@ -51,6 +51,7 @@ const Block = (props) => {
     value,
     tests,
     quizes,
+    chats,
     notes,
     shots,
     problems,
@@ -101,6 +102,13 @@ const Block = (props) => {
           <Title>
             <div className="type">
               Алгоритм: {shots.filter((q) => q.id === value.id)[0].title}
+            </div>
+          </Title>
+        ) : null}
+        {value.type && value.type.toLowerCase() === "chat" ? (
+          <Title>
+            <div className="type">
+              Диалог: {chats.filter((q) => q.id === value.id)[0].name}
             </div>
           </Title>
         ) : null}
@@ -161,6 +169,7 @@ const Block = (props) => {
           <select name="task" onChange={(e) => setTask(e.target.value)}>
             <option value="---">---</option>
             {notes.length > 0 && <option value="note">Лонгриды</option>}
+            {chats.length > 0 && <option value="chat">Диалоги</option>}
             {shots.length > 0 && <option value="shot">Алгоритмы</option>}
             {tests.length > 0 && <option value="newTest">Тесты</option>}
             {quizes.length > 0 && <option value="quiz">Вопросы</option>}
@@ -223,6 +232,25 @@ const Block = (props) => {
               {notes.map((n) => (
                 <div className="option">
                   <div>{renderHTML(n.text.substring(0, 100))}</div>
+                  <button
+                    name={n.__typename}
+                    value={n.id}
+                    onClick={(e) =>
+                      props.set(e.target.name, e.target.value, props.i)
+                    }
+                  >
+                    Выбрать
+                  </button>
+                </div>
+              ))}
+            </Section>
+          )}
+          {task === "chat" && (
+            <Section>
+              <h4>Диалоги:</h4>
+              {chats.map((n) => (
+                <div className="option">
+                  <div>{n.name}</div>
                   <button
                     name={n.__typename}
                     value={n.id}

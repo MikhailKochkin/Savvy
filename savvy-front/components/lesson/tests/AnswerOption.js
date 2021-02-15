@@ -5,8 +5,8 @@ import renderHTML from "react-render-html";
 const StyledButton = styled.div`
   display: inline-block;
   vertical-align: middle;
-  border: ${(props) =>
-    props.choose ? "1.5px solid #122A62" : "1px solid #c4c4c4"};
+  border: ${(props) => (props.color !== "#c4c4c4" ? "2px solid" : "1px solid")};
+  border-color: ${(props) => props.color};
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 3%;
@@ -39,6 +39,14 @@ class AnswerOption extends Component {
   };
 
   render() {
+    let color;
+    if (!this.props.hidden && this.props.true) {
+      color = "rgba(50, 172, 102, 0.25)";
+    } else if (this.props.hidden && this.state.choose) {
+      color = "#122A62";
+    } else {
+      color = "#c4c4c4";
+    }
     return (
       <StyledButton
         type="checkbox"
@@ -47,6 +55,7 @@ class AnswerOption extends Component {
         number={this.props.number}
         choose={this.state.choose}
         onClick={this.change}
+        color={color}
       >
         {renderHTML(this.props.answer)}
       </StyledButton>

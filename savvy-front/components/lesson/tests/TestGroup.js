@@ -29,6 +29,7 @@ class TestGroup extends Component {
                 type={test.type}
                 answers={test.answers}
                 true={test.correct}
+                complexity={test.complexity}
                 length={arr}
                 ifRight={test.ifRight}
                 ifWrong={test.ifWrong}

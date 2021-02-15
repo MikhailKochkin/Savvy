@@ -11,6 +11,7 @@ const {
 const Query = queryType({
   name: "Query",
   definition(t) {
+    t.crud.user({ filtering: true });
     t.crud.users({ ordering: true, filtering: true });
     t.crud.coursePages({ ordering: true, filtering: true });
     t.crud.coursePage({ ordering: true, filtering: true });

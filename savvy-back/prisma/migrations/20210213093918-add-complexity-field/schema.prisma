@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -189,7 +189,6 @@ model CourseVisit {
 model Document {
   id              String           @id @default(cuid())
   title           String
-  complexity      Int?             @default(1)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   userId          String

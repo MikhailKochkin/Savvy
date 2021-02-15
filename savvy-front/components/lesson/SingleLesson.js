@@ -9,6 +9,7 @@ import Note from "./notes/Note";
 import Document from "./documents/Document";
 // import Exams from "./exams/Exams";
 import Forum from "./forum/Forum";
+import Chat from "./chat/Chat";
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
 import QuizGroup from "./quizes/QuizGroup";
@@ -125,8 +126,18 @@ const SINGLE_LESSON_QUERY = gql`
       }
       notes {
         id
+        complexity
         text
         next
+        user {
+          id
+        }
+      }
+      chats {
+        id
+        name
+        complexity
+        messages
         user {
           id
         }
@@ -135,6 +146,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         question
         type
+        complexity
         check
         ifRight
         ifWrong
@@ -149,6 +161,7 @@ const SINGLE_LESSON_QUERY = gql`
       documents {
         id
         title
+        complexity
         user {
           id
         }
@@ -207,6 +220,7 @@ const SINGLE_LESSON_QUERY = gql`
         answers
         correct
         type
+        complexity
         ifRight
         ifWrong
         next
@@ -219,6 +233,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         text
         nodeID
+        complexity
         nodeType
         user {
           id
@@ -229,6 +244,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
+        complexity
         variants
         hint
         type
@@ -239,6 +255,7 @@ const SINGLE_LESSON_QUERY = gql`
       texteditors {
         id
         name
+        complexity
         text
         totalMistakes
         user {
@@ -631,10 +648,22 @@ const SingleLesson = (props) => {
                             user={lesson.user.id}
                             note={note}
                             id={note.id}
+                            complexity={note.complexity}
                             next={note.next}
                             quizes={lesson.quizes}
                             notes={lesson.notes}
                             tests={lesson.newTests}
+                            lessonID={lesson.id}
+                          />
+                        ))}
+                      {page === "chat" &&
+                        lesson.chats.map((c) => (
+                          <Chat
+                            name={c.name}
+                            me={me}
+                            user={lesson.user.id}
+                            messages={c.messages}
+                            id={c.id}
                             lessonID={lesson.id}
                           />
                         ))}
@@ -702,13 +731,10 @@ const SingleLesson = (props) => {
                         <>
                           {lesson.quizes.length > 0 ? (
                             <QuizGroup
-                              notes={lesson.notes}
                               lessonID={lesson.id}
                               quizResults={lesson.quizResults}
                               me={me}
                               quizes={lesson.quizes}
-                              notes={lesson.notes}
-                              tests={lesson.newTests}
                             />
                           ) : (
                             <Center>

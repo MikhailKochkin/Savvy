@@ -7,8 +7,8 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { withTranslation } from "../../../i18n";
 
 const UPDATE_NOTE_MUTATION = gql`
-  mutation UPDATE_NOTE_MUTATION($id: String!, $text: String) {
-    updateNote(id: $id, text: $text) {
+  mutation UPDATE_NOTE_MUTATION($id: String!, $text: String, $complexity: Int) {
+    updateNote(id: $id, text: $text, complexity: $complexity) {
       id
       text
       next
@@ -66,6 +66,21 @@ const Button = styled.button`
   }
 `;
 
+const Complexity = styled.div`
+  select,
+  option {
+    width: 80%;
+    border-radius: 5px;
+    margin-top: 3%;
+    border: 1px solid #c4c4c4;
+    font-family: Montserrat;
+    font-size: 1.4rem;
+    outline: 0;
+    padding: 1.5%;
+    margin-bottom: 10px;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
@@ -73,16 +88,9 @@ const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
 
 const UpdateNote = (props) => {
   const [text, setText] = useState(props.text);
-  const [trueVal, setTrueVal] = useState(
-    props.next && props.next.true ? props.next.true : ""
+  const [complexity, setComplexity] = useState(
+    props.complexity ? props.complexity : 0
   );
-  const [falseVal, setFalseVal] = useState(
-    props.next && props.next.false ? props.next.false : ""
-  );
-
-  const myCallback = async (type, data) => {
-    return type === true ? setTrueVal(data) : setFalseVal(data);
-  };
 
   const getText = (d) => setText(d);
 
@@ -90,16 +98,26 @@ const UpdateNote = (props) => {
   return (
     <>
       <Container>
+        <Complexity>
+          <select
+            value={complexity}
+            onChange={(e) => setComplexity(parseInt(e.target.value))}
+          >
+            <option value={0}>Выберите сложность</option>
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            <option value={5}>5</option>
+          </select>
+        </Complexity>
         <DynamicLoadedEditor getEditorText={getText} previousText={text} />
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
           variables={{
-            id: id,
-            text: text,
-            // next: {
-            //   true: trueVal,
-            //   false: falseVal,
-            // },
+            id,
+            text,
+            complexity,
           }}
           refetchQueries={() => [
             {

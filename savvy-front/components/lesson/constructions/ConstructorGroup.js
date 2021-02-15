@@ -119,6 +119,7 @@ class ConstructorGroup extends Component {
               key={construction.id}
               lessonID={this.props.lessonID}
               construction={construction}
+              complexity={construction.complexity}
               variants={construction.variants}
               me={this.props.me}
               arr={arr}

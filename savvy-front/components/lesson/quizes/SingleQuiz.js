@@ -81,6 +81,7 @@ const IconBlock = styled.div`
     text-align: center;
     color: #8f93a3;
     max-width: 80px;
+    margin: 0 7px;
   }
 `;
 
@@ -335,6 +336,7 @@ const SingleQuiz = (props) => {
     userData,
     exam,
     story,
+    complexity,
     ifWrong,
     ifRight,
     check,
@@ -523,6 +525,7 @@ const SingleQuiz = (props) => {
               lessonID={props.lessonID}
               answer={props.answer}
               question={props.question}
+              complexity={complexity}
               ifRight={ifRight}
               ifWrong={ifWrong}
               notes={props.notes}
