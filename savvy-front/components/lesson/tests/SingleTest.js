@@ -122,6 +122,7 @@ const TextBar = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-items: flex-start;
   }
   .answer_name {
     margin-right: 10px;
@@ -251,6 +252,7 @@ const SingleTest = (props) => {
   const [sent, setSent] = useState(false);
   const [zero, setZero] = useState(false);
   const [hidden, setHidden] = useState(true);
+  const [reveal, setReveal] = useState("");
 
   const getTestData = (number, answer) => {
     handleAnswerSelected(number, answer);
@@ -395,12 +397,16 @@ const SingleTest = (props) => {
               ))}
             </Options>
           </div>
-          {/* {zero && (
+          {zero && (
             <div className="question">
               <div className="question_text">Выберите хотя бы один вариант</div>
-              <div className="question_name">{author_name}</div>
+              <IconBlock>
+                <img className="icon" src="../../static/hipster.svg" />
+                <div className="name">BeSavvy</div>
+              </IconBlock>
             </div>
           )}
+          {/* 
           {answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">{props.t("correct")}!</div>
@@ -517,9 +523,9 @@ const SingleTest = (props) => {
                   <Option onClick={(e) => setHidden(false)}>
                     {props.t("yes")}
                   </Option>
-                  <Option onClick={(e) => setHidden(true)}>
+                  {/* <Option onClick={(e) => setHidden(true)}>
                     {props.t("no")}
-                  </Option>
+                  </Option> */}
                 </OptionsGroup>
               </div>
             </>

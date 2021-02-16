@@ -431,10 +431,11 @@ const SingleQuiz = (props) => {
                     {props.t("check")}
                   </Button1>
                 </Group>
-                {correct === "true" && ifRight && ifRight !== "<p></p>" && (
+                {correct === "true" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.t("correct")}!{renderHTML(ifRight)}{" "}
+                      {props.t("correct")}!{" "}
+                      {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
                       {props.t("show")}
                     </div>
                     <IconBlock>
@@ -446,8 +447,11 @@ const SingleQuiz = (props) => {
                 {correct === "false" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.t("wrong")}... {renderHTML(ifWrong)}{" "}
-                      {props.t("show")}
+                      {props.t("wrong")}...
+                      {ifWrong &&
+                        ifWrong !== "<p></p>" &&
+                        renderHTML(ifWrong)}{" "}
+                      {hint !== null && hint !== 0 && hint}. {props.t("show")}
                     </div>
                     <IconBlock>
                       <img className="icon" src="../../static/hipster.svg" />
@@ -498,9 +502,9 @@ const SingleQuiz = (props) => {
                         <Option onClick={(e) => setHidden(false)}>
                           {props.t("yes")}
                         </Option>
-                        <Option onClick={(e) => setHidden(true)}>
+                        {/* <Option onClick={(e) => setHidden(true)}>
                           {props.t("no")}
-                        </Option>
+                        </Option> */}
                       </Options>
                     </div>
                   </>
