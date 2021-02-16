@@ -25,9 +25,10 @@ const Journey = (props) => {
   let data_labels = sorted_lessons.map(function (item) {
     return {
       progress: item.progress,
-      total: item.lesson.structure.lessonItems
-        ? item.lesson.structure.lessonItems.length
-        : 0,
+      total:
+        item.lesson.structure && item.lesson.structure.lessonItems
+          ? item.lesson.structure.lessonItems.length
+          : 0,
     };
   });
   let data_percent = data_labels.map((item) => {
