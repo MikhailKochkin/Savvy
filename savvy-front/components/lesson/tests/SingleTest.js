@@ -485,7 +485,8 @@ const SingleTest = (props) => {
           {answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.t("correct")}! {renderHTML(ifRight)}
+                {props.t("correct")}!{" "}
+                {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
               </div>
               <IconBlock>
                 <img className="icon" src="../../static/hipster.svg" />
@@ -496,7 +497,8 @@ const SingleTest = (props) => {
           {answerState === "wrong" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.t("wrong")}... {renderHTML(ifWrong)}
+                {props.t("wrong")}...{" "}
+                {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
               </div>
               <IconBlock>
                 <img className="icon" src="../../static/hipster.svg" />
