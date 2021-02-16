@@ -191,6 +191,7 @@ class SingleProblem extends Component {
   }
   render() {
     const { problem, me, userData, lesson, story, complexity } = this.props;
+
     const data = userData
       .filter((result) => result.problem.id === problem.id)
       .filter((result) => result.student.id === me.id);
@@ -304,6 +305,9 @@ class SingleProblem extends Component {
               nodeID={problem.nodeID}
               nodeType={problem.nodeType}
               complexity={complexity}
+              quizes={lesson.quizes}
+              newTests={lesson.newTests}
+              notes={lesson.notes}
             />
           </>
         )}
