@@ -12,7 +12,7 @@ const CREATE_PRIVATE_ORDER_MUTATION = gql`
     $promocode: String
   ) {
     createPrivateOrder(
-      coursePage: $coursePage
+      coursePageId: $coursePageId
       user: $user
       promocode: $promocode
     ) {
@@ -53,11 +53,12 @@ const Comment = styled.div`
 
 const EnrollCoursePage = (props) => {
   const [show, setShow] = useState(false);
-
   let subj = [];
   props.meData.new_subjects.map((s) => subj.push(s.id));
   const onClick = async (e, enrollOnCourse) => {
     e.preventDefault();
+    console.log(props.meData.id, props.coursePage.id);
+
     if (
       props.coursePage.courseType === "PUBLIC" ||
       props.coursePage.courseType === "CHALLENGE"
@@ -66,7 +67,7 @@ const EnrollCoursePage = (props) => {
         enrollOnCourse({
           variables: {
             id: props.meData.id,
-            coursePage: props.coursePage.id,
+            coursePageId: props.coursePage.id,
           },
         });
         alert("Вы успешно зарегистрировлаись. Наслаждайтесь курсом!");
@@ -77,7 +78,6 @@ const EnrollCoursePage = (props) => {
   };
 
   const { coursePage, meData } = props;
-  console.log(props.coursePage.id);
   return (
     <>
       {(coursePage.courseType === "PUBLIC" ||
@@ -94,7 +94,12 @@ const EnrollCoursePage = (props) => {
         >
           {(enrollOnCourse) =>
             !subj.includes(coursePage.id) ? (
-              <Button onClick={(e) => onClick(e, enrollOnCourse)}>
+              <Button
+                onClick={(e) => {
+                  onClick(e, enrollOnCourse);
+                  console.log("final");
+                }}
+              >
                 Регистрация
               </Button>
             ) : (
@@ -107,7 +112,7 @@ const EnrollCoursePage = (props) => {
         <Mutation
           mutation={CREATE_PRIVATE_ORDER_MUTATION}
           variables={{
-            coursePage: coursePage.id,
+            coursePageId: coursePage.id,
             user: meData.id,
             promocode: "",
           }}

@@ -16,7 +16,6 @@ const { randomBytes } = require("crypto");
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
-// const FinishEmail = require("../emails/Finish");
 const NextWeekEmail = require("../emails/nextWeek");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
@@ -225,8 +224,10 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, args, ctx) => {
+        console.log(args);
         const coursePageId = args.coursePageId;
         delete args.coursePageId;
+        console.log(coursePageId);
         const enrolledUser = await ctx.prisma.user.update({
           data: {
             new_subjects: {
@@ -241,7 +242,7 @@ const Mutation = mutationType({
           {
             where: {
               student: { id: { equals: args.id } },
-              coursePage: { id: { equals: args.coursePageId } },
+              coursePage: { id: { equals: coursePageId } },
             },
           },
           `{ student { id, name, email } }`
@@ -1713,16 +1714,16 @@ const Mutation = mutationType({
             },
             `{ id, user { name, email}, coursePage {id, title} }`
           );
-          const notification = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
-            To: order.user.email,
-            Subject: "🎆 BeSavvy: доступ к курсу открыт!",
-            HtmlBody: PurchaseEmail.PurchaseEmail(
-              order.user.name,
-              order.coursePage.title,
-              order.coursePage.id
-            ),
-          });
+          // const notification = await client.sendEmail({
+          //   From: "Mikhail@besavvy.app",
+          //   To: order.user.email,
+          //   Subject: "🎆 BeSavvy: доступ к курсу открыт!",
+          //   HtmlBody: PurchaseEmail.PurchaseEmail(
+          //     order.user.name,
+          //     order.coursePage.title,
+          //     order.coursePage.id
+          //   ),
+          // });
         }
         return ctx.prisma.order.update({
           data: {

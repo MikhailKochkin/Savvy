@@ -39,6 +39,14 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
 
 const Styles = styled.div`
   margin-bottom: 20px;
+  width: ${(props) => (props.width ? "95vw" : "100%")};
+  /* width: 95vw; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* align-items: center; */
+  background: #f8f9fa;
+  padding: 2% 0;
 `;
 
 const TextBar = styled.div`
@@ -136,6 +144,118 @@ const TextBar = styled.div`
   }
 `;
 
+const Window = styled.div`
+  margin-left: -10px;
+  min-height: 80px;
+  border-radius: 10px;
+  width: 280px;
+  line-height: 1.4;
+  background: rgb(255, 255, 255);
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
+  .answerBox {
+    border-top: 1px solid #dadce0;
+    padding: 10px 15px;
+    button {
+      background-color: rgb(26, 115, 232);
+      color: rgb(255, 255, 255);
+      border-radius: 4px;
+      border: none;
+      box-shadow: none;
+      box-sizing: border-box;
+      font-family: "Google Sans", Roboto, RobotoDraft, Helvetica, Arial,
+        sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      height: 24px;
+      padding: 3px 12px 5px;
+      margin-top: 8px;
+      cursor: pointer;
+      &:hover {
+        box-shadow: rgb(66 133 244 / 15%) 0px 1px 3px 1px;
+        background-color: rgb(43, 125, 233);
+      }
+    }
+  }
+  .questionBox {
+    padding: 10px 15px;
+    .icon {
+      border-radius: 50%;
+      height: 40px;
+      width: 40px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .nameBlock {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .name {
+      margin-left: 8px;
+    }
+
+    .cancelBlock {
+      height: 100%;
+      transition: 0.5s;
+      border-radius: 50%;
+      padding: 1%;
+      cursor: pointer;
+      &:hover {
+        background: #ecf5fe;
+      }
+    }
+    .cancel {
+      margin: 5px;
+      height: 15px;
+      width: 15px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+`;
+
+const IconBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* align-items: center; */
+  width: 100%;
+  margin: 5px 0;
+`;
+
+const Input = styled.input`
+  font-family: Montserrat;
+  border: 1px solid;
+  border: ${(props) => {
+    if (props.color == true || props.color == false) {
+      return "2px solid";
+    } else {
+      return "1px solid";
+    }
+  }};
+
+  border-radius: 5px;
+  outline: 0;
+  padding: 5px 7px;
+  width: 100%;
+  border-color: ${(props) => {
+    if (props.color == true) {
+      return "rgba(50, 172, 102, 0.75)";
+    } else if (props.color == false) {
+      return "rgba(222, 107, 72, 0.5)";
+    } else {
+      return "#dadce0";
+    }
+  }};
+`;
+
 const EditText = styled.div`
   color: rgb(17, 17, 17);
   width: ${(props) => (props.story ? "940px" : "740px")};
@@ -145,7 +265,10 @@ const EditText = styled.div`
   box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   padding: 5% 8%;
   margin: 55px auto 45px;
-  @media (max-width: 800px) {
+  @media (max-width: 1250px) {
+    width: 70%;
+  }
+  @media (max-width: 900px) {
     width: 100%;
   }
 `;
@@ -157,13 +280,15 @@ const Buttons = styled.div`
   width: 100%;
 `;
 
-const Input = styled.input`
-  margin-left: 10px;
-  border: none;
-  border-bottom: 1px solid #edefed;
-  outline: 0;
-  font-size: 1.6rem;
-  font-family: Montserrat;
+const Comment = styled.div`
+  margin-top: 10px;
+`;
+
+const WindowColumn = styled.div`
+  height: 100%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 35%;
 `;
 
 const StyledButton = withStyles({
@@ -182,15 +307,23 @@ class SingleTextEditor extends Component {
     answer: "",
     correct_option: "",
     wrong_option: "",
-    show: false,
     attempts: 0,
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text,
     update: false,
     result: false,
     inputColor: "#c0d6df",
-    open: true,
     recieved: [],
+    showQuiz: false,
+    quiz: {
+      question: "",
+      answer: "",
+    },
+    quiz_guess: "",
+    quiz_result: "no",
+    quizAnswered: false,
+    showNote: false,
+    note: "",
   };
 
   check = async (e) => {
@@ -255,6 +388,33 @@ class SingleTextEditor extends Component {
       .catch((err) => console.log(err));
 
     this.setState({ shown: false });
+  };
+
+  quizCheck = async (e) => {
+    let data = {
+      answer1: this.state.quiz.answer,
+      answer2: this.state.quiz_guess,
+    };
+    const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (parseFloat(res.res) > 69) {
+          this.setState({
+            quiz_result: true,
+          });
+        } else {
+          this.setState({
+            quiz_result: false,
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   onTest = (e) => {
@@ -349,99 +509,201 @@ class SingleTextEditor extends Component {
           .filter((result) => result.textEditor.id === textEditor.id)
           .filter((result) => result.student.id === me.id))
       : (data = [""]);
-
     return (
-      <Styles id={textEditor.id + 1}>
-        {!this.state.update && (
-          <>
-            <TextBar id={textEditor.id}>
-              <EditText story={story}>
-                <Mutation
-                  mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-                  variables={{
-                    lessonId: this.props.lessonID,
-                    textEditorId: this.props.textEditor.id,
-                    attempts: this.state.attempts,
-                    correct: this.state.correct_option,
-                    wrong: this.state.wrong_option,
-                    guess: htmlToText(this.state.answer, {
-                      wordwrap: false,
-                    }),
-                    result: this.state.result,
-                  }}
-                  refetchQueries={() => [
-                    {
-                      query: SINGLE_LESSON_QUERY,
-                      variables: { id: this.props.lessonID },
-                    },
-                    {
-                      query: CURRENT_USER_QUERY,
-                    },
-                  ]}
-                >
-                  {(createTextEditorResult, { loading, error }) => (
-                    <div
-                      onClick={async (e) => {
-                        const res1 = this.onTest();
-                        if (e.target.getAttribute("data-initial")) {
-                          this.setState({
-                            correct_option: e.target.getAttribute(
-                              "data-initial"
-                            ),
-                          });
-                        }
-                        if (e.target.id === "id") {
-                          if (this.state.total > 0) {
-                            const res2 = await this.onMouseClick(e);
-                          } else if (
-                            this.state.total == 0 ||
-                            this.state.total == null
+      <>
+        <Styles id={textEditor.id + 1} width={story}>
+          {!this.state.update && (
+            <div>
+              <TextBar id={textEditor.id}>
+                <EditText story={story}>
+                  <Mutation
+                    mutation={CREATE_TEXTEDITORRESULT_MUTATION}
+                    variables={{
+                      lessonId: this.props.lessonID,
+                      textEditorId: this.props.textEditor.id,
+                      attempts: this.state.attempts,
+                      correct: this.state.correct_option,
+                      wrong: this.state.wrong_option,
+                      guess: htmlToText(this.state.answer, {
+                        wordwrap: false,
+                      }),
+                      result: this.state.result,
+                    }}
+                    refetchQueries={() => [
+                      {
+                        query: SINGLE_LESSON_QUERY,
+                        variables: { id: this.props.lessonID },
+                      },
+                      {
+                        query: CURRENT_USER_QUERY,
+                      },
+                    ]}
+                  >
+                    {(createTextEditorResult, { loading, error }) => (
+                      <div
+                        onClick={async (e) => {
+                          const res1 = this.onTest();
+                          if (
+                            e.target.getAttribute("type") === "quiz" ||
+                            e.target.parentElement.getAttribute("type") ===
+                              "quiz"
                           ) {
-                            const res3 = await this.onReveal(e);
+                            this.setState({
+                              showQuiz: true,
+                              quiz: {
+                                question:
+                                  e.target.getAttribute("type") === "quiz"
+                                    ? e.target.getAttribute("question")
+                                    : e.target.parentElement.getAttribute(
+                                        "question"
+                                      ),
+                                answer:
+                                  e.target.getAttribute("type") === "quiz"
+                                    ? e.target.getAttribute("answer")
+                                    : e.target.parentElement.getAttribute(
+                                        "answer"
+                                      ),
+                                ifRight:
+                                  e.target.getAttribute("type") === "quiz"
+                                    ? e.target.getAttribute("ifRight")
+                                    : e.target.parentElement.getAttribute(
+                                        "ifRight"
+                                      ),
+                                ifWrong:
+                                  e.target.getAttribute("type") === "quiz"
+                                    ? e.target.getAttribute("ifWrong")
+                                    : e.target.parentElement.getAttribute(
+                                        "ifWrong"
+                                      ),
+                              },
+                              quiz_result: "no",
+                            });
                           }
-                        }
-                        if (this.state.shown) {
-                          setTimeout(() => {
-                            console.log("Save");
-                            const res2 = createTextEditorResult();
-                          }, 3000);
-                        }
-                      }}
-                    >
-                      {renderHTML(this.state.text)}
-                    </div>
-                  )}
-                </Mutation>
-              </EditText>
-            </TextBar>
-            <Buttons>
-              <StyledButton
-                onClick={this.onShow}
-                variant="contained"
-                color="primary"
-              >
-                {this.state.mistakesShown
-                  ? this.props.t("close2")
-                  : this.props.t("open2")}
-              </StyledButton>
-              {me && me.id === textEditor.user.id && !story ? (
-                <DeleteSingleTextEditor
-                  id={this.props.textEditor.id}
-                  lessonID={this.props.lessonID}
-                />
-              ) : null}
-              {me && me.id === textEditor.user.id && !story && (
+                          if (
+                            e.target.getAttribute("type") === "note" ||
+                            e.target.parentElement.getAttribute("type") ===
+                              "note"
+                          ) {
+                            this.setState({
+                              showNote: true,
+                              note:
+                                e.target.getAttribute("type") === "note"
+                                  ? e.target.getAttribute("text")
+                                  : e.target.parentElement.getAttribute("text"),
+                            });
+                          }
+                          if (e.target.id === "id") {
+                            if (this.state.total > 0) {
+                              const res2 = await this.onMouseClick(e);
+                            } else if (
+                              this.state.total == 0 ||
+                              this.state.total == null
+                            ) {
+                              console.log("reveal");
+                              const res3 = await this.onReveal(e);
+                            }
+                          }
+                          if (this.state.shown) {
+                            setTimeout(() => {
+                              console.log("Save");
+                              const res2 = createTextEditorResult();
+                            }, 3000);
+                          }
+                        }}
+                      >
+                        {renderHTML(this.state.text)}
+                      </div>
+                    )}
+                  </Mutation>
+                </EditText>
+              </TextBar>
+              <Buttons>
                 <StyledButton
-                  onClick={(e) =>
-                    this.setState((prev) => ({ update: !prev.update }))
-                  }
+                  onClick={this.onShow}
+                  variant="contained"
+                  color="primary"
                 >
-                  {this.props.t("update")}
+                  {this.state.mistakesShown
+                    ? this.props.t("close2")
+                    : this.props.t("open2")}
                 </StyledButton>
-              )}
-            </Buttons>
-          </>
-        )}
+                {me && me.id === textEditor.user.id && !story ? (
+                  <DeleteSingleTextEditor
+                    id={this.props.textEditor.id}
+                    lessonID={this.props.lessonID}
+                  />
+                ) : null}
+                {me && me.id === textEditor.user.id && !story && (
+                  <StyledButton
+                    onClick={(e) =>
+                      this.setState((prev) => ({ update: !prev.update }))
+                    }
+                  >
+                    {this.props.t("update")}
+                  </StyledButton>
+                )}
+              </Buttons>
+            </div>
+          )}
+          <WindowColumn>
+            {this.state.showQuiz && (
+              <Window>
+                <div className="questionBox">
+                  <IconBlock>
+                    <div className="nameBlock">
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </div>
+                    <div
+                      className="cancelBlock"
+                      onClick={(e) => this.setState({ showQuiz: false })}
+                    >
+                      <img className="cancel" src="../../static/cancel.svg" />
+                    </div>
+                  </IconBlock>
+                  <div>{this.state.quiz.question}</div>
+                </div>
+                <div className="answerBox">
+                  <Input
+                    color={this.state.quiz_result}
+                    onChange={(e) => {
+                      this.setState({ quiz_guess: e.target.value });
+                    }}
+                  />
+                  <button onClick={this.quizCheck}>Ответить</button>
+                  {this.state.quiz_result === false && (
+                    <Comment>{this.state.quiz.ifWrong}</Comment>
+                  )}
+                  {this.state.quiz_result === true && (
+                    <Comment>{this.state.quiz.ifRight}</Comment>
+                  )}
+                </div>
+              </Window>
+            )}
+            {this.state.showNote && (
+              <Window>
+                <div className="questionBox">
+                  <IconBlock>
+                    <div className="nameBlock">
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </div>
+                    <div
+                      className="cancelBlock"
+                      onClick={(e) => this.setState({ showNote: false })}
+                    >
+                      <img className="cancel" src="../../static/cancel.svg" />
+                    </div>
+                  </IconBlock>
+                </div>
+                <div className="answerBox">
+                  <Comment>{this.state.note}</Comment>
+                </div>
+              </Window>
+            )}
+          </WindowColumn>
+        </Styles>
+
         {this.state.update && (
           <UpdateTextEditor
             lessonID={lessonID}
@@ -451,7 +713,7 @@ class SingleTextEditor extends Component {
             totalMistakes={this.state.total}
           />
         )}
-      </Styles>
+      </>
     );
   }
 }

@@ -166,6 +166,7 @@ const CreateProblem = (props) => {
             >
               {loading ? "Сохраняем..." : "Сохранить"}
             </Button>
+            {error ? error : null}
           </>
         )}
       </Mutation>
