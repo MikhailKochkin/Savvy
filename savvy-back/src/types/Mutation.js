@@ -1714,16 +1714,16 @@ const Mutation = mutationType({
             },
             `{ id, user { name, email}, coursePage {id, title} }`
           );
-          // const notification = await client.sendEmail({
-          //   From: "Mikhail@besavvy.app",
-          //   To: order.user.email,
-          //   Subject: "🎆 BeSavvy: доступ к курсу открыт!",
-          //   HtmlBody: PurchaseEmail.PurchaseEmail(
-          //     order.user.name,
-          //     order.coursePage.title,
-          //     order.coursePage.id
-          //   ),
-          // });
+          const notification = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: order.user.email,
+            Subject: "🎆 BeSavvy: доступ к курсу открыт!",
+            HtmlBody: PurchaseEmail.PurchaseEmail(
+              order.user.name,
+              order.coursePage.title,
+              order.coursePage.id
+            ),
+          });
         }
         return ctx.prisma.order.update({
           data: {
