@@ -15,7 +15,7 @@ const Styles = styled.div`
     line-height: 1.4;
   }
   @media (max-width: 800px) {
-    max-height: 120vh;
+    height: auto;
     padding-bottom: 50px;
   }
 `;
