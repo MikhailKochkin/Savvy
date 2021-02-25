@@ -64,6 +64,7 @@ const DynamicNav = dynamic(import("./Nav"), {
 
 const Page = ({ children }) => {
   const router = useRouter();
+  console.log(router.pathname);
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
@@ -72,7 +73,7 @@ const Page = ({ children }) => {
           <Meta />
           <ModalProvider>
             <Header />
-            <DynamicNav />
+            {router.pathname !== "/corporate_lawyer" && <DynamicNav />}
             <Inner>{children}</Inner>
             {router.pathname !== "/lesson" && <Footer />}
           </ModalProvider>

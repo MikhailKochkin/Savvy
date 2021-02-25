@@ -34,7 +34,7 @@ const Inner = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-      @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap&subset=cyrillic');
+     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;600;900&display=swap');
 
     html {
         font-family: 'Montserrat', sans-serif;
