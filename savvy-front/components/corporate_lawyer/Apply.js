@@ -56,6 +56,9 @@ const Stage = styled.div`
   }
   @media (max-width: 800px) {
     width: 80%;
+    .sub_header {
+      font-size: 2.6rem;
+    }
   }
 `;
 const Apply = () => {

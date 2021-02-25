@@ -101,6 +101,7 @@ const Options = styled.div`
     }
     .header2 {
       text-align: left;
+      width: 100%;
     }
     .text {
       width: 90%;
