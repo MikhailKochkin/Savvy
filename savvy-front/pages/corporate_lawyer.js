@@ -8,7 +8,9 @@ import Price from "../components/corporate_lawyer/Price";
 import Teachers from "../components/corporate_lawyer/Teachers";
 import Apply from "../components/corporate_lawyer/Apply";
 import Questions from "../components/corporate_lawyer/Questions";
-
+import Partners from "../components/corporate_lawyer/Partners";
+import Results from "../components/corporate_lawyer/Results";
+import Projects from "../components/corporate_lawyer/Projects";
 const corporate_lawyer = () => {
   return (
     <>
@@ -16,11 +18,15 @@ const corporate_lawyer = () => {
       <Problem />
       <Audience />
       <Syllabus />
-      <Call1 />
       <Perks />
+      <Call1 />
       <Price />
       <Teachers />
+      <Partners />
       <Apply />
+      <Call1 />
+      <Results />
+      <Projects />
       <Call1 />
       <Questions />
     </>
