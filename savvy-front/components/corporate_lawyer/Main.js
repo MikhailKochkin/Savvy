@@ -38,7 +38,7 @@ const Info = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 60%;
+  width: 70%;
   #level1 {
     display: flex;
     flex-direction: row;
@@ -138,7 +138,7 @@ const Main = () => {
       </Header>
       <Info>
         <div id="level1">
-          <h1>Профессия корпоративный юрист</h1>
+          <h1>Профессия "Корпоративный юрист"</h1>
           <img src="static/star.svg" />
         </div>
         <h2>
@@ -149,22 +149,22 @@ const Main = () => {
           <div className="element">
             {" "}
             <img src="static/tick.svg" />
-            Сделки с долями
+            Сделки M/A
           </div>
           <div className="element">
             {" "}
             <img src="static/tick.svg" />
-            Рынок ценных бумаг
+            Финансирование корпораций
           </div>
           <div className="element">
             {" "}
             <img src="static/tick.svg" />
-            Внутренние процедуры
+            Копоративные договоры
           </div>
           <div className="element">
             {" "}
             <img src="static/tick.svg" />
-            Сделки с долями
+            Решение кейсов в командах
           </div>
           <div className="element">
             {" "}
@@ -174,7 +174,7 @@ const Main = () => {
           <div className="element">
             {" "}
             <img src="static/tick.svg" />
-            IT навыки
+            Инструменты Legal Tech
           </div>
         </List>
       </Info>

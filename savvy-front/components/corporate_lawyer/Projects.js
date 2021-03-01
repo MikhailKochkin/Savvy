@@ -19,8 +19,7 @@ const Styles = styled.div`
     margin-bottom: 1%;
   }
   @media (max-width: 800px) {
-    height: auto;
-    margin: 50px 0;
+    margin: 0;
     #header {
       font-size: 2.2rem;
       margin: 20px 0;
@@ -54,8 +53,7 @@ const Slide = styled.div`
     img {
       object-fit: cover;
       max-width: 95%;
-      /* border: 1px solid; */
-      /* border-radius: 6px; */
+      max-height: 300px;
     }
   }
   @media (max-width: 800px) {
@@ -186,7 +184,7 @@ const Projects = () => {
               </div>
             </Text>
             <div className="image">
-              <img src="../../static/goal.svg" />
+              <img src="../../static/mindset.svg" />
             </div>
           </Slide>
           <Slide>
@@ -201,7 +199,7 @@ const Projects = () => {
               </div>
             </Text>
             <div className="image">
-              <img src="../../static/goal.svg" />
+              <img src="../../static/problem.svg" />
             </div>
           </Slide>
           <Slide>

@@ -11,11 +11,11 @@ const Styles = styled.div`
   padding: 50px 0;
   .header {
     font-size: 2.6rem;
-    font-weight: bold;
+    font-weight: 500;
     width: 100%;
     line-height: 1.4;
-    width: 80%;
-    margin-bottom: 50px;
+    width: 90%;
+    margin-bottom: 30px;
   }
   @media (max-width: 800px) {
     height: 100%;
@@ -28,8 +28,9 @@ const Table = styled.div`
   width: 70%;
   align-items: space-between;
   justify-content: space-between;
+  line-height: 1.7;
   .main-element {
-    border: 2px solid #162b4b;
+    border: 1px solid #162b4b;
     background: #162b4b;
     color: #fff;
     padding: 1%;
@@ -37,7 +38,7 @@ const Table = styled.div`
     font-weight: 600;
   }
   .element {
-    border: 2px solid #162b4b;
+    border: 1px solid #162b4b;
     padding: 1%;
     border-bottom: none;
     display: flex;
@@ -52,9 +53,12 @@ const Table = styled.div`
     }
   }
   .final {
-    border: 2px solid #162b4b;
+    border: 1px solid #162b4b;
   }
   @media (max-width: 800px) {
+    .element {
+      padding: 5px 8px;
+    }
     width: 90%;
     img {
       margin: 5px 0;
@@ -86,7 +90,7 @@ const Perks = () => {
         </div>
         <div className="main-element ">Погружение в рынок</div>
         <div className="element">
-          <div>Встречи с экспертами </div>
+          <div>Встречи с экспертами</div>
           <img src="static/tick.svg" />
         </div>
         <div className="element">
@@ -94,7 +98,11 @@ const Perks = () => {
           <img src="static/tick.svg" />
         </div>
         <div className="element">
-          <div>Подготовка к собеседованиям</div>
+          <div>Проведение 2 тестовых собеседований</div>
+          <img src="static/tick.svg" />
+        </div>
+        <div className="element">
+          <div>Анализ рынка и существующих возможностей</div>
           <img src="static/tick.svg" />
         </div>
         <div className="main-element ">Дополнительные бонусы</div>

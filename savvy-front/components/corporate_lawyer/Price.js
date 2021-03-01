@@ -11,7 +11,7 @@ const Styles = styled.div`
   justify-content: center;
   .header {
     font-size: 3.6rem;
-    font-weight: bold;
+    font-weight: 500;
     line-height: 1.4;
     width: 80%;
     text-align: center;
@@ -47,7 +47,7 @@ const Options = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 90%;
+  width: 80%;
   #full {
     flex-basis: 50%;
     display: flex;
@@ -91,6 +91,7 @@ const Options = styled.div`
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
+      /* width: 50%; */
     }
     #discount {
       display: flex;
@@ -98,13 +99,14 @@ const Options = styled.div`
       align-items: flex-start;
       justify-content: center;
       margin-top: 25px;
+      /* width: 50%; */
     }
     .header2 {
       text-align: left;
       width: 100%;
     }
     .text {
-      width: 90%;
+      width: 60%;
     }
   }
 `;

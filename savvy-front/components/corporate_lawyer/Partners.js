@@ -1,6 +1,6 @@
 import styled from "styled-components";
 const Styles = styled.div`
-  height: 80vh;
+  min-height: 80vh;
   width: 100vw;
   display: flex;
   flex-direction: column;

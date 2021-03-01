@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Slide = styled.div`
-  min-height: 80vh;
+  min-height: 60vh;
   width: 100vw;
   background: #162b4b;
   padding: 50px;

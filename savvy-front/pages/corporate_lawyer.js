@@ -19,14 +19,13 @@ const corporate_lawyer = () => {
       <Audience />
       <Syllabus />
       <Perks />
+      <Projects />
       <Call1 />
-      <Price />
       <Teachers />
       <Partners />
       <Apply />
-      <Call1 />
+      <Price />
       <Results />
-      <Projects />
       <Call1 />
       <Questions />
     </>

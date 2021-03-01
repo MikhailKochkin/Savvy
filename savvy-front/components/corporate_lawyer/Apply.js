@@ -7,7 +7,7 @@ const Styles = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 50px 0;
+  padding-top: 50px;
   .header {
     font-size: 3.6rem;
     font-weight: 500;
