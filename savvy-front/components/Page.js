@@ -73,7 +73,7 @@ const Page = ({ children }) => {
           <Meta />
           <ModalProvider>
             <Header />
-            {router.pathname !== "/corporate_lawyer" && <DynamicNav />}
+            {router.pathname !== "/school" && <DynamicNav />}
             <Inner>{children}</Inner>
             {router.pathname !== "/lesson" && <Footer />}
           </ModalProvider>

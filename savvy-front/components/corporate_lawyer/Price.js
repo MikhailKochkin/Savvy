@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const Styles = styled.div`
-  height: 100vh;
+  min-height: 80vh;
   width: 100vw;
   background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 50px 0;
   .header {
     font-size: 3.6rem;
     font-weight: 500;
@@ -18,12 +19,21 @@ const Styles = styled.div`
     margin-bottom: 50px;
   }
   .conclusion {
-    margin-top: 40px;
-    font-size: 1.8rem;
+    padding: 1% 3%;
+    border-radius: 10px;
+    color: #fff;
+    background: #ff6f59;
+    border: none;
+    outline: 0;
     cursor: pointer;
-    border-bottom: 2px solid black;
-    display: inline-block;
-    max-width: 300px;
+    margin-top: 20px;
+    font-family: Montserrat;
+    width: 350px;
+    font-size: 1.8rem;
+    transition: 0.3s;
+    &:hover {
+      background: #e01e00;
+    }
   }
 
   @media (max-width: 800px) {
@@ -32,12 +42,12 @@ const Styles = styled.div`
     .header {
       font-size: 2.8rem;
       text-align: left;
+      margin-bottom: 0px;
     }
     .conclusion {
-      text-align: left;
-      border-bottom: 1px solid black;
-      display: inline-block;
-      max-width: 300px;
+      text-align: center;
+      padding: 3%;
+      width: 80%;
     }
   }
 `;
@@ -49,23 +59,27 @@ const Options = styled.div`
   justify-content: center;
   width: 80%;
   #full {
+    padding-top: 50px;
     flex-basis: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    min-height: 300px;
   }
   #discount {
+    padding-top: 50px;
     flex-basis: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    min-height: 300px;
   }
   .header2 {
     color: #ff6f59;
     font-size: 2.6rem;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     width: 70%;
     line-height: 1.4;
@@ -91,14 +105,16 @@ const Options = styled.div`
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      /* width: 50%; */
+      padding-top: 0px;
     }
     #discount {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
-      margin-top: 25px;
+      /* margin-top: 25px; */
+      padding-top: 0px;
+
       /* width: 50%; */
     }
     .header2 {
@@ -106,12 +122,20 @@ const Options = styled.div`
       width: 100%;
     }
     .text {
-      width: 60%;
+      width: 100%;
     }
   }
 `;
 
 const Price = () => {
+  const slide = () => {
+    var my_element = document.getElementById("C2A");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
   return (
     <Styles>
       <div className="header">Варианты участия в программе</div>
@@ -135,7 +159,9 @@ const Price = () => {
           </div>
         </div>
       </Options>
-      <span className="conclusion">Записаться на собеседование</span>
+      <button onClick={(e) => slide()} className="conclusion">
+        Записаться на собеседование
+      </button>
     </Styles>
   );
 };

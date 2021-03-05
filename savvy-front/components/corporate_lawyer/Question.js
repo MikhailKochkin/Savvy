@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const Styles = styled.li`
-  color: #162b4b;
   height: auto;
-  /* padding-top: 40px; */
   display: flex;
   font-size: 1.8rem;
   flex-direction: column;

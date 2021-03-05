@@ -1,15 +1,59 @@
 import styled from "styled-components";
 const Styles = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background: #f8efe6;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  #data0 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 80%;
+    h1 {
+      margin-bottom: 0;
+    }
+  }
+  #data {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+  }
+  #mobile_image {
+    display: none;
+  }
   @media (max-width: 800px) {
     height: 100%;
     padding-bottom: 50px;
+    #mobile_image {
+      display: block;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: flex-start;
+      img {
+        width: 60%;
+        margin: 15px 0;
+      }
+    }
+    #data {
+      width: 90%;
+      flex-direction: column;
+    }
+    #data0 {
+      width: 90%;
+      flex-direction: column;
+      justify-content: flex-start;
+      h1 {
+        line-height: 1.4;
+      }
+    }
   }
 `;
 
@@ -25,10 +69,31 @@ const Header = styled.div`
   color: #1b222c;
   border-color: #1b222c;
   font-size: 2.1rem;
+  margin-bottom: 50px;
   @media (max-width: 800px) {
     flex-basis: 20%;
     padding-top: 20px;
     width: 95%;
+    margin-bottom: 0px;
+    div {
+      line-height: 1.6;
+    }
+  }
+`;
+
+const Text = styled.div`
+  flex-basis: 70%;
+  height: 100%;
+`;
+
+const Image = styled.div`
+  width: 30%;
+  height: 100%;
+  img {
+    width: 310px;
+  }
+  @media (max-width: 800px) {
+    display: none;
   }
 `;
 
@@ -36,20 +101,25 @@ const Info = styled.div`
   flex-basis: 85%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  width: 70%;
+  width: 100%;
+  /* min-width: 1000px; */
   #level1 {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    #mobile_image {
+      display: none;
+    }
   }
   h1 {
     font-size: 3.6rem;
     font-weight: 500;
     width: 80%;
-    text-align: center;
+    text-align: left;
     line-height: 1.2;
   }
   img {
@@ -59,8 +129,27 @@ const Info = styled.div`
   h2 {
     font-size: 2rem;
     font-weight: 500;
-    text-align: center;
-    width: 80%;
+    text-align: left;
+    width: 60%;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    button {
+      padding: 3%;
+      border-radius: 10px;
+      color: #fff;
+      background: #ff6f59;
+      border: none;
+      outline: 0;
+      cursor: pointer;
+      margin-top: 20px;
+      font-family: Montserrat;
+      width: 250px;
+      font-size: 1.8rem;
+      transition: 0.3s;
+      &:hover {
+        background: #e01e00;
+      }
+    }
     span {
       color: #ff6f59;
       cursor: pointer;
@@ -70,20 +159,29 @@ const Info = styled.div`
     }
   }
   @media (max-width: 800px) {
-    margin-top: 50px;
     width: 90%;
-
     #level1 {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      #mobile_image {
+        display: block;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        img {
+          width: 60%;
+          margin: 15px 0;
+        }
+      }
       h1 {
-        font-size: 2.6rem;
-        font-weight: 600;
+        font-size: 3rem;
+        font-weight: 500;
         width: 95%;
         text-align: left;
-        line-height: 1.2;
+        line-height: 1.4;
       }
-
       img {
         width: 100px;
       }
@@ -104,15 +202,14 @@ const List = styled.div`
   align-items: space-between;
   justify-content: center;
   flex-wrap: wrap;
-  height: 200px;
-  width: 100%;
+  height: auto;
+  width: 80%;
   font-size: 2rem;
   .element {
     display: flex;
     flex-direction: row;
     margin-bottom: 15px;
-    padding-left: 100px;
-    width: 50%;
+    padding-left: 50px;
     img {
       width: 25px;
       margin-right: 15px;
@@ -123,6 +220,8 @@ const List = styled.div`
     height: auto;
     flex-wrap: nowrap;
     margin-top: 20px;
+    width: 100%;
+
     .element {
       width: 100%;
       padding-left: 50px;
@@ -131,53 +230,66 @@ const List = styled.div`
   }
 `;
 const Main = () => {
+  const slide = () => {
+    var my_element = document.getElementById("C2A");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
   return (
     <Styles>
       <Header>
-        <div>BeSavvy & Школа права Статут</div>
+        <div>Проект BeSavvy & Школы права Статут</div>
       </Header>
-      <Info>
+      <div id="data0">
         <div id="level1">
-          <h1>Профессия "Корпоративный юрист"</h1>
-          <img src="static/star.svg" />
+          <h1>Школа молодого юриста BeSavvy 2021</h1>
+          <div id="mobile_image">
+            <img src="static/certificate.svg" />
+          </div>
         </div>
-        <h2>
-          Практический курс для запуска карьеры в сфере корпоративного и
-          договорного права. <span>Подайте заявку сейчас</span>
-        </h2>
-        <List>
-          <div className="element">
-            {" "}
-            <img src="static/tick.svg" />
-            Сделки M/A
-          </div>
-          <div className="element">
-            {" "}
-            <img src="static/tick.svg" />
-            Финансирование корпораций
-          </div>
-          <div className="element">
-            {" "}
-            <img src="static/tick.svg" />
-            Копоративные договоры
-          </div>
-          <div className="element">
-            {" "}
-            <img src="static/tick.svg" />
-            Решение кейсов в командах
-          </div>
-          <div className="element">
-            {" "}
-            <img src="static/tick.svg" />
-            Тестовые собеседования
-          </div>
-          <div className="element">
-            {" "}
-            <img src="static/tick.svg" />
-            Инструменты Legal Tech
-          </div>
-        </List>
-      </Info>
+        <div style={{ fontSize: "1.8rem", color: "#626262" }}>
+          Старт: 5 июля. Скидка 30% до 1 апреля
+        </div>
+      </div>
+
+      <div id="data">
+        <Text>
+          <Info>
+            <h2>
+              Программа для развития карьеры в актуальных областях права <br />
+              <button onClick={(e) => slide()}>Подать заявку</button>
+            </h2>
+            <List>
+              <div className="element">
+                {" "}
+                <img src="static/tick.svg" />
+                Корпоративный юрист
+              </div>
+              <div className="element">
+                {" "}
+                <img src="static/tick.svg" />
+                Сопровождение IT проектов
+              </div>
+              <div className="element">
+                {" "}
+                <img src="static/tick.svg" />
+                Сложные проекты в области IP
+              </div>
+              <div className="element">
+                {" "}
+                <img src="static/tick.svg" />
+                Как и где использовать Legal Tech?
+              </div>
+            </List>
+          </Info>
+        </Text>
+        <Image>
+          <img src="static/certificate.svg" />
+        </Image>
+      </div>
     </Styles>
   );
 };

@@ -3,8 +3,8 @@ import styled from "styled-components";
 const Slide = styled.div`
   min-height: 60vh;
   width: 100vw;
-  background: #162b4b;
-  padding: 50px;
+  background: #fff;
+  padding: 100px 50px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -17,14 +17,13 @@ const Slide = styled.div`
 const Styles = styled.div`
   width: 90%;
   display: flex;
-  background: #162b4b;
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;
   .header {
     font-size: 2.6rem;
-    flex-basis: 40%;
-    color: #f7d188;
+    flex-basis: 50%;
+    color: black;
     font-weight: 500;
     line-height: 1.4;
     width: 80%;
@@ -34,19 +33,28 @@ const Styles = styled.div`
   }
   .result_box {
     width: 90%;
-    color: #fff;
-    border-bottom: 1px solid #fff;
     padding: 20px 0;
     font-size: 2rem;
     line-height: 1.4;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
   .result_box_first {
     width: 90%;
-    color: #fff;
-    border-bottom: 1px solid #fff;
     padding-bottom: 20px;
     font-size: 2rem;
     line-height: 1.4;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  img {
+    width: 22px;
+    margin-right: 15px;
+    margin-top: 5px;
   }
   @media (max-width: 800px) {
     height: 100%;
@@ -74,22 +82,32 @@ const Results = () => {
         </div>
         <div>
           <div className="result_box_first">
-            У вас будет возможность пройти стажировку / найти работу в компании
-            партнере
+            <img src="static/tick2.svg" />
+            <div>
+              У вас будет возможность пройти стажировку / найти работу в
+              компании партнере
+            </div>
           </div>
           <div className="result_box">
-            Пройдете 5 тестовых собеседований с разными юристами
+            <img src="static/tick2.svg" />
+            <div>Пройдете 3 тестовых собеседования с разными юристами</div>
           </div>
           <div className="result_box">
-            Научитесь работать с документами на уровне младшего юриста топовой
-            фирмы
+            <img src="static/tick2.svg" />
+            <div>
+              Научитесь работать с документами на уровне младшего юриста топовой
+              фирмы
+            </div>
           </div>
           <div className="result_box">
+            <img src="static/tick2.svg" />
+            <div>
+              В формате кейсов и игр разберете сложный материал в сжатые сроки
+            </div>
+          </div>
+          {/* <div className="result_box">
             В формате кейсов и игр разберем сложный материал в сжатые сроки
-          </div>
-          <div className="result_box">
-            В формате кейсов и игр разберем сложный материал в сжатые сроки
-          </div>
+          </div> */}
         </div>
       </Styles>
     </Slide>

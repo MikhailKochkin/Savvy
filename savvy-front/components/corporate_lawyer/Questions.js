@@ -12,7 +12,7 @@ const Styles = styled.div`
   padding: 50px 0;
   .header {
     font-size: 2.6rem;
-    color: #162b4b;
+    /* color: #162b4b; */
     font-weight: bold;
     line-height: 1.4;
     width: 80%;

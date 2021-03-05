@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState } from "react";
 
 const Styles = styled.li`
-  color: white;
   height: auto;
   /* padding-top: 40px; */
   display: flex;
@@ -10,7 +9,7 @@ const Styles = styled.li`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  border-bottom: 1px solid #f7d188;
+  border-bottom: 1px solid #162b4b;
   width: 90%;
   @media (max-width: 800px) {
     height: 100%;
@@ -27,7 +26,7 @@ const Control = styled.div`
   align-items: space-between;
   justify-content: space-between;
   .circle {
-    border: 1px solid #f7d188;
+    border: 1px solid #162b4b;
     width: 25px;
     height: 25px;
     display: flex;
@@ -36,13 +35,21 @@ const Control = styled.div`
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
-    color: #f7d188;
+    color: #162b4b;
+    transition: 0.3s;
+    &:hover {
+      background: #162b4b;
+      color: #fff;
+    }
+  }
+  .module {
+    max-width: 80%;
   }
   @media (max-width: 800px) {
     height: 100%;
     width: 100%;
     .module {
-      width: 80%;
+      max-width: 80%;
     }
     .circle {
       width: 35px;

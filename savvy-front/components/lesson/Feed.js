@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
 import { withTranslation } from "../../i18n";
 import { assertValidExecutionArguments } from "graphql/execution/execute";
 
@@ -260,11 +260,6 @@ const Feed = (props) => {
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
-      console.log(
-        props.components[num + 1].props.complexity == complexity,
-        props.components[num + 1].props.complexity,
-        complexity
-      );
       if (props.components[num + 1].props.complexity > complexity) {
         setComplexity(props.components[num + 1].props.complexity);
         setVisible(true);
@@ -412,51 +407,100 @@ const Feed = (props) => {
           </div>
         </div>
         <Content className="second">
-          {props.components.slice(0, num + 2).map((c, i) => (
-            <Block
-              show={i === num + 1 ? "final" : "no"}
-              className={i === num + 1 ? "final" : "no"}
-            >
-              {c}
-              <Mutation
-                mutation={UPDATE_LESSONRESULT_MUTATION}
-                variables={{
-                  id: props.my_result.id,
-                  lessonID: props.lessonID,
-                  progress: num + 2,
-                }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_COURSEPAGE_QUERY,
-                    variables: { id: props.coursePageID },
-                  },
-                ]}
-              >
-                {(updateLessonResult, { loading, error }) => {
-                  return (
-                    <>
-                      {props.components.length > num + 1 && i === num && (
-                        <div
-                          className="arrow_box"
-                          onClick={(e) => {
-                            if (props.my_result.progress < num + 2) {
-                              let res = updateLessonResult();
-                            }
-                            let res2 = move();
-                          }}
-                        >
-                          <img
-                            className="arrow"
-                            src="../../static/down-arrow.svg"
-                          />
-                        </div>
-                      )}
-                    </>
-                  );
-                }}
-              </Mutation>
-            </Block>
-          ))}
+          {props.my_result ? (
+            <>
+              {props.components.slice(0, num + 2).map((c, i) => (
+                <Block
+                  show={i === num + 1 ? "final" : "no"}
+                  className={i === num + 1 ? "final" : "no"}
+                >
+                  {c}
+                  <Mutation
+                    mutation={UPDATE_LESSONRESULT_MUTATION}
+                    variables={{
+                      id: props.my_result.id,
+                      lessonID: props.lessonID,
+                      progress: num + 2,
+                    }}
+                    refetchQueries={() => [
+                      {
+                        query: NEW_SINGLE_LESSON_QUERY,
+                        variables: { id: props.lessonID },
+                      },
+                    ]}
+                  >
+                    {(updateLessonResult, { loading, error }) => {
+                      return (
+                        <>
+                          {props.components.length > num + 1 && i === num && (
+                            <div
+                              className="arrow_box"
+                              onClick={(e) => {
+                                if (props.my_result.progress < num + 2) {
+                                  let res = updateLessonResult();
+                                }
+                                let res2 = move();
+                              }}
+                            >
+                              <img
+                                className="arrow"
+                                src="../../static/down-arrow.svg"
+                              />
+                            </div>
+                          )}
+                        </>
+                      );
+                    }}
+                  </Mutation>
+                </Block>
+              ))}
+            </>
+          ) : (
+            <>
+              {props.components.slice(0, num + 2).map((c, i) => (
+                <Block
+                  show={i === num + 1 ? "final" : "no"}
+                  className={i === num + 1 ? "final" : "no"}
+                >
+                  {c}
+                  <Mutation
+                    mutation={CREATE_LESSONRESULT_MUTATION}
+                    variables={{
+                      lessonID: props.lessonID,
+                      progress: num + 2,
+                    }}
+                    refetchQueries={[
+                      {
+                        query: NEW_SINGLE_LESSON_QUERY,
+                        variables: { id: props.lessonID },
+                      },
+                    ]}
+                  >
+                    {(createLessonResult, { loading, error }) => {
+                      return (
+                        <>
+                          {props.components.length > num + 1 && i === num && (
+                            <div
+                              className="arrow_box"
+                              onClick={(e) => {
+                                let res = createLessonResult();
+                                let res2 = move();
+                              }}
+                            >
+                              <img
+                                className="arrow"
+                                src="../../static/down-arrow.svg"
+                              />
+                            </div>
+                          )}
+                        </>
+                      );
+                    }}
+                  </Mutation>
+                </Block>
+              ))}
+            </>
+          )}
           <Stepper>
             {props.me &&
               props.components.length === num + 1 &&
@@ -494,7 +538,6 @@ const Feed = (props) => {
                                 className={classes.button}
                                 onClick={() => {
                                   createLessonResult();
-                                  console.log(1);
                                 }}
                               >
                                 {props.t("next_lesson")}
@@ -535,7 +578,6 @@ const Feed = (props) => {
                                 className={classes.button}
                                 onClick={() => {
                                   updateLessonResult();
-                                  console.log(2);
                                 }}
                               >
                                 {props.t("next_lesson")}

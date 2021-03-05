@@ -173,9 +173,7 @@ const Projects = () => {
           <Slide>
             <Text>
               <div>
-                <div className="header2">
-                  Заключение корпоративного договора
-                </div>
+                <div className="header2">Договорная структура IT-компании</div>
                 <div className="text">
                   Разберемся, как составить документы, провести переговоры и не
                   допустить ошибки{" "}
@@ -190,7 +188,7 @@ const Projects = () => {
           <Slide>
             <Text>
               <div>
-                <div className="header2">Исключение участника ООО</div>
+                <div className="header2">Инвестиции в IT-проект</div>
                 <div className="text">
                   Разберемся, как составить документы, провести переговоры и не
                   допустить ошибки{" "}
@@ -209,8 +207,7 @@ const Projects = () => {
                   Создание конструктора документов в Excel
                 </div>
                 <div className="text">
-                  Разберемся, как составить документы, провести переговоры и не
-                  допустить ошибки{" "}
+                  Покажем, как создать свой legal tech проект с 0
                 </div>
                 {/* <button className="button">Try it</button> */}
               </div>

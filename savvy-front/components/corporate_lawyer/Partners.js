@@ -1,18 +1,17 @@
 import styled from "styled-components";
 const Styles = styled.div`
-  min-height: 80vh;
+  min-height: 70vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 50px;
+  padding-top: 50px;
   .header {
     font-size: 2.6rem;
-    color: #162b4b;
     font-weight: 500;
     line-height: 1.4;
-    width: 80%;
+    width: 90%;
     text-align: left;
     margin-bottom: 50px;
   }
@@ -33,8 +32,8 @@ const Group = styled.div`
 `;
 
 const Icon = styled.div`
-  height: 250px;
-  width: 200px;
+  height: 200px;
+  width: 160px;
   background: #162b4b;
   margin-right: 40px;
   margin-bottom: 20px;

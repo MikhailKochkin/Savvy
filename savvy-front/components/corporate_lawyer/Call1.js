@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const Styles = styled.div`
-  height: 100vh;
+  min-height: 80vh;
   width: 100vw;
-  background: #fff;
+  background: #77cbfa;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,6 +29,13 @@ const Block = styled.div`
     font-size: 2.4rem;
     font-weight: 500;
     padding-left: 10px;
+    #additional-info {
+      width: 80%;
+      margin-bottom: 20px;
+      /* line-height: 1.8rem; */
+      font-size: 1.8rem;
+      margin-top: 15px;
+    }
   }
   #block2 {
     flex-basis: 50%;
@@ -36,22 +43,18 @@ const Block = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    #additional-info {
-      width: 80%;
-      margin-bottom: 20px;
-    }
     #form {
       width: 80%;
     }
     form {
       font-size: 1.6rem;
-      margin-bottom: 25px;
+      margin-bottom: 5px;
       #input_box {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        margin-top: 10px;
+        margin-top: 5px;
         #call {
           flex-basis: 50%;
         }
@@ -125,17 +128,19 @@ const Block = styled.div`
 `;
 const Call1 = () => {
   return (
-    <Styles>
+    <Styles id="C2A">
       <Block>
         <div id="block1">
-          Запишитесь на собеседование с директором программы и получите{" "}
+          <div>
+            Запишитесь на собеседование с директором программы и получите{" "}
+          </div>
           <span style={{ color: "#FF6F59" }}>персональную консультацию</span>
-        </div>
-        <div id="block2">
           <div id="additional-info">
             Мы расскажем о программе, о наших преподавателях и подходах, о
             рынке, разберемся в ваших целях и нынешних знаниях.
           </div>
+        </div>
+        <div id="block2">
           <div id="form">
             <input className="data" placeholder="Имя" />
             <input className="data" type="tel" placeholder="Телефон" />

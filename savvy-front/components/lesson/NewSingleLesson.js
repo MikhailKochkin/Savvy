@@ -422,6 +422,7 @@ const NewSingleLesson = (props) => {
               </Progress>
             );
           let lesson = data.lesson;
+          console.log(123, lesson);
           // if (lesson === undefined) return <Reload />;
           let next = lesson.coursePage.lessons.find(
             (l) => l.number === lesson.number + 1
