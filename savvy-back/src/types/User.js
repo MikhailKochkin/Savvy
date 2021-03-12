@@ -61,6 +61,10 @@ const BusinessClient = objectType({
   definition(t) {
     t.model.id();
     t.model.email();
+    t.model.type();
+    t.model.name();
+    t.model.number();
+    t.model.communication_medium();
     t.model.createdAt();
     t.model.updatedAt();
   },

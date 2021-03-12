@@ -6,7 +6,9 @@ import dynamic from "next/dynamic";
 import Meta from "./Meta";
 import Footer from "./Footer";
 import Header from "./Header";
-// import Layout from "../components/Layout";
+import Ad from "./Ad";
+
+import Layout from "../components/Layout";
 // import { useUser } from "./User";
 
 const theme = {
@@ -64,19 +66,21 @@ const DynamicNav = dynamic(import("./Nav"), {
 
 const Page = ({ children }) => {
   const router = useRouter();
-  console.log(router.pathname);
   return (
     <ThemeProvider theme={theme}>
       <StyledPage>
         <>
           <GlobalStyle />
           <Meta />
-          <ModalProvider>
-            <Header />
-            {router.pathname !== "/school" && <DynamicNav />}
-            <Inner>{children}</Inner>
-            {router.pathname !== "/lesson" && <Footer />}
-          </ModalProvider>
+          <Layout>
+            <ModalProvider>
+              {router.pathname == "/" && <Ad />}
+              <Header />
+              {router.pathname !== "/school" && <DynamicNav />}
+              <Inner>{children}</Inner>
+              {router.pathname !== "/lesson" && <Footer />}
+            </ModalProvider>
+          </Layout>
         </>
       </StyledPage>
     </ThemeProvider>

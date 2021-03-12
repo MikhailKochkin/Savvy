@@ -1,0 +1,26 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "name",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "number",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "communication_medium",
+      "type": "String",
+      "arity": "Optional"
+    }
+  ]
+}

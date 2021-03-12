@@ -2,6 +2,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
+import { useRouter } from "next/router";
+
 import ReactResizeDetector from "react-resize-detector";
 import { useUser } from "./User";
 import Signup from "./auth/Signup";
@@ -37,7 +39,7 @@ const SideMenu = styled.div`
   .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: white;
     display: block;
     transition: 0.3s;
@@ -79,19 +81,19 @@ const SideMenu = styled.div`
 `;
 
 const StyledHeader = styled.header`
-  background-color: white;
+  background: ${(props) => (props.color ? "#fff" : "#f5f5f5")};
   display: grid;
-  height: 60px;
-  margin-top: 20px;
+  min-height: 50px;
+  padding: 10px 0;
   grid-template-areas: "CourseMenu UserData";
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 3fr;
   cursor: pointer;
   a,
   button,
   input,
   p {
     text-decoration: none;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     padding-left: 2%;
     background-color: none;
   }
@@ -103,8 +105,30 @@ const StyledHeader = styled.header`
     flex-direction: row;
     justify-content: space-between;
   }
+  .my {
+    margin-left: 50px;
+    min-width: 120px;
+  }
+  .blog {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    a {
+      padding: 0;
+      margin: 0;
+      font-size: 1.6rem;
+    }
+  }
   .logo {
     width: 150px;
+    a {
+      font-weight: 400;
+      font-size: 2.2rem;
+      @media (max-width: 990px) {
+        font-size: 1.6rem;
+      }
+    }
     @media (max-width: 990px) {
       padding-top: 15px;
       margin-right: 10px;
@@ -115,11 +139,10 @@ const StyledHeader = styled.header`
 `;
 
 const CourseMenu = styled.div`
-  grid-area: CourseMenu;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: space-between;
+  justify-content: space-between;
   @media (max-width: 600px) {
     flex-direction: row;
   }
@@ -139,12 +162,17 @@ const CourseMenu = styled.div`
 const Button = styled.div`
   border: none;
   background: none;
-  width: 60%;
+  min-width: 80px;
   display: flex;
+  font-size: 1.4rem;
   flex-direction: row;
   justify-content: flex-end;
   padding-right: 0;
+  margin-left: 50px;
   cursor: pointer;
+  a {
+    font-size: 1.6rem;
+  }
   &:hover {
     color: #6daae1;
   }
@@ -163,13 +191,15 @@ const UserData = styled.div`
   }
   .name {
     /* margin-right: 40px; */
-    min-width: 30%;
+    min-width: 200px;
+    font-size: 1.6rem;
   }
   .imgGroup {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-left: 50px;
   }
   .img {
     display: flex;
@@ -179,7 +209,7 @@ const UserData = styled.div`
     margin-right: 10px;
   }
   img {
-    width: 30px;
+    width: 25px;
   }
 `;
 
@@ -217,7 +247,7 @@ const Nav = (props) => {
   const [width, setWidth] = useState(800);
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
-
+  const router = useRouter();
   const onResize = (width) => {
     setWidth(width);
   };
@@ -243,58 +273,32 @@ const Nav = (props) => {
       <>
         {width > 800 && (
           <>
-            <StyledHeader>
+            <StyledHeader
+              color={router.pathname !== "/" && router.pathname !== "/business"}
+            >
               <CourseMenu>
                 <Link href="/">
                   <div className="logo">
                     <a>BeSavvy</a>
                   </div>
                 </Link>
-
-                <Link href="/blog">
-                  <div>
-                    <a>
-                      {props.t("blog")}
-                      {/* Блог */}
-                    </a>
-                  </div>
-                </Link>
-                {me && me !== null ? (
-                  <>
-                    {me.status && me.status === "AUTHOR" && (
-                      <Link href="/educator">
-                        <div>
-                          <a>
-                            {props.t("my")}
-                            {/* Мои курсы */}
-                          </a>
-                        </div>
-                      </Link>
-                    )}
-                    {me.status && me.status === "HR" && (
-                      <Link href="/educator">
-                        <div>
-                          <a>
-                            {props.t("my")}
-                            {/* Мои курсы */}
-                          </a>
-                        </div>
-                      </Link>
-                    )}
-                    {me.status && me.status === "SAVVY_AUTHOR" && (
-                      <Link href="/educator">
-                        <div>
-                          <a>
-                            {props.t("my")}
-                            {/* Мои курсы */}
-                          </a>
-                        </div>
-                      </Link>
-                    )}
-                  </>
-                ) : null}
               </CourseMenu>
               <UserData>
+                <Link href="/blog">
+                  <div className="blog">
+                    <a>{props.t("blog")}</a>
+                  </div>
+                </Link>
+                {me &&
+                  me.status &&
+                  me.status !== "STUDENT" &&
+                  me.status !== "LAWYER" && (
+                    <Link href="/educator">
+                      <div className="my">
+                        <a>{props.t("my")}</a>
+                      </div>
+                    </Link>
+                  )}
                 <div className="imgGroup">
                   <div className="img">
                     <img
@@ -324,13 +328,11 @@ const Nav = (props) => {
                     </a>
                   </Link>
                 ) : null}
-                {me ? <Signout /> : null}
-                {!me && (
+                {me ? (
+                  <Signout />
+                ) : (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>
-                      {props.t("signup")}
-                      {/* Войти */}
-                    </a>
+                    <a>{props.t("signup")}</a>
                   </Button>
                 )}
               </UserData>
@@ -412,10 +414,7 @@ const Nav = (props) => {
                   }}
                 >
                   <button onClick={(e) => closeNav()}>
-                    <a>
-                      {props.t("blog")}
-                      Блог
-                    </a>
+                    <a>{props.t("blog")}</a>
                   </button>
                 </Link>
                 {me ? <Signout /> : null}

@@ -29,6 +29,7 @@ const CREATE_DOCUMENTRESULT_MUTATION = gql`
 
 const Styles = styled.div`
   margin-top: 5%;
+  width: 50%;
 `;
 
 const Header = styled.div`

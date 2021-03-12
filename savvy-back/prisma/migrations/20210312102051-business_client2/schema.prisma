@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -633,6 +633,7 @@ model User {
   textEditors                   TextEditor[]
   textEditorResults            TextEditorResult[]
   co_coursePages               CoursePage[]         @relation("AuthorsCoursePage")
+  sandbox                      Sandbox[]
   new_subjects                 CoursePage[]         @relation("UserSubjects")
 }
 

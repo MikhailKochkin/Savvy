@@ -1,5 +1,29 @@
-import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import { Mutation } from "@apollo/client/react/components";
+import { gql } from "@apollo/client";
+import * as EmailValidator from "email-validator";
+import Modal from "styled-react-modal";
+
+const CREATE_CLIENT = gql`
+  mutation createBusinessClient(
+    $email: String!
+    $name: String!
+    $number: String!
+    $type: String!
+    $communication_medium: String!
+  ) {
+    createBusinessClient(
+      email: $email
+      name: $name
+      number: $number
+      type: $type
+      communication_medium: $communication_medium
+    ) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   min-height: 80vh;
@@ -126,57 +150,167 @@ const Block = styled.div`
     }
   }
 `;
+
+const StyledModal = Modal.styled`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 40%;
+  min-width: 400px;
+  padding: 2%;
+  .top_message {
+    padding-bottom: 2%;
+    border-bottom: 1px solid grey;
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+  }
+  .bottom_message {
+    margin-top: 2%;
+  }
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
+
 const Call1 = () => {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [medium, setMedium] = useState("PHONE");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleModal = (e) => setIsOpen(!isOpen);
+
   return (
-    <Styles id="C2A">
-      <Block>
-        <div id="block1">
-          <div>
-            Запишитесь на собеседование с директором программы и получите{" "}
-          </div>
-          <span style={{ color: "#FF6F59" }}>персональную консультацию</span>
-          <div id="additional-info">
-            Мы расскажем о программе, о наших преподавателях и подходах, о
-            рынке, разберемся в ваших целях и нынешних знаниях.
-          </div>
-        </div>
-        <div id="block2">
-          <div id="form">
-            <input className="data" placeholder="Имя" />
-            <input className="data" type="tel" placeholder="Телефон" />
-            <input className="data" type="email" placeholder="Имейл" />
-            <form>
-              <div>Удобный способ связи:</div>
-              <div id="input_box">
-                <div id="call">
-                  <input type="radio" id="male" name="gender" value="male" />
-                  <label for="male">Звонок</label>
-                </div>
-                <div id="telegram">
-                  <input
-                    type="radio"
-                    id="female"
-                    name="gender"
-                    value="female"
-                  />
-                  <label for="female">Телеграм</label>
-                </div>
+    <Mutation
+      mutation={CREATE_CLIENT}
+      variables={{
+        email,
+        name,
+        number,
+        communication_medium: medium,
+        type: "STUDENT",
+      }}
+    >
+      {(createBusinessClient, { error, loading }) => (
+        <Styles id="C2A">
+          <Block>
+            <div id="block1">
+              <div>
+                Запишитесь на собеседование с директором программы и получите{" "}
               </div>
-            </form>
-            <form>
-              <div>Согласие на обработку персональных данных</div>
-              <div id="input_box">
-                <div id="agree">
-                  <input type="radio" id="male" name="gender" value="male" />
-                  <label for="male">Да</label>
-                </div>
+              <span style={{ color: "#FF6F59" }}>
+                персональную консультацию
+              </span>
+              <div id="additional-info">
+                Мы расскажем о программе, о наших преподавателях и подходах, о
+                рынке, разберемся в ваших целях и нынешних знаниях.
               </div>
-            </form>
-            <button>Записаться</button>
-          </div>
-        </div>
-      </Block>
-    </Styles>
+            </div>
+            <div id="block2">
+              <div id="form">
+                <input
+                  className="data"
+                  placeholder="Имя"
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <input
+                  className="data"
+                  type="tel"
+                  placeholder="Телефон"
+                  onChange={(e) => setNumber(e.target.value)}
+                />
+                <input
+                  className="data"
+                  type="email"
+                  placeholder="Имейл"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <form>
+                  <div>Удобный способ связи:</div>
+                  <div id="input_box">
+                    <div id="call">
+                      <input
+                        type="radio"
+                        id="male"
+                        value="PHONE"
+                        name="medium"
+                        onChange={(e) => setMedium("PHONE")}
+                      />
+                      <label for="male">Звонок</label>
+                    </div>
+                    <div id="telegram">
+                      <input
+                        type="radio"
+                        id="female"
+                        value="TELEGRAM"
+                        name="medium"
+                        onChange={(e) => setMedium("TELEGRAM")}
+                      />
+                      <label for="female">Телеграм</label>
+                    </div>
+                  </div>
+                </form>
+                <form>
+                  <div>Согласие на обработку персональных данных</div>
+                  <div id="input_box">
+                    <div id="agree">
+                      <input
+                        type="radio"
+                        id="male"
+                        name="gender"
+                        value="male"
+                      />
+                      <label for="male">Да</label>
+                    </div>
+                  </div>
+                </form>
+                <button
+                  onClick={(e) => {
+                    if (EmailValidator.validate(email)) {
+                      createBusinessClient();
+                      toggleModal();
+                    } else {
+                      alert("Неправильный имейл");
+                    }
+                  }}
+                >
+                  Записаться
+                </button>
+              </div>
+            </div>
+          </Block>
+          <StyledModal
+            isOpen={isOpen}
+            onBackgroundClick={toggleModal}
+            onEscapeKeydown={toggleModal}
+          >
+            <div className="top_message">Мы получили заявку!</div>
+            <div className="bottom_message">
+              Спасибо, что заинтересовались нашей программой. Мы очень ждем
+              возможности познакомиться с вами поближе. Напишем или позвоним вам
+              в ближайшие дни.
+            </div>
+          </StyledModal>
+        </Styles>
+      )}
+    </Mutation>
   );
 };
 

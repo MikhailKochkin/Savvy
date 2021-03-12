@@ -94,7 +94,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, { name, surname, email, password, status }, ctx) => {
         const hashed_password = await bcrypt.hash(password, 10);
-        console.log(name, surname, email, password, status);
         const user = await ctx.prisma.user.create({
           data: {
             name,
@@ -206,7 +205,6 @@ const Mutation = mutationType({
         // delete args.permissions;
         const updates = { ...args };
         delete updates.id;
-        console.log(updates);
         const user = await ctx.prisma.user.update({
           data: updates,
           where: {
@@ -224,10 +222,8 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args);
         const coursePageId = args.coursePageId;
         delete args.coursePageId;
-        console.log(coursePageId);
         const enrolledUser = await ctx.prisma.user.update({
           data: {
             new_subjects: {
@@ -306,7 +302,6 @@ const Mutation = mutationType({
         coursePageId: stringArg(),
       },
       resolve: async (_, { visitsNumber, coursePageId }, ctx) => {
-        console.log(ctx.res.req.userId, coursePageId);
         const courseVisit = await ctx.prisma.courseVisit.create({
           data: {
             coursePage: {
@@ -1006,7 +1001,6 @@ const Mutation = mutationType({
         delete updates.answer;
         const variants = args.variants;
         const answer = args.answer;
-        console.log(updates);
         return ctx.prisma.construction.update({
           data: {
             variants: {
@@ -1314,10 +1308,6 @@ const Mutation = mutationType({
             lesson[0].id
           ),
         });
-        console.log(
-          author[0].email.toLowerCase(),
-          author[0].email.toLowerCase() === "mi.kochkin@ya.ru"
-        );
         if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
           const newMail2 = await client.sendEmail({
             From: "Mikhail@besavvy.app",
@@ -1554,7 +1544,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const id = args.id;
-        console.log(args);
         //remove the ID from updates
         delete args.id;
         //run the update method
@@ -1920,6 +1909,10 @@ const Mutation = mutationType({
       type: "BusinessClient",
       args: {
         email: stringArg(),
+        name: stringArg(),
+        type: stringArg(),
+        number: stringArg(),
+        communication_medium: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const client = await ctx.prisma.businessClient.create({

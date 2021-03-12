@@ -37,7 +37,7 @@ const SideMenu = styled.div`
   .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: white;
     display: block;
     transition: 0.3s;

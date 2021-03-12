@@ -76,7 +76,7 @@ const Perks = () => {
     <Styles>
       <div className="header">В ходе обучения вас ждут:</div>
       <Table>
-        <div className="main-element ">Онлайн-занятия </div>
+        <div className="main-element">Онлайн-занятия </div>
         <div className="element">
           <div>Решение практического кейса в команде по каждому модулю</div>
           <img src="static/tick2.svg" />
@@ -86,31 +86,33 @@ const Perks = () => {
           <img src="static/tick2.svg" />
         </div>
         <div className="element">
-          <div>Персональные консультации команды</div>
+          <div>Персональные консультации команды по решению кейсов</div>
           <img src="static/tick2.svg" />
         </div>
         <div className="element">
-          <div>Интерактивные занятия по каждой изучаемой теме </div>
+          <div>Интерактивные онлайн занятия по каждой изучаемой теме </div>
           <img src="static/tick2.svg" />
         </div>
-        <div className="main-element ">Погружение в рынок</div>
+        <div className="main-element">Погружение в рынок</div>
         <div className="element">
-          <div>Встречи с экспертами</div>
-          <img src="static/tick2.svg" />
-        </div>
-        <div className="element">
-          <div>Помощь в составлении резюме</div>
+          <div>Встречи с экспертами и обсуждение трендов в работе юриста</div>
           <img src="static/tick2.svg" />
         </div>
         <div className="element">
-          <div>Проведение 2 тестовых собеседований</div>
+          <div>Помощь в составлении резюме и CV</div>
           <img src="static/tick2.svg" />
         </div>
         <div className="element">
-          <div>Анализ рынка и существующих возможностей</div>
+          <div>
+            Проведение 2 тестовых собеседований по вывбранным направлениям
+          </div>
           <img src="static/tick2.svg" />
         </div>
-        <div className="main-element ">Дополнительные бонусы</div>
+        <div className="element">
+          <div>Анализ рынка и существующих карьерных возможностей</div>
+          <img src="static/tick2.svg" />
+        </div>
+        <div className="main-element">Дополнительные бонусы</div>
         <div className="element">
           <div>Бесплатное участие в программе Legaltech-директор</div>
           <img src="static/tick2.svg" />
@@ -120,7 +122,10 @@ const Perks = () => {
           <img src="static/tick2.svg" />
         </div>
         <div className="element final">
-          <div>50% скидка на все программы по Legal English</div>
+          <div>
+            50% скидка или бесплаатное участие во всех программах по Legal
+            English
+          </div>
           <img src="static/tick2.svg" />
         </div>
       </Table>

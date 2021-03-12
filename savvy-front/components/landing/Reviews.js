@@ -8,15 +8,14 @@ import Carousel from "nuka-carousel";
 
 const Blue = styled.div`
   font-size: 2.4rem;
-  color: white;
   height: 13vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
-  background: #0068e5;
   margin-bottom: 5%;
+  padding-top: 50px;
   @media (max-width: 900px) {
     height: 13vh;
     font-size: 2.2rem;
@@ -102,7 +101,7 @@ const Reviews = (props) => {
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <Blue>
         {/* {props.t("reviews")} */}
-        367 студентов прошли наши курсы. Вот, что они говорят:
+        379 студентов прошли наши курсы. Вот, что они говорят:
       </Blue>
       <Block>
         <Carousel

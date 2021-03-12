@@ -271,12 +271,12 @@ const Main = () => {
               <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Сопровождение IT проектов
+                Сопровождение IT/IP проектов
               </div>
               <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Сложные проекты в области IP
+                Работа судебного юриста
               </div>
               <div className="element">
                 {" "}

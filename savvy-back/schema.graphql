@@ -54,9 +54,13 @@ input BoolNullableListFilter {
 }
 
 type BusinessClient {
+  communication_medium: String
   createdAt: DateTime!
   email: String!
   id: String!
+  name: String
+  number: String
+  type: String
   updatedAt: DateTime!
 }
 
@@ -1067,7 +1071,7 @@ input Messages {
 }
 
 type Mutation {
-  createBusinessClient(email: String): BusinessClient
+  createBusinessClient(communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createConstruction(answer: [String], hint: String, lessonId: String, name: String, type: String, variants: [String]): Construction

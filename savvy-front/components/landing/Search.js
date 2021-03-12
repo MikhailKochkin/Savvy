@@ -9,17 +9,35 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  .custom-shape-divider-top-1615390650 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .custom-shape-divider-top-1615390650 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 133px;
+  }
+
+  .custom-shape-divider-top-1615390650 .shape-fill {
+    fill: #f5f5f5;
+  }
 `;
 
 const Block = styled.div`
-  border: 1px solid #e7e9ea;
-  box-sizing: border-box;
+  /* border: 1px solid #e7e9ea;
+  box-sizing: border-box; */
   border-radius: 5px;
   width: 80%;
   padding: 2% 4%;
-  margin-top: 3%;
-  min-height: 400px;
-  box-shadow: 0 6px 15px 0 rgba(85, 92, 107, 0.15);
+  margin-top: 1%;
+  /* min-height00px; */
+  /* box-shadow: 0 6px 15px 0 rgba(85, 92, 107, 0.15); */
   .title {
     font-size: 2.4rem;
     font-weight: bold;
@@ -49,11 +67,11 @@ const Group = styled.div`
     margin: 20px 0;
   }
   button {
-    background: #f03e64;
-    border: 1px solid #c61f4a;
+    background: #91e9e3;
+    border: 1px solid #91e9e3;
     box-sizing: border-box;
     border-radius: 5px;
-    color: white;
+    color: black;
     width: 20%;
     font-family: Montserrat;
     font-size: 1.6rem;
@@ -61,10 +79,10 @@ const Group = styled.div`
     outline: none;
     transition: background-color 0.15s ease-in-out;
     &:hover {
-      background: #c31c40;
+      background: #33d7cc;
     }
     a {
-      color: white;
+      color: black;
     }
     @media (max-width: 900px) {
       padding: 4% 2%;
@@ -232,7 +250,20 @@ const Search = (props) => {
   };
   return (
     <Styles>
-      <Block>
+      <div class="custom-shape-divider-top-1615390650">
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M1200 120L0 16.48 0 0 1200 0 1200 120z"
+            class="shape-fill"
+          ></path>
+        </svg>
+      </div>
+      <Block id="course_search">
         <div className="title">
           Найдите онлайн-курс, который продвинет вашу карьеру:
           {/* {props.t("header")} */}
@@ -317,12 +348,12 @@ const Search = (props) => {
             </a>
           </button>
         </Group>
-        <Proof>
+        {/* <Proof>
           <div className="div1">
             <img src="/static/student.svg" />
             <div className="text">
               <div>
-                {/* {props.t("bullet1")} */}
+                {props.t("bullet1")}
                 Все курсы идут полностью онлайн
               </div>
             </div>
@@ -331,7 +362,7 @@ const Search = (props) => {
             <img src="/static/information.svg" />
             <div className="text">
               <div>
-                {/* {props.t("bullet3")} */}
+               
                 На каждом курсе есть открытый урок, который покажет вам, как
                 работает курс
               </div>{" "}
@@ -341,7 +372,6 @@ const Search = (props) => {
             <img src="/static/teacher.svg" />
             <div className="text">
               <div>
-                {/* {props.t("bullet2")} */}
                 Вы можете выбрать, как проходить курс: самостоятельно или с
                 сопровождением преподавателя
               </div>
@@ -351,13 +381,12 @@ const Search = (props) => {
             <img src="/static/notebook.svg" />
             <div className="text">
               <div>
-                {/* {props.t("bullet4")} */}
                 Наши курсы отличаются интерактивностью: вы будете составлять
                 документы, решать задачи и вести дела.
               </div>
             </div>
           </div>
-        </Proof>
+        </Proof> */}
       </Block>
       <div id="section1"></div>
       <ShownCourses

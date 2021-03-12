@@ -16,14 +16,14 @@ const CREATE_CLIENT = gql`
 `;
 
 const Styles = styled.div`
-  height: 85vh;
+  min-height: 85vh;
   width: 100vw;
   display: flex;
+  background: #f5f5f5;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   @media (max-width: 800px) {
-    height: 100%;
   }
 `;
 
@@ -51,7 +51,7 @@ const LeftContainer = styled.div`
   div {
     height: 50%;
     img {
-      height: 100%;
+      height: 250px;
     }
   }
   .secret {
@@ -82,7 +82,7 @@ const RightContainer = styled.div`
   div {
     height: 50%;
     img {
-      height: 100%;
+      height: 250px;
     }
   }
   @media (max-width: 800px) {
@@ -337,13 +337,13 @@ const Intro = () => {
               </div>
             </RightContainer>
           </Containers>
-          <Arrow>
+          {/* <Arrow>
             <Icon
               size={75}
               icon={ic_keyboard_arrow_down}
               onClick={(e) => slide()}
             />
-          </Arrow>
+          </Arrow> */}
         </Styles>
       )}
     </Mutation>

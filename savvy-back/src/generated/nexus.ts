@@ -1675,9 +1675,13 @@ export interface NexusGenObjects {
     user?: NexusGenRootTypes['User'] | null; // User
   }
   BusinessClient: { // root type
+    communication_medium?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
+    name?: string | null; // String
+    number?: string | null; // String
+    type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   ChallengeResult: { // root type
@@ -2085,9 +2089,13 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
   }
   BusinessClient: { // field return type
+    communication_medium: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
+    name: string | null; // String
+    number: string | null; // String
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   ChallengeResult: { // field return type
@@ -2685,9 +2693,13 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   BusinessClient: { // field return type name
+    communication_medium: 'String'
     createdAt: 'DateTime'
     email: 'String'
     id: 'String'
+    name: 'String'
+    number: 'String'
+    type: 'String'
     updatedAt: 'DateTime'
   }
   ChallengeResult: { // field return type name
@@ -3443,7 +3455,11 @@ export interface NexusGenArgTypes {
   }
   Mutation: {
     createBusinessClient: { // args
+      communication_medium?: string | null; // String
       email?: string | null; // String
+      name?: string | null; // String
+      number?: string | null; // String
+      type?: string | null; // String
     }
     createChat: { // args
       lessonId?: string | null; // String

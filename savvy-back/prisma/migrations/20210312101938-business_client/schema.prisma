@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -21,7 +21,6 @@ model Application {
 
 model BusinessClient {
   id        String   @id @default(cuid())
-  type      String?
   email     String
   name      String?
   number    String?
@@ -633,6 +632,7 @@ model User {
   textEditors                   TextEditor[]
   textEditorResults            TextEditorResult[]
   co_coursePages               CoursePage[]         @relation("AuthorsCoursePage")
+  sandbox                      Sandbox[]
   new_subjects                 CoursePage[]         @relation("UserSubjects")
 }
 

@@ -48,6 +48,7 @@ const Advice = styled.p`
 `;
 
 const StoryUpdate = (props) => {
+  console.log(props.lesson.structure === true);
   const [list, setList] = useState(
     props.lesson.structure ? props.lesson.structure.lessonItems : ["el"]
   );
@@ -79,6 +80,7 @@ const StoryUpdate = (props) => {
   };
 
   const { lesson } = props;
+  console.log(list);
   return (
     <>
       <Mutation

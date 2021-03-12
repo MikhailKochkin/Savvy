@@ -16,16 +16,18 @@ const SIGN_OUT_MUTATION = gql`
 const Button = styled.div`
   border: none;
   background: none;
-  font-size: 1.8rem;
   cursor: pointer;
-  width: 30%;
+  min-width: 80px;
   display: flex;
+  font-size: 1.6rem;
+
   flex-direction: row;
   justify-content: flex-end;
   a {
     &:hover {
       border-bottom: 1px solid #112a62;
     }
+    font-size: 1.6rem;
   }
   @media (max-width: 850px) {
     color: white;

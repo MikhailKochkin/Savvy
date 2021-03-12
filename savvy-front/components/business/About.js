@@ -5,12 +5,31 @@ import "react-multi-carousel/lib/styles.css";
 import ReactResizeDetector from "react-resize-detector";
 
 const Styles = styled.div`
-  height: 80vh;
+  min-height: 80vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  .custom-shape-divider-top-1615390650 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .custom-shape-divider-top-1615390650 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 133px;
+  }
+
+  .custom-shape-divider-top-1615390650 .shape-fill {
+    fill: #f5f5f5;
+  }
+
   #header {
     width: 80%;
     font-size: 2.8rem;
@@ -146,6 +165,19 @@ const About = () => {
   };
   return (
     <Styles id="about">
+      <div class="custom-shape-divider-top-1615390650">
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M1200 120L0 16.48 0 0 1200 0 1200 120z"
+            class="shape-fill"
+          ></path>
+        </svg>
+      </div>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div id="header">Create simulators for any high skilled job</div>
       <Box>
