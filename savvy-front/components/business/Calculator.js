@@ -214,18 +214,14 @@ const Box = styled.div`
     input {
       margin: 10px 0;
     }
-
     .data {
-      /* height: 45px; */
       display: flex;
       flex-direction: column;
       align-content: center;
       justify-content: center;
-      /* background: yellow; */
       margin-bottom: 10px;
     }
     .text_area {
-      /* width: 60%; */
       text-align: left;
     }
     .data {
