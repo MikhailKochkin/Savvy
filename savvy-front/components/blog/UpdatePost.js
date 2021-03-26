@@ -14,7 +14,7 @@ const UPDATE_POST_MUTATION = gql`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
+const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
 });

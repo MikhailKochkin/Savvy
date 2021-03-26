@@ -35,7 +35,7 @@ const Editor = styled.div`
   margin-top: 1%;
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
+const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
 });
