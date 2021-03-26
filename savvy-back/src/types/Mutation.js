@@ -487,9 +487,16 @@ const Mutation = mutationType({
         { lessonId, answers, correct, question, ifRight, ifWrong },
         ctx
       ) => {
+        console.log(
+          ctx.res.req.userId ? ctx.res.req.userId : "ckmddnbfy180981gwpn2ir82c9"
+        );
         const new_data = {
           user: {
-            connect: { id: ctx.res.req.userId },
+            connect: {
+              id: ctx.res.req.userId
+                ? ctx.res.req.userId
+                : "ckmddnbfy180981gwpn2ir82c9",
+            },
           },
           lesson: {
             connect: { id: lessonId },
@@ -503,6 +510,7 @@ const Mutation = mutationType({
           question: {
             set: [...question],
           },
+          lessonID: lessonId,
           ifRight,
           ifWrong,
         };
@@ -522,7 +530,11 @@ const Mutation = mutationType({
         const TestResult = await ctx.prisma.testResult.create({
           data: {
             student: {
-              connect: { id: ctx.res.req.userId },
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
             },
             test: {
               connect: { id: args.testID },
@@ -548,7 +560,11 @@ const Mutation = mutationType({
         if (checker.join(", ") === args.answer) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.res.req.userId },
+              where: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
               include: {
                 level: true,
               },
@@ -702,7 +718,11 @@ const Mutation = mutationType({
         const QuizResult = await ctx.prisma.quizResult.create({
           data: {
             student: {
-              connect: { id: ctx.res.req.userId },
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
             },
             quiz: {
               connect: { id: quiz },
@@ -717,7 +737,11 @@ const Mutation = mutationType({
         if (args.correct === true) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.res.req.userId },
+              where: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
               include: {
                 level: true,
               },
@@ -826,6 +850,29 @@ const Mutation = mutationType({
         return Chat;
       },
     });
+    t.field("updateChat", {
+      type: "Chat",
+      args: {
+        id: stringArg(),
+        name: stringArg(),
+        messages: arg({
+          type: "Messages",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        const id = args.id;
+        delete args.id;
+        const Chat = await ctx.prisma.chat.update({
+          data: {
+            ...args,
+          },
+          where: {
+            id,
+          },
+        });
+        return Chat;
+      },
+    });
     t.field("createTextEditor", {
       type: "TextEditor",
       args: {
@@ -911,7 +958,11 @@ const Mutation = mutationType({
         const TextEditorResult = await ctx.prisma.textEditorResult.create({
           data: {
             student: {
-              connect: { id: ctx.res.req.userId },
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
             },
             textEditor: {
               connect: { id: textEditorId },
@@ -926,7 +977,11 @@ const Mutation = mutationType({
         if (args.result === true) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.res.req.userId },
+              where: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
               include: {
                 level: true,
               },
@@ -1056,7 +1111,11 @@ const Mutation = mutationType({
         const ConstructionResult = await ctx.prisma.constructionResult.create({
           data: {
             student: {
-              connect: { id: ctx.res.req.userId },
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
             },
             construction: {
               connect: { id: constructionId },
@@ -1074,7 +1133,11 @@ const Mutation = mutationType({
         if (args.result === true) {
           const user = await ctx.prisma.user.findUnique(
             {
-              where: { id: ctx.res.req.userId },
+              where: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
               include: {
                 level: true,
               },

@@ -1,10 +1,19 @@
-import { Editor } from "slate-react";
-import styled from "styled-components";
-import Html from "slate-html-serializer";
-import React from "react";
-import ReactDOM from "react-dom";
-import { css } from "@emotion/css";
-import { Button, IconBlock, Menu } from "./components";
+export const thisIsAnUnusedExport =
+  "this export only exists to disable fast refresh for this file";
+
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
+import { Slate, Editable, ReactEditor, withReact, useSlate } from "slate-react";
+import { Editor, Transforms, Text, createEditor, Node } from "slate";
+import { css } from "emotion";
+import { withHistory } from "slate-history";
+import escapeHtml from "escape-html";
+import { jsx } from "slate-hyperscript";
 import Icon from "react-icons-kit";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
@@ -13,18 +22,10 @@ import { strikethrough } from "react-icons-kit/fa/strikethrough";
 import { underline } from "react-icons-kit/fa/underline";
 import { image } from "react-icons-kit/fa/image";
 import { commentO } from "react-icons-kit/fa/commentO";
-import CommentStyle from "./CommentStyle";
-
-const Img = styled.img`
-  display: block;
-  max-width: 100%;
-  max-height: 20em;
-  box-shadow: "0 0 0 2px blue;";
-`;
-
-const CommentStyle2 = styled.span`
-  color: green;
-`;
+import { ic_announcement } from "react-icons-kit/md/ic_announcement";
+import { Button, IconBlock, Menu, Portal } from "./components";
+import { Range } from "slate";
+import { blue } from "@material-ui/core/colors";
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",
@@ -34,454 +35,308 @@ const AppStyles = {
   fontSize: "1.5rem",
 };
 
-const DEFAULT_NODE = "paragraph";
+// 1. Serializer – slate to html
 
-const BLOCK_TAGS = {
-  p: "paragraph",
-  img: "image",
-  iframe: "video",
-  ol: "numbered-list",
-  li: "list-item",
+const serialize = (node) => {
+  if (Text.isText(node)) {
+    let styles = Object.keys(node);
+    styles.shift();
+    // console.log(styles);
+    if (styles.length) {
+      let text = node.text;
+      if (styles.includes("bold")) {
+        text = `<b>${text}</b>`;
+      }
+      if (styles.includes("italic")) {
+        text = `<em>${text}</em>`;
+      }
+      if (styles.includes("underline")) {
+        text = `<u>${text}</u>`;
+      }
+      if (styles.includes("error")) {
+        text = `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${text}</span>`;
+      }
+      if (styles.includes("note")) {
+        text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
+      }
+      if (styles.includes("quiz")) {
+        text = `<span className="quiz" question="${node.question}" answer="${node.answer}">${text}</span>`;
+      }
+      return text;
+    } else {
+      return escapeHtml(node.text);
+    }
+  }
+  const children = node.children.map((n) => serialize(n)).join("");
+  switch (node.type) {
+    case "quote":
+      return `<blockquote><p>${children}</p></blockquote>`;
+    case "flag":
+      return `<div className="flag">${children}</div>`;
+    case "header":
+      return `<h2>${children}<h2/>`;
+    case "paragraph":
+      return `<p>${children}</p>`;
+    case "image":
+      return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
+    case "video":
+      return `<iframe src="${escapeHtml(
+        node.src
+      )}">${children}</iframe><p></p>`;
+    case "link":
+      return `<a href="${escapeHtml(
+        node.url
+      )}" target=”_blank”>${children}</a>`;
+    case "table":
+      return `<table>${children}</table>`;
+    case "table-row":
+      return `<tr>${children}</tr>`;
+    case "table-cell":
+      return `<th>${children}</th>`;
+    default:
+      return children;
+  }
 };
 
-const INLINE_TAGS = {
-  a: "link",
-  input: "input",
-  span: "comment",
-};
+// 2. deserialize – html to text
 
-const MARK_TAGS = {
-  i: "italic",
-  strong: "bold",
-  header: "header",
-  u: "u",
-};
-
-const rules = [
-  {
-    deserialize(el, next) {
-      const type = BLOCK_TAGS[el.tagName.toLowerCase()];
-      if (type) {
-        return {
-          object: "block",
-          type: type,
-          data: {
-            className: el.src,
-          },
-          nodes: next(el.childNodes),
-        };
-      }
-    },
-    serialize(obj, children) {
-      if (obj.object == "block") {
-        switch (obj.type) {
-          case "paragraph":
-            return <p className={obj.data.get("className")}>{children}</p>;
-          case "image":
-            return (
-              <img
-                data="data-three"
-                src={obj.data._root.entries[0][1]}
-                alt="caption_goes_here"
-              />
-            );
-        }
-      }
-    },
-  },
-  // Add a new rule that handles marks...
-  {
-    deserialize(el, next) {
-      const type = MARK_TAGS[el.tagName.toLowerCase()];
-      if (type) {
-        return {
-          object: "mark",
-          type: type,
-          nodes: next(el.childNodes),
-        };
-      }
-    },
-    serialize(obj, children) {
-      if (obj.object == "mark") {
-        switch (obj.type) {
-          case "bold":
-            return <strong>{children}</strong>;
-          case "italic":
-            return <i>{children}</i>;
-          case "del":
-            return <del>{children}</del>;
-          case "u":
-            return <u>{children}</u>;
-        }
-      }
-    },
-  },
-  {
-    deserialize(el, next) {
-      if (el.tagName !== "SPAN") {
-        return;
-      }
-      const type = INLINE_TAGS[el.tagName.toLowerCase()];
-
-      if (type) {
-        return {
-          // inline to show that Inline nodes may contain nested inline nodes and text nodes—just like in the DOM.
-          object: "inline",
-          type: type,
-          nodes: next(el.childNodes),
-          data: {
-            data:
-              Array.from(el.attributes).find(({ name }) => name == "data") !==
-              undefined
-                ? Array.from(el.attributes).find(({ name }) => name == "data")
-                    .value
-                : null,
-            href:
-              Array.from(el.attributes).find(({ name }) => name == "href") !==
-              undefined
-                ? Array.from(el.attributes).find(({ name }) => name == "href")
-                    .value
-                : null,
-          },
-        };
-      }
-    },
-    serialize: function (object, children) {
-      if (object.object == "inline") {
-        switch (object.type) {
-          case "input":
-            return <input name={object.data._root.entries[0][1]} id="text" />;
-          case "comment":
-            return (
-              <CommentStyle2 id="id" data={object.data._root.entries[0][1]}>
-                {children}
-              </CommentStyle2>
-            );
-        }
-      }
-    },
-  },
-];
-
-const html = new Html({
-  rules,
-});
-
-const MarkButton = ({ editor, type, icon }) => {
-  const { value } = editor;
-  const isActive = value.activeMarks.some((mark) => mark.type === type);
-  return (
-    <Button
-      reversed
-      active={isActive}
-      onMouseDown={(event) => {
-        event.preventDefault();
-        editor.toggleMark(type);
-      }}
-    >
-      <IconBlock>
-        <Icon icon={icon} />
-      </IconBlock>
-    </Button>
-  );
-};
-
-const wrapInput = (editor, src) => {
-  editor.wrapInline({
-    type: "input",
-    data: { src },
-  });
-  editor.moveToEnd();
-};
-
-const insertImage = (editor, src, target) => {
-  if (target) {
-    editor.select(target);
+const deserialize = (el) => {
+  // console.log(el, el.nodeType);
+  if (el.nodeType === 3) {
+    return el.textContent;
+  } else if (el.nodeType !== 1) {
+    return null;
   }
 
-  editor.insertBlock({
-    type: "image",
-    data: { src },
-  });
+  const children = Array.from(el.childNodes).map(deserialize);
+  switch (el.nodeName) {
+    case "BODY":
+      return jsx("fragment", {}, children);
+    case "BR":
+      return "\n";
+    case "IFRAME":
+      return jsx("element", { type: "video", src: el.src }, [{ text: "" }]);
+    case "IMAGE":
+      return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
+    case "BLOCKQUOTE":
+      return jsx("element", { type: "quote" }, children);
+    case "P":
+      return jsx(
+        "element",
+        { type: "paragraph" },
+        children.length > 0 ? children : [{ text: "" }]
+      );
+    case "A":
+      return jsx(
+        "element",
+        { type: "link", url: el.getAttribute("href") },
+        children
+      );
+    default:
+      return el.textContent;
+  }
 };
 
-const onClickImage = (event, editor) => {
-  event.preventDefault();
-  const src = window.prompt("Enter the URL of the image:");
-  if (!src) return;
-  editor.command(insertImage, src);
-};
-
-const onClickLink = (event, editor) => {
-  event.preventDefault();
-  const src = window.prompt("Enter the URL of the image:");
-  if (!src) return;
-  editor.command(wrapInput(editor, src));
-};
-
-// const hasComments = () => {
-//   const { value } = this.state;
-//   return value.inlines.some((inline) => inline.type === "comment");
-// };
-
-const wrapComment = (editor, comment) => {
-  editor.wrapInline({
-    type: "comment",
-    data: { comment },
-  });
-  editor.moveToEnd();
-};
-
-const onClickComment = (event, editor) => {
-  event.preventDefault();
-  // const hasComments = hasComments();
-  // if (hasComments) {
-  //   editor.command(unwrapComment);
-  // } else if (value.selection.isExpanded) {
-  const comment = window.prompt("Напишите правильный вариант:");
-  if (comment == null) {
-    return;
+const HoveringMenu = (props) => {
+  let text;
+  if (props.value) {
+    let document = new DOMParser().parseFromString(props.value, "text/html");
+    text = deserialize(document.body);
+    // } else if (props.placeholder) {
+    //   let document = new DOMParser().parseFromString(
+    //     props.placeholder,
+    //     "text/html"
+    //   );
+    //   text = deserialize(document.body);
   } else {
-    editor.command(wrapComment(editor, comment));
+    let document = new DOMParser().parseFromString(`<p></p>`, "text/html");
+    text = deserialize(document.body);
   }
-};
-// };
+  const [value, setValue] = useState(text);
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
-const InputButton = ({ editor, type, icon }) => {
-  const { value } = editor;
-  const isActive = value.activeMarks.some((mark) => mark.type === type);
+  // 4.2 Leaf renderer
+
+  const renderLeaf = useCallback((props) => {
+    return <Leaf {...props} />;
+  }, []);
+
   return (
-    <Button
-      reversed
-      active={isActive}
-      onMouseDown={(event) => {
-        event.preventDefault();
-        onClickComment(event, editor);
+    <Slate
+      editor={editor}
+      value={value}
+      onChange={(value) => {
+        let arr = [];
+        value.map((v) => arr.push(serialize(v)));
+        // console.log("value", value);
+        setValue(value);
+        props.getEditorText(arr.join(""), props.name);
+        // console.log(arr.join(""));
       }}
     >
-      <IconBlock>
-        <Icon icon={commentO} />
-      </IconBlock>
-    </Button>
+      <HoveringToolbar />
+      <Editable
+        style={AppStyles}
+        renderLeaf={renderLeaf}
+        placeholder={
+          props.placeholder ? props.placeholder : "Enter some text..."
+        }
+        // onDOMBeforeInput={(event) => {
+        //   event.preventDefault();
+        //   console.log(event.inputType);
+        //   switch (event.inputType) {
+        //     case "bold":
+        //       return toggleFormat(editor, "bold");
+        //     case "italic":
+        //       return toggleFormat(editor, "italic");
+        //     // case "underline":
+        //     //   return toggleFormat(editor, "underline");
+        //     case "delete":
+        //       return toggleFormat(editor, "delete");
+        //     case "insert":
+        //       return toggleFormat(editor, "insert");
+        //   }
+        // }}
+      />
+    </Slate>
   );
 };
 
-const ImageButton = ({ editor, type, icon }) => {
-  const { value } = editor;
-  const isActive = value.activeMarks.some((mark) => mark.type === type);
-  return (
-    <Button
-      reversed
-      active={isActive}
-      onMouseDown={(event) => {
-        event.preventDefault();
-        onClickImage(event, editor);
-      }}
-    >
-      <IconBlock>
-        <Icon icon={icon} />
-      </IconBlock>
-    </Button>
+const toggleFormat = (editor, format) => {
+  const isActive = isFormatActive(editor, format);
+  Transforms.setNodes(
+    editor,
+    { [format]: isActive ? null : true },
+    { match: Text.isText, split: true }
   );
 };
 
-const HoverMenu = React.forwardRef(({ editor }, ref) => {
-  const root = window.document.getElementById("root");
-  return ReactDOM.createPortal(
-    <Menu
-      ref={ref}
-      className={css`
-        padding: 8px 12px 6px;
-        position: absolute;
-        z-index: 1;
-        top: -10000px;
-        left: -10000px;
-        margin: -6px;
-        opacity: 0;
-        background-color: #222;
-        border-radius: 4px;
-        transition: opacity 0.75s;
-      `}
-    >
-      <MarkButton editor={editor} type="bold" icon={bold} />
-      <MarkButton editor={editor} type="italic" icon={italic} />
-      <MarkButton editor={editor} type="del" icon={strikethrough} />
-      <MarkButton editor={editor} type="u" icon={underline} />
-      <InputButton editor={editor} type="pencil" icon={pencil} />
-      <ImageButton editor={editor} type="image" icon={image} />
-    </Menu>,
-    root
-  );
-});
+const isFormatActive = (editor, format) => {
+  const [match] = Editor.nodes(editor, {
+    match: (n) => n[format] === true,
+    mode: "all",
+  });
+  return !!match;
+};
 
-/**
- * The hovering menu example.
- *
- * @type {Component}
- */
+const Leaf = ({ attributes, children, leaf }) => {
+  if (leaf.bold) {
+    children = <strong>{children}</strong>;
+  }
 
-class HoveringMenu extends React.Component {
-  /**
-   * Deserialize the raw initial value.
-   *
-   * @type {Object}
-   */
+  if (leaf.italic) {
+    children = <em>{children}</em>;
+  }
 
-  state = {
-    value: this.props.value
-      ? html.deserialize(this.props.value)
-      : html.deserialize(``),
-  };
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
 
-  menuRef = React.createRef();
+  if (leaf.delete) {
+    children = <del>{children}</del>;
+  }
 
-  /**
-   * On update, update the menu.
-   */
+  if (leaf.insert) {
+    children = <ins>{children}</ins>;
+  }
 
-  componentDidMount = () => {
-    this.updateMenu();
-  };
+  return <span {...attributes}>{children}</span>;
+};
 
-  componentDidUpdate = () => {
-    this.updateMenu();
-  };
+const HoveringToolbar = () => {
+  const ref = useRef();
+  const editor = useSlate();
 
-  onChange = ({ value }) => {
-    this.setState({ value });
-    this.props.getEditorText(html.serialize(this.state.value), this.props.name);
-  };
+  useEffect(() => {
+    const el = ref.current;
+    const { selection } = editor;
 
-  /**
-   * Update the menu's absolute position.
-   */
-
-  updateMenu = () => {
-    const menu = this.menuRef.current;
-    if (!menu) return;
-
-    const { value } = this.state;
-    const { fragment, selection } = value;
-
-    if (selection.isBlurred || selection.isCollapsed || fragment.text === "") {
-      menu.removeAttribute("style");
+    if (!el) {
       return;
     }
 
-    const native = window.getSelection();
-    const range = native.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-    menu.style.opacity = 1;
-    menu.style.top = `${rect.top + window.pageYOffset - menu.offsetHeight}px`;
+    if (
+      !selection ||
+      !ReactEditor.isFocused(editor) ||
+      Range.isCollapsed(selection) ||
+      Editor.string(editor, selection) === ""
+    ) {
+      el.removeAttribute("style");
+      return;
+    }
 
-    menu.style.left = `${
-      rect.left + window.pageXOffset - menu.offsetWidth / 2 + rect.width / 2
+    const domSelection = window.getSelection();
+    const domRange = domSelection.getRangeAt(0);
+    const rect = domRange.getBoundingClientRect();
+    el.style.opacity = "1";
+    el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`;
+    el.style.left = `${
+      rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
     }px`;
-  };
+  });
 
-  /**
-   * Render.
-   *
-   * @return {Element}
-   */
+  return (
+    <Portal>
+      <Menu
+        ref={ref}
+        className={css`
+          padding: 8px 7px 6px;
+          position: absolute;
+          z-index: 1;
+          top: -10000px;
+          left: -10000px;
+          margin-top: -6px;
+          opacity: 0;
+          background-color: #222;
+          border-radius: 4px;
+          transition: opacity 0.75s;
+        `}
+      >
+        <FormatButton format="bold" icon={bold} />
+        <FormatButton format="italic" icon={italic} />
+        {/* <FormatButton format="underline" icon={underline} /> */}
+        <FormatButton format="delete" icon={strikethrough} />
+        <FormatButton format="insert" icon={underline} />
+      </Menu>
+    </Portal>
+  );
+};
 
-  render() {
-    return (
-      <div>
-        <Editor
-          style={AppStyles}
-          value={this.state.value}
-          onChange={this.onChange}
-          renderEditor={this.renderEditor}
-          renderMark={this.renderMark}
-          renderBlock={this.renderBlock}
-          renderInline={this.renderInline}
-          placeholder={this.props.placeholder}
-        />
-      </div>
-    );
-  }
+const FormatButton = ({ format, icon }) => {
+  const editor = useSlate();
+  return (
+    <Button
+      reversed
+      active={isFormatActive(editor, format)}
+      onMouseDown={(event) => {
+        event.preventDefault();
+        toggleFormat(editor, format);
+      }}
+    >
+      <IconBlock>
+        <Icon icon={icon} />
+      </IconBlock>
+    </Button>
+  );
+};
 
-  /**
-   * Render the editor.
-   *
-   * @param {Object} props
-   * @param {Function} next
-   * @return {Element}
-   */
-
-  renderEditor = (props, editor, next) => {
-    const children = next();
-    return (
-      <>
-        {children}
-        <HoverMenu ref={this.menuRef} editor={editor} />
-      </>
-    );
-  };
-
-  /**
-   * Render a Slate mark.
-   *
-   * @param {Object} props
-   * @param {Editor} editor
-   * @param {Function} next
-   * @return {Element}
-   */
-
-  renderMark = (props, editor, next) => {
-    const { children, mark, attributes } = props;
-
-    switch (mark.type) {
-      case "bold":
-        return <strong {...attributes}>{children}</strong>;
-      case "code":
-        return <code {...attributes}>{children}</code>;
-      case "italic":
-        return <em {...attributes}>{children}</em>;
-      case "del":
-        return <del {...attributes}>{children}</del>;
-      case "u":
-        return <u {...attributes}>{children}</u>;
-      default:
-        return next();
-    }
-  };
-
-  // Render a Slate block.
-  renderBlock = (props, editor, next) => {
-    const { attributes, node, isFocused, children } = props;
-    switch (node.type) {
-      case "paragraph":
-        return <p {...attributes}>{children}</p>;
-      case "image": {
-        // console.log(node.data._root.entries[0][1]);
-        const src = node.data._root.entries[0][1];
-        return <Img {...attributes} src={src} />;
-      }
-      default: {
-        return next();
-      }
-    }
-  };
-
-  renderInline = (props, editor, next) => {
-    const { attributes, children, node } = props;
-    switch (node.type) {
-      case "input":
-        return <input id="text" />;
-      case "comment":
-        return (
-          <CommentStyle data={node.data.get("data")}>{children}</CommentStyle>
-        );
-      default:
-        return next();
-    }
-  };
-}
-
-/**
- * Export.
- */
+const initialValue = [
+  {
+    children: [
+      {
+        text:
+          "Since the editor is based on a recursive tree model, similar to an HTML document, you can create complex nested structures, like tables:",
+      },
+    ],
+  },
+  {
+    children: [
+      {
+        text:
+          "This table is just a basic example of rendering a table, and it doesn't have fancy functionality. But you could augment it to add support for navigating with arrow keys, displaying table headers, adding column and rows, or even formulas if you wanted to get really crazy!",
+      },
+    ],
+  },
+];
 
 export default HoveringMenu;

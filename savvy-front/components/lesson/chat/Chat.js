@@ -4,7 +4,8 @@ import renderHTML from "react-render-html";
 import UpdateChat from "./UpdateChat";
 
 const Styles = styled.div`
-  width: ${(props) => props.width};
+  /* width: ${(props) => props.width}; */
+  width: 650px;
   margin: 20px 0;
   @media (max-width: 800px) {
     width: 100%;
@@ -79,8 +80,7 @@ const IconBlock = styled.div`
 
 const Chat = (props) => {
   const [update, setUpdate] = useState(false); // what is the answer?
-
-  const { name, messages, me, story, lessonId } = props;
+  const { name, messages, me, story, lessonId, id } = props;
   let width;
   if (props.problem) {
     width = "50%";
@@ -119,6 +119,7 @@ const Chat = (props) => {
       {!story && <button onClick={(e) => setUpdate(!update)}>Изменить</button>}
       {update && (
         <UpdateChat
+          id={id}
           name={name}
           me={me}
           messages={messages}

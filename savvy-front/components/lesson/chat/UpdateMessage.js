@@ -30,7 +30,7 @@ const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   ssr: false,
 });
 
-const CreateMessage = (props) => {
+const UpdateMessage = (props) => {
   const [author, setAuthor] = useState("");
   const [text, setText] = useState("");
 
@@ -39,6 +39,7 @@ const CreateMessage = (props) => {
   };
 
   const add = () => {
+    console.log(text);
     props.getMessage({
       number: props.index,
       author,
@@ -68,4 +69,4 @@ const CreateMessage = (props) => {
   );
 };
 
-export default CreateMessage;
+export default UpdateMessage;

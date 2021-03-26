@@ -91,7 +91,7 @@ const Advice = styled.div`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/TextEditor"), {
+const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
 });

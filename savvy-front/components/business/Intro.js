@@ -7,6 +7,8 @@ import { check } from "react-icons-kit/fa/check";
 import Icon from "react-icons-kit";
 import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
 import * as EmailValidator from "email-validator";
+import { withTranslation } from "../../i18n";
+
 const CREATE_CLIENT = gql`
   mutation createBusinessClient($email: String!) {
     createBusinessClient(email: $email) {
@@ -16,7 +18,7 @@ const CREATE_CLIENT = gql`
 `;
 
 const Styles = styled.div`
-  min-height: 85vh;
+  min-height: 75vh;
   width: 100vw;
   display: flex;
   background: #f5f5f5;
@@ -68,6 +70,9 @@ const LeftContainer = styled.div`
     }
     div {
       height: 150px;
+      img {
+        height: 150px;
+      }
     }
   }
 `;
@@ -105,6 +110,8 @@ const CentralContainer = styled.div`
     font-size: 4rem;
     font-weight: bold;
     margin-bottom: 4%;
+    text-align: center;
+    line-height: 6rem;
   }
   #main {
     font-size: 2.3rem;
@@ -121,6 +128,7 @@ const CentralContainer = styled.div`
       border-radius: 6px 0 0 6px;
       width: 70%;
       display: flex;
+      background: white;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -130,6 +138,7 @@ const CentralContainer = styled.div`
         font-family: Montserrat;
         height: 70%;
         border: none;
+        background: white;
         width: 100%;
         font-size: 1.7rem;
         padding: 2%;
@@ -161,10 +170,11 @@ const CentralContainer = styled.div`
     display: flex;
     flex-direction: row;
     margin-top: 30px;
+    width: 100%;
   }
   .bullet {
     display: flex;
-    width: 250px;
+    width: 300px;
     flex-direction: row;
     font-size: 1.2rem;
     font-weight: bold;
@@ -257,7 +267,7 @@ const Arrow = styled.div`
   }
 `;
 
-const Intro = () => {
+const Intro = (props) => {
   const [email, setEmail] = useState("");
 
   const slide = () => {
@@ -282,11 +292,8 @@ const Intro = () => {
               </div>
             </LeftContainer>
             <CentralContainer>
-              <div id="big">Great training starts here</div>
-              <div id="main">
-                Give your employees an e-mentor and cust costs on internal
-                training by 60%.
-              </div>
+              <div id="big">{props.t("h1")}</div>
+              <div id="main">{props.t("h2")}</div>
               <div id="input">
                 <div id="text">
                   <input
@@ -307,7 +314,7 @@ const Intro = () => {
                     }
                   }}
                 >
-                  Get Started
+                  {props.t("C2A")}
                 </button>
               </div>
               <div id="advantages">
@@ -315,19 +322,19 @@ const Intro = () => {
                   <span>
                     <Icon size={25} icon={check} />
                   </span>
-                  <div>Unique training simulators </div>
+                  <div>{props.t("bullet1")} </div>
                 </div>
                 <div className="bullet">
                   <span>
                     <Icon size={25} icon={check} />
                   </span>
-                  <div>24/7 tech and course development support</div>
+                  <div>{props.t("bullet2")} </div>
                 </div>
                 <div className="bullet">
                   <span>
                     <Icon size={25} icon={check} />
                   </span>
-                  <div>Set up next course in minutes</div>
+                  <div>{props.t("bullet3")} </div>
                 </div>
               </div>
             </CentralContainer>
@@ -350,4 +357,4 @@ const Intro = () => {
   );
 };
 
-export default Intro;
+export default withTranslation("business")(Intro);

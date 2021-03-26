@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   height: 80vh;
@@ -50,14 +51,11 @@ const Container = styled.div`
     }
   }
 `;
-const Result = () => {
+const Result = (props) => {
   return (
     <Styles>
       <Container>
-        <div id="header">
-          As a result your employees pratice real-life skills in an online
-          risk-free environment
-        </div>
+        <div id="header">{props.t("result")}</div>
         <div id="container">
           <img src="../../static/result.svg" />
         </div>
@@ -66,4 +64,4 @@ const Result = () => {
   );
 };
 
-export default Result;
+export default withTranslation("business")(Result);

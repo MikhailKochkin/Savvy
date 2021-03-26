@@ -78,7 +78,7 @@ const Advice = styled.p`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/ProblemEditor"), {
+const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   loading: () => <p>Загрузка редактора...</p>,
   ssr: false,
 });

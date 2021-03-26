@@ -1118,6 +1118,7 @@ type Mutation {
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
+  updateChat(id: String, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConstruction(answer: [String], complexity: Int, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage

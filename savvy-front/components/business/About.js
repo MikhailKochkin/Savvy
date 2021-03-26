@@ -3,9 +3,10 @@ import styled from "styled-components";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import ReactResizeDetector from "react-resize-detector";
+import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
-  min-height: 80vh;
+  min-height: 60vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -38,7 +39,7 @@ const Styles = styled.div`
   }
   @media (max-width: 800px) {
     height: auto;
-    margin: 50px 0;
+    /* margin: 50px 0; */
     #header {
       font-size: 2.2rem;
       margin: 20px 0;
@@ -56,7 +57,7 @@ const Box = styled.div`
 
 const Slide = styled.div`
   width: 90%;
-  background: #f3f0ea;
+  background: #f5f5f5;
   padding: 3%;
   height: 400px;
   display: flex;
@@ -141,7 +142,7 @@ const Text = styled.div`
   }
 `;
 
-const About = () => {
+const About = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
   const responsive = {
@@ -179,7 +180,7 @@ const About = () => {
         </svg>
       </div>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <div id="header">Create simulators for any high skilled job</div>
+      <div id="header">{props.t("about_header")}</div>
       <Box>
         <Carousel
           responsive={responsive}
@@ -188,11 +189,8 @@ const About = () => {
           <Slide>
             <Text>
               <div>
-                <div className="header2">Case studies</div>
-                <div className="text">
-                  Learn to solve legal & business cases with our e-mentor
-                </div>
-                {/* <button className="button">Try it</button> */}
+                <div className="header2">{props.t("casestudy")}</div>
+                <div className="text">{props.t("casestudy_explainer")}</div>
               </div>
             </Text>
             <div className="image">
@@ -202,11 +200,8 @@ const About = () => {
           <Slide>
             <Text>
               <div>
-                <div className="header2">Decision Maker Simulator</div>
-                <div className="text">
-                  Master your decision-making skills using data and dashboards
-                </div>
-                {/* <button className="button">Try it</button> */}
+                <div className="header2">{props.t("decisionmaker")}</div>
+                <div className="text">{props.t("decisionmaker_explainer")}</div>
               </div>
             </Text>
             <div className="image">
@@ -216,11 +211,10 @@ const About = () => {
           <Slide>
             <Text>
               <div>
-                <div className="header2">Document Builders</div>
+                <div className="header2">{props.t("documentbuilder")}</div>
                 <div className="text">
-                  Learn to draft complex documents from scratch
+                  {props.t("documentbuilder_explainer")}
                 </div>
-                {/* <button className="button">Try it</button> */}
               </div>
             </Text>
             <div className="image">
@@ -230,10 +224,8 @@ const About = () => {
           <Slide>
             <Text>
               <div>
-                <div className="header2">Text Checker</div>
-                <div className="text">
-                  Learn to find mistakes and insights in texts and data
-                </div>
+                <div className="header2">{props.t("textchecker")}</div>
+                <div className="text">{props.t("textchecker_explainer")}</div>
                 {/* <button className="button">Try it</button> */}
               </div>
             </Text>
@@ -247,4 +239,4 @@ const About = () => {
   );
 };
 
-export default About;
+export default withTranslation("business")(About);

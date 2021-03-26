@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import CreateMessage from "./CreateMessage";
+import UpdateMessage from "./UpdateMessage";
 
-const CREATE_CHAT_MUTATION = gql`
-  mutation CREATE_CHAT_MUTATION(
+const UPDATE_CHAT_MUTATION = gql`
+  mutation UPDATE_CHAT_MUTATION(
+    $id: String!
     $name: String!
     $messages: Messages!
-    $lessonId: String!
   ) {
-    createChat(name: $name, messages: $messages, lessonId: $lessonId) {
+    updateChat(id: $id, name: $name, messages: $messages) {
       id
     }
   }
@@ -44,14 +44,17 @@ const UpdateChat = (props) => {
   const [name, setName] = useState(props.name);
   const [messages, setMessages] = useState(props.messages.messagesList);
   const [num, setNum] = useState(props.messages.messagesList.length);
-  const [createChat, { data, loading, error }] = useMutation(
-    CREATE_CHAT_MUTATION
+  const [updateChat, { data, loading, error }] = useMutation(
+    UPDATE_CHAT_MUTATION
   );
 
   const getMessage = (data) => {
-    setMessages([...messages, data]);
+    console.log(data);
+    let old_messages = [...messages];
+    old_messages.splice(data.number - 1, 1, data);
+    setMessages([...old_messages]);
   };
-
+  console.log(num);
   return (
     <Styles>
       <Input
@@ -61,28 +64,26 @@ const UpdateChat = (props) => {
         onChange={(e) => setName(e.target.value)}
       />
       <br />
-      {_.times(num, (i) => (
-        <>
-          <CreateMessage
-            index={i + 1}
-            author={props.messages.messagesList[i].author}
-            document={props.document}
-            getMessage={getMessage}
-          />
-        </>
+      {props.messages.messagesList.map((m, i) => (
+        <UpdateMessage
+          index={i + 1}
+          author={props.messages.messagesList[i].author}
+          text={m.text}
+          getMessage={getMessage}
+        />
       ))}
-      <button className="but" onClick={(e) => setNum(num - 1)}>
+      {/* <button className="but" onClick={(e) => setNum(num - 1)}>
         -1
       </button>
       <button className="but" onClick={(e) => setNum(num + 1)}>
         +1
-      </button>
+      </button> */}
       <button
         onClick={async (e) => {
           e.preventDefault();
-          const res = await createChat({
+          const res = await updateChat({
             variables: {
-              lessonId: props.lessonID,
+              id: props.id,
               messages: { messagesList: messages },
               name,
             },

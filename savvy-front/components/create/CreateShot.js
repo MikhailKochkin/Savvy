@@ -12,13 +12,13 @@ const CREATE_SHOTS_MUTATION = gql`
     $title: String!
     $parts: [String!]
     $comments: [String!]
-    $lessonID: ID!
+    $lessonId: String!
   ) {
     createShot(
       title: $title
       parts: $parts
       comments: $comments
-      lessonID: $lessonID
+      lessonId: $lessonId
     ) {
       id
     }
@@ -223,7 +223,7 @@ class CreateShot extends Component {
         <Mutation
           mutation={CREATE_SHOTS_MUTATION}
           variables={{
-            lessonID: this.props.lessonID,
+            lessonId: this.props.lessonID,
             parts: this.state.final_p,
             comments: this.state.final_c,
             title: this.state.title,

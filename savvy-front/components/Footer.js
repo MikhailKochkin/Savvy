@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 
 const FooterStyles = styled.div`
-  background-color: #001f4e;
+  background-color: #000e29;
   color: white;
   max-height: 40%;
   width: 100%;
@@ -102,7 +102,7 @@ const Footer = () => {
           </a>
         </div>
         <div>
-          <a target="_blank" href="https://www.instagram.com/savvy_legal">
+          <a target="_blank" href="https://www.instagram.com/besavvylawyer/">
             Instagram
           </a>
         </div>

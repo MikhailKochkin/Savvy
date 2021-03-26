@@ -4,50 +4,43 @@ import Router from "next/router";
 import { check } from "react-icons-kit/fa/check";
 import Icon from "react-icons-kit";
 import OurCalculator from "./OurCalculator";
+import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
-  height: 100vh;
+  min-height: 70vh;
   width: 100vw;
   display: flex;
   background: white;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  .custom-shape-divider-top-1616698146 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .custom-shape-divider-top-1616698146 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 76px;
+  }
+
+  .custom-shape-divider-top-1616698146 .shape-fill {
+    fill: #f5f5f5;
+  }
   #header {
     width: 80%;
     font-size: 2.8rem;
     font-weight: bold;
-    margin-bottom: 5%;
+    margin: 5% 0;
     text-align: center;
   }
   @media (max-width: 800px) {
     height: auto;
-    #header {
-      font-size: 2.2rem;
-      margin: 5% 0;
-    }
-  }
-`;
-
-const Styles2 = styled.div`
-  height: 65vh;
-  width: 100vw;
-  background: #f2f0ea;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  #header {
-    width: 80%;
-    font-size: 2.8rem;
-    font-weight: bold;
-    margin-bottom: 3%;
-    text-align: center;
-  }
-  #box {
-    width: 80%;
-  }
-  @media (max-width: 800px) {
     #header {
       font-size: 2.2rem;
       margin: 5% 0;
@@ -70,28 +63,30 @@ const Cards = styled.div`
 
 const Card = styled.div`
   transition: all 0.3s;
-  width: ${(props) => (props.chosen ? "32%" : "28%")};
-  height: ${(props) => (props.chosen ? "110%" : "100%")};
+  width: ${(props) => (props.chosen ? "30%" : "30%")};
+  height: ${(props) => (props.chosen ? "300px" : "300px")};
   border-radius: 15px;
   cursor: pointer;
   .top {
-    padding: 2% 14%;
-    height: 50%;
+    padding: 15px 30px;
+    min-height: 90%;
     background: #f7f8fc;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px;
     border: 1px solid;
-    border-color: ${(props) => (props.chosen ? "#1F2041" : "#e1e5f4")};
-    border-bottom: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-color: #e1e5f4;
+    &:hover {
+      border-color: #1f2041;
+    }
   }
   .bottom {
     height: 50%;
     background: white;
     border: 1px solid;
-    border-color: ${(props) => (props.chosen ? "#1F2041" : "#e1e5f4")};
+    /* border-color: ${(props) => (props.chosen ? "#1F2041" : "#e1e5f4")}; */
     border-radius: 0 0 15px 15px;
     border-top: none;
     display: flex;
@@ -99,7 +94,9 @@ const Card = styled.div`
     align-items: center;
     padding-top: 5%;
     font-size: 1.3rem;
-    /* justify-content: center; */
+    &:hover {
+      border-color: ${(props) => (props.chosen ? "#e1e5f4" : "#1F2041")};
+    }
   }
   .inner {
     width: 80%;
@@ -127,154 +124,126 @@ const Card = styled.div`
 
 const Button = styled.button`
   background: black;
-  margin-top: 10%;
+  margin-top: 10px;
   width: 70%;
   padding: 4% 0;
   outline: 0;
   color: white;
+  font-weight: bold;
   border-radius: 5px;
   border: 1px solid #12182d;
   cursor: pointer;
   font-family: Montserrat;
   transition: all 0.5s;
   &:hover {
-    background: white;
+    background: #f7f8fc;
     color: black;
   }
 `;
 
-const Prices = () => {
+const Explainer = styled.div`
+  width: 80%;
+  margin: 20px 0 30px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .explainer_header {
+    width: 70%;
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: bold;
+    margin: 5% 0;
+  }
+  @media (max-width: 800px) {
+    width: 95%;
+    .explainer_header {
+      width: 100%;
+      font-size: 2.2rem;
+    }
+  }
+`;
+
+const Prices = (props) => {
   const [plan, setPlan] = useState("business");
   return (
-    <>
-      <Styles>
-        <div id="header">Save money with us by spending only:</div>
-        <Cards>
-          <Card onClick={(e) => setPlan("basic")} chosen={plan === "basic"}>
-            <div className="top">
-              <div className="type">Pilot</div>
-              <div className="price">8$</div>
-              <div className="terms">
-                per student, per month,
-                <br /> per course
-              </div>
-              <Button
-                onClick={(e) => {
-                  Router.push({
-                    pathname: "/hello",
-                  });
-                }}
-              >
-                Get Started
-              </Button>
-            </div>
-            <div className="bottom">
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span> Choose the topics for your first 2 courses</span>
-              </div>
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span> Let us do the work and show what we've got</span>
-              </div>
-            </div>
-          </Card>
-          <Card
-            onClick={(e) => setPlan("business")}
-            chosen={plan === "business"}
-          >
-            <div className="top">
-              <div className="type">Business</div>
-              <div className="price">15$</div>
-              <div className="terms">
-                per student, per month,
-                <br /> per course
-              </div>
-              <Button
-                onClick={(e) => {
-                  Router.push({
-                    pathname: "/hello",
-                  });
-                }}
-              >
-                Get Started
-              </Button>
-            </div>
-            <div className="bottom">
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span> We develop the learning strategy for your company</span>
-              </div>
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span>
-                  {" "}
-                  Make research and come up with the most suitable learning
-                  solutions
-                </span>
-              </div>
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span> Develop online courses with you and for you</span>
-              </div>
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span>
-                  {" "}
-                  Track learning results and find ways to improve the existing
-                  learning process
-                </span>
-              </div>
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span>
-                  {" "}
-                  Connect learning experience to KPIs and goals of your company
-                </span>
-              </div>
-            </div>
-          </Card>
-          <Card
-            onClick={(e) => setPlan("enterprise")}
-            chosen={plan === "enterprise"}
-          >
-            <div className="top">
-              <div className="type">Enterprise</div>
-              <div className="price">Let's talk</div>
-              <div className="terms">
-                per student, per month, <br /> per course
-              </div>
-              <Button
-                onClick={(e) => {
-                  Router.push({
-                    pathname: "/hello",
-                  });
-                }}
-              >
-                Get Started
-              </Button>
-            </div>
-            <div className="bottom">
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span> Your company has big learning plans?</span>
-              </div>
-              <div className="inner">
-                <Icon size={17} icon={check} />
-                <span> Let's talk how we can help implement them</span>
-              </div>
-            </div>
-          </Card>
-        </Cards>
-      </Styles>
-      <Styles2>
-        <div id="header">How much will you spend and save with us?</div>
-        <div id="box">
-          <OurCalculator plan={plan} />
+    <Styles>
+      <div class="custom-shape-divider-top-1616698146">
+        <svg
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1200 120"
+          preserveAspectRatio="none"
+        >
+          <path
+            d="M1200 120L0 16.48 0 0 1200 0 1200 120z"
+            class="shape-fill"
+          ></path>
+        </svg>
+      </div>
+      <div id="header">{props.t("prices_header")}</div>
+      <Cards>
+        <Card onClick={(e) => setPlan("basic")} chosen={plan === "basic"}>
+          <div className="top">
+            <div className="type">{props.t("pilot")}</div>
+            <div className="price">100 000 ₽</div>
+            <div className="terms">{props.t("pilot_terms")}</div>
+            <Button
+              onClick={(e) => {
+                Router.push({
+                  pathname: "/hello",
+                });
+              }}
+            >
+              {props.t("C2A")}
+            </Button>
+          </div>
+        </Card>
+        <Card onClick={(e) => setPlan("business")} chosen={plan === "business"}>
+          <div className="top">
+            <div className="type">{props.t("business")}</div>
+            <div className="price">150 000₽</div>
+            <div className="terms">{props.t("business_terms")}</div>
+            <Button
+              onClick={(e) => {
+                Router.push({
+                  pathname: "/hello",
+                });
+              }}
+            >
+              {props.t("C2A")}
+            </Button>
+          </div>
+        </Card>
+        <Card
+          onClick={(e) => setPlan("enterprise")}
+          chosen={plan === "enterprise"}
+        >
+          <div className="top">
+            <div className="type">{props.t("enterprise")}</div>
+            <div className="price">{props.t("talk")}</div>
+            <div className="terms">{props.t("enterprise_terms")}</div>
+            <Button
+              onClick={(e) => {
+                Router.push({
+                  pathname: "/hello",
+                });
+              }}
+            >
+              {props.t("C2A")}
+            </Button>
+          </div>
+        </Card>
+      </Cards>
+      <Explainer>
+        <div className="explainer_header">
+          Наша задача – перевести 60% внутреннего обучения в симуляторы,
+          отцифровать образовательный опыт сотрудников и в 2 раза сократить
+          расходы на обучение
         </div>
-      </Styles2>
-    </>
+      </Explainer>
+    </Styles>
   );
 };
 
-export default Prices;
+export default withTranslation("business")(Prices);

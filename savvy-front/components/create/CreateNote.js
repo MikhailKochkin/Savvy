@@ -71,7 +71,7 @@ const Advice = styled.p`
   width: 80%;
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
+const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
 });

@@ -119,7 +119,7 @@ const Complexity = styled.div`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../../editor/UpdateTextEditor"), {
+const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
 });
@@ -132,6 +132,7 @@ const UpdateTextEditor = (props) => {
   );
   const getText = (d) => setText(d);
   const { id, lessonID } = props;
+  console.log(text);
   return (
     <>
       <Container>
@@ -160,7 +161,8 @@ const UpdateTextEditor = (props) => {
             <option value={5}>5</option>
           </select>
         </Complexity>
-        <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+        {console.log(text)}
+        <DynamicLoadedEditor getEditorText={getText} value={text} />
         <Mutation
           mutation={UPDATE_TEXTEDITOR_MUTATION}
           variables={{

@@ -117,7 +117,7 @@ const Complexity = styled.div`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../../editor/ProblemEditor"), {
+const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   loading: () => <p>Загрузка...</p>,
   ssr: false,
 });

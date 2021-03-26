@@ -67,7 +67,8 @@ const Options = styled.div`
 `;
 
 const Styles = styled.div`
-  width: ${(props) => props.width};
+  width: 650px;
+  /* width: ${(props) => props.width}; */
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -286,7 +287,7 @@ const SingleTest = (props) => {
     const res = () => {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
         // 1. if the data is sent for the first time
-        if (!sent && props.getData) {
+        if (props.getData) {
           // 2. and if this quiz is a part of an exam
           props.getData(
             props.next ? [true, props.next.true] : [true, { type: "finish" }],
@@ -296,7 +297,7 @@ const SingleTest = (props) => {
         }
       } else {
         // 1. if the data is sent for the first time
-        if (!sent && props.getData) {
+        if (props.getData) {
           // 2. and if this quiz is a part of an exam
           props.getData(
             props.next ? [false, props.next.false] : [false, { type: "finish" }]
@@ -315,7 +316,7 @@ const SingleTest = (props) => {
         setAnswerState("right");
         setInputColor("rgba(50, 172, 102, 0.25)");
         // 1. if the data is sent for the first time
-        if (!sent && props.getData) {
+        if (props.getData) {
           // 2. and if this quiz is a part of an exam
           props.getData(
             props.next ? [true, props.next.true] : [true, { type: "finish" }],
@@ -326,7 +327,7 @@ const SingleTest = (props) => {
         setAnswerState("wrong");
         setInputColor("rgba(222, 107, 72, 0.5)");
         // 1. if the data is sent for the first time
-        if (!sent && props.getData) {
+        if (props.getData) {
           // 2. and if this quiz is a part of an exam
           props.getData(
             props.next ? [false, props.next.false] : [false, { type: "finish" }]
@@ -354,7 +355,6 @@ const SingleTest = (props) => {
   } else {
     width = "100%";
   }
-  console.log(props.true);
   return (
     <Styles width={width}>
       {!exam && story !== true && (
@@ -432,7 +432,7 @@ const SingleTest = (props) => {
             </Question>
           )} */}
 
-          <Group answerState={answerState}>
+          <Group>
             <Mutation
               mutation={CREATE_TESTRESULT_MUTATION}
               variables={{
@@ -444,7 +444,6 @@ const SingleTest = (props) => {
             >
               {(createTestResult, { loading, error }) => (
                 <MiniButton
-                  answerState={answerState}
                   // block={block}
                   className="button"
                   id="but1"

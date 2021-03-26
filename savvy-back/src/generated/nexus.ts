@@ -2366,6 +2366,7 @@ export interface NexusGenFieldTypes {
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    updateChat: NexusGenRootTypes['Chat'] | null; // Chat
     updateClause: NexusGenRootTypes['Clause'] | null; // Clause
     updateConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     updateCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
@@ -2970,6 +2971,7 @@ export interface NexusGenFieldTypeNames {
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
+    updateChat: 'Chat'
     updateClause: 'Clause'
     updateConstruction: 'Construction'
     updateCoursePage: 'CoursePage'
@@ -3684,6 +3686,11 @@ export interface NexusGenArgTypes {
       status?: NexusGenEnums['Status'] | null; // Status
       surname?: string | null; // String
       uniID?: string | null; // String
+    }
+    updateChat: { // args
+      id?: string | null; // String
+      messages?: NexusGenInputs['Messages'] | null; // Messages
+      name?: string | null; // String
     }
     updateClause: { // args
       commentary?: string | null; // String

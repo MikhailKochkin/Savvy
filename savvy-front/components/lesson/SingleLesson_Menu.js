@@ -184,6 +184,12 @@ const SingleLesson_Menu = (props) => {
               </ChooseButton>
             </ButtonZone>
           )}
+          <ButtonZone>
+            <ChooseButton name="newProblem" onClick={onSwitch}>
+              {" "}
+              Многовекторные задачи{" "}
+            </ChooseButton>
+          </ButtonZone>
           {lesson.constructions.length > 0 && (
             <ButtonZone>
               <ChooseButton name="constructor" onClick={onSwitch}>

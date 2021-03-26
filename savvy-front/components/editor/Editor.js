@@ -1,55 +1,61 @@
-import React from "react";
-import styled from "styled-components";
-import Plain from "slate-plain-serializer";
-import Html from "slate-html-serializer";
-import { Editor } from "slate-react";
-import Icon from "react-icons-kit";
+export const thisIsAnUnusedExport =
+  "this export only exists to disable fast refresh for this file";
+
+import React, { useState, useMemo, useCallback } from "react";
 import isUrl from "is-url";
-import BoldMark from "./BoldMark";
-import HeaderMark from "./HeaderMark";
-import ItalicMark from "./ItalicMark";
-import LinkMark from "./Link";
-import CommentStyle from "./CommentStyle";
+import {
+  createEditor,
+  Editor,
+  Range,
+  Point,
+  Transforms,
+  Text,
+  Element as SlateElement,
+} from "slate";
+import {
+  Slate,
+  Editable,
+  withReact,
+  useSlateStatic,
+  useSlate,
+  ReactEditor,
+  useFocused,
+  useSelected,
+} from "slate-react";
+// import { Slate, Editable, withReact, useSlateStatic } from "slate-react";
+import { withHistory } from "slate-history";
+import escapeHtml from "escape-html";
+import { css } from "emotion";
+import styled from "styled-components";
+import { jsx } from "slate-hyperscript";
 import FormatToolBar from "./FormatToolbar";
+import Icon from "react-icons-kit";
 import { bold } from "react-icons-kit/fa/bold";
+import { underline } from "react-icons-kit/fa/underline";
 import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
 import { link } from "react-icons-kit/fa/link";
 import { image } from "react-icons-kit/fa/image";
-import { commentO } from "react-icons-kit/fa/commentO";
-import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import { list } from "react-icons-kit/fa/list";
 import { film } from "react-icons-kit/fa/film";
+import { table } from "react-icons-kit/fa/table";
+import { flag } from "react-icons-kit/fa/flag";
+import { question } from "react-icons-kit/fa/question";
+import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
+import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
 
-const Div = styled.div`
-  /* color: yellow; */
-`;
-const LinkStyle = styled.a`
-  font-size: 1.8rem;
-  font-weight: bold;
-`;
-
-const HintStyle = styled.div`
-  font-size: 1.8rem;
-  color: brown;
-`;
-
-const CommentStyle2 = styled.span`
-  color: green;
-`;
-
-const Img = styled.img`
-  display: block;
-  max-width: 100%;
-  max-height: 20em;
-  box-shadow: "0 0 0 2px blue;";
-`;
-
-const Iframe = styled.img`
-  display: block;
-  width: auto;
-  height: 400px;
-`;
+const AppStyles = {
+  color: "rgb(17, 17, 17)",
+  maxWidth: "840px",
+  width: "100%",
+  backgroundColor: "rgb(255, 255, 255)",
+  border: "1px solid #EDEFED",
+  boxShadow: "rgba(118, 143, 255, 0.1) 0px 16px 24px 0px",
+  padding: "20px 40px",
+  margin: "25px auto 25px",
+  borderRadius: "4.5px",
+  fontSize: "1.6rem",
+};
 
 const ButtonStyle = styled.button`
   padding: 7px;
@@ -62,762 +68,755 @@ const ButtonStyle = styled.button`
   }
 `;
 
-const AppStyles = {
-  color: "rgb(17, 17, 17)",
-  maxWidth: "740px",
-  backgroundColor: "rgb(255, 255, 255)",
-  boxShadow: "rgba(118, 143, 255, 0.1) 0px 16px 24px 0px",
-  padding: "40px",
-  margin: "25px auto 45px",
-  borderRadius: "4.5px",
-  fontSize: "1.8rem",
+const Span = styled.span`
+  color: darkslateblue;
+`;
+
+const Quiz = styled.span`
+  text-transform: underline;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border: 1px solid #edefed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  tr {
+    border: 1px solid #edefed;
+  }
+  thead {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+  th {
+    border: 1px solid #edefed;
+  }
+  td {
+    border: 1px solid #edefed;
+    padding: 0% 2.5%;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    position: relative;
+  }
+`;
+const Link = styled.a`
+  border-bottom: 2px solid #26ba8d;
+  padding: 0%;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    /* background: #26ba8d;
+    color: #fff;
+    padding: 2px 0; */
+  }
+`;
+
+const Flag = styled.div`
+  color: #008489;
+  font-size: 2rem;
+  width: 100%;
+  margin: 3% 0;
+  padding: 3% 8%;
+  background-color: #f2fafb;
+  border-radius: 5px;
+`;
+
+// 1. Serializer – slate to html
+
+const serialize = (node) => {
+  if (Text.isText(node)) {
+    let styles = Object.keys(node);
+    styles.shift();
+    console.log(styles);
+    if (styles.length) {
+      let text = node.text;
+      if (styles.includes("bold")) {
+        text = `<b>${text}</b>`;
+      }
+      if (styles.includes("italic")) {
+        text = `<em>${text}</em>`;
+      }
+      if (styles.includes("underline")) {
+        text = `<u>${text}</u>`;
+      }
+      if (styles.includes("error")) {
+        text = `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${text}</span>`;
+      }
+      if (styles.includes("note")) {
+        text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
+      }
+      if (styles.includes("quiz")) {
+        console.log(node);
+        text = `<span type="quiz" className="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
+      }
+      return text;
+    } else {
+      return escapeHtml(node.text);
+    }
+  }
+  const children = node.children.map((n) => serialize(n)).join("");
+  switch (node.type) {
+    case "quote":
+      return `<blockquote><p>${children}</p></blockquote>`;
+    case "flag":
+      return `<div className="flag">${children}</div>`;
+    case "header":
+      return `<h2>${children}<h2/>`;
+    case "paragraph":
+      return `<p>${children}</p>`;
+    case "image":
+      return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
+    case "video":
+      return `<iframe src="${escapeHtml(
+        node.src
+      )}">${children}</iframe><p></p>`;
+    case "link":
+      return `<a href="${escapeHtml(
+        node.url
+      )}" target=”_blank”>${children}</a>`;
+    case "table":
+      return `<table>${children}</table>`;
+    case "table-row":
+      return `<tr>${children}</tr>`;
+    case "table-cell":
+      return `<th>${children}</th>`;
+    default:
+      return children;
+  }
 };
 
-// Define the default node type.
-const DEFAULT_NODE = "paragraph";
+// 2. deserialize – html to text
 
-const BLOCK_TAGS = {
-  p: "paragraph",
-  img: "image",
-  iframe: "video",
-  code: "code",
-  div: "hint",
-  ol: "numbered-list",
-  li: "list-item",
+const deserialize = (el) => {
+  if (el.nodeType === 3) {
+    return el.textContent;
+  } else if (el.nodeType !== 1) {
+    return null;
+  }
+
+  const children = Array.from(el.childNodes).map(deserialize);
+  switch (el.nodeName) {
+    case "BODY":
+      return jsx("fragment", {}, children);
+    case "BR":
+      return "\n";
+    case "IFRAME":
+      return jsx("element", { type: "video", src: el.src }, [{ text: "" }]);
+    case "IMAGE":
+      return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
+    case "BLOCKQUOTE":
+      return jsx("element", { type: "quote" }, children);
+    case "P":
+      return jsx(
+        "element",
+        { type: "paragraph" },
+        children.length > 0 ? children : [{ text: "" }]
+      );
+    case "A":
+      return jsx(
+        "element",
+        { type: "link", url: el.getAttribute("href") },
+        children
+      );
+    default:
+      return el.textContent;
+  }
 };
 
-const INLINE_TAGS = {
-  a: "link",
-  span: "comment",
-  div: "hintWrapper",
+// 3. Editor Commands
+
+const toggleMark = (editor, format) => {
+  const isActive = isMarkActive(editor, format);
+  Transforms.setNodes(
+    editor,
+    { [format]: isActive ? null : true },
+    { match: (n) => Text.isText(n), split: true }
+  );
 };
 
-const MARK_TAGS = {
-  i: "italic",
-  strong: "bold",
-  header: "header",
-  // code: 'code',
-  blockquote: "quote",
+const isMarkActive = (editor, format) => {
+  const marks = Editor.marks(editor);
+  return marks ? marks[format] === true : false;
 };
 
-function CodeNode(props) {
+const isElementActive = (editor, format) => {
+  const [match] = Editor.nodes(editor, {
+    match: (n) => n.type === format,
+    universal: true,
+  });
+
+  return !!match;
+};
+
+const toggleElement = (editor, format) => {
+  const isActive = isElementActive(editor, format);
+  if (isActive) {
+    Transforms.unwrapNodes(editor, {
+      // match: (n) => Text.isText(n),
+      split: true,
+    });
+    const newProperties = {
+      type: isActive ? "paragraph" : isList ? "list-item" : format,
+    };
+    Transforms.setNodes(editor, newProperties);
+  } else {
+    const block = { type: format, children: [] };
+    Transforms.wrapNodes(editor, block);
+  }
+};
+
+const CustomEditor = {
+  addVideoElement(editor) {
+    let link = prompt("Ссылка: ");
+    editor.selection.anchor.path == [0, 0] &&
+      editor.selection.anchor.offset == 0 &&
+      editor.insertBreak();
+    editor.insertNode({
+      type: "video",
+      src: link,
+      children: [{ text: "" }],
+    });
+    editor.insertNode({
+      type: "paragraph",
+      children: [
+        {
+          text: "",
+        },
+      ],
+    });
+  },
+
+  addImageElement(editor) {
+    let link = prompt("Ссылка: ");
+    editor.selection.anchor.path == [0, 0] &&
+      editor.selection.anchor.offset == 0 &&
+      editor.insertBreak();
+    editor.insertNode({
+      type: "image",
+      src: link,
+      children: [{ text: "" }],
+    });
+    editor.insertNode({
+      type: "paragraph",
+      children: [
+        {
+          text: "",
+        },
+      ],
+    });
+  },
+
+  addComment(editor) {
+    let my_data = prompt("Комментарий: ");
+    Transforms.setNodes(
+      editor,
+      { type: "note", note: my_data },
+      { match: (n) => Text.isText(n), split: true }
+    );
+  },
+
+  addQuiz(editor) {
+    let question = prompt("Вопрос: ");
+    let answer = prompt("Ответ: ");
+    let ifRight = prompt("Если правильно: ");
+    let ifWrong = prompt("Если неправильно: ");
+    Transforms.setNodes(
+      editor,
+      { type: "quiz", quiz: true, question, answer, ifRight, ifWrong },
+      { match: (n) => Text.isText(n), split: true }
+    );
+  },
+
+  addError(editor) {
+    let correct = prompt("Правильный ответ: ");
+    Transforms.setNodes(
+      editor,
+      { type: "error", error: true, correct: correct },
+      { match: (n) => Text.isText(n), split: true }
+    );
+  },
+
+  toggleFlag(editor) {
+    Transforms.insertNodes(
+      editor,
+      { type: "table-row", children: [] }
+      // { at: [current_path + 1] }
+    );
+  },
+};
+
+const withLinks = (editor) => {
+  const { insertData, insertText, isInline } = editor;
+
+  editor.isInline = (element) => {
+    return element.type === "link" ? true : isInline(element);
+  };
+
+  editor.insertText = (text) => {
+    if (text && isUrl(text)) {
+      wrapLink(editor, text);
+    } else {
+      insertText(text);
+    }
+  };
+
+  editor.insertData = (data) => {
+    const text = data.getData("text/plain");
+
+    if (text && isUrl(text)) {
+      wrapLink(editor, text);
+    } else {
+      insertData(data);
+    }
+  };
+
+  return editor;
+};
+
+const insertLink = (editor, url) => {
+  if (editor.selection) {
+    wrapLink(editor, url);
+  }
+};
+
+const isLinkActive = (editor) => {
+  const [link] = Editor.nodes(editor, {
+    match: (n) =>
+      !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "link",
+  });
+  return !!link;
+};
+
+const unwrapLink = (editor) => {
+  Transforms.unwrapNodes(editor, {
+    match: (n) =>
+      !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "link",
+  });
+};
+
+const wrapLink = (editor, url) => {
+  if (isLinkActive(editor)) {
+    unwrapLink(editor);
+  }
+
+  const { selection } = editor;
+  const isCollapsed = selection && Range.isCollapsed(selection);
+  const link = {
+    type: "link",
+    url,
+    children: isCollapsed ? [{ text: url }] : [],
+  };
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, link);
+  } else {
+    Transforms.wrapNodes(editor, link, { split: true });
+    Transforms.collapse(editor, { edge: "end" });
+  }
+};
+
+const withTables = (editor) => {
+  const { deleteBackward, deleteForward, insertBreak } = editor;
+
+  editor.deleteBackward = (unit) => {
+    const { selection } = editor;
+
+    if (selection && Range.isCollapsed(selection)) {
+      const [cell] = Editor.nodes(editor, {
+        match: (n) =>
+          !Editor.isEditor(n) &&
+          SlateElement.isElement(n) &&
+          n.type === "table-cell",
+      });
+
+      if (cell) {
+        const [, cellPath] = cell;
+        const start = Editor.start(editor, cellPath);
+
+        if (Point.equals(selection.anchor, start)) {
+          return;
+        }
+      }
+    }
+
+    deleteBackward(unit);
+  };
+
+  editor.deleteForward = (unit) => {
+    const { selection } = editor;
+
+    if (selection && Range.isCollapsed(selection)) {
+      const [cell] = Editor.nodes(editor, {
+        match: (n) =>
+          !Editor.isEditor(n) &&
+          SlateElement.isElement(n) &&
+          n.type === "table-cell",
+      });
+
+      if (cell) {
+        const [, cellPath] = cell;
+        const end = Editor.end(editor, cellPath);
+
+        if (Point.equals(selection.anchor, end)) {
+          return;
+        }
+      }
+    }
+
+    deleteForward(unit);
+  };
+
+  editor.insertBreak = () => {
+    const { selection } = editor;
+
+    if (selection) {
+      const [table] = Editor.nodes(editor, {
+        match: (n) =>
+          !Editor.isEditor(n) &&
+          SlateElement.isElement(n) &&
+          n.type === "table",
+      });
+
+      if (table) {
+        return;
+      }
+    }
+
+    insertBreak();
+  };
+
+  return editor;
+};
+
+const App = (props) => {
+  let html;
+  props.value ? (html = props.value) : (html = `<p> </p>`);
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const initial = deserialize(document.body);
+  const [value, setValue] = useState(initial);
+
+  const editor = useMemo(
+    () =>
+      withLinks(withTables(withEmbeds(withHistory(withReact(createEditor()))))),
+    []
+  );
+
+  // 4.1 Element renderer
+
+  const renderElement = useCallback((props) => {
+    // console.log(props.element, props.element.type);
+    switch (props.element.type) {
+      case "code":
+        return <CodeElement {...props} />;
+      case "quote":
+        return <QuoteElement {...props} />;
+      case "header":
+        return <HeaderElement {...props} />;
+      case "video":
+        return <VideoElement {...props} />;
+      case "image":
+        return <ImageElement {...props} />;
+      case "link":
+        return (
+          <LinkElement {...props.attributes} href={props.element.url}>
+            {props.children}
+          </LinkElement>
+        );
+      case "quiz":
+        return <QuizElement {...props} />;
+      case "table":
+        return (
+          <TableElement>
+            <tbody {...props.attributes}>{props.children}</tbody>
+          </TableElement>
+        );
+      case "table-row":
+        return <tr {...props.attributes}>{props.children}</tr>;
+      case "table-cell":
+        return <td {...props.attributes}>{props.children}</td>;
+      case "flag":
+        return <FlagElement {...props} />;
+      default:
+        return <DefaultElement {...props} />;
+    }
+  }, []);
+
+  // 4.2 Leaf renderer
+
+  const renderLeaf = useCallback((props) => {
+    return <Leaf {...props} />;
+  }, []);
+
+  return (
+    <Slate
+      editor={editor}
+      value={value}
+      onChange={(value) => {
+        let arr = [];
+        value.map((v) => arr.push(serialize(v)));
+
+        setValue(value);
+        props.getEditorText(arr.join(""));
+        console.log(arr.join(""));
+      }}
+    >
+      <FormatToolBar>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleMark(editor, "bold");
+          }}
+        >
+          <Icon icon={bold} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleMark(editor, "italic");
+          }}
+        >
+          <Icon icon={italic} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleMark(editor, "underline");
+          }}
+        >
+          <Icon icon={underline} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleElement(editor, "header");
+          }}
+        >
+          <Icon icon={header} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            const url = window.prompt("Enter the URL of the link:");
+            if (!url) return;
+            insertLink(editor, url);
+          }}
+        >
+          <Icon icon={link} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.addVideoElement(editor);
+          }}
+        >
+          <Icon icon={film} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.addImageElement(editor);
+          }}
+        >
+          <Icon icon={image} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.addComment(editor);
+          }}
+        >
+          <Icon icon={ic_insert_comment} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.addError(editor);
+          }}
+        >
+          <Icon icon={ic_find_replace} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            toggleElement(editor, "flag");
+          }}
+        >
+          <Icon icon={flag} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.addQuiz(editor);
+          }}
+        >
+          <Icon icon={question} />
+        </ButtonStyle>
+      </FormatToolBar>
+      <Editable
+        style={AppStyles}
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        placeholder="Enter some plain text..."
+      />
+    </Slate>
+  );
+};
+
+const withEmbeds = (editor) => {
+  const { isVoid } = editor;
+  editor.isVoid = (element) =>
+    element.type === "video" ? true : isVoid(element);
+  return editor;
+};
+
+// 5. Leaf declaration
+
+const Leaf = ({ attributes, children, leaf }) => {
+  if (leaf.bold) {
+    children = <strong>{children}</strong>;
+  }
+
+  if (leaf.italic) {
+    children = <em>{children}</em>;
+  }
+
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
+
+  if (leaf.note) {
+    children = <Span>{children}</Span>;
+  }
+
+  return <span {...attributes}>{children}</span>;
+};
+
+// 6. Code element declaration
+
+const CodeElement = (props) => {
+  return (
+    <blockquote {...props.attributes}>
+      <p>{props.children}</p>
+    </blockquote>
+  );
+};
+
+// 7. Quote element declaration
+
+const QuoteElement = (props) => {
   return (
     <pre {...props.attributes}>
       <code>{props.children}</code>
     </pre>
   );
-}
+};
 
-// A function to determine whether a URL has an image extension.
+// 8. Header element declaration
 
-function isImage(url) {
-  return imageExtensions.includes(getExtension(url));
-}
+const HeaderElement = (props) => {
+  return <h2 {...props.attributes}>{props.children}</h2>;
+};
 
-// Get the extension of the URL, using the URL API.
+const LinkElement = (props) => {
+  return <Link {...props.attributes}>{props.children}</Link>;
+};
 
-function getExtension(url) {
-  return new URL(url).pathname.split(".").pop();
-}
+const QuizElement = (props) => {
+  return <Quiz {...props.attributes}>{props.children}</Quiz>;
+};
 
-function insertImage(editor, src, target) {
-  if (target) {
-    editor.select(target);
-  }
+const DefaultElement = (props) => {
+  return <p {...props.attributes}>{props.children}</p>;
+};
 
-  editor.insertBlock({
-    type: "image",
-    data: { src },
-  });
-}
+const TableElement = (props) => {
+  return <Table {...props.attributes}>{props.children}</Table>;
+};
 
-function insertVideo(editor, src, target) {
-  if (target) {
-    editor.select(target);
-  }
+const FlagElement = (props) => {
+  return <Flag {...props.attributes}>{props.children}</Flag>;
+};
 
-  editor.insertBlock({
-    type: "video",
-    data: { src },
-  });
-}
-
-const rules = [
-  {
-    deserialize(el, next) {
-      const type = BLOCK_TAGS[el.tagName.toLowerCase()];
-      if (type) {
-        // console.log(el)
-        return {
-          object: "block",
-          type: type,
-          data: {
-            className: el.src,
-          },
-          nodes: next(el.childNodes),
-        };
-      }
-    },
-    serialize(obj, children) {
-      if (obj.object == "block") {
-        switch (obj.type) {
-          case "code":
-            // console.log("code:  " + obj.type)
-            return (
-              <pre>
-                <code>{children}</code>
-              </pre>
-            );
-          case "paragraph":
-            return <p className={obj.data.get("className")}>{children}</p>;
-          case "hint":
-            return (
-              <div id="conceal" data-text={obj.data._root.entries[0][1]}>
-                {children}
-              </div>
-            );
-          case "numbered-list":
-            return <ol>{children}</ol>;
-          case "list-item":
-            return <li>{children}</li>;
-          case "image":
-            return (
-              <img src={obj.data._root.entries[0][1]} alt="caption_goes_here" />
-            );
-          case "video":
-            return (
-              <iframe
-                src={obj.data._root.entries[0][1]}
-                frameborder="0"
-                tabindex="0"
-                allow="autoplay"
-                data-translatedyoutubelang="ru"
-                allowFullScreen
-              ></iframe>
-            );
-        }
-      }
-    },
-  },
-  // Add a new rule that handles marks...
-  {
-    deserialize(el, next) {
-      const type = MARK_TAGS[el.tagName.toLowerCase()];
-      if (type) {
-        // console.log(el, type)
-        return {
-          object: "mark",
-          type: type,
-          nodes: next(el.childNodes),
-        };
-      }
-    },
-    serialize(obj, children) {
-      if (obj.object == "mark") {
-        switch (obj.type) {
-          case "bold":
-            return <strong>{children}</strong>;
-          case "italic":
-            return <i>{children}</i>;
-          case "header":
-            return <h2>{children}</h2>;
-          case "quote":
-            return <blockquote>{children}</blockquote>;
-        }
-      }
-    },
-  },
-  {
-    deserialize(el, next) {
-      if (el.tagName !== "A" && el.tagName !== "SPAN" && el.tagName !== "DIV") {
-        return;
-      }
-      const type = INLINE_TAGS[el.tagName.toLowerCase()];
-      if (type) {
-        return {
-          // inline to show that Inline nodes may contain nested inline nodes and text nodes—just like in the DOM.
-          object: "inline",
-          type: type,
-          nodes: next(el.childNodes),
-          data: {
-            href:
-              Array.from(el.attributes).find(({ name }) => name == "href") !==
-              undefined
-                ? Array.from(el.attributes).find(({ name }) => name == "href")
-                    .value
-                : null,
-            title:
-              Array.from(el.attributes).find(({ name }) => name == "title") !==
-              undefined
-                ? Array.from(el.attributes).find(({ name }) => name == "title")
-                    .value
-                : null,
-            // dataText: Array.from(el.attributes).find(({name}) => name == 'data-text') !== undefined ? Array.from(el.attributes).find(({name}) => name == 'data-text').value : null
-          },
-        };
-      }
-    },
-    serialize: function (object, children) {
-      if (object.object == "inline") {
-        switch (object.type) {
-          case "link":
-            return (
-              <LinkStyle href={object.data._root.entries[0][1]} target="_blank">
-                {children}
-              </LinkStyle>
-            );
-          case "comment":
-            return (
-              <CommentStyle2 id="id" title={object.data._root.entries[0][1]}>
-                {children}
-              </CommentStyle2>
-            );
-          case "hintWrapper":
-            return (
-              <div id="conceal" data-text={object.data._root.entries[0][1]}>
-                {children}
-              </div>
-            );
-        }
-      }
-    },
-  },
-];
-
-const html = new Html({
-  rules,
-});
-
-const initialValue = `<p>6 июня по подозрению в покушении на сбыт и производство наркотиков был 
-задержан специальный корреспондент отдела расследований издания «Медуза» Иван Голунов.</p>
-<p>Мы приветствуем выбор судом более адекватной, чем заключение в СИЗО, меры пресечения Ивану Голунову.</p>
-<p>Вместе с тем мы не считаем представленные следствием доказательства виновности Ивана Голунова убедительными,
- а обстоятельства его задержания вызывают большие сомнения в том, что при проведении следственных
-  действий не было нарушено законодательство.</p>`;
-
-class App extends React.Component {
-  // Deserialize the initial editor value.
-  state = {
-    value: this.props.previousText
-      ? html.deserialize(this.props.previousText)
-      : html.deserialize(initialValue),
-  };
-
-  // Check if the current selection has a mark with `type` in it.
-
-  hasMark = (type) => {
-    const { value } = this.state;
-    return value.activeMarks.some((mark) => mark.type === type);
-  };
-
-  hasBlock = (type) => {
-    const { value } = this.state;
-    return value.blocks.some((node) => node.type === type);
-  };
-
-  hasLinks = () => {
-    const { value } = this.state;
-    return value.inlines.some((inline) => inline.type === "link");
-  };
-
-  hasComments = () => {
-    const { value } = this.state;
-    return value.inlines.some((inline) => inline.type === "comment");
-  };
-
-  hasHints = () => {
-    const { value } = this.state;
-    return value.inlines.some((inline) => inline.type === "hint");
-  };
-
-  wrapLink = (editor, href) => {
-    editor.wrapInline({
-      type: "link",
-      data: { href },
-    });
-    editor.moveToEnd();
-  };
-  wrapComment = (editor, comment) => {
-    editor.wrapInline({
-      type: "comment",
-      data: { comment },
-    });
-    editor.moveToEnd();
-  };
-
-  wrapHint = (editor, hint) => {
-    editor.wrapInline({
-      type: "hintWrapper",
-      data: { hint },
-    });
-    editor.moveToEnd();
-  };
-
-  unwrapLink = (editor) => {
-    editor.unwrapInline("link");
-  };
-
-  unwrapComment = (editor) => {
-    editor.unwrapInline("comment");
-  };
-
-  unwrapHint = (editor) => {
-    editor.unwrapInline("hint");
-  };
-
-  // Store a reference to the `editor`.
-  ref = (editor) => {
-    this.editor = editor;
-  };
-
-  render() {
-    return (
-      <>
-        <FormatToolBar>
-          {this.renderMarkButton("bold", bold)}
-          {this.renderMarkButton("italic", italic)}
-          {this.renderMarkButton("header", header)}
-          {this.renderBlockButton("numbered-list", "format_list_numbered")}
-          {this.renderHintBlockButton("hint", "format_list_numbered")}
-          <ButtonStyle onMouseDown={(event) => this.onClickLink(event)}>
-            <Icon icon={link} />
-          </ButtonStyle>
-          <ButtonStyle onMouseDown={(event) => this.onClickImage(event)}>
-            <Icon icon={image} />
-          </ButtonStyle>
-          <ButtonStyle onMouseDown={(event) => this.onClickFilm(event)}>
-            <Icon icon={film} />
-          </ButtonStyle>
-          <ButtonStyle onMouseDown={(event) => this.onClickComment(event)}>
-            <Icon icon={commentO} />
-          </ButtonStyle>
-        </FormatToolBar>
-        <Editor
-          style={AppStyles}
-          placeholder="Начните писать..."
-          ref={this.ref}
-          // schema={schema}
-          value={this.state.value}
-          onChange={this.onChange}
-          onKeyDown={this.onKeyDown}
-          renderBlock={this.renderBlock}
-          renderInline={this.renderInline}
-          renderMark={this.renderMark}
-          onDropOrPaste={this.onDropOrPaste}
-          // onPaste={this.onPaste}
-        />
+const VideoElement = ({ attributes, children, element }) => {
+  const editor = useSlate();
+  const { src } = element;
+  return (
+    <div {...attributes}>
+      <div contentEditable={false}>
         <div
-          dangerouslySetInnerHTML={{ __html: html.serialize(this.state.value) }}
-        ></div>
-      </>
-    );
-  }
+          style={{
+            padding: "75% 0 0 0",
+            position: "relative",
+          }}
+        >
+          <iframe
+            src={`${src}?title=0&byline=0&portrait=0`}
+            frameBorder="0"
+            style={{
+              position: "absolute",
+              top: "0",
+              left: "0",
+              width: "100%",
+              height: "100%",
+            }}
+          />
+        </div>
+        <p></p>
+        {/* <UrlInput
+          url={url}
+          onChange={(val) => {
+            const path = ReactEditor.findPath(editor, element);
+            const newProperties: Partial<SlateElement> = {
+              url: val,
+            };
+            Transforms.setNodes(editor, newProperties, { at: path });
+          }}
+        /> */}
+      </div>
+      {children}
+    </div>
+  );
+};
 
-  // Render a Slate block.
-  renderBlock = (props, editor, next) => {
-    // console.log("Render Block!!!")
-    const { attributes, node, isFocused, children } = props;
-    // console.log(props)
-    switch (node.type) {
-      case "paragraph":
-        return <p {...attributes}>{children}</p>;
-      case "list-item":
-        return <li {...attributes}>{children}</li>;
-      case "numbered-list":
-        return <ol {...attributes}>{children}</ol>;
-      case "hint": {
-        return <Div data-text={"1111"}>{children}</Div>;
-      }
-      case "code":
-        return <CodeNode {...props} />;
-      case "image": {
-        const src = node.data.get("src");
-        return <Img {...attributes} src={src} />;
-      }
-      case "video": {
-        const src = node.data.get("src");
-        return (
-          <Iframe
-            {...attributes}
-            src={src}
-            frameborder="0"
-            tabindex="0"
-            allow="autoplay"
-            data-translatedyoutubelang="ru"
-            allowFullScreen
-          ></Iframe>
-        );
-      }
-      default: {
-        return next();
-      }
-    }
-  };
+const UrlInput = ({ url, onChange }) => {
+  const [value, setValue] = React.useState(url);
+  return (
+    <input
+      value={value}
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        marginTop: "5px",
+        boxSizing: "border-box",
+      }}
+      onChange={(e) => {
+        const newUrl = e.target.value;
+        setValue(newUrl);
+        onChange(newUrl);
+      }}
+    />
+  );
+};
 
-  renderMark = (props, editor, next) => {
-    const { mark, children, attributes } = props;
-    // console.log("mark:" + mark)
-    switch (mark.type) {
-      case "bold":
-        return <BoldMark {...attributes}>{children}</BoldMark>;
-      case "italic":
-        return <ItalicMark {...attributes}>{children}</ItalicMark>;
-      case "header":
-        return <HeaderMark {...attributes}>{children}</HeaderMark>;
-      case "quote":
-        return <blockquote {...attributes}>{children}</blockquote>;
-      case "area":
-        return <div data-text={"1111"}>{children}</div>;
-      default:
-        return next();
-    }
-  };
-
-  renderInline = (props, editor, next) => {
-    const { attributes, children, node } = props;
-    switch (node.type) {
-      case "link":
-        return <LinkMark href={node.data.get("href")}>{children}</LinkMark>;
-      case "comment":
-        return (
-          <CommentStyle title={node.data.get("title")}>{children}</CommentStyle>
-        );
-      case "hint":
-        return (
-          <HintStyle data-text={node.data.get("data-text")}>
-            {children}
-          </HintStyle>
-        );
-      default:
-        return next();
-    }
-  };
-
-  onClickMark = (event, type) => {
-    event.preventDefault();
-    this.editor.toggleMark(type);
-  };
-
-  // Render a mark-toggling toolbar button.
-  renderMarkButton = (type, icon) => {
-    return (
-      <ButtonStyle onClick={(event) => this.onClickMark(event, type)}>
-        <Icon icon={icon} />
-      </ButtonStyle>
-    );
-  };
-
-  renderBlockButton = (type, icon) => {
-    let isActive = this.hasBlock(type);
-
-    if (["numbered-list"].includes(type)) {
-      const {
-        value: { document, blocks },
-      } = this.state;
-
-      if (blocks.size > 0) {
-        const parent = document.getParent(blocks.first().key);
-        isActive = this.hasBlock("list-item") && parent && parent.type === type;
-      }
-    }
-    return (
-      <ButtonStyle onMouseDown={(event) => this.onClickBlock(event, type)}>
-        <Icon icon={list} />
-      </ButtonStyle>
-    );
-  };
-
-  renderHintBlockButton = (type, icon) => {
-    // let isActive = this.hasBlock(type)
-
-    // if (['numbered-list'].includes(type)) {
-    //   const { value: { document, blocks } } = this.state
-
-    //   console.log(this.state.value)
-
-    //   if (blocks.size > 0) {
-    //     const parent = document.getParent(blocks.first().key)
-    //     console.log(parent)
-    //     isActive = this.hasBlock('list-item') && parent && parent.type === type
-    //     console.log(isActive)
-    //   }
-    // }
-
-    return (
-      <ButtonStyle onMouseDown={(event) => this.onClickHintBlock(event, type)}>
-        <Icon icon={eyeSlash} />
-      </ButtonStyle>
-    );
-  };
-
-  // On clicking the image button, prompt for an image and insert it.
-  onClickImage = (event) => {
-    event.preventDefault();
-    const src = window.prompt("Enter the URL of the image:");
-    if (!src) return;
-    this.editor.command(insertImage, src);
-  };
-
-  onClickFilm = (event) => {
-    event.preventDefault();
-    const src = window.prompt("Enter the URL of the video:");
-    if (!src) return;
-    this.editor.command(insertVideo, src);
-  };
-
-  // On drop, insert the image wherever it is dropped.
-  onDropOrPaste = (event, editor, next) => {
-    const target = editor.findEventRange(event);
-    if (!target && event.type === "drop") return next();
-
-    const transfer = getEventTransfer(event);
-    const { type, text, files } = transfer;
-
-    if (type === "files") {
-      for (const file of files) {
-        const reader = new FileReader();
-        const [mime] = file.type.split("/");
-        if (mime !== "image") continue;
-
-        reader.addEventListener("load", () => {
-          editor.command(insertImage, reader.result, target);
-        });
-
-        reader.readAsDataURL(file);
-      }
-      return;
-    }
-
-    if (type === "text") {
-      if (!isUrl(text)) return next();
-      if (!isImage(text)) return next();
-      editor.command(insertImage, text, target);
-      return;
-    }
-
-    next();
-  };
-
-  onClickHintBlock = (event, type) => {
-    event.preventDefault();
-
-    const { editor } = this;
-    const { value } = editor;
-    const { document } = value;
-    const data = window.prompt("Как назвать этот текст?");
-
-    // Handle everything but list buttons.
-    if (type !== "hint") {
-      const isActive = this.hasBlock(type);
-      const isHint = this.hasBlock("paragraph");
-
-      if (isHint) {
-        editor.setBlocks(isActive ? DEFAULT_NODE : type);
-        // .unwrapBlock('bulleted-list')
-      } else {
-        editor.setBlocks(isActive ? DEFAULT_NODE : type);
-      }
-    } else {
-      // Handle the extra wrapping required for list buttons.
-      const isList = this.hasBlock("paragraph");
-      const isType = value.blocks.some((block) => {
-        return !!document.getClosest(
-          block.key,
-          (parent) => parent.type === type
-        );
-      });
-
-      if (isList && isType) {
-        editor.setBlocks(DEFAULT_NODE).unwrapBlock("hint");
-        // .unwrapBlock('numbered-list')
-      } else if (isList) {
-        editor
-          // .unwrapBlock(
-          //   type === 'bulleted-list' ? 'numbered-list' : 'bulleted-list'
-          // )
-
-          .wrapBlock({
-            type: "hint",
-            data: { data },
-          });
-
-        // .wrapBlock('hint', 'hintdata')
-      } else {
-        editor.setBlocks("paragraph").wrapHint("type");
-      }
-    }
-  };
-
-  onClickBlock = (event, type) => {
-    event.preventDefault();
-
-    const { editor } = this;
-    const { value } = editor;
-    const { document } = value;
-
-    // Handle everything but list buttons.
-    if (type !== "numbered-list") {
-      const isActive = this.hasBlock(type);
-      const isList = this.hasBlock("list-item");
-      if (isList) {
-        editor
-          .setBlocks(isActive ? DEFAULT_NODE : type)
-          .unwrapBlock("bulleted-list")
-          .unwrapBlock("numbered-list");
-      } else {
-        editor.setBlocks(isActive ? DEFAULT_NODE : type);
-      }
-    } else {
-      // Handle the extra wrapping required for list buttons.
-      const isList = this.hasBlock("list-item");
-      const isType = value.blocks.some((block) => {
-        return !!document.getClosest(
-          block.key,
-          (parent) => parent.type === type
-        );
-      });
-
-      if (isList && isType) {
-        editor.setBlocks(DEFAULT_NODE).unwrapBlock("bulleted-list");
-      } else if (isList) {
-        editor
-          .unwrapBlock(
-            type === "bulleted-list" ? "numbered-list" : "bulleted-list"
-          )
-          .wrapBlock(type);
-      } else {
-        editor.setBlocks("list-item").wrapBlock(type);
-      }
-    }
-  };
-
-  // When clicking a link, if the selection has a link in it, remove the link.
-  // Otherwise, add a new link with an href and text.
-
-  onClickLink = (event) => {
-    event.preventDefault();
-    // console.log("Click the link!")
-    const { editor } = this;
-    const { value } = editor;
-    const hasLinks = this.hasLinks();
-    // console.log(value.selection)
-    if (hasLinks) {
-      // console.log("hasLinks")
-      this.editor.command(this.unwrapLink);
-    } else if (value.selection.isExpanded) {
-      // console.log("selection.isExpanded")
-      const href = window.prompt("Enter the URL of the link:");
-      if (href == null) {
-        return;
-      } else {
-        this.editor.command(this.wrapLink, href);
-        // console.log("Ссылка создана!")
-      }
-    } else {
-      const href = window.prompt("Enter the URL of the link:");
-      if (href == null) {
-        return;
-      } else {
-        const text = window.prompt("Enter the text for the link:");
-
-        if (text == null) {
-          return;
-        }
-
-        editor
-          .insertText(text)
-          .moveFocusBackward(text.length)
-          .command(this.wrapLink, href);
-      }
-    }
-  };
-
-  onClickComment = (event) => {
-    event.preventDefault();
-    const { editor } = this;
-    const { value } = editor;
-    const hasComments = this.hasComments();
-    if (hasComments) {
-      // console.log("hasLinks")
-      this.editor.command(this.unwrapComment);
-    } else if (value.selection.isExpanded) {
-      const comment = window.prompt("Напишите комментарий:");
-      if (comment == null) {
-        return;
-      } else {
-        this.editor.command(this.wrapComment, comment);
-      }
-    }
-  };
-
-  onClickHint = (event) => {
-    event.preventDefault();
-    const { editor } = this;
-    const { value } = editor;
-    const hasHints = this.hasHints();
-    if (hasHints) {
-      // console.log("hasLinks")
-      this.editor.command(this.unwrapHint);
-    } else if (value.selection.isExpanded) {
-      const hint = window.prompt("Напишите подсказку:");
-      if (hint == null) {
-        return;
-      } else {
-        this.editor.command(this.wrapHint, hint);
-      }
-    }
-  };
-
-  // On paste, if the text is a link, wrap the selection in a link.
-
-  onPaste = (event, editor, next) => {
-    if (editor.value.selection.isCollapsed) return next();
-
-    const transfer = getEventTransfer(event);
-    const { type, text } = transfer;
-    if (type !== "text" && type !== "html") return next();
-    if (!isUrl(text)) return next();
-
-    if (this.hasLinks()) {
-      editor.command(unwrapLink);
-    }
-
-    editor.command(wrapLink, text);
-  };
-
-  onKeyDown = (event, editor, next) => {
-    if (event.key != "b" || !event.ctrlKey) return next();
-
-    event.preventDefault();
-
-    // Determine whether any of the currently selected blocks are code blocks.
-    // const isCode = this.editor.value.blocks.some(block => block.type == 'code')
-    // console.log(isCode)
-    editor.setBlocks("code");
-
-    // let mark
-    // if (isBoldHotkey(event)) {
-    //   mark = 'bold'
-    // } else if (isItalicHotkey(event)) {
-    //   mark = 'italic'
-    // } else if (isUnderlinedHotkey(event)) {
-    //   mark = 'header'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'code'
-    // } else if (isCodeHotkey(event)) {
-    //   mark = 'quote'
-    // } else {
-    //   return next()
-    // }
-    // console.log("mark: " + mark)
-    // event.preventDefault()
-    // if(mark !== undefined){this.editor.toggleMark(mark)}
-  };
-
-  onChange = ({ value }) => {
-    this.setState({ value });
-    this.props.getEditorText(html.serialize(this.state.value));
-  };
-}
+const ImageElement = ({ attributes, children, element }) => {
+  const selected = useSelected();
+  const focused = useFocused();
+  return (
+    <div {...attributes}>
+      <div contentEditable={false}>
+        <img
+          src={element.src}
+          className={css`
+            display: block;
+            max-width: 100%;
+            max-height: 20em;
+            box-shadow: ${selected && focused ? "0 0 0 3px #B4D5FF" : "none"};
+          `}
+        />
+      </div>
+      {children}
+    </div>
+  );
+};
 
 export default App;

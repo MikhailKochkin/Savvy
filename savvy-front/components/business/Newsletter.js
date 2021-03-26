@@ -8,6 +8,7 @@ import { check } from "react-icons-kit/fa/check";
 import { facebookSquare } from "react-icons-kit/fa/facebookSquare";
 import { linkedinSquare } from "react-icons-kit/fa/linkedinSquare";
 import { instagram } from "react-icons-kit/fa/instagram";
+import { withTranslation } from "../../i18n";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient($email: String!) {
@@ -71,7 +72,7 @@ const Container = styled.div`
       flex-direction: row;
       align-items: center;
       justify-content: space-around;
-      span {
+      a {
         cursor: pointer;
         &:hover {
           color: #91e9e3;
@@ -238,7 +239,7 @@ const Container = styled.div`
   }
 `;
 
-const Newsletter = () => {
+const Newsletter = (props) => {
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
   return (
@@ -247,19 +248,29 @@ const Newsletter = () => {
         <Styles>
           <Container>
             <div className="message">
-              <div id="header">Just looking around?</div>
-              <div id="C2A">
-                Sign up for our newsletter and social media accounts
-              </div>
+              <div id="header">{props.t("newsletter_header")}</div>
+              <div id="C2A">{props.t("newsletter_С2A")}</div>
               <div className="SM">
                 <span>
-                  <Icon size={40} icon={facebookSquare} />
+                  <a target="_blank" href="https://www.facebook.com/besavvyapp">
+                    <Icon size={40} icon={facebookSquare} />
+                  </a>
                 </span>
                 <span>
-                  <Icon size={40} icon={linkedinSquare} />
+                  <a
+                    target="_blank"
+                    href="https://www.linkedin.com/company/besavvyapp"
+                  >
+                    <Icon size={40} icon={linkedinSquare} />
+                  </a>
                 </span>
                 <span>
-                  <Icon size={40} icon={instagram} />
+                  <a
+                    target="_blank"
+                    href="https://www.instagram.com/besavvylawyer/"
+                  >
+                    <Icon size={40} icon={instagram} />
+                  </a>
                 </span>
               </div>
             </div>
@@ -291,19 +302,19 @@ const Newsletter = () => {
                   <span>
                     <Icon size={25} icon={check} />
                   </span>
-                  <div>For lawyers</div>
+                  <div>{props.t("for_lawyers")}</div>
                 </div>
                 <div className="bullet">
                   <span>
                     <Icon size={25} icon={check} />
                   </span>
-                  <div>For bankers</div>
+                  <div>{props.t("for_accountants")}</div>
                 </div>
                 <div className="bullet">
                   <span>
                     <Icon size={25} icon={check} />
                   </span>
-                  <div>For consultants</div>
+                  <div>{props.t("for_consultants")}</div>
                 </div>
               </div>
             </div>
@@ -314,4 +325,4 @@ const Newsletter = () => {
   );
 };
 
-export default Newsletter;
+export default withTranslation("business")(Newsletter);

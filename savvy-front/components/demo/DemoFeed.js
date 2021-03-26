@@ -3,12 +3,9 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
 import Button from "@material-ui/core/Button";
-import MobileStepper from "@material-ui/core/MobileStepper";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
-import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
-import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
+import { NEW_SINGLE_LESSON_QUERY } from "./DemoLesson";
 import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
@@ -406,187 +403,55 @@ const Feed = (props) => {
           </div>
         </div>
         <Content className="second">
-          {props.my_result ? (
-            <>
-              {props.components.slice(0, num + 2).map((c, i) => (
-                <Block
-                  show={i === num + 1 ? "final" : "no"}
-                  className={i === num + 1 ? "final" : "no"}
-                >
-                  {c}
-                  <Mutation
-                    mutation={UPDATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      id: props.my_result.id,
-                      lessonID: props.lessonID,
-                      progress: num + 2,
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: NEW_SINGLE_LESSON_QUERY,
-                        variables: { id: props.lessonID },
-                      },
-                    ]}
-                  >
-                    {(updateLessonResult, { loading, error }) => {
-                      return (
-                        <>
-                          {props.components.length > num + 1 && i === num && (
-                            <div
-                              className="arrow_box"
-                              onClick={(e) => {
-                                if (props.my_result.progress < num + 2) {
-                                  let res = updateLessonResult();
-                                }
-                                let res2 = move();
-                              }}
-                            >
-                              <img
-                                className="arrow"
-                                src="../../static/down-arrow.svg"
-                              />
-                            </div>
-                          )}
-                        </>
-                      );
-                    }}
-                  </Mutation>
-                </Block>
-              ))}
-            </>
-          ) : (
-            <>
-              {props.components.slice(0, num + 2).map((c, i) => (
-                <Block
-                  show={i === num + 1 ? "final" : "no"}
-                  className={i === num + 1 ? "final" : "no"}
-                >
-                  {c}
-                  <Mutation
-                    mutation={CREATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      lessonID: props.lessonID,
-                      progress: num + 2,
-                    }}
-                    refetchQueries={[
-                      {
-                        query: NEW_SINGLE_LESSON_QUERY,
-                        variables: { id: props.lessonID },
-                      },
-                    ]}
-                  >
-                    {(createLessonResult, { loading, error }) => {
-                      return (
-                        <>
-                          {props.components.length > num + 1 && i === num && (
-                            <div
-                              className="arrow_box"
-                              onClick={(e) => {
-                                let res = createLessonResult();
-                                let res2 = move();
-                              }}
-                            >
-                              <img
-                                className="arrow"
-                                src="../../static/down-arrow.svg"
-                              />
-                            </div>
-                          )}
-                        </>
-                      );
-                    }}
-                  </Mutation>
-                </Block>
-              ))}
-            </>
-          )}
+          <>
+            {props.components.slice(0, num + 2).map((c, i) => (
+              <Block
+                show={i === num + 1 ? "final" : "no"}
+                className={i === num + 1 ? "final" : "no"}
+              >
+                {c}
+                <>
+                  {props.components.length > num + 1 && i === num && (
+                    <div
+                      className="arrow_box"
+                      onClick={(e) => {
+                        let res2 = move();
+                      }}
+                    >
+                      <img
+                        className="arrow"
+                        src="../../static/down-arrow.svg"
+                      />
+                    </div>
+                  )}
+                </>
+              </Block>
+            ))}
+          </>
           <Stepper>
             {props.me &&
               props.components.length === num + 1 &&
               props.next &&
               props.next.published && (
                 <>
-                  {visited.length === 0 ? (
-                    <Mutation
-                      mutation={CREATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        lessonID: props.next.id,
-                        visitsNumber: 1,
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_COURSEPAGE_QUERY,
-                          variables: { id: props.coursePageID },
-                        },
-                      ]}
-                    >
-                      {(createLessonResult, { loading, error }) => {
-                        return (
-                          <Link
-                            // The user HAS not yet visited the next lesson page
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: props.next.id,
-                                type: props.next.type.toLowerCase(),
-                              },
-                            }}
-                          >
-                            <a>
-                              <Button
-                                className={classes.button}
-                                onClick={() => {
-                                  createLessonResult();
-                                }}
-                              >
-                                {props.t("next_lesson")}
-                              </Button>
-                            </a>
-                          </Link>
-                        );
-                      }}
-                    </Mutation>
-                  ) : (
-                    <Mutation
-                      mutation={UPDATE_LESSONRESULT_MUTATION}
-                      variables={{
-                        id: visited[0].id,
-                        visitsNumber: visited[0].visitsNumber + 1,
-                      }}
-                      refetchQueries={() => [
-                        {
-                          query: SINGLE_COURSEPAGE_QUERY,
-                          variables: { id: props.coursePageID },
-                        },
-                      ]}
-                    >
-                      {(updateLessonResult, { loading, error }) => {
-                        return (
-                          <Link
-                            // The user HAS visited the next lesson page and we update it now
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: props.next.id,
-                                type: props.next.type.toLowerCase(),
-                              },
-                            }}
-                          >
-                            <a>
-                              <Button
-                                className={classes.button}
-                                onClick={() => {
-                                  updateLessonResult();
-                                }}
-                              >
-                                {props.t("next_lesson")}
-                              </Button>
-                            </a>
-                          </Link>
-                        );
-                      }}
-                    </Mutation>
-                  )}
+                  (
+                  <Link
+                    // The user HAS not yet visited the next lesson page
+                    href={{
+                      pathname: "/lesson",
+                      query: {
+                        id: props.next.id,
+                        type: props.next.type.toLowerCase(),
+                      },
+                    }}
+                  >
+                    <a>
+                      <Button className={classes.button} onClick={() => {}}>
+                        {props.t("next_lesson")}
+                      </Button>
+                    </a>
+                  </Link>
+                  )
                 </>
               )}
           </Stepper>

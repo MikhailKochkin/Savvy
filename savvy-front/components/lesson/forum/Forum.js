@@ -36,7 +36,8 @@ const CREATE_STATEMENT_MUTATION = gql`
 
 const Styles = styled.div`
   margin: 3% 0;
-  width: ${(props) => (props.story ? "50%" : "100%")};
+  /* width: ${(props) => props.width}; */
+  width: 650px;
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;

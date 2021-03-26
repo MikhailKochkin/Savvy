@@ -146,6 +146,7 @@ const TextBar = styled.div`
 
 const Window = styled.div`
   margin-left: -10px;
+  margin-bottom: 20px;
   min-height: 80px;
   border-radius: 10px;
   width: 280px;
@@ -266,7 +267,7 @@ const EditText = styled.div`
   padding: 5% 8%;
   margin: 55px auto 45px;
   @media (max-width: 1250px) {
-    width: 70%;
+    width: 750px;
   }
   @media (max-width: 900px) {
     width: 100%;
@@ -404,6 +405,7 @@ class SingleTextEditor extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
+        console.log(res, this.state.quiz.answer, this.state.quiz_guess);
         if (parseFloat(res.res) > 69) {
           this.setState({
             quiz_result: true,
@@ -543,6 +545,7 @@ class SingleTextEditor extends Component {
                       <div
                         onClick={async (e) => {
                           const res1 = this.onTest();
+                          console.log("e.target.getAttribute", e.target);
                           if (
                             e.target.getAttribute("type") === "quiz" ||
                             e.target.parentElement.getAttribute("type") ===
@@ -646,6 +649,27 @@ class SingleTextEditor extends Component {
             </div>
           )}
           <WindowColumn>
+            {this.state.showNote && (
+              <Window>
+                <div className="questionBox">
+                  <IconBlock>
+                    <div className="nameBlock">
+                      <img className="icon" src="../../static/hipster.svg" />
+                      <div className="name">BeSavvy</div>
+                    </div>
+                    <div
+                      className="cancelBlock"
+                      onClick={(e) => this.setState({ showNote: false })}
+                    >
+                      <img className="cancel" src="../../static/cancel.svg" />
+                    </div>
+                  </IconBlock>
+                </div>
+                <div className="answerBox">
+                  <Comment>{this.state.note}</Comment>
+                </div>
+              </Window>
+            )}
             {this.state.showQuiz && (
               <Window>
                 <div className="questionBox">
@@ -680,30 +704,8 @@ class SingleTextEditor extends Component {
                 </div>
               </Window>
             )}
-            {this.state.showNote && (
-              <Window>
-                <div className="questionBox">
-                  <IconBlock>
-                    <div className="nameBlock">
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
-                    </div>
-                    <div
-                      className="cancelBlock"
-                      onClick={(e) => this.setState({ showNote: false })}
-                    >
-                      <img className="cancel" src="../../static/cancel.svg" />
-                    </div>
-                  </IconBlock>
-                </div>
-                <div className="answerBox">
-                  <Comment>{this.state.note}</Comment>
-                </div>
-              </Window>
-            )}
           </WindowColumn>
         </Styles>
-
         {this.state.update && (
           <UpdateTextEditor
             lessonID={lessonID}

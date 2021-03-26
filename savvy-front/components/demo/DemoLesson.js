@@ -8,11 +8,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { CSSTransitionGroup } from "react-transition-group";
-import PleaseSignIn from "../auth/PleaseSignIn";
-import AreYouEnrolled from "../auth/AreYouEnrolled";
-import StoryEx from "./StoryEx";
-import { useUser } from "../User";
-import Panel from "./Panel";
+import DemoStoryEx from "./DemoStoryEx";
+// import Panel from "./Panel";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -399,14 +396,49 @@ const LessonPart = styled.div`
   }
 `;
 
-const NewSingleLesson = (props) => {
+const DemoLesson = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
-  const me = useUser();
-  console.log(me);
 
+  const me = {
+    company: {
+      __typename: "Company",
+      id: "ck95eoaef03600794opika5y8",
+      name: "BeSavvy",
+    },
+    coursePages: [],
+    courseVisits: [],
+    email: "mixa101094@yandex.ru",
+    id: "ckmddnbfy180981gwpn2ir82c9",
+    image: "",
+    interests: ["IP/IT", "Гражданское право"],
+    lessonResults: [],
+    lessons: [],
+    level: {
+      __typename: "UserLevel",
+      id: "ckmddnbr7181041gwpimgpqmin",
+      level: 1,
+    },
+    name: "Demo User",
+    new_subjects: [],
+    orders: [],
+    permissions: ["USER"],
+    status: "STUDENT",
+    studentFeedback: [],
+    surname: "",
+    teacherFeedback: [],
+    uni: {
+      __typename: "Uni",
+      id: "cjyimfz2e00lp07174jpder3m",
+      title: "Другой",
+      capacity: -7,
+      paidMonths: 0,
+    },
+    __typename: "User",
+    __proto__: Object,
+  };
   return (
-    <PleaseSignIn>
+    <>
       <div id="root"></div>
       <Query
         query={NEW_SINGLE_LESSON_QUERY}
@@ -438,104 +470,72 @@ const NewSingleLesson = (props) => {
           return (
             <>
               {lesson && (
-                <AreYouEnrolled
-                  openLesson={lesson.open}
-                  subject={lesson.coursePage.id}
-                >
-                  <Container>
-                    <ReactResizeDetector
-                      handleWidth
-                      handleHeight
-                      onResize={onResize}
-                    />
-
-                    <Head>
-                      {width > 800 && (
-                        <Link
-                          href={{
-                            pathname: "/coursePage",
-                            query: {
-                              id: lesson.coursePage.id,
-                            },
-                          }}
-                        >
-                          <span>
-                            <Icon size={"1.5em"} icon={arrowLeft} id="back" />
-                          </span>
-                        </Link>
-                      )}
-                      <span>
-                        {me &&
-                          (lesson.user.id === me.id ||
-                            me.permissions.includes("ADMIN")) && (
-                            <div>
-                              {/* Режим истории → */}
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: "regular",
-                                  },
-                                }}
-                              >
-                                <span>Переключить</span>
-                              </Link>
-                            </div>
-                          )}
-                      </span>
-                    </Head>
-
-                    {/* {me &&
-                      (lesson.user.id === me.id ||
-                        me.permissions.includes("ADMIN")) && (
-                        <Head2>
-                          {lesson.structure.lessonItems.length > 0 && (
-                            <div>
-                              Режим истории →
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: "regular",
-                                  },
-                                }}
-                              >
-                                <span> Переключить</span>
-                              </Link>
-                            </div>
-                          )}
-                        </Head2>
-                      )} */}
-                    <LessonPart>
-                      <h1>
-                        Урок {lesson.number}. {lesson.name}
-                      </h1>
-                      <CSSTransitionGroup transitionName="example">
-                        <StoryEx
-                          tasks={lesson.structure.lessonItems}
-                          me={me}
-                          lesson={lesson}
-                          next={next}
-                          my_result={my_result}
-                          coursePageID={lesson.coursePage.id}
-                        />
-                      </CSSTransitionGroup>
-                    </LessonPart>
-                    {/* {me && (
-                      <Panel level={me.level.level} change={lesson.change} />
-                    )} */}
-                  </Container>{" "}
-                </AreYouEnrolled>
+                <Container>
+                  <ReactResizeDetector
+                    handleWidth
+                    handleHeight
+                    onResize={onResize}
+                  />
+                  <Head>
+                    {width > 800 && (
+                      <Link
+                        href={{
+                          pathname: "/coursePage",
+                          query: {
+                            id: lesson.coursePage.id,
+                          },
+                        }}
+                      >
+                        <span>
+                          <Icon size={"1.5em"} icon={arrowLeft} id="back" />
+                        </span>
+                      </Link>
+                    )}
+                    <span>
+                      {me &&
+                        (lesson.user.id === me.id ||
+                          me.permissions.includes("ADMIN")) && (
+                          <div>
+                            {/* Режим истории → */}
+                            <Link
+                              href={{
+                                pathname: "/lesson",
+                                query: {
+                                  id: lesson.id,
+                                  type: "regular",
+                                },
+                              }}
+                            >
+                              <span>Переключить</span>
+                            </Link>
+                          </div>
+                        )}
+                    </span>
+                  </Head>
+                  <LessonPart>
+                    <h1>
+                      Урок {lesson.number}. {lesson.name}
+                    </h1>
+                    <CSSTransitionGroup transitionName="example">
+                      <DemoStoryEx
+                        tasks={lesson.structure.lessonItems}
+                        me={me}
+                        lesson={lesson}
+                        next={next}
+                        my_result={my_result}
+                        coursePageID={lesson.coursePage.id}
+                      />
+                    </CSSTransitionGroup>
+                  </LessonPart>
+                </Container>
               )}
             </>
           );
         }}
       </Query>
-    </PleaseSignIn>
+    </>
   );
 };
 
-export default NewSingleLesson;
+export default DemoLesson;
 export { NEW_SINGLE_LESSON_QUERY };

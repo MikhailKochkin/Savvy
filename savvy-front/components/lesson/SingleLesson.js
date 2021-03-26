@@ -14,6 +14,7 @@ import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
 import QuizGroup from "./quizes/QuizGroup";
 import ProblemGroup from "./problems/ProblemGroup";
+import NewProblem from "./problems/NewProblem";
 import ConstructorGroup from "./constructions/ConstructorGroup";
 import TextEditorGroup from "./textEditors/TextEditorGroup";
 import PleaseSignIn from "../auth/PleaseSignIn";
@@ -742,6 +743,9 @@ const SingleLesson = (props) => {
                             </Center>
                           )}
                         </>
+                      )}
+                      {page === "newProblem" && (
+                        <NewProblem lesson={lesson} me={me} />
                       )}
                       {page === "problem" && (
                         <>

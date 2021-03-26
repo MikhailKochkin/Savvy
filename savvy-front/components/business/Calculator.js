@@ -1,20 +1,28 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { withTranslation } from "../../i18n";
+
+const Divider1 = styled.div``;
 
 const Styles = styled.div`
-  height: 60vh;
+  min-height: 80vh;
   width: 100vw;
-  background: #f3f0ea;
+  background: #f5f5f5;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   #header {
     width: 80%;
     font-size: 2.8rem;
-    font-weight: bold;
-    margin-bottom: 3%;
+    margin: 3% 0;
     text-align: left;
+    line-height: 4rem;
+    #header_text {
+      width: 70%;
+      font-weight: bold;
+    }
     .animated {
       text-indent: 8px;
       border-bottom: 5px solid #91e9e2;
@@ -99,48 +107,57 @@ const Styles = styled.div`
       font-size: 2.2rem;
       font-weight: bold;
       text-align: center;
+      #header_text {
+        width: 100%;
+      }
     }
   }
 `;
 
 const Box = styled.div`
-  height: 50%;
+  height: 250px;
   width: 80%;
   background: white;
   border-radius: 6px;
+  padding: 10px 30px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   .row {
     width: 90%;
     height: 30%;
     display: flex;
     flex-direction: row;
-    align-content: center;
-    justify-content: space-around;
-    margin-bottom: 15px;
+    align-content: flex-start;
+    justify-content: flex-start;
   }
   .data {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    width: 25%;
-    font-weight: bold;
+    justify-content: flex-start;
     margin-right: 20px;
   }
   .text_area {
     display: flex;
-    width: 60%;
+    /* margin-left: 15px; */
     flex-direction: column;
     justify-content: center;
     align-content: center;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 2.2rem;
+  }
+  .arrow_area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin-left: 15px;
+    font-size: 2.2rem;
   }
   .input_area {
     display: flex;
-    width: 40%;
+    /* width: 200px; */
     flex-direction: column;
     justify-content: center;
     align-content: center;
@@ -153,37 +170,63 @@ const Box = styled.div`
     border: 1px solid #e0e0e0;
     border-radius: 6px;
     height: 60%;
+    font-size: 2.2rem;
     text-align: center;
+    width: 100px;
   }
   .sum {
-    width: 90%;
+    width: 35%;
     padding-left: 1%;
-    padding-top: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
     font-size: 2.2rem;
-    font-weight: bold;
-    border-top: 3px solid #91e9e3;
+    /* font-weight: bold; */
+    span {
+      color: #91e9e3;
+    }
+    /* border-top: 3px solid #91e9e3; */
+  }
+  .explainer {
+    width: 100%;
+    border-top: 2px solid #91e9e2;
+    padding-top: 10px;
   }
   @media (max-width: 800px) {
     height: auto;
     margin: 20px 0;
+    align-items: center;
+    padding: 10px 10px;
+
     .row {
       width: 90%;
       height: 30%;
       display: flex;
       flex-direction: column;
       align-content: center;
-      justify-content: space-around;
+      justify-content: center;
       margin-bottom: 15px;
     }
+    .arrow_area {
+      margin: 0;
+    }
+    input {
+      margin: 10px 0;
+    }
+
     .data {
-      height: 45px;
+      /* height: 45px; */
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
       /* background: yellow; */
       margin-bottom: 10px;
     }
     .text_area {
       /* width: 60%; */
       text-align: left;
-      font-size: 1.3rem;
     }
     .data {
       width: 90%;
@@ -194,34 +237,58 @@ const Box = styled.div`
   }
 `;
 
-const Calculator = () => {
-  const [employees, setEmployees] = useState(50);
+const Explainer = styled.div`
+  margin: 20px 0;
+  width: 80%;
+  font-size: 2rem;
+`;
+
+const Calculator = (props) => {
+  const [employees, setEmployees] = useState(30);
   const [salary, setSalary] = useState(42000);
   const [hours, setHours] = useState(120);
   const [days, setDays] = useState(14);
   return (
-    <Styles>
-      <div id="header">
-        This is how much you spend on training{" "}
-        <span className="animated"></span>{" "}
-      </div>
-      <Box>
-        <div className="row">
-          <div className="data">
-            <div className="text_area">
-              <div>№ of employees a year</div>
+    <>
+      <Styles>
+        <div id="header">
+          <div id="header_text">{props.t("calulator_header")}</div>
+          {/* <span className="animated"></span>{" "} */}
+        </div>
+        <Box>
+          <div className="row">
+            <div className="data">
+              <div className="text_area">
+                <div> {props.t("calulator_number_employees")}</div>
+              </div>
+              <div className="input_area">
+                <input
+                  type="number"
+                  defaultValue={employees}
+                  onChange={(e) => setEmployees(parseInt(e.target.value))}
+                />
+              </div>
+              <div className="arrow_area">➡️</div>
             </div>
-            <div className="input_area">
-              <input
-                type="number"
-                defaultValue={employees}
-                onChange={(e) => setEmployees(parseInt(e.target.value))}
-              />
+            <div className="sum">
+              {" "}
+              {isNaN(salary * hours * employees)
+                ? "..."
+                : new Intl.NumberFormat("de-DE", {
+                    style: "currency",
+                    currency: "RUB",
+                  }).format(
+                    0.6 * employees * (((80000 * 12) / 1920) * 224) +
+                      0.4 * employees * (((240000 * 12) / 1920) * 224)
+                    // employees * ((salary / 1920) * days * 8) +
+                    //   ((salary * 3) / 1920) * hours
+                  )}{" "}
+              в год
             </div>
-          </div>
-          <div className="data">
+
+            {/* <div className="data">
             <div className="text_area">
-              <div>№ of days spent on learning in a year</div>
+              <div>{props.t("calulator_number_days")}</div>
             </div>
             <div className="input_area">
               <input
@@ -233,7 +300,7 @@ const Calculator = () => {
           </div>
           <div className="data">
             <div className="text_area">
-              <div>Average salary before taxes</div>
+              <div>{props.t("calulator_salary")}</div>
             </div>
             <div className="input_area">
               <input
@@ -245,7 +312,7 @@ const Calculator = () => {
           </div>
           <div className="data">
             <div className="text_area">
-              <div>Hours of seniors spent in a year</div>
+              <div>{props.t("calulator_hours_seniors")}</div>
             </div>
             <div className="input_area">
               <input
@@ -254,25 +321,26 @@ const Calculator = () => {
                 onChange={(e) => setHours(parseInt(e.target.value))}
               />
             </div>
+          </div>*/}
           </div>
-        </div>
-        {console.log(isNaN(salary * hours * employees))}
-        <div className="sum">
-          = up to{" "}
-          {isNaN(salary * hours * employees)
-            ? "..."
-            : new Intl.NumberFormat("de-DE", {
-                style: "currency",
-                currency: "EUR",
-              }).format(
-                employees * ((salary / 1920) * days * 8) +
-                  ((salary * 3) / 1920) * hours
-              )}{" "}
-          Euros / month
-        </div>
-      </Box>
-    </Styles>
+          <div className="explainer">
+            <div>Эта цифра складывается из:</div>
+            <ul>
+              <li>Времени младших сотрудников, которое уходит на обучение</li>
+              <li>
+                Времени старших юристов, которое уходит на проведение внутренних
+                мероприятий
+              </li>
+              <li>
+                Времени старших юристов, которое уходит на индивидуальную работу
+                с младшими
+              </li>
+            </ul>
+          </div>
+        </Box>
+      </Styles>
+    </>
   );
 };
 
-export default Calculator;
+export default withTranslation("business")(Calculator);
