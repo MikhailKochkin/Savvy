@@ -18,13 +18,13 @@ const SINGLE_SHOT_QUERY = gql`
 `;
 
 const UPDATE_SHOTS_MUTATION = gql`
-  mutation CREATE_SHOTS_MUTATION(
-    $id: ID!
+  mutation UPDATE_SHOTS_MUTATION(
+    $id: String!
     $title: String!
     $parts: [String!]
     $comments: [String!]
   ) {
-    createShot(id: $id, title: $title, parts: $parts, comments: $comments) {
+    updateShot(id: $id, title: $title, parts: $parts, comments: $comments) {
       id
     }
   }
@@ -124,13 +124,21 @@ class CreateShot extends Component {
     final_p: [],
     final_c: [],
     steps: this.props.comments.length,
+    comments: this.props.comments,
+    parts: this.props.parts,
+    title: this.props.title,
   };
 
-  myCallback = (dataFromChild, name) => {
-    let st = name;
-    this.setState({
-      [st]: dataFromChild,
-    });
+  myCallback = (dataFromChild, name, index) => {
+    if (name === "part") {
+      let arr = [...this.state.parts];
+      arr[index] = dataFromChild;
+      this.setState({ parts: arr });
+    } else if (name === "comment") {
+      let arr = [...this.state.comments];
+      arr[index] = dataFromChild;
+      this.setState({ comments: arr });
+    }
   };
 
   more = () => {
@@ -147,22 +155,23 @@ class CreateShot extends Component {
     }
   };
 
-  save = () => {
-    let parts = [];
-    let comments = [];
-    Object.entries(this.state)
-      .filter((text) => text[0].includes("part"))
-      .map((t) => parts.push(t[1]));
-    Object.entries(this.state)
-      .filter((text) => text[0].includes("comment"))
-      .map((t) => comments.push(t[1]));
-    parts = parts.filter((el) => el !== undefined);
-    comments = comments.filter((el) => el !== undefined);
-    this.setState({
-      final_p: parts,
-      final_c: comments,
-    });
-  };
+  // save = () => {
+  //   let parts = [];
+  //   let comments = [];
+  //   Object.entries(this.state)
+  //     .filter((text) => text[0].includes("part"))
+  //     .map((t) => parts.push(t[1]));
+  //   Object.entries(this.state)
+  //     .filter((text) => text[0].includes("comment"))
+  //     .map((t) => comments.push(t[1]));
+  //   parts = parts.filter((el) => el !== undefined);
+  //   comments = comments.filter((el) => el !== undefined);
+  //   console.log(parts, comments);
+  //   this.setState({
+  //     final_p: parts,
+  //     final_c: comments,
+  //   });
+  // };
 
   handleChange = (e) => {
     e.preventDefault();
@@ -173,25 +182,23 @@ class CreateShot extends Component {
   render() {
     const { parts, comments, shotID } = this.props;
     let rows = [];
-    let part;
-    let comment;
     _.times(this.state.steps, (i) => {
-      part = `part${i + 1}`;
-      comment = `comment${i + 1}`;
+      // part = `part${i + 1}`;
+      // comment = `comment${i + 1}`;
       rows.push(
         <Row>
           <Frame>
             <DynamicLoadedEditor
-              index={i + 1}
-              name={part}
+              index={i}
+              name="part"
               getEditorText={this.myCallback}
-              placeholder={parts[i]}
+              value={parts[i]}
             />
             <div className="com">
               <DynamicLoadedEditor
-                index={i + 1}
-                name={comment}
-                placeholder={comments[i]}
+                index={i}
+                name="comment"
+                value={comments[i]}
                 getEditorText={this.myCallback}
               />
             </div>
@@ -204,8 +211,8 @@ class CreateShot extends Component {
         mutation={UPDATE_SHOTS_MUTATION}
         variables={{
           id: shotID,
-          parts: this.state.final_p,
-          comments: this.state.final_c,
+          parts: this.state.parts,
+          comments: this.state.comments,
           title: this.state.title,
         }}
         refetchQueries={() => [
@@ -225,37 +232,36 @@ class CreateShot extends Component {
               placeholder="Название документа"
               autoFocus
               required
-              defaultValue={this.props.title}
+              value={this.state.title}
               onChange={this.handleChange}
             />
             {rows.map((row) => row)}
             <More onClick={this.more}>Новый блок</More>
             <Remove onClick={this.remove}>Убрать блок</Remove>
-            {/* <Save
-              onClick={async e => {
+            <Save
+              onClick={async (e) => {
                 e.preventDefault();
-                document.getElementById("Message").style.display = "block";
-                setTimeout(function() {
-                  document.getElementById("Message")
-                    ? (document.getElementById("Message").style.display =
-                        "none")
-                    : "none";
-                }, 2500);
-                if (
-                  this.state.comment1 === undefined ||
-                  this.state.part1 === undefined
-                ) {
-                  alert("В вашем документе недостаточно частей");
-                } else {
-                  const res = await this.save();
-                  const res2 = await updateShot();
-                  console.log("Success");
-                }
+                // document.getElementById("Message").style.display = "block";
+                // setTimeout(function() {
+                //   document.getElementById("Message")
+                //     ? (document.getElementById("Message").style.display =
+                //         "none")
+                //     : "none";
+                // }, 2500);
+                // if (
+                //   this.state.comment1 === undefined ||
+                //   this.state.part1 === undefined
+                // ) {
+                //   alert("В вашем документе недостаточно частей");
+                // } else {
+                const res2 = await updateShot();
+                //   console.log("Success");
+                // }
               }}
             >
               {loading ? "Изменяем..." : "Изменить"}
             </Save>
-            <Message id="Message">Вы внесли изменения!</Message> */}
+            {/* <Message id="Message">Вы внесли изменения!</Message> */}
           </TestCreate>
         )}
       </Mutation>

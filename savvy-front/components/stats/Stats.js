@@ -70,11 +70,11 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         #     createdAt
         #   }
         # }
-        # notes {
-        #   id
-        #   text
-        #   next
-        # }
+        notes {
+          id
+          text
+          next
+        }
         problems {
           id
           text

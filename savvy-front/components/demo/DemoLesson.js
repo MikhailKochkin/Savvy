@@ -513,9 +513,7 @@ const DemoLesson = (props) => {
                     </span>
                   </Head>
                   <LessonPart>
-                    <h1>
-                      Урок {lesson.number}. {lesson.name}
-                    </h1>
+                    <h1>Демо урок</h1>
                     <CSSTransitionGroup transitionName="example">
                       <DemoStoryEx
                         tasks={lesson.structure.lessonItems}

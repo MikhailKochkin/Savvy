@@ -91,6 +91,8 @@ const Construction = objectType({
     t.model.hint();
     t.model.name();
     t.model.type();
+    t.model.text();
+    t.model.hasText();
     t.model.complexity();
     t.model.variants();
     t.model.answer();
@@ -159,6 +161,7 @@ const Statement = objectType({
   definition(t) {
     t.model.id();
     t.model.text();
+    t.model.comments();
     t.model.user();
     t.model.userId();
     t.model.forumId();

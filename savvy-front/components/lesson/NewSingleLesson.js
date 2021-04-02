@@ -155,6 +155,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         statements {
           id
           text
+          comments
           createdAt
           user {
             id
@@ -403,8 +404,6 @@ const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
   const me = useUser();
-  console.log(me);
-
   return (
     <PleaseSignIn>
       <div id="root"></div>
@@ -424,7 +423,6 @@ const NewSingleLesson = (props) => {
               </Progress>
             );
           let lesson = data.lesson;
-          console.log(123, lesson);
           // if (lesson === undefined) return <Reload />;
           let next = lesson.coursePage.lessons.find(
             (l) => l.number === lesson.number + 1

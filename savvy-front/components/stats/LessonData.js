@@ -7,6 +7,7 @@ import Loading from "../Loading";
 import { useLazyQuery, gql } from "@apollo/client";
 import CreateFeedback from "./CreateFeedback";
 import TestResult from "./results/TestResult";
+import Note from "./results/Note";
 import TexteditorResult from "./results/TexteditorResult";
 import QuizResult from "./results/QuizResult";
 import ProblemResult from "./results/ProblemResult";
@@ -195,7 +196,6 @@ const LessonData = (props) => {
   const [show, setShow] = useState(false);
   const { index, lesson, student, coursePageID, res } = props;
   moment.locale("ru");
-
   const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS);
   if (loading) return <Loading />;
   if (error) return `Error! ${error.message}`;
@@ -243,7 +243,76 @@ const LessonData = (props) => {
       )}
       {show && data !== undefined && (
         <>
-          <TestResult
+          {lesson.structure.lessonItems.map((l) => {
+            console.log(l.type.toLowerCase());
+            if (l.type.toLowerCase() == "note") {
+              console.log();
+              return (
+                <Note
+                  note={lesson.notes.filter((n) => n.id === l.id)}
+                  // results={data.stats.testResults}
+                  // student={student}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "newtest") {
+              return (
+                <TestResult
+                  newTests={lesson.newTests.filter((t) => t.id === l.id)}
+                  results={data.stats.testResults}
+                  student={student}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "problem") {
+              return (
+                <ProblemResult
+                  problems={lesson.problems.filter((t) => t.id === l.id)}
+                  student={student}
+                  results={data.stats.problemResults}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "quiz") {
+              return (
+                <QuizResult
+                  quizes={lesson.quizes.filter((t) => t.id === l.id)}
+                  student={student}
+                  results={data.stats.quizResults}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "texteditor") {
+              return (
+                <TexteditorResult
+                  texteditors={lesson.texteditors.filter((t) => t.id === l.id)}
+                  student={student}
+                  results={data.stats.textEditorResults}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "construction") {
+              return (
+                <ConstructionResult
+                  constructions={lesson.constructions.filter(
+                    (t) => t.id === l.id
+                  )}
+                  student={student}
+                  results={data.stats.constructionResults}
+                />
+              );
+            }
+            if (l.type.toLowerCase() == "document") {
+              return (
+                <DocumentResult
+                  documents={lesson.documents.filter((t) => t.id === l.id)}
+                  student={student}
+                  results={data.stats.documentResults}
+                />
+              );
+            }
+          })}
+          {/* <TestResult
             newTests={lesson.newTests}
             results={data.stats.testResults}
             student={student}
@@ -272,7 +341,7 @@ const LessonData = (props) => {
             documents={lesson.documents}
             student={student}
             results={data.stats.documentResults}
-          />
+          /> */}
           <Feedback feedback={data.stats.feedbacks} lesson={lesson.id} />
           <CreateFeedback
             coursePage={coursePageID}

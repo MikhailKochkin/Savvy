@@ -41,12 +41,16 @@ const ChooseButton = styled.button`
   }
 `;
 
+const Styles = styled.div``;
+
 const SingleLesson_MobileMenu = (props) => {
-  const getDataMob = (e) => {
+  const onSwitchMob = (e) => {
     e.preventDefault();
     const name = e.target.getAttribute("name");
-    setPage(name);
+    props.getDataMob(name);
   };
+
+  const { lesson } = props;
   return (
     <Styles>
       <div id="mySidenav2" className="sidenav">
@@ -68,6 +72,14 @@ const SingleLesson_MobileMenu = (props) => {
             <ChooseButton name="note" onClick={(e) => onSwitchMob(e)}>
               {" "}
               Лонгриды{" "}
+            </ChooseButton>
+          </ButtonZone>
+        )}
+        {lesson.shots.length > 0 && (
+          <ButtonZone>
+            <ChooseButton name="shots" onClick={(e) => onSwitchMob(e)}>
+              {" "}
+              Алгоритм{" "}
             </ChooseButton>
           </ButtonZone>
         )}

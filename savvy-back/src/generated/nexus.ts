@@ -223,6 +223,7 @@ export interface NexusGenInputs {
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     constructionResults?: NexusGenInputs['ConstructionResultListRelationFilter'] | null; // ConstructionResultListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    hasText?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
     hint?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
@@ -231,6 +232,7 @@ export interface NexusGenInputs {
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     NOT?: NexusGenInputs['ConstructionWhereInput'][] | null; // [ConstructionWhereInput!]
     OR?: NexusGenInputs['ConstructionWhereInput'][] | null; // [ConstructionWhereInput!]
+    text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     type?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -1263,8 +1265,6 @@ export interface NexusGenInputs {
     sandboxPageID?: NexusGenInputs['StringFilter'] | null; // StringFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
-    User?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
-    userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     video?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   ShotListRelationFilter: { // input type
@@ -1324,6 +1324,7 @@ export interface NexusGenInputs {
   }
   StatementWhereInput: { // input type
     AND?: NexusGenInputs['StatementWhereInput'][] | null; // [StatementWhereInput!]
+    comments?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     forum?: NexusGenInputs['ForumWhereInput'] | null; // ForumWhereInput
     forumId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1615,7 +1616,6 @@ export interface NexusGenInputs {
     resetToken?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetTokenExpiry?: NexusGenInputs['FloatNullableFilter'] | null; // FloatNullableFilter
     resume?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
-    sandbox?: NexusGenInputs['SandboxListRelationFilter'] | null; // SandboxListRelationFilter
     sandboxPageGoals?: NexusGenInputs['SandboxPageGoalListRelationFilter'] | null; // SandboxPageGoalListRelationFilter
     sandboxPages?: NexusGenInputs['SandboxPageListRelationFilter'] | null; // SandboxPageListRelationFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
@@ -1722,11 +1722,13 @@ export interface NexusGenObjects {
     answer: string[]; // [String!]!
     complexity?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    hasText: boolean; // Boolean!
     hint?: string | null; // String
     id: string; // String!
     lessonId: string; // String!
     lessonID: string; // String!
     name: string; // String!
+    text?: string | null; // String
     type: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
@@ -1987,6 +1989,7 @@ export interface NexusGenObjects {
     message?: string | null; // String
   }
   Statement: { // root type
+    comments: string[]; // [String!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     forumId?: string | null; // String
     id: string; // String!
@@ -2143,12 +2146,14 @@ export interface NexusGenFieldTypes {
     complexity: number | null; // Int
     constructionResults: NexusGenRootTypes['ConstructionResult'][]; // [ConstructionResult!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    hasText: boolean; // Boolean!
     hint: string | null; // String
     id: string; // String!
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonId: string; // String!
     lessonID: string; // String!
     name: string; // String!
+    text: string | null; // String
     type: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
@@ -2382,6 +2387,7 @@ export interface NexusGenFieldTypes {
     updatePublished: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateQuiz: NexusGenRootTypes['Quiz'] | null; // Quiz
     updateRating: NexusGenRootTypes['Rating'] | null; // Rating
+    updateShot: NexusGenRootTypes['Shot'] | null; // Shot
     updateStatement: NexusGenRootTypes['Statement'] | null; // Statement
     updateTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     updateUser: NexusGenRootTypes['User'] | null; // User
@@ -2578,6 +2584,7 @@ export interface NexusGenFieldTypes {
     message: string | null; // String
   }
   Statement: { // field return type
+    comments: string[]; // [String!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     forum: NexusGenRootTypes['Forum'] | null; // Forum
     forumId: string | null; // String
@@ -2748,12 +2755,14 @@ export interface NexusGenFieldTypeNames {
     complexity: 'Int'
     constructionResults: 'ConstructionResult'
     createdAt: 'DateTime'
+    hasText: 'Boolean'
     hint: 'String'
     id: 'String'
     lesson: 'Lesson'
     lessonId: 'String'
     lessonID: 'String'
     name: 'String'
+    text: 'String'
     type: 'String'
     updatedAt: 'DateTime'
     user: 'User'
@@ -2987,6 +2996,7 @@ export interface NexusGenFieldTypeNames {
     updatePublished: 'Lesson'
     updateQuiz: 'Quiz'
     updateRating: 'Rating'
+    updateShot: 'Shot'
     updateStatement: 'Statement'
     updateTextEditor: 'TextEditor'
     updateUser: 'User'
@@ -3183,6 +3193,7 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
   }
   Statement: { // field return type name
+    comments: 'String'
     createdAt: 'DateTime'
     forum: 'Forum'
     forumId: 'String'
@@ -3478,9 +3489,11 @@ export interface NexusGenArgTypes {
     }
     createConstruction: { // args
       answer?: Array<string | null> | null; // [String]
+      hasText?: boolean | null; // Boolean
       hint?: string | null; // String
       lessonId?: string | null; // String
       name?: string | null; // String
+      text?: string | null; // String
       type?: string | null; // String
       variants?: Array<string | null> | null; // [String]
     }
@@ -3500,6 +3513,7 @@ export interface NexusGenArgTypes {
     }
     createCourseVisit: { // args
       coursePageId?: string | null; // String
+      studentId?: string | null; // String
       visitsNumber?: number | null; // Int
     }
     createDocument: { // args
@@ -3800,9 +3814,15 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       rating?: number | null; // Int
     }
-    updateStatement: { // args
+    updateShot: { // args
+      comments?: Array<string | null> | null; // [String]
       id?: string | null; // String
-      text?: string | null; // String
+      parts?: Array<string | null> | null; // [String]
+      title?: string | null; // String
+    }
+    updateStatement: { // args
+      comments?: Array<string | null> | null; // [String]
+      id?: string | null; // String
     }
     updateTextEditor: { // args
       complexity?: number | null; // Int

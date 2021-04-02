@@ -217,7 +217,6 @@ const CreateNewTest = (props) => {
                   setNum(num + 1);
                   let old_answers = answers;
                   let old_correct = correct;
-                  console.log(old_answers, old_correct);
                   setAnswers([...old_answers, ""]);
                   setCorrect([...old_correct, false]);
                 }}
@@ -277,14 +276,12 @@ const CreateNewTest = (props) => {
             </Comment>
             <Button
               onClick={async (e) => {
-                console.log(0);
                 e.preventDefault();
                 const res = await setAnswers(answers.filter((an) => an !== ""));
                 let arr = correct;
                 arr.length = answers.filter((an) => an !== "").length;
                 const res2 = await setCorrect(arr);
                 createNewTest();
-                console.log(1);
                 alert("Готово!");
               }}
             >

@@ -14,6 +14,8 @@ const CREATE_CONSTRUCTION_MUTATION = gql`
     $answer: [String!]
     $hint: String
     $type: String!
+    $text: String!
+    $hasText: Boolean!
     $lessonId: String!
   ) {
     createConstruction(
@@ -22,6 +24,8 @@ const CREATE_CONSTRUCTION_MUTATION = gql`
       variants: $variants
       answer: $answer
       hint: $hint
+      text: $text
+      hasText: $hasText
       type: $type
     ) {
       id
@@ -223,12 +227,19 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   ssr: false,
 });
 
+const DynamicLoadedEditor2 = dynamic(import("../editor/Editor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
 const CreateConstructor = (props) => {
   const [name, setName] = useState("");
   const [variants, setVariants] = useState(["c"]);
   const [answer, setAnswer] = useState("");
   const [answersNumber, setAnswersNumber] = useState("");
   const [hint, setHint] = useState("");
+  const [text, setText] = useState("");
+  const [hasText, setHasText] = useState(false);
   const [type, setType] = useState("equal");
 
   const myCallback = (dataFromChild, index) => {
@@ -255,7 +266,11 @@ const CreateConstructor = (props) => {
     setAnswer(correct);
   };
 
-  let text;
+  const textCallBack = (dataFromChild) => {
+    setText(dataFromChild);
+  };
+
+  let t;
   const { lessonID } = props;
   return (
     <Center>
@@ -269,6 +284,7 @@ const CreateConstructor = (props) => {
         <div>Количество частей конструктора не ограничено.</div>
       </Advice>
       <Title>Новый конструктор</Title>
+      <DynamicLoadedEditor2 getEditorText={textCallBack} />
       <Header>
         <ChooseTag>
           <p> Метод проверки </p>
@@ -297,7 +313,7 @@ const CreateConstructor = (props) => {
       </Box>
       <Variants>
         {_.times(variants.length, (i) => {
-          text = `${i + 1}.`;
+          t = `${i + 1}.`;
           return (
             <TextBox>
               <div className="header">{i + 1}.</div>
@@ -354,6 +370,8 @@ const CreateConstructor = (props) => {
           name,
           hint,
           type,
+          text,
+          hasText,
         }}
         refetchQueries={() => [
           {

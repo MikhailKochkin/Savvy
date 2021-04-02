@@ -568,7 +568,7 @@ const PurchaseEmail = (name, course, coursePageID) => `
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        &copy; 2020 BeSavvy
+                        &copy; 2021 BeSavvy
                       </p>
                     </td>
                   </tr>

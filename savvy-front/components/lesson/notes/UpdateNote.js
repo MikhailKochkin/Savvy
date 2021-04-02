@@ -111,7 +111,7 @@ const UpdateNote = (props) => {
             <option value={5}>5</option>
           </select>
         </Complexity>
-        <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+        <DynamicLoadedEditor getEditorText={getText} value={text} />
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
           variables={{

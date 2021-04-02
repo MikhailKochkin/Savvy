@@ -17,6 +17,7 @@ const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
 const NextWeekEmail = require("../emails/nextWeek");
+const CommentEmail = require("../emails/Comment");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 
@@ -250,7 +251,7 @@ const Mutation = mutationType({
                 connect: { id: args.id },
               },
               coursePage: {
-                connect: { id: args.coursePage },
+                connect: { id: coursePageId },
               },
               visitsNumber: 1,
             },
@@ -300,8 +301,9 @@ const Mutation = mutationType({
       args: {
         visitsNumber: intArg(),
         coursePageId: stringArg(),
+        studentId: stringArg(),
       },
-      resolve: async (_, { visitsNumber, coursePageId }, ctx) => {
+      resolve: async (_, { visitsNumber, coursePageId, studentId }, ctx) => {
         const courseVisit = await ctx.prisma.courseVisit.create({
           data: {
             coursePage: {
@@ -311,7 +313,7 @@ const Mutation = mutationType({
             },
             student: {
               connect: {
-                id: ctx.res.req.userId,
+                id: studentId,
               },
             },
             visitsNumber,
@@ -1009,6 +1011,8 @@ const Mutation = mutationType({
         hint: stringArg(),
         variants: list(stringArg()),
         answer: list(stringArg()),
+        text: stringArg(),
+        hasText: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -1401,15 +1405,43 @@ const Mutation = mutationType({
       type: "Statement",
       args: {
         id: stringArg(),
-        text: stringArg(),
+        // text: stringArg(),
+        comments: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
         //remove the ID from updates
         delete updates.id;
         //run the update method
+
+        const statement = await ctx.prisma.statement.findUnique({
+          where: { id: args.id },
+        });
+
+        const student = await ctx.prisma.user.findUnique({
+          where: { id: statement.userId },
+        });
+
+        const lesson = await ctx.prisma.lesson.findUnique({
+          where: { forumId: statement.forumId },
+        });
+
+        const commentEmail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: student.email,
+          Subject: "BeSavvy: ответ на комментарий по курсу",
+          HtmlBody: CommentEmail.CommentEmail(
+            student.name,
+            lesson.name,
+            lesson.id
+          ),
+        });
         return ctx.prisma.statement.update({
-          data: updates,
+          data: {
+            comments: {
+              set: [...args.comments],
+            },
+          },
           where: {
             id: args.id,
           },
@@ -1469,6 +1501,35 @@ const Mutation = mutationType({
           },
         });
         return Shot;
+      },
+    });
+    t.field("updateShot", {
+      type: "Shot",
+      args: {
+        id: stringArg(),
+        parts: list(stringArg()),
+        comments: list(stringArg()),
+        title: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const id = args.id;
+        //remove the ID from updates
+        delete args.id;
+        //run the update method
+        return ctx.prisma.shot.update({
+          data: {
+            parts: {
+              set: [...args.parts],
+            },
+            comments: {
+              set: [...args.comments],
+            },
+            title: args.title,
+          },
+          where: {
+            id,
+          },
+        });
       },
     });
     t.field("deleteShot", {
@@ -1755,6 +1816,7 @@ const Mutation = mutationType({
         isPaid: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
+        console.log(args.isPaid);
         if (args.isPaid === true) {
           const order = await ctx.prisma.order.findUnique(
             {
@@ -1764,7 +1826,7 @@ const Mutation = mutationType({
                 coursePage: true,
               },
             },
-            `{ id, user { name, email}, coursePage {id, title} }`
+            `{ id, user { id, name, email}, coursePage {id, title} }`
           );
           const notification = await client.sendEmail({
             From: "Mikhail@besavvy.app",
@@ -1776,6 +1838,22 @@ const Mutation = mutationType({
               order.coursePage.id
             ),
           });
+          // console.log(order.coursePage.id, order.user.id);
+          // const courseVisit = await ctx.prisma.courseVisit.create({
+          //   data: {
+          //     coursePage: {
+          //       connect: {
+          //         id: order.coursePage.id,
+          //       },
+          //     },
+          //     student: {
+          //       connect: {
+          //         id: order.user.id,
+          //       },
+          //     },
+          //     visitsNumber: 1,
+          //   },
+          // });
         }
         return ctx.prisma.order.update({
           data: {

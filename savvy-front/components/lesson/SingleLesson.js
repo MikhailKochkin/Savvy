@@ -249,6 +249,8 @@ const SINGLE_LESSON_QUERY = gql`
         variants
         hint
         type
+        text
+        hasText
         user {
           id
         }

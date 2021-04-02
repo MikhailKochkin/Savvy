@@ -10,6 +10,7 @@ import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
 import { withTranslation } from "../../i18n";
+import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 
 const Styles = styled.div`
   display: flex;

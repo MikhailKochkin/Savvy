@@ -101,7 +101,10 @@ const Block = (props) => {
         {value.type && value.type.toLowerCase() === "shot" ? (
           <Title>
             <div className="type">
-              Алгоритм: {shots.filter((q) => q.id === value.id)[0].title}
+              Алгоритм:{" "}
+              {shots.filter((q) => q.id === value.id).length > 0
+                ? shots.filter((q) => q.id === value.id)[0].title
+                : "Материал был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}

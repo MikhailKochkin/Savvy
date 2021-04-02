@@ -26,7 +26,7 @@ const Box = styled.div`
   }
   div {
     flex: 50%;
-    padding: 0 1%;
+    padding: 0;
     &.column {
       padding-left: 2%;
       border-left: 1px solid #edefed;

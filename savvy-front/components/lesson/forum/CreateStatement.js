@@ -8,10 +8,34 @@ import Icon from "react-icons-kit";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const CREATE_STATEMENT_MUTATION = gql`
-  mutation CREATE_STATEMENT_MUTATION($text: String!, $forum: ID!) {
+  mutation CREATE_STATEMENT_MUTATION($text: String!, $forum: String!) {
     createStatement(text: $text, forum: $forum) {
       id
     }
+  }
+`;
+
+const IconBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .icon {
+    margin: 5px;
+    border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .name {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #8f93a3;
+    width: 70px;
+    margin: 0 7px;
   }
 `;
 

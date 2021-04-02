@@ -13,6 +13,7 @@ import Forum from "./forum/Forum";
 import Document from "./documents/Document";
 import Exam from "./exams/Exam";
 import Feed from "./Feed";
+import LessonHeader from "./LessonHeader";
 
 const Container = styled.div`
   .fade-enter {
@@ -214,6 +215,7 @@ class StoryEx extends Component {
             id={el.id}
             story={true}
             lesson={lesson.id}
+            author={lesson.user.id}
             result={el.rating.filter((r) => r.user.id == me.id)[0]}
             statements={el.statements}
           />

@@ -22,7 +22,6 @@ const Styles = styled.div`
 const Feedback = (props) => {
   moment.locale("ru");
   const { feedback, lesson } = props;
-  console.log(feedback);
   return (
     <AllStyles>
       <div className="header">Отправленная обратная связь:</div>

@@ -115,7 +115,7 @@ const hello = () => {
             them! Just choose the most convenient tool for you!
           </p>
           <a
-            href="https://calendly.com/mikhail-from-besavvy/30min"
+            href="https://calendly.com/mikhail-from-besavvy/15min"
             target="_blank"
           >
             <button>Set up a meeting</button>

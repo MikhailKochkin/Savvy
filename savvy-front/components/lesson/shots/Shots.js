@@ -32,12 +32,32 @@ const Text = styled.div`
     padding: 1% 2%;
     margin: 1% 0;
   }
+  img {
+    display: block;
+    max-width: 600px;
+    max-height: 50em;
+    box-shadow: "0 0 0 2px blue;";
+  }
+  ins {
+    text-decoration: none;
+    background: #edffe7;
+    /* padding: 0.5% 0.3%; */
+  }
+  del {
+    background: #f29ca3;
+    padding: 0.5% 0;
+  }
   /* span {
     padding: 0.5% 0.3%;
   } */
-  .true {
+  /* .true {
     background: #edffe7;
     border-radius: 10px;
+  } */
+  @media (max-width: 800px) {
+    img {
+      max-width: 95%;
+    }
   }
 `;
 
@@ -52,11 +72,12 @@ const Title = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
-  width: 15%;
+  width: 100%;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
   @media (max-width: 800px) {
-    width: 25%;
+    width: 100%;
   }
 `;
 
@@ -74,6 +95,9 @@ const SwitchButton = styled.div`
   cursor: pointer;
   outline: none;
   text-align: center;
+  @media (max-width: 800px) {
+    width: 50%;
+  }
 `;
 
 const Styles = styled.div`
@@ -82,8 +106,18 @@ const Styles = styled.div`
   margin: 30px 0;
   padding: 2%;
   width: ${(props) => props.width};
+  .bar {
+    width: 80%;
+    height: 5px;
+    background: #b6bce2;
+  }
   @media (max-width: 800px) {
     width: 100%;
+    .bar {
+      width: 200px;
+      height: 5px;
+      background: #b6bce2;
+    }
   }
 `;
 
@@ -105,6 +139,13 @@ const Circle = styled.button`
       props.color ? "1px solid #C4C4C4" : "2px solid #112a62"};
     color: #112a62;
   }
+`;
+
+const Progress = styled.div`
+  background: #3f51b5;
+  width: ${(props) => props.progress};
+  height: 5px;
+  transition: all 0.5s;
 `;
 
 class Shots extends Component {
@@ -159,21 +200,23 @@ class Shots extends Component {
         {this.state.page === "show" && (
           <>
             <Title>
-              <span>Алгоритм:</span> {title}
+              <span>Решение:</span> {title}
             </Title>
             <>
               <Text>
-                {visible.map((part, index) => (
-                  <div
-                    key={index}
-                    className={index === this.state.num - 1 ? "true" : "false"}
-                  >
-                    {renderHTML(part)}
-                  </div>
-                ))}
+                <div key={this.state.num - 1}>
+                  {renderHTML(visible[this.state.num - 1])}
+                </div>
               </Text>
               <Commentary>
                 <>{renderHTML(comments[this.state.num - 1])}</>
+                {console.log(
+                  comments,
+                  parts,
+                  comments[this.state.num],
+                  comments[this.state.num - 1],
+                  this.state.num
+                )}
               </Commentary>
             </>
             <Buttons>
@@ -199,6 +242,14 @@ class Shots extends Component {
                     <Circle color={this.state.num < 2} onClick={this.minus}>
                       <span>&#8249;</span>
                     </Circle>
+                    <div className="bar">
+                      <Progress
+                        className="progress"
+                        progress={
+                          parseInt((100 * this.state.num) / parts.length) + "%"
+                        }
+                      ></Progress>
+                    </div>
                     <Circle
                       color={this.state.num === parts.length}
                       onClick={async (e) => {
@@ -223,11 +274,11 @@ class Shots extends Component {
             {me && me.id === shotUser && !this.props.story && (
               <DeleteSingleShot shotID={shotID} lessonID={lessonID} />
             )}
-            {/* {me && me.id === shotUser && (
+            {me && me.id === shotUser && (
               <SwitchButton name="update" onClick={this.switch}>
                 Изменить
               </SwitchButton>
-            )} */}
+            )}
           </>
         )}
         {this.state.page === "update" && (

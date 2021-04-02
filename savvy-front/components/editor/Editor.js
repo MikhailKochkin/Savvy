@@ -44,6 +44,33 @@ import { question } from "react-icons-kit/fa/question";
 import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
 import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
 
+const ELEMENT_TAGS = {
+  A: (el) => ({ type: "link", url: el.getAttribute("href") }),
+  BLOCKQUOTE: () => ({ type: "quote" }),
+  H1: () => ({ type: "heading-one" }),
+  H2: () => ({ type: "header" }),
+  H3: () => ({ type: "heading-three" }),
+  H4: () => ({ type: "heading-four" }),
+  H5: () => ({ type: "heading-five" }),
+  H6: () => ({ type: "heading-six" }),
+  IMG: (el) => ({ type: "image", url: el.getAttribute("src") }),
+  LI: () => ({ type: "list-item" }),
+  OL: () => ({ type: "numbered-list" }),
+  P: () => ({ type: "paragraph" }),
+  PRE: () => ({ type: "code" }),
+  UL: () => ({ type: "bulleted-list" }),
+};
+
+const TEXT_TAGS = {
+  CODE: () => ({ code: true }),
+  DEL: () => ({ delete: true }),
+  INS: () => ({ insert: true }),
+  I: () => ({ italic: true }),
+  S: () => ({ strikethrough: true }),
+  B: () => ({ bold: true }),
+  U: () => ({ underline: true }),
+};
+
 const AppStyles = {
   color: "rgb(17, 17, 17)",
   maxWidth: "840px",
@@ -162,7 +189,7 @@ const serialize = (node) => {
     case "flag":
       return `<div className="flag">${children}</div>`;
     case "header":
-      return `<h2>${children}<h2/>`;
+      return `<h2>${children}</h2>`;
     case "paragraph":
       return `<p>${children}</p>`;
     case "image":
@@ -196,6 +223,18 @@ const deserialize = (el) => {
   }
 
   const children = Array.from(el.childNodes).map(deserialize);
+
+  console.log(el, el.getAttribute("classname"));
+
+  if (TEXT_TAGS[el.nodeName]) {
+    const attrs = TEXT_TAGS[el.nodeName](el);
+    return children.map((child) => jsx("text", attrs, child));
+  }
+
+  if (el.getAttribute("classname") == "flag") {
+    return jsx("element", { type: "flag" }, children);
+  }
+
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -207,6 +246,10 @@ const deserialize = (el) => {
       return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
     case "BLOCKQUOTE":
       return jsx("element", { type: "quote" }, children);
+    case "DIV":
+      return jsx("element", { type: "div" }, children);
+    case "H2":
+      return jsx("element", { type: "header" }, children);
     case "P":
       return jsx(
         "element",
@@ -494,6 +537,8 @@ const App = (props) => {
   props.value ? (html = props.value) : (html = `<p> </p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
+  console.log("initial", initial);
+
   const [value, setValue] = useState(initial);
 
   const editor = useMemo(
@@ -555,10 +600,11 @@ const App = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
+        console.log(value);
 
         setValue(value);
         props.getEditorText(arr.join(""));
-        console.log(arr.join(""));
+        console.log("html", arr.join(""));
       }}
     >
       <FormatToolBar>

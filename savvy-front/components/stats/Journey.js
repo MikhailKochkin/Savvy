@@ -13,15 +13,9 @@ const Styles = styled.div`
 `;
 
 const Journey = (props) => {
-  if (props.student.name == "Наталья Наумова") {
-    console.log(props.results);
-  }
   const sorted_lessons = props.results
     .slice()
     .sort((a, b) => a.lesson.number - b.lesson.number);
-  if (props.student.name == "Наталья Наумова") {
-    console.log("sorted_lessons", sorted_lessons);
-  }
   let data_labels = sorted_lessons.map(function (item) {
     return {
       progress: item.progress,
@@ -55,9 +49,6 @@ const Journey = (props) => {
   let data_data = sorted_lessons.map(function (item) {
     return item.lesson.number;
   });
-  if (props.student.name == "Наталья Наумова") {
-    console.log("colors", background_color, data_percent);
-  }
   const [data, setData] = useState({
     labels: data_data,
     datasets: [

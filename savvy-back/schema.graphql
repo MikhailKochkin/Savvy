@@ -248,12 +248,14 @@ type Construction {
   complexity: Int
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   createdAt: DateTime!
+  hasText: Boolean!
   hint: String
   id: String!
   lesson: Lesson!
   lessonId: String!
   lessonID: String!
   name: String!
+  text: String
   type: String!
   updatedAt: DateTime!
   user: User!
@@ -320,6 +322,7 @@ input ConstructionWhereInput {
   complexity: IntNullableFilter
   constructionResults: ConstructionResultListRelationFilter
   createdAt: DateTimeFilter
+  hasText: BoolFilter
   hint: StringNullableFilter
   id: StringFilter
   lesson: LessonWhereInput
@@ -328,6 +331,7 @@ input ConstructionWhereInput {
   name: StringFilter
   NOT: [ConstructionWhereInput!]
   OR: [ConstructionWhereInput!]
+  text: StringNullableFilter
   type: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1074,10 +1078,10 @@ type Mutation {
   createBusinessClient(communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
-  createConstruction(answer: [String], hint: String, lessonId: String, name: String, type: String, variants: [String]): Construction
+  createConstruction(answer: [String], hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
   createCoursePage(courseType: String, description: String, image: String, published: Boolean, title: String): CoursePage
-  createCourseVisit(coursePageId: String, visitsNumber: Int): CourseVisit
+  createCourseVisit(coursePageId: String, studentId: String, visitsNumber: Int): CourseVisit
   createDocument(lessonId: String, title: String): Document
   createDocumentResult(answers: [String], documentId: String, drafts: [String], lessonId: String): DocumentResult
   createFeedback(lessonId: String, studentId: String, text: String): Feedback
@@ -1134,7 +1138,8 @@ type Mutation {
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
-  updateStatement(id: String, text: String): Statement
+  updateShot(comments: [String], id: String, parts: [String], title: String): Shot
+  updateStatement(comments: [String], id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
   updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, status: Status, surname: String): User
 }
@@ -1903,8 +1908,6 @@ input SandboxWhereInput {
   sandboxPageID: StringFilter
   text: StringFilter
   updatedAt: DateTimeFilter
-  User: UserWhereInput
-  userId: StringNullableFilter
   video: StringNullableFilter
 }
 
@@ -2002,6 +2005,7 @@ enum SortOrder {
 }
 
 type Statement {
+  comments: [String!]!
   createdAt: DateTime!
   forum: Forum
   forumId: String
@@ -2020,6 +2024,7 @@ input StatementListRelationFilter {
 
 input StatementWhereInput {
   AND: [StatementWhereInput!]
+  comments: StringNullableListFilter
   createdAt: DateTimeFilter
   forum: ForumWhereInput
   forumId: StringNullableFilter
@@ -2443,7 +2448,6 @@ input UserWhereInput {
   resetToken: StringNullableFilter
   resetTokenExpiry: FloatNullableFilter
   resume: StringNullableFilter
-  sandbox: SandboxListRelationFilter
   sandboxPageGoals: SandboxPageGoalListRelationFilter
   sandboxPages: SandboxPageListRelationFilter
   shotResults: ShotResultListRelationFilter

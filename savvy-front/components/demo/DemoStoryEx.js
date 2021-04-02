@@ -106,19 +106,18 @@ class DemoStoryEx extends Component {
       } else if (task.type.toLowerCase() === "shot") {
         el = lesson.shots.find((shot) => shot.id === task.id);
         item = (
-          //   <Shots
-          //     key={el.id}
-          //     comments={el.comments}
-          //     parts={el.parts}
-          //     shotUser={el.user.id}
-          //     me={me}
-          //     shotID={el.id}
-          //     lessonID={lesson.id}
-          //     title={el.title}
-          //     userData={lesson.shotResults}
-          //     story={true}
-          //   />
-          <NewProblem lesson={lesson} me={me} />
+          <Shots
+            key={el.id}
+            comments={el.comments}
+            parts={el.parts}
+            shotUser={el.user.id}
+            me={me}
+            shotID={el.id}
+            lessonID={lesson.id}
+            title={el.title}
+            userData={lesson.shotResults}
+            story={true}
+          />
         );
         components.push(item);
       } else if (task.type.toLowerCase() === "chat") {
@@ -169,17 +168,18 @@ class DemoStoryEx extends Component {
       } else if (task.type.toLowerCase() === "construction") {
         el = lesson.constructions.find((con) => con.id === task.id);
         item = (
-          <SingleConstructor
-            key={el.id}
-            lessonID={lesson.id}
-            complexity={el.complexity}
-            construction={el}
-            variants={el.variants}
-            me={me}
-            arr={Array(el.answer.length).fill("")}
-            userData={lesson.constructionResults}
-            story={true}
-          />
+          // <SingleConstructor
+          //   key={el.id}
+          //   lessonID={lesson.id}
+          //   complexity={el.complexity}
+          //   construction={el}
+          //   variants={el.variants}
+          //   me={me}
+          //   arr={Array(el.answer.length).fill("")}
+          //   userData={lesson.constructionResults}
+          //   story={true}
+          // />
+          <NewProblem lesson={lesson} me={me} />
         );
         components.push(item);
       } else if (task.type.toLowerCase() === "exam") {

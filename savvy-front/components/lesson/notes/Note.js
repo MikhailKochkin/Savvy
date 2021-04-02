@@ -21,8 +21,8 @@ const Container = styled.div`
   width: ${(props) => props.width};
   font-size: 1.6rem;
   margin: 20px 0;
-  display: flex;
-  flex-direction: row;
+  /* display: flex;
+  flex-direction: row; */
   .text {
     flex-basis: 90%;
     border: 1px solid #f3f3f3;
@@ -59,11 +59,12 @@ const Container = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  width: ${(props) => (props.story ? "100%" : "95%")};
+  width: 100%;
   margin: 2% 0 0 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {
     font-size: 1.6rem;
+    width: 100%;
     order: 3;
     h2 {
       font-size: 2.2rem;
@@ -94,7 +95,7 @@ const NoteStyles = styled.div`
       text-decoration: underline;
     }
   }
-  .mark {
+  .flag {
     color: #008489;
     font-size: 2rem;
     width: 100%;
@@ -178,20 +179,10 @@ const Note = (props) => {
   } else if (props.story) {
     width = "50%";
   } else {
-    width = "100%";
+    width = "90%";
   }
   return (
     <>
-      <Container width={width}>
-        <div className="text">
-          {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
-          {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
-        </div>
-        <div className="author">
-          <img className="icon" src="../../static/hipster.svg" />
-          <div className="name">BeSavvy</div>
-        </div>
-      </Container>
       <Buttons>
         {!exam && !story && me.id === note.user.id && (
           <StyledButton onClick={(e) => setUpdate(!update)}>
@@ -202,6 +193,19 @@ const Note = (props) => {
           <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
         )}
       </Buttons>
+      {!update && (
+        <Container width={width}>
+          {/* <div className="text">
+          {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
+          {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
+        </div>
+        <div className="author">
+          <img className="icon" src="../../static/hipster.svg" />
+          <div className="name">BeSavvy</div>
+        </div> */}
+          <NoteStyles>{renderHTML(text)}</NoteStyles>
+        </Container>
+      )}
       {update && !story && !exam && (
         <UpdateNote
           text={text}

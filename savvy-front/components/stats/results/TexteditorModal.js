@@ -24,7 +24,7 @@ const Box = styled.div`
 const TextBox = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 1%;
+  padding: 0;
   #id {
     color: #001f4e;
   }

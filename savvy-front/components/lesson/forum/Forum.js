@@ -9,6 +9,7 @@ import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateStatement from "./CreateStatement";
 import DeleteStatement from "./DeleteStatement";
 import { withTranslation } from "../../../i18n";
+import Statement from "./Statement";
 
 const CREATE_RATING_MUTATION = gql`
   mutation CREATE_RATING_MUTATION($rating: Int, $forumId: String!) {
@@ -130,7 +131,7 @@ const Styles = styled.div`
     line-height: 1.8;
     font-family: Montserrat;
     font-size: 1.6rem;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     span {
       color: #767676;
       font-weight: normal;
@@ -164,7 +165,7 @@ const IconBlock = styled.div`
     font-size: 1.2rem;
     text-align: center;
     color: #8f93a3;
-    max-width: 65px;
+    width: 70px;
     margin: 0 7px;
   }
 `;
@@ -202,7 +203,6 @@ const Forum = (props) => {
   );
 
   moment.locale("ru");
-
   const { text, forum, id, statements, lesson, result, story, me } = props;
   return (
     <Styles story={story}>
@@ -337,18 +337,11 @@ const Forum = (props) => {
         </div>
       )}
       <>
-        {statements.map((s) => (
-          <div className="answer">
-            <IconBlock>
-              <img className="icon" src="../../static/batman.svg" />
-              <div className="name">{s.user.name}</div>
-            </IconBlock>{" "}
-            <div className="answer_text">
-              <div>{renderHTML(s.text)}</div>
-              <span>{moment(s.createdAt).format("LLL")}</span>
-            </div>
-          </div>
-        ))}
+        {statements
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .map((s) => (
+            <Statement author={props.author} s={s} me={me} />
+          ))}
       </>
     </Styles>
   );

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
 import PropTypes from "prop-types";
 import Loading from "../Loading";
+import * as _ from "lodash";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($coursePageId: String!) {
@@ -56,11 +57,30 @@ const UserAnalytics = (props) => {
   });
   if (loading) return <Loading />;
   const results = data.lessonResults;
-  // let coursePage = data.coursePage;
+
+  let cloned_elements = _.cloneDeep(students);
+  let d = cloned_elements.map((el) =>
+    Object.defineProperty(el, "date", {
+      value:
+        el.courseVisits.filter((c) => c.coursePage.id == coursePageID).length >
+        0
+          ? new Date(
+              el.courseVisits.filter(
+                (c) => c.coursePage.id == coursePageID
+              )[0].createdAt
+            )
+          : new Date("2016-01-01T08:16:20.669Z"),
+      writable: true,
+    })
+  );
+  // console.log("d", d);
+  let sorted = d.sort((a, b) => b.date - a.date);
+  // console.log("sorted", sorted);
+
   return (
     <Styles>
       <Header>Всего пользователей: {students.length} </Header>
-      {students.map((student) => {
+      {sorted.map((student) => {
         let student_results = results.filter((r) => r.student.id == student.id);
         return (
           <StudentData

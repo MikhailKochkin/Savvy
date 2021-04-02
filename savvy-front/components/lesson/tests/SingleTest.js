@@ -286,6 +286,7 @@ const SingleTest = (props) => {
   const onSend = async () => {
     const res = () => {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
+        setAnswerState("right");
         // 1. if the data is sent for the first time
         if (props.getData) {
           // 2. and if this quiz is a part of an exam
@@ -296,6 +297,7 @@ const SingleTest = (props) => {
           // document.querySelector(".button").disabled = true;
         }
       } else {
+        setAnswerState("wrong");
         // 1. if the data is sent for the first time
         if (props.getData) {
           // 2. and if this quiz is a part of an exam
@@ -310,7 +312,6 @@ const SingleTest = (props) => {
 
   const onCheck = async () => {
     const res1 = await setAttempts(attempts + 1);
-    console.log(JSON.stringify(answerOptions), JSON.stringify(props.true));
     const res = () => {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
         setAnswerState("right");
@@ -484,7 +485,7 @@ const SingleTest = (props) => {
           {answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.t("correct")}!{" "}
+                {props.type != "FORM" && props.t("correct") + "! "}
                 {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
               </div>
               <IconBlock>
@@ -496,7 +497,7 @@ const SingleTest = (props) => {
           {answerState === "wrong" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.t("wrong")}...{" "}
+                {props.type != "FORM" && props.t("wrong") + "... "}
                 {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
               </div>
               <IconBlock>
