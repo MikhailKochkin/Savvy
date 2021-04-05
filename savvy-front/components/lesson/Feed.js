@@ -314,7 +314,7 @@ const Feed = (props) => {
     }
   };
   let visited;
-  if (props.next && props.next.lessonResults) {
+  if (props.me && props.next && props.next.lessonResults) {
     visited = props.next.lessonResults.filter(
       (l) => l.student.id === props.me.id
     );

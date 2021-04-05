@@ -179,6 +179,7 @@ class Shots extends Component {
       title,
       userData,
     } = this.props;
+    console.log(me.id);
     const visible = [];
     for (let i = 0; i < this.state.num; i++) {
       visible.push(parts[i]);

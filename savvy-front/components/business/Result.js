@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { withTranslation } from "../../i18n";
+import Router from "next/router";
 
 const Styles = styled.div`
   height: 80vh;
@@ -21,14 +22,44 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  #header {
+  #block {
     width: 50%;
+  }
+  #header {
+    width: 100%;
     font-size: 2.4rem;
     font-weight: bold;
     text-align: left;
+    line-height: 1.5;
+  }
+  #C2A {
+    margin: 20px 0;
+    width: 100;
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: left;
+    line-height: 1.5;
   }
   #container {
-    height: 60%;
+    height: 40%;
+  }
+  button {
+    width: 240px;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 6px;
+    height: 60px;
+    background: black;
+    font-family: Montserrat;
+    font-size: 1.6rem;
+    font-weight: bold;
+    transition: all 0.5s;
+    color: white;
+    outline: 0;
+    &:hover {
+      background: #fff;
+      color: black;
+    }
   }
   img {
     height: 100%;
@@ -55,7 +86,21 @@ const Result = (props) => {
   return (
     <Styles>
       <Container>
-        <div id="header">{props.t("result")}</div>
+        <div id="block">
+          <div id="header">{props.t("result")}</div>
+          <div id="C2A">
+            Посмотрите, как это работает на практике в нашем демо-уроке
+          </div>
+          <button
+            onClick={(e) => {
+              Router.push({
+                pathname: "/demo",
+              });
+            }}
+          >
+            Демо Урок
+          </button>
+        </div>
         <div id="container">
           <img src="../../static/result.svg" />
         </div>

@@ -72,7 +72,7 @@ const Card = styled.div`
     min-height: 90%;
     background: #f7f8fc;
     border-radius: 15px;
-    border: 1px solid;
+    border: 2px solid;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,7 +85,7 @@ const Card = styled.div`
   .bottom {
     height: 50%;
     background: white;
-    border: 1px solid;
+    border: 2px solid;
     /* border-color: ${(props) => (props.chosen ? "#1F2041" : "#e1e5f4")}; */
     border-radius: 0 0 15px 15px;
     border-top: none;
@@ -131,7 +131,7 @@ const Button = styled.button`
   color: white;
   font-weight: bold;
   border-radius: 5px;
-  border: 1px solid #12182d;
+  border: 2px solid #12182d;
   cursor: pointer;
   font-family: Montserrat;
   transition: all 0.5s;

@@ -216,7 +216,7 @@ class StoryEx extends Component {
             story={true}
             lesson={lesson.id}
             author={lesson.user.id}
-            result={el.rating.filter((r) => r.user.id == me.id)[0]}
+            result={me ? el.rating.filter((r) => r.user.id == me.id)[0] : null}
             statements={el.statements}
           />
         );
