@@ -156,7 +156,7 @@ const UpdateProblem = (props) => {
             <option value={5}>5</option>
           </select>
         </Complexity>
-        <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+        <DynamicLoadedEditor getEditorText={getText} value={text} />
         <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
         {nodeID && (
           <ProblemBuilder

@@ -12,6 +12,7 @@ const Styles = styled.li`
   width: 90%;
   .question {
     font-weight: 600;
+    width: 80%;
   }
   @media (max-width: 800px) {
     height: 100%;

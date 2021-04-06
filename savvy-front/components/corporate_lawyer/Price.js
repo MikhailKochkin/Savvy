@@ -143,7 +143,7 @@ const Price = () => {
         <div id="full">
           <div className="header2">Полная оплата участия</div>
           <div className="text">
-            <span className="number">30 000 ₽</span> до 1 апреля <br />
+            <span className="number">35 000 ₽</span> до 18 апреля <br />
             <span className="number2"> 45 000 ₽ потом</span>
           </div>
           <div className="text">
@@ -154,7 +154,7 @@ const Price = () => {
         <div id="discount">
           <div className="header2">Cтипендии и скидки</div>
           <div className="text">
-            Получите скидку <span style={{ fontWeight: 600 }}>до 70%</span> на
+            Получите скидку <span style={{ fontWeight: 600 }}>до 90%</span> на
             конкурсной основе. Подробнее расскажем на собеседовании. Но
             торопитесь, скидки привязаны к цене курса на данный момент.
           </div>

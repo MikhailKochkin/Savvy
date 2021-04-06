@@ -15,9 +15,19 @@ const Styles = styled.div`
     width: 80%;
     line-height: 1.4;
   }
+  .header2 {
+    font-size: 2.6rem;
+    font-weight: bold;
+    width: 60%;
+    line-height: 1.4;
+    text-align: center;
+  }
   @media (max-width: 800px) {
     height: auto;
     padding-bottom: 0px;
+    .header2 {
+      width: 80%;
+    }
   }
 `;
 
@@ -135,6 +145,10 @@ const Audience = () => {
           </div>
         </div>
       </Table>
+      <div className="header2">
+        Наша задача не прочитать еще одну лекцию, а помочь вам получить работу
+        мечты
+      </div>
     </Styles>
   );
 };

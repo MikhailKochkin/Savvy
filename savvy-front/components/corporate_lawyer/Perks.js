@@ -93,6 +93,13 @@ const Perks = () => {
           <div>Интерактивные онлайн занятия по каждой изучаемой теме </div>
           <img src="static/tick2.svg" />
         </div>
+        <div className="element">
+          <div>
+            Индивидуальные отчеты о степени выработка необходимых навыков по
+            каждому модулю{" "}
+          </div>
+          <img src="static/tick2.svg" />
+        </div>
         <div className="main-element">Погружение в рынок</div>
         <div className="element">
           <div>Встречи с экспертами и обсуждение трендов в работе юриста</div>
@@ -104,7 +111,7 @@ const Perks = () => {
         </div>
         <div className="element">
           <div>
-            Проведение 2 тестовых собеседований по вывбранным направлениям
+            Проведение 2 тестовых собеседований по выбранным направлениям
           </div>
           <img src="static/tick2.svg" />
         </div>
@@ -112,20 +119,35 @@ const Perks = () => {
           <div>Анализ рынка и существующих карьерных возможностей</div>
           <img src="static/tick2.svg" />
         </div>
+        <div className="element">
+          <div>Помощь в поиске работы по окончании программы</div>
+          <img src="static/tick2.svg" />
+        </div>
+        <div className="element">
+          <div>
+            Индивидуальные консультации по подготовке к собеседованиям и по
+            результатам их прохождения{" "}
+          </div>
+          <img src="static/tick2.svg" />
+        </div>
         <div className="main-element">Дополнительные бонусы</div>
         <div className="element">
           <div>Бесплатное участие в программе Legaltech-директор</div>
           <img src="static/tick2.svg" />
         </div>
-        <div className="element">
+        {/* <div className="element">
           <div>Годовая подписка на </div>
+          <img src="static/tick2.svg" />
+        </div> */}
+        <div className="element final">
+          <div>
+            50% скидка или бесплатное участие во всех программах по Legal
+            English
+          </div>
           <img src="static/tick2.svg" />
         </div>
         <div className="element final">
-          <div>
-            50% скидка или бесплаатное участие во всех программах по Legal
-            English
-          </div>
+          <div>Доступ ко всем другим курсам на платформе BeSavvy</div>
           <img src="static/tick2.svg" />
         </div>
       </Table>

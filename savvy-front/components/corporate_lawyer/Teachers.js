@@ -27,7 +27,7 @@ const Group = styled.div`
   width: 80%;
   flex-wrap: wrap;
   align-items: space-between;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 40px 0;
 `;
 
@@ -38,7 +38,7 @@ const Icon = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-right: 40px;
+  margin-right: 60px;
   margin-bottom: 20px;
   .author_name {
     font-size: 1.8rem;
@@ -62,14 +62,36 @@ const Icon = styled.div`
   }
 `;
 
+const Icon2 = styled.div`
+  height: 200px;
+  width: 160px;
+  background: #162b4b;
+  margin-right: 40px;
+  /* margin-bottom: 20px; */
+`;
+
 const Teachers = () => {
   const teachers = [
     {
       name: "Михаил",
       surname: "Кочкин",
-      description: "Директор программы. Модуль Legal Tech",
+      description:
+        "Основатель и CTO BeSavvy. Директор программы. Модуль Legal Tech",
       img:
         "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1587153342/%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B5-%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-0485_1.png",
+    },
+    {
+      name: "Александр",
+      surname: "Трифонов",
+      description: "Основатель «LegalTech директор». Модуль Legal Tech",
+      img: "url",
+    },
+    {
+      name: "Олег",
+      surname: "Волошин",
+      description:
+        "Генеральный директор Школы права Статут. Директор программы.",
+      img: "url",
     },
     {
       name: "Дени",
@@ -81,7 +103,7 @@ const Teachers = () => {
     {
       name: "Лев",
       surname: "Толстопятов",
-      description: `Юрист Noerr. Модуль "Прохождение собеседований и оценка рынка"`,
+      description: `Помощник юриста Clifford Chance. Модуль "Soft skills и оценка рынка"`,
       img: "url",
     },
     {
@@ -90,12 +112,12 @@ const Teachers = () => {
       description: `Юрист Noerr. Модуль "M/A сделки"`,
       img: "url",
     },
-    {
-      name: "Максим",
-      surname: "Агибалов",
-      description: `Юрист Nevsky IP lawyers. Модуль "Основы IP"`,
-      img: "url",
-    },
+    // {
+    //   name: "Максим",
+    //   surname: "Агибалов",
+    //   description: `Юрист Nevsky IP lawyers. Модуль "Основы IP"`,
+    //   img: "url",
+    // },
     {
       name: "Глеб",
       surname: "Базурин",
@@ -111,63 +133,27 @@ const Teachers = () => {
     },
   ];
   const experts = [
-    {
-      name: "Михаил",
-      surname: "Кочкин",
-      description:
-        "Основатель и CTO BeSavvy. Директор программы. Модуль Legal Tech",
-      img:
-        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1587153342/%D0%BF%D0%B5%D1%80%D0%B2%D0%BE%D0%B5-%D0%BF%D0%BE%D0%BA%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5-0485_1.png",
-    },
-    {
-      name: "Александр",
-      surname: "Трифонов",
-      description:
-        "Советник и со-основатель FreshDoc.ru и Legium.io, «LegalTech директор». Модуль Legal Tech",
-      img: "url",
-    },
-    {
-      name: "Олег",
-      surname: "Волошин",
-      description:
-        "Генеральный директор Школы права Статут. Директор программы.",
-      img: "url",
-    },
-    {
-      name: "Анна",
-      surname: "Костыра",
-      description: "Ex руководитель юридического департамента Deloitte. ",
-      img: "url",
-    },
-    {
-      name: "Элина",
-      surname: "Джамбинова",
-      description:
-        "Старший юрист компании Алруд. Специалист по юридическому сопровождению Fin tech проектов.",
-      img: "url",
-    },
+    // {
+    //   name: "Анна",
+    //   surname: "Костыра",
+    //   description: "Ex руководитель юридического департамента Deloitte. ",
+    //   img: "url",
+    // },
+    // {
+    //   name: "Элина",
+    //   surname: "Джамбинова",
+    //   description:
+    //     "Старший юрист компании Алруд. Специалист по юридическому сопровождению Fin tech проектов.",
+    //   img: "url",
+    // },
   ];
   return (
     <Styles>
-      <div className="header">Эксперты программы:</div>
-      <Group>
-        {experts.map((t) => (
-          <Icon>
-            <img src={t.img} className="image" />
-            <div className="author_name">
-              {t.name}
-              <br />
-              {t.surname}
-            </div>
-            <div className="author_description">{t.description}</div>
-          </Icon>
-        ))}
-      </Group>
-      <div className="header">Преподаватели программы:</div>
+      <div className="header">Эксперты и преподаватели программы:</div>
       <Group>
         {teachers.map((t) => (
           <Icon>
-            <img src={t.img} className="image" />
+            {t.img == "url" ? <Icon2 /> : <img src={t.img} className="image" />}
             <div className="author_name">
               {t.name}
               <br />
@@ -177,6 +163,20 @@ const Teachers = () => {
           </Icon>
         ))}
       </Group>
+      {/* <div className="header">Преподаватели программы:</div>
+      <Group>
+        {teachers.map((t) => (
+          <Icon>
+            {t.img == "" ? <Icon2 /> : <img src={t.img} className="image" />}
+            <div className="author_name">
+              {t.name}
+              <br />
+              {t.surname}
+            </div>
+            <div className="author_description">{t.description}</div>
+          </Icon>
+        ))}
+      </Group> */}
     </Styles>
   );
 };

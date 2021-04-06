@@ -43,6 +43,7 @@ import { flag } from "react-icons-kit/fa/flag";
 import { question } from "react-icons-kit/fa/question";
 import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
 import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
+import { undo } from "react-icons-kit/fa/undo";
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -149,13 +150,25 @@ const Flag = styled.div`
   border-radius: 5px;
 `;
 
+const Conceal = styled.div`
+  color: red;
+  border-bottom: 1px solid green;
+  /* font-size: 2rem;
+  width: 100%;
+  margin: 3% 0;
+  padding: 3% 8%;
+  background-color: #f2fafb;
+  border-radius: 5px; */
+`;
+
 // 1. Serializer – slate to html
 
 const serialize = (node) => {
+  console.log("node0", node);
   if (Text.isText(node)) {
+    console.log("node1", node);
     let styles = Object.keys(node);
     styles.shift();
-    console.log(styles);
     if (styles.length) {
       let text = node.text;
       if (styles.includes("bold")) {
@@ -174,7 +187,6 @@ const serialize = (node) => {
         text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
       }
       if (styles.includes("quiz")) {
-        console.log(node);
         text = `<span type="quiz" className="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
       }
       return text;
@@ -183,11 +195,16 @@ const serialize = (node) => {
     }
   }
   const children = node.children.map((n) => serialize(n)).join("");
+  console.log("node2", node);
   switch (node.type) {
     case "quote":
       return `<blockquote><p>${children}</p></blockquote>`;
     case "flag":
       return `<div className="flag">${children}</div>`;
+    case "conceal":
+      return `<div id="conceal" data-text="${escapeHtml(
+        node.data
+      )}">${children}</div>`;
     case "header":
       return `<h2>${children}</h2>`;
     case "paragraph":
@@ -224,15 +241,24 @@ const deserialize = (el) => {
 
   const children = Array.from(el.childNodes).map(deserialize);
 
-  console.log(el, el.getAttribute("classname"));
-
   if (TEXT_TAGS[el.nodeName]) {
     const attrs = TEXT_TAGS[el.nodeName](el);
     return children.map((child) => jsx("text", attrs, child));
   }
 
+  // console.log("id", el.getAttribute("classname"), el.getAttribute("id"));
+
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
+  }
+
+  if (el.getAttribute("id") == "conceal") {
+    console.log("conceal", el);
+    return jsx(
+      "element",
+      { type: "conceal", data: el.getAttribute("data-text") },
+      children
+    );
   }
 
   switch (el.nodeName) {
@@ -243,6 +269,8 @@ const deserialize = (el) => {
     case "IFRAME":
       return jsx("element", { type: "video", src: el.src }, [{ text: "" }]);
     case "IMAGE":
+      return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
+    case "IMG":
       return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
     case "BLOCKQUOTE":
       return jsx("element", { type: "quote" }, children);
@@ -357,6 +385,12 @@ const CustomEditor = {
       { type: "note", note: my_data },
       { match: (n) => Text.isText(n), split: true }
     );
+  },
+
+  conceal(editor) {
+    let text = prompt("Текст: ");
+    const block = { type: "conceal", data: text, children: [] };
+    Transforms.wrapNodes(editor, block);
   },
 
   addQuiz(editor) {
@@ -537,7 +571,7 @@ const App = (props) => {
   props.value ? (html = props.value) : (html = `<p> </p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
-  console.log("initial", initial);
+  // console.log("initial", initial, props.value);
 
   const [value, setValue] = useState(initial);
 
@@ -550,7 +584,7 @@ const App = (props) => {
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {
-    // console.log(props.element, props.element.type);
+    console.log(props.element, props.element.type);
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />;
@@ -582,6 +616,9 @@ const App = (props) => {
         return <td {...props.attributes}>{props.children}</td>;
       case "flag":
         return <FlagElement {...props} />;
+      case "conceal":
+        console.log("conceal here");
+        return <ConcealElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
@@ -600,7 +637,7 @@ const App = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        console.log(value);
+        console.log("value", value);
 
         setValue(value);
         props.getEditorText(arr.join(""));
@@ -698,6 +735,14 @@ const App = (props) => {
         >
           <Icon icon={question} />
         </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.conceal(editor, "editor");
+          }}
+        >
+          <Icon icon={undo} />
+        </ButtonStyle>
       </FormatToolBar>
       <Editable
         style={AppStyles}
@@ -782,6 +827,10 @@ const TableElement = (props) => {
 
 const FlagElement = (props) => {
   return <Flag {...props.attributes}>{props.children}</Flag>;
+};
+
+const ConcealElement = (props) => {
+  return <Conceal {...props.attributes}>{props.children}</Conceal>;
 };
 
 const VideoElement = ({ attributes, children, element }) => {
