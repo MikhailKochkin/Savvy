@@ -132,7 +132,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 const CoursePage = (props) => {
   const [page, setPage] = useState("lessons");
   const me = useUser();
-  console.log(me);
   let my_reviews;
   // my_reviews = Reviews.filter((r) => r.coursePage === props.id);
   my_reviews = [];

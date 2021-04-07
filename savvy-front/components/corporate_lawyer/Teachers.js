@@ -94,6 +94,12 @@ const Teachers = () => {
       img: "url",
     },
     {
+      name: "Анна",
+      surname: "Костыра",
+      description: "Управляющий партнер Legit, ex Deloitte Legal ",
+      img: "url",
+    },
+    {
       name: "Дени",
       surname: "Мурдалов",
       description: `Юрист адвокатского бюро А2. Модуль "Основы работы с корпорациями"`,

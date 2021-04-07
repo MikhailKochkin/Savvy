@@ -33,6 +33,7 @@ const CURRENT_USER_QUERY = gql`
         lesson {
           id
           name
+          number
           coursePage {
             id
           }

@@ -31,7 +31,7 @@ const Feedback = (props) => {
             <Styles>
               {renderHTML(m.text)}
               <div className="time">
-                {`${m.teacher.name} ${m.teacher.surname}`}
+                {`${m.teacher.name} ${m.teacher.surname} `}
                 {moment(m.createdAt).format("LLL")}
               </div>
             </Styles>
