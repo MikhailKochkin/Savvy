@@ -1,8 +1,8 @@
 import { Query } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
-import Course from "../Course";
-import LoadingDummy from "../LoadingDummy";
+import Course from "../course/Course";
+import LoadingDummy from "../course/LoadingDummy";
 
 const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
@@ -61,7 +61,8 @@ const COURSE_PAGES_QUERY = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 80%;
+  margin-top: 40px;
   @media (max-width: 800px) {
     width: 95%;
     padding: 20px 0;
@@ -104,54 +105,17 @@ const Message = styled.div`
 const ShownCourses = (props) => {
   return (
     <Styles>
-      <Header>Вам могут быть интересны:</Header>
+      <Header>Ваша программа:</Header>
       <Container>
         <Query query={COURSE_PAGES_QUERY}>
           {({ data, error, loading, fetchMore }) => {
             if (error) return <p>Error: {error.message}</p>;
             if (loading) return <LoadingDummy />;
             const coursePages = data.coursePages;
-            let displayed;
-            if (
-              props.topic === "" &&
-              props.teacher === "" &&
-              props.level === ""
-            ) {
-              displayed = coursePages.filter((c) => c.tags.includes("Initial"));
-            } else {
-              displayed = coursePages.filter(
-                (c) =>
-                  c.published &&
-                  (c.courseType === "FORMONEY" || c.courseType === "PUBLIC")
-              );
-              if (props.topic && props.topic !== "Any") {
-                displayed = coursePages.filter((c) =>
-                  c.tags.includes(props.topic)
-                );
-              }
-              if (props.teacher) {
-                displayed = displayed.filter((c) =>
-                  c.tags.includes(props.teacher)
-                );
-              }
-
-              if (props.level === "All") {
-                displayed = displayed;
-              } else if (props.level) {
-                displayed = displayed.filter(
-                  (c) => c.tags.includes(props.level) || c.tags.includes("All")
-                );
-              }
-            }
+            let displayed = coursePages.filter((c) => c.tags.includes("Intro"));
+            console.log(coursePages, displayed);
             return (
               <>
-                {displayed.length === 0 && (
-                  <Message>
-                    Курсов по таким характеристикам пока нет. Но мы их уже
-                    делаем. Зарегистрируйтесь на сайте, и мы пришлем вам
-                    сообщение, когда такие курсы появятся.
-                  </Message>
-                )}
                 {displayed.map((c) => (
                   <Course key={c.id} id={c.id} coursePage={c} me={props.me} />
                 ))}

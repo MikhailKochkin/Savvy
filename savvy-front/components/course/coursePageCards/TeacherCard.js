@@ -5,9 +5,9 @@ import MakePublic from "../MakePublic";
 
 const Payment = styled.div`
   background: #ffffff;
-  border: 1px solid #e4e4e4;
-  box-sizing: border-box;
-  border-radius: 10px;
+  /* border: 1px solid #e4e4e4; */
+  /* box-sizing: border-box;
+  border-radius: 10px; */
   width: 270px;
   min-height: 290px;
   padding: 2% 4%;

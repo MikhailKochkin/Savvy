@@ -367,7 +367,7 @@ const LessonPart = styled.div`
   border-radius: 2px;
   margin: 0 0 20px 0;
   h1 {
-    max-width: 600px;
+    max-width: 650px;
     line-height: 1.4;
   }
   @media (max-width: 1500px) {

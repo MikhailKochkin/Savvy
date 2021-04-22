@@ -171,7 +171,7 @@ export default class Course extends Component {
     let average;
     if (coursePage && coursePage.lessons) {
       coursePage.lessons.map((l) =>
-        forums.push(l.forum ? [...l.forum.rating] : null)
+        forums.push(l.forum ? l.forum.rating : null)
       );
       forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
       forums.map((f) => f.map((r) => ratings.push(r.rating)));

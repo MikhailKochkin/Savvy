@@ -701,6 +701,7 @@ export interface NexusGenInputs {
     forum?: NexusGenInputs['ForumWhereInput'] | null; // ForumWhereInput
     forumId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
     lessonResults?: NexusGenInputs['LessonResultListRelationFilter'] | null; // LessonResultListRelationFilter
     map?: NexusGenInputs['JsonNullableListFilter'] | null; // JsonNullableListFilter
@@ -2325,6 +2326,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
     createConstruction: NexusGenRootTypes['Construction'] | null; // Construction
@@ -2934,6 +2936,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createBusinessClient: 'BusinessClient'
+    createChallengeResult: 'ChallengeResult'
     createChat: 'Chat'
     createClause: 'Clause'
     createConstruction: 'Construction'
@@ -3473,6 +3476,12 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       number?: string | null; // String
       type?: string | null; // String
+    }
+    createChallengeResult: { // args
+      correct?: number | null; // Int
+      lesson?: string | null; // String
+      time?: number | null; // Int
+      wrong?: number | null; // Int
     }
     createChat: { // args
       lessonId?: string | null; // String

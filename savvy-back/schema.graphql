@@ -1020,6 +1020,7 @@ input LessonWhereInput {
   forum: ForumWhereInput
   forumId: StringNullableFilter
   id: StringFilter
+  image: StringNullableFilter
   lessonFeedback: FeedbackListRelationFilter
   lessonResults: LessonResultListRelationFilter
   map: JsonNullableListFilter
@@ -1076,6 +1077,7 @@ input Messages {
 
 type Mutation {
   createBusinessClient(communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
+  createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createConstruction(answer: [String], hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction

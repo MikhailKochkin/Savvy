@@ -2149,6 +2149,31 @@ const Mutation = mutationType({
           // 8. return the new user
           return updatedUser;
         },
+      }),
+      t.field("createChallengeResult", {
+        type: "ChallengeResult",
+        args: {
+          lesson: stringArg(),
+          correct: intArg(),
+          wrong: intArg(),
+          time: intArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          const client = await ctx.prisma.challengeResult.create({
+            data: {
+              student: {
+                connect: { id: ctx.res.req.userId },
+              },
+              lesson: {
+                connect: { id: args.lesson },
+              },
+              correct: args.correct,
+              wrong: args.wrong,
+              time: args.time,
+            },
+          });
+          return client;
+        },
       });
   },
 });

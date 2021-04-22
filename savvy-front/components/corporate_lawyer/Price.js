@@ -143,8 +143,8 @@ const Price = () => {
         <div id="full">
           <div className="header2">Полная оплата участия</div>
           <div className="text">
-            <span className="number">35 000 ₽</span> до 18 апреля <br />
-            <span className="number2"> 45 000 ₽ потом</span>
+            <span className="number">38 000 ₽</span> до 2 мая <br />
+            <span className="number2"> 48 000 ₽ потом</span>
           </div>
           <div className="text">
             {" "}

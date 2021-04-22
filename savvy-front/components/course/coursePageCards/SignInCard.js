@@ -9,11 +9,8 @@ const Payment = styled.div`
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  border: 1px solid #e4e4e4;
-  box-sizing: border-box;
-  border-radius: 10px;
-  width: 270px;
-  min-height: 290px;
+  width: 100%;
+  /* min-height: 290px; */
   padding: 2% 4%;
   .message {
     border-bottom: 1px solid #e4e4e4;
@@ -28,8 +25,7 @@ const Header = styled.div`
   font-size: 1.8rem;
   font-weight: bold;
   font-style: italic;
-  padding-bottom: 6%;
-  padding-top: 4%;
+  padding: 4% 0;
   line-height: 1.4;
 `;
 
@@ -72,16 +68,16 @@ const StyledModal = Modal.styled`
 class RegisterCard extends Component {
   state = {
     isOpen: false,
-    auth: "signin"
+    auth: "signin",
   };
 
-  toggleModal = e => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+  toggleModal = (e) => {
+    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
   };
 
-  changeState = dataFromChild => {
+  changeState = (dataFromChild) => {
     this.setState({
-      auth: dataFromChild
+      auth: dataFromChild,
     });
   };
 
@@ -92,8 +88,10 @@ class RegisterCard extends Component {
           <Header>
             👏🏻Мы восхищаемся вашим стремлением узнавать что-то новое!
           </Header>
-          Но, пожалуйста, войдите в свой аккаунт или зарегистрируйтесь на
-          сайте,чтобы получить доступ к курсу.{" "}
+          <div>
+            Но, пожалуйста, войдите в свой аккаунт или зарегистрируйтесь на
+            сайте,чтобы получить доступ к курсу.{" "}
+          </div>
           <SmallButton onClick={this.toggleModal}>Войти</SmallButton>
         </Payment>
         <StyledModal

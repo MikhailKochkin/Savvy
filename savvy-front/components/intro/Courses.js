@@ -1,0 +1,90 @@
+import React from "react";
+import styled from "styled-components";
+import ShownCourses from "./ShownCourses";
+import { useUser } from "../User";
+import * as _ from "lodash";
+
+const Styles = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center;*/
+  align-items: center;
+  .bar {
+    width: 70%;
+    height: 6px;
+    /* background: #b6bce2; */
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const Progress = styled.div`
+  height: 100%;
+  background: #3f51b5;
+  /* width: ${(props) => props.progress}; */
+  background: green;
+  transition: all 0.5s;
+  border-radius: 10px;
+`;
+
+const Course = styled.div`
+  height: 6px;
+  background: #3f51b5;
+  /* width: ${(props) => props.progress}; */
+  width: 12%;
+  margin-right: 25px;
+  transition: all 0.5s;
+  border-radius: 10px;
+`;
+
+const Course2 = styled.div`
+  height: 6px;
+  background: #b6bce2;
+  width: 12%;
+  margin-right: 25px;
+  transition: all 0.5s;
+  border-radius: 10px;
+`;
+
+const Courses = (props) => {
+  let me = useUser();
+  let visitedCourses;
+  const pages = [
+    "ckgdgw88c02uv0742v0ttx8pl",
+    "ckfy1q60a02f307281abcpgae",
+    "ck89zsn5200790701jcpqxmiu",
+    "ck78sx36r00vi0700zxlzs1a5",
+    "ck4n47a2j01jg0790gspxqxju",
+    "cjyg59y2b00qg0768brp9xp2r",
+    "cjtreu3md00fp0897ga13aktp",
+  ];
+  if (me) {
+    visitedCourses = me.courseVisits.filter((c) =>
+      pages.includes(c.coursePage.id)
+    ).length;
+  } else {
+    visitedCourses = 0;
+  }
+  console.log(visitedCourses, 7 - visitedCourses);
+
+  return (
+    <Styles>
+      <div className="bar">
+        {_.times(visitedCourses, () => (
+          <Course></Course>
+        ))}
+        {_.times(7 - visitedCourses, () => (
+          <Course2></Course2>
+        ))}
+      </div>
+      <ShownCourses />
+    </Styles>
+  );
+};
+
+export default Courses;

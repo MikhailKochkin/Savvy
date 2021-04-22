@@ -151,7 +151,7 @@ const Block = styled.div`
   min-height: 50vh;
   display: ${(props) => (props.show === "final" ? "none" : "flex")};
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   width: 95vw;
 `;

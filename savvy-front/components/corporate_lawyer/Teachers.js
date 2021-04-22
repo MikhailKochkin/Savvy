@@ -84,7 +84,8 @@ const Teachers = () => {
       name: "Александр",
       surname: "Трифонов",
       description: "Основатель «LegalTech директор». Модуль Legal Tech",
-      img: "url",
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085432/%D0%A2%D1%80%D0%B8%D1%84%D0%BE%D0%BD%D0%BE%D0%B2_1.png",
     },
     {
       name: "Олег",
@@ -97,14 +98,15 @@ const Teachers = () => {
       name: "Анна",
       surname: "Костыра",
       description: "Управляющий партнер Legit, ex Deloitte Legal ",
-      img: "url",
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085433/%D0%9A%D0%BE%D1%81%D1%82%D1%8B%D1%80%D0%B0_1.png",
     },
     {
       name: "Дени",
       surname: "Мурдалов",
       description: `Юрист адвокатского бюро А2. Модуль "Основы работы с корпорациями"`,
       img:
-        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1614774378/deni2.png",
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085434/%D0%94%D0%B5%D0%BD%D0%B8_3.png",
     },
     {
       name: "Лев",
@@ -116,7 +118,8 @@ const Teachers = () => {
       name: "Юлия",
       surname: "Баймакова",
       description: `Юрист Noerr. Модуль "M/A сделки"`,
-      img: "url",
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085817/%D0%AE%D0%BB%D1%8F.png",
     },
     // {
     //   name: "Максим",
@@ -128,13 +131,20 @@ const Teachers = () => {
       name: "Глеб",
       surname: "Базурин",
       description: `Юрист VK Partners. Модуль "Инструменты договорной работы корпоративного юриста"`,
-      img: "url",
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085433/GlebSite_1.png",
     },
     {
       name: "Мария",
       surname: "Бояринцева",
       description: `Старший юрист АБ А2. Модуль "Рассмотрение дела о банкротстве: как это работает?
 "`,
+      img: "url",
+    },
+    {
+      name: "И еще 11",
+      surname: "специалистов,",
+      description: `которых мы совсем скоро вам представим.`,
       img: "url",
     },
   ];

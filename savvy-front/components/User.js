@@ -14,6 +14,9 @@ const CURRENT_USER_QUERY = gql`
       courseVisits {
         id
         reminders
+        coursePage {
+          id
+        }
       }
       teacherFeedback {
         id

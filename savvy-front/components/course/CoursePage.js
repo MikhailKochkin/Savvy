@@ -33,6 +33,7 @@ import {
   Details,
   Video,
   Comment,
+  Lessons,
 } from "./styles/CoursePage_Styles";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
@@ -66,6 +67,13 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         open
         description
         structure
+        forum {
+          id
+          rating {
+            id
+            rating
+          }
+        }
         published
         coursePage {
           id
@@ -189,16 +197,16 @@ const CoursePage = (props) => {
             return (
               <>
                 <Container>
-                  <LessonImage
+                  {/* <LessonImage
                     src={
                       "https://cdn.pixabay.com/photo/2016/05/24/16/48/mountains-1412683_1280.png"
                     }
-                  />
+                  /> */}
                   <LessonStyles>
                     <CourseInfo>
                       <Data>
                         <Header>{coursePage.title}</Header>
-                        <p className="track2">{coursePage.description}</p>
+                        {/* <p className="track2">{coursePage.description}</p> */}
                         {coursePage && coursePage.authors.length > 0 ? (
                           coursePage.authors.map((a) => (
                             <div className="name">
@@ -218,9 +226,12 @@ const CoursePage = (props) => {
                                 : coursePage.user.name}{" "}
                               {props.t("from")} {coursePage.user.company.name}
                             </p>
+                            <p className="track2">
+                              {coursePage.user.description}
+                            </p>
+                            {console.log(coursePage.user.description)}
                           </div>
                         )}
-                        <p className="track2">{coursePage.user.description}</p>
                       </Data>
                       <PayBox>
                         {/* Карточка регистрации на сайте */}
@@ -312,31 +323,27 @@ const CoursePage = (props) => {
                             {/* {props.t("total")}  */}
                             Всего уроков: {lessons.length}
                           </Total>
-                          {[...coursePage.lessons]
-                            .sort((a, b) => (a.number > b.number ? 1 : -1))
-                            .map((lesson, index) => (
-                              <>
-                                {(index + weeks) % weeks === 0 && (
-                                  <div className="week">
-                                    Неделя {/* {props.t("week")}  */}
-                                    {(index + weeks) / weeks}
-                                  </div>
-                                )}
-                                <LessonHeader
-                                  me={me}
-                                  key={lesson.id}
-                                  name={lesson.name}
-                                  lesson={lesson}
-                                  coursePage={props.id}
-                                  author={coursePage.user.id}
-                                  students={coursePage.students}
-                                  new_students={student_list}
-                                  open={index + 1 === 1}
-                                  index={index + 1}
-                                  coursePageId={coursePage.id}
-                                />
-                              </>
-                            ))}
+                          <Lessons>
+                            {[...coursePage.lessons]
+                              .sort((a, b) => (a.number > b.number ? 1 : -1))
+                              .map((lesson, index) => (
+                                <>
+                                  <LessonHeader
+                                    me={me}
+                                    key={lesson.id}
+                                    name={lesson.name}
+                                    lesson={lesson}
+                                    coursePage={props.id}
+                                    author={coursePage.user.id}
+                                    students={coursePage.students}
+                                    new_students={student_list}
+                                    open={index + 1 === 1}
+                                    index={index + 1}
+                                    coursePageId={coursePage.id}
+                                  />
+                                </>
+                              ))}
+                          </Lessons>
                         </>
                       )}
 
