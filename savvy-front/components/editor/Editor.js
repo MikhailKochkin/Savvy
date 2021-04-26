@@ -150,6 +150,10 @@ const Flag = styled.div`
   border-radius: 5px;
 `;
 
+const Note = styled.span`
+  color: darkslateblue;
+`;
+
 const Conceal = styled.div`
   color: red;
   border-bottom: 1px solid green;
@@ -164,9 +168,7 @@ const Conceal = styled.div`
 // 1. Serializer – slate to html
 
 const serialize = (node) => {
-  console.log("node0", node);
   if (Text.isText(node)) {
-    console.log("node1", node);
     let styles = Object.keys(node);
     styles.shift();
     if (styles.length) {
@@ -195,7 +197,6 @@ const serialize = (node) => {
     }
   }
   const children = node.children.map((n) => serialize(n)).join("");
-  console.log("node2", node);
   switch (node.type) {
     case "quote":
       return `<blockquote><p>${children}</p></blockquote>`;
@@ -211,6 +212,10 @@ const serialize = (node) => {
       return `<p>${children}</p>`;
     case "image":
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
+    case "error":
+      return `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${children}</span>`;
+    case "note":
+      return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
     case "video":
       return `<iframe src="${escapeHtml(
         node.src
@@ -246,14 +251,11 @@ const deserialize = (el) => {
     return children.map((child) => jsx("text", attrs, child));
   }
 
-  // console.log("id", el.getAttribute("classname"), el.getAttribute("id"));
-
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
   }
 
   if (el.getAttribute("id") == "conceal") {
-    console.log("conceal", el);
     return jsx(
       "element",
       { type: "conceal", data: el.getAttribute("data-text") },
@@ -261,6 +263,13 @@ const deserialize = (el) => {
     );
   }
 
+  if (el.getAttribute("classname") == "editor_note") {
+    return jsx(
+      "element",
+      { type: "note", note: el.getAttribute("text") },
+      children.length > 0 ? children : [{ text: "" }]
+    );
+  }
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -571,7 +580,6 @@ const App = (props) => {
   props.value ? (html = props.value) : (html = `<p> </p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
-  // console.log("initial", initial, props.value);
 
   const [value, setValue] = useState(initial);
 
@@ -584,7 +592,6 @@ const App = (props) => {
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {
-    console.log(props.element, props.element.type);
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />;
@@ -616,8 +623,9 @@ const App = (props) => {
         return <td {...props.attributes}>{props.children}</td>;
       case "flag":
         return <FlagElement {...props} />;
+      case "note":
+        return <NoteElement {...props} />;
       case "conceal":
-        console.log("conceal here");
         return <ConcealElement {...props} />;
       default:
         return <DefaultElement {...props} />;
@@ -637,11 +645,9 @@ const App = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        console.log("value", value);
 
         setValue(value);
         props.getEditorText(arr.join(""));
-        console.log("html", arr.join(""));
       }}
     >
       <FormatToolBar>
@@ -777,7 +783,7 @@ const Leaf = ({ attributes, children, leaf }) => {
   }
 
   if (leaf.note) {
-    children = <Span>{children}</Span>;
+    children = <NoteElement>{children}</NoteElement>;
   }
 
   return <span {...attributes}>{children}</span>;
@@ -827,6 +833,10 @@ const TableElement = (props) => {
 
 const FlagElement = (props) => {
   return <Flag {...props.attributes}>{props.children}</Flag>;
+};
+
+const NoteElement = (props) => {
+  return <Note {...props.attributes}>{props.children}</Note>;
 };
 
 const ConcealElement = (props) => {

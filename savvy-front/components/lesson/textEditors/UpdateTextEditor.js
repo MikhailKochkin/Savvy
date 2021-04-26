@@ -132,7 +132,6 @@ const UpdateTextEditor = (props) => {
   );
   const getText = (d) => setText(d);
   const { id, lessonID } = props;
-  console.log(text);
   return (
     <>
       <Container>
@@ -161,7 +160,6 @@ const UpdateTextEditor = (props) => {
             <option value={5}>5</option>
           </select>
         </Complexity>
-        {console.log(text)}
         <DynamicLoadedEditor getEditorText={getText} value={text} />
         <Mutation
           mutation={UPDATE_TEXTEDITOR_MUTATION}
@@ -184,9 +182,7 @@ const UpdateTextEditor = (props) => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation
-                console.log("1");
                 const res = await updateTextEditor();
-                console.log("2");
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}

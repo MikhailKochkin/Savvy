@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Link from "next/link";
 
 const Payment = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   background: #ffffff;
-  border: 1px solid #e4e4e4;
   box-sizing: border-box;
   border-radius: 10px;
   width: 290px;
@@ -36,13 +34,13 @@ const Button = styled.button`
   width: 50%;
   font-weight: 600;
   color: #fffdf7;
-  background: ${props => props.theme.green};
+  background: ${(props) => props.theme.green};
   border: solid 1px white;
   border-radius: 5px;
   cursor: pointer;
   outline: none;
   &:active {
-    background: ${props => props.theme.darkGreen};
+    background: ${(props) => props.theme.darkGreen};
   }
   @media (max-width: 800px) {
     width: 40%;
@@ -54,14 +52,16 @@ class StudentCard extends Component {
     const { coursePage, me } = this.props;
     // 0. Put all lesson results in an array
     let lessonResults = [];
-    coursePage.lessons.map(lesson => lessonResults.push(lesson.lessonResults));
+    coursePage.lessons.map((lesson) =>
+      lessonResults.push(lesson.lessonResults)
+    );
     // 1. leave only the results of the current user
-    const newlessonResults = lessonResults.map(result =>
-      result.filter(result => result.student.id === me.id)
+    const newlessonResults = lessonResults.map((result) =>
+      result.filter((result) => result.student.id === me.id)
     );
     // 2. See how many lessons the currents user has attended
     let status = 0;
-    newlessonResults.map(res => (res.length > 0 ? status++ : status));
+    newlessonResults.map((res) => (res.length > 0 ? status++ : status));
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio = (status * 100) / coursePage.lessons.length;

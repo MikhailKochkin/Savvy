@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Router from "next/router";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
@@ -30,9 +31,9 @@ const ENROLL_COURSE_MUTATION = gql`
 `;
 
 const Button = styled.button`
-  background: ${(props) => props.theme.green};
+  background: #0846d8;
   border-radius: 5px;
-  width: 200px;
+  width: 95%;
   height: 38px;
   outline: 0;
   color: white;
@@ -42,8 +43,16 @@ const Button = styled.button`
   cursor: pointer;
   border: none;
   margin-top: 10px;
+  &:hover {
+    background: rgba(8, 70, 216, 0.85);
+  }
   &:active {
     background-color: ${(props) => props.theme.darkGreen};
+  }
+  &:disabled {
+    &:hover {
+      background-color: #84bc9c;
+    }
   }
 `;
 
@@ -53,12 +62,11 @@ const Comment = styled.div`
 
 const EnrollCoursePage = (props) => {
   const [show, setShow] = useState(false);
+
   let subj = [];
   props.meData.new_subjects.map((s) => subj.push(s.id));
   const onClick = async (e, enrollOnCourse) => {
     e.preventDefault();
-    console.log(props.meData.id, props.coursePage.id);
-
     if (
       props.coursePage.courseType === "PUBLIC" ||
       props.coursePage.courseType === "CHALLENGE"
@@ -70,7 +78,9 @@ const EnrollCoursePage = (props) => {
             coursePageId: props.coursePage.id,
           },
         });
-        alert("Вы успешно зарегистрировлаись. Наслаждайтесь курсом!");
+        alert(
+          "Вы успешно зарегистрировались. Можете приступить к первому уроку!"
+        );
       } else {
         alert("Вы уже зарегистрированы!");
       }
@@ -78,6 +88,7 @@ const EnrollCoursePage = (props) => {
   };
 
   const { coursePage, meData } = props;
+  console.log(coursePage.id);
   return (
     <>
       {(coursePage.courseType === "PUBLIC" ||
@@ -95,9 +106,17 @@ const EnrollCoursePage = (props) => {
           {(enrollOnCourse) =>
             !subj.includes(coursePage.id) ? (
               <Button
-                onClick={(e) => {
-                  onClick(e, enrollOnCourse);
-                  console.log("final");
+                onClick={async (e) => {
+                  e.preventDefault();
+                  const res = await onClick(e, enrollOnCourse);
+                  setTimeout(function () {
+                    Router.push({
+                      pathname: "/coursePage",
+                      query: {
+                        id: coursePage.id,
+                      },
+                    });
+                  }, 500);
                 }}
               >
                 Регистрация
@@ -121,7 +140,7 @@ const EnrollCoursePage = (props) => {
             !subj.includes(coursePage.id) ? (
               <Button
                 onClick={async (e) => {
-                  e.preventDefault;
+                  e.preventDefault();
                   setShow(true);
                   const res = await createPrivateOrder();
                 }}

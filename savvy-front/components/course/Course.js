@@ -26,10 +26,12 @@ const CREATE_COURSE_VISIT_MUTATION = gql`
   mutation CREATE_COURSE_VISIT_MUTATION(
     $visitsNumber: Int
     $coursePageId: String
+    $studentId: String
   ) {
     createCourseVisit(
       visitsNumber: $visitsNumber
       coursePageId: $coursePageId
+      studentId: $studentId
     ) {
       id
     }
@@ -271,7 +273,7 @@ export default class Course extends Component {
                             variables={{
                               coursePageId: id,
                               visitsNumber: 1,
-                              student: me.id,
+                              studentId: me.id,
                             }}
                             refetchQueries={() => [
                               {

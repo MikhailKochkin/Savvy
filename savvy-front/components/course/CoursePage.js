@@ -184,10 +184,14 @@ const CoursePage = (props) => {
             } else {
               weeks = 3;
             }
+            let openLesson;
+            let openLessons = coursePage.lessons.filter((l) => l.open);
+            if (openLessons.length > 0) {
+              openLesson = openLessons[0];
+            } else {
+              openLesson = null;
+            }
 
-            const openLesson = coursePage.lessons.filter(
-              (c) => c.id === coursePage.openLesson
-            );
             let isEnrolled;
             if (me && me.new_subjects) {
               isEnrolled = me.new_subjects.some((c) => c.id == coursePage.id);
@@ -218,19 +222,20 @@ const CoursePage = (props) => {
                             </div>
                           ))
                         ) : (
-                          <div className="name">
-                            <img src={coursePage.user.image} />
-                            <p>
-                              {coursePage.user && coursePage.user.surname
-                                ? `${coursePage.user.name} ${coursePage.user.surname}`
-                                : coursePage.user.name}{" "}
-                              {props.t("from")} {coursePage.user.company.name}
-                            </p>
+                          <>
+                            <div className="name">
+                              <img src={coursePage.user.image} />
+                              <p>
+                                {coursePage.user && coursePage.user.surname
+                                  ? `${coursePage.user.name} ${coursePage.user.surname}`
+                                  : coursePage.user.name}{" "}
+                                {props.t("from")} {coursePage.user.company.name}
+                              </p>
+                            </div>
                             <p className="track2">
                               {coursePage.user.description}
                             </p>
-                            {console.log(coursePage.user.description)}
-                          </div>
+                          </>
                         )}
                       </Data>
                       <PayBox>
@@ -242,7 +247,7 @@ const CoursePage = (props) => {
                           me.id !== coursePage.user.id &&
                           !new_subjectArray.includes(coursePage.id) &&
                           !me.permissions.includes("ADMIN") && (
-                            <FirstLesson lesson={openLesson} />
+                            <FirstLesson openLesson={openLesson} />
                           )}
                         {/* Карточка преподавателя */}
                         {me &&

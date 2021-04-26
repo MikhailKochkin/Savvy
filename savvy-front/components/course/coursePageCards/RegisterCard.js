@@ -64,7 +64,7 @@ const Header = styled.div`
   background: rgba(36, 101, 255, 0.1);
   margin: 0;
   text-align: center;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   .crossed {
     text-decoration: line-through;
     font-size: 1.8rem;
@@ -88,6 +88,8 @@ const Part1 = styled.div`
   .message {
     text-align: center;
     margin-bottom: 10%;
+    margin: 0 10px;
+    font-size: 1.6rem;
   }
 `;
 
@@ -101,7 +103,12 @@ const Part2 = styled.div`
 `;
 
 const Text = styled.div`
-  /* margin: 4% 4%; */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 20%;
 `;
 
 const Paid = styled.div`
@@ -351,9 +358,8 @@ const RegisterCard = (props) => {
                 coursePage.courseType === "CHALLENGE") && (
                 <>
                   <div className="message">
-                    Это открытый курс, но вам необходимо на него
-                    зарегистрироваться, чтобы получить доступ к урокам. Для
-                    этого нажмите кнопку ниже.
+                    Это открытый курс, но вам нужно на него зарегистрироваться.
+                    Для этого нажмите кнопку ниже.
                   </div>
                 </>
               )}
@@ -424,6 +430,7 @@ const RegisterCard = (props) => {
             </Part1>
             <Part2>
               {coursePage.courseType !== "PUBLIC" &&
+                coursePage.courseType !== "PRIVATE" &&
                 coursePage.courseType !== "CHALLENGE" && (
                   <Input
                     name="promo"

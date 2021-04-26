@@ -96,13 +96,11 @@ const TextBar = styled.div`
     }
   }
   .edit {
-    background: red;
     width: 100%;
     font-size: 1.6rem;
     line-height: 1.8;
     font-family: Montserrat;
     border: none;
-    background: none;
     outline: 0;
     resize: none;
     color: #393939;
@@ -405,7 +403,6 @@ class SingleTextEditor extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res, this.state.quiz.answer, this.state.quiz_guess);
         if (parseFloat(res.res) > 69) {
           this.setState({
             quiz_result: true,
@@ -545,7 +542,7 @@ class SingleTextEditor extends Component {
                       <div
                         onClick={async (e) => {
                           const res1 = this.onTest();
-                          console.log("e.target.getAttribute", e.target);
+                          // console.log("e.target.getAttribute", e.target);
                           if (
                             e.target.getAttribute("type") === "quiz" ||
                             e.target.parentElement.getAttribute("type") ===
@@ -587,6 +584,7 @@ class SingleTextEditor extends Component {
                             e.target.parentElement.getAttribute("type") ===
                               "note"
                           ) {
+                            e.target.className = "edit";
                             this.setState({
                               showNote: true,
                               note:
@@ -602,13 +600,11 @@ class SingleTextEditor extends Component {
                               this.state.total == 0 ||
                               this.state.total == null
                             ) {
-                              console.log("reveal");
                               const res3 = await this.onReveal(e);
                             }
                           }
                           if (this.state.shown) {
                             setTimeout(() => {
-                              console.log("Save");
                               const res2 = createTextEditorResult();
                             }, 3000);
                           }

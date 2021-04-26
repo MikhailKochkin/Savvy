@@ -1,15 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import styled from "styled-components";
+import renderHTML from "react-render-html";
 
 const Payment = styled.div`
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */
   background: #ffffff;
-  border: 1px solid #e4e4e4;
+  /* border: 1px solid #e4e4e4; */
   box-sizing: border-box;
   border-radius: 10px;
-  width: 270px;
+  width: 95%;
   min-height: 290px;
   /* padding: 2% 4%; */
   .message {
@@ -23,7 +24,7 @@ const Header = styled.div`
   padding-bottom: 4%;
   padding-top: 4%;
   line-height: 1.4;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px;
   background: rgba(36, 101, 255, 0.1);
   margin: 0;
   text-align: center;
@@ -34,7 +35,9 @@ const Text = styled.div`
   margin: 4% 4%;
   max-width: 280px;
   display: flex;
+  height: 90%;
   flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Part1 = styled.div`
@@ -74,24 +77,38 @@ const Button = styled.button`
   }
 `;
 
-const RegisterCard = () => {
+const RegisterCard = (props) => {
+  console.log(props.openLesson);
+  const l = props.openLesson;
   return (
     <>
       <Payment>
         <Header>🔓 Открытый урок</Header>
-        <Text>
-          <Part1>
-            {/* <div className="Title">Урок 1. Основные источники права</div>
-            <div>
-              По своей сути рыбатекст является альтернативой традиционному lorem
-              ipsum, который вызывает у некторых людей недоумение при попытках
-              прочитать рыбу текст.
-            </div> */}
-          </Part1>
-          <Part2>
+        {l && (
+          <Text>
+            <Part1>
+              <div className="Title">
+                Урок {l.number}. {l.name}
+              </div>
+              <div>{renderHTML(l.description)}</div>
+            </Part1>
+            {/* <Part2>
             <Button>Начать</Button>
-          </Part2>
-        </Text>
+          </Part2> */}
+          </Text>
+        )}
+        {!l && (
+          <Text>
+            <Part1>
+              <div className="Title">
+                Напишите нам, какой урок этого курса вы хотели бы посмотреть.
+              </div>
+            </Part1>
+            {/* <Part2>
+            <Button>Начать</Button>
+          </Part2> */}
+          </Text>
+        )}
       </Payment>
     </>
   );

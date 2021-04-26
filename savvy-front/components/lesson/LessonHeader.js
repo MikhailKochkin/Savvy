@@ -366,121 +366,127 @@ const LessonHeader = (props) => {
               </ToggleQuestion>
             </>
           ) : null} */}
-            {me && (
-              <Link
-                // The user is the teacher or the admin or it is an openLesson.
-                href={{
-                  pathname: "/lesson",
-                  query: {
-                    id: lesson.id,
-                    type: lesson.type.toLowerCase(),
-                  },
-                }}
-              >
-                <A>
-                  <Button
-                    onClick={async (e) => {
-                      if (
-                        me &&
-                        lesson &&
-                        (me.id === author ||
-                          me.permissions.includes("ADMIN") ||
-                          lesson.open)
-                      ) {
-                        createLessonResult({
-                          variables: {
-                            lessonID: lesson.id,
-                            visitsNumber: 1,
-                          },
-                        });
-                        console.log(0);
-                      }
-
-                      if (
-                        me &&
-                        lesson &&
-                        me.id !== lesson.user.id &&
-                        new_students.includes(me.id) &&
-                        !me.permissions.includes("ADMIN") &&
-                        !lesson.open &&
-                        published
-                      ) {
-                        createLessonResult({
-                          variables: {
-                            lessonID: lesson.id,
-                            visitsNumber: 1,
-                          },
-                        });
-                        console.log(1);
-                      }
-
-                      if (
-                        me &&
-                        lesson &&
-                        (me.id === author || me.permissions.includes("ADMIN"))
-                      ) {
-                        updateLessonResult({
-                          variables: {
-                            id: lesson.lessonResults[0].id,
-                            visitsNumber:
-                              lesson.lessonResults[0].visitsNumber + 1,
-                          },
-                        });
-                        console.log(3);
-                      }
-
-                      if (
-                        me &&
-                        lesson &&
-                        me.id !== lesson.user.id &&
-                        !me.permissions.includes("ADMIN") &&
-                        new_students.includes(me.id) &&
-                        published
-                      ) {
-                        updateLessonResult({
-                          variables: {
-                            id: lesson.lessonResults[0].id,
-                            visitsNumber:
-                              lesson.lessonResults[0].visitsNumber + 1,
-                          },
-                        });
-                        console.log(4);
-                      }
-
-                      if (
-                        lesson &&
-                        lesson.open &&
-                        me.id !== lesson.user.id &&
-                        !me.permissions.includes("ADMIN") &&
-                        !new_students.includes(me.id) &&
-                        published
-                      ) {
-                        updateLessonResult({
-                          variables: {
-                            id: lesson.lessonResults[0].id,
-                            visitsNumber:
-                              lesson.lessonResults[0].visitsNumber + 1,
-                          },
-                        });
-                        console.log(5);
-                      }
-                    }}
-                  >
-                    {/* {props.t("start")} */}
-                    Начать
-                  </Button>
-                </A>
-              </Link>
-            )}
-
             {me &&
+              lesson.published &&
+              (me.permissions.includes("ADMIN") ||
+                new_students.includes(me.id) ||
+                me.id === lesson.user.id ||
+                lesson.open) && (
+                <Link
+                  // The user is the teacher or the admin or it is an openLesson.
+                  href={{
+                    pathname: "/lesson",
+                    query: {
+                      id: lesson.id,
+                      type: lesson.type.toLowerCase(),
+                    },
+                  }}
+                >
+                  <A>
+                    <Button
+                      onClick={async (e) => {
+                        if (
+                          me &&
+                          lesson &&
+                          lesson.lessonResults.length == 0 &&
+                          (me.id === author ||
+                            me.permissions.includes("ADMIN") ||
+                            lesson.open)
+                        ) {
+                          createLessonResult({
+                            variables: {
+                              lessonID: lesson.id,
+                              visitsNumber: 1,
+                            },
+                          });
+                          console.log(0);
+                        }
+
+                        if (
+                          me &&
+                          lesson &&
+                          me.id !== lesson.user.id &&
+                          new_students.includes(me.id) &&
+                          !me.permissions.includes("ADMIN") &&
+                          !lesson.open &&
+                          published
+                        ) {
+                          createLessonResult({
+                            variables: {
+                              lessonID: lesson.id,
+                              visitsNumber: 1,
+                            },
+                          });
+                          console.log(1);
+                        }
+                        if (
+                          me &&
+                          lesson &&
+                          lesson.lessonResults.length > 0 &&
+                          (me.id === author || me.permissions.includes("ADMIN"))
+                        ) {
+                          updateLessonResult({
+                            variables: {
+                              id: lesson.lessonResults[0].id,
+                              visitsNumber:
+                                lesson.lessonResults[0].visitsNumber + 1,
+                            },
+                          });
+                          console.log(3);
+                        }
+
+                        if (
+                          me &&
+                          lesson &&
+                          me.id !== lesson.user.id &&
+                          !me.permissions.includes("ADMIN") &&
+                          new_students.includes(me.id) &&
+                          published
+                        ) {
+                          updateLessonResult({
+                            variables: {
+                              id: lesson.lessonResults[0].id,
+                              visitsNumber:
+                                lesson.lessonResults[0].visitsNumber + 1,
+                            },
+                          });
+                          console.log(4);
+                        }
+
+                        if (
+                          lesson &&
+                          lesson.open &&
+                          me.id !== lesson.user.id &&
+                          !me.permissions.includes("ADMIN") &&
+                          !new_students.includes(me.id) &&
+                          published
+                        ) {
+                          updateLessonResult({
+                            variables: {
+                              id: lesson.lessonResults[0].id,
+                              visitsNumber:
+                                lesson.lessonResults[0].visitsNumber + 1,
+                            },
+                          });
+                          console.log(5);
+                        }
+                      }}
+                    >
+                      {/* {props.t("start")} */}
+                      Начать
+                    </Button>
+                  </A>
+                </Link>
+              )}
+
+            {/* {me &&
             lesson &&
             me.id !== lesson.user.id &&
             new_students.includes(me.id) &&
             !me.permissions.includes("ADMIN") &&
             !published ? (
               <InProgress>В разработке</InProgress>
-            ) : null}
+            ) : null} */}
           </Buttons>
         </div>
       </TextBar>

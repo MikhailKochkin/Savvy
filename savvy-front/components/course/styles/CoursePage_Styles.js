@@ -85,7 +85,7 @@ export const Data = styled.div`
     line-height: 1.4;
     padding-top: 0%;
     padding-bottom: 2%;
-    margin-top: 3%;
+    margin-top: 20px;
   }
   .trackName {
     font-weight: 600;
@@ -166,7 +166,8 @@ export const Total = styled.div`
   font-size: 1.6rem;
   margin: 1.5% 0;
   @media (max-width: 800px) {
-    margin-bottom: 20px;
+    font-size: 1.8rem;
+    margin-bottom: 6%;
   }
 `;
 
