@@ -59,19 +59,6 @@ const Footer = () => {
           <Link
             href={{
               pathname: "/legal",
-              query: { name: "terms" },
-            }}
-          >
-            <a>
-              {/* {t("terms")} */}
-              Пользовательское соглашение
-            </a>
-          </Link>
-        </div>
-        <div>
-          <Link
-            href={{
-              pathname: "/legal",
               query: { name: "privacy" },
             }}
           >
