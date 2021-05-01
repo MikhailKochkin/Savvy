@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import ShownCourses from "./ShownCourses";
+import Connect from "./Connect";
 import { useUser } from "../User";
 import * as _ from "lodash";
 
@@ -19,17 +20,12 @@ const Styles = styled.div`
     justify-content: center;
   }
   @media (max-width: 800px) {
+    margin-top: 30px;
     width: 100%;
+    .bar {
+      width: 90%;
+    }
   }
-`;
-
-const Progress = styled.div`
-  height: 100%;
-  background: #3f51b5;
-  /* width: ${(props) => props.progress}; */
-  background: green;
-  transition: all 0.5s;
-  border-radius: 10px;
 `;
 
 const Course = styled.div`
@@ -40,6 +36,10 @@ const Course = styled.div`
   margin-right: 25px;
   transition: all 0.5s;
   border-radius: 10px;
+  @media (max-width: 800px) {
+    width: 40px;
+    margin-right: 10px;
+  }
 `;
 
 const Course2 = styled.div`
@@ -49,6 +49,10 @@ const Course2 = styled.div`
   margin-right: 25px;
   transition: all 0.5s;
   border-radius: 10px;
+  @media (max-width: 800px) {
+    width: 40px;
+    margin-right: 10px;
+  }
 `;
 
 const Courses = (props) => {
@@ -83,6 +87,7 @@ const Courses = (props) => {
         ))}
       </div>
       <ShownCourses />
+      <Connect />
     </Styles>
   );
 };

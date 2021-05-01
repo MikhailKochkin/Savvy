@@ -78,7 +78,6 @@ const Button = styled.button`
 `;
 
 const RegisterCard = (props) => {
-  console.log(props.openLesson);
   const l = props.openLesson;
   return (
     <>
@@ -90,7 +89,7 @@ const RegisterCard = (props) => {
               <div className="Title">
                 Урок {l.number}. {l.name}
               </div>
-              <div>{renderHTML(l.description)}</div>
+              <div>{l.description ? renderHTML(l.description) : null}</div>
             </Part1>
             {/* <Part2>
             <Button>Начать</Button>

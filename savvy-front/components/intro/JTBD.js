@@ -6,7 +6,7 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
+  min-height: 70vh;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -41,6 +41,8 @@ const Container = styled.div`
   }
   @media (max-width: 800px) {
     width: 100%;
+    flex-direction: column;
+    margin-top: 40px;
   }
 `;
 
@@ -54,9 +56,9 @@ const Image = styled.div`
   img {
     width: 310px;
   }
-  @media (max-width: 800px) {
+  /* @media (max-width: 800px) {
     display: none;
-  }
+  } */
 `;
 
 const JTBD = () => {

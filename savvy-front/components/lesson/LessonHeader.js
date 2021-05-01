@@ -274,7 +274,6 @@ const LessonHeader = (props) => {
 
   if (me) {
     visit = lesson.lessonResults.find((l) => l.student.id === me.id);
-
     if (visit && lesson.structure && lesson.structure.lessonItems) {
       progress = visit.progress / lesson.structure.lessonItems.length;
     } else {
@@ -317,9 +316,6 @@ const LessonHeader = (props) => {
     <>
       <TextBar color={color}>
         <div>
-          {/* <div className="image">
-            <img src="/static/credit.svg" />
-          </div> */}
           <Text>
             <div className="lesson_name">
               {lesson.number}. {name}
@@ -367,6 +363,24 @@ const LessonHeader = (props) => {
             </>
           ) : null} */}
             {me &&
+              !lesson.published &&
+              (me.id === author || me.permissions.includes("ADMIN")) && (
+                <Link
+                  // author or admin or openLesson if the lesson is not published.
+                  href={{
+                    pathname: "/lesson",
+                    query: {
+                      id: lesson.id,
+                      type: lesson.type.toLowerCase(),
+                    },
+                  }}
+                >
+                  <A>
+                    <Button>Начать</Button>
+                  </A>
+                </Link>
+              )}
+            {me &&
               lesson.published &&
               (me.permissions.includes("ADMIN") ||
                 new_students.includes(me.id) ||
@@ -385,10 +399,11 @@ const LessonHeader = (props) => {
                   <A>
                     <Button
                       onClick={async (e) => {
+                        // 0. admin / open lesson / lesson author visit open lesson for the first time
                         if (
                           me &&
                           lesson &&
-                          lesson.lessonResults.length == 0 &&
+                          visit == undefined &&
                           (me.id === author ||
                             me.permissions.includes("ADMIN") ||
                             lesson.open)
@@ -401,10 +416,11 @@ const LessonHeader = (props) => {
                           });
                           console.log(0);
                         }
-
+                        // 1. registered user visits the lesson for the first time
                         if (
                           me &&
                           lesson &&
+                          visit == undefined &&
                           me.id !== lesson.user.id &&
                           new_students.includes(me.id) &&
                           !me.permissions.includes("ADMIN") &&
@@ -419,25 +435,12 @@ const LessonHeader = (props) => {
                           });
                           console.log(1);
                         }
-                        if (
-                          me &&
-                          lesson &&
-                          lesson.lessonResults.length > 0 &&
-                          (me.id === author || me.permissions.includes("ADMIN"))
-                        ) {
-                          updateLessonResult({
-                            variables: {
-                              id: lesson.lessonResults[0].id,
-                              visitsNumber:
-                                lesson.lessonResults[0].visitsNumber + 1,
-                            },
-                          });
-                          console.log(3);
-                        }
 
+                        // 2. registered user visits the lesson one more time
                         if (
                           me &&
                           lesson &&
+                          visit !== undefined &&
                           me.id !== lesson.user.id &&
                           !me.permissions.includes("ADMIN") &&
                           new_students.includes(me.id) &&
@@ -445,30 +448,80 @@ const LessonHeader = (props) => {
                         ) {
                           updateLessonResult({
                             variables: {
-                              id: lesson.lessonResults[0].id,
-                              visitsNumber:
-                                lesson.lessonResults[0].visitsNumber + 1,
+                              id: visit.id,
+                              visitsNumber: visit.visitsNumber + 1,
+                            },
+                          });
+                          console.log(2);
+                        }
+
+                        // 3. author or admin visits the lesson for the first time
+                        if (
+                          me &&
+                          lesson &&
+                          visit == undefined &&
+                          (me.id === author || me.permissions.includes("ADMIN"))
+                        ) {
+                          createLessonResult({
+                            variables: {
+                              lessonID: lesson.id,
+                              visitsNumber: 1,
+                            },
+                          });
+                          console.log(3);
+                        }
+
+                        // 4. author or admin visits the lesson one more time
+                        if (
+                          me &&
+                          lesson &&
+                          visit !== undefined &&
+                          (me.id === author || me.permissions.includes("ADMIN"))
+                        ) {
+                          updateLessonResult({
+                            variables: {
+                              id: visit.id,
+                              visitsNumber: visit.visitsNumber + 1,
                             },
                           });
                           console.log(4);
                         }
 
+                        // 5. unregistered user visits the open lesson for the first time
+                        if (
+                          lesson &&
+                          lesson.open &&
+                          visit == undefined &&
+                          me.id !== lesson.user.id &&
+                          !me.permissions.includes("ADMIN") &&
+                          !new_students.includes(me.id) &&
+                          published
+                        ) {
+                          createLessonResult({
+                            variables: {
+                              lessonID: lesson.id,
+                              visitsNumber: 1,
+                            },
+                          });
+                          console.log(5);
+                        }
+                        // 6. unregistered user visits the open lesson one more time
                         if (
                           lesson &&
                           lesson.open &&
                           me.id !== lesson.user.id &&
+                          visit !== undefined &&
                           !me.permissions.includes("ADMIN") &&
                           !new_students.includes(me.id) &&
                           published
                         ) {
                           updateLessonResult({
                             variables: {
-                              id: lesson.lessonResults[0].id,
-                              visitsNumber:
-                                lesson.lessonResults[0].visitsNumber + 1,
+                              id: visit.id,
+                              visitsNumber: visit.visitsNumber + 1,
                             },
                           });
-                          console.log(5);
+                          console.log(6);
                         }
                       }}
                     >

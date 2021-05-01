@@ -8,7 +8,7 @@ const COURSE_PAGES_QUERY = gql`
   query COURSE_PAGES_QUERY {
     coursePages(
       where: { published: { equals: true } }
-      orderBy: { createdAt: desc }
+      orderBy: { createdAt: asc }
     ) {
       id
       title
@@ -62,7 +62,7 @@ const Styles = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  margin-top: 40px;
+  margin: 40px 0;
   @media (max-width: 800px) {
     width: 95%;
     padding: 20px 0;
@@ -73,7 +73,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
   @media (max-width: 800px) {
     flex-direction: row;
     align-items: flex-start;
@@ -113,7 +113,6 @@ const ShownCourses = (props) => {
             if (loading) return <LoadingDummy />;
             const coursePages = data.coursePages;
             let displayed = coursePages.filter((c) => c.tags.includes("Intro"));
-            console.log(coursePages, displayed);
             return (
               <>
                 {displayed.map((c) => (

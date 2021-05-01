@@ -340,15 +340,20 @@ const RegisterCard = (props) => {
           <Header>
             {
               <>
-                {discountPrice && price !== "Бесплатно" && (
-                  <>
-                    <span className="crossed">{`${price}`}</span>
-                    {"        "}
-                    {`${discountPrice} ₽`}
-                  </>
-                )}
-                {!discountPrice && price !== "Бесплатно" && <>{`${price} ₽`}</>}
-                {!discountPrice && price === "Бесплатно" && <>{`Бесплатно`}</>}
+                {discountPrice &&
+                  price !== "Бесплатно" &&
+                  coursePage.courseType !== "PUBLIC" && (
+                    <>
+                      <span className="crossed">{`${price}`}</span>
+                      {"        "}
+                      {`${discountPrice} ₽`}
+                    </>
+                  )}
+                {!discountPrice &&
+                  price !== "Бесплатно" &&
+                  coursePage.courseType !== "PUBLIC" && <>{`${price} ₽`}</>}
+                {(!discountPrice && price === "Бесплатно") ||
+                  (coursePage.courseType == "PUBLIC" && <>{`Бесплатно`}</>)}
               </>
             }
           </Header>
