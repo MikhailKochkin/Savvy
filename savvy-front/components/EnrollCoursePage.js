@@ -108,14 +108,8 @@ const EnrollCoursePage = (props) => {
                 onClick={async (e) => {
                   e.preventDefault();
                   const res = await onClick(e, enrollOnCourse);
-                  setTimeout(function () {
-                    Router.push({
-                      pathname: "/coursePage",
-                      query: {
-                        id: coursePage.id,
-                      },
-                    });
-                  }, 500);
+                  console.log("Reload");
+                  Router.reload();
                 }}
               >
                 Регистрация

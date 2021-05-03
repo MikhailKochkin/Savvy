@@ -439,6 +439,7 @@ const NewSingleLesson = (props) => {
                 <AreYouEnrolled
                   openLesson={lesson.open}
                   subject={lesson.coursePage.id}
+                  lessonId={lesson.id}
                 >
                   <Container>
                     <ReactResizeDetector

@@ -7,6 +7,7 @@ import Meta from "./Meta";
 import Footer from "./Footer";
 import Header from "./Header";
 import Ad from "./Ad";
+import Ad2 from "./Ad2";
 
 import Layout from "../components/Layout";
 // import { useUser } from "./User";
@@ -75,9 +76,8 @@ const Page = ({ children }) => {
           <Meta />
           <Layout>
             <ModalProvider>
-              {(router.pathname == "/" || router.pathname == "/intro") && (
-                <Ad />
-              )}
+              {router.pathname == "/" && <Ad />}
+              {router.pathname == "/intro" && <Ad2 />}
               <Header />
               {router.pathname !== "/school" && <DynamicNav />}
               <Inner>{children}</Inner>

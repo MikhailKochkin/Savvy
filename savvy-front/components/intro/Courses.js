@@ -66,6 +66,7 @@ const Courses = (props) => {
     "ck4n47a2j01jg0790gspxqxju",
     "cjyg59y2b00qg0768brp9xp2r",
     "cjtreu3md00fp0897ga13aktp",
+    "ck3e1vo65002307638xcx7wkd",
   ];
   if (me) {
     visitedCourses = me.courseVisits.filter((c) =>
@@ -74,7 +75,7 @@ const Courses = (props) => {
   } else {
     visitedCourses = 0;
   }
-  console.log(visitedCourses, 7 - visitedCourses);
+  console.log(visitedCourses, 8 - visitedCourses);
 
   return (
     <Styles>
@@ -82,7 +83,7 @@ const Courses = (props) => {
         {_.times(visitedCourses, () => (
           <Course></Course>
         ))}
-        {_.times(7 - visitedCourses, () => (
+        {_.times(8 - visitedCourses, () => (
           <Course2></Course2>
         ))}
       </div>
