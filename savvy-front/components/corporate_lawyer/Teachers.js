@@ -112,7 +112,8 @@ const Teachers = () => {
       name: "Лев",
       surname: "Толстопятов",
       description: `Помощник юриста Clifford Chance. Модуль "Soft skills и оценка рынка"`,
-      img: "url",
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1620033245/%D0%9B%D0%B5%D0%B2-%D0%A8%D0%9C%D0%AE.png",
     },
     {
       name: "Юлия",
@@ -142,7 +143,35 @@ const Teachers = () => {
       img: "url",
     },
     {
-      name: "И еще 11",
+      name: "Михаил",
+      surname: "Cтеценко",
+      description: `Ассоциированный партнер LegIT. Модуль "IP и недобросовестная конкуренция"`,
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1620034080/Picture1_1.png",
+    },
+    {
+      name: "Алексей",
+      surname: "Зайцев",
+      description: `Старший юрист LegIT. Модуль "IP и недобросовестная конкуренция"`,
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1620034080/Picture2_1.png",
+    },
+    {
+      name: "Анна",
+      surname: "Кареева",
+      description: `Старший юрист LegIT. Модуль "Legal design"`,
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1620034080/Picture3_1.png",
+    },
+    {
+      name: "Елизавета",
+      surname: "Молдачева",
+      description: `Младший юрист LegIT. Модуль "IP и недобросовестная конкуренция"`,
+      img:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1620034080/Picture4_1.png",
+    },
+    {
+      name: "И еще 5",
       surname: "специалистов,",
       description: `которых мы совсем скоро вам представим.`,
       img: "url",
