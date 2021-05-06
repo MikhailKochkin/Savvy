@@ -17,15 +17,17 @@ const Box = styled.div`
   }
 `;
 
-const StyledModal = Modal.styled`
+const StyledModal = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: white;
   border: 1px solid grey;
   border-radius: 10px;
-  padding: 1% 2%;
+  overflow: scroll;
+  padding: 3% 2%;
   width: 50%;
+  max-height: 600px;
   @media (max-width: 800px) {
     width: 90%;
   }
@@ -44,6 +46,11 @@ const Button = styled.button`
   a {
     color: #112a62;
   }
+`;
+
+const Span = styled.div`
+  max-height: 600px;
+  margin: 3% 0;
 `;
 
 class ProblemModal extends Component {
@@ -91,20 +98,22 @@ class ProblemModal extends Component {
                       {renderHTML(t.answer.substring(0, 200) + "...")}
                     </span>
                   )}
-                  <StyledModal
+                  <Modal
                     isOpen={this.state.isOpen}
                     onBackgroundClick={this.toggleModal}
                     onEscapeKeydown={this.toggleModal}
                   >
-                    {results.filter((t) => t.problem.id === problem.id).length >
-                    0 ? (
-                      results
-                        .filter((t) => t.problem.id === problem.id)
-                        .map((t) => <span>{renderHTML(t.answer)}</span>)
-                    ) : (
-                      <span>Не выполнена</span>
-                    )}
-                  </StyledModal>
+                    <StyledModal>
+                      {results.filter((t) => t.problem.id === problem.id)
+                        .length > 0 ? (
+                        results
+                          .filter((t) => t.problem.id === problem.id)
+                          .map((t) => <Span>{renderHTML(t.answer)}</Span>)
+                      ) : (
+                        <span>Не выполнена</span>
+                      )}
+                    </StyledModal>
+                  </Modal>
                   <Button onClick={this.toggleModal}>
                     <a>Развернуть</a>
                   </Button>

@@ -267,12 +267,6 @@ const Nav = (props) => {
 
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   let me = useUser();
-  useEffect(() => {
-    if (!me) {
-      setAuth("signup");
-      setIsOpen(true);
-    }
-  }, [0]);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
