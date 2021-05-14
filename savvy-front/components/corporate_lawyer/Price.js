@@ -148,7 +148,7 @@ const Price = () => {
           </div>
           <div className="text">
             {" "}
-            или рассрочка <span className="number">6 900 ₽</span> на 6 месяцев
+            или рассрочка <span className="number">7 500 ₽</span> на 6 месяцев
           </div>
         </div>
         <div id="discount">
