@@ -4,7 +4,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 // import Applications from "./applications/Applications";
-// import Exercises from "./Exercises";
+import Exercises from "./Exercises";
 import Loading from "../Loading";
 import UserAnalytics from "./UserAnalytics";
 
@@ -206,12 +206,12 @@ const Stats = (props) => {
                 students={coursePage.new_students}
               />
             )}
-            {/* {page === "exercises_results" && (
-                        <Exercises
-                          lessons={coursePage.lessons}
-                          students={coursePage.new_students}
-                        />
-                      )} */}
+            {page === "exercises_results" && (
+              <Exercises
+                lessons={coursePage.lessons}
+                students={coursePage.new_students}
+              />
+            )}
             {/* 
                       {page === "applications" &&
                         coursePage.courseType !== "FORMONEY" && (
