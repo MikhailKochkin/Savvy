@@ -201,11 +201,6 @@ const CoursePage = (props) => {
             return (
               <>
                 <Container>
-                  {/* <LessonImage
-                    src={
-                      "https://cdn.pixabay.com/photo/2016/05/24/16/48/mountains-1412683_1280.png"
-                    }
-                  /> */}
                   <LessonStyles>
                     <CourseInfo>
                       <Data>

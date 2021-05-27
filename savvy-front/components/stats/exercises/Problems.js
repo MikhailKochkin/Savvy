@@ -80,7 +80,22 @@ const Problems = (props) => {
       {props.lesson.problems.map((p) => (
         <>
           <Box>{renderHTML(p.text)}</Box>
-
+          <div>
+            {results.problemResults
+              // .filter((prob) => prob.problem.id == p.id)
+              .map((r) => (
+                <>
+                  {console.log("r", r)}
+                  <Answer>
+                    {renderHTML(r.answer)}
+                    <div>
+                      {r.student.name} {r.student.surname}{" "}
+                      {moment(r.createdAt).format("LLL")}
+                    </div>
+                  </Answer>
+                </>
+              ))}
+          </div>
           <div>
             {results.feedbacks
               // .filter((prob) => prob.problem.id == p.id)

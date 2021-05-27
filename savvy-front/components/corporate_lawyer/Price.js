@@ -154,7 +154,7 @@ const Price = () => {
         <div id="discount">
           <div className="header2">Cтипендии и скидки</div>
           <div className="text">
-            Получите скидку <span style={{ fontWeight: 600 }}>до 90%</span> на
+            Получите скидку <span style={{ fontWeight: 600 }}>до 70%</span> на
             конкурсной основе. Подробнее расскажем на собеседовании. Но
             торопитесь, скидки привязаны к цене курса на данный момент.
           </div>

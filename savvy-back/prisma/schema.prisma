@@ -306,7 +306,7 @@ model Lesson {
 
 model LessonResult {
   id           String   @id @default(cuid())
-  visitsNumber Int?     @default(0)
+  visitsNumber Int?     @default(1)
   lessonID     String?  @default(cuid())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
