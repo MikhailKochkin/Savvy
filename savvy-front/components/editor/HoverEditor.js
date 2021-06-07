@@ -17,15 +17,24 @@ import {
   useFocused,
   useSelected,
 } from "slate-react";
-import { Editor, Transforms, Text, createEditor, Node } from "slate";
+import {
+  Editor,
+  Transforms,
+  Text,
+  createEditor,
+  Node,
+  Element as SlateElement,
+} from "slate";
 import { css } from "emotion";
+import styled from "styled-components";
+import isUrl from "is-url";
 import { withHistory } from "slate-history";
 import escapeHtml from "escape-html";
 import { jsx } from "slate-hyperscript";
 import Icon from "react-icons-kit";
 import { bold } from "react-icons-kit/fa/bold";
 import { italic } from "react-icons-kit/fa/italic";
-import { pencil } from "react-icons-kit/fa/pencil";
+import { link } from "react-icons-kit/fa/link";
 import { strikethrough } from "react-icons-kit/fa/strikethrough";
 import { underline } from "react-icons-kit/fa/underline";
 import { image } from "react-icons-kit/fa/image";
@@ -42,6 +51,18 @@ const AppStyles = {
   width: "100%",
   fontSize: "1.5rem",
 };
+
+const Link = styled.a`
+  border-bottom: 2px solid #26ba8d;
+  padding: 0;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    /* background: #26ba8d;
+    color: #fff;
+    padding: 2px 0; */
+  }
+`;
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -76,7 +97,6 @@ const serialize = (node) => {
   if (Text.isText(node)) {
     let styles = Object.keys(node);
     styles.shift();
-    // console.log(styles);
     if (styles.length) {
       let text = node.text;
       if (styles.includes("bold")) {
@@ -85,11 +105,8 @@ const serialize = (node) => {
       if (styles.includes("italic")) {
         text = `<em>${text}</em>`;
       }
-      if (styles.includes("insert")) {
-        text = `<ins>${text}</ins>`;
-      }
-      if (styles.includes("delete")) {
-        text = `<del>${text}</del>`;
+      if (styles.includes("underline")) {
+        text = `<u>${text}</u>`;
       }
       if (styles.includes("error")) {
         text = `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${text}</span>`;
@@ -98,7 +115,7 @@ const serialize = (node) => {
         text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
       }
       if (styles.includes("quiz")) {
-        text = `<span className="quiz" question="${node.question}" answer="${node.answer}">${text}</span>`;
+        text = `<span type="quiz" className="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
       }
       return text;
     } else {
@@ -111,12 +128,20 @@ const serialize = (node) => {
       return `<blockquote><p>${children}</p></blockquote>`;
     case "flag":
       return `<div className="flag">${children}</div>`;
+    case "conceal":
+      return `<div id="conceal" data-text="${escapeHtml(
+        node.data
+      )}">${children}</div>`;
     case "header":
-      return `<h2>${children}<h2/>`;
+      return `<h2>${children}</h2>`;
     case "paragraph":
       return `<p>${children}</p>`;
     case "image":
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
+    case "error":
+      return `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${children}</span>`;
+    case "note":
+      return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
     case "video":
       return `<iframe src="${escapeHtml(
         node.src
@@ -146,14 +171,27 @@ const deserialize = (el) => {
   }
 
   const children = Array.from(el.childNodes).map(deserialize);
-  // if (ELEMENT_TAGS[el.nodeName]) {
-  //   const attrs = ELEMENT_TAGS[el.nodeName](el);
-  //   return jsx("element", attrs, children);
-  // }
+
   if (TEXT_TAGS[el.nodeName]) {
     const attrs = TEXT_TAGS[el.nodeName](el);
     return children.map((child) => jsx("text", attrs, child));
   }
+
+  //  legacy fix. Use it if the initial text in the test was plain text, not html
+  if (el.nodeName == "BODY" && !el.innerHTML.includes("<p>")) {
+    console.log("!!!");
+    return [
+      {
+        type: "paragraph",
+        children: [
+          {
+            text: el.textContent,
+          },
+        ],
+      },
+    ];
+  }
+
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -163,8 +201,14 @@ const deserialize = (el) => {
       return jsx("element", { type: "video", src: el.src }, [{ text: "" }]);
     case "IMAGE":
       return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
+    case "IMG":
+      return jsx("element", { type: "image", src: el.src }, [{ text: "" }]);
     case "BLOCKQUOTE":
       return jsx("element", { type: "quote" }, children);
+    case "DIV":
+      return jsx("element", { type: "div" }, children);
+    case "H2":
+      return jsx("element", { type: "header" }, children);
     case "P":
       return jsx(
         "element",
@@ -177,29 +221,27 @@ const deserialize = (el) => {
         { type: "link", url: el.getAttribute("href") },
         children
       );
-    case "INS":
-      return jsx(
-        // "element",
-        // { type: "link", url: el.getAttribute("href") },
-        // children
-        { text: children, insert: true }
-      );
     default:
       return el.textContent;
   }
 };
 
 const HoveringMenu = (props) => {
-  let text;
-  if (props.value) {
-    let document = new DOMParser().parseFromString(props.value, "text/html");
-    text = deserialize(document.body);
-  } else {
-    let document = new DOMParser().parseFromString(`<p></p>`, "text/html");
-    text = deserialize(document.body);
-  }
-  const [value, setValue] = useState(text);
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  let html;
+  props.value ? (html = props.value) : (html = `<p> </p>`);
+  // html = `<p> </p>`;
+  const ref = useRef();
+
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const initial = deserialize(document.body);
+  // console.log("initial", initial);
+  // console.log("initialValue", initialValue);
+
+  const [value, setValue] = useState(initial);
+  const editor = useMemo(
+    () => withLinks(withHistory(withReact(createEditor()))),
+    []
+  );
 
   // 4.1 Element renderer
 
@@ -247,6 +289,34 @@ const HoveringMenu = (props) => {
     return <Leaf {...props} />;
   }, []);
 
+  // useEffect(() => {
+  //   const el = ref.current;
+  //   const { selection } = editor;
+
+  //   if (!el) {
+  //     return;
+  //   }
+
+  //   if (
+  //     !selection ||
+  //     !ReactEditor.isFocused(editor) ||
+  //     Range.isCollapsed(selection) ||
+  //     Editor.string(editor, selection) === ""
+  //   ) {
+  //     el.removeAttribute("style");
+  //     return;
+  //   }
+
+  //   const domSelection = window.getSelection();
+  //   const domRange = domSelection.getRangeAt(0);
+  //   const rect = domRange.getBoundingClientRect();
+  //   el.style.opacity = "1";
+  //   el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`;
+  //   el.style.left = `${
+  //     rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
+  //   }px`;
+  // });
+
   return (
     <Slate
       editor={editor}
@@ -254,10 +324,10 @@ const HoveringMenu = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        // console.log("value", value);
+        console.log("value", value);
         setValue(value);
         props.getEditorText(arr.join(""), props.name, props.index);
-        // console.log(arr.join(""));
+        console.log("html", arr.join(""));
       }}
     >
       <HoveringToolbar />
@@ -269,18 +339,18 @@ const HoveringMenu = (props) => {
         // onDOMBeforeInput={(event) => {
         //   event.preventDefault();
         //   console.log(event.inputType);
-        //   switch (event.inputType) {
-        //     case "bold":
-        //       return toggleFormat(editor, "bold");
-        //     case "italic":
-        //       return toggleFormat(editor, "italic");
-        //     // case "underline":
-        //     //   return toggleFormat(editor, "underline");
-        //     case "delete":
-        //       return toggleFormat(editor, "delete");
-        //     case "insert":
-        //       return toggleFormat(editor, "insert");
-        //   }
+        //   // switch (event.inputType) {
+        //   //   case "bold":
+        //   //     return toggleFormat(editor, "bold");
+        //   //   case "italic":
+        //   //     return toggleFormat(editor, "italic");
+        //   //   // case "underline":
+        //   //   //   return toggleFormat(editor, "underline");
+        //   //   case "delete":
+        //   //     return toggleFormat(editor, "delete");
+        //   //   case "insert":
+        //   //     return toggleFormat(editor, "insert");
+        //   // }
         // }}
       />
     </Slate>
@@ -314,6 +384,76 @@ const addImageElement = (editor) => {
       },
     ],
   });
+};
+
+const withLinks = (editor) => {
+  const { insertData, insertText, isInline } = editor;
+
+  editor.isInline = (element) => {
+    return element.type === "link" ? true : isInline(element);
+  };
+
+  editor.insertText = (text) => {
+    if (text && isUrl(text)) {
+      wrapLink(editor, text);
+    } else {
+      insertText(text);
+    }
+  };
+
+  editor.insertData = (data) => {
+    const text = data.getData("text/plain");
+
+    if (text && isUrl(text)) {
+      wrapLink(editor, text);
+    } else {
+      insertData(data);
+    }
+  };
+
+  return editor;
+};
+
+const insertLink = (editor, url) => {
+  if (editor.selection) {
+    wrapLink(editor, url);
+  }
+};
+
+const isLinkActive = (editor) => {
+  const [link] = Editor.nodes(editor, {
+    match: (n) =>
+      !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "link",
+  });
+  return !!link;
+};
+
+const unwrapLink = (editor) => {
+  Transforms.unwrapNodes(editor, {
+    match: (n) =>
+      !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === "link",
+  });
+};
+
+const wrapLink = (editor, url) => {
+  if (isLinkActive(editor)) {
+    unwrapLink(editor);
+  }
+
+  const { selection } = editor;
+  const isCollapsed = selection && Range.isCollapsed(selection);
+  const link = {
+    type: "link",
+    url,
+    children: isCollapsed ? [{ text: url }] : [],
+  };
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, link);
+  } else {
+    Transforms.wrapNodes(editor, link, { split: true });
+    Transforms.collapse(editor, { edge: "end" });
+  }
 };
 
 const isFormatActive = (editor, format) => {
@@ -402,6 +542,7 @@ const HoveringToolbar = () => {
         <FormatButton format="delete" icon={strikethrough} />
         <FormatButton format="insert" icon={underline} />
         <FormatButton2 format="image" icon={image} />
+        <LinkButton format="image" icon={link} />
       </Menu>
     </Portal>
   );
@@ -416,6 +557,25 @@ const FormatButton = ({ format, icon }) => {
       onMouseDown={(event) => {
         event.preventDefault();
         toggleFormat(editor, format);
+      }}
+    >
+      <IconBlock>
+        <Icon icon={icon} />
+      </IconBlock>
+    </Button>
+  );
+};
+
+const LinkButton = ({ format, icon }) => {
+  const editor = useSlate();
+  return (
+    <Button
+      reversed
+      onMouseDown={(event) => {
+        event.preventDefault();
+        const url = window.prompt("Enter the URL of the link:");
+        if (!url) return;
+        insertLink(editor, url);
       }}
     >
       <IconBlock>
@@ -552,18 +712,10 @@ const ImageElement = ({ attributes, children, element }) => {
 
 const initialValue = [
   {
+    type: "paragraph",
     children: [
       {
-        text:
-          "Since the editor is based on a recursive tree model, similar to an HTML document, you can create complex nested structures, like tables:",
-      },
-    ],
-  },
-  {
-    children: [
-      {
-        text:
-          "This table is just a basic example of rendering a table, and it doesn't have fancy functionality. But you could augment it to add support for navigating with arrow keys, displaying table headers, adding column and rows, or even formulas if you wanted to get really crazy!",
+        text: "This example shows how you can make a hovering menu appear above your content, which you can use to make text ",
       },
     ],
   },

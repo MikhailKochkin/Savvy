@@ -2357,6 +2357,7 @@ export interface NexusGenFieldTypes {
     deleteClause: NexusGenRootTypes['Clause'] | null; // Clause
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     deleteDocument: NexusGenRootTypes['Document'] | null; // Document
+    deleteLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     deleteNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     deleteNote: NexusGenRootTypes['Note'] | null; // Note
     deleteOrder: NexusGenRootTypes['Order'] | null; // Order
@@ -2967,6 +2968,7 @@ export interface NexusGenFieldTypeNames {
     deleteClause: 'Clause'
     deleteConstruction: 'Construction'
     deleteDocument: 'Document'
+    deleteLesson: 'Lesson'
     deleteNewTest: 'NewTest'
     deleteNote: 'Note'
     deleteOrder: 'Order'
@@ -3649,6 +3651,9 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
     }
     deleteDocument: { // args
+      id?: string | null; // String
+    }
+    deleteLesson: { // args
       id?: string | null; // String
     }
     deleteNewTest: { // args

@@ -47,7 +47,7 @@ const Questions = styled.div`
 `;
 
 const Final = styled.div`
-  width: 100%;
+  max-width: 400px;
   margin-top: 2%;
   text-align: center;
   background: #f0f8ff;
@@ -86,7 +86,13 @@ class Interactive extends Component {
     let newNote;
     let newTest;
     let finish;
-    if (data[1].type === "quiz") {
+    console.log(data, data[1].value, data[1].value === "");
+    if (
+      data[1].type === "quiz" &&
+      data[1].value !== null &&
+      data[1].value !== "0" &&
+      data[1].value !== ""
+    ) {
       let el = this.props.lesson.quizes.filter(
         (q) => q.id === data[1].value
       )[0];
@@ -124,7 +130,13 @@ class Interactive extends Component {
         };
       });
     }
-    if (data[1].type && data[1].type.toLowerCase() === "newtest") {
+    if (
+      data[1].type &&
+      data[1].type.toLowerCase() === "newtest" &&
+      data[1].value !== null &&
+      data[1].value !== "0" &&
+      data[1].value !== ""
+    ) {
       let el = this.props.lesson.newTests.filter(
         (n) => n.id === data[1].value
       )[0];
@@ -162,7 +174,12 @@ class Interactive extends Component {
         };
       });
     }
-    if (data[1].type === "note") {
+    if (
+      data[1].type === "note" &&
+      data[1].value !== null &&
+      data[1].value !== "0" &&
+      data[1].value !== ""
+    ) {
       let el = this.props.lesson.notes.filter((q) => q.id === data[1].value)[0];
       newNote = (
         <Note
@@ -192,10 +209,11 @@ class Interactive extends Component {
       data[1].type === "finish" ||
       data[1].type === null ||
       data[1].value === null ||
-      data[1].value === ""
+      data[1].value === "" ||
+      data[1].value == "0"
     ) {
-      // finish = <Final> {this.props.t("final")}📝</Final>;
-      finish = <div></div>;
+      finish = <Final> Теперь ответьте на изначальный вопрос📝</Final>;
+      // finish = <div></div>;
       this.setState((state) => {
         if (!(finish in this.state.componentList)) {
           const componentList = [...state.componentList, finish];

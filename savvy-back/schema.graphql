@@ -1108,6 +1108,7 @@ type Mutation {
   deleteClause(id: String): Clause
   deleteConstruction(id: String): Construction
   deleteDocument(id: String): Document
+  deleteLesson(id: String): Lesson
   deleteNewTest(id: String): NewTest
   deleteNote(id: String): Note
   deleteOrder(id: String): Order

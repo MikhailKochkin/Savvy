@@ -121,7 +121,7 @@ const TestBlock = (props) => {
             defaultValue={type ? type.toLowerCase() : "example"}
             onChange={(e) => setType(e.target.value)}
           >
-            <option value="example">Выберите тип</option>
+            <option value={0}>Выберите тип</option>
             <option value="newtest">Тест</option>
             <option value="quiz">Вопрос</option>
             <option value="note">Заметка</option>
@@ -132,7 +132,7 @@ const TestBlock = (props) => {
               defaultValue={c}
               onChange={(e) => setC(e.target.value)}
             >
-              <option value={1}>Выберите</option>
+              <option value={0}>Не выбран</option>
               {props.newTests.map((q) => {
                 let el = renderHTML(q.question[0]);
                 return (
@@ -149,7 +149,7 @@ const TestBlock = (props) => {
               defaultValue={c}
               onChange={(e) => setC(e.target.value)}
             >
-              <option value={1}>Выберите</option>
+              <option value={0}>Не выбран</option>
               {props.quizes.map((q) => {
                 let el = renderHTML(q.question);
                 return (
@@ -166,7 +166,7 @@ const TestBlock = (props) => {
               defaultValue={c}
               onChange={(e) => setC(e.target.value)}
             >
-              <option value={1}>Выберите</option>
+              <option value={0}>Не выбран</option>
               {props.notes.map((q) => {
                 return <option value={q.id}>{q.text}</option>;
               })}
@@ -188,7 +188,7 @@ const TestBlock = (props) => {
               </select>
               {t_type && t_type.toLowerCase() === "newtest" && (
                 <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
-                  <option value={1}>Выберите</option>
+                  <option value={0}>Не выбран</option>
 
                   {props.newTests.map((q) => {
                     let el = renderHTML(q.question[0]);
@@ -202,7 +202,7 @@ const TestBlock = (props) => {
               )}
               {t_type && t_type.toLowerCase() === "quiz" && (
                 <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
-                  <option value={1}>Выберите</option>
+                  <option value={0}>Не выбран</option>
 
                   {props.quizes.map((q) => {
                     let el = renderHTML(q.question);
@@ -216,7 +216,7 @@ const TestBlock = (props) => {
               )}
               {t_type && t_type.toLowerCase() === "note" && (
                 <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
-                  <option value={1}>Выберите</option>
+                  <option value={0}>Не выбран</option>
                   {props.notes.map((q) => {
                     return <option value={q.id}>{q.text}</option>;
                   })}
@@ -237,7 +237,7 @@ const TestBlock = (props) => {
               </select>
               {f_type && f_type.toLowerCase() === "newtest" && (
                 <select defaultValue={f} onChange={(e) => setF(e.target.value)}>
-                  <option value={1}>Выберите</option>
+                  <option value={0}>Не выбран</option>
                   {props.newTests.map((q) => {
                     let el = renderHTML(q.question[0]);
                     return (
@@ -250,7 +250,7 @@ const TestBlock = (props) => {
               )}
               {f_type && f_type.toLowerCase() === "quiz" && (
                 <select defaultValue={f} onChange={(e) => setF(e.target.value)}>
-                  <option value={1}>Выберите</option>
+                  <option value={0}>Не выбран</option>
                   {props.quizes.map((q) => {
                     let el = renderHTML(q.question);
                     return (
@@ -263,7 +263,7 @@ const TestBlock = (props) => {
               )}
               {f_type && f_type.toLowerCase() === "note" && (
                 <select defaultValue={f} onChange={(e) => setF(e.target.value)}>
-                  <option value={1}>Выберите</option>
+                  <option value={0}>Не выбран</option>
                   {props.notes.map((q) => {
                     return <option value={q.id}>{q.text}</option>;
                   })}
@@ -357,6 +357,7 @@ const TestBlock = (props) => {
                         console.log(0);
                         props.getNode(type, c);
                       }
+                      console.log("t_type", t_type, t, f_type, f);
                       if (type === "newtest") {
                         updateTestForProblem();
                       } else if (type === "quiz") {

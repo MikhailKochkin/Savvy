@@ -338,8 +338,8 @@ const TextBar = styled.div`
   font-size: 1.6rem;
   padding: 2% 2% 4% 2%;
   a {
-    color: #800000;
-    text-decoration: underline;
+    /* color: #800000;
+    text-decoration: underline; */
     cursor: pointer;
   }
   @media (max-width: 800px) {
@@ -476,10 +476,10 @@ const LessonPart = styled.div`
   flex-direction: column;
   /* background: white; */
   border-radius: 2px;
-  a {
+  /* a {
     padding-top: 2%;
     padding-left: 2%;
-  }
+  } */
   @media (max-width: 800px) {
     order: 2;
     margin: 1%;

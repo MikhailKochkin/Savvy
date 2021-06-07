@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { GoogleLogin } from "react-google-login";
 
 const Styles = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: #000000;
-  background-image: radial-gradient(#8f8f8f 0.4px, transparent 0.4px);
-  background-size: 50px 50px;
+  opacity: 1;
+  background-image: radial-gradient(#212121 1px, #000000 1px);
+  background-size: 20px 20px;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -19,8 +21,9 @@ const Window = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  /* justify-content: flex-start;
+  align-items: flex-start; */
+  max-width: 1300px;
 `;
 
 const Main = styled.div`
@@ -29,13 +32,13 @@ const Main = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
+  max-width: 1200px;
 `;
 
 const Logo = styled.div`
-  margin: 30px 10px 8% 30px;
+  margin: 30px 10px 5% 30px;
   font-size: 2.2rem;
   font-weight: 300;
-
   div {
     line-height: 1.4;
   }
@@ -47,6 +50,7 @@ const Logo = styled.div`
 
 const Info = styled.div`
   width: 40%;
+  margin-right: 10%;
   h1 {
     font-size: 4rem;
     margin: 0;
@@ -62,55 +66,144 @@ const Info = styled.div`
   }
 `;
 
-const Details = styled.div`
+const T = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  font-size: 2rem;
-  margin-bottom: 50px;
-  .time {
-    border-right: 0.5px solid white;
-    padding-right: 20px;
-    margin-right: 20px;
+  flex-direction: column;
+  align-items: center;
+  transition: 0.2s;
+  .black {
+    width: 270px;
+    height: 20px;
+    background: black;
+    z-index: 4;
   }
-  .format {
-    border-right: 0.5px solid white;
-    padding-right: 20px;
-    margin-right: 20px;
-  }
-  .photos {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    .border1 {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(196, 196, 196, 0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-right: 20px;
-    }
-    img {
-      width: 35px;
-      height: 35px;
-      border-radius: 50px;
-      border: 2px solid black;
-    }
-  }
+`;
+
+const Circle = styled.div`
+  background: blue;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  position: absolute;
+  right: 110px;
+  top: -20px;
+  z-index: 1;
+  background: black;
+  border: 4px solid #d25778;
 `;
 
 const TicketForm = styled.div`
-  height: 500px;
-  width: 400px;
-  background-image: linear-gradient(#6aff52, #4dfbfb);
+  height: 450px;
+  width: 270px;
+  background: linear-gradient(#d25778, #ec585c, #e7d155, #56a8c6);
   border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TickertInner = styled.div`
+  height: 98%;
+  width: 97%;
+  background: black;
+  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .personal_data {
+    width: 80%;
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    .image {
+      flex-basis: 40%;
+
+      img {
+        width: 55px;
+        height: 55px;
+        background: grey;
+        border-radius: 50%;
+      }
+    }
+    .names {
+      flex-basis: 50%;
+    }
+  }
+  .logo {
+    margin-top: 40px;
+    font-size: 2.4rem;
+    span {
+      color: #f6d288;
+      font-weight: 500;
+    }
+  }
+  .date {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    /* width: 85%; */
+    display: flex;
+    flex-direction: row;
+    #left_date {
+      border-right: 1px solid white;
+      padding-right: 10px;
+      margin-right: 10px;
+    }
+  }
+  .number {
+    border-top: 1px dashed white;
+    width: 100%;
+    margin-top: 30%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 30%;
+    font-size: 3rem;
+  }
 `;
 
 const Ticket = () => {
+  const [name, setName] = useState("Имя");
+  const [surname, setSurname] = useState("Фамилия");
+  const [image, setImage] = useState(
+    "https://res.cloudinary.com/mkpictureonlinebase/image/upload/c_scale,w_25/v1622816374/face.svg"
+  );
+  const [step, setStep] = useState(1);
+
+  useEffect(() => {});
+
+  const rotate = (e) => {
+    let el = document.getElementById("element");
+    const { x, y, width, height } = el.getBoundingClientRect();
+    const centerPoint = { x: x + width / 2, y: y + height / 2 };
+    // console.log(centerPoint);
+    const degreeX = (e.clientX - centerPoint.x) * 0.4;
+    const degreeY = (e.clientY - centerPoint.y) * -0.4;
+    // console.log(degreeX, degreeY);
+    el.style.transform = `perspective(800px) rotateX(${degreeX}deg) rotateY(${degreeY}deg)`;
+  };
+
+  const rotate0 = (e) => {
+    let el = document.getElementById("element");
+    const { x, y, width, height } = el.getBoundingClientRect();
+    const centerPoint = { x: x + width / 2, y: y + height / 2 };
+    // console.log(centerPoint);
+    const degreeX = (e.clientX - centerPoint.x) * 0;
+    const degreeY = (e.clientY - centerPoint.y) * 0;
+    // console.log(degreeX, degreeY);
+    el.style.transform = `perspective(800px) rotateX(${degreeX}deg) rotateY(${degreeY}deg)`;
+  };
+
+  const responseGoogle = (response) => {
+    console.log(response.At.fT);
+    setName(response.At.kV);
+    setSurname(response.At.fT);
+    setImage(response.At.ZJ);
+    setStep(2);
+  };
+
   return (
     <Styles>
       <Window>
@@ -121,11 +214,49 @@ const Ticket = () => {
         </Logo>
         <Main>
           <Info>
-            <h1>Вы в деле. Теперь получите свое приглашение. </h1>
+            <h1>
+              Вы в деле.
+              {step == 1 && "Теперь получите свое приглашение."}
+              {step == 2 && "Теперь расскажите остальным."}{" "}
+            </h1>
             <h2>Добавьте свои данные и получите уникальный билет.</h2>
-            <button>Привет</button>
+            <GoogleLogin
+              clientId="932923887873-kfm5r8hjj29ofrprsikf5u0qmkn1amln.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
           </Info>
-          <TicketForm>test</TicketForm>
+          <T
+            id="element"
+            onMouseMove={(e) => rotate(e)}
+            onMouseLeave={(e) => rotate0(e)}
+          >
+            <div className="black"></div>
+            <TicketForm>
+              <TickertInner>
+                <Circle></Circle>
+                <div className="personal_data">
+                  <div className="image">
+                    <img src={image} />
+                  </div>
+                  <div className="names">
+                    <div>{name}</div>
+                    <div>{surname}</div>
+                  </div>
+                </div>
+                <div className="logo">
+                  BeSavvy <span>Conf</span>
+                </div>
+                <div className="date">
+                  <div id="left_date">6 октября, 19:00</div>
+                  <div>Онлайн</div>
+                </div>
+                <div className="number">#003730</div>
+              </TickertInner>
+            </TicketForm>
+          </T>
         </Main>
       </Window>
     </Styles>

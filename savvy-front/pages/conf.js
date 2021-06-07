@@ -3,11 +3,13 @@ import Landing from "../components/conf/Landing";
 import Ticket from "../components/conf/Ticket";
 
 const conf = () => {
-  const [stage, setStage] = useState("ticket");
-
+  const [stage, setStage] = useState("email");
+  const change = () => {
+    setStage("ticket");
+  };
   return (
     <>
-      {stage == "email" && <Landing />}
+      {stage == "email" && <Landing change={change} />}
       {stage == "ticket" && <Ticket />}
     </>
   );

@@ -154,7 +154,7 @@ const TestBlock = (props) => {
               defaultValue={c}
               onChange={(e) => setC(e.target.value)}
             >
-              <option>Выберите</option>
+              <option value={undefined}>Не выбран</option>
               {props.newTests.map((q) => (
                 <option value={q.id}>{q.question[0]}</option>
               ))}
@@ -167,7 +167,7 @@ const TestBlock = (props) => {
               defaultValue={c}
               onChange={(e) => setC(e.target.value)}
             >
-              <option>Выберите</option>
+              <option value={undefined}>Не выбран</option>
               {props.quizes.map((q) => (
                 <option value={q.id}>{q.question}</option>
               ))}
@@ -180,7 +180,7 @@ const TestBlock = (props) => {
               defaultValue={c}
               onChange={(e) => setC(e.target.value)}
             >
-              <option>Выберите</option>
+              <option value={undefined}>Не выбран</option>
               {props.notes.map((q) => (
                 <option value={q.id}>{q.text}</option>
               ))}
@@ -202,7 +202,7 @@ const TestBlock = (props) => {
           </select>
           {t_type === "newtest" && (
             <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
-              <option>Выберите</option>
+              <option value={undefined}>Не выбран</option>
 
               {props.newTests.map((q) => (
                 <option value={q.id}>{q.question[0]}</option>

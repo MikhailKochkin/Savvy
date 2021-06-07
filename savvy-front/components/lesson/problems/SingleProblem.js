@@ -48,10 +48,10 @@ const TextBar = styled.div`
     text-decoration: underline;
     cursor: pointer;
   }
-  a {
+  /* a {
     color: #800000;
     text-decoration: underline;
-  }
+  } */
   img {
     display: block;
     max-width: 100%;
@@ -169,9 +169,8 @@ class SingleProblem extends Component {
     } else if (e.target.parentElement.getAttribute("concealed") === "false") {
       e.target.parentElement.id = "conceal";
       e.target.parentElement.setAttribute("concealed", "true");
-      e.target.parentElement.innerHTML = e.target.parentElement.getAttribute(
-        "data-text"
-      );
+      e.target.parentElement.innerHTML =
+        e.target.parentElement.getAttribute("data-text");
     }
   };
 

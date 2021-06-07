@@ -5,8 +5,12 @@ const Styles = styled.div`
   height: 100vh;
   width: 100vw;
   background-color: #000000;
-  background-image: radial-gradient(#8f8f8f 0.4px, transparent 0.4px);
-  background-size: 50px 50px;
+  opacity: 1;
+  background-image: radial-gradient(
+    #414141 0.8500000000000001px,
+    #000000 0.8500000000000001px
+  );
+  background-size: 17px 17px;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -21,10 +25,12 @@ const Window = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  max-width: 1200px;
 `;
 
 const Main = styled.div`
   margin-left: 5%;
+  max-width: 1500px;
 `;
 
 const Logo = styled.div`
@@ -39,14 +45,17 @@ const Logo = styled.div`
     color: #f6d288;
     font-weight: 700;
   }
+  @media (max-width: 800px) {
+    margin-left: 5%;
+  }
 `;
 
 const Info = styled.div`
   h1 {
-    font-size: 6rem;
+    font-size: 7.4rem;
     margin: 0;
     margin-bottom: 15px;
-    line-height: 1.5;
+    line-height: 1;
     font-weight: 600;
   }
   h2 {
@@ -54,6 +63,20 @@ const Info = styled.div`
     font-weight: 300;
     margin: 0;
     margin-bottom: 15px;
+    line-height: 1.2;
+  }
+  @media (max-width: 800px) {
+    h1 {
+      font-size: 4.6rem;
+      width: 70%;
+      line-height: 1.2;
+    }
+    h2 {
+      font-size: 3.2rem;
+      line-height: 1.4;
+
+      width: 70%;
+    }
   }
 `;
 
@@ -94,6 +117,24 @@ const Details = styled.div`
       height: 35px;
       border-radius: 50px;
       border: 2px solid black;
+    }
+  }
+  @media (max-width: 800px) {
+    font-size: 1.8rem;
+    flex-direction: column;
+
+    .time {
+      border: none;
+      padding-right: 5px;
+      margin-right: 5px;
+    }
+    .format {
+      border: none;
+      padding-right: 5px;
+      margin-right: 5px;
+    }
+    .photos {
+      display: none;
     }
   }
 `;
@@ -173,9 +214,46 @@ const Form = styled.div`
       }
     }
   }
+  @media (max-width: 800px) {
+    width: 95%;
+    .black {
+      input {
+        width: 95%;
+      }
+      .button {
+        display: none;
+      }
+    }
+  }
 `;
 
-const Landing = () => {
+const Button = styled.div`
+  background: #fff;
+  color: black;
+  border: 1px solid black;
+  border-radius: 8px;
+  font-size: 1.6rem;
+  width: 95%;
+  height: 50px;
+  margin-top: 10px;
+  font-weight: 400;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.4s;
+  cursor: pointer;
+  display: none;
+  &:hover {
+    border: 1px solid white;
+    background: black;
+    color: #fff;
+  }
+  @media (max-width: 800px) {
+    display: flex;
+  }
+`;
+
+const Landing = (props) => {
   return (
     <Styles>
       <Window>
@@ -187,7 +265,7 @@ const Landing = () => {
         <Main>
           <Info>
             <h1>Подготовка и карьера юриста</h1>
-            <h2>Быстрее, эффективнее, легче</h2>
+            <h2>Быстрее, эффективнее, результативнее</h2>
             <Details>
               <div className="time">6 октября, 19:00 по Москве</div>
               <div className="format">Онлайн</div>
@@ -207,9 +285,14 @@ const Landing = () => {
           <Form>
             <div className="black">
               <input placeholder="Напишите вашу почту.." />
-              <div className="button">Получить билет</div>
+              <div className="button" onClick={(e) => props.change("ticket")}>
+                Получить билет
+              </div>
             </div>
           </Form>
+          <Button onClick={(e) => props.change("ticket")}>
+            Получить билет
+          </Button>
         </Main>
       </Window>
     </Styles>

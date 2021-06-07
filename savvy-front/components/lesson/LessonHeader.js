@@ -186,7 +186,7 @@ const Info = styled.div`
 const ToggleQuestion = styled.div`
   /* The switch - the box around the slider */
   justify-self: center;
-  align-self: center;
+  align-self: flex-start;
   /* margin-right: 45%; */
   .switch {
     position: relative;
@@ -258,15 +258,8 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const {
-    lesson,
-    name,
-    author,
-    new_students,
-    coursePageId,
-    students,
-    me,
-  } = props;
+  const { lesson, name, author, new_students, coursePageId, students, me } =
+    props;
 
   let color;
   let progress;
@@ -307,7 +300,7 @@ const LessonHeader = (props) => {
 
   let time;
   if (lesson.structure && lesson.structure.lessonItems) {
-    time = lesson.structure.lessonItems.length * 3;
+    time = lesson.structure.lessonItems.length * 5;
   } else {
     time = 30;
   }
@@ -329,39 +322,39 @@ const LessonHeader = (props) => {
         <div>
           <Time>{time} мин.</Time>
           <Buttons>
-            {/* {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
-            <>
-              <ToggleQuestion>
-                <label className="switch">
-                  <input
-                    name="published"
-                    type="checkbox"
-                    checked={published}
-                    onChange={async (e) => {
-                      updatePublished({
-                        variables: {
-                          id: lesson.id,
-                          published: !published,
-                        },
-                        // refetchQueries: [
-                        //   {
-                        //     query: SINGLE_COURSEPAGE_QUERY,
-                        //     variables: { id: coursePageId },
-                        //   },
-                        // ],
-                      });
-                      setPublished(
-                        e.target.type === "checkbox"
-                          ? e.target.checked
-                          : e.target.value
-                      );
-                    }}
-                  />
-                  <span className="slider" />
-                </label>
-              </ToggleQuestion>
-            </>
-          ) : null} */}
+            {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
+              <>
+                <ToggleQuestion>
+                  <label className="switch">
+                    <input
+                      name="published"
+                      type="checkbox"
+                      checked={published}
+                      onChange={async (e) => {
+                        updatePublished({
+                          variables: {
+                            id: lesson.id,
+                            published: !published,
+                          },
+                          // refetchQueries: [
+                          //   {
+                          //     query: SINGLE_COURSEPAGE_QUERY,
+                          //     variables: { id: coursePageId },
+                          //   },
+                          // ],
+                        });
+                        setPublished(
+                          e.target.type === "checkbox"
+                            ? e.target.checked
+                            : e.target.value
+                        );
+                      }}
+                    />
+                    <span className="slider" />
+                  </label>
+                </ToggleQuestion>
+              </>
+            ) : null}
             {me &&
               !lesson.published &&
               (me.id === author || me.permissions.includes("ADMIN")) && (

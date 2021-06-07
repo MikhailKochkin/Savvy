@@ -75,12 +75,18 @@ const Styles = styled.div`
 `;
 
 const TextBar = styled.div`
-  width: ${(props) => (props.story ? "100%" : "95%")};
+  width: ${(props) => (props.story ? "100%" : "100%")};
   font-size: 1.6rem;
   padding-bottom: 2%;
   ul {
     list-style-type: none;
     padding-left: 0px;
+  }
+  a {
+    border-bottom: 2px solid #26ba8d;
+    padding: 0;
+    transition: 0.3s;
+    cursor: pointer;
   }
   .question {
     display: flex;
@@ -247,7 +253,7 @@ const SingleTest = (props) => {
   const [answerState, setAnswerState] = useState("think"); // is the answer of the student correct?
   const [answerOptions, setAnswerOptions] = useState(props.length); // how many test options do we have?
   const [answer, setAnswer] = useState([]); // what is the answer?
-  const [attempts, setAttempts] = useState(false); // how many attempts to answer correctly did the student make?
+  const [attempts, setAttempts] = useState(0); // how many attempts to answer correctly did the student make?
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [update, setUpdate] = useState(false);
   const [sent, setSent] = useState(false);
@@ -291,7 +297,9 @@ const SingleTest = (props) => {
         if (props.getData) {
           // 2. and if this quiz is a part of an exam
           props.getData(
-            props.next ? [true, props.next.true] : [true, { type: "finish" }],
+            props.next && props.next.true
+              ? [true, props.next.true]
+              : [true, { type: "finish" }],
             "true"
           );
           // document.querySelector(".button").disabled = true;
@@ -302,7 +310,9 @@ const SingleTest = (props) => {
         if (props.getData) {
           // 2. and if this quiz is a part of an exam
           props.getData(
-            props.next ? [false, props.next.false] : [false, { type: "finish" }]
+            props.next && props.next.false
+              ? [false, props.next.false]
+              : [false, { type: "finish" }]
           );
         }
       }
@@ -311,32 +321,60 @@ const SingleTest = (props) => {
   };
 
   const onCheck = async () => {
+    if (attempts == 0) {
+      const res = () => {
+        if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
+          setAnswerState("right");
+          setInputColor("rgba(50, 172, 102, 0.25)");
+          // 1. if the data is sent for the first time
+          if (props.getData) {
+            console.log(
+              "props.next && props.next.true",
+              props.next && props.next.true
+            );
+            // 2. and if this quiz is a part of an exam
+            props.getData(
+              props.next && props.next.true
+                ? [true, props.next.true]
+                : [true, { type: "finish" }],
+              "true"
+            );
+          }
+        } else {
+          setAnswerState("wrong");
+          setInputColor("rgba(222, 107, 72, 0.5)");
+          // 1. if the data is sent for the first time
+          if (props.getData) {
+            console.log(
+              props.next && props.next.false && props.next.false !== {}
+            );
+            console.log(props.next.false, props.next.false !== {});
+
+            // 2. and if this quiz is a part of an exam
+            props.getData(
+              props.next && props.next.false
+                ? [false, props.next.false]
+                : [false, { type: "finish" }]
+            );
+          }
+        }
+      };
+      const res2 = await res();
+    } else {
+      const res = () => {
+        if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
+          setAnswerState("right");
+          setInputColor("rgba(50, 172, 102, 0.25)");
+        } else {
+          setAnswerState("wrong");
+          setInputColor("rgba(222, 107, 72, 0.5)");
+        }
+      };
+      const res2 = await res();
+    }
+
     const res1 = await setAttempts(attempts + 1);
-    const res = () => {
-      if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
-        setAnswerState("right");
-        setInputColor("rgba(50, 172, 102, 0.25)");
-        // 1. if the data is sent for the first time
-        if (props.getData) {
-          // 2. and if this quiz is a part of an exam
-          props.getData(
-            props.next ? [true, props.next.true] : [true, { type: "finish" }],
-            "true"
-          );
-        }
-      } else {
-        setAnswerState("wrong");
-        setInputColor("rgba(222, 107, 72, 0.5)");
-        // 1. if the data is sent for the first time
-        if (props.getData) {
-          // 2. and if this quiz is a part of an exam
-          props.getData(
-            props.next ? [false, props.next.false] : [false, { type: "finish" }]
-          );
-        }
-      }
-    };
-    const res2 = await res();
+
     setSent(true);
   };
 

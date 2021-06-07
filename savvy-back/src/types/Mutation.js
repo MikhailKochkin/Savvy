@@ -360,6 +360,21 @@ const Mutation = mutationType({
         return Lesson;
       },
     });
+    t.field("deleteLesson", {
+      type: "Lesson",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        const lesson = await ctx.prisma.lesson.findUnique(
+          { where },
+          `{ id, user { id } }`
+        );
+        //3. Delete it
+        return ctx.prisma.lesson.delete({ where });
+      },
+    });
     t.field("updatePublished", {
       type: "Lesson",
       args: {
@@ -603,6 +618,7 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
         delete updates.id;
+        console.log(updates);
         const updatedTest = await ctx.prisma.newTest.update({
           data: updates,
           where: {
