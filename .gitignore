@@ -16,3 +16,5 @@ server.js
 *.csr
 *.ext
 .vscode
+.env
+.env.local

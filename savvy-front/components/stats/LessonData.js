@@ -244,9 +244,7 @@ const LessonData = (props) => {
       {show && data !== undefined && (
         <>
           {lesson.structure.lessonItems.map((l) => {
-            console.log(l.type.toLowerCase());
             if (l.type.toLowerCase() == "note") {
-              console.log();
               return (
                 <Note
                   note={lesson.notes.filter((n) => n.id === l.id)}

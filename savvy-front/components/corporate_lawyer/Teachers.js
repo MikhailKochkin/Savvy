@@ -123,6 +123,12 @@ const Teachers = () => {
       img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085433/GlebSite_1.png",
     },
     {
+      name: "Татьяна",
+      surname: "Свиридова",
+      description: `Старший юрист CMS Russia. Модуль "Как защитить интересы компании в арбитражном суде?"`,
+      img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1623682732/2021-06-14_16.02_1.png",
+    },
+    {
       name: "Мария",
       surname: "Бояринцева",
       description: `Старший юрист АБ А2. Модуль "Рассмотрение дела о банкротстве: как это работает?
@@ -166,10 +172,10 @@ const Teachers = () => {
       img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1620034080/Picture4_1.png",
     },
     {
-      name: "И еще 3",
-      surname: "специалиста,",
-      description: `которых мы совсем скоро вам представим.`,
-      img: "url",
+      name: "И другие",
+      surname: "эксперты,",
+      description: `которых мы представим во время программы.`,
+      img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1623682927/toa-heftiba-O3ymvT7Wf9U-unsplash_1.png",
     },
   ];
   const experts = [

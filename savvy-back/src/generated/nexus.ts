@@ -1719,6 +1719,14 @@ export interface NexusGenObjects {
     id: string; // String!
     name: string; // String!
   }
+  ConfUser: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    name?: string | null; // String
+    surname?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Construction: { // root type
     answer: string[]; // [String!]!
     complexity?: number | null; // Int
@@ -2142,6 +2150,14 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string; // String!
   }
+  ConfUser: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    name: string | null; // String
+    surname: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Construction: { // field return type
     answer: string[]; // [String!]!
     complexity: number | null; // Int
@@ -2329,6 +2345,7 @@ export interface NexusGenFieldTypes {
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
+    createConfUser: NexusGenRootTypes['ConfUser'] | null; // ConfUser
     createConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     createConstructionResult: NexusGenRootTypes['ConstructionResult'] | null; // ConstructionResult
     createCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
@@ -2376,6 +2393,7 @@ export interface NexusGenFieldTypes {
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     updateChat: NexusGenRootTypes['Chat'] | null; // Chat
     updateClause: NexusGenRootTypes['Clause'] | null; // Clause
+    updateConfUser: NexusGenRootTypes['ConfUser'] | null; // ConfUser
     updateConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     updateCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     updateCourseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -2753,6 +2771,14 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     name: 'String'
   }
+  ConfUser: { // field return type name
+    createdAt: 'DateTime'
+    email: 'String'
+    id: 'String'
+    name: 'String'
+    surname: 'String'
+    updatedAt: 'DateTime'
+  }
   Construction: { // field return type name
     answer: 'String'
     complexity: 'Int'
@@ -2940,6 +2966,7 @@ export interface NexusGenFieldTypeNames {
     createChallengeResult: 'ChallengeResult'
     createChat: 'Chat'
     createClause: 'Clause'
+    createConfUser: 'ConfUser'
     createConstruction: 'Construction'
     createConstructionResult: 'ConstructionResult'
     createCoursePage: 'CoursePage'
@@ -2987,6 +3014,7 @@ export interface NexusGenFieldTypeNames {
     signup: 'AuthPayload'
     updateChat: 'Chat'
     updateClause: 'Clause'
+    updateConfUser: 'ConfUser'
     updateConstruction: 'Construction'
     updateCoursePage: 'CoursePage'
     updateCourseVisit: 'CourseVisit'
@@ -3498,6 +3526,10 @@ export interface NexusGenArgTypes {
       sample?: string | null; // String
       title?: string | null; // String
     }
+    createConfUser: { // args
+      email?: string | null; // String
+      number?: number | null; // Int
+    }
     createConstruction: { // args
       answer?: Array<string | null> | null; // [String]
       hasText?: boolean | null; // Boolean
@@ -3727,6 +3759,11 @@ export interface NexusGenArgTypes {
       number?: number | null; // Int
       sample?: string | null; // String
       text?: string | null; // String
+    }
+    updateConfUser: { // args
+      id?: string | null; // String
+      name?: string | null; // String
+      surname?: string | null; // String
     }
     updateConstruction: { // args
       answer?: Array<string | null> | null; // [String]

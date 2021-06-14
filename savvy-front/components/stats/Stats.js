@@ -54,6 +54,17 @@ const SINGLE_COURSEPAGE_QUERY = gql`
           answer
           next
         }
+        forum {
+          rating {
+            id
+            rating
+            user {
+              id
+              name
+              surname
+            }
+          }
+        }
         # documents {
         #   id
         #   title

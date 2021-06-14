@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -35,7 +35,7 @@ model ConfUser {
   email     String
   name      String?
   surname   String?
-  conf_number    Int?
+  conf_number    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

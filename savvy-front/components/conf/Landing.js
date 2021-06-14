@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { signIn, useSession } from "next-auth/client";
 
 const Styles = styled.div`
   height: 100vh;
@@ -139,7 +140,7 @@ const Details = styled.div`
   }
 `;
 
-const Form = styled.div`
+const MainButton = styled.div`
   background-image: linear-gradient(
     90.69deg,
     #88ffea 13.42%,
@@ -148,15 +149,17 @@ const Form = styled.div`
   );
   border-radius: 12px;
   padding: 4px;
-  width: 550px;
+  width: 250px;
   height: 60px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  &:hover {
+  }
   .black {
     background: black;
-    color: #8b8b8b;
     padding: 0 5px 0 20px;
     width: 100%;
     height: 100%;
@@ -165,7 +168,7 @@ const Form = styled.div`
     border-radius: 8px;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     input {
       width: 65%;
@@ -282,17 +285,12 @@ const Landing = (props) => {
               </div>
             </Details>
           </Info>
-          <Form>
-            <div className="black">
-              <input placeholder="Напишите вашу почту.." />
-              <div className="button" onClick={(e) => props.change("ticket")}>
-                Получить билет
-              </div>
-            </div>
-          </Form>
-          <Button onClick={(e) => props.change("ticket")}>
+          <MainButton onClick={() => signIn()}>
+            <div className="black">Получить билет</div>
+          </MainButton>
+          {/* <Button onClick={(e) => props.change("ticket")}>
             Получить билет
-          </Button>
+          </Button> */}
         </Main>
       </Window>
     </Styles>

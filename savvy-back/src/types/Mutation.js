@@ -618,7 +618,6 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
         delete updates.id;
-        console.log(updates);
         const updatedTest = await ctx.prisma.newTest.update({
           data: updates,
           where: {
@@ -2080,38 +2079,73 @@ const Mutation = mutationType({
         return client;
       },
     }),
-      t.field("requestReset", {
-        type: "Message",
+      t.field("createConfUser", {
+        type: "ConfUser",
         args: {
           email: stringArg(),
+          number: intArg(),
         },
         resolve: async (_, args, ctx) => {
-          const user = await ctx.prisma.user.findUnique({
-            where: { email: args.email.toLowerCase() },
+          const client = await ctx.prisma.confUser.create({
+            data: {
+              ...args,
+            },
           });
-
-          const randomBytesPromiseified = promisify(randomBytes);
-          const resetToken = (await randomBytesPromiseified(20)).toString(
-            "hex"
-          );
-          const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
-          const res = await ctx.prisma.user.update({
-            where: { email: args.email.toLowerCase() },
-            data: { resetToken, resetTokenExpiry },
-          });
-          // 3. Email them that reset token
-          const mailRes = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
-            To: user.email,
-            Subject: "Смена пароля",
-            HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
-                  \n\n
-                  <a href="${process.env.FRONTEND_URL7}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
-          });
-          // 4. Return the message
-          return { message: "Спасибо!" };
+          return client;
         },
       }),
+      t.field("updateConfUser", {
+        type: "ConfUser",
+        args: {
+          id: stringArg(),
+          name: stringArg(),
+          surname: stringArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          const updates = { ...args };
+          //remove the ID from updates
+          delete updates.id;
+          //run the update method
+          return ctx.prisma.statement.update({
+            data: {
+              ...updates,
+            },
+            where: {
+              id: args.id,
+            },
+          });
+        },
+      });
+    t.field("requestReset", {
+      type: "Message",
+      args: {
+        email: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const user = await ctx.prisma.user.findUnique({
+          where: { email: args.email.toLowerCase() },
+        });
+
+        const randomBytesPromiseified = promisify(randomBytes);
+        const resetToken = (await randomBytesPromiseified(20)).toString("hex");
+        const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+        const res = await ctx.prisma.user.update({
+          where: { email: args.email.toLowerCase() },
+          data: { resetToken, resetTokenExpiry },
+        });
+        // 3. Email them that reset token
+        const mailRes = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: user.email,
+          Subject: "Смена пароля",
+          HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
+                  \n\n
+                  <a href="${process.env.FRONTEND_URL7}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
+        });
+        // 4. Return the message
+        return { message: "Спасибо!" };
+      },
+    }),
       t.field("resetPassword", {
         type: "User",
         args: {

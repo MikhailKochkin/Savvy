@@ -243,6 +243,15 @@ input CompanyWhereInput {
   updatedAt: DateTimeFilter
 }
 
+type ConfUser {
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  name: String
+  surname: String
+  updatedAt: DateTime!
+}
+
 type Construction {
   answer: [String!]!
   complexity: Int
@@ -1080,6 +1089,7 @@ type Mutation {
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
+  createConfUser(email: String, number: Int): ConfUser
   createConstruction(answer: [String], hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
   createCoursePage(courseType: String, description: String, image: String, published: Boolean, title: String): CoursePage
@@ -1127,6 +1137,7 @@ type Mutation {
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
   updateChat(id: String, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
+  updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], complexity: Int, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit

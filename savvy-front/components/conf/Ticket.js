@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { GoogleLogin } from "react-google-login";
+import { signIn, useSession } from "next-auth/client";
 
 const Styles = styled.div`
   height: 100vh;
@@ -164,7 +165,7 @@ const TickertInner = styled.div`
   }
 `;
 
-const Ticket = () => {
+const Ticket = (props) => {
   const [name, setName] = useState("Имя");
   const [surname, setSurname] = useState("Фамилия");
   const [image, setImage] = useState(
@@ -203,7 +204,8 @@ const Ticket = () => {
     setImage(response.At.ZJ);
     setStep(2);
   };
-
+  console.log(props.session.user);
+  const user = props.session.user;
   return (
     <Styles>
       <Window>
@@ -214,19 +216,8 @@ const Ticket = () => {
         </Logo>
         <Main>
           <Info>
-            <h1>
-              Вы в деле.
-              {step == 1 && "Теперь получите свое приглашение."}
-              {step == 2 && "Теперь расскажите остальным."}{" "}
-            </h1>
-            <h2>Добавьте свои данные и получите уникальный билет.</h2>
-            <GoogleLogin
-              clientId="932923887873-kfm5r8hjj29ofrprsikf5u0qmkn1amln.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
+            <h1>Вы в деле. Теперь расскажите остальным.</h1>
+            <h2>Поделитесь своим билетом в социальных сетях.</h2>
           </Info>
           <T
             id="element"
@@ -239,11 +230,11 @@ const Ticket = () => {
                 <Circle></Circle>
                 <div className="personal_data">
                   <div className="image">
-                    <img src={image} />
+                    <img src={user.image} />
                   </div>
                   <div className="names">
-                    <div>{name}</div>
-                    <div>{surname}</div>
+                    <div>{user.name}</div>
+                    {/* <div>{surname}</div> */}
                   </div>
                 </div>
                 <div className="logo">

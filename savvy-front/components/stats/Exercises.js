@@ -32,10 +32,22 @@ const Exercises = (props) => {
       {[...props.lessons]
         .sort((a, b) => (a.number > b.number ? 1 : -1))
         .map((l) => {
+          let ratings = [];
+          console.log(l.forum ? l.forum.rating : "no forum");
+          l.forum
+            ? l.forum.rating.map((r) => ratings.push(r.rating))
+            : (ratings = [0]);
+          let average = (
+            ratings.reduce((a, b) => a + b, 0) / ratings.length
+          ).toFixed(2);
+          console.log(average == NaN);
+          if (isNaN(average)) {
+            average = "Нет оценок";
+          }
           return (
             <MiniStyles>
               <Header>
-                {l.number}. {l.name}
+                {l.number}. {l.name}. {average}
               </Header>
               <LessonExercises lesson={l} />
             </MiniStyles>

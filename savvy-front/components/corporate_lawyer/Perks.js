@@ -140,14 +140,7 @@ const Perks = () => {
           <img src="static/tick2.svg" />
         </div> */}
         <div className="element final">
-          <div>
-            50% скидка или бесплатное участие во всех программах по Legal
-            English
-          </div>
-          <img src="static/tick2.svg" />
-        </div>
-        <div className="element final">
-          <div>Доступ ко всем другим курсам на платформе BeSavvy</div>
+          <div>50% скидка на участие во всех программах по Legal English</div>
           <img src="static/tick2.svg" />
         </div>
       </Table>

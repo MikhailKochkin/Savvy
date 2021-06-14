@@ -70,9 +70,23 @@ const BusinessClient = objectType({
   },
 });
 
+const ConfUser = objectType({
+  name: "ConfUser",
+  definition(t) {
+    t.model.id();
+    t.model.email();
+    t.model.surname();
+    t.model.name();
+    t.model.number();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   User,
   Feedback,
   UserLevel,
   BusinessClient,
+  ConfUser,
 };
