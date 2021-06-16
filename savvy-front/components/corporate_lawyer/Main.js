@@ -2,7 +2,17 @@ import styled from "styled-components";
 const Styles = styled.div`
   min-height: 100vh;
   width: 100vw;
-  background: #f8efe6;
+  background: #ffd89b; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #f8efe6,
+    #ffd89b
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #f8efe6,
+    #ffd89b
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +25,9 @@ const Styles = styled.div`
     width: 80%;
     h1 {
       margin-bottom: 0;
+      font-size: 5rem;
+      line-height: 1.4;
+      font-weight: 600;
     }
   }
   #data {
@@ -52,6 +65,8 @@ const Styles = styled.div`
       justify-content: flex-start;
       h1 {
         line-height: 1.4;
+        font-size: 3rem;
+        margin-top: 40px;
       }
     }
   }
@@ -63,7 +78,6 @@ const Header = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
-  border-bottom: 2px solid;
   padding-bottom: 10px;
   width: 90%;
   color: #1b222c;
@@ -111,16 +125,25 @@ const Info = styled.div`
     align-items: flex-start;
     justify-content: flex-start;
     width: 100%;
+
     #mobile_image {
       display: none;
     }
   }
   h1 {
-    font-size: 3.6rem;
+    font-size: 5.6rem;
     font-weight: 500;
     width: 80%;
     text-align: left;
     line-height: 1.2;
+  }
+  .timeline {
+    font-size: 1.8rem;
+    color: #626262;
+    margin-bottom: 30px;
+    #left {
+      border-bottom: 2px solid #ff6f59;
+    }
   }
   img {
     width: 120px;
@@ -143,7 +166,7 @@ const Info = styled.div`
       cursor: pointer;
       margin-top: 20px;
       font-family: Montserrat;
-      width: 250px;
+      width: 450px;
       font-size: 1.8rem;
       transition: 0.3s;
       &:hover {
@@ -192,6 +215,12 @@ const Info = styled.div`
       text-align: left;
       line-height: 1.4;
       margin-top: 20px;
+      button {
+        width: 100%;
+      }
+    }
+    .timeline {
+      margin-bottom: 0;
     }
   }
 `;
@@ -223,7 +252,7 @@ const List = styled.div`
     width: 100%;
 
     .element {
-      width: 100%;
+      width: 110%;
       padding-left: 50px;
       font-size: 1.8rem;
     }
@@ -240,18 +269,15 @@ const Main = () => {
   };
   return (
     <Styles>
-      <Header>
-        <div>Проект BeSavvy & Школы права Статут</div>
-      </Header>
+      {/* <Header>
+        <div>Школа молодого юриста BeSavvy 2021</div>
+      </Header> */}
       <div id="data0">
         <div id="level1">
-          <h1>Школа молодого юриста BeSavvy 2021</h1>
+          <h1> 🧑‍💻 Трансформируем вашу юридическую карьеру</h1>
           <div id="mobile_image">
             <img src="static/certificate.svg" />
           </div>
-        </div>
-        <div style={{ fontSize: "1.8rem", color: "#626262" }}>
-          Старт: 5 июля. Скидка до 50%. Осталось 5 мест
         </div>
       </div>
 
@@ -259,30 +285,37 @@ const Main = () => {
         <Text>
           <Info>
             <h2>
-              Программа для развития карьеры в актуальных областях права <br />
-              <button onClick={(e) => slide()}>Подать заявку</button>
+              Помогаем молодым юристам выбрать специализацию, прокачать навыки и
+              найти работу. <br />
+              <button onClick={(e) => slide()}>
+                Записаться на консультацию
+              </button>
             </h2>
+            <div className="timeline">
+              Старт: 5 июля. Скидка до 50%.{" "}
+              <span id="left">Осталось 5 мест</span>
+            </div>
             <List>
               <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Корпоративный юрист
+                Для студентов, ищущих свое направление
               </div>
               <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Сопровождение IT/IP проектов
+                Для выпускников, ищущих первую работу
               </div>
               <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Работа судебного юриста
+                Для юристов, которых хотят изменений в работе
               </div>
-              <div className="element">
+              {/* <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Как и где использовать Legal Tech?
-              </div>
+                Цель – довести вас до первой (или новой) работы
+              </div> */}
             </List>
           </Info>
         </Text>

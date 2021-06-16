@@ -161,7 +161,7 @@ const Price = () => {
         </div>
       </Options>
       <button onClick={(e) => slide()} className="conclusion">
-        Записаться на собеседование
+        Записаться на консультацию
       </button>
     </Styles>
   );
