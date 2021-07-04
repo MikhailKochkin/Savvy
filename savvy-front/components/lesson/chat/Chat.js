@@ -7,6 +7,12 @@ const Styles = styled.div`
   /* width: ${(props) => props.width}; */
   width: 650px;
   margin: 20px 0;
+  a {
+    border-bottom: 2px solid #26ba8d;
+    padding: 0%;
+    transition: 0.3s;
+    cursor: pointer;
+  }
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -64,6 +70,7 @@ const IconBlock = styled.div`
     border-radius: 50%;
     height: 55px;
     width: 55px;
+    object-fit: cover;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -80,7 +87,7 @@ const IconBlock = styled.div`
 
 const Chat = (props) => {
   const [update, setUpdate] = useState(false); // what is the answer?
-  const { name, messages, me, story, lessonId, id } = props;
+  const { name, messages, me, story, lessonId, id, author } = props;
   let width;
   if (props.problem) {
     width = "50%";
@@ -109,8 +116,14 @@ const Chat = (props) => {
               <Message className="author">
                 <div className="author_text">{renderHTML(m.text)}</div>
                 <IconBlock>
-                  <img className="icon" src="../../static/hipster.svg" />
-                  <div className="name">BeSavvy</div>
+                  {author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  )}
+                  <div className="name">
+                    {author && author.name ? author.name : "BeSavvy"}
+                  </div>
                 </IconBlock>
               </Message>
             );

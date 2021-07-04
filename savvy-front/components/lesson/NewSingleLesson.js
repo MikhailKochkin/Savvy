@@ -35,6 +35,9 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       createdAt
       user {
         id
+        name
+        surname
+        image
       }
       notes {
         id

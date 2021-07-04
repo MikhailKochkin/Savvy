@@ -378,7 +378,7 @@ const SingleTest = (props) => {
     setSent(true);
   };
 
-  const { exam, story, ifWrong, ifRight, me, user_name } = props;
+  const { exam, story, ifWrong, ifRight, me, user_name, author } = props;
   const mes = _.zip(props.answers, props.true);
   let userData;
   me
@@ -413,8 +413,14 @@ const SingleTest = (props) => {
           <div className="question">
             <div className="question_text">{renderHTML(props.question[0])}</div>
             <IconBlock>
-              <img className="icon" src="../../static/hipster.svg" />
-              <div className="name">BeSavvy</div>
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}{" "}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
             </IconBlock>
           </div>
           <div className="answer">
@@ -440,8 +446,14 @@ const SingleTest = (props) => {
             <div className="question">
               <div className="question_text">Выберите хотя бы один вариант</div>
               <IconBlock>
-                <img className="icon" src="../../static/hipster.svg" />
-                <div className="name">BeSavvy</div>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
               </IconBlock>
             </div>
           )}
@@ -515,8 +527,14 @@ const SingleTest = (props) => {
             <div className="question">
               <div className="question_text">Выберите хотя бы один вариант</div>
               <IconBlock>
-                <img className="icon" src="../../static/hipster.svg" />
-                <div className="name">BeSavvy</div>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
               </IconBlock>
             </div>
           )}
@@ -527,8 +545,14 @@ const SingleTest = (props) => {
                 {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
               </div>
               <IconBlock>
-                <img className="icon" src="../../static/hipster.svg" />
-                <div className="name">BeSavvy</div>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
               </IconBlock>
             </Question>
           )}
@@ -539,8 +563,14 @@ const SingleTest = (props) => {
                 {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
               </div>
               <IconBlock>
-                <img className="icon" src="../../static/hipster.svg" />
-                <div className="name">BeSavvy</div>
+                {author && author.image != null ? (
+                  <img className="icon" src={author.image} />
+                ) : (
+                  <img className="icon" src="../../static/hipster.svg" />
+                )}{" "}
+                <div className="name">
+                  {author && author.name ? author.name : "BeSavvy"}
+                </div>
               </IconBlock>
             </Question>
           )}
@@ -549,8 +579,14 @@ const SingleTest = (props) => {
               <div className="question">
                 <div className="question_text">Показать правильный ответ?</div>
                 <IconBlock>
-                  <img className="icon" src="../../static/hipster.svg" />
-                  <div className="name">BeSavvy</div>
+                  {author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  )}{" "}
+                  <div className="name">
+                    {author && author.name ? author.name : "BeSavvy"}
+                  </div>
                 </IconBlock>
               </div>
 

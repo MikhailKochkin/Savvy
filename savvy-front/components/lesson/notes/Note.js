@@ -18,11 +18,33 @@ const StyledButton = withStyles({
 })(Button);
 
 const Container = styled.div`
-  width: ${(props) => props.width};
+  width: 650px;
   font-size: 1.6rem;
   margin: 20px 0;
   /* display: flex;
   flex-direction: row; */
+  .arrow_box {
+    cursor: pointer;
+    padding: 10px 2%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    &:hover {
+      background: #dde1f8;
+    }
+  }
+  .arrow {
+    width: 25px;
+  }
+  a {
+    width: 30%;
+  }
+
   .text {
     flex-basis: 90%;
     border: 1px solid #f3f3f3;
@@ -33,12 +55,11 @@ const Container = styled.div`
     flex-basis: 10%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-end;
+    justify-content: flex-end;
     .icon {
       margin: 5px;
       border-radius: 50%;
-      padding: 2%;
       height: 55px;
       width: 55px;
       display: flex;
@@ -59,7 +80,7 @@ const Container = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  width: 100%;
+  /* width: 650px; */
   margin: 2% 0 0 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {
@@ -90,10 +111,10 @@ const NoteStyles = styled.div`
     }
   }
   a {
-    color: #112b62;
-    &:hover {
-      text-decoration: underline;
-    }
+    border-bottom: 2px solid #26ba8d;
+    padding: 0%;
+    transition: 0.3s;
+    cursor: pointer;
   }
   .flag {
     color: #008489;
@@ -155,11 +176,15 @@ const MiniButton = styled.div`
 
 const Note = (props) => {
   const [update, setUpdate] = useState(false);
+  const [moved, setMoved] = useState(false);
 
   const push = () => {
-    props.getData(
-      props.next ? [true, props.next.true] : [true, { type: "finish" }]
-    );
+    if (moved == false) {
+      props.getData(
+        props.next ? [true, props.next.true] : [true, { type: "finish" }]
+      );
+    }
+    setMoved(true);
   };
   const {
     exam,
@@ -169,6 +194,7 @@ const Note = (props) => {
     note,
     complexity,
     id,
+    author,
     user,
     getData,
     lessonID,
@@ -195,15 +221,30 @@ const Note = (props) => {
       </Buttons>
       {!update && (
         <Container width={width}>
-          {/* <div className="text">
-          {!update && <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>}
-          {getData && <MiniButton onClick={push}>{props.t("next")}</MiniButton>}
-        </div>
-        <div className="author">
-          <img className="icon" src="../../static/hipster.svg" />
-          <div className="name">BeSavvy</div>
-        </div> */}
-          <NoteStyles>{renderHTML(text)}</NoteStyles>
+          <div className="text">
+            {!update && (
+              <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>
+            )}
+            {getData && (
+              // <MiniButton onClick={push}>{props.t("next")}</MiniButton>
+              <div className="arrow_box" onClick={(e) => push()}>
+                <img className="arrow" src="../../static/down-arrow.svg" />
+              </div>
+            )}
+          </div>
+          <div className="author">
+            <div className="author_info">
+              {author && author.image != null ? (
+                <img className="icon" src={author.image} />
+              ) : (
+                <img className="icon" src="../../static/hipster.svg" />
+              )}
+              <div className="name">
+                {author && author.name ? author.name : "BeSavvy"}
+              </div>
+            </div>
+          </div>
+          {/* <NoteStyles>{renderHTML(text)}</NoteStyles> */}
         </Container>
       )}
       {update && !story && !exam && (

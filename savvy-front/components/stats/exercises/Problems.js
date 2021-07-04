@@ -6,12 +6,14 @@ import moment from "moment";
 
 const Box = styled.div`
   border-bottom: 2px solid #edefed;
+  border-top: 2px solid #522b47;
+
   margin: 3%;
 `;
 
 const Answer = styled.div`
   margin: 3%;
-  border-bottom: 2px solid grey;
+  border-bottom: 2px solid #edefed;
   ins,
   u {
     text-decoration: none;
@@ -80,12 +82,14 @@ const Problems = (props) => {
       {props.lesson.problems.map((p) => (
         <>
           <Box>{renderHTML(p.text)}</Box>
+          {/* {console.log(
+            results.problemResults.filter((pr) => pr.problem.id === p.id)
+          )} */}
           <div>
             {results.problemResults
-              // .filter((prob) => prob.problem.id == p.id)
+              .filter((pr) => pr.problem.id === p.id)
               .map((r) => (
                 <>
-                  {console.log("r", r)}
                   <Answer>
                     {renderHTML(r.answer)}
                     <div>
@@ -101,7 +105,6 @@ const Problems = (props) => {
               // .filter((prob) => prob.problem.id == p.id)
               .map((r) => (
                 <>
-                  {console.log("r", r)}
                   <Answer>
                     {renderHTML(r.text)}
                     <div>

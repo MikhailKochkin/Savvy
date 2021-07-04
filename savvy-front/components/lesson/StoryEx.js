@@ -48,6 +48,7 @@ class StoryEx extends Component {
           <Note
             text={el.text}
             me={me}
+            author={lesson.user}
             story={true}
             note={el}
             complexity={el.complexity}
@@ -61,6 +62,7 @@ class StoryEx extends Component {
             key={el.id}
             id={el.id}
             testID={el.id}
+            author={lesson.user}
             complexity={el.complexity}
             question={el.question}
             answers={el.answers}
@@ -101,6 +103,7 @@ class StoryEx extends Component {
             user={el.user.id}
             story={true}
             user_name={el.user}
+            author={lesson.user}
           />
         );
         components.push(item);
@@ -128,6 +131,7 @@ class StoryEx extends Component {
             key={el.id}
             name={el.name}
             me={me}
+            author={lesson.user}
             complexity={el.complexity}
             messages={el.messages}
             id={el.id}
@@ -149,6 +153,7 @@ class StoryEx extends Component {
             userData={lesson.problemResults}
             story={true}
             lesson={lesson}
+            author={lesson.user}
           />
         );
         components.push(item);

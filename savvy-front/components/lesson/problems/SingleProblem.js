@@ -189,7 +189,8 @@ class SingleProblem extends Component {
     });
   }
   render() {
-    const { problem, me, userData, lesson, story, complexity } = this.props;
+    const { problem, me, userData, lesson, story, complexity, author } =
+      this.props;
 
     const data = userData
       .filter((result) => result.problem.id === problem.id)
@@ -205,6 +206,7 @@ class SingleProblem extends Component {
                 me={me}
                 problem={problem}
                 story={story}
+                author={author}
               />
             )}
             {data.length > 0 && (

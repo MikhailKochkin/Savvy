@@ -118,6 +118,7 @@ class Interactive extends Component {
           getData={this.updateArray}
           exam={true}
           problem={true}
+          author={this.props.author}
         />
       );
 
@@ -163,6 +164,7 @@ class Interactive extends Component {
           getData={this.updateArray}
           exam={true}
           problem={true}
+          author={this.props.author}
         />
       );
       this.setState((state) => {
@@ -194,6 +196,7 @@ class Interactive extends Component {
           getData={this.updateArray}
           exam={true}
           problem={true}
+          author={this.props.author}
         />
       );
       this.setState((state) => {
@@ -257,6 +260,7 @@ class Interactive extends Component {
           getData={this.updateArray}
           exam={true}
           story={true}
+          author={this.props.author}
         />
       );
     } else if (this.props.problem.nodeType.toLowerCase() === "newtest") {
@@ -285,6 +289,7 @@ class Interactive extends Component {
           next={el.next}
           story={true}
           exam={true}
+          author={this.props.author}
         />
       );
     }

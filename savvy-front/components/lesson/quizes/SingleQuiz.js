@@ -95,6 +95,12 @@ const Question = styled.div`
   p {
     margin: 5px 0;
   }
+  a {
+    border-bottom: 2px solid #26ba8d;
+    padding: 0%;
+    transition: 0.3s;
+    cursor: pointer;
+  }
   .question {
     display: flex;
     flex-direction: row;
@@ -342,7 +348,9 @@ const SingleQuiz = (props) => {
     ifRight,
     check,
     user_name,
+    author,
   } = props;
+  console.log("author", author);
   let data;
   if (me) {
     data = userData
@@ -392,8 +400,14 @@ const SingleQuiz = (props) => {
                     {renderHTML(props.question)}
                   </div>
                   <IconBlock>
-                    <img className="icon" src="../../static/hipster.svg" />
-                    <div className="name">BeSavvy</div>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}{" "}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
                   </IconBlock>{" "}
                 </div>
                 <div className="answer">
@@ -440,8 +454,14 @@ const SingleQuiz = (props) => {
                       {props.t("show")}
                     </div>
                     <IconBlock>
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
                     </IconBlock>
                   </div>
                 )}
@@ -455,8 +475,14 @@ const SingleQuiz = (props) => {
                       {hint !== null && hint !== 0 && hint}. {props.t("show")}
                     </div>
                     <IconBlock>
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
                     </IconBlock>
                   </div>
                 )}
@@ -516,8 +542,14 @@ const SingleQuiz = (props) => {
                       {props.t("correct_answer")}: {renderHTML(props.answer)}
                     </div>
                     <IconBlock>
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
                     </IconBlock>{" "}
                   </div>
                 )}
