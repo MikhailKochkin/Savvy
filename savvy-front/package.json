@@ -54,6 +54,7 @@
     "react-render-html": "^0.6.0",
     "react-resize-detector": "^5.2.0",
     "react-star-ratings": "^2.3.0",
+    "react-tooltip": "^4.2.21",
     "react-transition-group": "^1.2.1",
     "react-yandex-metrika": "^2.6.0",
     "reactjs-popup": "^2.0.4",
