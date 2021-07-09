@@ -328,10 +328,6 @@ const SingleTest = (props) => {
           setInputColor("rgba(50, 172, 102, 0.25)");
           // 1. if the data is sent for the first time
           if (props.getData) {
-            console.log(
-              "props.next && props.next.true",
-              props.next && props.next.true
-            );
             // 2. and if this quiz is a part of an exam
             props.getData(
               props.next && props.next.true
@@ -345,11 +341,6 @@ const SingleTest = (props) => {
           setInputColor("rgba(222, 107, 72, 0.5)");
           // 1. if the data is sent for the first time
           if (props.getData) {
-            console.log(
-              props.next && props.next.false && props.next.false !== {}
-            );
-            console.log(props.next.false, props.next.false !== {});
-
             // 2. and if this quiz is a part of an exam
             props.getData(
               props.next && props.next.false

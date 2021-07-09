@@ -44,6 +44,7 @@ import { question } from "react-icons-kit/fa/question";
 import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
 import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
 import { undo } from "react-icons-kit/fa/undo";
+import { exclamation } from "react-icons-kit/fa/exclamation";
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -140,6 +141,17 @@ const Link = styled.a`
   }
 `;
 
+const Article = styled.div`
+  font-size: 1.6rem;
+  width: 100%;
+  margin: 1% 1%;
+  padding: 1% 4%;
+  border-left: 3px solid #0094c6;
+  p {
+    margin: 10px 0;
+  }
+`;
+
 const Flag = styled.div`
   color: #008489;
   font-size: 2rem;
@@ -165,6 +177,9 @@ const Conceal = styled.div`
   border-radius: 5px; */
 `;
 
+const Error = styled.span`
+  color: blue;
+`;
 // 1. Serializer – slate to html
 
 const serialize = (node) => {
@@ -202,6 +217,8 @@ const serialize = (node) => {
       return `<blockquote><p>${children}</p></blockquote>`;
     case "flag":
       return `<div className="flag">${children}</div>`;
+    case "article":
+      return `<div className="article">${children}</div>`;
     case "conceal":
       return `<div id="conceal" data-text="${escapeHtml(
         node.data
@@ -235,7 +252,7 @@ const serialize = (node) => {
   }
 };
 
-// 2. deserialize – html to text
+// 2. deserialize – html to slate
 
 const deserialize = (el) => {
   if (el.nodeType === 3) {
@@ -245,14 +262,33 @@ const deserialize = (el) => {
   }
 
   const children = Array.from(el.childNodes).map(deserialize);
+  console.log(1, el.nodeName, TEXT_TAGS[el.nodeName]);
 
   if (TEXT_TAGS[el.nodeName]) {
     const attrs = TEXT_TAGS[el.nodeName](el);
-    return children.map((child) => jsx("text", attrs, child));
+
+    return children
+      .find((child) => Text.isText(child))
+      ?.map((child) => jsx("text", attrs, child));
   }
+
+  // if (TEXT_TAGS[el.nodeName]) {
+  //   const attrs = TEXT_TAGS[el.nodeName](el);
+  //   return children.map((child) => jsx("text", attrs, child));
+  // }
 
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
+  }
+  if (
+    el.getAttribute("classname") == "editor_error" ||
+    el.getAttribute("id") == "id"
+  ) {
+    return jsx("element", { type: "error" }, children);
+  }
+
+  if (el.getAttribute("classname") == "article") {
+    return jsx("element", { type: "article" }, children);
   }
 
   if (el.getAttribute("id") == "conceal") {
@@ -623,10 +659,14 @@ const App = (props) => {
         return <td {...props.attributes}>{props.children}</td>;
       case "flag":
         return <FlagElement {...props} />;
+      case "article":
+        return <ArticleElement {...props} />;
       case "note":
         return <NoteElement {...props} />;
       case "conceal":
         return <ConcealElement {...props} />;
+      case "error":
+        return <ErrorElement {...props} />;
       default:
         return <DefaultElement {...props} />;
     }
@@ -736,6 +776,14 @@ const App = (props) => {
         <ButtonStyle
           onMouseDown={(event) => {
             event.preventDefault();
+            toggleElement(editor, "article");
+          }}
+        >
+          <Icon icon={exclamation} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
             CustomEditor.addQuiz(editor);
           }}
         >
@@ -819,6 +867,10 @@ const LinkElement = (props) => {
   return <Link {...props.attributes}>{props.children}</Link>;
 };
 
+const ErrorElement = (props) => {
+  return <Error {...props.attributes}>{props.children}</Error>;
+};
+
 const QuizElement = (props) => {
   return <Quiz {...props.attributes}>{props.children}</Quiz>;
 };
@@ -833,6 +885,10 @@ const TableElement = (props) => {
 
 const FlagElement = (props) => {
   return <Flag {...props.attributes}>{props.children}</Flag>;
+};
+
+const ArticleElement = (props) => {
+  return <Article {...props.attributes}>{props.children}</Article>;
 };
 
 const NoteElement = (props) => {

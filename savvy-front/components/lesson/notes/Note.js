@@ -118,12 +118,23 @@ const NoteStyles = styled.div`
   }
   .flag {
     color: #008489;
-    font-size: 2rem;
+    font-size: 1.8rem;
     width: 100%;
     margin: 3% 0;
     padding: 3% 8%;
     background-color: #f2fafb;
     border-radius: 5px;
+  }
+  .article {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 1% 1%;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    /* line-height: 1.6; */
+    p {
+      margin: 10px 0;
+    }
   }
   pre {
     background: #282c34;

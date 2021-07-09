@@ -176,6 +176,7 @@ const Tasks = (props) => {
   };
 
   let item;
+  console.log(0, activeStep, tasks[activeStep], tasks.length);
   let task = tasks[activeStep];
   if (tasks.length === activeStep) {
     item = (

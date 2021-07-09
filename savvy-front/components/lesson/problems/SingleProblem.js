@@ -40,6 +40,17 @@ const TextBar = styled.div`
   justify-content: center;
   padding-top: 2%;
   margin-bottom: 3%;
+  .article {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 1% 1%;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    /* line-height: 1.6; */
+    p {
+      margin: 10px 0;
+    }
+  }
   #text {
     width: ${(props) => (props.story ? "50%" : "100%")};
   }
