@@ -39,6 +39,7 @@ const Block = styled.div`
   margin-bottom: 15px;
   border-bottom: ${(props) =>
     props.final ? "1px solid #001F4E" : "1px solid #edefed"};
+  background: ${(props) => (props.color ? "#b5e48c" : "#fff")};
 `;
 
 class TestResult extends Component {
@@ -48,42 +49,50 @@ class TestResult extends Component {
     for (i = 0; i < arr.length; i++) if (arr[i] === val) indexes.push(i);
     return indexes;
   };
+
   render() {
     const { newTests, student, results } = this.props;
     moment.locale("ru");
     return (
       <Container>
         {newTests.length > 0 &&
-          newTests.map((test) => (
-            <Box>
-              <div>
-                <b>Тест: </b>
-                {renderHTML(test.question[0])}
-              </div>
-              <div className="column">
+          newTests.map((test) => {
+            let answer = this.getAllIndexes(test.correct, true).map((i) =>
+              renderHTML(test.answers[i])
+            );
+            return (
+              <Box>
                 <div>
-                  <b>Правильный ответ:</b>
+                  <b>Тест: </b>
+                  {renderHTML(test.question[0])}
                 </div>
-                {this.getAllIndexes(test.correct, true).map((i) =>
-                  renderHTML(test.answers[i])
-                )}
-              </div>
-              <div className="column">
-                {results && results.length > 0 ? (
-                  results
-                    .filter((r) => r.test.id === test.id)
-                    .map((t, i) => (
-                      <Block final={i == results.length - 1}>
-                        {renderHTML(t.answer)}(
-                        {moment(t.createdAt).format("LLL")})
-                      </Block>
-                    ))
-                ) : (
-                  <span>Не выполнен</span>
-                )}
-              </div>
-            </Box>
-          ))}
+                <div className="column">
+                  <div>
+                    <b>Правильный ответ:</b>
+                  </div>
+                  {answer}
+                </div>
+                <div className="column">
+                  {results && results.length > 0 ? (
+                    results
+                      .filter((r) => r.test.id === test.id)
+                      .map((t, i) => (
+                        <Block
+                          final={i == results.length - 1}
+                          color={answer == t.answer}
+                        >
+                          {console.log(answer, t.answer, answer == t.answer)}
+                          {renderHTML(t.answer)}(
+                          {moment(t.createdAt).format("LLL")})
+                        </Block>
+                      ))
+                  ) : (
+                    <span>Не выполнен</span>
+                  )}
+                </div>
+              </Box>
+            );
+          })}
       </Container>
     );
   }

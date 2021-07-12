@@ -19,7 +19,16 @@ const Container = styled.div`
 
 class ProblemResults extends Component {
   render() {
-    const { problems, student, results } = this.props;
+    const {
+      problems,
+      student,
+      results,
+      newTests,
+      quizes,
+      notes,
+      testResults,
+      quizResults,
+    } = this.props;
     return (
       <>
         <Container>
@@ -29,6 +38,11 @@ class ProblemResults extends Component {
                 problem={problem}
                 student={student}
                 results={results}
+                newTests={newTests}
+                testResults={testResults}
+                quizes={quizes}
+                quizResults={quizResults}
+                notes={notes}
               />
             ))}
         </Container>

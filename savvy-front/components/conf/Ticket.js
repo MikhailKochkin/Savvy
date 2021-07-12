@@ -38,12 +38,13 @@ const Styles = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 1;
+  z-index: 0;
 
   .night {
-    position: relative;
+    position: absolute;
     width: 100%;
-    /* border: 1px solid white; */
-    min-height: 100%;
+    z-index: -1;
+    height: 50%;
     -webkit-transform: rotateZ(45deg);
     transform: rotateZ(45deg);
   }
@@ -278,6 +279,9 @@ const Main = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
+  #image_comment {
+    text-align: center;
+  }
   .block3 {
     width: 35%;
     display: flex;
@@ -393,14 +397,17 @@ const TickertInner = styled.div`
       flex-basis: 40%;
 
       img {
-        width: 55px;
-        height: 55px;
+        width: 65px;
+        height: 65px;
         background: grey;
         border-radius: 50%;
       }
     }
     .names {
       flex-basis: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
   }
   .logo {
@@ -685,10 +692,13 @@ const Ticket = (props) => {
                     placeholder="Загрузите свою фотографию..."
                     onChange={(e) => uploadFile(e)}
                   />
-                  Загрузи квадратное фото 😊
+                  Загрузи фото 😊
                 </label>
               </div>
             </Form>
+            <div id="image_comment">
+              Рекомендуем взять квадратную фотографию или заранее ее обрезать
+            </div>
           </div>
         </Main>
       </Window>

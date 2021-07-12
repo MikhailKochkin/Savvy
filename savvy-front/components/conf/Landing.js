@@ -1,7 +1,17 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { signIn, useSession } from "next-auth/client";
 import ReactTooltip from "react-tooltip";
+import { useMutation, gql } from "@apollo/client";
+
+import * as EmailValidator from "email-validator";
+
+const CREATE_CONF_USER_MUTATION = gql`
+  mutation createConfUser($email: String!, $conf_number: Int!) {
+    createConfUser(email: $email, conf_number: $conf_number) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   min-height: 100vh;
@@ -19,8 +29,6 @@ const Styles = styled.div`
   color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
   min-height: 100vh;
   position: relative;
@@ -37,12 +45,14 @@ const Styles = styled.div`
   background-size: cover;
   background-position: center;
   opacity: 1;
+  z-index: 0;
 
   .night {
-    position: relative;
+    position: absolute;
     width: 100%;
-    /* border: 1px solid white; */
-    min-height: 100%;
+    z-index: -1;
+
+    height: 50%;
     -webkit-transform: rotateZ(45deg);
     transform: rotateZ(45deg);
   }
@@ -65,7 +75,7 @@ const Styles = styled.div`
   .shooting_star::after {
     content: "";
     position: absolute;
-    top: calc(50% - 1px);
+    top: calc(20% - 1px);
     right: 0;
     height: 2px;
     background: linear-gradient(
@@ -263,7 +273,7 @@ const Styles = styled.div`
 
 const Window = styled.div`
   width: 100%;
-  height: 100%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -274,6 +284,16 @@ const Window = styled.div`
 const Main = styled.div`
   margin-left: 5%;
   max-width: 1500px;
+  #FOMO {
+    line-height: 1.4;
+    margin-top: 10px;
+  }
+  @media (max-width: 800px) {
+    width: 95%;
+    #FOMO {
+      margin-bottom: 5%;
+    }
+  }
 `;
 
 const Logo = styled.div`
@@ -290,10 +310,13 @@ const Logo = styled.div`
   }
   @media (max-width: 800px) {
     margin-left: 5%;
+    margin-top: 5%;
   }
 `;
 
 const Info = styled.div`
+  z-index: 2;
+
   h1 {
     font-size: 7rem;
     margin: 0;
@@ -312,6 +335,56 @@ const Info = styled.div`
     margin-bottom: 15px;
     line-height: 1.4;
   }
+  .photos {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 90px;
+    margin: 20px 0;
+    .border1 {
+      display: flex;
+      flex-direction: column;
+      margin-right: 20px;
+    }
+    img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50px;
+      border: 4px solid #999999;
+      cursor: pointer;
+    }
+    #image1 {
+      transition: all 0.5s ease-out;
+      &:hover {
+        border: 4px solid #88ffea;
+      }
+    }
+    #image2 {
+      transition: all 0.5s ease-out;
+      &:hover {
+        border: 4px solid #ff4ecd;
+      }
+    }
+    #image3 {
+      transition: all 0.5s ease-out;
+      &:hover {
+        border: 4px solid #1a75ff;
+      }
+    }
+    #image4 {
+      transition: all 0.5s ease-out;
+      &:hover {
+        border: 4px solid #88ffea;
+      }
+    }
+    #image5 {
+      transition: all 0.5s ease-out;
+      &:hover {
+        border: 4px solid #ff4ecd;
+      }
+    }
+  }
   @media (max-width: 800px) {
     h1 {
       font-size: 4.4rem;
@@ -324,6 +397,13 @@ const Info = styled.div`
 
       width: 100%;
     }
+    .photos {
+      flex-wrap: wrap;
+      height: auto;
+    }
+    img {
+      margin-bottom: 20px;
+    }
   }
 `;
 
@@ -333,66 +413,14 @@ const Details = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   font-size: 2rem;
-  margin-bottom: 50px;
   .time {
     border-right: 0.5px solid white;
     padding-right: 20px;
     margin-right: 20px;
   }
   .format {
-    border-right: 0.5px solid white;
     padding-right: 20px;
     margin-right: 20px;
-  }
-  .photos {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    .border1 {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      flex-direction: column;
-      margin-right: 20px;
-    }
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50px;
-      border: 3px solid #999999;
-      cursor: pointer;
-    }
-    #image1 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 3px solid #88ffea;
-      }
-    }
-    #image2 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 3px solid #ff4ecd;
-      }
-    }
-    #image3 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 3px solid #1a75ff;
-      }
-    }
-    #image4 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 3px solid #88ffea;
-      }
-    }
-    #image5 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 3px solid #ff4ecd;
-      }
-    }
   }
   @media (max-width: 800px) {
     font-size: 1.8rem;
@@ -407,10 +435,6 @@ const Details = styled.div`
       border: none;
       padding-right: 5px;
       margin-right: 5px;
-    }
-    .photos {
-      margin-top: 20px;
-      /* display: none; */
     }
   }
 `;
@@ -537,7 +561,36 @@ const Button = styled.div`
   }
 `;
 
+const Footer = styled.div`
+  display: flex;
+  margin-top: 25px;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 90%;
+  #name {
+    margin-right: 20px;
+  }
+  a {
+    color: white;
+    cursor: pointer;
+    transition: ease-in 0.1s;
+    &:hover {
+      color: #ad61e2;
+    }
+  }
+  @media (max-width: 800px) {
+    display: none;
+  }
+`;
+
 const Landing = (props) => {
+  const [email, setEmail] = useState("");
+
+  const [createConfUser, { data, loading, error }] = useMutation(
+    CREATE_CONF_USER_MUTATION
+  );
+
   return (
     <Styles>
       <div class="night">
@@ -565,56 +618,83 @@ const Landing = (props) => {
             <Details>
               <div className="time">6 октября, 19:00 по Москве</div>
               <div className="format">Онлайн</div>
-              <div className="photos">
-                <div className="border1">
-                  <img
-                    id="image1"
-                    src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%9C%D0%B8%D1%88%D0%B0_1.png"
-                    data-tip="Про запуск EdTech стартапа на юридическом рынке"
-                  />
-                </div>
-                <div className="border1">
-                  <img
-                    id="image2"
-                    src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/photo_2021-05-27_12.48_2.png"
-                    data-tip="Про развитие в международном консалтинге"
-                  />
-                </div>
-                <div className="border1">
-                  <img
-                    id="image3"
-                    src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/photo_2021-05-27_12.47_2.png"
-                    data-tip="Про работу в технологическом инхаусе и переход в российский консалтинг"
-                  />
-                </div>
-                <div className="border1">
-                  <img
-                    id="image4"
-                    src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625401367/savvy/%D0%94%D0%B5%D0%BD%D0%B8_4_b3fqg4.png"
-                    data-tip="Про что-то еще"
-                  />
-                </div>
-                <div className="border1">
-                  <img
-                    id="image5"
-                    src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%AE%D0%BB%D1%8F3.png"
-                    data-tip="Про пеереезд в Москву и запуск карьеры"
-                  />
-                </div>
-                <div className="border1">
-                  {/* <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1595848224/%D0%9B%D0%A5_1.png" /> */}
-                </div>
-                {/* <div className="border1">
+            </Details>
+            <div className="photos">
+              <div className="border1">
+                <img
+                  id="image1"
+                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%9C%D0%B8%D1%88%D0%B0_1.png"
+                  data-tip="Михаил Кочкин из BeSavvy"
+                />
+              </div>
+              <div className="border1">
+                <img
+                  id="image2"
+                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/photo_2021-05-27_12.48_2.png"
+                  data-tip="Ксения Даньшина из CMS"
+                />
+              </div>
+              <div className="border1">
+                <img
+                  id="image3"
+                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/photo_2021-05-27_12.47_2.png"
+                  data-tip="Булат Кулахметов из Зарцын и партнеры"
+                />
+              </div>
+              <div className="border1">
+                <img
+                  id="image4"
+                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625401367/savvy/%D0%94%D0%B5%D0%BD%D0%B8_4_b3fqg4.png"
+                  data-tip="Дени Мурдалов из А2"
+                />
+              </div>
+              <div className="border1">
+                <img
+                  id="image5"
+                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%AE%D0%BB%D1%8F3.png"
+                  data-tip="Юлия Баймакова из Noerr"
+                />
+              </div>
+              <div className="border1">
+                <img
+                  id="image3"
+                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1626079215/%D0%9B%D0%B5%D0%B2_2.png"
+                  data-tip="Лев Толстопятов из Clifford Chance"
+                />
+              </div>
+              <div className="border1">
+                {/* <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1595848224/%D0%9B%D0%A5_1.png" /> */}
+              </div>
+              {/* <div className="border1">
                   <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1595848224/%D0%9B%D0%A5_1.png" />
                 </div> */}
-                <ReactTooltip place="top" type="light" effect="float" />
-              </div>
-            </Details>
+              <ReactTooltip place="top" type="light" effect="float" />
+            </div>
           </Info>
           <Form>
             <div className="black">
-              <input placeholder="Email" />{" "}
-              <div className="button" onClick={(e) => props.change("ticket")}>
+              <input
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+              />{" "}
+              <div
+                className="button"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (EmailValidator.validate(email)) {
+                    const res = await createConfUser({
+                      variables: {
+                        email: email,
+                        conf_number: 1,
+                      },
+                    });
+                    console.log(res);
+                    props.change("ticket");
+                  } else {
+                    alert("Неправильный имейл");
+                  }
+                }}
+              >
                 Получить билет
               </div>
             </div>
@@ -622,11 +702,39 @@ const Landing = (props) => {
           {/* <MainButton onClick={() => signIn()}>
             <div className="black">Получить билет</div>
           </MainButton> */}
-          <Button onClick={(e) => props.change("ticket")}>
+          <Button
+            onClick={async (e) => {
+              e.preventDefault();
+              if (EmailValidator.validate(email)) {
+                const res = await createConfUser({
+                  variables: {
+                    email: email,
+                    number: 1,
+                  },
+                  refetchQueries: [{ query: CURRENT_USER_QUERY }],
+                });
+                console.log(res);
+                props.change("ticket");
+              } else {
+                alert("Неправильный имейл");
+              }
+            }}
+          >
             Получить билет
           </Button>
+          <div id="FOMO">
+            Сразу поделимся еще 5 письмами о юридической карьере
+          </div>
         </Main>
       </Window>
+      <Footer>
+        <div id="name">ООО "БиСэвви"</div>
+        <div id="contact">
+          <a href="mailto:anastasia@besavvy.app">
+            По всем вопросам и предложениям
+          </a>
+        </div>
+      </Footer>
     </Styles>
   );
 };

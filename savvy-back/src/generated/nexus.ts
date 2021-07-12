@@ -3527,8 +3527,8 @@ export interface NexusGenArgTypes {
       title?: string | null; // String
     }
     createConfUser: { // args
+      conf_number?: number | null; // Int
       email?: string | null; // String
-      number?: number | null; // Int
     }
     createConstruction: { // args
       answer?: Array<string | null> | null; // [String]

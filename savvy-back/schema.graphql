@@ -1089,7 +1089,7 @@ type Mutation {
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
-  createConfUser(email: String, number: Int): ConfUser
+  createConfUser(conf_number: Int, email: String): ConfUser
   createConstruction(answer: [String], hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
   createCoursePage(courseType: String, description: String, image: String, published: Boolean, title: String): CoursePage

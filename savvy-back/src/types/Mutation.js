@@ -2083,7 +2083,7 @@ const Mutation = mutationType({
         type: "ConfUser",
         args: {
           email: stringArg(),
-          number: intArg(),
+          conf_number: intArg(),
         },
         resolve: async (_, args, ctx) => {
           const client = await ctx.prisma.confUser.create({

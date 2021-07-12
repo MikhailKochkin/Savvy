@@ -268,6 +268,11 @@ const LessonData = (props) => {
                   problems={lesson.problems.filter((t) => t.id === l.id)}
                   student={student}
                   results={data.stats.problemResults}
+                  newTests={lesson.newTests}
+                  testResults={data.stats.testResults}
+                  quizes={lesson.quizes}
+                  quizResults={data.stats.quizResults}
+                  notes={lesson.notes}
                 />
               );
             }
