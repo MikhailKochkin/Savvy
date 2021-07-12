@@ -514,6 +514,7 @@ const Form = styled.div`
       justify-content: center;
       align-items: center;
       transition: 0.4s;
+      font-family: Montserrat;
       cursor: pointer;
       &:hover {
         border: 1px solid white;
@@ -535,7 +536,7 @@ const Form = styled.div`
   }
 `;
 
-const Button = styled.div`
+const Button = styled.button`
   background: #fff;
   color: black;
   border: 1px solid black;
@@ -551,6 +552,8 @@ const Button = styled.div`
   transition: 0.4s;
   cursor: pointer;
   display: none;
+  font-family: Montserrat;
+
   &:hover {
     border: 1px solid white;
     background: black;
@@ -677,7 +680,7 @@ const Landing = (props) => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
               />{" "}
-              <div
+              <button
                 className="button"
                 onClick={async (e) => {
                   e.preventDefault();
@@ -696,7 +699,7 @@ const Landing = (props) => {
                 }}
               >
                 {loading ? "Сохраняем.." : "Получить билет"}
-              </div>
+              </button>
             </div>
           </Form>
           {/* <MainButton onClick={() => signIn()}>
