@@ -77,7 +77,7 @@ const ConfUser = objectType({
     t.model.email();
     t.model.surname();
     t.model.name();
-    t.model.number();
+    t.model.conf_number();
     t.model.createdAt();
     t.model.updatedAt();
   },
