@@ -1720,6 +1720,7 @@ export interface NexusGenObjects {
     name: string; // String!
   }
   ConfUser: { // root type
+    conf_number?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
@@ -2151,6 +2152,7 @@ export interface NexusGenFieldTypes {
     name: string; // String!
   }
   ConfUser: { // field return type
+    conf_number: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
@@ -2772,6 +2774,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
   }
   ConfUser: { // field return type name
+    conf_number: 'Int'
     createdAt: 'DateTime'
     email: 'String'
     id: 'String'

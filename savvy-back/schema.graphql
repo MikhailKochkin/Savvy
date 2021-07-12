@@ -244,6 +244,7 @@ input CompanyWhereInput {
 }
 
 type ConfUser {
+  conf_number: Int
   createdAt: DateTime!
   email: String!
   id: String!
