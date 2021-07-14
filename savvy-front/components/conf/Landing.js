@@ -691,7 +691,6 @@ const Landing = (props) => {
                         conf_number: 1,
                       },
                     });
-                    console.log(res);
                     props.change("ticket");
                   } else {
                     alert("Неправильный имейл");
@@ -712,11 +711,9 @@ const Landing = (props) => {
                 const res = await createConfUser({
                   variables: {
                     email: email,
-                    number: 1,
+                    conf_number: 1,
                   },
-                  refetchQueries: [{ query: CURRENT_USER_QUERY }],
                 });
-                console.log(res);
                 props.change("ticket");
               } else {
                 alert("Неправильный имейл");
