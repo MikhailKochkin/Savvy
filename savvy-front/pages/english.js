@@ -1,11 +1,12 @@
 import Main from "../components/english/Main";
-import Problem from "../components/corporate_lawyer/Problem";
-import Audience from "../components/corporate_lawyer/Audience";
-import Syllabus from "../components/corporate_lawyer/Syllabus";
-import Perks from "../components/corporate_lawyer/Perks";
-import Call1 from "../components/corporate_lawyer/Call1";
-import Price from "../components/corporate_lawyer/Price";
-import Teachers from "../components/corporate_lawyer/Teachers";
+import Context from "../components/english/Context";
+import Product from "../components/english/Product";
+import Action from "../components/english/Action";
+import Action2 from "../components/english/Action2";
+import Concerns from "../components/english/Concerns";
+import Author from "../components/english/Author";
+import Syllabus from "../components/english/Syllabus";
+import Reviews from "../components/english/Reviews";
 import Apply from "../components/corporate_lawyer/Apply";
 import Questions from "../components/corporate_lawyer/Questions";
 import Partners from "../components/corporate_lawyer/Partners";
@@ -16,6 +17,14 @@ const english = () => {
   return (
     <>
       <Main />
+      <Context />
+      <Product />
+      <Action />
+      <Concerns />
+      <Author />
+      <Action2 />
+      <Syllabus />
+      <Reviews />
     </>
   );
 };

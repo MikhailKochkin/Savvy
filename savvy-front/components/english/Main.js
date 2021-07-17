@@ -1,18 +1,16 @@
 import styled from "styled-components";
 const Styles = styled.div`
-  min-height: 100vh;
+  padding: 50px 0;
+  min-height: 80vh;
   width: 100vw;
-  background: #1c92d2; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #f2fcfe,
-    #1c92d2
-  ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
-    to right,
-    #f2fcfe,
-    #1c92d2
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    359.74deg,
+    #ffffff 0.21%,
+    rgba(255, 255, 255, 0.5) 29.76%,
+    rgba(220, 232, 253, 0.466013) 48.43%,
+    rgba(49, 117, 243, 0.3) 99.76%,
+    #c4d6fc 99.76%
+  );
 
   display: flex;
   flex-direction: column;
@@ -46,7 +44,7 @@ const Styles = styled.div`
     width: 90%;
   }
   @media (max-width: 800px) {
-    height: 100%;
+    height: 90%;
     padding-bottom: 50px;
     #mobile_image {
       display: block;
@@ -70,7 +68,7 @@ const Styles = styled.div`
       justify-content: flex-start;
       h1 {
         line-height: 1.4;
-        font-size: 3rem;
+        font-size: 3.6rem;
         margin-top: 40px;
       }
     }
@@ -78,15 +76,17 @@ const Styles = styled.div`
 `;
 
 const Header = styled.div`
-  height: 70px;
+  height: 100px;
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
-  padding: 0 100px;
-  font-size: 2rem;
-  margin-bottom: 8%;
+  font-size: 2.4rem;
+  margin-bottom: 4%;
+  @media (max-width: 800px) {
+    margin-bottom: 4%;
+  }
 `;
 
 const Info = styled.div`
@@ -109,7 +109,7 @@ const Info = styled.div`
     margin-left: -30px;
   }
   h2 {
-    font-size: 2rem;
+    font-size: 2.4rem;
     font-weight: 500;
     text-align: left;
     width: 60%;
@@ -133,17 +133,17 @@ const Info = styled.div`
     cursor: pointer;
     margin-top: 20px;
     font-family: Montserrat;
-    width: 400px;
-    height: 80px;
+    width: 310px;
+    height: 70px;
     font-size: 1.8rem;
     transition: 0.3s;
     font-size: 2.2rem;
     &:hover {
-      background: #e01e00;
+      background: #0057f8;
     }
   }
   @media (max-width: 800px) {
-    width: 90%;
+    width: 100%;
     #level1 {
       display: flex;
       flex-direction: column;
@@ -159,26 +159,26 @@ const Info = styled.div`
           margin: 15px 0;
         }
       }
-      h1 {
-        font-size: 3rem;
-        font-weight: 500;
-        width: 95%;
-        text-align: left;
-        line-height: 1.4;
-      }
       img {
         width: 100px;
       }
     }
-    h2 {
-      width: 100%;
-      font-size: 2rem;
+    h1 {
+      font-size: 3.6rem;
+      font-weight: 500;
+      width: 95%;
       text-align: left;
       line-height: 1.4;
-      margin-top: 20px;
-      button {
-        width: 100%;
-      }
+    }
+    h2 {
+      width: 90%;
+      font-size: 2.4rem;
+      text-align: left;
+      line-height: 1.4;
+      margin: 15px 0;
+    }
+    button {
+      width: 100%;
     }
     .timeline {
       margin-bottom: 0;
@@ -197,8 +197,8 @@ const Main = () => {
   };
   return (
     <Styles>
-      <Header>BeSavvy</Header>
       <div id="data0">
+        <Header>BeSavvy Legal English</Header>
         <div className="timeline">Старт 23 августа</div>
         <div id="level1">
           <h1> 🇬🇧 Научим использовать юридический английский в работе</h1>
@@ -207,9 +207,7 @@ const Main = () => {
               Покажем, как работать на международных проектах и поможем найти
               работу, где требуется английский
             </h2>
-            <button onClick={(e) => slide()}>
-              Записаться на пробное занятие
-            </button>
+            <button onClick={(e) => slide()}>Узнать больше</button>
           </Info>
         </div>
       </div>

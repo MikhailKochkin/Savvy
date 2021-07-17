@@ -483,6 +483,7 @@ input CoursePageWhereInput {
 }
 
 input CoursePageWhereUniqueInput {
+  examQuestionId: String
   id: String
 }
 

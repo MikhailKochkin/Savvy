@@ -419,6 +419,159 @@
       }
     },
     {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "name",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "number",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "communication_medium",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "BusinessClient",
+      "field": "type",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateModel",
+      "model": "ConfUser"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "id",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "ConfUser",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "ConfUser",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "ConfUser",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "email",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "name",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "surname",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "ConfUser",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "ConfUser",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "ConfUser",
+          "field": "updatedAt"
+        },
+        "directive": "updatedAt"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "ConfUser",
+      "field": "conf_number",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
       "tag": "CreateModel",
       "model": "CareerTrack"
     },
@@ -1553,6 +1706,77 @@
     {
       "tag": "CreateField",
       "model": "Construction",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Construction",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Construction",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Construction",
+      "field": "text",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Construction",
+      "field": "hasText",
+      "type": "Boolean",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Construction",
+          "field": "hasText"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Construction",
+          "field": "hasText"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "false"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Construction",
       "field": "lesson",
       "type": "Lesson",
       "arity": "Required"
@@ -2365,13 +2589,6 @@
     {
       "tag": "CreateField",
       "model": "CoursePage",
-      "field": "promocode",
-      "type": "Json",
-      "arity": "Optional"
-    },
-    {
-      "tag": "CreateField",
-      "model": "CoursePage",
       "field": "userId",
       "type": "String",
       "arity": "Required"
@@ -2388,6 +2605,24 @@
       "model": "CoursePage",
       "field": "examQuestionId",
       "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "CoursePage",
+          "field": "examQuestionId"
+        },
+        "directive": "unique"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "CoursePage",
+      "field": "promocode",
+      "type": "Json",
       "arity": "Optional"
     },
     {
@@ -3117,6 +3352,38 @@
       "field": "lessonId",
       "type": "String",
       "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Document",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Document",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Document",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
     },
     {
       "tag": "CreateField",
@@ -4468,6 +4735,13 @@
     {
       "tag": "CreateField",
       "model": "Lesson",
+      "field": "image",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Lesson",
       "field": "coursePage",
       "type": "CoursePage",
       "arity": "Required"
@@ -4613,6 +4887,13 @@
     {
       "tag": "CreateField",
       "model": "Lesson",
+      "field": "chats",
+      "type": "Chat",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Lesson",
       "field": "constructions",
       "type": "Construction",
       "arity": "List"
@@ -4620,7 +4901,7 @@
     {
       "tag": "CreateField",
       "model": "Lesson",
-      "field": "constructionResult",
+      "field": "constructionResults",
       "type": "ConstructionResult",
       "arity": "List"
     },
@@ -4827,7 +5108,7 @@
         "directive": "default"
       },
       "argument": "",
-      "value": "0"
+      "value": "1"
     },
     {
       "tag": "CreateField",
@@ -5006,7 +5287,7 @@
     {
       "tag": "CreateField",
       "model": "LessonResult",
-      "field": "user",
+      "field": "student",
       "type": "User",
       "arity": "Required"
     },
@@ -5016,7 +5297,7 @@
         "path": {
           "tag": "Field",
           "model": "LessonResult",
-          "field": "user"
+          "field": "student"
         },
         "directive": "relation"
       }
@@ -5028,7 +5309,7 @@
         "path": {
           "tag": "Field",
           "model": "LessonResult",
-          "field": "user"
+          "field": "student"
         },
         "directive": "relation"
       },
@@ -5042,7 +5323,7 @@
         "path": {
           "tag": "Field",
           "model": "LessonResult",
-          "field": "user"
+          "field": "student"
         },
         "directive": "relation"
       },
@@ -5269,6 +5550,38 @@
     {
       "tag": "CreateField",
       "model": "NewTest",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "NewTest",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "NewTest",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
+    },
+    {
+      "tag": "CreateField",
+      "model": "NewTest",
       "field": "lesson",
       "type": "Lesson",
       "arity": "Optional"
@@ -5361,7 +5674,7 @@
     {
       "tag": "CreateField",
       "model": "NewTest",
-      "field": "testResult",
+      "field": "testResults",
       "type": "TestResult",
       "arity": "List"
     },
@@ -5521,6 +5834,45 @@
       "field": "lessonId",
       "type": "String",
       "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Note",
+      "field": "chat",
+      "type": "Boolean",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Note",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Note",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Note",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
     },
     {
       "tag": "CreateField",
@@ -6065,7 +6417,7 @@
     {
       "tag": "CreateField",
       "model": "Post",
-      "field": "coursePage",
+      "field": "coursePages",
       "type": "CoursePage",
       "arity": "List"
     },
@@ -6075,7 +6427,7 @@
         "path": {
           "tag": "Field",
           "model": "Post",
-          "field": "coursePage"
+          "field": "coursePages"
         },
         "directive": "relation"
       }
@@ -6087,7 +6439,7 @@
         "path": {
           "tag": "Field",
           "model": "Post",
-          "field": "coursePage"
+          "field": "coursePages"
         },
         "directive": "relation"
       },
@@ -6321,6 +6673,38 @@
     {
       "tag": "CreateField",
       "model": "Problem",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Problem",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Problem",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Problem",
       "field": "lesson",
       "type": "Lesson",
       "arity": "Required"
@@ -6413,7 +6797,7 @@
     {
       "tag": "CreateField",
       "model": "Problem",
-      "field": "problemResult",
+      "field": "problemResults",
       "type": "ProblemResult",
       "arity": "List"
     },
@@ -6996,6 +7380,38 @@
     {
       "tag": "CreateField",
       "model": "Quiz",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Quiz",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Quiz",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Quiz",
       "field": "lesson",
       "type": "Lesson",
       "arity": "Optional"
@@ -7088,7 +7504,7 @@
     {
       "tag": "CreateField",
       "model": "Quiz",
-      "field": "quizResult",
+      "field": "quizResults",
       "type": "QuizResult",
       "arity": "List"
     },
@@ -7358,7 +7774,7 @@
     {
       "tag": "CreateField",
       "model": "QuizResult",
-      "field": "user",
+      "field": "student",
       "type": "User",
       "arity": "Required"
     },
@@ -7368,7 +7784,7 @@
         "path": {
           "tag": "Field",
           "model": "QuizResult",
-          "field": "user"
+          "field": "student"
         },
         "directive": "relation"
       }
@@ -7380,7 +7796,7 @@
         "path": {
           "tag": "Field",
           "model": "QuizResult",
-          "field": "user"
+          "field": "student"
         },
         "directive": "relation"
       },
@@ -7394,7 +7810,7 @@
         "path": {
           "tag": "Field",
           "model": "QuizResult",
-          "field": "user"
+          "field": "student"
         },
         "directive": "relation"
       },
@@ -7870,7 +8286,7 @@
     {
       "tag": "CreateField",
       "model": "Shot",
-      "field": "shotResult",
+      "field": "shotResults",
       "type": "ShotResult",
       "arity": "List"
     },
@@ -8318,6 +8734,13 @@
       "field": "forumId",
       "type": "String",
       "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Statement",
+      "field": "comments",
+      "type": "String",
+      "arity": "List"
     },
     {
       "tag": "CreateField",
@@ -8912,6 +9335,38 @@
     {
       "tag": "CreateField",
       "model": "TextEditor",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "TextEditor",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "TextEditor",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
+    },
+    {
+      "tag": "CreateField",
+      "model": "TextEditor",
       "field": "lesson",
       "type": "Lesson",
       "arity": "Required"
@@ -9004,7 +9459,7 @@
     {
       "tag": "CreateField",
       "model": "TextEditor",
-      "field": "textEditorResult",
+      "field": "textEditorResults",
       "type": "TextEditorResult",
       "arity": "List"
     },
@@ -9477,7 +9932,7 @@
     {
       "tag": "CreateField",
       "model": "Uni",
-      "field": "user",
+      "field": "teachers",
       "type": "User",
       "arity": "List"
     },
@@ -9786,13 +10241,6 @@
       "field": "image",
       "type": "String",
       "arity": "Optional"
-    },
-    {
-      "tag": "CreateField",
-      "model": "User",
-      "field": "sandboxes",
-      "type": "String",
-      "arity": "List"
     },
     {
       "tag": "CreateField",
@@ -10130,6 +10578,13 @@
     {
       "tag": "CreateField",
       "model": "User",
+      "field": "chats",
+      "type": "Chat",
+      "arity": "List"
+    },
+    {
+      "tag": "CreateField",
+      "model": "User",
       "field": "clauses",
       "type": "Clause",
       "arity": "List"
@@ -10453,13 +10908,6 @@
       },
       "argument": "",
       "value": "\"AuthorsCoursePage\""
-    },
-    {
-      "tag": "CreateField",
-      "model": "User",
-      "field": "sandbox",
-      "type": "Sandbox",
-      "arity": "List"
     },
     {
       "tag": "CreateField",
@@ -11337,6 +11785,255 @@
     },
     {
       "tag": "CreateModel",
+      "model": "Chat"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "id",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "id"
+        },
+        "directive": "id"
+      }
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "id"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "id"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "cuid()"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "name",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "messages",
+      "type": "Json",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "updatedAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "updatedAt"
+        },
+        "directive": "updatedAt"
+      }
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "createdAt",
+      "type": "DateTime",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "createdAt"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "now()"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "userId",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "lessonId",
+      "type": "String",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "complexity",
+      "type": "Int",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "complexity"
+        },
+        "directive": "default"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "complexity"
+        },
+        "directive": "default"
+      },
+      "argument": "",
+      "value": "1"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "lesson",
+      "type": "Lesson",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "lesson"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "lesson"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[lessonId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "lesson"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateField",
+      "model": "Chat",
+      "field": "user",
+      "type": "User",
+      "arity": "Required"
+    },
+    {
+      "tag": "CreateDirective",
+      "location": {
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "user"
+        },
+        "directive": "relation"
+      }
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "user"
+        },
+        "directive": "relation"
+      },
+      "argument": "fields",
+      "value": "[userId]"
+    },
+    {
+      "tag": "CreateArgument",
+      "location": {
+        "tag": "Directive",
+        "path": {
+          "tag": "Field",
+          "model": "Chat",
+          "field": "user"
+        },
+        "directive": "relation"
+      },
+      "argument": "references",
+      "value": "[id]"
+    },
+    {
+      "tag": "CreateModel",
       "model": "PointA"
     },
     {
@@ -11990,13 +12687,6 @@
       },
       "argument": "references",
       "value": "[id]"
-    },
-    {
-      "tag": "CreateField",
-      "model": "Sandbox",
-      "field": "user",
-      "type": "User",
-      "arity": "List"
     },
     {
       "tag": "CreateModel",

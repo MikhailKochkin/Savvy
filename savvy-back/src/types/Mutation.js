@@ -18,6 +18,7 @@ const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
 const NextWeekEmail = require("../emails/nextWeek");
 const CommentEmail = require("../emails/Comment");
+const ConfEmail = require("../emails/Conf");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 
@@ -2086,12 +2087,20 @@ const Mutation = mutationType({
           conf_number: intArg(),
         },
         resolve: async (_, args, ctx) => {
-          const client = await ctx.prisma.confUser.create({
+          const conf_user = await ctx.prisma.confUser.create({
             data: {
               ...args,
             },
           });
-          return client;
+
+          const newEmail = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: args.email,
+            Subject: "Рады видеть тебя на BeSavvyCon",
+            HtmlBody: ConfEmail.ConfEmail(),
+          });
+
+          return conf_user;
         },
       }),
       t.field("updateConfUser", {

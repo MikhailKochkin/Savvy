@@ -79,13 +79,13 @@ const Page = ({ children }) => {
               {router.pathname == "/" && <Ad />}
               {router.pathname == "/intro" && <Ad2 />}
               <Header />
-              {router.pathname !== "/school" && router.pathname !== "/con" && (
-                <DynamicNav />
-              )}
+              {router.pathname !== "/school" &&
+                router.pathname !== "/con" &&
+                router.pathname !== "/english" && <DynamicNav />}
               <Inner>{children}</Inner>
-              {router.pathname !== "/lesson" && router.pathname !== "/con" && (
-                <Footer />
-              )}
+              {router.pathname !== "/lesson" &&
+                router.pathname !== "/con" &&
+                router.pathname !== "/english" && <Footer />}
             </ModalProvider>
           </Layout>
         </>

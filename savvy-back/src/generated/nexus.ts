@@ -334,6 +334,7 @@ export interface NexusGenInputs {
     weeks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
   }
   CoursePageWhereUniqueInput: { // input type
+    examQuestionId?: string | null; // String
     id?: string | null; // String
   }
   CourseVisitListRelationFilter: { // input type
