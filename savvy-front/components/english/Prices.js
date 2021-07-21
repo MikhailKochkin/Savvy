@@ -106,6 +106,8 @@ const Styles = styled.div`
         width: 80%;
         margin-bottom: 20px;
       }
+    }
+  }
 `;
 
 const Level = styled.div`

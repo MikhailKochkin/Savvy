@@ -262,14 +262,18 @@ const deserialize = (el) => {
   }
 
   const children = Array.from(el.childNodes).map(deserialize);
-  console.log(1, el.nodeName, TEXT_TAGS[el.nodeName]);
+  // console.log(1, el.nodeName, TEXT_TAGS[el.nodeName]);
 
   if (TEXT_TAGS[el.nodeName]) {
     const attrs = TEXT_TAGS[el.nodeName](el);
-
-    return children
-      .find((child) => Text.isText(child))
-      ?.map((child) => jsx("text", attrs, child));
+    // console.log(
+    //   99,
+    //   children.map((child) => jsx("text", attrs, child))
+    // );
+    return children.map((child) => jsx("text", attrs, child));
+    // return children
+    //   .find((child) => Text.isText(child))
+    //   ?.map((child) => jsx("text", attrs, child));
   }
 
   // if (TEXT_TAGS[el.nodeName]) {
@@ -306,6 +310,7 @@ const deserialize = (el) => {
       children.length > 0 ? children : [{ text: "" }]
     );
   }
+  // console.log("children", children);
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -327,7 +332,9 @@ const deserialize = (el) => {
       return jsx(
         "element",
         { type: "paragraph" },
-        children.length > 0 ? children : [{ text: "" }]
+        children.length > 0 && children[0] !== undefined
+          ? children
+          : [{ text: "" }]
       );
     case "A":
       return jsx(

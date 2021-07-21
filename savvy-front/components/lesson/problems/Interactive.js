@@ -292,6 +292,26 @@ class Interactive extends Component {
           author={this.props.author}
         />
       );
+    } else if (this.props.problem.nodeType.toLowerCase() === "note") {
+      let el = this.props.lesson.notes.filter(
+        (q) => q.id === this.props.problem.nodeID
+      )[0];
+      item = (
+        <Note
+          id={el.id}
+          index={this.state.componentList.length + 1}
+          key={el.id}
+          text={el.text}
+          me={this.props.me}
+          teacher={el.user.id}
+          note={el.id}
+          next={el.next}
+          getData={this.updateArray}
+          exam={true}
+          problem={true}
+          author={this.props.author}
+        />
+      );
     }
     this.setState((state) => {
       const componentList = [...state.componentList, item];
