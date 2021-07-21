@@ -188,7 +188,7 @@ const Info = styled.div`
 
 const Main = () => {
   const slide = () => {
-    var my_element = document.getElementById("C2A");
+    var my_element = document.getElementById("contact");
     my_element.scrollIntoView({
       behavior: "smooth",
       block: "start",

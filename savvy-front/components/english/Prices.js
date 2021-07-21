@@ -11,7 +11,7 @@ const Styles = styled.div`
   align-items: center;
   color: #fff;
   font-size: 1.6rem;
-  padding-bottom: 50px;
+  padding-bottom: 100px;
   .custom-shape-divider-top-1626363977 {
     position: relative;
     top: 0;
@@ -29,7 +29,7 @@ const Styles = styled.div`
   }
 
   .custom-shape-divider-top-1626363977 .shape-fill {
-    fill: #c4d6fc;
+    fill: #c3d6fc;
   }
   .question_block {
     flex-basis: 40%;
@@ -53,6 +53,7 @@ const Styles = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0;
     padding-top: 4%;
     /* justify-content: center; */
     .answer_box {
@@ -64,19 +65,29 @@ const Styles = styled.div`
       background: #353c42;
       border-radius: 20px;
       padding: 3%;
-      span {
-        padding-bottom: 2px;
-        border-bottom: 2px solid #3175f3;
-      }
       /* display: flex;
       flex-direction: column;
       align-items: center; */
+      &#yellow {
+        border: 2px solid #fff929;
+      }
+      &#green {
+        border: 2px solid #b3ff15;
+      }
     }
   }
   .header {
     font-size: 2.4rem;
     line-height: 1.4;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+  }
+  .description {
+    color: #cbcbcb;
+    margin-bottom: 5px;
+  }
+  p {
+    margin: 5px 0;
+    line-height: 1.4;
   }
   @media (max-width: 800px) {
     flex-direction: column;
@@ -98,7 +109,6 @@ const Styles = styled.div`
 `;
 
 const Level = styled.div`
-  min-height: 40vh;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -107,7 +117,7 @@ const Level = styled.div`
   }
 `;
 
-const Concerns = () => {
+const Prices = () => {
   return (
     <>
       <Styles>
@@ -126,54 +136,59 @@ const Concerns = () => {
         </div>
         <Level>
           <div className="question_block">
-            <div className="question_box">
-              🧑🏼‍💻 У меня есть опыт обучения онлайн, это не работает
-            </div>
+            <div className="question_box">💁🏼‍♀️ Какие есть варианты обучения?</div>
           </div>
           <div className="answer_block">
             <div className="answer_box">
-              <div className="header">
-                Обратите внимание на наш формат обучения
+              <div className="header">Проходить по одному курсу</div>
+              <div className="description">14 000 ₽</div>
+              <div>
+                <p>
+                  Вы выбираете один из 4 курсов, который вам максимально
+                  подходит и проходите его вместе с группой в обозначенные
+                  сроки.
+                </p>{" "}
               </div>
-              Мы учим онлайн, но это не просто набор видео материалов. Это сотни
-              практических упражнений, общение в чате и на вебинарах,
-              индивидуальная проверка работ. А через кабинент статистики мы
-              следим за результатами каждого и готовы подключиться и помочь в
-              трудную минуту. У вас был опыт обучения онлайн
-              <span> в таком формате?</span>
             </div>
           </div>
         </Level>
         <Level>
           <div className="question_block">
-            <div className="question_box">
-              📝 Моего уровня не хватит, чтобы освоить юридический английский
-            </div>
+            {/* <div className="question_box">📝 А что это за навыки?</div> */}
           </div>
           <div className="answer_block">
-            <div className="answer_box">
-              <div className="header">Нужен уровень от A2</div>А дальше уже
-              можно приступать к юридическому английскому. Лучший способ поднять
-              знание лексики и грамматики – 
-              <span>начать работать с языком, читать, писать, переводить</span>.
-              А именно этим мы и занимаемся на курсе. Если же что-то не будет
-              получаться, мы всегда подключимся и поможем.
+            <div className="answer_box" id="yellow">
+              <div className="header">
+                Зарегистрироваться сразу на всю программу
+              </div>
+              <div className="description">32 000 ₽</div>
+              <div>
+                <p>
+                  Вы участвуете во всех 4 курсах. Вместе с группой вы проходите
+                  курсы, задаете вопросы в чате, сдаете практические работы и
+                  участвуете в вебинарах. Мы в системе следим за вашими успехами
+                  и контролируем, чтобы за 7 месяцев вы получили все необходимые
+                  знания и навыки.
+                </p>{" "}
+              </div>
             </div>
           </div>
         </Level>
         <Level>
           <div className="question_block">
-            <div className="question_box">
-              🤨 Я не уверен, что именно вы сможете мне помочь
-            </div>
+            {/* <div className="question_box">🤨 А зачем юр английский нужен?</div> */}
           </div>
           <div className="answer_block">
-            <div className="answer_box">
-              <div className="header">Я смогу вам помочь</div>У меня есть опыт
-              преподавания как General English, так и Legal English. Я учился в
-              МГИМО и работал в американских юр фирмах. Я прекрасно понимаю, и
-              как нужно обучать основам языка, и как{" "}
-              <span>подготовить вас к работе юриста на английском</span>.
+            <div className="answer_box" id="green">
+              <div className="header">Персональное обучение</div>
+              <div className="description">79 000 ₽</div>
+              <div>
+                <p>
+                  Все, что вы получаете при регистрации на программу по
+                  стандартному тарифу, + 32 часа индивидуальных занятий с
+                  автором курса.
+                </p>{" "}
+              </div>
             </div>
           </div>
         </Level>
@@ -182,4 +197,4 @@ const Concerns = () => {
   );
 };
 
-export default Concerns;
+export default Prices;

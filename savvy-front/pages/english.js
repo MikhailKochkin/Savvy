@@ -7,11 +7,11 @@ import Concerns from "../components/english/Concerns";
 import Author from "../components/english/Author";
 import Syllabus from "../components/english/Syllabus";
 import Reviews from "../components/english/Reviews";
-import Apply from "../components/corporate_lawyer/Apply";
-import Questions from "../components/corporate_lawyer/Questions";
-import Partners from "../components/corporate_lawyer/Partners";
-import Results from "../components/corporate_lawyer/Results";
-import Projects from "../components/corporate_lawyer/Projects";
+import Prices from "../components/english/Prices";
+import Results from "../components/english/Results";
+import Questions from "../components/english/Questions";
+// import Results from "../components/corporate_lawyer/Results";
+// import Projects from "../components/corporate_lawyer/Projects";
 
 const english = () => {
   return (
@@ -25,6 +25,10 @@ const english = () => {
       <Action2 />
       <Syllabus />
       <Reviews />
+      <Action />
+      <Prices />
+      <Results />
+      <Questions />
     </>
   );
 };

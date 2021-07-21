@@ -23,50 +23,106 @@ const Styles = styled.div`
   .custom-shape-divider-top-1626364588 .shape-fill {
     fill: #000000;
   }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  h2 {
+    font-size: 4rem;
+    font-weight: 600;
+    width: 80%;
+    line-height: 1.4;
+    margin-bottom: 50px;
+    span {
+      color: #3175f3;
+    }
+  }
   .parent {
+    width: 80%;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    grid-column-gap: 20px;
   }
 
-  /* .div1 {
+  .div1 {
     grid-area: 1 / 1 / 2 / 2;
-    height: 20vh;
-    text-align: center;
   }
   .div2 {
     grid-area: 1 / 2 / 2 / 3;
-  } */
+  }
   .div3 {
     grid-area: 2 / 1 / 3 / 2;
-    margin-bottom: 50px;
   }
   .div4 {
     grid-area: 2 / 2 / 3 / 3;
   }
-  .div5 {
-    grid-area: 3 / 1 / 4 / 2;
-  }
-  .div6 {
-    grid-area: 3 / 2 / 4 / 3;
-  }
-
-  h2 {
-    font-size: 3rem;
-    font-weight: 600;
+  @media (max-width: 800px) {
+    h2 {
+      font-size: 3.4rem;
+      margin-bottom: 0;
+      width: 90%;
+    }
+    .parent {
+      display: flex;
+      flex-direction: column;
+      width: 95%;
+    }
   }
 `;
 const Review = styled.div`
-  padding-left: 10%;
+  /* border: 1px solid grey; */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  &.right {
+    justify-content: flex-start;
+  }
   .bubble {
-    width: 60%;
-    background: #3175f3;
-    border-radius: 10px;
-    color: #fff;
-    height: 200px;
+    width: 100%;
+    /* background: #3175f3; */
+    border-radius: 20px;
     padding: 4% 2%;
+    display: flex;
+    flex-direction: row;
+    .number {
+      font-size: 14rem;
+      font-weight: 500;
+      margin-right: 30px;
+      color: #3175f3;
+    }
+    .text {
+      font-size: 2.6rem;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  @media (max-width: 800px) {
+    &.right {
+      justify-content: center;
+    }
+    .bubble {
+      width: 90%;
+      padding: 0;
+      .number {
+        font-size: 8rem;
+        font-weight: 500;
+        margin-right: 30px;
+        color: #3175f3;
+        width: 100px;
+      }
+      .text {
+        font-size: 2rem;
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
 `;
 
@@ -86,39 +142,43 @@ const Reviews = () => {
           ></path>
         </svg>
       </div>
+
       <h2>
-        Мы можем за 7 месяцев научить вас этим навыкам. Гарантированно. С
-        помощью:
+        Мы можем за 7 месяцев <span>научить вас этим навыкам</span>.
+        Гарантированно. С помощью:
       </h2>
       <div class="parent">
-        {/* <div class="div1">
-          <h2>
-            Мы можем за 7 месяцев научить вас этим навыкам. Гарантированно. С
-            помощью:
-          </h2>
-        </div>
-        <div class="div2"></div> */}
-        <div class="div3">
-          <Review>
-            <div className="bubble">Индивидуальные занятия с автором</div>
-          </Review>
-        </div>
-        <div class="div4">
+        <div class="div1">
           <Review>
             <div className="bubble">
-              Вебинары по актуальным темам и с разбором ошибок
+              <div className="number">32</div>
+              <div className="text">индивидуальных занятия с автором*</div>
             </div>
           </Review>
         </div>
-        <div class="div5">
-          <Review>
-            <div className="bubble">Интерактивные онлайн упражнения</div>
+        <div class="div2">
+          <Review className="right">
+            <div className="bubble">
+              <div className="number">12</div>
+              <div className="text">
+                вебинаров по актуальным темам и разборам ошибок
+              </div>
+            </div>
           </Review>
         </div>
-        <div class="div6">
+        <div class="div3">
           <Review>
             <div className="bubble">
-              Письменные упражнения с проверкой автора
+              <div className="number">88</div>
+              <div className="text">интерактивных онлайн тренажеров </div>
+            </div>
+          </Review>
+        </div>
+        <div class="div4">
+          <Review className="right">
+            <div className="bubble">
+              <div className="number">10</div>
+              <div className="text">письменных заданий с проверкой автора</div>
             </div>
           </Review>
         </div>

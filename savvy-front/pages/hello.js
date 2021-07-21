@@ -103,24 +103,25 @@ const hello = () => {
           </div>
         </div>
         <div className="text">
-          <p className="hello">Hello there!</p>
+          <p className="hello">Отлично, вы записались!</p>
           <p className="message">
-            BeSavvy is the tool for clever people who learn and teach clever
-            things. That's why setting up a course with us is not just about
-            uploading a video or creating a test. It's a bit more complex!
+            Теперь нам нужно встретиться и все обсудить.
           </p>
           <p className="message">
-            <span>But don't worry</span>. We are here to help. We will show you
-            around, help come up with great ideas for your course and implement
-            them! Just choose the most convenient tool for you!
+            <span>Для этого выберите время в календаре.</span> Сделать это
+            можно, нажав на кнопку ниже. После выбора времени автоматически
+            создастся встреча. Вам придет напоминание в календарь и ссылка на
+            зум.
           </p>
           <a
-            href="https://calendly.com/mikhail-from-besavvy/15min"
+            href="https://calendly.com/mikhail-from-besavvy/30min"
             target="_blank"
           >
-            <button>Set up a meeting</button>
+            <button>Назначить встречу</button>
           </a>
-          <p className="message">Or ask your questions in the chat</p>
+          <p className="message">
+            Если есть какие-то вопросы, задайте вопрос в чат.
+          </p>
           <div>
             <img src="../../static/arrow.svg" />
           </div>

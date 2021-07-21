@@ -64,10 +64,26 @@ const Styles = styled.div`
       min-height: 150px;
       background: #353c42;
       border-radius: 20px;
-      padding: 1% 3%;
+      padding: 3%;
       /* display: flex;
       flex-direction: column;
       align-items: center; */
+      button {
+        padding: 1.5% 2%;
+        margin-top: 10px;
+        font-family: Montserrat;
+        border: none;
+        background: #f9d801;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        outline: 0;
+        cursor: pointer;
+        font-size: 1.4rem;
+        transition: ease-in 0.2s;
+        &:hover {
+          background-color: #dfc201;
+        }
+      }
     }
   }
   .header {
@@ -85,13 +101,21 @@ const Styles = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
-    .question_box {
-      width: 85%;
+    .question_block {
+      flex-basis: 40%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .question_box {
+        width: 80%;
+        margin-bottom: 20px;
+      }
     }
-    .answer_box {
-      width: 85%;
-    }
-  }
+    .answer_block {
+      .answer_box {
+        width: 80%;
+        margin-bottom: 20px;
+      }
 `;
 
 const Level = styled.div`
@@ -127,7 +151,7 @@ const Context = () => {
           </div>
           <div className="answer_block">
             <div className="answer_box">
-              <div className="header">1. Введение в юридический английский</div>
+              <div className="header">1. Legal English. Базовый уровень</div>
               <div className="description">
                 23 августа – 7 октября 2021 года
               </div>
@@ -137,7 +161,18 @@ const Context = () => {
                   тексты. Этот навык - фундамент устной речи и навыка
                   составления документов на английском языке.
                 </p>{" "}
-                <p>Также курс включает изучение базовой юридической лексики.</p>
+                <p>
+                  Также курс включает изучение базовой юридической лексики из
+                  сфер корпоративного, договорного и банковского права.
+                </p>
+                <button>
+                  <a
+                    href="https://besavvy.app/coursePage?id=ck0pdit6900rt0704h6c5zmer"
+                    target="_blank"
+                  >
+                    Подробная программа
+                  </a>
+                </button>
               </div>
             </div>
           </div>
@@ -148,18 +183,30 @@ const Context = () => {
           </div>
           <div className="answer_block">
             <div className="answer_box">
-              <div className="header">2. Продвинутый Legal English</div>
+              <div className="header">
+                2. Legal English. Продвинутый уровень
+              </div>
               <div className="description">
-                18 октября – 18 декабря 2021 года
+                18 октября – 10 декабря 2021 года
               </div>
               <div>
                 <p>
-                  Мы учимся писать на английском языке и редактировать свои
-                  тексты. Этот навык - фундамент устной речи и навыка
-                  составления документов на английском языке.
+                  Мы освоили базовый навык письма. Теперь отрабатываем его на
+                  реальных примерах: письмах, договорах, меморандумах и уставах.
                 </p>{" "}
-                <p>Также курс включает изучение базовой юридической лексики.</p>
+                <p>
+                  Ну и заканчиваем изучать базовую лексику. Остались темы: IP и
+                  литигация.
+                </p>
               </div>
+              <button>
+                <a
+                  href="https://besavvy.app/coursePage?id=ck2f2nk4007dw0785lhixfppw"
+                  target="_blank"
+                >
+                  Подробная программа
+                </a>
+              </button>
             </div>
           </div>
         </Level>
@@ -175,12 +222,19 @@ const Context = () => {
               </div>
               <div>
                 <p>
-                  Мы учимся писать на английском языке и редактировать свои
-                  тексты. Этот навык - фундамент устной речи и навыка
-                  составления документов на английском языке.
+                  Учимся говорить на деловые темы на английском языке,
+                  прорабатывая основные коммуникационные ситуации: ответы на
+                  вопросы, диалог, презентация и переговоры.
                 </p>{" "}
-                <p>Также курс включает изучение базовой юридической лексики.</p>
               </div>
+              <button>
+                <a
+                  href="https://besavvy.app/coursePage?id=cknu5zekc112311g1emrinm7io"
+                  target="_blank"
+                >
+                  Подробная программа
+                </a>
+              </button>
             </div>
           </div>
         </Level>
@@ -190,16 +244,22 @@ const Context = () => {
           </div>
           <div className="answer_block">
             <div className="answer_box">
-              <div className="header">4. Юридический перевод</div>
+              <div className="header">4. Сложности юридического перевода</div>
               <div className="description">Январь – февраль 2022 года</div>
               <div>
                 <p>
-                  Мы учимся писать на английском языке и редактировать свои
-                  тексты. Этот навык - фундамент устной речи и навыка
-                  составления документов на английском языке.
+                  Учимся вычленять смысл любого юридического текста на
+                  английском: от судебного решения до научной работы.
                 </p>{" "}
-                <p>Также курс включает изучение базовой юридической лексики.</p>
               </div>
+              <button>
+                <a
+                  href="https://besavvy.app/coursePage?id=ck6mc531p02z20748kwpqnt7z"
+                  target="_blank"
+                >
+                  Подробная программа
+                </a>
+              </button>
             </div>
           </div>
         </Level>
