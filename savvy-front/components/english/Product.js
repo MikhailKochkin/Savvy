@@ -151,8 +151,8 @@ const Reviews = () => {
         <div class="div1">
           <Review>
             <div className="bubble">
-              <div className="number">32</div>
-              <div className="text">индивидуальных занятия с автором*</div>
+              <div className="number">26</div>
+              <div className="text">индивидуальных занятий с автором*</div>
             </div>
           </Review>
         </div>
