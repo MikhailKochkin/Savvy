@@ -42,13 +42,12 @@ class Legal extends Component {
           <Center>
             <TextBar>
               <h3>Политика обработки персональных данных</h3>
-              <p>От 4 апреля 2019 года</p>
+              <p>От 23 июля 2021 года</p>
               <p>
                 Настоящая Политика обработки персональных данных (далее —
-                Политика) регламентирует отношения, связанные с обработкой
-                индивидуальным предпринимателем Кочкиным Михаилом Валерьевичем
-                (далее — Администрация) персональных данных лиц, использующих
-                Сайт www.besavvy.app.
+                Политика) регламентирует отношения, связанные с обработкой ООО
+                "БиСэвви" (далее — Администрация) персональных данных лиц,
+                использующих Сайт www.besavvy.app.
               </p>
               <p>
                 Текст Политики доступен в сети Интернет по адресу{" "}
@@ -342,7 +341,7 @@ class Legal extends Component {
         ) : null}
         {this.props.name === "offer" ? (
           <Center>
-            <iframe src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619533265/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0_BeSavvy.pdf"></iframe>
+            <iframe src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1627035914/%D0%9E%D1%84%D0%B5%D1%80%D1%82%D0%B0_BeSavvy.pdf"></iframe>
           </Center>
         ) : null}
       </div>
