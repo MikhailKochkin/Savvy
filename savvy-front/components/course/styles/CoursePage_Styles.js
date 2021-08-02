@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #f0f5f7;
+  background: #f4f8fc;
 `;
 
 export const LessonStyles = styled.div`
@@ -30,6 +30,9 @@ export const CourseInfo = styled.div`
 export const LessonsInfo = styled.div`
   margin-top: 2%;
   padding: 0 3%;
+  h1 {
+    line-height: 1.2;
+  }
   .week {
     font-size: 1.6rem;
     font-weight: bold;

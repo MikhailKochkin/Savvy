@@ -98,6 +98,7 @@ const serialize = (node) => {
     let styles = Object.keys(node);
     styles.shift();
     if (styles.length) {
+      console.log(styles);
       let text = node.text;
       if (styles.includes("bold")) {
         text = `<b>${text}</b>`;
@@ -105,8 +106,14 @@ const serialize = (node) => {
       if (styles.includes("italic")) {
         text = `<em>${text}</em>`;
       }
+      if (styles.includes("delete")) {
+        text = `<del>${text}</del>`;
+      }
+      if (styles.includes("insert")) {
+        text = `<ins>${text}</ins>`;
+      }
       if (styles.includes("underline")) {
-        text = `<u>${text}</u>`;
+        text = `<ins>${text}</ins>`;
       }
       if (styles.includes("error")) {
         text = `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${text}</span>`;
