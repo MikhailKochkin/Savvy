@@ -467,9 +467,8 @@ class SingleTextEditor extends Component {
   };
 
   show = (e) => {
-    e.target.previousSibling.previousSibling.innerHTML = e.target.previousSibling.previousSibling.getAttribute(
-      "data-initial"
-    );
+    e.target.previousSibling.previousSibling.innerHTML =
+      e.target.previousSibling.previousSibling.getAttribute("data-initial");
     e.target.style.pointerEvents = "none";
     e.target.previousSibling.style.display = "none";
     e.target.style.display = "none";
@@ -494,14 +493,8 @@ class SingleTextEditor extends Component {
   };
 
   render() {
-    const {
-      textEditor,
-      me,
-      userData,
-      lessonID,
-      story,
-      complexity,
-    } = this.props;
+    const { textEditor, me, userData, lessonID, story, complexity } =
+      this.props;
     let data;
     me
       ? (data = userData
@@ -548,6 +541,8 @@ class SingleTextEditor extends Component {
                             e.target.parentElement.getAttribute("type") ===
                               "quiz"
                           ) {
+                            e.target.className = "edit";
+
                             this.setState({
                               showQuiz: true,
                               quiz: {
@@ -690,7 +685,9 @@ class SingleTextEditor extends Component {
                       this.setState({ quiz_guess: e.target.value });
                     }}
                   />
-                  <button onClick={this.quizCheck}>Ответить</button>
+                  <button onClick={this.quizCheck}>
+                    {this.props.t("answer")}
+                  </button>
                   {this.state.quiz_result === false && (
                     <Comment>{this.state.quiz.ifWrong}</Comment>
                   )}

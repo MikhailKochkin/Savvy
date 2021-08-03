@@ -193,9 +193,10 @@ const Statement = (props) => {
       </div>
       <div className="comment">
         <div className="comment_box">
-          {s.comments.map((c) => (
-            <div className="comment_text">{renderHTML(c)}</div>
-          ))}
+          {s.comments &&
+            s.comments.map((c) => (
+              <div className="comment_text">{renderHTML(c)}</div>
+            ))}
           {me && me.id == author && (
             <>
               <div className="comment_text">

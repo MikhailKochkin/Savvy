@@ -291,7 +291,7 @@ const SingleQuiz = (props) => {
         .then((response) => response.json())
         .then((res) => {
           console.log(res);
-          if (parseFloat(res.res) > 69) {
+          if (parseFloat(res.res) > 65) {
             console.log(res);
             setCorrect("true");
             setInputColor("rgba(50, 172, 102, 0.25)");

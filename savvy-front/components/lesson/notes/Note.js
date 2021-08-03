@@ -47,7 +47,7 @@ const Container = styled.div`
 
   .text {
     flex-basis: 90%;
-    border: 1px solid #f3f3f3;
+    border: 2px solid #f3f3f3;
     padding: 1% 2%;
     border-radius: 25px;
   }

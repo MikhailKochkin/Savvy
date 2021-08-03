@@ -5,6 +5,9 @@ import { handshakeO } from "react-icons-kit/fa/handshakeO";
 import Icon from "react-icons-kit";
 import Modal from "styled-react-modal";
 import { useMutation, gql } from "@apollo/client";
+import Signup from "../../auth/Signup";
+import Signin from "../../auth/Signin";
+import RequestReset from "../../auth/RequestReset";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -260,7 +263,15 @@ const Buy = styled.div`
 
 const Headline = (props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
+  const [auth, setAuth] = useState("signin");
+
+  const changeState = (dataFromChild) => {
+    setAuth(dataFromChild);
+  };
+
   const toggleModal = (e) => setIsOpen(!isOpen);
+  const toggleModal2 = (e) => setIsOpen2(!isOpen2);
 
   const [createOrder, { data, loading, error }] = useMutation(
     CREATE_ORDER_MUTATION
@@ -315,27 +326,31 @@ const Headline = (props) => {
                   <div className="old_price">6000 ₽</div>
                 </div>
                 <div className="buttons">
-                  <button
-                    onClick={async (e) => {
-                      e.preventDefault();
+                  {props.me ? (
+                    <button
+                      onClick={async (e) => {
+                        e.preventDefault();
 
-                      const res = await createOrder({
-                        variables: {
-                          coursePageId: props.coursePageId,
-                          price: 3000,
-                          userId: props.me.id,
-                          // promocode: props.promocode,
-                          // comment: props.comment,
-                        },
-                        // refetchQueries: [{ query: CURRENT_USER_QUERY }],
-                      });
+                        const res = await createOrder({
+                          variables: {
+                            coursePageId: props.coursePageId,
+                            price: 3000,
+                            userId: props.me.id,
+                            // promocode: props.promocode,
+                            // comment: props.comment,
+                          },
+                          // refetchQueries: [{ query: CURRENT_USER_QUERY }],
+                        });
 
-                      console.log(res.data.createOrder.url);
-                      location.href = res.data.createOrder.url;
-                    }}
-                  >
-                    {loading ? "Готовим платёж" : "Участвовать"}
-                  </button>
+                        console.log(res.data.createOrder.url);
+                        location.href = res.data.createOrder.url;
+                      }}
+                    >
+                      {loading ? "Готовим платёж" : "Участвовать"}
+                    </button>
+                  ) : (
+                    <button onClick={(e) => toggleModal2()}>Войти</button>
+                  )}
                   <div>
                     Скидки действуют для первых 20 участников. С нами уже:{" "}
                     <b>7</b>
@@ -353,27 +368,31 @@ const Headline = (props) => {
                   <div className="old_price">18000 ₽</div>
                 </div>
                 <div className="buttons">
-                  <button
-                    onClick={async (e) => {
-                      e.preventDefault();
+                  {props.me ? (
+                    <button
+                      onClick={async (e) => {
+                        e.preventDefault();
 
-                      const res = await createOrder({
-                        variables: {
-                          coursePageId: props.coursePageId,
-                          price: 8000,
-                          userId: props.me.id,
-                          // promocode: props.promocode,
-                          // comment: props.comment,
-                        },
-                        // refetchQueries: [{ query: CURRENT_USER_QUERY }],
-                      });
+                        const res = await createOrder({
+                          variables: {
+                            coursePageId: props.coursePageId,
+                            price: 8000,
+                            userId: props.me.id,
+                            // promocode: props.promocode,
+                            // comment: props.comment,
+                          },
+                          // refetchQueries: [{ query: CURRENT_USER_QUERY }],
+                        });
 
-                      console.log(res.data.createOrder.url);
-                      location.href = res.data.createOrder.url;
-                    }}
-                  >
-                    Участвовать
-                  </button>
+                        console.log(res.data.createOrder.url);
+                        location.href = res.data.createOrder.url;
+                      }}
+                    >
+                      {loading ? "Готовим платёж" : "Участвовать"}
+                    </button>
+                  ) : (
+                    <button onClick={(e) => toggleModal2()}>Войти</button>
+                  )}
                   <div>
                     Скидки действуют для первых 20 участников. С нами уже:{" "}
                     <b>7</b>
@@ -409,6 +428,19 @@ const Headline = (props) => {
           Промокод можно получить, написав в личные сообщения группы любого
           аккаунта нашей социальной сети.
         </p>
+      </StyledModal>
+      <StyledModal
+        isOpen={isOpen2}
+        onBackgroundClick={toggleModal2}
+        onEscapeKeydown={toggleModal2}
+      >
+        {auth === "signin" && (
+          <Signin getData={changeState} closeNavBar={toggleModal2} />
+        )}
+        {auth === "signup" && (
+          <Signup getData={changeState} closeNavBar={toggleModal2} />
+        )}
+        {auth === "reset" && <RequestReset getData={changeState} />}
       </StyledModal>
     </div>
   );

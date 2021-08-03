@@ -11,6 +11,7 @@ import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import Interactive from "./Interactive";
 import UpdateProblem from "./UpdateProblem";
 import HoverEditor from "../../editor/HoverEditor";
+import { withTranslation } from "../../../i18n";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -288,7 +289,9 @@ class SingleProblem extends Component {
                           }
                         }}
                       >
-                        {loading ? "В процессе..." : "Ответить"}
+                        {loading
+                          ? this.props.t("saving")
+                          : this.props.t("answer")}
                       </StyledButton>
                     </Buttons>
                   )}
@@ -337,4 +340,4 @@ SingleProblem.propTypes = {
   lesson: PropTypes.object,
 };
 
-export default SingleProblem;
+export default withTranslation("tasks")(SingleProblem);

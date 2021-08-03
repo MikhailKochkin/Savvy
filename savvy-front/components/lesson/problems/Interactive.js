@@ -215,7 +215,7 @@ class Interactive extends Component {
       data[1].value === "" ||
       data[1].value == "0"
     ) {
-      finish = <Final> Теперь ответьте на изначальный вопрос📝</Final>;
+      finish = <Final>{this.props.t("final")} 📝</Final>;
       // finish = <div></div>;
       this.setState((state) => {
         if (!(finish in this.state.componentList)) {
