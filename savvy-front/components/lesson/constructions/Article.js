@@ -7,6 +7,9 @@ const Styles = styled.div`
   width: 98%;
   font-size: 1.6rem;
   border-radius: 5px;
+  img {
+    width: 100%;
+  }
   .edit {
     background: red;
     width: 100%;

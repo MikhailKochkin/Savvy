@@ -8,6 +8,9 @@ const Styles = styled.div`
   margin-right: 3%;
   margin-bottom: 4%;
   background: white;
+  img {
+    width: 100%;
+  }
   .example-enter {
     opacity: 0.01;
   }
