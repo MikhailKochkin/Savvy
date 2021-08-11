@@ -4,9 +4,11 @@ import { ApolloProvider } from "@apollo/client";
 import Page from "../components/Page";
 import withData from "../lib/withData";
 import { appWithTranslation } from "../i18n";
+import TagManager from "react-gtm-module";
 
 function MyApp({ Component, apollo, pageProps }) {
   useEffect(() => {
+    TagManager.initialize({ gtmId: "GTM-WSZMCRD" });
     window.$crisp = [];
     window.CRISP_WEBSITE_ID = "d937200d-ad09-416f-87ba-4d441dcf12fd";
     (function () {

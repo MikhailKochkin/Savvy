@@ -12,6 +12,7 @@ import Forum from "./forum/Forum";
 import Chat from "./chat/Chat";
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
+import TestBlock from "./testBlocks/TestBlock";
 import QuizGroup from "./quizes/QuizGroup";
 import ProblemGroup from "./problems/ProblemGroup";
 import NewProblem from "./problems/NewProblem";
@@ -745,6 +746,14 @@ const SingleLesson = (props) => {
                             </Center>
                           )}
                         </>
+                      )}
+                      {page === "testBlock" && (
+                        <TestBlock
+                          lessonID={lesson.id}
+                          quizResults={lesson.quizResults}
+                          me={me}
+                          quizes={lesson.quizes}
+                        />
                       )}
                       {page === "newProblem" && (
                         <NewProblem lesson={lesson} me={me} />

@@ -184,6 +184,14 @@ const SingleLesson_Menu = (props) => {
               </ChooseButton>
             </ButtonZone>
           )}
+          {/* {lesson.problems.length > 0 && ( */}
+          <ButtonZone>
+            <ChooseButton name="testBlock" onClick={onSwitch}>
+              {" "}
+              Тестовые блоки{" "}
+            </ChooseButton>
+          </ButtonZone>
+          {/* )} */}
           <ButtonZone>
             <ChooseButton name="newProblem" onClick={onSwitch}>
               {" "}

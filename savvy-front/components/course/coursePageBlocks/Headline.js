@@ -5,6 +5,7 @@ const Image = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
   height: 80vh;
+  background-color: black;
   img {
     object-fit: cover;
     width: 100%;

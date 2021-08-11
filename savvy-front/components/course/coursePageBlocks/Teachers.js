@@ -47,6 +47,7 @@ const TeacherBox = styled.div`
   border-top: 3px solid;
   border-top-color: ${(props) => props.color};
   margin-bottom: 40px;
+  margin-right: 20px;
   box-shadow: 0px 0px 10px rgba(129, 129, 129, 0.45);
   border-radius: 5px;
   padding: 20px 0;
@@ -136,33 +137,33 @@ const Teachers = () => {
               гражданского права "Цивилист".
             </div>
           </TeacherBox>
-          <TeacherBox color="#5BC9BA">
-            <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1627914070/%D0%9D%D0%B8%D0%BA%D0%B8%D1%82%D0%B0.png" />
+          <TeacherBox color="#DB5ABA">
+            <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619615136/%D0%AE%D0%BB%D1%8F_%D0%97%D0%B5%D0%BC_1.png" />
             <div className="name">
-              Никита
-              <br /> Мазурин
+              Юлия
+              <br /> Максимкина
             </div>
-            <div className="work">Практикующий юрист</div>
+            <div className="work">Юрист Land Law Firm</div>
             <div className="description">
-              Студент факультета права ВШЭ, финалист муткорта в Финансовом
-              университете, участник студенческого конкурса по арбитражу
-              корпоративных споров имени В. П. Мозолина. Победитель двух секций
-              в рамках V Ежегодной научно-практической конференции студентов и
-              аспирантов «Дни науки факультета права НИУ ВШЭ – 2021».
+              Закончила магистратуру СПБГУ, аспирант 2 года ИЗиСП.
+              Специализируется в разрешении судебных споров в сфере
+              земельно-имущественных и строительных отношений, сопровождает
+              строительные проекты, в частности проекты по комплексному развитию
+              территории в г. Москве.
             </div>
           </TeacherBox>
-          {/* <TeacherBox color="#5BC9BA">
-            <img src="./static/misha.jpg" />
+          <TeacherBox color="#5BC9BA">
+            <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1628687623/%D0%93%D1%83%D0%BD%D0%B0.png" />
             <div className="name">
-              Никита
-              <br /> Мазурин
+              Александр
+              <br /> Гуна
             </div>
             <div className="work">Помощник юриста в CMS</div>
             <div className="description">
               «Яндекс» третий раз увеличил прогноз по размеру выручки в 2021
               году: теперь компания ожидает, что показатель вырастет на 53-55%.
             </div>
-          </TeacherBox> */}
+          </TeacherBox>
           <TeacherBox color="#F18F01">
             <img src="./static/misha.jpg" />
             <div className="name">
@@ -178,19 +179,19 @@ const Teachers = () => {
               практическим навыкам.
             </div>
           </TeacherBox>
-          <TeacherBox color="#DB5ABA">
-            <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619615136/%D0%AE%D0%BB%D1%8F_%D0%97%D0%B5%D0%BC_1.png" />
+          <TeacherBox color="#5BC9BA">
+            <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1627914070/%D0%9D%D0%B8%D0%BA%D0%B8%D1%82%D0%B0.png" />
             <div className="name">
-              Юлия
-              <br /> Максимкина
+              Никита
+              <br /> Мазурин
             </div>
-            <div className="work">Юрист Land Law Firm</div>
+            <div className="work">Студент ВШЭ</div>
             <div className="description">
-              Закончила магистратуру СПБГУ, аспирант 2 года ИЗиСП.
-              Специализируется в разрешении судебных споров в сфере
-              земельно-имущественных и строительных отношений, сопровождает
-              строительные проекты, в частности проекты по комплексному развитию
-              территории в г. Москве.
+              Студент факультета права ВШЭ, финалист муткорта в Финансовом
+              университете, участник студенческого конкурса по арбитражу
+              корпоративных споров имени В. П. Мозолина. Победитель двух секций
+              в рамках V Ежегодной научно-практической конференции студентов и
+              аспирантов «Дни науки факультета права НИУ ВШЭ – 2021».
             </div>
           </TeacherBox>
         </TeachersList>
