@@ -256,6 +256,7 @@ const Action = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <button
+                id="english_application_button1"
                 onClick={async (e) => {
                   e.preventDefault();
                   if (EmailValidator.validate(email)) {

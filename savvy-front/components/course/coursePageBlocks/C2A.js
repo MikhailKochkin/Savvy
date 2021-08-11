@@ -328,6 +328,7 @@ const Headline = (props) => {
                 <div className="buttons">
                   {props.me ? (
                     <button
+                      id="civil_law_3000_button"
                       onClick={async (e) => {
                         e.preventDefault();
 
@@ -370,6 +371,7 @@ const Headline = (props) => {
                 <div className="buttons">
                   {props.me ? (
                     <button
+                      id="civil_law_8000_button"
                       onClick={async (e) => {
                         e.preventDefault();
 
