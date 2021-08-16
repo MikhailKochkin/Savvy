@@ -5,6 +5,8 @@ import { handshakeO } from "react-icons-kit/fa/handshakeO";
 import Icon from "react-icons-kit";
 import Modal from "styled-react-modal";
 import { useMutation, gql } from "@apollo/client";
+import { useRouter } from "next/router";
+
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
@@ -237,6 +239,9 @@ const StyledModal = Modal.styled`
   max-width: 40%;
   min-width: 400px;
   padding: 2%;
+  p {
+    width: 100%;
+  }
   @media (max-width: 1300px) {
     max-width: 70%;
     min-width: 200px;
@@ -272,6 +277,7 @@ const Headline = (props) => {
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const toggleModal2 = (e) => setIsOpen2(!isOpen2);
+  const { asPath } = useRouter();
 
   const [createOrder, { data, loading, error }] = useMutation(
     CREATE_ORDER_MUTATION
@@ -338,7 +344,7 @@ const Headline = (props) => {
                             price: 3000,
                             userId: props.me.id,
                             // promocode: props.promocode,
-                            // comment: props.comment,
+                            comment: asPath,
                           },
                           // refetchQueries: [{ query: CURRENT_USER_QUERY }],
                         });
@@ -361,7 +367,7 @@ const Headline = (props) => {
               <Price>
                 <div className="term">
                   <div>
-                    Доступ на <b>3</b> месяца – <span>скидка 56%</span>
+                    Доступ на все <b>3</b> месяца – <span>скидка 56%</span>
                   </div>
                 </div>
                 <div className="prices">
@@ -381,7 +387,7 @@ const Headline = (props) => {
                             price: 8000,
                             userId: props.me.id,
                             // promocode: props.promocode,
-                            // comment: props.comment,
+                            comment: asPath,
                           },
                           // refetchQueries: [{ query: CURRENT_USER_QUERY }],
                         });

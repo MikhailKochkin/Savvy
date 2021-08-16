@@ -5,6 +5,7 @@ import Page from "../components/Page";
 import withData from "../lib/withData";
 import { appWithTranslation } from "../i18n";
 import TagManager from "react-gtm-module";
+import FacebookPixel from "../components/FacebookPixel";
 
 function MyApp({ Component, apollo, pageProps }) {
   useEffect(() => {
@@ -21,9 +22,11 @@ function MyApp({ Component, apollo, pageProps }) {
   });
   return (
     <ApolloProvider client={apollo}>
-      <Page>
-        <Component {...pageProps} />
-      </Page>
+      <FacebookPixel>
+        <Page>
+          <Component {...pageProps} />
+        </Page>
+      </FacebookPixel>
     </ApolloProvider>
   );
 }

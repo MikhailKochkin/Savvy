@@ -156,7 +156,7 @@ const TestBlock = (props) => {
             >
               <option value={undefined}>Не выбран</option>
               {props.newTests.map((q) => (
-                <option value={q.id}>{q.question[0]}</option>
+                <option value={q.id}>{q.question}</option>
               ))}
               <option value="">Конец</option>м
             </select>

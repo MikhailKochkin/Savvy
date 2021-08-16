@@ -1791,7 +1791,7 @@ const Mutation = mutationType({
         const coursePage = await ctx.prisma.coursePage.findUnique({
           where: { id: args.coursePageId },
         });
-
+        console.log("args", args);
         const order = await ctx.prisma.order.create({
           data: {
             price: args.price,

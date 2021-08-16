@@ -4,6 +4,7 @@ import { useMutation, gql } from "@apollo/client";
 import * as EmailValidator from "email-validator";
 import Modal from "styled-react-modal";
 import Router from "next/router";
+import { useRouter } from "next/router";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -217,6 +218,8 @@ const Action = () => {
 
   const toggleModal = (e) => setIsOpen(!isOpen);
 
+  const { asPath } = useRouter();
+
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
   return (
@@ -265,7 +268,7 @@ const Action = () => {
                     });
                     const res = await createBusinessClient({
                       variables: {
-                        type: "English",
+                        type: asPath ? asPath : "English",
                         email,
                         name,
                         number,

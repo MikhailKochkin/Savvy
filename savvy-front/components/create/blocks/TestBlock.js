@@ -104,7 +104,6 @@ const TestBlock = (props) => {
 
   const handleChoice = (el, correct) =>
     props.getNewBlock(el, c, props.color, correct);
-  console.log(props.getNode);
   return (
     <Block id={c ? c : props.id} className={c ? c : props.id}>
       <div className="body">
@@ -134,11 +133,14 @@ const TestBlock = (props) => {
             >
               <option value={0}>Не выбран</option>
               {props.newTests.map((q) => {
-                let el = renderHTML(q.question[0]);
+                let el = q.question[0];
                 return (
-                  <option value={q.id}>
-                    {el.props ? el.props.children[0] : el}
-                  </option>
+                  <>
+                    <option value={q.id}>
+                      {/* {el.props ? el.props.children[0] : el} */}
+                      {el}
+                    </option>
+                  </>
                 );
               })}
             </select>
@@ -151,10 +153,11 @@ const TestBlock = (props) => {
             >
               <option value={0}>Не выбран</option>
               {props.quizes.map((q) => {
-                let el = renderHTML(q.question);
+                let el = q.question;
                 return (
                   <option value={q.id}>
-                    {el.props ? el.props.children[0] : el}
+                    {/* {el.props ? el.props.children[0] : el} */}
+                    {el}
                   </option>
                 );
               })}
@@ -191,10 +194,11 @@ const TestBlock = (props) => {
                   <option value={0}>Не выбран</option>
 
                   {props.newTests.map((q) => {
-                    let el = renderHTML(q.question[0]);
+                    let el = q.question[0];
                     return (
                       <option value={q.id}>
-                        {el.props ? el.props.children[0] : el}
+                        {/* {el.props ? el.props.children[0] : el} */}
+                        {el}
                       </option>
                     );
                   })}
@@ -205,10 +209,11 @@ const TestBlock = (props) => {
                   <option value={0}>Не выбран</option>
 
                   {props.quizes.map((q) => {
-                    let el = renderHTML(q.question);
+                    let el = q.question;
                     return (
                       <option value={q.id}>
-                        {el.props ? el.props.children[0] : el}
+                        {/* {el.props ? el.props.children[0] : el} */}
+                        {el}
                       </option>
                     );
                   })}
@@ -239,10 +244,11 @@ const TestBlock = (props) => {
                 <select defaultValue={f} onChange={(e) => setF(e.target.value)}>
                   <option value={0}>Не выбран</option>
                   {props.newTests.map((q) => {
-                    let el = renderHTML(q.question[0]);
+                    let el = q.question[0];
                     return (
                       <option value={q.id}>
-                        {el.props ? el.props.children[0] : el}
+                        {/* {el.props ? el.props.children[0] : el} */}
+                        {el}
                       </option>
                     );
                   })}
@@ -252,10 +258,11 @@ const TestBlock = (props) => {
                 <select defaultValue={f} onChange={(e) => setF(e.target.value)}>
                   <option value={0}>Не выбран</option>
                   {props.quizes.map((q) => {
-                    let el = renderHTML(q.question);
+                    let el = q.question;
                     return (
                       <option value={q.id}>
-                        {el.props ? el.props.children[0] : el}
+                        {/* {el.props ? el.props.children[0] : el} */}
+                        {el}
                       </option>
                     );
                   })}

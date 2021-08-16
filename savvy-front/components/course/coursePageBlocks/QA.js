@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Question from "./Question";
 
@@ -42,9 +42,70 @@ const QuestionsList = styled.div`
   width: 100%;
 `;
 
+const ButtonZone = styled.div`
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  div {
+    width: 80%;
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 3rem;
+    line-height: 1.4;
+  }
+  button {
+    width: 40%;
+    margin-left: 50px;
+    height: 50px;
+    font-size: 2rem;
+    color: #fff;
+    font-family: Montserrat;
+    background-color: #4785a2;
+    border: 1px solid #4785a2;
+    border-radius: 8px;
+    transition: 0.2s ease-in;
+    cursor: pointer;
+    &:hover {
+      background: #29617a;
+    }
+  }
+  @media (max-width: 800px) {
+    button {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+`;
+
 const TeacherBox = styled.div``;
 
-const QA = () => {
+const QA = (element) => {
+  const [isVisible, setState] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setState(entry.isIntersecting);
+      },
+      { rootMargin: "20px" }
+    );
+
+    element && observer.observe(element);
+
+    return () => observer.unobserve(element);
+  }, []);
+
+  const slide2 = () => {
+    var my_element = document.getElementById("c2a");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
   let questions = [
     {
       question: "Как мне присоединиться к курсу?",
@@ -98,6 +159,7 @@ const QA = () => {
   return (
     <Styles>
       <Container>
+        {console.log(isVisible)}
         <h2>Часто задаваемые вопросы</h2>
         <QuestionsList>
           {questions.map((m) => (
@@ -105,6 +167,14 @@ const QA = () => {
           ))}
         </QuestionsList>
       </Container>
+      <ButtonZone>
+        <div>
+          Мы сделаем изучение гражданского быстрым и эффективным. А вы уже
+          никогда не сможете вернуться к банальному чтению книг и прослушиванию
+          лекций.
+        </div>
+        <button onClick={(e) => slide2()}>Записаться</button>
+      </ButtonZone>
     </Styles>
   );
 };
