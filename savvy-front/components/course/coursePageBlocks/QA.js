@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Question from "./Question";
+import Modal from "styled-react-modal";
+
+import "intersection-observer";
+import { useIsVisible } from "react-is-visible";
 
 const Styles = styled.div`
   width: 100vw;
@@ -80,23 +84,48 @@ const ButtonZone = styled.div`
   }
 `;
 
+const StyledModal = Modal.styled`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 40%;
+  min-width: 400px;
+  padding: 2%;
+  p {
+    width: 100%;
+  }
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+`;
+
 const TeacherBox = styled.div``;
 
 const QA = (element) => {
-  const [isVisible, setState] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleModal = (e) => setIsOpen(!isOpen);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setState(entry.isIntersecting);
-      },
-      { rootMargin: "20px" }
-    );
+  const [hasShown, setHasShown] = useState(false);
 
-    element && observer.observe(element);
+  const nodeRef = useRef();
+  const isVisible = useIsVisible(nodeRef);
 
-    return () => observer.unobserve(element);
-  }, []);
+  useEffect(() => {}, []);
 
   const slide2 = () => {
     var my_element = document.getElementById("c2a");
@@ -111,6 +140,23 @@ const QA = (element) => {
       question: "Как мне присоединиться к курсу?",
       answer: `Присоединиться очень просто - надо зарегистрироваться на сайте и оплатить курс по одному из тарифов. 13 сентября мы пришлеем тебе на почту всю информацию о вводном занятии и подключении к курсу. И начнем заниматься 15 сентября.
 `,
+    },
+    {
+      question: "Сколько времени у меня будет уходить на занятия?",
+      answer: `2-4 часа в неделю. Нам важно не перегрузить вас и не помешать остальной учебе.`,
+    },
+    {
+      question: "Я могу пройти всю программу за 1 месяц?",
+      answer: `Нет, каждый месяц вам открывается 5 уроков, которые необходимо пройти. За 3 месяца вы сможете пройти всю программу.`,
+    },
+    {
+      question: "Какой формат занятий?",
+      answer: `Вы в своем темпе проходите онлайн-урок на платформе besavvy.app в течение недели, задаете вопросы преподавателю в чате, учавствуете в разборе сложных кейсов с преподавателем в зуме.`,
+    },
+    {
+      question: "А если со мной хочется друг?",
+      answer:
+        "За каждого друга, который придет с вами, мы дадим вам скидку 1000 рублей на следующий месяц. И другу тоже.",
     },
     {
       question:
@@ -156,10 +202,10 @@ const QA = (element) => {
         "Напиши нам в социальных сетях. Ссылки на них можно найти внизу этой страницы.",
     },
   ];
+
   return (
     <Styles>
-      <Container>
-        {console.log(isVisible)}
+      <Container ref={nodeRef}>
         <h2>Часто задаваемые вопросы</h2>
         <QuestionsList>
           {questions.map((m) => (
@@ -175,6 +221,26 @@ const QA = (element) => {
         </div>
         <button onClick={(e) => slide2()}>Записаться</button>
       </ButtonZone>
+      <StyledModal
+        isOpen={isOpen}
+        onBackgroundClick={toggleModal}
+        onEscapeKeydown={toggleModal}
+      >
+        <p>
+          С нашей новой реферральной программой вы можете учиться практически
+          бесплатно.
+        </p>{" "}
+        После приобретения этого курса, вы получите специальный код, который
+        можете передать своим друзьям. После того, как ваш друг оплатит участие
+        в программе, вы оба получите бонусные 1000 рублей на следующую покупку
+        на BeSavvy. Таким образом, если по вашему промокоду придет 3 человека,
+        вы сможете участвовать в следующем месяце программы бесплатно.{" "}
+        <p>
+          {" "}
+          Промокод можно получить, написав в личные сообщения группы любого
+          аккаунта нашей социальной сети.
+        </p>
+      </StyledModal>
     </Styles>
   );
 };

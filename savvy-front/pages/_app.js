@@ -22,11 +22,9 @@ function MyApp({ Component, apollo, pageProps }) {
   });
   return (
     <ApolloProvider client={apollo}>
-      <FacebookPixel>
-        <Page>
-          <Component {...pageProps} />
-        </Page>
-      </FacebookPixel>
+      <Page>
+        <Component {...pageProps} />
+      </Page>
     </ApolloProvider>
   );
 }

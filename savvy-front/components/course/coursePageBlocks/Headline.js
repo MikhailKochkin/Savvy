@@ -215,7 +215,7 @@ const Headline = () => {
   return (
     <div>
       <Image>
-        <img src="./static/back_image.png" />
+        <img src="./static/back_image_low.png" />
         <InfoBlock>
           <Container>
             <h1>Старт в Гражданском Праве</h1>
