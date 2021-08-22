@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { calendar } from "react-icons-kit/fa/calendar";
 import { handshakeO } from "react-icons-kit/fa/handshakeO";
@@ -185,7 +185,7 @@ const Price = styled.div`
       font-size: 1.4rem;
       font-weight: 300;
       margin: 20px 0;
-      width: 80%;
+      width: 100%;
       line-height: 1.5;
     }
   }
@@ -270,6 +270,9 @@ const Headline = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [auth, setAuth] = useState("signin");
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
 
   const changeState = (dataFromChild) => {
     setAuth(dataFromChild);
@@ -282,6 +285,52 @@ const Headline = (props) => {
   const [createOrder, { data, loading, error }] = useMutation(
     CREATE_ORDER_MUTATION
   );
+
+  const getNoun = (number, one, two, five) => {
+    let n = Math.abs(number);
+    n %= 100;
+    if (n >= 5 && n <= 20) {
+      return five;
+    }
+    n %= 10;
+    if (n === 1) {
+      return one;
+    }
+    if (n >= 2 && n <= 4) {
+      return two;
+    }
+    return five;
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, "0");
+      var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      var yyyy = today.getFullYear();
+      var countDownDate = new Date(`${mm} ${dd}, ${yyyy} 23:59:59`).getTime(); // Get today's date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days_calculation = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours_calculation = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      var minutes_calculation = Math.floor(
+        (distance % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      var seconds_calculation = Math.floor((distance % (1000 * 60)) / 1000);
+      // Display the result
+      setHours(hours_calculation);
+      setMinutes(minutes_calculation);
+      setSeconds(seconds_calculation);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div>
@@ -324,11 +373,11 @@ const Headline = (props) => {
               <Price>
                 <div className="term">
                   <div>
-                    Доступ на <b>1</b> месяц – <span>скидка 50%</span>
+                    Доступ на <b>1</b> месяц – <span>скидка 60%</span>
                   </div>
                 </div>
                 <div className="prices">
-                  <div className="new_price">3000 ₽</div>
+                  <div className="new_price">2400 ₽</div>
                   <div className="old_price">6000 ₽</div>
                 </div>
                 <div className="buttons">
@@ -341,7 +390,7 @@ const Headline = (props) => {
                         const res = await createOrder({
                           variables: {
                             coursePageId: props.coursePageId,
-                            price: 3000,
+                            price: 2400,
                             userId: props.me.id,
                             // promocode: props.promocode,
                             comment: asPath,
@@ -359,19 +408,22 @@ const Headline = (props) => {
                     <button onClick={(e) => toggleModal2()}>Войти</button>
                   )}
                   <div>
-                    Скидки действуют для первых 20 участников. С нами уже:{" "}
-                    <b>9</b>
+                    До конца акции –{" "}
+                    <b>
+                      {hours} {getNoun(hours, "час", "часа", "часов")} {minutes}{" "}
+                      {getNoun(minutes, "минута", "минуты", "минут")}
+                    </b>
                   </div>
                 </div>
               </Price>
               <Price>
                 <div className="term">
                   <div>
-                    Доступ на все <b>3</b> месяца – <span>скидка 56%</span>
+                    Доступ на все <b>3</b> месяца – <span>скидка 72%</span>
                   </div>
                 </div>
                 <div className="prices">
-                  <div className="new_price">8000 ₽</div>
+                  <div className="new_price">5000 ₽</div>
                   <div className="old_price">18000 ₽</div>
                 </div>
                 <div className="buttons">
@@ -384,7 +436,7 @@ const Headline = (props) => {
                         const res = await createOrder({
                           variables: {
                             coursePageId: props.coursePageId,
-                            price: 8000,
+                            price: 5000,
                             userId: props.me.id,
                             // promocode: props.promocode,
                             comment: asPath,
@@ -402,8 +454,11 @@ const Headline = (props) => {
                     <button onClick={(e) => toggleModal2()}>Войти</button>
                   )}
                   <div>
-                    Скидки действуют для первых 20 участников. С нами уже:{" "}
-                    <b>9</b>
+                    До конца акции –{" "}
+                    <b>
+                      {hours} {getNoun(hours, "час", "часа", "часов")} {minutes}{" "}
+                      {getNoun(minutes, "минута", "минуты", "минут")}
+                    </b>
                   </div>
                 </div>
               </Price>
