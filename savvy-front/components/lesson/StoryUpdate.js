@@ -128,6 +128,7 @@ const StoryUpdate = (props) => {
                   problems={lesson.problems}
                   texteditors={lesson.texteditors}
                   constructions={lesson.constructions}
+                  testPractices={lesson.testPractices}
                   exams={lesson.exams}
                   documents={lesson.documents}
                   forum={lesson.forum}

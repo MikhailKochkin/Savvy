@@ -147,6 +147,23 @@ const ChallengeResult = objectType({
   },
 });
 
+const TestPracticeResult = objectType({
+  name: "TestPracticeResult",
+  definition(t) {
+    t.model.id();
+    t.model.correct();
+    t.model.tasks();
+    t.model.testPracticeId();
+    t.model.studentId();
+    t.model.lessonId();
+    t.model.lesson();
+    t.model.student();
+    t.model.testPractice();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   TestResult,
   QuizResult,
@@ -156,4 +173,5 @@ module.exports = {
   ShotResult,
   DocumentResult,
   ChallengeResult,
+  TestPracticeResult,
 };

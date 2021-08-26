@@ -12,7 +12,7 @@ import Forum from "./forum/Forum";
 import Chat from "./chat/Chat";
 import TestGroup from "./tests/TestGroup";
 import ShotsGroup from "./shots/ShotsGroup";
-// import TestBlock from "./testBlocks/TestBlock";
+import TestPractices from "./testblocks/TestPractices";
 import QuizGroup from "./quizes/QuizGroup";
 import ProblemGroup from "./problems/ProblemGroup";
 import NewProblem from "./problems/NewProblem";
@@ -21,6 +21,7 @@ import TextEditorGroup from "./textEditors/TextEditorGroup";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import CreateNewTest from "../create/CreateNewTest";
 import CreateQuiz from "../create/CreateQuiz";
+import CreateTestBlock from "./testblocks/CreateTestBlock";
 import CreateShot from "../create/CreateShot";
 import CreateConstructor from "../create/CreateConstructor";
 import CreateTextEditor from "../create/CreateTextEditor";
@@ -125,6 +126,11 @@ const SINGLE_LESSON_QUERY = gql`
         user {
           id
         }
+      }
+      testPractices {
+        id
+        tasks
+        tasksNum
       }
       notes {
         id
@@ -747,14 +753,17 @@ const SingleLesson = (props) => {
                           )}
                         </>
                       )}
-                      {/* {page === "testBlock" && (
-                        <TestBlock
+                      {page === "testBlock" && (
+                        <TestPractices
                           lessonID={lesson.id}
                           quizResults={lesson.quizResults}
                           me={me}
+                          testPractices={lesson.testPractices}
                           quizes={lesson.quizes}
+                          tests={lesson.newTests}
+                          lesson={lesson}
                         />
-                      )} */}
+                      )}
                       {page === "newProblem" && (
                         <NewProblem lesson={lesson} me={me} />
                       )}
@@ -816,6 +825,9 @@ const SingleLesson = (props) => {
                       )}
                       {page === "createNote" && (
                         <CreateNote lessonID={lesson.id} />
+                      )}
+                      {page === "createTestBlock" && (
+                        <CreateTestBlock lesson={lesson} lessonId={lesson.id} />
                       )}
                       {page === "createChat" && (
                         <CreateChat lessonID={lesson.id} />

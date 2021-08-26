@@ -14,6 +14,7 @@ import Document from "./documents/Document";
 import Exam from "./exams/Exam";
 import Feed from "./Feed";
 import LessonHeader from "./LessonHeader";
+import TestPractice from "./testblocks/TB";
 
 const Container = styled.div`
   .fade-enter {
@@ -104,6 +105,22 @@ class StoryEx extends Component {
             story={true}
             user_name={el.user}
             author={lesson.user}
+          />
+        );
+        components.push(item);
+      } else if (task.type.toLowerCase() === "testpractice") {
+        el = lesson.testPractices.find((t) => t.id === task.id);
+        item = (
+          <TestPractice
+            key={el.id}
+            lessonID={lesson.id}
+            quizResults={lesson.quizResults}
+            me={me}
+            testPractice={el}
+            quizes={lesson.quizes}
+            tests={lesson.newTests}
+            lesson={lesson}
+            story={true}
           />
         );
         components.push(item);

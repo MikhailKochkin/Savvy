@@ -48,6 +48,19 @@ const Quiz = objectType({
   },
 });
 
+const TestPractice = objectType({
+  name: "TestPractice",
+  definition(t) {
+    t.model.id();
+    t.model.tasks();
+    t.model.text();
+    t.model.tasksNum();
+    t.model.lessonId();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 const Note = objectType({
   name: "Note",
   definition(t) {
@@ -272,4 +285,5 @@ module.exports = {
   Shot,
   Document,
   Clause,
+  TestPractice,
 };

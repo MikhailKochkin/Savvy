@@ -27,6 +27,7 @@ const Lesson = objectType({
     t.model.constructionResults();
     t.model.testResults();
     t.model.shotResults();
+    t.model.testPractices();
     t.model.quizResults();
     t.model.problemResults();
     t.model.textEditorResults();

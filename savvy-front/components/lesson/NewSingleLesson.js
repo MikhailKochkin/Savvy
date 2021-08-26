@@ -85,6 +85,11 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           id
         }
       }
+      testPractices {
+        id
+        tasks
+        tasksNum
+      }
       problems {
         id
         text

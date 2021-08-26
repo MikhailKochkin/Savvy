@@ -13,6 +13,7 @@
     "deploy": "prisma deploy --env-file variables.env"
   },
   "dependencies": {
+    "@a2seven/yoo-checkout": "^1.1.2",
     "@nexus/schema": "^0.19.2",
     "@prisma/client": "^2.12.0",
     "apollo-server": "^2.19.1",

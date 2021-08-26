@@ -12,6 +12,13 @@ const yandex = require("../yandexCheckout");
 const postmark = require("postmark");
 const { promisify } = require("util");
 const { randomBytes } = require("crypto");
+const { YooCheckout, ICreateReceipt } = require("@a2seven/yoo-checkout");
+const idempotenceKey = "02347fc4-a4f0-456db-807e-f0d11c2eс4a5";
+
+const checkout = new YooCheckout({
+  shopId: process.env.SHOP_ID,
+  secretKey: process.env.SHOP_KEY,
+});
 
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
@@ -537,6 +544,37 @@ const Mutation = mutationType({
         return newTest;
       },
     });
+    t.field("createTestPractice", {
+      type: "NewTest",
+      args: {
+        text: stringArg(),
+        tasksNum: intArg(),
+        tasks: list(stringArg()),
+        lessonId: stringArg(),
+      },
+      resolve: async (_, { lessonId, tasks, tasksNum, text }, ctx) => {
+        const new_data = {
+          user: {
+            connect: {
+              id: ctx.res.req.userId
+                ? ctx.res.req.userId
+                : "ckmddnbfy180981gwpn2ir82c9",
+            },
+          },
+          lesson: {
+            connect: { id: lessonId },
+          },
+          tasks: {
+            set: [...tasks],
+          },
+          tasksNum: tasksNum,
+          text: text,
+        };
+
+        const newTP = await ctx.prisma.testPractice.create({ data: new_data });
+        return newTP;
+      },
+    });
     t.field("createTestResult", {
       type: "TestResult",
       args: {
@@ -600,6 +638,39 @@ const Mutation = mutationType({
         }
 
         return TestResult;
+      },
+    });
+    t.field("createTestPracticeResult", {
+      type: "TestPracticeResult",
+      args: {
+        tasks: list(stringArg()),
+        correct: intArg(),
+        lessonId: stringArg(),
+        testPracticeId: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const TestPracticeResult = await ctx.prisma.testPracticeResult.create({
+          data: {
+            student: {
+              connect: {
+                id: ctx.res.req.userId
+                  ? ctx.res.req.userId
+                  : "ckmddnbfy180981gwpn2ir82c9",
+              },
+            },
+            testPractice: {
+              connect: { id: args.testPracticeId },
+            },
+            lesson: {
+              connect: { id: args.lessonId },
+            },
+            tasks: {
+              set: [...args.tasks],
+            },
+            correct: args.correct,
+          },
+        });
+        return TestPracticeResult;
       },
     });
     t.field("updateNewTest", {
@@ -1766,7 +1837,36 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         // 1.
-        const result = await yandex.createPayment({
+        console.log("start", args);
+
+        // const result = await yandex.createPayment({
+        //   amount: {
+        //     value: args.price,
+        //     currency: "RUB",
+        //   },
+        //   payment_method_data: {
+        //     type: "bank_card",
+        //   },
+        //   confirmation: {
+        //     type: "redirect",
+        //     return_url: "https://besavvy.app/",
+        //   },
+        //   capture: true,
+        // });
+        // console.log("result", result);
+
+        // const url = result.confirmation.confirmation_url;
+        // console.log("url", url);
+
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: args.userId },
+        });
+        const coursePage = await ctx.prisma.coursePage.findUnique({
+          where: { id: args.coursePageId },
+        });
+
+        console.log(user.name, coursePage.title);
+        const createPayload = {
           amount: {
             value: args.price,
             currency: "RUB",
@@ -1774,28 +1874,82 @@ const Mutation = mutationType({
           payment_method_data: {
             type: "bank_card",
           },
+          receipt: {
+            customer: {
+              email: user.email,
+            },
+            items: [
+              {
+                description: coursePage.title,
+                quantity: "1",
+                amount: {
+                  value: args.price,
+                  currency: "RUB",
+                },
+                vat_code: 1,
+              },
+            ],
+          },
           confirmation: {
             type: "redirect",
-            return_url: "https://www.besavvy.app/",
+            return_url: "https://besavvy.app",
           },
-          capture: true,
-        });
+        };
 
-        const url = result.confirmation.confirmation_url;
+        const payment = await checkout.createPayment(createPayload);
+        // console.log("payment", payment, payment.id);
+
+        console.log(
+          "payment",
+          payment.id,
+          payment.confirmation.confirmation_url
+        );
+
+        const url = payment.confirmation.confirmation_url;
+
+        // const createReceiptPayload = {
+        //   send: true,
+        //   customer: {
+        //     email: "mi.kochkin@ya.ru",
+        //   },
+        //   type: "payment",
+        //   payment_id: payment.id,
+        //   settlements: [
+        //     {
+        //       type: "cashless",
+        //       amount: {
+        //         value: "2.00",
+        //         currency: "RUB",
+        //       },
+        //     },
+        //   ],
+        //   items: [
+        //     {
+        //       description: "test",
+        //       quantity: "1",
+        //       amount: {
+        //         value: "2.00",
+        //         currency: "RUB",
+        //       },
+        //       vat_code: 1,
+        //     },
+        //   ],
+        // };
+
+        // try {
+        //   const receipt = await checkout.createReceipt(createReceiptPayload);
+        //   console.log("receipt", receipt);
+        // } catch (error) {
+        //   console.error("error1", error);
+        // }
 
         // 2.
-        const paymentID = result.id;
-        const user = await ctx.prisma.user.findUnique({
-          where: { id: args.userId },
-        });
-        const coursePage = await ctx.prisma.coursePage.findUnique({
-          where: { id: args.coursePageId },
-        });
-        console.log("args", args);
+        // const paymentID = result.id;
+        // console.log("args", args);
         const order = await ctx.prisma.order.create({
           data: {
             price: args.price,
-            paymentID: paymentID,
+            paymentID: payment.id,
             promocode: args.promocode,
             comment: args.comment,
             user: {

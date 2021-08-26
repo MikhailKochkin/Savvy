@@ -8,6 +8,7 @@ const Styles = styled.div`
   margin: 3% 0;
   border: 1px solid #e4e4e4;
   padding: 2%;
+  width: ${(props) => props.width};
   option {
     font-family: Montserrat;
   }
@@ -58,8 +59,10 @@ const Block = (props) => {
     texteditors,
     constructions,
     documents,
+    testPractices,
     forum,
   } = props;
+
   return (
     <>
       {props.i !== 0 && <Icon size={"2.5em"} icon={arrowDown} id="back" />}
@@ -80,6 +83,16 @@ const Block = (props) => {
               Вопрос:{" "}
               {quizes.filter((q) => q.id === value.id).length > 0
                 ? quizes.filter((q) => q.id === value.id)[0].question
+                : "Вопрос был удален. Удалите этот блок из урока."}
+            </div>
+          </Title>
+        ) : null}
+        {value.type && value.type.toLowerCase() === "testpractice" ? (
+          <Title>
+            <div className="type">
+              Подводка:{" "}
+              {testPractices.filter((q) => q.id === value.id).length > 0
+                ? testPractices.filter((q) => q.id === value.id)[0].id
                 : "Вопрос был удален. Удалите этот блок из урока."}
             </div>
           </Title>
@@ -177,6 +190,9 @@ const Block = (props) => {
             {tests.length > 0 && <option value="newTest">Тесты</option>}
             {quizes.length > 0 && <option value="quiz">Вопросы</option>}
             {problems.length > 0 && <option value="problem">Задачи</option>}
+            {testPractices.length > 0 && (
+              <option value="testPractice">Тестовые блоки</option>
+            )}
             {texteditors.length > 0 && (
               <option value="texteditor">Редакторы</option>
             )}
@@ -216,6 +232,27 @@ const Block = (props) => {
               {quizes.map((q) => (
                 <div className="option">
                   <div>{q.question}</div>
+                  <button
+                    name={q.__typename}
+                    value={q.id}
+                    onClick={(e) =>
+                      props.set(e.target.name, e.target.value, props.i)
+                    }
+                  >
+                    Выбрать
+                  </button>
+                </div>
+              ))}
+            </Section>
+          )}
+          {task === "testPractice" && (
+            <Section>
+              <h4>Тестовые блоки:</h4>
+              {testPractices.map((q) => (
+                <div className="option">
+                  <div>
+                    {q.text} {q.id}
+                  </div>
                   <button
                     name={q.__typename}
                     value={q.id}

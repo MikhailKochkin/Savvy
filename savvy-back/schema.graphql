@@ -938,6 +938,7 @@ type Lesson {
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   shots(after: ShotWhereUniqueInput, before: ShotWhereUniqueInput, first: Int, last: Int): [Shot!]!
   structure: Json
+  testPractices(after: TestPracticeWhereUniqueInput, before: TestPracticeWhereUniqueInput, first: Int, last: Int): [TestPractice!]!
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int): [TestResult!]!
   text: String!
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int): [TextEditorResult!]!
@@ -1051,6 +1052,8 @@ input LessonWhereInput {
   shots: ShotListRelationFilter
   structure: JsonNullableFilter
   test: TestListRelationFilter
+  testPracticeResults: TestPracticeResultListRelationFilter
+  testPractices: TestPracticeListRelationFilter
   testResults: TestResultListRelationFilter
   text: StringFilter
   textEditorResults: TextEditorResultListRelationFilter
@@ -1114,6 +1117,8 @@ type Mutation {
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, text: String): Statement
+  createTestPractice(lessonId: String, tasks: [String], tasksNum: Int, text: String): NewTest
+  createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, wrong: String): TextEditorResult
@@ -2116,6 +2121,80 @@ input TestListRelationFilter {
   some: TestWhereInput
 }
 
+type TestPractice {
+  createdAt: DateTime!
+  id: String!
+  lessonId: String
+  tasks: [String!]!
+  tasksNum: Int!
+  text: String!
+  updatedAt: DateTime!
+}
+
+input TestPracticeListRelationFilter {
+  every: TestPracticeWhereInput
+  none: TestPracticeWhereInput
+  some: TestPracticeWhereInput
+}
+
+type TestPracticeResult {
+  correct: Int!
+  createdAt: DateTime!
+  id: String!
+  lesson: Lesson
+  lessonId: String
+  student: User!
+  studentId: String!
+  tasks: [String!]!
+  testPractice: TestPractice
+  testPracticeId: String
+  updatedAt: DateTime!
+}
+
+input TestPracticeResultListRelationFilter {
+  every: TestPracticeResultWhereInput
+  none: TestPracticeResultWhereInput
+  some: TestPracticeResultWhereInput
+}
+
+input TestPracticeResultWhereInput {
+  AND: [TestPracticeResultWhereInput!]
+  correct: IntFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  NOT: [TestPracticeResultWhereInput!]
+  OR: [TestPracticeResultWhereInput!]
+  student: UserWhereInput
+  studentId: StringFilter
+  tasks: StringNullableListFilter
+  testPractice: TestPracticeWhereInput
+  testPracticeId: StringNullableFilter
+  updatedAt: DateTimeFilter
+}
+
+input TestPracticeWhereInput {
+  AND: [TestPracticeWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  NOT: [TestPracticeWhereInput!]
+  OR: [TestPracticeWhereInput!]
+  tasks: StringNullableListFilter
+  tasksNum: IntFilter
+  testPracticeResults: TestPracticeResultListRelationFilter
+  text: StringFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+}
+
+input TestPracticeWhereUniqueInput {
+  id: String
+}
+
 type TestResult {
   answer: String
   attempts: Int
@@ -2474,6 +2553,8 @@ input UserWhereInput {
   subjects: StringNullableListFilter
   surname: StringNullableFilter
   teacherFeedback: FeedbackListRelationFilter
+  testPracticeResults: TestPracticeResultListRelationFilter
+  testPractices: TestPracticeListRelationFilter
   testResults: TestResultListRelationFilter
   tests: TestListRelationFilter
   textEditorResults: TextEditorResultListRelationFilter

@@ -272,6 +272,12 @@ const SingleLesson_Menu = (props) => {
             </ButtonZone>
 
             <ButtonZone>
+              <ChooseButton name="createTestBlock" onClick={onSwitch}>
+                Новый тестовый блок
+              </ChooseButton>
+            </ButtonZone>
+
+            <ButtonZone>
               <ChooseButton name="createProblem" onClick={onSwitch}>
                 Новая задача
               </ChooseButton>
@@ -282,6 +288,7 @@ const SingleLesson_Menu = (props) => {
                 Новый конструктор
               </ChooseButton>
             </ButtonZone>
+
             <ButtonZone>
               <ChooseButton name="createTextEditor" onClick={onSwitch}>
                 Новый редактор
