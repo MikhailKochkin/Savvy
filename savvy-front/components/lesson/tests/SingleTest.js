@@ -178,7 +178,7 @@ const Question = styled.div`
   }
   .question_text {
     background: #f3f3f3;
-    border: 2px solid;
+    border: 3px solid;
     border-color: ${(props) => props.inputColor};
     color: black;
     border-radius: 25px;
@@ -596,6 +596,24 @@ const SingleTest = (props) => {
                   </Option> */}
                 </OptionsGroup>
               </div>
+              {hidden == false && (
+                <div className="question">
+                  <div className="question_text">
+                    Я подсветил зеленым правильные варианты ответа. Посмотри на
+                    первоначальный вопрос.
+                  </div>
+                  <IconBlock>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}{" "}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
+                  </IconBlock>
+                </div>
+              )}
             </>
           )}
         </TextBar>

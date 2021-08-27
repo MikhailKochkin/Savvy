@@ -1865,7 +1865,6 @@ const Mutation = mutationType({
           where: { id: args.coursePageId },
         });
 
-        console.log(user.name, coursePage.title);
         const createPayload = {
           amount: {
             value: args.price,
@@ -1897,13 +1896,11 @@ const Mutation = mutationType({
         };
 
         const payment = await checkout.createPayment(createPayload);
-        // console.log("payment", payment, payment.id);
-
-        console.log(
-          "payment",
-          payment.id,
-          payment.confirmation.confirmation_url
-        );
+        // console.log(
+        //   "payment",
+        //   payment.id,
+        //   payment.confirmation.confirmation_url
+        // );
 
         const url = payment.confirmation.confirmation_url;
 

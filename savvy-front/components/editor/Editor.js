@@ -36,7 +36,8 @@ import { italic } from "react-icons-kit/fa/italic";
 import { header } from "react-icons-kit/fa/header";
 import { link } from "react-icons-kit/fa/link";
 import { image } from "react-icons-kit/fa/image";
-import { list } from "react-icons-kit/fa/list";
+import { listUl } from "react-icons-kit/fa/listUl";
+import { listOl } from "react-icons-kit/fa/listOl";
 import { film } from "react-icons-kit/fa/film";
 import { table } from "react-icons-kit/fa/table";
 import { flag } from "react-icons-kit/fa/flag";
@@ -62,6 +63,8 @@ const ELEMENT_TAGS = {
   PRE: () => ({ type: "code" }),
   UL: () => ({ type: "bulleted-list" }),
 };
+
+const LIST_TYPES = ["numbered-list", "bulleted-list"];
 
 const TEXT_TAGS = {
   CODE: () => ({ code: true }),
@@ -212,6 +215,7 @@ const serialize = (node) => {
     }
   }
   const children = node.children.map((n) => serialize(n)).join("");
+  console.log(node.type);
   switch (node.type) {
     case "quote":
       return `<blockquote><p>${children}</p></blockquote>`;
@@ -227,6 +231,12 @@ const serialize = (node) => {
       return `<h2>${children}</h2>`;
     case "paragraph":
       return `<p>${children}</p>`;
+    case "numbered-list":
+      return `<ol>${children}</ol>`;
+    case "bulleted-list":
+      return `<ul>${children}</ul>`;
+    case "list-item":
+      return `<li>${children}</li>`;
     case "image":
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
     case "error":
@@ -281,6 +291,8 @@ const deserialize = (el) => {
   //   return children.map((child) => jsx("text", attrs, child));
   // }
 
+  console.log("des", el.nodeName);
+
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
   }
@@ -326,6 +338,12 @@ const deserialize = (el) => {
       return jsx("element", { type: "quote" }, children);
     case "DIV":
       return jsx("element", { type: "div" }, children);
+    case "UL":
+      return jsx("element", { type: "bulleted-list" }, children);
+    case "OL":
+      return jsx("element", { type: "numbered-list" }, children);
+    case "LI":
+      return jsx("element", { type: "list-item" }, children);
     case "H2":
       return jsx("element", { type: "header" }, children);
     case "P":
@@ -361,6 +379,15 @@ const toggleMark = (editor, format) => {
 const isMarkActive = (editor, format) => {
   const marks = Editor.marks(editor);
   return marks ? marks[format] === true : false;
+};
+
+const isBlockActive = (editor, format) => {
+  const [match] = Editor.nodes(editor, {
+    match: (n) =>
+      !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,
+  });
+
+  return !!match;
 };
 
 const isElementActive = (editor, format) => {
@@ -437,6 +464,30 @@ const CustomEditor = {
       { type: "note", note: my_data },
       { match: (n) => Text.isText(n), split: true }
     );
+  },
+
+  makeList(editor, format) {
+    const isActive = isBlockActive(editor, format);
+    const isList = LIST_TYPES.includes(format);
+    // const isList = true
+
+    Transforms.unwrapNodes(editor, {
+      match: (n) =>
+        LIST_TYPES.includes(
+          !Editor.isEditor(n) && SlateElement.isElement(n) && n.type
+        ),
+      split: true,
+    });
+
+    const newProperties = {
+      type: isActive ? "paragraph" : isList ? "list-item" : format,
+    };
+    Transforms.setNodes(editor, newProperties);
+
+    if (!isActive && isList) {
+      const block = { type: format, children: [] };
+      Transforms.wrapNodes(editor, block);
+    }
   },
 
   conceal(editor) {
@@ -638,6 +689,13 @@ const App = (props) => {
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />;
+      case "bulleted-list":
+        // return <ul {...attributes}>{children}</ul>;
+        return <ListElement {...props} />;
+      case "numbered-list":
+        return <OrderedListElement {...props} />;
+      case "list-item":
+        return <ListItem {...props} />;
       case "quote":
         return <QuoteElement {...props} />;
       case "header":
@@ -692,7 +750,7 @@ const App = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-
+        console.log("value", arr);
         setValue(value);
         props.getEditorText(arr.join(""));
       }}
@@ -739,6 +797,22 @@ const App = (props) => {
           }}
         >
           <Icon icon={link} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.makeList(editor, "bulleted-list");
+          }}
+        >
+          <Icon icon={listUl} />
+        </ButtonStyle>
+        <ButtonStyle
+          onMouseDown={(event) => {
+            event.preventDefault();
+            CustomEditor.makeList(editor, "numbered-list");
+          }}
+        >
+          <Icon icon={listOl} />
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -904,6 +978,18 @@ const NoteElement = (props) => {
 
 const ConcealElement = (props) => {
   return <Conceal {...props.attributes}>{props.children}</Conceal>;
+};
+
+const ListElement = (props) => {
+  return <ul {...props.attributes}>{props.children}</ul>;
+};
+
+const OrderedListElement = (props) => {
+  return <ol {...props.attributes}>{props.children}</ol>;
+};
+
+const ListItem = (props) => {
+  return <li {...props.attributes}>{props.children}</li>;
 };
 
 const VideoElement = ({ attributes, children, element }) => {

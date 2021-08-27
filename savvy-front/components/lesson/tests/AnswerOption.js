@@ -5,7 +5,7 @@ import renderHTML from "react-render-html";
 const StyledButton = styled.div`
   display: inline-block;
   vertical-align: middle;
-  border: ${(props) => (props.color !== "#c4c4c4" ? "2px solid" : "1px solid")};
+  border: ${(props) => (props.color !== "#c4c4c4" ? "3px solid" : "1px solid")};
   border-color: ${(props) => props.color};
   padding: 10px 15px;
   cursor: pointer;
