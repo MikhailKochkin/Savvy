@@ -1,0 +1,18 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "Lesson",
+      "field": "short_structure",
+      "type": "Json",
+      "arity": "Optional"
+    },
+    {
+      "tag": "UpdateField",
+      "model": "TestPractice",
+      "field": "text",
+      "arity": "Optional"
+    }
+  ]
+}

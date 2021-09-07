@@ -7,6 +7,9 @@ const Styles = styled.div`
     border-bottom: 2px solid #f6a6ad;
     padding-bottom: 2px;
   }
+  img {
+    width: 100%;
+  }
 `;
 
 const Final = (props) => {
@@ -15,6 +18,7 @@ const Final = (props) => {
   let ratio = correct.length / props.tasks_number;
   return (
     <Styles>
+      <img src="/static/test_pattern.svg" />
       <p>
         Всего было {props.tasks_number} вопросов. Вы ответили правильно
         <span> на {correct.length} из них.</span>{" "}

@@ -13,6 +13,7 @@ const CREATE_NEWTEST_MUTATION = gql`
     $correct: [Boolean!]
     $ifRight: String
     $ifWrong: String
+    $type: String
     $lessonId: String!
   ) {
     createNewTest(
@@ -21,6 +22,7 @@ const CREATE_NEWTEST_MUTATION = gql`
       correct: $correct
       ifRight: $ifRight
       ifWrong: $ifWrong
+      type: $type
       lessonId: $lessonId
     ) {
       id
@@ -154,6 +156,7 @@ const CreateNewTest = (props) => {
   const [answers, setAnswers] = useState(["", ""]);
   const [correct, setCorrect] = useState([false, false]);
   const [question, setQuestion] = useState();
+  const [type, setType] = useState("TEST");
 
   const handleArray = (val, i) => {
     let arr = [...answers];
@@ -195,6 +198,7 @@ const CreateNewTest = (props) => {
           correct: correct,
           ifRight: ifRight,
           ifWrong: ifWrong,
+          type: type,
         }}
         refetchQueries={() => [
           {
@@ -210,6 +214,17 @@ const CreateNewTest = (props) => {
               Количество правильных ответов может быть любым.
             </Advice>
             <Title>Новый тест</Title>
+            <label for="types">Тип задания</label>
+            <select
+              name="types"
+              id="types"
+              defaultValue={type}
+              onChange={(e) => setType(e.target.value)}
+            >
+              <option value="TEST">Тест</option>
+              <option value="FORM">Форма</option>
+            </select>
+
             <CustomSelect1>
               <button
                 onClick={(e) => {

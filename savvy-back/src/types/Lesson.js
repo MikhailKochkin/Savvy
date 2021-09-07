@@ -20,6 +20,7 @@ const Lesson = objectType({
     t.model.forumId();
     t.model.coursePage();
     t.model.structure();
+    t.model.short_structure();
     // t.model.forum();
     t.model.user();
     t.model.lessonResults();

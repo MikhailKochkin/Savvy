@@ -935,6 +935,7 @@ type Lesson {
   published: Boolean
   quizes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int): [Quiz!]!
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int): [QuizResult!]!
+  short_structure: Json
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   shots(after: ShotWhereUniqueInput, before: ShotWhereUniqueInput, first: Int, last: Int): [Shot!]!
   structure: Json
@@ -1048,6 +1049,7 @@ input LessonWhereInput {
   published: BoolNullableFilter
   quizes: QuizListRelationFilter
   quizResults: QuizResultListRelationFilter
+  short_structure: JsonNullableFilter
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
   structure: JsonNullableFilter
@@ -1105,13 +1107,13 @@ type Mutation {
   createForum(lessonId: String, text: String): Forum
   createLesson(coursePageID: String, description: String, name: String, number: Int, text: String): Lesson
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
-  createNewTest(answers: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String]): NewTest
+  createNewTest(answers: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
   createNote(lessonId: String, text: String): Note
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(text: String, title: String): Post
   createProblem(lessonId: String, nodeID: String, nodeType: String, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
-  createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String): Quiz
+  createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
   createQuizResult(answer: String, correct: Boolean, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
@@ -1149,7 +1151,7 @@ type Mutation {
   updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
-  updateLesson(audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
+  updateLesson(audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateNewTest(answers: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
   updateNote(complexity: Int, id: String, next: NextType, text: String): Note
@@ -2127,7 +2129,7 @@ type TestPractice {
   lessonId: String
   tasks: [String!]!
   tasksNum: Int!
-  text: String!
+  text: String
   updatedAt: DateTime!
 }
 
@@ -2185,7 +2187,7 @@ input TestPracticeWhereInput {
   tasks: StringNullableListFilter
   tasksNum: IntFilter
   testPracticeResults: TestPracticeResultListRelationFilter
-  text: StringFilter
+  text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringNullableFilter

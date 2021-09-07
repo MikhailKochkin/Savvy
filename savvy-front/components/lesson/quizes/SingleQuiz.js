@@ -310,6 +310,51 @@ const SingleQuiz = (props) => {
     setProgress("false");
   };
 
+  const onSend = async (e) => {
+    setProgress("true");
+    let data1 = {
+      answer1: props.answer.toLowerCase(),
+      answer2: answer.toLowerCase(),
+    };
+    if (props.check === "WORD") {
+      if (props.answer.toLowerCase() === answer.toLowerCase()) {
+        setCorrect("true");
+        onMove("true");
+      } else {
+        setCorrect("false");
+        onMove("false");
+      }
+    } else {
+      const r = await fetch(
+        "https://arcane-refuge-67529.herokuapp.com/checker",
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data1),
+        }
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res);
+          if (parseFloat(res.res) > 65) {
+            console.log(res);
+            setCorrect("true");
+            onMove("true");
+          } else {
+            setCorrect("false");
+            if (typeof res.comment === "string") {
+              setHint(res.comment);
+            }
+            onMove("false");
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+    setProgress("false");
+  };
+
   const onMove = (result) => {
     // 1. if the data is sent for the first time
     if (!sent) {
@@ -394,6 +439,8 @@ const SingleQuiz = (props) => {
           </Buttons>
           {!update && (
             <>
+              <div>{props.type}</div>
+
               <Question story={story}>
                 <div className="question">
                   <div className="question_text">
@@ -449,9 +496,9 @@ const SingleQuiz = (props) => {
                 {correct === "true" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.t("correct")}!{" "}
+                      {!props.type != "FORM" && props.t("correct")}!{" "}
                       {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
-                      {props.t("show")}
+                      {!props.type != "FORM" && props.t("show")}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -468,11 +515,15 @@ const SingleQuiz = (props) => {
                 {correct === "false" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.t("wrong")}...
+                      {props.type != "FORM" && props.t("wrong") + "..."}
                       {ifWrong &&
                         ifWrong !== "<p></p>" &&
                         renderHTML(ifWrong)}{" "}
-                      {hint !== null && hint !== 0 && hint}. {props.t("show")}
+                      {hint !== null &&
+                        hint !== 0 &&
+                        props.type != "FORM" &&
+                        hint}
+                      {props.type != "FORM" && props.t("show")}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -518,7 +569,7 @@ const SingleQuiz = (props) => {
                     <div className="question_name">{author_name}</div>
                   </div>
                 )}*/}
-                {correct !== "" && (
+                {correct !== "" && props.type != "FORM" && (
                   <>
                     <div className="answer">
                       <IconBlock>

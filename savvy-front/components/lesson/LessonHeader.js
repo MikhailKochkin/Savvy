@@ -380,7 +380,6 @@ const LessonHeader = (props) => {
                 me.id === lesson.user.id ||
                 lesson.open) && (
                 <Link
-                  // The user is the teacher or the admin or it is an openLesson.
                   href={{
                     pathname: "/lesson",
                     query: {

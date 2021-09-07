@@ -7,6 +7,7 @@ import { SINGLE_LESSON_QUERY } from "./SingleLesson";
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import StoryUpdate from "./StoryUpdate";
+import ShortStoryUpdate from "./ShortStoryUpdate";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION(
@@ -273,6 +274,7 @@ export default class UpdateLesson extends Component {
             </Mutation>
           </Container>
           <StoryUpdate lesson={lesson} />
+          <ShortStoryUpdate lesson={lesson} />
         </AreYouATeacher>
       </PleaseSignIn>
     );

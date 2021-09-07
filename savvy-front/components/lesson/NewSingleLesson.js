@@ -23,6 +23,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       number
       type
       structure
+      short_structure
       change
       open
       lessonResults {
@@ -521,8 +522,16 @@ const NewSingleLesson = (props) => {
                       </h1>
                       <CSSTransitionGroup transitionName="example">
                         <StoryEx
-                          tasks={lesson.structure.lessonItems}
+                          tasks={
+                            props.size == "short"
+                              ? [
+                                  ...lesson.short_structure.lessonItems,
+                                  { id: 1, type: "offer" },
+                                ]
+                              : lesson.structure.lessonItems
+                          }
                           me={me}
+                          size={props.size == "short" ? "short" : "long"}
                           lesson={lesson}
                           next={next}
                           my_result={my_result}

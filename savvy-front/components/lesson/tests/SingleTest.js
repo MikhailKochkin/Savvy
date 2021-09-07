@@ -178,7 +178,7 @@ const Question = styled.div`
   }
   .question_text {
     background: #f3f3f3;
-    border: 3px solid;
+    border: 2px solid;
     border-color: ${(props) => props.inputColor};
     color: black;
     border-radius: 25px;
@@ -402,7 +402,6 @@ const SingleTest = (props) => {
       {!update && (
         <TextBar className="Test" story={story}>
           <div className="question">
-            {/* <div>{props.id}</div> */}
             <div className="question_text">{renderHTML(props.question[0])}</div>
             <IconBlock>
               {author && author.image != null ? (

@@ -254,7 +254,7 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const { lesson, name, author, new_students, coursePageId, students, me } =
+  const { lesson, name, author, student_list, coursePageId, students, me } =
     props;
 
   let color;
@@ -288,6 +288,287 @@ const LessonHeader = (props) => {
         <div>
           <Time>{time} мин.</Time>
         </div>
+        {/* new button logic */}
+        {/* if you do not have an account => no lesson / no link */}
+
+        {/* first visit: if you have an account but did not buy the new course => get the free version / link 1 */}
+        {me &&
+          lesson &&
+          lesson.open &&
+          me.id !== lesson.user.id &&
+          visit === undefined &&
+          !me.permissions.includes("ADMIN") &&
+          !student_list.includes(me.id) &&
+          published && (
+            <Link
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                  type: lesson.type.toLowerCase(),
+                  size: "short",
+                },
+              }}
+            >
+              <A>
+                <Button>
+                  {/* {props.t("start")} */}
+                  Начать
+                </Button>
+              </A>
+            </Link>
+          )}
+
+        {/* next visit: if you have an account but did not buy the new course => get the free version / link 1 */}
+        {me &&
+          lesson &&
+          lesson.open &&
+          me.id !== lesson.user.id &&
+          visit !== undefined &&
+          !me.permissions.includes("ADMIN") &&
+          !student_list.includes(me.id) &&
+          published && (
+            <Link
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                  type: lesson.type.toLowerCase(),
+                  size: "short",
+                },
+              }}
+            >
+              <A>
+                <Button>
+                  {/* {props.t("start")} */}
+                  Начать
+                </Button>
+              </A>
+            </Link>
+          )}
+
+        {/* if you have an account and bought the new course => get the paid version / link 2 */}
+        {me &&
+          lesson &&
+          visit == undefined &&
+          me.id !== lesson.user.id &&
+          student_list.includes(me.id) &&
+          !me.permissions.includes("ADMIN") &&
+          !lesson.open &&
+          published && (
+            <Link
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                  type: lesson.type.toLowerCase(),
+                },
+              }}
+            >
+              <A>
+                <Button>
+                  {/* {props.t("start")} */}
+                  Начать
+                </Button>
+              </A>
+            </Link>
+          )}
+
+        {/* if you have an account and you are a teacher / admin => get the paid version / link 2 */}
+
+        {me &&
+          lesson &&
+          lesson.published &&
+          visit == undefined &&
+          (me.id === author || me.permissions.includes("ADMIN")) && (
+            <Link
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                  type: lesson.type.toLowerCase(),
+                  size: "long",
+                },
+              }}
+            >
+              <A>
+                <Button>
+                  {/* {props.t("start")} */}
+                  Начать
+                </Button>
+              </A>
+            </Link>
+          )}
+
+        {/* if you have an account and you are a teacher / admin => get the paid version / link 2 */}
+
+        {me &&
+          !lesson.published &&
+          (me.id === author || me.permissions.includes("ADMIN")) && (
+            <Link
+              // author or admin or openLesson if the lesson is not published.
+              href={{
+                pathname: "/lesson",
+                query: {
+                  id: lesson.id,
+                  type: lesson.type.toLowerCase(),
+                },
+              }}
+            >
+              <A>
+                <Button>Начать</Button>
+              </A>
+            </Link>
+          )}
+        {/* {me && lesson.published && (
+          // &&
+          // (me.permissions.includes("ADMIN") ||
+          //   new_students.includes(me.id) ||
+          //   me.id === lesson.user.id ||
+          //   lesson.open)
+          <Link
+            href={{
+              pathname: "/lesson",
+              query: {
+                id: lesson.id,
+                type: lesson.type.toLowerCase(),
+              },
+            }}
+          >
+            <A>
+              <Button
+                onClick={async (e) => {
+                  // 0. admin / open lesson / lesson author visit open lesson for the first time
+                  if (
+                    me &&
+                    lesson &&
+                    visit == undefined &&
+                    (me.id === author ||
+                      me.permissions.includes("ADMIN") ||
+                      lesson.open)
+                  ) {
+                    createLessonResult({
+                      variables: {
+                        lessonID: lesson.id,
+                        visitsNumber: 1,
+                      },
+                    });
+                    console.log(0);
+                  }
+                  // 1. registered user visits the lesson for the first time
+                  if (
+                    me &&
+                    lesson &&
+                    visit == undefined &&
+                    me.id !== lesson.user.id &&
+                    new_students.includes(me.id) &&
+                    !me.permissions.includes("ADMIN") &&
+                    !lesson.open &&
+                    published
+                  ) {
+                    createLessonResult({
+                      variables: {
+                        lessonID: lesson.id,
+                        visitsNumber: 1,
+                      },
+                    });
+                    console.log(1);
+                  }
+
+                  // 2. registered user visits the lesson one more time
+                  if (
+                    me &&
+                    lesson &&
+                    visit !== undefined &&
+                    me.id !== lesson.user.id &&
+                    !me.permissions.includes("ADMIN") &&
+                    new_students.includes(me.id) &&
+                    published
+                  ) {
+                    updateLessonResult({
+                      variables: {
+                        id: visit.id,
+                        visitsNumber: visit.visitsNumber + 1,
+                      },
+                    });
+                    console.log(2);
+                  }
+
+                  // 3. author or admin visits the lesson for the first time
+                  if (
+                    me &&
+                    lesson &&
+                    visit == undefined &&
+                    (me.id === author || me.permissions.includes("ADMIN"))
+                  ) {
+                    createLessonResult({
+                      variables: {
+                        lessonID: lesson.id,
+                        visitsNumber: 1,
+                      },
+                    });
+                    console.log(3);
+                  }
+
+                  // 4. author or admin visits the lesson one more time
+                  if (
+                    me &&
+                    lesson &&
+                    visit !== undefined &&
+                    (me.id === author || me.permissions.includes("ADMIN"))
+                  ) {
+                    updateLessonResult({
+                      variables: {
+                        id: visit.id,
+                        visitsNumber: visit.visitsNumber + 1,
+                      },
+                    });
+                    console.log(4);
+                  }
+
+                  // 5. unregistered user visits the open lesson for the first time
+                  if (
+                    lesson &&
+                    lesson.open &&
+                    visit == undefined &&
+                    me.id !== lesson.user.id &&
+                    !me.permissions.includes("ADMIN") &&
+                    !new_students.includes(me.id) &&
+                    published
+                  ) {
+                    createLessonResult({
+                      variables: {
+                        lessonID: lesson.id,
+                        visitsNumber: 1,
+                      },
+                    });
+                    console.log(5);
+                  }
+                  // 6. unregistered user visits the open lesson one more time
+                  if (
+                    lesson &&
+                    lesson.open &&
+                    me.id !== lesson.user.id &&
+                    visit !== undefined &&
+                    !me.permissions.includes("ADMIN") &&
+                    !new_students.includes(me.id) &&
+                    published
+                  ) {
+                    updateLessonResult({
+                      variables: {
+                        id: visit.id,
+                        visitsNumber: visit.visitsNumber + 1,
+                      },
+                    });
+                    console.log(6);
+                  }
+                }}
+              >
+                Начать
+              </Button>
+            </A>
+          </Link>
+        )} */}
       </TextBar>
     </>
   );

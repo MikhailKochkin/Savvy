@@ -70,7 +70,7 @@ const CoursePage = (props) => {
                             coursePage={props.id}
                             // author={coursePage.user.id}
                             // students={coursePage.students}
-                            // new_students={student_list}
+                            student_list={props.student_list}
                             open={index + 1 === 1}
                             index={index + 1}
                             coursePageId={props.coursePageId}

@@ -13,6 +13,7 @@ const CREATE_QUIZ_MUTATION = gql`
     $lessonId: String!
     $ifRight: String
     $ifWrong: String
+    $type: String
   ) {
     createQuiz(
       question: $question
@@ -20,6 +21,7 @@ const CREATE_QUIZ_MUTATION = gql`
       lessonId: $lessonId
       ifRight: $ifRight
       ifWrong: $ifWrong
+      type: $type
     ) {
       id
     }
@@ -112,6 +114,7 @@ const CreateQuiz = (props) => {
   const [answer, setAnswer] = useState("");
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
+  const [type, setType] = useState("TEST");
 
   const { lessonID } = props;
   return (
@@ -124,6 +127,7 @@ const CreateQuiz = (props) => {
           question: question,
           ifRight: ifRight,
           ifWrong: ifWrong,
+          type: type,
         }}
         refetchQueries={() => [
           {
@@ -157,6 +161,17 @@ const CreateQuiz = (props) => {
                   неправильного ответов.
                 </Advice>
                 <Title>Новый вопрос</Title>
+                <label for="types">Тип задания</label>
+                <select
+                  name="types"
+                  id="types"
+                  defaultValue={type}
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <option value="TEST">Тест</option>
+                  <option value="FORM">Форма</option>
+                </select>
+
                 <AnswerOption>
                   <Comment>
                     <DynamicLoadedEditor

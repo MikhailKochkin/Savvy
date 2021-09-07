@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useUser } from "./User";
 import Account from "./Account";
+import MyCourses from "./MyCourses";
 import PleaseSignIn from "./auth/PleaseSignIn";
 
 const Styles = styled.div`
@@ -70,6 +71,7 @@ const AccountPage = (props) => {
             {page === "account" && me && <Account me={me} id={props.id} />}
           </Data>
         </Container>
+        <MyCourses me={me} />
       </Styles>
     </PleaseSignIn>
   );

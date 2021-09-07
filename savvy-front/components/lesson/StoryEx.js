@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import Note from "./notes/Note";
+import Offer from "./Offer";
 import Shots from "./shots/Shots";
 import SingleTest from "./tests/SingleTest";
 import Chat from "./chat/Chat";
@@ -39,6 +40,7 @@ const Container = styled.div`
 class StoryEx extends Component {
   render() {
     const { tasks, me, lesson, next, coursePageID } = this.props;
+    console.log("tasks", tasks);
     let components = [];
     tasks.map((task) => {
       let el;
@@ -155,6 +157,24 @@ class StoryEx extends Component {
             lessonId={lesson.id}
             me={me}
             story={true}
+          />
+        );
+        components.push(item);
+      } else if (task.type.toLowerCase() === "offer") {
+        item = (
+          <Offer
+            key={1}
+            name={"el.name"}
+            me={me}
+            author={lesson.user}
+            complexity={1} // messages={el.messages}
+            length={[false, false]}
+            id={1}
+            true={[true, false]}
+            lessonId={lesson.id}
+            me={me}
+            story={true}
+            coursePageId={coursePageID}
           />
         );
         components.push(item);

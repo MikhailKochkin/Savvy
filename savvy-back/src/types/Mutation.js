@@ -484,6 +484,9 @@ const Mutation = mutationType({
         structure: arg({
           type: "LessonStructure",
         }),
+        short_structure: arg({
+          type: "LessonStructure",
+        }),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -504,17 +507,15 @@ const Mutation = mutationType({
         answers: list(stringArg()),
         correct: list(booleanArg()),
         question: list(stringArg()),
+        type: stringArg(),
         ifRight: stringArg(),
         ifWrong: stringArg(),
       },
       resolve: async (
         _,
-        { lessonId, answers, correct, question, ifRight, ifWrong },
+        { lessonId, answers, correct, question, ifRight, ifWrong, type },
         ctx
       ) => {
-        console.log(
-          ctx.res.req.userId ? ctx.res.req.userId : "ckmddnbfy180981gwpn2ir82c9"
-        );
         const new_data = {
           user: {
             connect: {
@@ -538,6 +539,7 @@ const Mutation = mutationType({
           lessonID: lessonId,
           ifRight,
           ifWrong,
+          type,
         };
 
         const newTest = await ctx.prisma.newTest.create({ data: new_data });
@@ -726,6 +728,7 @@ const Mutation = mutationType({
         lessonId: stringArg(),
         ifRight: stringArg(),
         ifWrong: stringArg(),
+        type: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;

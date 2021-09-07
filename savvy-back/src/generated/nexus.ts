@@ -718,6 +718,7 @@ export interface NexusGenInputs {
     published?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
+    short_structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
     structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
@@ -1416,7 +1417,7 @@ export interface NexusGenInputs {
     tasks?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     tasksNum?: NexusGenInputs['IntFilter'] | null; // IntFilter
     testPracticeResults?: NexusGenInputs['TestPracticeResultListRelationFilter'] | null; // TestPracticeResultListRelationFilter
-    text?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1892,6 +1893,7 @@ export interface NexusGenObjects {
     number?: number | null; // Int
     open?: boolean | null; // Boolean
     published?: boolean | null; // Boolean
+    short_structure?: NexusGenScalars['Json'] | null; // Json
     structure?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     type?: string | null; // String
@@ -2072,7 +2074,7 @@ export interface NexusGenObjects {
     lessonId?: string | null; // String
     tasks: string[]; // [String!]!
     tasksNum: number; // Int!
-    text: string; // String!
+    text?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   TestPracticeResult: { // root type
@@ -2386,6 +2388,7 @@ export interface NexusGenFieldTypes {
     published: boolean | null; // Boolean
     quizes: NexusGenRootTypes['Quiz'][]; // [Quiz!]!
     quizResults: NexusGenRootTypes['QuizResult'][]; // [QuizResult!]!
+    short_structure: NexusGenScalars['Json'] | null; // Json
     shotResults: NexusGenRootTypes['ShotResult'][]; // [ShotResult!]!
     shots: NexusGenRootTypes['Shot'][]; // [Shot!]!
     structure: NexusGenScalars['Json'] | null; // Json
@@ -2704,7 +2707,7 @@ export interface NexusGenFieldTypes {
     lessonId: string | null; // String
     tasks: string[]; // [String!]!
     tasksNum: number; // Int!
-    text: string; // String!
+    text: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   TestPracticeResult: { // field return type
@@ -3033,6 +3036,7 @@ export interface NexusGenFieldTypeNames {
     published: 'Boolean'
     quizes: 'Quiz'
     quizResults: 'QuizResult'
+    short_structure: 'Json'
     shotResults: 'ShotResult'
     shots: 'Shot'
     structure: 'Json'
@@ -3724,6 +3728,7 @@ export interface NexusGenArgTypes {
       ifWrong?: string | null; // String
       lessonId?: string | null; // String
       question?: Array<string | null> | null; // [String]
+      type?: string | null; // String
     }
     createNote: { // args
       lessonId?: string | null; // String
@@ -3758,6 +3763,7 @@ export interface NexusGenArgTypes {
       ifWrong?: string | null; // String
       lessonId?: string | null; // String
       question?: string | null; // String
+      type?: string | null; // String
     }
     createQuizResult: { // args
       answer?: string | null; // String
@@ -3945,6 +3951,7 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       number?: number | null; // Int
       open?: boolean | null; // Boolean
+      short_structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
       structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
       tariffs?: string | null; // String
       text?: string | null; // String
