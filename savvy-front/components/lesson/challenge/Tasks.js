@@ -117,7 +117,7 @@ const Header = styled.div`
 `;
 
 const Block = styled.div`
-  border: 1px solid #edefed;
+  /* border: 1px solid #edefed; */
   padding: 0.5% 2%;
   color: black;
   width: 100%;

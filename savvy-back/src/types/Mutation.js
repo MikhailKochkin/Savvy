@@ -2226,12 +2226,30 @@ const Mutation = mutationType({
         communication_medium: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        const client = await ctx.prisma.businessClient.create({
+        const new_client = await ctx.prisma.businessClient.create({
           data: {
             ...args,
           },
         });
-        return client;
+
+        const newEmail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: "Mikhail@besavvy.app",
+          Subject: "Новая заявка",
+          HtmlBody: makeANiceEmail(
+            `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
+          ),
+        });
+
+        const newEmail2 = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: "aliona@besavvy.app",
+          Subject: "Новая заявка",
+          HtmlBody: makeANiceEmail(
+            `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
+          ),
+        });
+        return new_client;
       },
     }),
       t.field("createConfUser", {

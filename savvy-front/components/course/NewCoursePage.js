@@ -8,6 +8,7 @@ import SellingPoints from "./coursePageBlocks/SellingPoints";
 import Teachers from "./coursePageBlocks/Teachers";
 import Reviews from "./coursePageBlocks/Reviews";
 import C2A from "./coursePageBlocks/C2A";
+import Action from "./coursePageBlocks/Action";
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
@@ -130,18 +131,25 @@ const NewCoursePage = (props) => {
         <Details />
         <Goal />
         <BottomLine />
-        {!loading && data && (
+        {!loading && data ? (
           <Syllabus
             id={props.id}
             lessons={data.coursePage.lessons}
             coursePageId={data.coursePage.id}
             student_list={student_list}
           />
+        ) : (
+          <p>Загружаем прогамму курса ...</p>
+        )}
+        {!loading && data && (
+          <Action me={me} coursePageId={data.coursePage.id} />
         )}
         <SellingPoints />
         <Teachers />
         <Reviews />
-        {!loading && data && <C2A me={me} coursePageId={data.coursePage.id} />}
+        {!loading && data && (
+          <Action me={me} coursePageId={data.coursePage.id} />
+        )}
         <QA />
       </div>
     </div>

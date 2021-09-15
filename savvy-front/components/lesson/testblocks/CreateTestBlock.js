@@ -91,7 +91,7 @@ const CreateTestBlock = (props) => {
             e.preventDefault();
             const res = await createTestPractice({
               variables: {
-                tasksNum: number,
+                tasksNum: parseInt(number),
                 tasks: tasks,
                 text: "Тест",
                 lessonId: props.lessonId,

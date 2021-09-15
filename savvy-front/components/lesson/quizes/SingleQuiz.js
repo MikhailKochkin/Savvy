@@ -439,8 +439,6 @@ const SingleQuiz = (props) => {
           </Buttons>
           {!update && (
             <>
-              <div>{props.type}</div>
-
               <Question story={story}>
                 <div className="question">
                   <div className="question_text">

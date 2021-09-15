@@ -20,7 +20,7 @@ const Banner = styled.div`
   justify-content: flex-end;
   padding-right: 40px;
   .bottomline_text {
-    width: 20%;
+    width: 25%;
     font-size: 1.4rem;
     line-height: 1.6;
     margin-right: 20px;
@@ -70,7 +70,7 @@ const Ad = () => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="bottomline_text">
-        Цена со скидкой действует для первых 20 участников.{" "}
+        Купите сегодня – получите вебинар "Как найти работу в юр фирме?"
       </div>
       <button onClick={(e) => slide()}>Участвовать</button>
     </Banner>

@@ -69,7 +69,7 @@ const Details = () => {
         </Section>
         <Section>
           <div className="name">Старт </div>
-          <div className="main">15 сентября 2021 </div>
+          <div className="main">20 сентября 2021 </div>
           <div className="secondary">
             Получите доступ к материалам сразу после покупки
           </div>

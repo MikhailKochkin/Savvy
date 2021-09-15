@@ -37,11 +37,11 @@ const CREATE_ORDER_MUTATION = gql`
 
 const Image = styled.div`
   width: 100vw;
-  min-height: 120vh;
+  min-height: 90vh;
   img {
     object-fit: cover;
     width: 100%;
-    min-height: 120vh;
+    min-height: 90vh;
     position: absolute;
   }
   @media (max-width: 800px) {
@@ -55,7 +55,7 @@ const Image = styled.div`
 
 const InfoBlock = styled.div`
   width: 100%;
-  min-height: 120vh;
+  min-height: 90vh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -373,12 +373,12 @@ const Headline = (props) => {
               <Price>
                 <div className="term">
                   <div>
-                    Доступ на <b>1</b> месяц – <span>скидка 60%</span>
+                    Учиться в группе – <span>скидка 46%</span>
                   </div>
                 </div>
                 <div className="prices">
-                  <div className="new_price">2400 ₽</div>
-                  <div className="old_price">6000 ₽</div>
+                  <div className="new_price">4 990 ₽</div>
+                  <div className="old_price">9 000 ₽</div>
                 </div>
                 <div className="buttons">
                   {props.me ? (
@@ -390,7 +390,7 @@ const Headline = (props) => {
                         const res = await createOrder({
                           variables: {
                             coursePageId: props.coursePageId,
-                            price: 3000,
+                            price: 4990,
                             userId: props.me.id,
                             // promocode: props.promocode,
                             comment: asPath,
@@ -419,12 +419,12 @@ const Headline = (props) => {
               <Price>
                 <div className="term">
                   <div>
-                    Доступ на все <b>3</b> месяца – <span>скидка 72%</span>
+                    Учиться индивидуально – <span>скидка 47%</span>
                   </div>
                 </div>
                 <div className="prices">
-                  <div className="new_price">5000 ₽</div>
-                  <div className="old_price">18000 ₽</div>
+                  <div className="new_price">14 990 ₽</div>
+                  <div className="old_price">26 000 ₽</div>
                 </div>
                 <div className="buttons">
                   {props.me ? (
@@ -436,7 +436,7 @@ const Headline = (props) => {
                         const res = await createOrder({
                           variables: {
                             coursePageId: props.coursePageId,
-                            price: 5000,
+                            price: 14990,
                             userId: props.me.id,
                             // promocode: props.promocode,
                             comment: asPath,
@@ -462,17 +462,17 @@ const Headline = (props) => {
                   </div>
                 </div>
               </Price>
-              <Referral>
+              {/* <Referral>
                 <div>
                   А с реферральной программой скидка может быть еще больше.
                 </div>
                 <button onClick={(e) => toggleModal()}>Узнать</button>
-              </Referral>
+              </Referral> */}
             </Buy>
           </Container>
         </InfoBlock>
       </Image>
-      <StyledModal
+      {/* <StyledModal
         isOpen={isOpen}
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}
@@ -491,8 +491,8 @@ const Headline = (props) => {
           Промокод можно получить, написав в личные сообщения группы любого
           аккаунта нашей социальной сети.
         </p>
-      </StyledModal>
-      <StyledModal
+      </StyledModal> */}
+      {/* <StyledModal
         isOpen={isOpen2}
         onBackgroundClick={toggleModal2}
         onEscapeKeydown={toggleModal2}
@@ -504,7 +504,7 @@ const Headline = (props) => {
           <Signup getData={changeState} closeNavBar={toggleModal2} />
         )}
         {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
+      </StyledModal> */}
     </div>
   );
 };

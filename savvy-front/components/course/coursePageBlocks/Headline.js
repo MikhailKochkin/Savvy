@@ -5,7 +5,18 @@ const Image = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
   height: 80vh;
-  background-color: black;
+  background: #23074d; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #cc5333,
+    #23074d
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #cc5333,
+    #23074d
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   img {
     object-fit: cover;
     width: 100%;
@@ -37,7 +48,7 @@ const Container = styled.div`
     font-weight: 400;
     font-size: 6rem;
     text-align: center;
-    line-height: 1.4;
+    line-height: 1.2;
     margin: 0;
     margin-bottom: 20px;
   }
@@ -152,7 +163,7 @@ const Headline = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      var countDownDate = new Date("September 15, 2021 20:00:00").getTime(); // Get today's date and time
+      var countDownDate = new Date("September 20, 2021 20:00:00").getTime(); // Get today's date and time
       var now = new Date().getTime();
 
       // Find the distance between now and the count down date
@@ -218,12 +229,12 @@ const Headline = () => {
         <img src="./static/back_image_low.png" />
         <InfoBlock>
           <Container>
-            <h1>Старт в Гражданском Праве</h1>
+            <h1>Стань экспертом в Гражданском Праве</h1>
             <h2>
               {/* Сдай экзамен и пройди собеседование, получив знания и опыт от
               лучших молодых экспертов страны. */}
-              Быстро и эффективно изучи гражданское право, чтобы успешно сдать
-              экзамен и найти работу
+              Изучи гражданское право на практических кейсах, чтобы успешно
+              сдать экзамен и найти работу
             </h2>
             <Buttons>
               <button id="syl_button" onClick={(e) => slide()}>
