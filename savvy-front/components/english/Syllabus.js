@@ -154,9 +154,7 @@ const Context = () => {
           <div className="answer_block">
             <div className="answer_box">
               <div className="header">1. Legal English. Базовый уровень</div>
-              <div className="description">
-                23 августа – 7 октября 2021 года
-              </div>
+              <div className="description">2 месяца</div>
               <div>
                 <p>
                   Мы учимся писать на английском языке и редактировать свои
@@ -188,9 +186,7 @@ const Context = () => {
               <div className="header">
                 2. Legal English. Продвинутый уровень
               </div>
-              <div className="description">
-                18 октября – 10 декабря 2021 года
-              </div>
+              <div className="description">2 месяца</div>
               <div>
                 <p>
                   Мы освоили базовый навык письма. Теперь отрабатываем его на
@@ -247,7 +243,7 @@ const Context = () => {
           <div className="answer_block">
             <div className="answer_box">
               <div className="header">4. Сложности юридического перевода</div>
-              <div className="description">Январь – февраль 2022 года</div>
+              <div className="description">1.5 месяца</div>
               <div>
                 <p>
                   Учимся вычленять смысл любого юридического текста на

@@ -63,9 +63,6 @@ const AccountPage = (props) => {
         <Container>
           <Menu>
             <div name="account">Аккаунт</div>
-            {/* <div name="portfolio" onClick={this.onSwitch}>
-                Портфолио
-              </div> */}
           </Menu>
           <Data>
             {page === "account" && me && <Account me={me} id={props.id} />}

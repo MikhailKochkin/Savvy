@@ -292,8 +292,8 @@ const Main = () => {
               </button>
             </h2>
             <div className="timeline">
-              Старт: 5 июля. Скидка до 50%.{" "}
-              <span id="left">Осталось 5 мест</span>
+              Старт: 1 февраля. Скидка до 30%.{" "}
+              <span id="left">До 10 октября</span>
             </div>
             <List>
               <div className="element">

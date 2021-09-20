@@ -51,12 +51,11 @@ const Banner = styled.div`
   }
 `;
 
-const Ad = () => {
+const Ad = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width, height) => {
     setWidth(width);
   };
-
   const slide = () => {
     var my_element = document.getElementById("c2a");
     my_element.scrollIntoView({
@@ -65,13 +64,11 @@ const Ad = () => {
       inline: "nearest",
     });
   };
-
+  const d = props.data;
   return (
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <div className="bottomline_text">
-        Купите сегодня – получите вебинар "Как найти работу в юр фирме?"
-      </div>
+      <div className="bottomline_text">{d.offer}</div>
       <button onClick={(e) => slide()}>Участвовать</button>
     </Banner>
   );

@@ -85,6 +85,7 @@ const StyledHeader = styled.header`
   display: grid;
   min-height: 50px;
   padding: 10px 0;
+  font-weight: 500;
   grid-template-areas: "CourseMenu UserData";
   grid-template-columns: 1fr 3fr;
   cursor: pointer;
@@ -118,6 +119,11 @@ const StyledHeader = styled.header`
       padding: 0;
       margin: 0;
       font-size: 1.6rem;
+      transition: ease-in 0.5s;
+
+      &:hover {
+        color: #4679d8;
+      }
     }
   }
   .logo {
@@ -273,9 +279,7 @@ const Nav = (props) => {
       <>
         {width > 800 && (
           <>
-            <StyledHeader
-              color={router.pathname !== "/" && router.pathname !== "/business"}
-            >
+            <StyledHeader color={router.pathname !== "/business"}>
               <CourseMenu>
                 <Link href="/">
                   <div className="logo">
@@ -286,7 +290,7 @@ const Nav = (props) => {
               <UserData>
                 <Link href="/blog">
                   <div className="blog">
-                    <a>{props.t("blog")}</a>
+                    <a>📚 {props.t("blog")}</a>
                   </div>
                 </Link>
                 {me &&
@@ -388,6 +392,12 @@ const Nav = (props) => {
                 >
                   &times;
                 </a>
+
+                <Link href="/">
+                  <button onClick={(e) => closeNav()}>
+                    <a>BeSavvy</a>
+                  </button>
+                </Link>
                 {me && me.status === "AUTHOR" && (
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>

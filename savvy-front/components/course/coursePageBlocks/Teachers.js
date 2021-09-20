@@ -29,13 +29,11 @@ const Container = styled.div`
 `;
 
 const TeachersList = styled.div`
-  /* width: 800px; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: space-between;
-  /* overflow: scroll; */
   width: 100%;
 `;
 
@@ -48,7 +46,7 @@ const TeacherBox = styled.div`
   border-top: 3px solid;
   border-top-color: ${(props) => props.color};
   margin-bottom: 40px;
-  margin-right: 20px;
+  margin-right: 50px;
   box-shadow: 0px 0px 10px rgba(129, 129, 129, 0.45);
   border-radius: 5px;
   padding: 20px 0;
@@ -102,18 +100,38 @@ const TeacherBox = styled.div`
     line-height: 1.4;
     font-size: 1.4rem;
   }
+  @media (max-width: 800px) {
+    margin-right: 0;
+  }
 `;
 
-const Teachers = () => {
+const Teachers = (props) => {
+  const d = props.data;
+  let colors = [
+    "#4db0de",
+    "#9D5AE5",
+    "#DB5ABA",
+    "#5BC9BA",
+    "#F18F01",
+    "#F18F01",
+  ];
   return (
     <Styles>
       <Container>
-        <h2>
-          Преподаватели – ключ к успешному обучению. Мы создали команду
-          великолепных специалистов из разных юридических школ России.
-        </h2>
+        <h2>{d.authors_intro}</h2>
         <TeachersList>
-          <TeacherBox color="#4db0de">
+          {d.authors.map((a, i) => (
+            <TeacherBox color={colors[(i + 1) % 6]}>
+              <img src={a.image} />
+              <div className="name">
+                {a.name}
+                <br /> {a.surname}
+              </div>
+              <div className="work">{a.title}</div>
+              <div className="description">{a.info}</div>
+            </TeacherBox>
+          ))}
+          {/* <TeacherBox color="#4db0de">
             <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1626079215/%D0%9B%D0%B5%D0%B2_2.png" />
             <div className="name">
               Лев
@@ -126,8 +144,8 @@ const Teachers = () => {
               занимается M/A сделками и рынком ценных бумаг, а также помогает
               молодым специалистам проходить отбор в компании.
             </div>
-          </TeacherBox>
-          <TeacherBox color="#9D5AE5">
+          </TeacherBox> */}
+          {/* <TeacherBox color="#9D5AE5">
             <img src="https://media-exp1.licdn.com/dms/image/C5603AQEgI1cMJORQVA/profile-displayphoto-shrink_400_400/0/1603742799048?e=1633564800&v=beta&t=XuBR5Dk0RjkHI_xbriY-OFXZefl9P9FjXF7i3ueiNmQ" />
             <div className="name">
               Кирилл
@@ -199,7 +217,7 @@ const Teachers = () => {
               студентов и аспирантов «Дни науки факультета права НИУ ВШЭ –
               2021».
             </div>
-          </TeacherBox>
+          </TeacherBox> */}
         </TeachersList>
       </Container>
     </Styles>

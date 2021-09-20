@@ -58,26 +58,28 @@ const Section = styled.div`
   }
 `;
 
-const Details = () => {
+const Details = (props) => {
+  const d = props.data;
+
   return (
     <Styles>
       <Container>
         <Section>
-          <div className="name">Длительность </div>
-          <div className="main">3 месяца </div>
-          <div className="secondary">4 часа в неделю </div>
+          <div className="name">Длительность</div>
+          <div className="main">{d.length1}</div>
+          <div className="secondary">{d.length2}</div>
         </Section>
         <Section>
-          <div className="name">Старт </div>
-          <div className="main">20 сентября 2021 </div>
+          <div className="name">Старт</div>
+          <div className="main">{d.start}</div>
           <div className="secondary">
             Получите доступ к материалам сразу после покупки
           </div>
         </Section>
         <Section>
           <div className="name">Подготовка</div>
-          <div className="main">Не требуется </div>
-          <div className="secondary">Начинаем с самого нуля</div>
+          <div className="main">{d.prior_klnowledge_1}</div>
+          <div className="secondary">{d.prior_klnowledge_2}</div>
         </Section>
       </Container>
     </Styles>

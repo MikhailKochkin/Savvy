@@ -87,7 +87,9 @@ const Point = styled.div`
   }
 `;
 
-const SellingPoints = () => {
+const SellingPoints = (props) => {
+  const d = props.data;
+
   return (
     <Styles>
       <Container>
@@ -97,56 +99,36 @@ const SellingPoints = () => {
             <img src="https://images.unsplash.com/photo-1562564055-71e051d33c19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80" />
             <div className="info">
               <div className="header">
-                От теории <span>к практике</span>
+                <span>{d.selling_point_1}</span>
               </div>
-              <div className="text">
-                Мы понятно разберем сложные темы на мини-лекциях и дадим
-                конспекты. Отработаем теоретические и практические вопросы через
-                решение кейсов. А затем наши авторы расскажут, как строить
-                юридическую карьеру уже сейчас.
-              </div>
+              <div className="text">{d.selling_point_1_details}</div>
             </div>
           </Point>
           <Point>
             <img src="https://images.unsplash.com/photo-1600195077909-46e573870d99?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" />
             <div className="info">
               <div className="header">
-                <span>Индивидуальный</span> путь в обучении
+                <span>{d.selling_point_2}</span>
               </div>
-              <div className="text">
-                Наш курс – это не просто лекции. Это умная система обучения,
-                которая подстроится под ваши цели и даст персонализированный
-                фидбэк. А заниматься в программе вы сможете, когда вам удобно, в
-                любое время дня и ночи.
-              </div>
+              <div className="text">{d.selling_point_2_details}</div>
             </div>
           </Point>
           <Point>
             <img src="https://images.unsplash.com/photo-1589386417686-0d34b5903d23?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" />
             <div className="info">
               <div className="header">
-                Работа с <span>экспертами и кураторами</span>
+                <span>{d.selling_point_3}</span>
               </div>
-              <div className="text">
-                В нашу команду входят практикующие юристы, совсем недавно
-                закончившие МГУ, НИУ ВШЭ, МГЮА и СПБГУ. Они прекрасно знают, что
-                надо знать, чтобы сдать экзамен по гражданскому праву или пройти
-                собеседование в престижную компанию.
-              </div>
+              <div className="text">{d.selling_point_3_details}</div>
             </div>
           </Point>
           <Point>
             <img src="https://images.unsplash.com/photo-1459499362902-55a20553e082?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1049&q=80" />
             <div className="info">
               <div className="header">
-                Конечная цель – <span>экзамен и карьера</span>
+                <span>{d.selling_point_4}</span>
               </div>
-              <div className="text">
-                Мы не хотим выполнять роль лектора. Скорее, ментора и
-                наставника, который может взять вас за руку и провести через все
-                испытания к конечной цели: успешной сдаче экзамена или получению
-                предложения о работе.
-              </div>
+              <div className="text">{d.selling_point_4_details}</div>
             </div>
           </Point>
         </PointsBox>

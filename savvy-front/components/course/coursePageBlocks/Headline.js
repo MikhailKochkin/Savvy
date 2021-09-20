@@ -21,6 +21,7 @@ const Image = styled.div`
     object-fit: cover;
     width: 100%;
     height: 80vh;
+    filter: brightness(50%);
     /* height: 100%; */
     position: absolute;
   }
@@ -155,15 +156,15 @@ const TimeLeft = styled.div`
   }
 `;
 
-const Headline = () => {
+const Headline = (props) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
-
+  const d = props.data;
   useEffect(() => {
     const interval = setInterval(() => {
-      var countDownDate = new Date("September 20, 2021 20:00:00").getTime(); // Get today's date and time
+      var countDownDate = new Date(d.start_eng).getTime(); // Get today's date and time
       var now = new Date().getTime();
 
       // Find the distance between now and the count down date
@@ -222,20 +223,14 @@ const Headline = () => {
       inline: "nearest",
     });
   };
-
   return (
     <div>
       <Image>
-        <img src="./static/back_image_low.png" />
+        <img src={`./static/${d.image}`} />
         <InfoBlock>
           <Container>
-            <h1>Стань экспертом в Гражданском Праве</h1>
-            <h2>
-              {/* Сдай экзамен и пройди собеседование, получив знания и опыт от
-              лучших молодых экспертов страны. */}
-              Изучи гражданское право на практических кейсах, чтобы успешно
-              сдать экзамен и найти работу
-            </h2>
+            <h1>{d.header}</h1>
+            <h2>{d.subheader}</h2>
             <Buttons>
               <button id="syl_button" onClick={(e) => slide()}>
                 Смотреть Программу

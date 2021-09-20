@@ -25,6 +25,11 @@ const Container = styled.div`
     line-height: 1.4;
     margin-bottom: 100px;
   }
+  @media (max-width: 800px) {
+    h2 {
+      margin-bottom: 40px;
+    }
+  }
 `;
 
 const ReviewsList = styled.div`
@@ -57,12 +62,12 @@ const Review = styled.div`
     .name {
       color: #313d48;
       font-size: 2.2rem;
-      text-align: center;
+      text-align: left;
       line-height: 1.4;
       margin-bottom: 20px;
+      width: 50%;
     }
   }
-
   .description {
     color: #687481;
     width: 80%;
@@ -104,56 +109,22 @@ const Review = styled.div`
   }
 `;
 
-const Reviews = () => {
+const Reviews = (props) => {
+  const d = props.data;
   return (
     <Styles>
       <Container>
         <h2>Отзывы участников о программе:</h2>
         <ReviewsList>
-          <Review>
-            <div className="header">
-              <div className="name">Карина Б.</div>
-              <div className="arrows">⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>
-            </div>
-            <div className="description">
-              Этот курс стал для меня неотъемлемым помощником в эффективном
-              изучении гражданского права. Материал изложен очень лаконично и
-              интересно, а также помогает систематизировать полученные знания.
-              Спасибо создателям курса!
-            </div>
-          </Review>
-          <Review>
-            <div className="header">
-              <div className="name">Игорь Б.</div>
-              <div className="arrows">⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>
-            </div>
-            <div className="description">
-              Хороший курс. Вопрос по реальным и консенсуальным договорам
-              попался на собеседовании. А мне изначально казалось, что это
-              глупый вопрос.
-            </div>
-          </Review>
-          <Review>
-            <div className="header">
-              <div className="name">Екатерина П.</div>
-              <div className="arrows">⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>
-            </div>
-            <div className="description">
-              Курс мне очень понравился! Все очень понятно, структурировано!
-            </div>
-          </Review>
-          <Review>
-            <div className="header">
-              <div className="name">Анастасия Б.</div>
-              <div className="arrows">⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>
-            </div>
-            <div className="description">
-              Курс четко структурирован, что позволяет последовательно изучить
-              непростой материал. Также, хочется отметить, что такой подход
-              особенно сильно выручает в сессионный период, когда объем
-              информации для усвоения только копится день ото дня.
-            </div>
-          </Review>
+          {d.reviews.map((r) => (
+            <Review>
+              <div className="header">
+                <div className="name">{r.name}</div>
+                <div className="arrows">⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>
+              </div>
+              <div className="description">{r.info}</div>
+            </Review>
+          ))}
         </ReviewsList>
       </Container>
     </Styles>

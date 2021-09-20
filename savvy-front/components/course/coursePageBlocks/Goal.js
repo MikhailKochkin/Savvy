@@ -61,9 +61,13 @@ const Container = styled.div`
     .example {
       display: flex;
       flex-direction: row;
+      margin: 5px 0;
       .icon {
         margin-right: 20px;
         color: #327998;
+      }
+      div {
+        line-height: 1.2;
       }
     }
   }
@@ -88,7 +92,7 @@ const Container = styled.div`
   }
 `;
 
-const Goal = () => {
+const Goal = (props) => {
   const slide = () => {
     var my_element = document.getElementById("c2a");
     my_element.scrollIntoView({
@@ -97,7 +101,7 @@ const Goal = () => {
       inline: "nearest",
     });
   };
-
+  const d = props.data;
   return (
     <Styles>
       <Container>
@@ -112,19 +116,19 @@ const Goal = () => {
             <div className="icon">
               <Icon size={25} icon={university} />
             </div>
-            <div>Выиграть этап олимпиады</div>
+            <div>{d.goal_1}</div>
           </div>
           <div className="example">
             <div className="icon">
               <Icon size={25} icon={graduationCap} />
             </div>
-            <div>Сдать экзамен</div>
+            <div>{d.goal_2}</div>
           </div>
           <div className="example">
             <div className="icon">
               <Icon size={25} icon={building} />
             </div>
-            <div>Пройти собеседование</div>
+            <div>{d.goal_3}</div>
           </div>
         </div>
       </Container>

@@ -75,8 +75,6 @@ const Page = ({ children }) => {
           <Meta />
           <Layout>
             <ModalProvider>
-              {router.pathname == "/" && <Ad />}
-              {router.pathname == "/intro" && <Ad2 />}
               <Header />
               {router.pathname !== "/school" &&
                 router.pathname !== "/con" &&

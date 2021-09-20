@@ -8,7 +8,7 @@ const Styles = styled.div`
   width: 100%;
   display: flex;
   background: #f5f5f5;
-  min-height: 60vh;
+  min-height: 80vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -18,9 +18,9 @@ const Styles = styled.div`
 `;
 
 const Block = styled.div`
-  width: 70%;
+  width: 75%;
   /* border: 1px solid black; */
-  padding-top: 50px;
+  padding: 25px 0;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -68,15 +68,15 @@ const Text = styled.div`
   flex-direction: column;
   align-items: flex-end;
   justify-content: flex-start;
-  .header {
-    font-size: 3rem;
-    line-height: 1.6;
+  h1 {
+    font-size: 3.6rem;
+    line-height: 1.4;
     text-align: right;
     font-weight: 600;
   }
   .subheader {
     font-size: 2.2rem;
-    line-height: 1.6;
+    line-height: 1.4;
     text-align: right;
     margin-top: 20px;
     width: 85%;
@@ -98,10 +98,10 @@ const Text = styled.div`
     align-items: flex-end;
     justify-content: center;
     button {
-      background: #91e9e3;
+      background: #175ffe;
+      color: #fff;
       border-radius: 5px;
       border: none;
-      color: black;
       margin-bottom: 15px;
       width: 250px;
       padding: 15px 0;
@@ -111,7 +111,7 @@ const Text = styled.div`
       font-size: 1.8rem;
       transition: 0.3s;
       &:hover {
-        background: #33d7cc;
+        background: #0135a9;
       }
     }
     div {
@@ -219,27 +219,26 @@ const Landing = (props) => {
     <Styles>
       <Block>
         <Image>
-          <img src="../../static/main_page.svg" />
+          <img src="../../static/sync.svg" />
         </Image>
         <Text>
-          <div className="header">
-            Получите практические юридические навыки здесь и сейчас{" "}
-          </div>
+          <h1>Мы обучаем юристов практическим навыкам онлайн </h1>
           <div className="subheader">
-            Мы создаем образовательные курсы, которые через игры и симуляторы
-            готовят к реальной работе юриста{" "}
+            Подготовьтесь к работе на крупных юридических проектах с помощью
+            вебинаров, симуляторов, помощи сообщества и общения с экспертами
+            1-на-1{" "}
           </div>
           <div className="navigation_buttons">
             <div className="navigation_button">
               <button onClick={(e) => slide()}>Юристам</button>
-              <div>Помогаем трансформировать карьеру</div>
+              <div>Помогаем развивать карьеру</div>
             </div>
-            <div className="navigation_button">
+            {/* <div className="navigation_button">
               <Link href="/business">
                 <button>Бизнесам</button>
               </Link>
-              <div>Помогаем трансформировать обучение</div>
-            </div>
+              <div>Помогаем выстроить обучение</div>
+            </div> */}
           </div>
         </Text>
       </Block>

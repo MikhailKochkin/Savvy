@@ -28,18 +28,16 @@ const Styles = styled.div`
   padding: 50px 0;
   min-height: 85vh;
   width: 100vw;
-  background-color: #fff;
+  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   @media (max-width: 800px) {
-    height: auto;
     padding: 0;
     min-height: 0;
   }
 `;
-
 const Container = styled.div`
   width: 65%;
   @media (max-width: 800px) {
@@ -71,14 +69,9 @@ const Form = styled.div`
     }
   }
   #details {
-    font-size: 2.2rem;
+    font-size: 1.7rem;
     line-height: 1.4;
     width: 90%;
-    #price {
-      border-bottom: 2px solid white;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
     div {
       margin: 5px 0;
     }
@@ -148,6 +141,7 @@ const Form = styled.div`
     }
     #header {
       width: 95%;
+      font-size: 2.6rem;
     }
     input {
       width: 100%;
@@ -213,7 +207,7 @@ const StyledModal = Modal.styled`
   }
 `;
 
-const Action = (props) => {
+const ContactForm = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
@@ -225,18 +219,20 @@ const Action = (props) => {
 
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
-  const d = props.data;
-
   return (
-    <Styles id="c2a">
+    <Styles id="contact">
       <Container>
         <Form>
           <div id="description">
             <div id="header">
-              <span>Запишитесь на курс</span>
+              <span>Проконсультируйтесь</span> по обучающим программам
             </div>
             <div id="details">
-              <div>{d.c2a}</div>
+              <div>1. Составим индивидуальный план развития</div>
+              <div>2. Обсудим, какие карьерные цели вы планируете достичь</div>
+              <div>
+                3. Дадим доступ к <span>бесплатным и демо-материалам</span>
+              </div>
             </div>
           </div>
           <div id="form">
@@ -244,17 +240,20 @@ const Action = (props) => {
               <input
                 className="data"
                 placeholder="Имя и фамилия"
+                name="name"
                 onChange={(e) => setName(e.target.value)}
               />
               <input
                 className="data"
                 type="tel"
+                name="tel"
                 placeholder="+7 (999) 999-99-99"
                 onChange={(e) => setNumber(e.target.value)}
               />
               <input
                 className="data"
                 type="email"
+                name="email"
                 placeholder="Электронная почта"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -263,9 +262,9 @@ const Action = (props) => {
                 onClick={async (e) => {
                   e.preventDefault();
                   if (EmailValidator.validate(email)) {
-                    // Router.push({
-                    //   pathname: "/hello",
-                    // });
+                    Router.push({
+                      pathname: "/hello",
+                    });
                     const res = await createBusinessClient({
                       variables: {
                         type: asPath ? asPath : "English",
@@ -317,4 +316,4 @@ const Action = (props) => {
   );
 };
 
-export default Action;
+export default ContactForm;
