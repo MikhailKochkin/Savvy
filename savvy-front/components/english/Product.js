@@ -11,6 +11,7 @@ const Styles = styled.div`
     width: 100%;
     overflow: hidden;
     line-height: 0;
+    margin-top: -2px;
   }
 
   .custom-shape-divider-top-1626364588 svg {
@@ -144,15 +145,15 @@ const Reviews = () => {
       </div>
 
       <h2>
-        Мы можем за 7 месяцев <span>научить вас этим навыкам</span>.
+        Мы можем за 6 месяцев <span>научить вас этим навыкам</span>.
         Гарантированно. С помощью:
       </h2>
       <div class="parent">
         <div class="div1">
           <Review>
             <div className="bubble">
-              <div className="number">26</div>
-              <div className="text">индивидуальных занятий с автором*</div>
+              <div className="number">70</div>
+              <div className="text">онлайн-уроков</div>
             </div>
           </Review>
         </div>
@@ -170,7 +171,7 @@ const Reviews = () => {
           <Review>
             <div className="bubble">
               <div className="number">88</div>
-              <div className="text">интерактивных онлайн тренажеров </div>
+              <div className="text">интерактивных онлайн-тренажеров </div>
             </div>
           </Review>
         </div>

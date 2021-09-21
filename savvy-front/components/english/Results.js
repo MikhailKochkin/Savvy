@@ -12,6 +12,7 @@ const Styles = styled.div`
     width: 100%;
     overflow: hidden;
     line-height: 0;
+    margin-top: -2px;
   }
 
   .custom-shape-divider-top-1626364588 svg {
