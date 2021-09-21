@@ -7,6 +7,12 @@ const Styles = styled.div`
   /* width: ${(props) => props.width}; */
   width: 650px;
   margin: 20px 0;
+  img {
+    display: block;
+    width: 100%;
+    max-height: 50em;
+    box-shadow: "0 0 0 2px blue;";
+  }
   a {
     border-bottom: 2px solid #26ba8d;
     padding: 0%;
