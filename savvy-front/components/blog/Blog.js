@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 import styled from "styled-components";
 import CreatePost from "./CreatePost";
 import Post from "./Post";
+import PostCard from "./PostCard";
 
 const POSTS_QUERY = gql`
   query POSTS_QUERY {
@@ -27,59 +28,51 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: #252f3f;
+  padding: 50px 0;
 `;
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
   width: 100%;
   @media (max-width: 900px) {
     flex-direction: column;
   }
 `;
 
-const Menu = styled.div`
-  flex-basis: 20%;
-  border-right: 1px solid #001f4e;
-  font-size: 1.8rem;
-  min-height: 500px;
-  .logo {
-    margin-top: 5%;
-    font-size: 2rem;
-    padding: 0 5%;
-  }
-  .color1,
-  .color2 {
-    width: 100%;
-    height: 8px;
-  }
-  .color1 {
-    background: #02b3e4;
-  }
-  .color2 {
-    background: #02ccba;
-  }
-  .content {
-    font-size: 1.4rem;
-    text-align: left;
-    padding: 0 5%;
-    margin-top: 20px;
-  }
-  .header {
-    font-weight: bold;
-  }
-  @media (max-width: 800px) {
-    display: none;
-  }
-`;
-
 const Posts = styled.div`
-  flex-basis: 50%;
   padding: 3% 4%;
+  border: 1px solid blue;
+  width: 80%;
   min-height: 500px;
   padding-top: 1%;
+  h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 6rem;
+    line-height: 1.2;
+    text-align: center;
+    font-weight: 800;
+    margin: 0;
+    margin-bottom: 20px;
+    color: #252f3f;
+  }
+  h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    line-height: 1.2;
+    text-align: center;
+    font-weight: 400;
+    margin: 0;
+    margin-bottom: 80px;
+    color: #4b5563;
+  }
   @media (max-width: 1300px) {
-    flex-basis: 60%;
   }
   @media (max-width: 800px) {
     margin: 5% 0;
@@ -87,67 +80,23 @@ const Posts = styled.div`
   }
 `;
 
-const Blank = styled.div`
-  flex-basis: 30%;
-  @media (max-width: 1300px) {
-    margin: 5% 0;
-    flex-basis: 20%;
-  }
-`;
-
 const Blog = (props) => {
   return (
     <Styles>
       <Container>
-        <Menu>
-          <div className="color1"></div>
-          <div className="color2"></div>
-          <div className="logo">BeSavvy blog</div>
-          <div className="content">
-            <div className="header">Пишем про:</div>
-            <div>Старт юридической карьеры</div>
-            <div>Бизнес-ориентированность юриста</div>
-            <div>Лайфхаки в учебе</div>
-            <div>Изучение английского</div>
-            <div>Способы быстрого освоения новых тем</div>
-          </div>
-          <div className="content">
-            <div className="header">Социальные сети:</div>
-            <div>
-              <a href="https://www.vk.com/besavvylawyer/" target="_blank">
-                Вконтакте
-              </a>
-            </div>
-            <div>
-              <a
-                href="https://www.instagram.com/besavvylawyer/"
-                target="_blank"
-              >
-                Инстаграм
-              </a>
-            </div>
-            <div>
-              <a href="https://t.me/BeSavvyLawyer" target="_blank">
-                Телеграм
-              </a>
-            </div>
-          </div>
-        </Menu>
         <Posts>
-          {props.me &&
-            props.me.permissions &&
-            props.me.permissions.includes("ADMIN") && (
-              <CreatePost me={props.me} />
-            )}
-          <Query query={POSTS_QUERY}>
+          <h1>The BeSavvy Blog</h1>
+          <h2>Мы пишем про то, как учиться и эффективно работать юристом</h2>
+          {/* <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
               if (loading) return <p>Загрузка...</p>;
               return (
                 <>
                   {data.posts.map((d, index) => (
-                    <Post
+                    <PostCard
                       id={d.id}
                       text={d.text}
+                      title={d.title}
                       likes={d.likes}
                       tags={d.tags}
                       createdAt={d.createdAt}
@@ -158,9 +107,13 @@ const Blog = (props) => {
                 </>
               );
             }}
-          </Query>
+          </Query> */}
+          {props.me &&
+            props.me.permissions &&
+            props.me.permissions.includes("ADMIN") && (
+              <CreatePost me={props.me} />
+            )}
         </Posts>
-        <Blank></Blank>
       </Container>
     </Styles>
   );

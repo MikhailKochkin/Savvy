@@ -215,12 +215,12 @@ const Syllabus = () => {
     },
     {
       number: "Модуль 9",
-      name: "Legal Tech: как юристам создавать технологические продукты",
-      case: "Соглашения об осуществлении прав участников (SHA)",
+      name: "Вопросы налогообложения в юридических проектах",
+      case: "",
       lessons: [
-        "Технологии в работе юриста: от Word к конструктору документов в Excel",
-        "Профессия Legal Operations Manager",
-        "Как создать свой Legal-tech продукт?",
+        "Основные вопросы налогообложения юридических лиц",
+        "Налоговые вопросы в IT проектах",
+        "Налоговые вопросы в сделках М/A",
       ],
     },
 
@@ -246,7 +246,7 @@ const Syllabus = () => {
                 Старт: <span>1 февраля 2022</span>
               </div>
               <div>
-                Длительность: <span>18 недель</span>
+                Длительность: <span>24 недели</span>
               </div>
               <div>
                 Учебных модулей: <span>10</span>
@@ -273,9 +273,15 @@ const Syllabus = () => {
               <Module d={m} />
             ))}
           </ol>
-          <MiniHeader>Карьера в Legal Tech</MiniHeader>
+          <MiniHeader>Налоги</MiniHeader>
           <ol>
-            {modules.slice(8).map((m) => (
+            {modules.slice(8, 9).map((m) => (
+              <Module d={m} />
+            ))}
+          </ol>
+          <MiniHeader>Построение карьеры</MiniHeader>
+          <ol>
+            {modules.slice(9).map((m) => (
               <Module d={m} />
             ))}
           </ol>

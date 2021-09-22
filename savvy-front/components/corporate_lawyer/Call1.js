@@ -222,7 +222,10 @@ const Call1 = () => {
               </div>
               <div id="additional-info">
                 В течение 20 минут поговорим о ваших целях, расскажем, как
-                искать работу, объясним, как устроена программа.
+                искать работу и{" "}
+                <span style={{ color: "#FF6F59" }}>
+                  откроем доступ к демо-урокам.
+                </span>
               </div>
             </div>
             <div id="block2">
@@ -269,7 +272,7 @@ const Call1 = () => {
                     </div>
                   </div>
                 </form>
-                <form>
+                {/* <form>
                   <div>Согласие на обработку персональных данных</div>
                   <div id="input_box">
                     <div id="agree">
@@ -282,7 +285,7 @@ const Call1 = () => {
                       <label for="male">Да</label>
                     </div>
                   </div>
-                </form>
+                </form> */}
                 <button
                   onClick={(e) => {
                     if (EmailValidator.validate(email)) {

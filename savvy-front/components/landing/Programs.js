@@ -44,7 +44,7 @@ const Programs = () => {
       query: "id=main_page",
     },
     {
-      title: "Карьерная Академия Юриста",
+      title: "Школа Молодого Юриста",
       description:
         "Помогаем запустить престижную юридическую карьеру. Изучаем корпоративное право, арбитражный процесс, налоги и право IP/IT.",
       term: "Длительность: 6 месяцев",
@@ -72,9 +72,9 @@ const Programs = () => {
       description:
         "Изучаем основы юридического и общего английского, чтобы успешно пройти испытания в российские и зарубежные компании и получить первую работу.",
       term: "Длительность: 2 месяца",
-      price: "6 900₽",
-      conditions: "2 платежа",
-      installments: "3 500₽",
+      price: "7 900₽",
+      conditions: "До 1 октября скидка",
+      installments: "25%",
       img: "https://images.unsplash.com/photo-1592748752489-40082b21cd99?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1100&q=80",
       pathname: "coursePage",
       query: "id=cktrbubdl2237dou9vzn1gb3w",
