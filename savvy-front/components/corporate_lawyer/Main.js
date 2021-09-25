@@ -309,7 +309,7 @@ const Main = () => {
               <div className="element">
                 {" "}
                 <img src="static/tick.svg" />
-                Для юристов, которых хотят изменений в работе
+                Для юристов, которых хотят изменений в карьере
               </div>
               {/* <div className="element">
                 {" "}

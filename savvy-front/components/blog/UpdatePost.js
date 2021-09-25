@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { POSTS_QUERY } from "./Blog";
 
 const UPDATE_POST_MUTATION = gql`
-  mutation UPDATE_POST_MUTATION($id: ID!, $text: String) {
+  mutation UPDATE_POST_MUTATION($id: String!, $text: String) {
     updatePost(id: $id, text: $text) {
       id
       text
@@ -20,13 +20,18 @@ const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
 });
 
 const UpdatePost = (props) => {
+  console.log(props);
   const [text, setText] = useState(props.text);
   const getText = (d) => setText(d);
   const { id } = props;
 
   return (
     <div>
-      <DynamicLoadedEditor getEditorText={getText} previousText={text} />
+      <DynamicLoadedEditor
+        getEditorText={getText}
+        previousText={text}
+        value={text}
+      />
       <Mutation
         mutation={UPDATE_POST_MUTATION}
         variables={{

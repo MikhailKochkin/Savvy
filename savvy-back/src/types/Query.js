@@ -22,6 +22,7 @@ const Query = queryType({
     t.crud.lessons({ filtering: true });
     t.crud.newTest({ filtering: true });
     t.crud.orders({ ordering: true, filtering: true });
+    t.crud.post({ ordering: true, filtering: true });
     t.crud.posts({ ordering: true, filtering: true });
     t.crud.testResults({ ordering: true, filtering: true });
     t.crud.testResult({ ordering: true, filtering: true });
@@ -67,12 +68,11 @@ const Query = queryType({
           orderBy: { createdAt: "desc" },
           where: { lessonId, student: { id: { equals: userId } } },
         });
-        const constructionResults = await ctx.prisma.constructionResult.findMany(
-          {
+        const constructionResults =
+          await ctx.prisma.constructionResult.findMany({
             orderBy: { createdAt: "desc" },
             where: { lessonId, student: { id: { equals: userId } } },
-          }
-        );
+          });
         const documentResults = await ctx.prisma.documentResult.findMany({
           orderBy: { createdAt: "desc" },
           where: { lessonId, user: { id: { equals: userId } } },

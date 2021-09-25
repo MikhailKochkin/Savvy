@@ -8,6 +8,7 @@ const CoursePage = objectType({
     t.model.description();
     t.model.image();
     t.model.banner();
+    t.model.numInCareerTrack();
     t.model.weeks();
     t.model.subscription();
     t.model.news();

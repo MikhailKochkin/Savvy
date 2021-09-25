@@ -1,44 +1,72 @@
 import { useState } from "react";
 import renderHTML from "react-render-html";
-import { Mutation } from "@apollo/client/react/components";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import { gql } from "@apollo/client";
 import moment from "moment";
-import Signup from "../auth/Signup";
-import Signin from "../auth/Signin";
-import RequestReset from "../auth/RequestReset";
+import Link from "next/link";
 import UpdatePost from "./UpdatePost";
 import Modal from "styled-react-modal";
+import Loading from "../Loading";
 import { POSTS_QUERY } from "./Blog";
 
+const POST_QUERY = gql`
+  query POST_QUERY($id: String!) {
+    post(where: { id: $id }) {
+      id
+      title
+      text
+      tags
+      likes
+      user {
+        id
+        name
+        surname
+        image
+      }
+      createdAt
+    }
+  }
+`;
+
 const UPDATE_POST_MUTATION = gql`
-  mutation UPDATE_POST_MUTATION($id: ID!, $likes: Int) {
+  mutation UPDATE_POST_MUTATION($id: String!, $likes: Int) {
     updatePost(id: $id, likes: $likes) {
       id
     }
   }
 `;
 
-const UPDATE_USER_MUTATION = gql`
-  mutation UPDATE_USER_MUTATION($id: ID!, $interests: [String]) {
-    updateUserInterests(id: $id, interests: $interests) {
-      id
-    }
-  }
-`;
-
 const Styles = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 0;
+  @media (max-width: 800px) {
+    padding: 50px 0;
+  }
   img {
     display: block;
     width: 100%;
     max-height: 50em;
     box-shadow: "0 0 0 2px blue;";
   }
+  h1 {
+    font-size: 5rem;
+    margin: 0;
+    margin-bottom: 30px;
+    line-height: 1.2;
+    color: #252f3f;
+    @media (max-width: 800px) {
+      font-size: 4rem;
+    }
+  }
   h2 {
     font-size: 3rem;
     margin: 0;
     margin-bottom: 30px;
     line-height: 1.2;
+    color: #252f3f;
   }
   iframe {
     width: 100%;
@@ -55,18 +83,43 @@ const Styles = styled.div`
     }
   }
   .text {
-    padding-bottom: 2%;
+    padding: 5% 0;
     border-bottom: 1px solid #001f4e;
+    font-size: 1.8rem;
   }
   .date {
     font-weight: bold;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   margin-bottom: 50px;
 `;
 
+const PostContainer = styled.div`
+  width: 50%;
+  .author {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 2rem;
+    margin-top: 20px;
+    color: #252f3f;
+    .name {
+      font-style: italic;
+    }
+    img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50px;
+      margin-right: 20px;
+    }
+  }
+  @media (max-width: 800px) {
+    width: 90%;
+  }
+`;
+
 const Banner = styled.div`
-  width: 100%;
+  width: 50%;
   background: #479bc5;
   margin: 5% 0;
   color: white;
@@ -175,103 +228,102 @@ const Feedback = styled.div`
 const Data = styled.div``;
 
 const Post = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signup");
+  const {
+    loading: post_loading,
+    error: post_error,
+    data: post_data,
+  } = useQuery(POST_QUERY, {
+    variables: { id: props.id },
+  });
+  if (post_loading) return <Loading />;
+  if (post_error) return error;
+
+  let post = post_data.post;
+  console.log(post);
+
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [auth, setAuth] = useState("signup");
   const [update, setUpdate] = useState(false);
-  const [likes, setLikes] = useState(props.likes);
-  const [liked, setLiked] = useState(false);
-  const changeState = (dataFromChild) => {
-    setAuth(dataFromChild);
-  };
+  const [likes, setLikes] = useState(post.likes);
+  // const [liked, setLiked] = useState(false);
+
+  const [
+    updatePost,
+    { data: updated_data, loading: updated_loading, error: updated_error },
+  ] = useMutation(UPDATE_POST_MUTATION);
+
   moment.locale("ru");
-  let newInterests;
-  let newInterests2;
-  if (props.me) {
-    newInterests = [...props.me.interests, ...props.tags];
-    newInterests2 = [...new Set(newInterests)];
-  }
+
   return (
     <>
       <Styles>
-        {props.me &&
-          props.me.permissions &&
-          props.me.permissions.includes("ADMIN") && (
-            <button onClick={(e) => setUpdate(!update)}>Switch</button>
-          )}
-        {!update && (
-          <>
-            <div className="text">{renderHTML(props.text)}</div>
-            <Data>
-              <span className="date">
-                {moment(props.createdAt).format("Do MMMM YYYY")}
-              </span>
-              {props.me && (
-                <Mutation
-                  mutation={UPDATE_POST_MUTATION}
-                  variables={{
-                    id: props.id,
-                    likes: likes + 1,
-                  }}
-                  refetchQueries={() => [
-                    {
-                      query: POSTS_QUERY,
-                    },
-                  ]}
-                >
-                  {(updatePost, { loading, error }) => (
-                    <Mutation
-                      mutation={UPDATE_USER_MUTATION}
-                      variables={{
-                        id: props.me.id,
-                        interests: newInterests2,
+        <div className="title">
+          <Link
+            href={{
+              pathname: "/blog",
+            }}
+          >
+            <a>Назад</a>
+          </Link>
+        </div>
+        <PostContainer>
+          {props.me &&
+            props.me.permissions &&
+            props.me.permissions.includes("ADMIN") && (
+              <button onClick={(e) => setUpdate(!update)}>Switch</button>
+            )}
+          {!update && (
+            <>
+              <h1>{post.title}</h1>
+              <div className="author">
+                <img src={post.user.image} />
+                <div className="name">
+                  Автор – {post.user.name} {post.user.surname}
+                </div>
+              </div>
+              <div className="text">{renderHTML(post.text)}</div>
+              <Data>
+                <span className="date">
+                  {moment(post.createdAt).format("Do MMMM YYYY")}
+                </span>
+                <Feedback>
+                  <div className="question">Полезный материал? </div>
+                  <div className="favorite">
+                    <span
+                      className="likes"
+                      onClick={async (e) => {
+                        updatePost({
+                          variables: {
+                            id: post.id,
+                            likes: likes + 1,
+                          },
+                        });
+                        setLikes(likes + 1);
                       }}
                     >
-                      {(updateUserInterests, { loading, error }) => (
-                        <Feedback>
-                          <div className="question">Полезный материал? </div>
-                          <div className="favorite">
-                            <span
-                              className="likes"
-                              onClick={async (e) => {
-                                if (!liked) {
-                                  setLikes(likes + 1), setLiked(true);
-                                  const res = updatePost();
-                                  const res1 = updateUserInterests();
-                                  console.log(1);
-                                }
-                              }}
-                            >
-                              <img src="../../static/favorite.svg" />
-                            </span>
-                            {likes}
-                          </div>
-                        </Feedback>
-                      )}
-                    </Mutation>
-                  )}
-                </Mutation>
-              )}
-            </Data>
-          </>
-        )}
-        {update && <UpdatePost id={props.id} text={props.text} />}
+                      <img src="../../static/favorite.svg" />
+                    </span>
+                    {likes}
+                  </div>
+                </Feedback>
+              </Data>
+            </>
+          )}
+          {update && <UpdatePost id={post.id} text={post.text} />}
+        </PostContainer>
       </Styles>
-      {!props.me && (props.index === 1 || props.index === 4) && (
-        <Banner>
-          <div className="header">📫 Новостная рассылка</div>
-          <div className="comment">
-            Раз в неделю мы делаем выжимку всех материалов из блога и социальных
-            сетей и отправляем их на почту.
-          </div>
-          <div className="buttons">
-            Зарегистрируйтесь, чтобы подписаться на рассылку.
-          </div>
-          <Button onClick={(e) => setIsOpen(!isOpen)}>
-            Зарегистрироваться
-          </Button>
-        </Banner>
-      )}
-      <StyledModal
+      {/* <Banner>
+        <div className="header">📫 Новостная рассылка</div>
+        <div className="comment">
+          Раз в неделю мы делаем выжимку всех материалов из блога и социальных
+          сетей и отправляем их на почту.
+        </div>
+        <div className="buttons">
+          Зарегистрируйтесь, чтобы подписаться на рассылку.
+        </div>
+        <Button onClick={(e) => setIsOpen(!isOpen)}>Зарегистрироваться</Button>
+      </Banner> */}
+      {/* <StyledModal
         isOpen={isOpen}
         onBackgroundClick={(e) => setIsOpen(!isOpen)}
         onEscapeKeydown={(e) => setIsOpen(!isOpen)}
@@ -289,7 +341,7 @@ const Post = (props) => {
           />
         )}
         {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
+      </StyledModal> */}
     </>
   );
 };

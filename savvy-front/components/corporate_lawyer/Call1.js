@@ -4,6 +4,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import * as EmailValidator from "email-validator";
 import Modal from "styled-react-modal";
+import { useRouter } from "next/router";
+import Router from "next/router";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -194,6 +196,7 @@ const Call1 = () => {
   const [number, setNumber] = useState("");
   const [medium, setMedium] = useState("PHONE");
   const [isOpen, setIsOpen] = useState(false);
+  const { asPath } = useRouter();
 
   const toggleModal = (e) => setIsOpen(!isOpen);
 
@@ -205,7 +208,7 @@ const Call1 = () => {
         name,
         number,
         communication_medium: medium,
-        type: "STUDENT",
+        type: asPath ? asPath : "School",
       }}
     >
       {(createBusinessClient, { error, loading }) => (
@@ -231,17 +234,21 @@ const Call1 = () => {
             <div id="block2">
               <div id="form">
                 <input
+                  id="name"
                   className="data"
-                  placeholder="Имя"
+                  placeholder="Имя и фамилия"
+                  type="name"
                   onChange={(e) => setName(e.target.value)}
                 />
                 <input
+                  id="tel"
                   className="data"
                   type="tel"
-                  placeholder="Телефон"
+                  placeholder="+7 (999) 999-99-99"
                   onChange={(e) => setNumber(e.target.value)}
                 />
                 <input
+                  id="email"
                   className="data"
                   type="email"
                   placeholder="Имейл"
@@ -291,6 +298,9 @@ const Call1 = () => {
                     if (EmailValidator.validate(email)) {
                       createBusinessClient();
                       toggleModal();
+                      Router.push({
+                        pathname: "/hello",
+                      });
                     } else {
                       alert("Неправильный имейл");
                     }

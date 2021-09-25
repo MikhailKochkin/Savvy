@@ -19,6 +19,15 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         name
         surname
         email
+        studentFeedback {
+          id
+          lesson {
+            id
+            coursePage {
+              id
+            }
+          }
+        }
         courseVisits {
           id
           reminders

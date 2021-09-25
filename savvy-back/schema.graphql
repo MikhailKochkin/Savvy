@@ -370,6 +370,7 @@ type CoursePage {
   methods: String
   new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, where: UserWhereInput): [User!]!
   news: String
+  numInCareerTrack: Int
   price: Int
   promocode: Json
   published: Boolean
@@ -1156,7 +1157,7 @@ type Mutation {
   updateNewTest(answers: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
   updateNote(complexity: Int, id: String, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
-  updatePost(id: String, text: String): Post
+  updatePost(id: String, likes: Int, text: String): Post
   updateProblem(complexity: Int, id: String, nodeID: String, nodeType: String, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
@@ -1685,6 +1686,7 @@ type Query {
   me: User
   newTest(where: NewTestWhereUniqueInput!): NewTest
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByInput!], where: OrderWhereInput): [Order!]!
+  post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByInput!], where: PostWhereInput): [Post!]!
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByInput!], where: ProblemResultWhereInput): [ProblemResult!]!
   quizResult(where: QuizResultWhereUniqueInput!): QuizResult

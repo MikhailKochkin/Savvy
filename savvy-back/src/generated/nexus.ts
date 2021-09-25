@@ -1820,6 +1820,7 @@ export interface NexusGenObjects {
     image: string; // String!
     methods?: string | null; // String
     news?: string | null; // String
+    numInCareerTrack?: number | null; // Int
     price?: number | null; // Int
     promocode?: NexusGenScalars['Json'] | null; // Json
     published?: boolean | null; // Boolean
@@ -2283,6 +2284,7 @@ export interface NexusGenFieldTypes {
     methods: string | null; // String
     new_students: NexusGenRootTypes['User'][]; // [User!]!
     news: string | null; // String
+    numInCareerTrack: number | null; // Int
     price: number | null; // Int
     promocode: NexusGenScalars['Json'] | null; // Json
     published: boolean | null; // Boolean
@@ -2595,6 +2597,7 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     newTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
+    post: NexusGenRootTypes['Post'] | null; // Post
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
     quizResult: NexusGenRootTypes['QuizResult'] | null; // QuizResult
@@ -2931,6 +2934,7 @@ export interface NexusGenFieldTypeNames {
     methods: 'String'
     new_students: 'User'
     news: 'String'
+    numInCareerTrack: 'Int'
     price: 'Int'
     promocode: 'Json'
     published: 'Boolean'
@@ -3243,6 +3247,7 @@ export interface NexusGenFieldTypeNames {
     me: 'User'
     newTest: 'NewTest'
     orders: 'Order'
+    post: 'Post'
     posts: 'Post'
     problemResults: 'ProblemResult'
     quizResult: 'QuizResult'
@@ -3984,6 +3989,7 @@ export interface NexusGenArgTypes {
     }
     updatePost: { // args
       id?: string | null; // String
+      likes?: number | null; // Int
       text?: string | null; // String
     }
     updateProblem: { // args
@@ -4122,6 +4128,9 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['OrderOrderByInput'][] | null; // [OrderOrderByInput!]
       where?: NexusGenInputs['OrderWhereInput'] | null; // OrderWhereInput
+    }
+    post: { // args
+      where: NexusGenInputs['PostWhereUniqueInput']; // PostWhereUniqueInput!
     }
     posts: { // args
       after?: NexusGenInputs['PostWhereUniqueInput'] | null; // PostWhereUniqueInput

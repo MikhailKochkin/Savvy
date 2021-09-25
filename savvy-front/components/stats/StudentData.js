@@ -86,6 +86,8 @@ const Header = styled.div`
   grid-row-gap: 0px;
   .div1 {
     grid-area: 1 / 1 / 2 / 2;
+    span {
+    }
   }
   .div2 {
     grid-area: 1 / 2 / 2 / 3;
@@ -205,6 +207,10 @@ const Person = (props) => {
     color = "#84BC9C";
   }
 
+  let feedback_num = student.studentFeedback.filter(
+    (f) => f.lesson.coursePage.id == coursePageID
+  ).length;
+
   // find recent students
   let two_months_ago = new Date();
   two_months_ago.setMonth(two_months_ago.getMonth() - 2);
@@ -215,7 +221,8 @@ const Person = (props) => {
           <div>
             {student.surname
               ? `${student.name} ${student.surname}`
-              : student.name}
+              : student.name}{" "}
+            –<span> {feedback_num}</span>
           </div>
           <div className="email">{student.email}</div>
         </Name>

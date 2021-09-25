@@ -2078,11 +2078,12 @@ const Mutation = mutationType({
       args: {
         text: stringArg(),
         id: stringArg(),
+        likes: intArg(),
       },
-      resolve: async (_, { text, id }, ctx) => {
+      resolve: async (_, { text, id, likes }, ctx) => {
         const updatedPost = await ctx.prisma.post.update({
           where: { id },
-          data: { text },
+          data: { text, likes },
         });
         return updatedPost;
       },

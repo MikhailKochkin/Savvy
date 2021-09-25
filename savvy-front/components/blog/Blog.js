@@ -17,6 +17,7 @@ const POSTS_QUERY = gql`
         id
         name
         surname
+        image
       }
       createdAt
     }
@@ -29,7 +30,6 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   color: #252f3f;
-  padding: 50px 0;
 `;
 
 const Container = styled.div`
@@ -37,19 +37,22 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
   width: 100%;
   @media (max-width: 900px) {
     flex-direction: column;
   }
 `;
 
+const PostsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const Posts = styled.div`
-  padding: 3% 4%;
-  border: 1px solid blue;
+  padding: 100px 0;
   width: 80%;
   min-height: 500px;
-  padding-top: 1%;
   h1 {
     width: 100%;
     text-align: center;
@@ -86,28 +89,29 @@ const Blog = (props) => {
       <Container>
         <Posts>
           <h1>The BeSavvy Blog</h1>
-          <h2>Мы пишем про то, как учиться и эффективно работать юристом</h2>
-          {/* <Query query={POSTS_QUERY}>
+          <h2>Мы пишем про то, как эффективно учиться и работать юристом</h2>
+          <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
               if (loading) return <p>Загрузка...</p>;
               return (
-                <>
-                  {data.posts.map((d, index) => (
+                <PostsContainer>
+                  {[...data.posts, ...data.posts].map((d, index) => (
                     <PostCard
                       id={d.id}
                       text={d.text}
                       title={d.title}
                       likes={d.likes}
                       tags={d.tags}
+                      author={d.user}
                       createdAt={d.createdAt}
                       me={props.me}
                       index={index + 1}
                     />
                   ))}
-                </>
+                </PostsContainer>
               );
             }}
-          </Query> */}
+          </Query>
           {props.me &&
             props.me.permissions &&
             props.me.permissions.includes("ADMIN") && (
