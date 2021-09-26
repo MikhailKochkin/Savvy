@@ -285,7 +285,7 @@ const Element = (props) => {
         userData={props.lesson.testResults}
         lessonID={props.lesson.id}
         length={Array(task.correct.length).fill(false)}
-        userData={props.lesson.testResults}
+        userData={props.testResults}
         story={true}
         exam={false}
         getData={update}
@@ -305,7 +305,7 @@ const Element = (props) => {
         user={props.lesson.user.id}
         user_name={props.lesson.user}
         author={props.lesson.user}
-        userData={props.lesson.quizResults}
+        userData={props.quizResults}
         lessonID={props.lesson.id}
         quizID={task.id}
         user={task.user.id}

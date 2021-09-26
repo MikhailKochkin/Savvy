@@ -106,6 +106,8 @@ const TestPractice = (props) => {
             lesson={props.lesson}
             me={props.me}
             restart={restart}
+            quizResults={props.quizResults}
+            testResults={props.testResults}
           />
         </Container>
       )}

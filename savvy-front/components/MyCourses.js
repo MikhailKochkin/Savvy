@@ -76,12 +76,10 @@ const Container = styled.div`
 `;
 
 const MyCourses = (props) => {
-  console.log("me id", props.me.id);
   const { loading, error, data } = useQuery(MY_COURSE_PAGES_QUERY, {
     variables: { id: props.me.id },
   });
   if (loading) return <p>Загрузка...</p>;
-  console.log(data);
   return (
     <Styles>
       <Container>

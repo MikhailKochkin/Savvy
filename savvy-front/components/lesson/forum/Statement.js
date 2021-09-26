@@ -63,8 +63,9 @@ const Comment = styled.div`
     font-family: Montserrat;
     font-size: 1.6rem;
     margin-bottom: 20px;
-    input {
+    textarea {
       border: 0;
+      width: 100%;
       background: #f3f3f3;
       outline: 0;
       resize: none;
@@ -197,10 +198,10 @@ const Statement = (props) => {
             s.comments.map((c) => (
               <div className="comment_text">{renderHTML(c)}</div>
             ))}
-          {me && me.id == author && (
+          {me && (me.id == author || me.permissions.includes("ADMIN")) && (
             <>
               <div className="comment_text">
-                <input
+                <textarea
                   placeholder="..."
                   onChange={(e) => setComment(e.target.value)}
                 />

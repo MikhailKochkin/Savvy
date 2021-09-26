@@ -395,7 +395,6 @@ const SingleQuiz = (props) => {
     user_name,
     author,
   } = props;
-  console.log("author", author);
   let data;
   if (me) {
     data = userData
@@ -482,9 +481,7 @@ const SingleQuiz = (props) => {
                         const res = await onAnswer();
                       }
                       setProgress("false");
-                      if (data.length === 0) {
-                        const res0 = await createQuizResult();
-                      }
+                      const res0 = await createQuizResult();
                     }}
                     correct={correct}
                   >

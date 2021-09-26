@@ -8,7 +8,8 @@ const TestPractices = (props) => {
       {props.testPractices.map((t) => (
         <TestPractice
           lessonID={lesson.id}
-          quizResults={lesson.quizResults}
+          quizResults={props.quizResults}
+          testResults={props.testResults}
           me={me}
           testPractice={t}
           quizes={lesson.quizes}

@@ -263,7 +263,7 @@ const SingleConstructor = (props) => {
         .filter((result) => result.construction.id === construction.id)
         .filter((result) => result.student.id === props.me.id))
     : (data = [""]);
-
+  console.log("received", received);
   return (
     <>
       {me.id === construction.user.id && !story && (
@@ -307,7 +307,7 @@ const SingleConstructor = (props) => {
                 lessonId: lessonID,
                 attempts: attempts,
                 constructionId: construction.id,
-                inputs: inputs,
+                inputs: received,
               }}
               refetchQueries={() => [
                 {
@@ -324,7 +324,6 @@ const SingleConstructor = (props) => {
                       e.preventDefault();
                       const res = await check();
                       createConstructionResult();
-                      console.log("!!!");
                     }}
                   >
                     {props.t("check")}

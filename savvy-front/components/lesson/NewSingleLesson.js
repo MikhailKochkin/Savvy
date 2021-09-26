@@ -1,7 +1,6 @@
 import { useState } from "react";
-import gql from "graphql-tag";
 import styled from "styled-components";
-import { Query } from "@apollo/client/react/components";
+import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -191,64 +190,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           surname
         }
       }
-      shotResults {
-        id
-        student {
-          id
-        }
-        shot {
-          id
-        }
-        answer
-      }
-      testResults {
-        id
-        student {
-          id
-        }
-        testID
-        answer
-        # attempts
-      }
-      quizResults {
-        id
-        student {
-          id
-        }
-        answer
-        quiz {
-          id
-        }
-      }
-      problemResults {
-        id
-        student {
-          id
-        }
-        answer
-        problem {
-          id
-        }
-      }
-      textEditorResults {
-        id
-        student {
-          id
-        }
-        textEditor {
-          id
-        }
-      }
-      constructionResults {
-        id
-        answer
-        student {
-          id
-        }
-        construction {
-          id
-        }
-      }
       coursePage {
         id
         lessons {
@@ -266,16 +207,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           }
         }
       }
-      # exams {
-      #   id
-      #   name
-      #   question
-      #   nodeID
-      #   nodeType
-      #   user {
-      #     id
-      #   }
-      # }
     }
   }
 `;
@@ -413,142 +344,105 @@ const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
   const me = useUser();
+  const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
+    variables: { id: props.id },
+    fetchPolicy: "no-cache",
+  });
+  if (loading)
+    return (
+      <Progress>
+        <CircularProgress />
+      </Progress>
+    );
+  let lesson = data.lesson;
+  let next = lesson.coursePage.lessons.find(
+    (l) => l.number === lesson.number + 1
+  );
+  let my_result;
+  if (me) {
+    my_result = lesson.lessonResults.find((l) => l.student.id === me.id);
+  }
   return (
     <PleaseSignIn>
       <div id="root"></div>
-      <Query
-        query={NEW_SINGLE_LESSON_QUERY}
-        variables={{
-          id: props.id,
-        }}
-        fetchPolicy="no-cache"
-      >
-        {({ data, error, loading }) => {
-          if (error) return <Error error={error} />;
-          if (loading)
-            return (
-              <Progress>
-                <CircularProgress />
-              </Progress>
-            );
-          let lesson = data.lesson;
-          // if (lesson === undefined) return <Reload />;
-          let next = lesson.coursePage.lessons.find(
-            (l) => l.number === lesson.number + 1
-          );
-          let my_result;
-          if (me) {
-            my_result = lesson.lessonResults.find(
-              (l) => l.student.id === me.id
-            );
-          }
-          return (
-            <>
-              {lesson && (
-                <AreYouEnrolled
-                  openLesson={lesson.open}
-                  subject={lesson.coursePage.id}
-                  lessonId={lesson.id}
-                >
-                  <Container>
-                    <ReactResizeDetector
-                      handleWidth
-                      handleHeight
-                      onResize={onResize}
-                    />
+      <>
+        {lesson && (
+          <AreYouEnrolled
+            openLesson={lesson.open}
+            subject={lesson.coursePage.id}
+            lessonId={lesson.id}
+          >
+            <Container>
+              <ReactResizeDetector
+                handleWidth
+                handleHeight
+                onResize={onResize}
+              />
 
-                    <Head>
-                      {width > 800 && (
+              <Head>
+                {width > 800 && (
+                  <Link
+                    href={{
+                      pathname: "/coursePage",
+                      query: {
+                        id: lesson.coursePage.id,
+                      },
+                    }}
+                  >
+                    <span>
+                      <Icon size={"1.5em"} icon={arrowLeft} id="back" />
+                    </span>
+                  </Link>
+                )}
+                <span>
+                  {me &&
+                    (lesson.user.id === me.id ||
+                      me.permissions.includes("ADMIN")) && (
+                      <div>
+                        {/* Режим истории → */}
                         <Link
                           href={{
-                            pathname: "/coursePage",
+                            pathname: "/lesson",
                             query: {
-                              id: lesson.coursePage.id,
+                              id: lesson.id,
+                              type: "regular",
                             },
                           }}
                         >
-                          <span>
-                            <Icon size={"1.5em"} icon={arrowLeft} id="back" />
-                          </span>
+                          <span>Переключить</span>
                         </Link>
-                      )}
-                      <span>
-                        {me &&
-                          (lesson.user.id === me.id ||
-                            me.permissions.includes("ADMIN")) && (
-                            <div>
-                              {/* Режим истории → */}
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: "regular",
-                                  },
-                                }}
-                              >
-                                <span>Переключить</span>
-                              </Link>
-                            </div>
-                          )}
-                      </span>
-                    </Head>
-
-                    {/* {me &&
-                      (lesson.user.id === me.id ||
-                        me.permissions.includes("ADMIN")) && (
-                        <Head2>
-                          {lesson.structure.lessonItems.length > 0 && (
-                            <div>
-                              Режим истории →
-                              <Link
-                                href={{
-                                  pathname: "/lesson",
-                                  query: {
-                                    id: lesson.id,
-                                    type: "regular",
-                                  },
-                                }}
-                              >
-                                <span> Переключить</span>
-                              </Link>
-                            </div>
-                          )}
-                        </Head2>
-                      )} */}
-                    <LessonPart>
-                      <h1>
-                        Урок {lesson.number}. {lesson.name}
-                      </h1>
-                      <CSSTransitionGroup transitionName="example">
-                        <StoryEx
-                          tasks={
-                            props.size == "short"
-                              ? [
-                                  ...lesson.short_structure.lessonItems,
-                                  { id: 1, type: "offer" },
-                                ]
-                              : lesson.structure.lessonItems
-                          }
-                          me={me}
-                          size={props.size == "short" ? "short" : "long"}
-                          lesson={lesson}
-                          next={next}
-                          my_result={my_result}
-                          coursePageID={lesson.coursePage.id}
-                        />
-                      </CSSTransitionGroup>
-                    </LessonPart>
-                    {/* {me && (
-                      <Panel level={me.level.level} change={lesson.change} />
-                    )} */}
-                  </Container>{" "}
-                </AreYouEnrolled>
-              )}
-            </>
-          );
-        }}
-      </Query>
+                      </div>
+                    )}
+                </span>
+              </Head>
+              <LessonPart>
+                <h1>
+                  Урок {lesson.number}. {lesson.name}
+                </h1>
+                <CSSTransitionGroup transitionName="example">
+                  <StoryEx
+                    tasks={
+                      props.size == "short"
+                        ? [
+                            ...lesson.short_structure.lessonItems,
+                            { id: 1, type: "offer" },
+                          ]
+                        : lesson.structure.lessonItems
+                    }
+                    me={me}
+                    size={props.size == "short" ? "short" : "long"}
+                    lesson={lesson}
+                    next={next}
+                    my_result={my_result}
+                    coursePageID={lesson.coursePage.id}
+                  />
+                </CSSTransitionGroup>
+              </LessonPart>
+            </Container>{" "}
+          </AreYouEnrolled>
+        )}
+      </>
+      );
     </PleaseSignIn>
   );
 };

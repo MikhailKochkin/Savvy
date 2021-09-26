@@ -56,65 +56,65 @@ const SINGLE_LESSON_QUERY = gql`
       user {
         id
       }
-      testResults {
-        id
-        student {
-          id
-        }
-        answer
-        test {
-          id
-        }
-      }
-      shotResults {
-        id
-        student {
-          id
-        }
-        shot {
-          id
-        }
-        answer
-      }
-      quizResults {
-        id
-        student {
-          id
-        }
-        quiz {
-          id
-        }
-        answer
-      }
-      problemResults {
-        id
-        student {
-          id
-        }
-        answer
-        problem {
-          id
-        }
-      }
-      textEditorResults {
-        id
-        student {
-          id
-        }
-        textEditor {
-          id
-        }
-      }
-      constructionResults {
-        id
-        answer
-        student {
-          id
-        }
-        construction {
-          id
-        }
-      }
+      # testResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   answer
+      #   test {
+      #     id
+      #   }
+      # }
+      # shotResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   shot {
+      #     id
+      #   }
+      #   answer
+      # }
+      # quizResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   quiz {
+      #     id
+      #   }
+      #   answer
+      # }
+      # problemResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   answer
+      #   problem {
+      #     id
+      #   }
+      # }
+      # textEditorResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   textEditor {
+      #     id
+      #   }
+      # }
+      # constructionResults {
+      #   id
+      #   answer
+      #   student {
+      #     id
+      #   }
+      #   construction {
+      #     id
+      #   }
+      # }
       coursePage {
         id
       }
@@ -724,7 +724,7 @@ const SingleLesson = (props) => {
                               tests={lesson.newTests}
                               me={me}
                               lessonID={lesson.id}
-                              testResults={lesson.testResults}
+                              testResults={[]}
                               quizes={lesson.quizes}
                               notes={lesson.notes}
                               tests={lesson.newTests}
@@ -742,7 +742,7 @@ const SingleLesson = (props) => {
                           {lesson.quizes.length > 0 ? (
                             <QuizGroup
                               lessonID={lesson.id}
-                              quizResults={lesson.quizResults}
+                              quizResults={[]}
                               me={me}
                               quizes={lesson.quizes}
                             />
@@ -756,7 +756,8 @@ const SingleLesson = (props) => {
                       {page === "testBlock" && (
                         <TestPractices
                           lessonID={lesson.id}
-                          quizResults={lesson.quizResults}
+                          quizResults={[]}
+                          testResults={[]}
                           me={me}
                           testPractices={lesson.testPractices}
                           quizes={lesson.quizes}
@@ -774,7 +775,7 @@ const SingleLesson = (props) => {
                               lessonID={lesson.id}
                               problems={lesson.problems}
                               me={me}
-                              problemResults={lesson.problemResults}
+                              problemResults={[]}
                               lesson={lesson}
                             />
                           ) : (
@@ -793,7 +794,7 @@ const SingleLesson = (props) => {
                                 constructions={lesson.constructions}
                                 lessonID={lesson.id}
                                 me={me}
-                                constructionResults={lesson.constructionResults}
+                                constructionResults={[]}
                               />
                             </>
                           ) : (
@@ -809,7 +810,7 @@ const SingleLesson = (props) => {
                             lessonID={lesson.id}
                             textEditors={lesson.texteditors}
                             me={me}
-                            textEditorResults={lesson.textEditorResults}
+                            textEditorResults={[]}
                           />
                         ) : (
                           <Center>

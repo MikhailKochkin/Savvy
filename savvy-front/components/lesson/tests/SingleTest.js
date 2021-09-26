@@ -503,9 +503,7 @@ const SingleTest = (props) => {
                         console.log(1);
                         const res = await onCheck();
                       }
-                      if (userData.length === 0) {
-                        const res0 = await createTestResult();
-                      }
+                      const res0 = await createTestResult();
                     }
                   }}
                 >

@@ -169,16 +169,8 @@ class Shots extends Component {
     this.setState({ page: name });
   };
   render() {
-    const {
-      comments,
-      parts,
-      shotID,
-      lessonID,
-      me,
-      shotUser,
-      title,
-      userData,
-    } = this.props;
+    const { comments, parts, shotID, lessonID, me, shotUser, title, userData } =
+      this.props;
     console.log(me.id);
     const visible = [];
     for (let i = 0; i < this.state.num; i++) {
@@ -258,10 +250,7 @@ class Shots extends Component {
                         e.preventDefault();
                         // call the mutation
                         const res = await this.plus();
-                        if (
-                          data.length === 0 &&
-                          this.state.num + 1 === parts.length
-                        ) {
+                        if (this.state.num + 1 === parts.length) {
                           const res2 = await createShotResult();
                         }
                       }}

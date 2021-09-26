@@ -69,6 +69,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         structure
         forum {
           id
+          statements {
+            id
+            comments
+          }
           rating {
             id
             rating
@@ -198,6 +202,8 @@ const CoursePage = (props) => {
             } else {
               isEnrolled = false;
             }
+
+            console.log("lessons", lessons);
             return (
               <>
                 <Container>
