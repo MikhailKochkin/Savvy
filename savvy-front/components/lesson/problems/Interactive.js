@@ -109,7 +109,7 @@ class Interactive extends Component {
           me={this.props.me}
           type={el.type}
           hidden={true}
-          userData={this.props.lesson.quizResults}
+          userData={[]}
           lessonID={this.props.lesson.id}
           quizID={el.id}
           user={el.user.id}
@@ -156,10 +156,9 @@ class Interactive extends Component {
           user_name={el.user}
           type={el.type}
           me={this.props.me}
-          userData={this.props.lesson.testResults}
+          userData={[]}
           lessonID={this.props.lesson.id}
           length={Array(el.correct.length).fill(false)}
-          userData={this.props.lesson.testResults}
           next={el.next}
           getData={this.updateArray}
           exam={true}
@@ -251,7 +250,7 @@ class Interactive extends Component {
           me={this.props.me}
           type={el.type}
           hidden={true}
-          userData={this.props.lesson.quizResults}
+          userData={[]}
           lessonID={this.props.lesson.id}
           quizID={el.id}
           user={el.user.id}
@@ -281,10 +280,9 @@ class Interactive extends Component {
           user_name={el.user}
           type={el.type}
           me={this.props.me}
-          userData={this.props.lesson.testResults}
           lessonID={this.props.lesson.id}
           length={Array(el.correct.length).fill(false)}
-          userData={this.props.lesson.testResults}
+          userData={[]}
           getData={this.updateArray}
           next={el.next}
           story={true}

@@ -596,8 +596,8 @@ const SingleTest = (props) => {
               {hidden == false && (
                 <div className="question">
                   <div className="question_text">
-                    Я подсветил зеленым правильные варианты ответа. Посмотри на
-                    первоначальный вопрос.
+                    Мы подсветили зеленым правильные варианты ответа. Посмотри
+                    на первоначальный вопрос.
                   </div>
                   <IconBlock>
                     {author && author.image != null ? (
