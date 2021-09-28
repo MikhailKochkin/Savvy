@@ -6,27 +6,7 @@ import moment from "moment";
 import Link from "next/link";
 import UpdatePost from "./UpdatePost";
 import Modal from "styled-react-modal";
-import Loading from "../Loading";
-import { POSTS_QUERY } from "./Blog";
-
-const POST_QUERY = gql`
-  query POST_QUERY($id: String!) {
-    post(where: { id: $id }) {
-      id
-      title
-      text
-      tags
-      likes
-      user {
-        id
-        name
-        surname
-        image
-      }
-      createdAt
-    }
-  }
-`;
+import ContactForm from "../landing/ContactForm";
 
 const UPDATE_POST_MUTATION = gql`
   mutation UPDATE_POST_MUTATION($id: String!, $likes: Int) {
@@ -41,7 +21,7 @@ const Styles = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 100px 0;
+  padding-top: 100px;
   @media (max-width: 800px) {
     padding: 50px 0;
   }
@@ -92,10 +72,17 @@ const Styles = styled.div`
     font-size: 1.6rem;
   }
   margin-bottom: 50px;
+  .title {
+    width: 90%;
+  }
 `;
 
 const PostContainer = styled.div`
   width: 50%;
+  margin-bottom: 50px;
+  button {
+    margin: 50px 0;
+  }
   .author {
     display: flex;
     flex-direction: row;
@@ -228,32 +215,15 @@ const Feedback = styled.div`
 const Data = styled.div``;
 
 const Post = (props) => {
-  const {
-    loading: post_loading,
-    error: post_error,
-    data: post_data,
-  } = useQuery(POST_QUERY, {
-    variables: { id: props.id },
-  });
-  if (post_loading) return <Loading />;
-  if (post_error) return error;
-
-  let post = post_data.post;
-  console.log(post);
-
-  // const [isOpen, setIsOpen] = useState(false);
-  // const [auth, setAuth] = useState("signup");
-  const [update, setUpdate] = useState(false);
-  const [likes, setLikes] = useState(post.likes);
-  // const [liked, setLiked] = useState(false);
-
   const [
     updatePost,
     { data: updated_data, loading: updated_loading, error: updated_error },
   ] = useMutation(UPDATE_POST_MUTATION);
 
+  const [update, setUpdate] = useState(false);
+  const [likes, setLikes] = useState(props.post.likes);
+  let post = props.post;
   moment.locale("ru");
-
   return (
     <>
       <Styles>
@@ -309,9 +279,18 @@ const Post = (props) => {
               </Data>
             </>
           )}
-          {update && <UpdatePost id={post.id} text={post.text} />}
+          {update && (
+            <UpdatePost
+              id={post.id}
+              text={post.text}
+              title={post.title}
+              summary={post.summary}
+              image={post.image}
+            />
+          )}
         </PostContainer>
       </Styles>
+      <ContactForm />
       {/* <Banner>
         <div className="header">📫 Новостная рассылка</div>
         <div className="comment">

@@ -1111,7 +1111,7 @@ type Mutation {
   createNewTest(answers: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
   createNote(lessonId: String, text: String): Note
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
-  createPost(text: String, title: String): Post
+  createPost(image: String, summary: String, text: String, title: String): Post
   createProblem(lessonId: String, nodeID: String, nodeType: String, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
@@ -1157,7 +1157,7 @@ type Mutation {
   updateNewTest(answers: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
   updateNote(complexity: Int, id: String, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
-  updatePost(id: String, likes: Int, text: String): Post
+  updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
   updateProblem(complexity: Int, id: String, nodeID: String, nodeType: String, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
@@ -1511,7 +1511,9 @@ type Post {
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
   createdAt: DateTime!
   id: String!
+  image: String
   likes: Int
+  summary: String
   tags: [String!]!
   text: String
   title: String
@@ -1529,7 +1531,9 @@ input PostListRelationFilter {
 input PostOrderByInput {
   createdAt: SortOrder
   id: SortOrder
+  image: SortOrder
   likes: SortOrder
+  summary: SortOrder
   tags: SortOrder
   text: SortOrder
   title: SortOrder
@@ -1542,9 +1546,11 @@ input PostWhereInput {
   coursePages: CoursePageListRelationFilter
   createdAt: DateTimeFilter
   id: StringFilter
+  image: StringNullableFilter
   likes: IntNullableFilter
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]
+  summary: StringNullableFilter
   tags: StringNullableListFilter
   text: StringNullableFilter
   title: StringNullableFilter

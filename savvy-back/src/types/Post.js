@@ -6,6 +6,8 @@ const Post = objectType({
     t.model.id();
     t.model.title();
     t.model.text();
+    t.model.image();
+    t.model.summary();
     t.model.likes();
     t.model.userId();
     t.model.text();

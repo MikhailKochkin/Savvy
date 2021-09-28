@@ -215,7 +215,6 @@ const serialize = (node) => {
     }
   }
   const children = node.children.map((n) => serialize(n)).join("");
-  console.log(node.type);
   switch (node.type) {
     case "quote":
       return `<blockquote><p>${children}</p></blockquote>`;
@@ -290,8 +289,6 @@ const deserialize = (el) => {
   //   const attrs = TEXT_TAGS[el.nodeName](el);
   //   return children.map((child) => jsx("text", attrs, child));
   // }
-
-  console.log("des", el.nodeName);
 
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
@@ -750,7 +747,7 @@ const App = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        console.log("value", arr);
+        // console.log("value", arr);
         setValue(value);
         props.getEditorText(arr.join(""));
       }}

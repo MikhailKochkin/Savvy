@@ -12,6 +12,8 @@ const POSTS_QUERY = gql`
       title
       text
       tags
+      summary
+      image
       likes
       user {
         id
@@ -38,15 +40,16 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  @media (max-width: 900px) {
-    flex-direction: column;
-  }
 `;
 
 const PostsContainer = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const Posts = styled.div`
@@ -78,8 +81,21 @@ const Posts = styled.div`
   @media (max-width: 1300px) {
   }
   @media (max-width: 800px) {
+    width: 100%;
+
     margin: 5% 0;
     padding: 0 25px;
+    h1 {
+      font-size: 3.4rem;
+      margin-top: 30px;
+      text-align: left;
+    }
+    h2 {
+      font-size: 2.4rem;
+      margin-top: 10px;
+      margin-bottom: 30px;
+      text-align: left;
+    }
   }
 `;
 
@@ -89,13 +105,15 @@ const Blog = (props) => {
       <Container>
         <Posts>
           <h1>The BeSavvy Blog</h1>
-          <h2>Мы пишем про то, как эффективно учиться и работать юристом</h2>
+          <h2>
+            Мы пишем про то, как эффективно учиться и строить карьеру юриста
+          </h2>
           <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
               if (loading) return <p>Загрузка...</p>;
               return (
                 <PostsContainer>
-                  {[...data.posts, ...data.posts].map((d, index) => (
+                  {[...data.posts].map((d, index) => (
                     <PostCard
                       id={d.id}
                       text={d.text}
@@ -103,6 +121,8 @@ const Blog = (props) => {
                       likes={d.likes}
                       tags={d.tags}
                       author={d.user}
+                      summary={d.summary}
+                      image={d.image}
                       createdAt={d.createdAt}
                       me={props.me}
                       index={index + 1}

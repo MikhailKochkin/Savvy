@@ -1005,7 +1005,9 @@ export interface NexusGenInputs {
   PostOrderByInput: { // input type
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    image?: NexusGenEnums['SortOrder'] | null; // SortOrder
     likes?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    summary?: NexusGenEnums['SortOrder'] | null; // SortOrder
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     text?: NexusGenEnums['SortOrder'] | null; // SortOrder
     title?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1017,9 +1019,11 @@ export interface NexusGenInputs {
     coursePages?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     likes?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     NOT?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
     OR?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
+    summary?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     title?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1960,7 +1964,9 @@ export interface NexusGenObjects {
   Post: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    image?: string | null; // String
     likes?: number | null; // Int
+    summary?: string | null; // String
     tags: string[]; // [String!]!
     text?: string | null; // String
     title?: string | null; // String
@@ -2547,7 +2553,9 @@ export interface NexusGenFieldTypes {
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    image: string | null; // String
     likes: number | null; // Int
+    summary: string | null; // String
     tags: string[]; // [String!]!
     text: string | null; // String
     title: string | null; // String
@@ -3197,7 +3205,9 @@ export interface NexusGenFieldTypeNames {
     coursePages: 'CoursePage'
     createdAt: 'DateTime'
     id: 'String'
+    image: 'String'
     likes: 'Int'
+    summary: 'String'
     tags: 'String'
     text: 'String'
     title: 'String'
@@ -3747,6 +3757,8 @@ export interface NexusGenArgTypes {
       userId?: string | null; // String
     }
     createPost: { // args
+      image?: string | null; // String
+      summary?: string | null; // String
       text?: string | null; // String
       title?: string | null; // String
     }
@@ -3989,8 +4001,11 @@ export interface NexusGenArgTypes {
     }
     updatePost: { // args
       id?: string | null; // String
+      image?: string | null; // String
       likes?: number | null; // Int
+      summary?: string | null; // String
       text?: string | null; // String
+      title?: string | null; // String
     }
     updateProblem: { // args
       complexity?: number | null; // Int

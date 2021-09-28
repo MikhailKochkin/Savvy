@@ -1840,7 +1840,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         // 1.
-        console.log("start", args);
 
         // const result = await yandex.createPayment({
         //   amount: {
@@ -1986,7 +1985,6 @@ const Mutation = mutationType({
         isPaid: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log(args.isPaid);
         if (args.isPaid === true) {
           const order = await ctx.prisma.order.findUnique(
             {
@@ -2060,6 +2058,8 @@ const Mutation = mutationType({
       args: {
         text: stringArg(),
         title: stringArg(),
+        summary: stringArg(),
+        image: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const post = await ctx.prisma.post.create({
@@ -2077,13 +2077,16 @@ const Mutation = mutationType({
       type: "Post",
       args: {
         text: stringArg(),
+        summary: stringArg(),
+        image: stringArg(),
+        title: stringArg(),
         id: stringArg(),
         likes: intArg(),
       },
-      resolve: async (_, { text, id, likes }, ctx) => {
+      resolve: async (_, { text, id, likes, summary, image, title }, ctx) => {
         const updatedPost = await ctx.prisma.post.update({
           where: { id },
-          data: { text, likes },
+          data: { text, likes, summary, image, title },
         });
         return updatedPost;
       },

@@ -7,11 +7,22 @@ const Styles = styled.div`
   display: flex;
   background: #fff;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 50px;
+  @media (max-width: 900px) {
+    width: 100%;
+  }
+  img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
   .title {
     font-size: 2.6rem;
     font-weight: 600;
     line-height: 1.4;
+    height: 105px;
     text-align: left;
     width: 100%;
     margin-bottom: 20px;
@@ -28,8 +39,10 @@ const Styles = styled.div`
   .description {
     text-align: left;
     width: 90%;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     color: #6b7280;
+    line-height: 1.7;
     cursor: pointer;
   }
   .author {
@@ -52,10 +65,23 @@ const Styles = styled.div`
 `;
 
 const PostCard = (props) => {
-  const { author, id, title, text } = props;
+  const { author, id, title, summary, image } = props;
   return (
     <Styles>
-      <div className="title">
+      <div>
+        <div className="title">
+          <Link
+            href={{
+              pathname: "/post",
+              query: {
+                id: id,
+              },
+            }}
+          >
+            <a>{title}</a>
+          </Link>
+        </div>
+        <img src={image} />
         <Link
           href={{
             pathname: "/post",
@@ -64,23 +90,9 @@ const PostCard = (props) => {
             },
           }}
         >
-          <a>{title}</a>
+          <div className="description">{summary}</div>
         </Link>
       </div>
-      <Link
-        href={{
-          pathname: "/post",
-          query: {
-            id: id,
-          },
-        }}
-      >
-        <div className="description">
-          Your calendar shouldn't give you the Sunday Scaries. Taking some
-          evasive actions and being deliberate about defending your time can
-          start to put the control back in your hands.
-        </div>
-      </Link>
       <div className="author">
         <img src={author.image} />
         <div className="name">
