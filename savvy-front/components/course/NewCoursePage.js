@@ -12,6 +12,7 @@ import Action from "./coursePageBlocks/Action";
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
+import moment from "moment";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -123,6 +124,11 @@ const NewCoursePage = (props) => {
     data.coursePage.new_students.map((ns) => student_list.push(ns.id));
   }
   const me = useUser();
+  moment.locale("ru");
+
+  var today = moment();
+  var tomorrow = moment(today).add(5, "days");
+  console.log("tomorrow", moment(tomorrow._d).format("Do MMMM YYYY"));
 
   const programs = [
     {
@@ -132,8 +138,8 @@ const NewCoursePage = (props) => {
       image: "back_image_low.png",
       length1: "3 месяца",
       length2: "4 часа в неделю",
-      start: "27 сентября 2021",
-      start_eng: "September 27, 2021 20:00:00",
+      start: moment(tomorrow._d).format("Do MMMM YYYY"),
+      start_eng: tomorrow._d,
       prior_klnowledge_1: "Не требуется",
       prior_klnowledge_2: "Начинаем с самого нуля",
       goal_1: "Выиграть этап олимпиады",
@@ -419,7 +425,7 @@ const NewCoursePage = (props) => {
             student_list={student_list}
           />
         ) : (
-          <p>Загружаем прогамму курса ...</p>
+          <p>Загружаем программу курса ...</p>
         )}
         {!loading && data && (
           <Action me={me} coursePageId={data.coursePage.id} data={prog} />

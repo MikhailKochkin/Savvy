@@ -97,6 +97,16 @@ const Text = styled.div`
   justify-content: space-between;
   margin-top: 15px;
   /* padding-right: 25px; */
+  .comments {
+    background-color: yellow;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
   .lesson_name {
     font-size: 1.9rem;
     font-weight: bold;
@@ -258,7 +268,7 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const { lesson, name, author, new_students, coursePageId, students, me } =
+  const { lesson, name, author, new_students, coursePageId, statements, me } =
     props;
 
   let color;
@@ -305,13 +315,23 @@ const LessonHeader = (props) => {
     time = 30;
   }
 
+  console.log("statements", statements);
+  let need_response;
+  if (statements) {
+    need_response = statements.filter((s) => s.comments.length !== 0);
+  } else {
+    need_response = [];
+  }
+  console.log("need_response", need_response);
+
   return (
     <>
       <TextBar color={color}>
         <div>
           <Text>
             <div className="lesson_name">
-              {lesson.number}. {name}
+              {lesson.number}. {name}{" "}
+              <div className="comments">{need_response.length}</div>
             </div>
             <div className="lesson_description">
               {lesson.description &&

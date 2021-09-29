@@ -81,7 +81,7 @@ const SideMenu = styled.div`
 `;
 
 const StyledHeader = styled.header`
-  background: ${(props) => (props.color ? "#fff" : "#f5f5f5")};
+  background: #fff;
   display: grid;
   min-height: 50px;
   padding: 10px 0;
@@ -279,7 +279,7 @@ const Nav = (props) => {
       <>
         {width > 800 && (
           <>
-            <StyledHeader color={router.pathname !== "/business"}>
+            <StyledHeader>
               <CourseMenu>
                 <Link href="/">
                   <div className="logo">

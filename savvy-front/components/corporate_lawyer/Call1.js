@@ -41,8 +41,8 @@ const Styles = styled.div`
 `;
 
 const Block = styled.div`
-  min-height: 50%;
   width: 80%;
+  min-height: 380px;
   background: #f5f5f5;
   display: flex;
   flex-direction: row;
@@ -55,12 +55,15 @@ const Block = styled.div`
     font-size: 2.4rem;
     font-weight: 500;
     padding-left: 10px;
+    #main_idea {
+      margin-bottom: 20px;
+    }
     #additional-info {
       width: 80%;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       /* line-height: 1.8rem; */
       font-size: 1.8rem;
-      margin-top: 15px;
+      margin-top: 10px;
     }
   }
   #block2 {
@@ -69,12 +72,22 @@ const Block = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    #legal {
+      width: 100%;
+      font-size: 1.3rem;
+      line-height: 1.5;
+      margin-top: 10px;
+      a {
+        text-decoration: underline;
+      }
+    }
     #form {
       width: 80%;
     }
     form {
       font-size: 1.6rem;
       margin-bottom: 5px;
+
       #input_box {
         display: flex;
         flex-direction: row;
@@ -99,6 +112,7 @@ const Block = styled.div`
       border: none;
       font-family: Montserrat;
       outline: 0;
+      height: 30px;
       border-bottom: 1px solid #162b4b;
       padding-bottom: 0.5%;
       cursor: pointer;
@@ -140,6 +154,7 @@ const Block = styled.div`
       padding-left: 0;
     }
     #block2 {
+      margin-top: 20px;
       width: 90%;
       #additional-info {
         width: 100%;
@@ -215,20 +230,19 @@ const Call1 = () => {
         <Styles id="C2A">
           <Block>
             <div id="block1">
-              <div>
+              <div id="main_idea">
                 Запишитесь на
-                <span style={{ color: "#FF6F59" }}>
-                  {" "}
-                  бесплатную карьерную консультацию
-                </span>{" "}
-                с директором программы.{" "}
+                <span style={{ color: "#FF6F59" }}> онлайн-встречу</span> с
+                директором программы.{" "}
+              </div>
+              <div id="additional-info">✓ Бесплатное вводное занятие</div>
+              <div id="additional-info">
+                ✓ 20 минут вашего времени за 6 лет опыта работы с 76 успешными
+                кандидатами
               </div>
               <div id="additional-info">
-                В течение 20 минут поговорим о ваших целях, расскажем, как
-                искать работу и{" "}
-                <span style={{ color: "#FF6F59" }}>
-                  откроем доступ к демо-урокам.
-                </span>
+                ✓ Встреча с человеком, который работал в 2 из 4 крупнейших юр
+                фирм в мире
               </div>
             </div>
             <div id="block2">
@@ -254,7 +268,7 @@ const Call1 = () => {
                   placeholder="Имейл"
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                <form>
+                {/* <form>
                   <div>Удобный способ связи:</div>
                   <div id="input_box">
                     <div id="call">
@@ -278,20 +292,6 @@ const Call1 = () => {
                       <label for="female">Телеграм</label>
                     </div>
                   </div>
-                </form>
-                {/* <form>
-                  <div>Согласие на обработку персональных данных</div>
-                  <div id="input_box">
-                    <div id="agree">
-                      <input
-                        type="radio"
-                        id="male"
-                        name="gender"
-                        value="male"
-                      />
-                      <label for="male">Да</label>
-                    </div>
-                  </div>
                 </form> */}
                 <button
                   onClick={(e) => {
@@ -306,8 +306,25 @@ const Call1 = () => {
                     }
                   }}
                 >
-                  Записаться
+                  Записаться на встречу
                 </button>
+                <div id="legal">
+                  Нажимая кнопку, принимаю условия{" "}
+                  <a
+                    href="https://besavvy.app/legal?name=privacy"
+                    target="_blank"
+                  >
+                    политики
+                  </a>{" "}
+                  и{" "}
+                  <a
+                    href="https://besavvy.app/legal?name=offer"
+                    target="_blank"
+                  >
+                    оферты
+                  </a>
+                  .
+                </div>
               </div>
             </div>
           </Block>

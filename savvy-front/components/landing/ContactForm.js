@@ -273,7 +273,6 @@ const ContactForm = () => {
                         number,
                       },
                     });
-                    console.log(res);
                     toggleModal();
                   } else {
                     alert("Неправильный имейл");

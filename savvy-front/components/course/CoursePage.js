@@ -203,7 +203,6 @@ const CoursePage = (props) => {
               isEnrolled = false;
             }
 
-            console.log("lessons", lessons);
             return (
               <>
                 <Container>
@@ -339,6 +338,11 @@ const CoursePage = (props) => {
                                     key={lesson.id}
                                     name={lesson.name}
                                     lesson={lesson}
+                                    statements={
+                                      lesson.forum
+                                        ? lesson.forum.statements
+                                        : null
+                                    }
                                     coursePage={props.id}
                                     author={coursePage.user.id}
                                     students={coursePage.students}
