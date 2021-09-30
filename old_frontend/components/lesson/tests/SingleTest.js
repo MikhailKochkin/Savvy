@@ -317,7 +317,7 @@ const SingleTest = (props) => {
     <>
       {!exam && story !== true && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {!update ? props.t("update") : props.t("back")}
+          {!update ? "Меняем..." : "Изменить"}
         </StyledButton>
       )}
       {me && me.id === props.user && !story && !exam && (

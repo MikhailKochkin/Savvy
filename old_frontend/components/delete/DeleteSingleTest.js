@@ -48,7 +48,7 @@ const DeleteSingleTest = (props) => {
             }
           }}
         >
-          {loading ? props.t("deleting") : props.t("delete")}
+          {loading ? "Удаляем..." : "Удалить"}
         </Button>
       )}
     </Mutation>

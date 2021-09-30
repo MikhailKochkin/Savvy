@@ -230,7 +230,7 @@ const UpdateTest = (props) => {
               updateNewTest();
             }}
           >
-            {loading ? props.t("saving") : props.t("save")}
+            {loading ? "Сохраняем..." : "Сохранить"}
           </Button>
         )}
       </Mutation>

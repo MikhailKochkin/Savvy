@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import { withTranslation } from "../i18n";
+// import { withTranslation } from "../i18n";
 
 const Styles = styled.div`
   width: 100%;
@@ -79,4 +79,5 @@ const Contact = ({ t }) => {
   );
 };
 
-export default withTranslation("search")(Contact);
+// export default withTranslation("search")(Contact);
+export default Contact;

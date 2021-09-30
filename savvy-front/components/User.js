@@ -93,7 +93,6 @@ const CURRENT_USER_QUERY = gql`
 
 function useUser() {
   const { data, loading, error } = useQuery(CURRENT_USER_QUERY);
-  if (loading) return <p>...</p>;
   if (error) return console.log(error);
   if (data) {
     return data.me;

@@ -130,7 +130,7 @@ const UpdateNote = (props) => {
                 const res = await updateNote();
               }}
             >
-              {loading ? props.t("saving") : props.t("save")}
+              {loading ? "Сохраняем..." : "Сохранить"}
             </Button>
           )}
         </Mutation>

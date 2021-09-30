@@ -202,7 +202,7 @@ const UpdateQuiz = (props) => {
               const res = await updateQuiz();
             }}
           >
-            {loading ? props.t("saving") : props.t("save")}
+            {loading ? "Сохраняем..." : "Сохранить"}
           </Button>
         )}
       </Mutation>

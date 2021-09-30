@@ -140,7 +140,7 @@ const Note = (props) => {
         <Buttons>
           {!exam && !story && me.id === note.user.id && (
             <StyledButton onClick={(e) => setUpdate(!update)}>
-              {!update ? props.t("update") : props.t("back")}
+              {!update ? "Меняем..." : "Изменить"}
             </StyledButton>
           )}
           {me && me.id === user && !props.story && !props.exam && (
