@@ -11,7 +11,6 @@ import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
 import { CURRENT_USER_QUERY } from "../../User";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { withTranslation } from "../../../i18n";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -617,9 +616,7 @@ class SingleTextEditor extends Component {
                   variant="contained"
                   color="primary"
                 >
-                  {this.state.mistakesShown
-                    ? this.props.t("close2")
-                    : this.props.t("open2")}
+                  {this.state.mistakesShown ? "Скрыть" : "Показать"}
                 </StyledButton>
                 {me && me.id === textEditor.user.id && !story ? (
                   <DeleteSingleTextEditor
@@ -633,7 +630,7 @@ class SingleTextEditor extends Component {
                       this.setState((prev) => ({ update: !prev.update }))
                     }
                   >
-                    {this.props.t("update")}
+                    Изменить
                   </StyledButton>
                 )}
               </Buttons>
@@ -685,9 +682,7 @@ class SingleTextEditor extends Component {
                       this.setState({ quiz_guess: e.target.value });
                     }}
                   />
-                  <button onClick={this.quizCheck}>
-                    {this.props.t("answer")}
-                  </button>
+                  <button onClick={this.quizCheck}>Ответить</button>
                   {this.state.quiz_result === false && (
                     <Comment>{this.state.quiz.ifWrong}</Comment>
                   )}
@@ -720,4 +715,4 @@ SingleTextEditor.propTypes = {
   userData: PropTypes.object.isRequired,
 };
 
-export default withTranslation("tasks")(SingleTextEditor);
+export default SingleTextEditor;

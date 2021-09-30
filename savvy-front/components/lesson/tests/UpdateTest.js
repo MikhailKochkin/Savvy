@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import dynamic from "next/dynamic";
-import { withTranslation } from "../../../i18n";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
@@ -202,8 +201,8 @@ const UpdateTest = (props) => {
                 defaultValue={answer[1]}
                 onChange={(e) => handleCorrect(e.target.value, i)}
               >
-                <option value={true}>{props.t("correct")}</option>
-                <option value={false}>{props.t("wrong")}</option>
+                <option value={true}>Правильно!</option>
+                <option value={false}>Не совсем...</option>
               </select>
             </AnswerOption>
           );
@@ -214,7 +213,7 @@ const UpdateTest = (props) => {
           id="ifRight"
           name="ifRight"
           value={ifRight}
-          placeholder={props.t("correct_feedback")}
+          placeholder="Фидбэк по правильному ответу"
           getEditorText={setIf}
         />
       </Comment>
@@ -223,7 +222,7 @@ const UpdateTest = (props) => {
           id="ifWrong"
           name="ifWrong"
           value={ifWrong}
-          placeholder={props.t("wrong_feedback")}
+          placeholder="Фидбэк по неправильному ответу"
           getEditorText={setIf}
         />
       </Comment>
@@ -253,7 +252,7 @@ const UpdateTest = (props) => {
               updateNewTest();
             }}
           >
-            {loading ? props.t("saving") : props.t("save")}
+            {loading ? "Сохраняем..." : "Сохранить"}
           </Button>
         )}
       </Mutation>
@@ -261,4 +260,4 @@ const UpdateTest = (props) => {
   );
 };
 
-export default withTranslation("tasks")(UpdateTest);
+export default UpdateTest;

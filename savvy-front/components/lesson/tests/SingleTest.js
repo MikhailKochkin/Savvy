@@ -10,7 +10,6 @@ import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
-import { withTranslation } from "../../../i18n";
 
 const StyledButton = withStyles({
   root: {
@@ -389,7 +388,7 @@ const SingleTest = (props) => {
     <Styles width={width}>
       {!exam && story !== true && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {!update ? props.t("update") : props.t("back")}
+          {!update ? "Меняем..." : "Изменить"}
         </StyledButton>
       )}
       {me && me.id === props.user && !story && !exam && (
@@ -507,7 +506,7 @@ const SingleTest = (props) => {
                     }
                   }}
                 >
-                  {props.t("check")}
+                  Проверить
                 </MiniButton>
               )}
             </Mutation>
@@ -530,7 +529,7 @@ const SingleTest = (props) => {
           {answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.type != "FORM" && props.t("correct") + "! "}
+                {props.type != "FORM" && "Правильно!"}
                 {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
               </div>
               <IconBlock>
@@ -548,7 +547,7 @@ const SingleTest = (props) => {
           {answerState === "wrong" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.type != "FORM" && props.t("wrong") + "... "}
+                {props.type != "FORM" && "Не совсем..."}
                 {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
               </div>
               <IconBlock>
@@ -585,9 +584,7 @@ const SingleTest = (props) => {
                   <div className="name">{me.name}</div>
                 </IconBlock>{" "}
                 <OptionsGroup>
-                  <Option onClick={(e) => setHidden(false)}>
-                    {props.t("yes")}
-                  </Option>
+                  <Option onClick={(e) => setHidden(false)}>Да</Option>
                   {/* <Option onClick={(e) => setHidden(true)}>
                     {props.t("no")}
                   </Option> */}
@@ -636,4 +633,4 @@ const SingleTest = (props) => {
   );
 };
 
-export default withTranslation("tasks")(SingleTest);
+export default SingleTest;

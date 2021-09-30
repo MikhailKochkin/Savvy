@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const DELETE_TEXTEDITOR_MUTATION = gql`
   mutation DELETE_TEXTEDITOR_MUTATION($id: String!) {
@@ -41,18 +41,19 @@ const DeleteSingleTextEditor = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm(props.t("sure"))) {
+            if (confirm("Уверены?")) {
               deleteTextEditor().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? props.t("deleting") : props.t("delete")}
+          {loading ? "Удаляем..." : "Удалить"}
         </Button>
       )}
     </Mutation>
   );
 };
 
-export default withTranslation("update")(DeleteSingleTextEditor);
+// export default withTranslation("update")(DeleteSingleTextEditor);
+export default DeleteSingleTextEditor;

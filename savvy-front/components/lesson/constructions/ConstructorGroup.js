@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SingleConstructor from "./SingleConstructor";
 import styled from "styled-components";
-import { withTranslation } from "../../../i18n";
+// import { withTranslation } from "../../../i18n";
 
 const Title = styled.p`
   font-size: 1.6rem;
@@ -106,10 +106,9 @@ class ConstructorGroup extends Component {
       <>
         <Box>
           <Title>
-            {this.state.num + 1} {this.props.t("out")}{" "}
-            {this.props.constructions.length}
-            <button onClick={this.onPrev}>{this.props.t("prev1")} </button>
-            <button onClick={this.onNext}>{this.props.t("next1")} </button>
+            {this.state.num + 1} из {this.props.constructions.length}
+            <button onClick={this.onPrev}>Пред </button>
+            <button onClick={this.onNext}>След </button>
           </Title>
         </Box>
         {construction && (
@@ -132,4 +131,4 @@ class ConstructorGroup extends Component {
   }
 }
 
-export default withTranslation("tasks")(ConstructorGroup);
+export default ConstructorGroup;

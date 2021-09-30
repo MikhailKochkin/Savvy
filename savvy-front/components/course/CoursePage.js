@@ -13,7 +13,7 @@ import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
 // import { Reviews } from "../../config";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 import {
   Container,
@@ -216,7 +216,7 @@ const CoursePage = (props) => {
                             <div className="name">
                               <img src={a.image} />
                               <p>
-                                {a.name} {a.surname} {props.t("from")}{" "}
+                                {a.name} {a.surname} из
                                 {a.company.name}
                               </p>
                             </div>
@@ -229,7 +229,7 @@ const CoursePage = (props) => {
                                 {coursePage.user && coursePage.user.surname
                                   ? `${coursePage.user.name} ${coursePage.user.surname}`
                                   : coursePage.user.name}{" "}
-                                {props.t("from")} {coursePage.user.company.name}
+                                из {coursePage.user.company.name}
                               </p>
                             </div>
                             <p className="track2">
@@ -272,7 +272,7 @@ const CoursePage = (props) => {
                       {data.coursePage.audience && (
                         <div className="info">
                           <div className="header">
-                            <span>{props.t("TA")}</span>
+                            <span>Для кого этот курс</span>
                           </div>
                           <div>{renderHTML(data.coursePage.audience)}</div>
                         </div>
@@ -287,13 +287,13 @@ const CoursePage = (props) => {
                       )}
                       {data.coursePage.methods && (
                         <div className="info">
-                          <div className="header">{props.t("author")}</div>
+                          <div className="header">Про автора курса</div>
                           <div>{renderHTML(data.coursePage.methods)}</div>
                         </div>
                       )}
                       {data.coursePage.result && (
                         <div className="info">
-                          <div className="header">{props.t("result")}</div>
+                          <div className="header">О программе</div>
                           <div>{renderHTML(data.coursePage.result)}</div>
                         </div>
                       )}
@@ -384,7 +384,7 @@ const CoursePage = (props) => {
                     <Details>
                       {data.coursePage.tariffs && (
                         <div className="info">
-                          <div className="header">{props.t("tariffs")}</div>
+                          <div className="header">Тарифы</div>
                           <div>{renderHTML(data.coursePage.tariffs)}</div>
                         </div>
                       )}
@@ -461,7 +461,7 @@ const CoursePage = (props) => {
   );
 };
 
-export default withTranslation("course")(CoursePage);
-// export default CoursePage;
+// export default withTranslation("course")(CoursePage);
+export default CoursePage;
 
 export { SINGLE_COURSEPAGE_QUERY };

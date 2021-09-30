@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import AnswerOption from "./tests/AnswerOption";
-import { CURRENT_USER_QUERY } from "../User";
-import { withTranslation } from "../../i18n";
+// import { CURRENT_USER_QUERY } from "../User";
+// import { withTranslation } from "../../i18n";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -658,4 +656,5 @@ const SingleTest = (props) => {
   );
 };
 
-export default withTranslation("tasks")(SingleTest);
+// export default withTranslation("tasks")(SingleTest);
+export default SingleTest;

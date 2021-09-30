@@ -19,8 +19,8 @@ const LessonPage = (props) => (
   </div>
 );
 
-LessonPage.getInitialProps = async () => ({
-  namespacesRequired: ["story", "draft", "update"],
-});
+// LessonPage.getInitialProps = async () => ({
+//   namespacesRequired: ["story", "draft", "update"],
+// });
 
 export default LessonPage;

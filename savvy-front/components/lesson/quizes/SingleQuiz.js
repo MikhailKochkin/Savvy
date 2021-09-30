@@ -9,7 +9,6 @@ import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
 import renderHTML from "react-render-html";
 import { CURRENT_USER_QUERY } from "../../User";
-import { withTranslation } from "../../../i18n";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -425,7 +424,7 @@ const SingleQuiz = (props) => {
           <Buttons>
             {!exam && !story && (
               <StyledButton onClick={(e) => setUpdate(!update)}>
-                {!update ? props.t("update") : props.t("back")}
+                {!update ? "Меняем..." : "Изменить"}
               </StyledButton>
             )}
             {me && me.id === user && !props.exam && !props.story ? (
@@ -485,15 +484,15 @@ const SingleQuiz = (props) => {
                     }}
                     correct={correct}
                   >
-                    {props.t("check")}
+                    Проверить
                   </Button1>
                 </Group>
                 {correct === "true" && (
                   <div className="question">
                     <div className="question_text">
-                      {!props.type != "FORM" && props.t("correct")}!{" "}
+                      {!props.type != "FORM" && "Правильно"}!{" "}
                       {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
-                      {!props.type != "FORM" && props.t("show")}
+                      {!props.type != "FORM" && "Показать правильный ответ?"}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -510,7 +509,7 @@ const SingleQuiz = (props) => {
                 {correct === "false" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.type != "FORM" && props.t("wrong") + "..."}
+                      {props.type != "FORM" && "Не совсем" + "..."}
                       {ifWrong &&
                         ifWrong !== "<p></p>" &&
                         renderHTML(ifWrong)}{" "}
@@ -518,7 +517,7 @@ const SingleQuiz = (props) => {
                         hint !== 0 &&
                         props.type != "FORM" &&
                         hint}
-                      {props.type != "FORM" && props.t("show")}
+                      {props.type != "FORM" && "Показать правильный ответ?"}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -572,9 +571,7 @@ const SingleQuiz = (props) => {
                         <div className="name">{me.name}</div>
                       </IconBlock>{" "}
                       <Options>
-                        <Option onClick={(e) => setHidden(false)}>
-                          {props.t("yes")}
-                        </Option>
+                        <Option onClick={(e) => setHidden(false)}>Да</Option>
                         {/* <Option onClick={(e) => setHidden(true)}>
                           {props.t("no")}
                         </Option> */}
@@ -585,7 +582,7 @@ const SingleQuiz = (props) => {
                 {!hidden && (
                   <div className="question">
                     <div className="question_text">
-                      {props.t("correct_answer")}: {renderHTML(props.answer)}
+                      {"Правильный ответ"}: {renderHTML(props.answer)}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -624,4 +621,4 @@ const SingleQuiz = (props) => {
   );
 };
 
-export default withTranslation("tasks")(SingleQuiz);
+export default SingleQuiz;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
-import { withTranslation } from "../../../i18n";
+// import { withTranslation } from "../../../i18n";
 
 const Styles = styled.div`
   width: 98%;
@@ -157,4 +157,4 @@ class Article extends Component {
   }
 }
 
-export default withTranslation("tasks")(Article);
+export default Article;

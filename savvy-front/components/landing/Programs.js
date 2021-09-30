@@ -83,8 +83,9 @@ const Programs = () => {
   return (
     <Styles id="course_search">
       <Container>
-        {programs.map((p) => (
+        {programs.map((p, i) => (
           <Program
+            key={i}
             img={p.img}
             title={p.title}
             description={p.description}

@@ -23,4 +23,5 @@ const CoursePagePage = (props) => {
   );
 };
 
+// export default withTranslation("common")(CoursePagePage);
 export default CoursePagePage;

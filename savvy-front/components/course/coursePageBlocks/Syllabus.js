@@ -109,5 +109,5 @@ const CoursePage = (props) => {
   );
 };
 
-export default withTranslation("course")(CoursePage);
-// export default CoursePage;
+// export default withTranslation("course")(CoursePage);
+export default CoursePage;

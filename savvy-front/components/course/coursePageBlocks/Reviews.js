@@ -116,8 +116,8 @@ const Reviews = (props) => {
       <Container>
         <h2>Отзывы участников о программе:</h2>
         <ReviewsList>
-          {d.reviews.map((r) => (
-            <Review>
+          {d.reviews.map((r, i) => (
+            <Review key={i}>
               <div className="header">
                 <div className="name">{r.name}</div>
                 <div className="arrows">⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import SingleProblem from "./SingleProblem";
 import styled from "styled-components";
-import { withTranslation } from "../../../i18n";
 
 const Title = styled.p`
   font-size: 1.6rem;
@@ -72,10 +71,9 @@ class ProblemGroup extends Component {
         </Advice> */}
         <Box>
           <Title>
-            {this.props.t("case")} {this.state.num + 1} {this.props.t("out")}{" "}
-            {this.props.problems.length}
-            <button onClick={this.onPrev}>{this.props.t("prev1")} </button>
-            <button onClick={this.onNext}>{this.props.t("next1")} </button>
+            {this.state.num + 1} из {this.props.problems.length}
+            <button onClick={this.onPrev}>Пред </button>
+            <button onClick={this.onNext}>След </button>
           </Title>
         </Box>
         {problem && (
@@ -94,4 +92,4 @@ class ProblemGroup extends Component {
   }
 }
 
-export default withTranslation("tasks")(ProblemGroup);
+export default ProblemGroup;

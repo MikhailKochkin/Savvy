@@ -3,9 +3,9 @@ import App from "next/app";
 import { ApolloProvider } from "@apollo/client";
 import Page from "../components/Page";
 import withData from "../lib/withData";
-import { appWithTranslation } from "../i18n";
+// import { appWithTranslation } from "../i18n";
 import TagManager from "react-gtm-module";
-import FacebookPixel from "../components/FacebookPixel";
+// import FacebookPixel from "../components/FacebookPixel";
 
 function MyApp({ Component, apollo, pageProps }) {
   useEffect(() => {
@@ -39,4 +39,4 @@ MyApp.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default appWithTranslation(withData(MyApp));
+export default withData(MyApp);

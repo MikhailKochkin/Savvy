@@ -8,7 +8,6 @@ import moment from "moment";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateStatement from "./CreateStatement";
 import DeleteStatement from "./DeleteStatement";
-import { withTranslation } from "../../../i18n";
 import Statement from "./Statement";
 
 const CREATE_RATING_MUTATION = gql`
@@ -207,7 +206,10 @@ const Forum = (props) => {
   return (
     <Styles story={story}>
       <div className="question">
-        <div className="question_text">{props.t("rate")}</div>
+        <div className="question_text">
+          Пожалуйста, оцените, насколько полезен был этот урок. Преподаватель
+          увидит оценки в анонимном формате.
+        </div>
         <IconBlock>
           <img className="icon" src="../../static/hipster.svg" />
           <div className="name">BeSavvy</div>
@@ -245,7 +247,7 @@ const Forum = (props) => {
                   changeRating={async (data) => {
                     const res = await setRating(data);
                     const res1 = updateRating();
-                    alert(props.t("thank"));
+                    alert("Спасибо!");
                   }}
                 />
               )}
@@ -276,7 +278,7 @@ const Forum = (props) => {
                   changeRating={async (data) => {
                     const res = await setRating(data);
                     const res1 = createRating();
-                    alert(props.t("thank"));
+                    alert("Спасибо!");
                   }}
                 />
               )}
@@ -347,4 +349,4 @@ const Forum = (props) => {
   );
 };
 
-export default withTranslation("tasks")(Forum);
+export default Forum;

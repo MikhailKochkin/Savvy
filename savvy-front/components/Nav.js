@@ -11,7 +11,7 @@ import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
 // import { IoMdMenu } from "react-icons/io";
-import { i18n, withTranslation } from "../i18n";
+// import { i18n, withTranslation } from "../i18n";
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -290,7 +290,7 @@ const Nav = (props) => {
               <UserData>
                 <Link href="/blog">
                   <div className="blog">
-                    <a>📚 {props.t("blog")}</a>
+                    <a>📚 Блог</a>
                   </div>
                 </Link>
                 {me &&
@@ -299,11 +299,11 @@ const Nav = (props) => {
                   me.status !== "LAWYER" && (
                     <Link href="/educator">
                       <div className="my">
-                        <a>{props.t("my")}</a>
+                        <a>Мои курсы</a>
                       </div>
                     </Link>
                   )}
-                <div className="imgGroup">
+                {/* <div className="imgGroup">
                   <div className="img">
                     <img
                       src="../../static/uk.svg"
@@ -316,7 +316,7 @@ const Nav = (props) => {
                       onClick={() => i18n.changeLanguage("ru")}
                     />
                   </div>
-                </div>
+                </div> */}
                 {me ? (
                   <Link
                     href={{
@@ -336,7 +336,7 @@ const Nav = (props) => {
                   <Signout />
                 ) : (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>{props.t("signup")}</a>
+                    <a>Войти</a>
                   </Button>
                 )}
               </UserData>
@@ -377,7 +377,7 @@ const Nav = (props) => {
                 ) : null}
                 {!me && (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>{props.t("signup")}</a>
+                    <a>Войти</a>
                   </Button>
                 )}
               </div>
@@ -402,8 +402,8 @@ const Nav = (props) => {
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>
                       <a>
-                        {props.t("my")}
-                        {/* Мои курсы */}
+                        {/* {props.t("my")} */}
+                        Мои курсы
                       </a>
                     </button>
                   </Link>
@@ -412,8 +412,8 @@ const Nav = (props) => {
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>
                       <a>
-                        {props.t("my")}
-                        {/* Мои курсы */}
+                        {/* {props.t("my")} */}
+                        Мои курсы
                       </a>
                     </button>
                   </Link>
@@ -424,7 +424,7 @@ const Nav = (props) => {
                   }}
                 >
                   <button onClick={(e) => closeNav()}>
-                    <a>{props.t("blog")}</a>
+                    <a>📚 Блог</a>
                   </button>
                 </Link>
                 {me ? <Signout /> : null}
@@ -450,5 +450,5 @@ const Nav = (props) => {
   );
 };
 
-export default withTranslation("common")(Nav);
-// export default Nav;
+// export default withTranslation("common")(Nav);
+export default Nav;

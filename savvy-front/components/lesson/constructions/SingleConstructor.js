@@ -11,7 +11,7 @@ import UpdateConstruction from "./UpdateConstruction";
 import { CURRENT_USER_QUERY } from "../../User";
 import Box from "./Box";
 import Article from "./Article";
-import { withTranslation } from "../../../i18n";
+// import { withTranslation } from "../../../i18n";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -268,7 +268,7 @@ const SingleConstructor = (props) => {
     <>
       {me.id === construction.user.id && !story && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {update ? props.t("back") : props.t("update")}
+          {update ? "Назад" : "Изменить"}
         </StyledButton>
       )}
       {!update && (
@@ -326,7 +326,7 @@ const SingleConstructor = (props) => {
                       createConstructionResult();
                     }}
                   >
-                    {props.t("check")}
+                    Проверить
                   </StyledButton>
                 </Buttons>
               )}
@@ -334,7 +334,7 @@ const SingleConstructor = (props) => {
             {answerState === "wrong" ? (
               <>
                 <StyledButton onClick={(e) => setAnswerReveal(!answerReveal)}>
-                  {answerReveal ? props.t("close") : props.t("open")}
+                  {answerReveal ? "Закрыть" : "Открыть"}
                 </StyledButton>
               </>
             ) : null}
@@ -368,4 +368,4 @@ const SingleConstructor = (props) => {
   );
 };
 
-export default withTranslation("tasks")(SingleConstructor);
+export default SingleConstructor;

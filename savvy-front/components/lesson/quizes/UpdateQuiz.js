@@ -4,7 +4,6 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { withTranslation } from "../../../i18n";
 
 const UPDATE_QUIZ_MUTATION = gql`
   mutation UPDATE_QUIZ_MUTATION(
@@ -153,9 +152,9 @@ const UpdateQuiz = (props) => {
   return (
     <Container>
       <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
-        <option value={undefined}>{props.t("not_chosen")}</option>
-        <option value={"WORD"}>{props.t("word")}</option>
-        <option value={"IDEA"}>{props.t("idea")}</option>
+        <option value={undefined}>Не выбран</option>
+        <option value={"WORD"}>Дословно</option>
+        <option value={"IDEA"}>По смыслу</option>
       </select>
       <Complexity>
         <select
@@ -174,7 +173,7 @@ const UpdateQuiz = (props) => {
         <DynamicLoadedEditor
           id="question"
           name="question"
-          placeholder={props.t("quiz")}
+          placeholder={"Вопрос"}
           value={question}
           getEditorText={setQuestion}
         />
@@ -182,7 +181,7 @@ const UpdateQuiz = (props) => {
       <textarea
         id="answer"
         name="answer"
-        placeholder={props.t("answer")}
+        placeholder={"Ответ"}
         defaultValue={answer}
         onChange={(e) => setAnswer(e.target.value)}
       />
@@ -191,7 +190,7 @@ const UpdateQuiz = (props) => {
           id="answer"
           name="answer"
           value={ifRight}
-          placeholder={props.t("correct_feedback")}
+          placeholder={"Фидбэк по правильному ответу"}
           getEditorText={setIfRight}
         />
       </Comment>
@@ -199,7 +198,7 @@ const UpdateQuiz = (props) => {
         <DynamicLoadedEditor
           id="answer"
           name="answer"
-          placeholder={props.t("wrong_feedback")}
+          placeholder={"Фидбэк по неправильному ответу"}
           value={ifWrong}
           getEditorText={setIfWrong}
         />
@@ -235,7 +234,7 @@ const UpdateQuiz = (props) => {
               const res = await updateQuiz();
             }}
           >
-            {loading ? props.t("saving") : props.t("save")}
+            {loading ? "Сохраняем..." : "Сохранить"}
           </Button>
         )}
       </Mutation>
@@ -243,4 +242,4 @@ const UpdateQuiz = (props) => {
   );
 };
 
-export default withTranslation("tasks")(UpdateQuiz);
+export default UpdateQuiz;

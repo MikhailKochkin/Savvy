@@ -4,7 +4,6 @@ import styled from "styled-components";
 import SingleQuiz from "../quizes/SingleQuiz";
 import SingleTest from "../tests/SingleTest";
 import Note from "../notes/Note";
-import { withTranslation } from "../../../i18n";
 
 const Styles = styled.div`
   width: ${(props) => (props.story ? "100vw" : "100%")};
@@ -214,7 +213,11 @@ class Interactive extends Component {
       data[1].value === "" ||
       data[1].value == "0"
     ) {
-      finish = <Final>{this.props.t("final")} 📝</Final>;
+      finish = (
+        <Final>
+          Теперь запишите ответ на задачу на основе наводящих вопросов 📝
+        </Final>
+      );
       // finish = <div></div>;
       this.setState((state) => {
         if (!(finish in this.state.componentList)) {
@@ -323,9 +326,7 @@ class Interactive extends Component {
       <Styles>
         <div id="suggestion">
           <Button onClick={this.show}>
-            {!this.state.display
-              ? this.props.t("first")
-              : this.props.t("close1")}
+            {!this.state.display ? "Первый вопрос" : "Закрыть"}
           </Button>
         </div>
         <Questions display={this.state.display}>
@@ -342,4 +343,4 @@ Interactive.propTypes = {
   problem: PropTypes.object.isRequired,
 };
 
-export default withTranslation("tasks")(Interactive);
+export default Interactive;
