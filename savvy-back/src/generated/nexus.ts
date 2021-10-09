@@ -64,6 +64,32 @@ export interface NexusGenInputs {
   BoolNullableListFilter: { // input type
     equals?: boolean[] | null; // [Boolean!]
   }
+  BusinessClientOrderByInput: { // input type
+    communication_medium?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    email?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    number?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    type?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  BusinessClientWhereInput: { // input type
+    AND?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
+    communication_medium?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    email?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
+    number?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    OR?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
+  BusinessClientWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   CareerTrackListRelationFilter: { // input type
     every?: NexusGenInputs['CareerTrackWhereInput'] | null; // CareerTrackWhereInput
     none?: NexusGenInputs['CareerTrackWhereInput'] | null; // CareerTrackWhereInput
@@ -2594,6 +2620,7 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   Query: { // field return type
+    businessClients: NexusGenRootTypes['BusinessClient'][]; // [BusinessClient!]!
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -3246,6 +3273,7 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
   }
   Query: { // field return type name
+    businessClients: 'BusinessClient'
     coursePage: 'CoursePage'
     coursePages: 'CoursePage'
     courseVisit: 'CourseVisit'
@@ -4085,6 +4113,14 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    businessClients: { // args
+      after?: NexusGenInputs['BusinessClientWhereUniqueInput'] | null; // BusinessClientWhereUniqueInput
+      before?: NexusGenInputs['BusinessClientWhereUniqueInput'] | null; // BusinessClientWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['BusinessClientOrderByInput'][] | null; // [BusinessClientOrderByInput!]
+      where?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
+    }
     coursePage: { // args
       where: NexusGenInputs['CoursePageWhereUniqueInput']; // CoursePageWhereUniqueInput!
     }

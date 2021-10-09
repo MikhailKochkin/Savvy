@@ -13,6 +13,7 @@ const Query = queryType({
   definition(t) {
     t.crud.user({ filtering: true });
     t.crud.users({ ordering: true, filtering: true });
+    t.crud.businessClients({ ordering: true, filtering: true });
     t.crud.coursePages({ ordering: true, filtering: true });
     t.crud.coursePage({ ordering: true, filtering: true });
     t.crud.courseVisits({ ordering: true, filtering: true });

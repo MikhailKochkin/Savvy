@@ -342,7 +342,7 @@ class SingleTextEditor extends Component {
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
     )[0];
-    e.target.innerHTML = this.props.t("checking");
+    e.target.innerHTML = "Проверяем...";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -356,10 +356,10 @@ class SingleTextEditor extends Component {
         if (
           !e.target.nextSibling ||
           (e.target.nextSibling &&
-            e.target.nextSibling.innerHTML !== this.props.t("show1"))
+            e.target.nextSibling.innerHTML !== "Показать")
         ) {
           let button2 = document.createElement("button");
-          button2.innerHTML = this.props.t("show1");
+          button2.innerHTML = "Показать";
           button2.className = "mini_button";
           button2.addEventListener("click", this.show);
           e.target.after(button2);
@@ -369,13 +369,13 @@ class SingleTextEditor extends Component {
             result: true,
           });
           el.style.background = "#D9EAD3";
-          e.target.innerHTML = this.props.t("check");
+          e.target.innerHTML = "Проверить";
         } else {
           this.setState({
             result: false,
           });
           el.style.background = "#FCE5CD";
-          e.target.innerHTML = this.props.t("check");
+          e.target.innerHTML = "Проверить";
           e.target.className = "mini_button";
           if (res.comment) {
             alert(res.comment);
@@ -431,7 +431,8 @@ class SingleTextEditor extends Component {
     let n = e.target.parentNode.replaceChild(z, e.target);
 
     let button = document.createElement("button");
-    button.innerHTML = this.props.t("check");
+    button.innerHTML = "Проверить";
+
     button.className = "mini_button";
     button.tabIndex = 0;
     button.addEventListener("click", this.check);

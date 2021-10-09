@@ -338,7 +338,7 @@ const Styles = styled.div`
   width: 100%;
   display: flex;
   background: #fff;
-  min-height: 90vh;
+  min-height: 70vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -512,17 +512,15 @@ const Landing = (props) => {
       <Block>
         <Text>
           <h1>
-            Мы помогаем <span>молодым юристам</span>
-            <br /> построить успешную карьеру
+            Получите практические <span>юридические навыки</span>. <br />И
+            найдите работу.
           </h1>
           <div className="subheader">
-            За 6 месяцев даем вам практический опыт по 4 направлениям:
-            корпоративное право, арбитражный процесс, налоги и IT/IP. И помогаем
-            найти работу.
+            За 6 месяцев вы научитесь решать практические кейсы. Познакомитесь с
+            экспертами. И узнаете, как пройти любое собеседование.
           </div>
-
-          <button onClick={(e) => slide()}>Начать учиться</button>
-          <div>68 человек уже проходят эту программу. Присоединяйтесь.</div>
+          <button onClick={(e) => slide()}>Начать учиться сейчас</button>
+          <div>Первые 3 урока бесплатно</div>
         </Text>
       </Block>
     </Styles>

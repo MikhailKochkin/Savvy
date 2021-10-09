@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-const BImage = styled.div`
+const BigImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  height: 80vh;
+  height: 90vh;
   position: relative;
   background: #23074d; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -18,13 +18,15 @@ const BImage = styled.div`
     #cc5333,
     #23074d
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
   img {
     object-fit: cover;
-    filter: brightness(50%);
+    filter: brightness(40%);
   }
 `;
 
 const InfoBlock = styled.div`
+  /* background-image: url("./static/back_image.png"); */
   width: 100%;
   height: 100%;
   color: #fff;
@@ -37,7 +39,7 @@ const InfoBlock = styled.div`
 
 const Container = styled.div`
   /* background-image: url("./static/back_image.png"); */
-  width: 70%;
+  width: 80%;
   /* height: 50%; */
   display: flex;
   flex-direction: column;
@@ -221,8 +223,8 @@ const Headline = (props) => {
   };
   return (
     <div>
-      <BImage>
-        <Image src={`/static/${d.image}`} layout="fill" />
+      <BigImage>
+        <Image src={d.image} layout="fill" />
         <InfoBlock>
           <Container>
             <h1>{d.header}</h1>
@@ -232,7 +234,7 @@ const Headline = (props) => {
                 Смотреть Программу
               </button>
               <button id="buy_button" onClick={(e) => slide2()}>
-                Зарегистрироваться
+                Начать учиться бесплатно
               </button>
             </Buttons>
             <TimeLeft>
@@ -267,7 +269,7 @@ const Headline = (props) => {
             </TimeLeft>
           </Container>
         </InfoBlock>
-      </BImage>
+      </BigImage>
     </div>
   );
 };

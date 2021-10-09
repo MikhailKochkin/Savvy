@@ -49,12 +49,24 @@ const Programs = () => {
         "Помогаем запустить престижную юридическую карьеру. Изучаем корпоративное право, арбитражный процесс, налоги и право IP/IT.",
       term: "Длительность: 6 месяцев",
       price: "48 000₽",
-      conditions: "Рассрочка на 12 мес",
-      installments: "4 000₽",
+      conditions: "Грант на обучение",
+      installments: "до 50%",
       img: "https://images.unsplash.com/photo-1565349173908-1cf6bc9fd4ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1100&q=80",
-      pathname: "school",
+      pathname: "program",
       query: "id=main_page",
     },
+    // {
+    //   title: `Интенсив "Корпоративный юрист"`,
+    //   description:
+    //     "Повышаем квалификацию юристов в области корпоративного права, антимонопольного права и сделок M/A",
+    //   term: "Длительность: 3 месяца",
+    //   price: "28 000₽",
+    //   conditions: "Рассрочка на 12 мес",
+    //   installments: "2 340₽",
+    //   img: "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1470&q=80",
+    //   pathname: "program",
+    //   query: "id=main_page",
+    // },
     {
       title: "Старт в Гражданском праве",
       description:

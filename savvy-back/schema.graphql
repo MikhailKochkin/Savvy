@@ -64,6 +64,35 @@ type BusinessClient {
   updatedAt: DateTime!
 }
 
+input BusinessClientOrderByInput {
+  communication_medium: SortOrder
+  createdAt: SortOrder
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+  number: SortOrder
+  type: SortOrder
+  updatedAt: SortOrder
+}
+
+input BusinessClientWhereInput {
+  AND: [BusinessClientWhereInput!]
+  communication_medium: StringNullableFilter
+  createdAt: DateTimeFilter
+  email: StringFilter
+  id: StringFilter
+  name: StringNullableFilter
+  NOT: [BusinessClientWhereInput!]
+  number: StringNullableFilter
+  OR: [BusinessClientWhereInput!]
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+}
+
+input BusinessClientWhereUniqueInput {
+  id: String
+}
+
 input CareerTrackListRelationFilter {
   every: CareerTrackWhereInput
   none: CareerTrackWhereInput
@@ -1681,6 +1710,7 @@ input PromocodeList {
 }
 
 type Query {
+  businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByInput!], where: CoursePageWhereInput): [CoursePage!]!
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit

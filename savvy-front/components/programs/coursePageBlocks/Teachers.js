@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Image from "next/image";
 
 const Styles = styled.div`
   width: 100vw;
@@ -20,11 +21,18 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   h2 {
-    text-align: center;
+    text-align: left;
     font-weight: 400;
-    font-size: 3rem;
+    font-size: 4rem;
     line-height: 1.4;
-    margin-bottom: 100px;
+    width: 100%;
+    margin: 80px 0;
+  }
+  @media (max-width: 800px) {
+    h2 {
+      margin-bottom: 40px;
+      font-size: 3.2rem;
+    }
   }
 `;
 
@@ -32,58 +40,54 @@ const TeachersList = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: space-between;
   width: 100%;
 `;
 
 const TeacherBox = styled.div`
-  width: 310px;
+  width: 240px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
-  border-top: 3px solid;
-  border-top-color: ${(props) => props.color};
+  align-items: flex-start;
   margin-bottom: 40px;
-  margin-right: 50px;
-  box-shadow: 0px 0px 10px rgba(129, 129, 129, 0.45);
-  border-radius: 5px;
-  padding: 20px 0;
-  padding-top: 80px;
-  /* margin-right: 40px; */
   position: relative;
+  .image_container {
+    width: 160px;
+    height: 200px;
+    position: relative;
+    margin-bottom: 15px;
+    img {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
   .name {
     color: #313d48;
-    font-size: 2.3rem;
-    text-align: center;
+    font-size: 1.6rem;
+    text-align: left;
     line-height: 1.4;
-    margin-bottom: 20px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    width: 160px;
+    border-bottom: 1px solid black;
   }
   .work {
     color: #687481;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 500;
     margin-bottom: 20px;
-    text-align: center;
-    width: 80%;
+    text-align: left;
+    width: 160px;
     line-height: 1.4;
   }
   .description {
-    text-align: center;
+    text-align: left;
     color: #687481;
-    width: 80%;
+    width: 85%;
     font-size: 1.4rem;
     line-height: 1.5;
-  }
-  img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border-radius: 50px;
-    position: absolute;
-    top: -25px;
-    z-index: 1;
   }
   .header {
     font-weight: 600;
@@ -122,10 +126,12 @@ const Teachers = (props) => {
         <TeachersList>
           {d.authors.map((a, i) => (
             <TeacherBox color={colors[(i + 1) % 6]}>
-              <img src={a.image} />
+              <div className="image_container">
+                <Image src={a.image} layout="fill" />
+              </div>
               <div className="name">
-                {a.name}
-                <br /> {a.surname}
+                {a.name} <br />
+                {a.surname}
               </div>
               <div className="work">{a.title}</div>
               <div className="description">{a.info}</div>

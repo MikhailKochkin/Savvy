@@ -3,6 +3,7 @@ import Problem from "../components/corporate_lawyer/Problem";
 import Audience from "../components/corporate_lawyer/Audience";
 import Syllabus from "../components/corporate_lawyer/Syllabus";
 import Perks from "../components/corporate_lawyer/Perks";
+import Details from "../components/corporate_lawyer/Details";
 import Call1 from "../components/corporate_lawyer/Call1";
 import Price from "../components/corporate_lawyer/Price";
 import Teachers from "../components/corporate_lawyer/Teachers";
@@ -15,6 +16,7 @@ const corporate_lawyer = () => {
   return (
     <>
       <Main />
+      <Details />
       <Problem />
       <Audience />
       <Syllabus />
