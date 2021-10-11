@@ -6,17 +6,20 @@ import renderHTML from "react-render-html";
 const BImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  height: 80vh;
+  min-height: 80vh;
   position: relative;
   img {
     object-fit: cover;
     filter: brightness(40%);
   }
+  @media (max-width: 800px) {
+    padding: 50px 0;
+  }
 `;
 
 const InfoBlock = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -66,6 +69,7 @@ const Container = styled.div`
     }
     h2 {
       font-size: 2rem;
+      width: 100%;
     }
   }
 `;
@@ -109,6 +113,7 @@ const Buttons = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
+    width: 100%;
     #syl_button {
       width: 100%;
       margin-bottom: 20px;
@@ -150,7 +155,10 @@ const TimeLeft = styled.div`
   @media (max-width: 800px) {
     flex-direction: column;
     #clock {
-      width: 100%;
+      width: 100vw;
+      .clock_section {
+        width: 25%;
+      }
     }
   }
 `;
