@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Image from "next/image";
+// import Image from "next/image";
 
 const Styles = styled.div`
   width: 100vw;
@@ -127,7 +127,7 @@ const Reviews = (props) => {
               {r.img && r.img.length > 0 && (
                 <div className="author">
                   <div className="img_component">
-                    <Image src={r.img} layout="fill" />
+                    <img src={r.img} layout="fill" />
                   </div>
                 </div>
               )}

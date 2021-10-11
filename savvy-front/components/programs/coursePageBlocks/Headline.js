@@ -1,24 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import Image from "next/image";
+// import Image from "next/image";
+import renderHTML from "react-render-html";
 
 const BigImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  height: 90vh;
+  height: 80vh;
   position: relative;
-  background: #23074d; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #cc5333,
-    #23074d
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(
-    to right,
-    #cc5333,
-    #23074d
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
   img {
     object-fit: cover;
     filter: brightness(40%);
@@ -29,7 +18,6 @@ const InfoBlock = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100%;
   height: 100%;
-  color: #fff;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -43,20 +31,31 @@ const Container = styled.div`
   /* height: 50%; */
   display: flex;
   flex-direction: column;
+  align-items: center;
   h1 {
-    font-weight: 400;
     font-size: 6rem;
-    text-align: center;
     line-height: 1.2;
+    text-align: center;
+    font-weight: 800;
     margin: 0;
     margin-bottom: 20px;
+    color: #252f3f;
+    span {
+      background: #fce969;
+      display: inline-block;
+      transform: skew(-8deg);
+      /* -webkit-transform: skew(-5deg);
+      -moz-transform: skew(-5deg);
+      -o-transform: skew(-5deg); */
+    }
   }
   h2 {
-    font-weight: 300;
-    font-size: 2.6rem;
-    text-align: center;
+    font-size: 2.2rem;
     line-height: 1.4;
-    margin: 0;
+    text-align: center;
+    width: 75%;
+    font-weight: 400;
+    color: #4b5563;
   }
   @media (max-width: 800px) {
     width: 90%;
@@ -73,37 +72,39 @@ const Container = styled.div`
 
 const Buttons = styled.div`
   display: flex;
+  width: 65%;
   flex-direction: row;
   justify-content: center;
   margin: 30px 0;
   #syl_button {
-    width: 40%;
+    width: 45%;
     height: 50px;
     font-size: 2rem;
     font-family: Montserrat;
-    background-color: #fff;
-    border: 1px solid #fff;
+    background-color: #dedede;
+    border: 1px solid #dedede;
     border-radius: 8px;
     transition: 0.2s ease-in;
     cursor: pointer;
     &:hover {
-      background: #dedede;
+      background: #c2c2c2;
     }
   }
   #buy_button {
-    width: 40%;
+    width: 45%;
     margin-left: 50px;
+    background: #175ffe;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
     height: 50px;
     font-size: 2rem;
-    color: #000000;
-    font-family: Montserrat;
-    background-color: #d7690b;
-    border: 1px solid #d7690b;
-    border-radius: 8px;
-    transition: 0.2s ease-in;
+    outline: 0;
     cursor: pointer;
+    font-family: Montserrat;
+    transition: 0.3s;
     &:hover {
-      background: #b85a0a;
+      background: #0135a9;
     }
   }
   @media (max-width: 800px) {
@@ -224,17 +225,17 @@ const Headline = (props) => {
   return (
     <div>
       <BigImage>
-        <Image src={d.image} layout="fill" />
+        {/* <Image src={d.image} layout="fill" /> */}
         <InfoBlock>
           <Container>
-            <h1>{d.header}</h1>
+            <h1>{renderHTML(d.header)}</h1>
             <h2>{d.subheader}</h2>
             <Buttons>
               <button id="syl_button" onClick={(e) => slide()}>
                 Смотреть Программу
               </button>
               <button id="buy_button" onClick={(e) => slide2()}>
-                Начать учиться бесплатно
+                Начать учиться
               </button>
             </Buttons>
             <TimeLeft>

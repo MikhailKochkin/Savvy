@@ -132,7 +132,7 @@ const NewCoursePage = (props) => {
 
   const programs = [
     {
-      header: "Стань экспертом в Гражданском Праве",
+      header: "Стань экспертом в <span>Гражданском Праве</span>",
       subheader:
         "Изучи гражданское право на практических кейсах, чтобы успешно сдать экзамен и найти работу",
       image: "back_image_low.png",
@@ -174,7 +174,7 @@ const NewCoursePage = (props) => {
           name: "Кирилл",
           surname: "Михайлов",
           image:
-            "https://media-exp1.licdn.com/dms/image/C5603AQEgI1cMJORQVA/profile-displayphoto-shrink_400_400/0/1603742799048?e=1633564800&v=beta&t=XuBR5Dk0RjkHI_xbriY-OFXZefl9P9FjXF7i3ueiNmQ",
+            "https://sun9-21.userapi.com/impg/5rzspzFHlNYI5sMlyGWsyZBh-KSGkP7Bt7BdhQ/4u5VXDpBEr0.jpg?size=642x1080&quality=96&sign=0a19da6397e92424948cf538311bea72&type=album",
           title: "Юрист в Алруд",
           info: `Кирилл не только получил работу в одной из лучших компаний России, но и основал проект по изучению гражданского права "Цивилист". Он закончил МГУ и может много рассказать как про теорию гражданского права, так и про финансовые сделки.`,
         },
@@ -228,6 +228,12 @@ const NewCoursePage = (props) => {
           info: "Курс четко структурирован, что позволяет последовательно изучить непростой материал. Также, хочется отметить, что такой подход особенно сильно выручает в сессионный период, когда объем информации для усвоения только копится день ото дня.",
         },
       ],
+      price: {
+        full: "6 900 ₽",
+        full_explain: "Полная стоимость",
+        part: "3 300 ₽/мес",
+        part_explain: "Рассрочка на 2 мес",
+      },
       questions: [
         {
           q: "Как мне присоединиться к курсу?",
@@ -288,7 +294,7 @@ const NewCoursePage = (props) => {
       ],
     },
     {
-      header: "Выучи английский и найди первую работу",
+      header: "<span>Выучи английский</span> и найди первую работу",
       subheader:
         "Даем основы General и Legal English, чтобы пройти испытания и найти престижную юридическую работу",
       image: "/static/english_intro_course.png",
@@ -303,6 +309,12 @@ const NewCoursePage = (props) => {
       goal_3: "Научиться вести беседу с интервьюером",
       offer: `Купите сегодня – получите вебинар "Как переводить юридические тексты?"`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
+      price: {
+        full: "6 900 ₽",
+        full_explain: "Полная стоимость",
+        part: "3 300 ₽/мес",
+        part_explain: "Рассрочка на 2 мес",
+      },
       selling_point_1: "От теории к практике",
       selling_point_1_details:
         "Мы понятно разберем сложные темы на мини-лекциях и дадим конспекты. Отработаем теоретические и практические вопросы через практические упражнения. А затем на вебинарах поделиммся секретами прохождения интервью",
@@ -427,15 +439,13 @@ const NewCoursePage = (props) => {
         ) : (
           <p>Загружаем программу курса ...</p>
         )}
-        {!loading && data && (
-          <Action me={me} coursePageId={data.coursePage.id} data={prog} />
-        )}
+        {/* {!loading && data && ( */}
+        <Action me={me} coursePageId={123} data={prog} />
+        {/* )} */}
         <SellingPoints data={prog} />
         <Teachers data={prog} />
         <Reviews data={prog} />
-        {!loading && data && (
-          <Action data={prog} me={me} coursePageId={data.coursePage.id} />
-        )}
+        <Action me={me} coursePageId={123} data={prog} />
         <QA data={prog} />
       </div>
     </div>

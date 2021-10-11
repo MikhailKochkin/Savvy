@@ -3,11 +3,12 @@ import styled from "styled-components";
 
 const Styles = styled.div`
   width: 100vw;
-  min-height: 50vh;
+  min-height: 35vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-top: 1px solid #dce2e7;
   @media (max-width: 800px) {
     padding: 25px 0;
   }

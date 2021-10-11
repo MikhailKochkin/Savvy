@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Image from "next/image";
+// import Image from "next/image";
 
 const Styles = styled.div`
   width: 100vw;
@@ -127,7 +127,7 @@ const Teachers = (props) => {
           {d.authors.map((a, i) => (
             <TeacherBox color={colors[(i + 1) % 6]}>
               <div className="image_container">
-                <Image src={a.image} layout="fill" />
+                <img src={a.image} layout="fill" />
               </div>
               <div className="name">
                 {a.name} <br />

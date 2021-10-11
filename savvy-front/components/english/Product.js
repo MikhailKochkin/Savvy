@@ -59,6 +59,8 @@ const Styles = styled.div`
     grid-area: 2 / 2 / 3 / 3;
   }
   @media (max-width: 800px) {
+    min-height: 80vh;
+
     h2 {
       font-size: 3.4rem;
       margin-bottom: 0;

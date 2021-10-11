@@ -3,9 +3,6 @@ import styled from "styled-components";
 import Question from "./Question";
 import Modal from "styled-react-modal";
 
-import "intersection-observer";
-import { useIsVisible } from "react-is-visible";
-
 const Styles = styled.div`
   width: 100vw;
   min-height: 100vh;
@@ -136,7 +133,6 @@ const QA = (props) => {
   const [hasShown, setHasShown] = useState(false);
 
   const nodeRef = useRef();
-  const isVisible = useIsVisible(nodeRef);
 
   useEffect(() => {}, []);
 
