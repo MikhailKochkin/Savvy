@@ -1,23 +1,4 @@
 // next.config.js
-// const withCSS = require("@zeit/next-css");
-// const withOptimizedImages = require("next-optimized-images");
-
-// module.exports = withCSS({
-//   cssModules: true,
-//   //   cssLoaderOptions: {
-//   //     importLoaders: 1,
-//   //     localIdentName: "[local]___[hash:base64:5]"
-//   //   }
-// });
-
-const localeSubpaths = {};
-
-module.exports = {
-  rewrites: async () => nextI18NextRewrites(localeSubpaths),
-  publicRuntimeConfig: {
-    localeSubpaths,
-  },
-};
 
 module.exports = {
   images: {
