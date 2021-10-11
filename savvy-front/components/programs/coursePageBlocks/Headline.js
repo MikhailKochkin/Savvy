@@ -6,8 +6,11 @@ import renderHTML from "react-render-html";
 const BigImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  min-height: 80vh;
-  position: relative;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   img {
     object-fit: cover;
     filter: brightness(40%);
