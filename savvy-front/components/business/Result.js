@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { withTranslation } from "../../i18n";
 import Router from "next/router";
 
 const Styles = styled.div`
@@ -87,7 +86,7 @@ const Result = (props) => {
     <Styles>
       <Container>
         <div id="block">
-          <div id="header">{props.t("result")}</div>
+          {/* <div id="header">{props.t("result")}</div> */}
           <div id="C2A">
             Посмотрите, как это работает на практике в нашем демо-уроке
           </div>
@@ -109,4 +108,4 @@ const Result = (props) => {
   );
 };
 
-export default withTranslation("business")(Result);
+export default Result;

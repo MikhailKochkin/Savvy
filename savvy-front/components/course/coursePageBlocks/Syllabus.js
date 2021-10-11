@@ -2,7 +2,7 @@ import { useState } from "react";
 import LessonHeader from "./LessonHeader";
 import { useUser } from "../../User";
 import Feedback from "../Feedback";
-import { withTranslation } from "../../../i18n";
+// import { withTranslation } from "../../../i18n";
 
 import {
   Container,

@@ -7,7 +7,6 @@ import { check } from "react-icons-kit/fa/check";
 import Icon from "react-icons-kit";
 import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
 import * as EmailValidator from "email-validator";
-import { withTranslation } from "../../i18n";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient($email: String!) {
@@ -282,7 +281,7 @@ const Intro = (props) => {
     <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
       {(createBusinessClient, { error, loading }) => (
         <Styles>
-          <Containers>
+          {/* <Containers>
             <LeftContainer>
               <div>
                 <img src="../../static/boy.svg" />
@@ -343,7 +342,7 @@ const Intro = (props) => {
                 <img src="../../static/girl.svg" />
               </div>
             </RightContainer>
-          </Containers>
+          </Containers> */}
           {/* <Arrow>
             <Icon
               size={75}
@@ -357,4 +356,5 @@ const Intro = (props) => {
   );
 };
 
-export default withTranslation("business")(Intro);
+// export default withTranslation("business")(Intro);
+export default Intro;

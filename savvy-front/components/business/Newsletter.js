@@ -8,7 +8,6 @@ import { check } from "react-icons-kit/fa/check";
 import { facebookSquare } from "react-icons-kit/fa/facebookSquare";
 import { linkedinSquare } from "react-icons-kit/fa/linkedinSquare";
 import { instagram } from "react-icons-kit/fa/instagram";
-import { withTranslation } from "../../i18n";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient($email: String!) {
@@ -242,87 +241,87 @@ const Container = styled.div`
 const Newsletter = (props) => {
   const [email, setEmail] = useState("");
   const [comment, setComment] = useState("");
-  return (
-    <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
-      {(createBusinessClient, { error, loading }) => (
-        <Styles>
-          <Container>
-            <div className="message">
-              <div id="header">{props.t("newsletter_header")}</div>
-              <div id="C2A">{props.t("newsletter_С2A")}</div>
-              <div className="SM">
-                <span>
-                  <a target="_blank" href="https://www.facebook.com/besavvyapp">
-                    <Icon size={40} icon={facebookSquare} />
-                  </a>
-                </span>
-                <span>
-                  <a
-                    target="_blank"
-                    href="https://www.linkedin.com/company/besavvyapp"
-                  >
-                    <Icon size={40} icon={linkedinSquare} />
-                  </a>
-                </span>
-                <span>
-                  <a
-                    target="_blank"
-                    href="https://www.instagram.com/besavvylawyer/"
-                  >
-                    <Icon size={40} icon={instagram} />
-                  </a>
-                </span>
-              </div>
-            </div>
-            <div className="input">
-              <div id="input">
-                <div id="text">
-                  <input
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Mikhail@besavvy.app"
-                  />
-                </div>
-                <button
-                  onClick={(e) => {
-                    if (EmailValidator.validate(email)) {
-                      createBusinessClient();
-                      setComment("We will be in touch!");
-                    } else {
-                      setComment("This is not a correct email");
-                    }
-                  }}
-                >
-                  Sign Up
-                </button>
-              </div>
-              <Comment>{comment}</Comment>
-              <div id="advantages">
-                <div className="bullet">
-                  <span>
-                    <Icon size={25} icon={check} />
-                  </span>
-                  <div>{props.t("for_lawyers")}</div>
-                </div>
-                <div className="bullet">
-                  <span>
-                    <Icon size={25} icon={check} />
-                  </span>
-                  <div>{props.t("for_accountants")}</div>
-                </div>
-                <div className="bullet">
-                  <span>
-                    <Icon size={25} icon={check} />
-                  </span>
-                  <div>{props.t("for_consultants")}</div>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </Styles>
-      )}
-    </Mutation>
-  );
+  return test;
+  // <Mutation mutation={CREATE_CLIENT} variables={{ email }}>
+  //   {(createBusinessClient, { error, loading }) => (
+  //     <Styles>
+  //       <Container>
+  //         <div className="message">
+  //           <div id="header">{props.t("newsletter_header")}</div>
+  //           <div id="C2A">{props.t("newsletter_С2A")}</div>
+  //           <div className="SM">
+  //             <span>
+  //               <a target="_blank" href="https://www.facebook.com/besavvyapp">
+  //                 <Icon size={40} icon={facebookSquare} />
+  //               </a>
+  //             </span>
+  //             <span>
+  //               <a
+  //                 target="_blank"
+  //                 href="https://www.linkedin.com/company/besavvyapp"
+  //               >
+  //                 <Icon size={40} icon={linkedinSquare} />
+  //               </a>
+  //             </span>
+  //             <span>
+  //               <a
+  //                 target="_blank"
+  //                 href="https://www.instagram.com/besavvylawyer/"
+  //               >
+  //                 <Icon size={40} icon={instagram} />
+  //               </a>
+  //             </span>
+  //           </div>
+  //         </div>
+  //         <div className="input">
+  //           <div id="input">
+  //             <div id="text">
+  //               <input
+  //                 type="email"
+  //                 onChange={(e) => setEmail(e.target.value)}
+  //                 placeholder="Mikhail@besavvy.app"
+  //               />
+  //             </div>
+  //             <button
+  //               onClick={(e) => {
+  //                 if (EmailValidator.validate(email)) {
+  //                   createBusinessClient();
+  //                   setComment("We will be in touch!");
+  //                 } else {
+  //                   setComment("This is not a correct email");
+  //                 }
+  //               }}
+  //             >
+  //               Sign Up
+  //             </button>
+  //           </div>
+  //           <Comment>{comment}</Comment>
+  //           <div id="advantages">
+  //             <div className="bullet">
+  //               <span>
+  //                 <Icon size={25} icon={check} />
+  //               </span>
+  //               <div>{props.t("for_lawyers")}</div>
+  //             </div>
+  //             <div className="bullet">
+  //               <span>
+  //                 <Icon size={25} icon={check} />
+  //               </span>
+  //               <div>{props.t("for_accountants")}</div>
+  //             </div>
+  //             <div className="bullet">
+  //               <span>
+  //                 <Icon size={25} icon={check} />
+  //               </span>
+  //               <div>{props.t("for_consultants")}</div>
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </Container>
+  //     </Styles>
+  //   )}
+  // </Mutation>
 };
 
-export default withTranslation("business")(Newsletter);
+// export default withTranslation("business")(Newsletter);
+export default Newsletter;

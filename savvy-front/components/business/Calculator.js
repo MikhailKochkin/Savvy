@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const Divider1 = styled.div``;
 
@@ -248,14 +248,14 @@ const Calculator = (props) => {
     <>
       <Styles>
         <div id="header">
-          <div id="header_text">{props.t("calulator_header")}</div>
+          {/* <div id="header_text">{props.t("calulator_header")}</div> */}
           {/* <span className="animated"></span>{" "} */}
         </div>
         <Box>
           <div className="row">
             <div className="data">
               <div className="text_area">
-                <div> {props.t("calulator_number_employees")}</div>
+                {/* <div> {props.t("calulator_number_employees")}</div> */}
               </div>
               <div className="input_area">
                 <input
@@ -339,4 +339,5 @@ const Calculator = (props) => {
   );
 };
 
-export default withTranslation("business")(Calculator);
+// export default withTranslation("business")(Calculator);
+export default Calculator;

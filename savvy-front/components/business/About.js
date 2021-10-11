@@ -3,8 +3,7 @@ import styled from "styled-components";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import ReactResizeDetector from "react-resize-detector";
-import { withTranslation } from "../../i18n";
-
+// s
 const Styles = styled.div`
   min-height: 60vh;
   width: 100vw;
@@ -166,7 +165,7 @@ const About = (props) => {
   };
   return (
     <Styles id="about">
-      <div class="custom-shape-divider-top-1615390650">
+      {/* <div class="custom-shape-divider-top-1615390650">
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +225,7 @@ const About = (props) => {
               <div>
                 <div className="header2">{props.t("textchecker")}</div>
                 <div className="text">{props.t("textchecker_explainer")}</div>
-                {/* <button className="button">Try it</button> */}
+                <button className="button">Try it</button>
               </div>
             </Text>
             <div className="image">
@@ -234,9 +233,10 @@ const About = (props) => {
             </div>
           </Slide>
         </Carousel>
-      </Box>
+      </Box> */}
     </Styles>
   );
 };
 
-export default withTranslation("business")(About);
+// export default withTranslation("business")(About);
+export default About;

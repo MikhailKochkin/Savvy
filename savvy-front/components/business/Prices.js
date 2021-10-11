@@ -4,7 +4,6 @@ import Router from "next/router";
 import { check } from "react-icons-kit/fa/check";
 import Icon from "react-icons-kit";
 import OurCalculator from "./OurCalculator";
-import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   min-height: 70vh;
@@ -168,7 +167,7 @@ const Prices = (props) => {
   const [plan, setPlan] = useState("business");
   return (
     <Styles>
-      <div class="custom-shape-divider-top-1616698146">
+      {/* <div class="custom-shape-divider-top-1616698146">
         <svg
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -230,7 +229,7 @@ const Prices = (props) => {
                 });
               }}
             >
-              {props.t("C2A")}
+            test
             </Button>
           </div>
         </Card>
@@ -241,9 +240,10 @@ const Prices = (props) => {
           отцифровать образовательный опыт сотрудников и в 2 раза сократить
           расходы на обучение
         </div>
-      </Explainer>
+      </Explainer> */}
     </Styles>
   );
 };
 
-export default withTranslation("business")(Prices);
+// export default withTranslation("business")(Prices);
+export default Prices;

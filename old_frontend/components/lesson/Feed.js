@@ -9,7 +9,7 @@ import Link from "next/link";
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   display: flex;
@@ -104,17 +104,18 @@ const Feed = (props) => {
       const data = await setNum(num + 1);
       //   console.log(document.getElementsByClassName("final")[0].previousSibling);
       if (props.components.length > num + 2) {
-        var my_element = document.getElementsByClassName("final")[0]
-          .previousSibling;
+        var my_element =
+          document.getElementsByClassName("final")[0].previousSibling;
         my_element.scrollIntoView({
           behavior: "smooth",
           block: "start",
           inline: "nearest",
         });
       } else if (props.components.length === num + 2) {
-        var my_element = document.getElementsByClassName("no")[
-          document.getElementsByClassName("no").length - 1
-        ];
+        var my_element =
+          document.getElementsByClassName("no")[
+            document.getElementsByClassName("no").length - 1
+          ];
         my_element.scrollIntoView({
           behavior: "smooth",
           block: "start",
@@ -128,17 +129,18 @@ const Feed = (props) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
       if (props.components.length > num + 2) {
-        var my_element = document.getElementsByClassName("final")[0]
-          .previousSibling;
+        var my_element =
+          document.getElementsByClassName("final")[0].previousSibling;
         my_element.scrollIntoView({
           behavior: "smooth",
           block: "start",
           inline: "nearest",
         });
       } else if (props.components.length === num + 2) {
-        var my_element = document.getElementsByClassName("no")[
-          document.getElementsByClassName("no").length - 1
-        ];
+        var my_element =
+          document.getElementsByClassName("no")[
+            document.getElementsByClassName("no").length - 1
+          ];
         my_element.scrollIntoView({
           behavior: "smooth",
           block: "start",
@@ -163,8 +165,8 @@ const Feed = (props) => {
       props.my_result.progress / props.number_of_tasks < 0.9
     ) {
       if (props.components.length > num + 2) {
-        var my_element = document.getElementsByClassName("final")[0]
-          .previousSibling;
+        var my_element =
+          document.getElementsByClassName("final")[0].previousSibling;
         my_element &&
           my_element.scrollIntoView({
             behavior: "smooth",
@@ -172,9 +174,10 @@ const Feed = (props) => {
             inline: "nearest",
           });
       } else if (props.components.length === num + 2) {
-        var my_element = document.getElementsByClassName("no")[
-          document.getElementsByClassName("no").length - 1
-        ];
+        var my_element =
+          document.getElementsByClassName("no")[
+            document.getElementsByClassName("no").length - 1
+          ];
         my_element.scrollIntoView({
           behavior: "smooth",
           block: "start",

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
-import { withTranslation } from "../../i18n";
+// import { withTranslation } from "../../i18n";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
@@ -216,15 +216,8 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const {
-    lesson,
-    name,
-    author,
-    new_students,
-    coursePageId,
-    students,
-    me,
-  } = props;
+  const { lesson, name, author, new_students, coursePageId, students, me } =
+    props;
 
   let color;
 
