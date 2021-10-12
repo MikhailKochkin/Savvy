@@ -1,6 +1,6 @@
 export const endpoint = `http://localhost:4444/graphql`;
 export const prodEndpoint =
-  "https://api.besavvy.app/graphql" || "https://api.besavvy.ru/graphql";
+  `https://api.besavvy.app/graphql` || `https://api.besavvy.ru/graphql`;
 export const NEXTAUTH_URL = "http://localhost:7777";
 
 export const Unis = [
