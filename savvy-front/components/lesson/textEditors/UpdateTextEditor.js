@@ -40,10 +40,10 @@ const Container = styled.div`
     padding: 0% 5%;
   }
   p > a {
-    font-weight: 700;
+    /* font-weight: 700; */
   }
   p > a:hover {
-    text-decoration: underline;
+    /* text-decoration: underline; */
   }
   @media (max-width: 600px) {
     width: 100%;

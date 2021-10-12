@@ -388,7 +388,7 @@ const SingleTest = (props) => {
     <Styles width={width}>
       {!exam && story !== true && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {!update ? "Меняем..." : "Изменить"}
+          {!update ? "Изменить" : "Назад"}
         </StyledButton>
       )}
       {me && me.id === props.user && !story && !exam && (

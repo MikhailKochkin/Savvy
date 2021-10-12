@@ -210,39 +210,43 @@ const Block = (props) => {
           {task === "newTest" && (
             <Section>
               <h4>Тесты:</h4>
-              {tests.map((t) => (
-                <div className="option">
-                  <div>{t.question}</div>
-                  <button
-                    name={t.__typename}
-                    value={t.id}
-                    onClick={(e) =>
-                      props.set(e.target.name, e.target.value, props.i)
-                    }
-                  >
-                    Выбрать
-                  </button>
-                </div>
-              ))}
+              {[...tests]
+                .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+                .map((t) => (
+                  <div className="option">
+                    <div>{t.question}</div>
+                    <button
+                      name={t.__typename}
+                      value={t.id}
+                      onClick={(e) =>
+                        props.set(e.target.name, e.target.value, props.i)
+                      }
+                    >
+                      Выбрать
+                    </button>
+                  </div>
+                ))}
             </Section>
           )}
           {task === "quiz" && (
             <Section>
               <h4>Вопросы:</h4>
-              {quizes.map((q) => (
-                <div className="option">
-                  <div>{q.question}</div>
-                  <button
-                    name={q.__typename}
-                    value={q.id}
-                    onClick={(e) =>
-                      props.set(e.target.name, e.target.value, props.i)
-                    }
-                  >
-                    Выбрать
-                  </button>
-                </div>
-              ))}
+              {[...quizes]
+                .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+                .map((q) => (
+                  <div className="option">
+                    <div>{q.question}</div>
+                    <button
+                      name={q.__typename}
+                      value={q.id}
+                      onClick={(e) =>
+                        props.set(e.target.name, e.target.value, props.i)
+                      }
+                    >
+                      Выбрать
+                    </button>
+                  </div>
+                ))}
             </Section>
           )}
           {task === "testPractice" && (

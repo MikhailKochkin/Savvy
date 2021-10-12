@@ -98,7 +98,6 @@ const Text = styled.div`
   margin-top: 15px;
   /* padding-right: 25px; */
   .comments {
-    background-color: yellow;
     width: 40px;
     height: 40px;
     display: flex;
@@ -318,7 +317,7 @@ const LessonHeader = (props) => {
   console.log("statements", statements);
   let need_response;
   if (statements) {
-    need_response = statements.filter((s) => s.comments.length !== 0);
+    need_response = statements.filter((s) => s.comments.length === 0);
   } else {
     need_response = [];
   }
@@ -330,8 +329,7 @@ const LessonHeader = (props) => {
         <div>
           <Text>
             <div className="lesson_name">
-              {lesson.number}. {name}{" "}
-              <div className="comments">{need_response.length}</div>
+              {lesson.number}. {name} – {need_response.length}
             </div>
             <div className="lesson_description">
               {lesson.description &&

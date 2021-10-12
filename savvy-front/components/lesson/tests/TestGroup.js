@@ -17,35 +17,37 @@ class TestGroup extends Component {
     let arr;
     return (
       <Styles>
-        {this.state.tests.map((test, index) => {
-          let arr = Array(test.correct.length).fill(false);
-          return (
-            <>
-              <SingleTest
-                id={test.id}
-                testID={test.id}
-                question={test.question}
-                num={index + 1}
-                type={test.type}
-                answers={test.answers}
-                true={test.correct}
-                complexity={test.complexity}
-                length={arr}
-                ifRight={test.ifRight}
-                ifWrong={test.ifWrong}
-                next={test.next}
-                user={test.user.id}
-                user_name={test.user}
-                me={this.props.me}
-                lessonID={this.props.lessonID}
-                userData={this.props.testResults}
-                quizes={this.props.quizes}
-                notes={this.props.notes}
-                tests={this.props.tests}
-              />
-            </>
-          );
-        })}
+        {[...this.state.tests]
+          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+          .map((test, index) => {
+            let arr = Array(test.correct.length).fill(false);
+            return (
+              <>
+                <SingleTest
+                  id={test.id}
+                  testID={test.id}
+                  question={test.question}
+                  num={index + 1}
+                  type={test.type}
+                  answers={test.answers}
+                  true={test.correct}
+                  complexity={test.complexity}
+                  length={arr}
+                  ifRight={test.ifRight}
+                  ifWrong={test.ifWrong}
+                  next={test.next}
+                  user={test.user.id}
+                  user_name={test.user}
+                  me={this.props.me}
+                  lessonID={this.props.lessonID}
+                  userData={this.props.testResults}
+                  quizes={this.props.quizes}
+                  notes={this.props.notes}
+                  tests={this.props.tests}
+                />
+              </>
+            );
+          })}
       </Styles>
     );
   }

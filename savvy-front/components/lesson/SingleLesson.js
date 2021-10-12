@@ -160,6 +160,7 @@ const SINGLE_LESSON_QUERY = gql`
         ifWrong
         answer
         next
+        createdAt
         user {
           id
           name
@@ -233,6 +234,7 @@ const SINGLE_LESSON_QUERY = gql`
         ifWrong
         next
         question
+        createdAt
         user {
           id
         }
@@ -651,21 +653,23 @@ const SingleLesson = (props) => {
                         </TextBar>
                       )}
                       {page === "note" &&
-                        lesson.notes.map((note) => (
-                          <Note
-                            text={note.text}
-                            me={me}
-                            user={lesson.user.id}
-                            note={note}
-                            id={note.id}
-                            complexity={note.complexity}
-                            next={note.next}
-                            quizes={lesson.quizes}
-                            notes={lesson.notes}
-                            tests={lesson.newTests}
-                            lessonID={lesson.id}
-                          />
-                        ))}
+                        [...lesson.notes]
+                          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+                          .map((note) => (
+                            <Note
+                              text={note.text}
+                              me={me}
+                              user={lesson.user.id}
+                              note={note}
+                              id={note.id}
+                              complexity={note.complexity}
+                              next={note.next}
+                              quizes={lesson.quizes}
+                              notes={lesson.notes}
+                              tests={lesson.newTests}
+                              lessonID={lesson.id}
+                            />
+                          ))}
                       {page === "chat" &&
                         lesson.chats.map((c) => (
                           <Chat

@@ -275,20 +275,12 @@ const deserialize = (el) => {
 
   if (TEXT_TAGS[el.nodeName]) {
     const attrs = TEXT_TAGS[el.nodeName](el);
-    // console.log(
-    //   99,
-    //   children.map((child) => jsx("text", attrs, child))
-    // );
+
     return children.map((child) => jsx("text", attrs, child));
     // return children
     //   .find((child) => Text.isText(child))
     //   ?.map((child) => jsx("text", attrs, child));
   }
-
-  // if (TEXT_TAGS[el.nodeName]) {
-  //   const attrs = TEXT_TAGS[el.nodeName](el);
-  //   return children.map((child) => jsx("text", attrs, child));
-  // }
 
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
@@ -319,7 +311,6 @@ const deserialize = (el) => {
       children.length > 0 ? children : [{ text: "" }]
     );
   }
-  // console.log("children", children);
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -671,7 +662,6 @@ const App = (props) => {
   props.value ? (html = props.value) : (html = `<p> </p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
-
   const [value, setValue] = useState(initial);
 
   const editor = useMemo(
@@ -747,7 +737,6 @@ const App = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        // console.log("value", arr);
         setValue(value);
         props.getEditorText(arr.join(""));
       }}
@@ -906,6 +895,10 @@ const Leaf = ({ attributes, children, leaf }) => {
 
   if (leaf.underline) {
     children = <u>{children}</u>;
+  }
+
+  if (leaf.error) {
+    children = <ErrorElement>{children}</ErrorElement>;
   }
 
   if (leaf.note) {

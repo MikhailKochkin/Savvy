@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const DELETE_STATEMENT_MUTATION = gql`
-  mutation DELETE_STATEMENT_MUTATION($id: ID!) {
+  mutation DELETE_STATEMENT_MUTATION($id: String!) {
     deleteStatement(id: $id) {
       id
     }

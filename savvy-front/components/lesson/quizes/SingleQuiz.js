@@ -424,7 +424,7 @@ const SingleQuiz = (props) => {
           <Buttons>
             {!exam && !story && (
               <StyledButton onClick={(e) => setUpdate(!update)}>
-                {!update ? "Меняем..." : "Изменить"}
+                {!update ? "Изменить" : "Назад"}
               </StyledButton>
             )}
             {me && me.id === user && !props.exam && !props.story ? (

@@ -33,34 +33,36 @@ class QuizGroup extends Component {
   render() {
     return (
       <Styles>
-        {this.props.quizes.map((quiz, index) => (
-          <>
-            <SingleQuiz
-              id={quiz.id}
-              question={quiz.question}
-              answer={quiz.answer}
-              check={quiz.check}
-              type={quiz.type}
-              complexity={quiz.complexity}
-              num={index + 1}
-              getQuizData={this.myCallback}
-              me={this.props.me}
-              ifRight={quiz.ifRight}
-              ifWrong={quiz.ifWrong}
-              lessonID={this.props.lessonID}
-              quizID={quiz.id}
-              user={quiz.user.id}
-              user_name={quiz.user}
-              userData={this.props.quizResults}
-              quizes={this.props.quizes}
-              notes={this.props.notes}
-              tests={this.props.tests}
-              notes={this.props.notes}
-              next={quiz.next}
-              getData={this.updateArray}
-            />
-          </>
-        ))}
+        {[...this.props.quizes]
+          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+          .map((quiz, index) => (
+            <>
+              <SingleQuiz
+                id={quiz.id}
+                question={quiz.question}
+                answer={quiz.answer}
+                check={quiz.check}
+                type={quiz.type}
+                complexity={quiz.complexity}
+                num={index + 1}
+                getQuizData={this.myCallback}
+                me={this.props.me}
+                ifRight={quiz.ifRight}
+                ifWrong={quiz.ifWrong}
+                lessonID={this.props.lessonID}
+                quizID={quiz.id}
+                user={quiz.user.id}
+                user_name={quiz.user}
+                userData={this.props.quizResults}
+                quizes={this.props.quizes}
+                notes={this.props.notes}
+                tests={this.props.tests}
+                notes={this.props.notes}
+                next={quiz.next}
+                getData={this.updateArray}
+              />
+            </>
+          ))}
       </Styles>
     );
   }
