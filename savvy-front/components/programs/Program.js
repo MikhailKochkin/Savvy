@@ -223,7 +223,7 @@ const Program = (props) => {
           surname: "Шадрин",
           image:
             "https://fbk-pravo.ru/upload/iblock/723/doqskl%20tryfeal_big.jpg",
-          title: `Юрист ФБК Legal`,
+          title: `Юрист антимонопольной практики`,
           info: "",
         },
       ],
