@@ -11,19 +11,6 @@ function MyApp({ Component, apollo, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    TagManager.initialize({ gtmId: "GTM-WSZMCRD" });
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "d937200d-ad09-416f-87ba-4d441dcf12fd";
-    (function () {
-      var d = document;
-      var s = d.createElement("script");
-      s.src = "https://client.crisp.chat/l.js";
-      s.async = 1;
-      d.getElementsByTagName("head")[0].appendChild(s);
-    })();
-  });
-
-  useEffect(() => {
     // This pageview only triggers the first time (it's important for Pixel to have real information)
     fbq.pageview();
 
@@ -37,25 +24,22 @@ function MyApp({ Component, apollo, pageProps }) {
     };
   }, [router.events]);
 
+  useEffect(() => {
+    TagManager.initialize({ gtmId: "GTM-WSZMCRD" });
+    window.$crisp = [];
+    window.CRISP_WEBSITE_ID = "d937200d-ad09-416f-87ba-4d441dcf12fd";
+    (function () {
+      var d = document;
+      var s = d.createElement("script");
+      s.src = "https://client.crisp.chat/l.js";
+      s.async = 1;
+      d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+  });
+
   return (
     <ApolloProvider client={apollo}>
       <Page>
-        <script
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', ${fbq.FB_PIXEL_ID});
-          `,
-          }}
-        />
         <Component {...pageProps} />
       </Page>
     </ApolloProvider>

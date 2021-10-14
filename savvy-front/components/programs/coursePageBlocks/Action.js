@@ -13,12 +13,14 @@ const CREATE_CLIENT = gql`
     $name: String!
     $number: String!
     $type: String!
+    $communication_medium: String!
   ) {
     createBusinessClient(
       email: $email
       name: $name
       number: $number
       type: $type
+      communication_medium: $communication_medium
     ) {
       id
     }
@@ -119,6 +121,7 @@ const Description = styled.div`
     #header {
       font-size: 2.6rem;
       width: 95%;
+      margin-top: 10px;
     }
     #details {
       #prices {
@@ -131,6 +134,8 @@ const Description = styled.div`
         }
         .parts {
           width: 90%;
+          margin-top: 10px;
+
           span {
             font-size: 2.2rem;
           }
@@ -429,6 +434,7 @@ const Action = (props) => {
                           email,
                           name,
                           number,
+                          communication_medium: "school",
                         },
                       });
                       console.log(res);

@@ -56,6 +56,9 @@ const Section = styled.div`
     border-bottom: 1px solid #dce2e7;
     margin-bottom: 20px;
     padding-bottom: 10px;
+    &#last {
+      border-bottom: 1px solid #fff;
+    }
   }
 `;
 
@@ -77,7 +80,7 @@ const Details = (props) => {
             Получите доступ к 60 часам занятий сразу после покупки
           </div>
         </Section>
-        <Section>
+        <Section id="last">
           <div className="name">Доступ</div>
           <div className="main">{d.prior_klnowledge_1}</div>
           <div className="secondary">{d.prior_klnowledge_2}</div>

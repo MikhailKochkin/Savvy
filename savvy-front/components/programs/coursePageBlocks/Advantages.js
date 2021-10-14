@@ -50,7 +50,6 @@ const Points = styled.div`
 `;
 
 const Point = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   width: 320px;
@@ -68,6 +67,7 @@ const Point = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
+    width: 100%;
   }
 `;
 

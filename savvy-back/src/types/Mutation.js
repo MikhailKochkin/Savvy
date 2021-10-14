@@ -23,9 +23,13 @@ const checkout = new YooCheckout({
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
+const Demo_school = require("../emails/Demo_school");
+const Demo_eng = require("../emails/Demo_eng");
+
 const NextWeekEmail = require("../emails/nextWeek");
 const CommentEmail = require("../emails/Comment");
 const ConfEmail = require("../emails/Conf");
+const { argsToArgsConfig } = require("graphql/type/definition");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 
@@ -2220,6 +2224,38 @@ const Mutation = mutationType({
         return Feedback;
       },
     });
+    t.field("updateBusinessClient", {
+      type: "BusinessClient",
+      args: {
+        communication_medium: stringArg(),
+        id: stringArg(),
+      },
+      resolve: async (_, { communication_medium, id }, ctx) => {
+        const bclient = await ctx.prisma.businessClient.update({
+          where: { id },
+          data: { communication_medium },
+        });
+        const bc = await ctx.prisma.businessClient.findUnique({
+          where: { id: id },
+        });
+        if (communication_medium == "english") {
+          const newEmail3 = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: bc.email,
+            Subject: "Открытые уроки по юр английскому",
+            HtmlBody: Demo_eng.Demo_eng(),
+          });
+        } else {
+          const newEmail4 = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: bc.email,
+            Subject: "Открытые уроки BeSavvy",
+            HtmlBody: Demo_school.Demo_school(),
+          });
+        }
+        return bclient;
+      },
+    });
     t.field("createBusinessClient", {
       type: "BusinessClient",
       args: {
@@ -2235,7 +2271,6 @@ const Mutation = mutationType({
             ...args,
           },
         });
-
         const newEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: "Mikhail@besavvy.app",
@@ -2253,6 +2288,24 @@ const Mutation = mutationType({
             `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
           ),
         });
+        if (args.communication_medium == "english") {
+          console.log(1);
+
+          const newEmail3 = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: args.email,
+            Subject: "Открытые уроки по юр английскому",
+            HtmlBody: Demo_eng.Demo_eng(),
+          });
+        } else {
+          const newEmail4 = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: args.email,
+            Subject: "Открытые уроки Школы Молодого Юриста",
+            HtmlBody: Demo_school.Demo_school(),
+          });
+        }
+
         return new_client;
       },
     }),

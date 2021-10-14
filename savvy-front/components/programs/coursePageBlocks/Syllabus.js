@@ -175,7 +175,7 @@ const CoursePage = (props) => {
                     </div>{" "}
                     <div>
                       {getNoun(
-                        props.data.syllabus.lessons.length,
+                        props.data.syllabus.lessons,
                         "урок",
                         "урока",
                         "уроков"
@@ -190,7 +190,7 @@ const CoursePage = (props) => {
                     <div>
                       практических{" "}
                       {getNoun(
-                        props.data.syllabus.webinars.length,
+                        props.data.syllabus.webinars,
                         "вебинар",
                         "вебинара",
                         "вебинаров"

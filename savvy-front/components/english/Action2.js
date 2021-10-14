@@ -12,12 +12,14 @@ const CREATE_CLIENT = gql`
     $name: String!
     $number: String!
     $type: String!
+    $communication_medium: String!
   ) {
     createBusinessClient(
       email: $email
       name: $name
       number: $number
       type: $type
+      communication_medium: $communication_medium
     ) {
       id
     }
@@ -266,6 +268,7 @@ const Action = () => {
                         email,
                         name,
                         number,
+                        communication_medium: "english",
                       },
                     });
                     console.log(res);
