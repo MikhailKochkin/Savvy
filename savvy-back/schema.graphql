@@ -54,6 +54,7 @@ input BoolNullableListFilter {
 }
 
 type BusinessClient {
+  comment: String
   communication_medium: String
   createdAt: DateTime!
   email: String!
@@ -65,18 +66,21 @@ type BusinessClient {
 }
 
 input BusinessClientOrderByInput {
+  comment: SortOrder
   communication_medium: SortOrder
   createdAt: SortOrder
   email: SortOrder
   id: SortOrder
   name: SortOrder
   number: SortOrder
+  tags: SortOrder
   type: SortOrder
   updatedAt: SortOrder
 }
 
 input BusinessClientWhereInput {
   AND: [BusinessClientWhereInput!]
+  comment: StringNullableFilter
   communication_medium: StringNullableFilter
   createdAt: DateTimeFilter
   email: StringFilter
@@ -85,6 +89,7 @@ input BusinessClientWhereInput {
   NOT: [BusinessClientWhereInput!]
   number: StringNullableFilter
   OR: [BusinessClientWhereInput!]
+  tags: StringNullableListFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
 }
@@ -1171,10 +1176,11 @@ type Mutation {
   remind(id: String, reminders: [DateTime]): CourseVisit
   requestReset(email: String): Message
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
+  sendBusinessClientEmail(communication_medium: String, id: String): BusinessClient
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
-  updateBusinessClient(communication_medium: String, id: String): BusinessClient
+  updateBusinessClient(comment: String, id: String): BusinessClient
   updateChat(id: String, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser

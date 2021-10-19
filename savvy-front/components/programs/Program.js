@@ -215,7 +215,7 @@ const Program = (props) => {
           surname: "Мамедова",
           image:
             "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1634217191/photo_2021-10-14_16.12.46.jpg",
-          title: `Юрист Пепеляев Групп`,
+          title: `Юрист Antitrust Advisory`,
           info: "",
         },
         {
@@ -960,10 +960,10 @@ const Program = (props) => {
         ],
       },
       price: {
-        full: "48 000 ₽",
+        full: "54 000 ₽",
         full_explain: "Полная стоимость",
-        part: "4 000 ₽/мес",
-        part_explain: "Рассрочка на 12 мес",
+        part: "32 400 ₽",
+        part_explain: "Скидка 40% до 24.10",
       },
       reviews: [
         {

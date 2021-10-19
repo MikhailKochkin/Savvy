@@ -127,8 +127,7 @@ const NewCoursePage = (props) => {
   moment.locale("ru");
 
   var today = moment();
-  var tomorrow = moment(today).add(5, "days");
-  console.log("tomorrow", moment(tomorrow._d).format("Do MMMM YYYY"));
+  var tomorrow = moment(today).add(3, "days");
 
   const programs = [
     {
@@ -300,8 +299,8 @@ const NewCoursePage = (props) => {
       image: "/static/english_intro_course.png",
       length1: "2 месяца",
       length2: "4 часа в неделю",
-      start: "18 октября 2021",
-      start_eng: "October 18, 2021 20:00:00",
+      start: moment(tomorrow._d).format("Do MMMM YYYY"),
+      start_eng: tomorrow._d,
       prior_klnowledge_1: "Уровень – A1",
       prior_klnowledge_2: "Начинаем с основ",
       goal_1: "Пройти тестирование на грамматику и лексику",

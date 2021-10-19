@@ -65,17 +65,20 @@ export interface NexusGenInputs {
     equals?: boolean[] | null; // [Boolean!]
   }
   BusinessClientOrderByInput: { // input type
+    comment?: NexusGenEnums['SortOrder'] | null; // SortOrder
     communication_medium?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     email?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     name?: NexusGenEnums['SortOrder'] | null; // SortOrder
     number?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     type?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   BusinessClientWhereInput: { // input type
     AND?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
+    comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     communication_medium?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     email?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -84,6 +87,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
     number?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     OR?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
+    tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
@@ -1757,6 +1761,7 @@ export interface NexusGenObjects {
     user?: NexusGenRootTypes['User'] | null; // User
   }
   BusinessClient: { // root type
+    comment?: string | null; // String
     communication_medium?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
@@ -2206,6 +2211,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
   }
   BusinessClient: { // field return type
+    comment: string | null; // String
     communication_medium: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
@@ -2499,6 +2505,7 @@ export interface NexusGenFieldTypes {
     remind: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     requestReset: NexusGenRootTypes['Message'] | null; // Message
     resetPassword: NexusGenRootTypes['User'] | null; // User
+    sendBusinessClientEmail: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -2860,6 +2867,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   BusinessClient: { // field return type name
+    comment: 'String'
     communication_medium: 'String'
     createdAt: 'DateTime'
     email: 'String'
@@ -3153,6 +3161,7 @@ export interface NexusGenFieldTypeNames {
     remind: 'CourseVisit'
     requestReset: 'Message'
     resetPassword: 'User'
+    sendBusinessClientEmail: 'BusinessClient'
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
@@ -3925,6 +3934,10 @@ export interface NexusGenArgTypes {
       password?: string | null; // String
       resetToken?: string | null; // String
     }
+    sendBusinessClientEmail: { // args
+      communication_medium?: string | null; // String
+      id?: string | null; // String
+    }
     signin: { // args
       email?: string | null; // String
       password?: string | null; // String
@@ -3941,7 +3954,7 @@ export interface NexusGenArgTypes {
       uniID?: string | null; // String
     }
     updateBusinessClient: { // args
-      communication_medium?: string | null; // String
+      comment?: string | null; // String
       id?: string | null; // String
     }
     updateChat: { // args

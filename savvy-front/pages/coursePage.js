@@ -9,10 +9,12 @@ const CoursePagePage = (props) => {
     enrolled == false;
   } else {
     enrolled =
-      me.new_subjects.filter((s) => s.id === "cjtreu3md00fp0897ga13aktp")
-        .length > 0;
+      me.new_subjects.filter(
+        (s) =>
+          s.id === "cjtreu3md00fp0897ga13aktp" ||
+          s.id === "cktrbubdl2237dou9vzn1gb3w"
+      ).length > 0;
   }
-
   return (props.query.id === "cjtreu3md00fp0897ga13aktp" ||
     props.query.id === "cktrbubdl2237dou9vzn1gb3w") &&
     !enrolled &&

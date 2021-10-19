@@ -63,6 +63,7 @@ const BusinessClient = objectType({
     t.model.email();
     t.model.type();
     t.model.name();
+    t.model.comment();
     t.model.number();
     t.model.communication_medium();
     t.model.createdAt();

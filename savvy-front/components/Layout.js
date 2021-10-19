@@ -14,7 +14,7 @@ export default class Layout extends React.Component {
     return (
       <div>
         <YMInitializer
-          accounts={[52361302]}
+          accounts={[85932800]}
           options={{ webvisor: true }}
           version="2"
         />

@@ -2227,6 +2227,21 @@ const Mutation = mutationType({
     t.field("updateBusinessClient", {
       type: "BusinessClient",
       args: {
+        comment: stringArg(),
+        id: stringArg(),
+      },
+      resolve: async (_, { comment, id }, ctx) => {
+        const bclient = await ctx.prisma.businessClient.update({
+          where: { id },
+          data: { comment },
+        });
+
+        return bclient;
+      },
+    });
+    t.field("sendBusinessClientEmail", {
+      type: "BusinessClient",
+      args: {
         communication_medium: stringArg(),
         id: stringArg(),
       },

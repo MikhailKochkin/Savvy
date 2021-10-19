@@ -1,11 +1,22 @@
-import React from "react";
+import { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION($id: String!, $communication_medium: String) {
-    updateBusinessClient(id: $id, communication_medium: $communication_medium) {
+    sendBusinessClientEmail(
+      id: $id
+      communication_medium: $communication_medium
+    ) {
+      id
+    }
+  }
+`;
+
+const UPDATE_CLIENT_MUTATION2 = gql`
+  mutation UPDATE_CLIENT_MUTATION2($id: String!, $comment: String) {
+    updateBusinessClient(id: $id, comment: $comment) {
       id
     }
   }
@@ -54,12 +65,24 @@ const Row = styled.div`
     width: 15%;
   }
   .email {
-    width: 25%;
+    width: 20%;
   }
   .number {
     width: 10%;
   }
+  .comment {
+    width: 12%;
+    textarea {
+      font-family: Montserrat;
+      padding: 0 5%;
+      margin: 0 5%;
+      border: none;
+      width: 90%;
+      height: 100px;
+    }
+  }
   .tags {
+    width: 18%;
     padding-left: 20px;
     li {
       width: 100%;
@@ -81,11 +104,14 @@ const CLIENTS_QUERY = gql`
       number
       createdAt
       type
+      comment
     }
   }
 `;
 
 const Client = (props) => {
+  const [comment, setComment] = useState(props.comment);
+
   moment.locale("ru");
   var url = new URL("https://besavvy.app" + props.url);
   var utm_source = url.searchParams.get("utm_source");
@@ -95,10 +121,13 @@ const Client = (props) => {
 
   var id = url.searchParams.get("id");
 
-  const [updateBusinessClient, { updated_data }] = useMutation(
+  const [sendBusinessClientEmail, { updated_data }] = useMutation(
     UPDATE_CLIENT_MUTATION
   );
 
+  const [updateBusinessClient, { updated_data2 }] = useMutation(
+    UPDATE_CLIENT_MUTATION2
+  );
   const copyEnglish = (name) => {
     /* Copy the text inside the text field */
     let text = `Добрый день. 
@@ -129,6 +158,13 @@ const Client = (props) => {
     `;
     return navigator.clipboard.writeText(text);
   };
+
+  let number;
+  if (props.number.startsWith("8")) {
+    number = props.number.replace("8", "+7");
+  } else {
+    number = props.number;
+  }
   return (
     <Row>
       <div className="index">{props.index + 1}.</div>
@@ -148,7 +184,7 @@ const Client = (props) => {
         <button
           onClick={(e) => {
             console.log(1);
-            updateBusinessClient({
+            sendBusinessClientEmail({
               variables: {
                 id: props.id,
                 communication_medium: "english",
@@ -161,7 +197,7 @@ const Client = (props) => {
         </button>
         <button
           onClick={async (e) => {
-            updateBusinessClient({
+            sendBusinessClientEmail({
               variables: {
                 id: props.id,
                 communication_medium: "school",
@@ -174,16 +210,35 @@ const Client = (props) => {
         </button>
       </div>
       <div className="number">
-        <div>{props.number}</div>
+        <div>{number}</div>
         <button>
           <a
             target="_blank"
-            href={`https://api.whatsapp.com/send?phone=${props.number}?text=Hello!`}
+            href={`https://api.whatsapp.com/send?phone=${number}?text=Hello!`}
           >
             Написать в whatsApp
           </a>
         </button>
         <button>Написать в Telegram</button>
+      </div>
+      <div className="comment">
+        <textarea onChange={(e) => setComment(e.target.value)}>
+          {comment}
+        </textarea>
+        <br />
+        <button
+          onClick={(e) => {
+            updateBusinessClient({
+              variables: {
+                id: props.id,
+                comment: comment,
+              },
+            });
+            alert("Изменили");
+          }}
+        >
+          Изменить
+        </button>
       </div>
       <div className="tags">
         <li>pathname: {url.pathname}</li>
@@ -222,6 +277,7 @@ const ClientData = () => {
           id={c.id}
           name={c.name}
           email={c.email}
+          comment={c.comment}
           number={c.number}
           createdAt={c.createdAt}
           url={c.type}
