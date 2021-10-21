@@ -260,10 +260,11 @@ const Program = (props) => {
         },
       ],
       price: {
-        full: "34 000 ₽",
+        full: "44 000 ₽",
         full_explain: "Полная стоимость",
-        part: "20 400 ₽",
-        part_explain: "Скидка 40% до 21.10",
+        part: "26 400 ₽",
+        part_explain: "Скидка 40% до 25.10",
+        course: "corp",
       },
       syllabus: {
         lessons: 41,
@@ -960,10 +961,11 @@ const Program = (props) => {
         ],
       },
       price: {
-        full: "54 000 ₽",
+        full: "59 000 ₽",
         full_explain: "Полная стоимость",
-        part: "32 400 ₽",
-        part_explain: "Скидка 40% до 24.10",
+        part: "35 400 ₽",
+        part_explain: "Скидка 40% до 25.10",
+        course: "school",
       },
       reviews: [
         {

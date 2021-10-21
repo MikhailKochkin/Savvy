@@ -297,6 +297,7 @@ const deserialize = (el) => {
   }
 
   if (el.getAttribute("id") == "conceal") {
+    console.log(8);
     return jsx(
       "element",
       { type: "conceal", data: el.getAttribute("data-text") },

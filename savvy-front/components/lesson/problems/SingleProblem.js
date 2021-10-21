@@ -168,16 +168,20 @@ class SingleProblem extends Component {
 
   onMouseClick = (e) => {
     let answer = e.target.innerHTML.toLowerCase().trim();
+    console.log("answer", answer);
     if (
       e.target.getAttribute("concealed") === "true" &&
       ((answer !== "ответ" && answer !== "ответ." && answer !== "ответ:") ||
         this.state.revealAnswer)
     ) {
+      console.log(1);
       e.target.id = "no-conceal";
       e.target.innerHTML = e.target.getAttribute("data");
       e.target.setAttribute("concealed", "false");
       this.onCheck(e.target.innerHTML);
     } else if (e.target.parentElement.getAttribute("concealed") === "false") {
+      console.log(2);
+
       e.target.parentElement.id = "conceal";
       e.target.parentElement.setAttribute("concealed", "true");
       e.target.parentElement.innerHTML =
@@ -190,9 +194,12 @@ class SingleProblem extends Component {
       .getElementById(this.props.problem.id)
       .querySelectorAll("#conceal");
     let p;
+    console.log("elements", elements);
+
     elements.forEach((element) => {
       let data = element.innerHTML;
       let hint = element.getAttribute("data-text");
+      console.log("hint", hint);
       element.innerHTML = hint;
       element.setAttribute("data", data);
       element.setAttribute("concealed", true);

@@ -6,6 +6,7 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
+import ReactGA from "react-ga";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -420,14 +421,23 @@ const Action = (props) => {
                   id="english_application_button1"
                   onClick={async (e) => {
                     e.preventDefault();
-                    var phoneno =
-                      /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
                     if (!EmailValidator.validate(email)) {
                       alert("Неправильный имейл");
                     } else if (number.length < 7) {
                       alert("Неправильный номер мобильнного телефона");
                     } else {
+                      if (props.data.price.course == "school") {
+                        ReactGA.event({
+                          category: "School Apply Button Click",
+                          action: "Click",
+                        });
+                      } else if (props.data.price.course == "corp") {
+                        ReactGA.event({
+                          category: "Corp Apply Button Click",
+                          action: "Click",
+                        });
+                      }
                       const res = await createBusinessClient({
                         variables: {
                           type: asPath ? asPath : "English",

@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
+import ReactGA from "react-ga";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
