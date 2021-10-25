@@ -37,6 +37,17 @@ const Container = styled.div`
   @media (max-width: 600px) {
     width: 100%;
   }
+  textarea {
+    height: 200px;
+    margin: 40px 0;
+    width: 90%;
+    font-family: "Courier New", Courier, monospace;
+    padding: 1%;
+  }
+  button {
+    width: 150px;
+    margin: 20px 0;
+  }
   input {
     padding: 0.5%;
     height: 75%;
@@ -110,6 +121,15 @@ const UpdateNote = (props) => {
             <option value={5}>5</option>
           </select>
         </Complexity>
+        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
+        <button>
+          <a
+            href="https://codebeautify.org/html-table-generator"
+            target="_blank"
+          >
+            Создать таблицу
+          </a>
+        </button>
         <DynamicLoadedEditor getEditorText={getText} value={text} />
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
