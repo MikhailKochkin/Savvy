@@ -92,5 +92,8 @@
   },
   "directories": {
     "lib": "lib"
+  },
+  "dependencies": {
+    "@udecode/plate": "^6.1.0"
   }
 }

@@ -101,6 +101,15 @@ const Form = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    .names {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 80%;
+      input {
+        width: 49%;
+      }
+    }
   }
   input {
     width: 80%;
@@ -172,6 +181,9 @@ const Form = styled.div`
     }
     #form_container {
       width: 95%;
+      .names {
+        width: 100%;
+      }
     }
   }
 `;
@@ -216,6 +228,7 @@ const StyledModal = Modal.styled`
 const Action = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -243,19 +256,30 @@ const Action = () => {
             </div>
           </div>
           <div id="form">
-            <div id="form_container">
+            <form id="form_container">
+              <div className="names">
+                <input
+                  className="data"
+                  id="name"
+                  placeholder="Имя"
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <input
+                  className="data"
+                  id="surname"
+                  placeholder="Фамилия"
+                  onChange={(e) => setSurname(e.target.value)}
+                />
+              </div>
               <input
                 className="data"
-                placeholder="Имя и фамилия"
-                onChange={(e) => setName(e.target.value)}
-              />
-              <input
-                className="data"
+                id="tel"
                 type="tel"
                 placeholder="+7 (999) 999-99-99"
                 onChange={(e) => setNumber(e.target.value)}
               />
               <input
+                id="email"
                 className="data"
                 type="email"
                 placeholder="Электронная почта"
@@ -267,7 +291,13 @@ const Action = () => {
                   e.preventDefault();
                   if (EmailValidator.validate(email)) {
                     Router.push({
-                      pathname: "/hello",
+                      pathname: "/hello_eng",
+                      query: {
+                        name: name,
+                        surname: surname,
+                        email: email,
+                        course: "eng_prof",
+                      },
                     });
                     ReactGA.event({
                       category: "English Apply Button Click",
@@ -277,7 +307,7 @@ const Action = () => {
                       variables: {
                         type: asPath ? asPath : "English",
                         email,
-                        name,
+                        name: name + " " + surname,
                         number,
                         communication_medium: "english",
                       },
@@ -305,7 +335,7 @@ const Action = () => {
                 </a>
                 .
               </div>
-            </div>
+            </form>
           </div>
         </Form>
       </Container>

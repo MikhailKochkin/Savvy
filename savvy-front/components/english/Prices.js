@@ -144,7 +144,7 @@ const Prices = () => {
           <div className="answer_block">
             <div className="answer_box">
               <div className="header">Проходить по одному курсу</div>
-              <div className="description">14 000 ₽</div>
+              <div className="description">15 900 ₽</div>
               <div>
                 <p>
                   Вы выбираете один из 4 курсов, который вам максимально
@@ -162,9 +162,10 @@ const Prices = () => {
           <div className="answer_block">
             <div className="answer_box" id="yellow">
               <div className="header">
-                Зарегистрироваться сразу на всю программу (возможна рассрочка)
+                Зарегистрироваться сразу на всю программу (действует скидка до
+                40%!)
               </div>
-              <div className="description">39 000 ₽</div>
+              <div className="description">48 000 ₽</div>
               <div>
                 <p>
                   Вы участвуете во всех 4 курсах. Вместе с группой вы проходите

@@ -13,7 +13,11 @@ const LessonPage = (props) => (
   <div>
     {props.query.type === "regular" && <SingleLesson id={props.query.id} />}
     {props.query.type === "story" && (
-      <DynamicNewSingleLesson id={props.query.id} size={props.query.size} />
+      <DynamicNewSingleLesson
+        id={props.query.id}
+        size={props.query.size}
+        add={props.query.add}
+      />
     )}
     {props.query.type === "challenge" && <Challenge id={props.query.id} />}
   </div>

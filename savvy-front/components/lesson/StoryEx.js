@@ -144,6 +144,7 @@ const StoryEx = (props) => {
   if (error) return `Error! ${error.message}`;
   let results = data.stats;
   let components = [];
+  console.log("tasks", tasks);
   tasks.map((task) => {
     let el;
     let item;
@@ -263,6 +264,7 @@ const StoryEx = (props) => {
       );
       components.push(item);
     } else if (task.type.toLowerCase() === "offer") {
+      console.log("offer");
       item = (
         <Offer
           key={1}

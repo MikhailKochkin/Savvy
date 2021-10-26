@@ -191,7 +191,7 @@ const Question = styled.div`
       margin-top: 10px;
     }
     button {
-      width: 300px;
+      width: 100%;
       font-family: Montserrat;
       font-size: 1.6rem;
       color: white;
@@ -417,8 +417,8 @@ const SingleTest = (props) => {
   return (
     <Styles width={width}>
       <TextBar className="Test" story={story}>
-        <div className="question">
-          <div className="question_text">
+        {/*<div className="question">
+           <div className="question_text">
             На этом все. Вам понравилось занятие? Было ли оно полезно?{" "}
           </div>
           <IconBlock>
@@ -504,90 +504,105 @@ const SingleTest = (props) => {
               </div>
             </IconBlock>
           </div>
-        )}
-        {answerState === "right" && (
-          <Question inputColor={"#F3F3F3"}>
-            <div className="question_text">
+        )} */}
+        {/* {answerState === "right" && ( */}
+        <Question inputColor={"#F3F3F3"}>
+          <div className="question_text">
+            <p>
+              Хотим предложить вам принять участие в курсе на лучших условиях.{" "}
+              <b>Со скидкой 35%</b>!
+            </p>
+            <p>
+              Цена составит 31 200 вместо 48 000 за 6 месяцев обучения.{" "}
+              <b>
+                И действует она только, пока вы находитесь на этой странице.
+              </b>{" "}
+              Если вы оплатите курс по ссылке ниже, то по этой цене получите:
               <p>
-                Отлично, хотим предложить вам поучаствовать в платной версии
-                курса.
+                <li>2-месячный Курс "Старт в юридическом английском"</li>
+                <li>2-месячный тренинг по английской грамматике</li>
+                <li>
+                  6-месячный курс "Юридический английский для профессионалов"
+                </li>
               </p>
-              <p>
-                В ней мы более подробно разбираем теорию в видео формате, даем
-                сложные задачи и проводим онлайн разборы. Полный курс станет
-                вашим главным помощником в сдаче экзамена и прохождении
-                собеседований.
-              </p>
-              <p>
-                Если не уверены, что вам курс подойдет, купите первые 5 недель.
-                Это недорогой способ (2200 ₽) начать заниматься и опробовать
-                свои силы. Или уже сейчас можно купить доступ к курсу целиком по
-                специальной цене – всего 4900 ₽ за все 16 недель.
-              </p>
-              <p>Возникли вопросы? Вам ответит наш менеджер.</p>
-              <div id="buttons">
-                <button
-                  className="main"
-                  onClick={async (e) => {
-                    e.preventDefault();
+            </p>
+            <p>
+              Вы также можете оплатить курс{" "}
+              <b>в рассрочку на специальных условиях</b>: 3 платежа по 13 300
+              рублей. Первый сейчас, второй через 2 месяца, третий через 4
+              месяца.
+            </p>
+            <p>
+              Если все же у вас есть вопросы или условия, описанные выше, вам не
+              подходят, то вы можете забронировать встречу с директором
+              программы, нажав на кнопку ниже.{" "}
+            </p>
+            <div id="buttons">
+              <button
+                className="main"
+                onClick={async (e) => {
+                  e.preventDefault();
 
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: props.coursePageId,
-                        price: 5000,
-                        userId: props.me.id,
-                        comment: asPath,
-                      },
-                    });
-                    location.href = res.data.createOrder.url;
-                  }}
-                >
-                  {loading ? "Готовим платеж" : "Купить курс целиком"}
-                </button>
-                <button
-                  className="second"
-                  onClick={async (e) => {
-                    e.preventDefault();
+                  const res = await createOrder({
+                    variables: {
+                      coursePageId: "ck0pdit6900rt0704h6c5zmer",
+                      price: 31200,
+                      userId: props.me.id,
+                      comment: asPath,
+                    },
+                  });
+                  location.href = res.data.createOrder.url;
+                }}
+              >
+                {loading ? "Готовим платеж" : "Купить курс со скидкой 35%"}
+              </button>
+              <button
+                className="second"
+                onClick={async (e) => {
+                  e.preventDefault();
 
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: props.coursePageId,
-                        price: 2400,
-                        userId: props.me.id,
-                        // promocode: props.promocode,
-                        comment: asPath,
-                      },
-                      // refetchQueries: [{ query: CURRENT_USER_QUERY }],
-                    });
+                  const res = await createOrder({
+                    variables: {
+                      coursePageId: "ck0pdit6900rt0704h6c5zmer",
+                      price: 13300,
+                      userId: props.me.id,
+                      // promocode: props.promocode,
+                      comment: asPath,
+                    },
+                    // refetchQueries: [{ query: CURRENT_USER_QUERY }],
+                  });
 
-                    console.log(res.data.createOrder.url);
-                    location.href = res.data.createOrder.url;
-                  }}
-                >
-                  {loading ? "Готовим платеж" : "Купить 5 недель курса"}
-                </button>
-                <button className="second">Задать вопрос менеджеру</button>
-              </div>
+                  console.log(res.data.createOrder.url);
+                  location.href = res.data.createOrder.url;
+                }}
+              >
+                {loading ? "Готовим платеж" : "Оплатить в рассрочку"}
+              </button>
+              <a
+                href="https://calendly.com/mikhail-from-besavvy/30min"
+                target="_blank"
+              >
+                <button className="second">Встреча с директором</button>
+              </a>
             </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </Question>
-        )}
-        {answerState === "wrong" && (
+          </div>
+          <IconBlock>
+            {author && author.image != null ? (
+              <img className="icon" src={author.image} />
+            ) : (
+              <img className="icon" src="../../static/hipster.svg" />
+            )}{" "}
+            <div className="name">
+              {author && author.name ? author.name : "BeSavvy"}
+            </div>
+          </IconBlock>
+        </Question>
+        {/* )} */}
+        {/* {answerState === "wrong" && (
           <Question inputColor="#F3F3F3">
             <div className="question_text">
               <p>
-                Жалко. Возможно, вам нужно больше теоретических разборов, более
-                сложные задания и общение с преподавателями? Все это есть в
-                платной версии курса.
+                Жалко. Возможно, вам нужно больше работы с преподавателем 
               </p>
               <p>
                 Мы можем открыть вам досступ к первым 5 неделям за 2200 ₽. Или
@@ -604,7 +619,7 @@ const SingleTest = (props) => {
                     const res = await createOrder({
                       variables: {
                         coursePageId: props.coursePageId,
-                        price: 5000,
+                        price: "ck0pdit6900rt0704h6c5zmer",
                         userId: props.me.id,
                         comment: asPath,
                       },
@@ -622,7 +637,7 @@ const SingleTest = (props) => {
                     const res = await createOrder({
                       variables: {
                         coursePageId: props.coursePageId,
-                        price: 2400,
+                        price: "ck0pdit6900rt0704h6c5zmer",
                         userId: props.me.id,
                         // promocode: props.promocode,
                         comment: asPath,
@@ -650,7 +665,7 @@ const SingleTest = (props) => {
               </div>
             </IconBlock>
           </Question>
-        )}
+        )} */}
       </TextBar>
     </Styles>
   );

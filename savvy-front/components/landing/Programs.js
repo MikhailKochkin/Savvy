@@ -36,9 +36,9 @@ const Programs = () => {
       description:
         "Научим использовать юридический английский в реальных рабочих проектах",
       term: "Длительность: 6 месяцев",
-      price: "40 000₽",
-      conditions: "Рассрочка на 6 мес",
-      installments: "6 700₽",
+      price: "48 000₽",
+      conditions: "До 31 октября",
+      installments: "Скидка 40%",
       img: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1100&q=80",
       pathname: "english",
       query: "id=main_page",
@@ -56,7 +56,7 @@ const Programs = () => {
       query: "id=school",
     },
     {
-      title: `Интенсив "Корпоративный юрист"`,
+      title: `Интенсив "Корпоративное право"`,
       description:
         "Повышаем квалификацию юристов в области корпоративного права, антимонопольного права и сделок M/A",
       term: "Длительность: 3 месяца",

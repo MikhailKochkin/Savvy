@@ -29,26 +29,23 @@ const Box = styled.div`
 
 class ShotsGroup extends Component {
   state = {
-    num: 0
+    num: 0,
   };
   onNext = () => {
     if (this.state.num < this.props.shots.length - 1) {
-      this.setState(prevState => ({
-        num: prevState.num + 1
+      this.setState((prevState) => ({
+        num: prevState.num + 1,
       }));
     }
   };
   onPrev = () => {
     if (this.state.num > 0) {
-      this.setState(prevState => ({
-        num: prevState.num - 1
+      this.setState((prevState) => ({
+        num: prevState.num - 1,
       }));
     }
   };
   render() {
-    const userData = this.props.shotResults.filter(
-      result => result.student.id === this.props.me.id
-    );
     const sh = this.props.shots[this.state.num];
     return (
       <Styles>
@@ -69,7 +66,7 @@ class ShotsGroup extends Component {
             shotID={sh.id}
             lessonID={this.props.lessonID}
             title={sh.title}
-            userData={userData}
+            userData={[]}
           />
         )}
       </Styles>

@@ -1,10 +1,10 @@
 import { useUser } from "../components/User";
-import Old_Hello from "../components/hello/Old_Hello";
+import Hello from "../components/hello/Hello";
 
 const hello = (props) => {
   const me = useUser();
   return (
-    <Old_Hello
+    <Hello
       name={props.query.name}
       surname={props.query.surname}
       email={props.query.email}

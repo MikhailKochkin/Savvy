@@ -180,7 +180,7 @@ const UpdateTextEditor = (props) => {
             Создать таблицу
           </a>
         </button>
-        <DynamicLoadedEditor getEditorText={getText} value={text} />
+        {/* <DynamicLoadedEditor getEditorText={getText} value={text} /> */}
         <Mutation
           mutation={UPDATE_TEXTEDITOR_MUTATION}
           variables={{

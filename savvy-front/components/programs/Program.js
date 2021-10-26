@@ -263,7 +263,7 @@ const Program = (props) => {
         full: "44 000 ₽",
         full_explain: "Полная стоимость",
         part: "26 400 ₽",
-        part_explain: "Скидка 40% до 25.10",
+        part_explain: "Скидка 40% до 31.10",
         course: "corp",
       },
       syllabus: {
@@ -964,7 +964,7 @@ const Program = (props) => {
         full: "59 000 ₽",
         full_explain: "Полная стоимость",
         part: "35 400 ₽",
-        part_explain: "Скидка 40% до 25.10",
+        part_explain: "Скидка 40% до 31.10",
         course: "school",
       },
       reviews: [

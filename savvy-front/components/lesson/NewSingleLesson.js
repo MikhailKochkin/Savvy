@@ -420,11 +420,12 @@ const NewSingleLesson = (props) => {
                   Урок {lesson.number}. {lesson.name}
                 </h1>
                 <CSSTransitionGroup transitionName="example">
+                  {console.log("props", props)}
                   <StoryEx
                     tasks={
-                      props.size == "short"
+                      props.add == "offer"
                         ? [
-                            ...lesson.short_structure.lessonItems,
+                            ...lesson.structure.lessonItems,
                             { id: 1, type: "offer" },
                           ]
                         : lesson.structure.lessonItems
@@ -442,7 +443,6 @@ const NewSingleLesson = (props) => {
           </AreYouEnrolled>
         )}
       </>
-      );
     </PleaseSignIn>
   );
 };

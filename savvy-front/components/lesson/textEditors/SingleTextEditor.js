@@ -62,6 +62,15 @@ const TextBar = styled.div`
     max-height: 20em;
     box-shadow: "0 0 0 2px blue;";
   }
+  .flag {
+    color: #008489;
+    font-size: 1.8rem;
+    width: 100%;
+    margin: 3% 0;
+    padding: 3% 8%;
+    background-color: #f2fafb;
+    border-radius: 5px;
+  }
   iframe {
     width: 100%;
     height: 400px;
