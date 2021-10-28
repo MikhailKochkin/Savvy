@@ -7,7 +7,7 @@ import { ic_keyboard_arrow_up } from "react-icons-kit/md/ic_keyboard_arrow_up";
 const Styles = styled.li`
   height: auto;
   display: flex;
-  background-color: #e7e9eb;
+  background-color: #f4f8fc;
   margin-bottom: 20px;
   font-size: 1.8rem;
   flex-direction: column;
@@ -54,7 +54,6 @@ const Info = styled.div`
   display: ${(props) => (props.height ? "auto" : "none")};
   padding-bottom: 20px;
   font-size: 1.4rem;
-
   ul {
     list-style: inside;
   }
@@ -69,7 +68,7 @@ const Question = (props) => {
   return (
     <Styles>
       <Control>
-        <div className="question">{d.question}</div>
+        <div className="question">{d.q}</div>
         <div className="circle" onClick={(e) => setShow(!show)}>
           {show ? (
             <Icon size={25} icon={ic_keyboard_arrow_up} />
@@ -78,7 +77,7 @@ const Question = (props) => {
           )}
         </div>
       </Control>
-      <Info height={show}>{d.answer}</Info>
+      <Info height={show}>{d.a}</Info>
     </Styles>
   );
 };

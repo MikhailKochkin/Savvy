@@ -409,7 +409,7 @@ const SingleTest = (props) => {
     CREATE_ORDER_MUTATION
   );
 
-  const { exam, story, ifWrong, ifRight, me, user_name, author } = props;
+  const { exam, story, ifWrong, ifRight, me, lessonId, author } = props;
   const mes = _.zip(["Да", "Нет"], [true, false]);
   let userData = 1;
   let width = "50%";
@@ -417,121 +417,48 @@ const SingleTest = (props) => {
   return (
     <Styles width={width}>
       <TextBar className="Test" story={story}>
-        {/*<div className="question">
-           <div className="question_text">
-            На этом все. Вам понравилось занятие? Было ли оно полезно?{" "}
-          </div>
-          <IconBlock>
-            {author && author.image != null ? (
-              <img className="icon" src={author.image} />
-            ) : (
-              <img className="icon" src="../../static/hipster.svg" />
-            )}{" "}
-            <div className="name">
-              {author && author.name ? author.name : "BeSavvy"}
-            </div>
-          </IconBlock>
-        </div>
-        <div className="answer">
-          <IconBlock>
-            <img className="icon" src="../../static/flash.svg" />
-            <div className="name">{me.name}</div>
-          </IconBlock>
-          <Options>
-            {mes.map((answer, index) => (
-              <AnswerOption
-                true={0}
-                hidden={hidden}
-                key={index}
-                answer={answer[0]}
-                correct={answer[1]}
-                number={index}
-                onAnswerSelected={getTestData}
-              />
-            ))}
-          </Options>
-        </div>
-        {zero && (
-          <div className="question">
-            <div className="question_text">Выберите хотя бы один вариант</div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
-        )}
-        {attempts == 0 && (
-          <Group>
-            <MiniButton
-              // block={block}
-              className="button"
-              id="but1"
-              onClick={async (e) => {
-                // Stop the form from submitting
-                e.preventDefault();
-                // call the mutation
-                console.log(1, answer.length);
-                setAttempts(1);
-                if (answer.length < 1) {
-                  setZero(true);
-                  console.log(2);
-                } else {
-                  const res = await onCheck();
-                }
-              }}
-            >
-              Ответить
-            </MiniButton>
-          </Group>
-        )}
-        {zero && (
-          <div className="question">
-            <div className="question_text">Выберите хотя бы один вариант</div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </div>
-        )} */}
-        {/* {answerState === "right" && ( */}
         <Question inputColor={"#F3F3F3"}>
           <div className="question_text">
             <p>
               Хотим предложить вам принять участие в курсе на лучших условиях.{" "}
-              <b>Со скидкой 35%</b>!
+              <b>Со скидкой 40%</b>!
             </p>
             <p>
-              Цена составит 31 200 вместо 48 000 за 6 месяцев обучения.{" "}
+              {lessonId === "ckvb013zq76181hpzj2k2ruh2"
+                ? " Цена составит 14 900 вместо 23 900."
+                : " Цена составит 31 200 вместо 52 000 за 6 месяцев обучения."}{" "}
               <b>
                 И действует она только, пока вы находитесь на этой странице.
               </b>{" "}
-              Если вы оплатите курс по ссылке ниже, то по этой цене получите:
-              <p>
-                <li>2-месячный Курс "Старт в юридическом английском"</li>
-                <li>2-месячный тренинг по английской грамматике</li>
-                <li>
-                  6-месячный курс "Юридический английский для профессионалов"
-                </li>
-              </p>
+              {lessonId === "ckvb013zq76181hpzj2k2ruh2" ? (
+                <></>
+              ) : (
+                <>
+                  <p>
+                    Если вы оплатите курс по ссылке ниже, то по этой цене
+                    получите:
+                  </p>
+                  <p>
+                    <li>2-месячный Курс "Старт в юридическом английском"</li>
+                    <li>2-месячный тренинг по английской грамматике</li>
+                    <li>
+                      6-месячный курс "Юридический английский для
+                      профессионалов"
+                    </li>
+                  </p>
+                </>
+              )}
             </p>
-            <p>
-              Вы также можете оплатить курс{" "}
-              <b>в рассрочку на специальных условиях</b>: 3 платежа по 13 300
-              рублей. Первый сейчас, второй через 2 месяца, третий через 4
-              месяца.
-            </p>
+            {lessonId === "ckmxdsbmu15582mgrk04c07ztr" && (
+              <>
+                <p>
+                  Вы также можете оплатить курс{" "}
+                  <b>в рассрочку на специальных условиях</b>: 3 платежа по 13
+                  300 рублей. Первый сейчас, второй через 2 месяца, третий через
+                  4 месяца.
+                </p>
+              </>
+            )}
             <p>
               Если все же у вас есть вопросы или условия, описанные выше, вам не
               подходят, то вы можете забронировать встречу с директором
@@ -545,8 +472,14 @@ const SingleTest = (props) => {
 
                   const res = await createOrder({
                     variables: {
-                      coursePageId: "ck0pdit6900rt0704h6c5zmer",
-                      price: 31200,
+                      coursePageId:
+                        lessonId === "ckmxdsbmu15582mgrk04c07ztr"
+                          ? "ck0pdit6900rt0704h6c5zmer"
+                          : "ckt9rmh4e51981hp97uwp6rft",
+                      price:
+                        lessonId === "ckmxdsbmu15582mgrk04c07ztr"
+                          ? 31200
+                          : 14900,
                       userId: props.me.id,
                       comment: asPath,
                     },
@@ -554,30 +487,33 @@ const SingleTest = (props) => {
                   location.href = res.data.createOrder.url;
                 }}
               >
-                {loading ? "Готовим платеж" : "Купить курс со скидкой 35%"}
+                {loading ? "Готовим платеж" : "Купить курс со скидкой 40%"}
               </button>
-              <button
-                className="second"
-                onClick={async (e) => {
-                  e.preventDefault();
+              {lessonId == "ckmxdsbmu15582mgrk04c07ztr" && (
+                <button
+                  className="second"
+                  onClick={async (e) => {
+                    e.preventDefault();
 
-                  const res = await createOrder({
-                    variables: {
-                      coursePageId: "ck0pdit6900rt0704h6c5zmer",
-                      price: 13300,
-                      userId: props.me.id,
-                      // promocode: props.promocode,
-                      comment: asPath,
-                    },
-                    // refetchQueries: [{ query: CURRENT_USER_QUERY }],
-                  });
+                    const res = await createOrder({
+                      variables: {
+                        coursePageId: "ck0pdit6900rt0704h6c5zmer",
+                        price: 13300,
+                        userId: props.me.id,
+                        // promocode: props.promocode,
+                        comment: asPath,
+                      },
+                      // refetchQueries: [{ query: CURRENT_USER_QUERY }],
+                    });
 
-                  console.log(res.data.createOrder.url);
-                  location.href = res.data.createOrder.url;
-                }}
-              >
-                {loading ? "Готовим платеж" : "Оплатить в рассрочку"}
-              </button>
+                    console.log(res.data.createOrder.url);
+                    location.href = res.data.createOrder.url;
+                  }}
+                >
+                  {loading ? "Готовим платеж" : "Оплатить в рассрочку"}
+                </button>
+              )}
+
               <a
                 href="https://calendly.com/mikhail-from-besavvy/30min"
                 target="_blank"
@@ -597,75 +533,6 @@ const SingleTest = (props) => {
             </div>
           </IconBlock>
         </Question>
-        {/* )} */}
-        {/* {answerState === "wrong" && (
-          <Question inputColor="#F3F3F3">
-            <div className="question_text">
-              <p>
-                Жалко. Возможно, вам нужно больше работы с преподавателем 
-              </p>
-              <p>
-                Мы можем открыть вам досступ к первым 5 неделям за 2200 ₽. Или
-                доступ ко всем материалам (16 недель) по специальной цене – 4900
-                ₽.
-              </p>{" "}
-              <p>Возникли вопросы? Вам ответит наш менеджер.</p>
-              <div id="buttons">
-                <button
-                  className="main"
-                  onClick={async (e) => {
-                    e.preventDefault();
-
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: props.coursePageId,
-                        price: "ck0pdit6900rt0704h6c5zmer",
-                        userId: props.me.id,
-                        comment: asPath,
-                      },
-                    });
-                    location.href = res.data.createOrder.url;
-                  }}
-                >
-                  {loading ? "Готовим платеж" : "Купить курс целиком"}
-                </button>
-                <button
-                  className="second"
-                  onClick={async (e) => {
-                    e.preventDefault();
-
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: props.coursePageId,
-                        price: "ck0pdit6900rt0704h6c5zmer",
-                        userId: props.me.id,
-                        // promocode: props.promocode,
-                        comment: asPath,
-                      },
-                      // refetchQueries: [{ query: CURRENT_USER_QUERY }],
-                    });
-
-                    console.log(res.data.createOrder.url);
-                    location.href = res.data.createOrder.url;
-                  }}
-                >
-                  {loading ? "Готовим платеж" : "Купить 5 недель курса"}
-                </button>
-                <button className="second">Задать вопрос менеджеру</button>
-              </div>
-            </div>
-            <IconBlock>
-              {author && author.image != null ? (
-                <img className="icon" src={author.image} />
-              ) : (
-                <img className="icon" src="../../static/hipster.svg" />
-              )}{" "}
-              <div className="name">
-                {author && author.name ? author.name : "BeSavvy"}
-              </div>
-            </IconBlock>
-          </Question>
-        )} */}
       </TextBar>
     </Styles>
   );

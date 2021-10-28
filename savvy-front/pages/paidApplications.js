@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 const FOR_MONEY_COURSE_PAGES_QUERY = gql`
   query FOR_MONEY_COURSE_PAGES_QUERY(
     $type: CourseType!
-    $boolean: Boolean = true
+    $boolean: Boolean = false
   ) {
     coursePages(
       where: { courseType: { equals: $type }, published: { equals: $boolean } }
@@ -23,7 +23,7 @@ const PaidApplicationsPage = () => (
       returnPartialData={true}
       fetchPolicy="cache-first"
       variables={{
-        type: "FORMONEY",
+        type: "PRIVATE",
       }}
     >
       {({ data, loading, error }) => {

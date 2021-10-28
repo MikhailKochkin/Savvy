@@ -38,7 +38,7 @@ const Programs = () => {
       term: "Длительность: 6 месяцев",
       price: "48 000₽",
       conditions: "До 31 октября",
-      installments: "Скидка 40%",
+      installments: "40% скидка",
       img: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1100&q=80",
       pathname: "english",
       query: "id=main_page",
@@ -68,11 +68,23 @@ const Programs = () => {
       query: "id=corp",
     },
     {
+      title: `Интенсив "Арбитражный процесс"`,
+      description:
+        "Поэтапно покажем, как выиграть судебный процесс в арбитражном суде",
+      term: "Длительность: 1 месяц",
+      price: "24 900₽",
+      conditions: "До 31 октября",
+      installments: "40% скидка",
+      img: "https://images.unsplash.com/photo-1555848962-6e79363ec58f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1433&q=80",
+      pathname: "coursePage",
+      query: "id=ckt9rmh4e51981hp97uwp6rft",
+    },
+    {
       title: "Старт в Гражданском праве",
       description:
         "Изучаем основы гражданского права, чтобы успешно сдать экзамены и пройти отбор в юридическую фирму.",
       term: "Длительность: 6 месяцев",
-      price: "7 900₽",
+      price: "8 900₽",
       conditions: "До 31 октября",
       installments: "25% скидка",
       img: "https://images.unsplash.com/photo-1495542779398-9fec7dc7986c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",

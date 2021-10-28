@@ -16,6 +16,7 @@ const CoursePagePage = (props) => {
       ).length > 0;
   }
   return (props.query.id === "cjtreu3md00fp0897ga13aktp" ||
+    props.query.id === "ckt9rmh4e51981hp97uwp6rft" ||
     props.query.id === "cktrbubdl2237dou9vzn1gb3w") &&
     !enrolled &&
     props.query.type !== "old" ? (

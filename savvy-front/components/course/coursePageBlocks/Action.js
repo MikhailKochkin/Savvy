@@ -6,6 +6,7 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
+import ReactGA from "react-ga";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -13,12 +14,14 @@ const CREATE_CLIENT = gql`
     $name: String!
     $number: String!
     $type: String!
+    $communication_medium: String!
   ) {
     createBusinessClient(
       email: $email
       name: $name
       number: $number
       type: $type
+      communication_medium: $communication_medium
     ) {
       id
     }
@@ -119,6 +122,7 @@ const Description = styled.div`
     #header {
       font-size: 2.6rem;
       width: 95%;
+      margin-top: 10px;
     }
     #details {
       #prices {
@@ -131,6 +135,8 @@ const Description = styled.div`
         }
         .parts {
           width: 90%;
+          margin-top: 10px;
+
           span {
             font-size: 2.2rem;
           }
@@ -167,6 +173,15 @@ const Contact = styled.div`
     }
     form {
       width: 80%;
+      .names {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        input {
+          width: 48%;
+        }
+      }
     }
   }
   input {
@@ -231,6 +246,9 @@ const Contact = styled.div`
     form {
       width: 100%;
       border: none;
+      .names {
+        width: 100%;
+      }
     }
     #form_container {
       width: 100%;
@@ -337,6 +355,7 @@ const StyledModal = Modal.styled`
 const Action = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -357,9 +376,8 @@ const Action = (props) => {
               <span>Стоимость обучения</span>
             </div>
             <div>
-              Первая неделя обучения{" "}
-              <span className="highlight">бесплатно</span>. Укажите правильный
-              номер, чтобы мы могли направить ссылки на материалы.
+              Вводный урок <span className="highlight">бесплатно</span>. Укажите
+              правильный номер, чтобы мы могли направить ссылки на материалы.
             </div>
 
             <div id="details">
@@ -380,15 +398,23 @@ const Action = (props) => {
           <Contact>
             <div id="form_container">
               <div className="h2">
-                Записаться на курс и начать проходить бесплатные уроки
+                Записаться на курс и начать проходить вводный урок
               </div>
               <form>
-                <input
-                  id="name"
-                  className="data"
-                  placeholder="Имя и фамилия"
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <div className="names">
+                  <input
+                    className="data"
+                    id="name"
+                    placeholder="Имя"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <input
+                    className="data"
+                    id="surname"
+                    placeholder="Фамилия"
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                </div>
                 {/* <PhoneInput
                 placeholder="Enter phone number"
                 defaultCountry="RU"
@@ -415,28 +441,48 @@ const Action = (props) => {
                   id="english_application_button1"
                   onClick={async (e) => {
                     e.preventDefault();
-                    var phoneno =
-                      /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-
                     if (!EmailValidator.validate(email)) {
                       alert("Неправильный имейл");
                     } else if (number.length < 7) {
                       alert("Неправильный номер мобильнного телефона");
                     } else {
+                      if (props.data.price.course == "school") {
+                        ReactGA.event({
+                          category: "Litigation Apply Button Click",
+                          action: "Click",
+                        });
+                      } else if (props.data.price.course == "corp") {
+                        ReactGA.event({
+                          category: "Corp Apply Button Click",
+                          action: "Click",
+                        });
+                      }
                       const res = await createBusinessClient({
                         variables: {
-                          type: asPath ? asPath : "English",
+                          type: asPath ? asPath : "Unknown",
                           email,
-                          name,
+                          name: name + " " + surname,
                           number,
+                          communication_medium: "litigation",
                         },
                       });
-                      console.log(res);
-                      toggleModal();
+                      if (props.data.price.course == "litigation") {
+                        Router.push({
+                          pathname: "/hello_litigator",
+                          query: {
+                            name: name,
+                            surname: surname,
+                            email: email,
+                            course: "litigation",
+                          },
+                        });
+                      } else {
+                        toggleModal();
+                      }
                     }
                   }}
                 >
-                  Записаться
+                  {loading ? "Записываем..." : "Записаться"}
                 </button>
               </form>
               <div id="legal">

@@ -628,21 +628,27 @@ class SingleTextEditor extends Component {
                 >
                   {this.state.mistakesShown ? "Скрыть" : "Показать"}
                 </StyledButton>
-                {me && me.id === textEditor.user.id && !story ? (
+                {me &&
+                (me.id === textEditor.user.id ||
+                  me.permissions.includes("ADMIN")) &&
+                !story ? (
                   <DeleteSingleTextEditor
                     id={this.props.textEditor.id}
                     lessonID={this.props.lessonID}
                   />
                 ) : null}
-                {me && me.id === textEditor.user.id && !story && (
-                  <StyledButton
-                    onClick={(e) =>
-                      this.setState((prev) => ({ update: !prev.update }))
-                    }
-                  >
-                    Изменить
-                  </StyledButton>
-                )}
+                {me &&
+                  (me.id === textEditor.user.id ||
+                    me.permissions.includes("ADMIN")) &&
+                  !story && (
+                    <StyledButton
+                      onClick={(e) =>
+                        this.setState((prev) => ({ update: !prev.update }))
+                      }
+                    >
+                      Изменить
+                    </StyledButton>
+                  )}
               </Buttons>
             </div>
           )}

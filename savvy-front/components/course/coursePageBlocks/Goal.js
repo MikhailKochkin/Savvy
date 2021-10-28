@@ -8,13 +8,13 @@ import Icon from "react-icons-kit";
 
 const Styles = styled.div`
   width: 100vw;
-  min-height: 40vh;
+  min-height: 95vh;
   background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 0;
+  padding: 0;
   border-top: 1px solid #dce2e7;
   @media (max-width: 800px) {
   }
@@ -41,7 +41,7 @@ const Container = styled.div`
   }
   #goal_message {
     width: 40%;
-    height: 150px;
+    /* height: 150px; */
     h2 {
       line-height: 1.4;
       font-weight: 500;
@@ -50,7 +50,7 @@ const Container = styled.div`
   }
   #goal_examples {
     width: 40%;
-    height: 150px;
+    /* height: 150px; */
     font-size: 2rem;
     display: flex;
     flex-direction: column;
@@ -61,7 +61,7 @@ const Container = styled.div`
     .example {
       display: flex;
       flex-direction: row;
-      margin: 5px 0;
+      margin: 15px 0;
       .icon {
         margin-right: 20px;
         color: #327998;
@@ -85,13 +85,12 @@ const Container = styled.div`
       height: auto;
       width: 100%;
       .example {
-        margin: 8px 0;
+        margin: 20px 0;
         line-height: 1.4;
       }
     }
   }
 `;
-
 const Goal = (props) => {
   const slide = () => {
     var my_element = document.getElementById("c2a");
@@ -112,24 +111,14 @@ const Goal = (props) => {
           <button onClick={(e) => slide()}>Участвовать</button>
         </div>
         <div id="goal_examples">
-          <div className="example">
-            <div className="icon">
-              <Icon size={25} icon={university} />
+          {d.goals.map((g) => (
+            <div className="example">
+              <div className="icon">
+                <Icon size={25} icon={graduationCap} />
+              </div>
+              <div>{g}</div>
             </div>
-            <div>{d.goal_1}</div>
-          </div>
-          <div className="example">
-            <div className="icon">
-              <Icon size={25} icon={graduationCap} />
-            </div>
-            <div>{d.goal_2}</div>
-          </div>
-          <div className="example">
-            <div className="icon">
-              <Icon size={25} icon={building} />
-            </div>
-            <div>{d.goal_3}</div>
-          </div>
+          ))}
         </div>
       </Container>
     </Styles>

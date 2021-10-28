@@ -2257,7 +2257,7 @@ const Mutation = mutationType({
           const newEmail3 = await client.sendEmail({
             From: "Mikhail@besavvy.app",
             To: bc.email,
-            Subject: "Открытые уроки по юр английскому",
+            Subject: "35% скидка на юр английский",
             HtmlBody: Demo_eng.Demo_eng(),
           });
         } else {

@@ -264,7 +264,6 @@ const StoryEx = (props) => {
       );
       components.push(item);
     } else if (task.type.toLowerCase() === "offer") {
-      console.log("offer");
       item = (
         <Offer
           key={1}

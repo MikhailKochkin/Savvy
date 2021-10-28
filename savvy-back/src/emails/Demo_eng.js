@@ -479,20 +479,12 @@ const Demo_eng = () => `
                       <div class="f-fallback">
                         <h1>Здравствуйте,</h1>
                         <p>
-                          Это Михаил из BeSavvy. Получили вашу заявку на сайте
+                          Это Михаил из BeSavvy. Мы получили вашу заявку 
                           на программу "Юридический английский для
-                          профессионалов". Я с радостью проведу для вас вводное
-                          занятие и расскажу о программе.
+                          профессионалов", но нам так и не удалось с вами связаться. Надеемся, что это письмо до вас дойдет.
                         </p>
                         <p>
-                          Но, чтобы не быть голословным, хочу сразу дать вам
-                          доступ к демо-урокам нашего курса. Это уроки по
-                          навыкам написания абзацев на английском языке и по
-                          юридической лексике в сфере договорного права.
-                        </p>
-                        <p>
-                          Чтобы получить к ним доступ, надо зарегистрироваться
-                          на сайте.
+                          До конца этой рабочей недели (29 октября) у нас действует <b>скидка 35% на курс по юридическому английскому</b> (31 200 вместо 48 000). Ее можно получить, просто пройдя открытый урок. Это займет 15-20 минут.
                         </p>
                         <table
                           width="100%"
@@ -504,50 +496,17 @@ const Demo_eng = () => `
                           <tr>
                             <td align="center">
                               <a
-                                href="https://besavvy.app/coursePage?id=ck0pdit6900rt0704h6c5zmer"
+                                href="https://besavvy.app/hello_eng"
                                 class="f-fallback button button--blue"
                                 target="_blank"
-                                >Открыть урок</a
+                                >Пройти открытый урок</a
                               >
                             </td>
                           </tr>
                         </table>
 
                         <!-- Discount -->
-                        <table
-                          class="discount"
-                          align="center"
-                          width="100%"
-                          cellpadding="0"
-                          cellspacing="0"
-                          role="presentation"
-                        >
-                          <tr>
-                            <td align="center">
-                              <h1 class="f-fallback discount_heading">
-                                Специальное предложение!
-                              </h1>
-                              <p class="f-fallback discount_body">
-                                Уверен, вам понравятся наши уроки.
-                              </p>
-                              <p class="f-fallback discount_body">
-                                А, если вы решите присоединиться уже на
-                                следующей неделе, то мы с удовольствием дадим
-                                вам скидку 10% на обучение на программе.
-                              </p>
-                              <!-- Border based button
-           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
-                              <!-- <table width="100%" border="0" cellspacing="0" cellpadding="0" role="presentation">
-                                <tr>
-                                  <td align="center">
-                                    <a href="http://example.com" class="f-fallback button button--green" target="_blank">Use this discount now...</a>
-                                  </td>
-                                </tr>
-                              </table> -->
-                            </td>
-                          </tr>
-                        </table>
-
+                        <br/>
                         <p>
                           Если у вас остались вопросы по поводу наших продуктов,
                           вы можете просто ответить на это письмо. Или написать
