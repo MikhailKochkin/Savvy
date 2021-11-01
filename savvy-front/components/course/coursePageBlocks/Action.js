@@ -52,6 +52,23 @@ const Container = styled.div`
   }
 `;
 
+const BuyButton = styled.button`
+  width: 50%;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 2px solid black;
+  background: transparent;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.8rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #dfc201;
+  }
+`;
+
 const Description = styled.div`
   display: flex;
   flex-direction: column;
@@ -60,7 +77,7 @@ const Description = styled.div`
   min-width: 460px;
   height: 400px;
   border: 1px solid #e7ebef;
-  padding: 4%;
+  padding: 2% 4%;
   background: #fff;
   border-radius: 25px;
   .highlight {
@@ -92,6 +109,9 @@ const Description = styled.div`
       }
       .parts {
         width: 48%;
+        .buy {
+          text-decoration: underline;
+        }
         span {
           font-size: 2.6rem;
         }
@@ -390,9 +410,11 @@ const Action = (props) => {
                 <div className="parts">
                   {props.data.price.part_explain}
                   <br /> <span> {props.data.price.part}</span>
+                  <div className="buy">Купить</div>
                 </div>
               </div>
             </div>
+            {/* <BuyButton>Купить со скидкой</BuyButton> */}
             {/* <div className="discount">Акция до 10 октября</div> */}
           </Description>
           <Contact>

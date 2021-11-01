@@ -220,12 +220,12 @@ const Note = (props) => {
   return (
     <>
       <Buttons>
-        {!exam && !story && me.id === note.user.id && (
+        {!exam && !story && (
           <StyledButton onClick={(e) => setUpdate(!update)}>
             {!update ? "Изменить" : "Назад"}
           </StyledButton>
         )}
-        {me && me.id === user && !props.story && !props.exam && (
+        {me && !props.story && !props.exam && (
           <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
         )}
       </Buttons>

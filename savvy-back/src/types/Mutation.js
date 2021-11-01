@@ -2228,12 +2228,18 @@ const Mutation = mutationType({
       type: "BusinessClient",
       args: {
         comment: stringArg(),
+        tags: list(stringArg()),
         id: stringArg(),
       },
-      resolve: async (_, { comment, id }, ctx) => {
+      resolve: async (_, { comment, tags, id }, ctx) => {
         const bclient = await ctx.prisma.businessClient.update({
           where: { id },
-          data: { comment },
+          data: {
+            tags: {
+              set: [...tags],
+            },
+            comment,
+          },
         });
 
         return bclient;

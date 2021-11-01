@@ -314,14 +314,12 @@ const LessonHeader = (props) => {
     time = 30;
   }
 
-  console.log("statements", statements);
   let need_response;
   if (statements) {
     need_response = statements.filter((s) => s.comments.length === 0);
   } else {
     need_response = [];
   }
-  console.log("need_response", need_response);
 
   return (
     <>

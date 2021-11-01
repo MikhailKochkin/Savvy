@@ -427,7 +427,7 @@ const SingleQuiz = (props) => {
                 {!update ? "Изменить" : "Назад"}
               </StyledButton>
             )}
-            {me && me.id === user && !props.exam && !props.story ? (
+            {me && !props.exam && !props.story ? (
               <DeleteSingleQuiz
                 id={me.id}
                 quizID={props.quizID}

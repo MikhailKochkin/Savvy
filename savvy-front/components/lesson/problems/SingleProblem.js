@@ -302,12 +302,12 @@ class SingleProblem extends Component {
                 </Mutation>
               </>
             )}
-            {me && me.id === problem.user.id && !story && (
+            {me && !story && (
               <StyledButton onClick={(e) => this.setState({ update: true })}>
                 Изменить
               </StyledButton>
             )}
-            {me && me.id === problem.user.id && !story ? (
+            {me && !story ? (
               <DeleteSingleProblem
                 id={problem.id}
                 lessonId={this.props.lessonID}

@@ -64,6 +64,7 @@ const BusinessClient = objectType({
     t.model.type();
     t.model.name();
     t.model.comment();
+    t.model.tags();
     t.model.number();
     t.model.communication_medium();
     t.model.createdAt();

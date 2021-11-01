@@ -1768,6 +1768,7 @@ export interface NexusGenObjects {
     id: string; // String!
     name?: string | null; // String
     number?: string | null; // String
+    tags: string[]; // [String!]!
     type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -2218,6 +2219,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string | null; // String
     number: string | null; // String
+    tags: string[]; // [String!]!
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -2874,6 +2876,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     name: 'String'
     number: 'String'
+    tags: 'String'
     type: 'String'
     updatedAt: 'DateTime'
   }
@@ -3956,6 +3959,7 @@ export interface NexusGenArgTypes {
     updateBusinessClient: { // args
       comment?: string | null; // String
       id?: string | null; // String
+      tags?: Array<string | null> | null; // [String]
     }
     updateChat: { // args
       id?: string | null; // String

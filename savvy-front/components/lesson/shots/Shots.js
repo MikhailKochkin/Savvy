@@ -261,10 +261,10 @@ class Shots extends Component {
                 )}
               </Mutation>
             </Buttons>
-            {me && me.id === shotUser && !this.props.story && (
+            {me && !this.props.story && (
               <DeleteSingleShot shotID={shotID} lessonID={lessonID} />
             )}
-            {me && me.id === shotUser && (
+            {me && !this.props.story && (
               <SwitchButton name="update" onClick={this.switch}>
                 Изменить
               </SwitchButton>

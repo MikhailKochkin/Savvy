@@ -391,7 +391,7 @@ const SingleTest = (props) => {
           {!update ? "Изменить" : "Назад"}
         </StyledButton>
       )}
-      {me && me.id === props.user && !story && !exam && (
+      {me && !story && !exam && (
         <DeleteSingleTest
           id={me.id}
           testId={props.id}

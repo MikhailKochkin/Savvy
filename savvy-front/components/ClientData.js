@@ -15,8 +15,12 @@ const UPDATE_CLIENT_MUTATION = gql`
 `;
 
 const UPDATE_CLIENT_MUTATION2 = gql`
-  mutation UPDATE_CLIENT_MUTATION2($id: String!, $comment: String) {
-    updateBusinessClient(id: $id, comment: $comment) {
+  mutation UPDATE_CLIENT_MUTATION2(
+    $id: String!
+    $comment: String
+    $tags: [String]
+  ) {
+    updateBusinessClient(id: $id, comment: $comment, tags: $tags) {
       id
     }
   }
@@ -37,6 +41,22 @@ const Styles = styled.div`
     flex-direction: column;
     width: 100%;
     padding: 3%;
+  }
+`;
+
+const Tag = styled.div`
+  border: 1px solid blue;
+  cursor: pointer;
+  color: blue;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+  transition: ease-in 0.2s;
+  &:hover {
+    border: 2px solid blue;
   }
 `;
 
@@ -102,6 +122,7 @@ const CLIENTS_QUERY = gql`
       name
       email
       number
+      tags
       createdAt
       type
       comment
@@ -111,6 +132,8 @@ const CLIENTS_QUERY = gql`
 
 const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
+  const [tags, setTags] = useState(props.tags);
+  const [newTag, setNewTag] = useState();
 
   moment.locale("ru");
   var url = new URL("https://besavvy.app" + props.url);
@@ -174,6 +197,57 @@ const Client = (props) => {
       </div>
       <div className="name">
         <div>{props.name}</div>
+        {tags &&
+          tags.map((t, i) => (
+            <>
+              <Tag
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.sort(t);
+                }}
+                key={i}
+              >
+                {t}
+              </Tag>
+            </>
+          ))}
+        <form>
+          {/* <input onChange={(e) => setNewTag(e.target.value)} /> */}
+          <select onChange={(e) => setNewTag(e.target.value)}>
+            <option value="">Выберите тег</option>
+            <option value="Wrong Number">Wrong Number</option>
+            <option value="Reach out">Reach out</option>
+            <option value="Never Respond">Never Respond</option>
+            <option value="Contact">Contact</option>
+            <option value="Call">Call</option>
+            <option value="Refuse">Refuse</option>
+            <option value="Invoice">Invoice</option>
+            <option value="Sell">Sell</option>
+          </select>
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              setTags([newTag]);
+            }}
+          >
+            Добавить тег
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+
+              updateBusinessClient({
+                variables: {
+                  id: props.id,
+                  tags: tags,
+                },
+              });
+              alert("Сохранили");
+            }}
+          >
+            Сохранить
+          </button>
+        </form>
         <button onClick={(e) => copyEnglish()}>
           Сopy Демо Урок Английский
         </button>
@@ -232,6 +306,7 @@ const Client = (props) => {
               variables: {
                 id: props.id,
                 comment: comment,
+                tags: tags,
               },
             });
             alert("Изменили");
@@ -255,29 +330,32 @@ const Client = (props) => {
 const ClientData = () => {
   const { loading, error, data } = useQuery(CLIENTS_QUERY);
   if (loading) return <p>Загрузка...</p>;
-  let clients = data.businessClients;
+  let initial_clients = data.businessClients;
+  const [clients, setClients] = useState(initial_clients);
+
+  const sort = (val) => {
+    console.log(val);
+    const new_clients = clients.filter((c) => c.tags.includes(val));
+    setClients(new_clients);
+  };
 
   return (
     <Styles>
       <div className="total">Всего заявок: {clients.length}</div>
-      <a
-        href="tg://msg?text=your MsG!"
-        id="telegram_share"
-        class="mobileShare"
-        title="inviteFriends"
-        alt="telegram_share"
-      >
-        Test
-      </a>
+      <div className="total">
+        <button onClick={(e) => setClients(initial_clients)}>Restart</button>
+      </div>
 
       {clients.map((c, i) => (
         <Client
+          sort={sort}
           key={i}
           index={i}
           id={c.id}
           name={c.name}
           email={c.email}
           comment={c.comment}
+          tags={c.tags}
           number={c.number}
           createdAt={c.createdAt}
           url={c.type}

@@ -196,7 +196,7 @@ const NewCoursePage = (props) => {
           name: "Кирилл",
           surname: "Михайлов",
           image:
-            "https://sun9-21.userapi.com/impg/5rzspzFHlNYI5sMlyGWsyZBh-KSGkP7Bt7BdhQ/4u5VXDpBEr0.jpg?size=642x1080&quality=96&sign=0a19da6397e92424948cf538311bea72&type=album",
+            "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1635519068/HEBMUAVckdY_1.png",
           title: "Юрист в Алруд",
           info: `Кирилл не только получил работу в одной из лучших компаний России, но и основал проект по изучению гражданского права "Цивилист". Он закончил МГУ и может много рассказать как про теорию гражданского права, так и про финансовые сделки.`,
         },
@@ -251,10 +251,10 @@ const NewCoursePage = (props) => {
         },
       ],
       price: {
-        full: "8 900 ₽",
+        full: "9 900 ₽",
         full_explain: "Полная стоимость",
-        part: "3 300 ₽/мес",
-        part_explain: "Рассрочка на 2 мес",
+        part: "6 900 ₽",
+        part_explain: "Сейчас со скидкой",
       },
       questions: [
         {
@@ -337,10 +337,10 @@ const NewCoursePage = (props) => {
       offer: `Купите сегодня – получите в подарок модуль "Word для юристов"`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
       price: {
-        full: "8 900 ₽",
+        full: "9 900 ₽",
         full_explain: "Полная стоимость",
-        part: "3 300 ₽/мес",
-        part_explain: "Рассрочка на 2 мес",
+        part: "6 900 ₽",
+        part_explain: "Сейчас со скидкой",
       },
       sps: [
         {
@@ -383,7 +383,7 @@ const NewCoursePage = (props) => {
         },
         {
           name: "Анастасия",
-          surname: "Шашкина",
+          surname: "Широбокова",
           image: "/static/nastya.jpeg",
           title: "Внешний эксперт",
           info: `У Насти богатый опыт сдачи международных экзаменов. Она сдала TOEFL на 110 из 120. SAT (ЕГЭ в США) на 1590 из 1600. Она также преподавала английский для взрослых на уровнях B2-C2 в "English First" и "Easy Speak" в области делового, инвестиционного и юридического английского.`,
