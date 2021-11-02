@@ -26,6 +26,14 @@ const UPDATE_CLIENT_MUTATION2 = gql`
   }
 `;
 
+const DELETE_CLIENT_MUTATION = gql`
+  mutation DELETE_CLIENT_MUTATION($id: String!) {
+    deleteClient(id: $id) {
+      id
+    }
+  }
+`;
+
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -115,20 +123,31 @@ const Row = styled.div`
   }
 `;
 
-const CLIENTS_QUERY = gql`
-  query CLIENTS_QUERY {
-    businessClients(orderBy: { createdAt: desc }) {
-      id
-      name
-      email
-      number
-      tags
-      createdAt
-      type
-      comment
-    }
-  }
-`;
+const DeleteClient = (props) => {
+  const { clientId } = props;
+  const [deleteClient, { data, loading }] = useMutation(DELETE_CLIENT_MUTATION);
+  return (
+    <button
+      onClick={() => {
+        if (
+          confirm(
+            "Вы точно хотите удалить эту запись? Запись исчезнет после перезагрузки страницы."
+          )
+        ) {
+          deleteClient({
+            variables: {
+              id: props.clientId,
+            },
+          }).catch((error) => {
+            alert(error.message);
+          });
+        }
+      }}
+    >
+      {loading ? "Удаляем..." : "Удалить"}
+    </button>
+  );
+};
 
 const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
@@ -136,12 +155,12 @@ const Client = (props) => {
   const [newTag, setNewTag] = useState();
 
   moment.locale("ru");
+
   var url = new URL("https://besavvy.app" + props.url);
   var utm_source = url.searchParams.get("utm_source");
   var utm_medium = url.searchParams.get("utm_medium");
   var utm_campaign = url.searchParams.get("utm_campaign");
   var utm_term = url.searchParams.get("utm_term");
-
   var id = url.searchParams.get("id");
 
   const [sendBusinessClientEmail, { updated_data }] = useMutation(
@@ -157,11 +176,9 @@ const Client = (props) => {
 
 Это Михаил из BeSavvy. Получили вашу заявку на сайте на курс юридического английского. Я с радостью проведу для вас вводное занятие и расскажу о программе.
 
-Но, чтобы не быть голословным, хочу сразу дать вам доступ к демо-урокам нашего курса. Чтобы получить к ним доступ, надо зарегистрироваться на сайте.
+Но, чтобы не быть голословным, хочу сразу дать вам доступ к демо-урокам нашего курса. Чтобы перейти по ссылке: https://besavvy.app/hello_eng
 
-Модуль 1. https://besavvy.app/coursePage?id=ck0pdit6900rt0704h6c5zmer (Уроки 1 и 5)
-
-Уверен, вам понравятся наши уроки. А, если вы решите присоединиться уже на следующей неделе, то мы с удовольствием дадим вам скидку 10% на обучение на программе.
+После прохождения открытого урока вам будет доступна скидка 40%.
 
 Скажите, у вас получится посмотреть открытый урок на этой неделе?`;
     return navigator.clipboard.writeText(text);
@@ -171,7 +188,7 @@ const Client = (props) => {
     /* Copy the text inside the text field */
     let text = `Добрый день. 
 
-Это Михаил из BeSavvy. Получили вашу заявку на сайте на программу "Школа Молодого Юриста". Я с радостью проведу для вас вводное занятие и расскажу о программе.
+Это Михаил из BeSavvy. Получили вашу заявку на сайте. Я с радостью проведу для вас вводное занятие и расскажу о программе.
 
 Но, чтобы не быть голословным, хочу сразу дать вам доступ к демо-уроку нашего курса. Чтобы получить к нему доступ, надо зарегистрироваться на сайте. Это урок по преддоговорной ответственности из модуля "Основные инструменты договорной работы корпоративного юриста". Вот ссылка: https://besavvy.app/coursePage?id=ckqut60ya145911gqj58c0qo8a
 
@@ -197,8 +214,8 @@ const Client = (props) => {
       </div>
       <div className="name">
         <div>{props.name}</div>
-        {tags &&
-          tags.map((t, i) => (
+        {props.tags &&
+          props.tags.map((t, i) => (
             <>
               <Tag
                 onClick={(e) => {
@@ -252,6 +269,7 @@ const Client = (props) => {
           Сopy Демо Урок Английский
         </button>
         <button onClick={(e) => copySchool()}>Сopy Демо Урок Школа</button>
+        <DeleteClient clientId={props.id} />
       </div>
       <div className="email">
         <div>{props.email}</div>
@@ -327,11 +345,8 @@ const Client = (props) => {
   );
 };
 
-const ClientData = () => {
-  const { loading, error, data } = useQuery(CLIENTS_QUERY);
-  if (loading) return <p>Загрузка...</p>;
-  let initial_clients = data.businessClients;
-  const [clients, setClients] = useState(initial_clients);
+const ClientData = (props) => {
+  const [clients, setClients] = useState(props.initial_clients);
 
   const sort = (val) => {
     console.log(val);

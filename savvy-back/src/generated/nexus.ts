@@ -2491,6 +2491,7 @@ export interface NexusGenFieldTypes {
     createTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     createTextEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
     deleteClause: NexusGenRootTypes['Clause'] | null; // Clause
+    deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     deleteDocument: NexusGenRootTypes['Document'] | null; // Document
     deleteLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -3148,6 +3149,7 @@ export interface NexusGenFieldTypeNames {
     createTextEditor: 'TextEditor'
     createTextEditorResult: 'TextEditorResult'
     deleteClause: 'Clause'
+    deleteClient: 'BusinessClient'
     deleteConstruction: 'Construction'
     deleteDocument: 'Document'
     deleteLesson: 'Lesson'
@@ -3882,6 +3884,9 @@ export interface NexusGenArgTypes {
       wrong?: string | null; // String
     }
     deleteClause: { // args
+      id?: string | null; // String
+    }
+    deleteClient: { // args
       id?: string | null; // String
     }
     deleteConstruction: { // args

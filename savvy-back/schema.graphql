@@ -1161,6 +1161,7 @@ type Mutation {
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, wrong: String): TextEditorResult
   deleteClause(id: String): Clause
+  deleteClient(id: String): BusinessClient
   deleteConstruction(id: String): Construction
   deleteDocument(id: String): Document
   deleteLesson(id: String): Lesson

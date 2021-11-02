@@ -2245,6 +2245,16 @@ const Mutation = mutationType({
         return bclient;
       },
     });
+    t.field("deleteClient", {
+      type: "BusinessClient",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        return ctx.prisma.businessClient.delete({ where });
+      },
+    });
     t.field("sendBusinessClientEmail", {
       type: "BusinessClient",
       args: {
