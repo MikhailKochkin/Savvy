@@ -75,7 +75,7 @@ const Details = (props) => {
         </Section>
         <Section>
           <div className="name">Старт</div>
-          <div className="main">{d.start}</div>
+          <div className="main">{d.next_date}</div>
           <div className="secondary">
             Получите доступ к 60 часам занятий сразу после покупки
           </div>

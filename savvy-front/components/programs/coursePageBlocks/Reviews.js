@@ -119,7 +119,7 @@ const Review = styled.div`
 const Reviews = (props) => {
   const d = props.data;
   return (
-    <Styles>
+    <Styles id="reviews">
       <Container>
         <h2>Отзывы участников</h2>
         <ReviewsList>

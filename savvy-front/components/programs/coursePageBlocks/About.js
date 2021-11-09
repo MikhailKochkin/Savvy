@@ -30,24 +30,35 @@ const Styles = styled.div`
     fill: #f5f5f5;
   }
 
-  #header {
-    width: 80%;
-    font-size: 2.8rem;
-    font-weight: bold;
-    margin-bottom: 1%;
+  h2 {
+    text-align: left;
+    font-weight: 400;
+    font-size: 3.2rem;
+    line-height: 1.4;
+    width: 90%;
+    margin: 80px 0;
+  }
+  @media (max-width: 800px) {
+    h2 {
+      margin-bottom: 40px;
+      font-size: 3.2rem;
+    }
   }
   @media (max-width: 800px) {
     height: auto;
     /* margin: 50px 0; */
-    #header {
-      font-size: 2.2rem;
-      margin: 20px 0;
-    }
+  }
+`;
+
+const Container = styled.div`
+  width: 80%;
+  @media (max-width: 800px) {
+    width: 90%;
   }
 `;
 
 const Box = styled.div`
-  width: 90%;
+  width: 100%;
   padding: 1% 3%;
   @media (max-width: 800px) {
     /* border: 1px solid red; */
@@ -70,7 +81,9 @@ const Slide = styled.div`
     width: 50%;
     img {
       object-fit: cover;
+
       max-height: 95%;
+
       /* border: 1px solid; */
       /* border-radius: 6px; */
     }
@@ -114,6 +127,7 @@ const Text = styled.div`
     font-size: 2.6rem;
     font-weight: bold;
     margin-bottom: 10px;
+    line-height: 1.4;
   }
   .text {
     font-size: 1.8rem;
@@ -165,82 +179,75 @@ const About = (props) => {
   };
   return (
     <Styles id="about">
-      <div class="custom-shape-divider-top-1615390650">
-        <svg
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M1200 120L0 16.48 0 0 1200 0 1200 120z"
-            class="shape-fill"
-          ></path>
-        </svg>
-      </div>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <div id="header">
-        Учим практическим навыкам с помощью онлайн-тренажеров
-      </div>
-      <Box>
-        <Carousel
-          responsive={responsive}
-          partialVisible={width > 800 ? true : false}
-        >
-          <Slide>
-            <Text>
-              <div>
-                <div className="header2">Кейсы</div>
-                <div className="text">
-                  Научим решать юридические кейсы, даже если у них есть
-                  несколько решений
+      <Container>
+        <h2 id="header">
+          Получите практические навыки с помощью онлайн-тренажеров
+        </h2>
+        <Box>
+          <Carousel
+            responsive={responsive}
+            partialVisible={width > 800 ? true : false}
+          >
+            <Slide>
+              <Text>
+                <div>
+                  <div className="header2">Тренажер для решения кейсов</div>
+                  <div className="text">
+                    Научим решать юридические кейсы: зададим наводящие вопросы,
+                    дадим фидбэк по неправильным ответам и покажем образцовый
+                    ответ.
+                  </div>
                 </div>
+              </Text>
+              <div className="image">
+                <img src="../../static/CaseStudies.png" />
               </div>
-            </Text>
-            <div className="image">
-              <img src="../../static/CaseStudies.png" />
-            </div>
-          </Slide>
-          {/* <Slide>
-            <Text>
-              <div>
-                <div className="header2">{props.t("decisionmaker")}</div>
-                <div className="text">{props.t("decisionmaker_explainer")}</div>
-              </div>
-            </Text>
-            <div className="image">
-              <img src="../../static/DecisionMaker.png" />
-            </div>
-          </Slide> */}
-          <Slide>
-            <Text>
-              <div>
-                <div className="header2">Конструктор документов</div>
-                <div className="text">
-                  Покажем, как составлять документы, используя лучшие практики
+            </Slide>
+            <Slide>
+              <Text>
+                <div>
+                  <div className="header2">Редактор документов</div>
+                  <div className="text">
+                    Научим находить и исправлять риски и ошибки в документах
+                  </div>
+                  {/* <button className="button">Try it</button> */}
                 </div>
+              </Text>
+              <div className="image">
+                <img src="../../static/TextEditor.png" />
               </div>
-            </Text>
-            <div className="image">
-              <img src="../../static/DocBuilder.png" />
-            </div>
-          </Slide>
-          <Slide>
-            <Text>
-              <div>
-                <div className="header2">Редактор документов</div>
-                <div className="text">
-                  Научим находить и исправлять риски и ошибки в документах.
+            </Slide>
+            <Slide>
+              <Text>
+                <div>
+                  <div className="header2">Симулятор принятия решений</div>
+                  <div className="text">
+                    Учитесь принимать решения на основе данных и дэшбордов
+                  </div>
                 </div>
-                {/* <button className="button">Try it</button> */}
+              </Text>
+              <div className="image">
+                <img src="../../static/DecisionMaker.png" />
               </div>
-            </Text>
-            <div className="image">
-              <img src="../../static/TextEditor.png" />
-            </div>
-          </Slide>
-        </Carousel>
-      </Box>
+            </Slide>
+            <Slide>
+              <Text>
+                <div>
+                  <div className="header2">Конструктор документов</div>
+                  <div className="text">
+                    Покажем, как струкутрировать и составить документ, используя
+                    лучшие практики
+                  </div>
+                </div>
+              </Text>
+              <div className="image">
+                <img src="../../static/DocBuilder.png" />
+              </div>
+            </Slide>
+          </Carousel>
+        </Box>
+      </Container>
     </Styles>
   );
 };

@@ -26,15 +26,50 @@ function MyApp({ Component, apollo, pageProps }) {
 
   useEffect(() => {
     TagManager.initialize({ gtmId: "GTM-WSZMCRD" });
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "d937200d-ad09-416f-87ba-4d441dcf12fd";
-    (function () {
-      var d = document;
-      var s = d.createElement("script");
-      s.src = "https://client.crisp.chat/l.js";
-      s.async = 1;
-      d.getElementsByTagName("head")[0].appendChild(s);
-    })();
+    //   window.$crisp = [];
+    //   window.CRISP_WEBSITE_ID = "d937200d-ad09-416f-87ba-4d441dcf12fd";
+    //   (function () {
+    //     var d = document;
+    //     var s = d.createElement("script");
+    //     s.src = "https://client.crisp.chat/l.js";
+    //     s.async = 1;
+    //     d.getElementsByTagName("head")[0].appendChild(s);
+    //   })();
+    !(function () {
+      function t(t, e) {
+        return function () {
+          window.carrotquestasync.push(t, arguments);
+        };
+      }
+      if ("undefined" == typeof carrotquest) {
+        var e = document.createElement("script");
+        (e.type = "text/javascript"),
+          (e.async = !0),
+          (e.src = "//cdn.carrotquest.app/api.min.js"),
+          document.getElementsByTagName("head")[0].appendChild(e),
+          (window.carrotquest = {}),
+          (window.carrotquestasync = []),
+          (carrotquest.settings = {});
+        for (
+          var n = [
+              "connect",
+              "track",
+              "identify",
+              "auth",
+              "oth",
+              "onReady",
+              "addCallback",
+              "removeCallback",
+              "trackMessageInteraction",
+            ],
+            a = 0;
+          a < n.length;
+          a++
+        )
+          carrotquest[n[a]] = t(n[a]);
+      }
+    })(),
+      carrotquest.connect("46882-c19ef48fe94883ff348545ab97");
   });
 
   return (

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 
 const FooterStyles = styled.div`
-  background-color: #171e2e;
+  background-color: #000000;
   color: white;
   max-height: 40%;
   width: 100%;

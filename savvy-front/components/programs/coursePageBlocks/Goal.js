@@ -44,7 +44,7 @@ const Container = styled.div`
     h2 {
       line-height: 1.4;
       font-weight: 500;
-      font-size: 2.2rem;
+      font-size: 2.8rem;
     }
   }
   #goal_examples {
@@ -106,8 +106,11 @@ const Goal = (props) => {
       <Container>
         <div id="goal_message">
           <h2>
-            Наша задача – дать вам результаты, которые можно легко измерить.
+            Вы получите новые знания. <br />
+            Новые навыки.
+            <br /> И новые знакомства с экспертами.
           </h2>
+
           <button onClick={(e) => slide()}>Участвовать</button>
         </div>
         <div id="goal_examples">

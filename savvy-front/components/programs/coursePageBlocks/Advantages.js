@@ -3,11 +3,12 @@ import styled from "styled-components";
 
 const Styles = styled.div`
   width: 100vw;
-  min-height: 50vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 50px 0;
   h2 {
     text-align: left;
     font-weight: 400;
@@ -15,7 +16,7 @@ const Styles = styled.div`
     line-height: 1.4;
     width: 100%;
     margin: 20px 0;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
   }
   @media (max-width: 800px) {
     padding: 25px 0;
@@ -39,12 +40,17 @@ const Container = styled.div`
 
 const Points = styled.div`
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+  div {
+    background-color: #f7f9f9;
+  }
+
   @media (max-width: 800px) {
+    display: flex;
     flex-direction: column;
   }
 `;
@@ -53,10 +59,10 @@ const Point = styled.div`
   display: flex;
   flex-direction: column;
   width: 320px;
-  margin-bottom: 50px;
-  li {
-    font-size: 1.8rem;
-    font-weight: 500;
+  padding: 15px;
+  .li {
+    font-size: 2rem;
+    font-weight: 600;
     line-height: 1.3;
     height: 60px;
     width: 70%;
@@ -79,7 +85,7 @@ const Advantages = (props) => {
         <Points>
           {props.data.advantages.map((a) => (
             <Point>
-              <li>{a.title}</li>
+              <div className="li">{a.title}</div>
               <div>{a.details}</div>
             </Point>
           ))}

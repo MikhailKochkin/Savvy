@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Styles = styled.div`
   width: 100vw;
-  min-height: 100vh;
+  min-height: 70vh;
   background: #fff;
   border-top: 1px solid #dce2e7;
   display: flex;
@@ -110,7 +110,7 @@ const SellingPoints = (props) => {
   return (
     <Styles>
       <Container>
-        <h2>Как проходит обучение</h2>
+        <h2>Обучение состоит из 4 элементов</h2>
         <PointsBox>
           {d.sps.map((s, i) => (
             <Point>

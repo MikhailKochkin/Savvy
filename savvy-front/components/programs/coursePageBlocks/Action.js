@@ -66,6 +66,7 @@ const Description = styled.div`
   .highlight {
     padding-bottom: 1px;
     border-bottom: 3px solid #f9d801;
+    font-weight: 600;
   }
   #header {
     font-size: 3.4rem;
@@ -376,12 +377,11 @@ const Action = (props) => {
                   <span> {props.data.price.full}</span>
                 </div>
                 <div className="parts">
-                  {props.data.price.part_explain}
+                  Скидка {props.data.discount}% до {props.data.next_date2}
                   <br /> <span> {props.data.price.part}</span>
                 </div>
               </div>
             </div>
-            {/* <div className="discount">Акция до 10 октября</div> */}
           </Description>
           <Contact>
             <div id="form_container">

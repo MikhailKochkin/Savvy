@@ -2,19 +2,16 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 // import Image from "next/image";
 import renderHTML from "react-render-html";
+import _ from "lodash";
 
 const BigImage = styled.div`
-  /* background-image: url("./static/back_image.png"); */
   width: 100vw;
   min-height: 90vh;
+  /* background: linear-gradient(110deg, #fff 75%, #fce969 75%); */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  img {
-    object-fit: cover;
-    filter: brightness(40%);
-  }
   @media (max-width: 800px) {
     padding: 50px 0;
   }
@@ -37,14 +34,22 @@ const Container = styled.div`
   /* height: 50%; */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  .reviews {
+    color: #4b5563;
+    font-weight: 500;
+    span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
   h1 {
-    font-size: 6rem;
+    font-size: 4.8rem;
     line-height: 1.2;
-    text-align: center;
+    text-align: left;
     font-weight: 800;
-    margin: 0;
-    margin-bottom: 20px;
+    margin: 40px 0;
+    max-width: 1100px;
     color: #252f3f;
     span {
       background: #fce969;
@@ -55,17 +60,37 @@ const Container = styled.div`
       -o-transform: skew(-5deg); */
     }
   }
-  h2 {
-    font-size: 2.2rem;
-    line-height: 1.4;
-    text-align: center;
-    width: 75%;
-    font-weight: 400;
-    color: #4b5563;
+  .description {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    .text {
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.4;
+      text-align: left;
+      width: 65%;
+      color: #4b5563;
+      div {
+        margin: 10px 0;
+      }
+    }
+  }
+  img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
   }
   @media (max-width: 800px) {
     width: 90%;
-
+    .description {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: 100%;
+    }
     h1 {
       font-size: 3.6rem;
       line-height: 1.4;
@@ -79,12 +104,19 @@ const Container = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-  width: 65%;
+  width: 80%;
   flex-direction: row;
-  justify-content: center;
-  margin: 30px 0;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  .button_group {
+    div {
+      font-size: 1.6rem;
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
   #syl_button {
-    width: 45%;
+    width: 25%;
     height: 50px;
     font-size: 2rem;
     font-family: Montserrat;
@@ -93,13 +125,14 @@ const Buttons = styled.div`
     border-radius: 8px;
     transition: 0.2s ease-in;
     cursor: pointer;
+    margin-left: 50px;
+
     &:hover {
       background: #c2c2c2;
     }
   }
   #buy_button {
-    width: 45%;
-    margin-left: 50px;
+    width: 500px;
     background: #175ffe;
     color: #fff;
     border-radius: 5px;
@@ -110,13 +143,24 @@ const Buttons = styled.div`
     cursor: pointer;
     font-family: Montserrat;
     transition: 0.3s;
+    margin-top: 10px;
     &:hover {
       background: #0135a9;
     }
   }
   @media (max-width: 800px) {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    margin-top: 20px;
+    .button_group {
+      width: 90%;
+      div {
+        width: 100%;
+        text-align: center;
+      }
+    }
     #syl_button {
       width: 100%;
       margin-bottom: 20px;
@@ -124,29 +168,56 @@ const Buttons = styled.div`
     #buy_button {
       width: 100%;
       margin-left: 0;
+      height: 70px;
     }
   }
 `;
 
 const TimeLeft = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  .discount {
+    /* background-image: url("/static/badge_star.svg"); */
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    object-fit: cover;
+    img {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      z-index: 0;
+    }
+    .number {
+      font-size: 2.6rem;
+      font-weight: 700;
+      z-index: 1;
+    }
+    .deadline {
+      z-index: 1;
+    }
+    font-size: 1.6rem;
+  }
   #clock {
-    width: 80%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     .clock_section {
+      width: 90px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      width: 300px;
+      /* width: 100px; */
       .clock_time {
-        font-size: 3rem;
+        font-size: 2rem;
         font-weight: 600;
       }
       .clock_name {
@@ -157,6 +228,16 @@ const TimeLeft = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
+    .discount {
+      .number {
+        font-size: 2.6rem;
+      }
+      font-size: 1.3rem;
+      img {
+        width: 130px;
+        height: 130px;
+      }
+    }
     #clock {
       width: 100vw;
       .clock_section {
@@ -166,7 +247,7 @@ const TimeLeft = styled.div`
   }
 `;
 
-const Headline = (props) => {
+const ATF = (props) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -217,7 +298,7 @@ const Headline = (props) => {
   };
 
   const slide = () => {
-    var my_element = document.getElementById("syllabus");
+    var my_element = document.getElementById("reviews");
     my_element.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -236,21 +317,47 @@ const Headline = (props) => {
   return (
     <div>
       <BigImage>
-        {/* <Image src={d.image} layout="fill" /> */}
         <InfoBlock>
           <Container>
+            <div className="reviews">
+              <div>
+                {_.times(5, (i) => (
+                  <img src="./static/simple_star.svg" />
+                ))}
+              </div>
+              <div>
+                {d.rating} / 5 Рейтинг курса |{" "}
+                <span onClick={(e) => slide()}>Смотреть отзывы</span>
+              </div>
+            </div>
             <h1>{renderHTML(d.header)}</h1>
-            <h2>{d.subheader}</h2>
-            <Buttons>
-              <button id="syl_button" onClick={(e) => slide()}>
-                Смотреть Программу
-              </button>
+            <div className="description">
+              <div className="text">{renderHTML(d.subheader)}</div>
+              <TimeLeft>
+                <div className="discount">
+                  <img src="static/badge_star.svg" />
+                  <div className="number">-{d.discount}%</div>
+                  <div className="deadline">до {d.next_date}</div>
+                </div>
+              </TimeLeft>
+            </div>
+          </Container>
+          <Buttons>
+            <div className="button_group">
               <button id="buy_button" onClick={(e) => slide2()}>
-                Начать учиться
+                Зарегистрироваться на вводный урок
               </button>
-            </Buttons>
-            <TimeLeft>
-              <div id="clock">
+              <div>по теме "{d.open_lesson}"</div>
+            </div>
+            {/* <button id="syl_button" onClick={(e) => slide()}>
+              Смотреть Программу
+            </button> */}
+            {/* <TimeLeft>
+              <div className="discount">
+                <div className="number">-24%</div>
+                <div>до 5 ноября</div>
+              </div>
+              {/* <div id="clock">
                 <div className="clock_section">
                   <div className="clock_time">{days}</div>
                   <div className="clock_name">
@@ -262,8 +369,8 @@ const Headline = (props) => {
                   <div className="clock_name">
                     {getNoun(hours, "час", "часа", "часов")}
                   </div>
-                </div>
-                <div className="clock_section">
+                </div> */}
+            {/* <div className="clock_section">
                   <div className="clock_time">{minutes}</div>
                   <div className="clock_name">
                     {" "}
@@ -276,14 +383,14 @@ const Headline = (props) => {
                     {" "}
                     {getNoun(seconds, "секунда", "секунды", "секунд")}
                   </div>
-                </div>
-              </div>
-            </TimeLeft>
-          </Container>
+                </div> */}
+            {/* </div> */}
+            {/* </TimeLeft>  */}
+          </Buttons>
         </InfoBlock>
       </BigImage>
     </div>
   );
 };
 
-export default Headline;
+export default ATF;

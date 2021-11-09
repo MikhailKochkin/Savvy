@@ -6,7 +6,7 @@ const Styles = styled.div`
   width: 100vw;
   min-height: 100vh;
   background: #fff;
-  border-top: 1px solid #dce2e7;
+  /* border-top: 1px solid #dce2e7; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,7 +23,7 @@ const Container = styled.div`
   h2 {
     text-align: left;
     font-weight: 400;
-    font-size: 4rem;
+    font-size: 3.2rem;
     line-height: 1.4;
     width: 100%;
     margin: 80px 0;
