@@ -161,7 +161,6 @@ const SingleConstructor = (props) => {
   const handleSteps = (e) => {
     e.preventDefault();
     // 1. Get the user variant for a particular article
-    console.log(e.target);
     const { value } = e.target;
     console.log(value);
     // 2. Get the number of the article

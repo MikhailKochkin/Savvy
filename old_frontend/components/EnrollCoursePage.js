@@ -77,7 +77,6 @@ const EnrollCoursePage = (props) => {
   };
 
   const { coursePage, meData } = props;
-  console.log(props.coursePage.id);
   return (
     <>
       {(coursePage.courseType === "PUBLIC" ||

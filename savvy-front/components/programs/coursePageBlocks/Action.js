@@ -385,9 +385,7 @@ const Action = (props) => {
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">
-                Записаться на курс и начать проходить бесплатные уроки
-              </div>
+              <div className="h2">Записаться на вводное занятие</div>
               <form>
                 <input
                   id="name"
@@ -427,6 +425,14 @@ const Action = (props) => {
                     } else if (number.length < 7) {
                       alert("Неправильный номер мобильнного телефона");
                     } else {
+                      Router.push({
+                        pathname: "/hello",
+                        query: {
+                          name: name,
+                          email: email,
+                          number: number,
+                        },
+                      });
                       if (props.data.price.course == "school") {
                         ReactGA.event({
                           category: "School Apply Button Click",
@@ -440,7 +446,7 @@ const Action = (props) => {
                       }
                       const res = await createBusinessClient({
                         variables: {
-                          type: asPath ? asPath : "English",
+                          type: asPath ? asPath : "school",
                           email,
                           name,
                           number,
@@ -448,7 +454,6 @@ const Action = (props) => {
                         },
                       });
                       console.log(res);
-                      toggleModal();
                     }
                   }}
                 >

@@ -7,6 +7,7 @@ import Link from "next/link";
 import UpdatePost from "./UpdatePost";
 import Modal from "styled-react-modal";
 import ContactForm from "../landing/ContactForm";
+import BottomLine from "./BottomLine";
 
 const UPDATE_POST_MUTATION = gql`
   mutation UPDATE_POST_MUTATION($id: String!, $likes: Int) {
@@ -226,6 +227,7 @@ const Post = (props) => {
   moment.locale("ru");
   return (
     <>
+      <BottomLine />
       <Styles>
         <div className="title">
           <Link

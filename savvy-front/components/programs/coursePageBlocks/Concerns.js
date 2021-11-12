@@ -92,7 +92,6 @@ const Level = styled.div`
 `;
 
 const Concerns = (props) => {
-  console.log(props.data.refusals);
   return (
     <>
       <Styles>

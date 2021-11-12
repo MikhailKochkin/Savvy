@@ -7,6 +7,7 @@ const hello = (props) => {
     <Old_Hello
       name={props.query.name}
       surname={props.query.surname}
+      number={props.query.number}
       email={props.query.email}
       me={me}
     />

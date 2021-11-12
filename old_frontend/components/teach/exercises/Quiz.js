@@ -21,7 +21,6 @@ const Quiz = (props) => {
           </b>
           {renderHTML(t.answer)}
           {/* {t.correct ? "Правильно" : "Неправильно"} */}
-          {console.log(t.correct)}
         </div>
       ))}
     </>

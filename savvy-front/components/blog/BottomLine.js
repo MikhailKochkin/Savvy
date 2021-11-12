@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import moment from "moment";
-import Link from "next/link";
 import ReactResizeDetector from "react-resize-detector";
 
 const Banner = styled.div`
   width: 100%;
   min-height: 10vh;
-  background-image: url("/static/pattern.svg");
+  background: #000000; /* fallback for old browsers */
+  background: url("/static/mini_pattern.svg");
   background-size: cover;
   color: #fff;
-  /* position: -webkit-sticky;
-  position: sticky;
-  top: 0px; */
   position: fixed;
   bottom: 0;
   display: flex;
@@ -20,7 +16,6 @@ const Banner = styled.div`
   align-items: center;
   z-index: 3;
   justify-content: center;
-  /* padding-right: 300px; */
   .bottomline_text {
     max-width: 45%;
     min-width: 35%;
@@ -29,15 +24,11 @@ const Banner = styled.div`
     line-height: 1.6;
     font-weight: 500;
     padding: 10px;
-
-    span {
-    }
-    /* opacity: 0.9; */
   }
   button {
-    background: #fcc419;
+    background: #92dce5;
     color: #000;
-    border: 1px solid #fcc419;
+    border: 1px solid #1864ab;
     border-radius: 5px;
     width: 220px;
     font-family: Montserrat;
@@ -49,15 +40,13 @@ const Banner = styled.div`
     z-index: 4;
     transition: ease-in 0.2s;
     &:hover {
-      background-color: #dea702;
-      border: 1px solid #dea702;
+      background-color: #4ac3d3;
+      border: 1px solid #1864ab;
     }
   }
   @media (max-width: 800px) {
     flex-direction: column;
     padding: 20px 0;
-    background-size: contain;
-
     .bottomline_text {
       width: 90%;
       max-width: 90%;
@@ -90,9 +79,9 @@ const Ad = (props) => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="bottomline_text">
-        <span>{d.offer}</span>
+        <span>Black Friday в BeSavvy. Скидки до 50%</span>
       </div>
-      <button onClick={(e) => slide()}>Зарегистрироваться</button>
+      <button onClick={(e) => slide()}>Смотреть скидки</button>
     </Banner>
   );
 };

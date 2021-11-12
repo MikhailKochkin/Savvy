@@ -43,7 +43,6 @@ const Exercises = (props) => {
           if (isNaN(average)) {
             average = "Нет оценок";
           }
-          console.log("ratings", ratings);
           return (
             <MiniStyles>
               <Header>

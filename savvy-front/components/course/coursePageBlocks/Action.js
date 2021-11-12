@@ -419,9 +419,7 @@ const Action = (props) => {
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">
-                Записаться на курс и начать проходить вводный урок
-              </div>
+              <div className="h2">Записаться на вводное занятие</div>
               <form>
                 <div className="names">
                   <input
@@ -488,19 +486,14 @@ const Action = (props) => {
                           communication_medium: "litigation",
                         },
                       });
-                      if (props.data.price.course == "litigation") {
-                        Router.push({
-                          pathname: "/hello_litigator",
-                          query: {
-                            name: name,
-                            surname: surname,
-                            email: email,
-                            course: "litigation",
-                          },
-                        });
-                      } else {
-                        toggleModal();
-                      }
+                      Router.push({
+                        pathname: "/hello",
+                        query: {
+                          name: name + " " + surname,
+                          email: email,
+                          number: number,
+                        },
+                      });
                     }
                   }}
                 >

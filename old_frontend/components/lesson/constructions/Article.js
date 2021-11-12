@@ -54,7 +54,6 @@ class Article extends Component {
   };
 
   show = (e) => {
-    console.log(e.target.previousSibling.previousSibling);
     e.target.previousSibling.previousSibling.innerHTML = `
     ${
       e.target.previousSibling.previousSibling.innerHTML
@@ -72,11 +71,9 @@ class Article extends Component {
       answer1: this.state.correct_option.toLowerCase(),
       answer2: this.state.answer.toLowerCase(),
     };
-    console.log(data);
     let el = document
       .getElementById("answers")
       .querySelectorAll(`[data-initial='${this.state.correct_option}']`)[0];
-    console.log(document.getElementById("answers"), el);
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {

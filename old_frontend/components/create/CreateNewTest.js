@@ -228,7 +228,6 @@ const CreateNewTest = (props) => {
                   setNum(num + 1);
                   let old_answers = answers;
                   let old_correct = correct;
-                  console.log(old_answers, old_correct);
                   setAnswers([...old_answers, ""]);
                   setCorrect([...old_correct, false]);
                 }}

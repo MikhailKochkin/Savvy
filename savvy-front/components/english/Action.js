@@ -291,12 +291,12 @@ const Action = () => {
                   e.preventDefault();
                   if (EmailValidator.validate(email)) {
                     Router.push({
-                      pathname: "/hello_eng",
+                      pathname: "/hello",
                       query: {
-                        name: name,
-                        surname: surname,
+                        name: name + " " + surname,
                         email: email,
-                        course: "eng_prof",
+                        course: "english",
+                        number: number,
                       },
                     });
                     ReactGA.event({
@@ -312,8 +312,6 @@ const Action = () => {
                         communication_medium: "english",
                       },
                     });
-                    console.log(res);
-                    toggleModal();
                   } else {
                     alert("Неправильный имейл");
                   }

@@ -52,7 +52,6 @@ class QuizResult extends Component {
                       <li>
                         {t.answer}{" "}
                         {t.correct && (t.correct ? "Правильно" : "Неверно")}
-                        {console.log(t)}
                       </li>
                     ))
                 ) : (

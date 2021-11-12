@@ -7,12 +7,160 @@ const Styles = styled.div`
   width: 100%;
   display: flex;
   background: #fff;
-  min-height: 80vh;
+  min-height: 90vh;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   @media (max-width: 900px) {
     padding-top: 30px;
+  }
+`;
+
+const TimeLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  width: 40%;
+  .black {
+    text-align: center;
+    font-weight: 600;
+    font-size: 2.2rem;
+    margin-top: 10px;
+  }
+
+  .discount {
+    /* background-image: url("/static/badge_star.svg"); */
+    width: 150px;
+    color: #fff;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    object-fit: cover;
+    img {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      z-index: 0;
+    }
+    .number {
+      font-size: 2.4rem;
+      font-weight: 700;
+      z-index: 1;
+      text-align: center;
+    }
+    .deadline {
+      z-index: 1;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+    font-size: 1.6rem;
+  }
+  #clock {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    .clock_section {
+      width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      /* width: 100px; */
+      .clock_time {
+        font-size: 2rem;
+        font-weight: 600;
+      }
+      .clock_name {
+        font-size: 1.8rem;
+        font-weight: 400;
+      }
+    }
+  }
+  /* @media screen and (max-width: 900px), screen and (max-height: 800px) {
+    width: 35%;
+    position: absolute;
+    right: 100%;
+    left: 60%;
+  } */
+  @media screen and (max-width: 800px) {
+    width: 40%;
+    position: absolute;
+    right: 100%;
+    left: 60%;
+    top: 40%;
+    .black {
+      display: none;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.8rem;
+    }
+
+    .discount {
+      .number {
+        font-size: 2.1rem;
+      }
+      .deadline {
+        font-size: 1.3rem;
+      }
+      img {
+        width: 130px;
+        height: 130px;
+      }
+    }
+    #clock {
+      width: 100vw;
+      .clock_section {
+        width: 25%;
+      }
+    }
+  }
+`;
+
+const Subheader = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  .subheader {
+    font-size: 2rem;
+    line-height: 1.4;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
+    font-weight: 400;
+    color: #4b5563;
+    .row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+      margin: 10px 0;
+    }
+    img {
+      width: 25px;
+      height: 25px;
+    }
+    .point {
+      margin-left: 15px;
+    }
+  }
+  @media (max-width: 900px) {
+    flex-direction: column;
+    margin-top: 10px;
+    align-items: flex-start;
+    .subheader {
+      font-size: 1.8rem;
+      width: 90%;
+    }
   }
 `;
 
@@ -39,36 +187,44 @@ const Text = styled.div`
   h1 {
     font-size: 6rem;
     line-height: 1.2;
-    text-align: center;
+    text-align: left;
     font-weight: 800;
     margin: 0;
     margin-bottom: 20px;
     color: #252f3f;
     span {
-      background: #fce969;
       display: inline-block;
-      transform: skew(-8deg);
+      transform: skew(-6deg);
+      background: #fce969;
       /* -webkit-transform: skew(-5deg);
       -moz-transform: skew(-5deg);
       -o-transform: skew(-5deg); */
     }
   }
-  .subheader {
-    font-size: 2.2rem;
-    line-height: 1.4;
-    text-align: center;
-    width: 65%;
-    font-weight: 400;
-    color: #4b5563;
+  @media (max-width: 1300px) {
   }
+  @media (max-width: 900px) {
+    width: 100%;
+    h1 {
+      font-size: 4rem;
+    }
+    .header {
+      font-size: 2.4rem;
+    }
+  }
+`;
+
+const Buttons = styled.div`
+  width: 100%;
   button {
-    background: #175ffe;
+    background: #1b65f1;
     color: #fff;
     border-radius: 5px;
-    border: none;
+    font-weight: 500;
     margin-top: 25px;
     margin-bottom: 15px;
-    width: 250px;
+    border: none;
+    width: 290px;
     padding: 15px 0;
     outline: 0;
     cursor: pointer;
@@ -83,41 +239,14 @@ const Text = styled.div`
       font-size: 1.4rem;
     }
   }
-  .point_text {
-    text-align: right;
-  }
   @media (max-width: 1300px) {
     button {
       width: 40%;
     }
-    div {
-      width: 100%;
-      font-size: 1.6rem;
-      text-align: right;
-      margin-bottom: 15px;
-    }
   }
   @media (max-width: 900px) {
-    width: 100%;
-    h1 {
-      font-size: 4rem;
-    }
-
     button {
       width: 100%;
-    }
-    div {
-      width: 100%;
-      font-size: 1.6rem;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-    .header {
-      font-size: 2.4rem;
-    }
-    .subheader {
-      font-size: 2rem;
-      width: 95%;
     }
   }
 `;
@@ -169,7 +298,7 @@ const Landing = (props) => {
     smoothscroll.polyfill();
   });
   const slide = () => {
-    var my_element = document.getElementById("course_search");
+    var my_element = document.getElementById("black_friday");
     my_element.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -183,13 +312,42 @@ const Landing = (props) => {
           <h1>
             Мы <span>обучаем юристов</span> практическим навыкам онлайн{" "}
           </h1>
-          <div className="subheader">
-            В основе нашего обучения лежат экспертиза, технологии и сильное
-            сообщество. Чтобы вы эффективно и быстро учились в кругу интересных
-            людей.
-          </div>
+          <Subheader>
+            <div className="subheader">
+              <div className="row">
+                <img src="/static/tick2.svg" />
+                <div className="point">
+                  <b>2 500+</b> выпускников платных и бесплатных программ
+                </div>
+              </div>
+              <div className="row">
+                <img src="/static/tick2.svg" />
+                <div className="point">
+                  <b>20+</b> преподавателей-практиков из Noerr, CMS, Clifford
+                  Chance, Алруд и других престижных компаний.
+                </div>
+              </div>
 
-          <button onClick={(e) => slide()}>Смотреть программы</button>
+              <div className="row">
+                <img src="/static/tick2.svg" />
+                <div className="point">
+                  <b>4</b> вида симуляторов, позволяющих оттачивать
+                  практическкие навыки онлайн{" "}
+                </div>
+              </div>
+            </div>
+            <TimeLeft>
+              <div className="discount">
+                <img src="static/black_star.svg" />
+                <div className="deadline">15-21 ноября</div>
+                <div className="number">до -50%</div>
+              </div>
+              <div className="black">Black Friday</div>
+            </TimeLeft>
+          </Subheader>
+          <Buttons>
+            <button onClick={(e) => slide()}>Выбрать скидку</button>
+          </Buttons>
         </Text>
       </Block>
     </Styles>
