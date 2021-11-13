@@ -234,7 +234,7 @@ const Headline = (props) => {
     });
   };
   return (
-    <div>
+    <div id="ATF">
       <BImage>
         {/* <Image src={`/static/${d.image}`} layout="fill" /> */}
         <InfoBlock>

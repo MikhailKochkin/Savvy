@@ -7,6 +7,33 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
 import ReactGA from "react-ga";
+import Signup from "../../auth/Signup";
+import Signin from "../../auth/Signin";
+import RequestReset from "../../auth/RequestReset";
+
+const CREATE_ORDER_MUTATION = gql`
+  mutation createOrder(
+    $coursePageId: String!
+    $userId: String!
+    $price: Int!
+    $promocode: String
+    $comment: String
+  ) {
+    createOrder(
+      coursePageId: $coursePageId
+      price: $price
+      userId: $userId
+      promocode: $promocode
+      comment: $comment
+    ) {
+      order {
+        id
+        paymentID
+      }
+      url
+    }
+  }
+`;
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -378,14 +405,32 @@ const Action = (props) => {
   const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [auth, setAuth] = useState("signin");
 
   const toggleModal = (e) => setIsOpen(!isOpen);
+  const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const { asPath } = useRouter();
 
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
+
+  const [
+    createOrder,
+    { data: order_data, loading: loading_data, error: error_data },
+  ] = useMutation(CREATE_ORDER_MUTATION);
+
   const d = props.data;
+  const { me } = props;
+
+  const slide = () => {
+    var my_element = document.getElementById("ATF");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
 
   return (
     <Styles id="c2a">
@@ -410,12 +455,35 @@ const Action = (props) => {
                 <div className="parts">
                   {props.data.price.part_explain}
                   <br /> <span> {props.data.price.part}</span>
-                  <div className="buy">Купить</div>
+                  {!loading_data && (
+                    <div
+                      className="buy"
+                      onClick={async (e) => {
+                        if (!me) {
+                          alert(
+                            `Сейчас мы откроем страницу регистрации. Создайте аккаунт, а потом нажмите на конпку "Купить" еще раз.`
+                          );
+                          toggleModal();
+                        } else {
+                          const res = await createOrder({
+                            variables: {
+                              coursePageId: props.coursePage.id,
+                              price: props.data.price.price,
+                              userId: me.id,
+                              comment: props.comment,
+                            },
+                          });
+                          location.href = res.data.createOrder.url;
+                        }
+                      }}
+                    >
+                      Купить
+                    </div>
+                  )}
+                  {loading_data && <div>Готовим покупку...</div>}
                 </div>
               </div>
             </div>
-            {/* <BuyButton>Купить со скидкой</BuyButton> */}
-            {/* <div className="discount">Акция до 10 октября</div> */}
           </Description>
           <Contact>
             <div id="form_container">
@@ -523,12 +591,13 @@ const Action = (props) => {
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}
       >
-        <div className="top_message">Мы получили заявку!</div>
-        <div className="bottom_message">
-          Спасибо, что заинтересовались нашей программой. Мы очень ждем
-          возможности познакомиться с вами поближе. Напишем или позвоним вам в
-          течение часа.
-        </div>
+        {auth === "signin" && (
+          <Signin getData={changeState} closeNavBar={toggleModal} />
+        )}
+        {auth === "signup" && (
+          <Signup getData={changeState} closeNavBar={toggleModal} />
+        )}
+        {auth === "reset" && <RequestReset getData={changeState} />}
       </StyledModal>
     </Styles>
   );

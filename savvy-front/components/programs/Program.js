@@ -126,10 +126,8 @@ const Program = (props) => {
 
   var dates = [
     "November 11, 2021 20:00:00",
-    "November 15, 2021 20:00:00",
     "November 19, 2021 20:00:00",
-    "November 24, 2021 20:00:00",
-    "November 29, 2021 20:00:00",
+    "November 26, 2021 20:00:00",
     "December 2, 2021 20:00:00",
     "December 7, 2021 20:00:00",
     "December 12, 2021 20:00:00",
@@ -164,7 +162,7 @@ const Program = (props) => {
       open_lesson: "Преддоговорная ответственность",
       next_date: next_date,
       next_date2: next_date2,
-      discount: 25,
+      discount: 30,
       prior_klnowledge_1: "Пожизненный",
       prior_klnowledge_2:
         "И бесплатный доступ ко всем обновлениям и новым урокам",
@@ -291,7 +289,7 @@ const Program = (props) => {
       price: {
         full: "44 000 ₽",
         full_explain: "Полная стоимость",
-        part: "33 000 ₽",
+        part: "30 800 ₽",
         part_explain: "Скидка 25% до 31.10",
         course: "corp",
       },
@@ -556,7 +554,7 @@ const Program = (props) => {
       open_lesson: "Преддоговорная ответственность",
       next_date: next_date,
       next_date2: next_date2,
-      discount: 25,
+      discount: 30,
       prior_klnowledge_1: "Пожизненный",
       prior_klnowledge_2:
         "И бесплатный доступ ко всем обновлениям и новым урокам",
@@ -1031,7 +1029,7 @@ const Program = (props) => {
       price: {
         full: "59 000 ₽",
         full_explain: "Полная стоимость",
-        part: "35 400 ₽",
+        part: "41 300 ₽",
         part_explain: "Скидка 40% до 31.10",
         course: "school",
       },

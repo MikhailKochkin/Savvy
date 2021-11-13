@@ -196,9 +196,6 @@ const Text = styled.div`
       display: inline-block;
       transform: skew(-6deg);
       background: #fce969;
-      /* -webkit-transform: skew(-5deg);
-      -moz-transform: skew(-5deg);
-      -o-transform: skew(-5deg); */
     }
   }
   @media (max-width: 1300px) {

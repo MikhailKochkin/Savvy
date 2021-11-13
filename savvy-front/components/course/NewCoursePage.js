@@ -7,7 +7,6 @@ import Syllabus from "./coursePageBlocks/Syllabus";
 import SellingPoints from "./coursePageBlocks/SellingPoints";
 import Teachers from "./coursePageBlocks/Teachers";
 import Reviews from "./coursePageBlocks/Reviews";
-import C2A from "./coursePageBlocks/C2A";
 import Action from "./coursePageBlocks/Action";
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
@@ -251,9 +250,10 @@ const NewCoursePage = (props) => {
         },
       ],
       price: {
-        full: "9 900 ₽",
+        price: 7100,
+        full: "8 900 ₽",
         full_explain: "Полная стоимость",
-        part: "6 900 ₽",
+        part: "7 100 ₽",
         part_explain: "Сейчас со скидкой",
       },
       questions: [
@@ -337,9 +337,10 @@ const NewCoursePage = (props) => {
       offer: `Купите сегодня – получите в подарок модуль "Word для юристов"`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
       price: {
-        full: "9 900 ₽",
+        price: 7100,
+        full: "8 900 ₽",
         full_explain: "Полная стоимость",
-        part: "6 900 ₽",
+        part: "7 100 ₽",
         part_explain: "Сейчас со скидкой",
       },
       sps: [
@@ -483,10 +484,11 @@ const NewCoursePage = (props) => {
       offer: `Купите сегодня – получите в подарок модуль "Word для юристов"`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
       price: {
+        price: 16700,
         full: "23 900 ₽",
         full_explain: "Полная стоимость",
-        part: "14 900 ₽",
-        part_explain: "Скидка 40% до 31.10",
+        part: "16 700 ₽",
+        part_explain: "Скидка 30% до 26.11",
         course: "litigation",
       },
       sps: [
@@ -620,13 +622,16 @@ const NewCoursePage = (props) => {
         ) : (
           <p>Загружаем программу курса ...</p>
         )}
-        {/* {!loading && data && ( */}
-        <Action me={me} coursePageId={123} data={prog} />
-        {/* )} */}
+        {!loading && data && (
+          <Action me={me} coursePage={data.coursePage} data={prog} />
+        )}
         <SellingPoints data={prog} />
         <Teachers data={prog} />
         <Reviews data={prog} />
-        <Action me={me} coursePageId={123} data={prog} />
+        {!loading && data && (
+          <Action me={me} coursePage={data.coursePage} data={prog} />
+        )}
+
         <QA data={prog} />
       </div>
     </div>
