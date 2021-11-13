@@ -93,7 +93,7 @@ const TimeLeft = styled.div`
     position: absolute;
     right: 100%;
     left: 60%;
-    top: 40%;
+    top: 10%;
     .black {
       display: none;
       text-align: center;
