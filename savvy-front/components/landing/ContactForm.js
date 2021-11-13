@@ -243,6 +243,8 @@ const Contact = styled.div`
       width: 100%;
       height: 50px;
       font-size: 2.2rem;
+      color: black;
+      font-weight: 500;
     }
     #legal {
       width: 95%;

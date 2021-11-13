@@ -70,9 +70,6 @@ const Header = styled.div`
   background-image: linear-gradient(90deg, #02b3e4 0, #02ccba);
   color: white;
   padding: 1%;
-  -webkit-transform: skew(-5deg);
-  -moz-transform: skew(-5deg);
-  -o-transform: skew(-5deg);
   .icon {
     margin-right: 5px;
   }

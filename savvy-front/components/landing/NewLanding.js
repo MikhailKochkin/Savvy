@@ -335,7 +335,7 @@ const Landing = (props) => {
             </div>
             <TimeLeft>
               <div className="discount">
-                <img src="static/black_star.svg" />
+                <img src="static/bstar.svg" />
                 <div className="deadline">15-21 ноября</div>
                 <div className="number">до -50%</div>
               </div>
