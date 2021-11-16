@@ -161,6 +161,7 @@ const Client = (props) => {
   var utm_medium = url.searchParams.get("utm_medium");
   var utm_campaign = url.searchParams.get("utm_campaign");
   var utm_term = url.searchParams.get("utm_term");
+  var utm_content = url.searchParams.get("utm_content");
   var id = url.searchParams.get("id");
 
   const [sendBusinessClientEmail, { updated_data }] = useMutation(
@@ -170,32 +171,155 @@ const Client = (props) => {
   const [updateBusinessClient, { updated_data2 }] = useMutation(
     UPDATE_CLIENT_MUTATION2
   );
-  const copyEnglish = (name) => {
+  const copyEnglish1 = (name) => {
     /* Copy the text inside the text field */
-    let text = `Добрый день. 
+    let text = `Здравствуйте,
 
-Это Михаил из BeSavvy. Получили вашу заявку на сайте на курс юридического английского. Я с радостью проведу для вас вводное занятие и расскажу о программе.
+Мы получили вашу заявку на курс "Юридический английский для профессионалов".
 
-Но, чтобы не быть голословным, хочу сразу дать вам доступ к демо-урокам нашего курса. Чтобы перейти по ссылке: https://besavvy.app/hello_eng
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1GvZpUMzGTN5cWh4hsRjIl22q1aMeiDnp/view?usp=sharing 
 
-После прохождения открытого урока вам будет доступна скидка 40%.
+Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
 
-Скажите, у вас получится посмотреть открытый урок на этой неделе?`;
+P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
+
+Алена,
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
     return navigator.clipboard.writeText(text);
   };
 
-  const copySchool = (name) => {
+  const copyEnglish2 = (name) => {
     /* Copy the text inside the text field */
-    let text = `Добрый день. 
+    let text = `Здравствуйте,
 
-Это Михаил из BeSavvy. Получили вашу заявку на сайте. Я с радостью проведу для вас вводное занятие и расскажу о программе.
+Мы получили вашу заявку на курс "Юридический английский для профессионалов".
 
-Но, чтобы не быть голословным, хочу сразу дать вам доступ к демо-уроку нашего курса. Чтобы получить к нему доступ, надо зарегистрироваться на сайте. Это урок по преддоговорной ответственности из модуля "Основные инструменты договорной работы корпоративного юриста". Вот ссылка: https://besavvy.app/coursePage?id=ckqut60ya145911gqj58c0qo8a
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1GvZpUMzGTN5cWh4hsRjIl22q1aMeiDnp/view?usp=sharing
 
-Уверен, вам понравятся наши уроки. А, если вы решите присоединиться уже на следующей неделе, то мы с удовольствием дадим вам скидку 10% на обучение на программе.
+Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
 
-Скажите, у вас получится посмотреть открытый урок на этой неделе?
-    `;
+Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
+
+Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
+
+Алена
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
+    return navigator.clipboard.writeText(text);
+  };
+
+  const copySchool1 = (name) => {
+    /* Copy the text inside the text field */
+    let text = `Здравствуйте,
+
+Мы получили вашу заявку на курс "Карьерная Школа Юриста".
+
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1bZAtbPz5MrKCriPe0Bj2cG9ueVKau8kP/view?usp=sharing
+
+Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
+
+P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
+
+Алена,
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
+    return navigator.clipboard.writeText(text);
+  };
+
+  const copySchool2 = (name) => {
+    /* Copy the text inside the text field */
+    let text = `Здравствуйте,
+
+Мы получили вашу заявку на курс "Карьерная Школа Юриста".
+
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1bZAtbPz5MrKCriPe0Bj2cG9ueVKau8kP/view?usp=sharing
+
+Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
+
+Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
+
+Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
+
+Алена
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
+    return navigator.clipboard.writeText(text);
+  };
+
+  const copyCorp1 = (name) => {
+    /* Copy the text inside the text field */
+    let text = `Здравствуйте,
+
+Мы получили вашу заявку на курс "Корпоративное право".
+
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1Ku64al8Ktj097My6jp9aFxNvQRpDwN5M/view?usp=sharing
+
+Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
+
+P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
+
+Алена,
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
+    return navigator.clipboard.writeText(text);
+  };
+
+  const copyCorp2 = (name) => {
+    /* Copy the text inside the text field */
+    let text = `Здравствуйте,
+
+Мы получили вашу заявку на курс "Корпоративное право".
+
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1Ku64al8Ktj097My6jp9aFxNvQRpDwN5M/view?usp=sharing
+
+Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
+
+Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
+
+Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
+
+Алена
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
+    return navigator.clipboard.writeText(text);
+  };
+
+  const copyLitigation1 = (name) => {
+    /* Copy the text inside the text field */
+    let text = `Здравствуйте,
+
+Мы получили вашу заявку на курс "Арбитражный процесс".
+
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/16uTdmv-J62pzOQFskkyKJi4v5pYg4ekg/view?usp=sharing
+
+Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
+
+P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
+
+Алена,
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
+    return navigator.clipboard.writeText(text);
+  };
+
+  const copyLitigation2 = (name) => {
+    /* Copy the text inside the text field */
+    let text = `Здравствуйте,
+
+Мы получили вашу заявку на курс "Арбитражный процесс".
+
+Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/16uTdmv-J62pzOQFskkyKJi4v5pYg4ekg/view?usp=sharing
+
+Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
+
+Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
+
+Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
+
+Алена
+
+Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
     return navigator.clipboard.writeText(text);
   };
 
@@ -265,10 +389,32 @@ const Client = (props) => {
             Сохранить
           </button>
         </form>
-        <button onClick={(e) => copyEnglish()}>
-          Сopy Демо Урок Английский
+        <button onClick={(e) => copyEnglish1()}>
+          Сopy-Английский-Есть регистрация
         </button>
-        <button onClick={(e) => copySchool()}>Сopy Демо Урок Школа</button>
+        <button onClick={(e) => copyEnglish2()}>
+          Сopy-Английский-Нет регистрации
+        </button>
+        <button onClick={(e) => copySchool1()}>
+          {" "}
+          Сopy-Школа-Есть регистрация
+        </button>
+        <button onClick={(e) => copySchool2()}>
+          {" "}
+          Сopy-Школа-Нет регистрации
+        </button>
+        <button onClick={(e) => copyCorp1()}>
+          {" "}
+          Сopy-Корп-Есть регистрация
+        </button>
+        <button onClick={(e) => copyCorp2()}>Сopy-Корп-Нет регистрации</button>
+        <button onClick={(e) => copyLitigation1()}>
+          {" "}
+          Сopy-Арбитраж-Есть регистрация
+        </button>
+        <button onClick={(e) => copyLitigation2()}>
+          Сopy-Арбитраж-Нет регистрации
+        </button>
         <DeleteClient clientId={props.id} />
       </div>
       <div className="email">
@@ -340,6 +486,8 @@ const Client = (props) => {
         <li>utm_medium: {utm_medium}</li>
         <li>utm_campaign: {utm_campaign}</li>
         <li>utm_term: {utm_term}</li>
+        <li>utm_content: {utm_content}</li>
+        <li>communication_medium: {props.communication_medium}</li>
       </div>
     </Row>
   );
@@ -374,6 +522,7 @@ const ClientData = (props) => {
           number={c.number}
           createdAt={c.createdAt}
           url={c.type}
+          communication_medium={c.communication_medium}
         />
       ))}
     </Styles>

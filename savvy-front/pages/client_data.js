@@ -13,6 +13,7 @@ const CLIENTS_QUERY = gql`
       createdAt
       type
       comment
+      communication_medium
     }
   }
 `;
