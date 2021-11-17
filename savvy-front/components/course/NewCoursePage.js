@@ -127,6 +127,7 @@ const NewCoursePage = (props) => {
 
   var today = moment();
   var tomorrow = moment(today).add(3, "days");
+  var dec_13 = moment(today).add(26, "days");
 
   const programs = [
     {
@@ -601,8 +602,8 @@ const NewCoursePage = (props) => {
       image: "/static/english_intro_course.png",
       length1: "2 месяца",
       length2: "4 часа в неделю",
-      start: moment(tomorrow._d).format("Do MMMM YYYY"),
-      start_eng: tomorrow._d,
+      start: moment(dec_13._d).format("Do MMMM YYYY"),
+      start_eng: dec_13._d,
       prior_klnowledge_1: "Не требуется",
       prior_klnowledge_2: "Начинаем с основ",
       goals: [
