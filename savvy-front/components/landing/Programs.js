@@ -109,13 +109,25 @@ const Programs = () => {
       title: "Старт в Гражданском праве",
       description:
         "Изучаем основы гражданского права, чтобы успешно сдать экзамены и пройти отбор в юридическую фирму.",
-      term: "Длительность: 6 месяцев",
+      term: "Длительность: 3 месяца",
       price: "8 900₽",
       conditions: `До ${next_date}`,
       installments: "20% скидка",
       img: "https://images.unsplash.com/photo-1495542779398-9fec7dc7986c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
       pathname: "coursePage",
       query: "id=cjtreu3md00fp0897ga13aktp",
+    },
+    {
+      title: "Старт в IP",
+      description:
+        "Изучаем основы права интеллектуальной собственности, чтобы успешно сдать экзамены и пройти отбор в юридическую фирму.",
+      term: "Длительность: 1 месяц",
+      price: "8 900₽",
+      conditions: `До ${next_date}`,
+      installments: "20% скидка",
+      img: "https://images.unsplash.com/photo-1484136199491-6603c473c88b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
+      pathname: "coursePage",
+      query: "id=ckfy1q60a02f307281abcpgae",
     },
     {
       title: "Старт в юридическом английском",

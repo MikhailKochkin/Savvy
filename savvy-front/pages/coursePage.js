@@ -12,12 +12,15 @@ const CoursePagePage = (props) => {
       me.new_subjects.filter(
         (s) =>
           s.id === "cjtreu3md00fp0897ga13aktp" ||
-          s.id === "cktrbubdl2237dou9vzn1gb3w"
+          s.id === "ckt9rmh4e51981hp97uwp6rft" ||
+          s.id === "cktrbubdl2237dou9vzn1gb3w" ||
+          s.id === "ckfy1q60a02f307281abcpgae"
       ).length > 0;
   }
   return (props.query.id === "cjtreu3md00fp0897ga13aktp" ||
     props.query.id === "ckt9rmh4e51981hp97uwp6rft" ||
-    props.query.id === "cktrbubdl2237dou9vzn1gb3w") &&
+    props.query.id === "cktrbubdl2237dou9vzn1gb3w" ||
+    props.query.id === "ckfy1q60a02f307281abcpgae") &&
     !enrolled &&
     props.query.type !== "old" ? (
     <NewCoursePage id={props.query.id} />

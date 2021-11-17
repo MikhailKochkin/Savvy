@@ -216,8 +216,7 @@ const CoursePage = (props) => {
                             <div className="name">
                               <img src={a.image} />
                               <p>
-                                {a.name} {a.surname} из
-                                {a.company.name}
+                                {a.name} {a.surname} из {a.company.name}
                               </p>
                             </div>
                           ))

@@ -110,6 +110,7 @@ const Description = styled.div`
   .highlight {
     padding-bottom: 1px;
     border-bottom: 3px solid #f9d801;
+    font-weight: 600;
   }
   #header {
     font-size: 3.4rem;
@@ -441,8 +442,9 @@ const Action = (props) => {
               <span>Стоимость обучения</span>
             </div>
             <div>
-              Вводный урок <span className="highlight">бесплатно</span>. Укажите
-              правильный номер, чтобы мы могли направить ссылки на материалы.
+              Откроем <span className="highlight">бесплатный урок</span> на
+              вводном занятии. Укажите правильный номер, чтобы мы могли
+              направить ссылки на материалы.
             </div>
 
             <div id="details">

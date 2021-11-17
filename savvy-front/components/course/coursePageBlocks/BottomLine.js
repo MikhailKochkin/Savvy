@@ -7,46 +7,67 @@ import ReactResizeDetector from "react-resize-detector";
 const Banner = styled.div`
   width: 100%;
   min-height: 10vh;
-  background: #000000; /* fallback for old browsers */
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
   color: #fff;
-  opacity: 90%;
-  position: -webkit-sticky;
+  /* position: -webkit-sticky;
   position: sticky;
-  top: 0px;
+  top: 0px; */
+  position: fixed;
+  bottom: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   z-index: 3;
-  justify-content: flex-end;
-  padding-right: 40px;
+  justify-content: center;
+  /* padding-right: 300px; */
   .bottomline_text {
-    width: 25%;
-    font-size: 1.4rem;
+    max-width: 45%;
+    min-width: 35%;
+    font-size: 1.8rem;
+    height: 100%;
     line-height: 1.6;
-    margin-right: 20px;
+    font-weight: 500;
+    padding: 10px;
+
+    span {
+    }
+    /* opacity: 0.9; */
   }
   button {
-    background: #327998;
-    color: #fff;
-    border: 1px solid #327998;
+    background: #fcc419;
+    color: #000;
+    border: 1px solid #fcc419;
     border-radius: 5px;
     width: 220px;
     font-family: Montserrat;
     font-size: 1.7rem;
     font-weight: 400;
     height: 45px;
-    opacity: 100%;
+    opacity: 1;
     cursor: pointer;
+    z-index: 4;
+    transition: ease-in 0.2s;
+    &:hover {
+      background-color: #dea702;
+      border: 1px solid #dea702;
+    }
   }
   @media (max-width: 800px) {
-    padding: 0 10px;
+    flex-direction: column;
+    padding: 20px 0;
+    background-size: contain;
 
     .bottomline_text {
-      width: 60%;
+      width: 90%;
+      max-width: 90%;
+      padding: 0;
+      margin: 0;
+      margin-bottom: 15px;
     }
     button {
-      width: 120px;
-      font-size: 1.5rem;
+      min-width: 90%;
+      font-size: 1.8rem;
     }
   }
 `;
@@ -68,8 +89,10 @@ const Ad = (props) => {
   return (
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <div className="bottomline_text">{d.offer}</div>
-      <button onClick={(e) => slide()}>Участвовать</button>
+      <div className="bottomline_text">
+        <span>{d.offer}</span>
+      </div>
+      <button onClick={(e) => slide()}>Зарегистрироваться</button>
     </Banner>
   );
 };
