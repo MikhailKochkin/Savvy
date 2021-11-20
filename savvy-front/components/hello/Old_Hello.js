@@ -105,6 +105,9 @@ const Container = styled.div`
       &:hover {
         background: black;
         color: white;
+        a {
+          color: #fff;
+        }
       }
     }
   }
@@ -145,42 +148,54 @@ const hello = (props) => {
         <div className="text">
           <h1 className="hello">Спасибо, мы получили вашу заявку</h1>
           <div className="message">
-            Теперь, пожалуйста, <span>выберите удобное время</span> для
-            консультации. Это займет 15 секунд. На консультации покажем, как
-            идет обучение, откроем вводный урок и ответим на все вопросы.
+            Открытый урок уже у вас на почте. Также, если вы хотите больше
+            узнать о программе, <span>запишитесь на вводное занятие</span>. Мы
+            расскажем вам о программе, о скидках, карьерных трендах и наших
+            образовательных технологиях, которых нет ни в одной другой компании.
           </div>
+          <button>
+            <a
+              target="_blank"
+              href={`https://calendly.com/mikhail-from-besavvy/15-min-intro?name=${props.name}&email=${props.email}&a1=${props.number}`}
+            >
+              Выбрать время
+            </a>
+          </button>
           <div className="row">
             {" "}
             <img src="/static/tick2.svg" />
-            <div>Консультация займет всего 15 минут.</div>
-          </div>
-          <div className="row">
-            <img src="/static/tick2.svg" />
-            <div>Вы можете выбрать удобное для вас время в течение недели.</div>
+            <div>Занятие займет всего 15 минут.</div>
           </div>
           <div className="row">
             <img src="/static/tick2.svg" />
             <div>
-              Мы не будем звонить вам в неудобное время и отвлекать вас от
-              работы или семейных дел.
+              Вы можете выбрать удобное для вас время в течение недели. Даже в
+              выходные.
             </div>
           </div>
           <div className="row">
+            <img src="/static/tick2.svg" />
+            <div>
+              Мы не будем звонить в неудобное время и отвлекать вас от работы
+              или семейных дел.
+            </div>
+          </div>
+          {/* <div className="row">
             <img src="/static/tick2.svg" />
             <div>
               Если вы оставите мобильный номер, мы пришлем вам напоминание по
               смс за 10 минут до встречи.
             </div>
-          </div>
-          <div className="row_final">
+          </div> */}
+          {/* <div className="row_final">
             <img src="/static/tick2.svg" />
             <div>В крайнем случае консультацию можно легко перенести. </div>
-          </div>
-          <div className="widget">
+          </div> */}
+          {/* <div className="widget">
             <InlineWidget
               url={`https://calendly.com/mikhail-from-besavvy/15-min-intro?name=${props.name}&email=${props.email}&a1=${props.number}`}
             />
-          </div>
+          </div> */}
         </div>
       </Container>
     </Styles>
