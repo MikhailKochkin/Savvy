@@ -446,6 +446,19 @@ P.S. Если вы не сможете посетить консультацию
         >
           Демо Урок Школа
         </button>
+        <button
+          onClick={async (e) => {
+            sendBusinessClientEmail({
+              variables: {
+                id: props.id,
+                communication_medium: "reminder",
+              },
+            });
+            alert("Отправили");
+          }}
+        >
+          Напоминание
+        </button>
       </div>
       <div className="number">
         <div>{number}</div>

@@ -19,7 +19,7 @@ const checkout = new YooCheckout({
   shopId: process.env.SHOP_ID,
   secretKey: process.env.SHOP_KEY,
 });
-
+const ClientReminder = require("../emails/ClientReminder");
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
@@ -2262,6 +2262,10 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, { communication_medium, id }, ctx) => {
+        console.log("1", 1);
+
+        console.log("communication_medium", communication_medium);
+
         const bclient = await ctx.prisma.businessClient.update({
           where: { id },
           data: { communication_medium },
@@ -2271,14 +2275,29 @@ const Mutation = mutationType({
         });
         if (communication_medium == "english") {
           const newEmail3 = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
+            From: "Aliona@besavvy.app",
             To: bc.email,
-            Subject: "35% скидка на юр английский",
+            Subject: "Ваш помощник в изучении Legal English",
             HtmlBody: Demo_eng.Demo_eng(),
           });
-        } else {
+        } else if (communication_medium == "reminder") {
           const newEmail4 = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
+            From: "Aliona@besavvy.app",
+            To: bc.email,
+            Subject: "Ваш личный менеджер в BeSavvy Lawyer",
+            HtmlBody: ClientReminder.ClientReminder(
+              `<p>Вы оставляли заявку на курс для юристов на сайте besavvy.app.</p>
+              <p>К сожалению, у нас так и не получилось с вами связаться. Мы понимаем, что у вас много работы и может не быть времени начинать заниматься прямо сейчас.</p>
+              <p>Но у нас до конца недели действуют большие скидки, а учиться можно начать в любой момент. Поэтому, если захотите узнать больше о программах, записывайтесь на встречу с директором Школы по кнопке ниже.</p>
+              <p>Все наши программы можно посмотреть <a target="_blank" href="https://besavvy.app">по этой ссылке</a>.</p>
+              `,
+              `https://calendly.com/mikhail-from-besavvy/15-min-intro`,
+              `Зарегистрироваться на звонок`
+            ),
+          });
+        } else {
+          const newEmail5 = await client.sendEmail({
+            From: "Aliona@besavvy.app",
             To: bc.email,
             Subject: "Открытые уроки BeSavvy",
             HtmlBody: Demo_school.Demo_school(),
@@ -2323,14 +2342,16 @@ const Mutation = mutationType({
           console.log(1);
 
           const newEmail3 = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
+            From: "aliona@besavvy.app",
             To: args.email,
             Subject: "Открытые уроки по юр английскому",
             HtmlBody: Demo_eng.Demo_eng(),
           });
         } else {
+          console.log(2);
+
           const newEmail4 = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
+            From: "aliona@besavvy.app",
             To: args.email,
             Subject: "Открытые уроки Школы Молодого Юриста",
             HtmlBody: Demo_school.Demo_school(),
