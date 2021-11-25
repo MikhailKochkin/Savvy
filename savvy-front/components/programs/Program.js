@@ -127,7 +127,7 @@ const Program = (props) => {
   var dates = [
     "November 11, 2021 20:00:00",
     "November 19, 2021 20:00:00",
-    "November 26, 2021 20:00:00",
+    "November 28, 2021 20:00:00",
     "December 2, 2021 20:00:00",
     "December 7, 2021 20:00:00",
     "December 12, 2021 20:00:00",

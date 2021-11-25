@@ -373,6 +373,7 @@ export interface NexusGenInputs {
     some?: NexusGenInputs['CourseVisitWhereInput'] | null; // CourseVisitWhereInput
   }
   CourseVisitOrderByInput: { // input type
+    comment?: NexusGenEnums['SortOrder'] | null; // SortOrder
     coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     finish?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -384,6 +385,7 @@ export interface NexusGenInputs {
   }
   CourseVisitWhereInput: { // input type
     AND?: NexusGenInputs['CourseVisitWhereInput'][] | null; // [CourseVisitWhereInput!]
+    comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
     coursePageId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -2504,11 +2506,11 @@ export interface NexusGenFieldTypes {
     deleteStatement: NexusGenRootTypes['Statement'] | null; // Statement
     deleteTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     enrollOnCourse: NexusGenRootTypes['User'] | null; // User
-    newWeek: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     remind: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     requestReset: NexusGenRootTypes['Message'] | null; // Message
     resetPassword: NexusGenRootTypes['User'] | null; // User
     sendBusinessClientEmail: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    sendEmailToStudent: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -3162,11 +3164,11 @@ export interface NexusGenFieldTypeNames {
     deleteStatement: 'Statement'
     deleteTextEditor: 'TextEditor'
     enrollOnCourse: 'User'
-    newWeek: 'CourseVisit'
     remind: 'CourseVisit'
     requestReset: 'Message'
     resetPassword: 'User'
     sendBusinessClientEmail: 'BusinessClient'
+    sendEmailToStudent: 'CourseVisit'
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
@@ -3926,10 +3928,6 @@ export interface NexusGenArgTypes {
       coursePageId?: string | null; // String
       id?: string | null; // String
     }
-    newWeek: { // args
-      id?: string | null; // String
-      reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
-    }
     remind: { // args
       id?: string | null; // String
       reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
@@ -3945,6 +3943,11 @@ export interface NexusGenArgTypes {
     sendBusinessClientEmail: { // args
       communication_medium?: string | null; // String
       id?: string | null; // String
+    }
+    sendEmailToStudent: { // args
+      comment?: string | null; // String
+      id?: string | null; // String
+      reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
     }
     signin: { // args
       email?: string | null; // String

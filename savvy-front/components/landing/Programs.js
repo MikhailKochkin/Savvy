@@ -36,7 +36,7 @@ const Programs = () => {
   var dates = [
     "November 11, 2021 20:00:00",
     "November 19, 2021 20:00:00",
-    "November 26, 2021 20:00:00",
+    "November 28, 2021 20:00:00",
     "December 2, 2021 20:00:00",
     "December 7, 2021 20:00:00",
     "December 12, 2021 20:00:00",
@@ -82,7 +82,7 @@ const Programs = () => {
       query: "id=school",
     },
     {
-      title: `Интенсив "Корпоративное право"`,
+      title: `Корпоративное право`,
       description:
         "Повышаем квалификацию юристов в области корпоративного права, антимонопольного права и сделок M/A",
       term: "Длительность: 3 месяца",
@@ -94,7 +94,7 @@ const Programs = () => {
       query: "id=corp",
     },
     {
-      title: `Интенсив "Арбитражный процесс"`,
+      title: `Арбитражный процесс`,
       description:
         "Поэтапно покажем, как выиграть судебный процесс в арбитражном суде",
       term: "Длительность: 1 месяц",
@@ -128,6 +128,18 @@ const Programs = () => {
       img: "https://images.unsplash.com/photo-1484136199491-6603c473c88b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
       pathname: "coursePage",
       query: "id=ckfy1q60a02f307281abcpgae",
+    },
+    {
+      title: "Старт в Гражданском процессе",
+      description:
+        "Изучаем основы гражданского процессе, окунувшись в историю молодого юриста и его опытного наставника.",
+      term: "Длительность: 1 месяц",
+      price: "8 900₽",
+      conditions: `До ${next_date}`,
+      installments: "20% скидка",
+      img: "https://images.unsplash.com/photo-1476820865390-c52aeebb9891?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+      pathname: "coursePage",
+      query: "id=ck78sx36r00vi0700zxlzs1a5",
     },
     {
       title: "Старт в юридическом английском",

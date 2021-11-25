@@ -336,7 +336,7 @@ const Landing = (props) => {
             <TimeLeft>
               <div className="discount">
                 <img src="static/bstar.svg" />
-                <div className="deadline">15-21 ноября</div>
+                <div className="deadline">15-28 ноября</div>
                 <div className="number">до -50%</div>
               </div>
               <div className="black">Black Friday</div>

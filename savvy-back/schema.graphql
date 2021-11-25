@@ -551,6 +551,7 @@ input CourseVisitListRelationFilter {
 }
 
 input CourseVisitOrderByInput {
+  comment: SortOrder
   coursePageId: SortOrder
   createdAt: SortOrder
   finish: SortOrder
@@ -563,6 +564,7 @@ input CourseVisitOrderByInput {
 
 input CourseVisitWhereInput {
   AND: [CourseVisitWhereInput!]
+  comment: StringNullableFilter
   coursePage: CoursePageWhereInput
   coursePageId: StringFilter
   createdAt: DateTimeFilter
@@ -1174,11 +1176,11 @@ type Mutation {
   deleteStatement(id: String): Statement
   deleteTextEditor(id: String): TextEditor
   enrollOnCourse(coursePageId: String, id: String): User
-  newWeek(id: String, reminders: [DateTime]): CourseVisit
   remind(id: String, reminders: [DateTime]): CourseVisit
   requestReset(email: String): Message
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(communication_medium: String, id: String): BusinessClient
+  sendEmailToStudent(comment: String, id: String, reminders: [DateTime]): CourseVisit
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload

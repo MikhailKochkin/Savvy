@@ -8,17 +8,21 @@ import moment from "moment";
 import LessonData from "./LessonData";
 import Journey from "./Journey";
 
-const UPDATE_COURSE_VISIT_MUTATION = gql`
-  mutation UPDATE_COURSE_VISIT_MUTATION($id: String!, $reminders: [DateTime]) {
-    remind(id: $id, reminders: $reminders) {
-      id
-    }
-  }
-`;
+// const UPDATE_COURSE_VISIT_MUTATION = gql`
+//   mutation UPDATE_COURSE_VISIT_MUTATION($id: String!, $reminders: [DateTime]) {
+//     remind(id: $id, reminders: $reminders) {
+//       id
+//     }
+//   }
+// `;
 
-const UPDATE_COURSE_VISIT_MUTATION2 = gql`
-  mutation UPDATE_COURSE_VISIT_MUTATION2($id: String!, $reminders: [DateTime]) {
-    newWeek(id: $id, reminders: $reminders) {
+const UPDATE_COURSE_VISIT_MUTATION = gql`
+  mutation UPDATE_COURSE_VISIT_MUTATION(
+    $id: String!
+    $reminders: [DateTime]
+    $comment: String
+  ) {
+    sendEmailToStudent(id: $id, reminders: $reminders, comment: $comment) {
       id
     }
   }
@@ -251,27 +255,25 @@ const Person = (props) => {
       </Header>
       <Open secret={secret}>
         <Buttons>
-          <SendButton onClick={(e) => setPage("results")}>
-            Результаты
-          </SendButton>
           {courseVisit && (
             <Mutation
               mutation={UPDATE_COURSE_VISIT_MUTATION}
               variables={{
                 id: courseVisit.id,
                 reminders: [...courseVisit.reminders, new Date()],
+                comment: "hello",
               }}
             >
-              {(updateReminder, { loading, error }) => {
+              {(sendEmailToStudent, { loading, error }) => {
                 return (
                   <SendButton
                     onClick={(e) => {
-                      const data = updateReminder();
+                      const data = sendEmailToStudent();
                       alert("Отправлено!");
                     }}
                     name="CV"
                   >
-                    Напомнить
+                    Приветствие
                   </SendButton>
                 );
               }}
@@ -279,22 +281,47 @@ const Person = (props) => {
           )}
           {courseVisit && (
             <Mutation
-              mutation={UPDATE_COURSE_VISIT_MUTATION2}
+              mutation={UPDATE_COURSE_VISIT_MUTATION}
               variables={{
                 id: courseVisit.id,
                 reminders: [...courseVisit.reminders, new Date()],
+                comment: "problem",
               }}
             >
-              {(newWeek, { loading, error }) => {
+              {(sendEmailToStudent, { loading, error }) => {
                 return (
                   <SendButton
                     onClick={(e) => {
-                      const data = newWeek();
+                      const data = sendEmailToStudent();
                       alert("Отправлено!");
                     }}
                     name="CV"
                   >
-                    Новая неделя
+                    Проблемное
+                  </SendButton>
+                );
+              }}
+            </Mutation>
+          )}
+          {courseVisit && (
+            <Mutation
+              mutation={UPDATE_COURSE_VISIT_MUTATION}
+              variables={{
+                id: courseVisit.id,
+                reminders: [...courseVisit.reminders, new Date()],
+                comment: "motivation",
+              }}
+            >
+              {(sendEmailToStudent, { loading, error }) => {
+                return (
+                  <SendButton
+                    onClick={(e) => {
+                      const data = sendEmailToStudent();
+                      alert("Отправлено!");
+                    }}
+                    name="CV"
+                  >
+                    Мотивационнное
                   </SendButton>
                 );
               }}

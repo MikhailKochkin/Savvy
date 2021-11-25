@@ -1,4 +1,4 @@
-const NextWeekEmail = (name, course, coursePageID) => `
+const NextWeekEmail = (name, text, course, coursePageID) => `
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -469,9 +469,7 @@ const NextWeekEmail = (name, course, coursePageID) => `
                     <td class="content-cell">
                       <div class="f-fallback">
                         <h1>${name}, привет!</h1>
-                        <p>
-                          Началась новая неделя курса "${course}". Давай хорошенько поработаем!
-                        </p>
+                          ${text}
                         <table
                         class="body-action"
                         align="center"
@@ -497,7 +495,7 @@ const NextWeekEmail = (name, course, coursePageID) => `
                                   href="https://besavvy.app/coursePage?id=${coursePageID}"
                                   class="f-fallback button"
                                     target="_blank"
-                                    >На курс</a
+                                    >Перейти к курсу</a
                                   >
                                 </td>
                               </tr>
@@ -506,29 +504,11 @@ const NextWeekEmail = (name, course, coursePageID) => `
                         </tr>
                       </table>
 
-                      <p>
-                        Хочу напомнить, что залог успешной онлайн учебы – не чувствовать себя одиноким. 
-                        Одному трудно преодолевать трудности, поддерживать дисциплину и выходить за рамки своих возможностей.
-                      </p>
 
-                      <p>
-                        Поэтому общайтесь: пишите преподавателю, рассуждайте, смейтесь и жалуйтесь в чате! 
-                        Вас окружают яркие и целеустремленные люди, которые, как и вы, ставят перед собой большие цели. 
-                        Будьте частью команды, в одиночку учиться онлайн очень-очень трудно.
-                      </p>
-
-
-                        <p>Успехов, <br />Михаил Кочкин и команда BeSavvy</p>
+                        <p>Успехов, <br />Настя и команда BeSavvy</p>
                         <p>
-                          <strong>P.S.</strong> Если возникнут какие-то проблемы, я могу помочь. Можешь ответить на это
-                          письмо или написать нам
-                          <a
-                            href="https://vk.com/besavvylawyer"
-                            target="_blank"
-                            >в социальных сетях</a
-                          >.
-                        </p>
-    
+                          <strong>P.S.</strong> Если возникнут какие-то проблемы, можешь ответить на это письмо и я помогу.
+    </p>
 
                         <!-- Sub copy -->
                         <table class="body-sub" role="presentation">
