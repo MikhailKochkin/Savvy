@@ -162,7 +162,7 @@ const Program = (props) => {
       open_lesson: "Преддоговорная ответственность",
       next_date: next_date,
       next_date2: next_date2,
-      discount: 30,
+      discount: 20,
       prior_klnowledge_1: "Пожизненный",
       prior_klnowledge_2:
         "И бесплатный доступ ко всем обновлениям и новым урокам",
@@ -289,7 +289,7 @@ const Program = (props) => {
       price: {
         full: "44 000 ₽",
         full_explain: "Полная стоимость",
-        part: "30 800 ₽",
+        part: "35 200 ₽",
         part_explain: "Скидка 25% до 31.10",
         course: "corp",
       },
@@ -554,7 +554,7 @@ const Program = (props) => {
       open_lesson: "Преддоговорная ответственность",
       next_date: next_date,
       next_date2: next_date2,
-      discount: 30,
+      discount: 10,
       prior_klnowledge_1: "Пожизненный",
       prior_klnowledge_2:
         "И бесплатный доступ ко всем обновлениям и новым урокам",
@@ -1029,8 +1029,8 @@ const Program = (props) => {
       price: {
         full: "59 000 ₽",
         full_explain: "Полная стоимость",
-        part: "41 300 ₽",
-        part_explain: "Скидка 40% до 31.10",
+        part: "47 200 ₽",
+        part_explain: "Скидка 20% до 31.10",
         course: "school",
       },
       reviews: [

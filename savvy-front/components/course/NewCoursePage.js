@@ -125,9 +125,32 @@ const NewCoursePage = (props) => {
   const me = useUser();
   moment.locale("ru");
 
+  var dates = [
+    "November 11, 2021 20:00:00",
+    "November 19, 2021 20:00:00",
+    "November 28, 2021 20:00:00",
+    "December 2, 2021 20:00:00",
+    "December 7, 2021 20:00:00",
+    "December 12, 2021 20:00:00",
+    "December 19, 2021 20:00:00",
+    "December 24, 2021 20:00:00",
+    "December 29, 2021 20:00:00",
+    "January 7, 2022 20:00:00",
+  ];
+
+  let chooseDate = (date) => {
+    let i;
+    for (i = 0; i < dates.length; i++) {
+      if (date.diff(dates[i], "minutes") < 0) {
+        return dates[i];
+      }
+    }
+  };
+
   var today = moment();
   var tomorrow = moment(today).add(3, "days");
   var dec_13 = moment(today).add(26, "days");
+  let next_date = chooseDate(moment());
 
   const programs = [
     {
@@ -137,14 +160,17 @@ const NewCoursePage = (props) => {
       image: "back_image_low.png",
       length1: "3 месяца",
       length2: "4 часа в неделю",
-      start: moment(tomorrow._d).format("Do MMMM YYYY"),
-      start_eng: tomorrow._d,
+      start: moment(next_date._d).format("Do MMMM YYYY"),
+      start_eng: next_date,
       prior_klnowledge_1: "Не требуется",
       prior_klnowledge_2: "Начинаем с самого нуля",
       goals: [
-        "Выиграть этап олимпиады",
-        "Сдать экзамен",
-        "Пройти собеседование",
+        "Вы получите теоретические знания в формате коротких видео и удобных для повторения конспектов",
+        "Закрепите знаниия на 300 тестах и вопросах",
+        "Решите сложные задачи, которые могут попасться на экзаменах или собеседованиях",
+        "Получите обратную связь по всем своим решениям",
+        "Попадете на вебинары с практикующими юристами",
+        "Получите доступ в сообщество BeSavvy с вакансиями, офлайн мероприятиями и экспертными встречами",
       ],
       // goal_1: "Выиграть этап олимпиады",
       // goal_2: "Сдать экзамен",
@@ -181,8 +207,7 @@ const NewCoursePage = (props) => {
             "https://images.unsplash.com/photo-1459499362902-55a20553e082?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1049&q=80",
         },
       ],
-      authors_intro:
-        "Преподаватели – ключ к успешному обучению. Мы создали команду великолепных специалистов из разных юридических школ России.",
+      authors_intro: "Преподаватели",
       authors: [
         {
           name: "Лев",
@@ -323,8 +348,8 @@ const NewCoursePage = (props) => {
       image: "/static/english_intro_course.png",
       length1: "2 месяца",
       length2: "4 часа в неделю",
-      start: moment(tomorrow._d).format("Do MMMM YYYY"),
-      start_eng: tomorrow._d,
+      start: moment(next_date._d).format("Do MMMM YYYY"),
+      start_eng: next_date,
       prior_klnowledge_1: "Уровень – A1",
       prior_klnowledge_2: "Начинаем с основ",
       goals: [
@@ -481,8 +506,8 @@ const NewCoursePage = (props) => {
       image: "/static/english_intro_course.png",
       length1: "1 месяц",
       length2: "4 часа в неделю",
-      start: moment(tomorrow._d).format("Do MMMM YYYY"),
-      start_eng: tomorrow._d,
+      start: moment(next_date._d).format("Do MMMM YYYY"),
+      start_eng: next_date,
       prior_klnowledge_1: "Не требуется",
       prior_klnowledge_2: "Начинаем с основ",
       goals: [
@@ -602,8 +627,8 @@ const NewCoursePage = (props) => {
       image: "/static/english_intro_course.png",
       length1: "2 месяца",
       length2: "4 часа в неделю",
-      start: moment(tomorrow._d).format("Do MMMM YYYY"),
-      start_eng: tomorrow._d,
+      start: moment(next_date._d).format("Do MMMM YYYY"),
+      start_eng: next_date,
       prior_klnowledge_1: "Не требуется",
       prior_klnowledge_2: "Начинаем с основ",
       goals: [
@@ -753,8 +778,8 @@ const NewCoursePage = (props) => {
       image: "/static/english_intro_course.png",
       length1: "1 месяц",
       length2: "4 часа в неделю",
-      start: moment(tomorrow._d).format("Do MMMM YYYY"),
-      start_eng: tomorrow._d,
+      start: moment(next_date._d).format("Do MMMM YYYY"),
+      start_eng: next_date,
       prior_klnowledge_1: "Не требуется",
       prior_klnowledge_2: "Начинаем с основ",
       goals: [

@@ -3,6 +3,7 @@ import { Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import AddToCalendar from "react-add-to-calendar";
 import LessonHeader from "../lesson/LessonHeader";
 import { useUser } from "../User";
 import FirstLesson from "./coursePageCards/FirstLesson";
@@ -147,6 +148,13 @@ const CoursePage = (props) => {
   let my_reviews;
   // my_reviews = Reviews.filter((r) => r.coursePage === props.id);
   my_reviews = [];
+  let event = {
+    title: "Sample Event",
+    description: "This is the sample event provided as an example only",
+    location: "Portland, OR",
+    startTime: "2016-09-16T20:15:00-04:00",
+    endTime: "2016-09-16T21:45:00-04:00",
+  };
   return (
     <>
       <div id="root"></div>
@@ -268,6 +276,8 @@ const CoursePage = (props) => {
                       </PayBox>
                     </CourseInfo>
                     <Details>
+                      {/* <AddToCalendar event={event} /> */}
+
                       {data.coursePage.audience && (
                         <div className="info">
                           <div className="header">

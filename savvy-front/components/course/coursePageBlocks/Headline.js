@@ -6,7 +6,7 @@ import renderHTML from "react-render-html";
 const BImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  min-height: 90vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -174,6 +174,7 @@ const Headline = (props) => {
   const d = props.data;
   useEffect(() => {
     const interval = setInterval(() => {
+      console.log("start_eng", d.start_eng);
       var countDownDate = new Date(d.start_eng).getTime(); // Get today's date and time
       var now = new Date().getTime();
 

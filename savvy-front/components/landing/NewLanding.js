@@ -27,6 +27,7 @@ const TimeLeft = styled.div`
     text-align: center;
     font-weight: 600;
     font-size: 2.2rem;
+    line-height: 1.2;
     margin-top: 10px;
   }
 
@@ -336,10 +337,13 @@ const Landing = (props) => {
             <TimeLeft>
               <div className="discount">
                 <img src="static/bstar.svg" />
-                <div className="deadline">15-28 ноября</div>
-                <div className="number">до -50%</div>
+                <div className="deadline">Бесплатно</div>
+                <div className="number">1.12-31.12</div>
               </div>
-              <div className="black">Black Friday</div>
+              <div className="black">
+                Бесплатные
+                <br /> интенсивы
+              </div>
             </TimeLeft>
           </Subheader>
           <Buttons>

@@ -138,8 +138,10 @@ const Price = styled.div`
   font-size: 3rem;
   line-height: 1.4;
   .new {
-    font-size: 3.4rem;
-    white-space: nowrap;
+    font-size: 1.8rem;
+    text-align: center;
+    /* white-space: nowrap; */
+    width: 350px;
   }
   .old {
     font-size: 2.6rem;
@@ -148,7 +150,7 @@ const Price = styled.div`
     text-decoration: line-through;
   }
   button {
-    margin-top: 10px;
+    margin-bottom: 10px;
     background-color: #3f83f8;
     border-radius: 10px;
     border: none;
@@ -159,10 +161,13 @@ const Price = styled.div`
     font-family: Montserrat;
     padding: 10px 15px;
     font-weight: 500;
-    font-size: 1.4rem;
+    font-size: 2rem;
     text-decoration: none;
     text-shadow: 0px 0px 0px #2f6627;
     transition: all 0.4s ease;
+    a {
+      color: #ffffff;
+    }
     &:hover {
       background-color: #0854d9;
     }
@@ -172,14 +177,19 @@ const Price = styled.div`
     justify-content: center;
     align-items: center;
     width: 90%;
+    padding: 0;
 
+    .new {
+      width: 100%;
+      font-size: 1.6rem;
+    }
     .plus {
       width: 90%;
     }
     button {
       width: 100%;
-      margin-top: 20px;
-      font-size: 1.6rem;
+      margin-top: 30px;
+      font-size: 1.8rem;
     }
   }
 `;
@@ -214,17 +224,17 @@ const BlackFriday = (props) => {
       </div>
       <Container>
         <Container2>
-          <h2>Специальные предложения:</h2>
+          <h2>Бесплатные интенсивы:</h2>
           <Offer>
             <Course>
-              <div>Корпоративное право</div>
+              <div>Legal English: лексика из договорного права</div>
               {/* <div className="button">Подробнее</div> */}
             </Course>
             <div className="plus">
               <div>+</div>
             </div>
             <Course>
-              <div>Юридический английский для профессионалов </div>
+              <div>Legal English: драфтинг документов на английском языке</div>
               {/* <div className="button">Подробнее</div> */}
             </Course>
 
@@ -232,110 +242,19 @@ const BlackFriday = (props) => {
               <div>=</div>
             </div>
             <Price>
-              <div className="new">48 000 ₽</div>
-              <div className="old">96 000 ₽</div>
+              {" "}
               <button
-                onClick={(e) => {
-                  props.getOffer("corp");
-                  slide();
-                }}
+              // onClick={(e) => {
+              //   props.getOffer("corp");
+              //   slide();
+              // }}
               >
-                Получить программу
+                <a target="_blank" href="https://t.me/+5FUacwk7o6czYzdi">
+                  Перейти к интенсиву
+                </a>{" "}
               </button>
-            </Price>
-          </Offer>
-          <Offer>
-            <Course>
-              <div>Карьерная Школа Юриста</div>
-              {/* <div className="button">Подробнее</div>{" "} */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>Юридический английский для профессионалов </div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-
-            <div className="plus">
-              <div>=</div>
-            </div>
-            <Price>
-              <div className="new">56 000 ₽</div>
-              <div className="old">111 000 ₽</div>
-              <button
-                onClick={(e) => {
-                  props.getOffer("school");
-                  slide();
-                }}
-              >
-                Получить программу
-              </button>
-            </Price>
-          </Offer>
-          <Offer>
-            <Course>
-              <div>Арбитражный процесс</div>
-              {/* <div className="button">Подробнее</div>{" "} */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>Юридический английский для профессионалов </div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-
-            <div className="plus">
-              <div>=</div>
-            </div>
-            <Price>
-              <div className="new">38 500 ₽</div>
-              <div className="old">76 900 ₽</div>
-              <button
-                onClick={(e) => {
-                  props.getOffer("litigation");
-                  slide();
-                }}
-              >
-                Получить программу
-              </button>
-            </Price>
-          </Offer>
-          <Offer>
-            <Course>
-              <div>Старт в Гражданском праве</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>Старт в Юридическом английском</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>Старт в Праве интеллектуальной собственности</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-
-            <div className="plus">
-              <div>=</div>
-            </div>
-            <Price>
-              <div className="new">13 500 ₽</div>
-              <div className="old">27 000 ₽</div>
-              <button
-                onClick={(e) => {
-                  props.getOffer("start");
-                  slide();
-                }}
-              >
-                Получить программу
-              </button>
+              <div className="new">Подробная информация в телеграм-канале</div>
+              {/* <div className="old">96 000 ₽</div> */}
             </Price>
           </Offer>
         </Container2>
