@@ -347,7 +347,7 @@ const Landing = (props) => {
             </TimeLeft>
           </Subheader>
           <Buttons>
-            <button onClick={(e) => slide()}>Выбрать скидку</button>
+            <button onClick={(e) => slide()}>Выбрать интенсив</button>
           </Buttons>
         </Text>
       </Block>

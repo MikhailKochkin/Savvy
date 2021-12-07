@@ -6,7 +6,8 @@ const Styles = styled.div`
   min-height: 100vh;
   width: 100vw;
   background-image: url("/static/pattern.svg");
-  background-size: cover;
+  background-size: contain;
+
   color: #fff;
   padding-bottom: 100px;
   margin-bottom: 100px;
@@ -14,6 +15,12 @@ const Styles = styled.div`
     color: #ffffff;
     font-weight: 700;
     font-size: 4rem;
+  }
+  h3 {
+    color: #ffffff;
+    font-weight: 500;
+    text-align: center;
+    font-size: 2.6rem;
   }
 
   .custom-shape-divider-top-1636534911 {
@@ -46,6 +53,11 @@ const Styles = styled.div`
       font-size: 4rem;
       margin-bottom: 0;
     }
+    h3 {
+      line-height: 1.4;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
     .custom-shape-divider-top-1636534911 {
       display: none;
     }
@@ -71,11 +83,34 @@ const Container2 = styled.div`
 
 const Offer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  flex-wrap: wrap;
   margin: 30px 0;
+  justify-content: center;
+  align-items: center;
+  .arrow {
+    width: 60px;
+    margin: 0 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    div {
+      font-size: 3rem;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
   .plus {
     width: 60px;
     margin: 0 10px;
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -99,6 +134,7 @@ const Offer = styled.div`
     align-items: center;
     .plus {
       width: 90%;
+      margin-bottom: 0;
     }
   }
 `;
@@ -114,6 +150,7 @@ const Course = styled.div`
   width: 30%;
   font-size: 2.2rem;
   line-height: 1.4;
+  margin-bottom: 20px;
   div.button {
     font-size: 1.6rem;
     color: #5b729a;
@@ -225,21 +262,26 @@ const BlackFriday = (props) => {
       <Container>
         <Container2>
           <h2>Бесплатные интенсивы:</h2>
+          <h3>Выводим Legal English на международный уровень</h3>
           <Offer>
             <Course>
-              <div>Legal English: лексика из договорного права</div>
-              {/* <div className="button">Подробнее</div> */}
+              <div>Лексика из договорного права</div>
             </Course>
             <div className="plus">
               <div>+</div>
             </div>
             <Course>
-              <div>Legal English: драфтинг документов на английском языке</div>
-              {/* <div className="button">Подробнее</div> */}
+              <div>Драфтинг документов на английском языке</div>
+            </Course>
+            <div className="plus">
+              <div>+</div>
+            </div>
+            <Course>
+              <div>Прохождение интервью на английском языке</div>
             </Course>
 
-            <div className="plus">
-              <div>=</div>
+            <div className="arrow">
+              <div>⬇️</div>
             </div>
             <Price>
               {" "}
@@ -250,6 +292,53 @@ const BlackFriday = (props) => {
               // }}
               >
                 <a target="_blank" href="https://t.me/+5FUacwk7o6czYzdi">
+                  Перейти к интенсиву
+                </a>{" "}
+              </button>
+              <div className="new">Подробная информация в телеграм-канале</div>
+              {/* <div className="old">96 000 ₽</div> */}
+            </Price>
+          </Offer>
+          <h3>Карьера юриста. В каком направлении развиваться в 2022?</h3>
+          <Offer>
+            <Course>
+              <div>Как эффективно искать работу?</div>
+              {/* <div className="button">Подробнее</div> */}
+            </Course>
+            <div className="plus">
+              <div>+</div>
+            </div>
+            <Course>
+              <div>M/A сделки по российскому праву</div>
+              {/* <div className="button">Подробнее</div> */}
+            </Course>
+            <div className="plus">
+              <div>+</div>
+            </div>
+            <Course>
+              <div>Юридическое сопровождение IT проектов</div>
+              {/* <div className="button">Подробнее</div> */}
+            </Course>
+            <div className="plus">
+              <div>+</div>
+            </div>
+            <Course>
+              <div>Ведение дел в арбитражных судах</div>
+              {/* <div className="button">Подробнее</div> */}
+            </Course>
+
+            <div className="arrow">
+              <div>⬇️</div>
+            </div>
+            <Price>
+              {" "}
+              <button
+              // onClick={(e) => {
+              //   props.getOffer("corp");
+              //   slide();
+              // }}
+              >
+                <a target="_blank" href="https://t.me/+yUJZSoVu6x43NmEy">
                   Перейти к интенсиву
                 </a>{" "}
               </button>
