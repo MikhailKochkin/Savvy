@@ -3,7 +3,7 @@ import styled from "styled-components";
 import smoothscroll from "smoothscroll-polyfill";
 
 const Styles = styled.div`
-  min-height: 100vh;
+  height: 100%;
   width: 100vw;
   background-image: url("/static/pattern.svg");
   background-size: contain;
@@ -15,12 +15,7 @@ const Styles = styled.div`
     color: #ffffff;
     font-weight: 700;
     font-size: 4rem;
-  }
-  h3 {
-    color: #ffffff;
-    font-weight: 500;
     text-align: center;
-    font-size: 2.6rem;
   }
 
   .custom-shape-divider-top-1636534911 {
@@ -46,17 +41,12 @@ const Styles = styled.div`
   }
   @media (max-width: 900px) {
     margin: 40px 0;
-    background-size: contain;
+    /* background-size: contain; */
     h2 {
       line-height: 1.4;
       font-weight: 600;
-      font-size: 4rem;
-      margin-bottom: 0;
-    }
-    h3 {
-      line-height: 1.4;
-      font-weight: 600;
-      margin-bottom: 0;
+      font-size: 3rem;
+      margin-bottom: 20px;
     }
     .custom-shape-divider-top-1636534911 {
       display: none;
@@ -151,6 +141,10 @@ const Course = styled.div`
   font-size: 2.2rem;
   line-height: 1.4;
   margin-bottom: 20px;
+  div {
+    text-align: center;
+    width: 100%;
+  }
   div.button {
     font-size: 1.6rem;
     color: #5b729a;
@@ -261,23 +255,37 @@ const BlackFriday = (props) => {
       </div>
       <Container>
         <Container2>
-          <h2>Бесплатные интенсивы:</h2>
-          <h3>Выводим Legal English на международный уровень</h3>
+          <h2>
+            Бесплатный интенсив <br />
+            "Актуальные юридические профессии"
+          </h2>
           <Offer>
             <Course>
-              <div>Лексика из договорного права</div>
+              <div>Legal English</div>
             </Course>
             <div className="plus">
               <div>+</div>
             </div>
             <Course>
-              <div>Драфтинг документов на английском языке</div>
+              <div>Корпоративное право</div>
             </Course>
             <div className="plus">
               <div>+</div>
             </div>
             <Course>
-              <div>Прохождение интервью на английском языке</div>
+              <div>IP/IT</div>
+            </Course>
+            <div className="plus">
+              <div>+</div>
+            </div>
+            <Course>
+              <div>Арбитражный процесс</div>
+            </Course>
+            <div className="plus">
+              <div>+</div>
+            </div>
+            <Course>
+              <div>Налоговое право</div>
             </Course>
 
             <div className="arrow">
@@ -292,53 +300,6 @@ const BlackFriday = (props) => {
               // }}
               >
                 <a target="_blank" href="https://t.me/+5FUacwk7o6czYzdi">
-                  Перейти к интенсиву
-                </a>{" "}
-              </button>
-              <div className="new">Подробная информация в телеграм-канале</div>
-              {/* <div className="old">96 000 ₽</div> */}
-            </Price>
-          </Offer>
-          <h3>Карьера юриста. В каком направлении развиваться в 2022?</h3>
-          <Offer>
-            <Course>
-              <div>Как эффективно искать работу?</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>M/A сделки по российскому праву</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>Юридическое сопровождение IT проектов</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-            <div className="plus">
-              <div>+</div>
-            </div>
-            <Course>
-              <div>Ведение дел в арбитражных судах</div>
-              {/* <div className="button">Подробнее</div> */}
-            </Course>
-
-            <div className="arrow">
-              <div>⬇️</div>
-            </div>
-            <Price>
-              {" "}
-              <button
-              // onClick={(e) => {
-              //   props.getOffer("corp");
-              //   slide();
-              // }}
-              >
-                <a target="_blank" href="https://t.me/+yUJZSoVu6x43NmEy">
                   Перейти к интенсиву
                 </a>{" "}
               </button>

@@ -98,9 +98,9 @@ const Programs = () => {
       description:
         "Поэтапно покажем, как выиграть судебный процесс в арбитражном суде",
       term: "Длительность: 1 месяц",
-      price: "24 900₽",
+      price: "29 900₽",
       conditions: `До ${next_date}`,
-      installments: "20% скидка",
+      installments: "50% скидка",
       img: "https://images.unsplash.com/photo-1555848962-6e79363ec58f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1433&q=80",
       pathname: "coursePage",
       query: "id=ckt9rmh4e51981hp97uwp6rft",
