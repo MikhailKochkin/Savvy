@@ -10,6 +10,7 @@ import ReactGA from "react-ga";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
+import renderHTML from "react-render-html";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -139,6 +140,7 @@ const Description = styled.div`
         width: 48%;
         .buy {
           text-decoration: underline;
+          cursor: pointer;
         }
         span {
           font-size: 2.6rem;
@@ -441,11 +443,7 @@ const Action = (props) => {
             <div id="header">
               <span>Стоимость обучения</span>
             </div>
-            <div>
-              Откроем <span className="highlight">бесплатный урок</span> на
-              вводном занятии. Укажите правильный номер, чтобы мы могли
-              направить ссылки на материалы.
-            </div>
+            <div>{renderHTML(props.data.price.comment)}</div>
 
             <div id="details">
               <div id="prices">
@@ -489,7 +487,7 @@ const Action = (props) => {
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">Записаться на вводное занятие</div>
+              <div className="h2">Получить консультацию</div>
               <form>
                 <div className="names">
                   <input

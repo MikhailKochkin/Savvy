@@ -9,15 +9,9 @@ const CoursePagePage = (props) => {
     enrolled == false;
   } else {
     enrolled =
-      me.new_subjects.filter(
-        (s) =>
-          s.id === "cjtreu3md00fp0897ga13aktp" ||
-          s.id === "ckt9rmh4e51981hp97uwp6rft" ||
-          s.id === "cktrbubdl2237dou9vzn1gb3w" ||
-          s.id === "ck78sx36r00vi0700zxlzs1a5" ||
-          s.id === "ckfy1q60a02f307281abcpgae"
-      ).length > 0;
+      me.new_subjects.filter((s) => s.id === props.query.id).length > 0;
   }
+
   return (props.query.id === "cjtreu3md00fp0897ga13aktp" ||
     props.query.id === "ckt9rmh4e51981hp97uwp6rft" ||
     props.query.id === "cktrbubdl2237dou9vzn1gb3w" ||
