@@ -56,8 +56,8 @@ const UserAnalytics = (props) => {
     variables: { coursePageId: coursePageID },
   });
   if (loading) return <Loading />;
-
   const results = data.lessonResults;
+
   let cloned_elements = _.cloneDeep(students);
   let d = cloned_elements.map((el) =>
     Object.defineProperty(el, "date", {
@@ -73,7 +73,9 @@ const UserAnalytics = (props) => {
       writable: true,
     })
   );
+  // console.log("d", d);
   let sorted = d.sort((a, b) => b.date - a.date);
+  // console.log("sorted", sorted);
 
   return (
     <Styles>

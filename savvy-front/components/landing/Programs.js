@@ -106,6 +106,18 @@ const Programs = () => {
       query: "id=ckt9rmh4e51981hp97uwp6rft",
     },
     {
+      title: `Старт в Праве`,
+      description:
+        "Вы познакомитесь с гражданским правом, IP и юр английским, получите необходимые soft skills и начнете свой карьерный путь в компании проактивных и талантливых юристов.",
+      term: "Длительность: 6 месяцев",
+      price: "29 900₽",
+      conditions: `До ${next_date}`,
+      installments: "50% скидка",
+      img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80",
+      pathname: "program",
+      query: "id=start",
+    },
+    {
       title: "Старт в Гражданском праве",
       description:
         "Изучаем основы гражданского права, чтобы успешно сдать экзамены и пройти отбор в юридическую фирму.",

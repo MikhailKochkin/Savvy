@@ -7,6 +7,34 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
 import ReactGA from "react-ga";
+import Signup from "../../auth/Signup";
+import Signin from "../../auth/Signin";
+import RequestReset from "../../auth/RequestReset";
+import renderHTML from "react-render-html";
+
+const CREATE_ORDER_MUTATION = gql`
+  mutation createOrder(
+    $coursePageId: String!
+    $userId: String!
+    $price: Int!
+    $promocode: String
+    $comment: String
+  ) {
+    createOrder(
+      coursePageId: $coursePageId
+      price: $price
+      userId: $userId
+      promocode: $promocode
+      comment: $comment
+    ) {
+      order {
+        id
+        paymentID
+      }
+      url
+    }
+  }
+`;
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -52,6 +80,23 @@ const Container = styled.div`
   }
 `;
 
+const BuyButton = styled.button`
+  width: 50%;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 2px solid black;
+  background: transparent;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.8rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #dfc201;
+  }
+`;
+
 const Description = styled.div`
   display: flex;
   flex-direction: column;
@@ -60,9 +105,14 @@ const Description = styled.div`
   min-width: 460px;
   height: 400px;
   border: 1px solid #e7ebef;
-  padding: 4%;
+  padding: 2% 4%;
   background: #fff;
   border-radius: 25px;
+  .comment {
+    div {
+      margin: 10px 0;
+    }
+  }
   .highlight {
     padding-bottom: 1px;
     border-bottom: 3px solid #f9d801;
@@ -93,6 +143,10 @@ const Description = styled.div`
       }
       .parts {
         width: 48%;
+        .buy {
+          text-decoration: underline;
+          cursor: pointer;
+        }
         span {
           font-size: 2.6rem;
         }
@@ -174,6 +228,15 @@ const Contact = styled.div`
     }
     form {
       width: 80%;
+      .names {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        input {
+          width: 48%;
+        }
+      }
     }
   }
   input {
@@ -238,6 +301,9 @@ const Contact = styled.div`
     form {
       width: 100%;
       border: none;
+      .names {
+        width: 100%;
+      }
     }
     #form_container {
       width: 100%;
@@ -344,16 +410,35 @@ const StyledModal = Modal.styled`
 const Action = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [auth, setAuth] = useState("signin");
 
   const toggleModal = (e) => setIsOpen(!isOpen);
+  const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const { asPath } = useRouter();
 
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
+
+  const [
+    createOrder,
+    { data: order_data, loading: loading_data, error: error_data },
+  ] = useMutation(CREATE_ORDER_MUTATION);
+
   const d = props.data;
+  const { me } = props;
+
+  const slide = () => {
+    var my_element = document.getElementById("ATF");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
 
   return (
     <Styles id="c2a">
@@ -363,10 +448,8 @@ const Action = (props) => {
             <div id="header">
               <span>Стоимость обучения</span>
             </div>
-            <div>
-              Первая неделя обучения{" "}
-              <span className="highlight">бесплатно</span>. Укажите правильный
-              номер, чтобы мы могли направить ссылки на материалы.
+            <div className="comment">
+              {renderHTML(props.data.price.comment)}
             </div>
 
             <div id="details">
@@ -377,22 +460,56 @@ const Action = (props) => {
                   <span> {props.data.price.full}</span>
                 </div>
                 <div className="parts">
-                  Скидка {props.data.discount}% до {props.data.next_date2}
+                  {props.data.price.part_explain}
                   <br /> <span> {props.data.price.part}</span>
+                  {!loading_data && (
+                    <div
+                      className="buy"
+                      onClick={async (e) => {
+                        if (!me) {
+                          alert(
+                            `Сейчас мы откроем страницу регистрации. Создайте аккаунт, а потом нажмите на конпку "Купить" еще раз.`
+                          );
+                          toggleModal();
+                        } else {
+                          const res = await createOrder({
+                            variables: {
+                              coursePageId: "cjtreu3md00fp0897ga13aktp",
+                              price: props.data.price.price,
+                              userId: me.id,
+                              comment: props.comment,
+                            },
+                          });
+                          location.href = res.data.createOrder.url;
+                        }
+                      }}
+                    >
+                      Купить
+                    </div>
+                  )}
+                  {loading_data && <div>Готовим покупку...</div>}
                 </div>
               </div>
             </div>
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">Записаться на вводное занятие</div>
+              <div className="h2">Получить консультацию и вводный урок:</div>
               <form>
-                <input
-                  id="name"
-                  className="data"
-                  placeholder="Имя и фамилия"
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <div className="names">
+                  <input
+                    className="data"
+                    id="name"
+                    placeholder="Имя"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  <input
+                    className="data"
+                    id="surname"
+                    placeholder="Фамилия"
+                    onChange={(e) => setSurname(e.target.value)}
+                  />
+                </div>
                 {/* <PhoneInput
                 placeholder="Enter phone number"
                 defaultCountry="RU"
@@ -419,23 +536,14 @@ const Action = (props) => {
                   id="english_application_button1"
                   onClick={async (e) => {
                     e.preventDefault();
-
                     if (!EmailValidator.validate(email)) {
                       alert("Неправильный имейл");
                     } else if (number.length < 7) {
                       alert("Неправильный номер мобильнного телефона");
                     } else {
-                      Router.push({
-                        pathname: "/hello",
-                        query: {
-                          name: name,
-                          email: email,
-                          number: number,
-                        },
-                      });
                       if (props.data.price.course == "school") {
                         ReactGA.event({
-                          category: "School Apply Button Click",
+                          category: "Litigation Apply Button Click",
                           action: "Click",
                         });
                       } else if (props.data.price.course == "corp") {
@@ -446,18 +554,25 @@ const Action = (props) => {
                       }
                       const res = await createBusinessClient({
                         variables: {
-                          type: asPath ? asPath : "school",
+                          type: asPath ? asPath : "Unknown",
                           email,
-                          name,
+                          name: name + " " + surname,
                           number,
-                          communication_medium: "school",
+                          communication_medium: "litigation",
                         },
                       });
-                      console.log(res);
+                      Router.push({
+                        pathname: "/hello",
+                        query: {
+                          name: name + " " + surname,
+                          email: email,
+                          number: number,
+                        },
+                      });
                     }
                   }}
                 >
-                  Записаться
+                  {loading ? "Записываем..." : "Записаться"}
                 </button>
               </form>
               <div id="legal">
@@ -483,12 +598,13 @@ const Action = (props) => {
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}
       >
-        <div className="top_message">Мы получили заявку!</div>
-        <div className="bottom_message">
-          Спасибо, что заинтересовались нашей программой. Мы очень ждем
-          возможности познакомиться с вами поближе. Напишем или позвоним вам в
-          течение часа.
-        </div>
+        {auth === "signin" && (
+          <Signin getData={changeState} closeNavBar={toggleModal} />
+        )}
+        {auth === "signup" && (
+          <Signup getData={changeState} closeNavBar={toggleModal} />
+        )}
+        {auth === "reset" && <RequestReset getData={changeState} />}
       </StyledModal>
     </Styles>
   );
