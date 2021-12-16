@@ -1149,6 +1149,7 @@ type Mutation {
   createNote(lessonId: String, text: String): Note
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(image: String, summary: String, text: String, title: String): Post
+  createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
   createProblem(lessonId: String, nodeID: String, nodeType: String, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz

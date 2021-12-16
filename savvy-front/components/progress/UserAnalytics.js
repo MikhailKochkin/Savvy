@@ -73,9 +73,7 @@ const UserAnalytics = (props) => {
       writable: true,
     })
   );
-  // console.log("d", d);
   let sorted = d.sort((a, b) => b.date - a.date);
-  // console.log("sorted", sorted);
 
   return (
     <Styles>

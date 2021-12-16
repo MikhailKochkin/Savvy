@@ -63,9 +63,8 @@ const CourseBox = (props) => {
       writable: true,
     })
   );
-  // console.log("d", d);
   let sorted = d.sort((a, b) => b.date - a.date);
-  let fresh = sorted.slice(0, 10);
+  let fresh = sorted.slice(0, 20);
 
   return (
     <Box>

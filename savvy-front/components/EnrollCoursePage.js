@@ -14,10 +14,12 @@ const CREATE_PRIVATE_ORDER_MUTATION = gql`
   ) {
     createPrivateOrder(
       coursePageId: $coursePageId
-      user: $user
+      userId: $userId
       promocode: $promocode
     ) {
-      id
+      order {
+        id
+      }
     }
   }
 `;
@@ -125,7 +127,7 @@ const EnrollCoursePage = (props) => {
           mutation={CREATE_PRIVATE_ORDER_MUTATION}
           variables={{
             coursePageId: coursePage.id,
-            user: meData.id,
+            userId: meData.id,
             promocode: "",
           }}
         >
@@ -138,7 +140,7 @@ const EnrollCoursePage = (props) => {
                   const res = await createPrivateOrder();
                 }}
               >
-                Регистрация
+                Открыть доступ
               </Button>
             ) : (
               <div>Уже зарегистрированы!</div>

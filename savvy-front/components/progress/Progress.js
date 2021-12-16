@@ -17,9 +17,9 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const COURSEPAGES_QUERY = gql`
-  query COURSEPAGES_QUERY {
-    coursePages(where: { published: { equals: true } }) {
+const COURSEPAGE_QUERY = gql`
+  query COURSEPAGE_QUERY($id: String!) {
+    coursePage(where: { id: $id }) {
       id
       title
       courseType
@@ -134,17 +134,16 @@ const COURSEPAGES_QUERY = gql`
   }
 `;
 
-const Progress = () => {
-  const { loading, error, data } = useQuery(COURSEPAGES_QUERY);
+const Progress = (props) => {
+  const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
+    variables: { id: props.courseId },
+  });
   if (loading) return <p>Загрузка...</p>;
-  let coursePages = data.coursePages;
-  console.log(coursePages);
+  let coursePage = data.coursePage;
   return (
     <Styles>
       <Container>
-        {coursePages.map((c, i) => (
-          <CourseBox key={c.id} c={c} />
-        ))}
+        <CourseBox key={coursePage.id} c={coursePage} />
       </Container>
     </Styles>
   );

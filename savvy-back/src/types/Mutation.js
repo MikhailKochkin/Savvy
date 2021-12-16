@@ -1982,6 +1982,65 @@ const Mutation = mutationType({
         return { url, order };
       },
     });
+
+    t.field("createPrivateOrder", {
+      type: "PaymentInfo",
+      args: {
+        coursePageId: stringArg(),
+        userId: stringArg(),
+        promocode: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: args.userId },
+        });
+
+        const coursePage = await ctx.prisma.coursePage.findUnique({
+          where: { id: args.coursePageId },
+        });
+
+        const order = await ctx.prisma.order.create({
+          data: {
+            promocode: args.promocode,
+            user: {
+              connect: { id: args.userId },
+            },
+            coursePage: {
+              connect: { id: args.coursePageId },
+            },
+          },
+        });
+
+        const newOrderMail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: "Mikhail@besavvy.app",
+          Subject: "Новый клиент",
+          HtmlBody: newOrderEmail(
+            user.name,
+            user.surname,
+            user.email,
+            coursePage.title,
+            0
+          ),
+        });
+
+        const newOrderMail2 = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: "Anastasia@besavvy.app",
+          Subject: "Новая заявка на присоединение к курсу",
+          HtmlBody: newOrderEmail(
+            user.name,
+            user.surname,
+            user.email,
+            coursePage.title,
+            0
+          ),
+        });
+
+        return { order };
+      },
+    });
+
     t.field("updateOrder", {
       type: "Order",
       args: {

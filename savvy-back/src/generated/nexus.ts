@@ -2479,6 +2479,7 @@ export interface NexusGenFieldTypes {
     createNote: NexusGenRootTypes['Note'] | null; // Note
     createOrder: NexusGenRootTypes['PaymentInfo'] | null; // PaymentInfo
     createPost: NexusGenRootTypes['Post'] | null; // Post
+    createPrivateOrder: NexusGenRootTypes['PaymentInfo'] | null; // PaymentInfo
     createProblem: NexusGenRootTypes['Problem'] | null; // Problem
     createProblemResult: NexusGenRootTypes['ProblemResult'] | null; // ProblemResult
     createQuiz: NexusGenRootTypes['Quiz'] | null; // Quiz
@@ -3137,6 +3138,7 @@ export interface NexusGenFieldTypeNames {
     createNote: 'Note'
     createOrder: 'PaymentInfo'
     createPost: 'Post'
+    createPrivateOrder: 'PaymentInfo'
     createProblem: 'Problem'
     createProblemResult: 'ProblemResult'
     createQuiz: 'Quiz'
@@ -3807,6 +3809,11 @@ export interface NexusGenArgTypes {
       summary?: string | null; // String
       text?: string | null; // String
       title?: string | null; // String
+    }
+    createPrivateOrder: { // args
+      coursePageId?: string | null; // String
+      promocode?: string | null; // String
+      userId?: string | null; // String
     }
     createProblem: { // args
       lessonId?: string | null; // String
