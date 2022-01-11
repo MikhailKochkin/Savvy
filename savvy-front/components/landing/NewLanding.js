@@ -296,7 +296,7 @@ const Landing = (props) => {
     smoothscroll.polyfill();
   });
   const slide = () => {
-    var my_element = document.getElementById("black_friday");
+    var my_element = document.getElementById("course_search");
     my_element.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -334,7 +334,7 @@ const Landing = (props) => {
                 </div>
               </div>
             </div>
-            <TimeLeft>
+            {/* <TimeLeft>
               <div className="discount">
                 <img src="static/bstar.svg" />
                 <div className="deadline">Бесплатно</div>
@@ -344,10 +344,10 @@ const Landing = (props) => {
                 Бесплатные
                 <br /> интенсивы
               </div>
-            </TimeLeft>
+            </TimeLeft> */}
           </Subheader>
           <Buttons>
-            <button onClick={(e) => slide()}>Выбрать интенсив</button>
+            <button onClick={(e) => slide()}>Выбрать программу</button>
           </Buttons>
         </Text>
       </Block>

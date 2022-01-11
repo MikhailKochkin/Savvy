@@ -4,6 +4,9 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import AddToCalendar from "react-add-to-calendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import moment from "moment";
 import LessonHeader from "../lesson/LessonHeader";
 import { useUser } from "../User";
 import FirstLesson from "./coursePageCards/FirstLesson";
@@ -13,8 +16,6 @@ import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
-// import { Reviews } from "../../config";
-// import { withTranslation } from "../../i18n";
 
 import {
   Container,
@@ -142,19 +143,27 @@ const SINGLE_COURSEPAGE_QUERY = gql`
   }
 `;
 
+const CalendarComponent = styled.div`
+  height: 500px;
+  margin: 50px 0;
+`;
+
+const localizer = momentLocalizer(moment);
+
 const CoursePage = (props) => {
   const [page, setPage] = useState("lessons");
   const me = useUser();
   let my_reviews;
   // my_reviews = Reviews.filter((r) => r.coursePage === props.id);
   my_reviews = [];
-  let event = {
-    title: "Sample Event",
-    description: "This is the sample event provided as an example only",
-    location: "Portland, OR",
-    startTime: "2016-09-16T20:15:00-04:00",
-    endTime: "2016-09-16T21:45:00-04:00",
-  };
+  let events = [
+    {
+      start: new Date("January 19, 2022 20:00:00"),
+      end: new Date("January 19, 2022 21:00:00"),
+      title: "Договорные конструкции в юридическом английском",
+    },
+  ];
+
   return (
     <>
       <div id="root"></div>
@@ -274,47 +283,17 @@ const CoursePage = (props) => {
                             <StudentCard coursePage={coursePage} me={me} />
                           )}
                       </PayBox>
-                    </CourseInfo>
-                    <Details>
-                      {/* <AddToCalendar event={event} /> */}
-
-                      {data.coursePage.audience && (
-                        <div className="info">
-                          <div className="header">
-                            <span>Для кого этот курс</span>
-                          </div>
-                          <div>{renderHTML(data.coursePage.audience)}</div>
-                        </div>
-                      )}
-                      {data.coursePage.video && data.coursePage.video !== "" && (
-                        <Video>
-                          <div className="header">
-                            Посмотрите презентацию курса от его автора:
-                          </div>
-                          <iframe src={data.coursePage.video} allowFullScreen />
-                        </Video>
-                      )}
-                      {data.coursePage.methods && (
-                        <div className="info">
-                          <div className="header">Про автора курса</div>
-                          <div>{renderHTML(data.coursePage.methods)}</div>
-                        </div>
-                      )}
-                      {data.coursePage.result && (
-                        <div className="info">
-                          <div className="header">О программе</div>
-                          <div>{renderHTML(data.coursePage.result)}</div>
-                        </div>
-                      )}
-                      {data.coursePage.batch && (
-                        <div className="red">
-                          <div className="header">
-                            Информация о следующем живом потоке
-                          </div>
-                          {renderHTML(data.coursePage.batch)}
-                        </div>
-                      )}
-                    </Details>
+                    </CourseInfo>{" "}
+                    {/* <CalendarComponent>
+                      <Calendar
+                        localizer={localizer}
+                        events={events}
+                        defaultView="month"
+                        startAccessor="start"
+                        endAccessor="end"
+                        style={{ height: 500 }}
+                      />
+                    </CalendarComponent> */}
                     <LessonsInfo>
                       <Buttons>
                         <Button
@@ -391,6 +370,46 @@ const CoursePage = (props) => {
                         ))}
                     </LessonsInfo>
                     <Details>
+                      {/* <AddToCalendar event={event} /> */}
+
+                      {data.coursePage.audience && (
+                        <div className="info">
+                          <div className="header">
+                            <span>Для кого этот курс</span>
+                          </div>
+                          <div>{renderHTML(data.coursePage.audience)}</div>
+                        </div>
+                      )}
+                      {data.coursePage.video && data.coursePage.video !== "" && (
+                        <Video>
+                          <div className="header">
+                            Посмотрите презентацию курса от его автора:
+                          </div>
+                          <iframe src={data.coursePage.video} allowFullScreen />
+                        </Video>
+                      )}
+                      {data.coursePage.methods && (
+                        <div className="info">
+                          <div className="header">Про автора курса</div>
+                          <div>{renderHTML(data.coursePage.methods)}</div>
+                        </div>
+                      )}
+                      {data.coursePage.result && (
+                        <div className="info">
+                          <div className="header">О программе</div>
+                          <div>{renderHTML(data.coursePage.result)}</div>
+                        </div>
+                      )}
+                      {data.coursePage.batch && (
+                        <div className="red">
+                          <div className="header">
+                            Информация о следующем живом потоке
+                          </div>
+                          {renderHTML(data.coursePage.batch)}
+                        </div>
+                      )}
+                    </Details>
+                    <Details>
                       {data.coursePage.tariffs && (
                         <div className="info">
                           <div className="header">Тарифы</div>
@@ -412,7 +431,6 @@ const CoursePage = (props) => {
                           promocode={coursePage.promocode}
                         />
                       )}
-
                     {me &&
                       me.permissions &&
                       me.permissions.includes("ADMIN") && (
@@ -426,7 +444,6 @@ const CoursePage = (props) => {
                           promocode={coursePage.promocode}
                         />
                       )}
-
                     {!me && (
                       <RegisterCard
                         me={me}
@@ -438,7 +455,6 @@ const CoursePage = (props) => {
                         promocode={coursePage.promocode}
                       />
                     )}
-
                     {my_reviews[0] && (
                       <>
                         {/* <Header2>{props.t("reviews")}</Header2> */}

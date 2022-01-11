@@ -317,6 +317,16 @@ const Nav = (props) => {
                     />
                   </div>
                 </div> */}
+                {me && (
+                  <Link
+                    href={{
+                      pathname: "/account",
+                      query: { id: me.id },
+                    }}
+                  >
+                    <a className="name">Личный кабинет</a>
+                  </Link>
+                )}
                 {me ? (
                   <Link
                     href={{
@@ -427,6 +437,16 @@ const Nav = (props) => {
                     <a>📚 Блог</a>
                   </button>
                 </Link>
+                {me && (
+                  <Link
+                    href={{
+                      pathname: "/account",
+                      query: { id: me.id },
+                    }}
+                  >
+                    <a className="name">Личный кабинет</a>
+                  </Link>
+                )}
                 {me ? <Signout /> : null}
               </div>
             </SideMenu>

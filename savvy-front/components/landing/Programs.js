@@ -5,7 +5,7 @@ import moment from "moment";
 
 const Styles = styled.div`
   display: flex;
-  margin: 20px 0;
+  margin: 70px 0;
   flex-direction: column;
   align-items: center;
   width: 100%;

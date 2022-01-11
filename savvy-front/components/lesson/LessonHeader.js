@@ -52,6 +52,25 @@ const TextBar = styled.div`
   border-color: ${(props) => props.color};
   padding: 2%;
   padding-left: 2%;
+  position: relative;
+  .emoji {
+    position: absolute;
+    font-size: 2.4rem;
+    top: 2%;
+    left: 86%;
+    animation: spin 3s infinite linear;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes twist-up {
+    to {
+      transform: rotateX(360deg);
+    }
+  }
   .image {
     width: 100%;
     display: flex;
@@ -281,9 +300,9 @@ const LessonHeader = (props) => {
     } else {
       progress = 0;
     }
-    if (visit && progress < 0.9) {
+    if (visit && progress < 0.8) {
       color = "#FFD836";
-    } else if (visit && progress > 0.9) {
+    } else if (visit && progress >= 0.8) {
       color = "#32AC66";
     } else {
       color = "white";
@@ -324,6 +343,7 @@ const LessonHeader = (props) => {
   return (
     <>
       <TextBar color={color}>
+        {/* <div className="emoji">😉</div> */}
         <div>
           <Text>
             <div className="lesson_name">

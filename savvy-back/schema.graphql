@@ -1171,6 +1171,7 @@ type Mutation {
   deleteNewTest(id: String): NewTest
   deleteNote(id: String): Note
   deleteOrder(id: String): Order
+  deletePost(id: String): Post
   deleteProblem(id: String): Problem
   deleteQuiz(id: String): Quiz
   deleteShot(id: String): Shot

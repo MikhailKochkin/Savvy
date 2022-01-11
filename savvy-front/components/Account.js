@@ -51,7 +51,7 @@ const Fieldset = styled.fieldset`
   border: 1px solid #edefed;
   border-radius: 5px;
   input {
-    height: 50%;
+    height: 40px;
     width: 90%;
     border: 1px solid #c4c4c4;
     font-family: Montserrat;
@@ -166,7 +166,6 @@ const Account = (props) => {
   const [email, setEmail] = useState(props.me.email);
   const [image, setImage] = useState(props.me.image ? props.me.image : "");
   const [upload, setUpload] = useState(false);
-  console.log(props.me);
   // careerTrackID
   // uniID
   // company
@@ -275,7 +274,7 @@ const Account = (props) => {
                       // this.setState({ show: true });
                     }}
                   >
-                    Изменить
+                    {loading ? "Изменяем.." : "Изменить"}
                   </Button>
                 </Buttons>
               </>

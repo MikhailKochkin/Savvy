@@ -21,7 +21,7 @@ const Courses = () => {
   return (
     <>
       <NewLanding />
-      <BlackFriday getOffer={getOffer} />
+      {/* <BlackFriday getOffer={getOffer} /> */}
 
       {/* <Search me={me} /> */}
       <Programs me={me} />

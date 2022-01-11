@@ -2136,6 +2136,17 @@ const Mutation = mutationType({
         return post;
       },
     });
+    t.field("deletePost", {
+      type: "Post",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        //3. Delete it
+        return ctx.prisma.post.delete({ where });
+      },
+    });
     t.field("updatePost", {
       type: "Post",
       args: {

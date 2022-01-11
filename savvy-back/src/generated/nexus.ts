@@ -2501,6 +2501,7 @@ export interface NexusGenFieldTypes {
     deleteNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     deleteNote: NexusGenRootTypes['Note'] | null; // Note
     deleteOrder: NexusGenRootTypes['Order'] | null; // Order
+    deletePost: NexusGenRootTypes['Post'] | null; // Post
     deleteProblem: NexusGenRootTypes['Problem'] | null; // Problem
     deleteQuiz: NexusGenRootTypes['Quiz'] | null; // Quiz
     deleteShot: NexusGenRootTypes['Shot'] | null; // Shot
@@ -3160,6 +3161,7 @@ export interface NexusGenFieldTypeNames {
     deleteNewTest: 'NewTest'
     deleteNote: 'Note'
     deleteOrder: 'Order'
+    deletePost: 'Post'
     deleteProblem: 'Problem'
     deleteQuiz: 'Quiz'
     deleteShot: 'Shot'
@@ -3914,6 +3916,9 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
     }
     deleteOrder: { // args
+      id?: string | null; // String
+    }
+    deletePost: { // args
       id?: string | null; // String
     }
     deleteProblem: { // args
