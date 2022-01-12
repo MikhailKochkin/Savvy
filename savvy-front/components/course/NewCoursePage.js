@@ -125,28 +125,28 @@ const NewCoursePage = (props) => {
   const me = useUser();
   moment.locale("ru");
 
-  // var dates = [
-  //   "January 11, 2022 20:00:00",
-  //   "January 19, 2022 20:00:00",
-  //   "January 24, 2022 20:00:00",
-  //   "January 28, 2022 20:00:00",
-  //   "February 2, 2022 20:00:00",
-  //   "February 7, 2022 20:00:00",
-  //   "February 12, 2022 20:00:00",
-  //   "February 19, 2022 20:00:00",
-  //   "February 24, 2022 20:00:00",
-  //   "February 29, 2022 20:00:00",
-  //   "March 7, 2022 20:00:00",
-  // ];
+  var dates = [
+    "January 11, 2022 20:00:00",
+    "January 19, 2022 20:00:00",
+    "January 24, 2022 20:00:00",
+    "January 28, 2022 20:00:00",
+    "February 2, 2022 20:00:00",
+    "February 7, 2022 20:00:00",
+    "February 12, 2022 20:00:00",
+    "February 19, 2022 20:00:00",
+    "February 24, 2022 20:00:00",
+    "February 29, 2022 20:00:00",
+    "March 7, 2022 20:00:00",
+  ];
 
-  // let chooseDate = (date) => {
-  //   let i;
-  //   for (i = 0; i < dates.length; i++) {
-  //     if (date.diff(dates[i], "minutes") < 0) {
-  //       return dates[i];
-  //     }
-  //   }
-  // };
+  let chooseDate = (date) => {
+    let i;
+    for (i = 0; i < dates.length; i++) {
+      if (date.diff(dates[i], "minutes") < 0) {
+        return dates[i];
+      }
+    }
+  };
 
   var today = moment();
   var tomorrow = moment(today).add(3, "days");
@@ -937,7 +937,7 @@ const NewCoursePage = (props) => {
 
   return (
     <div>
-      {/* <Headline data={prog} /> */}
+      <Headline data={prog} />
       <div>
         <Details data={prog} />
         <Goal data={prog} />

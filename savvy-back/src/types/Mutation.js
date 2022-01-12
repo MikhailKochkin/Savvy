@@ -2176,14 +2176,14 @@ const Mutation = mutationType({
         ),
       },
       resolve: async (_, { id, reminders }, ctx) => {
-        const updateCourseVisit = await ctx.prisma.courseVisit.update({
-          where: { id },
-          data: { reminders: { set: reminders } },
-        });
+        // const updateCourseVisit = await ctx.prisma.courseVisit.update({
+        //   where: { id },
+        //   data: { reminders: { set: reminders } },
+        // });
 
-        const users = await ctx.prisma.user.findMany({
-          where: { courseVisits: { some: { id: { equals: id } } } },
-        });
+        // const users = await ctx.prisma.user.findMany({
+        //   where: { courseVisits: { some: { id: { equals: id } } } },
+        // });
 
         const courseVisits = await ctx.prisma.courseVisit.findMany(
           {
@@ -2193,16 +2193,16 @@ const Mutation = mutationType({
           `{ id, coursePage {id, title} }`
         );
 
-        const Reminder = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: users[0].email,
-          Subject: "🥇 Только 4% заканчивают онлайн-курс. Будешь среди них?",
-          HtmlBody: ReminderEmail.ReminderEmail(
-            users[0].name,
-            courseVisits[0].coursePage.title,
-            courseVisits[0].coursePage.id
-          ),
-        });
+        // const Reminder = await client.sendEmail({
+        //   From: "Mikhail@besavvy.app",
+        //   To: users[0].email,
+        //   Subject: "🥇 Только 4% заканчивают онлайн-курс. Будешь среди них?",
+        //   HtmlBody: ReminderEmail.ReminderEmail(
+        //     users[0].name,
+        //     courseVisits[0].coursePage.title,
+        //     courseVisits[0].coursePage.id
+        //   ),
+        // });
 
         return updateCourseVisit;
       },
