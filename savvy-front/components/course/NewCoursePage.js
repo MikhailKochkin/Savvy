@@ -277,11 +277,11 @@ const NewCoursePage = (props) => {
         },
       ],
       price: {
-        price: 7150,
+        price: 8900,
         full: "8 900 ₽",
         full_explain: "Полная стоимость",
-        part: "7 150 ₽",
-        part_explain: "Cо скидкой",
+        part: "На 4 месяца",
+        part_explain: "Рассрочка",
         comment: `
               Доступна рассрочка на 4,6 и 12 месяцев.`,
       },
@@ -366,11 +366,11 @@ const NewCoursePage = (props) => {
       offer: `Купите сегодня – получите в подарок модуль "Legal English. Speaking"`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
       price: {
-        price: 7150,
+        price: 8900,
         full: "8 900 ₽",
         full_explain: "Полная стоимость",
-        part: "7 150 ₽",
-        part_explain: "Cо скидкой",
+        part: "На 4 месяца",
+        part_explain: "Рассрочка",
         comment: `
               Доступна рассрочка на 4,6 и 12 месяцев.`,
       },
@@ -654,11 +654,11 @@ const NewCoursePage = (props) => {
       offer: `Начните учиться сегодня со скидкой 20%`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
       price: {
-        price: 7150,
+        price: 8900,
         full: "8 900 ₽",
         full_explain: "Полная стоимость",
-        part: "13 350 ₽",
-        part_explain: "Сейчас со скидкой",
+        part: "На 4 месяца",
+        part_explain: "Рассрочка",
         comment: `
               Доступна рассрочка на 4,6 и 12 месяцев.`,
       },
@@ -798,11 +798,11 @@ const NewCoursePage = (props) => {
       offer: `Начните учиться сегодня со скидкой 20%`,
       c2a: "Цена до 1 октября 5 990 ₽. Потом 7 990 ₽.",
       price: {
-        price: 7150,
+        price: 8900,
         full: "8 900 ₽",
         full_explain: "Полная стоимость",
-        part: "7 150 ₽",
-        part_explain: "Cо скидкой",
+        part: "На 4 месяца",
+        part_explain: "Рассрочка",
         comment: `
               Доступна рассрочка на 4,6 и 12 месяцев.`,
       },
