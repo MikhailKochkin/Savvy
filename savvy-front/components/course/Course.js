@@ -239,7 +239,7 @@ export default class Course extends Component {
                 // <SignUpbutton onClick={this.toggleModal}>Войти</SignUpbutton>
                 <Link
                   href={{
-                    pathname: "/coursePage",
+                    pathname: "/course",
                     query: { id },
                   }}
                 >
@@ -292,7 +292,7 @@ export default class Course extends Component {
                                     {me && coursePage && (
                                       <Link
                                         href={{
-                                          pathname: "/coursePage",
+                                          pathname: "/course",
                                           query: { id },
                                         }}
                                       >
@@ -338,7 +338,7 @@ export default class Course extends Component {
                                 coursePage && (
                                   <Link
                                     href={{
-                                      pathname: "/coursePage",
+                                      pathname: "/course",
                                       query: { id },
                                     }}
                                   >
