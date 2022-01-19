@@ -276,7 +276,7 @@ const CreateCourse = (props) => {
                       e.preventDefault();
                       const res2 = await createCoursePage();
                       Router.push({
-                        pathname: "/coursePage",
+                        pathname: "/course",
                         query: { id: res2.data.createCoursePage.id },
                       });
                     }}

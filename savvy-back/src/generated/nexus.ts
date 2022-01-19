@@ -48,6 +48,7 @@ export interface NexusGenInputs {
     message?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['ApplicationWhereInput'][] | null; // [ApplicationWhereInput!]
     OR?: NexusGenInputs['ApplicationWhereInput'][] | null; // [ApplicationWhereInput!]
+    promocode?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   ApplicationWhereUniqueInput: { // input type
@@ -378,6 +379,7 @@ export interface NexusGenInputs {
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     finish?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    info?: NexusGenEnums['SortOrder'] | null; // SortOrder
     reminders?: NexusGenEnums['SortOrder'] | null; // SortOrder
     studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -391,6 +393,7 @@ export interface NexusGenInputs {
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     finish?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    info?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     NOT?: NexusGenInputs['CourseVisitWhereInput'][] | null; // [CourseVisitWhereInput!]
     OR?: NexusGenInputs['CourseVisitWhereInput'][] | null; // [CourseVisitWhereInput!]
     reminders?: NexusGenInputs['DateTimeNullableListFilter'] | null; // DateTimeNullableListFilter
@@ -472,6 +475,10 @@ export interface NexusGenInputs {
   }
   DocumentWhereUniqueInput: { // input type
     id?: string | null; // String
+  }
+  EmailInfo: { // input type
+    name?: string | null; // String
+    value?: number | null; // Float
   }
   EnumCourseTypeNullableFilter: { // input type
     equals?: NexusGenEnums['CourseType'] | null; // CourseType
@@ -883,6 +890,7 @@ export interface NexusGenInputs {
   NewTestWhereInput: { // input type
     AND?: NexusGenInputs['NewTestWhereInput'][] | null; // [NewTestWhereInput!]
     answers?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    comments?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     correct?: NexusGenInputs['BoolNullableListFilter'] | null; // BoolNullableListFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -3698,6 +3706,7 @@ export interface NexusGenArgTypes {
   }
   Mutation: {
     createBusinessClient: { // args
+      comment?: string | null; // String
       communication_medium?: string | null; // String
       email?: string | null; // String
       name?: string | null; // String
@@ -3959,6 +3968,7 @@ export interface NexusGenArgTypes {
     sendEmailToStudent: { // args
       comment?: string | null; // String
       id?: string | null; // String
+      info?: NexusGenInputs['EmailInfo'] | null; // EmailInfo
       reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
     }
     signin: { // args

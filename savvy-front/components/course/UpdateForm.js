@@ -329,7 +329,7 @@ const UpdateForm = (props) => {
           </Button>
           <Link
             href={{
-              pathname: "/coursePage",
+              pathname: "/course",
               query: { id: coursePage.id },
             }}
           >

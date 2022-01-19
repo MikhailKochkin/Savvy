@@ -54,6 +54,14 @@ const PromocodeList = inputObjectType({
   },
 });
 
+const EmailInfo = inputObjectType({
+  name: "EmailInfo",
+  definition(t) {
+    t.string("name");
+    t.float("value");
+  },
+});
+
 module.exports = {
   NextType,
   NextTrueType,
@@ -62,6 +70,7 @@ module.exports = {
   LessonStructure,
   Promocode,
   PromocodeList,
+  EmailInfo,
   // Message,
   // Messages,
 };

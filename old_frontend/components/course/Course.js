@@ -237,7 +237,7 @@ export default class Course extends Component {
                 // <SignUpbutton onClick={this.toggleModal}>Войти</SignUpbutton>
                 <Link
                   href={{
-                    pathname: "/coursePage",
+                    pathname: "/course",
                     query: { id },
                   }}
                 >

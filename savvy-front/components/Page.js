@@ -76,9 +76,7 @@ const Page = ({ children }) => {
           <Layout>
             <ModalProvider>
               <Header />
-              {router.pathname !== "/con" && router.pathname !== "/english" && (
-                <DynamicNav />
-              )}
+              {router.pathname !== "/con" && <DynamicNav />}
               <Inner>{children}</Inner>
               {router.pathname !== "/lesson" &&
                 router.pathname !== "/con" &&

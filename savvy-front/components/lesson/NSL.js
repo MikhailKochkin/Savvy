@@ -264,7 +264,7 @@ const NSL = (props) => {
                   {width > 800 && (
                     <Link
                       href={{
-                        pathname: "/coursePage",
+                        pathname: "/course",
                         query: {
                           id: lesson.coursePage.id,
                         },

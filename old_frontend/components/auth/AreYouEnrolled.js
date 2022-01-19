@@ -72,7 +72,7 @@ const AreYouEnrolled = (props) =>
                   </Title>
                   <Link
                     href={{
-                      pathname: "/coursePage",
+                      pathname: "/course",
                       query: { id: props.subject },
                     }}
                   >

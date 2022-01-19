@@ -18,6 +18,7 @@ const LESSON_RESULTS_QUERY = gql`
       progress
       lesson {
         id
+        name
         structure
         type
         number

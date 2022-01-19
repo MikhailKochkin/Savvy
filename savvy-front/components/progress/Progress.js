@@ -143,7 +143,7 @@ const Progress = (props) => {
   return (
     <Styles>
       <Container>
-        <CourseBox key={coursePage.id} c={coursePage} />
+        <CourseBox key={coursePage.id} id={coursePage.id} c={coursePage} />
       </Container>
     </Styles>
   );

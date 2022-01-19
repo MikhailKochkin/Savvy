@@ -496,7 +496,7 @@ const PurchaseEmail = (name, course, coursePageID) => `
                           <tr>
                             <td align="center">
                               <a
-                                href="https://besavvy.app/coursePage?id=${coursePageID}"
+                                href="https://besavvy.app/course?id=${coursePageID}"
                                 class="f-fallback button button--blue"
                                 target="_blank"
                                 >Начать курс</a

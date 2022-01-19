@@ -27,6 +27,7 @@ input ApplicationWhereInput {
   message: StringNullableFilter
   NOT: [ApplicationWhereInput!]
   OR: [ApplicationWhereInput!]
+  promocode: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -556,6 +557,7 @@ input CourseVisitOrderByInput {
   createdAt: SortOrder
   finish: SortOrder
   id: SortOrder
+  info: SortOrder
   reminders: SortOrder
   studentId: SortOrder
   updatedAt: SortOrder
@@ -570,6 +572,7 @@ input CourseVisitWhereInput {
   createdAt: DateTimeFilter
   finish: DateTimeNullableFilter
   id: StringFilter
+  info: JsonNullableFilter
   NOT: [CourseVisitWhereInput!]
   OR: [CourseVisitWhereInput!]
   reminders: DateTimeNullableListFilter
@@ -694,6 +697,11 @@ input DocumentWhereInput {
 
 input DocumentWhereUniqueInput {
   id: String
+}
+
+input EmailInfo {
+  name: String
+  value: Float
 }
 
 input EnumCourseTypeNullableFilter {
@@ -1130,7 +1138,7 @@ input Messages {
 }
 
 type Mutation {
-  createBusinessClient(communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
+  createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
@@ -1182,7 +1190,7 @@ type Mutation {
   requestReset(email: String): Message
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(communication_medium: String, id: String): BusinessClient
-  sendEmailToStudent(comment: String, id: String, reminders: [DateTime]): CourseVisit
+  sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
@@ -1346,6 +1354,7 @@ input NewTestListRelationFilter {
 input NewTestWhereInput {
   AND: [NewTestWhereInput!]
   answers: StringNullableListFilter
+  comments: StringNullableListFilter
   complexity: IntNullableFilter
   correct: BoolNullableListFilter
   createdAt: DateTimeFilter

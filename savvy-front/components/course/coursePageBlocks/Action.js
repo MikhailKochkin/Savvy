@@ -42,14 +42,14 @@ const CREATE_CLIENT = gql`
     $name: String!
     $number: String!
     $type: String!
-    $communication_medium: String!
+    $comment: String!
   ) {
     createBusinessClient(
       email: $email
       name: $name
       number: $number
       type: $type
-      communication_medium: $communication_medium
+      comment: $comment
     ) {
       id
     }
@@ -80,34 +80,21 @@ const Container = styled.div`
   }
 `;
 
-const BuyButton = styled.button`
-  width: 50%;
-  padding: 2%;
-  font-family: Montserrat;
-  border: 2px solid black;
-  background: transparent;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  outline: 0;
-  cursor: pointer;
-  font-size: 1.8rem;
-  transition: ease-in 0.2s;
-  &:hover {
-    background-color: #dfc201;
-  }
-`;
-
 const Description = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 48%;
   min-width: 460px;
-  height: 400px;
   border: 1px solid #e7ebef;
   padding: 2% 4%;
   background: #fff;
   border-radius: 25px;
+  .comment {
+    div {
+      margin: 10px 0;
+    }
+  }
   .highlight {
     padding-bottom: 1px;
     border-bottom: 3px solid #f9d801;
@@ -120,30 +107,53 @@ const Description = styled.div`
     font-weight: 600;
     margin-bottom: 20px;
   }
+  #promo {
+    margin-top: 10%;
+    input {
+      width: 100%;
+      padding: 13px 6px;
+      border: 1px solid #d8d8d8;
+      border-radius: 5px;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1.6rem;
+    }
+  }
   #details {
+    margin-top: 10%;
+
     font-size: 1.6rem;
     line-height: 1.4;
-    width: 90%;
-
+    width: 100%;
+    .arrow {
+      width: 50%;
+    }
     #prices {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      .buy {
+        text-decoration: underline;
+        cursor: pointer;
+      }
       .full {
-        width: 48%;
-        color: #8b887e;
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
         span {
-          font-size: 2.6rem;
+          font-size: 3.4rem;
         }
       }
       .parts {
         width: 48%;
-        .buy {
-          text-decoration: underline;
-          cursor: pointer;
-        }
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
         span {
-          font-size: 2.6rem;
+          font-size: 2rem;
         }
       }
     }
@@ -159,8 +169,25 @@ const Description = styled.div`
       font-weight: 500;
     }
   }
+  .buy_button {
+    width: 100%;
+    padding: 2%;
+    font-family: Montserrat;
+    border: none;
+    background: #f9d801;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    outline: 0;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: ease-in 0.2s;
+    &:hover {
+      background-color: #dfc201;
+    }
+  }
   @media (max-width: 800px) {
     height: auto;
+    justify-content: space-around;
     min-height: 350px;
     width: 100%;
     min-width: 100px;
@@ -174,9 +201,16 @@ const Description = styled.div`
       width: 95%;
       margin-top: 10px;
     }
+    #promo {
+      margin-top: 0;
+    }
     #details {
+      margin-top: 0;
+      .arrow {
+        width: 70%;
+      }
       #prices {
-        flex-direction: column;
+        flex-direction: row;
         .full {
           width: 90%;
           span {
@@ -199,7 +233,7 @@ const Description = styled.div`
 const Contact = styled.div`
   width: 48%;
   min-width: 460px;
-  height: 400px;
+  /* height: 400px; */
   border-radius: 25px;
   display: flex;
   flex-direction: row;
@@ -208,15 +242,53 @@ const Contact = styled.div`
   background: #fff;
   border: 1px solid #e7ebef;
   border-radius: 25px;
+  padding: 30px 0;
   #form_container {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    .variants {
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: flex-start;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      .variants_form {
+        max-width: 45%;
+        display: flex;
+        flex-direction: row;
+        padding: 5px;
+        align-items: flex-start;
+        justify-content: flex-start;
+        border: 1px solid #d8d8d8;
+        border-radius: 10px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        label {
+          line-height: 1.6;
+        }
+        div {
+          width: 40px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          input {
+            margin: 0;
+            padding: 0;
+            margin-top: 5px;
+          }
+        }
+      }
+    }
     .h2 {
       width: 80%;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       font-weight: 700;
       font-size: 1.8rem;
       line-height: 1.5;
@@ -244,6 +316,12 @@ const Contact = styled.div`
     outline: 0;
     cursor: pointer;
     font-size: 1.4rem;
+  }
+  #explainer {
+    width: 100%;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
   }
   #legal {
     width: 80%;
@@ -302,6 +380,30 @@ const Contact = styled.div`
     }
     #form_container {
       width: 100%;
+
+      .variants {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .variants_form {
+          width: 100%;
+          max-width: 100%;
+          margin-bottom: 20px;
+          label {
+            font-size: 1.6rem;
+            line-height: 1.4;
+          }
+          div {
+            width: 30%;
+            max-width: 30%;
+            input[type="radio"] {
+              width: 30px;
+              height: 30px;
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -409,9 +511,21 @@ const Action = (props) => {
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
+  const [step, setStep] = useState("apply");
+  const [price, setPrice] = useState(props.data.price.price);
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
+
+  const addPromo = (val) => {
+    if (val.toLowerCase() == "besavvy2022") {
+      setPrice(price * 0.9);
+    }
+  };
+
+  const numberWithSpaces = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
 
   const { asPath } = useRouter();
 
@@ -426,15 +540,6 @@ const Action = (props) => {
   const d = props.data;
   const { me } = props;
 
-  const slide = () => {
-    var my_element = document.getElementById("ATF");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
-
   return (
     <Styles id="c2a">
       <Container>
@@ -443,22 +548,285 @@ const Action = (props) => {
             <div id="header">
               <span>Стоимость обучения</span>
             </div>
-            <div>{renderHTML(props.data.price.comment)}</div>
-
             <div id="details">
+              <br />
+              <div className="arrow"> {props.data.price.full_explain}</div>
+
               <div id="prices">
                 <div className="full">
-                  {props.data.price.full_explain}
-                  <br />
-                  <span> {props.data.price.full}</span>
+                  <span> {numberWithSpaces(Math.ceil(price / 10))} ₽/мес</span>
                 </div>
                 <div className="parts">
-                  {props.data.price.part_explain}
-                  <br /> <span> {props.data.price.part}</span>
+                  <span> {numberWithSpaces(price)} ₽</span>
+                </div>
+              </div>
+            </div>
+            <div id="promo">
+              <div>Введите промокод</div>
+              <input onChange={(e) => addPromo(e.target.value)} />
+            </div>
+          </Description>
+          <Contact>
+            <div id="form_container">
+              <div className="h2">Шаг 1. Выберите удобный вариант</div>
+              <div className="variants">
+                <div
+                  className="variants_form"
+                  onChange={(e) => {
+                    setStep(e.target.value);
+                  }}
+                >
+                  <div>
+                    <input
+                      type="radio"
+                      value="apply"
+                      checked={step == "apply"}
+                      onChange={(e) => {
+                        setStep(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <label for="html">Оставить заявку на консультацию</label>
+                </div>
+                <div
+                  className="variants_form"
+                  onChange={(e) => {
+                    setStep(e.target.value);
+                  }}
+                >
+                  <div>
+                    <input
+                      type="radio"
+                      value="installments"
+                      checked={step == "installments"}
+                      onChange={(e) => {
+                        setStep(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <label for="html">Купить курс в рассрочку</label>
+                </div>
+
+                <div className="variants_form">
+                  <div>
+                    <input
+                      type="radio"
+                      value="buy"
+                      checked={step == "buy"}
+                      onChange={(e) => {
+                        setStep(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <label for="html">Купить курс и начать обучение</label>
+                </div>
+              </div>
+              <div className="h2">
+                Шаг 2.
+                {step == "apply" && " Заполните заявку"}
+                {step == "buy" && " Оплатите курс"}
+                {step == "installments" && " Заявка на рассрочку"}
+              </div>
+              {step == "apply" && (
+                <>
+                  <form>
+                    <div className="names">
+                      <input
+                        className="data"
+                        id="name"
+                        placeholder="Имя"
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                      <input
+                        className="data"
+                        id="surname"
+                        placeholder="Фамилия"
+                        onChange={(e) => setSurname(e.target.value)}
+                      />
+                    </div>
+                    <input
+                      id="tel"
+                      className="data"
+                      type="tel"
+                      placeholder="+7 (999) 999-99-99"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                    <input
+                      id="email"
+                      className="data"
+                      type="email"
+                      placeholder="Электронная почта"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button
+                      type="submit"
+                      id="english_application_button1"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        if (!EmailValidator.validate(email)) {
+                          alert("Неправильный имейл");
+                        } else if (number.length < 7) {
+                          alert("Неправильный номер мобильнного телефона");
+                        } else {
+                          if (props.data.price.course == "school") {
+                            ReactGA.event({
+                              category: "Litigation Apply Button Click",
+                              action: "Click",
+                            });
+                          } else if (props.data.price.course == "corp") {
+                            ReactGA.event({
+                              category: "Corp Apply Button Click",
+                              action: "Click",
+                            });
+                          }
+                          const res = await createBusinessClient({
+                            variables: {
+                              type: asPath ? asPath : "Unknown",
+                              email,
+                              name: name + " " + surname,
+                              number,
+                              comment: "Консультация",
+                            },
+                          });
+                          Router.push({
+                            pathname: "/hello",
+                            query: {
+                              name: name + " " + surname,
+                              email: email,
+                              number: number,
+                            },
+                          });
+                        }
+                      }}
+                    >
+                      {loading ? "Записываем..." : "Оставить заявку"}
+                    </button>
+                  </form>
+                  <div id="legal">
+                    Нажимая кнопку, принимаю условия{" "}
+                    <a
+                      href="https://besavvy.app/legal?name=privacy"
+                      target="_blank"
+                    >
+                      политики
+                    </a>{" "}
+                    и{" "}
+                    <a
+                      href="https://besavvy.app/legal?name=offer"
+                      target="_blank"
+                    >
+                      оферты
+                    </a>
+                    .
+                  </div>
+                </>
+              )}
+              {step == "installments" && (
+                <>
+                  <form>
+                    <div className="names">
+                      <input
+                        className="data"
+                        id="name"
+                        placeholder="Имя"
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                      <input
+                        className="data"
+                        id="surname"
+                        placeholder="Фамилия"
+                        onChange={(e) => setSurname(e.target.value)}
+                      />
+                    </div>
+                    <input
+                      id="tel"
+                      className="data"
+                      type="tel"
+                      placeholder="+7 (999) 999-99-99"
+                      onChange={(e) => setNumber(e.target.value)}
+                    />
+                    <input
+                      id="email"
+                      className="data"
+                      type="email"
+                      placeholder="Электронная почта"
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button
+                      type="submit"
+                      id="english_application_button1"
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        if (!EmailValidator.validate(email)) {
+                          alert("Неправильный имейл");
+                        } else if (number.length < 7) {
+                          alert("Неправильный номер мобильнного телефона");
+                        } else {
+                          if (props.data.price.course == "school") {
+                            ReactGA.event({
+                              category: "Litigation Apply Button Click",
+                              action: "Click",
+                            });
+                          } else if (props.data.price.course == "corp") {
+                            ReactGA.event({
+                              category: "Corp Apply Button Click",
+                              action: "Click",
+                            });
+                          }
+                          const res = await createBusinessClient({
+                            variables: {
+                              type: asPath ? asPath : "Unknown",
+                              email,
+                              name: name + " " + surname,
+                              number,
+                              comment: "Рассрочка",
+                            },
+                          });
+                          Router.push({
+                            pathname: "/hello",
+                            query: {
+                              name: name + " " + surname,
+                              email: email,
+                              number: number,
+                            },
+                          });
+                        }
+                      }}
+                    >
+                      {loading ? "Готовим..." : "Оставить заявку"}
+                    </button>
+                  </form>
+                  <div id="legal">
+                    Нажимая кнопку, принимаю условия{" "}
+                    <a
+                      href="https://besavvy.app/legal?name=privacy"
+                      target="_blank"
+                    >
+                      политики
+                    </a>{" "}
+                    и{" "}
+                    <a
+                      href="https://besavvy.app/legal?name=offer"
+                      target="_blank"
+                    >
+                      оферты
+                    </a>
+                    .
+                  </div>
+                </>
+              )}
+              {step == "buy" && (
+                <form>
+                  <div id="explainer">
+                    Если у вас еще нет аккаунта, после нажатия на кнопку мы
+                    попросим вас зарегистрироваться на сайте. Если у вас уже
+                    есть аккаунт, то вас перенаправят на страницу оплаты.
+                  </div>
                   {!loading_data && (
-                    <div
+                    <button
                       className="buy"
                       onClick={async (e) => {
+                        e.preventDefault();
                         if (!me) {
                           alert(
                             `Сейчас мы откроем страницу регистрации. Создайте аккаунт, а потом нажмите на конпку "Купить" еще раз.`
@@ -467,8 +835,8 @@ const Action = (props) => {
                         } else {
                           const res = await createOrder({
                             variables: {
-                              coursePageId: props.coursePage.id,
-                              price: props.data.price.price,
+                              coursePageId: "cjtreu3md00fp0897ga13aktp",
+                              price: price,
                               userId: me.id,
                               comment: props.comment,
                             },
@@ -477,111 +845,29 @@ const Action = (props) => {
                         }
                       }}
                     >
-                      Купить
-                    </div>
+                      Купить курс
+                    </button>
                   )}
-                  {loading_data && <div>Готовим покупку...</div>}
-                </div>
-              </div>
-            </div>
-          </Description>
-          <Contact>
-            <div id="form_container">
-              <div className="h2">Получить консультацию</div>
-              <form>
-                <div className="names">
-                  <input
-                    className="data"
-                    id="name"
-                    placeholder="Имя"
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                  <input
-                    className="data"
-                    id="surname"
-                    placeholder="Фамилия"
-                    onChange={(e) => setSurname(e.target.value)}
-                  />
-                </div>
-                {/* <PhoneInput
-                placeholder="Enter phone number"
-                defaultCountry="RU"
-                // value={value}
-                // onChange={(e) => setNumber(e.target.value)}
-                onChange={setNumber}
-              /> */}
-                <input
-                  id="tel"
-                  className="data"
-                  type="tel"
-                  placeholder="+7 (999) 999-99-99"
-                  onChange={(e) => setNumber(e.target.value)}
-                />
-                <input
-                  id="email"
-                  className="data"
-                  type="email"
-                  placeholder="Электронная почта"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <button
-                  type="submit"
-                  id="english_application_button1"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    if (!EmailValidator.validate(email)) {
-                      alert("Неправильный имейл");
-                    } else if (number.length < 7) {
-                      alert("Неправильный номер мобильнного телефона");
-                    } else {
-                      if (props.data.price.course == "school") {
-                        ReactGA.event({
-                          category: "Litigation Apply Button Click",
-                          action: "Click",
-                        });
-                      } else if (props.data.price.course == "corp") {
-                        ReactGA.event({
-                          category: "Corp Apply Button Click",
-                          action: "Click",
-                        });
-                      }
-                      const res = await createBusinessClient({
-                        variables: {
-                          type: asPath ? asPath : "Unknown",
-                          email,
-                          name: name + " " + surname,
-                          number,
-                          communication_medium: "litigation",
-                        },
-                      });
-                      Router.push({
-                        pathname: "/hello",
-                        query: {
-                          name: name + " " + surname,
-                          email: email,
-                          number: number,
-                        },
-                      });
-                    }
-                  }}
-                >
-                  {loading ? "Записываем..." : "Записаться"}
-                </button>
-              </form>
-              <div id="legal">
-                Нажимая кнопку, принимаю условия{" "}
-                <a
-                  href="https://besavvy.app/legal?name=privacy"
-                  target="_blank"
-                >
-                  политики
-                </a>{" "}
-                и{" "}
-                <a href="https://besavvy.app/legal?name=offer" target="_blank">
-                  оферты
-                </a>
-                .
-              </div>
+                  {loading_data && <button>Готовим покупку...</button>}
+                  <div id="legal">
+                    Нажимая кнопку, принимаю условия{" "}
+                    <a
+                      href="https://besavvy.app/legal?name=privacy"
+                      target="_blank"
+                    >
+                      политики
+                    </a>{" "}
+                    и{" "}
+                    <a
+                      href="https://besavvy.app/legal?name=offer"
+                      target="_blank"
+                    >
+                      оферты
+                    </a>
+                    .
+                  </div>
+                </form>
+              )}
             </div>
           </Contact>
         </Form>

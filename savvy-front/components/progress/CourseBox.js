@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import moment from "moment";
+import Link from "next/link";
 import { useState } from "react";
 import * as _ from "lodash";
 import UserAnalytics from "../stats/UserAnalytics";
@@ -64,13 +65,19 @@ const CourseBox = (props) => {
     })
   );
   let sorted = d.sort((a, b) => b.date - a.date);
-  let fresh = sorted.slice(0, 20);
+  let fresh = sorted.slice(0, 40);
 
   return (
     <Box>
       <div>
         <b>{c.title}</b>
       </div>
+
+      <button>
+        <a href={`https://besavvy.app/course?id=${props.id}`} target="_blank">
+          Перейти к курсу
+        </a>
+      </button>
       <div>
         Общий рейтинг – <b>{average}</b>
       </div>

@@ -333,13 +333,13 @@ const ATF = (props) => {
             <h1>{renderHTML(d.header)}</h1>
             <div className="description">
               <div className="text">{renderHTML(d.subheader)}</div>
-              <TimeLeft>
+              {/* <TimeLeft>
                 <div className="discount">
                   <img src="static/badge_star.svg" />
                   <div className="number">-{d.discount}%</div>
                   <div className="deadline">до {d.next_date}</div>
-                </div>
-              </TimeLeft>
+                </div> 
+              </TimeLeft>*/}
             </div>
           </Container>
           <Buttons>

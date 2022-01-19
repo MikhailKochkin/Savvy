@@ -218,6 +218,50 @@ const Person = (props) => {
   // find recent students
   let two_months_ago = new Date();
   two_months_ago.setMonth(two_months_ago.getMonth() - 2);
+
+  // 1. Get all lesson results
+  const sorted_lessons = results
+    .slice()
+    .sort((a, b) => a.lesson.number - b.lesson.number);
+
+  // 2. group all lesson results by lesson
+  let new_array = [];
+  sorted_lessons.forEach((l) => {
+    let lessonId = l.lesson.id;
+    if (new_array.find((x) => x.lessonId === lessonId)) {
+      let obj = new_array.find((x) => x.lessonId === lessonId);
+      let new_results_list = [...obj.results, l];
+      return (obj.results = new_results_list);
+    } else {
+      let new_obj = {
+        lessonId: lessonId,
+        results: [l],
+      };
+      return new_array.push(new_obj);
+    }
+  });
+
+  // 3. leave only lesson results with the highest progress
+
+  let new_array_2 = new_array.map((el) => {
+    const max = el.results.reduce((prev, current) =>
+      prev.progress > current.progress ? prev : current
+    );
+    el["max"] = max;
+    return el;
+  });
+
+  // 4. Leave only maxes
+
+  let maxes = [];
+  new_array_2.forEach((el) => maxes.push(el.max));
+
+  if (props.student.id == "cjqy9i57l000k0821rj0oo8l4") {
+    console.log("2", maxes);
+  }
+
+  let student_data = maxes;
+
   return (
     <Styles>
       <Header>
@@ -262,6 +306,7 @@ const Person = (props) => {
                 id: courseVisit.id,
                 reminders: [...courseVisit.reminders, new Date()],
                 comment: "hello",
+                // info: {},
               }}
             >
               {(sendEmailToStudent, { loading, error }) => {
@@ -328,14 +373,19 @@ const Person = (props) => {
             </Mutation>
           )}
         </Buttons>
-        <Journey student={student} results={results} />
+        <Journey
+          student={student}
+          maxes={maxes}
+          results={results}
+          lessons={lessons}
+        />
         {courseVisit &&
           courseVisit.reminders.map((r) => <li>{moment(r).format("LLL")}</li>)}
         {page === "results" &&
           [...lessons]
             .sort((a, b) => (a.number > b.number ? 1 : -1))
             .map((lesson, index) => {
-              let res = results.filter((r) => r.lesson.id === lesson.id);
+              let res = maxes.filter((r) => r.lesson.id === lesson.id);
               return (
                 <LessonData
                   lesson={lesson}

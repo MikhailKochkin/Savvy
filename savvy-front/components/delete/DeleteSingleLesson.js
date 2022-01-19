@@ -63,7 +63,7 @@ class DeleteSingleLesson extends Component {
                   alert(error.message);
                 });
                 Router.push({
-                  pathname: "/coursePage",
+                  pathname: "/course",
                   query: { id: this.props.coursePageID },
                 });
               }

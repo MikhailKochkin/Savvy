@@ -16,6 +16,7 @@ import TeacherCard from "./coursePageCards/TeacherCard";
 import SignInCard from "./coursePageCards/SignInCard";
 import Loading from "../Loading";
 import Feedback from "./Feedback";
+import Certificate from "./Certificate";
 
 import {
   Container,
@@ -294,6 +295,7 @@ const CoursePage = (props) => {
                         style={{ height: 500 }}
                       />
                     </CalendarComponent> */}
+                    <Certificate />
                     <LessonsInfo>
                       <Buttons>
                         <Button

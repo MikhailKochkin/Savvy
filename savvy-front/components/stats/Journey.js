@@ -13,10 +13,7 @@ const Styles = styled.div`
 `;
 
 const Journey = (props) => {
-  const sorted_lessons = props.results
-    .slice()
-    .sort((a, b) => a.lesson.number - b.lesson.number);
-  let data_labels = sorted_lessons.map(function (item) {
+  let data_labels = props.maxes.map(function (item) {
     return {
       progress: item.progress,
       total:
@@ -46,7 +43,7 @@ const Journey = (props) => {
       return "rgba(247, 129, 84, 0.8)";
     }
   });
-  let data_data = sorted_lessons.map(function (item) {
+  let data_data = props.maxes.map(function (item) {
     return item.lesson.number;
   });
   const [data, setData] = useState({

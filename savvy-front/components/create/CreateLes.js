@@ -148,7 +148,7 @@ const CreateLes = (props) => {
           </Button>
           <Link
             href={{
-              pathname: "/coursePage",
+              pathname: "/course",
               query: { id: props.id },
             }}
           >

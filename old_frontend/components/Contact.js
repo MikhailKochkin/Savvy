@@ -68,7 +68,7 @@ const Contact = ({ t }) => {
         </div>
         <Link
           href={{
-            pathname: "/coursePage",
+            pathname: "/coursex",
             query: { id: "ck1srkdul00l20763ut2aicn9" },
           }}
         >

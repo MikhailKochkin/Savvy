@@ -70,7 +70,7 @@ const Contact = () => {
         </div>
         <Link
           href={{
-            pathname: "/coursePage",
+            pathname: "/course",
             query: { id: "ck1srkdul00l20763ut2aicn9" },
           }}
         >

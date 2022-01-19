@@ -492,7 +492,7 @@ const NextWeekEmail = (name, text, course, coursePageID) => `
                               <tr>
                                 <td align="center">
                                   <a
-                                  href="https://besavvy.app/coursePage?id=${coursePageID}"
+                                  href="https://besavvy.app/course?id=${coursePageID}"
                                   class="f-fallback button"
                                     target="_blank"
                                     >Перейти к курсу</a
@@ -518,7 +518,7 @@ const NextWeekEmail = (name, text, course, coursePageID) => `
                                 Если у вас не работает кнопка выше, просто
                                 скопируйте в поисковую строку:
                               </p>
-                              <p class="f-fallback sub">https://besavvy.app/coursePage?id=${coursePageID}</p>
+                              <p class="f-fallback sub">https://besavvy.app/course?id=${coursePageID}</p>
                             </td>
                           </tr>
                         </table>

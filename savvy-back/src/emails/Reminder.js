@@ -511,7 +511,7 @@ const ReminderEmail = (name, course, coursePageID) => `
                                 <tr>
                                   <td align="center">
                                     <a
-                                    href="https://besavvy.app/coursePage?id=${coursePageID}"
+                                    href="https://besavvy.app/course?id=${coursePageID}"
                                       class="f-fallback button"
                                       target="_blank"
                                       >На курс</a
@@ -539,7 +539,7 @@ const ReminderEmail = (name, course, coursePageID) => `
                                 Если у вас не работает кнопка выше, просто
                                 скопируйте в поисковую строку:
                               </p>
-                              <p class="f-fallback sub">https://besavvy.app/coursePage?id=${coursePageID}</p>
+                              <p class="f-fallback sub">https://besavvy.app/course?id=${coursePageID}</p>
                             </td>
                           </tr>
                         </table>
