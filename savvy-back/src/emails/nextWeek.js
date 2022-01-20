@@ -505,7 +505,7 @@ const NextWeekEmail = (name, text, course, coursePageID) => `
                       </table>
 
 
-                        <p>Успехов, <br />Настя и команда BeSavvy</p>
+                        <p>Успехов, <br />Миша и команда BeSavvy</p>
                         <p>
                           <strong>P.S.</strong> Если возникнут какие-то проблемы, можешь ответить на это письмо и я помогу.
     </p>

@@ -8,21 +8,19 @@ import moment from "moment";
 import LessonData from "./LessonData";
 import Journey from "./Journey";
 
-// const UPDATE_COURSE_VISIT_MUTATION = gql`
-//   mutation UPDATE_COURSE_VISIT_MUTATION($id: String!, $reminders: [DateTime]) {
-//     remind(id: $id, reminders: $reminders) {
-//       id
-//     }
-//   }
-// `;
-
 const UPDATE_COURSE_VISIT_MUTATION = gql`
   mutation UPDATE_COURSE_VISIT_MUTATION(
     $id: String!
     $reminders: [DateTime]
     $comment: String
+    $info: EmailInfo
   ) {
-    sendEmailToStudent(id: $id, reminders: $reminders, comment: $comment) {
+    sendEmailToStudent(
+      id: $id
+      reminders: $reminders
+      comment: $comment
+      info: $info
+    ) {
       id
     }
   }
@@ -179,7 +177,8 @@ const StyledButton = withStyles({
 const Person = (props) => {
   const [secret, setSecret] = useState(true);
   const [page, setPage] = useState("results");
-  const { student, lessons, courseVisit, coursePageID, results } = props;
+  const { student, lessons, courseVisit, coursePageID, coursePage, results } =
+    props;
 
   moment.locale("ru");
   let mail = `mailto:${student.email}`;
@@ -256,11 +255,38 @@ const Person = (props) => {
   let maxes = [];
   new_array_2.forEach((el) => maxes.push(el.max));
 
-  if (props.student.id == "cjqy9i57l000k0821rj0oo8l4") {
-    console.log("2", maxes);
-  }
+  let lesResults = [];
+  maxes.forEach((lr) => {
+    let new_obj = {
+      progress: lr.progress,
+      lesson_number: lr.lesson.number,
+      lesson_size: lr.lesson.structure
+        ? lr.lesson.structure.lessonItems.length
+        : 1,
+      lesson_name: lr.lesson.name,
+      visits: lr.visitsNumber,
+    };
+    lesResults.push(new_obj);
+  });
 
-  let student_data = maxes;
+  let emailInfo = {
+    course_name: coursePage,
+    student_name: student.name,
+    lessons_number: lessons.length,
+    completed_lessons_number: total,
+    lesResultsList: { lesResults: lesResults },
+  };
+
+  if (props.student.id == "cjqy9i57l000k0821rj0oo8l4") {
+    [...lesResults].map(
+      (l) =>
+        `<li>
+        ${l.lesson_number}.
+        ${" "}
+        ${l.lesson_name}
+         </li>`
+    );
+  }
 
   return (
     <Styles>
@@ -306,7 +332,7 @@ const Person = (props) => {
                 id: courseVisit.id,
                 reminders: [...courseVisit.reminders, new Date()],
                 comment: "hello",
-                // info: {},
+                info: emailInfo,
               }}
             >
               {(sendEmailToStudent, { loading, error }) => {
@@ -331,6 +357,7 @@ const Person = (props) => {
                 id: courseVisit.id,
                 reminders: [...courseVisit.reminders, new Date()],
                 comment: "problem",
+                info: emailInfo,
               }}
             >
               {(sendEmailToStudent, { loading, error }) => {
@@ -355,6 +382,7 @@ const Person = (props) => {
                 id: courseVisit.id,
                 reminders: [...courseVisit.reminders, new Date()],
                 comment: "motivation",
+                info: emailInfo,
               }}
             >
               {(sendEmailToStudent, { loading, error }) => {

@@ -57,8 +57,29 @@ const PromocodeList = inputObjectType({
 const EmailInfo = inputObjectType({
   name: "EmailInfo",
   definition(t) {
-    t.string("name");
-    t.float("value");
+    t.string("course_name");
+    t.string("student_name");
+    t.int("lessons_number");
+    t.int("completed_lessons_number");
+    t.field("lesResultsList", { type: "LesResultsList" });
+  },
+});
+
+const LesResultsList = inputObjectType({
+  name: "LesResultsList",
+  definition(t) {
+    t.list.field("lesResults", { type: "LesResult" });
+  },
+});
+
+const LesResult = inputObjectType({
+  name: "LesResult",
+  definition(t) {
+    t.int("progress");
+    t.int("lesson_number");
+    t.int("lesson_size");
+    t.string("lesson_name");
+    t.int("visits");
   },
 });
 
@@ -71,6 +92,7 @@ module.exports = {
   Promocode,
   PromocodeList,
   EmailInfo,
-  // Message,
-  // Messages,
+  LesResult,
+  LesResultsList,
+  EmailInfo,
 };

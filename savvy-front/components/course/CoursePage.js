@@ -295,7 +295,7 @@ const CoursePage = (props) => {
                         style={{ height: 500 }}
                       />
                     </CalendarComponent> */}
-                    <Certificate />
+                    {/* <Certificate /> */}
                     <LessonsInfo>
                       <Buttons>
                         <Button

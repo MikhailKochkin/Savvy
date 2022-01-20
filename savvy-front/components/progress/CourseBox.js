@@ -103,6 +103,7 @@ const CourseBox = (props) => {
         <UserAnalytics
           coursePageID={coursePageID}
           students={fresh}
+          coursePage={c.title}
           lessons={c.lessons}
         />
       </div>

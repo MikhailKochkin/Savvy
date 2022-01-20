@@ -477,8 +477,11 @@ export interface NexusGenInputs {
     id?: string | null; // String
   }
   EmailInfo: { // input type
-    name?: string | null; // String
-    value?: number | null; // Float
+    completed_lessons_number?: number | null; // Int
+    course_name?: string | null; // String
+    lesResultsList?: NexusGenInputs['LesResultsList'] | null; // LesResultsList
+    lessons_number?: number | null; // Int
+    student_name?: string | null; // String
   }
   EnumCourseTypeNullableFilter: { // input type
     equals?: NexusGenEnums['CourseType'] | null; // CourseType
@@ -675,6 +678,16 @@ export interface NexusGenInputs {
     resume?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+  }
+  LesResult: { // input type
+    lesson_name?: string | null; // String
+    lesson_number?: number | null; // Int
+    lesson_size?: number | null; // Int
+    progress?: number | null; // Int
+    visits?: number | null; // Int
+  }
+  LesResultsList: { // input type
+    lesResults?: Array<NexusGenInputs['LesResult'] | null> | null; // [LesResult]
   }
   LessonItem: { // input type
     id?: string | null; // String

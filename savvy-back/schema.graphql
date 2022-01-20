@@ -700,8 +700,11 @@ input DocumentWhereUniqueInput {
 }
 
 input EmailInfo {
-  name: String
-  value: Float
+  completed_lessons_number: Int
+  course_name: String
+  lesResultsList: LesResultsList
+  lessons_number: Int
+  student_name: String
 }
 
 input EnumCourseTypeNullableFilter {
@@ -951,6 +954,18 @@ input LegalPortfolioWhereInput {
   resume: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
+}
+
+input LesResult {
+  lesson_name: String
+  lesson_number: Int
+  lesson_size: Int
+  progress: Int
+  visits: Int
+}
+
+input LesResultsList {
+  lesResults: [LesResult]
 }
 
 type Lesson {

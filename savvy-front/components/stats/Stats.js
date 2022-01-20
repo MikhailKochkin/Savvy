@@ -221,6 +221,7 @@ const Stats = (props) => {
           <div className="data">
             {page === "student_results" && (
               <UserAnalytics
+                coursePage={coursePage.title}
                 coursePageID={coursePage.id}
                 lessons={coursePage.lessons}
                 students={coursePage.new_students}

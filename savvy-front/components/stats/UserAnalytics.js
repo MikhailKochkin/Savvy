@@ -52,7 +52,7 @@ const Header = styled.p`
 `;
 
 const UserAnalytics = (props) => {
-  const { coursePageID, students, lessons } = props;
+  const { coursePageID, coursePage, students, lessons } = props;
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: { coursePageId: coursePageID },
   });
@@ -75,7 +75,6 @@ const UserAnalytics = (props) => {
     })
   );
   let sorted = d.sort((a, b) => b.date - a.date);
-
   return (
     <Styles>
       <Header>Всего пользователей: {students.length} </Header>
@@ -84,6 +83,7 @@ const UserAnalytics = (props) => {
         return (
           <StudentData
             coursePageID={coursePageID}
+            coursePage={coursePage}
             student={student}
             lessons={lessons}
             results={student_results}
