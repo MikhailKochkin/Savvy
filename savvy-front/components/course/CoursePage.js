@@ -91,11 +91,20 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         lessonResults {
           id
           visitsNumber
-          lessonID
           progress
+          lesson {
+            id
+            name
+            structure
+            type
+            number
+          }
           student {
             id
+            email
           }
+          createdAt
+          updatedAt
         }
       }
       description
@@ -195,10 +204,74 @@ const CoursePage = (props) => {
               );
             }
 
-            const applicationsList = [];
-            coursePage.applications.map((application) =>
-              applicationsList.push(application.applicantId)
-            );
+            let maxes = [];
+
+            // 0.
+            if (me) {
+              let results = [];
+              coursePage.lessons.map((les) => {
+                results.push(...les.lessonResults);
+              });
+
+              let filtered_results = results.filter(
+                (r) => r.student.id == me.id
+              );
+
+              // 1. Get all lesson results
+              const sorted_lessons = filtered_results
+                .slice()
+                .sort((a, b) => a.lesson.number - b.lesson.number);
+
+              // 2. group all lesson results by lesson
+              let new_array = [];
+              sorted_lessons.forEach((l) => {
+                let lessonId = l.lesson.id;
+                if (new_array.find((x) => x.lessonId === lessonId)) {
+                  let obj = new_array.find((x) => x.lessonId === lessonId);
+                  let new_results_list = [...obj.results, l];
+                  return (obj.results = new_results_list);
+                } else {
+                  let new_obj = {
+                    lessonId: lessonId,
+                    results: [l],
+                  };
+                  return new_array.push(new_obj);
+                }
+              });
+
+              // 3. leave only lesson results with the highest progress
+
+              let new_array_2 = new_array.map((el) => {
+                const max = el.results.reduce((prev, current) =>
+                  prev.progress > current.progress ? prev : current
+                );
+                el["max"] = max;
+                return el;
+              });
+
+              // 4. Leave only maxes
+
+              new_array_2.forEach((el) => maxes.push(el.max));
+
+              let lesResults = [];
+              maxes.forEach((lr) => {
+                let new_obj = {
+                  progress: lr.progress,
+                  lesson_number: lr.lesson.number,
+                  lesson_size: lr.lesson.structure
+                    ? lr.lesson.structure.lessonItems.length
+                    : 1,
+                  lesson_name: lr.lesson.name,
+                  visits: lr.visitsNumber,
+                };
+                lesResults.push(new_obj);
+              });
+
+              const applicationsList = [];
+              coursePage.applications.map((application) =>
+                applicationsList.push(application.applicantId)
+              );
+            }
 
             let weeks;
             if (coursePage.weeks) {
@@ -220,6 +293,16 @@ const CoursePage = (props) => {
             } else {
               isEnrolled = false;
             }
+
+            let have_cert = false;
+            let cert;
+            me &&
+              me.certificates.forEach((c) => {
+                if (c.coursePage.id == coursePage.id) {
+                  have_cert = true;
+                  cert = c;
+                }
+              });
 
             return (
               <>
@@ -295,7 +378,20 @@ const CoursePage = (props) => {
                         style={{ height: 500 }}
                       />
                     </CalendarComponent> */}
-                    {/* <Certificate /> */}
+                    {me && (
+                      <Certificate
+                        completed={
+                          (maxes.length / coursePage.lessons.length) * 100
+                        }
+                        have_cert={have_cert}
+                        studentId={me.id}
+                        student={me}
+                        coursePageId={coursePage.id}
+                        coursePage={coursePage}
+                        createdAt={cert.createdAt}
+                        certId={have_cert ? cert.id : null}
+                      />
+                    )}
                     <LessonsInfo>
                       <Buttons>
                         <Button

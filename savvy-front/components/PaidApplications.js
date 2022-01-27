@@ -18,6 +18,7 @@ const PAGE_ORDERS_QUERY = gql`
       user {
         name
         surname
+        email
         id
       }
       createdAt

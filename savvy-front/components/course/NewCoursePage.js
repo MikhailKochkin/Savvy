@@ -524,7 +524,7 @@ const NewCoursePage = (props) => {
       ],
       offer: `Начните учиться сегодня со скидкой 50%`,
       price: {
-        price: 14900,
+        price: 17900,
         full: "29 900 ₽",
         full_explain: "Полная стоимость",
         part: "14 900 ₽",

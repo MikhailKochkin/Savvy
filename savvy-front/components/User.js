@@ -11,6 +11,13 @@ const CURRENT_USER_QUERY = gql`
       permissions
       interests
       image
+      certificates {
+        id
+        createdAt
+        coursePage {
+          id
+        }
+      }
       courseVisits {
         id
         reminders

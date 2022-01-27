@@ -143,6 +143,47 @@ input CareerTrackWhereInput {
   updatedAt: DateTimeFilter
 }
 
+type Certificate {
+  coursePage: CoursePage!
+  coursePageId: String!
+  createdAt: DateTime!
+  id: String!
+  student: User!
+  studentId: String!
+  updatedAt: DateTime!
+}
+
+input CertificateListRelationFilter {
+  every: CertificateWhereInput
+  none: CertificateWhereInput
+  some: CertificateWhereInput
+}
+
+input CertificateOrderByInput {
+  coursePageId: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  studentId: SortOrder
+  updatedAt: SortOrder
+}
+
+input CertificateWhereInput {
+  AND: [CertificateWhereInput!]
+  coursePage: CoursePageWhereInput
+  coursePageId: StringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  NOT: [CertificateWhereInput!]
+  OR: [CertificateWhereInput!]
+  student: UserWhereInput
+  studentId: StringFilter
+  updatedAt: DateTimeFilter
+}
+
+input CertificateWhereUniqueInput {
+  id: String
+}
+
 type ChallengeResult {
   correct: Int
   createdAt: DateTime!
@@ -475,6 +516,7 @@ input CoursePageWhereInput {
   batch: StringNullableFilter
   careerTrack: CareerTrackListRelationFilter
   careerTrackUnit: CareerTrackUnitListRelationFilter
+  certificates: CertificateListRelationFilter
   company: CompanyWhereInput
   companyId: StringNullableFilter
   courseType: EnumCourseTypeNullableFilter
@@ -1154,6 +1196,7 @@ input Messages {
 
 type Mutation {
   createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
+  createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
@@ -1748,6 +1791,7 @@ input PromocodeList {
 
 type Query {
   businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
+  certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByInput!], where: CertificateWhereInput): [Certificate!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByInput!], where: CoursePageWhereInput): [CoursePage!]!
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
@@ -2482,6 +2526,7 @@ input UniWhereInput {
 }
 
 type User {
+  certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
   company: Company
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCoursePagesOrderByInput!]): [CoursePage!]!
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int): [CourseVisit!]!
@@ -2569,6 +2614,7 @@ input UserWhereInput {
   careerTrack: CareerTrackWhereInput
   careerTrackId: StringNullableFilter
   careerTrackID: StringNullableFilter
+  certificates: CertificateListRelationFilter
   challengeResults: ChallengeResultListRelationFilter
   chats: ChatListRelationFilter
   clauses: ClauseListRelationFilter

@@ -134,6 +134,33 @@ export interface NexusGenInputs {
     OR?: NexusGenInputs['CareerTrackWhereInput'][] | null; // [CareerTrackWhereInput!]
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
+  CertificateListRelationFilter: { // input type
+    every?: NexusGenInputs['CertificateWhereInput'] | null; // CertificateWhereInput
+    none?: NexusGenInputs['CertificateWhereInput'] | null; // CertificateWhereInput
+    some?: NexusGenInputs['CertificateWhereInput'] | null; // CertificateWhereInput
+  }
+  CertificateOrderByInput: { // input type
+    coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  CertificateWhereInput: { // input type
+    AND?: NexusGenInputs['CertificateWhereInput'][] | null; // [CertificateWhereInput!]
+    coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
+    coursePageId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['CertificateWhereInput'][] | null; // [CertificateWhereInput!]
+    OR?: NexusGenInputs['CertificateWhereInput'][] | null; // [CertificateWhereInput!]
+    student?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
+  CertificateWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   ChallengeResultListRelationFilter: { // input type
     every?: NexusGenInputs['ChallengeResultWhereInput'] | null; // ChallengeResultWhereInput
     none?: NexusGenInputs['ChallengeResultWhereInput'] | null; // ChallengeResultWhereInput
@@ -321,6 +348,7 @@ export interface NexusGenInputs {
     batch?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     careerTrack?: NexusGenInputs['CareerTrackListRelationFilter'] | null; // CareerTrackListRelationFilter
     careerTrackUnit?: NexusGenInputs['CareerTrackUnitListRelationFilter'] | null; // CareerTrackUnitListRelationFilter
+    certificates?: NexusGenInputs['CertificateListRelationFilter'] | null; // CertificateListRelationFilter
     company?: NexusGenInputs['CompanyWhereInput'] | null; // CompanyWhereInput
     companyId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     courseType?: NexusGenInputs['EnumCourseTypeNullableFilter'] | null; // EnumCourseTypeNullableFilter
@@ -1672,6 +1700,7 @@ export interface NexusGenInputs {
     careerTrack?: NexusGenInputs['CareerTrackWhereInput'] | null; // CareerTrackWhereInput
     careerTrackId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     careerTrackID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    certificates?: NexusGenInputs['CertificateListRelationFilter'] | null; // CertificateListRelationFilter
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     chats?: NexusGenInputs['ChatListRelationFilter'] | null; // ChatListRelationFilter
     clauses?: NexusGenInputs['ClauseListRelationFilter'] | null; // ClauseListRelationFilter
@@ -1793,6 +1822,13 @@ export interface NexusGenObjects {
     number?: string | null; // String
     tags: string[]; // [String!]!
     type?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Certificate: { // root type
+    coursePageId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    studentId: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   ChallengeResult: { // root type
@@ -2246,6 +2282,15 @@ export interface NexusGenFieldTypes {
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  Certificate: { // field return type
+    coursePage: NexusGenRootTypes['CoursePage']; // CoursePage!
+    coursePageId: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    student: NexusGenRootTypes['User']; // User!
+    studentId: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   ChallengeResult: { // field return type
     correct: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2482,6 +2527,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
@@ -2657,6 +2703,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     businessClients: NexusGenRootTypes['BusinessClient'][]; // [BusinessClient!]!
+    certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -2851,6 +2898,7 @@ export interface NexusGenFieldTypes {
     title: string; // String!
   }
   User: { // field return type
+    certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
     company: NexusGenRootTypes['Company'] | null; // Company
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisits: NexusGenRootTypes['CourseVisit'][]; // [CourseVisit!]!
@@ -2904,6 +2952,15 @@ export interface NexusGenFieldTypeNames {
     number: 'String'
     tags: 'String'
     type: 'String'
+    updatedAt: 'DateTime'
+  }
+  Certificate: { // field return type name
+    coursePage: 'CoursePage'
+    coursePageId: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    student: 'User'
+    studentId: 'String'
     updatedAt: 'DateTime'
   }
   ChallengeResult: { // field return type name
@@ -3142,6 +3199,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createBusinessClient: 'BusinessClient'
+    createCertificate: 'Certificate'
     createChallengeResult: 'ChallengeResult'
     createChat: 'Chat'
     createClause: 'Clause'
@@ -3317,6 +3375,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     businessClients: 'BusinessClient'
+    certificates: 'Certificate'
     coursePage: 'CoursePage'
     coursePages: 'CoursePage'
     courseVisit: 'CourseVisit'
@@ -3511,6 +3570,7 @@ export interface NexusGenFieldTypeNames {
     title: 'String'
   }
   User: { // field return type name
+    certificates: 'Certificate'
     company: 'Company'
     coursePages: 'CoursePage'
     courseVisits: 'CourseVisit'
@@ -3725,6 +3785,10 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       number?: string | null; // String
       type?: string | null; // String
+    }
+    createCertificate: { // args
+      coursePageId?: string | null; // String
+      studentId?: string | null; // String
     }
     createChallengeResult: { // args
       correct?: number | null; // Int
@@ -4187,6 +4251,14 @@ export interface NexusGenArgTypes {
       orderBy?: NexusGenInputs['BusinessClientOrderByInput'][] | null; // [BusinessClientOrderByInput!]
       where?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
     }
+    certificates: { // args
+      after?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
+      before?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['CertificateOrderByInput'][] | null; // [CertificateOrderByInput!]
+      where?: NexusGenInputs['CertificateWhereInput'] | null; // CertificateWhereInput
+    }
     coursePage: { // args
       where: NexusGenInputs['CoursePageWhereUniqueInput']; // CoursePageWhereUniqueInput!
     }
@@ -4355,6 +4427,12 @@ export interface NexusGenArgTypes {
     }
   }
   User: {
+    certificates: { // args
+      after?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
+      before?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
     coursePages: { // args
       after?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
       before?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput

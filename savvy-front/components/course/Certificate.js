@@ -1,28 +1,68 @@
-import React from "react";
 import styled from "styled-components";
+import { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
+import Router from "next/router";
+import dynamic from "next/dynamic";
+import moment from "moment";
+
+const CREATE_CERT_MUTATION = gql`
+  mutation CREATE_CERT_MUTATION($coursePageId: String!, $studentId: String!) {
+    createCertificate(coursePageId: $coursePageId, studentId: $studentId) {
+      id
+    }
+  }
+`;
 
 const Outer = styled.div`
   width: 100%;
-  height: 500px;
+  height: 600px;
   margin: 50px 0;
   display: flex;
-  background: #fff;
-  flex-direction: column;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
   align-items: center;
   justify-content: center;
-  border: 3px solid black;
+  /* border: 2px solid #393939; */
   @media (max-width: 800px) {
     padding: 50px 0;
   }
 `;
 
 const Inner = styled.div`
-  width: 99%;
+  width: 95%;
+  height: 92%;
   display: flex;
+  opacity: 1;
+  /* border: 2px solid #393939; */
+  background: #fff;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 3px solid black;
+  .bookmark {
+    height: 60px;
+    width: 50px;
+    padding: 0px;
+    margin-top: 10px;
+    -webkit-transform: rotate(0deg) skew(0deg);
+    transform: rotate(0deg) skew(0deg);
+    border-left: 25px solid #ee7752;
+    border-right: 25px solid #ee7752;
+    border-bottom: 25px solid transparent;
+  }
   h2 {
     font-size: 5rem;
   }
@@ -55,6 +95,7 @@ const Data = styled.div`
 
   .left {
     width: 50%;
+    font-style: italic;
   }
   .right {
     width: 50%;
@@ -62,34 +103,64 @@ const Data = styled.div`
     flex-direction: column;
     align-items: flex-end;
     justify-content: space-between;
+    font-style: italic;
   }
   @media (max-width: 800px) {
     padding: 50px 0;
   }
 `;
 
-const Certificate = () => {
+const Certificate = (props) => {
+  const [createCertificate, { data, loading, error }] =
+    useMutation(CREATE_CERT_MUTATION);
+
+  moment.locale("ru");
+
   return (
-    <Outer>
-      <Inner>
-        <h2>СЕРТИФИКАТ</h2>
-        <div>Этот сертификат подтверждает, что:</div>
-        <div className="name">Михаил Кочкин</div>
-        <div>успешно прошел курс:</div>
-        <div className="course">Старт в Гражданском праве</div>
-        <Data>
-          <div className="left">
-            <div>ID сертификата: #5bbf7b757201281e770dfbfe</div>
-            <div>Выдан 10 октября 2021 года</div>
-          </div>
-          <div className="right">
-            <div>МК</div>
-            <div>Михаил Кочкин</div>
-            <div>Директор ООО БиСэвви</div>
-          </div>
-        </Data>
-      </Inner>
-    </Outer>
+    <>
+      {props.completed >= 90 && !props.have_cert && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            createCertificate({
+              variables: {
+                coursePageId: props.coursePageId,
+                studentId: props.studentId,
+              },
+            });
+            Router.reload();
+          }}
+        >
+          Сгенерировать сертификат
+        </button>
+      )}
+      {props.have_cert && (
+        <Outer>
+          <Inner>
+            <div className="bookmark"></div>
+            <h2>СЕРТИФИКАТ</h2>
+            <div>Этот сертификат подтверждает, что:</div>
+            <div className="name">
+              {props.student.name} {props.student.surname}
+            </div>
+            <div>успешно прошёл / прошла курс:</div>
+            <div className="course">{props.coursePage.title}</div>
+            <Data>
+              <div className="left">
+                <div>ID: {props.certId}</div>
+                <div>
+                  Выдан {moment(props.createdAt).format("Do MMMM YYYY")} года{" "}
+                </div>
+              </div>
+              <div className="right">
+                <div>Михаил Кочкин</div>
+                <div>Директор ООО БиСэвви</div>
+              </div>
+            </Data>
+          </Inner>
+        </Outer>
+      )}
+    </>
   );
 };
 

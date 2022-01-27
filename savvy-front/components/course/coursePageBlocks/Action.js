@@ -835,7 +835,7 @@ const Action = (props) => {
                         } else {
                           const res = await createOrder({
                             variables: {
-                              coursePageId: "cjtreu3md00fp0897ga13aktp",
+                              coursePageId: props.coursePage.id,
                               price: price,
                               userId: me.id,
                               comment: props.comment,

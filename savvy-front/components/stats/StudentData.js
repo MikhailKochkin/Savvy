@@ -273,7 +273,7 @@ const Person = (props) => {
     course_name: coursePage,
     student_name: student.name,
     lessons_number: lessons.length,
-    completed_lessons_number: total,
+    completed_lessons_number: Math.round(total),
     lesResultsList: { lesResults: lesResults },
   };
 

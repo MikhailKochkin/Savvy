@@ -436,7 +436,7 @@ const Action = (props) => {
                           email,
                           name,
                           number,
-                          communication_medium: "Black Friday " + program,
+                          communication_medium: "Blog page " + program,
                         },
                       });
                       console.log(res);

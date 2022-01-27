@@ -348,6 +348,30 @@ const Mutation = mutationType({
         return courseVisit;
       },
     });
+    t.field("createCertificate", {
+      type: "Certificate",
+      args: {
+        coursePageId: stringArg(),
+        studentId: stringArg(),
+      },
+      resolve: async (_, { coursePageId, studentId }, ctx) => {
+        const cert = await ctx.prisma.certificate.create({
+          data: {
+            coursePage: {
+              connect: {
+                id: coursePageId,
+              },
+            },
+            student: {
+              connect: {
+                id: studentId,
+              },
+            },
+          },
+        });
+        return cert;
+      },
+    });
     t.field("createLesson", {
       type: "Lesson",
       args: {

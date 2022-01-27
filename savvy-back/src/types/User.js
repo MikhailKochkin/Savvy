@@ -18,6 +18,7 @@ const User = objectType({
     t.model.orders();
     t.model.new_subjects();
     t.model.permissions();
+    t.model.certificates();
     t.model.courseVisits();
     t.model.lessons();
     t.model.studentFeedback();

@@ -79,9 +79,9 @@ const Ad = (props) => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="bottomline_text">
-        <span>Black Friday в BeSavvy. Скидки до 50%</span>
+        <span>Читаете наш блог? Получите скидку 20% на любой курс</span>
       </div>
-      <button onClick={(e) => slide()}>Смотреть скидки</button>
+      <button onClick={(e) => slide()}>Получить скидку</button>
     </Banner>
   );
 };

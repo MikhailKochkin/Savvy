@@ -14,4 +14,5 @@ module.exports = {
   ...require("./Enums"),
   ...require("./Post"),
   ...require("./Stats"),
+  ...require("./Certificate"),
 };
