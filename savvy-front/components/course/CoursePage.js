@@ -388,7 +388,7 @@ const CoursePage = (props) => {
                         student={me}
                         coursePageId={coursePage.id}
                         coursePage={coursePage}
-                        createdAt={cert.createdAt}
+                        createdAt={have_cert ? cert.createdAt : null}
                         certId={have_cert ? cert.id : null}
                       />
                     )}
