@@ -520,8 +520,11 @@ const Action = (props) => {
   const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const addPromo = (val) => {
-    if (val.toLowerCase() == "besavvy2022") {
-      setPrice(price * 0.9);
+    if (
+      val.toLowerCase() == "school50" &&
+      props.data.price.course == "school"
+    ) {
+      setPrice(price * 0.5);
     }
   };
 

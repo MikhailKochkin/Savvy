@@ -74,7 +74,7 @@ const Programs = () => {
       description:
         "Помогаем запустить престижную юридическую карьеру. Изучаем корпоративное право, арбитражный процесс, налоги и право IP/IT.",
       term: "Длительность: 6 месяцев",
-      price: "46 000 ₽",
+      price: "49 000 ₽",
       conditions: `На 10 месяцев`,
       installments: "Рассрочка",
       img: "https://images.unsplash.com/photo-1565349173908-1cf6bc9fd4ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1100&q=80",

@@ -518,8 +518,8 @@ const Action = (props) => {
   const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const addPromo = (val) => {
-    if (val.toLowerCase() == "besavvy2022") {
-      setPrice(price * 0.9);
+    if (val.toLowerCase() == "qdfdf") {
+      setPrice(price * 0.5);
     }
   };
 

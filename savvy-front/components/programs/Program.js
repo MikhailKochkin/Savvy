@@ -1033,8 +1033,8 @@ const Program = (props) => {
         ],
       },
       price: {
-        full: "46 000 ₽",
-        price: 46000,
+        full: "49 000 ₽",
+        price: 49000,
         full_explain: "Рассрочка без первого взноса:",
         part: "3 840 ₽/мес",
         part_explain: "Рассрочка",
