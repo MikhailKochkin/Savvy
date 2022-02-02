@@ -1,7 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typewriter, useTypewriter, Cursor } from "react-simple-typewriter";
 import styled from "styled-components";
+import smoothscroll from "smoothscroll-polyfill";
 
 const PhoneStyles = styled.div`
   display: flex;
@@ -13,19 +14,51 @@ const PhoneStyles = styled.div`
     background: #f5f5f5;
     border-radius: 28px;
     width: 252px;
-    height: 450px;
+    height: 460px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.25));
+    filter: drop-shadow(0px 10px 12px rgba(0, 0, 0, 0.45));
     .screen {
       background: #fff;
+      overflow-y: scroll;
       border-radius: 20px;
-      width: 232px;
-      height: 430px;
+      width: 238px;
+      height: 445px;
       padding: 0 5px;
+      padding-bottom: 15px;
     }
+  }
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: space-between;
+  margin-top: 8px;
+  color: #909aa5;
+  font-size: 1rem;
+  .name {
+    border-radius: 17px;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 2px;
+    width: 30%;
+    margin-left: 8px;
+  }
+  .time {
+    border-radius: 17px;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 2px;
+    width: 30%;
+    text-align: end;
+    margin-right: 8px;
   }
 `;
 
@@ -121,18 +154,29 @@ const Phone = () => {
     console.log(count);
   };
 
+  useEffect(() => {
+    // kick off the polyfill!
+    smoothscroll.polyfill();
+  });
+
   const handleDone = () => {
     setTimeout(() => setClicked1(true), 600);
     setTimeout(() => setClicked2(true), 800);
+    var elem = document.getElementById("screen");
+    elem.scrollTop = elem.scrollHeight;
   };
   return (
     <PhoneStyles>
       <div className="body">
-        <div className="screen">
+        <div className="screen" id="screen">
+          <Header>
+            <div className="name">Кейс 1</div>
+            <div className="time">20:34</div>
+          </Header>
           <Question>
             <div className="bubble">
-              Отлично. С теорией корпоративного договора разобрались. Теперь
-              давай решим вот этот кейс.
+              Чтобы решить этот кейс, нужно вспомнить признаки юр лица. Какие ты
+              помнишь?
             </div>
             <div className="image_box">
               <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80" />
@@ -146,7 +190,9 @@ const Phone = () => {
               <p>
                 {/* Я думаю, что надо сначала посмотреть на */}
                 <Typewriter
-                  words={["Я думаю, что надо помочь всем сторонам"]}
+                  words={[
+                    "Наличие обособленного имущества, гражданско-правовая ответственность ... ",
+                  ]}
                   loop={1}
                   cursor
                   cursorStyle="_"
@@ -166,7 +212,8 @@ const Phone = () => {
           {clicked2 && (
             <Question>
               <div className="bubble">
-                Отлично. Тогда второй наводящий вопрос.
+                Хорошо, как тогда обособленное имущество связано с защитой
+                интересов кредиторов?
               </div>
               <div className="image_box">
                 <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80" />

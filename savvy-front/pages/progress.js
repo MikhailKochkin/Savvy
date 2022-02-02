@@ -36,6 +36,15 @@ const progress = () => {
         <option value="ckt9rmh4e51981hp97uwp6rft">
           Как защитить интересы компании в арбитражном суде?
         </option>
+        <option value="ckwue8197229091h1abn955mbe">Налоговое право</option>
+        <option value="ckum7fc9i644701hqtbnqalqgg">Семейное право</option>
+        <option value="ckup6fss5650821hwe4oqbql91">
+          Правовое регулирование ПО
+        </option>
+        <option value="ckgdgw88c02uv0742v0ttx8pl">Старт в банкротстве</option>
+        <option value="ckx9f5kq487681hx6lojxzvqx">
+          Старт в ценных бумагах
+        </option>
       </select>
       <Progress courseId={option} />
     </div>

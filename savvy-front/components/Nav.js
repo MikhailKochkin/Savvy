@@ -16,10 +16,10 @@ import Signout from "./auth/Signout";
 const SideMenu = styled.div`
   /* The side navigation menu */
   .sidenav {
-    height: 0; /* 100% Full-height */
+    height: 100%; /* 100% Full-height */
     width: 100%; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Stay on top */
+    z-index: 10; /* Stay on top */
     top: 0; /* Stay at the top */
     left: 0;
     background-color: #112a62; /* Blue*/
@@ -394,7 +394,7 @@ const Nav = (props) => {
             </StyledHeader>
 
             <SideMenu>
-              <div id="mySidenav" class="sidenav">
+              <div id="mySidenav" className="sidenav">
                 <a
                   href="javascript:void(0)"
                   class="closebtn"

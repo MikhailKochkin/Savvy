@@ -70,6 +70,9 @@ const CaseCard = styled.div`
     font-size: 1.3rem;
     display: inline-block;
   }
+  @media (max-width: 1200px) {
+    margin-bottom: 35px;
+  }
   @media (max-width: 800px) {
     margin-bottom: 35px;
   }

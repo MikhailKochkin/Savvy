@@ -52,7 +52,25 @@ const Styles = styled.div`
     transform: rotate(1deg);
     height: 330px;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 1200px) {
+    .parent {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* width: 95%; */
+      .div1 {
+        margin-bottom: 50px;
+      }
+      .div2 {
+        margin-bottom: 50px;
+      }
+      .div4 {
+        margin-bottom: 50px;
+      }
+    }
+  }
+  @media (max-width: 600px) {
     h2 {
       font-size: 3.4rem;
       margin-bottom: 30px;
@@ -166,8 +184,8 @@ const Reviews = () => {
               <img src="https://sun9-48.userapi.com/impg/Eetn8cWpPY7rs__wS5FtQ9CRUylgePZ1PKSfPg/GxsQHAjsdHU.jpg?size=1080x1080&quality=96&sign=e9338491a7126108265a09b8469199f9&type=album" />
             </div>
             <div className="bubble">
-              "Я получила инструменты для составления юридических документов и
-              сейчас реализую их на практике."
+              "Я получила инструменты для составления юр документов и сейчас
+              использую их на практике."
             </div>
             <div className="author">
               <div>

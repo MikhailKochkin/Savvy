@@ -17,7 +17,11 @@ const Card = styled.div`
     width: 100%;
     height: 70px;
   }
-  @media (max-width: 800px) {
+  @media (max-width: 1200px) {
+    width: 360px;
+    height: 420px;
+  }
+  @media (max-width: 600px) {
     width: 95%;
   }
 `;

@@ -98,12 +98,24 @@ const Programs = () => {
       description:
         "Поэтапно покажем, как выиграть судебный процесс в арбитражном суде",
       term: "Длительность: 1 месяц",
-      price: "18 100₽",
+      price: "17 900₽",
       conditions: `На 10 месяцев`,
       installments: "Рассрочка",
       img: "https://images.unsplash.com/photo-1555848962-6e79363ec58f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1433&q=80",
       pathname: "coursePage",
       query: "id=ckt9rmh4e51981hp97uwp6rft",
+    },
+    {
+      title: `Налоговое право`,
+      description:
+        "Необходимые знания из области налогового права для юристов любого уровня",
+      term: "Длительность: 1 месяц",
+      price: "17 900₽",
+      conditions: `Осталось 5 мест`,
+      installments: "-20% до 06.02",
+      img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1911&q=80",
+      pathname: "coursePage",
+      query: "id=ckwue8197229091h1abn955mbe",
     },
     {
       title: `Старт в Праве`,

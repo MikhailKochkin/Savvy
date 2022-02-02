@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Landing from "../landing/Landing";
+import NewLanding3 from "../landing/NewLanding3";
 import NewLanding from "../landing/NewLanding";
 import Contact from "../landing/Contact";
 // import Tech from "../landing/Tech";
@@ -20,7 +21,7 @@ const Courses = () => {
   const me = useUser();
   return (
     <>
-      <NewLanding />
+      <NewLanding3 />
       {/* <BlackFriday getOffer={getOffer} /> */}
 
       {/* <Search me={me} /> */}

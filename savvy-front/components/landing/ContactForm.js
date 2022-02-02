@@ -126,6 +126,9 @@ const Description = styled.div`
       font-weight: 500;
     }
   }
+  @media (max-width: 1200px) {
+    margin-bottom: 40px;
+  }
   @media (max-width: 800px) {
     height: auto;
     min-height: 350px;
@@ -277,6 +280,10 @@ const Form = styled.div`
     height: 22px;
     select {
     }
+  }
+  @media (max-width: 1200px) {
+    flex-direction: column;
+    align-items: center;
   }
   @media (max-width: 800px) {
     flex-direction: column;
