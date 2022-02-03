@@ -523,6 +523,11 @@ const Action = (props) => {
       props.coursePage.id == "ckwue8197229091h1abn955mbe"
     ) {
       setPrice(price * 0.8);
+    } else if (
+      val.toLowerCase() == "work_today_10" &&
+      props.coursePage.id == "ckt9rmh4e51981hp97uwp6rft"
+    ) {
+      setPrice(price * 0.9);
     }
   };
 
