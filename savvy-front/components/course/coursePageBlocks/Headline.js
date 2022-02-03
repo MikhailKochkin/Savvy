@@ -17,6 +17,7 @@ const BImage = styled.div`
   }
   @media (max-width: 800px) {
     padding: 50px 0;
+    min-height: 60vh;
   }
 `;
 
