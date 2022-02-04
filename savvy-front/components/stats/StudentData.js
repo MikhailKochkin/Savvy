@@ -183,33 +183,6 @@ const Person = (props) => {
   moment.locale("ru");
   let mail = `mailto:${student.email}`;
 
-  //check how the student is progressing throught the course
-  let color;
-  let total = 0;
-  results.map((l) => {
-    let s;
-    if (l.lesson.type === "STORY") {
-      s = l.progress / l.lesson.structure.lessonItems.length;
-    } else {
-      s = 0;
-    }
-    if (s < 0.3) {
-      total += 0;
-    } else if (s >= 0.3 && s <= 0.8) {
-      total += 0.5;
-    } else if (s > 0.8) {
-      total += 1;
-    }
-  });
-
-  if (total / lessons.length <= 0.2) {
-    color = "#e97573";
-  } else if (total / lessons.length > 0.2 && total / lessons.length < 0.85) {
-    color = "#FDF3C8";
-  } else if (total / lessons.length >= 0.85) {
-    color = "#84BC9C";
-  }
-
   let feedback_num = student.studentFeedback.filter(
     (f) => f.lesson.coursePage.id == coursePageID
   ).length;
@@ -269,6 +242,32 @@ const Person = (props) => {
     lesResults.push(new_obj);
   });
 
+  let color;
+  let total = 0;
+  maxes.map((l) => {
+    let s;
+    if (l.lesson.type === "STORY") {
+      s = l.progress / l.lesson.structure.lessonItems.length;
+    } else {
+      s = 0;
+    }
+    if (s < 0.3) {
+      total += 0;
+    } else if (s >= 0.3 && s <= 0.8) {
+      total += 0.5;
+    } else if (s > 0.8) {
+      total += 1;
+    }
+  });
+
+  if (total / lessons.length <= 0.2) {
+    color = "#e97573";
+  } else if (total / lessons.length > 0.2 && total / lessons.length < 0.85) {
+    color = "#FDF3C8";
+  } else if (total / lessons.length >= 0.85) {
+    color = "#84BC9C";
+  }
+
   let emailInfo = {
     course_name: coursePage,
     student_name: student.name,
@@ -276,18 +275,6 @@ const Person = (props) => {
     completed_lessons_number: Math.round(total),
     lesResultsList: { lesResults: lesResults },
   };
-
-  if (props.student.id == "cjqy9i57l000k0821rj0oo8l4") {
-    [...lesResults].map(
-      (l) =>
-        `<li>
-        ${l.lesson_number}.
-        ${" "}
-        ${l.lesson_name}
-         </li>`
-    );
-  }
-
   return (
     <Styles>
       <Header>

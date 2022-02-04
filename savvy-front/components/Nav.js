@@ -16,7 +16,7 @@ import Signout from "./auth/Signout";
 const SideMenu = styled.div`
   /* The side navigation menu */
   .sidenav {
-    height: 100%; /* 100% Full-height */
+    height: 0%; /* 100% Full-height */
     width: 100%; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 10; /* Stay on top */

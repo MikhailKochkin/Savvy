@@ -84,7 +84,7 @@ const Menu = styled.div`
     transform-origin: -650% 100%;
   }
   @media (max-height: 750px) and (max-width: 900px) {
-    transform-origin: -650% 100%;
+    transform-origin: -550% 100%;
   }
 `;
 
