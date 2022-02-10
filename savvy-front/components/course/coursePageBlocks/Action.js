@@ -524,8 +524,8 @@ const Action = (props) => {
     ) {
       setPrice(price * 0.8);
     } else if (
-      val.toLowerCase() == "work_today_10" &&
-      props.coursePage.id == "ckt9rmh4e51981hp97uwp6rft"
+      val.toLowerCase() == "vusvkv_10" &&
+      props.coursePage.id == "ckfy1q60a02f307281abcpgae"
     ) {
       setPrice(price * 0.9);
     }
