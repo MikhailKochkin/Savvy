@@ -528,6 +528,11 @@ const Action = (props) => {
       props.coursePage.id == "ckfy1q60a02f307281abcpgae"
     ) {
       setPrice(price * 0.9);
+    } else if (
+      val.toLowerCase() == "valentines14" &&
+      props.coursePage.id == "ckum7fc9i644701hqtbnqalqgg"
+    ) {
+      setPrice(price * 0.86);
     }
   };
 

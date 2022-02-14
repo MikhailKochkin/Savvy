@@ -74,7 +74,9 @@ const Details = (props) => {
           <div className="name">Старт</div>
           <div className="main">{d.start}</div>
           <div className="secondary">
-            Получите доступ к материалам сразу после покупки
+            {d.start_comment
+              ? d.start_comment
+              : "Получите доступ к материалам сразу после покупки"}
           </div>
         </Section>
         <Section>
