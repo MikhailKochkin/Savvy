@@ -15,9 +15,12 @@ const BImage = styled.div`
     object-fit: cover;
     filter: brightness(40%);
   }
+  background-image: url("/static/pattern6.svg");
+  background-size: contain;
   @media (max-width: 800px) {
     padding: 50px 0;
     min-height: 60vh;
+    background-size: cover;
   }
 `;
 

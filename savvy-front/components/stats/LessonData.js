@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import Loading from "../Loading";
-import { useLazyQuery, gql } from "@apollo/client";
+import { useLazyQuery, gql, useMutation } from "@apollo/client";
 import CreateFeedback from "./CreateFeedback";
 import TestResult from "./results/TestResult";
 import Note from "./results/Note";
@@ -123,6 +123,13 @@ const GET_RESULTS = gql`
   }
 `;
 
+const CHECK_MUTATION = gql`
+  mutation CHECK_MUTATION($id: String!, $checked: Boolean) {
+    checkAssignment(id: $id, checked: $checked) {
+      id
+    }
+  }
+`;
 const Data = styled.div`
   display: flex;
   flex-direction: row;
@@ -197,13 +204,15 @@ const LessonData = (props) => {
   const { index, lesson, student, coursePageID, res } = props;
   moment.locale("ru");
   const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS);
+  const [checkAssignment, { data: data1 }] = useMutation(CHECK_MUTATION);
   if (loading) return <Loading />;
   if (error) return `Error! ${error.message}`;
   return (
     <>
       <Data>
         <Name>
-          {index + 1}. {lesson.name}
+          {index + 1}. {lesson.name}{" "}
+          <b>{lesson.assignment ? " 🔥 Практическое задание" : ""}</b>
         </Name>
         <StyledButton
           onClick={(e) => {
@@ -215,6 +224,17 @@ const LessonData = (props) => {
         >
           {show ? "Скрыть" : "Подробнее"}
         </StyledButton>
+        {res.length > 0 && (
+          <StyledButton
+            onClick={(e) => {
+              checkAssignment({
+                variables: { id: res[0].id, checked: true },
+              });
+            }}
+          >
+            {res[0].checked ? "✅ Проверено" : "Проверить"}
+          </StyledButton>
+        )}
       </Data>
       {res.length > 0 && res[0].lesson.structure ? (
         <Box>

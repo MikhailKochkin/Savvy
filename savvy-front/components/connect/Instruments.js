@@ -11,6 +11,9 @@ const Styles = styled.div`
   min-height: 100vh;
   background: #111111;
   color: #fff;
+  @media (max-width: 800px) {
+    padding: 30px 0;
+  }
 `;
 const Container = styled.div`
   display: flex;
@@ -26,14 +29,14 @@ const Header = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
   font-size: 3.4rem;
   width: 70%;
   line-height: 1.4;
   font-weight: 800;
   @media (max-width: 800px) {
-    width: 90%;
-    font-size: 2.4rem;
+    width: 100%;
+    font-size: 2.6rem;
   }
 `;
 
@@ -43,13 +46,11 @@ const Args = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: space-between;
-  border: 1px solid red;
   .box {
     width: 30%;
     font-size: 2.6rem;
     line-height: 1.4;
     font-weight: 600;
-    border: 1px solid #fff;
     margin-bottom: 40px;
     color: #8c8c8c;
     .header {
@@ -59,6 +60,30 @@ const Args = styled.div`
     .explainer {
       font-size: 2.2rem;
       margin-bottom: 20px;
+      #green {
+        background: #03e599;
+        color: #000000;
+      }
+      #yellow {
+        background: #fed232;
+        color: #000000;
+      }
+      #orange {
+        background: #fe7e43;
+        color: #000000;
+      }
+      #red {
+        background: #ff3f60;
+        color: #000000;
+      }
+      #violet {
+        background: #e42ee4;
+        color: #000000;
+      }
+      #blue {
+        background: #c34bfe;
+        color: #000000;
+      }
     }
 
     #green {
@@ -73,15 +98,15 @@ const Args = styled.div`
   @media (max-width: 800px) {
     flex-direction: column;
     .box {
-      width: 90%;
-      font-size: 1.8rem;
+      width: 100%;
+      font-size: 2rem;
       .header {
         color: #fff;
         min-height: 40px;
         font-size: 2.2rem;
       }
       .explainer {
-        font-size: 1.8rem;
+        font-size: 2rem;
         margin-bottom: 20px;
       }
     }
@@ -91,16 +116,16 @@ const Args = styled.div`
 const Instruments = () => {
   let args = [
     {
-      header: `Базу данных юристов`,
-      explainer: `Находите тех, кто может вам помочь, с кем можно посоветоваться. Все анкеты хранятся в Notion: там вы можете найти нужных вам людей по разным критериям (место работы или учебы, место проживания или профессиональные интересы)`,
+      header: `1. Базу данных юристов`,
+      explainer: `Находите тех, кто может вам помочь, с кем можно посоветоваться. Все анкеты хранятся в Notion: там вы можете <span id="green">найти нужных вам людей по разным критериям</span> (место работы или учебы, место проживания или профессиональные интересы)`,
     },
     {
-      header: `Учебная программа по нетворкингу`,
-      explainer: `Учебная программа по карьерному нетворкингу. Как общаться с людьми, чтобы все стороны получали пользу? Как строить отношения с коллегами, клиентами, наставниками, чтобы общение было комфортным и полезным для всех.`,
+      header: `2. Учебную программу по нетворкингу`,
+      explainer: `Учебная программа по карьерному нетворкингу. <span id="orange">Как общаться с людьми, чтобы все стороны получали пользу?</span> Как строить отношения с коллегами, клиентами, наставниками, чтобы общение было комфортным и полезным для всех.`,
     },
     {
-      header: `Встречи с гостями`,
-      explainer: `Встречи с гостями в теплой и уютной атмосфере, а не на конференции или семинаре. `,
+      header: `3. Встречи участников сообщества`,
+      explainer: `Встречи участников в теплой и уютной атмосфере, онлайн и офлайн. <span id="blue">Поговорим на юридические и неюридические темы</span>: про карьеру, эффективность, отдых, бизнес и так далее. `,
     },
   ];
 

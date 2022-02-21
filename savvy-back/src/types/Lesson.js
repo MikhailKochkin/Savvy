@@ -21,7 +21,7 @@ const Lesson = objectType({
     t.model.coursePage();
     t.model.structure();
     t.model.short_structure();
-    // t.model.forum();
+    t.model.assignment();
     t.model.user();
     t.model.lessonResults();
     t.model.challengeResults();
@@ -53,6 +53,7 @@ const LessonResults = objectType({
     t.model.id();
     t.model.student();
     t.model.lesson();
+    t.model.checked();
     t.model.progress();
     t.model.visitsNumber();
     t.model.lessonID();

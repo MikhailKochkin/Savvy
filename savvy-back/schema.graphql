@@ -302,6 +302,18 @@ input ClauseWhereUniqueInput {
   id: String
 }
 
+type CommunityMember {
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  name: String!
+  number: String
+  source: String
+  subscription: String
+  surname: String
+  updatedAt: DateTime!
+}
+
 type Company {
   id: String!
   name: String!
@@ -1011,6 +1023,7 @@ input LesResultsList {
 }
 
 type Lesson {
+  assignment: Boolean
   challenge_num: Int
   challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   change: String
@@ -1065,6 +1078,7 @@ input LessonListRelationFilter {
 }
 
 type LessonResult {
+  checked: Boolean
   createdAt: DateTime!
   id: String!
   lesson: Lesson!
@@ -1082,6 +1096,7 @@ input LessonResultListRelationFilter {
 }
 
 input LessonResultOrderByInput {
+  checked: SortOrder
   createdAt: SortOrder
   id: SortOrder
   lessonId: SortOrder
@@ -1094,6 +1109,7 @@ input LessonResultOrderByInput {
 
 input LessonResultWhereInput {
   AND: [LessonResultWhereInput!]
+  checked: BoolNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   lesson: LessonWhereInput
@@ -1118,6 +1134,7 @@ input LessonStructure {
 
 input LessonWhereInput {
   AND: [LessonWhereInput!]
+  assignment: BoolNullableFilter
   challenge_num: IntNullableFilter
   challengeResults: ChallengeResultListRelationFilter
   change: StringNullableFilter
@@ -1195,11 +1212,13 @@ input Messages {
 }
 
 type Mutation {
+  checkAssignment(checked: Boolean, id: String): LessonResult
   createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
+  createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
   createConfUser(conf_number: Int, email: String): ConfUser
   createConstruction(answer: [String], hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
@@ -1260,7 +1279,7 @@ type Mutation {
   updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
-  updateLesson(audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
+  updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateNewTest(answers: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
   updateNote(complexity: Int, id: String, next: NextType, text: String): Note
@@ -1555,6 +1574,11 @@ input OrderWhereUniqueInput {
 
 type PaymentInfo {
   order: Order
+  url: String
+}
+
+type PaymentInfo2 {
+  communityMember: CommunityMember
   url: String
 }
 

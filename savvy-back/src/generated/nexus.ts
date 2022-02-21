@@ -732,6 +732,7 @@ export interface NexusGenInputs {
     some?: NexusGenInputs['LessonResultWhereInput'] | null; // LessonResultWhereInput
   }
   LessonResultOrderByInput: { // input type
+    checked?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -743,6 +744,7 @@ export interface NexusGenInputs {
   }
   LessonResultWhereInput: { // input type
     AND?: NexusGenInputs['LessonResultWhereInput'][] | null; // [LessonResultWhereInput!]
+    checked?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
@@ -764,6 +766,7 @@ export interface NexusGenInputs {
   }
   LessonWhereInput: { // input type
     AND?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
+    assignment?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     challenge_num?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     challengeResults?: NexusGenInputs['ChallengeResultListRelationFilter'] | null; // ChallengeResultListRelationFilter
     change?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1861,6 +1864,17 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
   }
+  CommunityMember: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    name: string; // String!
+    number?: string | null; // String
+    source?: string | null; // String
+    subscription?: string | null; // String
+    surname?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Company: { // root type
     id: string; // String!
     name: string; // String!
@@ -1976,6 +1990,7 @@ export interface NexusGenObjects {
     userId?: string | null; // String
   }
   Lesson: { // root type
+    assignment?: boolean | null; // Boolean
     challenge_num?: number | null; // Int
     change?: string | null; // String
     coursePageId: string; // String!
@@ -1997,6 +2012,7 @@ export interface NexusGenObjects {
     userId: string; // String!
   }
   LessonResult: { // root type
+    checked?: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     lessonID?: string | null; // String
@@ -2050,6 +2066,10 @@ export interface NexusGenObjects {
   }
   PaymentInfo: { // root type
     order?: NexusGenRootTypes['Order'] | null; // Order
+    url?: string | null; // String
+  }
+  PaymentInfo2: { // root type
+    communityMember?: NexusGenRootTypes['CommunityMember'] | null; // CommunityMember
     url?: string | null; // String
   }
   Post: { // root type
@@ -2327,6 +2347,17 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User']; // User!
     userId: string; // String!
   }
+  CommunityMember: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    email: string; // String!
+    id: string; // String!
+    name: string; // String!
+    number: string | null; // String
+    source: string | null; // String
+    subscription: string | null; // String
+    surname: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Company: { // field return type
     id: string; // String!
     name: string; // String!
@@ -2471,6 +2502,7 @@ export interface NexusGenFieldTypes {
     userId: string | null; // String
   }
   Lesson: { // field return type
+    assignment: boolean | null; // Boolean
     challenge_num: number | null; // Int
     challengeResults: NexusGenRootTypes['ChallengeResult'][]; // [ChallengeResult!]!
     change: string | null; // String
@@ -2513,6 +2545,7 @@ export interface NexusGenFieldTypes {
     userId: string; // String!
   }
   LessonResult: { // field return type
+    checked: boolean | null; // Boolean
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
@@ -2526,11 +2559,13 @@ export interface NexusGenFieldTypes {
     message: string | null; // String
   }
   Mutation: { // field return type
+    checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
     createClause: NexusGenRootTypes['Clause'] | null; // Clause
+    createCommunityMember: NexusGenRootTypes['PaymentInfo2'] | null; // PaymentInfo2
     createConfUser: NexusGenRootTypes['ConfUser'] | null; // ConfUser
     createConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     createConstructionResult: NexusGenRootTypes['ConstructionResult'] | null; // ConstructionResult
@@ -2655,6 +2690,10 @@ export interface NexusGenFieldTypes {
   }
   PaymentInfo: { // field return type
     order: NexusGenRootTypes['Order'] | null; // Order
+    url: string | null; // String
+  }
+  PaymentInfo2: { // field return type
+    communityMember: NexusGenRootTypes['CommunityMember'] | null; // CommunityMember
     url: string | null; // String
   }
   Post: { // field return type
@@ -2999,6 +3038,17 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  CommunityMember: { // field return type name
+    createdAt: 'DateTime'
+    email: 'String'
+    id: 'String'
+    name: 'String'
+    number: 'String'
+    source: 'String'
+    subscription: 'String'
+    surname: 'String'
+    updatedAt: 'DateTime'
+  }
   Company: { // field return type name
     id: 'String'
     name: 'String'
@@ -3143,6 +3193,7 @@ export interface NexusGenFieldTypeNames {
     userId: 'String'
   }
   Lesson: { // field return type name
+    assignment: 'Boolean'
     challenge_num: 'Int'
     challengeResults: 'ChallengeResult'
     change: 'String'
@@ -3185,6 +3236,7 @@ export interface NexusGenFieldTypeNames {
     userId: 'String'
   }
   LessonResult: { // field return type name
+    checked: 'Boolean'
     createdAt: 'DateTime'
     id: 'String'
     lesson: 'Lesson'
@@ -3198,11 +3250,13 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
   }
   Mutation: { // field return type name
+    checkAssignment: 'LessonResult'
     createBusinessClient: 'BusinessClient'
     createCertificate: 'Certificate'
     createChallengeResult: 'ChallengeResult'
     createChat: 'Chat'
     createClause: 'Clause'
+    createCommunityMember: 'PaymentInfo2'
     createConfUser: 'ConfUser'
     createConstruction: 'Construction'
     createConstructionResult: 'ConstructionResult'
@@ -3327,6 +3381,10 @@ export interface NexusGenFieldTypeNames {
   }
   PaymentInfo: { // field return type name
     order: 'Order'
+    url: 'String'
+  }
+  PaymentInfo2: { // field return type name
+    communityMember: 'CommunityMember'
     url: 'String'
   }
   Post: { // field return type name
@@ -3778,6 +3836,10 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    checkAssignment: { // args
+      checked?: boolean | null; // Boolean
+      id?: string | null; // String
+    }
     createBusinessClient: { // args
       comment?: string | null; // String
       communication_medium?: string | null; // String
@@ -3808,6 +3870,13 @@ export interface NexusGenArgTypes {
       number?: number | null; // Int
       sample?: string | null; // String
       title?: string | null; // String
+    }
+    createCommunityMember: { // args
+      email?: string | null; // String
+      name?: string | null; // String
+      number?: string | null; // String
+      subscription?: string | null; // String
+      surname?: string | null; // String
     }
     createConfUser: { // args
       conf_number?: number | null; // Int
@@ -4118,6 +4187,7 @@ export interface NexusGenArgTypes {
       text?: string | null; // String
     }
     updateLesson: { // args
+      assignment?: boolean | null; // Boolean
       audience?: string | null; // String
       challenge_num?: number | null; // Int
       change?: string | null; // String

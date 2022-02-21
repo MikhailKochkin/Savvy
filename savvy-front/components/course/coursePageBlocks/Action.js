@@ -65,6 +65,8 @@ const Styles = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-image: url("/static/pattern5.svg");
+  background-size: contain;
   @media (max-width: 800px) {
     height: auto;
     padding: 0;
@@ -513,6 +515,7 @@ const Action = (props) => {
   const [auth, setAuth] = useState("signin");
   const [step, setStep] = useState("apply");
   const [price, setPrice] = useState(props.data.price.price);
+  const [isPromo, setIsPromo] = useState(false);
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
@@ -520,19 +523,25 @@ const Action = (props) => {
   const addPromo = (val) => {
     if (
       val.toLowerCase() == "tax_first_five" &&
-      props.coursePage.id == "ckwue8197229091h1abn955mbe"
+      props.coursePage.id == "ckwue8197229091h1abn955mbe" &&
+      isPromo == false
     ) {
       setPrice(price * 0.8);
+      setIsPromo(true);
     } else if (
       val.toLowerCase() == "vusvkv_10" &&
-      props.coursePage.id == "ckfy1q60a02f307281abcpgae"
+      props.coursePage.id == "ckfy1q60a02f307281abcpgae" &&
+      isPromo == false
     ) {
       setPrice(price * 0.9);
+      setIsPromo(true);
     } else if (
       val.toLowerCase() == "valentines14" &&
-      props.coursePage.id == "ckum7fc9i644701hqtbnqalqgg"
+      props.coursePage.id == "ckum7fc9i644701hqtbnqalqgg" &&
+      isPromo == false
     ) {
       setPrice(price * 0.86);
+      setIsPromo(true);
     }
   };
 

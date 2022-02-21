@@ -62,7 +62,8 @@ const Styles = styled.div`
   padding: 50px 0;
   min-height: 85vh;
   width: 100vw;
-  background: #74bcfe;
+  background-image: url("/static/pattern5.svg");
+  background-size: contain;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,6 +110,12 @@ const Description = styled.div`
     font-weight: 600;
     margin-bottom: 20px;
   }
+  #info {
+    div {
+      line-height: 1.4;
+      margin: 10px 0;
+    }
+  }
   #promo {
     margin-top: 10%;
     input {
@@ -122,8 +129,6 @@ const Description = styled.div`
     }
   }
   #details {
-    margin-top: 10%;
-
     font-size: 1.6rem;
     line-height: 1.4;
     width: 100%;
@@ -189,8 +194,9 @@ const Description = styled.div`
   }
   @media (max-width: 800px) {
     height: auto;
-    justify-content: space-around;
+    justify-content: space-between;
     min-height: 350px;
+    padding: 20px 0;
     width: 100%;
     min-width: 100px;
     margin-bottom: 40px;
@@ -515,6 +521,7 @@ const Action = (props) => {
   const [auth, setAuth] = useState("signin");
   const [step, setStep] = useState("apply");
   const [price, setPrice] = useState(props.data.price.price);
+  const [isPromo, setIsPromo] = useState(false);
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
@@ -522,9 +529,11 @@ const Action = (props) => {
   const addPromo = (val) => {
     if (
       val.toLowerCase() == "school50" &&
-      props.data.price.course == "school"
+      props.data.price.course == "school" &&
+      isPromo == false
     ) {
       setPrice(price * 0.5);
+      setIsPromo(true);
     }
   };
 
@@ -553,10 +562,17 @@ const Action = (props) => {
             <div id="header">
               <span>Стоимость обучения</span>
             </div>
+            <div id="info">
+              <div>
+                ✅ Если оставите заявку на консультацию, дадим доступ к
+                открытому уроку и поделимся гайдом по развитию юридической
+                карьеры.
+              </div>
+              <div>✅ Если вам не подойдет курс, мы вернем деньги.</div>
+            </div>
             <div id="details">
               <br />
               <div className="arrow"> {props.data.price.full_explain}</div>
-
               <div id="prices">
                 <div className="full">
                   <span> {numberWithSpaces(Math.ceil(price / 10))} ₽/мес</span>

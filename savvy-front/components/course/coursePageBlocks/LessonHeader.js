@@ -48,6 +48,20 @@ const TextBar = styled.div`
   margin-bottom: 35px;
   margin-right: 55px;
   padding: 2% 4%;
+  position: relative;
+  .open {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: #fcc417;
+    border-radius: 50%;
+    position: absolute;
+    top: -15px;
+    left: 290px;
+  }
   .image {
     width: 100%;
     display: flex;
@@ -101,6 +115,8 @@ const Text = styled.div`
   .lesson_description {
     font-size: 1.4rem;
     line-height: 1.6;
+    height: 200px;
+    overflow-y: scroll;
     p {
       margin: 4px 0;
     }
@@ -142,102 +158,6 @@ const Time = styled.div`
   font-size: 1.4rem;
 `;
 
-const Buttons = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  @media (max-width: 800px) {
-    justify-content: flex-start;
-  }
-`;
-
-const InProgress = styled.p`
-  justify-self: center;
-  align-self: center;
-  text-align: center;
-  font-size: 1.6rem;
-  padding: 2% 1%;
-  width: 140px;
-  border: 1px solid #716d6d;
-  color: #716d6d;
-  box-sizing: border-box;
-  border-radius: 5px;
-  @media (max-width: 800px) {
-    font-size: 1.4rem;
-  }
-`;
-
-const Info = styled.div`
-  background: rgba(50, 172, 102, 0.05);
-  padding: 2% 4%;
-  margin: 0 0 4% 0;
-  width: 100%;
-  @media (max-width: 800px) {
-    padding: 2% 8%;
-  }
-`;
-
-const ToggleQuestion = styled.div`
-  /* The switch - the box around the slider */
-  justify-self: center;
-  align-self: flex-start;
-  /* margin-right: 45%; */
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-  }
-
-  input:checked + .slider {
-    background-color: #092242;
-  }
-
-  input:focus + .slider {
-    box-shadow: 0 0 1px #092242;
-  }
-
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
-`;
-
 const LessonHeader = (props) => {
   const [published, setPublished] = useState(props.lesson.published);
   const [reveal, setReveal] = useState(false);
@@ -274,14 +194,14 @@ const LessonHeader = (props) => {
   return (
     <>
       <TextBar color={color}>
+        {lesson && lesson.open && <div className="open">🔓</div>}
         <div>
           <Text>
             <div className="lesson_name">
               {lesson.number}. {name}
             </div>
             <div className="lesson_description">
-              {lesson.description &&
-                renderHTML(lesson.description.substring(0, 300))}
+              {lesson.description && renderHTML(lesson.description)}
             </div>
           </Text>
         </div>

@@ -92,7 +92,7 @@ const Ad = (props) => {
       <div className="bottomline_text">
         <span>{d.offer}</span>
       </div>
-      <button onClick={(e) => slide()}>Зарегистрироваться</button>
+      <button onClick={(e) => slide()}>Получить гайд</button>
     </Banner>
   );
 };

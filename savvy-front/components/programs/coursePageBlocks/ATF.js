@@ -12,8 +12,11 @@ const BigImage = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-image: url("/static/pattern6.svg");
+  background-size: contain;
   @media (max-width: 800px) {
     padding: 50px 0;
+    background-size: cover;
   }
 `;
 
@@ -65,6 +68,7 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: space-between;
     width: 90%;
+    margin-bottom: 40px;
     .text {
       font-size: 2rem;
       font-weight: 500;
@@ -132,7 +136,7 @@ const Buttons = styled.div`
     }
   }
   #buy_button {
-    width: 500px;
+    width: 420px;
     background: #175ffe;
     color: #fff;
     border-radius: 5px;
@@ -345,9 +349,11 @@ const ATF = (props) => {
           <Buttons>
             <div className="button_group">
               <button id="buy_button" onClick={(e) => slide2()}>
-                Зарегистрироваться на вводный урок
+                Получить первый урок
               </button>
-              <div>по теме "{d.open_lesson}"</div>
+              <div>
+                и начать учиться с <b>677 студентами</b>
+              </div>
             </div>
             {/* <button id="syl_button" onClick={(e) => slide()}>
               Смотреть Программу

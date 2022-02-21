@@ -86,10 +86,26 @@ const ConfUser = objectType({
   },
 });
 
+const CommunityMember = objectType({
+  name: "CommunityMember",
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.surname();
+    t.model.email();
+    t.model.number();
+    t.model.source();
+    t.model.subscription();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   User,
   Feedback,
   UserLevel,
   BusinessClient,
   ConfUser,
+  CommunityMember,
 };

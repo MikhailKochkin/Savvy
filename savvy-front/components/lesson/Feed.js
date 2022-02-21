@@ -381,7 +381,7 @@ const Feed = (props) => {
   return (
     <>
       <Message visible={visible}>
-        <div id="message_text">💪🏻 Немного усложним задачу</div>
+        <div id="message_text">💪🏻 Повышаем уровень сложности</div>
       </Message>
       <Styles>
         <div className="firstColumn">

@@ -19,6 +19,12 @@ const checkout = new YooCheckout({
   shopId: process.env.SHOP_ID,
   secretKey: process.env.SHOP_KEY,
 });
+
+const community_checkout = new YooCheckout({
+  shopId: process.env.SHOP_ID_IP,
+  secretKey: process.env.SHOP_KEY_IP,
+});
+
 const ClientReminder = require("../emails/ClientReminder");
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
@@ -348,6 +354,21 @@ const Mutation = mutationType({
         return courseVisit;
       },
     });
+    t.field("checkAssignment", {
+      type: "LessonResult",
+      args: {
+        checked: booleanArg(),
+        id: stringArg(),
+      },
+      resolve: async (_, { checked, id }, ctx) => {
+        console.log("lessonResult");
+        const lessonResult = await ctx.prisma.lessonResult.update({
+          where: { id },
+          data: { checked },
+        });
+        return lessonResult;
+      },
+    });
     t.field("createCertificate", {
       type: "Certificate",
       args: {
@@ -507,6 +528,7 @@ const Mutation = mutationType({
         type: stringArg(),
         tariffs: stringArg(),
         change: stringArg(),
+        assignment: booleanArg(),
         challenge_num: intArg(),
         open: booleanArg(),
         structure: arg({
@@ -2573,6 +2595,86 @@ const Mutation = mutationType({
         return new_client;
       },
     }),
+      t.field("createCommunityMember", {
+        type: "PaymentInfo2",
+        args: {
+          email: stringArg(),
+          name: stringArg(),
+          surname: stringArg(),
+          number: stringArg(),
+          subscription: stringArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          // 1. Create new community member
+          const communityMember = await ctx.prisma.communityMember.create({
+            data: {
+              ...args,
+            },
+          });
+
+          // 2. Generate payment link
+
+          let price;
+          let description;
+          if (args.subscription == "month") {
+            price = 490;
+            description = "месяц";
+          } else if (args.subscription == "year") {
+            price = 5000;
+            description = "год";
+          }
+          const createPayload = {
+            amount: {
+              value: price,
+              currency: "RUB",
+            },
+            payment_method_data: {
+              type: "bank_card",
+            },
+            receipt: {
+              customer: {
+                email: args.email,
+              },
+              items: [
+                {
+                  description: `Подписка BeSavvy Connect: 1 ${description}`,
+                  quantity: "1",
+                  amount: {
+                    value: price,
+                    currency: "RUB",
+                  },
+                  vat_code: 1,
+                },
+              ],
+            },
+            confirmation: {
+              type: "redirect",
+              return_url: "https://besavvy.app/connect",
+            },
+          };
+
+          const payment = await community_checkout.createPayment(createPayload);
+          // console.log(
+          //   "payment",
+          //   payment.id,
+          //   payment.confirmation.confirmation_url
+          // );
+
+          const url = payment.confirmation.confirmation_url;
+          console.log("url", url);
+          // 3. Send email to administration
+          const newEmail = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: "Mikhail@besavvy.app",
+            Subject: "Новая заявка в сообщество",
+            HtmlBody: makeANiceEmail(
+              `Новая заявка в сообщество. Вот данные: ${args.name} ${args.surname}, ${args.email}, ${args.number}, ${args.subscription}`
+            ),
+          });
+
+          return { url, communityMember };
+        },
+      }),
       t.field("createConfUser", {
         type: "ConfUser",
         args: {

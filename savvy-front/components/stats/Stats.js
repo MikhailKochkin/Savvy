@@ -42,6 +42,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         text
         name
+        assignment
         number
         structure
         # coursePage {

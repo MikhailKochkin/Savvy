@@ -55,6 +55,12 @@ const CoursePage = (props) => {
                   <Total>
                     {" "}
                     {/* {props.t("total")}  */}
+                    Уроки, отмеченные замочком, можно посмотреть, если вы
+                    зарегистрируетесь на сайте.
+                  </Total>
+                  <Total>
+                    {" "}
+                    {/* {props.t("total")}  */}
                     Всего уроков: {props.lessons.length}
                   </Total>
                   <Lessons>

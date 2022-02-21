@@ -3,6 +3,7 @@ import styled from "styled-components";
 import moment from "moment";
 import Link from "next/link";
 import ReactResizeDetector from "react-resize-detector";
+import renderHTML from "react-render-html";
 
 const Banner = styled.div`
   width: 100%;
@@ -27,9 +28,10 @@ const Banner = styled.div`
     font-size: 1.8rem;
     height: 100%;
     line-height: 1.6;
+    text-align: center;
     font-weight: 500;
     padding: 10px;
-
+    margin-right: 40px;
     span {
     }
     /* opacity: 0.9; */
@@ -90,9 +92,9 @@ const Ad = (props) => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="bottomline_text">
-        <span>{d.offer}</span>
+        <span>{renderHTML(d.offer)}</span>
       </div>
-      <button onClick={(e) => slide()}>Зарегистрироваться</button>
+      <button onClick={(e) => slide()}>Получить гайд</button>
     </Banner>
   );
 };

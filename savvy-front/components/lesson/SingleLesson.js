@@ -52,6 +52,7 @@ const SINGLE_LESSON_QUERY = gql`
       challenge_num
       createdAt
       structure
+      assignment
       change
       user {
         id

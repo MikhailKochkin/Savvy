@@ -655,7 +655,7 @@ const Landing = (props) => {
                 <img
                   id="image5"
                   src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%AE%D0%BB%D1%8F3.png"
-                  data-tip="Юлия Баймакова из Noerr"
+                  data-tip="Юлия Баймакова из ЕПАМ"
                 />
               </div>
               <div className="border1">

@@ -11,6 +11,9 @@ const Styles = styled.div`
   min-height: 100vh;
   background: #111111;
   color: #fff;
+  @media (max-width: 800px) {
+    padding: 30px 0;
+  }
 `;
 const Container = styled.div`
   display: flex;
@@ -32,8 +35,8 @@ const Header = styled.div`
   line-height: 1.4;
   font-weight: 800;
   @media (max-width: 800px) {
-    width: 90%;
-    font-size: 2.4rem;
+    width: 100%;
+    font-size: 2.6rem;
   }
 `;
 
@@ -45,11 +48,12 @@ const Args = styled.div`
   align-items: space-between;
   .image {
     width: 15%;
-    div {
-      width: 80px;
-      height: 80px;
+    img {
+      width: 110px;
+      height: 110px;
       background: grey;
-      border-radius: 50px;
+      object-fit: cover;
+      border-radius: 50%;
     }
   }
   .intro {
@@ -60,11 +64,9 @@ const Args = styled.div`
       line-height: 1.4;
     }
   }
-
   .background {
     color: #8c8c8c;
     font-size: 2.2rem;
-
     width: 40%;
     p {
       width: 80%;
@@ -73,9 +75,23 @@ const Args = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
-    .box {
-      width: 90%;
-      font-size: 1.8rem;
+    .intro {
+      width: 95%;
+      p {
+        width: 100%;
+        font-size: 2rem;
+
+        line-height: 1.4;
+      }
+    }
+    .background {
+      color: #8c8c8c;
+      width: 95%;
+      p {
+        width: 100%;
+        font-size: 2rem;
+        line-height: 1.4;
+      }
     }
   }
 `;
@@ -87,24 +103,33 @@ const Founder = () => {
         <Header>Привет, я Миша</Header>
         <Args>
           <div className="image">
-            <div></div>
+            <img src="static/misha2.png" />
           </div>
           <div className="intro">
-            <p>Я основатель BeSavvy Connect.</p>{" "}
+            <p>Основатель BeSavvy Connect.</p>{" "}
             <p>
-              Я вижу, как важно для юристов взаимодействовать с коллегами и
-              представителями из других сфер.{" "}
+              Я по своему опыту вижу, что нетворкинг – это ключ к решению самых
+              разных вопросов. В первую очередь, карьерных.{" "}
             </p>
             <p>
-              {" "}
-              Но у них не всегда есть понимание, как это длать. Чтобы им помочь,
-              я создал BeSavvy Connect.
+              Но даже внутри юридического сообщества не совсем понятно, как ему
+              учиться и как им заниматься.
+            </p>
+            <p>
+              Чтобы каждому юристу дать инструменты для выстраивания отношений с
+              широким кругом людей, я создал BeSavvy Connect.
             </p>
           </div>
           <div className="background">
             <p>
-              А я еще основал BeSavvy School. Там мы учим юристов праву и
-              английскому языку.
+              А я еще основал онлайн-школу BeSavvy Lawyer. Там мы учим юристов
+              праву и английскому языку. И помогаем им найти работу или получить
+              повышение.
+            </p>
+            <p>
+              Благодаря опыту создания школы, я хорошо знаю, как создавать
+              сообщества и проводить мероприятия. И этот опыт ляжет в основу
+              работы сообщества.
             </p>
           </div>
         </Args>

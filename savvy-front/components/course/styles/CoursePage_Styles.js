@@ -171,6 +171,7 @@ export const Total = styled.div`
   @media (max-width: 800px) {
     font-size: 1.8rem;
     margin-bottom: 6%;
+    line-height: 1.4;
   }
 `;
 

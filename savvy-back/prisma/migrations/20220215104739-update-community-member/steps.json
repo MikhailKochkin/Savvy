@@ -1,0 +1,19 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "CommunityMember",
+      "field": "subscription",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "CommunityMember",
+      "field": "source",
+      "type": "String",
+      "arity": "Optional"
+    }
+  ]
+}

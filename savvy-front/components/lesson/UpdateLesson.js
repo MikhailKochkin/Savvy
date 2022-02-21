@@ -18,6 +18,7 @@ const UPDATE_LESSON_MUTATION = gql`
     $description: String
     $type: String
     $change: String
+    $assignment: Boolean
     $challenge_num: Int
     $open: Boolean
   ) {
@@ -29,6 +30,7 @@ const UPDATE_LESSON_MUTATION = gql`
       description: $description
       type: $type
       change: $change
+      assignment: $assignment
       challenge_num: $challenge_num
       open: $open
     ) {
@@ -136,6 +138,7 @@ export default class UpdateLesson extends Component {
   state = {
     challenge_num: this.props.lesson.challenge_num,
     type: this.props.lesson.type,
+    assignment: this.props.lesson.assignment,
   };
   handleName = (e) => {
     e.preventDefault();
@@ -203,6 +206,14 @@ export default class UpdateLesson extends Component {
               <option value="CHALLENGE">
                 Режим при открытии урока – Испытание
               </option>
+            </select>
+            <select
+              name="assignment"
+              defaultValue={lesson.assignment == true}
+              onChange={this.handleBoolean}
+            >
+              <option value={true}>Содержит практическое задание</option>
+              <option value={false}>Не содержит практическое задание</option>
             </select>
             {this.state.type === "CHALLENGE" && (
               <input

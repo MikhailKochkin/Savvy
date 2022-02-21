@@ -23,6 +23,14 @@ const PaymentInfo = objectType({
   },
 });
 
+const PaymentInfo2 = objectType({
+  name: "PaymentInfo2",
+  definition(t) {
+    t.string("url");
+    t.field("communityMember", { type: "CommunityMember" });
+  },
+});
+
 const SignOut = objectType({
   name: "SignOut",
   definition(t) {
@@ -30,4 +38,4 @@ const SignOut = objectType({
   },
 });
 
-module.exports = { AuthPayload, SignOut, PaymentInfo, Message };
+module.exports = { AuthPayload, SignOut, PaymentInfo, PaymentInfo2, Message };

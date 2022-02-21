@@ -113,7 +113,7 @@ const Teachers = () => {
     {
       name: "Юлия",
       surname: "Баймакова",
-      description: `Юрист Noerr. Модуль "M/A сделки"`,
+      description: `Юрист ЕПАМ. Модуль "M/A сделки"`,
       img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619085817/%D0%AE%D0%BB%D1%8F.png",
     },
     {

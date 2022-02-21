@@ -16,6 +16,7 @@ const LESSON_RESULTS_QUERY = gql`
       id
       visitsNumber
       progress
+      checked
       lesson {
         id
         name
