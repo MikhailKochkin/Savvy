@@ -4,6 +4,7 @@ import Value from "./Value";
 import Instruments from "./Instruments";
 import Founder from "./Founder";
 import Pricing from "./Pricing";
+import FAQ from "./FAQ";
 
 const Connect = () => {
   return (
@@ -13,6 +14,7 @@ const Connect = () => {
       <Instruments />
       <Founder />
       <Pricing />
+      <FAQ />
     </div>
   );
 };

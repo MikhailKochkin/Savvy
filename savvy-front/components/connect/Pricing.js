@@ -9,7 +9,7 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 120vh;
   background: #111111;
   color: #fff;
   @media (max-width: 800px) {
@@ -32,7 +32,7 @@ const Header = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 60px;
   font-size: 3.4rem;
   width: 70%;
   line-height: 1.4;
@@ -90,6 +90,8 @@ const Tarifs = styled.div`
 const Card = styled.div`
   width: 420px;
   height: 550px;
+  border: 2px solid #7d7d7d;
+  border-radius: 40px;
   .info {
     height: 75%;
     display: flex;
@@ -168,9 +170,9 @@ const StyledModal = Modal.styled`
   background-color: #000000;
   color: #fff;
   border: 1px solid grey;
-  border-radius: 4px;
+  border-radius: 8px;
   max-width: 40%;
-  min-width: 400px;
+  min-width: 320px;
   @media (max-width: 1300px) {
     max-width: 70%;
     min-width: 200px;
@@ -227,9 +229,9 @@ const Pricing = () => {
                 <div>Полная подписка на 1 год</div>
                 <div id="important">Вводная встреча с Мишей</div>
                 <div>Доступ к базе данных юристов</div>
-                <div>Доступ к онлайн мероприятиям</div>
+                <div>Доступ к мероприятиям</div>
                 <div>Доступ к микросообществам</div>
-                <div>Доступ к офлайн мероприятиям</div>
+                <div>Создание карточки участника</div>
               </div>
             </div>
             <div className="button">

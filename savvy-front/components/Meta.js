@@ -5,14 +5,18 @@ const Meta = () => (
   <Head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charSet="utf-8" />
-    <meta property="og:title" content="BeSavvy App" />
+    <meta property="og:title" content="BeSavvy" />
+    <meta property="og:description" content="Практические навыки для юристов" />
     <meta
-      property="og:description"
-      content="Интерактивные онлайн-курсы для юристов"
+      property="og:image"
+      content="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
     />
-    <meta property="og:image" content="/computer_mini.jpg" />
     <meta property="og:url" content="https://besavvy.app" />
-    <meta name="twitter:card" content="/computer_mini.jpg" />
+    <meta
+      name="twitter:card"
+      content="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+    />
+
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />

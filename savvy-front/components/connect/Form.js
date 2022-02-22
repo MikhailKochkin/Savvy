@@ -26,12 +26,13 @@ const CREATE_CLIENT = gql`
 `;
 
 const Styles = styled.div`
-  width: 80%;
+  width: 90%;
   margin: 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 40px;
   h2 {
     font-size: 5.6rem;
     font-weight: 1000;

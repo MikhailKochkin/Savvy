@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   display: flex;
@@ -8,7 +7,7 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 120vh;
   background: #111111;
   color: #fff;
   @media (max-width: 800px) {
@@ -122,14 +121,14 @@ const Founder = () => {
           </div>
           <div className="background">
             <p>
-              А я еще основал онлайн-школу BeSavvy Lawyer. Там мы учим юристов
+              А еще я основал онлайн-школу BeSavvy Lawyer. Там мы учим юристов
               праву и английскому языку. И помогаем им найти работу или получить
               повышение.
             </p>
             <p>
               Благодаря опыту создания школы, я хорошо знаю, как создавать
               сообщества и проводить мероприятия. И этот опыт ляжет в основу
-              работы сообщества.
+              работы BeSavvy Connect.
             </p>
           </div>
         </Args>

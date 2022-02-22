@@ -8,7 +8,7 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 120vh;
   background: #111111;
   color: #fff;
   @media (max-width: 800px) {

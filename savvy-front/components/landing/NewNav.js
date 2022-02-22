@@ -122,11 +122,18 @@ const Styles = styled.div`
       flex-direction: row;
       justify-content: center;
       align-items: center;
+      a {
+        color: #fff;
+        transition: ease 0.2s;
+        &:hover {
+          color: #cbcbcb;
+          cursor: pointer;
+        }
+      }
     }
     a {
       color: #fff;
       transition: ease 0.2s;
-
       &:hover {
         color: #cbcbcb;
         cursor: pointer;
@@ -248,6 +255,11 @@ const NewNav = (props) => {
                 <a>BeSavvy</a>
               </button>
             </Link>
+            <Link href="/connect">
+              <button onClick={(e) => closeNav()}>
+                <a>Сообщество</a>
+              </button>
+            </Link>
             {me && me.status === "AUTHOR" && (
               <Link href="/educator">
                 <button onClick={(e) => closeNav()}>
@@ -304,6 +316,11 @@ const NewNav = (props) => {
           <Link href="/blog">
             <div className="blog">
               <a>📚 Блог</a>
+            </div>
+          </Link>
+          <Link href="/connect">
+            <div className="blog">
+              <a>Сообщество</a>
             </div>
           </Link>
           {me && (
