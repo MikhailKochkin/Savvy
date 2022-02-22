@@ -1892,23 +1892,6 @@ const Mutation = mutationType({
         // 1.
 
         // const result = await yandex.createPayment({
-        //   amount: {
-        //     value: args.price,
-        //     currency: "RUB",
-        //   },
-        //   payment_method_data: {
-        //     type: "bank_card",
-        //   },
-        //   confirmation: {
-        //     type: "redirect",
-        //     return_url: "https://besavvy.app/",
-        //   },
-        //   capture: true,
-        // });
-        // console.log("result", result);
-
-        // const url = result.confirmation.confirmation_url;
-        // console.log("url", url);
 
         const user = await ctx.prisma.user.findUnique({
           where: { id: args.userId },
@@ -2605,17 +2588,20 @@ const Mutation = mutationType({
           subscription: stringArg(),
         },
         resolve: async (_, args, ctx) => {
+          console.log(1);
           // 1. Create new community member
           const communityMember = await ctx.prisma.communityMember.create({
             data: {
               ...args,
             },
           });
+          console.log(2);
 
           // 2. Generate payment link
 
           let price;
           let description;
+
           if (args.subscription == "month") {
             price = 490;
             description = "месяц";
@@ -2623,6 +2609,7 @@ const Mutation = mutationType({
             price = 5000;
             description = "год";
           }
+          console.log(3);
           const createPayload = {
             amount: {
               value: price,
@@ -2652,16 +2639,12 @@ const Mutation = mutationType({
               return_url: "https://besavvy.app/connect",
             },
           };
+          console.log(4);
 
           const payment = await community_checkout.createPayment(createPayload);
-          // console.log(
-          //   "payment",
-          //   payment.id,
-          //   payment.confirmation.confirmation_url
-          // );
+          console.log(5);
 
           const url = payment.confirmation.confirmation_url;
-          console.log("url", url);
           // 3. Send email to administration
           const newEmail = await client.sendEmail({
             From: "Mikhail@besavvy.app",
@@ -2671,6 +2654,7 @@ const Mutation = mutationType({
               `Новая заявка в сообщество. Вот данные: ${args.name} ${args.surname}, ${args.email}, ${args.number}, ${args.subscription}`
             ),
           });
+          console.log(6);
 
           return { url, communityMember };
         },

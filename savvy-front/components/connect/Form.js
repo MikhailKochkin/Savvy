@@ -161,6 +161,7 @@ const Form = (props) => {
             //       action: "Click",
             //     });
             //   }
+            console.log(1);
             const res = await createCommunityMember({
               variables: {
                 surname,
@@ -170,6 +171,8 @@ const Form = (props) => {
                 subscription: props.subscription,
               },
             });
+            console.log(2);
+
             console.log(res.data.createCommunityMember.url);
             location.href = res.data.createCommunityMember.url;
             //   Router.push({
