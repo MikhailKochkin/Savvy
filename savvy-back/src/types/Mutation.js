@@ -2639,20 +2639,29 @@ const Mutation = mutationType({
               return_url: "https://besavvy.app/connect",
             },
           };
-          console.log(4);
+
+          console.log(4, payment);
 
           try {
             const payment = await community_checkout.createPayment(
               createPayload2
             );
-
-            console.log(payment);
+            console.log("payment 1", payment);
           } catch (error) {
             console.error(error);
           }
-          console.log(5);
+
+          // try {
+          const payment = await community_checkout.createPayment(
+            createPayload2
+          );
+          console.log("payment 2", payment); // } catch (error) {
+          //   console.error(error);
+          // }
 
           const url = payment.confirmation.confirmation_url;
+          console.log("5 url", url);
+
           // 3. Send email to administration
           const newEmail = await client.sendEmail({
             From: "Mikhail@besavvy.app",
