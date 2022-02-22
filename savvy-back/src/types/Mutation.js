@@ -2640,7 +2640,7 @@ const Mutation = mutationType({
             },
           };
 
-          console.log(4, payment);
+          console.log(4);
 
           try {
             const payment = await community_checkout.createPayment(
