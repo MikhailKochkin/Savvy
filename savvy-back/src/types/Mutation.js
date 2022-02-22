@@ -2610,7 +2610,7 @@ const Mutation = mutationType({
             description = "год";
           }
           console.log(3);
-          const createPayload = {
+          const createPayload2 = {
             amount: {
               value: price,
               currency: "RUB",
@@ -2641,7 +2641,15 @@ const Mutation = mutationType({
           };
           console.log(4);
 
-          const payment = await community_checkout.createPayment(createPayload);
+          try {
+            const payment = await community_checkout.createPayment(
+              createPayload2
+            );
+
+            console.log(payment);
+          } catch (error) {
+            console.error(error);
+          }
           console.log(5);
 
           const url = payment.confirmation.confirmation_url;
