@@ -72,6 +72,11 @@ const Down = styled.div`
   }
   .price_box_price {
     font-size: 2rem;
+    text-decoration: line-through;
+    text-decoration-color: #496ddb;
+  }
+  .price_box_discount {
+    font-size: 2rem;
   }
   .price_box {
     width: 140px;
@@ -116,7 +121,7 @@ const Program = (props) => {
             <div className="price_box_description">Полная стоимость</div>
           </div>
           <div className="price_box">
-            <div className="price_box_price">{props.installments}</div>
+            <div className="price_box_discount">{props.installments}</div>
             <div className="price_box_description">{props.conditions}</div>
           </div>
         </div>

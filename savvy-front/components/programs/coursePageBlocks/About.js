@@ -11,6 +11,7 @@ const Styles = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  padding: 40px 0;
   .custom-shape-divider-top-1615390650 {
     top: 0;
     left: 0;

@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { university } from "react-icons-kit/fa/university";
 import { graduationCap } from "react-icons-kit/fa/graduationCap";
-import { building } from "react-icons-kit/fa/building";
 import Icon from "react-icons-kit";
+import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   width: 100vw;
@@ -64,9 +63,17 @@ const Container = styled.div`
       .icon {
         margin-right: 20px;
         color: #327998;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
       }
+
       div {
         line-height: 1.2;
+        span {
+          font-size: 3.6rem;
+        }
       }
     }
   }
@@ -106,9 +113,15 @@ const Goal = (props) => {
       <Container>
         <div id="goal_message">
           <h2>
-            Вы получите новые знания. <br />
-            Новые навыки.
-            <br /> И новые знакомства с экспертами.
+            {d.goal_header ? (
+              renderHTML(d.goal_header)
+            ) : (
+              <>
+                Вы получите новые знания. <br />
+                Новые навыки.
+                <br /> И новые знакомства с экспертами.
+              </>
+            )}
           </h2>
 
           <button onClick={(e) => slide()}>Участвовать</button>
@@ -119,7 +132,7 @@ const Goal = (props) => {
               <div className="icon">
                 <Icon size={25} icon={graduationCap} />
               </div>
-              <div>{g}</div>
+              <div>{renderHTML(g)}</div>
             </div>
           ))}
         </div>

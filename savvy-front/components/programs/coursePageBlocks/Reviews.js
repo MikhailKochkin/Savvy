@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   width: 100vw;
@@ -136,7 +137,7 @@ const Reviews = (props) => {
                 <div className="name">
                   <div>{r.name}</div>
                 </div>
-                <div className="description">{r.info}</div>
+                <div className="description">{renderHTML(r.info)}</div>
               </div>
             </Review>
           ))}
