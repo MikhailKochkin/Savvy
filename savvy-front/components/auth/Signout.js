@@ -1,9 +1,9 @@
 import React from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
+import { useTranslation } from "next-i18next";
 import styled from "styled-components";
 import { CURRENT_USER_QUERY } from "../User";
-// import { withTranslation } from "../../i18n";
 
 const SIGN_OUT_MUTATION = gql`
   mutation SIGN_OUT_MUTATION {
@@ -35,22 +35,23 @@ const Button = styled.div`
   }
 `;
 
-const Signout = (props) => (
-  <Mutation
-    mutation={SIGN_OUT_MUTATION}
-    refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-  >
-    {(signout) => (
-      <Button
-        onClick={async (e) => {
-          const res = await signout();
-        }}
-      >
-        <a>Выйти</a>
-      </Button>
-    )}
-  </Mutation>
-);
-
-// export default withTranslation("common")(Signout);
+const Signout = (props) => {
+  const { t } = useTranslation("nav");
+  return (
+    <Mutation
+      mutation={SIGN_OUT_MUTATION}
+      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+    >
+      {(signout) => (
+        <Button
+          onClick={async (e) => {
+            const res = await signout();
+          }}
+        >
+          <a>{t("sign_out")}</a>
+        </Button>
+      )}
+    </Mutation>
+  );
+};
 export default Signout;

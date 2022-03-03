@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
-import { useRouter } from "next/router";
-
+import { useTranslation } from "next-i18next";
 import { useUser } from "../User";
 import Signup from "../auth/Signup";
 import Signin from "../auth/Signin";
@@ -205,18 +204,13 @@ const MobileMenu = styled.span`
 
 const NewNav = (props) => {
   let me = useUser();
-  const [width, setWidth] = useState(800);
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
-  const router = useRouter();
-  const onResize = (width) => {
-    setWidth(width);
-  };
+  const { t } = useTranslation("nav");
 
   const toggleModal = (e) => setIsOpen(!isOpen);
 
   const openNav = () => {
-    console.log(111);
     document.getElementById("mySidenav").style.height = "35%";
     document.getElementById("mySidenav").style.paddingTop = "50px";
   };
@@ -257,26 +251,20 @@ const NewNav = (props) => {
             </Link>
             <Link href="/connect">
               <button onClick={(e) => closeNav()}>
-                <a>Сообщество</a>
+                <a>{t("community")}</a>
               </button>
             </Link>
             {me && me.status === "AUTHOR" && (
               <Link href="/educator">
                 <button onClick={(e) => closeNav()}>
-                  <a>
-                    {/* {props.t("my")} */}
-                    Мои курсы
-                  </a>
+                  <a>{t("my_courses")}</a>
                 </button>
               </Link>
             )}
             {me && me.status === "SAVVY_AUTHOR" && (
               <Link href="/educator">
                 <button onClick={(e) => closeNav()}>
-                  <a>
-                    {/* {props.t("my")} */}
-                    Мои курсы
-                  </a>
+                  <a>{t("my_courses")}</a>
                 </button>
               </Link>
             )}
@@ -286,7 +274,7 @@ const NewNav = (props) => {
               }}
             >
               <button onClick={(e) => closeNav()}>
-                <a>📚 Блог</a>
+                <a>{t("blog")}</a>
               </button>
             </Link>
             {me && (
@@ -296,7 +284,7 @@ const NewNav = (props) => {
                   query: { id: me.id },
                 }}
               >
-                <a className="name">Личный кабинет</a>
+                <a className="name">{t("my_account")}</a>
               </Link>
             )}
             {me ? <Signout /> : null}
@@ -309,18 +297,18 @@ const NewNav = (props) => {
             me.status !== "LAWYER" && (
               <Link href="/educator">
                 <div className="my">
-                  <a>Мои курсы</a>
+                  <a>{t("my_courses")}</a>
                 </div>
               </Link>
             )}
           <Link href="/blog">
             <div className="blog">
-              <a>📚 Блог</a>
+              <a>{t("blog")}</a>
             </div>
           </Link>
           <Link href="/connect">
             <div className="blog">
-              <a>Сообщество</a>
+              <a>{t("community")}</a>
             </div>
           </Link>
           {me && (
@@ -331,13 +319,13 @@ const NewNav = (props) => {
               }}
             >
               <div className="lk">
-                <a>Личный кабинет</a>
+                <a>{t("my_account")}</a>
               </div>
             </Link>
           )}
           {!me && (
             <div className="enter" onClick={(e) => toggleModal()}>
-              Войти
+              {t("login")}
             </div>
           )}
           {me ? <NewSignout /> : null}

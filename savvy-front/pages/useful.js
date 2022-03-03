@@ -1,8 +1,28 @@
 import React from "react";
+import { useRouter } from "next/router";
+
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useUser } from "../components/User";
 import Useful from "../components/useful/Useful";
 
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
+});
+
+// export const getServerSideProps = async ({ locale }) => ({
+//   props: {
+//     locale,
+//   },
+// });
+
 const useful = (props) => {
+  const { t } = useTranslation("common");
+  const router = useRouter();
+  const { pathname, asPath, query } = router;
+
   const data = {
     post1: {
       link: "https://disk.yandex.ru/i/X9S9O67A3aPREn",
@@ -23,9 +43,22 @@ const useful = (props) => {
   } else {
     material = null;
   }
-
   const me = useUser();
-  return <Useful me={me} id={props.query.id} material={material} />;
+  return (
+    <>
+      <h2>{t("h1")}</h2>
+      <button
+        onClick={(e) =>
+          router.push({ pathname, query }, asPath, {
+            locale: router.locale == "ru" ? "en" : "ru",
+          })
+        }
+      >
+        Change language
+      </button>
+      <Useful me={me} id={props.query.id} material={material} t={t} />;
+    </>
+  );
 };
 
 export default useful;

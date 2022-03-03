@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useTranslation } from "next-i18next";
 import { Typewriter, useTypewriter, Cursor } from "react-simple-typewriter";
 import styled from "styled-components";
 import smoothscroll from "smoothscroll-polyfill";
@@ -148,6 +149,7 @@ const Button = styled.div`
 const Phone = () => {
   const [clicked1, setClicked1] = useState(false);
   const [clicked2, setClicked2] = useState(false);
+  const { t } = useTranslation("landing");
 
   const handleType = (count) => {
     // access word count number
@@ -170,14 +172,11 @@ const Phone = () => {
       <div className="body">
         <div className="screen" id="screen">
           <Header>
-            <div className="name">Кейс 1</div>
+            <div className="name">{t("case")}</div>
             <div className="time">20:34</div>
           </Header>
           <Question>
-            <div className="bubble">
-              Чтобы решить этот кейс, нужно вспомнить признаки юр лица. Какие ты
-              помнишь?
-            </div>
+            <div className="bubble">{t("step1")}</div>
             <div className="image_box">
               <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80" />
             </div>
@@ -190,9 +189,7 @@ const Phone = () => {
               <p>
                 {/* Я думаю, что надо сначала посмотреть на */}
                 <Typewriter
-                  words={[
-                    "Наличие обособленного имущества, гражданско-правовая ответственность ... ",
-                  ]}
+                  words={[t("step2")]}
                   loop={1}
                   cursor
                   cursorStyle="_"
@@ -211,10 +208,7 @@ const Phone = () => {
 
           {clicked2 && (
             <Question>
-              <div className="bubble">
-                Хорошо, как тогда обособленное имущество связано с защитой
-                интересов кредиторов?
-              </div>
+              <div className="bubble">{t("step3")}</div>
               <div className="image_box">
                 <img src="https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=686&q=80" />
               </div>

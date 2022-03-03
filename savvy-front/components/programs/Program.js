@@ -2284,8 +2284,10 @@ const Program = (props) => {
     prog = programs[1];
   } else if (props.id == "english_professional") {
     prog = programs[2];
+  } else if (props.id == "start") {
+    prog = programs[4];
   } else {
-    prog = programs[3];
+    prog = programs[0];
   }
 
   return (

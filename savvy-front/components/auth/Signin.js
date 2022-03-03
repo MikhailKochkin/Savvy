@@ -3,10 +3,10 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
+import { useTranslation } from "next-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
-// import { withTranslation } from "../../i18n";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -95,6 +95,8 @@ const Signin = (props) => {
   const [password, setPassword] = useState("");
   const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
+  const { t } = useTranslation("nav");
+
   return (
     <Mutation
       mutation={SIGNIN_MUTATION}
@@ -112,11 +114,10 @@ const Signin = (props) => {
             props.closeNavBar(true);
             setPassword("");
             setEmail("");
-            console.log(res.data);
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>Войдите на BeSavvy</Title>
+            <Title>{t("join")}</Title>
             <Error error={error} />
             <Input
               type="email"
@@ -124,7 +125,7 @@ const Signin = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               id="standard-basic"
               name="email"
-              placeholder="Электронная почта"
+              placeholder={t("email")}
               label="Электронная почта"
             />
             <Input
@@ -132,7 +133,7 @@ const Signin = (props) => {
               name="password"
               label="Пароль"
               value={password}
-              placeholder="Пароль"
+              placeholder={t("password")}
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
@@ -141,17 +142,17 @@ const Signin = (props) => {
               color="primary"
               className={classes.button}
             >
-              {loading ? "Вхожу" : "Войти"}
+              {loading ? t("entering") : t("enter")}
             </Button>
             <Transit>
               <div>
                 <span name="reset" onClick={change}>
-                  Забыли пароль?
+                  {t("forgot_password")}
                 </span>
               </div>
-              Ещё не зарегистрированы?
+              {t("not_registered_yet")}{" "}
               <span name="signup" onClick={change}>
-                Зарегистрироваться
+                {t("sign_up")}
               </span>
             </Transit>
           </Fieldset>
@@ -161,7 +162,6 @@ const Signin = (props) => {
   );
 };
 
-// export default withTranslation("signup")(Signin);
 export default Signin;
 
 export { SIGNIN_MUTATION };

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Phone from "./Phone";
 import NewNav from "./NewNav";
 import ReactResizeDetector from "react-resize-detector";
-import { useResizeDetector } from "react-resize-detector";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100%;
@@ -193,10 +193,10 @@ const Buttons = styled.div`
 const Landing = (props) => {
   // const [width, setWidth] = useState(0);
   const [h, setH] = useState(0);
+  const { t } = useTranslation("landing");
 
   const onResize = (width, height) => {
     // setWidth(width);
-    console.log("height", height, width);
     let num = 0;
     if (height < 600) {
       num = 0;
@@ -229,14 +229,10 @@ const Landing = (props) => {
         <NewNav />
         <div className="container">
           <div className="text">
-            <h1>Мы обучаем юристов практическим навыкам</h1>
-            <div>
-              Больше 2500 юристов прошли наши курсы от экспертов из ЕПАМ, Алруд,
-              CMS, Clifford Chance, Eversheds Sutherland и других престижных
-              компаний.
-            </div>
+            <h1>{t("h1")}</h1>
+            <div>{t("h2")}</div>
             <Buttons>
-              <button onClick={(e) => slide()}>Посмотреть программы</button>
+              <button onClick={(e) => slide()}>{t("c2a")}</button>
             </Buttons>
           </div>
           <Phone />

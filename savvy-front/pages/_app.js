@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-// import Script from "next/script";
+import { appWithTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { ApolloProvider } from "@apollo/client";
 import Page from "../components/Page";
@@ -35,41 +35,6 @@ function MyApp({ Component, apollo, pageProps }) {
       s.async = 1;
       d.getElementsByTagName("head")[0].appendChild(s);
     })();
-    //   !(function () {
-    //     function t(t, e) {
-    //       return function () {
-    //         window.carrotquestasync.push(t, arguments);
-    //       };
-    //     }
-    //     if ("undefined" == typeof carrotquest) {
-    //       var e = document.createElement("script");
-    //       (e.type = "text/javascript"),
-    //         (e.async = !0),
-    //         (e.src = "//cdn.carrotquest.app/api.min.js"),
-    //         document.getElementsByTagName("head")[0].appendChild(e),
-    //         (window.carrotquest = {}),
-    //         (window.carrotquestasync = []),
-    //         (carrotquest.settings = {});
-    //       for (
-    //         var n = [
-    //             "connect",
-    //             "track",
-    //             "identify",
-    //             "auth",
-    //             "oth",
-    //             "onReady",
-    //             "addCallback",
-    //             "removeCallback",
-    //             "trackMessageInteraction",
-    //           ],
-    //           a = 0;
-    //         a < n.length;
-    //         a++
-    //       )
-    //         carrotquest[n[a]] = t(n[a]);
-    //     }
-    //   })(),
-    //     carrotquest.connect("46882-c19ef48fe94883ff348545ab97");
   });
 
   return (
@@ -91,4 +56,4 @@ MyApp.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default withData(MyApp);
+export default withData(appWithTranslation(MyApp));

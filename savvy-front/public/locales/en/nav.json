@@ -1,0 +1,16 @@
+{
+  "blog": "Blog",
+  "community": "Community",
+  "my_courses": "My courses",
+  "my_account": "My account",
+  "sign_out": "Sign out",
+  "login": "Login",
+  "sign_up": "Sign up",
+  "join": "Join BeSavvy",
+  "email": "Email",
+  "password": "Password",
+  "enter": "Log in",
+  "entering": "Logging in...",
+  "forgot_password": "Forgot your password?",
+  "not_registered_yet": "No account yet?"
+}

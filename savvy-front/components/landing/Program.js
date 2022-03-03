@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 const Card = styled.div`
   background: #ffffff;
@@ -106,6 +107,7 @@ const Down = styled.div`
 `;
 
 const Program = (props) => {
+  const { t } = useTranslation("landing");
   return (
     <Card>
       <Up>
@@ -118,7 +120,7 @@ const Program = (props) => {
         <div className="price">
           <div className="price_box">
             <div className="price_box_price">{props.price}</div>
-            <div className="price_box_description">Полная стоимость</div>
+            <div className="price_box_description">{t("full_price")}</div>
           </div>
           <div className="price_box">
             <div className="price_box_discount">{props.installments}</div>
@@ -131,7 +133,7 @@ const Program = (props) => {
             query: props.query,
           }}
         >
-          <button>Подробнее о программе</button>
+          <button>{t("learn_more")}</button>
         </Link>
       </Down>
     </Card>

@@ -1,7 +1,18 @@
 import Courses from "../components/course/Courses";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const Index = ({ t }) => {
-  return <Courses />;
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["landing", "nav"])),
+  },
+});
+
+const Index = () => {
+  return (
+    <>
+      <Courses />
+    </>
+  );
 };
 
 export default Index;

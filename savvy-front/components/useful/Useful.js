@@ -1,10 +1,12 @@
 import { useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 import { useMutation, gql } from "@apollo/client";
 import * as EmailValidator from "email-validator";
 import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import "react-phone-number-input/style.css";
 import ReactGA from "react-ga";
 import Signup from "../auth/Signup";
@@ -549,24 +551,32 @@ const Action = (props) => {
   const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const { asPath } = useRouter();
+  const router = useRouter();
+  const { t } = useTranslation("common");
 
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
 
-  // const [
-  //   createOrder,
-  //   { data: order_data, loading: loading_data, error: error_data },
-  // ] = useMutation(CREATE_ORDER_MUTATION);
+  console.log("router.locale", router.locale);
 
   const d = props.data;
   const { me, material } = props;
-
   return (
     <Styles id="c2a">
       <Container>
         <Form>
           <Contact>
             <div id="form_container">
+              <div>{router.locale}</div>
+              <Link href="/" locale={router.locale === "en" ? "ru" : "en"}>
+                <button
+                  onClick={(e) =>
+                    i18n.changeLanguage(router.locale === "en" ? "ru" : "en")
+                  }
+                >
+                  Сменить язык
+                </button>
+              </Link>
               <div className="h2">{material.header_text}</div>
               {step == "apply" && (
                 <>
