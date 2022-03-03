@@ -1930,7 +1930,7 @@ const Mutation = mutationType({
           },
         };
 
-        const payment = await checkout.createPayment(createPayload);
+        const payment = await community_checkout.createPayment(createPayload);
         // console.log(
         //   "payment",
         //   payment.id,
@@ -2588,14 +2588,12 @@ const Mutation = mutationType({
           subscription: stringArg(),
         },
         resolve: async (_, args, ctx) => {
-          console.log(1);
           // 1. Create new community member
           const communityMember = await ctx.prisma.communityMember.create({
             data: {
               ...args,
             },
           });
-          console.log(2);
 
           // 2. Generate payment link
 
@@ -2609,7 +2607,6 @@ const Mutation = mutationType({
             price = 5000;
             description = "год";
           }
-          console.log(3);
           const createPayload2 = {
             amount: {
               value: price,
@@ -2640,16 +2637,14 @@ const Mutation = mutationType({
             },
           };
 
-          console.log(4);
-
-          try {
-            const payment = await community_checkout.createPayment(
-              createPayload2
-            );
-            console.log("payment 1", payment);
-          } catch (error) {
-            console.error(error);
-          }
+          // try {
+          //   const payment = await community_checkout.createPayment(
+          //     createPayload2
+          //   );
+          //   console.log("payment 1", payment);
+          // } catch (error) {
+          //   console.error(error);
+          // }
 
           // try {
           const payment = await community_checkout.createPayment(
@@ -2671,7 +2666,6 @@ const Mutation = mutationType({
               `Новая заявка в сообщество. Вот данные: ${args.name} ${args.surname}, ${args.email}, ${args.number}, ${args.subscription}`
             ),
           });
-          console.log(6);
 
           return { url, communityMember };
         },
