@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import Router from "next/router";
-import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
 import moment from "moment";
 
 const CREATE_CERT_MUTATION = gql`
@@ -113,6 +112,7 @@ const Data = styled.div`
 const Certificate = (props) => {
   const [createCertificate, { data, loading, error }] =
     useMutation(CREATE_CERT_MUTATION);
+  const { t } = useTranslation("course");
 
   moment.locale("ru");
 
@@ -131,30 +131,30 @@ const Certificate = (props) => {
             Router.reload();
           }}
         >
-          Сгенерировать сертификат
+          Get your certificate
         </button>
       )}
       {props.have_cert && (
         <Outer>
           <Inner>
             <div className="bookmark"></div>
-            <h2>СЕРТИФИКАТ</h2>
-            <div>Этот сертификат подтверждает, что:</div>
+            <h2>{t("certificate")}</h2>
+            <div>{t("certify")}</div>
             <div className="name">
               {props.student.name} {props.student.surname}
             </div>
-            <div>успешно прошёл / прошла курс:</div>
+            <div>{t("completed")}</div>
             <div className="course">{props.coursePage.title}</div>
             <Data>
               <div className="left">
                 <div>ID: {props.certId}</div>
                 <div>
-                  Выдан {moment(props.createdAt).format("Do MMMM YYYY")} года{" "}
+                  {t("date")} {moment(props.createdAt).format("DD.MM.YY")}
                 </div>
               </div>
               <div className="right">
-                <div>Михаил Кочкин</div>
-                <div>Директор ООО БиСэвви</div>
+                <div>{t("mikhail")}</div>
+                <div>{t("lead_instructor")}</div>
               </div>
             </Data>
           </Inner>

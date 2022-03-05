@@ -3,10 +3,10 @@ import { Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
-import AddToCalendar from "react-add-to-calendar";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
+import { useTranslation } from "next-i18next";
 import LessonHeader from "../lesson/LessonHeader";
 import { useUser } from "../User";
 import FirstLesson from "./coursePageCards/FirstLesson";
@@ -163,8 +163,9 @@ const localizer = momentLocalizer(moment);
 const CoursePage = (props) => {
   const [page, setPage] = useState("lessons");
   const me = useUser();
+  const { t } = useTranslation("course");
+
   let my_reviews;
-  // my_reviews = Reviews.filter((r) => r.coursePage === props.id);
   my_reviews = [];
   let events = [
     {
@@ -317,7 +318,8 @@ const CoursePage = (props) => {
                             <div className="name">
                               <img src={a.image} />
                               <p>
-                                {a.name} {a.surname} из {a.company.name}
+                                {a.name} {a.surname} {t("from")}{" "}
+                                {a.company.name}
                               </p>
                             </div>
                           ))
@@ -398,21 +400,21 @@ const CoursePage = (props) => {
                           primary={page === "lessons"}
                           onClick={(e) => setPage("lessons")}
                         >
-                          Уроки
+                          {t("lessons")}
                         </Button>
                         <Button
                           primary={page === "feedback"}
                           onClick={(e) => setPage("feedback")}
                         >
-                          Обратная связь
+                          {t("feedback")}
                         </Button>
                       </Buttons>
                       {page === "lessons" && (
                         <>
                           <Total>
                             {" "}
-                            {/* {props.t("total")}  */}
-                            Всего уроков: {lessons.length}
+                            {t("total_lessons")}
+                            {lessons.length}
                           </Total>
                           <Lessons>
                             {[...coursePage.lessons]
@@ -449,7 +451,7 @@ const CoursePage = (props) => {
                             {me.studentFeedback.filter(
                               (f) => f.lesson.coursePage.id == coursePage.id
                             ).length === 0 ? (
-                              <p>Обратной связи нет</p>
+                              <p>Обратной связи нет {t("no_feedback_yet")}</p>
                             ) : null}
                             {me.studentFeedback
                               .filter(
@@ -460,11 +462,7 @@ const CoursePage = (props) => {
                               ))}
                           </>
                         ) : (
-                          <Comment>
-                            Зарегистрируйтесь на курс по продвинутому тарифу,
-                            чтобы получать обратную связь по выполненным
-                            заданиям.
-                          </Comment>
+                          <Comment>{t("join_the_course")}</Comment>
                         ))}
                     </LessonsInfo>
                     <Details>
@@ -473,36 +471,32 @@ const CoursePage = (props) => {
                       {data.coursePage.audience && (
                         <div className="info">
                           <div className="header">
-                            <span>Для кого этот курс</span>
+                            <span>{t("who_for")}</span>
                           </div>
                           <div>{renderHTML(data.coursePage.audience)}</div>
                         </div>
                       )}
                       {data.coursePage.video && data.coursePage.video !== "" && (
                         <Video>
-                          <div className="header">
-                            Посмотрите презентацию курса от его автора:
-                          </div>
+                          <div className="header">{t("presentation")}</div>
                           <iframe src={data.coursePage.video} allowFullScreen />
                         </Video>
                       )}
                       {data.coursePage.methods && (
                         <div className="info">
-                          <div className="header">Про автора курса</div>
+                          <div className="header">{t("author")}</div>
                           <div>{renderHTML(data.coursePage.methods)}</div>
                         </div>
                       )}
                       {data.coursePage.result && (
                         <div className="info">
-                          <div className="header">О программе</div>
+                          <div className="header">{t("about")}</div>
                           <div>{renderHTML(data.coursePage.result)}</div>
                         </div>
                       )}
                       {data.coursePage.batch && (
                         <div className="red">
-                          <div className="header">
-                            Информация о следующем живом потоке
-                          </div>
+                          <div className="header">{t("next_cohort")}</div>
                           {renderHTML(data.coursePage.batch)}
                         </div>
                       )}
@@ -510,7 +504,7 @@ const CoursePage = (props) => {
                     <Details>
                       {data.coursePage.tariffs && (
                         <div className="info">
-                          <div className="header">Тарифы</div>
+                          <div className="header">{t("tariffs")}</div>
                           <div>{renderHTML(data.coursePage.tariffs)}</div>
                         </div>
                       )}

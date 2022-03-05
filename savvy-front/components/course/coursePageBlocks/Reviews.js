@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100vw;
@@ -117,11 +118,13 @@ const Review = styled.div`
 `;
 
 const Reviews = (props) => {
+  const { t } = useTranslation("coursePage");
+
   const d = props.data;
   return (
     <Styles>
       <Container>
-        <h2>Отзывы участников</h2>
+        <h2>{t("Reviews")}</h2>
         <ReviewsList>
           {d.reviews.map((r, i) => (
             <Review key={i}>

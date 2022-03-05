@@ -2,7 +2,7 @@ import { useState } from "react";
 import LessonHeader from "./LessonHeader";
 import { useUser } from "../../User";
 import Feedback from "../Feedback";
-// import { withTranslation } from "../../../i18n";
+import { useTranslation } from "next-i18next";
 
 import {
   Container,
@@ -27,6 +27,8 @@ import {
 
 const CoursePage = (props) => {
   const [page, setPage] = useState("lessons");
+  const { t } = useTranslation("coursePage");
+
   const me = useUser();
   return (
     <>
@@ -35,33 +37,14 @@ const CoursePage = (props) => {
         <Container id="syllabus">
           <LessonStyles>
             <LessonsInfo>
-              <h1>Вот, что вы будете изучать </h1>
-              {/* <Buttons>
-                        <Button
-                          primary={page === "lessons"}
-                          onClick={(e) => setPage("lessons")}
-                        >
-                          Уроки
-                        </Button>
-                        <Button
-                          primary={page === "feedback"}
-                          onClick={(e) => setPage("feedback")}
-                        >
-                          Обратная связь
-                        </Button>
-                      </Buttons> */}
+              <h1>{t("what_u_will_learn")}</h1>
               {page === "lessons" && (
                 <>
+                  <Total> {t("open_lessons")}</Total>
                   <Total>
                     {" "}
                     {/* {props.t("total")}  */}
-                    Уроки, отмеченные замочком, можно посмотреть, если вы
-                    зарегистрируетесь на сайте.
-                  </Total>
-                  <Total>
-                    {" "}
-                    {/* {props.t("total")}  */}
-                    Всего уроков: {props.lessons.length}
+                    {t("total_lessons")} {props.lessons.length}
                   </Total>
                   <Lessons>
                     {[...props.lessons]
@@ -86,27 +69,6 @@ const CoursePage = (props) => {
                   </Lessons>
                 </>
               )}
-
-              {page === "feedback" &&
-                (me && isEnrolled ? (
-                  <>
-                    {me.studentFeedback.filter(
-                      (f) => f.lesson.coursePage.id == coursePage.id
-                    ).length === 0 ? (
-                      <p>Обратной связи нет</p>
-                    ) : null}
-                    {me.studentFeedback
-                      .filter((f) => f.lesson.coursePage.id == coursePage.id)
-                      .map((feedback) => (
-                        <Feedback feedback={feedback} />
-                      ))}
-                  </>
-                ) : (
-                  <Comment>
-                    Зарегистрируйтесь на курс по продвинутому тарифу, чтобы
-                    получать обратную связь по выполненным заданиям.
-                  </Comment>
-                ))}
             </LessonsInfo>
           </LessonStyles>
         </Container>

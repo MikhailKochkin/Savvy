@@ -48,9 +48,7 @@ const Signout = (props) => {
             const res = await signout();
           }}
         >
-          <a>Выйти</a>
-
-          {/* <a>{t("sign_out")}</a> */}
+          <a>{t("sign_out")}</a>
         </Button>
       )}
     </Mutation>

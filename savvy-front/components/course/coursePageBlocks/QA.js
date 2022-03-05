@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Question from "./Question";
 import Modal from "styled-react-modal";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100vw;
@@ -124,31 +125,14 @@ const StyledModal = Modal.styled`
   }
 `;
 
-const TeacherBox = styled.div``;
-
 const QA = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleModal = (e) => setIsOpen(!isOpen);
-
-  const [hasShown, setHasShown] = useState(false);
-
+  const { t } = useTranslation("coursePage");
   const nodeRef = useRef();
-
-  useEffect(() => {}, []);
-
-  const slide2 = () => {
-    var my_element = document.getElementById("c2a");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
 
   return (
     <Styles>
       <Container ref={nodeRef}>
-        <h2>Часто задаваемые вопросы</h2>
+        <h2>{t("faq")}</h2>
         <QuestionsList>
           {props.data.questions.map((m) => (
             <Question d={m} />

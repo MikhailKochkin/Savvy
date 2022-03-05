@@ -10,7 +10,7 @@ import ReactGA from "react-ga";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
-import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -42,6 +42,7 @@ const CREATE_CLIENT = gql`
     $name: String!
     $number: String!
     $type: String!
+    $communication_medium: String!
     $comment: String!
   ) {
     createBusinessClient(
@@ -49,6 +50,7 @@ const CREATE_CLIENT = gql`
       name: $name
       number: $number
       type: $type
+      communication_medium: $communication_medium
       comment: $comment
     ) {
       id
@@ -60,13 +62,12 @@ const Styles = styled.div`
   padding: 50px 0;
   min-height: 85vh;
   width: 100vw;
-  background: #74bcfe;
+  background-image: url("/static/pattern5.svg");
+  background-size: contain;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url("/static/pattern5.svg");
-  background-size: contain;
   @media (max-width: 800px) {
     height: auto;
     padding: 0;
@@ -109,6 +110,12 @@ const Description = styled.div`
     font-weight: 600;
     margin-bottom: 20px;
   }
+  #info {
+    div {
+      line-height: 1.4;
+      margin: 10px 0;
+    }
+  }
   #promo {
     margin-top: 10%;
     input {
@@ -122,8 +129,6 @@ const Description = styled.div`
     }
   }
   #details {
-    margin-top: 10%;
-
     font-size: 1.6rem;
     line-height: 1.4;
     width: 100%;
@@ -189,8 +194,9 @@ const Description = styled.div`
   }
   @media (max-width: 800px) {
     height: auto;
-    justify-content: space-around;
+    justify-content: space-between;
     min-height: 350px;
+    padding: 20px 0;
     width: 100%;
     min-width: 100px;
     margin-bottom: 40px;
@@ -516,31 +522,18 @@ const Action = (props) => {
   const [step, setStep] = useState("apply");
   const [price, setPrice] = useState(props.data.price.price);
   const [isPromo, setIsPromo] = useState(false);
+  const { t } = useTranslation("coursePage");
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
 
   const addPromo = (val) => {
     if (
-      val.toLowerCase() == "tax_first_five" &&
-      props.coursePage.id == "ckwue8197229091h1abn955mbe" &&
+      val.toLowerCase() == "school50" &&
+      props.data.price.course == "school" &&
       isPromo == false
     ) {
-      setPrice(price * 0.8);
-      setIsPromo(true);
-    } else if (
-      val.toLowerCase() == "vusvkv_10" &&
-      props.coursePage.id == "ckfy1q60a02f307281abcpgae" &&
-      isPromo == false
-    ) {
-      setPrice(price * 0.9);
-      setIsPromo(true);
-    } else if (
-      val.toLowerCase() == "valentines14" &&
-      props.coursePage.id == "ckum7fc9i644701hqtbnqalqgg" &&
-      isPromo == false
-    ) {
-      setPrice(price * 0.86);
+      setPrice(price * 0.5);
       setIsPromo(true);
     }
   };
@@ -568,12 +561,15 @@ const Action = (props) => {
         <Form>
           <Description>
             <div id="header">
-              <span>Стоимость обучения</span>
+              <span>{t("price")}</span>
+            </div>
+            <div id="info">
+              <div>{t("bonus")}</div>
+              <div>{t("refund")}</div>
             </div>
             <div id="details">
               <br />
               <div className="arrow"> {props.data.price.full_explain}</div>
-
               <div id="prices">
                 <div className="full">
                   <span> {numberWithSpaces(Math.ceil(price / 10))} ₽/мес</span>
@@ -584,13 +580,13 @@ const Action = (props) => {
               </div>
             </div>
             <div id="promo">
-              <div>Введите промокод</div>
+              <div>{t("apply_coupon")}</div>
               <input onChange={(e) => addPromo(e.target.value)} />
             </div>
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">Шаг 1. Выберите удобный вариант</div>
+              <div className="h2">{t("step1")}</div>
               <div className="variants">
                 <div
                   className="variants_form"
@@ -608,9 +604,9 @@ const Action = (props) => {
                       }}
                     />
                   </div>
-                  <label for="html">Оставить заявку на консультацию</label>
+                  <label for="html">{t("step1option1")}</label>
                 </div>
-                <div
+                {/* <div
                   className="variants_form"
                   onChange={(e) => {
                     setStep(e.target.value);
@@ -627,7 +623,7 @@ const Action = (props) => {
                     />
                   </div>
                   <label for="html">Купить курс в рассрочку</label>
-                </div>
+                </div> */}
 
                 <div className="variants_form">
                   <div>
@@ -636,18 +632,19 @@ const Action = (props) => {
                       value="buy"
                       checked={step == "buy"}
                       onChange={(e) => {
+                        console.log(e.target.value);
                         setStep(e.target.value);
                       }}
                     />
                   </div>
-                  <label for="html">Купить курс и начать обучение</label>
+                  <label for="html">{t("step1option2")}</label>
                 </div>
               </div>
               <div className="h2">
-                Шаг 2.
+                {t("step2")}
                 {step == "apply" && " Заполните заявку"}
                 {step == "buy" && " Оплатите курс"}
-                {step == "installments" && " Заявка на рассрочку"}
+                {/* {step == "installments" && " Заявка на рассрочку"} */}
               </div>
               {step == "apply" && (
                 <>
@@ -707,6 +704,7 @@ const Action = (props) => {
                               email,
                               name: name + " " + surname,
                               number,
+                              communication_medium: props.data.price.course,
                               comment: "Консультация",
                             },
                           });
@@ -801,6 +799,7 @@ const Action = (props) => {
                               email,
                               name: name + " " + surname,
                               number,
+                              communication_medium: props.data.price.course,
                               comment: "Рассрочка",
                             },
                           });
@@ -857,7 +856,7 @@ const Action = (props) => {
                         } else {
                           const res = await createOrder({
                             variables: {
-                              coursePageId: props.coursePage.id,
+                              coursePageId: "cjtreu3md00fp0897ga13aktp",
                               price: price,
                               userId: me.id,
                               comment: props.comment,
@@ -867,7 +866,7 @@ const Action = (props) => {
                         }
                       }}
                     >
-                      Купить курс
+                      {t("buy")}
                     </button>
                   )}
                   {loading_data && <button>Готовим покупку...</button>}

@@ -115,7 +115,7 @@ const Text = styled.div`
   .lesson_description {
     font-size: 1.4rem;
     line-height: 1.6;
-    height: 200px;
+    max-height: 180px;
     overflow-y: scroll;
     p {
       margin: 4px 0;

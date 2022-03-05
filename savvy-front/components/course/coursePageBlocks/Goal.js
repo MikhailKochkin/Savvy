@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { university } from "react-icons-kit/fa/university";
 import { graduationCap } from "react-icons-kit/fa/graduationCap";
-import { building } from "react-icons-kit/fa/building";
-
 import Icon from "react-icons-kit";
+import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100vw;
@@ -45,7 +44,7 @@ const Container = styled.div`
     h2 {
       line-height: 1.4;
       font-weight: 500;
-      font-size: 2.2rem;
+      font-size: 2.8rem;
     }
   }
   #goal_examples {
@@ -65,9 +64,17 @@ const Container = styled.div`
       .icon {
         margin-right: 20px;
         color: #327998;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
       }
+
       div {
         line-height: 1.2;
+        span {
+          font-size: 3.6rem;
+        }
       }
     }
   }
@@ -91,7 +98,10 @@ const Container = styled.div`
     }
   }
 `;
+
 const Goal = (props) => {
+  const { t } = useTranslation("coursePage");
+
   const slide = () => {
     var my_element = document.getElementById("c2a");
     my_element.scrollIntoView({
@@ -106,11 +116,18 @@ const Goal = (props) => {
       <Container>
         <div id="goal_message">
           <h2>
-            Вы получите новые знания. <br />
-            Новые навыки.
-            <br /> И новые знакомства с экспертами.
+            {d.goal_header ? (
+              renderHTML(d.goal_header)
+            ) : (
+              <>
+                Вы получите новые знания. <br />
+                Новые навыки.
+                <br /> И новые знакомства с экспертами.
+              </>
+            )}
           </h2>
-          <button onClick={(e) => slide()}>Участвовать</button>
+
+          <button onClick={(e) => slide()}>{t("get_started")}</button>
         </div>
         <div id="goal_examples">
           {d.goals.map((g) => (
@@ -118,7 +135,7 @@ const Goal = (props) => {
               <div className="icon">
                 <Icon size={25} icon={graduationCap} />
               </div>
-              <div>{g}</div>
+              <div>{renderHTML(g)}</div>
             </div>
           ))}
         </div>

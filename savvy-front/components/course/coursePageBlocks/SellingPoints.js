@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100vw;
@@ -106,15 +107,15 @@ const Point = styled.div`
 
 const SellingPoints = (props) => {
   const d = props.data;
+  const { t } = useTranslation("coursePage");
 
   return (
     <Styles>
       <Container>
-        <h2>Как проходит обучение</h2>
+        <h2>{t("program_includes")}</h2>
         <PointsBox>
           {d.sps.map((s, i) => (
             <Point>
-              {/* <Image src={s.image} width={200} height={200} /> */}
               <div className="number">{i + 1}</div>
               <div className="info">
                 <div className="header">{s.selling_point}</div>

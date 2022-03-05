@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useUser } from "../User";
-import Headline from "./coursePageBlocks/Headline";
+import ATF from "./coursePageBlocks/ATF";
 import Details from "./coursePageBlocks/Details";
 import Syllabus from "./coursePageBlocks/Syllabus";
 import SellingPoints from "./coursePageBlocks/SellingPoints";
@@ -1211,7 +1211,7 @@ const NewCoursePage = (props) => {
 
   return (
     <div>
-      <Headline data={prog} />
+      <ATF data={prog} />
       <div>
         <Details data={prog} />
         <Goal data={prog} />

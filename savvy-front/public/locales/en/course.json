@@ -1,0 +1,23 @@
+{
+  "from": "from",
+  "get_certificate": "Get your certificate",
+  "certificate": "CERTIFICATE OF COMPLETION",
+  "certify": "This is to certify that",
+  "completed": "has successfully completed the course",
+  "date": "Awarded On",
+  "mikhail": "Mikhail Kochkin",
+  "lead_instructor": "Lead Instructor",
+  "lessons": "Lessons",
+  "feedback": "Feedback",
+  "no_feedback_yet": "No feedback yet",
+  "join_the_course": "Join the course to get feedback",
+  "total_lessons": "Total lessons: ",
+  "minutes": "min",
+  "open": "Open",
+  "who_for": "Who is this course for?",
+  "presentation": "Check out the presentation of the course",
+  "author": "Meet the authors",
+  "about": "About the program",
+  "next_cohort": "Next cohort",
+  "tariffs": "Tariffs"
+}

@@ -3,6 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
@@ -272,7 +273,8 @@ const ToggleQuestion = styled.div`
 
 const LessonHeader = (props) => {
   const [published, setPublished] = useState(props.lesson.published);
-  const [reveal, setReveal] = useState(false);
+  // const [reveal, setReveal] = useState(false);
+  const { t } = useTranslation("course");
 
   const [createLessonResult, { create_data }] = useMutation(
     CREATE_LESSONRESULT_MUTATION
@@ -343,11 +345,11 @@ const LessonHeader = (props) => {
   return (
     <>
       <TextBar color={color}>
-        {/* <div className="emoji">😉</div> */}
         <div>
           <Text>
             <div className="lesson_name">
-              {lesson.number}. {name} – {need_response.length}
+              {lesson.number}. {name}{" "}
+              {me && <span>– {need_response.length}</span>}
             </div>
             <div className="lesson_description">
               {lesson.description &&
@@ -356,7 +358,9 @@ const LessonHeader = (props) => {
           </Text>
         </div>
         <div>
-          <Time>{time} мин.</Time>
+          <Time>
+            {time} {t("minutes")}
+          </Time>
           <Buttons>
             {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
               <>
@@ -405,7 +409,7 @@ const LessonHeader = (props) => {
                   }}
                 >
                   <A>
-                    <Button>Начать</Button>
+                    <Button>{t("open")}</Button>
                   </A>
                 </Link>
               )}
@@ -553,21 +557,11 @@ const LessonHeader = (props) => {
                         }
                       }}
                     >
-                      {/* {props.t("start")} */}
-                      Начать
+                      {t("open")}
                     </Button>
                   </A>
                 </Link>
               )}
-
-            {/* {me &&
-            lesson &&
-            me.id !== lesson.user.id &&
-            new_students.includes(me.id) &&
-            !me.permissions.includes("ADMIN") &&
-            !published ? (
-              <InProgress>В разработке</InProgress>
-            ) : null} */}
           </Buttons>
         </div>
       </TextBar>

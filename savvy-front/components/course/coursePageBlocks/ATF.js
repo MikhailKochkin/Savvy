@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-// import Image from "next/image";
+import { useTranslation } from "next-i18next";
 import renderHTML from "react-render-html";
+import { useRouter } from "next/router";
 
 const BImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
@@ -170,11 +171,14 @@ const TimeLeft = styled.div`
   }
 `;
 
-const Headline = (props) => {
+const ATF = (props) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const { t } = useTranslation("coursePage");
+  const router = useRouter();
+
   const d = props.data;
   useEffect(() => {
     const interval = setInterval(() => {
@@ -203,6 +207,16 @@ const Headline = (props) => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const getEngNoun = (number, one, two) => {
+    let n = Math.abs(number);
+    if (n == 1) {
+      return one;
+    }
+    if (n > 1) {
+      return two;
+    }
+  };
 
   const getNoun = (number, one, two, five) => {
     let n = Math.abs(number);
@@ -247,10 +261,10 @@ const Headline = (props) => {
             <h2>{d.subheader}</h2>
             <Buttons>
               <button id="syl_button" onClick={(e) => slide()}>
-                Смотреть Программу
+                {t("syllabus")}
               </button>
               <button id="buy_button" onClick={(e) => slide2()}>
-                Начать учиться
+                {t("enroll")}
               </button>
             </Buttons>
             <TimeLeft>
@@ -258,27 +272,33 @@ const Headline = (props) => {
                 <div className="clock_section">
                   <div className="clock_time">{days}</div>
                   <div className="clock_name">
-                    {getNoun(days, "день", "дня", "дней")}
+                    {router.locale == "en"
+                      ? getEngNoun(days, "day", "days")
+                      : getNoun(days, "день", "дня", "дней")}
                   </div>
                 </div>
                 <div className="clock_section">
                   <div className="clock_time">{hours}</div>
                   <div className="clock_name">
-                    {getNoun(hours, "час", "часа", "часов")}
+                    {router.locale == "en"
+                      ? getEngNoun(days, "hour", "hours")
+                      : getNoun(hours, "час", "часа", "часов")}
                   </div>
                 </div>
                 <div className="clock_section">
                   <div className="clock_time">{minutes}</div>
                   <div className="clock_name">
-                    {" "}
-                    {getNoun(minutes, "минута", "минуты", "минут")}
+                    {router.locale == "en"
+                      ? getEngNoun(minutes, "minute", "minutes")
+                      : getNoun(minutes, "минута", "минуты", "минут")}
                   </div>
                 </div>
                 <div className="clock_section">
                   <div className="clock_time">{seconds}</div>
                   <div className="clock_name">
-                    {" "}
-                    {getNoun(seconds, "секунда", "секунды", "секунд")}
+                    {router.locale == "en"
+                      ? getEngNoun(seconds, "second", "seconds")
+                      : getNoun(seconds, "секунда", "секунды", "секунд")}
                   </div>
                 </div>
               </div>
@@ -290,4 +310,4 @@ const Headline = (props) => {
   );
 };
 
-export default Headline;
+export default ATF;

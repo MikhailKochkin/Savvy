@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100vw;
@@ -60,18 +61,19 @@ const Section = styled.div`
 `;
 
 const Details = (props) => {
+  const { t } = useTranslation("landing");
   const d = props.data;
 
   return (
     <Styles>
       <Container>
         <Section>
-          <div className="name">Длительность</div>
+          <div className="name">{t("time")}</div>
           <div className="main">{d.length1}</div>
           <div className="secondary">{d.length2}</div>
         </Section>
         <Section>
-          <div className="name">Старт</div>
+          <div className="name">{t("enroll_by")}</div>
           <div className="main">{d.start}</div>
           <div className="secondary">
             {d.start_comment
@@ -80,7 +82,7 @@ const Details = (props) => {
           </div>
         </Section>
         <Section>
-          <div className="name">Подготовка</div>
+          <div className="name">{t("prerequisites")}</div>
           <div className="main">{d.prior_klnowledge_1}</div>
           <div className="secondary">{d.prior_klnowledge_2}</div>
         </Section>

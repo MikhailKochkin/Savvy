@@ -2555,25 +2555,25 @@ const Mutation = mutationType({
             `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
           ),
         });
-        if (args.communication_medium == "english") {
-          console.log(1);
+        // if (args.communication_medium == "english") {
+        //   console.log(1);
 
-          const newEmail3 = await client.sendEmail({
-            From: "aliona@besavvy.app",
-            To: args.email,
-            Subject: "Открытые уроки по юр английскому",
-            HtmlBody: Demo_eng.Demo_eng(),
-          });
-        } else {
-          console.log(2);
+        //   const newEmail3 = await client.sendEmail({
+        //     From: "aliona@besavvy.app",
+        //     To: args.email,
+        //     Subject: "Открытые уроки по юр английскому",
+        //     HtmlBody: Demo_eng.Demo_eng(),
+        //   });
+        // } else {
+        //   console.log(2);
 
-          const newEmail4 = await client.sendEmail({
-            From: "aliona@besavvy.app",
-            To: args.email,
-            Subject: "Открытые уроки Школы Молодого Юриста",
-            HtmlBody: Demo_school.Demo_school(),
-          });
-        }
+        //   const newEmail4 = await client.sendEmail({
+        //     From: "aliona@besavvy.app",
+        //     To: args.email,
+        //     Subject: "Открытые уроки Школы Молодого Юриста",
+        //     HtmlBody: Demo_school.Demo_school(),
+        //   });
+        // }
 
         return new_client;
       },
