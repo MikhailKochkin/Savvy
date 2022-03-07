@@ -27,7 +27,7 @@ const useful = (props) => {
         "Поговорим про сложности юр письма: цифры, источники права и так далее",
         "Разберем деловые темы, которые встречаются в работе юриста: нефтегаз, IT и так далее",
       ],
-      image_url: "/static/book.png",
+      image_url: "/static/book.webp",
       button_text: "Скачать пособие",
       header_text: "Получите пособие по юр английскому",
       material_type: "english_student_book_main",

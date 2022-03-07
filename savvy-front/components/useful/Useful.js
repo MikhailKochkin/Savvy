@@ -557,8 +557,6 @@ const Action = (props) => {
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
 
-  console.log("router.locale", router.locale);
-
   const d = props.data;
   const { me, material } = props;
   return (
