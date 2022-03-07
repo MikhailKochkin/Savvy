@@ -1417,6 +1417,7 @@ export interface NexusGenInputs {
   }
   StatementWhereInput: { // input type
     AND?: NexusGenInputs['StatementWhereInput'][] | null; // [StatementWhereInput!]
+    answered?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     comments?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     forum?: NexusGenInputs['ForumWhereInput'] | null; // ForumWhereInput
@@ -2169,6 +2170,7 @@ export interface NexusGenObjects {
     message?: string | null; // String
   }
   Statement: { // root type
+    answered?: boolean | null; // Boolean
     comments: string[]; // [String!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     forumId?: string | null; // String
@@ -2638,6 +2640,7 @@ export interface NexusGenFieldTypes {
     updateRating: NexusGenRootTypes['Rating'] | null; // Rating
     updateShot: NexusGenRootTypes['Shot'] | null; // Shot
     updateStatement: NexusGenRootTypes['Statement'] | null; // Statement
+    updateStatementChecked: NexusGenRootTypes['Statement'] | null; // Statement
     updateTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     updateUser: NexusGenRootTypes['User'] | null; // User
   }
@@ -2842,6 +2845,7 @@ export interface NexusGenFieldTypes {
     message: string | null; // String
   }
   Statement: { // field return type
+    answered: boolean | null; // Boolean
     comments: string[]; // [String!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     forum: NexusGenRootTypes['Forum'] | null; // Forum
@@ -3329,6 +3333,7 @@ export interface NexusGenFieldTypeNames {
     updateRating: 'Rating'
     updateShot: 'Shot'
     updateStatement: 'Statement'
+    updateStatementChecked: 'Statement'
     updateTextEditor: 'TextEditor'
     updateUser: 'User'
   }
@@ -3533,6 +3538,7 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
   }
   Statement: { // field return type name
+    answered: 'Boolean'
     comments: 'String'
     createdAt: 'DateTime'
     forum: 'Forum'
@@ -4269,6 +4275,10 @@ export interface NexusGenArgTypes {
     }
     updateStatement: { // args
       comments?: Array<string | null> | null; // [String]
+      id?: string | null; // String
+    }
+    updateStatementChecked: { // args
+      answered?: boolean | null; // Boolean
       id?: string | null; // String
     }
     updateTextEditor: { // args

@@ -1,0 +1,18 @@
+{
+  "lesson": "Lesson",
+  "switch": "Switch",
+  "update": "Update",
+  "back": "Back",
+  "choose_option": "Choose at least one option",
+  "check": "Check",
+  "show_correct": "Want to see the correct answer?",
+  "outline_color": "We have outlined the correct answers with green color. Take a look at the question.",
+  "correct": "Well done",
+  "wrong": "Not exactly",
+  "correct_answer": "Correct answer",
+  "yes": "Yes",
+  "enter": "Log in",
+  "entering": "Logging in...",
+  "forgot_password": "Forgot your password?",
+  "not_registered_yet": "No account yet?"
+}

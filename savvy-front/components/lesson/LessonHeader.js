@@ -273,7 +273,6 @@ const ToggleQuestion = styled.div`
 
 const LessonHeader = (props) => {
   const [published, setPublished] = useState(props.lesson.published);
-  // const [reveal, setReveal] = useState(false);
   const { t } = useTranslation("course");
 
   const [createLessonResult, { create_data }] = useMutation(

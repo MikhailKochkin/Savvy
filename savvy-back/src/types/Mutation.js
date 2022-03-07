@@ -1545,7 +1545,6 @@ const Mutation = mutationType({
       type: "Statement",
       args: {
         id: stringArg(),
-        // text: stringArg(),
         comments: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
@@ -1581,6 +1580,28 @@ const Mutation = mutationType({
             comments: {
               set: [...args.comments],
             },
+          },
+          where: {
+            id: args.id,
+          },
+        });
+      },
+    });
+    t.field("updateStatementChecked", {
+      type: "Statement",
+      args: {
+        id: stringArg(),
+        answered: booleanArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        //remove the ID from updates
+        delete updates.id;
+        //run the update method
+
+        return ctx.prisma.statement.update({
+          data: {
+            answered: args.answered,
           },
           where: {
             id: args.id,

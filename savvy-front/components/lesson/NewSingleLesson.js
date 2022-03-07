@@ -7,6 +7,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Icon } from "react-icons-kit";
 import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { CSSTransitionGroup } from "react-transition-group";
+import { useTranslation } from "next-i18next";
+
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
@@ -342,6 +344,8 @@ const LessonPart = styled.div`
 
 const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
+  const { t } = useTranslation("lesson");
+
   const onResize = (width) => setWidth(width);
   const me = useUser();
   const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
@@ -409,7 +413,7 @@ const NewSingleLesson = (props) => {
                             },
                           }}
                         >
-                          <span>Переключить</span>
+                          <span>{t("switch")}</span>
                         </Link>
                       </div>
                     )}
@@ -417,10 +421,9 @@ const NewSingleLesson = (props) => {
               </Head>
               <LessonPart>
                 <h1>
-                  Урок {lesson.number}. {lesson.name}
+                  {t("lesson")} {lesson.number}. {lesson.name}
                 </h1>
                 <CSSTransitionGroup transitionName="example">
-                  {console.log("props", props)}
                   <StoryEx
                     tasks={
                       props.add == "offer"

@@ -177,6 +177,7 @@ const Statement = objectType({
     t.model.comments();
     t.model.user();
     t.model.userId();
+    t.model.answered();
     t.model.forumId();
     t.model.forum();
     t.model.createdAt();

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -578,7 +578,7 @@ model Statement {
   userId    String?
   forumId   String?
   comments  String[]
-  answered  Boolean? @default(false)
+  answered  Boolean?
   forum     Forum?   @relation(fields: [forumId], references: [id])
   user      User?    @relation(fields: [userId], references: [id])
 }

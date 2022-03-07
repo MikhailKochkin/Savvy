@@ -74,6 +74,12 @@ const COURSEPAGE_QUERY = gql`
           next
         }
         forum {
+          id
+          text
+          lesson {
+            id
+            name
+          }
           rating {
             id
             rating
@@ -84,23 +90,37 @@ const COURSEPAGE_QUERY = gql`
               surname
             }
           }
+          statements {
+            id
+            text
+            createdAt
+            answered
+            comments
+            user {
+              id
+              name
+              surname
+            }
+            forum {
+              id
+              rating {
+                id
+                rating
+              }
+            }
+          }
+          # lesson {
+          #   id
+          #   user {
+          #     id
+          #   }
+          # }
+          # user {
+          #   id
+          #   name
+          #   surname
+          # }
         }
-        # documents {
-        #   id
-        #   title
-        #   documentResults {
-        #     id
-        #     user {
-        #       id
-        #     }
-        #     document {
-        #       id
-        #     }
-        #     answers
-        #     drafts
-        #     createdAt
-        #   }
-        # }
         notes {
           id
           text
@@ -127,9 +147,6 @@ const COURSEPAGE_QUERY = gql`
           id
           title
         }
-        # user {
-        #   id
-        # }
       }
     }
   }
@@ -141,6 +158,7 @@ const Progress = (props) => {
   });
   if (loading) return <p>Загрузка...</p>;
   let coursePage = data.coursePage;
+
   return (
     <Styles>
       <Container>

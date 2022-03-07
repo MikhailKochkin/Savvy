@@ -3,15 +3,14 @@ import Link from "next/link";
 import Modal from "styled-react-modal";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-
 import ReactResizeDetector from "react-resize-detector";
+import { useTranslation } from "next-i18next";
+
 import { useUser } from "./User";
 import Signup from "./auth/Signup";
 import Signin from "./auth/Signin";
 import RequestReset from "./auth/RequestReset";
 import Signout from "./auth/Signout";
-// import { IoMdMenu } from "react-icons/io";
-// import { i18n, withTranslation } from "../i18n";
 
 const SideMenu = styled.div`
   /* The side navigation menu */
@@ -254,6 +253,9 @@ const Nav = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
   const router = useRouter();
+  const { pathname, asPath, query } = router;
+  const { t } = useTranslation("nav");
+
   const onResize = (width) => {
     setWidth(width);
   };
@@ -290,7 +292,7 @@ const Nav = (props) => {
               <UserData>
                 <Link href="/blog">
                   <div className="blog">
-                    <a>📚 Блог</a>
+                    <a>{t("blog")}</a>
                   </div>
                 </Link>
                 {me &&
@@ -299,24 +301,32 @@ const Nav = (props) => {
                   me.status !== "LAWYER" && (
                     <Link href="/educator">
                       <div className="my">
-                        <a>Мои курсы</a>
+                        <a>{t("my_courses")}</a>
                       </div>
                     </Link>
                   )}
-                {/* <div className="imgGroup">
+                <div className="imgGroup">
                   <div className="img">
                     <img
                       src="../../static/uk.svg"
-                      onClick={() => i18n.changeLanguage("en")}
+                      onClick={(e) =>
+                        router.push({ pathname, query }, asPath, {
+                          locale: "en",
+                        })
+                      }
                     />
                   </div>
                   <div className="img">
                     <img
                       src="../../static/russia.svg"
-                      onClick={() => i18n.changeLanguage("ru")}
+                      onClick={(e) =>
+                        router.push({ pathname, query }, asPath, {
+                          locale: "ru",
+                        })
+                      }
                     />
                   </div>
-                </div> */}
+                </div>
                 {me && (
                   <Link
                     href={{
@@ -324,7 +334,7 @@ const Nav = (props) => {
                       query: { id: me.id },
                     }}
                   >
-                    <a className="name">Личный кабинет</a>
+                    <a className="name">{t("my_account")}</a>
                   </Link>
                 )}
                 {me ? (
@@ -346,7 +356,7 @@ const Nav = (props) => {
                   <Signout />
                 ) : (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>Войти</a>
+                    <a>{t("login")}</a>
                   </Button>
                 )}
               </UserData>
@@ -369,9 +379,7 @@ const Nav = (props) => {
         {width < 800 && (
           <>
             <StyledHeader>
-              <Span onClick={(e) => openNav()}>
-                {/* <IoMdMenu size={32} /> */}Меню
-              </Span>
+              <Span onClick={(e) => openNav()}>{t("menu")}</Span>
               <div className="logo">
                 {me ? (
                   <Link
@@ -387,7 +395,7 @@ const Nav = (props) => {
                 ) : null}
                 {!me && (
                   <Button onClick={(e) => toggleModal()}>
-                    <a>Войти</a>
+                    <a>{t("login")}</a>
                   </Button>
                 )}
               </div>
@@ -411,20 +419,14 @@ const Nav = (props) => {
                 {me && me.status === "AUTHOR" && (
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>
-                      <a>
-                        {/* {props.t("my")} */}
-                        Мои курсы
-                      </a>
+                      <a>{t("my_courses")}</a>
                     </button>
                   </Link>
                 )}
                 {me && me.status === "SAVVY_AUTHOR" && (
                   <Link href="/educator">
                     <button onClick={(e) => closeNav()}>
-                      <a>
-                        {/* {props.t("my")} */}
-                        Мои курсы
-                      </a>
+                      <a>{t("my_courses")}</a>
                     </button>
                   </Link>
                 )}
@@ -434,7 +436,7 @@ const Nav = (props) => {
                   }}
                 >
                   <button onClick={(e) => closeNav()}>
-                    <a>📚 Блог</a>
+                    <a>{t("blog")}</a>
                   </button>
                 </Link>
                 {me && (
@@ -444,7 +446,7 @@ const Nav = (props) => {
                       query: { id: me.id },
                     }}
                   >
-                    <a className="name">Личный кабинет</a>
+                    <a className="name">{t("my_account")}</a>
                   </Link>
                 )}
                 {me ? <Signout /> : null}

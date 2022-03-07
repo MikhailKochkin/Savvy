@@ -5,6 +5,8 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { useTranslation } from "next-i18next";
+
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
 import renderHTML from "react-render-html";
@@ -260,6 +262,8 @@ const SingleQuiz = (props) => {
   const [progress, setProgress] = useState("false");
   const [inputColor, setInputColor] = useState("#f3f3f3");
 
+  const { t } = useTranslation("lesson");
+
   const onAnswer = async (e) => {
     setProgress("true");
     let data1 = {
@@ -424,7 +428,7 @@ const SingleQuiz = (props) => {
           <Buttons>
             {!exam && !story && (
               <StyledButton onClick={(e) => setUpdate(!update)}>
-                {!update ? "Изменить" : "Назад"}
+                {!update ? t("update") : t("back")}
               </StyledButton>
             )}
             {me && !props.exam && !props.story ? (
@@ -490,9 +494,9 @@ const SingleQuiz = (props) => {
                 {correct === "true" && (
                   <div className="question">
                     <div className="question_text">
-                      {!props.type != "FORM" && "Правильно"}!{" "}
+                      {!props.type != "FORM" && t("correct")}!{" "}
                       {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
-                      {!props.type != "FORM" && "Показать правильный ответ?"}
+                      {!props.type != "FORM" && t("show_correct")}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -509,7 +513,7 @@ const SingleQuiz = (props) => {
                 {correct === "false" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.type != "FORM" && "Не совсем" + "..."}
+                      {props.type != "FORM" && t("wrong") + "..."}
                       {ifWrong &&
                         ifWrong !== "<p></p>" &&
                         renderHTML(ifWrong)}{" "}
@@ -517,7 +521,7 @@ const SingleQuiz = (props) => {
                         hint !== 0 &&
                         props.type != "FORM" &&
                         hint}
-                      {props.type != "FORM" && "Показать правильный ответ?"}
+                      {props.type != "FORM" && t("show_correct")}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -531,38 +535,6 @@ const SingleQuiz = (props) => {
                     </IconBlock>
                   </div>
                 )}
-                {/* {correct === "true" && (
-                  <div className="question">
-                    <div className="question_text">{props.t("correct")}!</div>
-                    <div className="question_name">{author_name}</div>
-                  </div>
-                )}
-                {correct === "true" && ifRight && ifRight !== "<p></p>" && (
-                  <div className="question">
-                    <div className="question_text">{renderHTML(ifRight)}</div>
-                    <div className="question_name">{author_name}</div>
-                  </div>
-                )}
-                {correct === "false" && (
-                  <div className="question">
-                    <div className="question_text">{props.t("wrong")}...</div>
-                    <div className="question_name">{author_name}</div>
-                  </div>
-                )}
-                {hint !== null && hint !== 0 && (
-                  <div className="question">
-                    <div className="question_text">
-                      {("Есть один комментарий. ", hint)}
-                    </div>
-                    <div className="question_name">{author_name}</div>
-                  </div>
-                )}
-                {correct === "false" && ifWrong && ifWrong !== "<p></p>" && (
-                  <div className="question">
-                    <div className="question_text">{renderHTML(ifWrong)}</div>
-                    <div className="question_name">{author_name}</div>
-                  </div>
-                )}*/}
                 {correct !== "" && props.type != "FORM" && (
                   <>
                     <div className="answer">
@@ -582,7 +554,7 @@ const SingleQuiz = (props) => {
                 {!hidden && (
                   <div className="question">
                     <div className="question_text">
-                      {"Правильный ответ"}: {renderHTML(props.answer)}
+                      {t("correct_answer")}: {renderHTML(props.answer)}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (

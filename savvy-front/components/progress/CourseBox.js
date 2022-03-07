@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import * as _ from "lodash";
 import UserAnalytics from "../stats/UserAnalytics";
+import Questions from "./Questions";
 
 const Box = styled.div`
   margin: 10px 0;
@@ -17,6 +18,8 @@ const CourseBox = (props) => {
   moment.locale("ru");
   let two_months_ago = new Date();
   two_months_ago.setMonth(two_months_ago.getMonth() - 2);
+  console.log(two_months_ago);
+
   let c = props.c;
   let coursePageID = props.c.id;
   let forums = [];
@@ -27,8 +30,11 @@ const CourseBox = (props) => {
   let last_ratings2 = [];
   if (c && c.lessons) {
     c.lessons.map((l) => forums.push(l.forum ? [...l.forum.rating] : null));
+
     forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
+
     forums.map((f) => f.map((r) => ratings.push(r.rating)));
+
     forums.map((f) =>
       f.map((r) => {
         if (r.createdAt > moment(two_months_ago).format()) {
@@ -38,6 +44,7 @@ const CourseBox = (props) => {
     );
 
     average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
+
     last_average = (
       last_ratings2.reduce((a, b) => a + b, 0) / last_ratings2.length
     ).toFixed(2);
@@ -45,7 +52,6 @@ const CourseBox = (props) => {
   let sorted_ratings = last_ratings.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
-
   let comments = [];
   //   forums.map((f) => f.statements.map((s) => comments.push(s)));
   let students = c.new_students;
@@ -66,7 +72,6 @@ const CourseBox = (props) => {
   );
   let sorted = d.sort((a, b) => b.date - a.date);
   let fresh = sorted.slice(0, 40);
-
   return (
     <Box>
       <div>
@@ -99,6 +104,7 @@ const CourseBox = (props) => {
           ))}
       </div>
       <div>Недавние студенты:</div>
+      <Questions c={c} />
       <div>
         <UserAnalytics
           coursePageID={coursePageID}

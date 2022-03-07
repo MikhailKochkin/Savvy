@@ -1,6 +1,13 @@
 import SingleLesson from "../components/lesson/SingleLesson";
 import Challenge from "../components/lesson/challenge/Challenge";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["lesson", "nav"])),
+  },
+});
 
 const DynamicNewSingleLesson = dynamic(
   import("../components/lesson/NewSingleLesson"),
@@ -22,9 +29,5 @@ const LessonPage = (props) => (
     {props.query.type === "challenge" && <Challenge id={props.query.id} />}
   </div>
 );
-
-// LessonPage.getInitialProps = async () => ({
-//   namespacesRequired: ["story", "draft", "update"],
-// });
 
 export default LessonPage;

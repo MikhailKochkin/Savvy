@@ -6,6 +6,8 @@ import _ from "lodash";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
+
 import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
@@ -260,6 +262,8 @@ const SingleTest = (props) => {
   const [hidden, setHidden] = useState(true);
   const [reveal, setReveal] = useState("");
 
+  const { t } = useTranslation("lesson");
+
   const getTestData = (number, answer) => {
     handleAnswerSelected(number, answer);
   };
@@ -388,7 +392,7 @@ const SingleTest = (props) => {
     <Styles width={width}>
       {!exam && story !== true && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {!update ? "Изменить" : "Назад"}
+          {!update ? t("update") : t("back")}
         </StyledButton>
       )}
       {me && !story && !exam && (
@@ -434,7 +438,7 @@ const SingleTest = (props) => {
           </div>
           {zero && (
             <div className="question">
-              <div className="question_text">Выберите хотя бы один вариант</div>
+              <div className="question_text">{t("choose_option")}</div>
               <IconBlock>
                 {author && author.image != null ? (
                   <img className="icon" src={author.image} />
@@ -506,14 +510,14 @@ const SingleTest = (props) => {
                     }
                   }}
                 >
-                  Проверить
+                  {t("check")}
                 </MiniButton>
               )}
             </Mutation>
           </Group>
           {zero && (
             <div className="question">
-              <div className="question_text">Выберите хотя бы один вариант</div>
+              <div className="question_text">{с}</div>
               <IconBlock>
                 {author && author.image != null ? (
                   <img className="icon" src={author.image} />
@@ -529,7 +533,7 @@ const SingleTest = (props) => {
           {answerState === "right" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.type != "FORM" && "Правильно!"}
+                {props.type != "FORM" && t("correct") + "!"}
                 {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
               </div>
               <IconBlock>
@@ -547,7 +551,7 @@ const SingleTest = (props) => {
           {answerState === "wrong" && (
             <Question inputColor={inputColor}>
               <div className="question_text">
-                {props.type != "FORM" && "Не совсем..."}
+                {props.type != "FORM" && t("wrong") + "..."}
                 {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
               </div>
               <IconBlock>
@@ -565,7 +569,7 @@ const SingleTest = (props) => {
           {answerState == "wrong" && (
             <>
               <div className="question">
-                <div className="question_text">Показать правильный ответ?</div>
+                <div className="question_text">{t("show_correct")}</div>
                 <IconBlock>
                   {author && author.image != null ? (
                     <img className="icon" src={author.image} />
@@ -584,18 +588,12 @@ const SingleTest = (props) => {
                   <div className="name">{me.name}</div>
                 </IconBlock>{" "}
                 <OptionsGroup>
-                  <Option onClick={(e) => setHidden(false)}>Да</Option>
-                  {/* <Option onClick={(e) => setHidden(true)}>
-                    {props.t("no")}
-                  </Option> */}
+                  <Option onClick={(e) => setHidden(false)}>{t("yes")}</Option>
                 </OptionsGroup>
               </div>
               {hidden == false && (
                 <div className="question">
-                  <div className="question_text">
-                    Мы подсветили зеленым правильные варианты ответа. Посмотри
-                    на первоначальный вопрос.
-                  </div>
+                  <div className="question_text">{t("outline_color")}</div>
                   <IconBlock>
                     {author && author.image != null ? (
                       <img className="icon" src={author.image} />

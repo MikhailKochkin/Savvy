@@ -567,16 +567,6 @@ const Action = (props) => {
         <Form>
           <Contact>
             <div id="form_container">
-              <div>{router.locale}</div>
-              <Link href="/" locale={router.locale === "en" ? "ru" : "en"}>
-                <button
-                  onClick={(e) =>
-                    i18n.changeLanguage(router.locale === "en" ? "ru" : "en")
-                  }
-                >
-                  Сменить язык
-                </button>
-              </Link>
               <div className="h2">{material.header_text}</div>
               {step == "apply" && (
                 <>
