@@ -1646,6 +1646,7 @@ type Post {
   createdAt: DateTime!
   id: String!
   image: String
+  language: String
   likes: Int
   summary: String
   tags: [String!]!
@@ -1666,6 +1667,7 @@ input PostOrderByInput {
   createdAt: SortOrder
   id: SortOrder
   image: SortOrder
+  language: SortOrder
   likes: SortOrder
   summary: SortOrder
   tags: SortOrder
@@ -1681,6 +1683,7 @@ input PostWhereInput {
   createdAt: DateTimeFilter
   id: StringFilter
   image: StringNullableFilter
+  language: StringNullableFilter
   likes: IntNullableFilter
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]

@@ -1,8 +1,10 @@
 import { Query } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
 import CreatePost from "./CreatePost";
-import Post from "./Post";
 import PostCard from "./PostCard";
 
 const POSTS_QUERY = gql`
@@ -12,6 +14,7 @@ const POSTS_QUERY = gql`
       title
       text
       tags
+      language
       summary
       image
       likes
@@ -100,20 +103,24 @@ const Posts = styled.div`
 `;
 
 const Blog = (props) => {
+  const { t } = useTranslation("blog");
+  const router = useRouter();
+
   return (
     <Styles>
       <Container>
         <Posts>
           <h1>The BeSavvy Blog</h1>
-          <h2>
-            Мы пишем про то, как эффективно учиться и строить карьеру юриста
-          </h2>
+          <h2>{t("h2")}</h2>
           <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
               if (loading) return <p>Загрузка...</p>;
+              let posts = [...data.posts].filter(
+                (p) => p.language == router.locale
+              );
               return (
                 <PostsContainer>
-                  {[...data.posts].map((d, index) => (
+                  {[...posts].map((d, index) => (
                     <PostCard
                       id={d.id}
                       text={d.text}

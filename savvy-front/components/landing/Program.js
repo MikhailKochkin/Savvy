@@ -73,7 +73,7 @@ const Down = styled.div`
   }
   .price_box_price {
     font-size: 2rem;
-    text-decoration: line-through;
+    /* text-decoration: line-through; */
     text-decoration-color: #496ddb;
   }
   .price_box_discount {

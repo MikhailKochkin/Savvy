@@ -1,6 +1,14 @@
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useQuery, gql } from "@apollo/client";
+
 import Post from "../components/blog/Post";
 import { useUser } from "../components/User";
-import { useQuery, gql } from "@apollo/client";
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["nav", "blog", "landing"])),
+  },
+});
 
 const POST_QUERY = gql`
   query POST_QUERY($id: String!) {
@@ -11,6 +19,7 @@ const POST_QUERY = gql`
       tags
       likes
       summary
+      language
       image
       user {
         id

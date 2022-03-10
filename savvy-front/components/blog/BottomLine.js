@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
+import { useTranslation } from "next-i18next";
 
 const Banner = styled.div`
   width: 100%;
@@ -66,6 +67,8 @@ const Ad = (props) => {
   const onResize = (width, height) => {
     setWidth(width);
   };
+  const { t } = useTranslation("blog");
+
   const slide = () => {
     var my_element = document.getElementById("c2a");
     my_element.scrollIntoView({
@@ -79,9 +82,9 @@ const Ad = (props) => {
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="bottomline_text">
-        <span>Читаете наш блог? Получите скидку 20% на любой курс</span>
+        <span>{t("discount")}</span>
       </div>
-      <button onClick={(e) => slide()}>Получить скидку</button>
+      <button onClick={(e) => slide()}>{t("c2a")}</button>
     </Banner>
   );
 };

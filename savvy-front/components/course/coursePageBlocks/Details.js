@@ -61,7 +61,7 @@ const Section = styled.div`
 `;
 
 const Details = (props) => {
-  const { t } = useTranslation("landing");
+  const { t } = useTranslation("coursePage");
   const d = props.data;
 
   return (

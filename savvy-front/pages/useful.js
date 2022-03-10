@@ -1,7 +1,4 @@
 import React from "react";
-import { useRouter } from "next/router";
-
-import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useUser } from "../components/User";
 import Useful from "../components/useful/Useful";

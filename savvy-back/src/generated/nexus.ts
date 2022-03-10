@@ -1090,6 +1090,7 @@ export interface NexusGenInputs {
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    language?: NexusGenEnums['SortOrder'] | null; // SortOrder
     likes?: NexusGenEnums['SortOrder'] | null; // SortOrder
     summary?: NexusGenEnums['SortOrder'] | null; // SortOrder
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1104,6 +1105,7 @@ export interface NexusGenInputs {
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    language?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     likes?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     NOT?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
     OR?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
@@ -2077,6 +2079,7 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     image?: string | null; // String
+    language?: string | null; // String
     likes?: number | null; // Int
     summary?: string | null; // String
     tags: string[]; // [String!]!
@@ -2704,6 +2707,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     image: string | null; // String
+    language: string | null; // String
     likes: number | null; // Int
     summary: string | null; // String
     tags: string[]; // [String!]!
@@ -3397,6 +3401,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     id: 'String'
     image: 'String'
+    language: 'String'
     likes: 'Int'
     summary: 'String'
     tags: 'String'

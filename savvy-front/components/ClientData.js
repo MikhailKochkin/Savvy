@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION($id: String!, $communication_medium: String) {
@@ -329,11 +331,11 @@ P.S. Если вы не сможете посетить консультацию
   } else {
     number = props.number;
   }
+
   return (
     <Row>
       <div className="index">{props.index + 1}.</div>
       <div className="time">
-        {" "}
         {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
       </div>
       <div className="name">
@@ -508,6 +510,7 @@ P.S. Если вы не сможете посетить консультацию
 
 const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
+  const [startDate, setStartDate] = useState(new Date());
 
   const sort = (val) => {
     console.log(val);
@@ -515,13 +518,74 @@ const ClientData = (props) => {
     setClients(new_clients);
   };
 
+  const setDate = (d) => {
+    let clients_in_range = clients.filter((cl) => {
+      let client_date = new Date(cl.createdAt);
+      let chosendate = new Date(d);
+      let week_before_date = new Date(d);
+      console.log("week_before_date_0", week_before_date);
+
+      week_before_date.setDate(chosendate.getDate() - 7);
+
+      console.log("chosendate", chosendate);
+      console.log("week_before_date_1", week_before_date);
+      if (
+        client_date.getTime() > week_before_date.getTime() &&
+        client_date.getTime() < chosendate.getTime()
+      ) {
+        return cl;
+      }
+    });
+    setClients(clients_in_range);
+  };
+
+  // console.log(two_months_ago);
+  // console.log(
+  //   "client",
+  //   new Date(clients[clients.length - 1].createdAt),
+  //   two_months_ago,
+  //   new Date(clients[clients.length - 1].createdAt).getTime() >
+  //     two_months_ago.getTime()
+  // );
+
+  let clients_in_range = clients.filter((cl) => {
+    let client_date = new Date(cl.createdAt);
+    let chosendate = new Date(startDate);
+    let week_before_date = new Date(startDate);
+    console.log("week_before_date_0", week_before_date);
+
+    week_before_date.setDate(chosendate.getDate() - 7);
+
+    console.log("chosendate", chosendate);
+    console.log("week_before_date_1", week_before_date);
+    if (
+      client_date.getTime() > week_before_date.getTime() &&
+      client_date.getTime() < chosendate.getTime()
+    ) {
+      return cl;
+    }
+  });
+
   return (
     <Styles>
       <div className="total">Всего заявок: {clients.length}</div>
+      <button onClick={(e) => setClients(props.initial_clients)}>
+        Показать всех клиентов
+      </button>
+      <div className="total">
+        Заявок за выбранный период: {clients_in_range.length}
+      </div>
+      <DatePicker
+        selected={startDate}
+        dateFormat="dd/MM/yyyy"
+        onChange={(date) => {
+          alert(date);
+          return setDate(date);
+        }}
+      />
       <div className="total">
         <button onClick={(e) => setClients(initial_clients)}>Restart</button>
       </div>
-
       {clients.map((c, i) => (
         <Client
           sort={sort}

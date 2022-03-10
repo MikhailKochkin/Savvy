@@ -2,11 +2,11 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import * as EmailValidator from "email-validator";
-import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+
 import "react-phone-number-input/style.css";
-import ReactGA from "react-ga";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -335,7 +335,7 @@ const Action = (props) => {
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleModal = (e) => setIsOpen(!isOpen);
+  const { t } = useTranslation("landing");
 
   const { asPath } = useRouter();
 
@@ -360,16 +360,11 @@ const Action = (props) => {
         <Form>
           <Description>
             <div id="header">
-              <span>
-                С каждым будущим студентом мы проводим вводное занятие
-              </span>
+              <span>{t("connect_header")}</span>
             </div>
             <div id="details2">
-              <div>Перед занятием мы пришлем подробную программу курса.</div>
-              <div>
-                А на занятии покажем, как проходит обучение, и поделимся
-                инсайдами с рынка.
-              </div>
+              <div>{t("arg1")}</div>
+              <div>{t("arg2")}</div>
             </div>
 
             {/* <div id="details">
@@ -388,12 +383,12 @@ const Action = (props) => {
           </Description>
           <Contact>
             <div id="form_container">
-              <div className="h2">Запишитесь на вводное занятие</div>
+              <div className="h2">{t("c2a_header")}</div>
               <form>
                 <input
                   id="name"
                   className="data"
-                  placeholder="Имя и фамилия"
+                  placeholder={t("name")}
                   onChange={(e) => setName(e.target.value)}
                 />
                 {/* <PhoneInput
@@ -407,14 +402,14 @@ const Action = (props) => {
                   id="tel"
                   className="data"
                   type="tel"
-                  placeholder="+7 (999) 999-99-99"
+                  placeholder={t("number")}
                   onChange={(e) => setNumber(e.target.value)}
                 />
                 <input
                   id="email"
                   className="data"
                   type="email"
-                  placeholder="Электронная почта"
+                  placeholder={t("email")}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <button
@@ -450,7 +445,7 @@ const Action = (props) => {
                     }
                   }}
                 >
-                  Записаться
+                  {t("c2a_button")}
                 </button>
               </form>
               <div id="legal">

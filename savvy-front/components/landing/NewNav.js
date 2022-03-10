@@ -142,6 +142,10 @@ const Styles = styled.div`
       font-size: 2rem;
       font-weight: 500;
       margin-right: 20%;
+      cursor: pointer;
+      img {
+        height: 40px;
+      }
     }
     .nav {
       display: flex;
@@ -228,7 +232,8 @@ const NewNav = (props) => {
       <div className="menu_bar">
         <Link href="/">
           <div className="logo">
-            <a>BeSavvy</a>
+            {/* <a>BeSavvy</a> */}
+            <img src="static/logo.svg" />
           </div>
         </Link>
         <MobileMenu onClick={(e) => openNav()}>

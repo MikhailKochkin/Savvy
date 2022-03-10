@@ -4,6 +4,8 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
+
 import UpdatePost from "./UpdatePost";
 import Modal from "styled-react-modal";
 import ContactForm from "../landing/ContactForm";
@@ -220,6 +222,7 @@ const Post = (props) => {
     updatePost,
     { data: updated_data, loading: updated_loading, error: updated_error },
   ] = useMutation(UPDATE_POST_MUTATION);
+  const { t } = useTranslation("blog");
 
   const [update, setUpdate] = useState(false);
   const [likes, setLikes] = useState(props.post.likes);
@@ -235,7 +238,7 @@ const Post = (props) => {
               pathname: "/blog",
             }}
           >
-            <a>Назад</a>
+            <a>{t("back")}</a>
           </Link>
         </div>
         <PostContainer>
@@ -250,16 +253,16 @@ const Post = (props) => {
               <div className="author">
                 <img src={post.user.image} />
                 <div className="name">
-                  Автор – {post.user.name} {post.user.surname}
+                  {t("by")} {post.user.name} {post.user.surname}
                 </div>
               </div>
               <div className="text">{renderHTML(post.text)}</div>
               <Data>
                 <span className="date">
-                  {moment(post.createdAt).format("Do MMMM YYYY")}
+                  {moment(post.createdAt).format("DD/MM/YYYY")}
                 </span>
                 <Feedback>
-                  <div className="question">Полезный материал? </div>
+                  {/* <div className="question">Полезный материал? </div> */}
                   <div className="favorite">
                     <span
                       className="likes"

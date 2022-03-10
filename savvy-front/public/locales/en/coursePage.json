@@ -17,11 +17,13 @@
   "refund": "✅ Если вам не подойдет курс, мы вернем деньги.",
   "apply_coupon": "Apply Coupon",
   "step1": "Step 1. Choose an option",
-  "step1option1": "",
+  "step1option1": "Get a consultation",
   "step1option2": "Buy the course",
+  "step1option3": "Pay in installments",
   "step2": "Step 2.",
-  "step2option1": " Заполните заявку",
-  "step2option2": " Оплатите курс",
+  "step2option1": "Fill in the form",
+  "step2option2": "Buy the course",
+  "step2option3": "Fill in the form",
   "apply": "Get a consultation",
   "buy": "Enroll now"
 }

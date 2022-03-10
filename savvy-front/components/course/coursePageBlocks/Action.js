@@ -529,11 +529,18 @@ const Action = (props) => {
 
   const addPromo = (val) => {
     if (
-      val.toLowerCase() == "school50" &&
-      props.data.price.course == "school" &&
+      val.toLowerCase() == "vushkv_30" &&
+      props.coursePage.id == "ckfy1q60a02f307281abcpgae" &&
       isPromo == false
     ) {
-      setPrice(price * 0.5);
+      setPrice(price * 0.7);
+      setIsPromo(true);
+    } else if (
+      val.toLowerCase() == "daniil.law_30" &&
+      props.coursePage.id == "cktrbubdl2237dou9vzn1gb3w" &&
+      isPromo == false
+    ) {
+      setPrice(price * 0.7);
       setIsPromo(true);
     }
   };
@@ -606,7 +613,7 @@ const Action = (props) => {
                   </div>
                   <label for="html">{t("step1option1")}</label>
                 </div>
-                {/* <div
+                <div
                   className="variants_form"
                   onChange={(e) => {
                     setStep(e.target.value);
@@ -622,8 +629,8 @@ const Action = (props) => {
                       }}
                     />
                   </div>
-                  <label for="html">Купить курс в рассрочку</label>
-                </div> */}
+                  <label for="html">{t("step1option3")}</label>
+                </div>
 
                 <div className="variants_form">
                   <div>
@@ -644,7 +651,7 @@ const Action = (props) => {
                 {t("step2")}
                 {step == "apply" && " Заполните заявку"}
                 {step == "buy" && " Оплатите курс"}
-                {/* {step == "installments" && " Заявка на рассрочку"} */}
+                {step == "installments" && " Заявка на рассрочку"}
               </div>
               {step == "apply" && (
                 <>

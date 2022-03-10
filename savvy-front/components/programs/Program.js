@@ -288,8 +288,8 @@ const Program = (props) => {
         },
       ],
       price: {
-        full: "14 950₽",
-        price: 14950,
+        full: "24 900₽",
+        price: 24900,
         full_explain: "Рассрочка без первого взноса:",
         part: "2490 ₽/мес",
         part_explain: "Рассрочка",
@@ -1019,10 +1019,10 @@ const Program = (props) => {
         ],
       },
       price: {
-        full: "24 500 ₽",
-        price: 24500,
+        full: "39 000 ₽",
+        price: 39000,
         full_explain: "Рассрочка без первого взноса:",
-        part: "3 840 ₽/мес",
+        part: "3 900 ₽/мес",
         part_explain: "Рассрочка",
         course: "school",
         comment: `
@@ -1239,8 +1239,8 @@ const Program = (props) => {
         },
       ],
       price: {
-        full: "20 950 ₽",
-        price: 20950,
+        full: "31 900 ₽",
+        price: 31900,
         full_explain: "Рассрочка без первого взноса:",
         part: "2190 ₽/мес",
         part_explain: "Рассрочка",
