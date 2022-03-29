@@ -7,6 +7,8 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies, Tracks } from "../../config";
@@ -15,6 +17,7 @@ const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
     $email: String!
     $name: String!
+    $number: String
     $surname: String!
     $password: String!
     $isFamiliar: Boolean!
@@ -26,6 +29,7 @@ const SIGNUP_MUTATION = gql`
     signup(
       email: $email
       name: $name
+      number: $number
       surname: $surname
       password: $password
       isFamiliar: $isFamiliar
@@ -43,8 +47,10 @@ const SIGNUP_MUTATION = gql`
 `;
 
 const Form = styled.form`
-  min-width: 400px;
+  min-width: 450px;
   font-size: 1.6rem;
+  overflow-y: scroll;
+
   @media (max-width: 800px) {
     min-width: 100px;
     max-width: 100%;
@@ -54,6 +60,8 @@ const Form = styled.form`
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border: none;
   padding: 15px;
   input {
@@ -76,33 +84,84 @@ const Fieldset = styled.fieldset`
   }
 `;
 
+const Comment = styled.div`
+  font-size: 1.2rem;
+  line-height: 1.4;
+  max-width: 450px;
+  margin-bottom: 10px;
+`;
+
+const Group = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+
+  input {
+    width: 48%;
+    background: none;
+    font-size: 1.6rem;
+    border: 1px solid #d6d6d6;
+    font-family: Montserrat;
+    outline: 0;
+    padding: 10px;
+    margin-bottom: 15px;
+    &:hover {
+      border: 1px solid #999999;
+    }
+    &:focus {
+      border: 1px solid #1a2a81;
+    }
+  }
+`;
+
 const Input = styled.input`
   width: 100%;
   background: none;
   font-size: 1.4rem;
-  border: none;
+  border: 1px solid #d6d6d6;
   font-family: Montserrat;
   outline: 0;
-  border-bottom: 1px solid #949494;
-  padding-bottom: 1%;
+  padding: 10px;
   margin-bottom: 15px;
   &:hover {
-    border-bottom: 1px solid #1a2a81;
+    border: 1px solid #999999;
   }
   &:focus {
-    border-bottom: 2px solid #1a2a81;
+    border: 1px solid #1a2a81;
+  }
+`;
+
+const PhoneInput = styled.input`
+  width: 100%;
+  background: none;
+  font-size: 1.4rem;
+  border: 1px solid #d6d6d6;
+  font-family: Montserrat;
+  outline: 0;
+  padding: 10px;
+  margin-bottom: 5px;
+  &:hover {
+    border: 1px solid #999999;
+  }
+  &:focus {
+    border: 1px solid #1a2a81;
   }
 `;
 
 const Title = styled.div`
-  font-size: 1.8rem;
-  font-weight: 900;
-  margin-bottom: 10px;
+  font-size: 2.4rem;
+  margin: 30px 0;
+  font-weight: 700;
+  line-height: 1.4;
+  width: 60%;
+  text-align: center;
 `;
 
 const Transit = styled.div`
   margin-top: 3%;
   font-size: 1.4rem;
+  width: 100%;
   span {
     color: #112a62;
     font-weight: 600;
@@ -114,7 +173,8 @@ const useStyles = makeStyles({
   button: {
     width: "100%",
     marginBottom: "2%",
-    fontSize: "1.4rem",
+    fontSize: "1.7rem",
+    fontFamily: "Montserrat",
     textTransform: "none",
   },
   root: {
@@ -134,13 +194,16 @@ const Signup = (props) => {
   const [surname, setSurname] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
   const [status, setStatus] = useState("LAWYER");
   const [uniID, setUniID] = useState("ckhxpu4sj0000k8rkthw1no3o");
   const [company, setCompany] = useState("ckhxpvj4b0040k8rkag97bkza");
   const [careerTrackID, setCareerTrackID] = useState(
     "ckhxpur6r0017k8rkw0qp2rp2"
   );
-  const [isFamiliar, setIsFamiliar] = useState(false);
+  const [isFamiliar, setIsFamiliar] = useState(true);
+
+  const { t } = useTranslation("auth");
 
   const classes = useStyles();
 
@@ -156,6 +219,7 @@ const Signup = (props) => {
         surname: surname,
         password: password,
         email: email,
+        number: number,
         status: status,
         uniID: uniID,
         company: company,
@@ -189,195 +253,74 @@ const Signup = (props) => {
               setTimeout(() => Router.push({ pathname: "/educator" }), 2000);
           }}
         >
-          <Fieldset
-            disabled={loading}
-            aria-busy={loading}
-            className={classes.root}
-          >
-            <Title>Зарегистрируйтесь на BeSavvy</Title>
+          <Fieldset disabled={loading} aria-busy={loading}>
+            <Title>{t("c2a")}</Title>
             <Error error={error} />
-            <Input
-              className="name"
-              type="text"
-              name="name"
-              placeholder="Имя"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              className="surname"
-              type="text"
-              name="surname"
-              placeholder="Фамилия"
-              value={surname}
-              onChange={(e) => setSurname(e.target.value)}
-            />
+            <Group>
+              <input
+                className="name"
+                type="text"
+                name="name"
+                placeholder={t("name")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                className="surname"
+                type="text"
+                name="surname"
+                placeholder={t("surname")}
+                value={surname}
+                onChange={(e) => setSurname(e.target.value)}
+              />
+            </Group>
             <Input
               className="email"
               type="email"
               name="email"
-              placeholder="Почта"
+              placeholder={t("email")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               label="Электронная почта"
             />
+            <PhoneInput
+              className="number"
+              type="tel"
+              name="number"
+              placeholder={t("number")}
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              label="Number"
+            />
+            <Comment>
+              We need your phone number to send personalized feedback to your
+              WhatsApp
+            </Comment>
             <Input
               className="password"
               type="password"
               name="password"
-              placeholder="Пароль"
+              placeholder={t("create_password")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               label="Пароль"
             />
-            <div className="condition">Выберите ваш статутс на сайте:</div>
-            <TextField
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot,
-                },
-              }}
-              id="standard-select-currency"
-              select
-              label="Select"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            >
-              <MenuItem key="STUDENT" value="STUDENT">
-                Студент
-              </MenuItem>
-              <MenuItem key="LAWYER" value="LAWYER">
-                Юрист
-              </MenuItem>
-              <MenuItem key="AUTHOR" value="AUTHOR">
-                Преподаватель
-              </MenuItem>
-              <MenuItem key="HR" value="HR">
-                HR
-              </MenuItem>
-            </TextField>
-
-            {(status === "HR" || status === "AUTHOR") && (
-              <>
-                <div className="condition">Из какой вы компании?</div>
-                <TextField
-                  className="company"
-                  name="company"
-                  className={classes.root}
-                  InputLabelProps={{
-                    classes: {
-                      root: classes.labelRoot,
-                    },
-                  }}
-                  id="standard-select-currency"
-                  select
-                  label="Select"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                >
-                  {Companies.map((co) => (
-                    <MenuItem
-                      key={Object.values(co)[0]}
-                      value={Object.values(co)[0]}
-                    >
-                      {Object.keys(co)[0]}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </>
-            )}
-
-            {status === "STUDENT" && (
-              <>
-                <TextField
-                  className="uni"
-                  name="uniID"
-                  className={classes.root}
-                  InputLabelProps={{
-                    classes: {
-                      root: classes.labelRoot,
-                    },
-                  }}
-                  id="standard-select-currency"
-                  select
-                  label="Select"
-                  value={uniID}
-                  onChange={(e) => setUniID(e.target.value)}
-                >
-                  {Unis.map((uni) => (
-                    <MenuItem
-                      key={Object.values(uni)[0]}
-                      value={Object.values(uni)[0]}
-                    >
-                      {Object.keys(uni)[0]}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <div className="condition">
-                  Выберите направление, в котором
-                  <br /> вы хотите развивать карьеру.
-                </div>
-                <TextField
-                  className="careerTrackID"
-                  name="careerTrackID"
-                  className={classes.root}
-                  InputLabelProps={{
-                    classes: {
-                      root: classes.labelRoot,
-                    },
-                  }}
-                  id="standard-select-currency"
-                  select
-                  label="Select"
-                  value={careerTrackID}
-                  onChange={(e) => setCareerTrackID(e.target.value)}
-                >
-                  {Tracks.map((track) => (
-                    <MenuItem
-                      key={Object.values(track)[0]}
-                      value={Object.values(track)[0]}
-                    >
-                      {Object.keys(track)[0]}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </>
-            )}
-            <div className="condition">
-              Согласие на обработку персональных данных:
-            </div>
-            <TextField
-              name="isFamiliar"
-              className="isFamiliar"
-              className={classes.root}
-              InputLabelProps={{
-                classes: {
-                  root: classes.labelRoot,
-                },
-              }}
-              id="standard-select-currency"
-              select
-              label="Select"
-              value={isFamiliar}
-              onChange={(e) => setIsFamiliar(e.target.value)}
-            >
-              <MenuItem key={23425} value={true}>
-                Да
-              </MenuItem>
-            </TextField>
             <Button
               type="submit"
               variant="contained"
               color="primary"
               className={classes.button}
             >
-              {loading ? "Регистрируюсь" : "Зарегистрироваться"}
+              {loading ? t("signing_up") : t("button")}
             </Button>
+            <Comment>
+              By clicking Sign Up, I agree to the the Terms of Service and
+              Privacy Policy.
+            </Comment>
             <Transit>
-              У вас уже есть аккаунт на Savvy App?{" "}
+              {t("already_registered")}{" "}
               <span name="signin" onClick={move}>
-                Войти
+                {t("login")}
               </span>
             </Transit>
           </Fieldset>

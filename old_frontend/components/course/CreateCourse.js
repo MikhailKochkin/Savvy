@@ -236,7 +236,7 @@ export default class CreateCourse extends Component {
                                 ? "Загрузите картинку курса"
                                 : null}
                               {this.state.upload === "pending"
-                                ? "Идет загрузка..."
+                                ? "Идет Loading..."
                                 : null}
                               {this.state.upload === true
                                 ? "Загрузка прошла успешно!"

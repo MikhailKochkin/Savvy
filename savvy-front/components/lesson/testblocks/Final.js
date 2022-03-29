@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   font-size: 1.6rem;
@@ -16,21 +17,19 @@ const Final = (props) => {
   console.log(props.answers);
   let correct = props.answers.filter((a) => a !== false);
   let ratio = correct.length / props.tasks_number;
+  const { t } = useTranslation("lesson");
+
   return (
     <Styles>
       <img src="/static/test_pattern.svg" />
       <p>
-        Всего было {props.tasks_number} вопросов. Вы ответили правильно
-        <span> на {correct.length} из них.</span>{" "}
+        {t("there_were")} {props.tasks_number} {t("questions")}
+        <span>
+          {" "}
+          {correct.length} {t("correct_num")}
+        </span>{" "}
       </p>
-      {ratio < 0.8 ? (
-        <p>
-          Мы хотим, чтобы вы были уверены в своих знаниях. Пожалуйста, пройдите
-          это задание еще раз и постарайтесь ответить верно на 80% вопросов.
-        </p>
-      ) : (
-        <div>Отличный результат. Можете двигаться дальше.</div>
-      )}
+      {ratio < 0.8 ? <p>{t("once_more")}</p> : <div>{t("great")}</div>}
     </Styles>
   );
 };

@@ -3,7 +3,7 @@ import NewCoursePage from "../components/course/NewCoursePage";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["coursePage", "nav"])),
+    ...(await serverSideTranslations(locale, ["coursePage", "nav", "auth"])),
   },
 });
 

@@ -230,6 +230,7 @@ const SINGLE_LESSON_QUERY = gql`
         answers
         correct
         type
+        comments
         complexity
         ifRight
         ifWrong
@@ -732,7 +733,6 @@ const SingleLesson = (props) => {
                               testResults={[]}
                               quizes={lesson.quizes}
                               notes={lesson.notes}
-                              tests={lesson.newTests}
                             />
                           ) : (
                             <Center>

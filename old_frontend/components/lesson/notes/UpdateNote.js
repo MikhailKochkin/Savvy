@@ -80,7 +80,7 @@ const Button2 = styled.button`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/LessonEditor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 

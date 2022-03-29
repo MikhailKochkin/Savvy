@@ -20,7 +20,7 @@ const CLIENTS_QUERY = gql`
 
 const client_data = () => {
   const { loading, error, data } = useQuery(CLIENTS_QUERY);
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>Loading...</p>;
   let initial_clients = data.businessClients;
   return <ClientData initial_clients={initial_clients} />;
 };

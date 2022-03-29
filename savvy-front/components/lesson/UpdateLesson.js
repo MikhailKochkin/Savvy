@@ -125,12 +125,12 @@ const Title = styled.div`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
 const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 

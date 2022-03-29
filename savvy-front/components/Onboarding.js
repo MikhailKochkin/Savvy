@@ -74,7 +74,7 @@ const Container = styled.div`
 
 const Onboarding = (props) => {
   const { loading, error, data } = useQuery(COURSES_QUERY);
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>Loading...</p>;
   const coursePages = data.coursePages;
   const englishCourses = [
     "ck6mc531p02z20748kwpqnt7z",

@@ -3,6 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
@@ -177,6 +178,8 @@ const LessonHeader = (props) => {
   const { lesson, name, author, student_list, coursePageId, students, me } =
     props;
 
+  const { t } = useTranslation("coursePage");
+
   let color;
   let visit;
 
@@ -206,7 +209,9 @@ const LessonHeader = (props) => {
           </Text>
         </div>
         <div>
-          <Time>{time} мин.</Time>
+          <Time>
+            {time} {t("min")}.
+          </Time>
         </div>
         {/* new button logic */}
         {/* if you do not have an account => no lesson / no link */}
@@ -231,10 +236,7 @@ const LessonHeader = (props) => {
               }}
             >
               <A>
-                <Button>
-                  {/* {props.t("start")} */}
-                  Начать
-                </Button>
+                <Button>{t("start")}</Button>
               </A>
             </Link>
           )}
@@ -261,7 +263,7 @@ const LessonHeader = (props) => {
               <A>
                 <Button>
                   {/* {props.t("start")} */}
-                  Начать
+                  {t("start")}
                 </Button>
               </A>
             </Link>
@@ -288,7 +290,7 @@ const LessonHeader = (props) => {
               <A>
                 <Button>
                   {/* {props.t("start")} */}
-                  Начать
+                  {t("start")}
                 </Button>
               </A>
             </Link>
@@ -314,7 +316,7 @@ const LessonHeader = (props) => {
               <A>
                 <Button>
                   {/* {props.t("start")} */}
-                  Начать
+                  {t("start")}
                 </Button>
               </A>
             </Link>
@@ -336,7 +338,7 @@ const LessonHeader = (props) => {
               }}
             >
               <A>
-                <Button>Начать</Button>
+                <Button>{t("start")}</Button>
               </A>
             </Link>
           )}
@@ -484,7 +486,7 @@ const LessonHeader = (props) => {
                   }
                 }}
               >
-                Начать
+                {t("start")}
               </Button>
             </A>
           </Link>

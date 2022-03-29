@@ -3,6 +3,8 @@ import Router from "next/router";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+
 import { CURRENT_USER_QUERY } from "./User";
 import { SINGLE_COURSEPAGE_QUERY } from "./course/CoursePage";
 
@@ -64,6 +66,7 @@ const Comment = styled.div`
 
 const EnrollCoursePage = (props) => {
   const [show, setShow] = useState(false);
+  const { t } = useTranslation("course");
 
   let subj = [];
   props.meData.new_subjects.map((s) => subj.push(s.id));
@@ -80,11 +83,8 @@ const EnrollCoursePage = (props) => {
             coursePageId: props.coursePage.id,
           },
         });
-        alert(
-          "Вы успешно зарегистрировались. Можете приступить к первому уроку!"
-        );
       } else {
-        alert("Вы уже зарегистрированы!");
+        alert(t("have_access"));
       }
     }
   };
@@ -97,12 +97,6 @@ const EnrollCoursePage = (props) => {
         <Mutation
           mutation={ENROLL_COURSE_MUTATION}
           refetchQueries={() => [{ query: CURRENT_USER_QUERY }]}
-          refetchQueries={() => [
-            {
-              query: SINGLE_COURSEPAGE_QUERY,
-              variables: { id: coursePage.id },
-            },
-          ]}
         >
           {(enrollOnCourse) =>
             !subj.includes(coursePage.id) ? (
@@ -110,14 +104,13 @@ const EnrollCoursePage = (props) => {
                 onClick={async (e) => {
                   e.preventDefault();
                   const res = await onClick(e, enrollOnCourse);
-                  console.log("Reload");
                   Router.reload();
                 }}
               >
-                Регистрация
+                {t("enroll")}
               </Button>
             ) : (
-              <div>Вы уже зарегистрированы!</div>
+              <div>{t("have_access")}</div>
             )
           }
         </Mutation>
@@ -140,20 +133,15 @@ const EnrollCoursePage = (props) => {
                   const res = await createPrivateOrder();
                 }}
               >
-                Открыть доступ
+                {t("enroll")}
               </Button>
             ) : (
-              <div>Уже зарегистрированы!</div>
+              <div>{t("have_access")}</div>
             )
           }
         </Mutation>
       )}
-      {show && (
-        <Comment>
-          Ваша заявка на рассмотрении. Скоро преподаватель рассмотрит ее и
-          откроет доступ к курсу.
-        </Comment>
-      )}
+      {show && <Comment>{t("applied")}</Comment>}
     </>
   );
 };

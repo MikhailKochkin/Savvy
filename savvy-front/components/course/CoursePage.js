@@ -153,11 +153,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
   }
 `;
 
-const CalendarComponent = styled.div`
-  height: 500px;
-  margin: 50px 0;
-`;
-
 const localizer = momentLocalizer(moment);
 
 const CoursePage = (props) => {
@@ -312,7 +307,6 @@ const CoursePage = (props) => {
                     <CourseInfo>
                       <Data>
                         <Header>{coursePage.title}</Header>
-                        {/* <p className="track2">{coursePage.description}</p> */}
                         {coursePage && coursePage.authors.length > 0 ? (
                           coursePage.authors.map((a) => (
                             <div className="name">
@@ -331,7 +325,7 @@ const CoursePage = (props) => {
                                 {coursePage.user && coursePage.user.surname
                                   ? `${coursePage.user.name} ${coursePage.user.surname}`
                                   : coursePage.user.name}{" "}
-                                из {coursePage.user.company.name}
+                                {t("from")} {coursePage.user.company.name}
                               </p>
                             </div>
                             <p className="track2">
@@ -349,7 +343,15 @@ const CoursePage = (props) => {
                           me.id !== coursePage.user.id &&
                           !new_subjectArray.includes(coursePage.id) &&
                           !me.permissions.includes("ADMIN") && (
-                            <FirstLesson openLesson={openLesson} />
+                            <RegisterCard
+                              me={me}
+                              coursePage={coursePage}
+                              price={price}
+                              subscription={coursePage.subscription}
+                              subscriptionPrice={coursePage.subscriptionPrice}
+                              discountPrice={coursePage.discountPrice}
+                              promocode={coursePage.promocode}
+                            />
                           )}
                         {/* Карточка преподавателя */}
                         {me &&
@@ -370,16 +372,6 @@ const CoursePage = (props) => {
                           )}
                       </PayBox>
                     </CourseInfo>{" "}
-                    {/* <CalendarComponent>
-                      <Calendar
-                        localizer={localizer}
-                        events={events}
-                        defaultView="month"
-                        startAccessor="start"
-                        endAccessor="end"
-                        style={{ height: 500 }}
-                      />
-                    </CalendarComponent> */}
                     {me && (
                       <Certificate
                         completed={
@@ -509,7 +501,7 @@ const CoursePage = (props) => {
                         </div>
                       )}
                     </Details>
-                    {me &&
+                    {/* {me &&
                       me.permissions &&
                       !me.permissions.includes("ADMIN") &&
                       !new_subjectArray.includes(coursePage.id) && (
@@ -546,7 +538,7 @@ const CoursePage = (props) => {
                         discountPrice={coursePage.discountPrice}
                         promocode={coursePage.promocode}
                       />
-                    )}
+                    )} */}
                     {my_reviews[0] && (
                       <>
                         {/* <Header2>{props.t("reviews")}</Header2> */}

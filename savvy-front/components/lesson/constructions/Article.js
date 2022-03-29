@@ -5,7 +5,8 @@ import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   width: 98%;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  line-height: 1.8;
   border-radius: 5px;
   img {
     width: 100%;

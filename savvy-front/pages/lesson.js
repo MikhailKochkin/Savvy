@@ -5,7 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["lesson", "nav"])),
+    ...(await serverSideTranslations(locale, ["lesson", "nav", "auth"])),
   },
 });
 

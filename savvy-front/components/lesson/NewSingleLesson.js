@@ -77,6 +77,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         answers
         type
         correct
+        comments
         complexity
         ifRight
         ifWrong
@@ -218,7 +219,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
-  padding-bottom: 5%;
+  /* padding-bottom: 5%; */
 `;
 
 const Head = styled.div`
@@ -301,7 +302,7 @@ const Progress = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
-  padding: 0.5% 2%;
+  padding: 0% 2%;
   width: 100%;
   flex-direction: column;
   justify-content: center;
@@ -311,6 +312,7 @@ const LessonPart = styled.div`
   h1 {
     max-width: 650px;
     line-height: 1.4;
+    font-weight: 600;
   }
   @media (max-width: 1500px) {
     width: 55%;
@@ -420,9 +422,9 @@ const NewSingleLesson = (props) => {
                 </span>
               </Head>
               <LessonPart>
-                <h1>
+                {/* <h1>
                   {t("lesson")} {lesson.number}. {lesson.name}
-                </h1>
+                </h1> */}
                 <CSSTransitionGroup transitionName="example">
                   <StoryEx
                     tasks={

@@ -7,7 +7,8 @@ import { useRouter } from "next/router";
 const BImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  min-height: 100vh;
+  min-height: 70vh;
+  max-height: 1200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,6 +39,7 @@ const InfoBlock = styled.div`
 const Container = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 70%;
+  max-width: 1050px;
   /* height: 50%; */
   display: flex;
   flex-direction: column;

@@ -114,7 +114,7 @@ const Blog = (props) => {
           <h2>{t("h2")}</h2>
           <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
-              if (loading) return <p>Загрузка...</p>;
+              if (loading) return <p>Loading...</p>;
               let posts = [...data.posts].filter(
                 (p) => p.language == router.locale
               );

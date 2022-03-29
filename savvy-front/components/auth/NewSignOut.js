@@ -14,21 +14,15 @@ const SIGN_OUT_MUTATION = gql`
 `;
 
 const Button = styled.div`
-  border: none;
-  background: none;
-  min-width: 80px;
-  display: flex;
-  font-size: 1.6rem;
-  font-weight: 400;
-  flex-direction: row;
-  justify-content: flex-end;
-  background: rgba(255, 255, 255, 0.4);
   border-radius: 30px;
+  border: 2px solid black;
+  font-weight: 500;
   padding: 5px 25px;
   cursor: pointer;
-  @media (max-width: 850px) {
-    color: white;
-    margin: 8px 8px 8px 32px;
+  &:hover {
+    color: #5c5c5c;
+    cursor: pointer;
+    border-color: #5c5c5c;
   }
 `;
 

@@ -64,7 +64,7 @@ const CREATE_EXAM_ANSWER_MUTATION = gql`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/LessonEditor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 

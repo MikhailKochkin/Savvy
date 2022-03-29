@@ -49,6 +49,8 @@ const Styles = styled.div`
 const Container = styled.div`
   width: 75%;
   height: 90%;
+  max-width: 1100px;
+
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -419,9 +421,9 @@ const Action = (props) => {
                     e.preventDefault();
 
                     if (!EmailValidator.validate(email)) {
-                      alert("Неправильный имейл");
+                      alert("Wrong Email");
                     } else if (number.length < 7) {
-                      alert("Неправильный номер мобильнного телефона");
+                      alert("Wrong mobile number");
                     } else {
                       Router.push({
                         pathname: "/hello",
@@ -448,7 +450,7 @@ const Action = (props) => {
                   {t("c2a_button")}
                 </button>
               </form>
-              <div id="legal">
+              {/* <div id="legal">
                 Нажимая кнопку, принимаю условия{" "}
                 <a
                   href="https://besavvy.app/legal?name=privacy"
@@ -461,7 +463,7 @@ const Action = (props) => {
                   оферты
                 </a>
                 .
-              </div>
+              </div> */}
             </div>
           </Contact>
         </Form>

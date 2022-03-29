@@ -6,6 +6,8 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
 import UpdateConstruction from "./UpdateConstruction";
 import { CURRENT_USER_QUERY } from "../../User";
@@ -34,7 +36,8 @@ const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  width: ${(props) => (props.story ? "75vw" : "100%")};
+  width: ${(props) => (props.story ? "85vw" : "100%")};
+  max-width: 1350px;
   padding-right: 4%;
   display: flex;
   margin-bottom: 4%;
@@ -45,7 +48,10 @@ const Styles = styled.div`
   @media (max-width: 800px) {
     font-size: 1.4rem;
     width: 100%;
-    flex-direction: column;
+    padding-right: 0%;
+    margin-bottom: 30px;
+    display: block;
+    height: auto;
   }
 `;
 
@@ -55,7 +61,12 @@ const Variants = styled.div`
   flex-basis: 35%;
   margin-top: 55px;
   overflow: auto;
-  max-height: 95vh;
+  max-height: 200vh;
+  padding: 1%;
+  @media (max-width: 800px) {
+    max-height: 100%;
+    padding: 3%;
+  }
 `;
 
 const Answers = styled.div`
@@ -74,6 +85,8 @@ const Answers = styled.div`
   }
   @media (max-width: 800px) {
     margin-bottom: 15px;
+    margin: 20px 2% 20px 2%;
+    flex-basis: 0%;
   }
 `;
 
@@ -95,16 +108,7 @@ const Label = styled.div`
   border-radius: 10px;
   margin-top: ${(props) => (props.data ? 0 : "2%")};
   margin-bottom: ${(props) => (props.data ? 0 : "6%")};
-
-  input.l {
-    padding: 2%;
-    width: 12%;
-    border: none;
-    border-bottom: 1px solid grey;
-    white-space: nowrap;
-    font-family: Montserrat;
-    font-size: 1.4rem;
-  }
+  font-weight: 500;
 
   input#text {
     padding: 2%;
@@ -118,6 +122,19 @@ const Label = styled.div`
   input:focus {
     outline: none;
   }
+`;
+
+const Number_Input = styled.input`
+  padding: 2%;
+  width: 12%;
+  border-bottom: 1px solid grey;
+  border: 1px dashed;
+  border-color: ${(props) => props.article_status};
+  white-space: nowrap;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  margin-bottom: 10px;
 `;
 
 const StyledButton = withStyles({
@@ -134,6 +151,10 @@ const SingleConstructor = (props) => {
   const [variants, setVariants] = useState([]);
   const [answer, setAnswer] = useState(props.construction.answer);
   const [received, setReceived] = useState(props.arr);
+  const [status, setStatus] = useState(
+    new Array(props.construction.answer.length).fill(false)
+  );
+
   const [answerState, setAnswerState] = useState("");
   const [type, setType] = useState(props.construction.type);
   const [attempts, setAttempts] = useState(1);
@@ -142,7 +163,7 @@ const SingleConstructor = (props) => {
   const [answerReveal, setAnswerReveal] = useState(false);
   const [update, setUpdate] = useState(false);
 
-  // answerState = "";
+  const { t } = useTranslation("lesson");
 
   // shuffle article options
   const shuffle = (array) => {
@@ -180,31 +201,28 @@ const SingleConstructor = (props) => {
   };
 
   const showWrong = () => {
-    console.log(1);
     const elements = document
       .getElementById(props.construction.id)
       .getElementsByClassName("l");
-    for (let element of elements) {
-      element.style.border = "1px solid #DE6B48";
-    }
-    setAnswerState("wrong");
+    // for (let element of elements) {
+    //   element.style.border = "1px solid #DE6B48";
+    // }
     setAttempts(attempts + 1);
-    setTimeout(function () {
-      for (let element of elements) {
-        element.style.border = "none";
-        element.style.borderBottom = "1px solid grey ";
-      }
-    }, 3000);
+    // setTimeout(function () {
+    //   for (let element of elements) {
+    //     element.style.border = "none";
+    //     element.style.borderBottom = "1px solid grey ";
+    //   }
+    // }, 3000);
   };
 
   const showRight = () => {
-    console.log(2);
     const elements = document
       .getElementById(props.construction.id)
       .getElementsByClassName("l");
-    for (let element of elements) {
-      element.style.border = "1px solid #84BC9C";
-    }
+    // for (let element of elements) {
+    //   element.style.border = "1px solid #84BC9C";
+    // }
     setAnswerState("right");
     setAnswered(true);
     const texts = document.querySelectorAll("#text");
@@ -243,9 +261,18 @@ const SingleConstructor = (props) => {
       }
     } else if (type === "equal") {
       // 3. Check if all the correct variants are included into the answer, order does matter
+      let status_arr = status;
+      answer.map((an, i) => {
+        if (an == received[i]) {
+          status_arr[i] = true;
+        }
+      });
+
       if (JSON.stringify(answer) == JSON.stringify(received)) {
+        setAnswerState("right");
         showRight();
       } else {
+        setAnswerState("wrong");
         showWrong();
       }
     }
@@ -263,7 +290,6 @@ const SingleConstructor = (props) => {
         .filter((result) => result.construction.id === construction.id)
         .filter((result) => result.student.id === props.me.id))
     : (data = [""]);
-  console.log("received", received);
   return (
     <>
       {me.id === construction.user.id && !story && (
@@ -275,23 +301,39 @@ const SingleConstructor = (props) => {
         <Styles id={construction.id} story={story}>
           <Answers className="answer" id="answers">
             <Title>{construction.name}</Title>
+            <div>{t("construction_explainer")}</div>
             {!answerReveal && (
               <>
-                {received.map((option, index) => (
-                  <Label
-                    className="Var"
-                    key={index + 1}
-                    data={received[index] !== ""}
-                  >
-                    <input
-                      className="l"
-                      data={index + 1}
-                      type="number"
-                      onChange={(e) => handleSteps(e)}
-                    />
-                    <Article option={option} />
-                  </Label>
-                ))}
+                {received.map((option, index) => {
+                  let article_status;
+                  if (answerState == "") {
+                    article_status = "#c4c4c4";
+                  } else if (answerState == "right") {
+                    article_status = "#84BC9C";
+                  } else if (answerState == "wrong" && status[index]) {
+                    article_status = "#84BC9C";
+                  } else if (answerState == "wrong" && !status[index]) {
+                    article_status = "#DE6B48";
+                  }
+                  return (
+                    <Label
+                      className="Var"
+                      key={index + 1}
+                      data={received[index] !== ""}
+                      correct={status[index]}
+                    >
+                      <Number_Input
+                        className="l"
+                        data={index + 1}
+                        type="number"
+                        correct={status[index]}
+                        onChange={(e) => handleSteps(e)}
+                        article_status={article_status}
+                      />
+                      <Article option={option} />
+                    </Label>
+                  );
+                })}
               </>
             )}
             {answerReveal && (
@@ -326,7 +368,7 @@ const SingleConstructor = (props) => {
                       createConstructionResult();
                     }}
                   >
-                    Проверить
+                    {t("check")}
                   </StyledButton>
                 </Buttons>
               )}
@@ -334,7 +376,7 @@ const SingleConstructor = (props) => {
             {answerState === "wrong" ? (
               <>
                 <StyledButton onClick={(e) => setAnswerReveal(!answerReveal)}>
-                  {answerReveal ? "Закрыть" : "Открыть"}
+                  {answerReveal ? t("back") : t("show")}
                 </StyledButton>
               </>
             ) : null}
@@ -346,9 +388,16 @@ const SingleConstructor = (props) => {
             ) : null}
           </Answers>
           <Variants>
-            {variants.map((option, index) => (
-              <Box index={index} option={option} id={construction.id} />
-            ))}
+            {variants.map((option, index) => {
+              return (
+                <Box
+                  used={received.includes(option)}
+                  index={index}
+                  option={option}
+                  id={construction.id}
+                />
+              );
+            })}
           </Variants>
         </Styles>
       )}

@@ -252,7 +252,7 @@ const CreateCourse = (props) => {
                 <label for="file">
                   <div className="upload">
                     {!pending && "Загрузите картинку курса"}
-                    {pending && "Идет загрузка..."}
+                    {pending && "Идет Loading..."}
                   </div>
                 </label>
                 <input

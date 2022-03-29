@@ -118,7 +118,7 @@ const Complexity = styled.div`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
@@ -156,6 +156,8 @@ const UpdateProblem = (props) => {
             <option value={5}>5</option>
           </select>
         </Complexity>
+        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
+
         <DynamicLoadedEditor getEditorText={getText} value={text} />
         <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
         {nodeID && (

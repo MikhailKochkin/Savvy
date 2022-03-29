@@ -26,7 +26,7 @@ const Container = styled.div`
     font-size: 4rem;
     line-height: 1.4;
     width: 100%;
-    margin: 80px 0;
+    margin-bottom: 80px;
   }
   @media (max-width: 800px) {
     h2 {
@@ -40,8 +40,8 @@ const TeachersList = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: space-between;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   @media (max-width: 800px) {
     width: auto;

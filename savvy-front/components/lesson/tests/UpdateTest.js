@@ -11,6 +11,7 @@ const UPDATE_TEST_MUTATION = gql`
     $question: [String!]
     $answers: [String!]
     $correct: [Boolean!]
+    $comments: [String!]
     $complexity: Int
     $ifRight: String
     $ifWrong: String
@@ -20,6 +21,7 @@ const UPDATE_TEST_MUTATION = gql`
       question: $question
       answers: $answers
       correct: $correct
+      comments: $comments
       complexity: $complexity
       ifRight: $ifRight
       ifWrong: $ifWrong
@@ -64,6 +66,17 @@ const AnswerOption = styled.div`
     font-size: 1.4rem;
     outline: 0;
   }
+  .comment {
+    border-radius: 5px;
+    margin-top: 15px;
+    border: 1px solid #c4c4c4;
+    width: 80%;
+    min-height: 100px;
+    padding: 1.5%;
+    font-size: 1.4rem;
+    outline: 0;
+  }
+
   select {
     width: 20%;
     font-size: 1.4rem;
@@ -127,6 +140,9 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const UpdateTest = (props) => {
   const [answers, setAnswers] = useState(props.answers);
+  const [comments, setComments] = useState(
+    props.comments ? props.comments : new Array(props.answers.length).fill("")
+  );
   const [correct, setCorrect] = useState(props.correct);
   const [question, setQuestion] = useState(props.question[0]);
   const [complexity, setComplexity] = useState(
@@ -134,10 +150,16 @@ const UpdateTest = (props) => {
   );
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
-  const handleArray = (val, i) => {
+  const handleArray = (val, name, i) => {
     let arr = [...answers];
-    arr[i] = val;
+    arr[i - 1] = val;
     return setAnswers(arr);
+  };
+
+  const handleArray2 = (val, name, i) => {
+    let arr = [...comments];
+    arr[i - 1] = val;
+    return setComments(arr);
   };
 
   const handleCorrect = (val, i) => {
@@ -159,7 +181,6 @@ const UpdateTest = (props) => {
   };
 
   const { testID, mes, lessonID } = props;
-  console.log(lessonID);
   return (
     <div>
       <Comment>
@@ -204,6 +225,14 @@ const UpdateTest = (props) => {
                 <option value={true}>Правильно!</option>
                 <option value={false}>Не совсем...</option>
               </select>
+              <div className="comment">
+                <DynamicLoadedEditor
+                  index={i + 1}
+                  name={i}
+                  value={answer[2]}
+                  getEditorText={handleArray2}
+                />
+              </div>
             </AnswerOption>
           );
         })}
@@ -239,6 +268,7 @@ const UpdateTest = (props) => {
           question: [question],
           answers: answers,
           correct: correct,
+          comments: comments,
           complexity,
           ifRight: ifRight,
           ifWrong: ifWrong,

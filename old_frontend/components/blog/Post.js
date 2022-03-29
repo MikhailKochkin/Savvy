@@ -105,12 +105,21 @@ const StyledModal = Modal.styled`
   background-color: white;
   border: 1px solid grey;
   border-radius: 10px;
-  max-width: 30%;
+  max-width: 40%;
+  min-width: 400px;
   @media (max-width: 1300px) {
     max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
   }
   @media (max-width: 800px) {
     max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 `;
 

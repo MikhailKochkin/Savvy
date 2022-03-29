@@ -1,5 +1,7 @@
 import React from "react";
 import { useQuery, gql } from "@apollo/client";
+import { useRouter } from "next/router";
+
 import { useUser } from "../User";
 import ATF from "./coursePageBlocks/ATF";
 import Details from "./coursePageBlocks/Details";
@@ -123,7 +125,9 @@ const NewCoursePage = (props) => {
     data.coursePage.new_students.map((ns) => student_list.push(ns.id));
   }
   const me = useUser();
-  moment.locale("ru");
+  const router = useRouter();
+
+  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
 
   var dates = [
     "March 5, 2022 20:00:00",
@@ -173,9 +177,6 @@ const NewCoursePage = (props) => {
         "Попадете на вебинары с практикующими юристами",
         "Получите доступ в сообщество BeSavvy с вакансиями, офлайн мероприятиями и экспертными встречами",
       ],
-      // goal_1: "Выиграть этап олимпиады",
-      // goal_2: "Сдать экзамен",
-      // goal_3: "Пройти собеседование",
       offer: `Зарегистрируйтесь на открытый урок`,
       c2a: "Стоимость программы: 14 900 ₽ за 4 недели",
       sps: [
@@ -1190,6 +1191,117 @@ const NewCoursePage = (props) => {
         },
       ],
     },
+    {
+      header: "Learn fundamentals of <span>Legal English</span> in 1 week",
+      subheader:
+        "Master the skills of legal writing, write an essay and get personalized feedback from a tutor with 5+ years of experience.",
+      image: "back_image_low.png",
+      length1: "1 week",
+      length2: "6 hours per week",
+      start: moment(next_date._d).format("Do MMMM YYYY"),
+      start_eng: next_date,
+      start_comment: "We will send the course link to your email",
+      prior_klnowledge_1: "B1 level",
+      prior_klnowledge_2:
+        "We will help if you have any gaps in your knowledge ",
+      goals: [
+        "We will explain complex grammar topics in a simple way",
+        "Help you learn corporate law vocabulary",
+        "Show how to draft Legal English texts",
+        "Provide feedback on your work",
+        "Answer all questions on our Discord server",
+      ],
+      offer: `Reserve your free spot at our course "Introduction to Legal English"`,
+      sps: [
+        {
+          selling_point: "Interactive lessons",
+          selling_point_details:
+            "Learn new topics in an interactive way, master new skills on simulations,  ",
+          image:
+            "https://images.unsplash.com/photo-1562564055-71e051d33c19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80",
+        },
+        {
+          selling_point: "Practical assignments",
+          selling_point_details:
+            "Once you are ready, write an essay on a legal topic that you know a lot about.",
+          image:
+            "https://images.unsplash.com/photo-1600195077909-46e573870d99?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        },
+        {
+          selling_point: "Personalized feedback",
+          selling_point_details:
+            "Get feedback on the practical assignment from the tutor. He will explain any grammar, vocabulary or writing mistakes that you may make.",
+          image:
+            "https://images.unsplash.com/photo-1600195077909-46e573870d99?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        },
+        {
+          selling_point: "Community discussions",
+          selling_point_details:
+            "Communicate with fellow students on our discord server. Ask questions, help others, feel that there are hundreds of people learning Legal English together with you.",
+          image:
+            "https://images.unsplash.com/photo-1589386417686-0d34b5903d23?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+        },
+      ],
+      authors_intro: "Learn from",
+      authors: [
+        {
+          name: "Mike",
+          surname: "Kochkin",
+          title: "BeSavvy founder",
+          image: "/static/misha.jpg",
+          info: `Mike is a former trainee lawyer in Baker McKenzie and Latham & Watkins, who has been teaching Legal English for more than 5 years.`,
+        },
+      ],
+      reviews: [
+        // {
+        //   name: "Карина Б.",
+        //   info: "Этот курс стал для меня неотъемлемым помощником в эффективном изучении гражданского права. Материал изложен очень лаконично и интересно, а также помогает систематизировать полученные знания. Спасибо создателям курса!",
+        // },
+        // {
+        //   name: "Игорь Б.",
+        //   info: "Хороший курс. Вопрос по реальным и консенсуальным договорам попался на собеседовании. А мне изначально казалось, что это глупый вопрос.",
+        // },
+        // {
+        //   name: "Екатерина П.",
+        //   info: "Курс мне очень понравился! Все очень понятно, структурировано!",
+        // },
+        // {
+        //   name: "Анастасия Ш.",
+        //   info: "Курс четко структурирован, что позволяет последовательно изучить непростой материал. Также, хочется отметить, что такой подход особенно сильно выручает в сессионный период, когда объем информации для усвоения только копится день ото дня.",
+        // },
+      ],
+      price: {
+        price: 0,
+        full: "0$",
+        full_explain: "Полная стоимость",
+        part: "На 4 месяца",
+        part_explain: "Рассрочка",
+        comment: `
+              Доступна рассрочка на 4,6 и 12 месяцев.`,
+      },
+      questions: [
+        {
+          q: "How do I join the course?",
+          a: "Appply for the course in the form. We will send you the link to the course as soon as we launch it.",
+        },
+        {
+          q: "Why should I enroll?",
+          a: "Mike knows well how to develop your Legal English and Legal Writing skills if English is not your first language. This free course is a great opportunity to get to know Mike's system better and decide if you want to continue studying Legal English at BeSavvy.",
+        },
+        {
+          q: "Will you help me if I run into any problems?",
+          a: "Of course. We will offer you any help 24/7 on Discord.",
+        },
+        {
+          q: "Free courses are always a waste of time",
+          a: "These lessons are a part of our more advanced course on Legal English. Our goal right now is to make sure that you like the platform and our approach. That's why the course is free.",
+        },
+        {
+          q: "Can my friend join?",
+          a: "We will be happy if you tell your friends about our course 😁 ",
+        },
+      ],
+    },
   ];
 
   let prog;
@@ -1205,10 +1317,11 @@ const NewCoursePage = (props) => {
     prog = programs[5];
   } else if (props.id == "ckum7fc9i644701hqtbnqalqgg") {
     prog = programs[6];
+  } else if (props.id == "cl11wmpa584311hyuvzpunsqi") {
+    prog = programs[7];
   } else {
     prog = programs[0];
   }
-
   return (
     <div>
       <ATF data={prog} />
@@ -1226,9 +1339,9 @@ const NewCoursePage = (props) => {
         ) : (
           <p>Загружаем программу курса ...</p>
         )}
-        {!loading && data && (
+        {/* {!loading && data && (
           <Action me={me} coursePage={data.coursePage} data={prog} />
-        )}
+        )} */}
         <SellingPoints data={prog} />
         <Teachers data={prog} />
         {prog.reviews.length > 0 && <Reviews data={prog} />}

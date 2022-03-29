@@ -98,7 +98,6 @@ const serialize = (node) => {
     let styles = Object.keys(node);
     styles.shift();
     if (styles.length) {
-      console.log(styles);
       let text = node.text;
       if (styles.includes("bold")) {
         text = `<b>${text}</b>`;
@@ -186,7 +185,6 @@ const deserialize = (el) => {
 
   //  legacy fix. Use it if the initial text in the test was plain text, not html
   if (el.nodeName == "BODY" && !el.innerHTML.includes("<p>")) {
-    console.log("!!!");
     return [
       {
         type: "paragraph",
@@ -236,14 +234,8 @@ const deserialize = (el) => {
 const HoveringMenu = (props) => {
   let html;
   props.value ? (html = props.value) : (html = `<p> </p>`);
-  // html = `<p> </p>`;
-  const ref = useRef();
-
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
-  // console.log("initial", initial);
-  // console.log("initialValue", initialValue);
-
   const [value, setValue] = useState(initial);
   const editor = useMemo(
     () => withLinks(withHistory(withReact(createEditor()))),
@@ -331,10 +323,8 @@ const HoveringMenu = (props) => {
       onChange={(value) => {
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        console.log("value", value);
         setValue(value);
         props.getEditorText(arr.join(""), props.name, props.index);
-        console.log("html", arr.join(""));
       }}
     >
       <HoveringToolbar />

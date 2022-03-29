@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
@@ -7,8 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 import Cookies from "universal-cookie";
-
-const cookies = new Cookies();
+import { useTranslation } from "next-i18next";
 
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -35,26 +34,34 @@ const Form = styled.form`
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
-  border: 1px solid #f0f0f0;
-  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  border: none;
   padding: 15px;
+  input {
+    font-size: 1.6rem;
+    font-family: Montserrat;
+  }
+  @media (max-width: 800px) {
+    min-width: 100px;
+    width: 100%;
+  }
 `;
 
 const Input = styled.input`
   width: 100%;
   background: none;
   font-size: 1.4rem;
-  border: none;
+  border: 1px solid #d6d6d6;
   font-family: Montserrat;
   outline: 0;
-  border-bottom: 1px solid #949494;
-  padding-bottom: 1%;
+  padding: 10px;
   margin-bottom: 15px;
   &:hover {
-    border-bottom: 1px solid #1a2a81;
+    border: 1px solid #999999;
   }
   &:focus {
-    border-bottom: 2px solid #1a2a81;
+    border: 1px solid #1a2a81;
   }
 `;
 
@@ -66,6 +73,7 @@ const Title = styled.div`
 
 const Transit = styled.div`
   margin-top: 3%;
+  width: 100%;
   font-size: 1.4rem;
   span {
     color: #112a62;
@@ -78,7 +86,8 @@ const useStyles = makeStyles({
   button: {
     width: "100%",
     marginBottom: "2%",
-    fontSize: "1.4rem",
+    fontSize: "1.7rem",
+    fontFamily: "Montserrat",
     textTransform: "none",
   },
   root: {
@@ -94,6 +103,8 @@ const WideSignin = (props) => {
   const [password, setPassword] = useState("");
   const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
+  const { t } = useTranslation("auth");
+
   return (
     <Mutation
       mutation={SIGNIN_MUTATION}
@@ -115,7 +126,7 @@ const WideSignin = (props) => {
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>Войдите на BeSavvy App</Title>
+            <Title>{t("c2a2")}</Title>
             <Error error={error} />
             <Input
               type="email"
@@ -123,15 +134,15 @@ const WideSignin = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               id="standard-basic"
               name="email"
-              placeholder="Электронная почта"
+              placeholder={t("email")}
+              label="Электронная почта"
             />
             <Input
               type="password"
-              id="standard-basic"
               name="password"
               label="Пароль"
               value={password}
-              placeholder="Пароль"
+              placeholder={t("password")}
               onChange={(e) => setPassword(e.target.value)}
             />
             <Button
@@ -140,17 +151,17 @@ const WideSignin = (props) => {
               color="primary"
               className={classes.button}
             >
-              {loading ? "Вхожу" : "Войти"}
+              {loading ? t("entering") : t("enter")}
             </Button>
             <Transit>
               <div>
                 <span name="reset" onClick={change}>
-                  Забыли пароль?
+                  {t("forgot_password")}
                 </span>
               </div>
-              Ещё не зарегистрированы на Savvy?{" "}
+              {t("not_registered_yet")}{" "}
               <span name="signup" onClick={change}>
-                Зарегистрироваться
+                {t("signup")}
               </span>
             </Transit>
           </Fieldset>

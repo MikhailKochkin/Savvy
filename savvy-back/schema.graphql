@@ -1230,7 +1230,7 @@ type Mutation {
   createForum(lessonId: String, text: String): Forum
   createLesson(coursePageID: String, description: String, name: String, number: Int, text: String): Lesson
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
-  createNewTest(answers: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
+  createNewTest(answers: [String], comments: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
   createNote(lessonId: String, text: String): Note
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(image: String, summary: String, text: String, title: String): Post
@@ -1266,11 +1266,12 @@ type Mutation {
   remind(id: String, reminders: [DateTime]): CourseVisit
   requestReset(email: String): Message
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
-  sendBusinessClientEmail(communication_medium: String, id: String): BusinessClient
+  sendBusinessClientEmail(comment: String, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
   signin(email: String, password: String): AuthPayload
   signout: SignOut
-  signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
+  signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
+  textBusinessClient(comment: String, id: String): BusinessClient
   updateBusinessClient(comment: String, id: String, tags: [String]): BusinessClient
   updateChat(id: String, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
@@ -1281,7 +1282,7 @@ type Mutation {
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
-  updateNewTest(answers: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
+  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
   updateNote(complexity: Int, id: String, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
@@ -1293,7 +1294,7 @@ type Mutation {
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
-  updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, status: Status, surname: String): User
+  updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String): User
 }
 
 input NestedBoolFilter {
@@ -1405,6 +1406,7 @@ input NestedStringNullableFilter {
 
 type NewTest {
   answers: [String!]!
+  comments: [String!]!
   complexity: Int
   correct: [Boolean!]!
   createdAt: DateTime!
@@ -2570,6 +2572,7 @@ type User {
   level: UserLevel
   name: String!
   new_subjects(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
+  number: String
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   password: String!
   permissions: [Permission!]!
@@ -2626,6 +2629,7 @@ input UserOrderByInput {
   legalPortfolioId: SortOrder
   levelId: SortOrder
   name: SortOrder
+  number: SortOrder
   password: SortOrder
   permissions: SortOrder
   resetToken: SortOrder
@@ -2681,6 +2685,7 @@ input UserWhereInput {
   newTests: NewTestListRelationFilter
   NOT: [UserWhereInput!]
   notes: NoteListRelationFilter
+  number: StringNullableFilter
   OR: [UserWhereInput!]
   orders: OrderListRelationFilter
   password: StringFilter

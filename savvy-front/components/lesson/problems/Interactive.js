@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
 import SingleQuiz from "../quizes/SingleQuiz";
 import SingleTest from "../tests/SingleTest";
 import Note from "../notes/Note";
@@ -11,16 +14,14 @@ const Styles = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  #suggestion {
-    /* background: #f0f8ff; */
+  .suggestion {
+    margin: 20px 0;
     color: white;
-    border-radius: 16px;
-    padding: 1.5% 3%;
-    width: 50vw;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
   span {
     cursor: pointer;
@@ -29,7 +30,7 @@ const Styles = styled.div`
     }
   }
   @media (max-width: 800px) {
-    #suggestion {
+    .suggestion {
       width: 100%;
       margin-bottom: 20px;
     }
@@ -55,20 +56,21 @@ const Final = styled.div`
 `;
 
 const Button = styled.div`
-  width: 60%;
+  width: 170px;
   text-align: center;
   box-sizing: border-box;
   border-radius: 10px;
-  background: #f96358;
-  padding: 2% 0;
-  /* margin-top: 2%; */
+  background: #000000;
+  padding: 10px 10px;
+  font-weight: 600;
+  color: #fff;
   cursor: pointer;
   @media (max-width: 800px) {
     width: 65%;
   }
   transition: 0.3s;
   &:hover {
-    background: #e75b52;
+    background: #444444;
   }
 `;
 
@@ -80,6 +82,7 @@ class Interactive extends Component {
     answers: [],
     display: false,
   };
+
   updateArray = (data, type) => {
     let newQuiz;
     let newNote;
@@ -106,7 +109,6 @@ class Interactive extends Component {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={this.props.me}
-          type={el.type}
           hidden={true}
           userData={[]}
           lessonID={this.props.lesson.id}
@@ -150,6 +152,7 @@ class Interactive extends Component {
           answers={el.answers}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
+          comments={el.comments}
           true={el.correct}
           user={el.user.id}
           user_name={el.user}
@@ -213,10 +216,13 @@ class Interactive extends Component {
       data[1].value === "" ||
       data[1].value == "0"
     ) {
+      this.props.onFinish(true);
       finish = (
-        <Final>
-          Теперь запишите ответ на задачу на основе наводящих вопросов 📝
-        </Final>
+        <></>
+        // <Final>
+        //   Now write down the answer to the problem in the form below. Then we
+        //   will share the answer provided by the course author. 📝
+        // </Final>
       );
       // finish = <div></div>;
       this.setState((state) => {
@@ -251,7 +257,6 @@ class Interactive extends Component {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={this.props.me}
-          type={el.type}
           hidden={true}
           userData={[]}
           lessonID={this.props.lesson.id}
@@ -324,9 +329,10 @@ class Interactive extends Component {
   render() {
     return (
       <Styles>
-        <div id="suggestion">
+        <div className="suggestion">
           <Button onClick={this.show}>
-            {!this.state.display ? "Первый вопрос" : "Закрыть"}
+            Start the problem
+            {/* {!this.state.display ? "Первый вопрос" : "Закрыть"} */}
           </Button>
         </div>
         <Questions display={this.state.display}>

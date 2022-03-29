@@ -10,6 +10,7 @@ const NewTest = objectType({
     t.model.complexity();
     t.model.lessonID();
     t.model.next();
+    t.model.comments();
     t.model.question();
     t.model.answers();
     t.model.correct();

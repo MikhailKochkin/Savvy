@@ -92,12 +92,14 @@ const Complexity = styled.div`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
 const UpdateNote = (props) => {
   const [text, setText] = useState(props.text);
+  const [show, setShow] = useState(false);
+
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -130,7 +132,10 @@ const UpdateNote = (props) => {
             Создать таблицу
           </a>
         </button>
-        <DynamicLoadedEditor getEditorText={getText} value={text} />
+        <button onClick={(e) => setShow(!show)}>
+          {show ? "Закрыть" : "Открыть редактор"}
+        </button>
+        {show && <DynamicLoadedEditor getEditorText={getText} value={text} />}
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
           variables={{

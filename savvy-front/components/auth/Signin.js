@@ -22,7 +22,7 @@ const SIGNIN_MUTATION = gql`
 `;
 
 const Form = styled.form`
-  min-width: 400px;
+  min-width: 450px;
   font-size: 1.6rem;
   @media (max-width: 800px) {
     min-width: 100px;
@@ -33,11 +33,17 @@ const Form = styled.form`
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border: none;
   padding: 15px;
   input {
     font-size: 1.6rem;
     font-family: Montserrat;
+  }
+  @media (max-width: 800px) {
+    min-width: 100px;
+    width: 100%;
   }
 `;
 
@@ -45,28 +51,31 @@ const Input = styled.input`
   width: 100%;
   background: none;
   font-size: 1.4rem;
-  border: none;
+  border: 1px solid #d6d6d6;
   font-family: Montserrat;
   outline: 0;
-  border-bottom: 1px solid #949494;
-  padding-bottom: 1%;
+  padding: 10px;
   margin-bottom: 15px;
   &:hover {
-    border-bottom: 1px solid #1a2a81;
+    border: 1px solid #999999;
   }
   &:focus {
-    border-bottom: 2px solid #1a2a81;
+    border: 1px solid #1a2a81;
   }
 `;
 
 const Title = styled.div`
-  font-size: 1.8rem;
-  font-weight: 900;
-  margin-bottom: 10px;
+  font-size: 2.4rem;
+  margin: 30px 0;
+  font-weight: 700;
+  line-height: 1.4;
+  width: 60%;
+  text-align: center;
 `;
 
 const Transit = styled.div`
   margin-top: 3%;
+  width: 100%;
   font-size: 1.4rem;
   span {
     color: #112a62;
@@ -79,7 +88,8 @@ const useStyles = makeStyles({
   button: {
     width: "100%",
     marginBottom: "2%",
-    fontSize: "1.4rem",
+    fontSize: "1.7rem",
+    fontFamily: "Montserrat",
     textTransform: "none",
   },
   root: {
@@ -95,7 +105,7 @@ const Signin = (props) => {
   const [password, setPassword] = useState("");
   const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
-  const { t } = useTranslation("nav");
+  const { t } = useTranslation("auth");
 
   return (
     <Mutation
@@ -117,7 +127,7 @@ const Signin = (props) => {
           }}
         >
           <Fieldset disabled={loading} aria-busy={loading}>
-            <Title>{t("join")}</Title>
+            <Title>{t("c2a2")}</Title>
             <Error error={error} />
             <Input
               type="email"
@@ -152,7 +162,7 @@ const Signin = (props) => {
               </div>
               {t("not_registered_yet")}{" "}
               <span name="signup" onClick={change}>
-                {t("sign_up")}
+                {t("signup")}
               </span>
             </Transit>
           </Fieldset>

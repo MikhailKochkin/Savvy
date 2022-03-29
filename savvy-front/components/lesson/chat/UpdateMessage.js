@@ -26,7 +26,7 @@ const Frame = styled.div`
 `;
 
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 

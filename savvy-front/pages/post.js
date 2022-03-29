@@ -43,7 +43,7 @@ const PostPage = (props) => {
     variables: { id: props.query.id },
   });
 
-  if (post_loading) return <p>Загрузка...</p>;
+  if (post_loading) return <p>Loading...</p>;
   if (post_error) return post_error;
   let post = post_data.post;
 

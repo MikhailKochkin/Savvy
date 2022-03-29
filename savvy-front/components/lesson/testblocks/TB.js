@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import Block from "./Block";
+import { useTranslation } from "next-i18next";
 
 const Container = styled.div`
   display: flex;
@@ -67,6 +68,7 @@ const TestPractice = (props) => {
   let filtered_quizes = quizes.filter((q) =>
     props.testPractice.tasks.includes(q.id)
   );
+  const { t } = useTranslation("lesson");
 
   const shuffled_tasks = shuffle([...filtered_tests, ...filtered_quizes]);
   console.log("shuffled_tasks", shuffled_tasks);
@@ -89,12 +91,9 @@ const TestPractice = (props) => {
       {!start && (
         <Container width={width}>
           <img src="/static/test_pattern.svg" />
-          <h2>Закрепление материала</h2>
-          <div>
-            Ответьте на 80% вопросов правильно, чтобы закрепить новые знания.
-            После этого вы сможете продолжить проходить урок.{" "}
-          </div>
-          <button onClick={(e) => setStart(true)}>Начать</button>
+          <h2>{t("practice")}</h2>
+          <div>{t("practice_explainer")}</div>
+          <button onClick={(e) => setStart(true)}>{t("start")}</button>
         </Container>
       )}
       {start && (

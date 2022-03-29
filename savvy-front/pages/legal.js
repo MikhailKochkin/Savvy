@@ -1,8 +1,12 @@
-import Legal from '../components/Legal';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const LegalPage = (props) => (
-            <Legal name={props.query.name} />
+import Legal from "../components/Legal";
 
-);
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["nav"])),
+  },
+});
+const LegalPage = (props) => <Legal name={props.query.name} />;
 
 export default LegalPage;

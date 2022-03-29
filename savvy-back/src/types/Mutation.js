@@ -30,7 +30,7 @@ const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
 const Demo_school = require("../emails/Demo_school");
-const Demo_eng = require("../emails/Demo_eng");
+const Template = require("../emails/Template");
 
 const NextWeekEmail = require("../emails/nextWeek");
 const CommentEmail = require("../emails/Comment");
@@ -38,6 +38,25 @@ const ConfEmail = require("../emails/Conf");
 const { argsToArgsConfig } = require("graphql/type/definition");
 
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
+
+const qrcode = require("qrcode-terminal");
+
+// const { Client } = require("whatsapp-web.js");
+// const wa_client = new Client();
+
+// wa_client.on("qr", (qr) => {
+//   console.log(1);
+//   qrcode.generate(qr, { small: true });
+//   console.log(2);
+// });
+
+// wa_client.on("ready", () => {
+//   console.log("Client is ready!");
+// });
+
+// wa_client.initialize();
+
+// console.log(12);
 
 const makeANiceEmail = (text) => `
   <div className="email" style="
@@ -101,6 +120,7 @@ const Mutation = mutationType({
       args: {
         name: stringArg(),
         surname: stringArg(),
+        number: stringArg(),
         email: stringArg(),
         password: stringArg(),
         isFamiliar: booleanArg(),
@@ -111,7 +131,11 @@ const Mutation = mutationType({
         careerTrackID: stringArg(),
         company: stringArg(),
       },
-      resolve: async (_, { name, surname, email, password, status }, ctx) => {
+      resolve: async (
+        _,
+        { name, surname, email, number, password, status },
+        ctx
+      ) => {
         const hashed_password = await bcrypt.hash(password, 10);
         const user = await ctx.prisma.user.create({
           data: {
@@ -120,6 +144,7 @@ const Mutation = mutationType({
             email: email.toLowerCase(),
             permissions: { set: ["USER"] },
             password: hashed_password,
+            number: number,
             // uni: { connect: { id: uniID } },
             // company: { connect: { id: company } },
             // careerTrack: { connect: { id: careerTrackID } },
@@ -209,8 +234,8 @@ const Mutation = mutationType({
       type: "User",
       args: {
         id: stringArg(),
-        // permissions: list(stringArg()),
         name: stringArg(),
+        number: stringArg(),
         image: stringArg(),
         surname: stringArg(),
         email: stringArg(),
@@ -556,6 +581,7 @@ const Mutation = mutationType({
         lessonId: stringArg(),
         answers: list(stringArg()),
         correct: list(booleanArg()),
+        comments: list(stringArg()),
         question: list(stringArg()),
         type: stringArg(),
         ifRight: stringArg(),
@@ -563,7 +589,16 @@ const Mutation = mutationType({
       },
       resolve: async (
         _,
-        { lessonId, answers, correct, question, ifRight, ifWrong, type },
+        {
+          lessonId,
+          answers,
+          correct,
+          comments,
+          question,
+          ifRight,
+          ifWrong,
+          type,
+        },
         ctx
       ) => {
         const new_data = {
@@ -579,6 +614,9 @@ const Mutation = mutationType({
           },
           answers: {
             set: [...answers],
+          },
+          comments: {
+            set: [...comments],
           },
           correct: {
             set: [...correct],
@@ -732,6 +770,7 @@ const Mutation = mutationType({
         answers: list(stringArg()),
         correct: list(booleanArg()),
         question: list(stringArg()),
+        comments: list(stringArg()),
         ifRight: stringArg(),
         ifWrong: stringArg(),
         complexity: intArg(),
@@ -2482,6 +2521,49 @@ const Mutation = mutationType({
         return bclient;
       },
     });
+    t.field("textBusinessClient", {
+      type: "BusinessClient",
+      args: {
+        comment: stringArg(),
+        id: stringArg(),
+      },
+      resolve: async (_, { comment, id }, ctx) => {
+        const my_client = await ctx.prisma.businessClient.findUnique({
+          where: { id: id },
+        });
+
+        let number;
+        if (my_client.number.startsWith("8")) {
+          number = my_client.number.replace("8", "7");
+        } else if (my_client.number.startsWith("+7")) {
+          number = my_client.number.replace("+7", "7");
+        } else if (my_client.number.startsWith("9")) {
+          number = `7${my_client.number}`;
+        } else {
+          number = my_client.number;
+        }
+
+        // const number_details = await wa_client.getNumberId(number); // get mobile number details
+
+        // if (number_details) {
+        //   const sendMessageData = await wa_client.sendMessage(
+        //     number_details._serialized,
+        //     comment
+        //   ); // send message
+        //   console.log(number, "Success");
+        // } else {
+        //   console.log(number, "Mobile number is not registered");
+        // }
+        // const bclient = await ctx.prisma.businessClient.update({
+        //   where: { id },
+        //   data: {
+        //     comment,
+        //   },
+        // });
+
+        return bclient;
+      },
+    });
     t.field("deleteClient", {
       type: "BusinessClient",
       args: {
@@ -2495,52 +2577,25 @@ const Mutation = mutationType({
     t.field("sendBusinessClientEmail", {
       type: "BusinessClient",
       args: {
-        communication_medium: stringArg(),
+        comment: stringArg(),
         id: stringArg(),
       },
-      resolve: async (_, { communication_medium, id }, ctx) => {
+      resolve: async (_, { communication_medium, comment, id }, ctx) => {
         console.log("1", 1);
-
-        console.log("communication_medium", communication_medium);
-
-        const bclient = await ctx.prisma.businessClient.update({
-          where: { id },
-          data: { communication_medium },
-        });
         const bc = await ctx.prisma.businessClient.findUnique({
           where: { id: id },
         });
-        if (communication_medium == "english") {
-          const newEmail3 = await client.sendEmail({
-            From: "Aliona@besavvy.app",
-            To: bc.email,
-            Subject: "Ваш помощник в изучении Legal English",
-            HtmlBody: Demo_eng.Demo_eng(),
-          });
-        } else if (communication_medium == "reminder") {
-          const newEmail4 = await client.sendEmail({
-            From: "Aliona@besavvy.app",
-            To: bc.email,
-            Subject: "Ваш личный менеджер в BeSavvy Lawyer",
-            HtmlBody: ClientReminder.ClientReminder(
-              `<p>Вы оставляли заявку на курс для юристов на сайте besavvy.app.</p>
-              <p>К сожалению, у нас так и не получилось с вами связаться. Мы понимаем, что у вас много работы и может не быть времени начинать заниматься прямо сейчас.</p>
-              <p>Но у нас до конца недели действуют большие скидки, а учиться можно начать в любой момент. Поэтому, если захотите узнать больше о программах, записывайтесь на встречу с директором Школы по кнопке ниже.</p>
-              <p>Все наши программы можно посмотреть <a target="_blank" href="https://besavvy.app">по этой ссылке</a>.</p>
-              `,
-              `https://calendly.com/mikhail-from-besavvy/15-min-intro`,
-              `Зарегистрироваться на звонок`
-            ),
-          });
-        } else {
-          const newEmail5 = await client.sendEmail({
-            From: "Aliona@besavvy.app",
-            To: bc.email,
-            Subject: "Открытые уроки BeSavvy",
-            HtmlBody: Demo_school.Demo_school(),
-          });
-        }
-        return bclient;
+        console.log("bc2", 2);
+
+        const newEmail3 = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: bc.email,
+          Subject: "🚀 Полезное письмо для юристов от BeSavvy",
+          HtmlBody: Template.Template(comment),
+        });
+        console.log("bc3", 3);
+
+        return bc;
       },
     });
     t.field("createBusinessClient", {

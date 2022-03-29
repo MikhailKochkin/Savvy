@@ -5,6 +5,7 @@ import Note from "../notes/Note";
 import SingleTest from "../tests/SingleTest";
 import SingleQuiz from "../quizes/SingleQuiz";
 import Final from "./Final";
+import { useTranslation } from "next-i18next";
 
 const CREATE_TEST_PRACTICE_RESULT_MUTATION = gql`
   mutation CREATE_TEST_PRACTICE_RESULT_MUTATION(
@@ -219,6 +220,7 @@ const Element = (props) => {
   const [time, setTime] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [answers, setAnswers] = useState([]);
+  const { t } = useTranslation("lesson");
 
   const [createTestPracticeResult, { data, loading, error }] = useMutation(
     CREATE_TEST_PRACTICE_RESULT_MUTATION
@@ -236,15 +238,9 @@ const Element = (props) => {
     if (!data[0]) {
       let old_answers = [...answers];
       setAnswers([...old_answers, false]);
-      //   setTimeout(function () {
-      //     setActiveStep(activeStep + 1);
-      //   }, 1000);
     } else if (data[0]) {
       let old_answers = [...answers];
       setAnswers([...old_answers, true]);
-      //   setTimeout(function () {
-      //     setActiveStep(activeStep + 1);
-      //   }, 1000);
     }
   };
 
@@ -275,14 +271,13 @@ const Element = (props) => {
         question={task.question}
         answers={task.answers}
         true={task.correct}
-        user={task.user.id}
         author={props.lesson.user}
         type={task.type}
         test={task}
         me={props.me}
         user={props.lesson.user.id}
         user_name={props.lesson.user}
-        userData={props.lesson.testResults}
+        // userData={props.lesson.testResults}
         lessonID={props.lesson.id}
         length={Array(task.correct.length).fill(false)}
         userData={props.testResults}
@@ -302,7 +297,6 @@ const Element = (props) => {
         type={task.type}
         check={task.check}
         hidden={true}
-        user={props.lesson.user.id}
         user_name={props.lesson.user}
         author={props.lesson.user}
         userData={props.quizResults}
@@ -321,8 +315,8 @@ const Element = (props) => {
       <LessonPart>
         <Progress>
           <div className="question">
-            {Math.round(props.tasksNum * 0.8)} из {props.tasksNum} вопросов,
-            чтобы пройти дальше.
+            {Math.round(props.tasksNum * 0.8)} {t("out")} {props.tasksNum}{" "}
+            {t("to_proceed")}.
           </div>
           <div className="circles">
             {_.times(props.tasksNum, (i) => (
@@ -338,8 +332,19 @@ const Element = (props) => {
           <button
             onClick={async (e) => {
               e.preventDefault();
+              console.log(
+                "activeStep",
+                activeStep + 1,
+                "answers.length",
+                answers.length
+              );
               setActiveStep(activeStep + 1);
 
+              if (activeStep + 1 > answers.length) {
+                console.log("!!!", answers);
+
+                setAnswers([...answers, false]);
+              }
               if (activeStep + 1 == props.tasksNum) {
                 const res = await createTestPracticeResult({
                   variables: {
@@ -352,11 +357,11 @@ const Element = (props) => {
               }
             }}
           >
-            Далее
+            {t("next")}
           </button>
         )}
         {activeStep == props.tasksNum && (
-          <button onClick={(e) => props.restart(false)}>Начать заново</button>
+          <button onClick={(e) => props.restart(false)}>{t("restart")}</button>
         )}
       </LessonPart>
     </Container>

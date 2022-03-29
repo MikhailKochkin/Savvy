@@ -104,18 +104,23 @@ const Styles = styled.div`
   border: 1px solid #edefed;
   box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
   margin: 30px 0;
+  font-weight: 500;
   padding: 2%;
   width: ${(props) => props.width};
   .bar {
-    width: 80%;
-    height: 5px;
+    width: 70%;
+    height: 7px;
+    border-radius: 4px;
     background: #b6bce2;
+  }
+  .step {
+    font-weight: 600;
   }
   @media (max-width: 800px) {
     width: 100%;
     .bar {
       width: 200px;
-      height: 5px;
+      height: 7px;
       background: #b6bce2;
     }
   }
@@ -123,7 +128,7 @@ const Styles = styled.div`
 
 const Circle = styled.button`
   border: ${(props) =>
-    props.color ? "1px solid #C4C4C4" : "1px solid #112a62"};
+    props.color ? "2px solid #C4C4C4" : "2px solid #112a62"};
   width: 32px;
   height: 32px;
   background: white;
@@ -132,6 +137,7 @@ const Circle = styled.button`
   outline: 0;
   span {
     font-size: 1.8rem;
+    font-weight: 600;
     color: ${(props) => (props.color ? "#C4C4C4" : "#112a62")};
   }
   &:active {
@@ -144,7 +150,8 @@ const Circle = styled.button`
 const Progress = styled.div`
   background: #3f51b5;
   width: ${(props) => props.progress};
-  height: 5px;
+  height: 7px;
+  border-radius: 4px;
   transition: all 0.5s;
 `;
 
@@ -171,7 +178,6 @@ class Shots extends Component {
   render() {
     const { comments, parts, shotID, lessonID, me, shotUser, title, userData } =
       this.props;
-    console.log(me.id);
     const visible = [];
     for (let i = 0; i < this.state.num; i++) {
       visible.push(parts[i]);
@@ -184,7 +190,7 @@ class Shots extends Component {
     if (this.props.problem) {
       width = "50%";
     } else if (this.props.story) {
-      width = "50%";
+      width = "540px";
     } else {
       width = "100%";
     }
@@ -193,8 +199,10 @@ class Shots extends Component {
         {this.state.page === "show" && (
           <>
             <Title>
-              <span>Решение:</span> {title}
+              <span>Пояснение:</span> {title}
             </Title>
+            <div className="step">Шаг {this.state.num}</div>
+
             <>
               <Text>
                 <div key={this.state.num - 1}>
@@ -203,13 +211,6 @@ class Shots extends Component {
               </Text>
               <Commentary>
                 <>{renderHTML(comments[this.state.num - 1])}</>
-                {console.log(
-                  comments,
-                  parts,
-                  comments[this.state.num],
-                  comments[this.state.num - 1],
-                  this.state.num
-                )}
               </Commentary>
             </>
             <Buttons>

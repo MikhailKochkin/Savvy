@@ -141,7 +141,7 @@ const Blog = (props) => {
           )}
           <Query query={POSTS_QUERY}>
             {({ data, loading, fetchMore }) => {
-              if (loading) return <p>Загрузка...</p>;
+              if (loading) return <p>Loading...</p>;
               console.log(data);
               return (
                 <>

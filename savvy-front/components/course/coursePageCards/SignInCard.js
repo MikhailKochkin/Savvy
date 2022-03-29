@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import Modal from "styled-react-modal";
+import { useTranslation } from "next-i18next";
 
 const Payment = styled.div`
   display: flex;
@@ -59,59 +60,63 @@ const StyledModal = Modal.styled`
   background-color: white;
   border: 1px solid grey;
   border-radius: 10px;
-  max-width: 30%;
+  max-width: 40%;
+  min-width: 400px;
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
   @media (max-width: 800px) {
-    width: 90%;
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 `;
 
-class RegisterCard extends Component {
-  state = {
-    isOpen: false,
-    auth: "signin",
+const RegisterCard = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [auth, setAuth] = useState("signin");
+  const { t } = useTranslation("course");
+
+  const changeState = (dataFromChild) => {
+    setAuth(dataFromChild);
   };
 
-  toggleModal = (e) => {
-    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
-  };
-
-  changeState = (dataFromChild) => {
-    this.setState({
-      auth: dataFromChild,
-    });
-  };
-
-  render() {
-    return (
-      <>
-        <Payment>
-          <Header>
-            👏🏻Мы восхищаемся вашим стремлением узнавать что-то новое!
-          </Header>
-          <div>
-            Но, пожалуйста, войдите в свой аккаунт или зарегистрируйтесь на
-            сайте,чтобы получить доступ к курсу.{" "}
-          </div>
-          <SmallButton onClick={this.toggleModal}>Войти</SmallButton>
-        </Payment>
-        <StyledModal
-          isOpen={this.state.isOpen}
-          onBackgroundClick={this.toggleModal}
-          onEscapeKeydown={this.toggleModal}
-        >
-          {this.state.auth === "signin" && (
-            <Signin getData={this.changeState} closeNavBar={this.toggleModal} />
-          )}
-          {this.state.auth === "signup" && (
-            <Signup getData={this.changeState} closeNavBar={this.toggleModal} />
-          )}
-          {this.state.auth === "reset" && (
-            <RequestReset getData={this.changeState} />
-          )}
-        </StyledModal>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Payment>
+        <Header>👏🏻 {t("register_header")}</Header>
+        <div>{t("register_explainer")}</div>
+        <SmallButton onClick={(e) => setIsOpen(true)}>
+          {t("register_button")}
+        </SmallButton>
+      </Payment>
+      <StyledModal
+        isOpen={isOpen}
+        onBackgroundClick={(e) => setIsOpen(!isOpen)}
+        onEscapeKeydown={(e) => setIsOpen(!isOpen)}
+      >
+        {auth === "signin" && (
+          <Signin
+            getData={changeState}
+            closeNavBar={(e) => setIsOpen(!isOpen)}
+          />
+        )}
+        {auth === "signup" && (
+          <Signup
+            getData={changeState}
+            closeNavBar={(e) => setIsOpen(!isOpen)}
+          />
+        )}
+        {auth === "reset" && <RequestReset getData={changeState} />}
+      </StyledModal>
+    </>
+  );
+};
 
 export default RegisterCard;

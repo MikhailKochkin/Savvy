@@ -32,6 +32,7 @@ const CREATE_PROBLEMRESULT_MUTATION = gql`
 
 const TextBar = styled.div`
   width: ${(props) => (props.story ? "100vw" : "100%")};
+  max-width: 540px;
   font-size: 1.6rem;
   padding: 0;
   display: flex;
@@ -49,20 +50,27 @@ const TextBar = styled.div`
     /* line-height: 1.6; */
     p {
       margin: 10px 0;
+      line-height: 1.4;
     }
   }
   #text {
-    width: ${(props) => (props.story ? "50%" : "100%")};
+    width: 100%;
   }
   .hint {
     color: #333a8a;
     text-decoration: underline;
     cursor: pointer;
   }
-  /* a {
-    color: #800000;
-    text-decoration: underline;
-  } */
+  p {
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  h2 p {
+    line-height: 1.2;
+    width: 90%;
+    font-size: 3.2rem;
+    font-weight: 700;
+  }
   img {
     display: block;
     max-width: 100%;
@@ -78,6 +86,15 @@ const TextBar = styled.div`
     @media (max-width: 800px) {
       width: 100%;
       height: auto;
+    }
+  }
+  #question {
+    background: #f5f5f5;
+    padding: 15px 20px;
+    border-radius: 20px;
+    .line_top {
+      border-top: 1px solid #d0d0d0;
+      padding-top: 20px;
     }
   }
   #conceal {
@@ -96,11 +113,16 @@ const TextBar = styled.div`
   }
 `;
 
+const ResponseArea = styled.div`
+  width: 100%;
+`;
+
 const Frame = styled.div`
   border: 1px solid #c4c4c4;
   border-radius: 10px;
-  width: ${(props) => (props.story ? "50%" : "100%")};
+  width: 100%;
   margin: 1.5% 0;
+  height: 120px;
   padding: 0% 3%;
   .com {
     border-top: 1px solid #c4c4c4;
@@ -111,14 +133,41 @@ const Frame = styled.div`
 `;
 
 const ButtonGroup = styled.div`
-  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Buttons = styled.div`
-  width: ${(props) => (props.story ? "10%" : "30%")};
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
   pointer-events: ${(props) => (props.block ? "none" : "auto")};
   @media (max-width: 800px) {
     width: 50%;
+  }
+`;
+
+const Button2 = styled.div`
+  width: 170px;
+  text-align: center;
+  box-sizing: border-box;
+  border-radius: 10px;
+  background: #000000;
+  padding: 10px 10px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  @media (max-width: 800px) {
+    width: 65%;
+  }
+  transition: 0.3s;
+  &:hover {
+    background: #444444;
   }
 `;
 
@@ -127,8 +176,12 @@ const StyledButton = withStyles({
     margin: "4% 0",
     marginRight: "2%",
     fontSize: "1.6rem",
+    borderRadius: "10px",
+    fontFamily: "Montserrat",
+    fontWeight: "600",
     textTransform: "none",
-    width: "100%",
+    padding: "10px",
+    width: "170px",
   },
 })(Button);
 
@@ -140,9 +193,11 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 class SingleProblem extends Component {
   state = {
     answer: "",
-    revealAnswer: false,
+    showAnswer: false,
     revealed: [],
     update: false,
+    teacher_answer: "",
+    isFinished: false,
   };
 
   handleChange = (e) => {
@@ -166,22 +221,24 @@ class SingleProblem extends Component {
     }
   };
 
+  onFinish = (status) => {
+    console.log(status);
+    this.setState({ isFinished: true });
+  };
+
   onMouseClick = (e) => {
     let answer = e.target.innerHTML.toLowerCase().trim();
-    console.log("answer", answer);
     if (
       e.target.getAttribute("concealed") === "true" &&
       ((answer !== "ответ" && answer !== "ответ." && answer !== "ответ:") ||
         this.state.revealAnswer)
     ) {
-      console.log(1);
       e.target.id = "no-conceal";
       e.target.innerHTML = e.target.getAttribute("data");
       e.target.setAttribute("concealed", "false");
+
       this.onCheck(e.target.innerHTML);
     } else if (e.target.parentElement.getAttribute("concealed") === "false") {
-      console.log(2);
-
       e.target.parentElement.id = "conceal";
       e.target.parentElement.setAttribute("concealed", "true");
       e.target.parentElement.innerHTML =
@@ -197,14 +254,27 @@ class SingleProblem extends Component {
     console.log("elements", elements);
 
     elements.forEach((element) => {
-      let data = element.innerHTML;
-      let hint = element.getAttribute("data-text");
-      console.log("hint", hint);
-      element.innerHTML = hint;
-      element.setAttribute("data", data);
-      element.setAttribute("concealed", true);
-      element.addEventListener("click", this.onMouseClick);
+      let answer = element.getAttribute("data-text").toLowerCase();
+      console.log("answer", answer, answer !== "ответ");
+
+      if (
+        element.getAttribute("concealed") === "true" ||
+        (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:")
+      ) {
+        console.log(11);
+        let data = element.innerHTML;
+        let hint = element.getAttribute("data-text");
+        element.innerHTML = hint;
+        element.setAttribute("data", data);
+        element.setAttribute("concealed", true);
+        element.addEventListener("click", this.onMouseClick);
+      } else {
+        console.log(12);
+        this.setState({ teacher_answer: element.innerHTML });
+        element.style.display = "none";
+      }
     });
+    // elements[0].style.display = "none";
   }
   render() {
     const { problem, me, userData, lesson, story, complexity, author } =
@@ -225,36 +295,12 @@ class SingleProblem extends Component {
                 problem={problem}
                 story={story}
                 author={author}
+                onFinish={this.onFinish}
               />
             )}
-            {data.length > 0 && (
-              <ButtonGroup>
-                <StyledButton
-                  variant="contained"
-                  color="primary"
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    const res2 = await this.setState((prev) => ({
-                      revealAnswer: !prev.revealAnswer,
-                    }));
-                  }}
-                >
-                  {this.state.revealAnswer
-                    ? "Закрыть ответы"
-                    : "Открыть ответы"}
-                </StyledButton>
-              </ButtonGroup>
-            )}
-            {this.state.revealAnswer && data.length > 0 && (
-              <Frame story={story}>
-                <p>
-                  <b>Ваш ответ:</b>
-                </p>{" "}
-                {renderHTML(data[0].answer)}
-              </Frame>
-            )}
-            {data.length === 0 && (
-              <>
+            {(this.state.isFinished || !problem.nodeID) && (
+              <ResponseArea>
+                <h2>Запишите ответ</h2>
                 <Frame story={story}>
                   <HoverEditor
                     index={1}
@@ -284,11 +330,8 @@ class SingleProblem extends Component {
                           if (this.state.answer !== "") {
                             const res = await createProblemResult();
                             const res2 = await this.setState({
-                              revealAnswer: true,
+                              showAnswerButton: true,
                             });
-                            alert(
-                              "Ваш ответ сохранен! Вы можете посмотреть вариант преподавателя и перейти к следующему заданию."
-                            );
                             console.log("Yes");
                           } else {
                             console.log("No");
@@ -297,11 +340,29 @@ class SingleProblem extends Component {
                       >
                         {loading ? "Сохраняем..." : "Ответить"}
                       </StyledButton>
+                      {this.state.showAnswerButton && (
+                        <Button2
+                          onClick={(e) =>
+                            this.setState((prevState) => ({
+                              showAnswerText: !prevState.showAnswer,
+                            }))
+                          }
+                        >
+                          Открыть ответ
+                        </Button2>
+                      )}
                     </Buttons>
                   )}
                 </Mutation>
-              </>
+                {this.state.showAnswerText && (
+                  <div>
+                    <h2>Ответ</h2>
+                    {renderHTML(this.state.teacher_answer)}
+                  </div>
+                )}
+              </ResponseArea>
             )}
+            {/* )} */}
             {me && !story && (
               <StyledButton onClick={(e) => this.setState({ update: true })}>
                 Изменить

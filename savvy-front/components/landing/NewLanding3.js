@@ -9,13 +9,12 @@ import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   background: #fff;
-  min-height: 90vh;
+  min-height: 100vh;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   @media (min-height: 1000px) and (max-height: 1200px) {
     transform-origin: -600% 100%;
     height: 50%;
@@ -30,64 +29,6 @@ const Styles = styled.div`
   }
 `;
 
-const Menu = styled.div`
-  width: 100%;
-  height: 800px;
-  z-index: 1;
-  /* margin: 50px 0; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* justify-content: center; */
-  background: linear-gradient(-85deg, #ee7752, #ff4fce, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 10s ease infinite;
-  position: absolute;
-  bottom: 0;
-  top: auto;
-  opacity: 0.9;
-  transform-origin: ${(props) => `${-90}% 100%`};
-  transform: skewY(-12deg);
-  @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    25% {
-      background-position: 50% 0;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    75% {
-      background-position: 50% 100%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-  @media (min-height: 1000px) and (max-height: 1200px) {
-    transform-origin: -500% 100%;
-  }
-  @media (min-height: 400px) and (min-width: 1100px) and (max-width: 1500px) {
-    transform-origin: ${(props) => `${-100}% 100%`};
-  }
-  @media (max-height: 500px) and (min-width: 1100px) and (max-width: 1500px) {
-    transform-origin: ${(props) => `${-100}% 100%`};
-  }
-  @media (min-height: 900px) and (max-height: 1000px) and (max-width: 900px) {
-    transform-origin: -800% 100%;
-  }
-  @media (min-height: 800px) and (max-height: 900px) and (max-width: 900px) {
-    transform-origin: -750% 100%;
-  }
-  @media (max-height: 800px) and (max-width: 900px) {
-    transform-origin: -650% 100%;
-  }
-  @media (max-height: 750px) and (max-width: 900px) {
-    transform-origin: -550% 100%;
-  }
-`;
-
 const Info = styled.div`
   z-index: 2;
   width: 100%;
@@ -95,20 +36,47 @@ const Info = styled.div`
   flex-direction: column;
   align-items: center;
   .container {
-    width: 80%;
+    width: 1050px;
     display: flex;
+    max-height: 65vh;
+    min-height: 75vh;
     margin-top: 20px;
     flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .video_box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      video {
+        background: #fff;
+        width: 560px;
+      }
+    }
+    @media (max-width: 900px) {
+      flex-direction: column;
+      max-height: 150vh;
+      width: 90%;
+
+      .video_box {
+        video {
+          width: 100%;
+        }
+      }
+    }
+
     .text {
       h1 {
-        font-size: 7rem;
+        font-size: 6rem;
         line-height: 1.1;
         text-align: left;
         font-weight: 700;
         width: 70%;
         opacity: 0.9;
         /* margin-top: 10%; */
-        color: #3a3a3a;
+        color: #000000;
         span {
           display: inline-block;
           transform: skew(-6deg);
@@ -125,11 +93,11 @@ const Info = styled.div`
         }
       }
       div {
-        width: 70%;
+        width: 90%;
         font-family: Montserrat;
         font-style: normal;
         font-weight: 500;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
         line-height: 1.4;
         color: #3a3a3a;
         margin-bottom: 20px;
@@ -224,7 +192,7 @@ const Landing = (props) => {
   };
   return (
     <Styles>
-      <Menu height={h}></Menu>
+      {/* <Menu></Menu> */}
       <Info>
         <NewNav />
         <div className="container">
@@ -235,7 +203,12 @@ const Landing = (props) => {
               <button onClick={(e) => slide()}>{t("c2a")}</button>
             </Buttons>
           </div>
-          <Phone />
+          <div className="video_box">
+            <video loop="loop" autoplay="autoplay" playsinline muted>
+              <source src="static/v4.webm" type="video/webm" />
+            </video>
+          </div>
+          {/* <Phone /> */}
         </div>
       </Info>
       <Block></Block>

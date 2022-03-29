@@ -104,7 +104,7 @@ const Label = styled.label`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/UpdateTextEditor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 

@@ -156,7 +156,7 @@ const Progress = (props) => {
   const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
     variables: { id: props.courseId },
   });
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>Loading...</p>;
   let coursePage = data.coursePage;
 
   return (

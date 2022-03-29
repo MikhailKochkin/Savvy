@@ -4,10 +4,11 @@ import { graduationCap } from "react-icons-kit/fa/graduationCap";
 import Icon from "react-icons-kit";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const Styles = styled.div`
   width: 100vw;
-  min-height: 95vh;
+  min-height: 70vh;
   background: #fff;
   display: flex;
   flex-direction: column;
@@ -101,6 +102,7 @@ const Container = styled.div`
 
 const Goal = (props) => {
   const { t } = useTranslation("coursePage");
+  const router = useRouter();
 
   const slide = () => {
     var my_element = document.getElementById("c2a");
@@ -120,9 +122,18 @@ const Goal = (props) => {
               renderHTML(d.goal_header)
             ) : (
               <>
-                Вы получите новые знания. <br />
-                Новые навыки.
-                <br /> И новые знакомства с экспертами.
+                {router.locale == "ru" ? (
+                  <>
+                    Вы получите новые знания. <br />
+                    Новые навыки.
+                    <br /> И новые знакомства с экспертами.
+                  </>
+                ) : (
+                  <>
+                    Get new knowledge. <br /> Master new skills. <br /> Join the
+                    community.
+                  </>
+                )}
               </>
             )}
           </h2>

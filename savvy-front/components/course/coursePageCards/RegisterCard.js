@@ -6,7 +6,7 @@ import moment from "moment";
 import BuyDummy from "../BuyDummy";
 import ReactResizeDetector from "react-resize-detector";
 import Modal from "styled-react-modal";
-// import { withTranslation } from "../../../i18n";
+import { useTranslation } from "next-i18next";
 
 const Data = styled.div`
   display: flex;
@@ -47,10 +47,8 @@ const Payment = styled.div`
   flex-direction: column;
   /* justify-content: space-between; */
   background: #ffffff;
-  border: 1px solid #e4e4e4;
   box-sizing: border-box;
   width: 350px;
-  min-height: 290px;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -106,9 +104,9 @@ const Text = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  padding-top: 20%;
+  min-height: 200px;
 `;
 
 const Paid = styled.div`
@@ -233,13 +231,21 @@ const StyledModal = Modal.styled`
   background-color: white;
   border: 1px solid grey;
   border-radius: 10px;
-  max-width: 70%;
-  min-width: 1100px;
-  height: 80%;
-  @media (max-width: 800px) {
-    min-width: 90%;
-    height: 75%;
+  max-width: 40%;
+  min-width: 400px;
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
     margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
   }
 `;
 
@@ -270,20 +276,12 @@ const RegisterCard = (props) => {
   const [width, setWidth] = useState(0);
   const [used, setUsed] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation("course");
 
   const onResize = (width) => {
     setWidth(width);
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setTimeLeft(calculateTimeLeft());
-  //   }, 1000);
-  // });
-
-  // if (props.coursePage.promocode) {
-  //   props.coursePage.c[0].map((el) => promos.push(Object.keys(el)[0]));
-  // }
   const handlePromo = (p) => {
     if (
       props.promocode &&
@@ -328,129 +326,22 @@ const RegisterCard = (props) => {
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <Data>
-        <Description>
-          {/* <div className="title">{props.t("choose_plan")}</div>
-          <div>{props.t("life")}</div>
-          <div>{props.t("access")}</div>
-          <div>{props.t("services")}</div>
-          <div>{props.t("exclusive")}</div>
-          <div>{props.t("career")}</div> */}
-        </Description>
         <Payment>
-          <Header>
-            {
-              <>
-                {discountPrice &&
-                  price !== "Бесплатно" &&
-                  coursePage.courseType !== "PUBLIC" && (
-                    <>
-                      <span className="crossed">{`${price}`}</span>
-                      {"        "}
-                      {`${discountPrice} ₽`}
-                    </>
-                  )}
-                {!discountPrice &&
-                  price !== "Бесплатно" &&
-                  coursePage.courseType !== "PUBLIC" && <>{`${price} ₽`}</>}
-                {(!discountPrice && price === "Бесплатно") ||
-                  (coursePage.courseType == "PUBLIC" && <>{`Бесплатно`}</>)}
-              </>
-            }
-          </Header>
           <Text>
             <Part1>
               {(coursePage.courseType === "PUBLIC" ||
                 coursePage.courseType === "CHALLENGE") && (
                 <>
-                  <div className="message">
-                    Это открытый курс, но вам нужно на него зарегистрироваться.
-                    Для этого нажмите кнопку ниже.
-                  </div>
+                  <div className="message">{t("open_course")}</div>
                 </>
               )}
-              {coursePage.courseType === "PRIVATE" && (
-                <div className="message">
-                  Это закрытый курс. Вам необходимо подать заявку на регистрацию
-                  и преподаватель откроет вам доступ.
-                </div>
-              )}
-              {coursePage.courseType === "FORMONEY" && (
-                <GridContainer>
-                  <div className="Title">Выберите план</div>
-                  <div />
-                  <div className="Self">
-                    <span className="Emoji">🛩</span>
-                    <span>Базовый</span>
-                  </div>
-                  <input
-                    className="Price1"
-                    type="radio"
-                    value={props.price}
-                    name="price"
-                    onChange={(e) => {
-                      setPack(0),
-                        setPrice(props.price),
-                        setUsed(false),
-                        setDiscountPrice(props.discountPrice);
-                    }}
-                  />
-                  {props.subscriptionPrice && (
-                    <div className="Teacher">
-                      <span className="Emoji">🚀</span>
-                      <span>Продвинутый</span>
-                    </div>
-                  )}
-                  {/* {the1 && (
-                      <div
-                        className="Package"
-                        onClick={(e) => {
-                          if (me) {
-                            setIsOpen(!isOpen);
-                          } else {
-                            alert("Необходимо зарегистрироваться");
-                          }
-                        }}
-                      >
-                        Купить пакетом
-                      </div>
-                    )} */}
-                  {props.subscriptionPrice && (
-                    <input
-                      className="Price2"
-                      type="radio"
-                      name="price"
-                      value={props.subscriptionPrice}
-                      onChange={(e) => {
-                        setPack(0),
-                          setPrice(props.subscriptionPrice),
-                          setUsed(false),
-                          props.discountPrice
-                            ? setDiscountPrice(props.discountPrice * 1.75)
-                            : null;
-                      }}
-                    />
-                  )}
-                </GridContainer>
+              {(coursePage.courseType === "PRIVATE" ||
+                coursePage.courseType === "FORMONEY") && (
+                <div className="message">{t("private_course")}</div>
               )}
             </Part1>
             <Part2>
-              {coursePage.courseType !== "PUBLIC" &&
-                coursePage.courseType !== "PRIVATE" &&
-                coursePage.courseType !== "CHALLENGE" && (
-                  <Input
-                    name="promo"
-                    onChange={(e) => handlePromo(e.target.value)}
-                    placeholder="Введите промокод"
-                  />
-                )}
-              {applied && (
-                <Paid>
-                  Мы получили вашу заявку. Если оплата прошла, то скоро откроем
-                  доступ. Если оплата не прошла, вы можете провести ее еще раз и
-                  мы откроем доступ.
-                </Paid>
-              )}
-              {!me && <BuyDummy>Войти</BuyDummy>}
+              {applied && <Paid>{t("applied")}</Paid>}
               {me && (
                 <>
                   {coursePage.courseType === "FORMONEY" && (
@@ -465,7 +356,7 @@ const RegisterCard = (props) => {
                           : parseInt(price)
                       }
                     >
-                      Купить
+                      {t("enroll")}
                     </TakeMyMoney>
                   )}
                   {coursePage.courseType !== "FORMONEY" && (

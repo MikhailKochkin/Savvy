@@ -140,7 +140,7 @@ const StoryEx = (props) => {
     variables: { userId: me.id, lessonId: lesson.id },
     fetchPolicy: "no-cache",
   });
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return `Error! ${error.message}`;
   let results = data.stats;
   let components = [];
@@ -154,6 +154,7 @@ const StoryEx = (props) => {
         <Note
           text={el.text}
           me={me}
+          id={el.id}
           author={lesson.user}
           story={true}
           note={el}
@@ -172,6 +173,7 @@ const StoryEx = (props) => {
           complexity={el.complexity}
           question={el.question}
           answers={el.answers}
+          comments={el.comments}
           true={el.correct}
           user={el.user.id}
           user_name={el.user}
@@ -379,6 +381,8 @@ const StoryEx = (props) => {
           number_of_tasks={tasks.length}
           coursePageID={coursePageID}
           me={me}
+          lesson_number={lesson.number}
+          lesson_name={lesson.name}
           lessonID={lesson.id}
           my_result={props.my_result}
         />

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { gql, useMutation } from "@apollo/client";
+import { useTranslation } from "next-i18next";
+
 import { CURRENT_USER_QUERY } from "../User";
 import Router from "next/router";
 
@@ -155,6 +157,8 @@ const hello = (props) => {
   const [surname, setSurname] = useState(props.surname);
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState(props.email);
+  const { t } = useTranslation("hello");
+
   useEffect(() => {
     var my_element = document.getElementById("initial");
     my_element.scrollIntoView({

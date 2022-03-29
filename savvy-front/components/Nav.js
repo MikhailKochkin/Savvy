@@ -305,7 +305,7 @@ const Nav = (props) => {
                       </div>
                     </Link>
                   )}
-                <div className="imgGroup">
+                {/* <div className="imgGroup">
                   <div className="img">
                     <img
                       src="../../static/uk.svg"
@@ -326,7 +326,7 @@ const Nav = (props) => {
                       }
                     />
                   </div>
-                </div>
+                </div> */}
                 {me && (
                   <Link
                     href={{

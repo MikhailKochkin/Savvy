@@ -52,6 +52,7 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
         margin: 0;
         font-size:1.5rem;
+        font-weight: 500;
         line-height: 1.8;
         height:100%;
     }

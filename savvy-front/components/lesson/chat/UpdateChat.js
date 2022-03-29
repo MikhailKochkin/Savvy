@@ -44,17 +44,14 @@ const UpdateChat = (props) => {
   const [name, setName] = useState(props.name);
   const [messages, setMessages] = useState(props.messages.messagesList);
   const [num, setNum] = useState(props.messages.messagesList.length);
-  const [updateChat, { data, loading, error }] = useMutation(
-    UPDATE_CHAT_MUTATION
-  );
+  const [updateChat, { data, loading, error }] =
+    useMutation(UPDATE_CHAT_MUTATION);
 
   const getMessage = (data) => {
-    console.log(data);
     let old_messages = [...messages];
     old_messages.splice(data.number - 1, 1, data);
     setMessages([...old_messages]);
   };
-  console.log(num);
   return (
     <Styles>
       <Input
@@ -88,7 +85,6 @@ const UpdateChat = (props) => {
               name,
             },
           });
-          console.log(res);
           alert("Готово!");
         }}
       >

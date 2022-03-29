@@ -40,6 +40,8 @@ const Styles = styled.div`
   width: 650px;
   font-size: 1.6rem;
   display: flex;
+  font-weight: 500;
+
   flex-direction: column;
   .header {
     font-weight: bold;

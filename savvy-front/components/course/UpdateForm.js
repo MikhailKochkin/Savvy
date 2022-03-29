@@ -290,7 +290,7 @@ const UpdateForm = (props) => {
         {/* <label for="file">
           <div className="upload">
             {upload === false ? "Загрузите новый логотип курса" : null}
-            {upload === "pending" ? "Идет загрузка..." : null}
+            {upload === "pending" ? "Идет Loading..." : null}
             // {upload === true ? "Загрузка прошла успешно!" : null}
           </div>
         </label> */}

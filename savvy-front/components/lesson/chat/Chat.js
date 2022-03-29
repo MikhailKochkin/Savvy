@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import UpdateChat from "./UpdateChat";
 
 const Styles = styled.div`
-  /* width: ${(props) => props.width}; */
   width: 650px;
   margin: 20px 0;
+  font-weight: 500;
   img {
     display: block;
     width: 100%;
@@ -26,6 +26,9 @@ const Styles = styled.div`
 
 const Message = styled.div`
   display: flex;
+  opacity: 0;
+  /* transition-property: sliding-vertically; */
+  transition: 0.2s ease-out;
   flex-direction: row;
   justify-content: flex-end;
   margin-bottom: 20px;
@@ -92,8 +95,20 @@ const IconBlock = styled.div`
 `;
 
 const Chat = (props) => {
-  const [update, setUpdate] = useState(false); // what is the answer?
+  const [update, setUpdate] = useState(false);
+
   const { name, messages, me, story, lessonId, id, author } = props;
+
+  useEffect(() => {
+    let chat = document.getElementById(id);
+    messages.messagesList.map((m, i) => {
+      setTimeout(() => {
+        let el = document.getElementById("message" + i + id);
+        el.style.opacity = 1;
+      }, i * 2 * 1000);
+    });
+  }, [0]);
+
   let width;
   if (props.problem) {
     width = "50%";
@@ -103,13 +118,18 @@ const Chat = (props) => {
     width = "90%";
   }
   return (
-    <Styles width={width}>
+    <Styles id={id} width={width}>
       {!story && <div>{name}</div>}
       {!update &&
-        messages.messagesList.map((m) => {
+        messages.messagesList.map((m, i) => {
           if (m.author === "student") {
             return (
-              <Message className="student">
+              <Message
+                id={"message" + i + id}
+                key={i}
+                time={i}
+                className="student"
+              >
                 <IconBlock>
                   <img className="icon" src="../../static/flash.svg" />
                   <div className="name">{me.name}</div>
@@ -119,7 +139,12 @@ const Chat = (props) => {
             );
           } else {
             return (
-              <Message className="author">
+              <Message
+                id={"message" + i + id}
+                key={i}
+                time={i}
+                className="author"
+              >
                 <div className="author_text">{renderHTML(m.text)}</div>
                 <IconBlock>
                   {author && author.image != null ? (

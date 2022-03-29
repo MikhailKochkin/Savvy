@@ -35,7 +35,7 @@ const UpdateCoursePage = (props) => {
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.id },
   });
-  if (loading) return <p>Загрузка...</p>;
+  if (loading) return <p>Loading...</p>;
   return (
     <Width>
       <div id="root"></div>

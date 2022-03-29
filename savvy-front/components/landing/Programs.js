@@ -2,6 +2,7 @@ import React from "react";
 import Program from "./Program";
 import styled from "styled-components";
 import moment from "moment";
+import { useRouter } from "next/router";
 
 const Styles = styled.div`
   display: flex;
@@ -20,7 +21,8 @@ const Container = styled.div`
   width: 800px;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.moreThanOne ? "space-between" : "center"};
   flex-wrap: wrap;
   @media (max-width: 800px) {
     width: 100%;
@@ -32,6 +34,7 @@ const Container = styled.div`
 
 const Programs = () => {
   moment.locale("ru");
+  const router = useRouter();
 
   var dates = [
     "November 11, 2021 20:00:00",
@@ -56,7 +59,7 @@ const Programs = () => {
   };
 
   let next_date = moment(chooseDate(moment())).format("DD MMMM");
-  const programs = [
+  const rus_programs = [
     {
       title: "Юридический английский для профессионалов",
       description:
@@ -190,9 +193,40 @@ const Programs = () => {
       query: "id=cktrbubdl2237dou9vzn1gb3w",
     },
   ];
+
+  const eng_programs = [
+    {
+      title: "Introduction to Legal English",
+      description:
+        "The course shares grammar, vocabulary and drafting essenitals to write your first English essay on a legal topic.",
+      term: "Length: 1 week",
+      price: "Free Course",
+      conditions: `and community `,
+      installments: "Feedback",
+      img: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1100&q=80",
+      pathname: "coursePage",
+      query: "id=cl11wmpa584311hyuvzpunsqi",
+    },
+    // {
+    //   title: "Legal English. Full course",
+    //   description:
+    //     "We will dive into the complex grammar and vocabulary topics, develop writing and editing skills to make sure that you are good at drafting contracts, writing memos and business letters.",
+    //   term: "Length: 2 months",
+    //   price: "From 99$",
+    //   conditions: `is free`,
+    //   installments: "First lesson",
+    //   img: "https://images.unsplash.com/photo-1565349173908-1cf6bc9fd4ee?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1100&q=80",
+    //   pathname: "program",
+    //   query: "id=english_full",
+    // },
+  ];
+
+  let programs;
+  router.locale == "ru" ? (programs = rus_programs) : (programs = eng_programs);
+
   return (
     <Styles id="course_search">
-      <Container>
+      <Container moreThanOne={programs.length > 1 ? true : false}>
         {programs.map((p, i) => (
           <Program
             key={i}

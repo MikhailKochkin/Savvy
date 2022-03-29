@@ -1,40 +1,11 @@
-import { useState } from "react";
+import { useState, useEffectq } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import moment from "moment";
+import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const UPDATE_CLIENT_MUTATION = gql`
-  mutation UPDATE_CLIENT_MUTATION($id: String!, $communication_medium: String) {
-    sendBusinessClientEmail(
-      id: $id
-      communication_medium: $communication_medium
-    ) {
-      id
-    }
-  }
-`;
-
-const UPDATE_CLIENT_MUTATION2 = gql`
-  mutation UPDATE_CLIENT_MUTATION2(
-    $id: String!
-    $comment: String
-    $tags: [String]
-  ) {
-    updateBusinessClient(id: $id, comment: $comment, tags: $tags) {
-      id
-    }
-  }
-`;
-
-const DELETE_CLIENT_MUTATION = gql`
-  mutation DELETE_CLIENT_MUTATION($id: String!) {
-    deleteClient(id: $id) {
-      id
-    }
-  }
-`;
+import Client from "./Client";
 
 const Styles = styled.div`
   display: flex;
@@ -101,7 +72,25 @@ const Row = styled.div`
     width: 10%;
   }
   .comment {
-    width: 12%;
+    width: 45%;
+    .editor {
+      font-size: 1.6rem;
+      width: 95%;
+      margin-left: 5%;
+      border: 1px solid #c4c4c4;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      outline: 0;
+      padding: 0.5%;
+      font-size: 1.6rem;
+      @media (max-width: 800px) {
+        width: 350px;
+      }
+    }
+    button {
+      margin-left: 5%;
+      margin-bottom: 5%;
+    }
     textarea {
       font-family: Montserrat;
       padding: 0 5%;
@@ -109,10 +98,12 @@ const Row = styled.div`
       border: none;
       width: 90%;
       height: 100px;
+      white-space: pre-line;
+    }
+    .editor {
     }
   }
   .tags {
-    width: 18%;
     padding-left: 20px;
     li {
       width: 100%;
@@ -125,392 +116,10 @@ const Row = styled.div`
   }
 `;
 
-const DeleteClient = (props) => {
-  const { clientId } = props;
-  const [deleteClient, { data, loading }] = useMutation(DELETE_CLIENT_MUTATION);
-  return (
-    <button
-      onClick={() => {
-        if (
-          confirm(
-            "Вы точно хотите удалить эту запись? Запись исчезнет после перезагрузки страницы."
-          )
-        ) {
-          deleteClient({
-            variables: {
-              id: props.clientId,
-            },
-          }).catch((error) => {
-            alert(error.message);
-          });
-        }
-      }}
-    >
-      {loading ? "Удаляем..." : "Удалить"}
-    </button>
-  );
-};
-
-const Client = (props) => {
-  const [comment, setComment] = useState(props.comment);
-  const [tags, setTags] = useState(props.tags);
-  const [newTag, setNewTag] = useState();
-
-  moment.locale("ru");
-
-  var url = new URL("https://besavvy.app" + props.url);
-  var utm_source = url.searchParams.get("utm_source");
-  var utm_medium = url.searchParams.get("utm_medium");
-  var utm_campaign = url.searchParams.get("utm_campaign");
-  var utm_term = url.searchParams.get("utm_term");
-  var utm_content = url.searchParams.get("utm_content");
-  var id = url.searchParams.get("id");
-
-  const [sendBusinessClientEmail, { updated_data }] = useMutation(
-    UPDATE_CLIENT_MUTATION
-  );
-
-  const [updateBusinessClient, { updated_data2 }] = useMutation(
-    UPDATE_CLIENT_MUTATION2
-  );
-  const copyEnglish1 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Юридический английский для профессионалов".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1GvZpUMzGTN5cWh4hsRjIl22q1aMeiDnp/view?usp=sharing 
-
-Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
-
-P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
-
-Алена,
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copyEnglish2 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Юридический английский для профессионалов".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1GvZpUMzGTN5cWh4hsRjIl22q1aMeiDnp/view?usp=sharing
-
-Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
-
-Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
-
-Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
-
-Алена
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copySchool1 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Карьерная Школа Юриста".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1bZAtbPz5MrKCriPe0Bj2cG9ueVKau8kP/view?usp=sharing
-
-Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
-
-P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
-
-Алена,
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copySchool2 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Карьерная Школа Юриста".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1bZAtbPz5MrKCriPe0Bj2cG9ueVKau8kP/view?usp=sharing
-
-Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
-
-Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
-
-Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
-
-Алена
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copyCorp1 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Корпоративное право".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1Ku64al8Ktj097My6jp9aFxNvQRpDwN5M/view?usp=sharing
-
-Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
-
-P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
-
-Алена,
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copyCorp2 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Корпоративное право".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/1Ku64al8Ktj097My6jp9aFxNvQRpDwN5M/view?usp=sharing
-
-Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
-
-Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
-
-Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
-
-Алена
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copyLitigation1 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Арбитражный процесс".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/16uTdmv-J62pzOQFskkyKJi4v5pYg4ekg/view?usp=sharing
-
-Ждём вас на консультации с Михаилом и на наших программах. Хорошего дня!
-
-P.S. Если вы не сможете посетить консультацию, пожалуйста, предупредите нас. 
-
-Алена,
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  const copyLitigation2 = (name) => {
-    /* Copy the text inside the text field */
-    let text = `Здравствуйте,
-
-Мы получили вашу заявку на курс "Арбитражный процесс".
-
-Как обещали, высылаем детальную программу курса. Посмотрите ее по ссылке: https://drive.google.com/file/d/16uTdmv-J62pzOQFskkyKJi4v5pYg4ekg/view?usp=sharing
-
-Пожалуйста, выберите время для консультации с директором программы Михаилом. Это займёт всего 15 минут. Михаил покажет, как проходит обучение, и ответит на любые ваши вопросы.
-
-Выбрать удобное время можно по ссылке: https://calendly.com/mikhail-from-besavvy/15-min-intro
-
-Если вам ничего не подходит, напишите, разберёмся. Хорошего дня!
-
-Алена
-
-Менеджер по работе со студентами в онлайн-школе BeSavvy Lawyer`;
-    return navigator.clipboard.writeText(text);
-  };
-
-  let number;
-  if (props.number.startsWith("8")) {
-    number = props.number.replace("8", "+7");
-  } else {
-    number = props.number;
-  }
-
-  return (
-    <Row>
-      <div className="index">{props.index + 1}.</div>
-      <div className="time">
-        {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
-      </div>
-      <div className="name">
-        <div>{props.name}</div>
-        {props.tags &&
-          props.tags.map((t, i) => (
-            <>
-              <Tag
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.sort(t);
-                }}
-                key={i}
-              >
-                {t}
-              </Tag>
-            </>
-          ))}
-        <form>
-          {/* <input onChange={(e) => setNewTag(e.target.value)} /> */}
-          <select onChange={(e) => setNewTag(e.target.value)}>
-            <option value="">Выберите тег</option>
-            <option value="Wrong Number">Wrong Number</option>
-            <option value="Reach out">Reach out</option>
-            <option value="Never Respond">Never Respond</option>
-            <option value="Contact">Contact</option>
-            <option value="Call">Call</option>
-            <option value="Refuse">Refuse</option>
-            <option value="Invoice">Invoice</option>
-            <option value="Sell">Sell</option>
-          </select>
-          <button
-            onClick={async (e) => {
-              e.preventDefault();
-              setTags([newTag]);
-            }}
-          >
-            Добавить тег
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-
-              updateBusinessClient({
-                variables: {
-                  id: props.id,
-                  tags: tags,
-                },
-              });
-              alert("Сохранили");
-            }}
-          >
-            Сохранить
-          </button>
-        </form>
-        <button onClick={(e) => copyEnglish1()}>
-          Сopy-Английский-Есть регистрация
-        </button>
-        <button onClick={(e) => copyEnglish2()}>
-          Сopy-Английский-Нет регистрации
-        </button>
-        <button onClick={(e) => copySchool1()}>
-          {" "}
-          Сopy-Школа-Есть регистрация
-        </button>
-        <button onClick={(e) => copySchool2()}>
-          {" "}
-          Сopy-Школа-Нет регистрации
-        </button>
-        <button onClick={(e) => copyCorp1()}>
-          {" "}
-          Сopy-Корп-Есть регистрация
-        </button>
-        <button onClick={(e) => copyCorp2()}>Сopy-Корп-Нет регистрации</button>
-        <button onClick={(e) => copyLitigation1()}>
-          {" "}
-          Сopy-Арбитраж-Есть регистрация
-        </button>
-        <button onClick={(e) => copyLitigation2()}>
-          Сopy-Арбитраж-Нет регистрации
-        </button>
-        <DeleteClient clientId={props.id} />
-      </div>
-      <div className="email">
-        <div>{props.email}</div>
-        <button
-          onClick={(e) => {
-            console.log(1);
-            sendBusinessClientEmail({
-              variables: {
-                id: props.id,
-                communication_medium: "english",
-              },
-            });
-            alert("Отправили");
-          }}
-        >
-          Демо Урок Английский
-        </button>
-        <button
-          onClick={async (e) => {
-            sendBusinessClientEmail({
-              variables: {
-                id: props.id,
-                communication_medium: "school",
-              },
-            });
-            alert("Отправили");
-          }}
-        >
-          Демо Урок Школа
-        </button>
-        <button
-          onClick={async (e) => {
-            sendBusinessClientEmail({
-              variables: {
-                id: props.id,
-                communication_medium: "reminder",
-              },
-            });
-            alert("Отправили");
-          }}
-        >
-          Напоминание
-        </button>
-      </div>
-      <div className="number">
-        <div>{number}</div>
-        <button>
-          <a
-            target="_blank"
-            href={`https://api.whatsapp.com/send?phone=${number}?text=Hello!`}
-          >
-            Написать в whatsApp
-          </a>
-        </button>
-        <button>Написать в Telegram</button>
-      </div>
-      <div className="comment">
-        <textarea onChange={(e) => setComment(e.target.value)}>
-          {comment}
-        </textarea>
-        <br />
-        <button
-          onClick={(e) => {
-            updateBusinessClient({
-              variables: {
-                id: props.id,
-                comment: comment,
-                tags: tags,
-              },
-            });
-            alert("Изменили");
-          }}
-        >
-          Изменить
-        </button>
-      </div>
-      <div className="tags">
-        <li>pathname: {url.pathname}</li>
-        <li>id: {id}</li>
-        <li>utm_source: {utm_source}</li>
-        <li>utm_medium: {utm_medium}</li>
-        <li>utm_campaign: {utm_campaign}</li>
-        <li>utm_term: {utm_term}</li>
-        <li>utm_content: {utm_content}</li>
-        <li>communication_medium: {props.communication_medium}</li>
-      </div>
-    </Row>
-  );
-};
-
 const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
   const [startDate, setStartDate] = useState(new Date());
+  const [value, setValue] = useState(0); // integer state
 
   const sort = (val) => {
     console.log(val);
@@ -518,17 +127,14 @@ const ClientData = (props) => {
     setClients(new_clients);
   };
 
-  const setDate = (d) => {
-    let clients_in_range = clients.filter((cl) => {
+  const chooseDate = (d) => {
+    let clients_in_range = props.initial_clients.filter((cl) => {
       let client_date = new Date(cl.createdAt);
       let chosendate = new Date(d);
       let week_before_date = new Date(d);
-      console.log("week_before_date_0", week_before_date);
 
       week_before_date.setDate(chosendate.getDate() - 7);
 
-      console.log("chosendate", chosendate);
-      console.log("week_before_date_1", week_before_date);
       if (
         client_date.getTime() > week_before_date.getTime() &&
         client_date.getTime() < chosendate.getTime()
@@ -536,28 +142,17 @@ const ClientData = (props) => {
         return cl;
       }
     });
+    console.log("clients_in_range", clients_in_range);
     setClients(clients_in_range);
   };
-
-  // console.log(two_months_ago);
-  // console.log(
-  //   "client",
-  //   new Date(clients[clients.length - 1].createdAt),
-  //   two_months_ago,
-  //   new Date(clients[clients.length - 1].createdAt).getTime() >
-  //     two_months_ago.getTime()
-  // );
 
   let clients_in_range = clients.filter((cl) => {
     let client_date = new Date(cl.createdAt);
     let chosendate = new Date(startDate);
     let week_before_date = new Date(startDate);
-    console.log("week_before_date_0", week_before_date);
 
     week_before_date.setDate(chosendate.getDate() - 7);
 
-    console.log("chosendate", chosendate);
-    console.log("week_before_date_1", week_before_date);
     if (
       client_date.getTime() > week_before_date.getTime() &&
       client_date.getTime() < chosendate.getTime()
@@ -568,24 +163,24 @@ const ClientData = (props) => {
 
   return (
     <Styles>
-      <div className="total">Всего заявок: {clients.length}</div>
+      <div className="total">Всего заявок: {props.initial_clients.length}</div>
       <button onClick={(e) => setClients(props.initial_clients)}>
         Показать всех клиентов
       </button>
       <div className="total">
         Заявок за выбранный период: {clients_in_range.length}
       </div>
+      <button onClick={(e) => setValue((value) => value + 1)}>
+        Обновить данные
+      </button>
       <DatePicker
         selected={startDate}
         dateFormat="dd/MM/yyyy"
         onChange={(date) => {
-          alert(date);
-          return setDate(date);
+          setStartDate(date);
+          return chooseDate(date);
         }}
       />
-      <div className="total">
-        <button onClick={(e) => setClients(initial_clients)}>Restart</button>
-      </div>
       {clients.map((c, i) => (
         <Client
           sort={sort}

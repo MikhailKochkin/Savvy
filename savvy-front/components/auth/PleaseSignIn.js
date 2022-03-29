@@ -4,6 +4,7 @@ import WideSignIn from "./WideSignIn";
 import WideSignUp from "./WideSignUp";
 import WideRequestReset from "./WideRequestReset";
 import { useUser } from "../User";
+import { useRouter } from "next/router";
 
 const Styles = styled.div`
   display: flex;
@@ -29,12 +30,20 @@ const PleaseSignIn = (props) => {
   const [auth, setAuth] = useState("signin");
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   const me = useUser();
+  const router = useRouter();
+
   if (!me)
     return (
       <Styles>
         <Title>
-          Что-то не получается? Просто зарегистрируйтесь или войдите в аккаунт и
-          все заработает! 😉
+          {router.locale == "en" ? (
+            <>Something went wrong? Just log in or create an account 😉</>
+          ) : (
+            <>
+              Что-то не получается? Просто зарегистрируйтесь или войдите в
+              аккаунт и все заработает! 😉
+            </>
+          )}
         </Title>
         {auth === "signin" && <WideSignIn getData={changeState} />}
         {auth === "signup" && <WideSignUp getData={changeState} />}

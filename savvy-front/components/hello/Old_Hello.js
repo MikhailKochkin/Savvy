@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { InlineWidget } from "react-calendly";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const Styles = styled.div`
   min-height: 90vh;
@@ -15,7 +16,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  height: 85%;
+  min-height: 90%;
   width: 80%;
   display: flex;
   flex-direction: row;
@@ -137,6 +138,9 @@ const hello = (props) => {
       inline: "nearest",
     });
   }, [0]);
+  const { t } = useTranslation("hello");
+  const router = useRouter();
+
   return (
     <Styles>
       <Container id="initial">
@@ -146,56 +150,43 @@ const hello = (props) => {
           </div>
         </div>
         <div className="text">
-          <h1 className="hello">Спасибо, мы получили вашу заявку</h1>
+          <h1 className="hello">{t("h1")}</h1>
           <div className="message">
-            Открытый урок уже у вас на почте. Также, если вы хотите больше
-            узнать о программе, <span>запишитесь на вводное занятие</span>. Мы
-            расскажем вам о программе, о скидках, карьерных трендах и наших
-            образовательных технологиях, которых нет ни в одной другой компании.
+            {router.locale == "ru" ? (
+              <>
+                Мы скоро с вами свяжемся. Также, если вы хотите больше узнать о
+                программе, <span>запишитесь на звонок</span> с директором
+                программы. Мы будем рады ближе с вами познакомиться 🤗
+              </>
+            ) : (
+              <>
+                We will get back to you soon. You can also{" "}
+                <span>schedule a call</span> yourself by clicking on the button
+                below. We are really looking forward to e-meeting you 🤗
+              </>
+            )}
           </div>
           <button>
             <a
               target="_blank"
               href={`https://calendly.com/mikhail-from-besavvy/15-min-intro?name=${props.name}&email=${props.email}&a1=${props.number}`}
             >
-              Выбрать время
+              {t("choose_time")}
             </a>
           </button>
           <div className="row">
             {" "}
             <img src="/static/tick2.svg" />
-            <div>Занятие займет всего 15 минут.</div>
+            <div>{t("15_minutes")}</div>
           </div>
           <div className="row">
             <img src="/static/tick2.svg" />
-            <div>
-              Вы можете выбрать удобное для вас время в течение недели. Даже в
-              выходные.
-            </div>
+            <div>{t("convenient_time")}</div>
           </div>
           <div className="row">
             <img src="/static/tick2.svg" />
-            <div>
-              Мы не будем звонить в неудобное время и отвлекать вас от работы
-              или семейных дел.
-            </div>
+            <div>{t("no_distract")}</div>
           </div>
-          {/* <div className="row">
-            <img src="/static/tick2.svg" />
-            <div>
-              Если вы оставите мобильный номер, мы пришлем вам напоминание по
-              смс за 10 минут до встречи.
-            </div>
-          </div> */}
-          {/* <div className="row_final">
-            <img src="/static/tick2.svg" />
-            <div>В крайнем случае консультацию можно легко перенести. </div>
-          </div> */}
-          {/* <div className="widget">
-            <InlineWidget
-              url={`https://calendly.com/mikhail-from-besavvy/15-min-intro?name=${props.name}&email=${props.email}&a1=${props.number}`}
-            />
-          </div> */}
         </div>
       </Container>
     </Styles>

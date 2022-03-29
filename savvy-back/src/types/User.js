@@ -6,6 +6,7 @@ const User = objectType({
     t.model.id();
     t.model.name();
     t.model.surname();
+    t.model.number();
     t.model.email();
     t.model.password();
     t.model.description();

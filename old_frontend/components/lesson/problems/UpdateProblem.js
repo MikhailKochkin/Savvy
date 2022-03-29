@@ -96,7 +96,7 @@ const Button = styled.button`
 `;
 
 const DynamicLoadedEditor = dynamic(import("../../editor/ProblemEditor"), {
-  loading: () => <p>Загрузка...</p>,
+  loading: () => <p>Loading...</p>,
   ssr: false,
 });
 

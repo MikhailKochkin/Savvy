@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import Error from "../ErrorMessage";
+import { useTranslation } from "next-i18next";
 
 const REQUEST_RESET_MUTATION = gql`
   mutation REQUEST_RESET_MUTATION($email: String!) {
@@ -103,64 +104,54 @@ const Comment = styled.div`
   font-size: 1.4rem;
 `;
 
-class WideRequestReset extends Component {
-  state = {
-    email: "",
-  };
-  saveToState = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  switch = (e) => {
-    const name = e.target.getAttribute("name");
-    this.props.getData(name);
-  };
-  render() {
-    return (
-      <Mutation mutation={REQUEST_RESET_MUTATION} variables={this.state}>
-        {(reset, { error, loading, called }) => (
-          <Form
-            method="post"
-            data-test="form"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              await reset();
-              this.setState({ email: "" });
-            }}
-          >
-            <Fieldset disabled={loading} aria-busy={loading}>
-              <Title>Восстановите пароль</Title>
-              <Message>
-                Введите адрес электронной почты, связанный с вашим аккаунтом на
-                BeSavvy, и мы вышлем вам ссылку для изменения пароля.
-              </Message>
-              <Container>
-                <Error error={error} />
-                {!error && !loading && called && (
-                  <Comment>
-                    Нашли! На вашей почте должна быть ссылка для смены пароля!
-                  </Comment>
-                )}
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Электронная почта"
-                  value={this.state.email}
-                  onChange={this.saveToState}
-                />
-              </Container>
-              <Buttons>
-                <div name="signin" onClick={this.switch}>
-                  Вернуться ко входу
-                </div>
-                <SubmitButton type="submit">Отправить ссылку </SubmitButton>
-              </Buttons>
-            </Fieldset>
-          </Form>
-        )}
-      </Mutation>
-    );
-  }
-}
+const WideRequestReset = (props) => {
+  const [email, setEmail] = useState("");
+  const { t } = useTranslation("auth");
+  const change = (e) => props.getData(e.target.getAttribute("name"));
+  return (
+    <Mutation
+      mutation={REQUEST_RESET_MUTATION}
+      variables={{
+        email: email,
+      }}
+    >
+      {(reset, { error, loading, called }) => (
+        <Form
+          method="post"
+          data-test="form"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await reset();
+            setEmail("");
+          }}
+        >
+          <Fieldset disabled={loading} aria-busy={loading}>
+            <Title>{t("c2a3")}</Title>
+            <Message>{t("explainer")}</Message>
+            <Container>
+              <Error error={error} />
+              {!error && !loading && called && <Comment>{t("found")}</Comment>}
+
+              <input
+                type="email"
+                name="email"
+                placeholder={t("email")}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Container>
+            <Buttons>
+              <div name="signin" onClick={change}>
+                {t("back")}
+              </div>
+              <SubmitButton type="submit">{t("button2")}</SubmitButton>
+            </Buttons>
+          </Fieldset>
+        </Form>
+      )}
+    </Mutation>
+  );
+};
 
 export default WideRequestReset;
 export { REQUEST_RESET_MUTATION };

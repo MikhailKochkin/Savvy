@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
@@ -33,8 +34,8 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  /* width: ${(props) => props.width}; */
-  width: 650px;
+  max-width: 650px;
+  font-weight: 500;
   margin-bottom: 3%;
   font-size: 1.6rem;
   @media (max-width: 800px) {
@@ -61,6 +62,10 @@ const Option = styled.div`
   margin-right: 3%;
   margin-bottom: 2%;
   height: 50px;
+  transition: 0.3s;
+  &:hover {
+    border: 1px solid #3f51b5;
+  }
 `;
 
 const IconBlock = styled.div`
@@ -263,6 +268,7 @@ const SingleQuiz = (props) => {
   const [inputColor, setInputColor] = useState("#f3f3f3");
 
   const { t } = useTranslation("lesson");
+  const router = useRouter();
 
   const onAnswer = async (e) => {
     setProgress("true");
@@ -303,7 +309,15 @@ const SingleQuiz = (props) => {
             setCorrect("false");
             setInputColor("rgba(222, 107, 72, 0.5)");
             if (typeof res.comment === "string") {
-              setHint(res.comment);
+              if (router.locale == "ru") {
+                setHint(res.comment);
+              } else {
+                if (res.comment == "Дайте более развернутый ответ") {
+                  setHint("Give a more detailed answer.");
+                } else {
+                  setHint("Give a shorter answer.");
+                }
+              }
             }
             onMove("false");
           }
@@ -347,8 +361,18 @@ const SingleQuiz = (props) => {
             onMove("true");
           } else {
             setCorrect("false");
+            console.log(router.locale, res.comment);
+
             if (typeof res.comment === "string") {
-              setHint(res.comment);
+              if (router.locale == "ru") {
+                setHint(res.comment);
+              } else {
+                if (res.comment == "Дайте более развернутый ответ") {
+                  setHint("Give a more detailed answer.");
+                } else {
+                  setHint("Give a shorter answer.");
+                }
+              }
             }
             onMove("false");
           }
@@ -488,13 +512,13 @@ const SingleQuiz = (props) => {
                     }}
                     correct={correct}
                   >
-                    Проверить
+                    {t("check")}
                   </Button1>
                 </Group>
                 {correct === "true" && (
                   <div className="question">
                     <div className="question_text">
-                      {!props.type != "FORM" && t("correct")}!{" "}
+                      {!props.type != "FORM" && "🎉 " + t("correct")}!{" "}
                       {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
                       {!props.type != "FORM" && t("show_correct")}
                     </div>
@@ -513,7 +537,8 @@ const SingleQuiz = (props) => {
                 {correct === "false" && (
                   <div className="question">
                     <div className="question_text">
-                      {props.type != "FORM" && t("wrong") + "..."}
+                      {props.type != "FORM" && "🔎  " + t("wrong") + "..."}
+                      <br />
                       {ifWrong &&
                         ifWrong !== "<p></p>" &&
                         renderHTML(ifWrong)}{" "}
@@ -521,6 +546,7 @@ const SingleQuiz = (props) => {
                         hint !== 0 &&
                         props.type != "FORM" &&
                         hint}
+                      <br />
                       {props.type != "FORM" && t("show_correct")}
                     </div>
                     <IconBlock>
@@ -543,10 +569,9 @@ const SingleQuiz = (props) => {
                         <div className="name">{me.name}</div>
                       </IconBlock>{" "}
                       <Options>
-                        <Option onClick={(e) => setHidden(false)}>Да</Option>
-                        {/* <Option onClick={(e) => setHidden(true)}>
-                          {props.t("no")}
-                        </Option> */}
+                        <Option onClick={(e) => setHidden(false)}>
+                          {t("yes")}
+                        </Option>
                       </Options>
                     </div>
                   </>

@@ -12,5 +12,10 @@
   "enter": "Войти",
   "entering": "Вхожу...",
   "forgot_password": "Забыли пароль?",
-  "not_registered_yet": "Ещё не зарегистрированы?"
+  "not_registered_yet": "Ещё не зарегистрированы?",
+  "name": "ИП Михаил Кочкин",
+  "registration_number": "318774600589944",
+  "tax_number": "771771639796",
+  "privacy_policy": "Персональные данные",
+  "terms": "Оферта"
 }

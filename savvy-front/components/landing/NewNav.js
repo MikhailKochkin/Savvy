@@ -104,13 +104,18 @@ const StyledModal = Modal.styled`
 
 const Styles = styled.div`
   width: 100%;
-  max-height: 800px;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   .menu_bar {
     width: 100%;
+    max-width: 1140px;
     padding-left: 30px;
-    color: #fff;
+    color: black;
     display: flex;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -122,19 +127,20 @@ const Styles = styled.div`
       justify-content: center;
       align-items: center;
       a {
-        color: #fff;
+        font-weight: 500;
+        color: black;
         transition: ease 0.2s;
         &:hover {
-          color: #cbcbcb;
+          color: #a3a3a3;
           cursor: pointer;
         }
       }
     }
     a {
-      color: #fff;
+      color: black;
       transition: ease 0.2s;
       &:hover {
-        color: #cbcbcb;
+        color: #5c5c5c;
         cursor: pointer;
       }
     }
@@ -144,7 +150,7 @@ const Styles = styled.div`
       margin-right: 20%;
       cursor: pointer;
       img {
-        height: 40px;
+        height: 32px;
       }
     }
     .nav {
@@ -158,16 +164,19 @@ const Styles = styled.div`
       font-weight: 400;
       div {
         transition: ease 0.2s;
-        &:hover {
-          color: #cbcbcb;
-          cursor: pointer;
-        }
       }
       .enter {
-        background: rgba(255, 255, 255, 0.4);
+        /* background: rgba(255, 255, 255, 0.4); */
         border-radius: 30px;
+        border: 2px solid black;
+        font-weight: 500;
         padding: 5px 25px;
         cursor: pointer;
+        &:hover {
+          color: #5c5c5c;
+          cursor: pointer;
+          border-color: #5c5c5c;
+        }
       }
       @media (max-width: 1100px) {
         nav {
@@ -233,7 +242,7 @@ const NewNav = (props) => {
         <Link href="/">
           <div className="logo">
             {/* <a>BeSavvy</a> */}
-            <img src="static/logo.svg" />
+            <img src="static/long_logo.svg" />
           </div>
         </Link>
         <MobileMenu onClick={(e) => openNav()}>
@@ -254,11 +263,11 @@ const NewNav = (props) => {
                 <a>BeSavvy</a>
               </button>
             </Link>
-            <Link href="/connect">
+            {/* <Link href="/connect">
               <button onClick={(e) => closeNav()}>
                 <a>{t("community")}</a>
               </button>
-            </Link>
+            </Link> */}
             {me && me.status === "AUTHOR" && (
               <Link href="/educator">
                 <button onClick={(e) => closeNav()}>
@@ -311,11 +320,11 @@ const NewNav = (props) => {
               <a>{t("blog")}</a>
             </div>
           </Link>
-          <Link href="/connect">
+          {/* <Link href="/connect">
             <div className="blog">
               <a>{t("community")}</a>
             </div>
-          </Link>
+          </Link> */}
           {me && (
             <Link
               href={{

@@ -78,6 +78,10 @@ const Styles = styled.div`
 const Container = styled.div`
   width: 75%;
   height: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -241,6 +245,7 @@ const Description = styled.div`
 const Contact = styled.div`
   width: 48%;
   min-width: 460px;
+  max-width: 480px;
   /* height: 400px; */
   border-radius: 25px;
   display: flex;
@@ -267,18 +272,21 @@ const Contact = styled.div`
       font-size: 1.4rem;
       margin-bottom: 15px;
       .variants_form {
-        max-width: 45%;
         display: flex;
         flex-direction: row;
         padding: 5px;
-        align-items: flex-start;
+        margin-right: 20px;
+        align-items: center;
         justify-content: flex-start;
         border: 1px solid #d8d8d8;
         border-radius: 10px;
         margin-right: 6px;
         margin-bottom: 6px;
+        width: 300px;
+        height: 50px;
         label {
           line-height: 1.6;
+          font-size: 1.6rem;
         }
         div {
           width: 40px;
@@ -424,7 +432,9 @@ const Form = styled.div`
   display: flex;
   flex-direction: row;
   align-items: space-between;
-  justify-content: space-between;
+  justify-content: center;
+  justify-content: ${(props) =>
+    props.space == "en" ? "center" : "space-between"};
   .PhoneInput {
     width: 80%;
     height: 22px;
@@ -523,6 +533,7 @@ const Action = (props) => {
   const [price, setPrice] = useState(props.data.price.price);
   const [isPromo, setIsPromo] = useState(false);
   const { t } = useTranslation("coursePage");
+  const router = useRouter();
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
@@ -565,339 +576,476 @@ const Action = (props) => {
   return (
     <Styles id="c2a">
       <Container>
-        <Form>
-          <Description>
-            <div id="header">
-              <span>{t("price")}</span>
-            </div>
-            <div id="info">
-              <div>{t("bonus")}</div>
-              <div>{t("refund")}</div>
-            </div>
-            <div id="details">
-              <br />
-              <div className="arrow"> {props.data.price.full_explain}</div>
-              <div id="prices">
-                <div className="full">
-                  <span> {numberWithSpaces(Math.ceil(price / 10))} ₽/мес</span>
+        <Form space={router.locale}>
+          {router.locale == "ru" && (
+            <>
+              <Description>
+                <div id="header">
+                  <span>{t("price")}</span>
                 </div>
-                <div className="parts">
-                  <span> {numberWithSpaces(price)} ₽</span>
+                <div id="info">
+                  <div>{t("bonus")}</div>
+                  <div>{t("refund")}</div>
                 </div>
-              </div>
-            </div>
-            <div id="promo">
-              <div>{t("apply_coupon")}</div>
-              <input onChange={(e) => addPromo(e.target.value)} />
-            </div>
-          </Description>
-          <Contact>
-            <div id="form_container">
-              <div className="h2">{t("step1")}</div>
-              <div className="variants">
-                <div
-                  className="variants_form"
-                  onChange={(e) => {
-                    setStep(e.target.value);
-                  }}
-                >
-                  <div>
-                    <input
-                      type="radio"
-                      value="apply"
-                      checked={step == "apply"}
+                <div id="details">
+                  <br />
+                  <div className="arrow"> {props.data.price.full_explain}</div>
+                  <div id="prices">
+                    <div className="full">
+                      <span>
+                        {" "}
+                        {numberWithSpaces(Math.ceil(price / 10))} ₽/мес
+                      </span>
+                    </div>
+                    <div className="parts">
+                      <span> {numberWithSpaces(price)} ₽</span>
+                    </div>
+                  </div>
+                </div>
+                <div id="promo">
+                  <div>{t("apply_coupon")}</div>
+                  <input onChange={(e) => addPromo(e.target.value)} />
+                </div>
+              </Description>
+              <Contact>
+                <div id="form_container">
+                  <div className="h2">{t("step1")}</div>
+                  <div className="variants">
+                    <div
+                      className="variants_form"
                       onChange={(e) => {
                         setStep(e.target.value);
                       }}
-                    />
-                  </div>
-                  <label for="html">{t("step1option1")}</label>
-                </div>
-                <div
-                  className="variants_form"
-                  onChange={(e) => {
-                    setStep(e.target.value);
-                  }}
-                >
-                  <div>
-                    <input
-                      type="radio"
-                      value="installments"
-                      checked={step == "installments"}
+                    >
+                      <div>
+                        <input
+                          type="radio"
+                          value="apply"
+                          checked={step == "apply"}
+                          onChange={(e) => {
+                            setStep(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <label for="html">{t("step1option1")}</label>
+                    </div>
+                    <div
+                      className="variants_form"
                       onChange={(e) => {
                         setStep(e.target.value);
                       }}
-                    />
-                  </div>
-                  <label for="html">{t("step1option3")}</label>
-                </div>
+                    >
+                      <div>
+                        <input
+                          type="radio"
+                          value="installments"
+                          checked={step == "installments"}
+                          onChange={(e) => {
+                            setStep(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <label for="html">{t("step1option3")}</label>
+                    </div>
 
-                <div className="variants_form">
-                  <div>
-                    <input
-                      type="radio"
-                      value="buy"
-                      checked={step == "buy"}
+                    <div className="variants_form">
+                      <div>
+                        <input
+                          type="radio"
+                          value="buy"
+                          checked={step == "buy"}
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                            setStep(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <label for="html">{t("step1option2")}</label>
+                    </div>
+                  </div>
+                  <div className="h2">
+                    {t("step2")}
+                    {step == "apply" && " Заполните заявку"}
+                    {step == "buy" && " Оплатите курс"}
+                    {step == "installments" && " Заявка на рассрочку"}
+                  </div>
+                  {step == "apply" && (
+                    <>
+                      <form>
+                        <div className="names">
+                          <input
+                            className="data"
+                            id="name"
+                            placeholder="Имя"
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                          <input
+                            className="data"
+                            id="surname"
+                            placeholder="Фамилия"
+                            onChange={(e) => setSurname(e.target.value)}
+                          />
+                        </div>
+                        <input
+                          id="tel"
+                          className="data"
+                          type="tel"
+                          placeholder="+7 (999) 999-99-99"
+                          onChange={(e) => setNumber(e.target.value)}
+                        />
+                        <input
+                          id="email"
+                          className="data"
+                          type="email"
+                          placeholder="Электронная почта"
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <button
+                          type="submit"
+                          id="english_application_button1"
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            if (!EmailValidator.validate(email)) {
+                              alert("Неправильный имейл");
+                            } else if (number.length < 7) {
+                              alert("Неправильный номер мобильнного телефона");
+                            } else {
+                              if (props.data.price.course == "school") {
+                                ReactGA.event({
+                                  category: "Litigation Apply Button Click",
+                                  action: "Click",
+                                });
+                              } else if (props.data.price.course == "corp") {
+                                ReactGA.event({
+                                  category: "Corp Apply Button Click",
+                                  action: "Click",
+                                });
+                              }
+                              const res = await createBusinessClient({
+                                variables: {
+                                  type: asPath ? asPath : "Unknown",
+                                  email,
+                                  name: name + " " + surname,
+                                  number,
+                                  communication_medium: props.data.price.course,
+                                  comment: "Консультация",
+                                },
+                              });
+                              Router.push({
+                                pathname: "/hello",
+                                query: {
+                                  name: name + " " + surname,
+                                  email: email,
+                                  number: number,
+                                },
+                              });
+                            }
+                          }}
+                        >
+                          {loading ? "Записываем..." : "Оставить заявку"}
+                        </button>
+                      </form>
+                      <div id="legal">
+                        Нажимая кнопку, принимаю условия{" "}
+                        <a
+                          href="https://besavvy.app/legal?name=privacy"
+                          target="_blank"
+                        >
+                          политики
+                        </a>{" "}
+                        и{" "}
+                        <a
+                          href="https://besavvy.app/legal?name=offer"
+                          target="_blank"
+                        >
+                          оферты
+                        </a>
+                        .
+                      </div>
+                    </>
+                  )}
+                  {step == "installments" && (
+                    <>
+                      <form>
+                        <div className="names">
+                          <input
+                            className="data"
+                            id="name"
+                            placeholder="Имя"
+                            onChange={(e) => setName(e.target.value)}
+                          />
+                          <input
+                            className="data"
+                            id="surname"
+                            placeholder="Фамилия"
+                            onChange={(e) => setSurname(e.target.value)}
+                          />
+                        </div>
+                        <input
+                          id="tel"
+                          className="data"
+                          type="tel"
+                          placeholder="+7 (999) 999-99-99"
+                          onChange={(e) => setNumber(e.target.value)}
+                        />
+                        <input
+                          id="email"
+                          className="data"
+                          type="email"
+                          placeholder="Электронная почта"
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <button
+                          type="submit"
+                          id="english_application_button1"
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            if (!EmailValidator.validate(email)) {
+                              alert("Неправильный имейл");
+                            } else if (number.length < 7) {
+                              alert("Неправильный номер мобильнного телефона");
+                            } else {
+                              if (props.data.price.course == "school") {
+                                ReactGA.event({
+                                  category: "Litigation Apply Button Click",
+                                  action: "Click",
+                                });
+                              } else if (props.data.price.course == "corp") {
+                                ReactGA.event({
+                                  category: "Corp Apply Button Click",
+                                  action: "Click",
+                                });
+                              }
+                              const res = await createBusinessClient({
+                                variables: {
+                                  type: asPath ? asPath : "Unknown",
+                                  email,
+                                  name: name + " " + surname,
+                                  number,
+                                  communication_medium: props.data.price.course,
+                                  comment: "Рассрочка",
+                                },
+                              });
+                              Router.push({
+                                pathname: "/hello",
+                                query: {
+                                  name: name + " " + surname,
+                                  email: email,
+                                  number: number,
+                                },
+                              });
+                            }
+                          }}
+                        >
+                          {loading ? "Готовим..." : "Оставить заявку"}
+                        </button>
+                      </form>
+                      <div id="legal">
+                        Нажимая кнопку, принимаю условия{" "}
+                        <a
+                          href="https://besavvy.app/legal?name=privacy"
+                          target="_blank"
+                        >
+                          политики
+                        </a>{" "}
+                        и{" "}
+                        <a
+                          href="https://besavvy.app/legal?name=offer"
+                          target="_blank"
+                        >
+                          оферты
+                        </a>
+                        .
+                      </div>
+                    </>
+                  )}
+                  {step == "buy" && (
+                    <form>
+                      <div id="explainer">
+                        Если у вас еще нет аккаунта, после нажатия на кнопку мы
+                        попросим вас зарегистрироваться на сайте. Если у вас уже
+                        есть аккаунт, то вас перенаправят на страницу оплаты.
+                      </div>
+                      {!loading_data && (
+                        <button
+                          className="buy"
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            if (!me) {
+                              alert(
+                                `Сейчас мы откроем страницу регистрации. Создайте аккаунт, а потом нажмите на конпку "Купить" еще раз.`
+                              );
+                              toggleModal();
+                            } else {
+                              const res = await createOrder({
+                                variables: {
+                                  coursePageId: "cjtreu3md00fp0897ga13aktp",
+                                  price: price,
+                                  userId: me.id,
+                                  comment: props.comment,
+                                },
+                              });
+                              location.href = res.data.createOrder.url;
+                            }
+                          }}
+                        >
+                          {t("buy")}
+                        </button>
+                      )}
+                      {loading_data && <button>Готовим покупку...</button>}
+                      <div id="legal">
+                        Нажимая кнопку, принимаю условия{" "}
+                        <a
+                          href="https://besavvy.app/legal?name=privacy"
+                          target="_blank"
+                        >
+                          политики
+                        </a>{" "}
+                        и{" "}
+                        <a
+                          href="https://besavvy.app/legal?name=offer"
+                          target="_blank"
+                        >
+                          оферты
+                        </a>
+                        .
+                      </div>
+                    </form>
+                  )}
+                </div>
+              </Contact>
+            </>
+          )}
+          {router.locale == "en" && (
+            <>
+              <Contact>
+                <div id="form_container">
+                  <div className="h2">Choose an option</div>
+                  <div className="variants">
+                    <div
+                      className="variants_form"
                       onChange={(e) => {
-                        console.log(e.target.value);
                         setStep(e.target.value);
                       }}
-                    />
+                    >
+                      <div>
+                        <input
+                          type="radio"
+                          value="apply"
+                          checked={step == "apply"}
+                          onChange={(e) => {
+                            setStep(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <label for="html">Get a consultation</label>
+                    </div>
+                    <div
+                      className="variants_form"
+                      onChange={(e) => {
+                        setStep(e.target.value);
+                      }}
+                    >
+                      <div>
+                        <input
+                          type="radio"
+                          value="installments"
+                          checked={step == "installments"}
+                          onChange={(e) => {
+                            setStep(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <label for="html">Apply Today</label>
+                    </div>
                   </div>
-                  <label for="html">{t("step1option2")}</label>
+                  <div className="h2">Fill out the application</div>
+                  <>
+                    <form>
+                      <div className="names">
+                        <input
+                          className="data"
+                          id="name"
+                          placeholder="Name"
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                        <input
+                          className="data"
+                          id="surname"
+                          placeholder="Surname"
+                          onChange={(e) => setSurname(e.target.value)}
+                        />
+                      </div>
+                      <input
+                        id="tel"
+                        className="data"
+                        type="tel"
+                        placeholder="Mobile number"
+                        onChange={(e) => setNumber(e.target.value)}
+                      />
+                      <input
+                        id="email"
+                        className="data"
+                        type="email"
+                        placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                      <button
+                        type="submit"
+                        id="english_application_button1"
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          if (!EmailValidator.validate(email)) {
+                            alert("Wrong Email");
+                          } else if (number.length < 7) {
+                            alert("Wrong Mobile Number");
+                          } else {
+                            const res = await createBusinessClient({
+                              variables: {
+                                type: asPath ? asPath : "Unknown",
+                                email,
+                                name: name + " " + surname,
+                                number,
+                                communication_medium: "Legal English Intro",
+                                comment: "Консультация",
+                              },
+                            });
+                            Router.push({
+                              pathname: "/hello",
+                              query: {
+                                name: name + " " + surname,
+                                email: email,
+                                number: number,
+                              },
+                            });
+                          }
+                        }}
+                      >
+                        {loading ? "Applying..." : "Apply"}
+                      </button>
+                    </form>
+                    {/* <div id="legal">
+                      Нажимая кнопку, принимаю условия{" "}
+                      <a
+                        href="https://besavvy.app/legal?name=privacy"
+                        target="_blank"
+                      >
+                        политики
+                      </a>{" "}
+                      и{" "}
+                      <a
+                        href="https://besavvy.app/legal?name=offer"
+                        target="_blank"
+                      >
+                        оферты
+                      </a>
+                      .
+                    </div> */}
+                  </>
                 </div>
-              </div>
-              <div className="h2">
-                {t("step2")}
-                {step == "apply" && " Заполните заявку"}
-                {step == "buy" && " Оплатите курс"}
-                {step == "installments" && " Заявка на рассрочку"}
-              </div>
-              {step == "apply" && (
-                <>
-                  <form>
-                    <div className="names">
-                      <input
-                        className="data"
-                        id="name"
-                        placeholder="Имя"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                      <input
-                        className="data"
-                        id="surname"
-                        placeholder="Фамилия"
-                        onChange={(e) => setSurname(e.target.value)}
-                      />
-                    </div>
-                    <input
-                      id="tel"
-                      className="data"
-                      type="tel"
-                      placeholder="+7 (999) 999-99-99"
-                      onChange={(e) => setNumber(e.target.value)}
-                    />
-                    <input
-                      id="email"
-                      className="data"
-                      type="email"
-                      placeholder="Электронная почта"
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      id="english_application_button1"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        if (!EmailValidator.validate(email)) {
-                          alert("Неправильный имейл");
-                        } else if (number.length < 7) {
-                          alert("Неправильный номер мобильнного телефона");
-                        } else {
-                          if (props.data.price.course == "school") {
-                            ReactGA.event({
-                              category: "Litigation Apply Button Click",
-                              action: "Click",
-                            });
-                          } else if (props.data.price.course == "corp") {
-                            ReactGA.event({
-                              category: "Corp Apply Button Click",
-                              action: "Click",
-                            });
-                          }
-                          const res = await createBusinessClient({
-                            variables: {
-                              type: asPath ? asPath : "Unknown",
-                              email,
-                              name: name + " " + surname,
-                              number,
-                              communication_medium: props.data.price.course,
-                              comment: "Консультация",
-                            },
-                          });
-                          Router.push({
-                            pathname: "/hello",
-                            query: {
-                              name: name + " " + surname,
-                              email: email,
-                              number: number,
-                            },
-                          });
-                        }
-                      }}
-                    >
-                      {loading ? "Записываем..." : "Оставить заявку"}
-                    </button>
-                  </form>
-                  <div id="legal">
-                    Нажимая кнопку, принимаю условия{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=privacy"
-                      target="_blank"
-                    >
-                      политики
-                    </a>{" "}
-                    и{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=offer"
-                      target="_blank"
-                    >
-                      оферты
-                    </a>
-                    .
-                  </div>
-                </>
-              )}
-              {step == "installments" && (
-                <>
-                  <form>
-                    <div className="names">
-                      <input
-                        className="data"
-                        id="name"
-                        placeholder="Имя"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                      <input
-                        className="data"
-                        id="surname"
-                        placeholder="Фамилия"
-                        onChange={(e) => setSurname(e.target.value)}
-                      />
-                    </div>
-                    <input
-                      id="tel"
-                      className="data"
-                      type="tel"
-                      placeholder="+7 (999) 999-99-99"
-                      onChange={(e) => setNumber(e.target.value)}
-                    />
-                    <input
-                      id="email"
-                      className="data"
-                      type="email"
-                      placeholder="Электронная почта"
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      id="english_application_button1"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        if (!EmailValidator.validate(email)) {
-                          alert("Неправильный имейл");
-                        } else if (number.length < 7) {
-                          alert("Неправильный номер мобильнного телефона");
-                        } else {
-                          if (props.data.price.course == "school") {
-                            ReactGA.event({
-                              category: "Litigation Apply Button Click",
-                              action: "Click",
-                            });
-                          } else if (props.data.price.course == "corp") {
-                            ReactGA.event({
-                              category: "Corp Apply Button Click",
-                              action: "Click",
-                            });
-                          }
-                          const res = await createBusinessClient({
-                            variables: {
-                              type: asPath ? asPath : "Unknown",
-                              email,
-                              name: name + " " + surname,
-                              number,
-                              communication_medium: props.data.price.course,
-                              comment: "Рассрочка",
-                            },
-                          });
-                          Router.push({
-                            pathname: "/hello",
-                            query: {
-                              name: name + " " + surname,
-                              email: email,
-                              number: number,
-                            },
-                          });
-                        }
-                      }}
-                    >
-                      {loading ? "Готовим..." : "Оставить заявку"}
-                    </button>
-                  </form>
-                  <div id="legal">
-                    Нажимая кнопку, принимаю условия{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=privacy"
-                      target="_blank"
-                    >
-                      политики
-                    </a>{" "}
-                    и{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=offer"
-                      target="_blank"
-                    >
-                      оферты
-                    </a>
-                    .
-                  </div>
-                </>
-              )}
-              {step == "buy" && (
-                <form>
-                  <div id="explainer">
-                    Если у вас еще нет аккаунта, после нажатия на кнопку мы
-                    попросим вас зарегистрироваться на сайте. Если у вас уже
-                    есть аккаунт, то вас перенаправят на страницу оплаты.
-                  </div>
-                  {!loading_data && (
-                    <button
-                      className="buy"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        if (!me) {
-                          alert(
-                            `Сейчас мы откроем страницу регистрации. Создайте аккаунт, а потом нажмите на конпку "Купить" еще раз.`
-                          );
-                          toggleModal();
-                        } else {
-                          const res = await createOrder({
-                            variables: {
-                              coursePageId: "cjtreu3md00fp0897ga13aktp",
-                              price: price,
-                              userId: me.id,
-                              comment: props.comment,
-                            },
-                          });
-                          location.href = res.data.createOrder.url;
-                        }
-                      }}
-                    >
-                      {t("buy")}
-                    </button>
-                  )}
-                  {loading_data && <button>Готовим покупку...</button>}
-                  <div id="legal">
-                    Нажимая кнопку, принимаю условия{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=privacy"
-                      target="_blank"
-                    >
-                      политики
-                    </a>{" "}
-                    и{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=offer"
-                      target="_blank"
-                    >
-                      оферты
-                    </a>
-                    .
-                  </div>
-                </form>
-              )}
-            </div>
-          </Contact>
+              </Contact>
+            </>
+          )}
         </Form>
       </Container>
       <StyledModal

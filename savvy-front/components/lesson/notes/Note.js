@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import Button from "@material-ui/core/Button";
@@ -17,11 +17,9 @@ const StyledButton = withStyles({
 })(Button);
 
 const Container = styled.div`
-  width: 650px;
+  width: ${(props) => props.width};
   font-size: 1.6rem;
   margin: 20px 0;
-  /* display: flex;
-  flex-direction: row; */
   .arrow_box {
     cursor: pointer;
     padding: 10px 2%;
@@ -43,12 +41,36 @@ const Container = styled.div`
   a {
     width: 30%;
   }
+  .black_back {
+    background: #000000;
+    width: 100vw;
+    padding: 10% 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    img {
+      display: block;
+      width: 100%;
+      max-height: 50em;
+      box-shadow: "0 0 0 2px blue;";
+      width: 50vw;
+    }
+    iframe {
+      width: 50%;
+      height: 400px;
+    }
+  }
 
   .text {
-    flex-basis: 90%;
-    border: 2px solid #f3f3f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    font-weight: 500;
     padding: 1% 2%;
-    border-radius: 25px;
+    max-width: 100vw;
+    line-height: 1.6;
   }
   .author {
     flex-basis: 10%;
@@ -74,12 +96,12 @@ const Container = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: row;
-    width: 100%;
+    width: 90%;
   }
 `;
 
 const NoteStyles = styled.div`
-  /* width: 650px; */
+  max-width: 540px;
   margin: 2% 0 0 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {
@@ -92,7 +114,8 @@ const NoteStyles = styled.div`
     }
   }
   h2 {
-    font-size: 2.6rem;
+    font-size: 3.2rem;
+    font-weight: 600;
     line-height: 1.4;
   }
   img {
@@ -188,6 +211,42 @@ const Note = (props) => {
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
 
+  useEffect(() => {
+    let el = document.getElementById("wide");
+    if (el && props.story) {
+      console.log(1, el);
+      let img_div = document.createElement("div");
+      let new_img = document.createElement("img");
+      new_img.src = el.src;
+      img_div.className = "black_back";
+      img_div.appendChild(new_img);
+      el.remove();
+      const box = document.getElementById(props.id);
+      box.prepend(img_div);
+    }
+
+    let el2 = document.getElementById("blackvideo");
+    if (el2 && props.story) {
+      console.log(2, el2);
+
+      let video_div = document.createElement("div");
+      let new_video = document.createElement("iframe");
+      new_video.src = el2.src;
+      new_video.frameborder = "0";
+      new_video.tabindex = "0";
+      new_video.allow = "autoplay";
+      new_video.allowfullscreen = "true";
+
+      video_div.className = "black_back";
+      video_div.appendChild(new_video);
+      console.log(video_div);
+      el2.remove();
+      const box = document.getElementById(props.id);
+      box.prepend(video_div);
+      console.log(box);
+    }
+  });
+
   const push = () => {
     if (moved == false) {
       props.getData(
@@ -213,7 +272,7 @@ const Note = (props) => {
   if (props.problem) {
     width = "50%";
   } else if (props.story) {
-    width = "50%";
+    width = "100vw";
   } else {
     width = "90%";
   }
@@ -230,19 +289,18 @@ const Note = (props) => {
         )}
       </Buttons>
       {!update && (
-        <Container width={width}>
+        <Container id={id} width={width}>
           <div className="text">
             {!update && (
               <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>
             )}
             {getData && (
-              // <MiniButton onClick={push}>{props.t("next")}</MiniButton>
               <div className="arrow_box" onClick={(e) => push()}>
                 <img className="arrow" src="../../static/down-arrow.svg" />
               </div>
             )}
           </div>
-          <div className="author">
+          {/* <div className="author">
             <div className="author_info">
               {author && author.image != null ? (
                 <img className="icon" src={author.image} />
@@ -253,7 +311,7 @@ const Note = (props) => {
                 {author && author.name ? author.name : "BeSavvy"}
               </div>
             </div>
-          </div>
+          </div> */}
           {/* <NoteStyles>{renderHTML(text)}</NoteStyles> */}
         </Container>
       )}

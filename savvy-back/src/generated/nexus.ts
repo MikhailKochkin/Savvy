@@ -1689,6 +1689,7 @@ export interface NexusGenInputs {
     legalPortfolioId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     levelId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    number?: NexusGenEnums['SortOrder'] | null; // SortOrder
     password?: NexusGenEnums['SortOrder'] | null; // SortOrder
     permissions?: NexusGenEnums['SortOrder'] | null; // SortOrder
     resetToken?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1743,6 +1744,7 @@ export interface NexusGenInputs {
     newTests?: NexusGenInputs['NewTestListRelationFilter'] | null; // NewTestListRelationFilter
     NOT?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     notes?: NexusGenInputs['NoteListRelationFilter'] | null; // NoteListRelationFilter
+    number?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     OR?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     orders?: NexusGenInputs['OrderListRelationFilter'] | null; // OrderListRelationFilter
     password?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -2029,6 +2031,7 @@ export interface NexusGenObjects {
   Mutation: {};
   NewTest: { // root type
     answers: string[]; // [String!]!
+    comments: string[]; // [String!]!
     complexity?: number | null; // Int
     correct: boolean[]; // [Boolean!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2260,6 +2263,7 @@ export interface NexusGenObjects {
     image?: string | null; // String
     interests: string[]; // [String!]!
     name: string; // String!
+    number?: string | null; // String
     password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
     resume?: string | null; // String
@@ -2623,6 +2627,7 @@ export interface NexusGenFieldTypes {
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    textBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     updateBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     updateChat: NexusGenRootTypes['Chat'] | null; // Chat
     updateClause: NexusGenRootTypes['Clause'] | null; // Clause
@@ -2649,6 +2654,7 @@ export interface NexusGenFieldTypes {
   }
   NewTest: { // field return type
     answers: string[]; // [String!]!
+    comments: string[]; // [String!]!
     complexity: number | null; // Int
     correct: boolean[]; // [Boolean!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2959,6 +2965,7 @@ export interface NexusGenFieldTypes {
     level: NexusGenRootTypes['UserLevel'] | null; // UserLevel
     name: string; // String!
     new_subjects: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
+    number: string | null; // String
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
     password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
@@ -3317,6 +3324,7 @@ export interface NexusGenFieldTypeNames {
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
+    textBusinessClient: 'BusinessClient'
     updateBusinessClient: 'BusinessClient'
     updateChat: 'Chat'
     updateClause: 'Clause'
@@ -3343,6 +3351,7 @@ export interface NexusGenFieldTypeNames {
   }
   NewTest: { // field return type name
     answers: 'String'
+    comments: 'String'
     complexity: 'Int'
     correct: 'Boolean'
     createdAt: 'DateTime'
@@ -3653,6 +3662,7 @@ export interface NexusGenFieldTypeNames {
     level: 'UserLevel'
     name: 'String'
     new_subjects: 'CoursePage'
+    number: 'String'
     orders: 'Order'
     password: 'String'
     permissions: 'Permission'
@@ -3954,6 +3964,7 @@ export interface NexusGenArgTypes {
     }
     createNewTest: { // args
       answers?: Array<string | null> | null; // [String]
+      comments?: Array<string | null> | null; // [String]
       correct?: Array<boolean | null> | null; // [Boolean]
       ifRight?: string | null; // String
       ifWrong?: string | null; // String
@@ -4119,7 +4130,7 @@ export interface NexusGenArgTypes {
       resetToken?: string | null; // String
     }
     sendBusinessClientEmail: { // args
-      communication_medium?: string | null; // String
+      comment?: string | null; // String
       id?: string | null; // String
     }
     sendEmailToStudent: { // args
@@ -4138,10 +4149,15 @@ export interface NexusGenArgTypes {
       email?: string | null; // String
       isFamiliar?: boolean | null; // Boolean
       name?: string | null; // String
+      number?: string | null; // String
       password?: string | null; // String
       status?: NexusGenEnums['Status'] | null; // Status
       surname?: string | null; // String
       uniID?: string | null; // String
+    }
+    textBusinessClient: { // args
+      comment?: string | null; // String
+      id?: string | null; // String
     }
     updateBusinessClient: { // args
       comment?: string | null; // String
@@ -4220,6 +4236,7 @@ export interface NexusGenArgTypes {
     }
     updateNewTest: { // args
       answers?: Array<string | null> | null; // [String]
+      comments?: Array<string | null> | null; // [String]
       complexity?: number | null; // Int
       correct?: Array<boolean | null> | null; // [Boolean]
       id?: string | null; // String
@@ -4299,6 +4316,7 @@ export interface NexusGenArgTypes {
       image?: string | null; // String
       isFamiliar?: boolean | null; // Boolean
       name?: string | null; // String
+      number?: string | null; // String
       status?: NexusGenEnums['Status'] | null; // Status
       surname?: string | null; // String
     }

@@ -17,6 +17,8 @@ const Styles = styled.div`
 
 const Container = styled.div`
   width: 80%;
+  max-width: 1050px;
+
   display: flex;
   flex-direction: row;
   justify-content: center;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import moment from "moment";
-import Link from "next/link";
+import { useTranslation } from "next-i18next";
 import ReactResizeDetector from "react-resize-detector";
 
 const Banner = styled.div`
@@ -77,6 +76,8 @@ const Ad = (props) => {
   const onResize = (width, height) => {
     setWidth(width);
   };
+  const { t } = useTranslation("coursePage");
+
   const slide = () => {
     var my_element = document.getElementById("c2a");
     my_element.scrollIntoView({
@@ -92,7 +93,7 @@ const Ad = (props) => {
       <div className="bottomline_text">
         <span>{d.offer}</span>
       </div>
-      <button onClick={(e) => slide()}>Получить гайд</button>
+      <button onClick={(e) => slide()}>{t("buy")}</button>
     </Banner>
   );
 };

@@ -1,4 +1,4 @@
-const Demo_eng = () => `
+const Template = (comment) => `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
@@ -477,19 +477,7 @@ const Demo_eng = () => `
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>Здравствуйте,</h1>
-                        <p>
-                          Это Алена из BeSavvy. Мы получили вашу заявку 
-                          на программу "Юридический английский для
-                          профессионалов", но нам так и не удалось с вами связаться. Надеемся, что это письмо до вас дойдет.
-                        </p>
-                        <p>
-Высылаем детальную программу курса. Ее можно получить <a target="_blank" href="https://drive.google.com/file/d/1GvZpUMzGTN5cWh4hsRjIl22q1aMeiDnp/view">по этой ссылке</a></p>
-                        <p>
-                          Также даем доступ к открытым урокам нашего курса. Для доступа к ним перейдите <a target="_blank" href="https://besavvy.app/course?id=ck0pdit6900rt0704h6c5zmer"> по этой ссылке</a> и зарегистрируйтесь на сайте.
-                        </p>
-                        <p>
-Если вам интересно не просто посмотреть материалы, но и обсудить все ваши вопросы с руководителемм программы, вы можете забронировать звонок с ним. Это очень удобно, делается в 2 клика. Сам звонок займет 15 минут и поможет вам лучше понять, подходит ли вам курс. Регистрируйтесь на звонок по кнопке ниже.</p>
+                        ${comment}
                         <table
                           width="100%"
                           border="0"
@@ -503,7 +491,7 @@ const Demo_eng = () => `
                                 href="https://calendly.com/mikhail-from-besavvy/15-min-intro"
                                 class="f-fallback button button--blue"
                                 target="_blank"
-                                >Зарегистрироваться на звонок</a
+                                >Зарегистрироваться на звонок со мной</a
                               >
                             </td>
                           </tr>
@@ -513,9 +501,9 @@ const Demo_eng = () => `
                         <br/>
                         <p>
                           Если у вас остались вопросы по поводу наших продуктов,
-                          вы можете просто ответить на это письмо или написать мне в телеграм: https://t.me/alionakochkina
+                          вы можете просто ответить на это письмо.
                         </p>
-                        <p>Успехов, <br />Алена и команда BeSavvy</p>
+                        <p>Успехов, <br />Миша и команда BeSavvy</p>
                         <!-- Action -->
                         <!-- Sub copy -->
                       </div>
@@ -552,4 +540,4 @@ const Demo_eng = () => `
 </html>
 `;
 
-exports.Demo_eng = Demo_eng;
+exports.Template = Template;

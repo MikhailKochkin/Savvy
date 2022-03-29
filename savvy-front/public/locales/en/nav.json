@@ -12,5 +12,9 @@
   "enter": "Log in",
   "entering": "Logging in...",
   "forgot_password": "Forgot your password?",
-  "not_registered_yet": "No account yet?"
+  "name": "Mike Kochkin",
+  "registration_number": "318774600589944",
+  "tax_number": "771771639796",
+  "privacy_policy": "Privacy Policy",
+  "terms": "Terms"
 }
