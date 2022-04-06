@@ -2189,7 +2189,7 @@ const Program = (props) => {
           surname: "Максимкина",
           image:
             "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1619615136/%D0%AE%D0%BB%D1%8F_%D0%97%D0%B5%D0%BC_1.png",
-          title: "Юрист Land Law Firm",
+          title: "Юрист Althaus Legal",
           info: "",
         },
         {

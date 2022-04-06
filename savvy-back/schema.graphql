@@ -241,6 +241,17 @@ input ChatListRelationFilter {
   some: ChatWhereInput
 }
 
+input ChatOrderByInput {
+  complexity: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  lessonId: SortOrder
+  messages: SortOrder
+  name: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
+}
+
 input ChatWhereInput {
   AND: [ChatWhereInput!]
   complexity: IntNullableFilter
@@ -1204,6 +1215,7 @@ input MessageElement {
   author: String
   image: String
   number: Int
+  reactions: [Reaction]
   text: String
 }
 
@@ -1248,6 +1260,7 @@ type Mutation {
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, wrong: String): TextEditorResult
+  deleteChat(id: String): Chat
   deleteClause(id: String): Clause
   deleteClient(id: String): BusinessClient
   deleteConstruction(id: String): Construction
@@ -1822,6 +1835,8 @@ input PromocodeList {
 type Query {
   businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByInput!], where: CertificateWhereInput): [Certificate!]!
+  chat(where: ChatWhereUniqueInput!): Chat
+  chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByInput!], where: ChatWhereInput): [Chat!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByInput!], where: CoursePageWhereInput): [CoursePage!]!
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
@@ -2014,6 +2029,11 @@ input RatingWhereInput {
 
 input RatingWhereUniqueInput {
   id: String
+}
+
+input Reaction {
+  comment: String
+  reaction: String
 }
 
 input SandboxListRelationFilter {

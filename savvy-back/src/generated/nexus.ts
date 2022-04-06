@@ -189,6 +189,16 @@ export interface NexusGenInputs {
     none?: NexusGenInputs['ChatWhereInput'] | null; // ChatWhereInput
     some?: NexusGenInputs['ChatWhereInput'] | null; // ChatWhereInput
   }
+  ChatOrderByInput: { // input type
+    complexity?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    messages?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   ChatWhereInput: { // input type
     AND?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
@@ -825,6 +835,7 @@ export interface NexusGenInputs {
     author?: string | null; // String
     image?: string | null; // String
     number?: number | null; // Int
+    reactions?: Array<NexusGenInputs['Reaction'] | null> | null; // [Reaction]
     text?: string | null; // String
   }
   Messages: { // input type
@@ -1300,6 +1311,10 @@ export interface NexusGenInputs {
   }
   RatingWhereUniqueInput: { // input type
     id?: string | null; // String
+  }
+  Reaction: { // input type
+    comment?: string | null; // String
+    reaction?: string | null; // String
   }
   SandboxListRelationFilter: { // input type
     every?: NexusGenInputs['SandboxWhereInput'] | null; // SandboxWhereInput
@@ -2604,6 +2619,7 @@ export interface NexusGenFieldTypes {
     createTestResult: NexusGenRootTypes['TestResult'] | null; // TestResult
     createTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     createTextEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
+    deleteChat: NexusGenRootTypes['Chat'] | null; // Chat
     deleteClause: NexusGenRootTypes['Clause'] | null; // Clause
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
@@ -2756,6 +2772,8 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     businessClients: NexusGenRootTypes['BusinessClient'][]; // [BusinessClient!]!
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
+    chat: NexusGenRootTypes['Chat'] | null; // Chat
+    chats: NexusGenRootTypes['Chat'][]; // [Chat!]!
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -3301,6 +3319,7 @@ export interface NexusGenFieldTypeNames {
     createTestResult: 'TestResult'
     createTextEditor: 'TextEditor'
     createTextEditorResult: 'TextEditorResult'
+    deleteChat: 'Chat'
     deleteClause: 'Clause'
     deleteClient: 'BusinessClient'
     deleteConstruction: 'Construction'
@@ -3453,6 +3472,8 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     businessClients: 'BusinessClient'
     certificates: 'Certificate'
+    chat: 'Chat'
+    chats: 'Chat'
     coursePage: 'CoursePage'
     coursePages: 'CoursePage'
     courseVisit: 'CourseVisit'
@@ -4071,6 +4092,9 @@ export interface NexusGenArgTypes {
       textEditorId?: string | null; // String
       wrong?: string | null; // String
     }
+    deleteChat: { // args
+      id?: string | null; // String
+    }
     deleteClause: { // args
       id?: string | null; // String
     }
@@ -4361,6 +4385,17 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['CertificateOrderByInput'][] | null; // [CertificateOrderByInput!]
       where?: NexusGenInputs['CertificateWhereInput'] | null; // CertificateWhereInput
+    }
+    chat: { // args
+      where: NexusGenInputs['ChatWhereUniqueInput']; // ChatWhereUniqueInput!
+    }
+    chats: { // args
+      after?: NexusGenInputs['ChatWhereUniqueInput'] | null; // ChatWhereUniqueInput
+      before?: NexusGenInputs['ChatWhereUniqueInput'] | null; // ChatWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['ChatOrderByInput'][] | null; // [ChatOrderByInput!]
+      where?: NexusGenInputs['ChatWhereInput'] | null; // ChatWhereInput
     }
     coursePage: { // args
       where: NexusGenInputs['CoursePageWhereUniqueInput']; // CoursePageWhereUniqueInput!

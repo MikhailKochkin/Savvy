@@ -73,7 +73,7 @@ const Block = (props) => {
               Тест:{" "}
               {tests.filter((q) => q.id === value.id).length > 0
                 ? tests.filter((q) => q.id === value.id)[0].question
-                : "Тест был удален. Удалите этот блок из урока."}
+                : " Тест был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
@@ -83,7 +83,7 @@ const Block = (props) => {
               Вопрос:{" "}
               {quizes.filter((q) => q.id === value.id).length > 0
                 ? quizes.filter((q) => q.id === value.id)[0].question
-                : "Вопрос был удален. Удалите этот блок из урока."}
+                : " Вопрос был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
@@ -93,7 +93,7 @@ const Block = (props) => {
               Подводка:{" "}
               {testPractices.filter((q) => q.id === value.id).length > 0
                 ? testPractices.filter((q) => q.id === value.id)[0].id
-                : "Вопрос был удален. Удалите этот блок из урока."}
+                : " Вопрос был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
@@ -107,7 +107,7 @@ const Block = (props) => {
                       .filter((q) => q.id === value.id)[0]
                       .text.substring(0, 100)
                   )
-                : "Лонгрид был удален. Удалите этот блок из урока."}
+                : " Лонгрид был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
@@ -117,14 +117,17 @@ const Block = (props) => {
               Алгоритм:{" "}
               {shots.filter((q) => q.id === value.id).length > 0
                 ? shots.filter((q) => q.id === value.id)[0].title
-                : "Материал был удален. Удалите этот блок из урока."}
+                : " Материал был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}
         {value.type && value.type.toLowerCase() === "chat" ? (
           <Title>
             <div className="type">
-              Диалог: {chats.filter((q) => q.id === value.id)[0].name}
+              Диалог:
+              {chats.filter((q) => q.id === value.id).length > 0
+                ? chats.filter((q) => q.id === value.id)[0].name
+                : " Чат был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}

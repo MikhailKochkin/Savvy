@@ -41,13 +41,19 @@ const Input = styled.input`
   }
 `;
 
+const Bottom = styled.div`
+  margin-top: 50px;
+  padding-top: 15px;
+  width: 70%;
+  border-top: 1px solid grey;
+`;
+
 const CreateChat = (props) => {
   const [name, setName] = useState("");
   const [messages, setMessages] = useState([]);
   const [num, setNum] = useState(0);
-  const [createChat, { data, loading, error }] = useMutation(
-    CREATE_CHAT_MUTATION
-  );
+  const [createChat, { data, loading, error }] =
+    useMutation(CREATE_CHAT_MUTATION);
 
   const getMessage = (data) => {
     setMessages([...messages, data]);
@@ -71,34 +77,36 @@ const CreateChat = (props) => {
           />
         </>
       ))}
-      <button className="but" onClick={(e) => setNum(num - 1)}>
-        -1
-      </button>
-      <button className="but" onClick={(e) => setNum(num + 1)}>
-        +1
-      </button>
-      <button
-        onClick={async (e) => {
-          e.preventDefault();
-          const res = await createChat({
-            variables: {
-              lessonId: props.lessonID,
-              messages: { messagesList: messages },
-              name,
-            },
-            refetchQueries: [
-              {
-                query: SINGLE_LESSON_QUERY,
-                variables: { id: props.lessonID },
+      <Bottom>
+        <button className="but" onClick={(e) => setNum(num - 1)}>
+          -1 реплика
+        </button>
+        <button className="but" onClick={(e) => setNum(num + 1)}>
+          +1 реплика
+        </button>
+        <button
+          onClick={async (e) => {
+            e.preventDefault();
+            const res = await createChat({
+              variables: {
+                lessonId: props.lessonID,
+                messages: { messagesList: messages },
+                name,
               },
-            ],
-          });
-          console.log(res);
-          alert("Готово!");
-        }}
-      >
-        Сохранить
-      </button>
+              refetchQueries: [
+                {
+                  query: SINGLE_LESSON_QUERY,
+                  variables: { id: props.lessonID },
+                },
+              ],
+            });
+            console.log("messages", messages);
+            alert("Готово!");
+          }}
+        >
+          Сохранить диалог
+        </button>
+      </Bottom>
     </Styles>
   );
 };

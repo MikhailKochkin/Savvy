@@ -222,7 +222,7 @@ class SingleProblem extends Component {
   };
 
   onFinish = (status) => {
-    console.log(status);
+    console.log("status", status);
     this.setState({ isFinished: true });
   };
 

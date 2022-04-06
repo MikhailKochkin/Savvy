@@ -151,6 +151,9 @@ const TextBar = styled.div`
 `;
 
 const Window = styled.div`
+  top: 15%;
+  position: -webkit-sticky;
+  position: sticky;
   margin-left: -10px;
   margin-bottom: 20px;
   min-height: 80px;

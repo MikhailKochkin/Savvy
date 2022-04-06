@@ -245,6 +245,15 @@ const MessageElement = inputObjectType({
     t.string("author");
     t.string("text");
     t.string("image");
+    t.list.field("reactions", { type: "Reaction" });
+  },
+});
+
+const Reaction = inputObjectType({
+  name: "Reaction",
+  definition(t) {
+    t.string("reaction");
+    t.string("comment");
   },
 });
 
@@ -275,6 +284,7 @@ module.exports = {
   Shot,
   Chat,
   Messages,
+  Reaction,
   MessageElement,
   Quiz,
   Note,

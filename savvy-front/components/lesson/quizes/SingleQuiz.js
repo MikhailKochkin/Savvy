@@ -34,7 +34,7 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 650px;
+  width: 650px;
   font-weight: 500;
   margin-bottom: 3%;
   font-size: 1.6rem;

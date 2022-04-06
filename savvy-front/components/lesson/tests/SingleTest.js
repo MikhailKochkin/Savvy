@@ -560,6 +560,7 @@ const SingleTest = (props) => {
                   commentsList.map((com, i) => {
                     return renderHTML(com);
                   })}
+                {/* {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "} */}
               </div>
               <IconBlock>
                 {author && author.image != null ? (

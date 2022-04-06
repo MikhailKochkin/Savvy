@@ -615,9 +615,9 @@ const Mutation = mutationType({
           answers: {
             set: [...answers],
           },
-          comments: {
-            set: [...comments],
-          },
+          // comments: {
+          //   set: [...comments],
+          // },
           correct: {
             set: [...correct],
           },
@@ -997,12 +997,31 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = note.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = note.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.note.delete({ where });
+      },
+    });
+    t.field("deleteChat", {
+      type: "Chat",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        const chat = await ctx.prisma.chat.findUnique(
+          { where },
+          `{ id, user { id } }`
+        );
+        // const ownsTest = note.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
+        //3. Delete it
+        return ctx.prisma.chat.delete({ where });
       },
     });
     t.field("createChat", {
@@ -1111,10 +1130,10 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = TE.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = TE.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.textEditor.delete({ where });
       },
@@ -1398,10 +1417,10 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = C.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.problem.delete({ where });
       },

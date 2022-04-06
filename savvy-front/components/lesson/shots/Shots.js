@@ -22,12 +22,13 @@ const CREATE_SHOTRESULT_MUTATION = gql`
 `;
 
 const Commentary = styled.div`
-  border-top: 1px solid #edefed;
+  border-bottom: 1px solid #edefed;
   padding: 1% 2%;
   margin: 1% 0;
 `;
 
 const Text = styled.div`
+  margin-top: 20px;
   p {
     padding: 1% 2%;
     margin: 1% 0;
@@ -41,12 +42,13 @@ const Text = styled.div`
   ins {
     text-decoration: none;
     background: #edffe7;
-    /* padding: 0.5% 0.3%; */
+    padding: 0.5% 0.3%;
   }
   del {
     background: #f29ca3;
-    padding: 0.5% 0;
+    padding: 0.5% 0.3%;
   }
+  margin-bottom: 40px;
   /* span {
     padding: 0.5% 0.3%;
   } */
@@ -63,7 +65,10 @@ const Text = styled.div`
 
 const Title = styled.div`
   margin: 10px 0;
-  font-size: 1.6rem;
+  line-height: 1.4;
+  font-size: 2rem;
+  font-weight: 600;
+  width: 95%;
   span {
     font-weight: bold;
   }
@@ -101,11 +106,12 @@ const SwitchButton = styled.div`
 `;
 
 const Styles = styled.div`
-  border: 1px solid #edefed;
+  border: 1px solid #d4d4d4;
   box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
   margin: 30px 0;
   font-weight: 500;
   padding: 2%;
+  min-height: 50vh;
   width: ${(props) => props.width};
   .bar {
     width: 70%;
@@ -198,20 +204,17 @@ class Shots extends Component {
       <Styles width={width}>
         {this.state.page === "show" && (
           <>
-            <Title>
-              <span>Пояснение:</span> {title}
-            </Title>
-            <div className="step">Шаг {this.state.num}</div>
-
+            <Title>{title}</Title>
+            <div className="step">Step {this.state.num}</div>
             <>
+              <Commentary>
+                <>{renderHTML(comments[this.state.num - 1])}</>
+              </Commentary>
               <Text>
                 <div key={this.state.num - 1}>
                   {renderHTML(visible[this.state.num - 1])}
                 </div>
               </Text>
-              <Commentary>
-                <>{renderHTML(comments[this.state.num - 1])}</>
-              </Commentary>
             </>
             <Buttons>
               <Mutation

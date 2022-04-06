@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import UpdateChat from "./UpdateChat";
+import DeleteChat from "./DeleteChat";
+import Reaction from "./Reaction";
 
 const Styles = styled.div`
   width: 650px;
@@ -26,7 +28,7 @@ const Styles = styled.div`
 
 const Message = styled.div`
   display: flex;
-  opacity: 0;
+  /* opacity: 0; */
   /* transition-property: sliding-vertically; */
   transition: 0.2s ease-out;
   flex-direction: row;
@@ -100,13 +102,13 @@ const Chat = (props) => {
   const { name, messages, me, story, lessonId, id, author } = props;
 
   useEffect(() => {
-    let chat = document.getElementById(id);
-    messages.messagesList.map((m, i) => {
-      setTimeout(() => {
-        let el = document.getElementById("message" + i + id);
-        el.style.opacity = 1;
-      }, i * 2 * 1000);
-    });
+    // let chat = document.getElementById(id);
+    // messages.messagesList.map((m, i) => {
+    //   setTimeout(() => {
+    //     let el = document.getElementById("message" + i + id);
+    //     el.style.opacity = 1;
+    //   }, i * 2 * 1000);
+    // });
   }, [0]);
 
   let width;
@@ -139,28 +141,41 @@ const Chat = (props) => {
             );
           } else {
             return (
-              <Message
-                id={"message" + i + id}
-                key={i}
-                time={i}
-                className="author"
-              >
-                <div className="author_text">{renderHTML(m.text)}</div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
-                  </div>
-                </IconBlock>
-              </Message>
+              <>
+                <Message
+                  id={"message" + i + id}
+                  key={i}
+                  time={i}
+                  className="author"
+                >
+                  <div className="author_text">{renderHTML(m.text)}</div>
+                  <IconBlock>
+                    {author && author.image != null ? (
+                      <img className="icon" src={author.image} />
+                    ) : (
+                      <img className="icon" src="../../static/hipster.svg" />
+                    )}
+                    <div className="name">
+                      {author && author.name ? author.name : "BeSavvy"}
+                    </div>
+                  </IconBlock>
+                </Message>
+                {m.reactions && m.reactions.length > 0 && (
+                  <Reaction
+                    reactions={m.reactions}
+                    me={me}
+                    author={author}
+                    initialQuestion={m.text}
+                  />
+                )}
+              </>
             );
           }
         })}
       {!story && <button onClick={(e) => setUpdate(!update)}>Изменить</button>}
+      {me && !story && (
+        <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
+      )}
       {update && (
         <UpdateChat
           id={id}
