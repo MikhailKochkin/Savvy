@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import { initial } from "lodash";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   @media (max-width: 800px) {
@@ -122,6 +123,7 @@ const Reaction = (props) => {
   const [reaction, setReaction] = useState(undefined);
   const [leftReactions, setLeftReactions] = useState(props.reactions);
   const { me, author, initialQuestion } = props;
+  const { t } = useTranslation("lesson");
 
   return (
     <Styles>
@@ -154,10 +156,7 @@ const Reaction = (props) => {
           <>
             {usedReactions.length > 0 && (
               <Message className="author">
-                <div className="author_text">
-                  Могу еще что-то подсказать?
-                  {/* {renderHTML(initialQuestion)} */}
-                </div>
+                <div className="author_text">{t("more_explain")}</div>
                 <IconBlock>
                   {author && author.image != null ? (
                     <img className="icon" src={author.image} />

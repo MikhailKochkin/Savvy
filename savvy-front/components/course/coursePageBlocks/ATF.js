@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 const BImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
   width: 100vw;
-  min-height: 70vh;
+  min-height: 90vh;
   max-height: 1200px;
   display: flex;
   flex-direction: column;

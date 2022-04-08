@@ -214,7 +214,6 @@ const Note = (props) => {
   useEffect(() => {
     let el = document.getElementById("wide");
     if (el && props.story) {
-      console.log(1, el);
       let img_div = document.createElement("div");
       let new_img = document.createElement("img");
       new_img.src = el.src;

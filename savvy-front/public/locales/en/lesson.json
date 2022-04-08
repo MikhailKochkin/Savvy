@@ -38,5 +38,10 @@
   "questions": "questions. You gave",
   "correct_num": "correct answers.",
   "once_more": "Keep on practicing until you get 80% of the questions right. We know you can!",
-  "great": "Great result! Let's proceed"
+  "great": "Great result! Let's proceed",
+  "write_answer": "Write down the answer",
+  "rate": "Please rate this lesson",
+  "forum_end": "That's it. See you at the next lesson. Maybe you have any questions?",
+  "got_question": "We got your question, I will write you back in a couple of days.",
+  "more_explain": "Can I help you with anything else?"
 }

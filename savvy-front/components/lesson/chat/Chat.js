@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
+
 import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
 import Reaction from "./Reaction";
@@ -28,8 +30,6 @@ const Styles = styled.div`
 
 const Message = styled.div`
   display: flex;
-  /* opacity: 0; */
-  /* transition-property: sliding-vertically; */
   transition: 0.2s ease-out;
   flex-direction: row;
   justify-content: flex-end;
@@ -55,7 +55,6 @@ const Message = styled.div`
     justify-content: center;
   }
   .student_text {
-    /* height: 140px; */
     min-width: 60%;
     max-width: 70%;
     border: 2px solid;
@@ -98,17 +97,18 @@ const IconBlock = styled.div`
 
 const Chat = (props) => {
   const [update, setUpdate] = useState(false);
+  const { t } = useTranslation("lesson");
 
   const { name, messages, me, story, lessonId, id, author } = props;
 
   useEffect(() => {
-    // let chat = document.getElementById(id);
-    // messages.messagesList.map((m, i) => {
-    //   setTimeout(() => {
-    //     let el = document.getElementById("message" + i + id);
-    //     el.style.opacity = 1;
-    //   }, i * 2 * 1000);
-    // });
+    let chat = document.getElementById(id);
+    messages.messagesList.map((m, i) => {
+      setTimeout(() => {
+        let el = document.getElementById("message" + i + id);
+        el.style.opacity = 1;
+      }, i * 2 * 1000);
+    });
   }, [0]);
 
   let width;
@@ -172,7 +172,9 @@ const Chat = (props) => {
             );
           }
         })}
-      {!story && <button onClick={(e) => setUpdate(!update)}>Изменить</button>}
+      {!story && (
+        <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
+      )}
       {me && !story && (
         <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
       )}

@@ -5,6 +5,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateStatement from "./CreateStatement";
 import DeleteStatement from "./DeleteStatement";
@@ -199,6 +201,8 @@ const Forum = (props) => {
   const [comment, setComment] = useState("");
   const [sent, setSent] = useState(false);
 
+  const { t } = useTranslation("lesson");
+
   const [createStatement, { data, loading }] = useMutation(
     CREATE_STATEMENT_MUTATION
   );
@@ -208,10 +212,7 @@ const Forum = (props) => {
   return (
     <Styles story={story}>
       <div className="question">
-        <div className="question_text">
-          Пожалуйста, оцените, насколько полезен был этот урок. Преподаватель
-          увидит оценки в анонимном формате.
-        </div>
+        <div className="question_text">{t("rate")}</div>
         <IconBlock>
           <img className="icon" src="../../static/hipster.svg" />
           <div className="name">BeSavvy</div>
@@ -249,7 +250,7 @@ const Forum = (props) => {
                   changeRating={async (data) => {
                     const res = await setRating(data);
                     const res1 = updateRating();
-                    alert("Спасибо!");
+                    alert("Thanks!");
                   }}
                 />
               )}
@@ -280,7 +281,7 @@ const Forum = (props) => {
                   changeRating={async (data) => {
                     const res = await setRating(data);
                     const res1 = createRating();
-                    alert("Спасибо!");
+                    alert("Thanks!");
                   }}
                 />
               )}
@@ -290,9 +291,7 @@ const Forum = (props) => {
       </div>
       <div className="question">
         <div className="question_text">
-          {text.length > 7
-            ? renderHTML(text)
-            : "На этом все. Увидимся на следующем уроке! Но, может быть, у тебя остались какие-то вопросы?"}
+          {text.length > 7 ? renderHTML(text) : t("forum_end")}
         </div>
         <IconBlock>
           <img className="icon" src="../../static/hipster.svg" />
@@ -323,17 +322,14 @@ const Forum = (props) => {
                 });
               }}
             >
-              {!sent ? "Отправить" : "Отправлено"}
+              {!sent ? "Send" : "Sending..."}
             </button>
           </div>
         )}
       </div>
       {sent && (
         <div className="question">
-          <div className="question_text">
-            Я получил твой вопрос, передам его авторам курса и вернусь с ответом
-            в течение нескольких дней. Напишу на почту, когда найду ответ.
-          </div>
+          <div className="question_text">{t("got_question")}</div>
           <IconBlock>
             <img className="icon" src="../../static/hipster.svg" />
             <div className="name">BeSavvy</div>

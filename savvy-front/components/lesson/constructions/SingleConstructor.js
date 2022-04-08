@@ -13,7 +13,6 @@ import UpdateConstruction from "./UpdateConstruction";
 import { CURRENT_USER_QUERY } from "../../User";
 import Box from "./Box";
 import Article from "./Article";
-// import { withTranslation } from "../../../i18n";
 
 const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
   mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
@@ -301,7 +300,7 @@ const SingleConstructor = (props) => {
         <Styles id={construction.id} story={story}>
           <Answers className="answer" id="answers">
             <Title>{construction.name}</Title>
-            <div>{t("construction_explainer")}</div>
+            {/* <div>{t("construction_explainer")}</div> */}
             {!answerReveal && (
               <>
                 {received.map((option, index) => {

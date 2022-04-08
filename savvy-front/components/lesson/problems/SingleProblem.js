@@ -153,7 +153,7 @@ const Buttons = styled.div`
 `;
 
 const Button2 = styled.div`
-  width: 170px;
+  min-width: 170px;
   text-align: center;
   box-sizing: border-box;
   border-radius: 10px;
@@ -300,7 +300,7 @@ class SingleProblem extends Component {
             )}
             {(this.state.isFinished || !problem.nodeID) && (
               <ResponseArea>
-                <h2>Запишите ответ</h2>
+                <h2>Write down the answer</h2>
                 <Frame story={story}>
                   <HoverEditor
                     index={1}
@@ -338,7 +338,7 @@ class SingleProblem extends Component {
                           }
                         }}
                       >
-                        {loading ? "Сохраняем..." : "Ответить"}
+                        {loading ? "Answering..." : "Answer"}
                       </StyledButton>
                       {this.state.showAnswerButton && (
                         <Button2
@@ -348,7 +348,7 @@ class SingleProblem extends Component {
                             }))
                           }
                         >
-                          Открыть ответ
+                          Show the correct answer
                         </Button2>
                       )}
                     </Buttons>

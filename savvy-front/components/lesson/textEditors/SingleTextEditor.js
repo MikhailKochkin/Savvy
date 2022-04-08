@@ -354,7 +354,7 @@ class SingleTextEditor extends Component {
     let el = document.querySelectorAll(
       `[data-initial='${this.state.correct_option}']`
     )[0];
-    e.target.innerHTML = "Проверяем...";
+    e.target.innerHTML = "Checking...";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -367,11 +367,10 @@ class SingleTextEditor extends Component {
         console.log(res);
         if (
           !e.target.nextSibling ||
-          (e.target.nextSibling &&
-            e.target.nextSibling.innerHTML !== "Показать")
+          (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
         ) {
           let button2 = document.createElement("button");
-          button2.innerHTML = "Показать";
+          button2.innerHTML = "Show";
           button2.className = "mini_button";
           button2.addEventListener("click", this.show);
           e.target.after(button2);
@@ -381,13 +380,13 @@ class SingleTextEditor extends Component {
             result: true,
           });
           el.style.background = "#D9EAD3";
-          e.target.innerHTML = "Проверить";
+          e.target.innerHTML = "Check";
         } else {
           this.setState({
             result: false,
           });
           el.style.background = "#FCE5CD";
-          e.target.innerHTML = "Проверить";
+          e.target.innerHTML = "Check";
           e.target.className = "mini_button";
           if (res.comment) {
             alert(res.comment);
@@ -443,7 +442,7 @@ class SingleTextEditor extends Component {
     let n = e.target.parentNode.replaceChild(z, e.target);
 
     let button = document.createElement("button");
-    button.innerHTML = "Проверить";
+    button.innerHTML = "Check";
 
     button.className = "mini_button";
     button.tabIndex = 0;
@@ -629,7 +628,7 @@ class SingleTextEditor extends Component {
                   variant="contained"
                   color="primary"
                 >
-                  {this.state.mistakesShown ? "Скрыть" : "Показать"}
+                  {this.state.mistakesShown ? "Hide mistakes" : "Show mistakes"}
                 </StyledButton>
                 {me &&
                 (me.id === textEditor.user.id ||

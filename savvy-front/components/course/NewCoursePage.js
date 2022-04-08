@@ -1192,11 +1192,11 @@ const NewCoursePage = (props) => {
       ],
     },
     {
-      header: "Learn fundamentals of <span>Legal English</span> in 1 week",
+      header: "Start using <span>Legal English</span> in your job in 9 weeks",
       subheader:
-        "Master the skills of legal writing, write an essay and get personalized feedback from a tutor with 5+ years of experience.",
+        "Master the skills of reading, writing and editing, draft a contract and a memorandum and get personalized feedback from a tutor with 5+ years of experience.",
       image: "back_image_low.png",
-      length1: "1 week",
+      length1: "9 weeks",
       length2: "6 hours per week",
       start: moment(next_date._d).format("Do MMMM YYYY"),
       start_eng: next_date,
@@ -1206,12 +1206,12 @@ const NewCoursePage = (props) => {
         "We will help if you have any gaps in your knowledge ",
       goals: [
         "We will explain complex grammar topics in a simple way",
-        "Help you learn corporate law vocabulary",
-        "Show how to draft Legal English texts",
+        "Help you learn legal vocabulary",
+        "Show how to draft contracts and memoranda",
         "Provide feedback on your work",
         "Answer all questions on our Discord server",
       ],
-      offer: `Reserve your free spot at our course "Introduction to Legal English"`,
+      offer: `Reserve your spot at our Legal English course`,
       sps: [
         {
           selling_point: "Interactive lessons",
@@ -1272,7 +1272,7 @@ const NewCoursePage = (props) => {
       ],
       price: {
         price: 0,
-        full: "0$",
+        full: "250$",
         full_explain: "Полная стоимость",
         part: "На 4 месяца",
         part_explain: "Рассрочка",
