@@ -80,8 +80,9 @@ const SideMenu = styled.div`
 `;
 
 const StyledHeader = styled.header`
-  background: #fff;
+  background: #00306f;
   display: grid;
+  color: #fff;
   min-height: 70px;
   padding: 10px 0;
   font-weight: 500;
@@ -96,6 +97,7 @@ const StyledHeader = styled.header`
     font-size: 1.6rem;
     padding-left: 2%;
     background-color: none;
+    color: #fff;
   }
   @media (max-width: 1000px) {
     grid-template-columns: 1fr 2fr;
@@ -292,7 +294,7 @@ const Nav = (props) => {
               <CourseMenu>
                 <Link href="/">
                   <div className="logo">
-                    <img src="static/long_logo.svg" />
+                    <img src="static/long_logo2.svg" />
                   </div>
                 </Link>
               </CourseMenu>

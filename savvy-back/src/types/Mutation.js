@@ -12,6 +12,7 @@ const yandex = require("../yandexCheckout");
 const postmark = require("postmark");
 const { promisify } = require("util");
 const { randomBytes } = require("crypto");
+const generator = require("generate-password");
 const { YooCheckout, ICreateReceipt } = require("@a2seven/yoo-checkout");
 const idempotenceKey = "02347fc4-a4f0-456db-807e-f0d11c2eс4a5";
 
@@ -801,10 +802,10 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = test.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = test.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.newTest.delete({ where });
       },
@@ -874,10 +875,10 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = quiz.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = quiz.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.quiz.delete({ where });
       },
@@ -1130,10 +1131,7 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        // const ownsTest = TE.userId === ctx.res.req.userId;
-        // if (!ownsTest) {
-        //   throw new Error("К сожалению, у вас нет полномочий на это.");
-        // }
+
         //3. Delete it
         return ctx.prisma.textEditor.delete({ where });
       },
@@ -1286,10 +1284,10 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
+        // const ownsTest = C.userId === ctx.res.req.userId;
+        // if (!ownsTest) {
+        //   throw new Error("К сожалению, у вас нет полномочий на это.");
+        // }
         //3. Delete it
         return ctx.prisma.construction.delete({ where });
       },
@@ -2633,6 +2631,13 @@ const Mutation = mutationType({
             ...args,
           },
         });
+
+        // let password = generator.generate({
+        //   length: 10,
+        //   numbers: true,
+        // });
+        // console.log(password);
+
         const newEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: "Mikhail@besavvy.app",
@@ -2650,27 +2655,9 @@ const Mutation = mutationType({
             `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
           ),
         });
-        // if (args.communication_medium == "english") {
-        //   console.log(1);
-
-        //   const newEmail3 = await client.sendEmail({
-        //     From: "aliona@besavvy.app",
-        //     To: args.email,
-        //     Subject: "Открытые уроки по юр английскому",
-        //     HtmlBody: Demo_eng.Demo_eng(),
-        //   });
-        // } else {
-        //   console.log(2);
-
-        //   const newEmail4 = await client.sendEmail({
-        //     From: "aliona@besavvy.app",
-        //     To: args.email,
-        //     Subject: "Открытые уроки Школы Молодого Юриста",
-        //     HtmlBody: Demo_school.Demo_school(),
-        //   });
-        // }
 
         return new_client;
+        // return 1;
       },
     }),
       t.field("createCommunityMember", {

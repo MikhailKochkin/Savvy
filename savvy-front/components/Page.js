@@ -66,6 +66,10 @@ const DynamicNav = dynamic(import("./Nav"), {
   ssr: false,
 });
 
+const DynamicSpaceNav = dynamic(import("./SpaceNav"), {
+  ssr: false,
+});
+
 const Page = ({ children }) => {
   const router = useRouter();
   return (
@@ -79,7 +83,9 @@ const Page = ({ children }) => {
               <Header />
               {router.pathname !== "/con" &&
                 router.pathname !== "/" &&
-                router.pathname !== "/connect" && <DynamicNav />}
+                router.pathname !== "/connect" &&
+                router.pathname !== "/useful" && <DynamicNav />}
+              {router.pathname == "/useful" && <DynamicSpaceNav />}
               <Inner>{children}</Inner>
               {router.pathname !== "/lesson" &&
                 router.pathname !== "/con" &&
