@@ -12,18 +12,6 @@ const conf = () => {
   };
   return (
     <>
-      {/* {!session && (
-        <>
-          Not signed in <br />
-          <button onClick={() => signIn()}>Sign in</button>
-        </>
-      )}
-      {session && (
-        <>
-          Signed in as {session.user.email} <br />
-          <button onClick={() => signOut()}>Sign out</button>
-        </>
-      )} */}
       {stage === "email" && <Landing change={change} />}
       {stage !== "email" && <Ticket />}
     </>

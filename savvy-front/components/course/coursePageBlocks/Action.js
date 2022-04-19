@@ -10,6 +10,7 @@ import ReactGA from "react-ga";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
+import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
 
 const CREATE_ORDER_MUTATION = gql`
@@ -53,6 +54,23 @@ const CREATE_CLIENT = gql`
       communication_medium: $communication_medium
       comment: $comment
     ) {
+      id
+    }
+  }
+`;
+
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($id: String!, $userId: String!) {
+    updateOrderAuto(id: $id, userId: $userId) {
+      id
+      isPaid
+    }
+  }
+`;
+
+const ENROLL_COURSE_MUTATION = gql`
+  mutation ENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    enrollOnCourse(id: $id, coursePageId: $coursePageId) {
       id
     }
   }
@@ -282,11 +300,11 @@ const Contact = styled.div`
         border-radius: 10px;
         margin-right: 6px;
         margin-bottom: 6px;
-        width: 300px;
+        width: 100%;
         height: 50px;
         label {
-          line-height: 1.6;
-          font-size: 1.6rem;
+          line-height: 1.4;
+          font-size: 1.5rem;
         }
         div {
           width: 40px;
@@ -297,7 +315,6 @@ const Contact = styled.div`
           input {
             margin: 0;
             padding: 0;
-            margin-top: 5px;
           }
         }
       }
@@ -537,21 +554,13 @@ const Action = (props) => {
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
-
   const addPromo = (val) => {
     if (
-      val.toLowerCase() == "vushkv_30" &&
-      props.coursePage.id == "ckfy1q60a02f307281abcpgae" &&
+      val.toLowerCase() ==
+        props.coursePage.promocode.promocodes[0].name?.toLowerCase() &&
       isPromo == false
     ) {
-      setPrice(price * 0.7);
-      setIsPromo(true);
-    } else if (
-      val.toLowerCase() == "daniil.law_30" &&
-      props.coursePage.id == "cktrbubdl2237dou9vzn1gb3w" &&
-      isPromo == false
-    ) {
-      setPrice(price * 0.7);
+      setPrice(price * props.coursePage.promocode.promocodes[0].value);
       setIsPromo(true);
     }
   };
@@ -570,8 +579,27 @@ const Action = (props) => {
     { data: order_data, loading: loading_data, error: error_data },
   ] = useMutation(CREATE_ORDER_MUTATION);
 
+  const [
+    updateOrderAuto,
+    { data: updated_data, loading: updated_loading, error: updated_error },
+  ] = useMutation(UPDATE_ORDER);
+
+  const [
+    enrollOnCourse,
+    { data: enroll_data, loading: enroll_loading, error: enroll_error },
+  ] = useMutation(ENROLL_COURSE_MUTATION, {
+    refetchQueries: [
+      CURRENT_USER_QUERY, // DocumentNode object parsed with gql
+      "me", // Query name
+    ],
+  });
+
   const d = props.data;
-  const { me } = props;
+  const { me, coursePage } = props;
+  let my_orders = [];
+  if (me) {
+    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+  }
 
   return (
     <Styles id="c2a">
@@ -629,25 +657,6 @@ const Action = (props) => {
                       </div>
                       <label for="html">{t("step1option1")}</label>
                     </div>
-                    <div
-                      className="variants_form"
-                      onChange={(e) => {
-                        setStep(e.target.value);
-                      }}
-                    >
-                      <div>
-                        <input
-                          type="radio"
-                          value="installments"
-                          checked={step == "installments"}
-                          onChange={(e) => {
-                            setStep(e.target.value);
-                          }}
-                        />
-                      </div>
-                      <label for="html">{t("step1option3")}</label>
-                    </div>
-
                     <div className="variants_form">
                       <div>
                         <input
@@ -662,12 +671,33 @@ const Action = (props) => {
                       </div>
                       <label for="html">{t("step1option2")}</label>
                     </div>
+                    <div
+                      className="variants_form"
+                      onChange={(e) => {
+                        setStep(e.target.value);
+                      }}
+                    >
+                      <div>
+                        <input
+                          type="radio"
+                          value="open"
+                          checked={step == "open"}
+                          onChange={(e) => {
+                            setStep(e.target.value);
+                          }}
+                        />
+                      </div>
+                      <label for="html">
+                        Открыть доступ к оплаченному курсу
+                      </label>
+                    </div>
                   </div>
+
                   <div className="h2">
                     {t("step2")}
                     {step == "apply" && " Заполните заявку"}
                     {step == "buy" && " Оплатите курс"}
-                    {step == "installments" && " Заявка на рассрочку"}
+                    {step == "open" && " Открываем доступ"}
                   </div>
                   {step == "apply" && (
                     <>
@@ -764,99 +794,66 @@ const Action = (props) => {
                       </div>
                     </>
                   )}
-                  {step == "installments" && (
+                  {step == "open" && (
                     <>
                       <form>
-                        <div className="names">
-                          <input
-                            className="data"
-                            id="name"
-                            placeholder="Имя"
-                            onChange={(e) => setName(e.target.value)}
-                          />
-                          <input
-                            className="data"
-                            id="surname"
-                            placeholder="Фамилия"
-                            onChange={(e) => setSurname(e.target.value)}
-                          />
+                        <div id="explainer">
+                          Проверьте, что вы открываете курс с того же аккаунта,
+                          с которого платили. После проверки оплаты мы перенесем
+                          вас на страницу курса.
                         </div>
-                        <input
-                          id="tel"
-                          className="data"
-                          type="tel"
-                          placeholder="+7 (999) 999-99-99"
-                          onChange={(e) => setNumber(e.target.value)}
-                        />
-                        <input
-                          id="email"
-                          className="data"
-                          type="email"
-                          placeholder="Электронная почта"
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
                         <button
                           type="submit"
                           id="english_application_button1"
                           onClick={async (e) => {
                             e.preventDefault();
-                            if (!EmailValidator.validate(email)) {
-                              alert("Неправильный имейл");
-                            } else if (number.length < 7) {
-                              alert("Неправильный номер мобильнного телефона");
-                            } else {
-                              if (props.data.price.course == "school") {
-                                ReactGA.event({
-                                  category: "Litigation Apply Button Click",
-                                  action: "Click",
+                            let results = [];
+
+                            let checked_orders = await Promise.all(
+                              my_orders.map(async (o) => {
+                                let updated_res = await updateOrderAuto({
+                                  variables: {
+                                    userId: me.id,
+                                    id: o.id,
+                                  },
                                 });
-                              } else if (props.data.price.course == "corp") {
-                                ReactGA.event({
-                                  category: "Corp Apply Button Click",
-                                  action: "Click",
-                                });
-                              }
-                              const res = await createBusinessClient({
+                                return updated_res;
+                              })
+                            );
+
+                            console.log("checked_orders", checked_orders);
+
+                            const checked_orders2 = checked_orders.filter(
+                              (c) => c.data.updateOrderAuto.isPaid == true
+                            );
+                            console.log("checked_orders2", checked_orders2);
+
+                            if (checked_orders2.length > 0) {
+                              console.log("> 0");
+                              let enroll = await enrollOnCourse({
                                 variables: {
-                                  type: asPath ? asPath : "Unknown",
-                                  email,
-                                  name: name + " " + surname,
-                                  number,
-                                  communication_medium: props.data.price.course,
-                                  comment: "Рассрочка",
+                                  id: me.id,
+                                  coursePageId: coursePage.id,
                                 },
                               });
                               Router.push({
-                                pathname: "/hello",
+                                pathname: "/course",
                                 query: {
-                                  name: name + " " + surname,
-                                  email: email,
-                                  number: number,
+                                  id: coursePage.id,
                                 },
                               });
+                            } else {
+                              alert(
+                                "Не нашли ваш платеж. Если вы считаете, что произошла ошибка, напишите нам."
+                              );
                             }
                           }}
                         >
-                          {loading ? "Готовим..." : "Оставить заявку"}
+                          {updated_loading || enroll_loading
+                            ? "Проверяем..."
+                            : "Открыть курс"}
                         </button>
                       </form>
-                      <div id="legal">
-                        Нажимая кнопку, принимаю условия{" "}
-                        <a
-                          href="https://besavvy.app/legal?name=privacy"
-                          target="_blank"
-                        >
-                          политики
-                        </a>{" "}
-                        и{" "}
-                        <a
-                          href="https://besavvy.app/legal?name=offer"
-                          target="_blank"
-                        >
-                          оферты
-                        </a>
-                        .
-                      </div>
                     </>
                   )}
                   {step == "buy" && (
@@ -879,7 +876,7 @@ const Action = (props) => {
                             } else {
                               const res = await createOrder({
                                 variables: {
-                                  coursePageId: "cjtreu3md00fp0897ga13aktp",
+                                  coursePageId: coursePage.id,
                                   price: price,
                                   userId: me.id,
                                   comment: props.comment,
@@ -949,8 +946,8 @@ const Action = (props) => {
                       <div>
                         <input
                           type="radio"
-                          value="installments"
-                          checked={step == "installments"}
+                          value="open"
+                          checked={step == "open"}
                           onChange={(e) => {
                             setStep(e.target.value);
                           }}

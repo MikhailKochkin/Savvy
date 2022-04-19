@@ -8,18 +8,11 @@ const {
 } = require("@nexus/schema");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const yandex = require("../yandexCheckout");
 const postmark = require("postmark");
 const { promisify } = require("util");
 const { randomBytes } = require("crypto");
-const generator = require("generate-password");
-const { YooCheckout, ICreateReceipt } = require("@a2seven/yoo-checkout");
+const { YooCheckout, IGetPaymentList } = require("@a2seven/yoo-checkout");
 const idempotenceKey = "02347fc4-a4f0-456db-807e-f0d11c2eс4a5";
-
-const checkout = new YooCheckout({
-  shopId: process.env.SHOP_ID,
-  secretKey: process.env.SHOP_KEY,
-});
 
 const community_checkout = new YooCheckout({
   shopId: process.env.SHOP_ID_IP,
@@ -138,6 +131,18 @@ const Mutation = mutationType({
         ctx
       ) => {
         const hashed_password = await bcrypt.hash(password, 10);
+        const valid = await bcrypt.compare(password, hashed_password);
+
+        const our_user = await ctx.prisma.user.findUnique({
+          where: { email: email.toLowerCase() },
+        });
+        console.log("our_user", our_user);
+        if (our_user) {
+          throw new Error(
+            `Пользователь с таким имейл уже есть. Войдите в аккаунт или восстановите пароль.`
+          );
+        }
+
         const user = await ctx.prisma.user.create({
           data: {
             name,
@@ -171,12 +176,12 @@ const Mutation = mutationType({
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "None",
-            maxAge: 1000 * 60 * 60 * 24 * 365,
+            maxAge: 31557600000,
           });
         } else {
           ctx.res.cookie("token", token, {
             httpOnly: true,
-            maxAge: 1000 * 60 * 60 * 24 * 365,
+            maxAge: 31557600000,
           });
         }
 
@@ -184,7 +189,7 @@ const Mutation = mutationType({
           From: "Mikhail@besavvy.app",
           To: email,
           Subject: "Расскажу о возможностях BeSavvy",
-          HtmlBody: WelcomeEmail.WelcomeEmail(name),
+          HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
         });
 
         return { user, token };
@@ -207,6 +212,7 @@ const Mutation = mutationType({
         }
         // 2. Check if their password is correct
         const valid = await bcrypt.compare(password, user.password);
+
         if (!valid) {
           throw new Error("Invalid Password!");
         }
@@ -219,10 +225,12 @@ const Mutation = mutationType({
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "None",
+            maxAge: 31557600000,
           });
         } else {
           ctx.res.cookie("token", token, {
             httpOnly: true,
+            maxAge: 31557600000,
           });
         }
 
@@ -772,6 +780,7 @@ const Mutation = mutationType({
         correct: list(booleanArg()),
         question: list(stringArg()),
         comments: list(stringArg()),
+        type: stringArg(),
         ifRight: stringArg(),
         ifWrong: stringArg(),
         complexity: intArg(),
@@ -2003,16 +2012,12 @@ const Mutation = mutationType({
           },
           confirmation: {
             type: "redirect",
-            return_url: "https://besavvy.app",
+            return_url: `https://besavvy.app/coursePage?id=${coursePage.id}`,
           },
+          capture: true,
         };
 
         const payment = await community_checkout.createPayment(createPayload);
-        // console.log(
-        //   "payment",
-        //   payment.id,
-        //   payment.confirmation.confirmation_url
-        // );
 
         const url = payment.confirmation.confirmation_url;
 
@@ -2059,6 +2064,7 @@ const Mutation = mutationType({
           data: {
             price: args.price,
             paymentID: payment.id,
+            isPaid: false,
             promocode: args.promocode,
             comment: args.comment,
             user: {
@@ -2175,22 +2181,6 @@ const Mutation = mutationType({
               order.coursePage.id
             ),
           });
-          // console.log(order.coursePage.id, order.user.id);
-          // const courseVisit = await ctx.prisma.courseVisit.create({
-          //   data: {
-          //     coursePage: {
-          //       connect: {
-          //         id: order.coursePage.id,
-          //       },
-          //     },
-          //     student: {
-          //       connect: {
-          //         id: order.user.id,
-          //       },
-          //     },
-          //     visitsNumber: 1,
-          //   },
-          // });
         }
         return ctx.prisma.order.update({
           data: {
@@ -2200,6 +2190,66 @@ const Mutation = mutationType({
             id: args.id,
           },
         });
+      },
+    });
+    t.field("updateOrderAuto", {
+      type: "Order",
+      args: {
+        id: stringArg(),
+        userId: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        // 1. find all orders for our user
+
+        const order = await ctx.prisma.order.findUnique(
+          {
+            where: { id: args.id },
+            include: {
+              user: true,
+              coursePage: true,
+            },
+          },
+          `{ id, user { id, name, email}, coursePage {id, title}, paymentID }`
+        );
+
+        // console.log("order", order);
+
+        // 2. check at yookassa if any order is paid
+
+        const payment = await community_checkout.getPayment(order.paymentID);
+
+        console.log("payment", payment);
+        // 3. give access
+
+        // const notification = await client.sendEmail({
+        //   From: "Mikhail@besavvy.app",
+        //   To: order.user.email,
+        //   Subject: "🎆 BeSavvy: доступ к курсу открыт!",
+        //   HtmlBody: PurchaseEmail.PurchaseEmail(
+        //     order.user.name,
+        //     order.coursePage.title,
+        //     order.coursePage.id
+        //   ),
+        // });
+        if (payment.status == "succeeded") {
+          return ctx.prisma.order.update({
+            data: {
+              isPaid: true,
+            },
+            where: {
+              id: args.id,
+            },
+          });
+        } else {
+          return ctx.prisma.order.update({
+            data: {
+              isPaid: false,
+            },
+            where: {
+              id: args.id,
+            },
+          });
+        }
       },
     });
     t.field("deleteOrder", {
@@ -2616,7 +2666,7 @@ const Mutation = mutationType({
       },
     });
     t.field("createBusinessClient", {
-      type: "BusinessClient",
+      type: "User",
       args: {
         email: stringArg(),
         name: stringArg(),
@@ -2632,32 +2682,7 @@ const Mutation = mutationType({
           },
         });
 
-        // let password = generator.generate({
-        //   length: 10,
-        //   numbers: true,
-        // });
-        // console.log(password);
-
-        const newEmail = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: "Mikhail@besavvy.app",
-          Subject: "Новая заявка",
-          HtmlBody: makeANiceEmail(
-            `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
-          ),
-        });
-
-        const newEmail2 = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: "aliona@besavvy.app",
-          Subject: "Новая заявка",
-          HtmlBody: makeANiceEmail(
-            `Новая заявка. Вот данные: ${args.name}, ${args.email}, ${args.type}, ${args.number}`
-          ),
-        });
-
         return new_client;
-        // return 1;
       },
     }),
       t.field("createCommunityMember", {

@@ -1,16 +1,8 @@
-import { useState } from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
-import * as EmailValidator from "email-validator";
-import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
 import "react-phone-number-input/style.css";
+import Modal from "styled-react-modal";
 
 import ContactForm from "./ContactForm";
-import Modal from "styled-react-modal";
-import Signup from "../auth/Signup";
-import Signin from "../auth/Signin";
-import RequestReset from "../auth/RequestReset";
 
 const Styles = styled.div`
   padding: 50px 0;
@@ -18,12 +10,10 @@ const Styles = styled.div`
   width: 100vw;
   background-image: url("/static/space.svg");
   background-size: cover;
-  /* background: url("/static/space.svg") no-repeat 0 0 contain; */
-
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   @media (max-width: 800px) {
     background-size: cover;
     background-repeat: no-repeat;
@@ -35,7 +25,7 @@ const Styles = styled.div`
 
 const Container = styled.div`
   width: 75%;
-  height: 90%;
+  height: 100%;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -47,7 +37,6 @@ const Description = styled.div`
   justify-content: flex-start;
   width: 48%;
   min-width: 460px;
-  /* border: 1px solid #e7ebef; */
   padding: 2% 4%;
   border-radius: 5px;
   .comment {
@@ -197,8 +186,8 @@ const Description = styled.div`
 const ImageBlock = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
   .explainer {
     width: 65%;
     li {
@@ -218,6 +207,22 @@ const ImageBlock = styled.div`
 const Image = styled.img`
   width: 100%;
   height: 100%;
+`;
+
+const Bottom = styled.div`
+  display: flex;
+  margin-top: 30px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 1.6rem;
+  width: 100%;
+  height: 100px;
+  .explainer_block {
+    width: 30%;
+    line-height: 1.6;
+  }
 `;
 
 const Form = styled.div`
@@ -318,6 +323,7 @@ const StyledModal = Modal.styled`
 const Action = (props) => {
   const d = props.data;
   const { me, material } = props;
+  console.log("material.image_url", material);
   return (
     <Styles id="c2a">
       <Container>
@@ -327,27 +333,14 @@ const Action = (props) => {
             <Description>
               <Image src={material.image_url} />
             </Description>
-            {/* <div className="explainer">
-              {material.description.map((d) => (
-                <li>{d}</li>
-              ))}
-            </div> */}
           </ImageBlock>
         </Form>
+        <Bottom>
+          {material.description.map((d) => (
+            <div className="explainer_block">{d}</div>
+          ))}
+        </Bottom>
       </Container>
-      {/* <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal> */}
     </Styles>
   );
 };

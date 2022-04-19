@@ -8,9 +8,10 @@ const ErrorStyles = styled.div`
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-left: 5px solid red;
+  color: #000000;
   p {
     margin: 0;
-    font-weight: 100;
+    font-weight: 500;
   }
   strong {
     margin-right: 1rem;

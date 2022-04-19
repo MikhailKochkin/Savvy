@@ -13,6 +13,7 @@ const UPDATE_TEST_MUTATION = gql`
     $correct: [Boolean!]
     $comments: [String!]
     $complexity: Int
+    $type: String
     $ifRight: String
     $ifWrong: String
   ) {
@@ -25,6 +26,7 @@ const UPDATE_TEST_MUTATION = gql`
       complexity: $complexity
       ifRight: $ifRight
       ifWrong: $ifWrong
+      type: $type
     ) {
       id
     }
@@ -150,6 +152,8 @@ const UpdateTest = (props) => {
   );
   const [ifRight, setIfRight] = useState(props.ifRight);
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
+  const [type, setType] = useState(props.type);
+
   const handleArray = (val, name, i) => {
     let arr = [...answers];
     arr[i - 1] = val;
@@ -183,6 +187,16 @@ const UpdateTest = (props) => {
   const { testID, mes, lessonID } = props;
   return (
     <div>
+      <label for="types">Тип задания</label>
+      <select
+        name="types"
+        id="types"
+        defaultValue={type}
+        onChange={(e) => setType(e.target.value)}
+      >
+        <option value="TEST">Тест</option>
+        <option value="FORM">Форма</option>
+      </select>
       <Comment>
         <DynamicLoadedEditor
           id="question"
@@ -270,6 +284,7 @@ const UpdateTest = (props) => {
           correct: correct,
           comments: comments,
           complexity,
+          type,
           ifRight: ifRight,
           ifWrong: ifWrong,
         }}

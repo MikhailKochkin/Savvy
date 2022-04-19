@@ -471,6 +471,7 @@ type CoursePage {
   new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, where: UserWhereInput): [User!]!
   news: String
   numInCareerTrack: Int
+  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   price: Int
   promocode: Json
   published: Boolean
@@ -1225,7 +1226,7 @@ input Messages {
 
 type Mutation {
   checkAssignment(checked: Boolean, id: String): LessonResult
-  createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): BusinessClient
+  createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
@@ -1295,9 +1296,10 @@ type Mutation {
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
-  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String]): NewTest
+  updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
   updateNote(complexity: Int, id: String, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
+  updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
   updateProblem(complexity: Int, id: String, nodeID: String, nodeType: String, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
@@ -1834,6 +1836,7 @@ input PromocodeList {
 
 type Query {
   businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
+  certificate(where: CertificateWhereUniqueInput!): Certificate
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByInput!], where: CertificateWhereInput): [Certificate!]!
   chat(where: ChatWhereUniqueInput!): Chat
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByInput!], where: ChatWhereInput): [Chat!]!

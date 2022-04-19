@@ -34,6 +34,7 @@ const Message = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-bottom: 20px;
+  opacity: 0;
   p {
     margin: 5px 0;
   }
@@ -46,19 +47,50 @@ const Message = styled.div`
     color: black;
     border-radius: 25px;
     padding: 2% 5%;
-    min-width: 40%;
+    display: inline-block;
+    min-width: 20%;
     max-width: 70%;
-    display: flex;
     font-size: 1.6rem;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    p {
+      margin: 10px 0;
+      &.button_box {
+        margin: 30px 0;
+        displlay: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      a.button {
+        border: none;
+        background: #0084ff;
+        color: #fff;
+        border-radius: 25px;
+        padding: 12px 20px;
+        cursor: pointer;
+        width: 100%;
+        margin: 10px 0;
+        transition: 0.3s;
+        &:hover {
+          background: #005fb8;
+        }
+        @media (max-width: 800px) {
+          display: block;
+          text-align: center;
+          padding: 12px 20px;
+          line-height: 1.2;
+        }
+      }
+    }
   }
   .student_text {
-    min-width: 60%;
+    min-width: 20%;
     max-width: 70%;
     border: 2px solid;
-    border-color: #f3f3f3;
+    background: #248bf5;
+    color: #fff;
     outline: 0;
     resize: none;
     border-radius: 25px;

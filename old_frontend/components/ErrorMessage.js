@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 const ErrorStyles = styled.div`
   padding: 2rem;
+  color: #000000;
   background: white;
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -12,6 +13,7 @@ const ErrorStyles = styled.div`
   p {
     margin: 0;
     font-weight: 100;
+    color: black;
   }
   strong {
     margin-right: 1rem;

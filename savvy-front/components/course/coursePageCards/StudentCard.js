@@ -319,7 +319,7 @@ class StudentCard extends Component {
                 parseInt(100 * (status / coursePage.lessons.length)) + "%"
               }
             >
-              <div>1</div>
+              {/* <div>1</div> */}
               <div>{status}</div>
             </Result>
             <Full

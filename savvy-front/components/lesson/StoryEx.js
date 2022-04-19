@@ -202,7 +202,6 @@ const StoryEx = (props) => {
           me={me}
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
-          type={el.type}
           hidden={true}
           userData={results.quizResults}
           lessonID={lesson.id}
@@ -260,7 +259,6 @@ const StoryEx = (props) => {
           messages={el.messages}
           id={el.id}
           lessonId={lesson.id}
-          me={me}
           story={true}
         />
       );
@@ -277,7 +275,6 @@ const StoryEx = (props) => {
           id={1}
           true={[true, false]}
           lessonId={lesson.id}
-          me={me}
           story={true}
           coursePageId={coursePageID}
         />

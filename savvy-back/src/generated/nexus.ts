@@ -2448,6 +2448,7 @@ export interface NexusGenFieldTypes {
     new_students: NexusGenRootTypes['User'][]; // [User!]!
     news: string | null; // String
     numInCareerTrack: number | null; // Int
+    orders: NexusGenRootTypes['Order'][]; // [Order!]!
     price: number | null; // Int
     promocode: NexusGenScalars['Json'] | null; // Json
     published: boolean | null; // Boolean
@@ -2584,7 +2585,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
-    createBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    createBusinessClient: NexusGenRootTypes['User'] | null; // User
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
     createChat: NexusGenRootTypes['Chat'] | null; // Chat
@@ -2657,6 +2658,7 @@ export interface NexusGenFieldTypes {
     updateNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     updateNote: NexusGenRootTypes['Note'] | null; // Note
     updateOrder: NexusGenRootTypes['Order'] | null; // Order
+    updateOrderAuto: NexusGenRootTypes['Order'] | null; // Order
     updatePost: NexusGenRootTypes['Post'] | null; // Post
     updateProblem: NexusGenRootTypes['Problem'] | null; // Problem
     updatePublished: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -2771,6 +2773,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     businessClients: NexusGenRootTypes['BusinessClient'][]; // [BusinessClient!]!
+    certificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
     chat: NexusGenRootTypes['Chat'] | null; // Chat
     chats: NexusGenRootTypes['Chat'][]; // [Chat!]!
@@ -3148,6 +3151,7 @@ export interface NexusGenFieldTypeNames {
     new_students: 'User'
     news: 'String'
     numInCareerTrack: 'Int'
+    orders: 'Order'
     price: 'Int'
     promocode: 'Json'
     published: 'Boolean'
@@ -3284,7 +3288,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     checkAssignment: 'LessonResult'
-    createBusinessClient: 'BusinessClient'
+    createBusinessClient: 'User'
     createCertificate: 'Certificate'
     createChallengeResult: 'ChallengeResult'
     createChat: 'Chat'
@@ -3357,6 +3361,7 @@ export interface NexusGenFieldTypeNames {
     updateNewTest: 'NewTest'
     updateNote: 'Note'
     updateOrder: 'Order'
+    updateOrderAuto: 'Order'
     updatePost: 'Post'
     updateProblem: 'Problem'
     updatePublished: 'Lesson'
@@ -3471,6 +3476,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     businessClients: 'BusinessClient'
+    certificate: 'Certificate'
     certificates: 'Certificate'
     chat: 'Chat'
     chats: 'Chat'
@@ -3737,6 +3743,12 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
       where?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    }
+    orders: { // args
+      after?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput
+      before?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
   }
   Document: {
@@ -4268,6 +4280,7 @@ export interface NexusGenArgTypes {
       ifWrong?: string | null; // String
       next?: NexusGenInputs['NextType'] | null; // NextType
       question?: Array<string | null> | null; // [String]
+      type?: string | null; // String
     }
     updateNote: { // args
       complexity?: number | null; // Int
@@ -4278,6 +4291,10 @@ export interface NexusGenArgTypes {
     updateOrder: { // args
       id?: string | null; // String
       isPaid?: boolean | null; // Boolean
+    }
+    updateOrderAuto: { // args
+      id?: string | null; // String
+      userId?: string | null; // String
     }
     updatePost: { // args
       id?: string | null; // String
@@ -4377,6 +4394,9 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['BusinessClientOrderByInput'][] | null; // [BusinessClientOrderByInput!]
       where?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
+    }
+    certificate: { // args
+      where: NexusGenInputs['CertificateWhereUniqueInput']; // CertificateWhereUniqueInput!
     }
     certificates: { // args
       after?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput

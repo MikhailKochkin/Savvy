@@ -41,7 +41,7 @@ const TeachersList = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   @media (max-width: 800px) {
     width: auto;

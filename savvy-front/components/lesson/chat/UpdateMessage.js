@@ -55,6 +55,11 @@ const UpdateMessage = (props) => {
         <option value="student">Студент</option>
         <option value="author">Преподаватель</option>
       </select>
+      <br />
+      <textarea onChange={(e) => setText(e.target.value)}>
+        {props.text}
+      </textarea>
+
       <Frame>
         <DynamicHoverEditor
           index={1}

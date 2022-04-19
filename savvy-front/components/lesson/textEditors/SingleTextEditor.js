@@ -11,6 +11,7 @@ import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
 import { CURRENT_USER_QUERY } from "../../User";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { v4 as uuidv4 } from "uuid";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -318,6 +319,7 @@ class SingleTextEditor extends Component {
     correct_option: "",
     wrong_option: "",
     attempts: 0,
+    chosenElement: "",
     total: this.props.textEditor.totalMistakes,
     text: this.props.textEditor.text,
     update: false,
@@ -351,9 +353,10 @@ class SingleTextEditor extends Component {
       answer1: answer1,
       answer2: answer2,
     };
-    let el = document.querySelectorAll(
-      `[data-initial='${this.state.correct_option}']`
-    )[0];
+    // let el = document.querySelectorAll(
+    //   `[data-initial='${this.state.correct_option}']`
+    // )[0];
+    let el = document.getElementById(this.state.chosenElement);
     e.target.innerHTML = "Checking...";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
@@ -434,10 +437,12 @@ class SingleTextEditor extends Component {
 
   onMouseClick = (e) => {
     let z = document.createElement("span");
+    let id = uuidv4();
     z.contentEditable = true;
     z.innerHTML = e.target.innerHTML;
     z.className = "edit";
     z.setAttribute("data-initial", e.target.getAttribute("data"));
+    z.setAttribute("id", id);
     z.addEventListener("input", this.changeState);
     let n = e.target.parentNode.replaceChild(z, e.target);
 
@@ -456,6 +461,7 @@ class SingleTextEditor extends Component {
       answer: "",
       correct_option: e.target.getAttribute("data"),
       wrong_option: wrong_option,
+      chosenElement: id,
     });
   };
 
@@ -546,7 +552,6 @@ class SingleTextEditor extends Component {
                       <div
                         onClick={async (e) => {
                           const res1 = this.onTest();
-                          // console.log("e.target.getAttribute", e.target);
                           if (
                             e.target.getAttribute("type") === "quiz" ||
                             e.target.parentElement.getAttribute("type") ===

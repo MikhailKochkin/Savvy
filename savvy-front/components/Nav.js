@@ -135,7 +135,7 @@ const StyledHeader = styled.header`
       height: 32px;
     }
     a {
-      font-weight: 400;
+      font-weight: 500;
       font-size: 2.2rem;
       @media (max-width: 990px) {
         font-size: 1.6rem;
@@ -386,7 +386,7 @@ const Nav = (props) => {
         {width < 800 && (
           <>
             <StyledHeader>
-              <Span onClick={(e) => openNav()}>{t("menu")}</Span>
+              <Span onClick={(e) => openNav()}>Menu</Span>
               <div className="logo">
                 {me ? (
                   <Link

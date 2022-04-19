@@ -38,11 +38,10 @@ const Message = styled.div`
     justify-content: center;
   }
   .student_text {
-    /* height: 140px; */
+    background: #248bf5;
+    color: #fff;
     min-width: 60%;
     max-width: 70%;
-    border: 2px solid;
-    border-color: #f3f3f3;
     outline: 0;
     resize: none;
     border-radius: 25px;
@@ -89,7 +88,8 @@ const ReactionsList = styled.div`
 const StyledButton = styled.div`
   display: inline-block;
   vertical-align: middle;
-  border: 1px solid #c4c4c4;
+  border: 2px solid #c4c4c4;
+  background: #fff;
   /* ${(props) => (props.color !== "#c4c4c4" ? "3px solid" : "1px solid")}; */
   /* border-color: ${(props) => props.color}; */
   padding: 10px 15px;
@@ -98,10 +98,10 @@ const StyledButton = styled.div`
   margin-bottom: 10px;
   transition: 0.3s;
   &:hover {
-    border: 3px solid #c4c4c4;
+    border: 2px solid #122a62;
   }
   &:active {
-    border: 3px solid #122a62;
+    border: 2px solid #122a62;
   }
   img {
     display: block;

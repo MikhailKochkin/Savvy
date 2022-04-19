@@ -5,6 +5,9 @@ import * as EmailValidator from "email-validator";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import "react-phone-number-input/style.css";
+import { v4 as uuidv4 } from "uuid";
+import Error from "../ErrorMessage";
+import Signin from "./SignIn";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
@@ -24,6 +27,33 @@ const CREATE_CLIENT = gql`
       comment: $comment
     ) {
       id
+    }
+  }
+`;
+
+const SIGNUP_MUTATION = gql`
+  mutation SIGNUP_MUTATION(
+    $email: String!
+    $name: String!
+    $number: String
+    $surname: String!
+    $password: String!
+    $isFamiliar: Boolean!
+    $status: Status!
+  ) {
+    signup(
+      email: $email
+      name: $name
+      number: $number
+      surname: $surname
+      password: $password
+      isFamiliar: $isFamiliar
+      status: $status
+    ) {
+      token
+      user {
+        id
+      }
     }
   }
 `;
@@ -214,17 +244,18 @@ const Contact = styled.div`
   }
 `;
 
+const Nav = styled.div`
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
 const Form = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signin");
-  const [step, setStep] = useState("apply");
-
-  const toggleModal = (e) => setIsOpen(!isOpen);
-  const changeState = (dataFromChild) => setAuth(dataFromChild);
+  const [step, setStep] = useState("register");
 
   const { asPath } = useRouter();
   const router = useRouter();
@@ -233,83 +264,130 @@ const Form = (props) => {
   const [createBusinessClient, { data, loading, error }] =
     useMutation(CREATE_CLIENT);
 
+  const [signup, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(SIGNUP_MUTATION);
+
+  let password = uuidv4();
+
   const d = props.data;
   const { me, material } = props;
   return (
     <Contact>
       <div id="form_container">
         <div className="h2">{material.header_text}</div>
-        {step == "apply" && (
+        {me && (
+          <button
+            onClick={async (e) => {
+              e.preventDefault();
+              location.href = material.link;
+            }}
+          >
+            {material.button_text}
+          </button>
+        )}
+        {!me && (
           <>
-            <form>
-              <div className="names">
-                <input
-                  className="data"
-                  id="name"
-                  placeholder="Имя"
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                  className="data"
-                  id="surname"
-                  placeholder="Фамилия"
-                  onChange={(e) => setSurname(e.target.value)}
-                />
-              </div>
-              <input
-                id="tel"
-                className="data"
-                type="tel"
-                placeholder="+7 (999) 999-99-99"
-                onChange={(e) => setNumber(e.target.value)}
-              />
-              <input
-                id="email"
-                className="data"
-                type="email"
-                placeholder="Электронная почта"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <button
-                type="submit"
-                id="english_application_button1"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  if (!EmailValidator.validate(email)) {
-                    alert("Неправильный имейл");
-                  } else if (number.length < 7) {
-                    alert("Неправильный номер мобильнного телефона");
-                  } else {
-                    const res = await createBusinessClient({
-                      variables: {
-                        type: asPath ? asPath : "Unknown",
-                        email,
-                        name: name + " " + surname,
-                        number,
-                        comment: material.material_type,
-                        communication_medium: "email",
-                      },
-                    });
-                    location.href = material.link;
-                  }
-                }}
-              >
-                {loading ? "..." : material.button_text}
-              </button>
-            </form>
-            <div id="legal">
-              Нажимая кнопку, принимаю условия{" "}
-              <a href="https://besavvy.app/legal?name=privacy" target="_blank">
-                политики
-              </a>{" "}
-              и{" "}
-              <a href="https://besavvy.app/legal?name=offer" target="_blank">
-                оферты
-              </a>
-              .
-            </div>
+            {step == "register" && (
+              <>
+                <Error error={error2} />
+                <form>
+                  <div className="names">
+                    <input
+                      className="data"
+                      id="name"
+                      placeholder="Имя"
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                    <input
+                      className="data"
+                      id="surname"
+                      placeholder="Фамилия"
+                      onChange={(e) => setSurname(e.target.value)}
+                    />
+                  </div>
+                  <input
+                    id="tel"
+                    className="data"
+                    type="tel"
+                    placeholder="+7 (999) 999-99-99"
+                    onChange={(e) => setNumber(e.target.value)}
+                  />
+                  <input
+                    id="email"
+                    className="data"
+                    type="email"
+                    placeholder="Электронная почта"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    id="english_application_button1"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      if (!EmailValidator.validate(email)) {
+                        alert("Неправильный имейл");
+                      } else if (number.length < 7) {
+                        alert("Неправильный номер мобильнного телефона");
+                      } else if (name.length < 2) {
+                        alert("Напишите, пожалуйста, свое имя");
+                      } else if (surname.length < 2) {
+                        alert("Напишите, пожалуйста, свою фамилию");
+                      } else {
+                        const res2 = await signup({
+                          variables: {
+                            name: name,
+                            surname: surname,
+                            password: password,
+                            email: email,
+                            number: number,
+                            status: "LAWYER",
+                            isFamiliar: true,
+                          },
+                        });
+                        location.href = material.link;
+
+                        const res = await createBusinessClient({
+                          variables: {
+                            type: asPath ? asPath : "Unknown",
+                            email,
+                            name: name + " " + surname,
+                            number,
+                            comment: material.material_type,
+                            communication_medium: "email",
+                          },
+                        });
+                      }
+                    }}
+                  >
+                    {loading2 ? "..." : material.button_text}
+                  </button>
+                </form>
+                <Nav onClick={(e) => setStep("signin")}>
+                  Если у вас уже есть аккаунт BeSavvy, жмите сюда
+                </Nav>
+              </>
+            )}
+            {step == "signin" && (
+              <>
+                <Signin material={material} />
+                <Nav onClick={(e) => setStep("register")}>
+                  Вернуться к регистрации
+                </Nav>
+              </>
+            )}
           </>
         )}
+        {/* <div id="legal">
+          Если аккаунта ннет, то просто оставьте з
+          <a href="https://besavvy.app/legal?name=privacy" target="_blank">
+            политики
+          </a>{" "}
+          и{" "}
+          <a href="https://besavvy.app/legal?name=offer" target="_blank">
+            оферты
+          </a>
+          .
+        </div> */}
       </div>
     </Contact>
   );

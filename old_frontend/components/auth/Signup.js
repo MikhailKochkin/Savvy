@@ -274,7 +274,6 @@ const Signup = (props) => {
                 <TextField
                   className="company"
                   name="company"
-                  className={classes.root}
                   InputLabelProps={{
                     classes: {
                       root: classes.labelRoot,
@@ -303,7 +302,6 @@ const Signup = (props) => {
                 <TextField
                   className="uni"
                   name="uniID"
-                  className={classes.root}
                   InputLabelProps={{
                     classes: {
                       root: classes.labelRoot,
@@ -331,7 +329,6 @@ const Signup = (props) => {
                 <TextField
                   className="careerTrackID"
                   name="careerTrackID"
-                  className={classes.root}
                   InputLabelProps={{
                     classes: {
                       root: classes.labelRoot,
@@ -358,7 +355,6 @@ const Signup = (props) => {
             <TextField
               name="isFamiliar"
               className="isFamiliar"
-              className={classes.root}
               InputLabelProps={{
                 classes: {
                   root: classes.labelRoot,

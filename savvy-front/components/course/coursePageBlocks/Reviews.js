@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   width: 100vw;
@@ -124,7 +125,7 @@ const Reviews = (props) => {
   return (
     <Styles>
       <Container>
-        <h2>{t("Reviews")}</h2>
+        <h2>{t("reviews")}</h2>
         <ReviewsList>
           {d.reviews.map((r, i) => (
             <Review key={i}>
@@ -139,7 +140,7 @@ const Reviews = (props) => {
                 <div className="name">
                   <div>{r.name}</div>
                 </div>
-                <div className="description">{r.info}</div>
+                <div className="description">{renderHTML(r.info)}</div>
               </div>
             </Review>
           ))}

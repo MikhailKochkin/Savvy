@@ -21,14 +21,14 @@ const Banner = styled.div`
   justify-content: center;
   /* padding-right: 300px; */
   .bottomline_text {
-    max-width: 45%;
-    min-width: 35%;
+    max-width: 65%;
+    min-width: 45%;
     font-size: 1.8rem;
     height: 100%;
     line-height: 1.6;
     font-weight: 500;
     padding: 10px;
-
+    margin-right: 50px;
     span {
     }
     /* opacity: 0.9; */
@@ -93,7 +93,7 @@ const Ad = (props) => {
       <div className="bottomline_text">
         <span>{d.offer}</span>
       </div>
-      <button onClick={(e) => slide()}>{t("buy")}</button>
+      <button onClick={(e) => slide()}>{t("offer_buy")}</button>
     </Banner>
   );
 };

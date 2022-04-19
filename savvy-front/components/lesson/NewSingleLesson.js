@@ -219,7 +219,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
-  /* padding-bottom: 5%; */
+  background-image: url("/static/law_pattern.svg");
+  background-size: contain;
 `;
 
 const Head = styled.div`

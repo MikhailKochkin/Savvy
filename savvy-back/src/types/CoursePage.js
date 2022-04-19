@@ -11,6 +11,7 @@ const CoursePage = objectType({
     t.model.numInCareerTrack();
     t.model.weeks();
     t.model.subscription();
+    t.model.orders();
     t.model.news();
     t.model.user();
     t.model.authors();
@@ -18,7 +19,6 @@ const CoursePage = objectType({
     t.model.applications();
     t.model.published();
     t.model.uni();
-    // t.model.posts();
     t.model.tags();
     t.model.courseType();
     t.model.students();
@@ -26,10 +26,8 @@ const CoursePage = objectType({
     t.model.price();
     t.model.subscriptionPrice();
     t.model.discountPrice();
-    // t.model.orders();
     t.model.company();
     t.model.promocode();
-    // t.model.visits();
     t.model.audience();
     t.model.result();
     t.model.tariffs();

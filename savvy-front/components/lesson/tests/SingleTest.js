@@ -69,6 +69,8 @@ const Options = styled.div`
 
 const Styles = styled.div`
   width: 650px;
+  background: #fff;
+
   font-weight: 500;
   @media (max-width: 800px) {
     width: 100%;
@@ -244,6 +246,7 @@ const Option = styled.div`
   vertical-align: middle;
   border: 1px solid #c4c4c4;
   padding: 10px 15px;
+  background: #fff;
   cursor: pointer;
   margin-right: 3%;
   margin-bottom: 2%;
@@ -335,6 +338,11 @@ const SingleTest = (props) => {
         }
       }
     };
+    let comments_arr = [];
+    if (comments && comments.length > 0) {
+      answerNums.map((num) => comments_arr.push(comments[num]));
+    }
+    setCommentsList(comments_arr);
     const res2 = await res();
   };
 
@@ -386,9 +394,6 @@ const SingleTest = (props) => {
     if (comments && comments.length > 0) {
       answerNums.map((num) => comments_arr.push(comments[num]));
     }
-
-    console.log("comments_arr", comments_arr);
-
     setCommentsList(comments_arr);
 
     const res1 = await setAttempts(attempts + 1);
@@ -525,7 +530,7 @@ const SingleTest = (props) => {
             </Mutation>
           </Group>
 
-          {/* 4. Верный ответ. Пооздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}
+          {/* 4. Верный ответ. Поздравляем студента, даем комментарий к правильному варианту, объясняем, что делать дальше.  */}
 
           {answerState === "right" && (
             <Question inputColor={inputColor}>
@@ -556,9 +561,12 @@ const SingleTest = (props) => {
             <Question inputColor={inputColor}>
               <div className="question_text">
                 {props.type != "FORM" && "🔎 " + "  " + t("wrong") + "..."}
+
+                {console.log("commentsList", commentsList)}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
-                    return renderHTML(com);
+                    console.log(i, com);
+                    return com ? renderHTML(com) : null;
                   })}
                 {/* {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "} */}
               </div>
@@ -577,7 +585,7 @@ const SingleTest = (props) => {
 
           {/* 6. Неправильный ответ. Спрашиваем, показать ли объяснение?*/}
 
-          {answerState == "wrong" && ifWrong && (
+          {answerState == "wrong" && ifWrong && props.type !== "FORM" && (
             <>
               <div className="question">
                 <div className="question_text">{t("show_explainer")}</div>
@@ -629,36 +637,12 @@ const SingleTest = (props) => {
 
           {/* 7. Неправильный ответ. Спрашиваем показать ли правильный вариант?*/}
 
-          {answerState == "wrong" && (revealExplainer == true || !ifWrong) && (
-            <>
-              <div className="question">
-                <div className="question_text">{t("show_correct")}</div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
-                  </div>
-                </IconBlock>
-              </div>
-
-              <div className="answer">
-                <IconBlock>
-                  <img className="icon" src="../../static/flash.svg" />
-                  <div className="name">{me.name}</div>
-                </IconBlock>{" "}
-                <OptionsGroup>
-                  <Option onClick={(e) => setShowAnswer(true)}>
-                    {t("yes")}
-                  </Option>
-                </OptionsGroup>
-              </div>
-              {showAnswer && (
+          {answerState == "wrong" &&
+            props.type !== "FORM" &&
+            (revealExplainer == true || !ifWrong) && (
+              <>
                 <div className="question">
-                  <div className="question_text">{t("outline_color")}</div>
+                  <div className="question_text">{t("show_correct")}</div>
                   <IconBlock>
                     {author && author.image != null ? (
                       <img className="icon" src={author.image} />
@@ -670,9 +654,35 @@ const SingleTest = (props) => {
                     </div>
                   </IconBlock>
                 </div>
-              )}
-            </>
-          )}
+
+                <div className="answer">
+                  <IconBlock>
+                    <img className="icon" src="../../static/flash.svg" />
+                    <div className="name">{me.name}</div>
+                  </IconBlock>{" "}
+                  <OptionsGroup>
+                    <Option onClick={(e) => setShowAnswer(true)}>
+                      {t("yes")}
+                    </Option>
+                  </OptionsGroup>
+                </div>
+                {showAnswer && (
+                  <div className="question">
+                    <div className="question_text">{t("outline_color")}</div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </div>
+                )}
+              </>
+            )}
         </TextBar>
       )}
       {update && (
@@ -686,6 +696,7 @@ const SingleTest = (props) => {
           answers={props.answers}
           correct={props.true}
           mes={mes}
+          type={props.type}
           next={props.next}
           ifRight={ifRight}
           ifWrong={ifWrong}

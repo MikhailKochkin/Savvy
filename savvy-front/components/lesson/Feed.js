@@ -432,7 +432,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [num, setNum] = useState(
     props.my_result &&
       props.my_result.progress !== null &&

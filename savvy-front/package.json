@@ -75,7 +75,8 @@
     "smoothscroll-polyfill": "^0.4.4",
     "styled-components": "^5.2.0",
     "styled-react-modal": "^2.0.1",
-    "universal-cookie": "^4.0.4"
+    "universal-cookie": "^4.0.4",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

@@ -102,6 +102,7 @@ const Container = styled.div`
 
 const NoteStyles = styled.div`
   max-width: 540px;
+  background: #fff;
   margin: 2% 0 0 0;
   font-size: 1.6rem;
   @media (max-width: 800px) {
@@ -123,6 +124,9 @@ const NoteStyles = styled.div`
     width: 100%;
     max-height: 50em;
     box-shadow: "0 0 0 2px blue;";
+  }
+  p {
+    margin: 20px 0;
   }
   iframe {
     width: 100%;
