@@ -25,7 +25,7 @@ const Styles = styled.div`
 
 const Container = styled.div`
   width: 75%;
-  height: 100%;
+  min-height: 100%;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -222,6 +222,19 @@ const Bottom = styled.div`
   .explainer_block {
     width: 30%;
     line-height: 1.6;
+  }
+  @media (max-width: 800px) {
+    height: auto;
+    flex-direction: column;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    margin-left: 20px;
+    .explainer_block {
+      width: 100%;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
   }
 `;
 
