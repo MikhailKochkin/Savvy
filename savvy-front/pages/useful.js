@@ -11,7 +11,7 @@ export const getServerSideProps = async ({ locale }) => ({
 const useful = (props) => {
   const data = {
     post1: {
-      link: "http://localhost:7777/ru/lesson?id=cl1xos6xr46971izxzt5tgxcp&type=story",
+      link: "https://besavvy.app/ru/lesson?id=cl1xos6xr46971izxzt5tgxcp&type=story",
       description: [
         "⭐️   Разберем необходимые выражения из договорного, корпоративного и IP права",
         "⭐️   Поговорим про сложности юр письма: цифры, источники права и так далее",
@@ -23,7 +23,7 @@ const useful = (props) => {
       material_type: "english_student_book_main",
     },
     contracts: {
-      link: "https://disk.yandex.ru/i/0xwZh8gmjIJM0A",
+      link: "https://besavvy.app/ru/lesson?id=cl25ytyrm1966oiu9g4la3m03&type=story",
       description: [
         "⭐️   Идеально, чтобы повторить материал перед собеседованием или экзаменом",
         "⭐️   Система графиков помогает быстро запомнить разные договорные конструкции",
