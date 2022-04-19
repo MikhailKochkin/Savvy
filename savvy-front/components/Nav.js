@@ -142,9 +142,6 @@ const StyledHeader = styled.header`
       }
     }
     @media (max-width: 990px) {
-      padding-top: 15px;
-      margin-right: 10px;
-      width: 80%;
       text-align: right;
     }
   }
@@ -252,7 +249,10 @@ const StyledModal = Modal.styled`
 
 const Span = styled.span`
   margin-left: 10px;
-  padding-top: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Nav = (props) => {
@@ -386,7 +386,9 @@ const Nav = (props) => {
         {width < 800 && (
           <>
             <StyledHeader>
-              <Span onClick={(e) => openNav()}>Menu</Span>
+              <Span onClick={(e) => openNav()}>
+                <div>Menu</div>
+              </Span>
               <div className="logo">
                 {me ? (
                   <Link

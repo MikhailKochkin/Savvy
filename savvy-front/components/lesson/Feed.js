@@ -327,6 +327,7 @@ const Content = styled.div`
     justify-content: center;
     transition: 0.5s;
     position: fixed;
+    background: #fff;
     bottom: 15px;
     right: 0;
     z-index: 4;
