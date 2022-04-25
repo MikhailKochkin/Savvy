@@ -261,7 +261,15 @@ const Element = (props) => {
       />
     );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "Note") {
-    item = <Note text={task.text} me={props.me} story={true} note={tasks[0]} />;
+    item = (
+      <Note
+        clicks={task.link_clicks}
+        text={task.text}
+        me={props.me}
+        story={true}
+        note={tasks[0]}
+      />
+    );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "NewTest") {
     item = (
       <SingleTest

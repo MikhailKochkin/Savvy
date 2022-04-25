@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
@@ -287,15 +287,14 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const { lesson, name, author, new_students, coursePageId, statements, me } =
+  const { lesson, name, author, lessonResult, coursePageId, statements, me } =
     props;
-
   let color;
   let progress;
   let visit;
 
   if (me) {
-    visit = lesson.lessonResults.find((l) => l.student.id === me.id);
+    visit = lessonResult;
     if (visit && lesson.structure && lesson.structure.lessonItems) {
       progress = visit.progress / lesson.structure.lessonItems.length;
     } else {
@@ -415,7 +414,7 @@ const LessonHeader = (props) => {
             {me &&
               lesson.published &&
               (me.permissions.includes("ADMIN") ||
-                new_students.includes(me.id) ||
+                me.new_subjects.includes(coursePageId) ||
                 me.id === lesson.user.id ||
                 lesson.open) && (
                 <Link
@@ -431,29 +430,29 @@ const LessonHeader = (props) => {
                     <Button
                       onClick={async (e) => {
                         // 0. admin / open lesson / lesson author visit open lesson for the first time
-                        if (
-                          me &&
-                          lesson &&
-                          visit == undefined &&
-                          (me.id === author ||
-                            me.permissions.includes("ADMIN") ||
-                            lesson.open)
-                        ) {
-                          createLessonResult({
-                            variables: {
-                              lessonID: lesson.id,
-                              visitsNumber: 1,
-                            },
-                          });
-                          console.log(0);
-                        }
+                        // if (
+                        //   me &&
+                        //   lesson &&
+                        //   visit == undefined &&
+                        //   (me.id === author ||
+                        //     me.permissions.includes("ADMIN") ||
+                        //     lesson.open)
+                        // ) {
+                        //   createLessonResult({
+                        //     variables: {
+                        //       lessonID: lesson.id,
+                        //       visitsNumber: 1,
+                        //     },
+                        //   });
+                        //   console.log(0);
+                        // }
                         // 1. registered user visits the lesson for the first time
                         if (
                           me &&
                           lesson &&
                           visit == undefined &&
                           me.id !== lesson.user.id &&
-                          new_students.includes(me.id) &&
+                          me.new_subjects.includes(coursePageId) &&
                           !me.permissions.includes("ADMIN") &&
                           !lesson.open &&
                           published
@@ -474,7 +473,7 @@ const LessonHeader = (props) => {
                           visit !== undefined &&
                           me.id !== lesson.user.id &&
                           !me.permissions.includes("ADMIN") &&
-                          new_students.includes(me.id) &&
+                          me.new_subjects.includes(coursePageId) &&
                           published
                         ) {
                           updateLessonResult({
@@ -525,7 +524,7 @@ const LessonHeader = (props) => {
                           visit == undefined &&
                           me.id !== lesson.user.id &&
                           !me.permissions.includes("ADMIN") &&
-                          !new_students.includes(me.id) &&
+                          !me.new_subjects.includes(coursePageId) &&
                           published
                         ) {
                           createLessonResult({
@@ -543,7 +542,7 @@ const LessonHeader = (props) => {
                           me.id !== lesson.user.id &&
                           visit !== undefined &&
                           !me.permissions.includes("ADMIN") &&
-                          !new_students.includes(me.id) &&
+                          !me.new_subjects.includes(coursePageId) &&
                           published
                         ) {
                           updateLessonResult({

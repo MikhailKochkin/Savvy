@@ -34,12 +34,26 @@ const useful = (props) => {
       header_text: "Получите сборник схем договорных конструкций",
       material_type: "contracts_book_main",
     },
+    conclude: {
+      link: "https://besavvy.app/ru/lesson?id=cl2eqzzkr27273d5u9ot8djywz&type=story",
+      description: [
+        "⭐️   Разбираем практический кейс с реального собеседования",
+        "⭐️   Это интересно. Вы решаете, задаете вопросы, мы только помогаем вам разобраться",
+        "⭐️   Вы получите новый практический навык за 10 минут",
+      ],
+      image_url: "/static/case1.webp",
+      button_text: "Решить кейс",
+      header_text: "Решите кейс с собеседования на младшего юриста",
+      material_type: "contract_conclude_case",
+    },
   };
   let material;
   if (props.query.id == "post1") {
     material = data.post1;
   } else if (props.query.id == "contracts") {
     material = data.contracts;
+  } else if (props.query.id == "conclude") {
+    material = data.conclude;
   } else {
     material = data.post1;
   }

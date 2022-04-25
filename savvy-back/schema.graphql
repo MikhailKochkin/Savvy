@@ -229,6 +229,7 @@ type Chat {
   id: String!
   lesson: Lesson!
   lessonId: String!
+  link_clicks: Int
   messages: Json
   name: String
   updatedAt: DateTime!
@@ -246,6 +247,7 @@ input ChatOrderByInput {
   createdAt: SortOrder
   id: SortOrder
   lessonId: SortOrder
+  link_clicks: SortOrder
   messages: SortOrder
   name: SortOrder
   updatedAt: SortOrder
@@ -259,6 +261,7 @@ input ChatWhereInput {
   id: StringFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
+  link_clicks: IntNullableFilter
   messages: JsonNullableFilter
   name: StringNullableFilter
   NOT: [ChatWhereInput!]
@@ -1287,7 +1290,7 @@ type Mutation {
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
   updateBusinessClient(comment: String, id: String, tags: [String]): BusinessClient
-  updateChat(id: String, messages: Messages, name: String): Chat
+  updateChat(id: String, link_clicks: Int, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], complexity: Int, hint: String, id: String, name: String, type: String, variants: [String]): Construction
@@ -1297,7 +1300,7 @@ type Mutation {
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
-  updateNote(complexity: Int, id: String, next: NextType, text: String): Note
+  updateNote(complexity: Int, id: String, link_clicks: Int, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
@@ -1496,6 +1499,7 @@ type Note {
   lesson: Lesson
   lessonId: String
   lessonID: String
+  link_clicks: Int
   next: Json
   text: String!
   updatedAt: DateTime!
@@ -1518,6 +1522,7 @@ input NoteWhereInput {
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
   lessonID: StringNullableFilter
+  link_clicks: IntNullableFilter
   next: JsonNullableFilter
   NOT: [NoteWhereInput!]
   OR: [NoteWhereInput!]

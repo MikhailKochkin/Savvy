@@ -46,6 +46,7 @@ class DemoStoryEx extends Component {
         item = (
           <Note
             text={el.text}
+            clicks={el.link_clicks}
             me={me}
             story={true}
             note={el}
@@ -73,7 +74,6 @@ class DemoStoryEx extends Component {
             userData={lesson.testResults}
             lessonID={lesson.id}
             length={Array(el.correct.length).fill(false)}
-            userData={lesson.testResults}
             story={true}
           />
         );
@@ -92,7 +92,6 @@ class DemoStoryEx extends Component {
             me={me}
             ifRight={el.ifRight}
             ifWrong={el.ifWrong}
-            type={el.type}
             hidden={true}
             userData={lesson.quizResults}
             lessonID={lesson.id}
@@ -131,7 +130,6 @@ class DemoStoryEx extends Component {
             messages={el.messages}
             id={el.id}
             lessonId={lesson.id}
-            me={me}
             story={true}
           />
         );

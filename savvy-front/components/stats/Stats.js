@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import Exercises from "./Exercises";
 import Loading from "../Loading";
 import UserAnalytics from "./UserAnalytics";
+import Lessons from "./lessons/Lessons";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -51,6 +52,15 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         # forum {
         #   id
         # }
+        lessonResults {
+          id
+          progress
+          student {
+            id
+            name
+            surname
+          }
+        }
         newTests {
           id
           question
@@ -214,9 +224,9 @@ const Stats = (props) => {
             <div
               className="button"
               name="applications"
-              onClick={(e) => setPage("applications")}
+              onClick={(e) => setPage("lessons")}
             >
-              Заявки
+              Визиты
             </div>
           </div>
           <div className="data">
@@ -234,11 +244,14 @@ const Stats = (props) => {
                 students={coursePage.new_students}
               />
             )}
-            {/* 
-                      {page === "applications" &&
-                        coursePage.courseType !== "FORMONEY" && (
-                          <Applications id={coursePage.id} />
-                        )} */}
+
+            {page === "lessons" && (
+              <Lessons
+                id={coursePage.id}
+                lessons={coursePage.lessons}
+                students={coursePage.new_students}
+              />
+            )}
           </div>
         </Container>
       </Styles>

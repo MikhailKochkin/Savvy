@@ -7,21 +7,8 @@ import { useTranslation } from "next-i18next";
 import {
   Container,
   LessonStyles,
-  CourseInfo,
   LessonsInfo,
-  Data,
-  PayBox,
-  LessonImage,
-  Header,
-  Header2,
   Total,
-  Buttons,
-  Button,
-  ReviewsStyles,
-  Post,
-  Details,
-  Video,
-  Comment,
   Lessons,
 } from "../styles/CoursePage_Styles";
 
@@ -43,7 +30,6 @@ const CoursePage = (props) => {
                   <Total> {t("open_lessons")}</Total>
                   <Total>
                     {" "}
-                    {/* {props.t("total")}  */}
                     {t("total_lessons")} {props.lessons.length}
                   </Total>
                   <Lessons>
@@ -59,7 +45,6 @@ const CoursePage = (props) => {
                             coursePage={props.id}
                             // author={coursePage.user.id}
                             // students={coursePage.students}
-                            student_list={props.student_list}
                             open={index + 1 === 1}
                             index={index + 1}
                             coursePageId={props.coursePageId}
@@ -77,5 +62,4 @@ const CoursePage = (props) => {
   );
 };
 
-// export default withTranslation("course")(CoursePage);
 export default CoursePage;

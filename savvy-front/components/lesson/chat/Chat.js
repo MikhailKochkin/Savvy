@@ -2,11 +2,19 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
+import { useMutation, gql } from "@apollo/client";
 
 import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
 import Reaction from "./Reaction";
 
+const UPDATE_CHAT_MUTATION = gql`
+  mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
+    updateChat(id: $id, link_clicks: $link_clicks) {
+      id
+    }
+  }
+`;
 const Styles = styled.div`
   width: 650px;
   margin: 20px 0;
@@ -129,10 +137,12 @@ const IconBlock = styled.div`
 
 const Chat = (props) => {
   const [update, setUpdate] = useState(false);
+  const [clicks, setClicks] = useState(props.clicks);
+
   const { t } = useTranslation("lesson");
-
+  const [updateChat, { data, loading, error }] =
+    useMutation(UPDATE_CHAT_MUTATION);
   const { name, messages, me, story, lessonId, id, author } = props;
-
   useEffect(() => {
     let chat = document.getElementById(id);
     messages.messagesList.map((m, i) => {
@@ -152,7 +162,21 @@ const Chat = (props) => {
     width = "90%";
   }
   return (
-    <Styles id={id} width={width}>
+    <Styles
+      id={id}
+      width={width}
+      onClick={async (e) => {
+        if (e.target.className === "button") {
+          const res = await updateChat({
+            variables: {
+              id: id,
+              link_clicks: clicks + 1,
+            },
+          });
+          setClicks(clicks + 1);
+        }
+      }}
+    >
       {!story && <div>{name}</div>}
       {!update &&
         messages.messagesList.map((m, i) => {

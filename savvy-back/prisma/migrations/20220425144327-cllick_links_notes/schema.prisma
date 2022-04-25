@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -785,7 +785,6 @@ model Chat {
   id         String   @id @default(cuid())
   name       String?
   messages   Json?
-  link_clicks     Int?     @default(0)
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
   userId     String

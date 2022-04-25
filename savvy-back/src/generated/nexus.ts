@@ -194,6 +194,7 @@ export interface NexusGenInputs {
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    link_clicks?: NexusGenEnums['SortOrder'] | null; // SortOrder
     messages?: NexusGenEnums['SortOrder'] | null; // SortOrder
     name?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -206,6 +207,7 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    link_clicks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     messages?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['ChatWhereInput'][] | null; // [ChatWhereInput!]
@@ -994,6 +996,7 @@ export interface NexusGenInputs {
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    link_clicks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     next?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     NOT?: NexusGenInputs['NoteWhereInput'][] | null; // [NoteWhereInput!]
     OR?: NexusGenInputs['NoteWhereInput'][] | null; // [NoteWhereInput!]
@@ -1869,6 +1872,7 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     lessonId: string; // String!
+    link_clicks?: number | null; // Int
     messages?: NexusGenScalars['Json'] | null; // Json
     name?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2067,6 +2071,7 @@ export interface NexusGenObjects {
     id: string; // String!
     lessonId?: string | null; // String
     lessonID?: string | null; // String
+    link_clicks?: number | null; // Int
     next?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2353,6 +2358,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonId: string; // String!
+    link_clicks: number | null; // Int
     messages: NexusGenScalars['Json'] | null; // Json
     name: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2697,6 +2703,7 @@ export interface NexusGenFieldTypes {
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId: string | null; // String
     lessonID: string | null; // String
+    link_clicks: number | null; // Int
     next: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3056,6 +3063,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     lesson: 'Lesson'
     lessonId: 'String'
+    link_clicks: 'Int'
     messages: 'Json'
     name: 'String'
     updatedAt: 'DateTime'
@@ -3400,6 +3408,7 @@ export interface NexusGenFieldTypeNames {
     lesson: 'Lesson'
     lessonId: 'String'
     lessonID: 'String'
+    link_clicks: 'Int'
     next: 'Json'
     text: 'String'
     updatedAt: 'DateTime'
@@ -4202,6 +4211,7 @@ export interface NexusGenArgTypes {
     }
     updateChat: { // args
       id?: string | null; // String
+      link_clicks?: number | null; // Int
       messages?: NexusGenInputs['Messages'] | null; // Messages
       name?: string | null; // String
     }
@@ -4285,6 +4295,7 @@ export interface NexusGenArgTypes {
     updateNote: { // args
       complexity?: number | null; // Int
       id?: string | null; // String
+      link_clicks?: number | null; // Int
       next?: NexusGenInputs['NextType'] | null; // NextType
       text?: string | null; // String
     }

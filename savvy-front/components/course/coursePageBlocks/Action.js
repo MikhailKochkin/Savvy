@@ -218,7 +218,7 @@ const Description = styled.div`
     height: auto;
     justify-content: space-between;
     min-height: 350px;
-    padding: 20px 0;
+    padding: 20px 20px;
     width: 100%;
     min-width: 100px;
     margin-bottom: 40px;

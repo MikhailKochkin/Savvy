@@ -135,6 +135,7 @@ const SINGLE_LESSON_QUERY = gql`
       }
       notes {
         id
+        link_clicks
         complexity
         text
         next
@@ -145,6 +146,7 @@ const SINGLE_LESSON_QUERY = gql`
       chats {
         id
         name
+        link_clicks
         complexity
         messages
         user {
@@ -661,6 +663,7 @@ const SingleLesson = (props) => {
                             <Note
                               text={note.text}
                               me={me}
+                              clicks={note.link_clicks}
                               user={lesson.user.id}
                               note={note}
                               id={note.id}

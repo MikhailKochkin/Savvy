@@ -412,7 +412,6 @@ const SingleQuiz = (props) => {
   const {
     me,
     user,
-    userData,
     exam,
     story,
     complexity,
@@ -422,12 +421,6 @@ const SingleQuiz = (props) => {
     user_name,
     author,
   } = props;
-  let data;
-  if (me) {
-    data = userData
-      .filter((el) => el.quiz.id === props.id)
-      .filter((el) => el.student.id === me.id);
-  }
   let width;
   if (props.problem) {
     width = "50%";

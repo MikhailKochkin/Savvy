@@ -214,6 +214,7 @@ const MiniButton = styled.div`
 const Note = (props) => {
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
+  const [clicks, setClicks] = useState(props.clicks);
 
   useEffect(() => {
     let el = document.getElementById("wide");
@@ -279,6 +280,7 @@ const Note = (props) => {
   } else {
     width = "90%";
   }
+  console.log("clicks", props.clicks);
   return (
     <>
       <Buttons>

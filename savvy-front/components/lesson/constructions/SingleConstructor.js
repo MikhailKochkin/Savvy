@@ -282,13 +282,7 @@ const SingleConstructor = (props) => {
     setVariants(vars);
   }, []);
 
-  const { me, lessonID, construction, userData, story, complexity } = props;
-  let data;
-  me
-    ? (data = userData
-        .filter((result) => result.construction.id === construction.id)
-        .filter((result) => result.student.id === props.me.id))
-    : (data = [""]);
+  const { me, lessonID, construction, story, complexity } = props;
   return (
     <>
       {me.id === construction.user.id && !story && (

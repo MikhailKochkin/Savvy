@@ -191,7 +191,7 @@ const Tasks = (props) => {
       />
     );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "Note") {
-    item = <Note text={task.text} me={props.me} story={true} note={tasks[0]} />;
+    item = <Note me={props.me} story={true} note={tasks[0]} />;
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "NewTest") {
     item = (
       <SingleTest
@@ -208,7 +208,6 @@ const Tasks = (props) => {
         userData={props.lesson.testResults}
         lessonID={props.lesson.id}
         length={Array(task.correct.length).fill(false)}
-        userData={props.lesson.testResults}
         story={true}
         exam={false}
         getData={update}

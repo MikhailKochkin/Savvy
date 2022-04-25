@@ -408,12 +408,6 @@ const SingleTest = (props) => {
     props.true,
     comments ? comments : new Array(props.answers.length).fill("")
   );
-  let userData;
-  me
-    ? (userData = props.userData
-        .filter((el) => el.testID === props.id)
-        .filter((el) => el.student.id === me.id))
-    : (userData = 1);
   let width;
   if (props.problem) {
     width = "50%";

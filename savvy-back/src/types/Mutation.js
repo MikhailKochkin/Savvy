@@ -980,6 +980,7 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         text: stringArg(),
+        link_clicks: intArg(),
         complexity: intArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
@@ -1065,6 +1066,7 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         name: stringArg(),
+        link_clicks: intArg(),
         messages: arg({
           type: "Messages",
         }),

@@ -44,9 +44,7 @@ class Exam extends Component {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={this.props.me}
-          type={el.type}
           hidden={true}
-          userData={this.props.lesson.quizResults}
           lessonID={this.props.lesson.id}
           quizID={el.id}
           user={el.user.id}
@@ -83,10 +81,8 @@ class Exam extends Component {
           user={el.user.id}
           type={el.type}
           me={this.props.me}
-          userData={this.props.lesson.testResults}
           lessonID={this.props.lesson.id}
           length={Array(el.correct.length).fill(false)}
-          userData={this.props.lesson.testResults}
           next={el.next}
           getData={this.updateArray}
           exam={true}
@@ -107,6 +103,7 @@ class Exam extends Component {
       newNote = (
         <Note
           id={el.id}
+          clicks={el.link_clicks}
           index={this.state.componentList.length + 1}
           key={el.id}
           text={el.text}
@@ -173,9 +170,7 @@ class Exam extends Component {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           me={this.props.me}
-          type={el.type}
           hidden={true}
-          userData={this.props.lesson.quizResults}
           lessonID={this.props.lesson.id}
           quizID={el.id}
           user={el.user.id}
@@ -201,10 +196,8 @@ class Exam extends Component {
           user={el.user.id}
           type={el.type}
           me={this.props.me}
-          userData={this.props.lesson.testResults}
           lessonID={this.props.lesson.id}
           length={Array(el.correct.length).fill(false)}
-          userData={this.props.lesson.testResults}
           getData={this.updateArray}
           next={el.next}
           story={true}

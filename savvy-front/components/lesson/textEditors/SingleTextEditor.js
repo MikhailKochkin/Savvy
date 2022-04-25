@@ -510,14 +510,7 @@ class SingleTextEditor extends Component {
   };
 
   render() {
-    const { textEditor, me, userData, lessonID, story, complexity } =
-      this.props;
-    let data;
-    me
-      ? (data = userData
-          .filter((result) => result.textEditor.id === textEditor.id)
-          .filter((result) => result.student.id === me.id))
-      : (data = [""]);
+    const { textEditor, me, lessonID, story, complexity } = this.props;
     return (
       <>
         <Styles id={textEditor.id + 1} width={story}>

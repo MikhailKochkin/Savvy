@@ -653,7 +653,7 @@ const Feed = (props) => {
                   >
                     {(createLessonResult, { loading, error }) => {
                       return (
-                        <>
+                        <Buttons>
                           {props.components.length > num + 1 && i === num && (
                             <>
                               <div
@@ -670,7 +670,7 @@ const Feed = (props) => {
                               </div>
                             </>
                           )}
-                        </>
+                        </Buttons>
                       );
                     }}
                   </Mutation>

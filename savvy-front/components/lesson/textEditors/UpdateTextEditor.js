@@ -137,6 +137,8 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 
 const UpdateTextEditor = (props) => {
   const [text, setText] = useState(props.text);
+  const [open, setOpen] = useState(false);
+
   const [mistakes, setMistakes] = useState(props.totalMistakes);
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
@@ -180,7 +182,8 @@ const UpdateTextEditor = (props) => {
             Создать таблицу
           </a>
         </button>
-        <DynamicLoadedEditor getEditorText={getText} value={text} />
+        <button onClick={(e) => setOpen(!open)}>Открыть</button>
+        {open && <DynamicLoadedEditor getEditorText={getText} value={text} />}
         <Mutation
           mutation={UPDATE_TEXTEDITOR_MUTATION}
           variables={{

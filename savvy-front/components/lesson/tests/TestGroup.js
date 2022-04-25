@@ -41,7 +41,6 @@ class TestGroup extends Component {
                   user_name={test.user}
                   me={this.props.me}
                   lessonID={this.props.lessonID}
-                  userData={this.props.testResults}
                   quizes={this.props.quizes}
                   notes={this.props.notes}
                   tests={this.props.tests}

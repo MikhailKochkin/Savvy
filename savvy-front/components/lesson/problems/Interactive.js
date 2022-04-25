@@ -187,6 +187,7 @@ class Interactive extends Component {
       newNote = (
         <Note
           id={el.id}
+          clicks={el.link_clicks}
           index={this.state.componentList.length + 1}
           key={el.id}
           text={el.text}
@@ -305,6 +306,7 @@ class Interactive extends Component {
       item = (
         <Note
           id={el.id}
+          clicks={el.link_clicks}
           index={this.state.componentList.length + 1}
           key={el.id}
           text={el.text}

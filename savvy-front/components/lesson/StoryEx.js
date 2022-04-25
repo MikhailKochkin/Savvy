@@ -1,7 +1,9 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
-import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql, useLazyQuery } from "@apollo/client";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import Note from "./notes/Note";
 import Offer from "./Offer";
 import Shots from "./shots/Shots";
@@ -18,96 +20,115 @@ import Feed from "./Feed";
 import LessonHeader from "./LessonHeader";
 import TestPractice from "./testblocks/TB";
 
-const GET_RESULTS = gql`
-  query stats($lessonId: String!, $userId: String!) {
-    stats(lessonId: $lessonId, userId: $userId) {
-      testResults {
-        id
-        answer
-        test {
-          id
-          question
-        }
-        student {
-          id
-          name
-          surname
-        }
-        createdAt
+// const GET_RESULTS = gql`
+//   query stats($lessonId: String!, $userId: String!) {
+//     stats(lessonId: $lessonId, userId: $userId) {
+//       testResults {
+//         id
+//         answer
+//         test {
+//           id
+//           question
+//         }
+//         student {
+//           id
+//           name
+//           surname
+//         }
+//         createdAt
+//       }
+//       quizResults {
+//         id
+//         correct
+//         student {
+//           id
+//           name
+//           surname
+//         }
+//         quiz {
+//           id
+//         }
+//         answer
+//         createdAt
+//       }
+//       textEditorResults {
+//         id
+//         wrong
+//         correct
+//         guess
+//         attempts
+//         student {
+//           id
+//         }
+//         textEditor {
+//           id
+//         }
+//         createdAt
+//       }
+//       problemResults {
+//         id
+//         answer
+//         lesson {
+//           id
+//         }
+//         problem {
+//           id
+//         }
+//         student {
+//           id
+//           name
+//           surname
+//         }
+//         revealed
+//         createdAt
+//       }
+//       constructionResults {
+//         id
+//         answer
+//         inputs
+//         attempts
+//         construction {
+//           id
+//         }
+//         student {
+//           id
+//           name
+//           surname
+//         }
+//         construction {
+//           id
+//         }
+//       }
+//       documentResults {
+//         id
+//         user {
+//           id
+//         }
+//         document {
+//           id
+//         }
+//         answers
+//         drafts
+//         createdAt
+//       }
+//     }
+//   }
+// `;
+
+const LESSON_RESULTS_QUERY = gql`
+  query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
+    lessonResults(
+      where: {
+        lesson: { id: { equals: $lessonId } }
+        student: { id: { equals: $userId } }
       }
-      quizResults {
+    ) {
+      id
+      visitsNumber
+      progress
+      lessonID
+      student {
         id
-        correct
-        student {
-          id
-          name
-          surname
-        }
-        quiz {
-          id
-        }
-        answer
-        createdAt
-      }
-      textEditorResults {
-        id
-        wrong
-        correct
-        guess
-        attempts
-        student {
-          id
-        }
-        textEditor {
-          id
-        }
-        createdAt
-      }
-      problemResults {
-        id
-        answer
-        lesson {
-          id
-        }
-        problem {
-          id
-        }
-        student {
-          id
-          name
-          surname
-        }
-        revealed
-        createdAt
-      }
-      constructionResults {
-        id
-        answer
-        inputs
-        attempts
-        construction {
-          id
-        }
-        student {
-          id
-          name
-          surname
-        }
-        construction {
-          id
-        }
-      }
-      documentResults {
-        id
-        user {
-          id
-        }
-        document {
-          id
-        }
-        answers
-        drafts
-        createdAt
       }
     }
   }
@@ -133,18 +154,54 @@ const Container = styled.div`
   }
 `;
 
+const Progress = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70vh;
+  margin: 0 0 2% 0;
+`;
+
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
 
-  const { loading, error, data } = useQuery(GET_RESULTS, {
-    variables: { userId: me.id, lessonId: lesson.id },
-    fetchPolicy: "no-cache",
+  const [
+    fetchQuery,
+    { loading: stats_loading, error: stats_error, data: stats_data },
+  ] = useLazyQuery(LESSON_RESULTS_QUERY, {
+    variables: {
+      lessonId: props.id,
+      userId: me.id,
+    },
   });
-  if (loading) return <p>Loading...</p>;
-  if (error) return `Error! ${error.message}`;
-  let results = data.stats;
+  useEffect(() => {
+    // when the first query is loaded, then fire this lazy query function
+    if (me) {
+      fetchQuery({
+        variables: {
+          lessonId: props.id,
+          userId: me.id,
+        },
+      });
+    }
+  }, [me]);
+  if (stats_error) return <p>{stats_error}</p>;
+  if (stats_loading)
+    return (
+      <Progress>
+        <CircularProgress />
+      </Progress>
+    );
+
+  let my_result =
+    stats_data && stats_data.lessonResults.length > 0
+      ? stats_data.lessonResults.reduce((prev, current) =>
+          prev.progress > current.progress ? prev : current
+        )
+      : [];
   let components = [];
-  console.log("tasks", tasks);
   tasks.map((task) => {
     let el;
     let item;
@@ -158,6 +215,7 @@ const StoryEx = (props) => {
           author={lesson.user}
           story={true}
           note={el}
+          clicks={el.link_clicks}
           complexity={el.complexity}
         />
       );
@@ -183,7 +241,6 @@ const StoryEx = (props) => {
           me={me}
           lessonID={lesson.id}
           length={Array(el.correct.length).fill(false)}
-          userData={results.testResults}
           story={true}
         />
       );
@@ -203,7 +260,6 @@ const StoryEx = (props) => {
           ifRight={el.ifRight}
           ifWrong={el.ifWrong}
           hidden={true}
-          userData={results.quizResults}
           lessonID={lesson.id}
           quizID={el.id}
           user={el.user.id}
@@ -219,8 +275,6 @@ const StoryEx = (props) => {
         <TestPractice
           key={el.id}
           lessonID={lesson.id}
-          quizResults={results.quizResults}
-          testResults={results.testResults}
           me={me}
           testPractice={el}
           quizes={lesson.quizes}
@@ -253,6 +307,7 @@ const StoryEx = (props) => {
         <Chat
           key={el.id}
           name={el.name}
+          clicks={el.link_clicks}
           me={me}
           author={lesson.user}
           complexity={el.complexity}
@@ -289,7 +344,6 @@ const StoryEx = (props) => {
           complexity={el.complexity}
           lessonID={lesson.id}
           me={me}
-          userData={results.problemResults}
           story={true}
           lesson={lesson}
           author={lesson.user}
@@ -305,7 +359,6 @@ const StoryEx = (props) => {
           complexity={el.complexity}
           textEditor={el}
           me={me}
-          userData={results.textEditorResults}
           story={true}
         />
       );
@@ -321,7 +374,6 @@ const StoryEx = (props) => {
           variants={el.variants}
           me={me}
           arr={Array(el.answer.length).fill("")}
-          userData={results.constructionResults}
           story={true}
         />
       );
@@ -372,17 +424,19 @@ const StoryEx = (props) => {
         transitionEnterTimeout={500}
         transitionLeaveTimeout={10}
       >
-        <Feed
-          components={components}
-          next={next}
-          number_of_tasks={tasks.length}
-          coursePageID={coursePageID}
-          me={me}
-          lesson_number={lesson.number}
-          lesson_name={lesson.name}
-          lessonID={lesson.id}
-          my_result={props.my_result}
-        />
+        {me && (
+          <Feed
+            components={components}
+            next={next}
+            number_of_tasks={tasks.length}
+            coursePageID={coursePageID}
+            me={me}
+            lesson_number={lesson.number}
+            lesson_name={lesson.name}
+            lessonID={lesson.id}
+            my_result={my_result}
+          />
+        )}
       </CSSTransitionGroup>
     </Container>
   );

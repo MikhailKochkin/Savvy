@@ -27,13 +27,13 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       short_structure
       change
       open
-      lessonResults {
-        id
-        student {
-          id
-        }
-        progress
-      }
+      # lessonResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   progress
+      # }
       createdAt
       user {
         id
@@ -43,6 +43,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       }
       notes {
         id
+        link_clicks
         text
         complexity
         next
@@ -53,6 +54,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       chats {
         id
         name
+        link_clicks
         complexity
         messages
         user {
@@ -200,14 +202,14 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           number
           type
           published
-          lessonResults {
-            id
-            visitsNumber
-            lessonID
-            student {
-              id
-            }
-          }
+          # lessonResults {
+          #   id
+          #   visitsNumber
+          #   lessonID
+          #   student {
+          #     id
+          #   }
+          # }
         }
       }
     }
@@ -361,14 +363,12 @@ const NewSingleLesson = (props) => {
         <CircularProgress />
       </Progress>
     );
+
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
     (l) => l.number === lesson.number + 1
   );
-  let my_result;
-  if (me) {
-    my_result = lesson.lessonResults.find((l) => l.student.id === me.id);
-  }
+
   return (
     <PleaseSignIn>
       <div id="root"></div>
@@ -428,6 +428,7 @@ const NewSingleLesson = (props) => {
                 </h1> */}
                 <CSSTransitionGroup transitionName="example">
                   <StoryEx
+                    id={props.id}
                     tasks={
                       props.add == "offer"
                         ? [
@@ -440,7 +441,6 @@ const NewSingleLesson = (props) => {
                     size={props.size == "short" ? "short" : "long"}
                     lesson={lesson}
                     next={next}
-                    my_result={my_result}
                     coursePageID={lesson.coursePage.id}
                   />
                 </CSSTransitionGroup>

@@ -40,12 +40,12 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       user {
         id
       }
-      orders {
-        id
-        user {
-          id
-        }
-      }
+      # orders {
+      #   id
+      #   user {
+      #     id
+      #   }
+      # }
       lessons {
         id
         name
@@ -80,14 +80,14 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       }
       description
       courseType
-      students
+      # students
       # applications {
       #   id
       #   applicantId
       # }
-      new_students {
-        id
-      }
+      # new_students {
+      #   id
+      # }
       user {
         id
         name
@@ -128,10 +128,7 @@ const NewCoursePage = (props) => {
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.id },
   });
-  const student_list = [];
-  if (data) {
-    data.coursePage.new_students.map((ns) => student_list.push(ns.id));
-  }
+
   const me = useUser();
   const router = useRouter();
 
@@ -150,7 +147,6 @@ const NewCoursePage = (props) => {
             id={props.id}
             lessons={data.coursePage.lessons}
             coursePageId={data.coursePage.id}
-            student_list={student_list}
           />
         ) : (
           <p>Загружаем программу курса ...</p>
@@ -172,3 +168,6 @@ const NewCoursePage = (props) => {
 };
 
 export default NewCoursePage;
+
+// Идеи. Отдельно в ленивом формате подгружать статистические данные
+// Отдельнно подгружать первые элементы страницы, чтобы ускорить время первого взаимодействия студента с курсом

@@ -68,6 +68,7 @@ const Note = objectType({
     t.model.id();
     t.model.text();
     t.model.next();
+    t.model.link_clicks();
     t.model.complexity();
     t.model.userId();
     t.model.lessonId();
@@ -269,6 +270,7 @@ const Chat = objectType({
   definition(t) {
     t.model.id();
     t.model.name();
+    t.model.link_clicks();
     t.model.complexity();
     t.model.messages();
     t.model.lessonId();

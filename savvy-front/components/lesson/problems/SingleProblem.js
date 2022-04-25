@@ -222,7 +222,6 @@ class SingleProblem extends Component {
   };
 
   onFinish = (status) => {
-    console.log("status", status);
     this.setState({ isFinished: true });
   };
 
@@ -251,17 +250,14 @@ class SingleProblem extends Component {
       .getElementById(this.props.problem.id)
       .querySelectorAll("#conceal");
     let p;
-    console.log("elements", elements);
 
     elements.forEach((element) => {
       let answer = element.getAttribute("data-text").toLowerCase();
-      console.log("answer", answer, answer !== "ответ");
 
       if (
         element.getAttribute("concealed") === "true" ||
         (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:")
       ) {
-        console.log(11);
         let data = element.innerHTML;
         let hint = element.getAttribute("data-text");
         element.innerHTML = hint;
@@ -269,7 +265,6 @@ class SingleProblem extends Component {
         element.setAttribute("concealed", true);
         element.addEventListener("click", this.onMouseClick);
       } else {
-        console.log(12);
         this.setState({ teacher_answer: element.innerHTML });
         element.style.display = "none";
       }
@@ -277,12 +272,8 @@ class SingleProblem extends Component {
     // elements[0].style.display = "none";
   }
   render() {
-    const { problem, me, userData, lesson, story, complexity, author } =
-      this.props;
+    const { problem, me, lesson, story, complexity, author } = this.props;
 
-    const data = userData
-      .filter((result) => result.problem.id === problem.id)
-      .filter((result) => result.student.id === me.id);
     return (
       <>
         {!this.state.update && (
@@ -401,7 +392,6 @@ SingleProblem.propTypes = {
   story: PropTypes.string,
   problem: PropTypes.object.isRequired,
   me: PropTypes.object,
-  userData: PropTypes.object,
   lesson: PropTypes.object,
 };
 

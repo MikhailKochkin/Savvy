@@ -175,9 +175,8 @@ const LessonHeader = (props) => {
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const { lesson, name, author, student_list, coursePageId, students, me } =
-    props;
-
+  const { lesson, name, author, coursePageId, students, me } = props;
+  console.log("props", props);
   const { t } = useTranslation("coursePage");
 
   let color;
@@ -217,32 +216,24 @@ const LessonHeader = (props) => {
         {/* if you do not have an account => no lesson / no link */}
 
         {/* first visit: if you have an account but did not buy the new course => get the free version / link 1 */}
-        {me &&
-          lesson &&
-          lesson.open &&
-          me.id !== lesson.user.id &&
-          visit === undefined &&
-          !me.permissions.includes("ADMIN") &&
-          !student_list.includes(me.id) &&
-          published && (
-            <Link
-              href={{
-                pathname: "/lesson",
-                query: {
-                  id: lesson.id,
-                  type: lesson.type.toLowerCase(),
-                  size: "short",
-                },
-              }}
-            >
-              <A>
-                <Button>{t("start")}</Button>
-              </A>
-            </Link>
-          )}
+        {me && lesson && lesson.open && (
+          <Link
+            href={{
+              pathname: "/lesson",
+              query: {
+                id: lesson.id,
+                type: lesson.type.toLowerCase(),
+              },
+            }}
+          >
+            <A>
+              <Button>{t("start")}</Button>
+            </A>
+          </Link>
+        )}
 
         {/* next visit: if you have an account but did not buy the new course => get the free version / link 1 */}
-        {me &&
+        {/* {me &&
           lesson &&
           lesson.open &&
           me.id !== lesson.user.id &&
@@ -256,21 +247,19 @@ const LessonHeader = (props) => {
                 query: {
                   id: lesson.id,
                   type: lesson.type.toLowerCase(),
-                  size: "short",
                 },
               }}
             >
               <A>
                 <Button>
-                  {/* {props.t("start")} */}
                   {t("start")}
                 </Button>
               </A>
             </Link>
-          )}
+          )} */}
 
         {/* if you have an account and bought the new course => get the paid version / link 2 */}
-        {me &&
+        {/* {me &&
           lesson &&
           visit == undefined &&
           me.id !== lesson.user.id &&
@@ -288,17 +277,14 @@ const LessonHeader = (props) => {
               }}
             >
               <A>
-                <Button>
-                  {/* {props.t("start")} */}
-                  {t("start")}
-                </Button>
+                <Button>{t("start")}</Button>
               </A>
             </Link>
-          )}
+          )} */}
 
         {/* if you have an account and you are a teacher / admin => get the paid version / link 2 */}
 
-        {me &&
+        {/* {me &&
           lesson &&
           lesson.published &&
           visit == undefined &&
@@ -315,16 +301,15 @@ const LessonHeader = (props) => {
             >
               <A>
                 <Button>
-                  {/* {props.t("start")} */}
                   {t("start")}
                 </Button>
               </A>
             </Link>
-          )}
+          )} */}
 
         {/* if you have an account and you are a teacher / admin => get the paid version / link 2 */}
 
-        {me &&
+        {/* {me &&
           !lesson.published &&
           (me.id === author || me.permissions.includes("ADMIN")) && (
             <Link
@@ -341,7 +326,7 @@ const LessonHeader = (props) => {
                 <Button>{t("start")}</Button>
               </A>
             </Link>
-          )}
+          )} */}
         {/* {me && lesson.published && (
           // &&
           // (me.permissions.includes("ADMIN") ||
