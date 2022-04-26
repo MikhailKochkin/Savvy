@@ -304,7 +304,7 @@ const CoursePage = (props) => {
                 {me &&
                   me.permissions &&
                   me.id !== coursePage.user.id &&
-                  me.new_subjects.find((c) => c.id == coursePage.id) &&
+                  !me.new_subjects.find((c) => c.id == coursePage.id) &&
                   !me.permissions.includes("ADMIN") && (
                     <RegisterCard me={me} coursePage={coursePage} />
                   )}
@@ -316,11 +316,16 @@ const CoursePage = (props) => {
                     <TeacherCard id={coursePage.id} coursePage={coursePage} />
                   )}
                 {/* Карточка ученика */}
-                {me &&
+                {stats_data &&
+                  me &&
                   me.permissions &&
                   me.new_subjects.find((c) => c.id == coursePage.id) &&
                   !me.permissions.includes("ADMIN") && (
-                    <StudentCard coursePage={coursePage} me={me} />
+                    <StudentCard
+                      coursePage={coursePage}
+                      lessonResults={maxes}
+                      me={me}
+                    />
                   )}
               </PayBox>
             </CourseInfo>{" "}

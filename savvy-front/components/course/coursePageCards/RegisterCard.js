@@ -69,6 +69,7 @@ const Paid = styled.div`
 
 const RegisterCard = (props) => {
   const { t } = useTranslation("course");
+  const [width, setWidth] = useState(800);
 
   const onResize = (width) => {
     setWidth(width);

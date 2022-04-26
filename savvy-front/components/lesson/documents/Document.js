@@ -122,13 +122,13 @@ const Document = (props) => {
       >
         {(createDocumentResult, { loading, error }) => (
           <>
-            <Advice size={story}>
+            {/* <Advice size={story}>
               Каждый пункт должен состоять <b>только из 1 абзаца. </b>
               Пункты проверяются в 2 этапа: сначала нажмите на кнопку
               "Проверить" и получите автоматческие рекомендации от сайта. Когда
               запишете все пункты и внесете в них исправления, нажмите кнопку
               Сохранить" и их проверит преподаватель.
-            </Advice>
+            </Advice> */}
             <Header> {title} </Header>
             {sorted_clauses.slice(0, clausesTotal).map((clause, index) => (
               <>
@@ -159,12 +159,10 @@ const Document = (props) => {
                   const res = await save();
                   const res2 = await createDocumentResult();
                   setReveal(true);
-                  alert(
-                    "Документ сохранен. Можете перейти к следующему заданию."
-                  );
+                  alert("We saved your work. You can move on.");
                 }}
               >
-                Сохранить
+                Save
               </StyledButton>
               {me && me.id === user ? (
                 <DeleteDocument

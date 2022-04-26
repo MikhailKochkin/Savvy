@@ -32,6 +32,7 @@ const Text = styled.div`
   p {
     padding: 1% 2%;
     margin: 1% 0;
+    font-style: italic;
   }
   img {
     display: block;
@@ -109,6 +110,7 @@ const Styles = styled.div`
   border: 1px solid #d4d4d4;
   box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
   margin: 30px 0;
+  background: #fff;
   font-weight: 500;
   padding: 2%;
   min-height: 50vh;

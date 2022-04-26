@@ -277,19 +277,19 @@ const Progress = styled.div`
 
 class StudentCard extends Component {
   render() {
-    const { coursePage, me } = this.props;
+    const { coursePage, me, lessonResults } = this.props;
     // 0. Put all lesson results in an array
-    let lessonResults = [];
-    coursePage.lessons.map((lesson) =>
-      lessonResults.push(lesson.lessonResults)
-    );
-    // 1. leave only the results of the current user
-    const newlessonResults = lessonResults.map((result) =>
-      result.filter((result) => result.student.id === me.id)
-    );
+    // let lessonResults = [];
+    // coursePage.lessons.map((lesson) =>
+    //   lessonResults.push(lesson.lessonResults)
+    // );
+    // // 1. leave only the results of the current user
+    // const newlessonResults = lessonResults.map((result) =>
+    //   result.filter((result) => result.student.id === me.id)
+    // );
     // 2. See how many lessons the currents user has attended
     let status = 0;
-    newlessonResults.map((res) => (res.length > 0 ? status++ : status));
+    lessonResults.map((res) => (res.progress > 5 ? status++ : status));
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio = (status * 100) / coursePage.lessons.length;

@@ -135,7 +135,7 @@ const Clause = (props) => {
         <>
           <div>
             {" "}
-            Пункт {index}. {renderHTML(commentary)}
+            Section {index}. {renderHTML(commentary)}
           </div>
           <Frame>
             <DynamicLoadedEditor getEditorText={myCallback} />
@@ -235,15 +235,15 @@ const Clause = (props) => {
             {/* {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>} */}
             {props.me.id === props.userID && (
               <StyledButton onClick={(e) => setType("update")}>
-                Изменить
+                Change
               </StyledButton>
             )}
             {index !== total ? (
               <StyledButton onClick={(e) => getNumber(index + 1)}>
-                Дальше
+                Next
               </StyledButton>
             ) : (
-              <div>Конец документа.</div>
+              <div>The end</div>
             )}
           </Buttons>
         </>
@@ -257,11 +257,7 @@ const Clause = (props) => {
             commentary={commentary}
             keywords={keywords}
           />
-          {
-            <StyledButton onClick={(e) => setType("test")}>
-              Изменить
-            </StyledButton>
-          }
+          {<StyledButton onClick={(e) => setType("test")}>Update</StyledButton>}
         </>
       )}
     </Styles>

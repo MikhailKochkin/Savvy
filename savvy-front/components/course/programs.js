@@ -2274,8 +2274,8 @@ export const programs = [
     image: "back_image_low.png",
     length1: "9 weeks",
     length2: "6 hours per week",
-    start: moment(next_date._d).format("Do MMMM YYYY"),
-    start_eng: next_date,
+    start: moment("July 1, 2022 20:00:00").format("Do MMMM YYYY"),
+    start_eng: "July 1, 2022 20:00:00",
     start_comment: "We will send the course link to your email",
     prior_klnowledge_1: "B1 level",
     prior_klnowledge_2: "We will help if you have any gaps in your knowledge ",
@@ -2347,7 +2347,7 @@ export const programs = [
     ],
     price: {
       price: 0,
-      full: "250$",
+      full: "149$",
       full_explain: "Полная стоимость",
       part: "На 4 месяца",
       part_explain: "Рассрочка",
@@ -2367,13 +2367,10 @@ export const programs = [
         q: "Will you help me if I run into any problems?",
         a: "Of course. We will offer you any help 24/7 on Discord.",
       },
-      {
-        q: "Free courses are always a waste of time",
-        a: "These lessons are a part of our more advanced course on Legal English. Our goal right now is to make sure that you like the platform and our approach. That's why the course is free.",
-      },
+
       {
         q: "Can my friend join?",
-        a: "We will be happy if you tell your friends about our course 😁 ",
+        a: "We will be happy if you tell your friends about our course 😁. If you come with a friend, the course price for each of you will be 129$ instead of 149$. If you come with 2 friends, the price for each of you will be 99$ only.",
       },
     ],
   },

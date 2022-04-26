@@ -278,13 +278,13 @@ const Programs = () => {
 
   const eng_programs = [
     {
-      title: "Introduction to Legal English",
+      title: "Legal English course",
       description:
-        "The course shares grammar, vocabulary and drafting essenitals to write your first English essay on a legal topic.",
-      term: "Length: 1 week",
-      price: "Free Course",
-      conditions: `and community `,
-      installments: "Feedback",
+        "The course teaches students grammar, vocabulary and writing skills necessary to work in a law firm.",
+      term: "Length: 9 weeks",
+      price: "149 $",
+      conditions: `for groups `,
+      installments: "up to -33%",
       img: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1100&q=80",
       pathname: "coursePage",
       query: "id=cl11wmpa584311hyuvzpunsqi",

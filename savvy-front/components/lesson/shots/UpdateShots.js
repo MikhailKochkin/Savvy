@@ -188,12 +188,14 @@ class CreateShot extends Component {
       rows.push(
         <Row>
           <Frame>
+            <p>Текст</p>
             <DynamicLoadedEditor
               index={i}
               name="part"
               getEditorText={this.myCallback}
               value={parts[i]}
             />
+            <p>Комментарий</p>
             <div className="com">
               <DynamicLoadedEditor
                 index={i}
