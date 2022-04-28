@@ -414,7 +414,8 @@ const LessonHeader = (props) => {
             {me &&
               lesson.published &&
               (me.permissions.includes("ADMIN") ||
-                me.new_subjects.includes(coursePageId) ||
+                me.new_subjects.filter((s) => s.id == coursePageId).length >
+                  0 ||
                 me.id === lesson.user.id ||
                 lesson.open) && (
                 <Link
@@ -452,7 +453,8 @@ const LessonHeader = (props) => {
                           lesson &&
                           visit == undefined &&
                           me.id !== lesson.user.id &&
-                          me.new_subjects.includes(coursePageId) &&
+                          me.new_subjects.filter((s) => s.id == coursePageId)
+                            .length > 0 &&
                           !me.permissions.includes("ADMIN") &&
                           !lesson.open &&
                           published
@@ -473,7 +475,8 @@ const LessonHeader = (props) => {
                           visit !== undefined &&
                           me.id !== lesson.user.id &&
                           !me.permissions.includes("ADMIN") &&
-                          me.new_subjects.includes(coursePageId) &&
+                          me.new_subjects.filter((s) => s.id == coursePageId)
+                            .length > 0 &&
                           published
                         ) {
                           updateLessonResult({
