@@ -155,11 +155,13 @@ const Block = (props) => {
           <Title>
             <div className="type">
               Задача:{" "}
-              {renderHTML(
-                problems
-                  .filter((q) => q.id === value.id)[0]
-                  .text.substring(0, 100)
-              )}
+              {problems.filter((q) => q.id === value.id).length > 0
+                ? renderHTML(
+                    problems
+                      .filter((q) => q.id === value.id)[0]
+                      .text.substring(0, 100)
+                  )
+                : " Материал был удален. Удалите этот блок из урока."}
             </div>
           </Title>
         ) : null}

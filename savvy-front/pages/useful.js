@@ -46,6 +46,18 @@ const useful = (props) => {
       header_text: "Решите кейс с собеседования на младшего юриста",
       material_type: "contract_conclude_case",
     },
+    ip: {
+      link: "https://besavvy.app/lesson?id=cl2rqcw8f151711hum7o1jrn6j&type=story",
+      description: [
+        "⭐️   Взяли вопросы с собеседований, в которых участвовали наши студенты",
+        "⭐️   Рассказали, как отвечать на самые сложные их них",
+        "⭐️   Вы сможете заранее подготовиться кк сложным и неожиданным вопросам и чувствовать себя уверенно.",
+      ],
+      image_url: "/static/ip.png",
+      button_text: "Смотреть вопросы",
+      header_text: "Получите чек-лист с вопросами с собеседования по IP",
+      material_type: "ip_interview",
+    },
   };
   let material;
   if (props.query.id == "post1") {
@@ -54,6 +66,8 @@ const useful = (props) => {
     material = data.contracts;
   } else if (props.query.id == "conclude") {
     material = data.conclude;
+  } else if (props.query.id == "ip") {
+    material = data.ip;
   } else {
     material = data.post1;
   }

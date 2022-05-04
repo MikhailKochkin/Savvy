@@ -262,9 +262,13 @@ const UpdateConstruction = (props) => {
   }, [0]);
 
   const myCallback = (dataFromChild, index) => {
+    console.log("myCallback", dataFromChild, index);
     let arr = [...variants];
+    console.log("arr[index]", arr[index]);
+
     arr[index] = dataFromChild;
     setVariants(arr);
+    console.log("arr", arr);
   };
 
   const myCallback2 = (dataFromChild, name) => {
@@ -321,10 +325,10 @@ const UpdateConstruction = (props) => {
           spellCheck={true}
           name="name"
           defaultValue={name}
-          placeholder="Название конструктора. Например: Договор оказания медицинских услуг"
           onChange={(e) => setName(e.target.value)}
         />
       </Box>
+
       <Complexity>
         <select
           value={complexity}
@@ -348,6 +352,13 @@ const UpdateConstruction = (props) => {
               getEditorText={myCallback}
               value={option}
             />
+            <textarea
+              index={index + 1}
+              name={index}
+              onChange={(e) => myCallback(e.target.value, index)}
+            >
+              {option}
+            </textarea>
           </TextBox>
         </>
       ))}

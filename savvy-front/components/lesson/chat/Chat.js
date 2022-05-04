@@ -25,6 +25,38 @@ const Styles = styled.div`
     max-height: 50em;
     box-shadow: "0 0 0 2px blue;";
   }
+  table {
+    width: 100%;
+    border: 1px solid #edefed;
+    border-collapse: collapse;
+    tr {
+      border: 1px solid #d0d0d0;
+      line-height: 1.6;
+      vertical-align: text-top;
+    }
+    thead {
+      background: #f5f5f5;
+      font-weight: bold;
+      vertical-align: text-top;
+      line-height: 1.6;
+    }
+    thead th {
+      padding: 20px 0px;
+    }
+    th {
+      border: 1px solid #d0d0d0;
+    }
+    td {
+      border: 1px solid #d0d0d0;
+      border-top: none;
+      border-bottom: none;
+      border-right: none;
+      padding: 0% 2.5%;
+      position: relative;
+      width: 5%;
+      padding: 10px 10px;
+    }
+  }
   a {
     border-bottom: 2px solid #26ba8d;
     padding: 0%;

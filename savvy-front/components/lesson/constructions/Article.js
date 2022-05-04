@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
-// import { withTranslation } from "../../../i18n";
+import { v4 as uuidv4 } from "uuid";
 
 const Styles = styled.div`
   width: 98%;
@@ -14,7 +14,7 @@ const Styles = styled.div`
   .edit {
     background: red;
     width: 100%;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     line-height: 1.8;
     font-family: Montserrat;
     border: none;
@@ -58,12 +58,8 @@ class Article extends Component {
   };
 
   show = (e) => {
-    console.log(e.target.previousSibling.previousSibling);
-    e.target.previousSibling.previousSibling.innerHTML = `
-    ${
-      e.target.previousSibling.previousSibling.innerHTML
-    } (${e.target.previousSibling.previousSibling.getAttribute("data-initial")})
-    `;
+    e.target.previousSibling.previousSibling.innerHTML =
+      e.target.previousSibling.previousSibling.getAttribute("data-initial");
     e.target.style.pointerEvents = "none";
     e.target.previousSibling.style.display = "none";
     e.target.style.display = "none";
@@ -76,11 +72,11 @@ class Article extends Component {
       answer1: this.state.correct_option.toLowerCase(),
       answer2: this.state.answer.toLowerCase(),
     };
-    console.log(data);
-    let el = document
-      .getElementById("answers")
-      .querySelectorAll(`[data-initial='${this.state.correct_option}']`)[0];
-    console.log(document.getElementById("answers"), el);
+
+    let el = document.getElementById(this.state.chosenElement);
+
+    e.target.innerHTML = "Checking...";
+
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -93,11 +89,10 @@ class Article extends Component {
         console.log(res);
         if (
           !e.target.nextSibling ||
-          (e.target.nextSibling &&
-            e.target.nextSibling.innerHTML !== this.props.t("show"))
+          (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
         ) {
           let button2 = document.createElement("button");
-          button2.innerHTML = this.props.t("show1");
+          button2.innerHTML = "Show";
           button2.className = "mini_button";
           button2.addEventListener("click", this.show);
           e.target.after(button2);
@@ -105,9 +100,13 @@ class Article extends Component {
         if (parseFloat(res.res) > 69) {
           this.setState({ result: true });
           el.style.background = "#D9EAD3";
+          e.target.pointerEvents = "auto";
+          e.target.innerHTML = "Check";
         } else {
           this.setState({ result: false });
           el.style.background = "#FCE5CD";
+          e.target.innerHTML = "Check";
+
           if (res.comment) {
             alert(res.comment);
           }
@@ -119,24 +118,29 @@ class Article extends Component {
 
   onMouseClick = (e) => {
     let z = document.createElement("span");
+    let id = uuidv4();
+
     z.contentEditable = true;
     z.innerHTML = e.target.innerHTML;
     z.className = "edit";
     z.setAttribute("data-initial", e.target.getAttribute("data"));
+    z.setAttribute("id", id);
+
     z.addEventListener("input", this.changeState);
     let n = e.target.parentNode.replaceChild(z, e.target);
 
     let button = document.createElement("button");
-    button.innerHTML = this.props.t("check");
+    button.innerHTML = "Check";
     button.className = "mini_button";
     button.tabIndex = 0;
     button.addEventListener("click", this.check);
     z.after(button);
 
-    // this.setState({
-    //   answer: "",
-    //   wrong_option: e.target.innerHTML,
-    // });
+    this.setState({
+      answer: "",
+      // correct_option: e.target.getAttribute("data"),
+      chosenElement: id,
+    });
   };
   render() {
     return (
@@ -146,8 +150,7 @@ class Article extends Component {
           if (e.target.getAttribute("data")) {
             this.setState({ correct_option: e.target.getAttribute("data") });
           }
-          if (e.target.id === "id") {
-            console.log(e.target.id);
+          if (e.target.getAttribute("type") === "error") {
             const res2 = this.onMouseClick(e);
           }
         }}
