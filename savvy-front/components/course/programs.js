@@ -36,8 +36,8 @@ export const programs = [
       "Создадим у вас грамматический, лексический и письменный фундамент для работы с юридическим английским языком.",
     length1: "2 месяца",
     length2: "4 часа в неделю",
-    start: moment(next_date._d).format("Do MMMM YYYY"),
-    start_eng: next_date,
+    start: moment("July 1, 2022 20:00:00").format("Do MMMM YYYY"),
+    start_eng: moment("July 1, 2022 20:00:00"),
     prior_klnowledge_1: "Не требуется",
     prior_klnowledge_2: "Начинаем с самого нуля",
     goals: [
@@ -120,8 +120,8 @@ export const programs = [
       },
     ],
     price: {
-      price: 9900,
-      full: "9900 ₽",
+      price: 18900,
+      full: "18900 ₽",
       full_explain: "Полная стоимость",
       part: "На 4 месяца",
       part_explain: "Рассрочка",

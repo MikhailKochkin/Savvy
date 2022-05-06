@@ -176,7 +176,6 @@ const LessonHeader = (props) => {
   );
 
   const { lesson, name, author, coursePageId, students, me } = props;
-  console.log("props", props);
   const { t } = useTranslation("coursePage");
 
   let color;

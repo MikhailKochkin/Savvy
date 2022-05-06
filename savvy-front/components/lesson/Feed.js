@@ -483,9 +483,6 @@ const Feed = (props) => {
   };
 
   const search = async (num) => {
-    console.log(num);
-    console.log(props.components.length);
-
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
       if (props.components.length > num + 2) {

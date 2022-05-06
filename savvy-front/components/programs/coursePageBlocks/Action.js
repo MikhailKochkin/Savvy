@@ -607,7 +607,9 @@ const Action = (props) => {
                       }}
                     />
                   </div>
-                  <label for="html">Оставить заявку на консультацию</label>
+                  <label for="html">
+                    Оставить заявку (консультация/рассрочка)
+                  </label>
                 </div>
                 <div
                   className="variants_form"
@@ -635,7 +637,6 @@ const Action = (props) => {
                       value="buy"
                       checked={step == "buy"}
                       onChange={(e) => {
-                        console.log(e.target.value);
                         setStep(e.target.value);
                       }}
                     />

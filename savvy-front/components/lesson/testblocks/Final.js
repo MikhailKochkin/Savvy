@@ -14,7 +14,6 @@ const Styles = styled.div`
 `;
 
 const Final = (props) => {
-  console.log(props.answers);
   let correct = props.answers.filter((a) => a !== false);
   let ratio = correct.length / props.tasks_number;
   const { t } = useTranslation("lesson");

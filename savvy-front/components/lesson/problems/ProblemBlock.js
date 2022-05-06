@@ -60,7 +60,6 @@ const ProblemBlock = (props) => {
     let index;
     console.log(data);
     data[0] ? (index = 0) : (index = 1);
-    console.log(props.obj.children, index, props.obj.children[index]);
 
     setOpenChildren([...openChildren, props.obj.children[index]]);
   };
@@ -74,7 +73,6 @@ const ProblemBlock = (props) => {
       obj={obj}
     />
   );
-  console.log(props.tests);
   return (
     <Styles first={props.first}>
       {props.obj && (
@@ -121,7 +119,6 @@ const ProblemBlock = (props) => {
                     ifRight={el.ifRight}
                     ifWrong={el.ifWrong}
                     me={props.me}
-                    type={el.type}
                     hidden={true}
                     userData={props.lesson.quizResults}
                     lessonID={props.lesson.id}

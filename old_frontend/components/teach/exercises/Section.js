@@ -75,7 +75,6 @@ const Section = (props) => {
                 lesson={props.lesson.id}
               />
             ))}
-          {console.log(props.lesson.problems)}
           {props.lesson.problems &&
             props.lesson.problems.map((p, i) => (
               <Problem

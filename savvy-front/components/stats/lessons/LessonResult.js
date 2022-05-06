@@ -1,7 +1,6 @@
 import React from "react";
 
 const LessonResult = (props) => {
-  console.log("props", props.res);
   return (
     <div>
       <div>Всего визитов: {props.res.length}</div>

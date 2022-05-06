@@ -15,7 +15,6 @@ const Block = styled.div`
 `;
 
 const Document = (props) => {
-  console.log(props.document);
   const { document, students } = props;
   let students_who_completed = students.filter(
     (s) =>

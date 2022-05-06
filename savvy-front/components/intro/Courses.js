@@ -75,7 +75,6 @@ const Courses = (props) => {
   } else {
     visitedCourses = 0;
   }
-  console.log(visitedCourses, 8 - visitedCourses);
 
   return (
     <Styles>
