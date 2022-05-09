@@ -347,7 +347,6 @@ const LessonHeader = (props) => {
           <Text>
             <div className="lesson_name">
               {lesson.number}. {name}{" "}
-              {me && <span>– {need_response.length}</span>}
             </div>
             <div className="lesson_description">
               {lesson.description &&

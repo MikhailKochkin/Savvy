@@ -808,7 +808,7 @@ const Action = (props) => {
                           onClick={async (e) => {
                             e.preventDefault();
                             let results = [];
-
+                            console.log(1);
                             let checked_orders = await Promise.all(
                               my_orders.map(async (o) => {
                                 let updated_res = await updateOrderAuto({
@@ -820,13 +820,13 @@ const Action = (props) => {
                                 return updated_res;
                               })
                             );
-
-                            console.log("checked_orders", checked_orders);
+                            console.log(2);
 
                             const checked_orders2 = checked_orders.filter(
-                              (c) => c.data.updateOrderAuto.isPaid == true
+                              (c) =>
+                                c.data.updateOrderAuto !== null &&
+                                c.data.updateOrderAuto.isPaid == true
                             );
-                            console.log("checked_orders2", checked_orders2);
 
                             if (checked_orders2.length > 0) {
                               console.log("> 0");

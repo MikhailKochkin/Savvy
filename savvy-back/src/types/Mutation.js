@@ -2214,44 +2214,40 @@ const Mutation = mutationType({
           `{ id, user { id, name, email}, coursePage {id, title}, paymentID }`
         );
 
-        // console.log("order", order);
-
         // 2. check at yookassa if any order is paid
-
-        const payment = await community_checkout.getPayment(order.paymentID);
-
-        console.log("payment", payment);
-        // 3. give access
-
-        // const notification = await client.sendEmail({
-        //   From: "Mikhail@besavvy.app",
-        //   To: order.user.email,
-        //   Subject: "🎆 BeSavvy: доступ к курсу открыт!",
-        //   HtmlBody: PurchaseEmail.PurchaseEmail(
-        //     order.user.name,
-        //     order.coursePage.title,
-        //     order.coursePage.id
-        //   ),
-        // });
-        if (payment.status == "succeeded") {
-          return ctx.prisma.order.update({
-            data: {
-              isPaid: true,
-            },
-            where: {
-              id: args.id,
-            },
-          });
-        } else {
-          return ctx.prisma.order.update({
-            data: {
-              isPaid: false,
-            },
-            where: {
-              id: args.id,
-            },
-          });
+        if (order.paymentID) {
+          const payment = await community_checkout.getPayment(order.paymentID);
+          if (payment.status == "succeeded") {
+            const notification = await client.sendEmail({
+              From: "Mikhail@besavvy.app",
+              To: order.user.email,
+              Subject: "🎆 BeSavvy: доступ к курсу открыт!",
+              HtmlBody: PurchaseEmail.PurchaseEmail(
+                order.user.name,
+                order.coursePage.title,
+                order.coursePage.id
+              ),
+            });
+            return ctx.prisma.order.update({
+              data: {
+                isPaid: true,
+              },
+              where: {
+                id: args.id,
+              },
+            });
+          } else {
+            return ctx.prisma.order.update({
+              data: {
+                isPaid: false,
+              },
+              where: {
+                id: args.id,
+              },
+            });
+          }
         }
+        // 3. give access
       },
     });
     t.field("deleteOrder", {
