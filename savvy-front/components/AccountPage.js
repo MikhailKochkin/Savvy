@@ -68,7 +68,7 @@ const AccountPage = (props) => {
             {page === "account" && me && <Account me={me} id={props.id} />}
           </Data>
         </Container>
-        <MyCourses me={me} />
+        {me && <MyCourses me={me} />}
       </Styles>
     </PleaseSignIn>
   );

@@ -335,6 +335,53 @@ const Content = styled.div`
       background: #dde1f8;
     }
   }
+  .arrowmenu2 {
+    cursor: pointer;
+    width: 75px;
+    height: 75px;
+    margin-right: 15px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    position: fixed;
+    background: ${(props) => {
+      if (props.angle == 360) {
+        return `conic-gradient(#ffb703 0deg ${props.angle + "deg"}, #ade8f4 ${
+          props.angle + "deg"
+        } 360deg)`;
+      } else {
+        return `conic-gradient(#023e8a 0deg ${props.angle + "deg"}, #ade8f4 ${
+          props.angle + "deg"
+        } 360deg)`;
+      }
+    }};
+
+    /* background: conic-gradient(#023e8a 0deg 90deg, #ade8f4 90deg 360deg); */
+    border: 1px solid black;
+    bottom: 15px;
+    left: 15px;
+    z-index: 4;
+    &:hover {
+      /* background: #dde1f8; */
+    }
+    .inner {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 1px solid black;
+      background: ${(props) => (props.angle == 360 ? "#fff" : "#dcf0f4")};
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+  }
   .arrow {
     width: 30px;
   }
@@ -347,6 +394,14 @@ const Content = styled.div`
     .arrowmenu {
       width: 60px;
       height: 60px;
+    }
+    .arrowmenu2 {
+      width: 60px;
+      height: 60px;
+      .inner {
+        width: 48px;
+        height: 48px;
+      }
     }
     .arrow {
       width: 25px;
@@ -434,6 +489,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Feed = (props) => {
   const [open, setOpen] = useState(false);
+  const [experience, setExperience] = useState(0);
   const [num, setNum] = useState(
     props.my_result &&
       props.my_result.progress !== null &&
@@ -444,7 +500,7 @@ const Feed = (props) => {
   );
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
-
+  const total = 5;
   const classes = useStyles();
   const { t } = useTranslation("lesson");
 
@@ -557,16 +613,28 @@ const Feed = (props) => {
   } else {
     color = "#55a630";
   }
-
+  console.log("angle", experience * (360 / total));
   return (
     <>
       <Styles>
-        <Content open={open} className="second">
+        <Content
+          open={open}
+          className="second"
+          angle={experience * (360 / total)}
+        >
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
             </div>
           </Message>
+          <div
+            className="arrowmenu2"
+            onClick={(e) => {
+              setOpen(!open);
+            }}
+          >
+            <div className="inner">{experience}</div>
+          </div>
           <div
             className="arrowmenu"
             onClick={(e) => {
@@ -609,6 +677,7 @@ const Feed = (props) => {
                                   if (props.my_result.progress < num + 2) {
                                     let res = updateLessonResult();
                                   }
+                                  setExperience(experience + 1);
                                   let res2 = move();
                                 }}
                               >

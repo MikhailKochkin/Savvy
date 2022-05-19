@@ -296,47 +296,10 @@ const Form = styled.div`
   }
 `;
 
-const StyledModal = Modal.styled`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 10px;
-  max-width: 40%;
-  min-width: 400px;
-  padding: 2%;
-  .top_message {
-    padding-bottom: 2%;
-    border-bottom: 1px solid grey;
-    font-size: 2rem;
-    width: 100%;
-    text-align: center;
-  }
-  .bottom_message {
-    margin-top: 2%;
-  }
-  @media (max-width: 1300px) {
-    max-width: 70%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-  @media (max-width: 800px) {
-    max-width: 90%;
-    min-width: 200px;
-    margin: 10px;
-    max-height: 100vh;
-    overflow-y: scroll;
-  }
-`;
-
 const Action = (props) => {
   const d = props.data;
   const { me, material } = props;
-  console.log("material.image_url", material);
+  console.log("material", material);
   return (
     <Styles id="c2a">
       <Container>

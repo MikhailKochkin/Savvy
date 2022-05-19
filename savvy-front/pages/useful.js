@@ -51,12 +51,25 @@ const useful = (props) => {
       description: [
         "⭐️   Взяли вопросы с собеседований, в которых участвовали наши студенты",
         "⭐️   Рассказали, как отвечать на самые сложные их них",
-        "⭐️   Вы сможете заранее подготовиться кк сложным и неожиданным вопросам и чувствовать себя уверенно.",
+        "⭐️   Вы сможете заранее подготовиться к сложным и неожиданным вопросам и чувствовать себя уверенно.",
       ],
       image_url: "/static/ip.png",
       button_text: "Смотреть вопросы",
       header_text: "Получите чек-лист с вопросами с собеседования по IP",
       material_type: "ip_interview",
+    },
+    vocabulary: {
+      link: "https://besavvy.app/lesson?id=cl3bnf2de41891h2m88zkq608&type=story",
+      description: [
+        "⭐️   Взяли правила изучения лексики из своего опыта",
+        "⭐️   Научим работать со словарями и переводить юр лексику",
+        "⭐️   Вы сможете заранее подготовиться к собеседованиям и чувствовать себя уверенно.",
+      ],
+      image_url:
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1652882569/vocab.webp",
+      button_text: "Получить пособие",
+      header_text: "Получите 6 правил изучения юр лексики",
+      material_type: "vocab_book",
     },
   };
   let material;
@@ -68,10 +81,13 @@ const useful = (props) => {
     material = data.conclude;
   } else if (props.query.id == "ip") {
     material = data.ip;
+  } else if (props.query.id == "vocabulary") {
+    material = data.vocabulary;
   } else {
     material = data.post1;
   }
   const me = useUser();
+
   return (
     <>
       <Useful me={me} id={props.query.id} material={material} />
