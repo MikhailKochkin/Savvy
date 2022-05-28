@@ -271,6 +271,7 @@ const SingleTest = (props) => {
   const [revealExplainer, setRevealExplainer] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [isExperienced, setIsExperienced] = useState(false);
 
   const { t } = useTranslation("lesson");
 
@@ -351,6 +352,10 @@ const SingleTest = (props) => {
       const res = () => {
         if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
           setAnswerState("right");
+          if (!isExperienced) {
+            props.getResults(1);
+            setIsExperienced(true);
+          }
           setInputColor("rgba(50, 172, 102, 0.25)");
           // 1. if the data is sent for the first time
           if (props.getData) {
@@ -380,6 +385,10 @@ const SingleTest = (props) => {
     } else {
       const res = () => {
         if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
+          if (!isExperienced) {
+            props.getResults(1);
+            setIsExperienced(true);
+          }
           setAnswerState("right");
           setInputColor("rgba(50, 172, 102, 0.25)");
         } else {
@@ -387,6 +396,7 @@ const SingleTest = (props) => {
           setInputColor("rgba(222, 107, 72, 0.5)");
         }
       };
+
       const res2 = await res();
     }
 
@@ -555,11 +565,8 @@ const SingleTest = (props) => {
             <Question inputColor={inputColor}>
               <div className="question_text">
                 {props.type != "FORM" && "🔎 " + "  " + t("wrong") + "..."}
-
-                {console.log("commentsList", commentsList)}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
-                    console.log(i, com);
                     return com ? renderHTML(com) : null;
                   })}
                 {/* {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "} */}

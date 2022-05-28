@@ -69,6 +69,7 @@ const Note = objectType({
     t.model.text();
     t.model.next();
     t.model.link_clicks();
+    t.model.isSecret();
     t.model.complexity();
     t.model.userId();
     t.model.lessonId();
@@ -129,6 +130,7 @@ const Problem = objectType({
     t.model.text();
     t.model.nodeType();
     t.model.complexity();
+    t.model.isSecret();
     t.model.nodeID();
     t.model.userId();
     t.model.lessonId();
@@ -273,6 +275,7 @@ const Chat = objectType({
     t.model.link_clicks();
     t.model.complexity();
     t.model.messages();
+    t.model.isSecret();
     t.model.lessonId();
     t.model.lesson();
     t.model.user();

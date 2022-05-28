@@ -193,6 +193,7 @@ export interface NexusGenInputs {
     complexity?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    isSecret?: NexusGenEnums['SortOrder'] | null; // SortOrder
     lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     link_clicks?: NexusGenEnums['SortOrder'] | null; // SortOrder
     messages?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -205,6 +206,7 @@ export interface NexusGenInputs {
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    isSecret?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     link_clicks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
@@ -796,6 +798,7 @@ export interface NexusGenInputs {
     examResult?: NexusGenInputs['ExamResultListRelationFilter'] | null; // ExamResultListRelationFilter
     forum?: NexusGenInputs['ForumWhereInput'] | null; // ForumWhereInput
     forumId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    hasSecret?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
@@ -824,6 +827,7 @@ export interface NexusGenInputs {
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
     textEditorResults?: NexusGenInputs['TextEditorResultListRelationFilter'] | null; // TextEditorResultListRelationFilter
     texteditors?: NexusGenInputs['TextEditorListRelationFilter'] | null; // TextEditorListRelationFilter
+    totalPoints?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -993,6 +997,7 @@ export interface NexusGenInputs {
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    isSecret?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1185,6 +1190,7 @@ export interface NexusGenInputs {
     hints?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     hintsList?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    isSecret?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     lessonID?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -1871,6 +1877,7 @@ export interface NexusGenObjects {
     complexity?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isSecret?: boolean | null; // Boolean
     lessonId: string; // String!
     link_clicks?: number | null; // Int
     messages?: NexusGenScalars['Json'] | null; // Json
@@ -2022,6 +2029,7 @@ export interface NexusGenObjects {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description?: string | null; // String
     forumId?: string | null; // String
+    hasSecret?: boolean | null; // Boolean
     id: string; // String!
     map: NexusGenScalars['Json'][]; // [Json!]!
     name: string; // String!
@@ -2031,6 +2039,7 @@ export interface NexusGenObjects {
     short_structure?: NexusGenScalars['Json'] | null; // Json
     structure?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
+    totalPoints?: number | null; // Int
     type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
@@ -2069,6 +2078,7 @@ export interface NexusGenObjects {
     complexity?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isSecret?: boolean | null; // Boolean
     lessonId?: string | null; // String
     lessonID?: string | null; // String
     link_clicks?: number | null; // Int
@@ -2115,6 +2125,7 @@ export interface NexusGenObjects {
     complexity?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isSecret?: boolean | null; // Boolean
     lessonId: string; // String!
     lessonID: string; // String!
     nodeID?: string | null; // String
@@ -2356,6 +2367,7 @@ export interface NexusGenFieldTypes {
     complexity: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isSecret: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonId: string; // String!
     link_clicks: number | null; // Int
@@ -2548,6 +2560,7 @@ export interface NexusGenFieldTypes {
     documents: NexusGenRootTypes['Document'][]; // [Document!]!
     forum: NexusGenRootTypes['Forum'] | null; // Forum
     forumId: string | null; // String
+    hasSecret: boolean | null; // Boolean
     id: string; // String!
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     map: NexusGenScalars['Json'][]; // [Json!]!
@@ -2570,6 +2583,7 @@ export interface NexusGenFieldTypes {
     text: string; // String!
     textEditorResults: NexusGenRootTypes['TextEditorResult'][]; // [TextEditorResult!]!
     texteditors: NexusGenRootTypes['TextEditor'][]; // [TextEditor!]!
+    totalPoints: number | null; // Int
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
@@ -2700,6 +2714,7 @@ export interface NexusGenFieldTypes {
     complexity: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isSecret: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonId: string | null; // String
     lessonID: string | null; // String
@@ -2752,6 +2767,7 @@ export interface NexusGenFieldTypes {
     complexity: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isSecret: boolean | null; // Boolean
     lesson: NexusGenRootTypes['Lesson']; // Lesson!
     lessonId: string; // String!
     lessonID: string; // String!
@@ -3061,6 +3077,7 @@ export interface NexusGenFieldTypeNames {
     complexity: 'Int'
     createdAt: 'DateTime'
     id: 'String'
+    isSecret: 'Boolean'
     lesson: 'Lesson'
     lessonId: 'String'
     link_clicks: 'Int'
@@ -3253,6 +3270,7 @@ export interface NexusGenFieldTypeNames {
     documents: 'Document'
     forum: 'Forum'
     forumId: 'String'
+    hasSecret: 'Boolean'
     id: 'String'
     lessonResults: 'LessonResult'
     map: 'Json'
@@ -3275,6 +3293,7 @@ export interface NexusGenFieldTypeNames {
     text: 'String'
     textEditorResults: 'TextEditorResult'
     texteditors: 'TextEditor'
+    totalPoints: 'Int'
     type: 'String'
     updatedAt: 'DateTime'
     user: 'User'
@@ -3405,6 +3424,7 @@ export interface NexusGenFieldTypeNames {
     complexity: 'Int'
     createdAt: 'DateTime'
     id: 'String'
+    isSecret: 'Boolean'
     lesson: 'Lesson'
     lessonId: 'String'
     lessonID: 'String'
@@ -3457,6 +3477,7 @@ export interface NexusGenFieldTypeNames {
     complexity: 'Int'
     createdAt: 'DateTime'
     id: 'String'
+    isSecret: 'Boolean'
     lesson: 'Lesson'
     lessonId: 'String'
     lessonID: 'String'
@@ -4211,6 +4232,7 @@ export interface NexusGenArgTypes {
     }
     updateChat: { // args
       id?: string | null; // String
+      isSecret?: boolean | null; // Boolean
       link_clicks?: number | null; // Int
       messages?: NexusGenInputs['Messages'] | null; // Messages
       name?: string | null; // String
@@ -4265,6 +4287,7 @@ export interface NexusGenArgTypes {
       challenge_num?: number | null; // Int
       change?: string | null; // String
       description?: string | null; // String
+      hasSecret?: boolean | null; // Boolean
       id?: string | null; // String
       name?: string | null; // String
       number?: number | null; // Int
@@ -4273,6 +4296,7 @@ export interface NexusGenArgTypes {
       structure?: NexusGenInputs['LessonStructure'] | null; // LessonStructure
       tariffs?: string | null; // String
       text?: string | null; // String
+      totalPoints?: number | null; // Int
       type?: string | null; // String
     }
     updateLessonResult: { // args
@@ -4295,6 +4319,7 @@ export interface NexusGenArgTypes {
     updateNote: { // args
       complexity?: number | null; // Int
       id?: string | null; // String
+      isSecret?: boolean | null; // Boolean
       link_clicks?: number | null; // Int
       next?: NexusGenInputs['NextType'] | null; // NextType
       text?: string | null; // String
@@ -4318,6 +4343,7 @@ export interface NexusGenArgTypes {
     updateProblem: { // args
       complexity?: number | null; // Int
       id?: string | null; // String
+      isSecret?: boolean | null; // Boolean
       nodeID?: string | null; // String
       nodeType?: string | null; // String
       text?: string | null; // String

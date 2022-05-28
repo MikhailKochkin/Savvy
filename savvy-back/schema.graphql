@@ -227,6 +227,7 @@ type Chat {
   complexity: Int
   createdAt: DateTime!
   id: String!
+  isSecret: Boolean
   lesson: Lesson!
   lessonId: String!
   link_clicks: Int
@@ -246,6 +247,7 @@ input ChatOrderByInput {
   complexity: SortOrder
   createdAt: SortOrder
   id: SortOrder
+  isSecret: SortOrder
   lessonId: SortOrder
   link_clicks: SortOrder
   messages: SortOrder
@@ -259,6 +261,7 @@ input ChatWhereInput {
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
+  isSecret: BoolNullableFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
   link_clicks: IntNullableFilter
@@ -1053,6 +1056,7 @@ type Lesson {
   documents(after: DocumentWhereUniqueInput, before: DocumentWhereUniqueInput, first: Int, last: Int): [Document!]!
   forum: Forum
   forumId: String
+  hasSecret: Boolean
   id: String!
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int): [LessonResult!]!
   map: [Json!]!
@@ -1075,6 +1079,7 @@ type Lesson {
   text: String!
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int): [TextEditorResult!]!
   texteditors(after: TextEditorWhereUniqueInput, before: TextEditorWhereUniqueInput, first: Int, last: Int): [TextEditor!]!
+  totalPoints: Int
   type: String
   updatedAt: DateTime!
   user: User!
@@ -1167,6 +1172,7 @@ input LessonWhereInput {
   examResult: ExamResultListRelationFilter
   forum: ForumWhereInput
   forumId: StringNullableFilter
+  hasSecret: BoolNullableFilter
   id: StringFilter
   image: StringNullableFilter
   lessonFeedback: FeedbackListRelationFilter
@@ -1195,6 +1201,7 @@ input LessonWhereInput {
   text: StringFilter
   textEditorResults: TextEditorResultListRelationFilter
   texteditors: TextEditorListRelationFilter
+  totalPoints: IntNullableFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1290,21 +1297,21 @@ type Mutation {
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
   updateBusinessClient(comment: String, id: String, tags: [String]): BusinessClient
-  updateChat(id: String, link_clicks: Int, messages: Messages, name: String): Chat
+  updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], complexity: Int, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
-  updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, type: String): Lesson
+  updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
-  updateNote(complexity: Int, id: String, link_clicks: Int, next: NextType, text: String): Note
+  updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
-  updateProblem(complexity: Int, id: String, nodeID: String, nodeType: String, text: String): Problem
+  updateProblem(complexity: Int, id: String, isSecret: Boolean, nodeID: String, nodeType: String, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
@@ -1496,6 +1503,7 @@ type Note {
   complexity: Int
   createdAt: DateTime!
   id: String!
+  isSecret: Boolean
   lesson: Lesson
   lessonId: String
   lessonID: String
@@ -1519,6 +1527,7 @@ input NoteWhereInput {
   complexity: IntNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
+  isSecret: BoolNullableFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
   lessonID: StringNullableFilter
@@ -1726,6 +1735,7 @@ type Problem {
   complexity: Int
   createdAt: DateTime!
   id: String!
+  isSecret: Boolean
   lesson: Lesson!
   lessonId: String!
   lessonID: String!
@@ -1810,6 +1820,7 @@ input ProblemWhereInput {
   hints: StringNullableFilter
   hintsList: StringNullableListFilter
   id: StringFilter
+  isSecret: BoolNullableFilter
   lesson: LessonWhereInput
   lessonId: StringFilter
   lessonID: StringFilter

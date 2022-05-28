@@ -320,6 +320,7 @@ class SingleProblem extends Component {
                           // call the mutation
                           if (this.state.answer !== "") {
                             const res = await createProblemResult();
+                            this.props.getResults(3);
                             const res2 = await this.setState({
                               showAnswerButton: true,
                             });

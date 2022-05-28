@@ -61,7 +61,9 @@ const shuffle = (array) => {
 const TestPractice = (props) => {
   let tests = [...props.tests];
   let quizes = [...props.quizes];
-
+  const passResult = (val) => {
+    props.getResults(3);
+  };
   let filtered_tests = tests.filter((t) =>
     props.testPractice.tasks.includes(t.id)
   );
@@ -101,6 +103,7 @@ const TestPractice = (props) => {
           <Block
             id={props.testPractice.id}
             tasks={sliced_tasks}
+            passResult={passResult}
             tasksNum={props.testPractice.tasksNum}
             lesson={props.lesson}
             me={props.me}

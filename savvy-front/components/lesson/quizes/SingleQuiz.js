@@ -266,6 +266,7 @@ const SingleQuiz = (props) => {
   const [showComment, setShowComment] = useState(false); // give the comment to the answer of the student
   const [progress, setProgress] = useState("false");
   const [inputColor, setInputColor] = useState("#f3f3f3");
+  const [isExperienced, setIsExperienced] = useState(false);
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
@@ -278,6 +279,10 @@ const SingleQuiz = (props) => {
     };
     if (props.check === "WORD") {
       if (props.answer.toLowerCase() === answer.toLowerCase()) {
+        if (!isExperienced) {
+          props.getResults(2);
+          setIsExperienced(true);
+        }
         setCorrect("true");
         setInputColor("rgba(50, 172, 102, 0.25)");
         onMove("true");
@@ -301,6 +306,10 @@ const SingleQuiz = (props) => {
         .then((res) => {
           console.log(res);
           if (parseFloat(res.res) > 65) {
+            if (!isExperienced) {
+              props.getResults(2);
+              setIsExperienced(true);
+            }
             console.log(res);
             setCorrect("true");
             setInputColor("rgba(50, 172, 102, 0.25)");

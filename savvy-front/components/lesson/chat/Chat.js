@@ -74,7 +74,7 @@ const Message = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-bottom: 20px;
-  opacity: 0;
+  opacity: 1;
   p {
     margin: 5px 0;
   }
@@ -142,6 +142,10 @@ const Message = styled.div`
   }
 `;
 
+const Messages = styled.div`
+  filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
+`;
+
 const IconBlock = styled.div`
   display: flex;
   flex-direction: column;
@@ -167,9 +171,86 @@ const IconBlock = styled.div`
   }
 `;
 
+const Secret = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  position: relative;
+  #open {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    position: absolute;
+    box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
+    -webkit-box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
+    -moz-box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
+    border-radius: 10px;
+    top: 150px;
+    left: 25%;
+    img {
+      width: 200px;
+      margin: 20px 0;
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+    }
+    img {
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+      animation: ${(props) => (props.shiver ? "shake 1s" : "none")};
+    }
+    @keyframes shake {
+      0% {
+        transform: translate(1px, 1px) rotate(0deg);
+      }
+      10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+      }
+      20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+      }
+      30% {
+        transform: translate(3px, 2px) rotate(0deg);
+      }
+      40% {
+        transform: translate(1px, -1px) rotate(1deg);
+      }
+      50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+      }
+      60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+      }
+      70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+      }
+      80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+      }
+      90% {
+        transform: translate(1px, 2px) rotate(0deg);
+      }
+      100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+      }
+    }
+    #button {
+      margin-bottom: 20px;
+      border: 1px solid #04377f;
+      padding: 5px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  }
+  /* justify-content: center; */
+`;
+
 const Chat = (props) => {
   const [update, setUpdate] = useState(false);
   const [clicks, setClicks] = useState(props.clicks);
+  const [isRevealed, setIsRevealed] = useState(!props.isSecret);
+  const [shiver, setShiver] = useState(false);
 
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] =
@@ -210,56 +291,137 @@ const Chat = (props) => {
       }}
     >
       {!story && <div>{name}</div>}
-      {!update &&
-        messages.messagesList.map((m, i) => {
-          if (m.author === "student") {
-            return (
-              <Message
-                id={"message" + i + id}
-                key={i}
-                time={i}
-                className="student"
-              >
-                <IconBlock>
-                  <img className="icon" src="../../static/flash.svg" />
-                  <div className="name">{me.name}</div>
-                </IconBlock>
-                <div className="student_text">{renderHTML(m.text)}</div>
-              </Message>
-            );
-          } else {
-            return (
-              <>
+      {!isRevealed && (
+        <Secret shiver={shiver}>
+          <Messages isRevealed={isRevealed}>
+            {!update &&
+              messages.messagesList.map((m, i) => {
+                if (m.author === "student") {
+                  return (
+                    <Message
+                      id={"message" + i + id}
+                      key={i}
+                      time={i}
+                      className="student"
+                    >
+                      <IconBlock>
+                        <img className="icon" src="../../static/flash.svg" />
+                        <div className="name">{me.name}</div>
+                      </IconBlock>
+                      <div className="student_text">{renderHTML(m.text)}</div>
+                    </Message>
+                  );
+                } else {
+                  return (
+                    <>
+                      <Message
+                        id={"message" + i + id}
+                        key={i}
+                        time={i}
+                        className="author"
+                      >
+                        <div className="author_text">{renderHTML(m.text)}</div>
+                        <IconBlock>
+                          {author && author.image != null ? (
+                            <img className="icon" src={author.image} />
+                          ) : (
+                            <img
+                              className="icon"
+                              src="../../static/hipster.svg"
+                            />
+                          )}
+                          <div className="name">
+                            {author && author.name ? author.name : "BeSavvy"}
+                          </div>
+                        </IconBlock>
+                      </Message>
+                      {m.reactions && m.reactions.length > 0 && (
+                        <Reaction
+                          reactions={m.reactions}
+                          me={me}
+                          author={author}
+                          initialQuestion={m.text}
+                        />
+                      )}
+                    </>
+                  );
+                }
+              })}
+          </Messages>
+          <div id="open">
+            <img src="static/lock.svg" />
+            <div
+              id="button"
+              onClick={(e) => {
+                if (props.experience >= props.total) {
+                  setIsRevealed(true);
+                } else {
+                  setShiver(true);
+                  setTimeout(() => {
+                    setShiver(false);
+                  }, 1000);
+                }
+              }}
+            >
+              Открыть материал
+            </div>
+          </div>
+        </Secret>
+      )}
+      {isRevealed && !update && (
+        <Messages isRevealed={isRevealed}>
+          {messages.messagesList.map((m, i) => {
+            if (m.author === "student") {
+              return (
                 <Message
                   id={"message" + i + id}
                   key={i}
                   time={i}
-                  className="author"
+                  className="student"
                 >
-                  <div className="author_text">{renderHTML(m.text)}</div>
                   <IconBlock>
-                    {author && author.image != null ? (
-                      <img className="icon" src={author.image} />
-                    ) : (
-                      <img className="icon" src="../../static/hipster.svg" />
-                    )}
-                    <div className="name">
-                      {author && author.name ? author.name : "BeSavvy"}
-                    </div>
+                    <img className="icon" src="../../static/flash.svg" />
+                    <div className="name">{me.name}</div>
                   </IconBlock>
+                  <div className="student_text">{renderHTML(m.text)}</div>
                 </Message>
-                {m.reactions && m.reactions.length > 0 && (
-                  <Reaction
-                    reactions={m.reactions}
-                    me={me}
-                    author={author}
-                    initialQuestion={m.text}
-                  />
-                )}
-              </>
-            );
-          }
-        })}
+              );
+            } else {
+              return (
+                <>
+                  <Message
+                    id={"message" + i + id}
+                    key={i}
+                    time={i}
+                    className="author"
+                  >
+                    <div className="author_text">{renderHTML(m.text)}</div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </Message>
+                  {m.reactions && m.reactions.length > 0 && (
+                    <Reaction
+                      reactions={m.reactions}
+                      me={me}
+                      author={author}
+                      initialQuestion={m.text}
+                    />
+                  )}
+                </>
+              );
+            }
+          })}
+        </Messages>
+      )}
+
       {!story && (
         <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
       )}
@@ -271,6 +433,7 @@ const Chat = (props) => {
           id={id}
           name={name}
           me={me}
+          isSecret={props.isSecret}
           messages={messages}
           lessonId={lessonId}
         />

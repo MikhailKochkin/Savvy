@@ -6,8 +6,18 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_NOTE_MUTATION = gql`
-  mutation UPDATE_NOTE_MUTATION($id: String!, $text: String, $complexity: Int) {
-    updateNote(id: $id, text: $text, complexity: $complexity) {
+  mutation UPDATE_NOTE_MUTATION(
+    $id: String!
+    $text: String
+    $complexity: Int
+    $isSecret: Boolean
+  ) {
+    updateNote(
+      id: $id
+      text: $text
+      complexity: $complexity
+      isSecret: $isSecret
+    ) {
       id
       text
       next
@@ -99,6 +109,7 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 const UpdateNote = (props) => {
   const [text, setText] = useState(props.text);
   const [show, setShow] = useState(false);
+  const [isSecret, setIsSecret] = useState(props.isSecret);
 
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
@@ -122,6 +133,13 @@ const UpdateNote = (props) => {
             <option value={4}>4</option>
             <option value={5}>5</option>
           </select>
+          <select
+            defaultValue={isSecret}
+            onChange={(e) => setIsSecret(e.target.value == "true")}
+          >
+            <option value={"true"}>Секретный</option>
+            <option value={"false"}>Открытый</option>
+          </select>
         </Complexity>
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
         <button>
@@ -142,6 +160,7 @@ const UpdateNote = (props) => {
             id,
             text,
             complexity,
+            isSecret,
           }}
           refetchQueries={() => [
             {

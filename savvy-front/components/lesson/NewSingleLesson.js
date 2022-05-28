@@ -27,6 +27,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       short_structure
       change
       open
+      totalPoints
+      hasSecret
       # lessonResults {
       #   id
       #   student {
@@ -45,6 +47,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         link_clicks
         text
+        isSecret
         complexity
         next
         user {
@@ -54,6 +57,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       chats {
         id
         name
+        isSecret
         link_clicks
         complexity
         messages

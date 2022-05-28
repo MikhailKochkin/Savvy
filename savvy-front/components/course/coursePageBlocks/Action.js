@@ -757,8 +757,8 @@ const Action = (props) => {
                                   email,
                                   name: name + " " + surname,
                                   number,
-                                  communication_medium: props.data.price.course,
-                                  comment: "Консультация",
+                                  communication_medium: "Consultation",
+                                  comment: "consult",
                                 },
                               });
                               Router.push({
@@ -1004,7 +1004,7 @@ const Action = (props) => {
                                 name: name + " " + surname,
                                 number,
                                 communication_medium: "Legal English Intro",
-                                comment: "Консультация",
+                                comment: "consult",
                               },
                             });
                             Router.push({

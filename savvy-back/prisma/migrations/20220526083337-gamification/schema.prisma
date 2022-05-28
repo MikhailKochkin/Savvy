@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -419,7 +419,7 @@ model Note {
   lessonID   String?  @default(cuid())
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
-  isSecret  Boolean? @default(false)
+  hasSecret  Boolean? @default(false)
   next       Json?
   userId     String?
   lessonId   String?
@@ -472,7 +472,7 @@ model Problem {
   lessonID       String          @default(cuid())
   nodeType       String?
   nodeID         String?         @default(cuid())
-  isSecret      Boolean?        @default(false)
+  hasSecret      Boolean?        @default(false)
   hintsList      String[]
   solutionList   String[]
   userId         String
@@ -792,7 +792,7 @@ model Chat {
   link_clicks     Int?     @default(0)
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
-  isSecret  Boolean? @default(false)
+  hasSecret  Boolean? @default(false)
   userId     String
   lessonId   String
   complexity Int?     @default(1)

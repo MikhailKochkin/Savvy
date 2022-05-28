@@ -21,6 +21,8 @@ const UPDATE_LESSON_MUTATION = gql`
     $assignment: Boolean
     $challenge_num: Int
     $open: Boolean
+    $hasSecret: Boolean
+    $totalPoints: Int
   ) {
     updateLesson(
       id: $id
@@ -33,6 +35,8 @@ const UPDATE_LESSON_MUTATION = gql`
       assignment: $assignment
       challenge_num: $challenge_num
       open: $open
+      hasSecret: $hasSecret
+      totalPoints: $totalPoints
     ) {
       id
     }
@@ -191,6 +195,22 @@ export default class UpdateLesson extends Component {
               name="number"
               placeholder="Номер урока"
               defaultValue={lesson.number}
+              onChange={this.handleNumber}
+            />
+            <select
+              name="hasSecret"
+              defaultValue={lesson.hasSecret === true}
+              onChange={this.handleBoolean}
+            >
+              <option value={true}>Has Secret</option>
+              <option value={false}>No Secret</option>
+            </select>
+            <input
+              type="number"
+              id="totalPoints"
+              name="totalPoints"
+              placeholder="# для открытия секретоов"
+              defaultValue={lesson.totalPoints}
               onChange={this.handleNumber}
             />
 

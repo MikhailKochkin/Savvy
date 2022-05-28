@@ -253,6 +253,7 @@ const SingleConstructor = (props) => {
           }
         });
         if (correct === answer.length) {
+          props.getResults(2);
           showRight();
         } else {
           showWrong();
@@ -268,6 +269,7 @@ const SingleConstructor = (props) => {
       });
 
       if (JSON.stringify(answer) == JSON.stringify(received)) {
+        props.getResults(2);
         setAnswerState("right");
         showRight();
       } else {

@@ -226,6 +226,10 @@ const Element = (props) => {
     CREATE_TEST_PRACTICE_RESULT_MUTATION
   );
 
+  const getResults = (res) => {
+    return;
+  };
+
   let tasks_array = props.tasks.map((t) => t.id);
   useInterval(() => {
     // Your custom logic here
@@ -253,6 +257,7 @@ const Element = (props) => {
         results={props.results}
         wrong={wrong}
         right={right}
+        passResult={props.passResult}
         answers={answers}
         time={time}
         me={props.me}
@@ -279,6 +284,7 @@ const Element = (props) => {
         question={task.question}
         answers={task.answers}
         true={task.correct}
+        getResults={getResults}
         author={props.lesson.user}
         type={task.type}
         test={task}
@@ -302,6 +308,7 @@ const Element = (props) => {
         question={task.question}
         answer={task.answer}
         me={props.me}
+        getResults={getResults}
         type={task.type}
         check={task.check}
         hidden={true}
@@ -354,6 +361,7 @@ const Element = (props) => {
                 setAnswers([...answers, false]);
               }
               if (activeStep + 1 == props.tasksNum) {
+                props.passResult(3);
                 const res = await createTestPracticeResult({
                   variables: {
                     tasks: tasks_array,

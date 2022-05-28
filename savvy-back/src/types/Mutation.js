@@ -564,6 +564,8 @@ const Mutation = mutationType({
         change: stringArg(),
         assignment: booleanArg(),
         challenge_num: intArg(),
+        totalPoints: intArg(),
+        hasSecret: booleanArg(),
         open: booleanArg(),
         structure: arg({
           type: "LessonStructure",
@@ -981,6 +983,7 @@ const Mutation = mutationType({
         id: stringArg(),
         text: stringArg(),
         link_clicks: intArg(),
+        isSecret: booleanArg(),
         complexity: intArg(),
         next: arg({
           type: "NextType", // name should match the name you provided
@@ -1067,6 +1070,7 @@ const Mutation = mutationType({
         id: stringArg(),
         name: stringArg(),
         link_clicks: intArg(),
+        isSecret: booleanArg(),
         messages: arg({
           type: "Messages",
         }),
@@ -1400,6 +1404,7 @@ const Mutation = mutationType({
         nodeID: stringArg(),
         nodeType: stringArg(),
         complexity: intArg(),
+        isSecret: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -2679,6 +2684,17 @@ const Mutation = mutationType({
             ...args,
           },
         });
+
+        if (args.comment == "consult") {
+          const newEmail = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: "Mikhail@besavvy.app",
+            Subject: "Новая заявка на курс",
+            HtmlBody: makeANiceEmail(
+              `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
+            ),
+          });
+        }
 
         return new_client;
       },

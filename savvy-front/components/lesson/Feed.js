@@ -347,8 +347,9 @@ const Content = styled.div`
     justify-content: center;
     transition: 0.5s;
     position: fixed;
+    transition: 0.3s ease;
     background: ${(props) => {
-      if (props.angle == 360) {
+      if (props.angle >= 360) {
         return `conic-gradient(#ffb703 0deg ${props.angle + "deg"}, #ade8f4 ${
           props.angle + "deg"
         } 360deg)`;
@@ -372,7 +373,7 @@ const Content = styled.div`
       height: 55px;
       border-radius: 50%;
       border: 1px solid black;
-      background: ${(props) => (props.angle == 360 ? "#fff" : "#dcf0f4")};
+      background: ${(props) => (props.angle >= 360 ? "#fff" : "#dcf0f4")};
 
       display: flex;
       flex-direction: row;
@@ -489,7 +490,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Feed = (props) => {
   const [open, setOpen] = useState(false);
-  const [experience, setExperience] = useState(0);
   const [num, setNum] = useState(
     props.my_result &&
       props.my_result.progress !== null &&
@@ -500,10 +500,11 @@ const Feed = (props) => {
   );
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
-  const total = 5;
   const classes = useStyles();
   const { t } = useTranslation("lesson");
-
+  const getResults = (el) => {
+    console.log("res2", el);
+  };
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
@@ -613,28 +614,29 @@ const Feed = (props) => {
   } else {
     color = "#55a630";
   }
-  console.log("angle", experience * (360 / total));
   return (
     <>
       <Styles>
         <Content
           open={open}
           className="second"
-          angle={experience * (360 / total)}
+          angle={props.experience * (360 / props.total)}
         >
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
             </div>
           </Message>
-          <div
-            className="arrowmenu2"
-            onClick={(e) => {
-              setOpen(!open);
-            }}
-          >
-            <div className="inner">{experience}</div>
-          </div>
+          {props.hasSecret && (
+            <div
+              className="arrowmenu2"
+              onClick={(e) => {
+                setOpen(!open);
+              }}
+            >
+              <div className="inner">{props.experience}</div>
+            </div>
+          )}
           <div
             className="arrowmenu"
             onClick={(e) => {
@@ -677,7 +679,6 @@ const Feed = (props) => {
                                   if (props.my_result.progress < num + 2) {
                                     let res = updateLessonResult();
                                   }
-                                  setExperience(experience + 1);
                                   let res2 = move();
                                 }}
                               >

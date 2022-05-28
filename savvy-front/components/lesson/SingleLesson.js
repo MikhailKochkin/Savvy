@@ -49,6 +49,8 @@ const SINGLE_LESSON_QUERY = gql`
       description
       open
       type
+      totalPoints
+      hasSecret
       challenge_num
       createdAt
       structure
@@ -137,6 +139,7 @@ const SINGLE_LESSON_QUERY = gql`
         id
         link_clicks
         complexity
+        isSecret
         text
         next
         user {
@@ -146,6 +149,7 @@ const SINGLE_LESSON_QUERY = gql`
       chats {
         id
         name
+        isSecret
         link_clicks
         complexity
         messages
@@ -680,6 +684,7 @@ const SingleLesson = (props) => {
                           <Chat
                             name={c.name}
                             me={me}
+                            isSecret={c.isSecret}
                             user={lesson.user.id}
                             messages={c.messages}
                             id={c.id}

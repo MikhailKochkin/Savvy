@@ -382,6 +382,7 @@ class SingleTextEditor extends Component {
           this.setState({
             result: true,
           });
+          this.props.getResults(1);
           el.style.background = "#D9EAD3";
           e.target.innerHTML = "Check";
         } else {

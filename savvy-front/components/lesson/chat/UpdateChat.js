@@ -8,8 +8,9 @@ const UPDATE_CHAT_MUTATION = gql`
     $id: String!
     $name: String!
     $messages: Messages!
+    $isSecret: Boolean
   ) {
-    updateChat(id: $id, name: $name, messages: $messages) {
+    updateChat(id: $id, name: $name, messages: $messages, isSecret: $isSecret) {
       id
     }
   }
@@ -44,9 +45,10 @@ const UpdateChat = (props) => {
   const [name, setName] = useState(props.name);
   const [messages, setMessages] = useState(props.messages.messagesList);
   const [num, setNum] = useState(props.messages.messagesList.length);
+  const [isSecret, setIsSecret] = useState(props.isSecret);
+
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
-
   const getMessage = (data) => {
     let old_messages = [...messages];
     old_messages.splice(data.number - 1, 1, data);
@@ -61,6 +63,13 @@ const UpdateChat = (props) => {
         onChange={(e) => setName(e.target.value)}
       />
       <br />
+      <select
+        defaultValue={isSecret}
+        onChange={(e) => setIsSecret(e.target.value == "true")}
+      >
+        <option value={"true"}>Секретный</option>
+        <option value={"false"}>Открытый</option>
+      </select>
       {props.messages.messagesList.map((m, i) => (
         <UpdateMessage
           index={i + 1}
@@ -83,6 +92,7 @@ const UpdateChat = (props) => {
               id: props.id,
               messages: { messagesList: messages },
               name,
+              isSecret,
             },
           });
           alert("Готово!");

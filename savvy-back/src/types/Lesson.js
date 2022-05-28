@@ -10,6 +10,8 @@ const Lesson = objectType({
     t.model.type();
     t.model.description();
     t.model.open();
+    t.model.hasSecret();
+    t.model.totalPoints();
     t.model.coursePageID();
     t.model.change();
     t.model.challenge_num();

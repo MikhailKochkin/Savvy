@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
@@ -19,101 +19,6 @@ import Exam from "./exams/Exam";
 import Feed from "./Feed";
 import LessonHeader from "./LessonHeader";
 import TestPractice from "./testblocks/TB";
-
-// const GET_RESULTS = gql`
-//   query stats($lessonId: String!, $userId: String!) {
-//     stats(lessonId: $lessonId, userId: $userId) {
-//       testResults {
-//         id
-//         answer
-//         test {
-//           id
-//           question
-//         }
-//         student {
-//           id
-//           name
-//           surname
-//         }
-//         createdAt
-//       }
-//       quizResults {
-//         id
-//         correct
-//         student {
-//           id
-//           name
-//           surname
-//         }
-//         quiz {
-//           id
-//         }
-//         answer
-//         createdAt
-//       }
-//       textEditorResults {
-//         id
-//         wrong
-//         correct
-//         guess
-//         attempts
-//         student {
-//           id
-//         }
-//         textEditor {
-//           id
-//         }
-//         createdAt
-//       }
-//       problemResults {
-//         id
-//         answer
-//         lesson {
-//           id
-//         }
-//         problem {
-//           id
-//         }
-//         student {
-//           id
-//           name
-//           surname
-//         }
-//         revealed
-//         createdAt
-//       }
-//       constructionResults {
-//         id
-//         answer
-//         inputs
-//         attempts
-//         construction {
-//           id
-//         }
-//         student {
-//           id
-//           name
-//           surname
-//         }
-//         construction {
-//           id
-//         }
-//       }
-//       documentResults {
-//         id
-//         user {
-//           id
-//         }
-//         document {
-//           id
-//         }
-//         answers
-//         drafts
-//         createdAt
-//       }
-//     }
-//   }
-// `;
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
@@ -166,6 +71,15 @@ const Progress = styled.div`
 
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
+  const [experience, setExperience] = useState(0);
+
+  const total = props.lesson.totalPoints;
+
+  const getResults = (res) => {
+    // if (experience <= total) {
+    setExperience(experience + res);
+    // }
+  };
 
   const [
     fetchQuery,
@@ -212,6 +126,8 @@ const StoryEx = (props) => {
           text={el.text}
           me={me}
           id={el.id}
+          experience={experience}
+          total={total}
           author={lesson.user}
           story={true}
           note={el}
@@ -226,6 +142,7 @@ const StoryEx = (props) => {
         <SingleTest
           key={el.id}
           id={el.id}
+          getResults={getResults}
           testID={el.id}
           author={lesson.user}
           complexity={el.complexity}
@@ -252,6 +169,7 @@ const StoryEx = (props) => {
           key={el.id}
           id={el.id}
           complexity={el.complexity}
+          getResults={getResults}
           question={el.question}
           answer={el.answer}
           type={el.type}
@@ -275,6 +193,7 @@ const StoryEx = (props) => {
         <TestPractice
           key={el.id}
           lessonID={lesson.id}
+          getResults={getResults}
           me={me}
           testPractice={el}
           quizes={lesson.quizes}
@@ -307,6 +226,9 @@ const StoryEx = (props) => {
         <Chat
           key={el.id}
           name={el.name}
+          isSecret={el.isSecret}
+          experience={experience}
+          total={total}
           clicks={el.link_clicks}
           me={me}
           author={lesson.user}
@@ -342,6 +264,7 @@ const StoryEx = (props) => {
           key={el.id}
           problem={el}
           complexity={el.complexity}
+          getResults={getResults}
           lessonID={lesson.id}
           me={me}
           story={true}
@@ -357,6 +280,7 @@ const StoryEx = (props) => {
           key={el.id}
           lessonID={lesson.id}
           complexity={el.complexity}
+          getResults={getResults}
           textEditor={el}
           me={me}
           story={true}
@@ -370,6 +294,7 @@ const StoryEx = (props) => {
           key={el.id}
           lessonID={lesson.id}
           complexity={el.complexity}
+          getResults={getResults}
           construction={el}
           variants={el.variants}
           me={me}
@@ -427,10 +352,13 @@ const StoryEx = (props) => {
         {me && (
           <Feed
             components={components}
+            experience={experience}
+            total={total}
             next={next}
             number_of_tasks={tasks.length}
             coursePageID={coursePageID}
             me={me}
+            hasSecret={lesson.hasSecret}
             lesson_number={lesson.number}
             lesson_name={lesson.name}
             lessonID={lesson.id}

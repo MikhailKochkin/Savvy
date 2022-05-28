@@ -100,11 +100,86 @@ const Container = styled.div`
   }
 `;
 
+const Secret = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  position: relative;
+
+  #open {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    position: absolute;
+    border: 1px solid #04377f;
+    border-radius: 10px;
+    top: 150px;
+    left: 25%;
+    img {
+      width: 200px;
+      margin: 20px 0;
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+    }
+    img {
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+      animation: ${(props) => (props.shiver ? "shake 1s" : "none")};
+    }
+    @keyframes shake {
+      0% {
+        transform: translate(1px, 1px) rotate(0deg);
+      }
+      10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+      }
+      20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+      }
+      30% {
+        transform: translate(3px, 2px) rotate(0deg);
+      }
+      40% {
+        transform: translate(1px, -1px) rotate(1deg);
+      }
+      50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+      }
+      60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+      }
+      70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+      }
+      80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+      }
+      90% {
+        transform: translate(1px, 2px) rotate(0deg);
+      }
+      100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+      }
+    }
+    #button {
+      margin-bottom: 20px;
+      border: 1px solid #04377f;
+      padding: 5px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  }
+  /* justify-content: center; */
+`;
+
 const NoteStyles = styled.div`
   max-width: 540px;
   background: #fff;
   margin: 2% 0 0 0;
   font-size: 1.6rem;
+  filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
   @media (max-width: 800px) {
     font-size: 1.6rem;
     width: 100%;
@@ -215,6 +290,8 @@ const Note = (props) => {
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
   const [clicks, setClicks] = useState(props.clicks);
+  const [isRevealed, setIsRevealed] = useState(!props.note.isSecret);
+  const [shiver, setShiver] = useState(false);
 
   useEffect(() => {
     let el = document.getElementById("wide");
@@ -231,8 +308,6 @@ const Note = (props) => {
 
     let el2 = document.getElementById("blackvideo");
     if (el2 && props.story) {
-      console.log(2, el2);
-
       let video_div = document.createElement("div");
       let new_video = document.createElement("iframe");
       new_video.src = el2.src;
@@ -243,11 +318,9 @@ const Note = (props) => {
 
       video_div.className = "black_back";
       video_div.appendChild(new_video);
-      console.log(video_div);
       el2.remove();
       const box = document.getElementById(props.id);
       box.prepend(video_div);
-      console.log(box);
     }
   });
 
@@ -280,7 +353,6 @@ const Note = (props) => {
   } else {
     width = "90%";
   }
-  console.log("clicks", props.clicks);
   return (
     <>
       <Buttons>
@@ -297,7 +369,38 @@ const Note = (props) => {
         <Container id={id} width={width}>
           <div className="text">
             {!update && (
-              <NoteStyles story={story}>{renderHTML(text)}</NoteStyles>
+              <>
+                {isRevealed && (
+                  <NoteStyles story={story} isRevealed={isRevealed}>
+                    {renderHTML(text)}
+                  </NoteStyles>
+                )}
+                {!isRevealed && (
+                  <Secret shiver={shiver}>
+                    <NoteStyles story={story} isRevealed={isRevealed}>
+                      {renderHTML(text)}
+                    </NoteStyles>
+                    <div id="open">
+                      <img src="static/lock.svg" />
+                      <div
+                        id="button"
+                        onClick={(e) => {
+                          if (props.experience >= props.total) {
+                            setIsRevealed(true);
+                          } else {
+                            setShiver(true);
+                            setTimeout(() => {
+                              setShiver(false);
+                            }, 1000);
+                          }
+                        }}
+                      >
+                        Открыть материал
+                      </div>
+                    </div>
+                  </Secret>
+                )}
+              </>
             )}
             {getData && (
               <div className="arrow_box" onClick={(e) => push()}>
@@ -323,6 +426,7 @@ const Note = (props) => {
       {update && !story && !exam && (
         <UpdateNote
           text={text}
+          isSecret={note.isSecret}
           complexity={complexity}
           id={id}
           next={props.next}
