@@ -555,14 +555,12 @@ const Action = (props) => {
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   const addPromo = (val) => {
-    if (
-      val.toLowerCase() ==
-        props.coursePage.promocode.promocodes[0].name?.toLowerCase() &&
-      isPromo == false
-    ) {
-      setPrice(price * props.coursePage.promocode.promocodes[0].value);
-      setIsPromo(true);
-    }
+    props.coursePage.promocode.promocodes.map((p) => {
+      if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
+        setPrice(price * p.value);
+        setIsPromo(true);
+      }
+    });
   };
 
   const numberWithSpaces = (x) => {

@@ -12,6 +12,14 @@ const CREATE_CHAT_MUTATION = gql`
   ) {
     createChat(name: $name, messages: $messages, lessonId: $lessonId) {
       id
+      name
+      isSecret
+      link_clicks
+      complexity
+      messages
+      user {
+        id
+      }
     }
   }
 `;
@@ -100,7 +108,7 @@ const CreateChat = (props) => {
                 },
               ],
             });
-            console.log("messages", messages);
+            props.getResult(res);
             alert("Готово!");
           }}
         >

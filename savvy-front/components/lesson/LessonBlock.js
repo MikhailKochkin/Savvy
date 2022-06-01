@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateNewTest from "../create/CreateNewTest";
 import SingleTest from "./tests/SingleTest";
 import styled from "styled-components";
 
 import CreateQuiz from "../create/CreateQuiz";
+import SingleQuiz from "./quizes/SingleQuiz";
+
 import CreateTestBlock from "./testblocks/CreateTestBlock";
 import CreateShot from "../create/CreateShot";
 import CreateConstructor from "../create/CreateConstructor";
@@ -13,6 +15,8 @@ import CreateNote from "../create/CreateNote";
 import Note from "./notes/Note";
 
 import CreateChat from "./chat/CreateChat";
+import Chat from "./chat/Chat";
+
 import ChangeForum from "./forum/ChangeForum";
 import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import SingleLesson_Menu from "./SingleLesson_Menu";
@@ -41,17 +45,23 @@ const LessonBlock = (props) => {
       setData(res.data.createNewTest);
       setType("NewTest");
       setIdNum(res.data.createNewTest.id);
+    } else if (res.data.createQuiz) {
+      setData(res.data.createQuiz);
+      setType("Quiz");
+      setIdNum(res.data.createQuiz.id);
+    } else if (res.data.createChat) {
+      setData(res.data.createChat);
+      setType("Chat");
+      setIdNum(res.data.createChat.id);
     }
     setSaved(true);
   };
   const isSaved = () => {};
   return (
     <Styles id={props.id}>
-      {console.log("data", data.__typename)}
-      {console.log("el.type", el.type)}
       {el.type == "Note" && (
         <>
-          {!saved && d == null && (
+          {!saved && el.id == undefined && (
             <CreateNote
               lessonID={lesson.id}
               getResult={getResult}
@@ -72,9 +82,9 @@ const LessonBlock = (props) => {
           )}
         </>
       )}
-      {el.type == "NewTest" && <CreateNewTest lessonID={lesson.id} /> && (
+      {el.type == "NewTest" && (
         <>
-          {!saved && d == null && data.__typename == "NewTest" && (
+          {!saved && d == null && (
             <CreateNewTest
               lessonID={lesson.id}
               getResult={getResult}
@@ -82,7 +92,7 @@ const LessonBlock = (props) => {
             />
           )}
 
-          {(saved || d != null) && (
+          {(saved || d != null) && data.__typename == "NewTest" && (
             <SingleTest
               id={data.id}
               testID={data.id}
@@ -103,9 +113,62 @@ const LessonBlock = (props) => {
           )}
         </>
       )}
-      {el == "quiz" && <CreateQuiz lessonID={lesson.id} />}
+      {el.type == "Quiz" && (
+        <>
+          {!saved && d == null && (
+            <CreateQuiz
+              lessonID={lesson.id}
+              getResult={getResult}
+              isSaved={isSaved}
+            />
+          )}
+          {console.log("data", data)}
+          {(saved || d != null) && data.__typename == "Quiz" && (
+            <SingleQuiz
+              id={data.id}
+              testID={data.id}
+              question={data.question}
+              type={data.type}
+              answers={data.answers}
+              true={data.correct}
+              comments={data.comments}
+              complexity={data.complexity}
+              ifRight={data.ifRight}
+              ifWrong={data.ifWrong}
+              next={data.next}
+              user={data.user.id}
+              user_name={data.user}
+              me={me}
+              lessonID={lesson.id}
+            />
+          )}
+        </>
+      )}
+
+      {el.type == "Chat" && (
+        <>
+          {!saved && d == null && (
+            <CreateChat
+              lessonID={lesson.id}
+              getResult={getResult}
+              isSaved={isSaved}
+            />
+          )}
+          {(saved || d != null) && data.__typename == "Chat" && (
+            <Chat
+              name={data.name}
+              me={me}
+              isSecret={data.isSecret}
+              user={lesson.user.id}
+              messages={data.messages}
+              id={data.id}
+              lessonID={lesson.id}
+            />
+          )}
+        </>
+      )}
       <button onClick={(e) => props.remove(idNum)}>Remove</button>
-      <button onClick={(e) => props.addToLesson(type, idNum, id)}>
+      <button onClick={(e) => props.addToLesson(type, idNum, index)}>
         Добавить в урок
       </button>
       <button onClick={(e) => props.addPlace(idNum)}>

@@ -72,6 +72,8 @@ const LessonBuilder = (props) => {
         setElements([...elements, { id: undefined, type: "NewTest" }]);
       } else if (type == "quiz") {
         setElements([...elements, { id: undefined, type: "Quiz" }]);
+      } else if (type == "chat") {
+        setElements([...elements, { id: undefined, type: "Chat" }]);
       }
     } else {
       let new_elements = [...elements];
@@ -87,6 +89,9 @@ const LessonBuilder = (props) => {
         setElements([...new_elements]);
       } else if (type == "quiz") {
         new_elements.splice(index + 1, 0, { id: undefined, type: "Quiz" });
+        setElements([...new_elements]);
+      } else if (type == "chat") {
+        new_elements.splice(index + 1, 0, { id: undefined, type: "Chat" });
         setElements([...new_elements]);
       }
     }
@@ -105,11 +110,9 @@ const LessonBuilder = (props) => {
 
   const addToLesson = (type, id, num) => {
     let new_list = elements;
-    console.log(1, new_list, num);
-    console.log(2, new_list[num], new_list[num]);
     new_list[num].id = id;
-    console.log(3, new_list);
     setElements([...new_list]);
+    console.log(3, new_list);
   };
 
   const addPlace = (id) => {
@@ -120,19 +123,6 @@ const LessonBuilder = (props) => {
 
   return (
     <Styles>
-      <button
-        onClick={(e) => {
-          updateLesson({
-            variables: {
-              id: props.lesson.id,
-              structure: { lessonItems: elements },
-            },
-          });
-          alert("Готово");
-        }}
-      >
-        Сохраннить урок
-      </button>
       <Container>
         <BuilderPart>
           {elements.map((el, i) => {
@@ -142,11 +132,16 @@ const LessonBuilder = (props) => {
               d = lesson.notes.find((n) => n.id == el.id);
             } else if (el.type == "NewTest") {
               d = lesson.newTests.find((n) => n.id == el.id);
+            } else if (el.type == "Quiz") {
+              d = lesson.quizes.find((n) => n.id == el.id);
+            } else if (el.type == "Chat") {
+              d = lesson.chats.find((n) => n.id == el.id);
             } else {
               d = null;
             }
             return (
               <LessonBlock
+                key={el.id}
                 id={el.id}
                 d={d}
                 index={i}
@@ -164,11 +159,27 @@ const LessonBuilder = (props) => {
         </BuilderPart>
         <Menu>
           <Sticky>
+            <button
+              onClick={(e) => {
+                updateLesson({
+                  variables: {
+                    id: props.lesson.id,
+                    structure: {
+                      lessonItems: elements.filter((el) => el.id != undefined),
+                    },
+                  },
+                });
+                alert("Готово");
+              }}
+            >
+              Сохранить урок
+            </button>
             <button onClick={(e) => addBlock("longread")}>
               Добавить лонгрид
             </button>
             <button onClick={(e) => addBlock("test")}>Добавить тест</button>
             <button onClick={(e) => addBlock("quiz")}>Добавить вопрос</button>
+            <button onClick={(e) => addBlock("chat")}>Добавить диалог</button>
           </Sticky>
         </Menu>
       </Container>

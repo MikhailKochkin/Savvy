@@ -24,6 +24,20 @@ const CREATE_QUIZ_MUTATION = gql`
       type: $type
     ) {
       id
+      question
+      type
+      complexity
+      check
+      ifRight
+      ifWrong
+      answer
+      next
+      createdAt
+      user {
+        id
+        name
+        surname
+      }
     }
   }
 `;
@@ -141,26 +155,13 @@ const CreateQuiz = (props) => {
           <Form
             onSubmit={async (e) => {
               e.preventDefault();
-              console.log(1);
               document.getElementById("Message").style.display = "block";
-              setTimeout(function () {
-                document.getElementById("Message")
-                  ? (document.getElementById("Message").style.display = "none")
-                  : "none";
-              }, 1500);
-              console.log(2);
               const res = await createQuiz();
-              console.log(res);
+              props.getResult(res);
             }}
           >
             <fieldset>
               <Answers>
-                <Advice>
-                  Создайте новый вопрос. Введите сам вопрос, ответ на него, а
-                  также (при необходимости) пояснения на случай правильного и
-                  неправильного ответов.
-                </Advice>
-                <Title>Новый вопрос</Title>
                 <label for="types">Тип задания</label>
                 <select
                   name="types"
