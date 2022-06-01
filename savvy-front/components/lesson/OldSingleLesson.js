@@ -650,10 +650,218 @@ const SingleLesson = (props) => {
                       </Head2>
                     )}
 
+                  {/* <Button onClick={(e) => setIsMenuShown(!isMenuShown)}>
+                    {isMenuShown ? "Скрыть меню" : "Показать меню"}
+                  </Button> */}
                   <LessonStyles>
                     <LessonPart>
-                      <LessonBuilder lesson={lesson} me={me} />
+                      {page === "lesson" && (
+                        <TextBar>
+                          <HowTo getLink={getLink} />
+                          <Text>{renderHTML(lesson.text)}</Text>
+                        </TextBar>
+                      )}
+                      {page === "note" &&
+                        [...lesson.notes]
+                          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+                          .map((note) => (
+                            <Note
+                              text={note.text}
+                              me={me}
+                              clicks={note.link_clicks}
+                              user={lesson.user.id}
+                              note={note}
+                              id={note.id}
+                              complexity={note.complexity}
+                              next={note.next}
+                              quizes={lesson.quizes}
+                              notes={lesson.notes}
+                              tests={lesson.newTests}
+                              lessonID={lesson.id}
+                            />
+                          ))}
+                      {page === "chat" &&
+                        lesson.chats.map((c) => (
+                          <Chat
+                            name={c.name}
+                            me={me}
+                            isSecret={c.isSecret}
+                            user={lesson.user.id}
+                            messages={c.messages}
+                            id={c.id}
+                            lessonID={lesson.id}
+                          />
+                        ))}
+                      {page === "document" &&
+                        lesson.documents.map((doc) => (
+                          <Document
+                            clauses={doc.clauses}
+                            title={doc.title}
+                            me={me}
+                            documentID={doc.id}
+                            user={lesson.user.id}
+                            lessonID={lesson.id}
+                          />
+                        ))}
+                      {page === "shots" && (
+                        <ShotsGroup
+                          shots={lesson.shots}
+                          me={me}
+                          lessonID={lesson.id}
+                          shotResults={lesson.shotResults}
+                        />
+                      )}
+                      {page === "test" && (
+                        <>
+                          {lesson.newTests.length > 0 ? (
+                            <TestGroup
+                              tests={lesson.newTests}
+                              me={me}
+                              lessonID={lesson.id}
+                              testResults={[]}
+                              quizes={lesson.quizes}
+                              notes={lesson.notes}
+                            />
+                          ) : (
+                            <Center>
+                              <h2>Тестов по этому уроку нет</h2>
+                            </Center>
+                          )}
+                        </>
+                      )}
+
+                      {page === "quiz" && (
+                        <>
+                          {lesson.quizes.length > 0 ? (
+                            <QuizGroup
+                              lessonID={lesson.id}
+                              quizResults={[]}
+                              me={me}
+                              quizes={lesson.quizes}
+                            />
+                          ) : (
+                            <Center>
+                              <h2>Вопросов по этому уроку нет</h2>
+                            </Center>
+                          )}
+                        </>
+                      )}
+                      {page === "testBlock" && (
+                        <TestPractices
+                          lessonID={lesson.id}
+                          quizResults={[]}
+                          testResults={[]}
+                          me={me}
+                          testPractices={lesson.testPractices}
+                          quizes={lesson.quizes}
+                          tests={lesson.newTests}
+                          lesson={lesson}
+                        />
+                      )}
+                      {page === "newProblem" && (
+                        <NewProblem lesson={lesson} me={me} />
+                      )}
+                      {page === "problem" && (
+                        <>
+                          {lesson.problems.length > 0 ? (
+                            <ProblemGroup
+                              lessonID={lesson.id}
+                              problems={lesson.problems}
+                              me={me}
+                              problemResults={[]}
+                              lesson={lesson}
+                            />
+                          ) : (
+                            <Center>
+                              <h2>Задач пока нет</h2>
+                            </Center>
+                          )}
+                        </>
+                      )}
+                      {page === "constructor" && (
+                        <>
+                          {" "}
+                          {lesson.constructions.length > 0 ? (
+                            <>
+                              <ConstructorGroup
+                                constructions={lesson.constructions}
+                                lessonID={lesson.id}
+                                me={me}
+                                constructionResults={[]}
+                              />
+                            </>
+                          ) : (
+                            <Center>
+                              <h2>Конструкторов документов пока нет</h2>
+                            </Center>
+                          )}{" "}
+                        </>
+                      )}
+                      {page === "textEditor" &&
+                        (lesson.texteditors.length > 0 ? (
+                          <TextEditorGroup
+                            lessonID={lesson.id}
+                            textEditors={lesson.texteditors}
+                            me={me}
+                            textEditorResults={[]}
+                          />
+                        ) : (
+                          <Center>
+                            <h2>Редакторов документов пока нет</h2>
+                          </Center>
+                        ))}
+                      {page === "createTest" && (
+                        <CreateNewTest lessonID={lesson.id} />
+                      )}
+                      {page === "createForum" && (
+                        <ChangeForum lesson={lesson.id} forum={lesson.forum} />
+                      )}
+                      {page === "createNote" && (
+                        <CreateNote lessonID={lesson.id} />
+                      )}
+                      {page === "createTestBlock" && (
+                        <CreateTestBlock lesson={lesson} lessonId={lesson.id} />
+                      )}
+                      {page === "createChat" && (
+                        <CreateChat lessonID={lesson.id} />
+                      )}
+                      {page === "createDocument" && (
+                        <CreateDocument lessonID={lesson.id} />
+                      )}
+                      {page === "createShot" && (
+                        <CreateShot lessonID={lesson.id} />
+                      )}
+                      {page === "createQuiz" && (
+                        <CreateQuiz lessonID={lesson.id} />
+                      )}
+                      {page === "createProblem" && (
+                        <CreateProblem lessonID={lesson.id} lesson={lesson} />
+                      )}
+                      {page === "createConstructor" && (
+                        <CreateConstructor lessonID={lesson.id} />
+                      )}
+                      {page === "createTextEditor" && (
+                        <CreateTextEditor lessonID={lesson.id} />
+                      )}
+                      {page === "updateLesson" && (
+                        <UpdateLesson
+                          lessonID={lesson.id}
+                          description={lesson.description}
+                          lesson={lesson}
+                          change={lesson.change}
+                        />
+                      )}
+                      {page === "updateShots" && (
+                        <UpdateShots lessonID={lesson.id} />
+                      )}
                     </LessonPart>
+                    {width > 800 && isMenuShown && (
+                      <SingleLesson_Menu
+                        lesson={lesson}
+                        getData={getData}
+                        me={me}
+                      />
+                    )}
                   </LessonStyles>
                 </Container>
                 <div id="root"></div>

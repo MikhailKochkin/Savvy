@@ -61,14 +61,14 @@ const useful = (props) => {
     vocabulary: {
       link: "https://besavvy.app/lesson?id=cl3bnf2de41891h2m88zkq608&type=story",
       description: [
-        "⭐️   Взяли правила изучения лексики из своего опыта",
+        "⭐️   Взяли правила перевода из своего опыта",
         "⭐️   Научим работать со словарями и переводить юр лексику",
         "⭐️   Вы сможете заранее подготовиться к собеседованиям и чувствовать себя уверенно.",
       ],
       image_url:
-        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1652882569/vocab.webp",
+        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1654077716/Group_466.webp",
       button_text: "Получить пособие",
-      header_text: "Получите 6 правил изучения юр лексики",
+      header_text: "Как переводить юридические тексты?",
       material_type: "vocab_book",
     },
   };

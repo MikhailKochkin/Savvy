@@ -26,6 +26,19 @@ const CREATE_NEWTEST_MUTATION = gql`
       lessonId: $lessonId
     ) {
       id
+      answers
+      correct
+      type
+      comments
+      complexity
+      ifRight
+      ifWrong
+      next
+      question
+      createdAt
+      user {
+        id
+      }
     }
   }
 `;
@@ -48,6 +61,9 @@ const TestCreate = styled.div`
   align-items: center;
   width: 100%;
   padding: 1% 2%;
+  .styles {
+    width: 100%;
+  }
 `;
 
 const Answers = styled.div`
@@ -208,12 +224,7 @@ const CreateNewTest = (props) => {
         ]}
       >
         {(createNewTest, { loading, error }) => (
-          <div>
-            <Advice>
-              Создайте новый тест. Введите сам вопрос, 2-9 вариантов ответа.
-              Количество правильных ответов может быть любым.
-            </Advice>
-            <Title>Новый тест</Title>
+          <div className="styles">
             <label for="types">Тип задания</label>
             <select
               name="types"
@@ -296,8 +307,8 @@ const CreateNewTest = (props) => {
                 let arr = correct;
                 arr.length = answers.filter((an) => an !== "").length;
                 const res2 = await setCorrect(arr);
-                createNewTest();
-                alert("Готово!");
+                const res3 = await createNewTest();
+                props.getResult(res3);
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}

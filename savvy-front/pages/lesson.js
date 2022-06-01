@@ -1,5 +1,7 @@
 import SingleLesson from "../components/lesson/SingleLesson";
 import Challenge from "../components/lesson/challenge/Challenge";
+import OldSingleLesson from "../components/lesson/OldSingleLesson";
+
 import dynamic from "next/dynamic";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -18,6 +20,8 @@ const DynamicNewSingleLesson = dynamic(
 
 const LessonPage = (props) => (
   <div>
+    {props.query.type === "old" && <OldSingleLesson id={props.query.id} />}
+
     {props.query.type === "regular" && <SingleLesson id={props.query.id} />}
     {props.query.type === "story" && (
       <DynamicNewSingleLesson

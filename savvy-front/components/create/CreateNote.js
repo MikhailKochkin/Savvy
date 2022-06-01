@@ -10,6 +10,14 @@ const CREATE_NOTE_MUTATION = gql`
   mutation CREATE_NOTE_MUTATION($text: String!, $lessonId: String!) {
     createNote(text: $text, lessonId: $lessonId) {
       id
+      link_clicks
+      complexity
+      isSecret
+      text
+      next
+      user {
+        id
+      }
     }
   }
 `;
@@ -91,12 +99,6 @@ export default class CreateSingleNote extends Component {
     const { lessonID } = this.props;
     return (
       <Container>
-        <Advice>
-          Напишите новый лонгрид. Количество лонгридов внутри одного урока не
-          ограничено. В лонгрид можно добавлять текст, картинки, таблицы и
-          видео. Картинки и видео добавляются только по ссылкам!
-        </Advice>
-        <Title>Новый лонгрид</Title>
         <Editor>
           <DynamicLoadedEditor getEditorText={this.myCallback} />
         </Editor>
@@ -120,19 +122,14 @@ export default class CreateSingleNote extends Component {
                 e.preventDefault();
                 const res = await createNote();
                 document.getElementById("Message").style.display = "block";
-                setTimeout(function () {
-                  document.getElementById("Message")
-                    ? (document.getElementById("Message").style.display =
-                        "none")
-                    : "none";
-                }, 1500);
+                this.props.getResult(res);
               }}
             >
               {loading ? "Сохраняем..." : "Cохранить"}
             </Button>
           )}
         </Mutation>
-        <Message id="Message">Вы создали новый логрид!</Message>
+        <Message id="Message">Готово</Message>
       </Container>
     );
   }
