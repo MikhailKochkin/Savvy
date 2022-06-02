@@ -3,20 +3,11 @@ import styled from "styled-components";
 import Plain from "slate-plain-serializer";
 import Html from "slate-html-serializer";
 import { Editor } from "slate-react";
-import Icon from "react-icons-kit";
 import isUrl from "is-url";
 import BoldMark from "./BoldMark";
 import HeaderMark from "./HeaderMark";
 import ItalicMark from "./ItalicMark";
 import LinkMark from "./Link";
-import { bold } from "react-icons-kit/fa/bold";
-import { italic } from "react-icons-kit/fa/italic";
-import { header } from "react-icons-kit/fa/header";
-import { link } from "react-icons-kit/fa/link";
-import { image } from "react-icons-kit/fa/image";
-import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
-import { list } from "react-icons-kit/fa/list";
-import { film } from "react-icons-kit/fa/film";
 
 const FormatToolBar = styled.div`
   display: flex;

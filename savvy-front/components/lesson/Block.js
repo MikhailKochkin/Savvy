@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Icon } from "react-icons-kit";
-import { arrowDown } from "react-icons-kit/fa/arrowDown";
+// import { arrowDown } from "react-icons-kit/fa/arrowDown";
 import renderHTML from "react-render-html";
 
 const Styles = styled.div`
@@ -65,7 +64,7 @@ const Block = (props) => {
 
   return (
     <>
-      {props.i !== 0 && <Icon size={"2.5em"} icon={arrowDown} id="back" />}
+      {props.i !== 0 && <span>⬇️</span>}
       <Styles>
         {value.type && value.type.toLowerCase() === "newtest" ? (
           <Title>

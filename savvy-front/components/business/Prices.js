@@ -1,8 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Router from "next/router";
-import { check } from "react-icons-kit/fa/check";
-import Icon from "react-icons-kit";
 import OurCalculator from "./OurCalculator";
 
 const Styles = styled.div`

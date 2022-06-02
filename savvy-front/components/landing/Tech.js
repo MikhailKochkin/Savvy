@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import Icon from "react-icons-kit";
 // import { ic_forum } from "react-icons-kit/md/ic_forum";
 // import { ic_laptop_mac } from "react-icons-kit/md/ic_laptop_mac";
 // import { withTranslation } from "../../i18n";

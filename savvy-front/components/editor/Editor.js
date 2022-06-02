@@ -29,23 +29,22 @@ import { css } from "emotion";
 import styled from "styled-components";
 import { jsx } from "slate-hyperscript";
 import FormatToolBar from "./FormatToolbar";
-import Icon from "react-icons-kit";
-import { bold } from "react-icons-kit/fa/bold";
-import { underline } from "react-icons-kit/fa/underline";
-import { italic } from "react-icons-kit/fa/italic";
-import { header } from "react-icons-kit/fa/header";
-import { link } from "react-icons-kit/fa/link";
-import { image } from "react-icons-kit/fa/image";
-import { listUl } from "react-icons-kit/fa/listUl";
-import { listOl } from "react-icons-kit/fa/listOl";
-import { film } from "react-icons-kit/fa/film";
-import { table } from "react-icons-kit/fa/table";
-import { flag } from "react-icons-kit/fa/flag";
-import { question } from "react-icons-kit/fa/question";
-import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
-import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
-import { undo } from "react-icons-kit/fa/undo";
-import { exclamation } from "react-icons-kit/fa/exclamation";
+// import { bold } from "react-icons-kit/fa/bold";
+// import { underline } from "react-icons-kit/fa/underline";
+// import { italic } from "react-icons-kit/fa/italic";
+// import { header } from "react-icons-kit/fa/header";
+// import { link } from "react-icons-kit/fa/link";
+// import { image } from "react-icons-kit/fa/image";
+// import { listUl } from "react-icons-kit/fa/listUl";
+// import { listOl } from "react-icons-kit/fa/listOl";
+// import { film } from "react-icons-kit/fa/film";
+// import { table } from "react-icons-kit/fa/table";
+// import { flag } from "react-icons-kit/fa/flag";
+// import { question } from "react-icons-kit/fa/question";
+// import { ic_insert_comment } from "react-icons-kit/md/ic_insert_comment";
+// import { ic_find_replace } from "react-icons-kit/md/ic_find_replace";
+// import { undo } from "react-icons-kit/fa/undo";
+// import { exclamation } from "react-icons-kit/fa/exclamation";
 
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
@@ -749,7 +748,7 @@ const App = (props) => {
             toggleMark(editor, "bold");
           }}
         >
-          <Icon icon={bold} />
+          Bold
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -757,7 +756,7 @@ const App = (props) => {
             toggleMark(editor, "italic");
           }}
         >
-          <Icon icon={italic} />
+          Italic
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -765,7 +764,7 @@ const App = (props) => {
             toggleMark(editor, "underline");
           }}
         >
-          <Icon icon={underline} />
+          Underline
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -773,7 +772,7 @@ const App = (props) => {
             toggleElement(editor, "header");
           }}
         >
-          <Icon icon={header} />
+          Header
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -783,7 +782,7 @@ const App = (props) => {
             insertLink(editor, url);
           }}
         >
-          <Icon icon={link} />
+          Link
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -791,7 +790,7 @@ const App = (props) => {
             CustomEditor.makeList(editor, "bulleted-list");
           }}
         >
-          <Icon icon={listUl} />
+          List
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -799,7 +798,7 @@ const App = (props) => {
             CustomEditor.makeList(editor, "numbered-list");
           }}
         >
-          <Icon icon={listOl} />
+          ListOl{" "}
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -807,7 +806,7 @@ const App = (props) => {
             CustomEditor.addVideoElement(editor);
           }}
         >
-          <Icon icon={film} />
+          Video
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -815,7 +814,7 @@ const App = (props) => {
             CustomEditor.addImageElement(editor);
           }}
         >
-          <Icon icon={image} />
+          Image
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -823,7 +822,7 @@ const App = (props) => {
             CustomEditor.addComment(editor);
           }}
         >
-          <Icon icon={ic_insert_comment} />
+          Comment
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -831,7 +830,7 @@ const App = (props) => {
             CustomEditor.addError(editor);
           }}
         >
-          <Icon icon={ic_find_replace} />
+          Erroe
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -839,7 +838,7 @@ const App = (props) => {
             toggleElement(editor, "flag");
           }}
         >
-          <Icon icon={flag} />
+          Flag
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -847,7 +846,7 @@ const App = (props) => {
             toggleElement(editor, "article");
           }}
         >
-          <Icon icon={exclamation} />
+          Source
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -855,7 +854,7 @@ const App = (props) => {
             CustomEditor.addQuiz(editor);
           }}
         >
-          <Icon icon={question} />
+          Question
         </ButtonStyle>
         <ButtonStyle
           onMouseDown={(event) => {
@@ -863,7 +862,7 @@ const App = (props) => {
             CustomEditor.conceal(editor, "editor");
           }}
         >
-          <Icon icon={undo} />
+          Conceal
         </ButtonStyle>
       </FormatToolBar>
       <Editable

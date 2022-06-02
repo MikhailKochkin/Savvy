@@ -4,8 +4,6 @@ import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
-import { Icon } from "react-icons-kit";
-import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import AreYouEnrolled from "../../auth/AreYouEnrolled";
@@ -271,9 +269,7 @@ const Challenge = (props) => {
                             },
                           }}
                         >
-                          <span>
-                            <Icon size={"10%"} icon={arrowLeft} id="back" />
-                          </span>
+                          <span>Back </span>
                         </Link>
                       )}
                       <span>

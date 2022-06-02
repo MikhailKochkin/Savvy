@@ -5,8 +5,7 @@ import { Query } from "@apollo/client/react/components";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Icon } from "react-icons-kit";
-import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
+// import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { CSSTransitionGroup } from "react-transition-group";
 import DemoStoryEx from "./DemoStoryEx";
 // import Panel from "./Panel";
@@ -487,7 +486,7 @@ const DemoLesson = (props) => {
                         }}
                       >
                         <span>
-                          <Icon size={"1.5em"} icon={arrowLeft} id="back" />
+                          {/* <Icon size={"1.5em"} icon={arrowLeft} id="back" /> */}
                         </span>
                       </Link>
                     )}

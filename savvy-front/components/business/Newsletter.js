@@ -2,12 +2,6 @@ import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import * as EmailValidator from "email-validator";
-import Icon from "react-icons-kit";
-import { check } from "react-icons-kit/fa/check";
-import { facebookSquare } from "react-icons-kit/fa/facebookSquare";
-import { linkedinSquare } from "react-icons-kit/fa/linkedinSquare";
-import { instagram } from "react-icons-kit/fa/instagram";
 
 const CREATE_CLIENT = gql`
   mutation createBusinessClient($email: String!) {

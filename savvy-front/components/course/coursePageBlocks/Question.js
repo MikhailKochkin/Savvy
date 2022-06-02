@@ -1,8 +1,5 @@
 import styled from "styled-components";
 import { useState } from "react";
-import Icon from "react-icons-kit";
-import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
-import { ic_keyboard_arrow_up } from "react-icons-kit/md/ic_keyboard_arrow_up";
 
 const Styles = styled.li`
   height: auto;
@@ -70,11 +67,7 @@ const Question = (props) => {
       <Control>
         <div className="question">{d.q}</div>
         <div className="circle" onClick={(e) => setShow(!show)}>
-          {show ? (
-            <Icon size={25} icon={ic_keyboard_arrow_up} />
-          ) : (
-            <Icon size={25} icon={ic_keyboard_arrow_down} />
-          )}
+          {show ? <span>⬆️</span> : <span>⬇️</span>}
         </div>
       </Control>
       <Info height={show}>{d.a}</Info>

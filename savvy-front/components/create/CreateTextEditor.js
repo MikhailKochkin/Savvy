@@ -5,9 +5,6 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import { commentO } from "react-icons-kit/fa/commentO";
-import { commentingO } from "react-icons-kit/fa/commentingO";
-import Icon from "react-icons-kit";
 
 const CREATE_TEXTEDITOR_MUTATION = gql`
   mutation CREATE_TEXTEDITOR_MUTATION(
@@ -117,19 +114,7 @@ export default class CreateTextEditor extends Component {
     const { lessonID } = this.props;
     return (
       <Width>
-        <Advice>
-          <div>
-            В редактор можно поместить два типа ошибок. Если выделить ошибку,
-            нажав на кнопку <Icon icon={commentO} /> , то можно во всплывающем
-            окне записать правильный вариант, а ученику впоследствии эта ошибка
-            видна в тексте <b>не будет</b>.
-          </div>{" "}
-          <div>
-            Если же выделить текст, нажав на кнопку <Icon icon={commentingO} />,
-            то вы сможете записать свой комментарий, а на экране ученика этот
-            текст <b>будет выделен жирным</b>.{" "}
-          </div>
-        </Advice>
+        <Advice></Advice>
         <Title>Составьте редактор</Title>
         <Label>
           <p>Всего ошибок / рисков: </p>

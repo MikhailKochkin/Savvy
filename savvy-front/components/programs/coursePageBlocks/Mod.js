@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Icon from "react-icons-kit";
-import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
-import { ic_keyboard_arrow_up } from "react-icons-kit/md/ic_keyboard_arrow_up";
+// import Icon from "react-icons-kit";
+// import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
+// import { ic_keyboard_arrow_up } from "react-icons-kit/md/ic_keyboard_arrow_up";
 
 // DE4634;
 
@@ -91,11 +91,7 @@ const Mod = (props) => {
       <div className="name">
         <div>{props.mod.name} </div>
         <span className="circle" onClick={(e) => setOpen(!open)}>
-          {open ? (
-            <Icon size={25} icon={ic_keyboard_arrow_up} />
-          ) : (
-            <Icon size={25} icon={ic_keyboard_arrow_down} />
-          )}
+          {open ? <span>⬆️</span> : <span>⬇️</span>}
         </span>
       </div>
       {open && (

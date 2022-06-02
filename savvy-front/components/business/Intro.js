@@ -3,9 +3,6 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 import Router from "next/router";
-import { check } from "react-icons-kit/fa/check";
-import Icon from "react-icons-kit";
-import { ic_keyboard_arrow_down } from "react-icons-kit/md/ic_keyboard_arrow_down";
 import * as EmailValidator from "email-validator";
 
 const CREATE_CLIENT = gql`

@@ -31,15 +31,15 @@ import isUrl from "is-url";
 import { withHistory } from "slate-history";
 import escapeHtml from "escape-html";
 import { jsx } from "slate-hyperscript";
-import Icon from "react-icons-kit";
-import { bold } from "react-icons-kit/fa/bold";
-import { italic } from "react-icons-kit/fa/italic";
-import { link } from "react-icons-kit/fa/link";
-import { strikethrough } from "react-icons-kit/fa/strikethrough";
-import { underline } from "react-icons-kit/fa/underline";
-import { image } from "react-icons-kit/fa/image";
-import { commentO } from "react-icons-kit/fa/commentO";
-import { ic_announcement } from "react-icons-kit/md/ic_announcement";
+// import Icon from "react-icons-kit";
+// import { bold } from "react-icons-kit/fa/bold";
+// import { italic } from "react-icons-kit/fa/italic";
+// import { link } from "react-icons-kit/fa/link";
+// import { strikethrough } from "react-icons-kit/fa/strikethrough";
+// import { underline } from "react-icons-kit/fa/underline";
+// import { image } from "react-icons-kit/fa/image";
+// import { commentO } from "react-icons-kit/fa/commentO";
+// import { ic_announcement } from "react-icons-kit/md/ic_announcement";
 import { Button, IconBlock, Menu, Portal } from "./components";
 import { Range } from "slate";
 import { blue } from "@material-ui/core/colors";
@@ -556,9 +556,7 @@ const FormatButton = ({ format, icon }) => {
         toggleFormat(editor, format);
       }}
     >
-      <IconBlock>
-        <Icon icon={icon} />
-      </IconBlock>
+      <IconBlock>{/* <Icon icon={icon} /> */}</IconBlock>
     </Button>
   );
 };
@@ -575,9 +573,7 @@ const LinkButton = ({ format, icon }) => {
         insertLink(editor, url);
       }}
     >
-      <IconBlock>
-        <Icon icon={icon} />
-      </IconBlock>
+      <IconBlock>{/* <Icon icon={icon} /> */}</IconBlock>
     </Button>
   );
 };
@@ -593,9 +589,7 @@ const FormatButton2 = ({ format, icon }) => {
         addImageElement(editor);
       }}
     >
-      <IconBlock>
-        <Icon icon={icon} />
-      </IconBlock>
+      <IconBlock>{/* <Icon icon={icon} /> */}</IconBlock>
     </Button>
   );
 };

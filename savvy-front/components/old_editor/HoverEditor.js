@@ -5,14 +5,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { css } from "@emotion/css";
 import { Button, IconBlock, Menu } from "./components";
-import Icon from "react-icons-kit";
-import { bold } from "react-icons-kit/fa/bold";
-import { italic } from "react-icons-kit/fa/italic";
-import { pencil } from "react-icons-kit/fa/pencil";
-import { strikethrough } from "react-icons-kit/fa/strikethrough";
-import { underline } from "react-icons-kit/fa/underline";
-import { image } from "react-icons-kit/fa/image";
-import { commentO } from "react-icons-kit/fa/commentO";
 import CommentStyle from "./CommentStyle";
 
 const Img = styled.img`

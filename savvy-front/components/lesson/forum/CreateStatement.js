@@ -3,8 +3,6 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import { send } from "react-icons-kit/fa/send";
-import Icon from "react-icons-kit";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const CREATE_STATEMENT_MUTATION = gql`
@@ -115,7 +113,7 @@ const CreateStatement = (props) => {
                 const res = await createStatement();
               }}
             >
-              {loading ? "..." : <Icon icon={send} />}
+              {loading ? "..." : "Send"}
             </Button>
           </Form>
         )}

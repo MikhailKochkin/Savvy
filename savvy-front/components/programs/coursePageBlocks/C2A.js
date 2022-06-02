@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { calendar } from "react-icons-kit/fa/calendar";
-import { handshakeO } from "react-icons-kit/fa/handshakeO";
-import Icon from "react-icons-kit";
+// import { calendar } from "react-icons-kit/fa/calendar";
+// import { handshakeO } from "react-icons-kit/fa/handshakeO";
+// import Icon from "react-icons-kit";
 import Modal from "styled-react-modal";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -346,7 +346,7 @@ const Headline = (props) => {
               <Point>
                 <div className="point_header">
                   <div className="icon">
-                    <Icon size={20} icon={calendar} />
+                    {/* <Icon size={20} icon={calendar} /> */}
                   </div>
                   <div>Занятия</div>
                 </div>
@@ -359,7 +359,7 @@ const Headline = (props) => {
               <Point>
                 <div className="point_header">
                   <div className="icon">
-                    <Icon size={20} icon={handshakeO} />
+                    {/* <Icon size={20} icon={handshakeO} /> */}
                   </div>
                   <div>Поддержка</div>
                 </div>

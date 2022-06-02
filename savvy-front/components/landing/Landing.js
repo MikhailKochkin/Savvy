@@ -1,8 +1,6 @@
 import styled from "styled-components";
 // import { withTranslation } from "../../i18n";
 import Link from "next/link";
-import { check } from "react-icons-kit/fa/check";
-import Icon from "react-icons-kit";
 
 const Styles = styled.div`
   width: 100%;

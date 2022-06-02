@@ -6,8 +6,7 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
-import Icon from "react-icons-kit";
+// import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import ProblemBuilder from "./ProblemBuilder";
 
 const useStyles = makeStyles({
@@ -107,21 +106,6 @@ const CreateProblem = (props) => {
           <b>текст задачи, подсказки и ответ</b>. Ко второй –{" "}
           <b>поэтапное решение задачи</b>.
         </div>{" "}
-        <div>
-          Чтобы задать подсказки и ответ, необходимо выделить текст, нажать на
-          кнопку <Icon icon={eyeSlash} /> и задать название этого куска текста.
-          Название может быть любым: "Подсказка", "Комментарий", "Источник" и
-          так далее. Ограничения есть только для ответа. Он может иметь только
-          три названия: "Ответ", "Ответ." или "Ответ:". Это важно, потому что
-          текст с таким названием будет открываться только после того, как
-          ученик сдаст свой ответ.
-        </div>
-        <div>
-          Чтобы задать этапы решения задач, нужно выбрать тест или вопрос, с
-          которого начнется решение задачи. Его нужно заранее создать в
-          соответствующем разделе. Дальнейшие указания на этапы нужно внести в
-          самих вопросах, тестах и лонгридах.
-        </div>
       </Advice>
       <Title>Новая задача</Title>
       <DynamicLoadedEditor getEditorText={myCallback} />

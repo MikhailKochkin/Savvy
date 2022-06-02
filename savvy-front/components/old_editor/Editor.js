@@ -3,23 +3,22 @@ import styled from "styled-components";
 import Plain from "slate-plain-serializer";
 import Html from "slate-html-serializer";
 import { Editor } from "slate-react";
-import Icon from "react-icons-kit";
-import isUrl from "is-url";
-import BoldMark from "./BoldMark";
-import HeaderMark from "./HeaderMark";
-import ItalicMark from "./ItalicMark";
-import LinkMark from "./Link";
-import CommentStyle from "./CommentStyle";
-import FormatToolBar from "./FormatToolbar";
-import { bold } from "react-icons-kit/fa/bold";
-import { italic } from "react-icons-kit/fa/italic";
-import { header } from "react-icons-kit/fa/header";
-import { link } from "react-icons-kit/fa/link";
-import { image } from "react-icons-kit/fa/image";
-import { commentO } from "react-icons-kit/fa/commentO";
-import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
-import { list } from "react-icons-kit/fa/list";
-import { film } from "react-icons-kit/fa/film";
+// import isUrl from "is-url";
+// import BoldMark from "./BoldMark";
+// import HeaderMark from "./HeaderMark";
+// import ItalicMark from "./ItalicMark";
+// import LinkMark from "./Link";
+// import CommentStyle from "./CommentStyle";
+// import FormatToolBar from "./FormatToolbar";
+// import { bold } from "react-icons-kit/fa/bold";
+// import { italic } from "react-icons-kit/fa/italic";
+// import { header } from "react-icons-kit/fa/header";
+// import { link } from "react-icons-kit/fa/link";
+// import { image } from "react-icons-kit/fa/image";
+// import { commentO } from "react-icons-kit/fa/commentO";
+// import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
+// import { list } from "react-icons-kit/fa/list";
+// import { film } from "react-icons-kit/fa/film";
 
 const Div = styled.div`
   /* color: yellow; */
@@ -380,16 +379,16 @@ class App extends React.Component {
           {this.renderBlockButton("numbered-list", "format_list_numbered")}
           {this.renderHintBlockButton("hint", "format_list_numbered")}
           <ButtonStyle onMouseDown={(event) => this.onClickLink(event)}>
-            <Icon icon={link} />
+            Link
           </ButtonStyle>
           <ButtonStyle onMouseDown={(event) => this.onClickImage(event)}>
-            <Icon icon={image} />
+            Image
           </ButtonStyle>
           <ButtonStyle onMouseDown={(event) => this.onClickFilm(event)}>
-            <Icon icon={film} />
+            Film
           </ButtonStyle>
           <ButtonStyle onMouseDown={(event) => this.onClickComment(event)}>
-            <Icon icon={commentO} />
+            Comment
           </ButtonStyle>
         </FormatToolBar>
         <Editor
@@ -502,7 +501,7 @@ class App extends React.Component {
   renderMarkButton = (type, icon) => {
     return (
       <ButtonStyle onClick={(event) => this.onClickMark(event, type)}>
-        <Icon icon={icon} />
+        {/* <Icon icon={icon} /> */}
       </ButtonStyle>
     );
   };
@@ -522,7 +521,7 @@ class App extends React.Component {
     }
     return (
       <ButtonStyle onMouseDown={(event) => this.onClickBlock(event, type)}>
-        <Icon icon={list} />
+        {/* <Icon icon={list} /> */}
       </ButtonStyle>
     );
   };
@@ -545,7 +544,7 @@ class App extends React.Component {
 
     return (
       <ButtonStyle onMouseDown={(event) => this.onClickHintBlock(event, type)}>
-        <Icon icon={eyeSlash} />
+        {/* <Icon icon={eyeSlash} /> */}
       </ButtonStyle>
     );
   };

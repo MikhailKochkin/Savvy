@@ -4,8 +4,6 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import { GET_RESULTS } from "./LessonData";
-import { send } from "react-icons-kit/fa/send";
-import Icon from "react-icons-kit";
 
 const CREATE_FEEDBACK_MUTATION = gql`
   mutation CREATE_FEEDBACK_MUTATION(
@@ -99,7 +97,7 @@ class CreateFeedback extends Component {
                 const res = await createFeedback();
               }}
             >
-              {loading ? "..." : <Icon icon={send} />}
+              {loading ? "..." : "Send"}
             </Button>
           )}
         </Mutation>

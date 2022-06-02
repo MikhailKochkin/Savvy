@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { graduationCap } from "react-icons-kit/fa/graduationCap";
-import Icon from "react-icons-kit";
+// import { graduationCap } from "react-icons-kit/fa/graduationCap";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -144,7 +143,7 @@ const Goal = (props) => {
           {d.goals.map((g) => (
             <div className="example">
               <div className="icon">
-                <Icon size={25} icon={graduationCap} />
+                {/* <Icon size={25} icon={graduationCap} /> */}
               </div>
               <div>{renderHTML(g)}</div>
             </div>

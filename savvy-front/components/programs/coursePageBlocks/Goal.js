@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { graduationCap } from "react-icons-kit/fa/graduationCap";
-import Icon from "react-icons-kit";
 import renderHTML from "react-render-html";
 
 const Styles = styled.div`
@@ -129,9 +127,7 @@ const Goal = (props) => {
         <div id="goal_examples">
           {d.goals.map((g) => (
             <div className="example">
-              <div className="icon">
-                <Icon size={25} icon={graduationCap} />
-              </div>
+              <div className="icon"></div>
               <div>{renderHTML(g)}</div>
             </div>
           ))}

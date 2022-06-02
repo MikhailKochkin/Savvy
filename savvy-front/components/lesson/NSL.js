@@ -4,8 +4,6 @@ import Link from "next/link";
 import styled from "styled-components";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
-import { Icon } from "react-icons-kit";
-import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import MobileStepper from "@material-ui/core/MobileStepper";
 import Button from "@material-ui/core/Button";
@@ -270,9 +268,7 @@ const NSL = (props) => {
                         },
                       }}
                     >
-                      <span>
-                        <Icon size={"1.5em"} icon={arrowLeft} id="back" />
-                      </span>
+                      <span>Back </span>
                     </Link>
                   )}
                   <span>

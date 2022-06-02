@@ -36,8 +36,6 @@ import AreYouEnrolled from "../auth/AreYouEnrolled";
 import UpdateLesson from "./UpdateLesson";
 import HowTo from "./HowTo";
 import { useUser } from "../User";
-import { Icon } from "react-icons-kit";
-import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import LessonBuilder from "./LessonBuilder";
 
 const SINGLE_LESSON_QUERY = gql`
@@ -591,9 +589,7 @@ const SingleLesson = (props) => {
                           },
                         }}
                       >
-                        <span>
-                          <Icon size={"10%"} icon={arrowLeft} id="back" />
-                        </span>
+                        <span>Back </span>
                       </Link>
                     ) : (
                       width < 800 && (

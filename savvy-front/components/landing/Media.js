@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
-// import Icon from "react-icons-kit";
 // import { instagram } from "react-icons-kit/fa/instagram";
-// import { graduationCap } from "react-icons-kit/fa/graduationCap";
 // import { vk } from "react-icons-kit/fa/vk";
 // import { telegram } from "react-icons-kit/fa/telegram";
 // import { withTranslation } from "../../i18n";
@@ -102,9 +100,6 @@ const Media = () => {
         <Block>
           <Card>
             <Header>
-              {/* <div className="icon">
-                <Icon size={30} icon={graduationCap} />
-              </div> */}
               <span>
                 <Link
                   href={{
