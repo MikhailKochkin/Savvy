@@ -180,6 +180,9 @@ const LessonBuilder = (props) => {
             <button onClick={(e) => addBlock("test")}>Добавить тест</button>
             <button onClick={(e) => addBlock("quiz")}>Добавить вопрос</button>
             <button onClick={(e) => addBlock("chat")}>Добавить диалог</button>
+            <button onClick={(e) => addBlock("editor")}>
+              Добавить редактор
+            </button>
           </Sticky>
         </Menu>
       </Container>
