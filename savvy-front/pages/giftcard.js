@@ -10,35 +10,32 @@ export const getServerSideProps = async ({ locale }) => ({
   },
 });
 
-// const CERT_QUERY = gql`
-//   query CERT_QUERY($id: String!) {
-//     certificates(where: { id: { equals: $id } }) {
-//       id
-//       createdAt
-//       updatedAt
-//       studentId
-//       coursePageId
-//       coursePage {
-//         title
-//       }
-//       student {
-//         name
-//         surname
-//       }
-//     }
-//   }
-// `;
-
 const giftcard = (props) => {
-  //   const { loading, error, data } = useQuery(CERT_QUERY, {
-  //     variables: { id: props.query.id },
-  //   });
+  const users = [
+    {
+      name: "Андрей",
+      surname: "Савин",
+      course: "Legal English. Speaking Skills.",
+      img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1653755242/image_1.png",
+      num: 46,
+    },
+    {
+      name: "Эмиль",
+      surname: "Сафин",
+      course: "Legal English. Полный курс",
+      img: "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1654151389/kSdXuV6z8RMyfInEgBZKoycwOBNO8yenIA5OPiPHTGVNKBcxpUysQvTIsOd16J_u2pajaT37y09V5D1de_OyNRe4.jpg",
+      num: 47,
+    },
+  ];
 
-  //   if (loading) return <p>Loading...</p>;
-  //   if (error) return error;
-  //   let cert = data.certificates[0];
-  //   console.log("cert", cert);
-  return <GiftCard id={props.query.id} />;
+  let data;
+
+  if (props.query.id == "safin") {
+    data = users[1];
+  } else {
+    data = users[0];
+  }
+  return <GiftCard id={props.query.id} data={data} />;
 };
 
 export default giftcard;

@@ -636,15 +636,11 @@ const Ticket = (props) => {
                 <Circle></Circle>
                 <div className="personal_data">
                   <div className="image">
-                    <img
-                      src={
-                        "https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1653755242/image_1.png"
-                      }
-                    />
+                    <img src={props.data.img} />
                   </div>
                   <div className="names">
-                    <div>Андрей</div>
-                    <div>Савин</div>
+                    <div> {props.data.name}</div>
+                    <div> {props.data.surname}</div>
                   </div>
                 </div>
                 <div className="logo">
@@ -655,14 +651,14 @@ const Ticket = (props) => {
                     target="_blank"
                     href="https://besavvy.app/ru/coursePage?id=cknu5zekc112311g1emrinm7io"
                   >
-                    Legal English. Speaking Skills.
+                    {props.data.course}
                   </a>
                 </div>
                 <div className="date">
                   <div id="left_date">Старт в любой день</div>
                   <div>Онлайн</div>
                 </div>
-                <div className="number">{"#00" + 46}</div>
+                <div className="number">{"#00" + props.data.num}</div>
               </TickertInner>
             </TicketForm>
           </T>
