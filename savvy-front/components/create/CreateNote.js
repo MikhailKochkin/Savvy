@@ -22,6 +22,8 @@ const CREATE_NOTE_MUTATION = gql`
   }
 `;
 
+const Explainer = styled.div``;
+
 const Container = styled.div`
   width: 95%;
   margin: 3% 0;
@@ -40,22 +42,23 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 1.5% 3%;
-  font-size: 1.6rem;
-  width: 23%;
-  font-weight: 600;
-  color: #fffdf7;
-  background: ${(props) => props.theme.green};
-  border: solid 1px white;
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
   border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
   cursor: pointer;
-  outline: none;
-  &:active {
-    background: ${(props) => props.theme.darkGreen};
-  }
-  @media (max-width: 850px) {
-    width: 40%;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
   }
 `;
 
@@ -99,8 +102,9 @@ export default class CreateSingleNote extends Component {
     const { lessonID } = this.props;
     return (
       <Container>
+        <Explainer></Explainer>
         <Editor>
-          <DynamicLoadedEditor getEditorText={this.myCallback} />
+          <DynamicLoadedEditor getEditorText={this.myCallback} simple={true} />
         </Editor>
         <Mutation
           mutation={CREATE_NOTE_MUTATION}
@@ -117,7 +121,7 @@ export default class CreateSingleNote extends Component {
           awaitRefetchQueries={true}
         >
           {(createNote, { loading, error }) => (
-            <Button
+            <ButtonTwo
               onClick={async (e) => {
                 e.preventDefault();
                 const res = await createNote();
@@ -126,7 +130,7 @@ export default class CreateSingleNote extends Component {
               }}
             >
               {loading ? "Сохраняем..." : "Cохранить"}
-            </Button>
+            </ButtonTwo>
           )}
         </Mutation>
         <Message id="Message">Готово</Message>

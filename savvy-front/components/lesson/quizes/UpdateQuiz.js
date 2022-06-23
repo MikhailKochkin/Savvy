@@ -25,6 +25,20 @@ const UPDATE_QUIZ_MUTATION = gql`
       ifWrong: $ifWrong
     ) {
       id
+      question
+      type
+      complexity
+      check
+      ifRight
+      ifWrong
+      answer
+      next
+      createdAt
+      user {
+        id
+        name
+        surname
+      }
     }
   }
 `;
@@ -147,8 +161,7 @@ const UpdateQuiz = (props) => {
   const [falseVal, setFalseVal] = useState(
     props.next && props.next.false ? props.next.false : ""
   );
-
-  const { lessonID, quizID } = props;
+  const { lessonID, quizId } = props;
   return (
     <Container>
       <select defaultValue={check} onChange={(e) => setCheck(e.target.value)}>
@@ -203,10 +216,11 @@ const UpdateQuiz = (props) => {
           getEditorText={setIfWrong}
         />
       </Comment>
+      {console.log("quizID", quizId)}
       <Mutation
         mutation={UPDATE_QUIZ_MUTATION}
         variables={{
-          id: quizID,
+          id: quizId,
           question: question,
           answer: answer,
           ifRight: ifRight,
@@ -232,6 +246,9 @@ const UpdateQuiz = (props) => {
               e.preventDefault();
               // call the mutation
               const res = await updateQuiz();
+              props.getResult(res);
+              props.switchUpdate();
+              props.passUpdated();
             }}
           >
             {loading ? "Сохраняем..." : "Сохранить"}

@@ -26,15 +26,9 @@ const UPDATE_NOTE_MUTATION = gql`
 `;
 
 const Container = styled.div`
-  width: 100%;
-  display: grid;
+  width: 600px;
   margin: 1% 0 0 0;
   margin-top: 5%;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(3 70px);
-  grid-template-areas:
-    "explain"
-    "first   ";
   h4 {
     padding: 0% 5%;
   }
@@ -54,10 +48,7 @@ const Container = styled.div`
     font-family: "Courier New", Courier, monospace;
     padding: 1%;
   }
-  button {
-    width: 150px;
-    margin: 20px 0;
-  }
+
   input {
     padding: 0.5%;
     height: 75%;
@@ -67,6 +58,26 @@ const Container = styled.div`
     border-radius: 3.5px;
     padding: 2%;
     font-size: 1.4rem;
+  }
+`;
+
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
   }
 `;
 
@@ -122,7 +133,7 @@ const UpdateNote = (props) => {
     <>
       <Container>
         <Complexity>
-          <select
+          {/* <select
             value={complexity}
             onChange={(e) => setComplexity(parseInt(e.target.value))}
           >
@@ -132,28 +143,29 @@ const UpdateNote = (props) => {
             <option value={3}>3</option>
             <option value={4}>4</option>
             <option value={5}>5</option>
-          </select>
-          <select
+          </select> */}
+          {/* <select
             defaultValue={isSecret}
             onChange={(e) => setIsSecret(e.target.value == "true")}
           >
             <option value={"true"}>Секретный</option>
             <option value={"false"}>Открытый</option>
-          </select>
+          </select> */}
         </Complexity>
-        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
-        <button>
+        {/* <button>
           <a
             href="https://codebeautify.org/html-table-generator"
             target="_blank"
           >
             Создать таблицу
           </a>
-        </button>
+        </button> */}
         <button onClick={(e) => setShow(!show)}>
           {show ? "Закрыть" : "Открыть редактор"}
         </button>
         {show && <DynamicLoadedEditor getEditorText={getText} value={text} />}
+        <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
+
         <Mutation
           mutation={UPDATE_NOTE_MUTATION}
           variables={{
@@ -170,16 +182,17 @@ const UpdateNote = (props) => {
           ]}
         >
           {(updateNote, { loading, error }) => (
-            <Button
+            <ButtonTwo
               onClick={async (e) => {
-                // Stop the form from submitting
                 e.preventDefault();
-                // call the mutation
                 const res = await updateNote();
+                props.getResult(res);
+                props.switchUpdate();
+                props.passUpdated();
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
+            </ButtonTwo>
           )}
         </Mutation>
       </Container>

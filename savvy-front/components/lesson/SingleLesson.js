@@ -58,65 +58,6 @@ const SINGLE_LESSON_QUERY = gql`
       user {
         id
       }
-      # testResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   answer
-      #   test {
-      #     id
-      #   }
-      # }
-      # shotResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   shot {
-      #     id
-      #   }
-      #   answer
-      # }
-      # quizResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   quiz {
-      #     id
-      #   }
-      #   answer
-      # }
-      # problemResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   answer
-      #   problem {
-      #     id
-      #   }
-      # }
-      # textEditorResults {
-      #   id
-      #   student {
-      #     id
-      #   }
-      #   textEditor {
-      #     id
-      #   }
-      # }
-      # constructionResults {
-      #   id
-      #   answer
-      #   student {
-      #     id
-      #   }
-      #   construction {
-      #     id
-      #   }
-      # }
       coursePage {
         id
       }
@@ -191,6 +132,33 @@ const SINGLE_LESSON_QUERY = gql`
           sample
         }
       }
+      miniforums {
+        id
+        type
+        value
+        statements {
+          id
+          text
+          comments
+          createdAt
+          user {
+            id
+            name
+            surname
+          }
+        }
+        lesson {
+          id
+          user {
+            id
+          }
+        }
+        user {
+          id
+          name
+          surname
+        }
+      }
       forum {
         id
         text
@@ -251,6 +219,7 @@ const SINGLE_LESSON_QUERY = gql`
         text
         nodeID
         complexity
+        steps
         nodeType
         user {
           id
@@ -345,37 +314,13 @@ const Container = styled.div`
   }
 `;
 
-const TextBar = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 90%;
-  margin: 2.5% 0;
-  font-size: 1.6rem;
-  padding: 2% 2% 4% 2%;
-  a {
-    /* color: #800000;
-    text-decoration: underline; */
-    cursor: pointer;
-  }
-  @media (max-width: 800px) {
-    width: 100%;
-    font-size: 1.8rem;
-  }
-`;
-
-const Center = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 const Head = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   color: white;
+  cursor: pointer;
   height: 10vh;
   background: #1a2980; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -385,7 +330,7 @@ const Head = styled.div`
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to right, #26d0ce, #1a2980);
   width: 100vw;
-  font-size: 2.3rem;
+  font-size: 2rem;
   span {
     margin: 0 3%;
   }
@@ -439,7 +384,6 @@ const Head2 = styled.div`
 
 const LessonStyles = styled.div`
   display: flex;
-  width: 80%;
   max-width: 1400px;
   flex-direction: row;
   @media (max-width: 800px) {
@@ -499,28 +443,6 @@ const LessonPart = styled.div`
     order: 2;
     margin: 1%;
   }
-`;
-
-const Text = styled.div`
-  line-height: 1.8;
-  img {
-    display: block;
-    max-width: 100%;
-    max-height: 20em;
-    box-shadow: "0 0 0 2px blue;";
-  }
-  iframe {
-    width: 110%;
-    height: 400px;
-    @media (max-width: 800px) {
-      width: 100%;
-      height: auto;
-    }
-  }
-`;
-
-const Button = styled.button`
-  margin-top: 10px;
 `;
 
 const SingleLesson = (props) => {
@@ -589,7 +511,7 @@ const SingleLesson = (props) => {
                           },
                         }}
                       >
-                        <span>Back </span>
+                        <span>Back to course </span>
                       </Link>
                     ) : (
                       width < 800 && (
@@ -604,35 +526,23 @@ const SingleLesson = (props) => {
                     (lesson.user.id === me.id ||
                       me.permissions.includes("ADMIN")) && (
                       <Head2>
-                        {lesson ? (
-                          <Link
-                            href={{
-                              pathname: "/lesson",
-                              query: {
-                                id: lesson.id,
-                                type: "story",
-                              },
-                            }}
-                          >
-                            <span>{`История `}</span>
-                          </Link>
-                        ) : (
-                          <span
-                            onClick={() =>
-                              alert(
-                                `Структура урока не задана, это можно сделать в настройках.`
-                              )
-                            }
-                          >
-                            {" "}
-                            История
-                          </span>
-                        )}
-                        <>
+                        <Link
+                          href={{
+                            pathname: "/lesson",
+                            query: {
+                              id: lesson.id,
+                              type: "story",
+                            },
+                          }}
+                        >
+                          <span>{` ➡️ Открыть интерфейс студента `}</span>
+                        </Link>
+
+                        {/* <>
                           {" "}
                           <span>{` |  `}</span>
-                        </>
-                        <Link
+                        </> */}
+                        {/* <Link
                           href={{
                             pathname: "/lesson",
                             query: {
@@ -642,7 +552,7 @@ const SingleLesson = (props) => {
                           }}
                         >
                           <span> Испытание</span>
-                        </Link>
+                        </Link> */}
                       </Head2>
                     )}
 

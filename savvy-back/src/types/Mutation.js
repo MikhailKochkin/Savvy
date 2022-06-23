@@ -626,9 +626,9 @@ const Mutation = mutationType({
           answers: {
             set: [...answers],
           },
-          // comments: {
-          //   set: [...comments],
-          // },
+          comments: {
+            set: [...comments],
+          },
           correct: {
             set: [...correct],
           },
@@ -642,11 +642,24 @@ const Mutation = mutationType({
         };
 
         const newTest = await ctx.prisma.newTest.create({ data: new_data });
+        const miniForum = await ctx.prisma.miniForum.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            value: newTest.id,
+            type: "NewTest",
+          },
+        });
+
         return newTest;
       },
     });
     t.field("createTestPractice", {
-      type: "NewTest",
+      type: "TestPractice",
       args: {
         text: stringArg(),
         tasksNum: intArg(),
@@ -671,7 +684,6 @@ const Mutation = mutationType({
           tasksNum: tasksNum,
           text: text,
         };
-
         const newTP = await ctx.prisma.testPractice.create({ data: new_data });
         return newTP;
       },
@@ -845,6 +857,18 @@ const Mutation = mutationType({
             ...args,
           },
         });
+        const miniForum = await ctx.prisma.miniForum.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            value: Quiz.id,
+            type: "Quiz",
+          },
+        });
         return Quiz;
       },
     });
@@ -972,6 +996,18 @@ const Mutation = mutationType({
               connect: { id: lessonId },
             },
             ...args,
+          },
+        });
+        const miniForum = await ctx.prisma.miniForum.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            value: Note.id,
+            type: "Note",
           },
         });
         return Note;
@@ -1376,8 +1412,11 @@ const Mutation = mutationType({
       args: {
         lessonId: stringArg(),
         text: stringArg(),
-        nodeID: stringArg(),
-        nodeType: stringArg(),
+        steps: arg({
+          type: "ProblemStructure",
+        }),
+        // nodeID: stringArg(),
+        // nodeType: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const lessonId = args.lessonId;
@@ -1390,6 +1429,7 @@ const Mutation = mutationType({
             lesson: {
               connect: { id: lessonId },
             },
+            lessonID: lessonId,
             ...args,
           },
         });
@@ -1401,8 +1441,8 @@ const Mutation = mutationType({
       args: {
         id: stringArg(),
         text: stringArg(),
-        nodeID: stringArg(),
-        nodeType: stringArg(),
+        // nodeID: stringArg(),
+        // nodeType: stringArg(),
         complexity: intArg(),
         isSecret: booleanArg(),
       },
@@ -1497,6 +1537,30 @@ const Mutation = mutationType({
         return forum;
       },
     });
+    t.field("createMiniForum", {
+      type: "MiniForum",
+      args: {
+        lessonId: stringArg(),
+        type: stringArg(),
+        value: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const lessonId = args.lessonId;
+        delete args.lessonId;
+        const miniforum = await ctx.prisma.miniForum.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            ...args,
+          },
+        });
+        return miniforum;
+      },
+    });
     t.field("updateForum", {
       type: "Forum",
       args: {
@@ -1561,51 +1625,125 @@ const Mutation = mutationType({
     t.field("createStatement", {
       type: "Statement",
       args: {
+        miniforumId: stringArg(),
         forumId: stringArg(),
         text: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const forumId = args.forumId;
         delete args.forumId;
-        const author = await ctx.prisma.user.findMany({
-          where: { forums: { some: { id: { equals: forumId } } } },
-        });
-        const lesson = await ctx.prisma.lesson.findMany(
-          {
-            where: { forumId: forumId },
-            include: { coursePage: true },
-          },
-          `{id, coursePage {id, title}, name}`
-        );
-        const newMail = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: author[0].email,
-          Subject: "Новое сообщение на форуме",
-          HtmlBody: AuthorNotification(
-            lesson[0].name,
-            lesson[0].coursePage.title,
-            lesson[0].id
-          ),
-        });
-        if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
-          const newMail2 = await client.sendEmail({
+        const miniforumId = args.miniforumId;
+        delete args.miniforumId;
+        let statement;
+        if (forumId) {
+          const author = await ctx.prisma.user.findMany({
+            where: { forums: { some: { id: { equals: forumId } } } },
+          });
+          const lesson = await ctx.prisma.lesson.findMany(
+            {
+              where: { forumId: forumId },
+              include: { coursePage: true },
+            },
+            `{id, coursePage {id, title}, name}`
+          );
+          const newMail = await client.sendEmail({
             From: "Mikhail@besavvy.app",
-            To: "mi.kochkin@ya.ru",
-            Subject: "(Другой автор) Новое сообщение на форуме",
+            To: author[0].email,
+            Subject: "Новое сообщение на форуме",
             HtmlBody: AuthorNotification(
               lesson[0].name,
               lesson[0].coursePage.title,
               lesson[0].id
             ),
           });
+          if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
+            const newMail2 = await client.sendEmail({
+              From: "Mikhail@besavvy.app",
+              To: "mi.kochkin@ya.ru",
+              Subject: "(Другой автор) Новое сообщение на форуме",
+              HtmlBody: AuthorNotification(
+                lesson[0].name,
+                lesson[0].coursePage.title,
+                lesson[0].id
+              ),
+            });
+          }
+          statement = await ctx.prisma.statement.create({
+            data: {
+              user: {
+                connect: { id: ctx.res.req.userId },
+              },
+              forum: {
+                connect: { id: forumId },
+              },
+              ...args,
+            },
+          });
+        } else if (miniforumId) {
+          statement = await ctx.prisma.statement.create({
+            data: {
+              user: {
+                connect: { id: ctx.res.req.userId },
+              },
+              miniforum: {
+                connect: { id: miniforumId },
+              },
+              ...args,
+            },
+          });
         }
+
+        return statement;
+      },
+    });
+    t.field("createMiniStatement", {
+      type: "Statement",
+      args: {
+        miniforumId: stringArg(),
+        text: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const miniforumId = args.miniforumId;
+        delete args.miniforumId;
+        const author = await ctx.prisma.user.findMany({
+          where: { forums: { some: { id: { equals: forumId } } } },
+        });
+        // const lesson = await ctx.prisma.lesson.findMany(
+        //   {
+        //     where: { forumId: forumId },
+        //     include: { coursePage: true },
+        //   },
+        //   `{id, coursePage {id, title}, name}`
+        // );
+        // const newMail = await client.sendEmail({
+        //   From: "Mikhail@besavvy.app",
+        //   To: author[0].email,
+        //   Subject: "Новое сообщение на форуме",
+        //   HtmlBody: AuthorNotification(
+        //     lesson[0].name,
+        //     lesson[0].coursePage.title,
+        //     lesson[0].id
+        //   ),
+        // });
+        // if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
+        //   const newMail2 = await client.sendEmail({
+        //     From: "Mikhail@besavvy.app",
+        //     To: "mi.kochkin@ya.ru",
+        //     Subject: "(Другой автор) Новое сообщение на форуме",
+        //     HtmlBody: AuthorNotification(
+        //       lesson[0].name,
+        //       lesson[0].coursePage.title,
+        //       lesson[0].id
+        //     ),
+        //   });
+        // }
         const statement = await ctx.prisma.statement.create({
           data: {
             user: {
               connect: { id: ctx.res.req.userId },
             },
-            forum: {
-              connect: { id: forumId },
+            miniforum: {
+              connect: { id: miniforumId },
             },
             ...args,
           },
@@ -1647,6 +1785,52 @@ const Mutation = mutationType({
             lesson.id
           ),
         });
+        return ctx.prisma.statement.update({
+          data: {
+            comments: {
+              set: [...args.comments],
+            },
+          },
+          where: {
+            id: args.id,
+          },
+        });
+      },
+    });
+    t.field("updateMiniStatement", {
+      type: "Statement",
+      args: {
+        id: stringArg(),
+        comments: list(stringArg()),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        //remove the ID from updates
+        delete updates.id;
+        //run the update method
+
+        const statement = await ctx.prisma.statement.findUnique({
+          where: { id: args.id },
+        });
+
+        // const student = await ctx.prisma.user.findUnique({
+        //   where: { id: statement.userId },
+        // });
+
+        // const lesson = await ctx.prisma.lesson.findUnique({
+        //   where: { forumId: statement.forumId },
+        // });
+
+        // const commentEmail = await client.sendEmail({
+        //   From: "Mikhail@besavvy.app",
+        //   To: student.email,
+        //   Subject: "BeSavvy: ответ на комментарий по курсу",
+        //   HtmlBody: CommentEmail.CommentEmail(
+        //     student.name,
+        //     lesson.name,
+        //     lesson.id
+        //   ),
+        // });
         return ctx.prisma.statement.update({
           data: {
             comments: {

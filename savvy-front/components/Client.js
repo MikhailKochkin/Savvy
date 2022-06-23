@@ -208,7 +208,7 @@ const Client = (props) => {
 
   let comment_for_wa = comment ? comment.replaceAll("</p>", "\n\n") : "";
   comment_for_wa = comment_for_wa.replaceAll("<p>", "");
-  console.log("comment_for_wa", renderHTML(comment_for_wa));
+  // console.log("comment_for_wa", renderHTML(comment_for_wa));
   return (
     <Row>
       <div className="index">{props.index + 1}.</div>

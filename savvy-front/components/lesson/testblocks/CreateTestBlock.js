@@ -16,15 +16,40 @@ const CREATE_TEST_PRACTICE = gql`
       lessonId: $lessonId
     ) {
       id
+      tasks
+      tasksNum
     }
   }
 `;
 
-const Styles = styled.div``;
+const Styles = styled.div`
+  margin: 10px 0;
+`;
 
 const Element = styled.div`
   border-bottom: 1px solid grey;
   margin-bottom: 10px;
+`;
+
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  max-width: 180px;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
 `;
 
 const CreateTestBlock = (props) => {
@@ -56,6 +81,11 @@ const CreateTestBlock = (props) => {
         value={number}
         onChange={(e) => setNumber(e.target.value)}
       />
+      <p>
+        Выберите, какие тесты и вопросы вы хотите включить в испытание. Если вы
+        хотите добавить новые тесты или вопросы, не забудьте предварительно
+        создать их внутри урока.{" "}
+      </p>
       <h2>Тесты</h2>
       <form>
         {tests.map((t, i) => (
@@ -86,7 +116,7 @@ const CreateTestBlock = (props) => {
             <br />
           </Element>
         ))}
-        <button
+        <ButtonTwo
           onClick={async (e) => {
             e.preventDefault();
             const res = await createTestPractice({
@@ -97,11 +127,11 @@ const CreateTestBlock = (props) => {
                 lessonId: props.lessonId,
               },
             });
-            alert("Сохранили!");
+            props.getResult(res);
           }}
         >
-          Сохранить
-        </button>
+          {loading ? "Сохраняем..." : "Сохранить"}
+        </ButtonTwo>
       </form>
     </Styles>
   );

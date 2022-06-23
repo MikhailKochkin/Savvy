@@ -217,7 +217,7 @@ class Interactive extends Component {
       data[1].value === "" ||
       data[1].value == "0"
     ) {
-      this.props.onFinish(true);
+      this.props.onFinish(true, "old");
       finish = (
         <></>
         // <Final>

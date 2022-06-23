@@ -16,7 +16,9 @@ const UPDATE_CHAT_MUTATION = gql`
   }
 `;
 const Styles = styled.div`
-  width: 650px;
+  /* max-width: 650px;
+  min-width: 510px; */
+  width: 570px;
   margin: 20px 0;
   font-weight: 500;
   img {
@@ -87,7 +89,7 @@ const Message = styled.div`
     color: black;
     border-radius: 25px;
     padding: 2% 5%;
-    display: inline-block;
+    display: flex;
     min-width: 20%;
     max-width: 70%;
     font-size: 1.6rem;
@@ -151,9 +153,34 @@ const IconBlock = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  width: 65px;
   .icon {
     margin: 5px;
     border-radius: 50%;
+    height: 55px;
+    width: 55px;
+    object-fit: cover;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon2 {
+    margin: 5px;
+    border-radius: 50%;
+    background: #cb2d3e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
     height: 55px;
     width: 55px;
     object-fit: cover;
@@ -256,15 +283,18 @@ const Chat = (props) => {
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
   const { name, messages, me, story, lessonId, id, author } = props;
-  useEffect(() => {
-    let chat = document.getElementById(id);
-    messages.messagesList.map((m, i) => {
-      setTimeout(() => {
-        let el = document.getElementById("message" + i + id);
-        el.style.opacity = 1;
-      }, i * 2 * 1000);
-    });
-  }, [0]);
+
+  const getResult = (data) => {
+    props.getResult(data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+  };
+
+  const switchUpdate = () => {
+    setUpdate(!update);
+  };
 
   let width;
   if (props.problem) {
@@ -290,7 +320,12 @@ const Chat = (props) => {
         }
       }}
     >
-      {!story && <div>{name}</div>}
+      {!story && (
+        <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
+      )}
+      {me && !story && (
+        <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
+      )}
       {!isRevealed && (
         <Secret shiver={shiver}>
           <Messages isRevealed={isRevealed}>
@@ -306,6 +341,9 @@ const Chat = (props) => {
                     >
                       <IconBlock>
                         <img className="icon" src="../../static/flash.svg" />
+                        {/* <div>
+                          {me.name[0]} {me.surname[0]}
+                        </div> */}
                         <div className="name">{me.name}</div>
                       </IconBlock>
                       <div className="student_text">{renderHTML(m.text)}</div>
@@ -380,7 +418,12 @@ const Chat = (props) => {
                   className="student"
                 >
                   <IconBlock>
-                    <img className="icon" src="../../static/flash.svg" />
+                    <div className="icon2">
+                      {me.surname
+                        ? `${me.name[0]}${me.surname[0]}`
+                        : `${me.name[0]}${me.name[1]}`}
+                    </div>
+                    {/* <img className="icon" src="../../static/flash.svg" /> */}
                     <div className="name">{me.name}</div>
                   </IconBlock>
                   <div className="student_text">{renderHTML(m.text)}</div>
@@ -421,13 +464,6 @@ const Chat = (props) => {
           })}
         </Messages>
       )}
-
-      {!story && (
-        <button onClick={(e) => setUpdate(!update)}>{t("update")}</button>
-      )}
-      {me && !story && (
-        <DeleteChat me={me.id} chatId={id} lessonId={lessonId} />
-      )}
       {update && (
         <UpdateChat
           id={id}
@@ -436,6 +472,9 @@ const Chat = (props) => {
           isSecret={props.isSecret}
           messages={messages}
           lessonId={lessonId}
+          getResult={getResult}
+          switchUpdate={switchUpdate}
+          passUpdated={passUpdated}
         />
       )}
     </Styles>

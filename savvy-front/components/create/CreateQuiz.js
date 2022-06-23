@@ -42,6 +42,10 @@ const CREATE_QUIZ_MUTATION = gql`
   }
 `;
 
+const Styles = styled.div`
+  width: 100%;
+`;
+
 const Form = styled.form`
   font-size: 1.6rem;
   fieldset {
@@ -49,10 +53,34 @@ const Form = styled.form`
   }
 `;
 
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  max-width: 180px;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
+`;
+
 const Answers = styled.div`
   display: flex;
   flex-direction: column;
   background: white;
+  select {
+    width: 25%;
+  }
 `;
 
 const Advice = styled.p`
@@ -71,8 +99,9 @@ const AnswerOption = styled.div`
   textarea {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
-    height: 100px;
+    height: 60px;
     width: 100%;
+    font-family: Montserrat;
     padding: 1.5%;
     font-size: 1.4rem;
     outline: 0;
@@ -106,8 +135,8 @@ const Comment = styled.div`
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   width: 100%;
-  min-height: 100px;
-  padding: 1.5%;
+  min-height: 60px;
+  padding: 0.5%;
   font-size: 1.4rem;
   outline: 0;
   &#ifRight {
@@ -132,7 +161,7 @@ const CreateQuiz = (props) => {
 
   const { lessonID } = props;
   return (
-    <>
+    <Styles>
       <Mutation
         mutation={CREATE_QUIZ_MUTATION}
         variables={{
@@ -169,7 +198,7 @@ const CreateQuiz = (props) => {
                   defaultValue={type}
                   onChange={(e) => setType(e.target.value)}
                 >
-                  <option value="TEST">Тест</option>
+                  <option value="TEST">Вопрос</option>
                   <option value="FORM">Форма</option>
                 </select>
 
@@ -207,16 +236,16 @@ const CreateQuiz = (props) => {
                   </Comment>
                 </AnswerOption>
 
-                <Button type="submit">
+                <ButtonTwo type="submit">
                   {loading ? "Сохраняем..." : "Сохранить"}
-                </Button>
+                </ButtonTwo>
                 <Message id="Message">Вы создали новый вопрос!</Message>
               </Answers>
             </fieldset>
           </Form>
         )}
       </Mutation>
-    </>
+    </Styles>
   );
 };
 

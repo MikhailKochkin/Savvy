@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
+import Chat from "../questions/Chat";
 
 const StyledButton = withStyles({
   root: {
@@ -70,6 +71,7 @@ const Container = styled.div`
     font-weight: 500;
     padding: 1% 2%;
     max-width: 100vw;
+    min-width: 360px;
     line-height: 1.6;
   }
   .author {
@@ -175,7 +177,7 @@ const Secret = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  max-width: 540px;
+  width: 570px;
   background: #fff;
   margin: 2% 0 0 0;
   font-size: 1.6rem;
@@ -289,7 +291,6 @@ const MiniButton = styled.div`
 const Note = (props) => {
   const [update, setUpdate] = useState(false);
   const [moved, setMoved] = useState(false);
-  const [clicks, setClicks] = useState(props.clicks);
   const [isRevealed, setIsRevealed] = useState(!props.note.isSecret);
   const [shiver, setShiver] = useState(false);
 
@@ -340,19 +341,30 @@ const Note = (props) => {
     note,
     complexity,
     id,
-    author,
-    user,
+    miniforum,
     getData,
     lessonID,
   } = props;
   let width;
   if (props.problem) {
-    width = "50%";
+    width = "100%";
   } else if (props.story) {
     width = "100vw";
   } else {
     width = "90%";
   }
+
+  const getResult = (data) => {
+    props.getResult(data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+  };
+
+  const switchUpdate = () => {
+    setUpdate(!update);
+  };
   return (
     <>
       <Buttons>
@@ -423,6 +435,8 @@ const Note = (props) => {
           {/* <NoteStyles>{renderHTML(text)}</NoteStyles> */}
         </Container>
       )}
+      {miniforum && <Chat me={me} miniforum={miniforum} />}
+
       {update && !story && !exam && (
         <UpdateNote
           text={text}
@@ -431,6 +445,9 @@ const Note = (props) => {
           id={id}
           next={props.next}
           lessonID={lessonID}
+          getResult={getResult}
+          switchUpdate={switchUpdate}
+          passUpdated={passUpdated}
         />
       )}
     </>

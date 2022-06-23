@@ -804,6 +804,7 @@ export interface NexusGenInputs {
     lessonFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
     lessonResults?: NexusGenInputs['LessonResultListRelationFilter'] | null; // LessonResultListRelationFilter
     map?: NexusGenInputs['JsonNullableListFilter'] | null; // JsonNullableListFilter
+    miniforums?: NexusGenInputs['MiniForumListRelationFilter'] | null; // MiniForumListRelationFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     newTests?: NexusGenInputs['NewTestListRelationFilter'] | null; // NewTestListRelationFilter
     NOT?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
@@ -846,6 +847,30 @@ export interface NexusGenInputs {
   }
   Messages: { // input type
     messagesList?: Array<NexusGenInputs['MessageElement'] | null> | null; // [MessageElement]
+  }
+  MiniForumListRelationFilter: { // input type
+    every?: NexusGenInputs['MiniForumWhereInput'] | null; // MiniForumWhereInput
+    none?: NexusGenInputs['MiniForumWhereInput'] | null; // MiniForumWhereInput
+    some?: NexusGenInputs['MiniForumWhereInput'] | null; // MiniForumWhereInput
+  }
+  MiniForumWhereInput: { // input type
+    AND?: NexusGenInputs['MiniForumWhereInput'][] | null; // [MiniForumWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['MiniForumWhereInput'][] | null; // [MiniForumWhereInput!]
+    OR?: NexusGenInputs['MiniForumWhereInput'][] | null; // [MiniForumWhereInput!]
+    statements?: NexusGenInputs['StatementListRelationFilter'] | null; // StatementListRelationFilter
+    text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    value?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+  }
+  MiniForumWhereUniqueInput: { // input type
+    id?: string | null; // String
   }
   NestedBoolFilter: { // input type
     equals?: boolean | null; // Boolean
@@ -1139,6 +1164,11 @@ export interface NexusGenInputs {
   PostWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  ProblemItem: { // input type
+    id?: string | null; // String
+    next?: NexusGenInputs['NextType'] | null; // NextType
+    type?: string | null; // String
+  }
   ProblemListRelationFilter: { // input type
     every?: NexusGenInputs['ProblemWhereInput'] | null; // ProblemWhereInput
     none?: NexusGenInputs['ProblemWhereInput'] | null; // ProblemWhereInput
@@ -1182,6 +1212,9 @@ export interface NexusGenInputs {
   ProblemResultWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  ProblemStructure: { // input type
+    problemItems?: Array<NexusGenInputs['ProblemItem'] | null> | null; // [ProblemItem]
+  }
   ProblemWhereInput: { // input type
     AND?: NexusGenInputs['ProblemWhereInput'][] | null; // [ProblemWhereInput!]
     answer?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1201,6 +1234,7 @@ export interface NexusGenInputs {
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
     solution?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     solutionList?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    steps?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     text?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -1449,6 +1483,8 @@ export interface NexusGenInputs {
     forum?: NexusGenInputs['ForumWhereInput'] | null; // ForumWhereInput
     forumId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    miniforum?: NexusGenInputs['MiniForumWhereInput'] | null; // MiniForumWhereInput
+    miniforumId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['StatementWhereInput'][] | null; // [StatementWhereInput!]
     OR?: NexusGenInputs['StatementWhereInput'][] | null; // [StatementWhereInput!]
     text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1763,6 +1799,7 @@ export interface NexusGenInputs {
     lessons?: NexusGenInputs['LessonListRelationFilter'] | null; // LessonListRelationFilter
     level?: NexusGenInputs['UserLevelWhereInput'] | null; // UserLevelWhereInput
     levelId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    miniforums?: NexusGenInputs['MiniForumListRelationFilter'] | null; // MiniForumListRelationFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     new_subjects?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
     newTests?: NexusGenInputs['NewTestListRelationFilter'] | null; // NewTestListRelationFilter
@@ -2056,6 +2093,15 @@ export interface NexusGenObjects {
   Message: { // root type
     message?: string | null; // String
   }
+  MiniForum: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    lessonId?: string | null; // String
+    type?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
+    value?: string | null; // String
+  }
   Mutation: {};
   NewTest: { // root type
     answers: string[]; // [String!]!
@@ -2130,6 +2176,7 @@ export interface NexusGenObjects {
     lessonID: string; // String!
     nodeID?: string | null; // String
     nodeType?: string | null; // String
+    steps?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId: string; // String!
@@ -2564,6 +2611,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     map: NexusGenScalars['Json'][]; // [Json!]!
+    miniforums: NexusGenRootTypes['MiniForum'][]; // [MiniForum!]!
     name: string; // String!
     newTests: NexusGenRootTypes['NewTest'][]; // [NewTest!]!
     notes: NexusGenRootTypes['Note'][]; // [Note!]!
@@ -2603,6 +2651,18 @@ export interface NexusGenFieldTypes {
   Message: { // field return type
     message: string | null; // String
   }
+  MiniForum: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonId: string | null; // String
+    statements: NexusGenRootTypes['Statement'][]; // [Statement!]!
+    type: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
+    value: string | null; // String
+  }
   Mutation: { // field return type
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createBusinessClient: NexusGenRootTypes['User'] | null; // User
@@ -2622,6 +2682,8 @@ export interface NexusGenFieldTypes {
     createForum: NexusGenRootTypes['Forum'] | null; // Forum
     createLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     createLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
+    createMiniForum: NexusGenRootTypes['MiniForum'] | null; // MiniForum
+    createMiniStatement: NexusGenRootTypes['Statement'] | null; // Statement
     createNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     createNote: NexusGenRootTypes['Note'] | null; // Note
     createOrder: NexusGenRootTypes['PaymentInfo'] | null; // PaymentInfo
@@ -2635,7 +2697,7 @@ export interface NexusGenFieldTypes {
     createShot: NexusGenRootTypes['Shot'] | null; // Shot
     createShotResult: NexusGenRootTypes['ShotResult'] | null; // ShotResult
     createStatement: NexusGenRootTypes['Statement'] | null; // Statement
-    createTestPractice: NexusGenRootTypes['NewTest'] | null; // NewTest
+    createTestPractice: NexusGenRootTypes['TestPractice'] | null; // TestPractice
     createTestPracticeResult: NexusGenRootTypes['TestPracticeResult'] | null; // TestPracticeResult
     createTestResult: NexusGenRootTypes['TestResult'] | null; // TestResult
     createTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
@@ -2675,6 +2737,7 @@ export interface NexusGenFieldTypes {
     updateForum: NexusGenRootTypes['Forum'] | null; // Forum
     updateLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
+    updateMiniStatement: NexusGenRootTypes['Statement'] | null; // Statement
     updateNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     updateNote: NexusGenRootTypes['Note'] | null; // Note
     updateOrder: NexusGenRootTypes['Order'] | null; // Order
@@ -2774,6 +2837,7 @@ export interface NexusGenFieldTypes {
     nodeID: string | null; // String
     nodeType: string | null; // String
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
+    steps: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
@@ -2809,6 +2873,7 @@ export interface NexusGenFieldTypes {
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     me: NexusGenRootTypes['User'] | null; // User
+    miniForums: NexusGenRootTypes['MiniForum'][]; // [MiniForum!]!
     newTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
     post: NexusGenRootTypes['Post'] | null; // Post
@@ -3274,6 +3339,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     lessonResults: 'LessonResult'
     map: 'Json'
+    miniforums: 'MiniForum'
     name: 'String'
     newTests: 'NewTest'
     notes: 'Note'
@@ -3313,6 +3379,18 @@ export interface NexusGenFieldTypeNames {
   Message: { // field return type name
     message: 'String'
   }
+  MiniForum: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    lesson: 'Lesson'
+    lessonId: 'String'
+    statements: 'Statement'
+    type: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+    value: 'String'
+  }
   Mutation: { // field return type name
     checkAssignment: 'LessonResult'
     createBusinessClient: 'User'
@@ -3332,6 +3410,8 @@ export interface NexusGenFieldTypeNames {
     createForum: 'Forum'
     createLesson: 'Lesson'
     createLessonResult: 'LessonResult'
+    createMiniForum: 'MiniForum'
+    createMiniStatement: 'Statement'
     createNewTest: 'NewTest'
     createNote: 'Note'
     createOrder: 'PaymentInfo'
@@ -3345,7 +3425,7 @@ export interface NexusGenFieldTypeNames {
     createShot: 'Shot'
     createShotResult: 'ShotResult'
     createStatement: 'Statement'
-    createTestPractice: 'NewTest'
+    createTestPractice: 'TestPractice'
     createTestPracticeResult: 'TestPracticeResult'
     createTestResult: 'TestResult'
     createTextEditor: 'TextEditor'
@@ -3385,6 +3465,7 @@ export interface NexusGenFieldTypeNames {
     updateForum: 'Forum'
     updateLesson: 'Lesson'
     updateLessonResult: 'LessonResult'
+    updateMiniStatement: 'Statement'
     updateNewTest: 'NewTest'
     updateNote: 'Note'
     updateOrder: 'Order'
@@ -3484,6 +3565,7 @@ export interface NexusGenFieldTypeNames {
     nodeID: 'String'
     nodeType: 'String'
     problemResults: 'ProblemResult'
+    steps: 'Json'
     text: 'String'
     updatedAt: 'DateTime'
     user: 'User'
@@ -3519,6 +3601,7 @@ export interface NexusGenFieldTypeNames {
     lessonResults: 'LessonResult'
     lessons: 'Lesson'
     me: 'User'
+    miniForums: 'MiniForum'
     newTest: 'NewTest'
     orders: 'Order'
     post: 'Post'
@@ -3846,6 +3929,12 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
     }
+    miniforums: { // args
+      after?: NexusGenInputs['MiniForumWhereUniqueInput'] | null; // MiniForumWhereUniqueInput
+      before?: NexusGenInputs['MiniForumWhereUniqueInput'] | null; // MiniForumWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
     newTests: { // args
       after?: NexusGenInputs['NewTestWhereUniqueInput'] | null; // NewTestWhereUniqueInput
       before?: NexusGenInputs['NewTestWhereUniqueInput'] | null; // NewTestWhereUniqueInput
@@ -3915,6 +4004,14 @@ export interface NexusGenArgTypes {
     texteditors: { // args
       after?: NexusGenInputs['TextEditorWhereUniqueInput'] | null; // TextEditorWhereUniqueInput
       before?: NexusGenInputs['TextEditorWhereUniqueInput'] | null; // TextEditorWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
+  MiniForum: {
+    statements: { // args
+      after?: NexusGenInputs['StatementWhereUniqueInput'] | null; // StatementWhereUniqueInput
+      before?: NexusGenInputs['StatementWhereUniqueInput'] | null; // StatementWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }
@@ -4025,6 +4122,15 @@ export interface NexusGenArgTypes {
       lessonID?: string | null; // String
       visitsNumber?: number | null; // Int
     }
+    createMiniForum: { // args
+      lessonId?: string | null; // String
+      type?: string | null; // String
+      value?: string | null; // String
+    }
+    createMiniStatement: { // args
+      miniforumId?: string | null; // String
+      text?: string | null; // String
+    }
     createNewTest: { // args
       answers?: Array<string | null> | null; // [String]
       comments?: Array<string | null> | null; // [String]
@@ -4059,8 +4165,7 @@ export interface NexusGenArgTypes {
     }
     createProblem: { // args
       lessonId?: string | null; // String
-      nodeID?: string | null; // String
-      nodeType?: string | null; // String
+      steps?: NexusGenInputs['ProblemStructure'] | null; // ProblemStructure
       text?: string | null; // String
     }
     createProblemResult: { // args
@@ -4100,6 +4205,7 @@ export interface NexusGenArgTypes {
     }
     createStatement: { // args
       forumId?: string | null; // String
+      miniforumId?: string | null; // String
       text?: string | null; // String
     }
     createTestPractice: { // args
@@ -4304,6 +4410,10 @@ export interface NexusGenArgTypes {
       progress?: number | null; // Int
       visitsNumber?: number | null; // Int
     }
+    updateMiniStatement: { // args
+      comments?: Array<string | null> | null; // [String]
+      id?: string | null; // String
+    }
     updateNewTest: { // args
       answers?: Array<string | null> | null; // [String]
       comments?: Array<string | null> | null; // [String]
@@ -4344,8 +4454,6 @@ export interface NexusGenArgTypes {
       complexity?: number | null; // Int
       id?: string | null; // String
       isSecret?: boolean | null; // Boolean
-      nodeID?: string | null; // String
-      nodeType?: string | null; // String
       text?: string | null; // String
     }
     updatePublished: { // args
@@ -4501,6 +4609,13 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
       where?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    }
+    miniForums: { // args
+      after?: NexusGenInputs['MiniForumWhereUniqueInput'] | null; // MiniForumWhereUniqueInput
+      before?: NexusGenInputs['MiniForumWhereUniqueInput'] | null; // MiniForumWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      where?: NexusGenInputs['MiniForumWhereInput'] | null; // MiniForumWhereInput
     }
     newTest: { // args
       where: NexusGenInputs['NewTestWhereUniqueInput']; // NewTestWhereUniqueInput!

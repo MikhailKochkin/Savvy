@@ -24,6 +24,7 @@ const Query = queryType({
     t.crud.lesson({ filtering: true });
     t.crud.lessons({ filtering: true });
     t.crud.newTest({ filtering: true });
+    t.crud.miniForums({ filtering: true });
     t.crud.orders({ ordering: true, filtering: true });
     t.crud.post({ ordering: true, filtering: true });
     t.crud.posts({ ordering: true, filtering: true });

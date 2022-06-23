@@ -102,6 +102,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         text
         nodeID
+        steps
         complexity
         nodeType
         user {
@@ -156,6 +157,33 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         comments
         user {
           id
+        }
+      }
+      miniforums {
+        id
+        type
+        value
+        statements {
+          id
+          text
+          comments
+          createdAt
+          user {
+            id
+            name
+            surname
+          }
+        }
+        lesson {
+          id
+          user {
+            id
+          }
+        }
+        user {
+          id
+          name
+          surname
         }
       }
       forum {
@@ -234,6 +262,7 @@ const Head = styled.div`
   justify-content: space-between;
   align-items: center;
   color: white;
+  cursor: pointer;
   min-height: 10vh;
   background: #1a2980; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -244,9 +273,8 @@ const Head = styled.div`
   background: linear-gradient(to right, #26d0ce, #1a2980);
   width: 100%;
   font-size: 2rem;
-  span {
-    margin: 0 3%;
-    margin-right: 3%;
+  padding: 0 20px;
+  .block {
   }
   #back {
     &:hover {
@@ -399,29 +427,27 @@ const NewSingleLesson = (props) => {
                       },
                     }}
                   >
-                    <span>Back</span>
+                    <span>Back to course</span>
                   </Link>
                 )}
-                <span>
+                <div className="block">
                   {me &&
                     (lesson.user.id === me.id ||
                       me.permissions.includes("ADMIN")) && (
-                      <div>
-                        {/* Режим истории → */}
-                        <Link
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: lesson.id,
-                              type: "regular",
-                            },
-                          }}
-                        >
-                          <span>{t("switch")}</span>
-                        </Link>
-                      </div>
+                      <Link
+                        href={{
+                          pathname: "/lesson",
+                          query: {
+                            id: lesson.id,
+                            type: "regular",
+                          },
+                        }}
+                      >
+                        {/* <span>{t("switch")}</span> */}
+                        <span>К разработке</span>
+                      </Link>
                     )}
-                </span>
+                </div>
               </Head>
               <LessonPart>
                 {/* <h1>

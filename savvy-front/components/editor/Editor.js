@@ -30,6 +30,28 @@ import styled from "styled-components";
 import { jsx } from "slate-hyperscript";
 import FormatToolBar from "./FormatToolbar";
 // import { bold } from "react-icons-kit/fa/bold";
+import { IconContext } from "react-icons";
+import {
+  BiBold,
+  BiUnderline,
+  BiHeading,
+  BiItalic,
+  BiLinkAlt,
+  BiListOl,
+  BiListUl,
+  BiVideoPlus,
+  BiImageAdd,
+  BiHighlight,
+  BiCommentAdd,
+  BiCommentError,
+  BiCommentCheck,
+  BiCommentMinus,
+  BiAlignRight,
+  BiAlignMiddle,
+  BiCommentDots,
+} from "react-icons/bi";
+import { FaQuoteLeft } from "react-icons/fa";
+
 // import { underline } from "react-icons-kit/fa/underline";
 // import { italic } from "react-icons-kit/fa/italic";
 // import { header } from "react-icons-kit/fa/header";
@@ -77,7 +99,7 @@ const TEXT_TAGS = {
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",
-  maxWidth: "840px",
+  maxWidth: "600px",
   width: "100%",
   backgroundColor: "rgb(255, 255, 255)",
   border: "1px solid #EDEFED",
@@ -93,9 +115,14 @@ const ButtonStyle = styled.button`
   margin: 3px;
   border-radius: 5px;
   outline: none;
+  width: 37px;
   &:hover {
     background: #112862;
     color: white;
+  }
+  .react-icons {
+    width: 100px;
+    /* vertical-align: middle; */
   }
 `;
 
@@ -104,7 +131,13 @@ const Span = styled.span`
 `;
 
 const Quiz = styled.span`
-  text-transform: underline;
+  color: #f2cc8f;
+`;
+
+const Question = styled.div`
+  background: #f5f5f5;
+  padding: 15px 20px;
+  border-radius: 20px;
 `;
 
 const Table = styled.table`
@@ -164,13 +197,23 @@ const Flag = styled.div`
   border-radius: 5px;
 `;
 
+const Right = styled.div`
+  width: 100%;
+  text-align: right;
+`;
+
+const Center = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+
 const Note = styled.span`
-  color: darkslateblue;
+  color: #81b29a;
 `;
 
 const Conceal = styled.div`
-  color: red;
-  border-bottom: 1px solid green;
+  color: #3a5a40;
+  border-bottom: 1px solid #3a5a40;
   /* font-size: 2rem;
   width: 100%;
   margin: 3% 0;
@@ -180,7 +223,7 @@ const Conceal = styled.div`
 `;
 
 const Error = styled.span`
-  color: blue;
+  color: #e07a5f;
 `;
 // 1. Serializer – slate to html
 
@@ -200,7 +243,7 @@ const serialize = (node) => {
         text = `<u>${text}</u>`;
       }
       if (styles.includes("error")) {
-        text = `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${text}</span>`;
+        text = `<span className="editor_error" type="error" id="id" error_text="${node.error_text}" error_data="${node.error_text}">${text}</span>`;
       }
       if (styles.includes("note")) {
         text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
@@ -217,6 +260,8 @@ const serialize = (node) => {
   switch (node.type) {
     case "quote":
       return `<blockquote><p>${children}</p></blockquote>`;
+    case "question":
+      return `<div className="question">${children}</div>`;
     case "flag":
       return `<div className="flag">${children}</div>`;
     case "article":
@@ -235,12 +280,18 @@ const serialize = (node) => {
       return `<ul>${children}</ul>`;
     case "list-item":
       return `<li>${children}</li>`;
+    case "right":
+      return `<div className="align-right" style="text-align:right">${children}</div>`;
+    case "center":
+      return `<div className="align-center" style="text-align:center">${children}</div>`;
     case "image":
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
     case "error":
-      return `<span className="editor_error" type="error" id="id" text="${node.correct}" data="${node.correct}">${children}</span>`;
+      return `<span className="editor_error" type="error" id="id" error_text="${node.error_text}" error_data="${node.error_text}">${children}</span>`;
     case "note":
       return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
+    case "quiz":
+      return `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}"`;
     case "video":
       return `<iframe src="${escapeHtml(
         node.src
@@ -267,32 +318,76 @@ const deserialize = (el) => {
     return el.textContent;
   } else if (el.nodeType !== 1) {
     return null;
+  } else if (el.nodeName === "BR") {
+    return "\n";
   }
 
-  const children = Array.from(el.childNodes).map(deserialize);
+  const { nodeName } = el;
+  let parent = el;
+
+  let children = Array.from(parent.childNodes).map(deserialize).flat();
+  // if (children.includes(undefined)) {
+  //   return null;
+  // }
+  // let children = Array.from(el.childNodes).map(deserialize);
   // console.log(1, el.nodeName, TEXT_TAGS[el.nodeName]);
 
-  if (TEXT_TAGS[el.nodeName]) {
-    const attrs = TEXT_TAGS[el.nodeName](el);
-
-    return children.map((child) => jsx("text", attrs, child));
-    // return children
-    //   .find((child) => Text.isText(child))
-    //   ?.map((child) => jsx("text", attrs, child));
+  if (TEXT_TAGS[nodeName]) {
+    const attrs = TEXT_TAGS[nodeName](el);
+    return children.map((child) => {
+      // if (child.children && child.children[0] && child.children[0].text) {
+      //   return jsx("text", attrs, child.children[0].text);
+      if (child.children && child.children[0]) {
+        return child;
+      } else {
+        return jsx("text", attrs, child);
+      }
+    });
   }
 
   if (el.getAttribute("classname") == "flag") {
     return jsx("element", { type: "flag" }, children);
   }
+
+  if (el.getAttribute("classname") == "question") {
+    return jsx("element", { type: "question" }, children);
+  }
+
   if (
     el.getAttribute("classname") == "editor_error" ||
     el.getAttribute("id") == "id"
   ) {
-    return jsx("element", { type: "error" }, children);
+    return jsx(
+      "element",
+      {
+        type: "error",
+        error_text: el.getAttribute("error_text")
+          ? el.getAttribute("error_data")
+          : el.getAttribute("data"),
+        error_data: el.getAttribute("error_data")
+          ? el.getAttribute("error_data")
+          : el.getAttribute("data"),
+        id: "id",
+      },
+      children
+    );
   }
 
   if (el.getAttribute("classname") == "article") {
     return jsx("element", { type: "article" }, children);
+  }
+  if (el.getAttribute("classname") == "quiz") {
+    return jsx(
+      "element",
+      {
+        type: "quiz",
+        question: el.getAttribute("question"),
+        answer: el.getAttribute("answer"),
+        ifRight: el.getAttribute("ifRight"),
+        ifWrong: el.getAttribute("ifWrong"),
+      },
+      children
+    );
   }
 
   if (el.getAttribute("id") == "conceal") {
@@ -311,6 +406,23 @@ const deserialize = (el) => {
       children.length > 0 ? children : [{ text: "" }]
     );
   }
+
+  if (el.getAttribute("classname") == "align-right") {
+    return jsx(
+      "element",
+      { type: "right" },
+      children.length > 0 ? children : [{ text: "" }]
+    );
+  }
+
+  if (el.getAttribute("classname") == "align-center") {
+    return jsx(
+      "element",
+      { type: "center" },
+      children.length > 0 ? children : [{ text: "" }]
+    );
+  }
+
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -406,7 +518,7 @@ const toggleElement = (editor, format) => {
 
 const CustomEditor = {
   addVideoElement(editor) {
-    let link = prompt("Ссылка: ");
+    let link = prompt("Ссылка на видео: ");
     editor.selection.anchor.path == [0, 0] &&
       editor.selection.anchor.offset == 0 &&
       editor.insertBreak();
@@ -426,7 +538,7 @@ const CustomEditor = {
   },
 
   addImageElement(editor) {
-    let link = prompt("Ссылка: ");
+    let link = prompt("Ссылка на картинку: ");
     editor.selection.anchor.path == [0, 0] &&
       editor.selection.anchor.offset == 0 &&
       editor.insertBreak();
@@ -500,16 +612,8 @@ const CustomEditor = {
     let correct = prompt("Правильный ответ: ");
     Transforms.setNodes(
       editor,
-      { type: "error", error: true, correct: correct },
+      { type: "error", error: true, error_text: correct, error_data: correct },
       { match: (n) => Text.isText(n), split: true }
-    );
-  },
-
-  toggleFlag(editor) {
-    Transforms.insertNodes(
-      editor,
-      { type: "table-row", children: [] }
-      // { at: [current_path + 1] }
     );
   },
 };
@@ -659,7 +763,7 @@ const withTables = (editor) => {
 
 const App = (props) => {
   let html;
-  props.value ? (html = props.value) : (html = `<p> </p>`);
+  props.value ? (html = props.value) : (html = `<p></p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
   const [value, setValue] = useState(initial);
@@ -711,6 +815,12 @@ const App = (props) => {
         return <td {...props.attributes}>{props.children}</td>;
       case "flag":
         return <FlagElement {...props} />;
+      case "question":
+        return <QuestionElement {...props} />;
+      case "right":
+        return <RightElement {...props} />;
+      case "center":
+        return <CenterElement {...props} />;
       case "article":
         return <ArticleElement {...props} />;
       case "note":
@@ -742,134 +852,168 @@ const App = (props) => {
       }}
     >
       <FormatToolBar>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            toggleMark(editor, "bold");
-          }}
-        >
-          Bold
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            toggleMark(editor, "italic");
-          }}
-        >
-          Italic
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            toggleMark(editor, "underline");
-          }}
-        >
-          Underline
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            toggleElement(editor, "header");
-          }}
-        >
-          Header
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            const url = window.prompt("Enter the URL of the link:");
-            if (!url) return;
-            insertLink(editor, url);
-          }}
-        >
-          Link
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.makeList(editor, "bulleted-list");
-          }}
-        >
-          List
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.makeList(editor, "numbered-list");
-          }}
-        >
-          ListOl{" "}
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.addVideoElement(editor);
-          }}
-        >
-          Video
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.addImageElement(editor);
-          }}
-        >
-          Image
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.addComment(editor);
-          }}
-        >
-          Comment
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.addError(editor);
-          }}
-        >
-          Erroe
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            toggleElement(editor, "flag");
-          }}
-        >
-          Flag
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            toggleElement(editor, "article");
-          }}
-        >
-          Source
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.addQuiz(editor);
-          }}
-        >
-          Question
-        </ButtonStyle>
-        <ButtonStyle
-          onMouseDown={(event) => {
-            event.preventDefault();
-            CustomEditor.conceal(editor, "editor");
-          }}
-        >
-          Conceal
-        </ButtonStyle>
+        <IconContext.Provider value={{ size: "18px" }}>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleMark(editor, "bold");
+            }}
+          >
+            <BiBold value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleMark(editor, "italic");
+            }}
+          >
+            <BiItalic value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleMark(editor, "underline");
+            }}
+          >
+            <BiUnderline value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleElement(editor, "header");
+            }}
+          >
+            <BiHeading value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              const url = window.prompt("Enter the URL of the link:");
+              if (!url) return;
+              insertLink(editor, url);
+            }}
+          >
+            <BiLinkAlt value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              CustomEditor.makeList(editor, "bulleted-list");
+            }}
+          >
+            <BiListUl value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              CustomEditor.makeList(editor, "numbered-list");
+            }}
+          >
+            <BiListOl value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleElement(editor, "center");
+            }}
+          >
+            <BiAlignMiddle value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleElement(editor, "right");
+            }}
+          >
+            <BiAlignRight value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              CustomEditor.addImageElement(editor);
+            }}
+          >
+            <BiImageAdd value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              CustomEditor.addVideoElement(editor);
+            }}
+          >
+            <BiVideoPlus value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleElement(editor, "article");
+            }}
+          >
+            <FaQuoteLeft value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          <ButtonStyle
+            onMouseDown={(event) => {
+              event.preventDefault();
+              toggleElement(editor, "flag");
+            }}
+          >
+            <BiHighlight value={{ className: "react-icons" }} />
+          </ButtonStyle>
+          {props.problem && (
+            <>
+              <ButtonStyle
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  CustomEditor.conceal(editor, "editor");
+                }}
+              >
+                <BiCommentMinus value={{ className: "react-icons" }} />
+              </ButtonStyle>
+              <ButtonStyle
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  toggleElement(editor, "question");
+                }}
+              >
+                <BiCommentDots value={{ className: "react-icons" }} />
+              </ButtonStyle>
+            </>
+          )}
+          {props.complex && (
+            <>
+              <ButtonStyle
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  CustomEditor.addComment(editor);
+                }}
+              >
+                <BiCommentAdd value={{ className: "react-icons" }} />
+              </ButtonStyle>
+              <ButtonStyle
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  CustomEditor.addError(editor);
+                }}
+              >
+                <BiCommentError value={{ className: "react-icons" }} />
+              </ButtonStyle>
+              <ButtonStyle
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  CustomEditor.addQuiz(editor);
+                }}
+              >
+                <BiCommentCheck value={{ className: "react-icons" }} />
+              </ButtonStyle>
+            </>
+          )}
+        </IconContext.Provider>
       </FormatToolBar>
       <Editable
         style={AppStyles}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder="Enter some plain text..."
+        placeholder="Write something..."
       />
     </Slate>
   );
@@ -956,6 +1100,18 @@ const TableElement = (props) => {
 
 const FlagElement = (props) => {
   return <Flag {...props.attributes}>{props.children}</Flag>;
+};
+
+const QuestionElement = (props) => {
+  return <Question {...props.attributes}>{props.children}</Question>;
+};
+
+const RightElement = (props) => {
+  return <Right {...props.attributes}>{props.children}</Right>;
+};
+
+const CenterElement = (props) => {
+  return <Center {...props.attributes}>{props.children}</Center>;
 };
 
 const ArticleElement = (props) => {

@@ -3,6 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import CreateMessage from "./CreateMessage";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import _ from "lodash";
 
 const CREATE_CHAT_MUTATION = gql`
   mutation CREATE_CHAT_MUTATION(
@@ -25,7 +26,8 @@ const CREATE_CHAT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  margin: 20px 0;
+  width: 570px;
+  margin: 10px 0;
   button.but {
     padding: 1%;
     border-radius: 5px;
@@ -34,32 +36,66 @@ const Styles = styled.div`
   }
 `;
 
-const Input = styled.input`
-  width: 50%;
-  background: none;
-  font-size: 1.6rem;
+const ButtonTwo = styled.button`
   border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
   font-family: Montserrat;
-  outline: 0;
-  margin-bottom: 2%;
-  border-bottom: 1px solid #edefed;
-  padding-bottom: 0.5%;
-  &:focus {
-    border-bottom: 1px solid #1a2a81;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
   }
 `;
 
 const Bottom = styled.div`
-  margin-top: 50px;
-  padding-top: 15px;
   width: 70%;
-  border-top: 1px solid grey;
+  .number_box {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    .number {
+      cursor: pointer;
+      border: 1px solid grey;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      margin-right: 15px;
+      button {
+        border: none;
+        cursor: pointer;
+
+        background: none;
+        font-family: Montserrat;
+      }
+    }
+  }
 `;
 
 const CreateChat = (props) => {
-  const [name, setName] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [num, setNum] = useState(0);
+  const [name, setName] = useState("Dialogue");
+  const [messages, setMessages] = useState([
+    {
+      number: 0,
+      author: "author",
+      text: "",
+      image: "",
+      reactions: [],
+    },
+  ]);
+  const [num, setNum] = useState(1);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
 
@@ -67,32 +103,64 @@ const CreateChat = (props) => {
     setMessages([...messages, data]);
   };
 
+  const updateAuthor = (val, i) => {
+    let old_messages = [...messages];
+    old_messages[i].author = val;
+    setMessages([...old_messages]);
+  };
+
+  const updateText = (val, i) => {
+    let old_messages = [...messages];
+    old_messages[i].text = val;
+    setMessages([...old_messages]);
+  };
+
   return (
     <Styles>
-      <Input
+      {/* <Input
         type="text"
         placeholder="Название диалога"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <br />
-      {_.times(num, (i) => (
+      <br /> */}
+      {messages.map((m, i) => (
         <>
           <CreateMessage
-            index={i + 1}
-            document={props.document}
+            index={i}
+            // document={props.document}
             getMessage={getMessage}
+            updateAuthor={updateAuthor}
+            updateText={updateText}
           />
         </>
       ))}
       <Bottom>
-        <button className="but" onClick={(e) => setNum(num - 1)}>
-          -1 реплика
-        </button>
-        <button className="but" onClick={(e) => setNum(num + 1)}>
-          +1 реплика
-        </button>
-        <button
+        <div className="number_box">
+          {/* <div className="number">
+            <button onClick={(e) => setNum(num - 1)}>-1</button>
+          </div> */}
+          <div className="number">
+            <button
+              onClick={(e) => {
+                setMessages([
+                  ...messages,
+                  {
+                    number: 0,
+                    author: "author",
+                    text: "",
+                    image: "",
+                    reactions: [],
+                  },
+                ]);
+              }}
+            >
+              +1
+            </button>
+          </div>
+        </div>
+        <br />
+        <ButtonTwo
           onClick={async (e) => {
             e.preventDefault();
             const res = await createChat({
@@ -109,11 +177,11 @@ const CreateChat = (props) => {
               ],
             });
             props.getResult(res);
-            alert("Готово!");
+            console.log("res", res);
           }}
         >
-          Сохранить диалог
-        </button>
+          {loading ? "Сохраняем..." : "Сохранить"}
+        </ButtonTwo>
       </Bottom>
     </Styles>
   );

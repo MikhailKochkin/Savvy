@@ -40,6 +40,7 @@ const Lesson = objectType({
     t.model.quizes();
     t.model.documents();
     t.model.forum();
+    t.model.miniforums();
     t.model.newTests();
     t.model.problems();
     t.model.constructions();

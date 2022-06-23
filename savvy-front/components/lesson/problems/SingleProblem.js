@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import Interactive from "./Interactive";
+import NewInteractive from "./NewInteractive";
 import UpdateProblem from "./UpdateProblem";
 import HoverEditor from "../../editor/HoverEditor";
 
@@ -31,8 +32,10 @@ const CREATE_PROBLEMRESULT_MUTATION = gql`
 `;
 
 const TextBar = styled.div`
-  width: ${(props) => (props.story ? "100vw" : "100%")};
-  max-width: 540px;
+  /* width: ${(props) => (props.story ? "100vw" : "100%")}; */
+  /* max-width: 540px; */
+  width: 570px;
+
   font-size: 1.6rem;
   padding: 0;
   display: flex;
@@ -67,7 +70,7 @@ const TextBar = styled.div`
   }
   h2 p {
     line-height: 1.2;
-    width: 90%;
+    width: 80%;
     font-size: 3.2rem;
     font-weight: 700;
   }
@@ -86,6 +89,15 @@ const TextBar = styled.div`
     @media (max-width: 800px) {
       width: 100%;
       height: auto;
+    }
+  }
+  .question {
+    background: #f5f5f5;
+    padding: 15px 20px;
+    border-radius: 20px;
+    .line_top {
+      border-top: 1px solid #d0d0d0;
+      padding-top: 20px;
     }
   }
   #question {
@@ -185,7 +197,7 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
+const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
@@ -197,7 +209,8 @@ class SingleProblem extends Component {
     revealed: [],
     update: false,
     teacher_answer: "",
-    isFinished: false,
+    isOldFinished: false,
+    isNewFinished: false,
   };
 
   handleChange = (e) => {
@@ -221,8 +234,13 @@ class SingleProblem extends Component {
     }
   };
 
-  onFinish = (status) => {
-    this.setState({ isFinished: true });
+  onFinish = (status, type) => {
+    console.log("status, type", status, type);
+    if (type == "old") {
+      this.setState({ isOldFinished: true });
+    } else if (type == "new") {
+      this.setState({ isNewFinished: true });
+    }
   };
 
   onMouseClick = (e) => {
@@ -276,6 +294,20 @@ class SingleProblem extends Component {
 
     return (
       <>
+        {me && !story && (
+          <StyledButton
+            onClick={(e) =>
+              this.setState((prevState) => ({
+                update: !prevState.update,
+              }))
+            }
+          >
+            Изменить
+          </StyledButton>
+        )}
+        {me && !story ? (
+          <DeleteSingleProblem id={problem.id} lessonId={this.props.lessonID} />
+        ) : null}
         {!this.state.update && (
           <TextBar id={problem.id} story={story}>
             <div id="text">{renderHTML(problem.text)}</div>
@@ -289,83 +321,80 @@ class SingleProblem extends Component {
                 onFinish={this.onFinish}
               />
             )}
-            {(this.state.isFinished || !problem.nodeID) && (
-              <ResponseArea>
-                <h2>Write down the answer</h2>
-                <Frame story={story}>
-                  <HoverEditor
-                    index={1}
-                    name="answer"
-                    getEditorText={this.myCallback}
-                    placeholder={``}
-                  />
-                </Frame>
-                <Mutation
-                  mutation={CREATE_PROBLEMRESULT_MUTATION}
-                  variables={{
-                    lessonId: this.props.lessonID,
-                    answer: this.state.answer,
-                    revealed: this.state.revealed,
-                    problemID: this.props.problem.id,
-                  }}
-                >
-                  {(createProblemResult, { loading, error }) => (
-                    <Buttons story={story} block={this.state.revealAnswer}>
-                      <StyledButton
-                        variant="contained"
-                        color="primary"
-                        onClick={async (e) => {
-                          // Stop the form from submitting
-                          e.preventDefault();
-                          // call the mutation
-                          if (this.state.answer !== "") {
-                            const res = await createProblemResult();
-                            this.props.getResults(3);
-                            const res2 = await this.setState({
-                              showAnswerButton: true,
-                            });
-                            console.log("Yes");
-                          } else {
-                            console.log("No");
-                          }
-                        }}
-                      >
-                        {loading ? "Answering..." : "Answer"}
-                      </StyledButton>
-                      {this.state.showAnswerButton && (
-                        <Button2
-                          onClick={(e) =>
-                            this.setState((prevState) => ({
-                              showAnswerText: !prevState.showAnswer,
-                            }))
-                          }
-                        >
-                          Show the correct answer
-                        </Button2>
-                      )}
-                    </Buttons>
-                  )}
-                </Mutation>
-                {this.state.showAnswerText && (
-                  <div>
-                    <h2>Ответ</h2>
-                    {renderHTML(this.state.teacher_answer)}
-                  </div>
-                )}
-              </ResponseArea>
-            )}
-            {/* )} */}
-            {me && !story && (
-              <StyledButton onClick={(e) => this.setState({ update: true })}>
-                Изменить
-              </StyledButton>
-            )}
-            {me && !story ? (
-              <DeleteSingleProblem
-                id={problem.id}
-                lessonId={this.props.lessonID}
+            {problem.steps && problem.steps.problemItems.length >= 1 && (
+              <NewInteractive
+                lesson={lesson}
+                me={me}
+                problem={problem}
+                story={story}
+                author={author}
+                onFinish={this.onFinish}
               />
-            ) : null}
+            )}
+            {/* {(this.state.isOldFinished || this.state.isNewFinished) && ( */}
+            <ResponseArea>
+              <h2>Write down the answer</h2>
+              <Frame story={story}>
+                <DynamicHoverEditor
+                  index={1}
+                  name="answer"
+                  getEditorText={this.myCallback}
+                  placeholder={`Write something`}
+                />
+              </Frame>
+              <Mutation
+                mutation={CREATE_PROBLEMRESULT_MUTATION}
+                variables={{
+                  lessonId: this.props.lessonID,
+                  answer: this.state.answer,
+                  revealed: this.state.revealed,
+                  problemID: this.props.problem.id,
+                }}
+              >
+                {(createProblemResult, { loading, error }) => (
+                  <Buttons story={story} block={this.state.revealAnswer}>
+                    <StyledButton
+                      variant="contained"
+                      color="primary"
+                      onClick={async (e) => {
+                        // Stop the form from submitting
+                        e.preventDefault();
+                        // call the mutation
+                        if (this.state.answer !== "") {
+                          const res = await createProblemResult();
+                          this.props.getResults(3);
+                          const res2 = await this.setState({
+                            showAnswerButton: true,
+                          });
+                          console.log("Yes");
+                        } else {
+                          console.log("No");
+                        }
+                      }}
+                    >
+                      {loading ? "Answering..." : "Answer"}
+                    </StyledButton>
+                    {this.state.showAnswerButton && (
+                      <Button2
+                        onClick={(e) =>
+                          this.setState((prevState) => ({
+                            showAnswerText: !prevState.showAnswer,
+                          }))
+                        }
+                      >
+                        Show the correct answer
+                      </Button2>
+                    )}
+                  </Buttons>
+                )}
+              </Mutation>
+              {this.state.showAnswerText && (
+                <div>
+                  <h2>Ответ</h2>
+                  {renderHTML(this.state.teacher_answer)}
+                </div>
+              )}
+            </ResponseArea>
           </TextBar>
         )}
         {this.state.update && (
@@ -374,8 +403,8 @@ class SingleProblem extends Component {
               id={problem.id}
               text={problem.text}
               lessonID={this.props.lessonID}
-              nodeID={problem.nodeID}
-              nodeType={problem.nodeType}
+              nodeID={problem.nodeID ? problem.nodeID : null}
+              nodeType={problem.nodeType ? problem.nodeType : null}
               complexity={complexity}
               quizes={lesson.quizes}
               newTests={lesson.newTests}

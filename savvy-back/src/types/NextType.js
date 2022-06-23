@@ -24,6 +24,22 @@ const NextType = inputObjectType({
   },
 });
 
+const ProblemItem = inputObjectType({
+  name: "ProblemItem",
+  definition(t) {
+    t.string("type");
+    t.string("id");
+    t.field("next", { type: "NextType" });
+  },
+});
+
+const ProblemStructure = inputObjectType({
+  name: "ProblemStructure",
+  definition(t) {
+    t.list.field("problemItems", { type: "ProblemItem" });
+  },
+});
+
 const LessonItem = inputObjectType({
   name: "LessonItem",
   definition(t) {
@@ -91,8 +107,9 @@ module.exports = {
   LessonStructure,
   Promocode,
   PromocodeList,
-  EmailInfo,
   LesResult,
   LesResultsList,
   EmailInfo,
+  ProblemItem,
+  ProblemStructure,
 };

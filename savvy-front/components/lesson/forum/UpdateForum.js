@@ -81,7 +81,7 @@ const UpdateForum = (props) => {
             </div>
             <DynamicLoadedEditor
               getEditorText={myCallback}
-              previousText={props.text}
+              value={props.text}
             />
             <Button
               type="submit"

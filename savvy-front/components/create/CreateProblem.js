@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 // import { eyeSlash } from "react-icons-kit/fa/eyeSlash";
 import ProblemBuilder from "./ProblemBuilder";
+import NewProblemBuilder from "./NewProblemBuilder";
 
 const useStyles = makeStyles({
   button: {
@@ -38,16 +39,17 @@ const CREATE_PROBLEM_MUTATION = gql`
   mutation CREATE_PROBLEM_MUTATION(
     $text: String!
     $lessonId: String!
-    $nodeID: String!
-    $nodeType: String
+    $steps: ProblemStructure # $nodeType: String #$nodeID: String!
   ) {
     createProblem(
       text: $text
       lessonId: $lessonId
-      nodeID: $nodeID
-      nodeType: $nodeType
+      steps: $steps # nodeType: $nodeType # nodeID: $nodeID
     ) {
       id
+      text
+      lessonId
+      steps
     }
   }
 `;
@@ -55,6 +57,27 @@ const CREATE_PROBLEM_MUTATION = gql`
 const Styles = styled.div`
   margin-top: 2%;
   max-width: 600px;
+`;
+
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  max-width: 180px;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
 `;
 
 const Title = styled.div`
@@ -84,48 +107,51 @@ const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
 
 const CreateProblem = (props) => {
   const [text, setText] = React.useState("");
-  const [nodeID, setNodeID] = React.useState("");
-  const [nodeType, setNodeType] = React.useState("");
+  const [steps, setSteps] = React.useState("");
+  // const [nodeID, setNodeID] = React.useState("");
+  // const [nodeType, setNodeType] = React.useState("");
   const classes = useStyles();
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
 
-  const { lessonID, lesson } = props;
-
-  const getNode = (type, id) => {
-    setNodeID(id);
-    setNodeType(type);
+  const getSteps = (val) => {
+    setSteps([...val]);
   };
+
+  const { lessonID, lesson } = props;
+  const placeholder = `<h2><p>План задачи</p></h2><p>1. Заголовок: название задачи. Сделайте его заголовком, нажав на кнопку <b>H</b>.</p><p>2. Опишите условия кейса</p><p>3. Запишите вопрос к задаче. Визуально выделите его, нажав на кнопку с двумя точками.</p><p>4. Ответ к задаче. Его нужно будет скрыть от студента, нажав на кнопку с минусом по центру диалогового окна. В появившемся окне напишите слово "Ответ". Ответ станет доступен только после решения задачи студентом.</p>`;
+  // const getNode = (type, id) => {
+  //   setNodeID(id);
+  //   setNodeType(type);
+  // };
 
   return (
     <Styles>
-      <Advice>
-        <div>
-          Задача состоит из двух частей. К первой части относятся{" "}
-          <b>текст задачи, подсказки и ответ</b>. Ко второй –{" "}
-          <b>поэтапное решение задачи</b>.
-        </div>{" "}
-      </Advice>
       <Title>Новая задача</Title>
-      <DynamicLoadedEditor getEditorText={myCallback} />
-      <h3>
-        Выберите первый вопрос, с которого начнется объяснение решения задачи.
-      </h3>
-      <ProblemBuilder
+      <DynamicLoadedEditor
+        getEditorText={myCallback}
+        problem={true}
+        value={placeholder}
+      />
+      <NewProblemBuilder
         lessonID={lesson.id}
-        getNode={getNode}
-        quizes={lesson.quizes}
-        newTests={lesson.newTests}
-        notes={lesson.notes}
+        lesson={lesson}
+        getSteps={getSteps}
+        me={props.me}
       />
       <Mutation
         mutation={CREATE_PROBLEM_MUTATION}
         variables={{
           lessonId: lessonID,
           text: text,
-          nodeID: nodeID,
-          nodeType: nodeType,
+          steps: {
+            problemItems: [...steps].map(
+              ({ index, ...keepAttrs }) => keepAttrs
+            ),
+          },
+          // nodeID: nodeID,
+          // nodeType: nodeType,
         }}
         refetchQueries={() => [
           {
@@ -137,7 +163,7 @@ const CreateProblem = (props) => {
       >
         {(createProblem, { loading, error }) => (
           <>
-            <Button
+            <ButtonTwo
               type="submit"
               variant="contained"
               color="primary"
@@ -145,11 +171,11 @@ const CreateProblem = (props) => {
               onClick={async (e) => {
                 e.preventDefault();
                 const res = await createProblem();
-                alert("Создали!");
+                props.getResult(res);
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
+            </ButtonTwo>
             {error ? error : null}
           </>
         )}

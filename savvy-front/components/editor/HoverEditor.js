@@ -25,6 +25,24 @@ import {
   Node,
   Element as SlateElement,
 } from "slate";
+import { IconContext } from "react-icons";
+
+import {
+  BiBold,
+  BiUnderline,
+  BiHeading,
+  BiItalic,
+  BiLinkAlt,
+  BiListOl,
+  BiListUl,
+  BiVideoPlus,
+  BiImageAdd,
+  BiStrikethrough,
+  BiCommentAdd,
+  BiCommentError,
+  BiCommentCheck,
+  BiCommentMinus,
+} from "react-icons/bi";
 import { css } from "emotion";
 import styled from "styled-components";
 import isUrl from "is-url";
@@ -233,7 +251,7 @@ const deserialize = (el) => {
 
 const HoveringMenu = (props) => {
   let html;
-  props.value ? (html = props.value) : (html = `<p> </p>`);
+  props.value ? (html = props.value) : (html = `<p></p>`);
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
   const [value, setValue] = useState(initial);
@@ -332,7 +350,7 @@ const HoveringMenu = (props) => {
         style={AppStyles}
         renderLeaf={renderLeaf}
         renderElement={renderElement}
-        placeholder={"Enter some text..."}
+        placeholder={props.placeholder}
         // onDOMBeforeInput={(event) => {
         //   event.preventDefault();
         //   console.log(event.inputType);
@@ -519,28 +537,30 @@ const HoveringToolbar = () => {
 
   return (
     <Portal>
-      <Menu
-        ref={ref}
-        className={css`
-          padding: 8px 7px 6px;
-          position: absolute;
-          z-index: 1;
-          top: -10000px;
-          left: -10000px;
-          margin-top: -6px;
-          opacity: 0;
-          background-color: #222;
-          border-radius: 4px;
-          transition: opacity 0.75s;
-        `}
-      >
-        <FormatButton format="bold" icon={bold} />
-        <FormatButton format="italic" icon={italic} />
-        <FormatButton format="delete" icon={strikethrough} />
-        <FormatButton format="insert" icon={underline} />
-        <FormatButton2 format="image" icon={image} />
-        <LinkButton format="image" icon={link} />
-      </Menu>
+      <IconContext.Provider value={{ size: "18px" }}>
+        <Menu
+          ref={ref}
+          className={css`
+            padding: 8px 7px 6px;
+            position: absolute;
+            z-index: 1;
+            top: -10000px;
+            left: -10000px;
+            margin-top: -6px;
+            opacity: 0;
+            background-color: #222;
+            border-radius: 4px;
+            transition: opacity 0.75s;
+          `}
+        >
+          <FormatButton format="bold" icon={"bold"} />
+          <FormatButton format="italic" icon={"italic"} />
+          <FormatButton format="delete" icon={"strikethrough"} />
+          <FormatButton format="insert" icon={"underline"} />
+          <FormatButton2 format="image" icon={"image"} />
+          <LinkButton format="image" icon={"link"} />
+        </Menu>
+      </IconContext.Provider>
     </Portal>
   );
 };
@@ -556,7 +576,16 @@ const FormatButton = ({ format, icon }) => {
         toggleFormat(editor, format);
       }}
     >
-      <IconBlock>{/* <Icon icon={icon} /> */}</IconBlock>
+      <IconBlock>
+        {icon == "bold" && <BiBold value={{ className: "react-icons" }} />}
+        {icon == "italic" && <BiItalic value={{ className: "react-icons" }} />}
+        {icon == "strikethrough" && (
+          <BiStrikethrough value={{ className: "react-icons" }} />
+        )}
+        {icon == "underline" && (
+          <BiUnderline value={{ className: "react-icons" }} />
+        )}
+      </IconBlock>
     </Button>
   );
 };
@@ -573,7 +602,9 @@ const LinkButton = ({ format, icon }) => {
         insertLink(editor, url);
       }}
     >
-      <IconBlock>{/* <Icon icon={icon} /> */}</IconBlock>
+      <IconBlock>
+        <BiLinkAlt value={{ className: "react-icons" }} />
+      </IconBlock>
     </Button>
   );
 };
@@ -589,7 +620,9 @@ const FormatButton2 = ({ format, icon }) => {
         addImageElement(editor);
       }}
     >
-      <IconBlock>{/* <Icon icon={icon} /> */}</IconBlock>
+      <IconBlock>
+        <BiImageAdd value={{ className: "react-icons" }} />
+      </IconBlock>
     </Button>
   );
 };

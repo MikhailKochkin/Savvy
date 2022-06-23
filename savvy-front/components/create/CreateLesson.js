@@ -25,6 +25,18 @@ const Container = styled.div`
     font-size: 1.6rem;
     outline: 0;
   }
+  input.model {
+    height: 15px;
+    width: 15px;
+    margin: 0px;
+    margin-right: 15px;
+    /* margin: 1% 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 3.5px;
+    padding: 2%;
+    font-size: 1.6rem;
+    outline: 0; */
+  }
   @media (max-width: 850px) {
     width: 85%;
   }

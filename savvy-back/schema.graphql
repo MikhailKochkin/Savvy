@@ -1060,6 +1060,7 @@ type Lesson {
   id: String!
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int): [LessonResult!]!
   map: [Json!]!
+  miniforums(after: MiniForumWhereUniqueInput, before: MiniForumWhereUniqueInput, first: Int, last: Int): [MiniForum!]!
   name: String!
   newTests(after: NewTestWhereUniqueInput, before: NewTestWhereUniqueInput, first: Int, last: Int): [NewTest!]!
   notes(after: NoteWhereUniqueInput, before: NoteWhereUniqueInput, first: Int, last: Int): [Note!]!
@@ -1178,6 +1179,7 @@ input LessonWhereInput {
   lessonFeedback: FeedbackListRelationFilter
   lessonResults: LessonResultListRelationFilter
   map: JsonNullableListFilter
+  miniforums: MiniForumListRelationFilter
   name: StringFilter
   newTests: NewTestListRelationFilter
   NOT: [LessonWhereInput!]
@@ -1234,6 +1236,46 @@ input Messages {
   messagesList: [MessageElement]
 }
 
+type MiniForum {
+  createdAt: DateTime!
+  id: String!
+  lesson: Lesson
+  lessonId: String
+  statements(after: StatementWhereUniqueInput, before: StatementWhereUniqueInput, first: Int, last: Int): [Statement!]!
+  type: String
+  updatedAt: DateTime!
+  user: User
+  userId: String
+  value: String
+}
+
+input MiniForumListRelationFilter {
+  every: MiniForumWhereInput
+  none: MiniForumWhereInput
+  some: MiniForumWhereInput
+}
+
+input MiniForumWhereInput {
+  AND: [MiniForumWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  NOT: [MiniForumWhereInput!]
+  OR: [MiniForumWhereInput!]
+  statements: StatementListRelationFilter
+  text: StringNullableFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+  value: StringNullableFilter
+}
+
+input MiniForumWhereUniqueInput {
+  id: String
+}
+
 type Mutation {
   checkAssignment(checked: Boolean, id: String): LessonResult
   createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): User
@@ -1253,20 +1295,22 @@ type Mutation {
   createForum(lessonId: String, text: String): Forum
   createLesson(coursePageID: String, description: String, name: String, number: Int, text: String): Lesson
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
+  createMiniForum(lessonId: String, type: String, value: String): MiniForum
+  createMiniStatement(miniforumId: String, text: String): Statement
   createNewTest(answers: [String], comments: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
   createNote(lessonId: String, text: String): Note
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(image: String, summary: String, text: String, title: String): Post
   createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
-  createProblem(lessonId: String, nodeID: String, nodeType: String, text: String): Problem
+  createProblem(lessonId: String, steps: ProblemStructure, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
   createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
   createQuizResult(answer: String, correct: Boolean, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
-  createStatement(forumId: String, text: String): Statement
-  createTestPractice(lessonId: String, tasks: [String], tasksNum: Int, text: String): NewTest
+  createStatement(forumId: String, miniforumId: String, text: String): Statement
+  createTestPractice(lessonId: String, tasks: [String], tasksNum: Int, text: String): TestPractice
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
@@ -1306,12 +1350,13 @@ type Mutation {
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
+  updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
   updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
-  updateProblem(complexity: Int, id: String, isSecret: Boolean, nodeID: String, nodeType: String, text: String): Problem
+  updateProblem(complexity: Int, id: String, isSecret: Boolean, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
@@ -1742,10 +1787,17 @@ type Problem {
   nodeID: String
   nodeType: String
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
+  steps: Json
   text: String!
   updatedAt: DateTime!
   user: User!
   userId: String!
+}
+
+input ProblemItem {
+  id: String
+  next: NextType
+  type: String
 }
 
 input ProblemListRelationFilter {
@@ -1812,6 +1864,10 @@ input ProblemResultWhereUniqueInput {
   id: String
 }
 
+input ProblemStructure {
+  problemItems: [ProblemItem]
+}
+
 input ProblemWhereInput {
   AND: [ProblemWhereInput!]
   answer: StringNullableFilter
@@ -1831,6 +1887,7 @@ input ProblemWhereInput {
   problemResults: ProblemResultListRelationFilter
   solution: StringNullableFilter
   solutionList: StringNullableListFilter
+  steps: JsonNullableFilter
   text: StringFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1865,6 +1922,7 @@ type Query {
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int, orderBy: [LessonResultOrderByInput!], where: LessonResultWhereInput): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int, where: LessonWhereInput): [Lesson!]!
   me: User
+  miniForums(after: MiniForumWhereUniqueInput, before: MiniForumWhereUniqueInput, first: Int, last: Int, where: MiniForumWhereInput): [MiniForum!]!
   newTest(where: NewTestWhereUniqueInput!): NewTest
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByInput!], where: OrderWhereInput): [Order!]!
   post(where: PostWhereUniqueInput!): Post
@@ -2242,6 +2300,8 @@ input StatementWhereInput {
   forum: ForumWhereInput
   forumId: StringNullableFilter
   id: StringFilter
+  miniforum: MiniForumWhereInput
+  miniforumId: StringNullableFilter
   NOT: [StatementWhereInput!]
   OR: [StatementWhereInput!]
   text: StringNullableFilter
@@ -2719,6 +2779,7 @@ input UserWhereInput {
   lessons: LessonListRelationFilter
   level: UserLevelWhereInput
   levelId: StringNullableFilter
+  miniforums: MiniForumListRelationFilter
   name: StringFilter
   new_subjects: CoursePageListRelationFilter
   newTests: NewTestListRelationFilter

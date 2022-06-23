@@ -40,11 +40,10 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
 const Styles = styled.div`
   margin-bottom: 20px;
   width: ${(props) => (props.width ? "95vw" : "100%")};
-  /* width: 95vw; */
   display: flex;
   flex-direction: row;
   justify-content: center;
-  /* align-items: center; */
+  align-items: center;
   background: #f8f9fa;
   padding: 2% 0;
 `;
@@ -269,7 +268,7 @@ const Input = styled.input`
 
 const EditText = styled.div`
   color: rgb(17, 17, 17);
-  width: ${(props) => (props.story ? "940px" : "740px")};
+  width: ${(props) => (props.story ? "940px" : "840px")};
   background: rgb(255, 255, 255);
   -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
@@ -326,6 +325,7 @@ class SingleTextEditor extends Component {
     result: false,
     inputColor: "#c0d6df",
     recieved: [],
+    checking: false,
     showQuiz: false,
     quiz: {
       question: "",
@@ -378,6 +378,8 @@ class SingleTextEditor extends Component {
           button2.addEventListener("click", this.show);
           e.target.after(button2);
         }
+        console.log("here 00000");
+
         if (parseFloat(res.res) > 69) {
           this.setState({
             result: true,
@@ -385,6 +387,7 @@ class SingleTextEditor extends Component {
           this.props.getResults(1);
           el.style.background = "#D9EAD3";
           e.target.innerHTML = "Check";
+          console.log("here &&&&");
         } else {
           this.setState({
             result: false,
@@ -404,6 +407,7 @@ class SingleTextEditor extends Component {
   };
 
   quizCheck = async (e) => {
+    this.setState({ checking: true });
     let data = {
       answer1: this.state.quiz.answer,
       answer2: this.state.quiz_guess,
@@ -421,10 +425,12 @@ class SingleTextEditor extends Component {
           this.setState({
             quiz_result: true,
           });
+          this.setState({ checking: false });
         } else {
           this.setState({
             quiz_result: false,
           });
+          this.setState({ checking: false });
         }
       })
       .catch((err) => console.log(err));
@@ -460,7 +466,8 @@ class SingleTextEditor extends Component {
     });
     this.setState({
       answer: "",
-      correct_option: e.target.getAttribute("data"),
+      correct_option:
+        e.target.getAttribute("error_data") || e.target.getAttribute("data"),
       wrong_option: wrong_option,
       chosenElement: id,
     });
@@ -497,7 +504,7 @@ class SingleTextEditor extends Component {
   onShow = () => {
     const elements = document
       .getElementById(this.props.textEditor.id + 1)
-      .querySelectorAll("#id");
+      .querySelectorAll("#id, .quiz, .editor_note");
     if (this.state.mistakesShown) {
       elements.forEach((element) => {
         element.classList.remove("edit");
@@ -514,6 +521,23 @@ class SingleTextEditor extends Component {
     const { textEditor, me, lessonID, story, complexity } = this.props;
     return (
       <>
+        {me &&
+          (me.id === textEditor.user.id || me.permissions.includes("ADMIN")) &&
+          !story && (
+            <>
+              <StyledButton
+                onClick={(e) =>
+                  this.setState((prev) => ({ update: !prev.update }))
+                }
+              >
+                {this.props.update ? "Назад" : "Изменить"}
+              </StyledButton>
+              <DeleteSingleTextEditor
+                id={this.props.textEditor.id}
+                lessonID={this.props.lessonID}
+              />
+            </>
+          )}
         <Styles id={textEditor.id + 1} width={story}>
           {!this.state.update && (
             <div>
@@ -629,27 +653,6 @@ class SingleTextEditor extends Component {
                 >
                   {this.state.mistakesShown ? "Hide mistakes" : "Show mistakes"}
                 </StyledButton>
-                {me &&
-                (me.id === textEditor.user.id ||
-                  me.permissions.includes("ADMIN")) &&
-                !story ? (
-                  <DeleteSingleTextEditor
-                    id={this.props.textEditor.id}
-                    lessonID={this.props.lessonID}
-                  />
-                ) : null}
-                {me &&
-                  (me.id === textEditor.user.id ||
-                    me.permissions.includes("ADMIN")) &&
-                  !story && (
-                    <StyledButton
-                      onClick={(e) =>
-                        this.setState((prev) => ({ update: !prev.update }))
-                      }
-                    >
-                      Изменить
-                    </StyledButton>
-                  )}
               </Buttons>
             </div>
           )}
@@ -699,7 +702,9 @@ class SingleTextEditor extends Component {
                       this.setState({ quiz_guess: e.target.value });
                     }}
                   />
-                  <button onClick={this.quizCheck}>Ответить</button>
+                  <button onClick={this.quizCheck}>
+                    {this.state.checking ? "Проверяем..." : "Ответить"}
+                  </button>
                   {this.state.quiz_result === false && (
                     <Comment>{this.state.quiz.ifWrong}</Comment>
                   )}

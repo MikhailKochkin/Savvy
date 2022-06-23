@@ -133,6 +133,7 @@ const StoryEx = (props) => {
           note={el}
           clicks={el.link_clicks}
           complexity={el.complexity}
+          miniforum={lesson.miniforums.find((m) => m.value == el.id)}
         />
       );
       components.push(item);
@@ -159,6 +160,7 @@ const StoryEx = (props) => {
           lessonID={lesson.id}
           length={Array(el.correct.length).fill(false)}
           story={true}
+          miniforum={lesson.miniforums.find((m) => m.value == el.id)}
         />
       );
       components.push(item);
@@ -184,6 +186,7 @@ const StoryEx = (props) => {
           story={true}
           user_name={el.user}
           author={lesson.user}
+          miniforum={lesson.miniforums.find((m) => m.value == el.id)}
         />
       );
       components.push(item);

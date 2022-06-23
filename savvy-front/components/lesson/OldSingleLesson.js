@@ -251,6 +251,7 @@ const SINGLE_LESSON_QUERY = gql`
         text
         nodeID
         complexity
+        steps
         nodeType
         user {
           id

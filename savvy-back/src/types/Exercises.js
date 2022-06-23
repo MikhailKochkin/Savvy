@@ -140,6 +140,7 @@ const Problem = objectType({
     t.model.problemResults();
     t.model.createdAt();
     t.model.updatedAt();
+    t.model.steps();
   },
 });
 
@@ -153,6 +154,22 @@ const Forum = objectType({
     // t.model.lessonId();
     t.model.lesson();
     t.model.rating();
+    t.model.statements();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+const MiniForum = objectType({
+  name: "MiniForum",
+  definition(t) {
+    t.model.id();
+    t.model.user();
+    t.model.userId();
+    t.model.lessonId();
+    t.model.lesson();
+    t.model.type();
+    t.model.value();
     t.model.statements();
     t.model.createdAt();
     t.model.updatedAt();
@@ -303,4 +320,5 @@ module.exports = {
   Document,
   Clause,
   TestPractice,
+  MiniForum,
 };

@@ -164,6 +164,30 @@ const IconBlock = styled.div`
     align-items: center;
     justify-content: center;
   }
+  .icon2 {
+    margin: 5px;
+    border-radius: 50%;
+    background: #cb2d3e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
+    height: 55px;
+    width: 55px;
+    object-fit: cover;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
   .name {
     font-size: 1.2rem;
     text-align: center;
@@ -220,7 +244,11 @@ const Forum = (props) => {
       </div>
       <div className="answer">
         <IconBlock>
-          <img className="icon" src="../../static/flash.svg" />
+          <div className="icon2">
+            {me.surname
+              ? `${me.name[0]}${me.surname[0]}`
+              : `${me.name[0]}${me.name[1]}`}
+          </div>
           <div className="name">{me.name}</div>
         </IconBlock>{" "}
         <Stars>
@@ -300,7 +328,11 @@ const Forum = (props) => {
       </div>
       <div className="answer">
         <IconBlock>
-          <img className="icon" src="../../static/flash.svg" />
+          <div className="icon2">
+            {me.surname
+              ? `${me.name[0]}${me.surname[0]}`
+              : `${me.name[0]}${me.name[1]}`}
+          </div>
           <div className="name">{me.name}</div>
         </IconBlock>{" "}
         <Answer_text

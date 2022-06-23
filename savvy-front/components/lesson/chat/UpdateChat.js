@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import UpdateMessage from "./UpdateMessage";
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION(
@@ -12,6 +13,14 @@ const UPDATE_CHAT_MUTATION = gql`
   ) {
     updateChat(id: $id, name: $name, messages: $messages, isSecret: $isSecret) {
       id
+      name
+      isSecret
+      link_clicks
+      complexity
+      messages
+      user {
+        id
+      }
     }
   }
 `;
@@ -41,28 +50,74 @@ const Input = styled.input`
   }
 `;
 
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
+`;
+
 const UpdateChat = (props) => {
   const [name, setName] = useState(props.name);
-  const [messages, setMessages] = useState(props.messages.messagesList);
+  const [mess, setMess] = useState(props.messages.messagesList);
   const [num, setNum] = useState(props.messages.messagesList.length);
   const [isSecret, setIsSecret] = useState(props.isSecret);
 
-  const [updateChat, { data, loading, error }] =
-    useMutation(UPDATE_CHAT_MUTATION);
+  const [updateChat, { data, loading, error }] = useMutation(
+    UPDATE_CHAT_MUTATION,
+    {
+      refetchQueries: [
+        { query: SINGLE_LESSON_QUERY, variables: { id: props.lessonId } }, // DocumentNode object parsed with gql
+        "SINGLE_LESSON_QUERY", // Query name
+      ],
+    }
+  );
+
   const getMessage = (data) => {
-    let old_messages = [...messages];
-    old_messages.splice(data.number - 1, 1, data);
-    setMessages([...old_messages]);
+    let old_mess = [...mess];
+    old_mess.splice(data.number - 1, 1, data);
+    setMess([...old_messages]);
+  };
+
+  const updateAuthor = (val, i) => {
+    let old_messages = [...mess];
+    let new_obj = { ...old_messages[i] };
+    new_obj.author = val;
+    old_messages[i] = new_obj;
+
+    setMess([...old_messages]);
+  };
+
+  const updateText = (val, i) => {
+    let old_mess = [...mess];
+    let new_obj = { ...old_mess[i] };
+    new_obj.text = val;
+    old_mess[i] = new_obj;
+
+    setMess([...old_mess]);
   };
   return (
     <Styles>
-      <Input
+      {/* <Input
         type="text"
         placeholder="Название диалога"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <br />
+      <br /> */}
       <select
         defaultValue={isSecret}
         onChange={(e) => setIsSecret(e.target.value == "true")}
@@ -70,12 +125,14 @@ const UpdateChat = (props) => {
         <option value={"true"}>Секретный</option>
         <option value={"false"}>Открытый</option>
       </select>
-      {props.messages.messagesList.map((m, i) => (
+      {mess.map((m, i) => (
         <UpdateMessage
-          index={i + 1}
-          author={props.messages.messagesList[i].author}
+          index={i}
+          author={mess[i].author}
           text={m.text}
           getMessage={getMessage}
+          updateAuthor={updateAuthor}
+          updateText={updateText}
         />
       ))}
       {/* <button className="but" onClick={(e) => setNum(num - 1)}>
@@ -84,22 +141,24 @@ const UpdateChat = (props) => {
       <button className="but" onClick={(e) => setNum(num + 1)}>
         +1
       </button> */}
-      <button
+      <ButtonTwo
         onClick={async (e) => {
           e.preventDefault();
           const res = await updateChat({
             variables: {
               id: props.id,
-              messages: { messagesList: messages },
+              messages: { messagesList: mess },
               name,
               isSecret,
             },
           });
-          alert("Готово!");
+          props.getResult(res);
+          props.switchUpdate();
+          props.passUpdated();
         }}
       >
-        Сохранить
-      </button>
+        {loading ? "Сохраняем..." : "Сохранить"}
+      </ButtonTwo>
     </Styles>
   );
 };

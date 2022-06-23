@@ -12,6 +12,7 @@ import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
 import renderHTML from "react-render-html";
 import { CURRENT_USER_QUERY } from "../../User";
+import Chat from "../questions/Chat";
 
 const CREATE_QUIZRESULT_MUTATION = gql`
   mutation CREATE_QUIZRESULT_MUTATION(
@@ -34,7 +35,9 @@ const CREATE_QUIZRESULT_MUTATION = gql`
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
-  width: 650px;
+  /* max-width: 650px;
+  min-width: 510px; */
+  width: 570px;
   font-weight: 500;
   margin-bottom: 3%;
   font-size: 1.6rem;
@@ -83,6 +86,30 @@ const IconBlock = styled.div`
     align-items: center;
     justify-content: center;
   }
+  .icon2 {
+    margin: 5px;
+    border-radius: 50%;
+    background: #cb2d3e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
+    height: 55px;
+    width: 55px;
+    object-fit: cover;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
   .name {
     font-size: 1.2rem;
     text-align: center;
@@ -107,8 +134,9 @@ const Question = styled.div`
     transition: 0.3s;
     cursor: pointer;
   }
-  .question {
+  .question_box {
     display: flex;
+    background: #ffffff;
     flex-direction: row;
     justify-content: flex-end;
     margin-bottom: 20px;
@@ -427,9 +455,22 @@ const SingleQuiz = (props) => {
     ifWrong,
     ifRight,
     check,
-    user_name,
+    miniforum,
     author,
   } = props;
+
+  const getResult = (data) => {
+    props.getResult(data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+  };
+
+  const switchUpdate = () => {
+    setUpdate(!update);
+  };
+
   let width;
   if (props.problem) {
     width = "50%";
@@ -468,7 +509,7 @@ const SingleQuiz = (props) => {
           {!update && (
             <>
               <Question story={story}>
-                <div className="question">
+                <div className="question_box">
                   <div className="question_text">
                     {renderHTML(props.question)}
                   </div>
@@ -485,7 +526,11 @@ const SingleQuiz = (props) => {
                 </div>
                 <div className="answer">
                   <IconBlock>
-                    <img className="icon" src="../../static/flash.svg" />
+                    <div className="icon2">
+                      {me.surname
+                        ? `${me.name[0]}${me.surname[0]}`
+                        : `${me.name[0]}${me.name[1]}`}
+                    </div>{" "}
                     <div className="name">{me.name}</div>
                   </IconBlock>{" "}
                   <Answer_text
@@ -518,7 +563,7 @@ const SingleQuiz = (props) => {
                   </Button1>
                 </Group>
                 {correct === "true" && (
-                  <div className="question">
+                  <div className="question_box">
                     <div className="question_text">
                       {!props.type != "FORM" && "🎉 " + t("correct")}!{" "}
                       {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
@@ -537,7 +582,7 @@ const SingleQuiz = (props) => {
                   </div>
                 )}
                 {correct === "false" && (
-                  <div className="question">
+                  <div className="question_box">
                     <div className="question_text">
                       {props.type != "FORM" && "🔎  " + t("wrong") + "..."}
                       <br />
@@ -567,7 +612,11 @@ const SingleQuiz = (props) => {
                   <>
                     <div className="answer">
                       <IconBlock>
-                        <img className="icon" src="../../static/flash.svg" />
+                        <div className="icon2">
+                          {me.surname
+                            ? `${me.name[0]}${me.surname[0]}`
+                            : `${me.name[0]}${me.name[1]}`}
+                        </div>{" "}
                         <div className="name">{me.name}</div>
                       </IconBlock>{" "}
                       <Options>
@@ -579,7 +628,7 @@ const SingleQuiz = (props) => {
                   </>
                 )}
                 {!hidden && (
-                  <div className="question">
+                  <div className="question_box">
                     <div className="question_text">
                       {t("correct_answer")}: {renderHTML(props.answer)}
                     </div>
@@ -598,20 +647,21 @@ const SingleQuiz = (props) => {
               </Question>
             </>
           )}
+          {miniforum && <Chat me={me} miniforum={miniforum} />}
           {update && (
             <UpdateQuiz
-              quizID={props.quizID}
+              quizId={props.id}
               lessonID={props.lessonID}
               answer={props.answer}
               question={props.question}
               complexity={complexity}
               ifRight={ifRight}
               ifWrong={ifWrong}
-              notes={props.notes}
               next={props.next}
               check={check}
-              quizes={props.quizes.filter((q) => q.id !== props.quizID)}
-              tests={props.tests}
+              getResult={getResult}
+              switchUpdate={switchUpdate}
+              passUpdated={passUpdated}
             />
           )}
         </Styles>

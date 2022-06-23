@@ -29,30 +29,51 @@ const UPDATE_TEST_MUTATION = gql`
       type: $type
     ) {
       id
+      answers
+      correct
+      type
+      comments
+      complexity
+      ifRight
+      ifWrong
+      next
+      question
+      createdAt
+      user {
+        id
+      }
     }
   }
 `;
 
-const Button = styled.button`
-  padding: 1% 2%;
-  background: ${(props) => props.theme.green};
-  width: 20%;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
-  cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
-  }
+const Styles = styled.div`
+  margin: 20px 0;
 `;
 
 const Answers = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 3%;
+`;
+
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
 `;
 
 const AnswerOption = styled.div`
@@ -186,7 +207,7 @@ const UpdateTest = (props) => {
 
   const { testID, mes, lessonID } = props;
   return (
-    <div>
+    <Styles>
       <label for="types">Тип задания</label>
       <select
         name="types"
@@ -290,18 +311,21 @@ const UpdateTest = (props) => {
         }}
       >
         {(updateNewTest, { loading, error }) => (
-          <Button
+          <ButtonTwo
             onClick={async (e) => {
               // Stop the form from submitting
               e.preventDefault();
-              updateNewTest();
+              const res = await updateNewTest();
+              props.getResult(res);
+              props.switchUpdate();
+              props.passUpdated();
             }}
           >
             {loading ? "Сохраняем..." : "Сохранить"}
-          </Button>
+          </ButtonTwo>
         )}
       </Mutation>
-    </div>
+    </Styles>
   );
 };
 

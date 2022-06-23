@@ -117,9 +117,17 @@ const CreateLes = (props) => {
             index={1}
             name="description"
             getEditorText={myCallback2}
-            placeholder="Описание"
+            placeholder="Краткое описание"
           />
         </Frame>
+        <input
+          className="model"
+          type="radio"
+          id="model"
+          name="fav_language"
+          value={true}
+        />
+        <label for="model">Базовая модель урока</label>
         <Buttons>
           <Button
             onClick={async (e) => {
@@ -134,7 +142,6 @@ const CreateLes = (props) => {
                 },
                 refetchQueries: [{ query: CURRENT_USER_QUERY }],
               });
-              console.log(res);
               Router.push({
                 pathname: "/lesson",
                 query: {
@@ -144,7 +151,7 @@ const CreateLes = (props) => {
               });
             }}
           >
-            {loading ? "Сохраняем..." : "Cохранить"}
+            {loading ? "Создаем урок..." : "Создать"}
           </Button>
           <Link
             href={{
@@ -152,7 +159,7 @@ const CreateLes = (props) => {
               query: { id: props.id },
             }}
           >
-            <div>Вернуться на страницу урока</div>
+            <div>Вернуться на страницу курса</div>
           </Link>
         </Buttons>
       </>

@@ -12,6 +12,7 @@ import AnswerOption from "./AnswerOption";
 import UpdateTest from "./UpdateTest";
 import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
+import Chat from "../questions/Chat";
 
 const StyledButton = withStyles({
   root: {
@@ -28,11 +29,36 @@ const IconBlock = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  width: 65px;
   .icon {
     margin: 5px;
     border-radius: 50%;
     height: 55px;
     width: 55px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon2 {
+    margin: 5px;
+    border-radius: 50%;
+    background: #cb2d3e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      #ef473a,
+      #cb2d3e
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
+    height: 55px;
+    width: 55px;
+    object-fit: cover;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -68,7 +94,9 @@ const Options = styled.div`
 `;
 
 const Styles = styled.div`
-  width: 650px;
+  /* max-width: 650px;
+  min-width: 510px; */
+  width: 570px;
   background: #fff;
 
   font-weight: 500;
@@ -91,7 +119,7 @@ const TextBar = styled.div`
     transition: 0.3s;
     cursor: pointer;
   }
-  .question {
+  .question_box {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -411,8 +439,20 @@ const SingleTest = (props) => {
     setSent(true);
   };
 
-  const { exam, story, ifWrong, ifRight, me, comments, user_name, author } =
+  const { exam, story, ifWrong, ifRight, me, comments, miniforum, author } =
     props;
+
+  const switchUpdate = () => {
+    setUpdate(!update);
+  };
+
+  const getResult = (data) => {
+    props.getResult(data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+  };
   const mes = _.zip(
     props.answers,
     props.true,
@@ -443,7 +483,7 @@ const SingleTest = (props) => {
       {/* 1. Вопрос студенту и варианты ответа */}
       {!update && (
         <TextBar className="Test" story={story}>
-          <div className="question">
+          <div className="question_box">
             <div className="question_text">{renderHTML(props.question[0])}</div>
             <IconBlock>
               {author && author.image != null ? (
@@ -458,7 +498,12 @@ const SingleTest = (props) => {
           </div>
           <div className="answer">
             <IconBlock>
-              <img className="icon" src="../../static/flash.svg" />
+              {/* <img className="icon" src="../../static/flash.svg" /> */}
+              <div className="icon2">
+                {me.surname
+                  ? `${me.name[0]}${me.surname[0]}`
+                  : `${me.name[0]}${me.name[1]}`}
+              </div>
               <div className="name">{me.name}</div>
             </IconBlock>
             <Options>
@@ -478,7 +523,7 @@ const SingleTest = (props) => {
           {/* 2. Студент не выбрал ни однного из вариантов. Просим дать ответ  */}
 
           {zero && (
-            <div className="question">
+            <div className="question_box">
               <div className="question_text">{t("choose_option")}</div>
               <IconBlock>
                 {author && author.image != null ? (
@@ -588,7 +633,7 @@ const SingleTest = (props) => {
 
           {answerState == "wrong" && ifWrong && props.type !== "FORM" && (
             <>
-              <div className="question">
+              <div className="question_box">
                 <div className="question_text">{t("show_explainer")}</div>
                 <IconBlock>
                   {author && author.image != null ? (
@@ -604,7 +649,12 @@ const SingleTest = (props) => {
 
               <div className="answer">
                 <IconBlock>
-                  <img className="icon" src="../../static/flash.svg" />
+                  {/* <img className="icon" src="../../static/flash.svg" /> */}
+                  <div className="icon2">
+                    {me.surname
+                      ? `${me.name[0]}${me.surname[0]}`
+                      : `${me.name[0]}${me.name[1]}`}
+                  </div>
                   <div className="name">{me.name}</div>
                 </IconBlock>{" "}
                 <OptionsGroup>
@@ -619,7 +669,7 @@ const SingleTest = (props) => {
                 </OptionsGroup>
               </div>
               {hidden == false && (
-                <div className="question">
+                <div className="question_box">
                   <div className="question_text">{renderHTML(ifWrong)}</div>
                   <IconBlock>
                     {author && author.image != null ? (
@@ -642,7 +692,7 @@ const SingleTest = (props) => {
             props.type !== "FORM" &&
             (revealExplainer == true || !ifWrong) && (
               <>
-                <div className="question">
+                <div className="question_box">
                   <div className="question_text">{t("show_correct")}</div>
                   <IconBlock>
                     {author && author.image != null ? (
@@ -658,7 +708,12 @@ const SingleTest = (props) => {
 
                 <div className="answer">
                   <IconBlock>
-                    <img className="icon" src="../../static/flash.svg" />
+                    {/* <img className="icon" src="../../static/flash.svg" /> */}
+                    <div className="icon2">
+                      {me.surname
+                        ? `${me.name[0]}${me.surname[0]}`
+                        : `${me.name[0]}${me.name[1]}`}
+                    </div>
                     <div className="name">{me.name}</div>
                   </IconBlock>{" "}
                   <OptionsGroup>
@@ -668,7 +723,7 @@ const SingleTest = (props) => {
                   </OptionsGroup>
                 </div>
                 {showAnswer && (
-                  <div className="question">
+                  <div className="question_box">
                     <div className="question_text">{t("outline_color")}</div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -686,6 +741,7 @@ const SingleTest = (props) => {
             )}
         </TextBar>
       )}
+      {miniforum && <Chat me={me} miniforum={miniforum} />}
       {update && (
         <UpdateTest
           testID={props.id}
@@ -703,6 +759,9 @@ const SingleTest = (props) => {
           ifWrong={ifWrong}
           notes={props.notes}
           tests={props.tests}
+          getResult={getResult}
+          switchUpdate={switchUpdate}
+          passUpdated={passUpdated}
         />
       )}
     </Styles>

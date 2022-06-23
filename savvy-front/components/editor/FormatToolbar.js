@@ -1,9 +1,11 @@
+import { wrap } from "lodash";
 import React from "react";
 import { withTheme } from "styled-components";
 
 const FormatToolbarStyles = {
   display: "flex",
   background: "white",
+  flexWrap: "wrap",
   padding: "2%",
   margin: "0 0 10px 0",
   position: "-webkit-sticky",

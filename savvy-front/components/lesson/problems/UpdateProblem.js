@@ -11,15 +11,15 @@ const UPDATE_PROBLEM_MUTATION = gql`
   mutation UPDATE_PROBLEM_MUTATION(
     $id: String!
     $text: String
-    $nodeID: String
-    $nodeType: String
+    # $nodeID: String
+    # $nodeType: String
     $complexity: Int
   ) {
     updateProblem(
       id: $id
       text: $text
-      nodeID: $nodeID
-      nodeType: $nodeType
+      # nodeID: $nodeID
+      # nodeType: $nodeType
       complexity: $complexity
     ) {
       id
@@ -54,14 +54,8 @@ const useStyles = makeStyles({
 
 const Container = styled.div`
   width: 100%;
-  display: grid;
   margin: 1% 0 0 0;
   margin-top: 5%;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(3 70px);
-  grid-template-areas:
-    "explain"
-    "first   ";
   h4 {
     padding: 0% 5%;
   }
@@ -124,8 +118,8 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 
 const UpdateProblem = (props) => {
   const [text, setText] = useState(props.text);
-  const [nodeID, setNodeID] = useState(props.nodeID);
-  const [nodeType, setNodeType] = useState(props.nodeType);
+  // const [nodeID, setNodeID] = useState(props.nodeID);
+  // const [nodeType, setNodeType] = useState(props.nodeType);
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -139,7 +133,7 @@ const UpdateProblem = (props) => {
 
   const classes = useStyles();
 
-  const { id, quizes, lessonID, newTests, notes } = props;
+  const { id, quizes, lessonID, newTests, notes, nodeID, nodeType } = props;
   return (
     <>
       <Container>
@@ -158,9 +152,13 @@ const UpdateProblem = (props) => {
         </Complexity>
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
 
-        <DynamicLoadedEditor getEditorText={getText} value={text} />
+        <DynamicLoadedEditor
+          getEditorText={getText}
+          value={text}
+          problem={true}
+        />
         <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
-        {nodeID && (
+        {nodeID && nodeType && (
           <ProblemBuilder
             elements={[...newTests, ...quizes, ...notes]}
             quizes={quizes}
@@ -178,8 +176,8 @@ const UpdateProblem = (props) => {
           variables={{
             id,
             text,
-            nodeID,
-            nodeType,
+            // nodeID,
+            // nodeType,
             complexity,
           }}
           refetchQueries={() => [

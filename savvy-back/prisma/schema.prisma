@@ -283,6 +283,20 @@ model Forum {
   statements Statement[]
 }
 
+model MiniForum {
+  id         String      @id @default(cuid())
+  text       String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  lessonId   String?
+  userId     String?
+  user       User?       @relation(fields: [userId], references: [id])
+  lesson     Lesson?     @relation(fields: [lessonId], references: [id])
+  statements Statement[]
+  type       String?
+  value      String?
+}
+
 model LegalPortfolio {
   id           String       @id @default(cuid())
   cv           String?
@@ -321,6 +335,7 @@ model Lesson {
   image               String?
   coursePage          CoursePage           @relation(fields: [coursePageId], references: [id])
   forum               Forum?               @relation(fields: [forumId], references: [id])
+  miniforums          MiniForum[]          
   user                User                 @relation(fields: [userId], references: [id])
   challengeResults    ChallengeResult[]
   chats               Chat[]
@@ -469,12 +484,13 @@ model Problem {
   answer         String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-  lessonID       String          @default(cuid())
+  lessonID       String          
   nodeType       String?
-  nodeID         String?         @default(cuid())
-  isSecret      Boolean?        @default(false)
+  nodeID         String?         
+  isSecret       Boolean?        @default(false)
   hintsList      String[]
   solutionList   String[]
+  steps          Json?
   userId         String
   lessonId       String
   complexity     Int?            @default(1)
@@ -583,9 +599,11 @@ model Statement {
   updatedAt DateTime @updatedAt
   userId    String?
   forumId   String?
+  miniforumId String?
   comments  String[]
   answered  Boolean? @default(false)
   forum     Forum?   @relation(fields: [forumId], references: [id])
+  miniforum MiniForum?   @relation(fields: [miniforumId], references: [id])
   user      User?    @relation(fields: [userId], references: [id])
 }
 
@@ -698,6 +716,7 @@ model User {
   studentFeedback     Feedback[]           @relation("StudentFeedback")
   teacherFeedback     Feedback[]           @relation("TeacherFeedback")
   forums              Forum[]
+  miniforums          MiniForum[]
   lessons             Lesson[]
   lessonResults       LessonResult[]
   newTests            NewTest[]

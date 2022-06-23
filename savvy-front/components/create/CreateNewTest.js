@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
+import _ from "lodash";
+
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
@@ -13,6 +15,7 @@ const CREATE_NEWTEST_MUTATION = gql`
     $correct: [Boolean!]
     $ifRight: String
     $ifWrong: String
+    $comments: [String!]
     $type: String
     $lessonId: String!
   ) {
@@ -21,6 +24,7 @@ const CREATE_NEWTEST_MUTATION = gql`
       answers: $answers
       correct: $correct
       ifRight: $ifRight
+      comments: $comments
       ifWrong: $ifWrong
       type: $type
       lessonId: $lessonId
@@ -72,6 +76,26 @@ const Answers = styled.div`
   margin-bottom: 3%;
 `;
 
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
+`;
+
 const CustomSelect1 = styled.div`
   display: flex;
   flex-direction: row;
@@ -80,11 +104,22 @@ const CustomSelect1 = styled.div`
   @media (max-width: 800px) {
     width: 65%;
   }
-  select {
-    border: 1px solid #c4c4c4;
+  cursor: pointer;
+  border: 1px solid grey;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin-right: 15px;
+  button {
+    border: none;
+    cursor: pointer;
+
     background: none;
-    width: 40px;
-    font-size: 1.6rem;
+    font-family: Montserrat;
   }
 `;
 
@@ -92,12 +127,23 @@ const AnswerOption = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2% 0;
+  border-bottom: 1px solid #edefed;
   .question {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
     width: 80%;
-    min-height: 100px;
-    padding: 1.5%;
+    min-height: 60px;
+    padding: 0.5%;
+    font-size: 1.4rem;
+    outline: 0;
+  }
+  .comment {
+    border-radius: 5px;
+    margin-top: 15px;
+    border: 1px solid #c4c4c4;
+    width: 80%;
+    min-height: 60px;
+    padding: 0.5%;
     font-size: 1.4rem;
     outline: 0;
   }
@@ -148,8 +194,8 @@ const Comment = styled.div`
   border-radius: 5px;
   border: 1px solid #c4c4c4;
   width: 80%;
-  min-height: 100px;
-  padding: 1.5%;
+  min-height: 60px;
+  padding: 0.5%;
   font-size: 1.4rem;
   outline: 0;
   &#ifRight {
@@ -170,6 +216,7 @@ const CreateNewTest = (props) => {
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
   const [answers, setAnswers] = useState(["", ""]);
+  const [comments, setComments] = useState(["", ""]);
   const [correct, setCorrect] = useState([false, false]);
   const [question, setQuestion] = useState();
   const [type, setType] = useState("TEST");
@@ -178,6 +225,12 @@ const CreateNewTest = (props) => {
     let arr = [...answers];
     arr[i] = val;
     return setAnswers(arr);
+  };
+
+  const handleArray2 = (val, name, i) => {
+    let arr = [...comments];
+    arr[i - 1] = val;
+    return setComments(arr);
   };
 
   const handleCorrect = (val, i) => {
@@ -212,6 +265,7 @@ const CreateNewTest = (props) => {
           question: [question],
           answers: answers,
           correct: correct,
+          comments: comments,
           ifRight: ifRight,
           ifWrong: ifWrong,
           type: type,
@@ -226,6 +280,7 @@ const CreateNewTest = (props) => {
         {(createNewTest, { loading, error }) => (
           <div className="styles">
             <label for="types">Тип задания</label>
+            <br />
             <select
               name="types"
               id="types"
@@ -236,20 +291,6 @@ const CreateNewTest = (props) => {
               <option value="FORM">Форма</option>
             </select>
 
-            <CustomSelect1>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setNum(num + 1);
-                  let old_answers = answers;
-                  let old_correct = correct;
-                  setAnswers([...old_answers, ""]);
-                  setCorrect([...old_correct, false]);
-                }}
-              >
-                +1 вариант ответа
-              </button>
-            </CustomSelect1>
             <Comment>
               <DynamicLoadedEditor
                 id="question"
@@ -262,6 +303,7 @@ const CreateNewTest = (props) => {
               {_.times(num, (i) => {
                 let answer = `answer${i + 1}`;
                 let val = answers[i];
+                let val2 = comments[i];
                 return (
                   <AnswerOption id={answer}>
                     <div className="question">
@@ -278,29 +320,71 @@ const CreateNewTest = (props) => {
                       onChange={(e) => handleCorrect(e.target.value, i)}
                     >
                       <option value={true}>Правильно</option>
-                      <option value={false}>Ошибочно</option>
+                      <option value={false}>Неправильно</option>
                     </select>
+                    <div className="comment">
+                      <DynamicLoadedEditor
+                        index={i + 1}
+                        name={i}
+                        value={val2}
+                        getEditorText={handleArray2}
+                        placeholder={`Пояснение к ответу ${i + 1}`}
+                      />
+                    </div>
                   </AnswerOption>
                 );
               })}
             </Answers>
-            <Comment id="ifRight">
-              <DynamicLoadedEditor
-                id="ifRight"
-                name="ifRight"
-                placeholder={`Комментарий в случае правильного ответа`}
-                getEditorText={setIf}
-              />
-            </Comment>
+            <CustomSelect1>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNum(num + 1);
+                  let old_answers = answers;
+                  let old_correct = correct;
+                  let old_comments = comments;
+
+                  setAnswers([...old_answers, ""]);
+                  setCorrect([...old_correct, false]);
+                  setComments([...old_comments, ""]);
+                }}
+              >
+                +1
+              </button>
+            </CustomSelect1>
+            <CustomSelect1>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setNum(num - 1);
+                  let old_answers = [...answers];
+                  let old_correct = [...correct];
+                  let old_comments = [...comments];
+                  setAnswers([...old_answers].pop());
+                  setCorrect([...old_correct].pop());
+                  setComments([...old_comments].pop());
+                }}
+              >
+                -1
+              </button>
+            </CustomSelect1>
             <Comment id="ifWrong">
               <DynamicLoadedEditor
                 id="ifWrong"
                 name="ifWrong"
-                placeholder={`Комментарий в случае неправильного ответа`}
+                placeholder={`Объяснение вопроса`}
                 getEditorText={setIf}
               />
             </Comment>
-            <Button
+            <Comment id="ifRight">
+              <DynamicLoadedEditor
+                id="ifRight"
+                name="ifRight"
+                placeholder={`Подводка к следующему блоку`}
+                getEditorText={setIf}
+              />
+            </Comment>
+            <ButtonTwo
               onClick={async (e) => {
                 e.preventDefault();
                 const res = await setAnswers(answers.filter((an) => an !== ""));
@@ -312,7 +396,7 @@ const CreateNewTest = (props) => {
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
+            </ButtonTwo>
             <Message id="Message">Вы создали новый тестовый вопрос!</Message>
           </div>
         )}

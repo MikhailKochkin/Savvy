@@ -6,6 +6,13 @@ import dynamic from "next/dynamic";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
+import {
+  BiCommentAdd,
+  BiCommentError,
+  BiCommentCheck,
+  BiCommentMinus,
+} from "react-icons/bi";
+
 const CREATE_TEXTEDITOR_MUTATION = gql`
   mutation CREATE_TEXTEDITOR_MUTATION(
     $name: String!
@@ -20,28 +27,40 @@ const CREATE_TEXTEDITOR_MUTATION = gql`
       lessonId: $lessonId
     ) {
       id
+      name
+      complexity
+      text
+      totalMistakes
+      user {
+        id
+      }
     }
   }
 `;
 
 const Width = styled.div`
-  width: 90%;
+  width: 650px;
   margin-bottom: 3%;
 `;
 
-const Button = styled.button`
-  padding: 1.5% 3%;
-  font-size: 1.6rem;
-  width: 20%;
-  font-weight: 600;
-  color: #fffdf7;
-  background: ${(props) => props.theme.green};
-  border: solid 1px white;
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
   border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
   cursor: pointer;
-  outline: none;
-  &:active {
-    background: ${(props) => props.theme.darkGreen};
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  max-width: 180px;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
   }
 `;
 
@@ -74,17 +93,19 @@ const Title = styled.p`
   margin-top: 2%;
 `;
 
-const Advice = styled.div`
-  font-size: 1.5rem;
-  margin: 1% 4%;
-  background: #fdf3c8;
-  border: 1px solid #c4c4c4;
-  border-radius: 10px;
-  padding: 2%;
-  margin: 30px 0;
-  width: 90%;
-  div {
-    margin-bottom: 1.5%;
+const Explainer = styled.div`
+  .icon {
+    width: 30px;
+    height: 20px;
+  }
+  #green {
+    color: #81b29a;
+  }
+  #red {
+    color: #e07a5f;
+  }
+  #orange {
+    color: #f2cc8f;
   }
 `;
 
@@ -97,7 +118,7 @@ export default class CreateTextEditor extends Component {
   state = {
     name: "Test",
     text: "",
-    totalMistakes: 0,
+    totalMistakes: 1,
   };
 
   myCallback = (dataFromChild) => {
@@ -111,22 +132,55 @@ export default class CreateTextEditor extends Component {
   };
 
   render() {
+    const placeholder = `<h2><div className="align-center" style="text-align:center"><p>Доверенность</p></div></h2><div className="align-right" style="text-align:right"><p>21 июня 2022</p><p>г. Москва</p></div><p><b>ООО АККИО</b> , юридическое лицо, созданное и осуществляющее свою деятельность в соответствии с законодательством Российской Федерации, зарегистрированное за основным государственным регистрационным номером (ОГРН)  ...</p>`;
+
     const { lessonID } = this.props;
     return (
       <Width>
-        <Advice></Advice>
-        <Title>Составьте редактор</Title>
-        <Label>
-          <p>Всего ошибок / рисков: </p>
-          <input
-            spellcheck={true}
-            id="totalMistakes"
-            name="totalMistakes"
-            value={this.state.totalMistakes}
-            onChange={this.handleChange}
-          />
-        </Label>
-        <DynamicLoadedEditor getEditorText={this.myCallback} />
+        <Title>Редактор</Title>
+        <Explainer>
+          <p>
+            Задача редактора – воссоздать опыт работы над реальным документом
+            вместе с наставником. Для этого мы создали разные инструменты.
+            Сейчас покажем, как они работают:
+          </p>
+          <p>
+            <BiCommentAdd
+              className="icon"
+              value={{ className: "react-icons" }}
+            />
+            Позволит вам добавить{" "}
+            <span id="green">скрытый комментарий в текст</span>. Предложите
+            студенту найти пункт в документе, который нужно разобрать. При
+            нажатии на правильный пункт студент увидит ваш комментарий.
+          </p>
+          <p>
+            <BiCommentError
+              className="icon"
+              value={{ className: "react-icons" }}
+            />
+            Позволит вам добавить <span id="red">ошибку в текст</span> и
+            исправленный вариант. Предложите студенту найти пункт в документе, в
+            котором содержится ошибка. При нажатии на правильный пункт студент
+            получит возможность отредактировать текст, автоматически проверить
+            свой ответ и увидеть ваш вариант.
+          </p>
+          <p>
+            <BiCommentCheck
+              className="icon"
+              value={{ className: "react-icons" }}
+            />
+            Позволит вам <span id="orange">задать вопрос</span> к определенному
+            фрагменту текста. Задайте вопрос, ответ, а также комментарии на
+            случай правильного и неправильного ответов.
+          </p>
+        </Explainer>
+
+        <DynamicLoadedEditor
+          getEditorText={this.myCallback}
+          complex={true}
+          value={placeholder}
+        />
 
         <Mutation
           mutation={CREATE_TEXTEDITOR_MUTATION}
@@ -145,23 +199,16 @@ export default class CreateTextEditor extends Component {
           awaitRefetchQueries={true}
         >
           {(createTextEditor, { loading, error }) => (
-            <Button
+            <ButtonTwo
               onClick={async (e) => {
-                // Stop the form from submitting
                 e.preventDefault();
                 document.getElementById("Message").style.display = "block";
-                setTimeout(() => {
-                  document.getElementById("Message")
-                    ? (document.getElementById("Message").style.display =
-                        "none")
-                    : "none";
-                }, 3000);
-                // call the mutation
                 const res = await createTextEditor();
+                this.props.getResult(res);
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
+            </ButtonTwo>
           )}
         </Mutation>
         <Message id="Message">Вы создали новый редактор!</Message>
