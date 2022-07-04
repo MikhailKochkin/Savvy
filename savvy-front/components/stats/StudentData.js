@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { gql } from "@apollo/client";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
@@ -29,6 +29,14 @@ const UPDATE_COURSE_VISIT_MUTATION = gql`
 const UPDATE_FINISH_MUTATION = gql`
   mutation UPDATE_FINISH_MUTATION($id: String!, $finish: DateTime) {
     updateFinish(id: $id, finish: $finish) {
+      id
+    }
+  }
+`;
+
+const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
+    updateUser(id: $id, tags: $tags) {
       id
     }
   }
@@ -82,14 +90,12 @@ const Header = styled.div`
   width: 100%;
   height: 50px;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 2fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
   grid-template-rows: 40px;
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   .div1 {
     grid-area: 1 / 1 / 2 / 2;
-    span {
-    }
   }
   .div2 {
     grid-area: 1 / 2 / 2 / 3;
@@ -154,15 +160,36 @@ const SendButton = styled.div`
   }
 `;
 
-const StyledCV = styled.div`
-  margin-bottom: 2%;
-  a {
-    color: #112b62;
-    font-weight: bold;
-    &:hover {
-      text-decoration: underline;
+const Tags = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  form {
+    input {
+      width: 50px;
+      background: none;
+      border: none;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1rem;
     }
   }
+`;
+
+const Tag = styled.div`
+  font-size: 1rem;
+  margin-bottom: 2%;
+  background: #f8eed7;
+  padding: 2px 6px;
+  margin: 0 2px;
+  height: 22px;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledButton = withStyles({
@@ -176,6 +203,8 @@ const StyledButton = withStyles({
 
 const Person = (props) => {
   const [secret, setSecret] = useState(true);
+  const [tags, setTags] = useState(props.student.tags);
+  const [tag, setTag] = useState("");
   const [page, setPage] = useState("results");
   const { student, lessons, courseVisit, coursePageID, coursePage, results } =
     props;
@@ -275,30 +304,70 @@ const Person = (props) => {
     completed_lessons_number: Math.round(total),
     lesResultsList: { lesResults: lesResults },
   };
+
+  // const [updateUser, { data, loading, error }] =
+  //   useMutation(UPDATE_USER_MUTATION);
   return (
     <Styles>
       <Header>
         <Name className="div1">
-          <div>
+          <div className="name">
             {student.surname
               ? `${student.name} ${student.surname}`
               : student.name}{" "}
-            –<span> {feedback_num}</span>
+            – <span> {feedback_num}</span>
           </div>
           <div className="email">{student.email}</div>
         </Name>
-        <Square className="div2" inputColor={color}>
+        <Tags className="div2">
+          {" "}
+          {tags.map((t) => (
+            <Tag>{t}</Tag>
+          ))}
+          <Mutation
+            mutation={UPDATE_USER_MUTATION}
+            variables={{
+              id: student.id,
+              tags: [...tags, tag],
+            }}
+          >
+            {(updateUser, { loading, error }) => {
+              return (
+                <form
+                  method="POST"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const res = await updateUser();
+                    let new_arr = [...tags, tag];
+                    setTags(new_arr);
+                    setTag("");
+                    console.log("new arr 2");
+                  }}
+                >
+                  <input
+                    type="text"
+                    name=""
+                    value={tag}
+                    onChange={(e) => setTag(e.target.value)}
+                    placeholder="..."
+                  />
+                </form>
+              );
+            }}
+          </Mutation>
+        </Tags>
+        <Square className="div3" inputColor={color}>
           <div>
             {total}/{lessons.length}
           </div>
         </Square>
         <ButtonBox>
-          <StyledButton className="div3" onClick={(e) => setSecret(!secret)}>
+          <StyledButton className="div4" onClick={(e) => setSecret(!secret)}>
             {secret ? "Открыть" : "Закрыть"}
           </StyledButton>
         </ButtonBox>
         <RegDate
-          className="div4"
+          className="div5"
           date={
             courseVisit
               ? courseVisit.createdAt > moment(two_months_ago).format()

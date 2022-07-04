@@ -1,33 +1,23 @@
 import { useState } from "react";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
-import gql from "graphql-tag";
 import dynamic from "next/dynamic";
-import { Message } from "../styles/Button";
-import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
 
-const CREATE_CONSTRUCTION_MUTATION = gql`
-  mutation CREATE_CONSTRUCION_MUTATION(
-    $name: String!
-    $variants: [String!]
-    $answer: [String!]
+const UPDATE_CONSTRUCTION_MUTATION = gql`
+  mutation UPDATE_CONSTRUCTION_MUTATION(
+    $id: String!
     $hint: String
     $columnsNum: Int
     $elements: ElementsList
-    # $type: String!
-    # $text: String!
-    # $hasText: Boolean!
-    $lessonId: String!
   ) {
-    createConstruction(
-      name: $name
-      lessonId: $lessonId
-      variants: $variants
-      answer: $answer
+    updateConstruction(
+      id: $id
       hint: $hint
       columnsNum: $columnsNum
-      elements: $elements # hasText: $hasText # text: $text # type: $type
+      elements: $elements
     ) {
       id
       name
@@ -220,49 +210,28 @@ const MoreButton = styled.button`
   }
 `;
 
-const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
-const CreateConstructor = (props) => {
+const UpdateNewConstructor = (props) => {
+  const { construction, lesson } = props;
   const [name, setName] = useState("");
   const [variants, setVariants] = useState(["c"]);
   const [answer, setAnswer] = useState("");
   const [answersNumber, setAnswersNumber] = useState("");
-  const [hint, setHint] = useState("");
+  const [hint, setHint] = useState(construction.hint);
   // const [hasText, setHasText] = useState(false);
   // const [type, setType] = useState("equal");
-  const [columnsNum, setColumns] = useState(3);
-  const [elements, setElements] = useState([
-    {
-      place: 0,
-      inDoc: true,
-      isTest: false,
-      size: 0,
-      text: "<p></p>",
-      type: "",
-      value: "",
-    },
-    {
-      place: 1,
-      inDoc: true,
-      isTest: false,
-      size: 0,
-      text: "<p></p>",
-      type: "",
-      value: "",
-    },
-    {
-      place: 2,
-      inDoc: true,
-      isTest: false,
-      size: 0,
-      text: "<p></p>",
-      type: "",
-      value: "",
-    },
-  ]);
+  const [columnsNum, setColumns] = useState(construction.columnsNum);
+  const [elements, setElements] = useState(construction.elements.elements);
+
+  const myCallback2 = (dataFromChild, name) => {
+    if (name == "hint") {
+      setHint(dataFromChild);
+    }
+  };
 
   let mod_el = {
     place: 2,
@@ -274,24 +243,6 @@ const CreateConstructor = (props) => {
     value: "",
   };
 
-  const myCallback2 = (dataFromChild, name) => {
-    if (name == "hint") {
-      setHint(dataFromChild);
-    }
-  };
-
-  const generate = () => {
-    let correct = [];
-    let nums = answersNumber
-      .split(",")
-      .map((el) => (el = parseInt(el)))
-      .filter((el) => !Object.is(el, NaN));
-    nums.map((num) => {
-      correct.push(variants[num - 1]);
-    });
-    setAnswer(correct);
-  };
-
   const getData = (val, i) => {
     const new_elements = [...elements];
     new_elements[i] = val;
@@ -299,8 +250,18 @@ const CreateConstructor = (props) => {
     setElements(new_elements);
   };
 
+  const [updateConstruction, { data, loading, error }] = useMutation(
+    UPDATE_CONSTRUCTION_MUTATION,
+    {
+      refetchQueries: [
+        { query: SINGLE_LESSON_QUERY, variables: { id: props.lessonId } }, // DocumentNode object parsed with gql
+        "SINGLE_LESSON_QUERY", // Query name
+      ],
+    }
+  );
+
   let t;
-  const { lessonID } = props;
+  const { lessonId } = props;
   return (
     <Center>
       <Title>Новый конструктор</Title>
@@ -376,18 +337,6 @@ const CreateConstructor = (props) => {
           );
         })}
       </Block>
-      {/* <Box>
-        <Textarea
-          type="text"
-          cols={60}
-          rows={1}
-          spellCheck={true}
-          name="answersNumber"
-          placeholder="Запишите номера верных частей конструктора. Используйте только цифры и запишите
-                их через запятые, без пробелов: 1,2,3,4"
-          onChange={(e) => setAnswersNumber(e.target.value)}
-        />
-      </Box> */}
       <TextBox>
         <DynamicLoadedEditor
           name="hint"
@@ -396,43 +345,29 @@ const CreateConstructor = (props) => {
           placeholder="Запишите подсказку или пояснение к конструктору"
         />
       </TextBox>
-      <Mutation
-        mutation={CREATE_CONSTRUCTION_MUTATION}
-        variables={{
-          lessonId: lessonID,
-          answer,
-          variants,
-          name,
-          hint,
-          columnsNum,
-          elements: { elements },
+      <ButtonTwo
+        onClick={async (e) => {
+          e.preventDefault();
+          const res = await updateConstruction({
+            variables: {
+              id: props.id,
+              hint,
+              columnsNum,
+              elements: { elements },
+            },
+          });
+          props.getResult(res);
+          props.switchUpdate();
+          props.passUpdated();
         }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID },
-          },
-        ]}
       >
-        {(createConstruction, { loading, error }) => (
-          <ButtonTwo
-            onClick={async (e) => {
-              e.preventDefault();
-              // const res0 = await generate();
-              const res = await createConstruction();
-              props.getResult(res);
-            }}
-          >
-            {loading ? "Сохраняем..." : "Сохранить"}
-          </ButtonTwo>
-        )}
-      </Mutation>
-      <Message id="Message">Готово!</Message>
+        {loading ? "Сохраняем..." : "Сохранить"}
+      </ButtonTwo>
     </Center>
   );
 };
 
-export default CreateConstructor;
+export default UpdateNewConstructor;
 
 const ConElement = (props) => {
   const [el, setEl] = useState(props.el);
@@ -494,19 +429,6 @@ const ConElement = (props) => {
           <div> ➡️ </div>
         </div>
       </Settings>
-      {/* <select
-        defaultValue={el.isTest}
-        onChange={(e) => {
-          let new_el = { ...el };
-          new_el.isTest = e.target.value == "true";
-          setEl(new_el);
-          props.getData(new_el, props.i);
-        }}
-      >
-        <option value={"true"}>Испытание</option>
-        <option value={"false"}>Не испытание</option>
-      </select> */}
-      {/* <div className="header">{props.i + 1}.</div> */}
       <DynamicLoadedEditor
         // index={i}
         // name={i}

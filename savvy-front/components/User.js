@@ -9,7 +9,7 @@ const CURRENT_USER_QUERY = gql`
       name
       surname
       permissions
-      interests
+      tags
       image
       certificates {
         id

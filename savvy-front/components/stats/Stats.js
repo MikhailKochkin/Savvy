@@ -19,6 +19,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         name
         surname
+        tags
         email
         studentFeedback {
           id

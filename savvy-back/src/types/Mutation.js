@@ -246,6 +246,7 @@ const Mutation = mutationType({
         name: stringArg(),
         number: stringArg(),
         image: stringArg(),
+        tags: list(stringArg()),
         surname: stringArg(),
         email: stringArg(),
         status: arg({
@@ -256,10 +257,15 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         // const permissions = args.permissions;
         // delete args.permissions;
+        console.log("tags", tags);
         const updates = { ...args };
+        delete updates.tags;
         delete updates.id;
         const user = await ctx.prisma.user.update({
           data: updates,
+          tags: {
+            set: [...args.tags],
+          },
           where: {
             id: args.id,
           },
@@ -1260,8 +1266,13 @@ const Mutation = mutationType({
         answer: list(stringArg()),
         text: stringArg(),
         hasText: booleanArg(),
+        columnsNum: intArg(),
+        elements: arg({
+          type: "ElementsList",
+        }),
       },
       resolve: async (_, args, ctx) => {
+        console.log("args", args);
         const lessonId = args.lessonId;
         delete args.lessonId;
         variants = args.variants;
@@ -1277,6 +1288,7 @@ const Mutation = mutationType({
             lesson: {
               connect: { id: lessonId },
             },
+            type: "equal",
             variants: {
               set: [...variants],
             },
@@ -1299,6 +1311,10 @@ const Mutation = mutationType({
         variants: list(stringArg()),
         answer: list(stringArg()),
         complexity: intArg(),
+        columnsNum: intArg(),
+        elements: arg({
+          type: "ElementsList",
+        }),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
@@ -1309,12 +1325,12 @@ const Mutation = mutationType({
         const answer = args.answer;
         return ctx.prisma.construction.update({
           data: {
-            variants: {
-              set: [...variants],
-            },
-            answer: {
-              set: [...answer],
-            },
+            // variants: {
+            //   set: [...variants],
+            // },
+            // answer: {
+            //   set: [...answer],
+            // },
             ...updates,
           },
           where: {

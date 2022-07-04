@@ -114,6 +114,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
+        elements
+        columnsNum
         complexity
         variants
         hint

@@ -361,9 +361,11 @@ type ConfUser {
 
 type Construction {
   answer: [String!]!
+  columnsNum: Int
   complexity: Int
   constructionResults(after: ConstructionResultWhereUniqueInput, before: ConstructionResultWhereUniqueInput, first: Int, last: Int): [ConstructionResult!]!
   createdAt: DateTime!
+  elements: Json
   hasText: Boolean!
   hint: String
   id: String!
@@ -435,9 +437,11 @@ input ConstructionResultWhereUniqueInput {
 input ConstructionWhereInput {
   AND: [ConstructionWhereInput!]
   answer: StringNullableListFilter
+  columnsNum: IntNullableFilter
   complexity: IntNullableFilter
   constructionResults: ConstructionResultListRelationFilter
   createdAt: DateTimeFilter
+  elements: JsonNullableFilter
   hasText: BoolFilter
   hint: StringNullableFilter
   id: StringFilter
@@ -769,6 +773,20 @@ input DocumentWhereInput {
 
 input DocumentWhereUniqueInput {
   id: String
+}
+
+input Element {
+  inDoc: Boolean
+  isTest: Boolean
+  place: Int
+  size: Int
+  text: String
+  type: String
+  value: String
+}
+
+input ElementsList {
+  elements: [Element]
 }
 
 input EmailInfo {
@@ -1285,7 +1303,7 @@ type Mutation {
   createClause(commentary: String, documentId: String, keywords: [String], number: Int, sample: String, title: String): Clause
   createCommunityMember(email: String, name: String, number: String, subscription: String, surname: String): PaymentInfo2
   createConfUser(conf_number: Int, email: String): ConfUser
-  createConstruction(answer: [String], hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
+  createConstruction(answer: [String], columnsNum: Int, elements: ElementsList, hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
   createCoursePage(courseType: String, description: String, image: String, published: Boolean, title: String): CoursePage
   createCourseVisit(coursePageId: String, studentId: String, visitsNumber: Int): CourseVisit
@@ -1344,7 +1362,7 @@ type Mutation {
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
-  updateConstruction(answer: [String], complexity: Int, hint: String, id: String, name: String, type: String, variants: [String]): Construction
+  updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
@@ -1364,7 +1382,7 @@ type Mutation {
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
-  updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String): User
+  updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String]): User
 }
 
 input NestedBoolFilter {
@@ -2665,7 +2683,6 @@ type User {
   email: String!
   id: String!
   image: String
-  interests: [String!]!
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   level: UserLevel
@@ -2679,6 +2696,7 @@ type User {
   status: String
   studentFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
   surname: String
+  tags: [String!]!
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
   uni: Uni
 }
@@ -2723,7 +2741,6 @@ input UserOrderByInput {
   favourites: SortOrder
   id: SortOrder
   image: SortOrder
-  interests: SortOrder
   isFamiliar: SortOrder
   legalPortfolioId: SortOrder
   levelId: SortOrder
@@ -2737,6 +2754,7 @@ input UserOrderByInput {
   status: SortOrder
   subjects: SortOrder
   surname: SortOrder
+  tags: SortOrder
   uniId: SortOrder
   uniID: SortOrder
   updatedAt: SortOrder
@@ -2771,7 +2789,6 @@ input UserWhereInput {
   forums: ForumListRelationFilter
   id: StringFilter
   image: StringNullableFilter
-  interests: StringNullableListFilter
   isFamiliar: BoolFilter
   legalPortfolio: LegalPortfolioWhereInput
   legalPortfolioId: StringNullableFilter
@@ -2810,6 +2827,7 @@ input UserWhereInput {
   studentFeedback: FeedbackListRelationFilter
   subjects: StringNullableListFilter
   surname: StringNullableFilter
+  tags: StringNullableListFilter
   teacherFeedback: FeedbackListRelationFilter
   testPracticeResults: TestPracticeResultListRelationFilter
   testPractices: TestPracticeListRelationFilter

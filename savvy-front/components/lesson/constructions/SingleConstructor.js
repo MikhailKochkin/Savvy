@@ -203,16 +203,7 @@ const SingleConstructor = (props) => {
     const elements = document
       .getElementById(props.construction.id)
       .getElementsByClassName("l");
-    // for (let element of elements) {
-    //   element.style.border = "1px solid #DE6B48";
-    // }
     setAttempts(attempts + 1);
-    // setTimeout(function () {
-    //   for (let element of elements) {
-    //     element.style.border = "none";
-    //     element.style.borderBottom = "1px solid grey ";
-    //   }
-    // }, 3000);
   };
 
   const showRight = () => {

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -133,7 +133,7 @@ model Construction {
   text                String?
   hasText             Boolean              @default(false)
   columnsNum          Int?
-  elements            Json?
+  structure           Json?
   lesson              Lesson               @relation(fields: [lessonId], references: [id])
   user                User                 @relation(fields: [userId], references: [id])
   constructionResults ConstructionResult[]
@@ -690,7 +690,7 @@ model User {
   image               String?
   favourites          String[]
   subjects            String[]
-  tags                String[]
+  interests           String[]
   permissions         Permission[]
   uniId               String?
   companyId           String?

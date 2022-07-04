@@ -13,6 +13,8 @@ import SingleQuiz from "./quizes/SingleQuiz";
 import SingleProblem from "./problems/SingleProblem";
 import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
+import NewConstructor from "./constructions/NewConstructor";
+
 import Forum from "./forum/Forum";
 import Document from "./documents/Document";
 import Exam from "./exams/Exam";
@@ -292,19 +294,28 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "construction") {
       el = lesson.constructions.find((con) => con.id === task.id);
-      item = (
-        <SingleConstructor
-          key={el.id}
-          lessonID={lesson.id}
-          complexity={el.complexity}
-          getResults={getResults}
-          construction={el}
-          variants={el.variants}
-          me={me}
-          arr={Array(el.answer.length).fill("")}
-          story={true}
-        />
-      );
+      item =
+        el.elements !== null ? (
+          <NewConstructor
+            key={el.id}
+            lessonID={lesson.id}
+            construction={el}
+            complexity={el.complexity}
+            me={me}
+          />
+        ) : (
+          <SingleConstructor
+            key={el.id}
+            lessonID={lesson.id}
+            complexity={el.complexity}
+            getResults={getResults}
+            construction={el}
+            variants={el.variants}
+            me={me}
+            arr={Array(el.answer.length).fill("")}
+            story={true}
+          />
+        );
       components.push(item);
     } else if (task.type.toLowerCase() === "exam") {
       el = lesson.exams.find((con) => con.id === task.id);

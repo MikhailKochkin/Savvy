@@ -231,6 +231,8 @@ const SINGLE_LESSON_QUERY = gql`
         name
         answer
         complexity
+        elements
+        columnsNum
         variants
         hint
         type

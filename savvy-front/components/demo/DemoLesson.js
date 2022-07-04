@@ -410,7 +410,7 @@ const DemoLesson = (props) => {
     email: "mixa101094@yandex.ru",
     id: "ckmddnbfy180981gwpn2ir82c9",
     image: "",
-    interests: ["IP/IT", "Гражданское право"],
+    tags: ["IP/IT", "Гражданское право"],
     lessonResults: [],
     lessons: [],
     level: {

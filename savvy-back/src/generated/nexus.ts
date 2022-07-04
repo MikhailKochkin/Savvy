@@ -292,9 +292,11 @@ export interface NexusGenInputs {
   ConstructionWhereInput: { // input type
     AND?: NexusGenInputs['ConstructionWhereInput'][] | null; // [ConstructionWhereInput!]
     answer?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    columnsNum?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     complexity?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     constructionResults?: NexusGenInputs['ConstructionResultListRelationFilter'] | null; // ConstructionResultListRelationFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    elements?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     hasText?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
     hint?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -517,6 +519,18 @@ export interface NexusGenInputs {
   }
   DocumentWhereUniqueInput: { // input type
     id?: string | null; // String
+  }
+  Element: { // input type
+    inDoc?: boolean | null; // Boolean
+    isTest?: boolean | null; // Boolean
+    place?: number | null; // Int
+    size?: number | null; // Int
+    text?: string | null; // String
+    type?: string | null; // String
+    value?: string | null; // String
+  }
+  ElementsList: { // input type
+    elements?: Array<NexusGenInputs['Element'] | null> | null; // [Element]
   }
   EmailInfo: { // input type
     completed_lessons_number?: number | null; // Int
@@ -1744,7 +1758,6 @@ export interface NexusGenInputs {
     favourites?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
-    interests?: NexusGenEnums['SortOrder'] | null; // SortOrder
     isFamiliar?: NexusGenEnums['SortOrder'] | null; // SortOrder
     legalPortfolioId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     levelId?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1758,6 +1771,7 @@ export interface NexusGenInputs {
     status?: NexusGenEnums['SortOrder'] | null; // SortOrder
     subjects?: NexusGenEnums['SortOrder'] | null; // SortOrder
     surname?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     uniId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     uniID?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1791,7 +1805,6 @@ export interface NexusGenInputs {
     forums?: NexusGenInputs['ForumListRelationFilter'] | null; // ForumListRelationFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
-    interests?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     isFamiliar?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
     legalPortfolio?: NexusGenInputs['LegalPortfolioWhereInput'] | null; // LegalPortfolioWhereInput
     legalPortfolioId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1830,6 +1843,7 @@ export interface NexusGenInputs {
     studentFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
     subjects?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     surname?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teacherFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
     testPracticeResults?: NexusGenInputs['TestPracticeResultListRelationFilter'] | null; // TestPracticeResultListRelationFilter
     testPractices?: NexusGenInputs['TestPracticeListRelationFilter'] | null; // TestPracticeListRelationFilter
@@ -1958,8 +1972,10 @@ export interface NexusGenObjects {
   }
   Construction: { // root type
     answer: string[]; // [String!]!
+    columnsNum?: number | null; // Int
     complexity?: number | null; // Int
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    elements?: NexusGenScalars['Json'] | null; // Json
     hasText: boolean; // Boolean!
     hint?: string | null; // String
     id: string; // String!
@@ -2339,7 +2355,6 @@ export interface NexusGenObjects {
     email: string; // String!
     id: string; // String!
     image?: string | null; // String
-    interests: string[]; // [String!]!
     name: string; // String!
     number?: string | null; // String
     password: string; // String!
@@ -2347,6 +2362,7 @@ export interface NexusGenObjects {
     resume?: string | null; // String
     status?: string | null; // String
     surname?: string | null; // String
+    tags: string[]; // [String!]!
   }
   UserLevel: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2462,9 +2478,11 @@ export interface NexusGenFieldTypes {
   }
   Construction: { // field return type
     answer: string[]; // [String!]!
+    columnsNum: number | null; // Int
     complexity: number | null; // Int
     constructionResults: NexusGenRootTypes['ConstructionResult'][]; // [ConstructionResult!]!
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    elements: NexusGenScalars['Json'] | null; // Json
     hasText: boolean; // Boolean!
     hint: string | null; // String
     id: string; // String!
@@ -3068,7 +3086,6 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: string; // String!
     image: string | null; // String
-    interests: string[]; // [String!]!
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     level: NexusGenRootTypes['UserLevel'] | null; // UserLevel
@@ -3082,6 +3099,7 @@ export interface NexusGenFieldTypes {
     status: string | null; // String
     studentFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
     surname: string | null; // String
+    tags: string[]; // [String!]!
     teacherFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
     uni: NexusGenRootTypes['Uni'] | null; // Uni
   }
@@ -3190,9 +3208,11 @@ export interface NexusGenFieldTypeNames {
   }
   Construction: { // field return type name
     answer: 'String'
+    columnsNum: 'Int'
     complexity: 'Int'
     constructionResults: 'ConstructionResult'
     createdAt: 'DateTime'
+    elements: 'Json'
     hasText: 'Boolean'
     hint: 'String'
     id: 'String'
@@ -3796,7 +3816,6 @@ export interface NexusGenFieldTypeNames {
     email: 'String'
     id: 'String'
     image: 'String'
-    interests: 'String'
     lessonResults: 'LessonResult'
     lessons: 'Lesson'
     level: 'UserLevel'
@@ -3810,6 +3829,7 @@ export interface NexusGenFieldTypeNames {
     status: 'String'
     studentFeedback: 'Feedback'
     surname: 'String'
+    tags: 'String'
     teacherFeedback: 'Feedback'
     uni: 'Uni'
   }
@@ -4065,6 +4085,8 @@ export interface NexusGenArgTypes {
     }
     createConstruction: { // args
       answer?: Array<string | null> | null; // [String]
+      columnsNum?: number | null; // Int
+      elements?: NexusGenInputs['ElementsList'] | null; // ElementsList
       hasText?: boolean | null; // Boolean
       hint?: string | null; // String
       lessonId?: string | null; // String
@@ -4358,7 +4380,9 @@ export interface NexusGenArgTypes {
     }
     updateConstruction: { // args
       answer?: Array<string | null> | null; // [String]
+      columnsNum?: number | null; // Int
       complexity?: number | null; // Int
+      elements?: NexusGenInputs['ElementsList'] | null; // ElementsList
       hint?: string | null; // String
       id?: string | null; // String
       name?: string | null; // String
@@ -4505,6 +4529,7 @@ export interface NexusGenArgTypes {
       number?: string | null; // String
       status?: NexusGenEnums['Status'] | null; // Status
       surname?: string | null; // String
+      tags?: Array<string | null> | null; // [String]
     }
   }
   NewTest: {

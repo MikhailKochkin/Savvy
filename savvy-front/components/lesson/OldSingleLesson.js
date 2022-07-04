@@ -267,6 +267,8 @@ const SINGLE_LESSON_QUERY = gql`
         hint
         type
         text
+        columnsNum
+        elements
         hasText
         user {
           id

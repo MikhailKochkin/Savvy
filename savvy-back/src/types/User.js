@@ -12,7 +12,7 @@ const User = objectType({
     t.model.description();
     t.model.resume();
     t.model.status();
-    t.model.interests();
+    t.model.tags();
     t.model.level();
     t.model.uni();
     t.model.image();

@@ -8,13 +8,14 @@ const Styles = styled.div`
   margin-bottom: 4%;
   background: white;
   font-size: 1.4rem;
+  max-width: 350px;
   line-height: 1.8;
   font-weight: 500;
-background: #F6EC9A;
-padding: 4% 6%;
-box-shadow: 0px 4px 4px rgba(182, 182, 182, 0.25);
-transform: ${(props) =>
-  props.index % 2 == 0 ? `rotate(-1.2deg)` : `rotate(1.2deg)`};
+  background: #F6EC9A;
+  padding: 4% 6%;
+  box-shadow: 0px 4px 4px rgba(182, 182, 182, 0.25);
+  transform: ${(props) =>
+    props.index % 2 == 0 ? `rotate(-1.2deg)` : `rotate(1.2deg)`};
   img {
     width: 100%;
   }

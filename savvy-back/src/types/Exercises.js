@@ -108,6 +108,8 @@ const Construction = objectType({
     t.model.name();
     t.model.type();
     t.model.text();
+    t.model.columnsNum();
+    t.model.elements();
     t.model.hasText();
     t.model.complexity();
     t.model.variants();

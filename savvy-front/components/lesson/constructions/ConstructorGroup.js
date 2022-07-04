@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SingleConstructor from "./SingleConstructor";
+import NewConstructor from "./NewConstructor";
 import styled from "styled-components";
-// import { withTranslation } from "../../../i18n";
 
 const Title = styled.p`
   font-size: 1.6rem;
@@ -111,7 +111,7 @@ class ConstructorGroup extends Component {
             <button onClick={this.onNext}>След </button>
           </Title>
         </Box>
-        {construction && (
+        {construction.elements == null ? (
           <>
             {(arr = Array(construction.answer.length).fill(""))}
             <SingleConstructor
@@ -123,6 +123,16 @@ class ConstructorGroup extends Component {
               me={this.props.me}
               arr={arr}
               userData={this.props.constructionResults}
+            />
+          </>
+        ) : (
+          <>
+            <NewConstructor
+              key={construction.id}
+              lessonID={this.props.lessonID}
+              construction={construction}
+              complexity={construction.complexity}
+              me={this.props.me}
             />
           </>
         )}

@@ -12,6 +12,9 @@ import TestPractice from "./testblocks/TB";
 import CreateShot from "../create/CreateShot";
 import CreateConstructor from "../create/CreateConstructor";
 
+import NewConstructor from "./constructions/NewConstructor";
+import SingleConstructor from "./constructions/SingleConstructor";
+
 import CreateTextEditor from "../create/CreateTextEditor";
 import TextEditor from "./textEditors/SingleTextEditor";
 
@@ -73,7 +76,7 @@ const Styles = styled.div`
   padding: 20px;
   border: ${(props) =>
     props.isAdded ? "1px solid #adb5bd" : "1px dashed #dee2e6"};
-  width: ${(props) => (props.width ? "85vw" : "660px")};
+  width: ${(props) => (props.width ? "75vw" : "660px")};
   margin-bottom: 100px;
   margin-right: 10px;
   display: flex;
@@ -122,6 +125,8 @@ const LessonBlock = (props) => {
     d = lesson.problems.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "forum" && !el.data) {
     d = lesson.forum;
+  } else if (el.type && el.type.toLowerCase() == "construction" && !el.data) {
+    d = lesson.constructions.find((n) => n.id == el.id);
   } else if (el.data) {
     d = el.data;
   } else {
@@ -259,6 +264,16 @@ const LessonBlock = (props) => {
         "Forum",
         res.data.createForum
       );
+    } else if (res.data.createConstruction) {
+      setIsAdded(true);
+      setType("Construction");
+      setIdNum(res.data.createConstruction.id);
+      props.addToLesson(
+        res.data.createConstruction.id,
+        index,
+        "Construction",
+        res.data.createConstruction
+      );
     }
     setIsSaved(true);
   };
@@ -269,7 +284,10 @@ const LessonBlock = (props) => {
       <Styles
         id={props.id}
         isAdded={isAdded}
-        width={type.toLowerCase() == "texteditor"}
+        width={
+          type.toLowerCase() == "texteditor" ||
+          type.toLowerCase() == "construction"
+        }
       >
         {!isSaved && (
           <Menu>
@@ -283,6 +301,9 @@ const LessonBlock = (props) => {
             <ButtonTwo onClick={(e) => addBlock("Problem")}>Задача</ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("TextEditor")}>
               Редактор
+            </ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Construction")}>
+              Конструктор
             </ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("Forum")}>Форум</ButtonTwo>
           </Menu>
@@ -486,6 +507,50 @@ const LessonBlock = (props) => {
                   lessonID={lesson.id}
                   getResults={getResults}
                 />
+              )}
+          </>
+        )}
+        {console.log("type.toLowerCase()", type.toLowerCase(), data)}
+        {type.toLowerCase() == "construction" && (
+          <>
+            {!isSaved && d == null && (
+              <CreateConstructor
+                lessonID={lesson.id}
+                getResult={getResult}
+                isSaved={isSaved}
+              />
+            )}
+            {(isSaved || d != null) &&
+              data &&
+              data.__typename.toLowerCase() == "construction" && (
+                <>
+                  {console.log("data.elements", data.elements)}
+                  {data.elements == null && (
+                    <SingleConstructor
+                      key={data.id}
+                      lessonID={lesson.id}
+                      complexity={data.complexity}
+                      getResults={getResults}
+                      construction={data}
+                      variants={data.variants}
+                      me={me}
+                      arr={Array(data.answer.length).fill("")}
+                      story={true}
+                    />
+                  )}
+                  {data.elements !== null && (
+                    <NewConstructor
+                      key={data.id}
+                      lessonID={lesson.id}
+                      construction={data}
+                      complexity={data.complexity}
+                      me={me}
+                      getResults={getResults}
+                      getResult={getResult}
+                      passUpdated={passUpdated}
+                    />
+                  )}
+                </>
               )}
           </>
         )}

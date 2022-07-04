@@ -70,6 +70,26 @@ const PromocodeList = inputObjectType({
   },
 });
 
+const Element = inputObjectType({
+  name: "Element",
+  definition(t) {
+    t.string("type");
+    t.string("value");
+    t.string("text");
+    t.int("place");
+    t.int("size");
+    t.boolean("inDoc");
+    t.boolean("isTest");
+  },
+});
+
+const ElementsList = inputObjectType({
+  name: "ElementsList",
+  definition(t) {
+    t.list.field("elements", { type: "Element" });
+  },
+});
+
 const EmailInfo = inputObjectType({
   name: "EmailInfo",
   definition(t) {
@@ -112,4 +132,6 @@ module.exports = {
   EmailInfo,
   ProblemItem,
   ProblemStructure,
+  Element,
+  ElementsList,
 };

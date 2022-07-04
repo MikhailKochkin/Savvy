@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -690,7 +690,7 @@ model User {
   image               String?
   favourites          String[]
   subjects            String[]
-  tags                String[]
+  tags           String[]
   permissions         Permission[]
   uniId               String?
   companyId           String?
