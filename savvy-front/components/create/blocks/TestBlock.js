@@ -364,7 +364,6 @@ const TestBlock = (props) => {
                         console.log(0);
                         props.getNode(type, c);
                       }
-                      console.log("t_type", t_type, t, f_type, f);
                       if (type === "newtest") {
                         updateTestForProblem();
                       } else if (type === "quiz") {

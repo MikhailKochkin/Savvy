@@ -23,6 +23,15 @@ const UPDATE_PROBLEM_MUTATION = gql`
       complexity: $complexity
     ) {
       id
+      text
+      nodeID
+      steps
+      complexity
+      nodeType
+      user {
+        id
+      }
+      createdAt
     }
   }
 `;
@@ -80,19 +89,23 @@ const Container = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 0.5% 1%;
-  background: ${(props) => props.theme.green};
-  width: 25%;
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
   border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.6rem;
-  margin: 2% 0;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
   cursor: pointer;
-  outline: 0;
-  &:active {
-    background-color: ${(props) => props.theme.darkGreen};
+  margin: 20px 0;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
   }
 `;
 
@@ -124,9 +137,7 @@ const UpdateProblem = (props) => {
     props.complexity ? props.complexity : 0
   );
   const getText = (d) => setText(d);
-  console.log(props.complexity);
   const handleChange = (type, id) => {
-    console.log(type, id);
     setNodeID(id);
     setNodeType(type);
   };
@@ -157,7 +168,7 @@ const UpdateProblem = (props) => {
           value={text}
           problem={true}
         />
-        <h3>Выберите задания для формата "Экзамен" и "Задача":</h3>
+        {/* <h3>Выберите задания для формата "Экзамен" и "Задача":</h3> */}
         {nodeID && nodeType && (
           <ProblemBuilder
             elements={[...newTests, ...quizes, ...notes]}
@@ -188,16 +199,19 @@ const UpdateProblem = (props) => {
           ]}
         >
           {(updateProblem, { loading, error }) => (
-            <Button
+            <ButtonTwo
               onClick={async (e) => {
                 // Stop the form from submitting
                 e.preventDefault();
                 // call the mutation
                 const res = await updateProblem();
+                props.getResult(res);
+                props.switchUpdate();
+                props.passUpdated();
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}
-            </Button>
+            </ButtonTwo>
           )}
         </Mutation>
       </Container>

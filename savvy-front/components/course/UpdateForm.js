@@ -194,7 +194,6 @@ const UpdateForm = (props) => {
 
   const myCallback = (dataFromChild, name) => {
     let st = name;
-    console.log(st);
     if (st === "audience") {
       setAudience(dataFromChild);
     } else if (st === "methods") {

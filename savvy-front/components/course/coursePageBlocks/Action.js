@@ -662,7 +662,6 @@ const Action = (props) => {
                           value="buy"
                           checked={step == "buy"}
                           onChange={(e) => {
-                            console.log(e.target.value);
                             setStep(e.target.value);
                           }}
                         />

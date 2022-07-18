@@ -81,7 +81,6 @@ const TakeMyMoney = (props) => {
                 e.preventDefault;
                 setLoading(true);
                 const res = await createOrder();
-                console.log(res.data.createOrder.url);
                 location.href = res.data.createOrder.url;
                 setLoading(false);
               }}

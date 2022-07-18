@@ -84,7 +84,6 @@ const StoryUpdate = (props) => {
   };
 
   const { lesson } = props;
-  console.log(list);
   return (
     <>
       <Mutation

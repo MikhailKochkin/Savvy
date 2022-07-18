@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LessonBlock from "./LessonBlock";
 import { useMutation, gql } from "@apollo/client";
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
+import UpdateLesson from "./UpdateLesson";
 
 const UPDATE_LESSON_MUTATION = gql`
   mutation UPDATE_LESSON_MUTATION($id: String!, $structure: LessonStructure) {
@@ -23,9 +24,9 @@ const Styles = styled.div`
 const Container = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: row;
-  /* align-items: center; */
-  /* justify-content: center; */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const BuilderPart = styled.div`
@@ -174,10 +175,10 @@ const LessonBuilder = (props) => {
     },
     {
       id: undefined,
-      type: "Problem",
+      type: "Construction",
       num: 7,
       comment: `
-      <p>Следующий уровень изучения материала – это применение новых знаний на практике. Для этого давайте создадим задачу, или кейс-стади.</p>
+      <p>С помощью конструкторов помогите студенту структурировать новые знания. Предложите ему составить план документа, сопоставить понятия и определения или заполнить пробелы в таблице.</p>
       `,
     },
     {
@@ -193,7 +194,7 @@ const LessonBuilder = (props) => {
       type: "Problem",
       num: 9,
       comment: `
-      <p>Последний блок посвящен практическому заданию. Над этим я еще работаю.</p>
+      <p>Следующий уровень изучения материала – это применение новых знаний на практике. Для этого давайте создадим задачу, или кейс-стади.</p>
       `,
     },
     {
@@ -242,12 +243,11 @@ const LessonBuilder = (props) => {
     const b = a.map(({ num, ...keepAttrs }) => keepAttrs);
     const c = b.map(({ data, ...keepAttrs }) => keepAttrs);
     const d = c.map(({ comment, ...keepAttrs }) => keepAttrs);
-
     updateLesson({
       variables: {
         id: props.lesson.id,
         structure: {
-          lessonItems: new_list2,
+          lessonItems: d,
         },
       },
     });
@@ -260,13 +260,11 @@ const LessonBuilder = (props) => {
     temp_obj.type = type;
     temp_obj.data = data;
     new_list[num] = temp_obj;
-
     setElements([...new_list]);
     let a = new_list.filter((el) => el.id != undefined);
     const b = a.map(({ num, ...keepAttrs }) => keepAttrs);
     const c = b.map(({ data, ...keepAttrs }) => keepAttrs);
     const d = c.map(({ comment, ...keepAttrs }) => keepAttrs);
-
     updateLesson({
       variables: {
         id: props.lesson.id,
@@ -284,6 +282,12 @@ const LessonBuilder = (props) => {
   return (
     <Styles>
       <Container>
+        <UpdateLesson
+          lessonID={lesson.id}
+          description={lesson.description}
+          lesson={lesson}
+          // change={lesson.change}
+        />
         <BuilderPart>
           {elements.map((el, i) => {
             return (

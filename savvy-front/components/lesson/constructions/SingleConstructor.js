@@ -210,9 +210,7 @@ const SingleConstructor = (props) => {
     const elements = document
       .getElementById(props.construction.id)
       .getElementsByClassName("l");
-    // for (let element of elements) {
-    //   element.style.border = "1px solid #84BC9C";
-    // }
+
     setAnswerState("right");
     setAnswered(true);
     const texts = document.querySelectorAll("#text");
@@ -287,7 +285,6 @@ const SingleConstructor = (props) => {
         <Styles id={construction.id} story={story}>
           <Answers className="answer" id="answers">
             <Title>{construction.name}</Title>
-            {/* <div>{t("construction_explainer")}</div> */}
             {!answerReveal && (
               <>
                 {received.map((option, index) => {

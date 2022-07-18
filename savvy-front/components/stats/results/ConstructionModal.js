@@ -65,7 +65,6 @@ const ConstructionModal = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { student, construction, results } = props;
   let student_results;
-  console.log(results);
   results.filter((r) => r.construction.id === construction.id).length > 0
     ? (student_results = results.filter(
         (r) => r.construction.id === construction.id

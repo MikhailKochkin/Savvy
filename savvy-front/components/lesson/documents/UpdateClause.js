@@ -93,7 +93,6 @@ const UpdateClause = (props) => {
   };
   const classes = useStyles();
   const { index } = props;
-  console.log(number);
   return (
     <>
       <div id="title">Условия документа:</div>

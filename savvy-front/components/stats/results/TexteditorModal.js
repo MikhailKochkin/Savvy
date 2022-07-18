@@ -47,12 +47,10 @@ const TexteditorModal = (props) => {
     let res;
     if (results.filter((t) => t.textEditor.id === texteditor.id).length > 0) {
       if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
-        console.log(results.filter((t) => t.textEditor.id === texteditor.id));
-      res = results.filter((t) => t.textEditor.id === texteditor.id);
+        res = results.filter((t) => t.textEditor.id === texteditor.id);
       const elements = document
         .getElementById(texteditor.id)
         .querySelectorAll("#id");
-      if (texteditor.id == "ck9k4st6j04ys07341ols5zbl") console.log(elements);
       elements.forEach((element) => {
         if (
           res.filter((r) => r.correct == element.getAttribute("data")).length >
@@ -62,24 +60,16 @@ const TexteditorModal = (props) => {
             (r) => r.correct == element.getAttribute("data")
           );
           if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
-            console.log(answers);
-          var guesses_arr = answers.map(function (obj) {
-            return obj.guess;
-          });
+            var guesses_arr = answers.map(function (obj) {
+              return obj.guess;
+            });
           if (guesses_arr.leength == 0) {
             guesses_arr = ["––"];
           }
-          if (texteditor.id == "ck9k4st6j04ys07341ols5zbl") console.log(111);
           if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
-            console.log(
-              element,
-              `${answers[0].wrong} / ${answers[0].correct} / ${guesses_arr.join(
-                ", "
-              )}`
-            );
-          element.innerHTML = `${answers[0].wrong} / ${
-            answers[0].correct
-          } / ${guesses_arr.join(", ")}`;
+            element.innerHTML = `${answers[0].wrong} / ${
+              answers[0].correct
+            } / ${guesses_arr.join(", ")}`;
         }
       });
     }

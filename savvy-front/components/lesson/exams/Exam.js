@@ -33,7 +33,6 @@ class Exam extends Component {
       let el = this.props.lesson.quizes.filter(
         (q) => q.id === data[1].value
       )[0];
-      console.log(el);
       newQuiz = (
         <SingleQuiz
           key={el.id}
@@ -158,7 +157,6 @@ class Exam extends Component {
       el = this.props.lesson.quizes.find(
         (quiz) => quiz.id === this.props.exam.nodeID
       );
-      console.log(el);
       item = (
         <SingleQuiz
           id={el.id}

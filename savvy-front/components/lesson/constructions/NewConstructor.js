@@ -2,8 +2,32 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import dynamic from "next/dynamic";
+import { useMutation, gql } from "@apollo/client";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
 import UpdateNewConstructor from "./UpdateNewConstructor";
 import Box from "./Box";
+
+const CREATE_CONSTRUCTIONRESULT_MUTATION = gql`
+  mutation CREATE_CONSTRUCTIONRESULT_MUTATION(
+    $answer: String
+    $attempts: Int
+    $lessonId: String
+    $constructionId: String
+    $inputs: [String]
+  ) {
+    createConstructionResult(
+      answer: $answer
+      attempts: $attempts
+      lessonId: $lessonId
+      constructionId: $constructionId
+      inputs: $inputs
+    ) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   width: ${(props) => (props.story ? "85vw" : "100%")};
@@ -62,6 +86,7 @@ const Block = styled.div`
 `;
 
 const Element = styled.div`
+  display: ${(props) => (props.display ? "block" : "none")};
   font-size: 1.4rem;
   min-height: 100px;
   width: 100%;
@@ -125,21 +150,38 @@ const Variants = styled.div`
   }
 `;
 
+const StyledButton = withStyles({
+  root: {
+    margin: "4% 0",
+    marginRight: "2%",
+    fontSize: "1.6rem",
+    textTransform: "none",
+    width: "50%",
+  },
+})(Button);
+
 const NewConstructor = (props) => {
-  const { construction, me } = props;
+  const { construction, me, lessonID, story } = props;
   let elements = construction.elements.elements;
   const [check, setCheck] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+
   const [update, setUpdate] = useState(false);
   const [variants, setVariants] = useState([]);
   const [answersCheck, setAnswersCheck] = useState(
     elements.map((t) => (t.isTest ? false : true))
   );
+
   const [currentConfig, setCurrentConfig] = useState([]);
   const [shiverList, setShiverList] = useState([]);
   const [used, setUsed] = useState(
     Array(elements.filter((t) => t.isTest == true).length).fill("")
   );
-  console.log("used", used);
+  const [createConstructionResult, { data, loading, error }] = useMutation(
+    CREATE_CONSTRUCTIONRESULT_MUTATION
+  );
+
+  const { t } = useTranslation("lesson");
 
   const shuffle = (array) => {
     let m = array.length,
@@ -155,22 +197,14 @@ const NewConstructor = (props) => {
   };
 
   useEffect(() => {
-    const vars = shuffle([...elements.filter((t) => t.isTest)]);
+    const vars = shuffle([...props.elements.filter((t) => t.isTest)]);
     setVariants(vars);
   }, []);
 
   const getAnswer = (val, i, answer) => {
-    console.log("val", val, i, answer);
     let new_arr = [...used];
     new_arr[i - 1] = answer;
-    // if (used.includes(answer)) {
-    //   new_arr = new_arr.filter((el) => el == answer);
-    // } else {
-    //   console.log(1, new_arr);
-    //   new_arr = [...new_arr, answer];
-    // }
     setUsed(new_arr);
-    console.log("new_arr", new_arr);
     let arr = [...answersCheck];
     arr[i] = val;
     setAnswersCheck(arr);
@@ -201,18 +235,28 @@ const NewConstructor = (props) => {
     );
     setCheck(true);
     if (!answersCheck.includes(false)) {
-      // alert("correct");
-    } else {
-      // alert("incorrect");
+      createConstructionResult({
+        variables: {
+          answer: "correct",
+          attempts: attempts,
+          lessonId: lessonID,
+          constructionId: construction.id,
+          inputs: [],
+        },
+      });
     }
     setTimeout(() => {
       setShiverList(Array(answersCheck.length).fill(false));
     }, 1000);
+    setAttempts(attempts + 1);
   };
-
   return (
     <>
-      {<button onClick={(e) => setUpdate(!update)}>Изменить</button>}
+      {story !== true && (
+        <StyledButton onClick={(e) => setUpdate(!update)}>
+          {!update ? t("update") : t("back")}
+        </StyledButton>
+      )}
       <Styles>
         {!update && (
           <>
@@ -233,6 +277,7 @@ const NewConstructor = (props) => {
                   check={check}
                   status={currentConfig[i]}
                   shiver={shiverList[i]}
+                  display={t.inDoc}
                 />
               ))}
               <ButtonTwo onClick={(e) => onCheck()}>Check</ButtonTwo>
@@ -244,7 +289,6 @@ const NewConstructor = (props) => {
                     used={used.includes(index + 1)}
                     index={index}
                     option={option.text}
-                    // id={construction.id}
                   />
                 );
               })}
@@ -297,6 +341,7 @@ const ConElement = (props) => {
     place,
     status,
     shiver,
+    display,
   } = props;
   const onCheck = (e) => {
     setValue(parseInt(e.target.value));
@@ -312,15 +357,6 @@ const ConElement = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (status == false) {
-  //     setShiver(true);
-  //     setTimeout(() => {
-  //       setShiver(false);
-  //     }, 1000);
-  //   }
-  // }, []);
-
   return (
     <Element
       shiver={shiver}
@@ -328,6 +364,7 @@ const ConElement = (props) => {
       correct={correct}
       check={check}
       size={size}
+      display={display}
     >
       {isTest && (
         <Number_Input
@@ -345,7 +382,6 @@ const ConElement = (props) => {
       )}
       {!isTest && <div>{renderHTML(text)}</div>}
       {status == true && correct == true && isShown && "✅"}
-      {/* {status == false && correct == false && isShown && "⛔️"} */}
     </Element>
   );
 };

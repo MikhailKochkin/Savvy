@@ -161,6 +161,10 @@ const Tasks = (props) => {
     }
   }, 1000);
 
+  const getResults = () => {
+    return;
+  };
+
   const update = (data) => {
     if (!data[0]) {
       setWrong(wrong + 1);
@@ -176,7 +180,6 @@ const Tasks = (props) => {
   };
 
   let item;
-  console.log(0, activeStep, tasks[activeStep], tasks.length);
   let task = tasks[activeStep];
   if (tasks.length === activeStep) {
     item = (
@@ -211,6 +214,7 @@ const Tasks = (props) => {
         story={true}
         exam={false}
         getData={update}
+        getResults={getResults}
       />
     );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "Quiz") {
@@ -231,6 +235,7 @@ const Tasks = (props) => {
         story={true}
         exam={false}
         getData={update}
+        getResults={getResults}
       />
     );
   }

@@ -135,7 +135,6 @@ const CreateMessage = (props) => {
     };
     let arr = [...reactions];
     arr[index] = obj;
-    console.log("index", arr[index]);
     setReactions(arr);
     setReaction("");
     setComment("");

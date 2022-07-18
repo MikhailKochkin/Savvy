@@ -216,7 +216,6 @@ const UpdateQuiz = (props) => {
           getEditorText={setIfWrong}
         />
       </Comment>
-      {console.log("quizID", quizId)}
       <Mutation
         mutation={UPDATE_QUIZ_MUTATION}
         variables={{

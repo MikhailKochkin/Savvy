@@ -171,7 +171,6 @@ const Simulator = (props) => {
     new_data.datasets[0].data.push(Number(((total * 100) / k).toFixed(2)));
     setData(new_data);
     setIndex(index + 1);
-    console.log(result, goal);
     if (goal >= result) {
       props.getData(true, props.index);
     }

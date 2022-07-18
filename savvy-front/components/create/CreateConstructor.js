@@ -132,8 +132,8 @@ const Block = styled.div`
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  box-shadow: 0px 0px 3px 0px rgb(199 199 199);
-  padding: 10px 5%;
+  /* box-shadow: 0px 0px 3px 0px rgb(199 199 199); */
+  /* padding: 10px 5%; */
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
@@ -280,18 +280,6 @@ const CreateConstructor = (props) => {
     }
   };
 
-  const generate = () => {
-    let correct = [];
-    let nums = answersNumber
-      .split(",")
-      .map((el) => (el = parseInt(el)))
-      .filter((el) => !Object.is(el, NaN));
-    nums.map((num) => {
-      correct.push(variants[num - 1]);
-    });
-    setAnswer(correct);
-  };
-
   const getData = (val, i) => {
     const new_elements = [...elements];
     new_elements[i] = val;
@@ -299,7 +287,6 @@ const CreateConstructor = (props) => {
     setElements(new_elements);
   };
 
-  let t;
   const { lessonID } = props;
   return (
     <Center>
@@ -314,7 +301,7 @@ const CreateConstructor = (props) => {
         </p>
         <ul>
           <li>
-            По общему правилу блоки статичны. То есть, ккогда они будут
+            По общему правилу блоки статичны. То есть, когда они будут
             показываться студентам, двигать их будет нельзя.
           </li>
           <li>
@@ -376,26 +363,14 @@ const CreateConstructor = (props) => {
           );
         })}
       </Block>
-      {/* <Box>
-        <Textarea
-          type="text"
-          cols={60}
-          rows={1}
-          spellCheck={true}
-          name="answersNumber"
-          placeholder="Запишите номера верных частей конструктора. Используйте только цифры и запишите
-                их через запятые, без пробелов: 1,2,3,4"
-          onChange={(e) => setAnswersNumber(e.target.value)}
-        />
-      </Box> */}
-      <TextBox>
+      {/* <TextBox>
         <DynamicLoadedEditor
           name="hint"
           getEditorText={myCallback2}
           value={hint}
           placeholder="Запишите подсказку или пояснение к конструктору"
         />
-      </TextBox>
+      </TextBox> */}
       <Mutation
         mutation={CREATE_CONSTRUCTION_MUTATION}
         variables={{
@@ -494,22 +469,7 @@ const ConElement = (props) => {
           <div> ➡️ </div>
         </div>
       </Settings>
-      {/* <select
-        defaultValue={el.isTest}
-        onChange={(e) => {
-          let new_el = { ...el };
-          new_el.isTest = e.target.value == "true";
-          setEl(new_el);
-          props.getData(new_el, props.i);
-        }}
-      >
-        <option value={"true"}>Испытание</option>
-        <option value={"false"}>Не испытание</option>
-      </select> */}
-      {/* <div className="header">{props.i + 1}.</div> */}
       <DynamicLoadedEditor
-        // index={i}
-        // name={i}
         onChange={(e) => updateEl(e.target.value)}
         getEditorText={myCallback}
         value={el.text}

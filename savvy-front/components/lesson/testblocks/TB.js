@@ -73,10 +73,8 @@ const TestPractice = (props) => {
   const { t } = useTranslation("lesson");
 
   const shuffled_tasks = shuffle([...filtered_tests, ...filtered_quizes]);
-  console.log("shuffled_tasks", shuffled_tasks);
 
   const sliced_tasks = shuffled_tasks.slice(0, props.testPractice.tasksNum);
-  console.log("sliced_tasks", sliced_tasks);
   const restart = () => setStart(false);
 
   const [start, setStart] = useState(false);
@@ -87,7 +85,6 @@ const TestPractice = (props) => {
   } else {
     width = "100%";
   }
-  console.log("width", width);
   return (
     <>
       {!start && (

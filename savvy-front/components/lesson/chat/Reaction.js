@@ -191,7 +191,6 @@ const Reaction = (props) => {
                           reaction: lr.reaction,
                         },
                       ]);
-                      console.log(leftReactions, lr.comment);
                       setLeftReactions(
                         [...leftReactions].filter(
                           (r) => r.comment !== lr.comment

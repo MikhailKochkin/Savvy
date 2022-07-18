@@ -17,7 +17,6 @@ const Box = styled.div`
 class Feedback extends Component {
   render() {
     const { feedback } = this.props;
-    console.log(feedback.lesson);
     return (
       <Box>
         <>

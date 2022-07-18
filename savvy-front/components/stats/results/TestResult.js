@@ -81,7 +81,6 @@ class TestResult extends Component {
                           final={i == results.length - 1}
                           color={answer == t.answer}
                         >
-                          {console.log(answer, t.answer, answer == t.answer)}
                           {renderHTML(t.answer)}(
                           {moment(t.createdAt).format("LLL")})
                         </Block>

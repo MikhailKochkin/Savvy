@@ -335,6 +335,10 @@ const SingleTest = (props) => {
     }
     const res = await change();
     //6. save the results
+    if (answerVar.includes(true)) {
+      setZero(false);
+    }
+
     const res1 = await setAnswerOptions(answerVar);
     const res2 = await setAnswer(answerText);
   };
@@ -377,6 +381,7 @@ const SingleTest = (props) => {
 
   const onCheck = async () => {
     if (attempts == 0) {
+      // pass test data if the student answers for the first time. Needed for problems.
       const res = () => {
         if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
           setAnswerState("right");
@@ -429,8 +434,15 @@ const SingleTest = (props) => {
     }
 
     let comments_arr = [];
+
     if (comments && comments.length > 0) {
-      answerNums.map((num) => comments_arr.push(comments[num]));
+      answerNums.map((num) => {
+        if (comments[num] == undefined) {
+          return;
+        } else {
+          comments_arr.push(comments[num]);
+        }
+      });
     }
     setCommentsList(comments_arr);
 
@@ -453,6 +465,7 @@ const SingleTest = (props) => {
   const passUpdated = () => {
     props.passUpdated(true);
   };
+
   const mes = _.zip(
     props.answers,
     props.true,
@@ -520,7 +533,7 @@ const SingleTest = (props) => {
               ))}
             </Options>
           </div>
-          {/* 2. Студент не выбрал ни однного из вариантов. Просим дать ответ  */}
+          {/* 2. Студент не выбрал ни одного из вариантов. Просим дать ответ  */}
 
           {zero && (
             <div className="question_box">
@@ -587,7 +600,7 @@ const SingleTest = (props) => {
                 {props.type != "FORM" && "🎉" + "  " + t("correct") + "!"}
                 {commentsList.length > 0 &&
                   commentsList.map((com, i) => {
-                    return renderHTML(com);
+                    return com ? renderHTML(com) : null;
                   })}
                 {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
               </div>
@@ -614,7 +627,6 @@ const SingleTest = (props) => {
                   commentsList.map((com, i) => {
                     return com ? renderHTML(com) : null;
                   })}
-                {/* {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "} */}
               </div>
               <IconBlock>
                 {author && author.image != null ? (

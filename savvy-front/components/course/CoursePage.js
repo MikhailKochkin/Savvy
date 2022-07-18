@@ -278,7 +278,7 @@ const CoursePage = (props) => {
                     <div className="name">
                       <img src={a.image} />
                       <p>
-                        {a.name} {a.surname} {t("from")} {a.company.name}
+                        {a.name} {a.surname}
                       </p>
                     </div>
                   ))
@@ -290,7 +290,6 @@ const CoursePage = (props) => {
                         {coursePage.user && coursePage.user.surname
                           ? `${coursePage.user.name} ${coursePage.user.surname}`
                           : coursePage.user.name}{" "}
-                        {t("from")} {coursePage.user.company.name}
                       </p>
                     </div>
                     <p className="track2">{coursePage.user.description}</p>

@@ -43,6 +43,13 @@ const UPDATE_LESSON_MUTATION = gql`
   }
 `;
 
+const Styles = styled.div`
+  width: 660px;
+  border: 1px solid #adb5bd;
+  margin: 40px 0;
+  padding: 20px;
+`;
+
 const Container = styled.div`
   width: 100%;
   margin: 5% 0;
@@ -60,23 +67,24 @@ const Container = styled.div`
   }
   input {
     padding: 1.5% 2%;
-    margin-bottom: 1.5%;
     width: 100%;
     outline: 0;
     border: 1px solid #ccc;
     border-radius: 3.5px;
     font-size: 1.4rem;
+    font-family: Montserrat;
   }
   select {
     width: 100%;
     font-size: 1.4rem;
     outline: none;
+    font-family: Montserrat;
+
     line-height: 1.3;
     padding: 1.5% 2%;
     max-width: 100%;
     box-sizing: border-box;
     margin: 0;
-    margin-bottom: 1.5%;
     border: 1px solid #c5c5c5;
     border-radius: 4px;
     background: none;
@@ -122,10 +130,41 @@ const Frame = styled.div`
   }
 `;
 
+const Row = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+  .description {
+    width: 40%;
+    line-height: 1.4;
+  }
+`;
+
 const Title = styled.div`
   font-size: 2.2rem;
   font-weight: 600;
-  margin-top: 4%;
+  margin: 4% 0;
+`;
+
+const ButtonTwo = styled.button`
+  border: none;
+  background: #3f51b5;
+  padding: 10px 20px;
+  border: 2px solid #3f51b5;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #2e3b83;
+    border: 2px solid #2e3b83;
+  }
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
@@ -143,6 +182,7 @@ export default class UpdateLesson extends Component {
     challenge_num: this.props.lesson.challenge_num,
     type: this.props.lesson.type,
     assignment: this.props.lesson.assignment,
+    text: this.props.lesson.text,
   };
   handleName = (e) => {
     e.preventDefault();
@@ -177,10 +217,11 @@ export default class UpdateLesson extends Component {
   render() {
     const { lessonID, description, lesson, change } = this.props;
     return (
-      <PleaseSignIn>
-        <AreYouATeacher subject={lesson.coursePage.id}>
-          <Title>Изменить урок</Title>
-          <Container>
+      <Styles>
+        <Container>
+          <Title>Настройки урока</Title>
+          <Row>
+            <div className="description">Название</div>
             <input
               type="text"
               id="name"
@@ -189,6 +230,9 @@ export default class UpdateLesson extends Component {
               defaultValue={lesson.name}
               onChange={this.handleName}
             />
+          </Row>
+          <Row>
+            <div className="description">Номер</div>
             <input
               type="number"
               id="number"
@@ -197,45 +241,66 @@ export default class UpdateLesson extends Component {
               defaultValue={lesson.number}
               onChange={this.handleNumber}
             />
+          </Row>
+          <Row>
+            <div className="description">Урок</div>
             <select
-              name="hasSecret"
-              defaultValue={lesson.hasSecret === true}
+              name="open"
+              defaultValue={lesson.open === true}
               onChange={this.handleBoolean}
             >
-              <option value={true}>Has Secret</option>
-              <option value={false}>No Secret</option>
+              <option value={true}>Открытый</option>
+              <option value={false}>Закрытый</option>
             </select>
-            <input
-              type="number"
-              id="totalPoints"
-              name="totalPoints"
-              placeholder="# для открытия секретоов"
-              defaultValue={lesson.totalPoints}
-              onChange={this.handleNumber}
-            />
-
+          </Row>
+          <Row>
+            <div className="description">Режим урока</div>
             <select
               name="type"
               defaultValue={lesson.type}
               onChange={this.handleName}
             >
-              <option value="REGULAR">
-                Режим при открытии урока – Разработка
-              </option>
-              <option value="STORY">Режим при открытии урока – История</option>
-              <option value="CHALLENGE">
-                Режим при открытии урока – Испытание
-              </option>
+              <option value="REGULAR">Разработка</option>
+              <option value="STORY">История</option>
+              <option value="CHALLENGE">Испытание</option>
             </select>
+          </Row>
+          <Row>
+            <div className="description">Практическое задание</div>
             <select
               name="assignment"
               defaultValue={lesson.assignment == true}
               onChange={this.handleBoolean}
             >
-              <option value={true}>Содержит практическое задание</option>
-              <option value={false}>Не содержит практическое задание</option>
+              <option value={true}>Да</option>
+              <option value={false}>Нет</option>
             </select>
-            {this.state.type === "CHALLENGE" && (
+          </Row>
+          <Row>
+            <div className="description">Игра в уроке</div>
+            <select
+              name="hasSecret"
+              defaultValue={lesson.hasSecret === true}
+              onChange={this.handleBoolean}
+            >
+              <option value={true}>Да</option>
+              <option value={false}>Нет</option>
+            </select>
+          </Row>
+          <Row>
+            <div className="description">Очки в игре</div>
+            <input
+              type="number"
+              id="totalPoints"
+              name="totalPoints"
+              placeholder="# для открытия секретов"
+              defaultValue={lesson.totalPoints}
+              onChange={this.handleNumber}
+            />
+          </Row>
+          {this.state.type === "CHALLENGE" && (
+            <Row>
+              <div className="description"># заданий в испытании</div>
               <input
                 type="number"
                 id="challenge_num"
@@ -244,15 +309,10 @@ export default class UpdateLesson extends Component {
                 defaultValue={this.state.challenge_num}
                 onChange={this.handleNumber}
               />
-            )}
-            <select
-              name="open"
-              defaultValue={lesson.open === true}
-              onChange={this.handleBoolean}
-            >
-              <option value={true}>Открытый урок</option>
-              <option value={false}>Закрытый урок</option>
-            </select>
+            </Row>
+          )}
+          <Row>
+            <div className="description">Описание урока</div>
             <Frame>
               <DynamicHoverEditor
                 index={1}
@@ -262,52 +322,57 @@ export default class UpdateLesson extends Component {
                 value={description}
               />
             </Frame>
+          </Row>
+          {/* <Frame>
+            <DynamicHoverEditor
+              index={1}
+              name="change"
+              getEditorText={this.myCallback2}
+              placeholder="Как измениться ученик после прохождения урока"
+              value={change}
+            />
+          </Frame> */}
+          <Row>
+            <div className="description">Комментарии</div>
             <Frame>
               <DynamicHoverEditor
-                index={1}
-                name="change"
-                getEditorText={this.myCallback2}
-                placeholder="Как измениться ученик после прохождения урока"
-                value={change}
+                value={this.state.text}
+                getEditorText={this.myCallback}
+                previousText={lesson.text}
               />
             </Frame>
-            <DynamicLoadedEditor
-              getEditorText={this.myCallback}
-              previousText={lesson.text}
-            />
-
-            <Mutation
-              mutation={UPDATE_LESSON_MUTATION}
-              variables={{
-                id: lessonID,
-                ...this.state,
-              }}
-              refetchQueries={() => [
-                {
-                  query: SINGLE_LESSON_QUERY,
-                  variables: { id: lessonID },
-                },
-              ]}
-            >
-              {(updateLesson, { loading, error }) => (
-                <Button
-                  onClick={async (e) => {
-                    // Stop the form from submitting
-                    e.preventDefault();
-                    // call the mutation
-                    const res = await updateLesson();
-                    // change the page to the single case page
-                  }}
-                >
-                  {loading ? "Сохраняем..." : "Сохранить"}
-                </Button>
-              )}
-            </Mutation>
-          </Container>
-          <StoryUpdate lesson={lesson} />
-          <ShortStoryUpdate lesson={lesson} />
-        </AreYouATeacher>
-      </PleaseSignIn>
+          </Row>
+          <Mutation
+            mutation={UPDATE_LESSON_MUTATION}
+            variables={{
+              id: lessonID,
+              ...this.state,
+            }}
+            refetchQueries={() => [
+              {
+                query: SINGLE_LESSON_QUERY,
+                variables: { id: lessonID },
+              },
+            ]}
+          >
+            {(updateLesson, { loading, error }) => (
+              <ButtonTwo
+                onClick={async (e) => {
+                  // Stop the form from submitting
+                  e.preventDefault();
+                  // call the mutation
+                  const res = await updateLesson();
+                  // change the page to the single case page
+                }}
+              >
+                {loading ? "Сохраняем..." : "Сохранить"}
+              </ButtonTwo>
+            )}
+          </Mutation>
+        </Container>
+        {/* <StoryUpdate lesson={lesson} />
+        <ShortStoryUpdate lesson={lesson} /> */}
+      </Styles>
     );
   }
 }

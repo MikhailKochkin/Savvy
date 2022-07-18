@@ -18,7 +18,6 @@ const CourseBox = (props) => {
   moment.locale("ru");
   let two_months_ago = new Date();
   two_months_ago.setMonth(two_months_ago.getMonth() - 2);
-  console.log(two_months_ago);
 
   let c = props.c;
   let coursePageID = props.c.id;
@@ -71,7 +70,7 @@ const CourseBox = (props) => {
     })
   );
   let sorted = d.sort((a, b) => b.date - a.date);
-  let fresh = sorted.slice(0, 40);
+  let fresh = sorted.slice(0, 20);
   return (
     <Box>
       <div>

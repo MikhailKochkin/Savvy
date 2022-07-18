@@ -32,7 +32,6 @@ const Result = (props) => {
     }
     return r.time - n.time;
   });
-  console.log(results);
   return (
     <Styles>
       {my && (

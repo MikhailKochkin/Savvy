@@ -177,7 +177,6 @@ const CreateChat = (props) => {
               ],
             });
             props.getResult(res);
-            console.log("res", res);
           }}
         >
           {loading ? "Сохраняем..." : "Сохранить"}

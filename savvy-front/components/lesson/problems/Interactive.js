@@ -83,12 +83,15 @@ class Interactive extends Component {
     display: false,
   };
 
+  getResults = () => {
+    return;
+  };
+
   updateArray = (data, type) => {
     let newQuiz;
     let newNote;
     let newTest;
     let finish;
-    console.log(data, data[1].value, data[1].value === "");
     if (
       data[1].type === "quiz" &&
       data[1].value !== null &&
@@ -120,6 +123,7 @@ class Interactive extends Component {
           exam={true}
           problem={true}
           author={this.props.author}
+          getResults={this.getResults}
         />
       );
 
@@ -166,6 +170,7 @@ class Interactive extends Component {
           exam={true}
           problem={true}
           author={this.props.author}
+          getResults={this.getResults}
         />
       );
       this.setState((state) => {
@@ -242,6 +247,10 @@ class Interactive extends Component {
   componentDidMount = () => {
     let item;
     let el;
+    const getResults = () => {
+      return;
+    };
+
     if (this.props.problem.nodeType === "quiz") {
       el = this.props.lesson.quizes.find(
         (quiz) => quiz.id === this.props.problem.nodeID
@@ -269,6 +278,7 @@ class Interactive extends Component {
           exam={true}
           story={true}
           author={this.props.author}
+          getResults={getResults}
         />
       );
     } else if (this.props.problem.nodeType.toLowerCase() === "newtest") {
@@ -297,6 +307,7 @@ class Interactive extends Component {
           story={true}
           exam={true}
           author={this.props.author}
+          getResults={getResults}
         />
       );
     } else if (this.props.problem.nodeType.toLowerCase() === "note") {

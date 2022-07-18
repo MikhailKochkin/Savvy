@@ -86,7 +86,6 @@ const ProblemBuilder = (props) => {
     };
 
     let first = cloned_elements.filter((e) => e.id === props.nodeID)[0];
-    console.log("first", Object.isExtensible(first));
     recurse2(first);
     setComponents([...arr]);
   }, [0]);

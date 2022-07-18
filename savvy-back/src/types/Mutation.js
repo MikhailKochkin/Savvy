@@ -136,7 +136,6 @@ const Mutation = mutationType({
         const our_user = await ctx.prisma.user.findUnique({
           where: { email: email.toLowerCase() },
         });
-        console.log("our_user", our_user);
         if (our_user) {
           throw new Error(
             `Пользователь с таким имейл уже есть. Войдите в аккаунт или восстановите пароль.`
@@ -257,14 +256,15 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         // const permissions = args.permissions;
         // delete args.permissions;
-        console.log("tags", tags);
         const updates = { ...args };
         delete updates.tags;
         delete updates.id;
         const user = await ctx.prisma.user.update({
-          data: updates,
-          tags: {
-            set: [...args.tags],
+          data: {
+            tags: {
+              set: [...args.tags],
+            },
+            ...updates,
           },
           where: {
             id: args.id,
@@ -332,6 +332,8 @@ const Mutation = mutationType({
         title: stringArg(),
         description: stringArg(),
         image: stringArg(),
+        audience: stringArg(),
+        result: stringArg(),
         courseType: stringArg(),
         published: booleanArg(),
       },
@@ -343,11 +345,6 @@ const Mutation = mutationType({
                 id: ctx.res.req.userId,
               },
             },
-            // uni: {
-            //   connect: {
-            //     id: uniID,
-            //   },
-            // },
             ...args,
           },
         });
@@ -401,7 +398,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, { checked, id }, ctx) => {
-        console.log("lessonResult");
         const lessonResult = await ctx.prisma.lessonResult.update({
           where: { id },
           data: { checked },
@@ -1272,7 +1268,6 @@ const Mutation = mutationType({
         }),
       },
       resolve: async (_, args, ctx) => {
-        console.log("args", args);
         const lessonId = args.lessonId;
         delete args.lessonId;
         variants = args.variants;
@@ -2851,11 +2846,9 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, { communication_medium, comment, id }, ctx) => {
-        console.log("1", 1);
         const bc = await ctx.prisma.businessClient.findUnique({
           where: { id: id },
         });
-        console.log("bc2", 2);
 
         const newEmail3 = await client.sendEmail({
           From: "Mikhail@besavvy.app",
@@ -2863,7 +2856,6 @@ const Mutation = mutationType({
           Subject: "🚀 Полезное письмо для юристов от BeSavvy",
           HtmlBody: Template.Template(comment),
         });
-        console.log("bc3", 3);
 
         return bc;
       },
@@ -2971,12 +2963,10 @@ const Mutation = mutationType({
           const payment = await community_checkout.createPayment(
             createPayload2
           );
-          console.log("payment 2", payment); // } catch (error) {
           //   console.error(error);
           // }
 
           const url = payment.confirmation.confirmation_url;
-          console.log("5 url", url);
 
           // 3. Send email to administration
           const newEmail = await client.sendEmail({

@@ -262,13 +262,10 @@ const UpdateConstruction = (props) => {
   }, [0]);
 
   const myCallback = (dataFromChild, index) => {
-    console.log("myCallback", dataFromChild, index);
     let arr = [...variants];
-    console.log("arr[index]", arr[index]);
 
     arr[index] = dataFromChild;
     setVariants(arr);
-    console.log("arr", arr);
   };
 
   const myCallback2 = (dataFromChild, name) => {

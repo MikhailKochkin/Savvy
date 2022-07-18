@@ -122,8 +122,6 @@ const Block = styled.div`
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  box-shadow: 0px 0px 3px 0px rgb(199 199 199);
-  padding: 10px 5%;
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
@@ -275,7 +273,7 @@ const UpdateNewConstructor = (props) => {
         </p>
         <ul>
           <li>
-            По общему правилу блоки статичны. То есть, ккогда они будут
+            По общему правилу блоки статичны. То есть, когда они будут
             показываться студентам, двигать их будет нельзя.
           </li>
           <li>
@@ -337,14 +335,14 @@ const UpdateNewConstructor = (props) => {
           );
         })}
       </Block>
-      <TextBox>
+      {/* <TextBox>
         <DynamicLoadedEditor
           name="hint"
           getEditorText={myCallback2}
           value={hint}
           placeholder="Запишите подсказку или пояснение к конструктору"
         />
-      </TextBox>
+      </TextBox> */}
       <ButtonTwo
         onClick={async (e) => {
           e.preventDefault();
@@ -429,6 +427,7 @@ const ConElement = (props) => {
           <div> ➡️ </div>
         </div>
       </Settings>
+      {/* {el.text} */}
       <DynamicLoadedEditor
         // index={i}
         // name={i}

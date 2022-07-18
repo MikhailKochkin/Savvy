@@ -299,7 +299,6 @@ const Form = styled.div`
 const Action = (props) => {
   const d = props.data;
   const { me, material } = props;
-  console.log("material", material);
   return (
     <Styles id="c2a">
       <Container>

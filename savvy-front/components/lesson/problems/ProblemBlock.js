@@ -58,7 +58,6 @@ const ProblemBlock = (props) => {
 
   const getData = (data) => {
     let index;
-    console.log(data);
     data[0] ? (index = 0) : (index = 1);
 
     setOpenChildren([...openChildren, props.obj.children[index]]);

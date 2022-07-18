@@ -1305,7 +1305,7 @@ type Mutation {
   createConfUser(conf_number: Int, email: String): ConfUser
   createConstruction(answer: [String], columnsNum: Int, elements: ElementsList, hasText: Boolean, hint: String, lessonId: String, name: String, text: String, type: String, variants: [String]): Construction
   createConstructionResult(answer: String, attempts: Int, constructionId: String, inputs: [String], lessonId: String): ConstructionResult
-  createCoursePage(courseType: String, description: String, image: String, published: Boolean, title: String): CoursePage
+  createCoursePage(audience: String, courseType: String, description: String, image: String, published: Boolean, result: String, title: String): CoursePage
   createCourseVisit(coursePageId: String, studentId: String, visitsNumber: Int): CourseVisit
   createDocument(lessonId: String, title: String): Document
   createDocumentResult(answers: [String], documentId: String, drafts: [String], lessonId: String): DocumentResult
@@ -2679,6 +2679,7 @@ type User {
   company: Company
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCoursePagesOrderByInput!]): [CoursePage!]!
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int): [CourseVisit!]!
+  createdAt: DateTime!
   description: String
   email: String!
   id: String!
@@ -2699,6 +2700,7 @@ type User {
   tags: [String!]!
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
   uni: Uni
+  updatedAt: DateTime!
 }
 
 input UserCoursePagesOrderByInput {

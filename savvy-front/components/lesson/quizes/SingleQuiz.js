@@ -398,7 +398,6 @@ const SingleQuiz = (props) => {
             onMove("true");
           } else {
             setCorrect("false");
-            console.log(router.locale, res.comment);
 
             if (typeof res.comment === "string") {
               if (router.locale == "ru") {

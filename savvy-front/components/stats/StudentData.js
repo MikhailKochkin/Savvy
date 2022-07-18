@@ -182,7 +182,7 @@ const Tag = styled.div`
   margin-bottom: 2%;
   background: #f8eed7;
   padding: 2px 6px;
-  margin: 0 2px;
+  margin: 2px;
   height: 22px;
   border-radius: 5px;
 
@@ -305,8 +305,6 @@ const Person = (props) => {
     lesResultsList: { lesResults: lesResults },
   };
 
-  // const [updateUser, { data, loading, error }] =
-  //   useMutation(UPDATE_USER_MUTATION);
   return (
     <Styles>
       <Header>
@@ -337,11 +335,10 @@ const Person = (props) => {
                   method="POST"
                   onSubmit={async (e) => {
                     e.preventDefault();
-                    const res = await updateUser();
                     let new_arr = [...tags, tag];
                     setTags(new_arr);
                     setTag("");
-                    console.log("new arr 2");
+                    const res = await updateUser();
                   }}
                 >
                   <input

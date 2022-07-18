@@ -24,8 +24,6 @@ const Questions = (props) => {
       {show && (
         <div>
           {forums.map((f, i) => {
-            console.log("f", i, f);
-
             let unanswered_questions = f
               ? f.statements.filter((s) => s.answered !== true)
               : [];

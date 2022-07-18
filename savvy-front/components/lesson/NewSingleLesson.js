@@ -7,7 +7,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 // import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { CSSTransitionGroup } from "react-transition-group";
 import { useTranslation } from "next-i18next";
-
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";

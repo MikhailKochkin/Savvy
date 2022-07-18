@@ -29,6 +29,13 @@ const UPDATE_TEXTEDITOR_MUTATION = gql`
       complexity: $complexity
     ) {
       id
+      name
+      complexity
+      text
+      totalMistakes
+      user {
+        id
+      }
     }
   }
 `;
@@ -173,7 +180,9 @@ const UpdateTextEditor = (props) => {
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
-  const getText = (d) => setText(d);
+  const getText = (d) => {
+    setText(d);
+  };
   const { id, lessonID } = props;
   return (
     <>
@@ -259,7 +268,6 @@ const UpdateTextEditor = (props) => {
             Создать таблицу
           </a>
         </button> */}
-        {console.log("lessonID", lessonID)}
         <Mutation
           mutation={UPDATE_TEXTEDITOR_MUTATION}
           variables={{
@@ -280,9 +288,10 @@ const UpdateTextEditor = (props) => {
               onClick={async (e) => {
                 // Stop the form from submitting
                 e.preventDefault();
-                // call the mutation
                 const res = await updateTextEditor();
-                // props.getResult(res);
+                props.getResult(res);
+                props.switchUpdate();
+                props.passUpdated();
               }}
             >
               {loading ? "Сохраняем..." : "Сохранить"}

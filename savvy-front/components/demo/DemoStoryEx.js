@@ -155,6 +155,7 @@ class DemoStoryEx extends Component {
           <SingleTextEditor
             key={el.id}
             lessonID={lesson.id}
+            text={el.text}
             complexity={el.complexity}
             textEditor={el}
             me={me}

@@ -399,7 +399,6 @@ const Headline = (props) => {
                           // refetchQueries: [{ query: CURRENT_USER_QUERY }],
                         });
 
-                        console.log(res.data.createOrder.url);
                         location.href = res.data.createOrder.url;
                       }}
                     >
@@ -445,7 +444,6 @@ const Headline = (props) => {
                           // refetchQueries: [{ query: CURRENT_USER_QUERY }],
                         });
 
-                        console.log(res.data.createOrder.url);
                         location.href = res.data.createOrder.url;
                       }}
                     >

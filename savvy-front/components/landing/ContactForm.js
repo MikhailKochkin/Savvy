@@ -443,7 +443,6 @@ const Action = (props) => {
                           communication_medium: "Blog page " + program,
                         },
                       });
-                      console.log(res);
                     }
                   }}
                 >

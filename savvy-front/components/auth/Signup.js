@@ -132,6 +132,23 @@ const Input = styled.input`
   }
 `;
 
+const Select = styled.select`
+  width: 100%;
+  background: none;
+  font-size: 1.4rem;
+  border: 1px solid #d6d6d6;
+  font-family: Montserrat;
+  outline: 0;
+  padding: 10px;
+  margin-bottom: 15px;
+  &:hover {
+    border: 1px solid #999999;
+  }
+  &:focus {
+    border: 1px solid #1a2a81;
+  }
+`;
+
 const PhoneInput = styled.input`
   width: 100%;
   background: none;
@@ -283,6 +300,13 @@ const Signup = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               label="Электронная почта"
             />
+            <Select
+              defaultValue={"STUDENT"}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value={"STUDENT"}>Статус на сайте – Студент</option>
+              <option value={"AUTHOR"}>Статус на сайте – Автор курсов</option>
+            </Select>
             <PhoneInput
               className="number"
               type="tel"

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import StudentData from "./StudentData";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
@@ -54,6 +55,8 @@ const Header = styled.p`
 
 const UserAnalytics = (props) => {
   const { coursePageID, coursePage, students, lessons } = props;
+  const [number, setNumber] = useState(25);
+
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: { coursePageId: coursePageID },
   });
@@ -79,7 +82,7 @@ const UserAnalytics = (props) => {
   return (
     <Styles>
       <Header>Всего пользователей: {students.length} </Header>
-      {sorted.map((student) => {
+      {sorted.slice(0, number).map((student) => {
         let student_results = results.filter((r) => r.student.id == student.id);
         return (
           <StudentData
@@ -96,6 +99,9 @@ const UserAnalytics = (props) => {
           />
         );
       })}
+      {number < students.length && (
+        <button onClick={(e) => setNumber(number + 25)}>Еще</button>
+      )}
     </Styles>
   );
 };

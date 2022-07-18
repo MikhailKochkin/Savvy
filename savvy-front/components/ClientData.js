@@ -1,4 +1,4 @@
-import { useState, useEffectq } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
@@ -122,7 +122,6 @@ const ClientData = (props) => {
   const [value, setValue] = useState(0); // integer state
 
   const sort = (val) => {
-    console.log(val);
     const new_clients = clients.filter((c) => c.tags.includes(val));
     setClients(new_clients);
   };
@@ -142,7 +141,6 @@ const ClientData = (props) => {
         return cl;
       }
     });
-    console.log("clients_in_range", clients_in_range);
     setClients(clients_in_range);
   };
 

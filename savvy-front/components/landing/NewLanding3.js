@@ -173,7 +173,6 @@ const Landing = (props) => {
     } else if (height >= 770) {
       num = 130;
     }
-    console.log("num", num);
     setH(num);
   };
 

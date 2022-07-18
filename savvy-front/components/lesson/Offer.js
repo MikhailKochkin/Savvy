@@ -298,10 +298,8 @@ const SingleTest = (props) => {
   const handleAnswerSelected = async (number, student_answer) => {
     // 1. Create an array with true / false values to compare the answer of the student and the author
     let answerVar = answerOptions;
-    console.log("answerVar", answerVar);
     // 2. Which option did the student choose?
     let int = parseInt(number);
-    console.log("int", int);
 
     // 3. Change the true / false value from step 1 according to the answer of the student in step 2
     answerVar[int] = !answerVar[int];
@@ -356,8 +354,6 @@ const SingleTest = (props) => {
   const onCheck = async () => {
     if (attempts == 0) {
       const res = () => {
-        console.log(JSON.stringify(answerOptions), JSON.stringify(props.true));
-
         if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
           setAnswerState("right");
           console.log("right");
@@ -506,7 +502,6 @@ const SingleTest = (props) => {
                       // refetchQueries: [{ query: CURRENT_USER_QUERY }],
                     });
 
-                    console.log(res.data.createOrder.url);
                     location.href = res.data.createOrder.url;
                   }}
                 >

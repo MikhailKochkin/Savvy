@@ -39,7 +39,6 @@ const Exercises = (props) => {
           let average = (
             ratings.reduce((a, b) => a + b, 0) / ratings.length
           ).toFixed(2);
-          console.log(average == NaN);
           if (isNaN(average)) {
             average = "Нет оценок";
           }

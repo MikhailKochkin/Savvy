@@ -37,7 +37,6 @@ const certificate = (props) => {
   if (loading) return <p>Loading...</p>;
   if (error) return error;
   let cert = data.certificates[0];
-  console.log("cert", cert);
   return <Certificate id={props.query.id} cert={cert} />;
 };
 

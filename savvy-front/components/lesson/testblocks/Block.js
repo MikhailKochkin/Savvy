@@ -347,17 +347,9 @@ const Element = (props) => {
           <button
             onClick={async (e) => {
               e.preventDefault();
-              console.log(
-                "activeStep",
-                activeStep + 1,
-                "answers.length",
-                answers.length
-              );
               setActiveStep(activeStep + 1);
 
               if (activeStep + 1 > answers.length) {
-                console.log("!!!", answers);
-
                 setAnswers([...answers, false]);
               }
               if (activeStep + 1 == props.tasksNum) {

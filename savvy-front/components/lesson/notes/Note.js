@@ -177,7 +177,7 @@ const Secret = styled.div`
 `;
 
 const NoteStyles = styled.div`
-  width: 570px;
+  max-width: 570px;
   background: #fff;
   margin: 2% 0 0 0;
   font-size: 1.6rem;
@@ -252,15 +252,20 @@ const NoteStyles = styled.div`
     width: 100%;
     border: 1px solid #edefed;
     border-collapse: collapse;
+    font-size: 1.4rem;
     tr {
       border: 1px solid #edefed;
     }
+    tr:nth-child(even) {
+      background: #f8f8f8;
+    }
     thead {
-      background: #f5f5f5;
-      font-weight: bold;
+      background: #36304a;
+      color: #fff;
     }
     th {
       border: 1px solid #edefed;
+      padding: 15px 0;
     }
     td {
       border: 1px solid #edefed;
@@ -269,7 +274,7 @@ const NoteStyles = styled.div`
       border-right: none;
       padding: 0% 2.5%;
       position: relative;
-      width: 5%;
+      padding: 15px 15px;
     }
   }
 `;

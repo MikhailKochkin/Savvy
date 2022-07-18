@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import renderHTML from "react-render-html";
@@ -118,6 +118,21 @@ const TextBar = styled.div`
     padding: 3px 3px;
   }
   .mini_button {
+    color: #6d7578;
+    border: 1px solid #6d7578;
+    font-family: Montserrat;
+    background: none;
+    outline: 0;
+    border-radius: 3px;
+    padding: 4px 7px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    &:hover {
+      color: white;
+      background: #6d7578;
+    }
+  }
+  .show_button {
     color: #6d7578;
     border: 1px solid #6d7578;
     font-family: Montserrat;
@@ -310,42 +325,63 @@ const StyledButton = withStyles({
   },
 })(Button);
 
-class SingleTextEditor extends Component {
-  state = {
-    shown: false,
-    mistakesShown: false,
-    answer: "",
-    correct_option: "",
-    wrong_option: "",
-    attempts: 0,
-    chosenElement: "",
-    total: this.props.textEditor.totalMistakes,
-    text: this.props.textEditor.text,
-    update: false,
-    result: false,
-    inputColor: "#c0d6df",
-    recieved: [],
-    checking: false,
-    showQuiz: false,
-    quiz: {
-      question: "",
-      answer: "",
-    },
-    quiz_guess: "",
-    quiz_result: "no",
-    quizAnswered: false,
-    showNote: false,
-    note: "",
-  };
+const SingleTextEditor = (props) => {
+  // const [text, setText] = useState(props.textEditor.text);
+  const [attempts, setAttempts] = useState(0);
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quiz, setQuiz] = useState();
+  const [showNote, setShowNote] = useState(false);
+  const [note, setNote] = useState();
+  const [quizResult, setQuizResult] = useState("no");
+  const [quizGuess, setQuizQuess] = useState("");
+  const [errorAnswer, setErrorAnswer] = useState();
+  const [correctErrorOption, setCorrectErrorOption] = useState();
+  const [wrongErrorOption, setWrongErrorOption] = useState();
+  const [chosenElement, setChosenElement] = useState();
+  const [checking, setChecking] = useState(false);
+  const [shown, setShown] = useState(false);
+  const [result, setResult] = useState(false);
+  const [update, setUpdate] = useState(false);
+  // const [correctErrorOption, setCorrectErrorOption] = useState();
 
-  check = async (e) => {
+  const total = props.textEditor.totalMistakes;
+
+  // state = {
+  //   shown: false,
+  //   mistakesShown: false,
+  //   answer: "",
+  //   correct_option: "",
+  //   wrong_option: "",
+  //   attempts: 0,
+  //   chosenElement: "",
+  //   total: props.textEditor.totalMistakes,
+  //   text: props.textEditor.text,
+  //   update: false,
+  //   result: false,
+  //   inputColor: "#c0d6df",
+  //   recieved: [],
+  //   checking: false,
+  //   showQuiz: false,
+  //   quiz: {
+  //     question: "",
+  //     answer: "",
+  //   },
+  //   quiz_guess: "",
+  //   quizresult: "no",
+  //   quizAnswered: false,
+  //   showNote: false,
+  //   note: "",
+  // };
+
+  const check = async (e) => {
+    e.persist();
     e.target.className = "blocked";
-    this.setState({ shown: true });
-    let answer1 = htmlToText(this.state.correct_option.toLowerCase(), {
+    setShown(true);
+    let answer1 = htmlToText(correctErrorOption.toLowerCase(), {
       wordwrap: false,
       uppercase: false,
     });
-    let answer2 = htmlToText(this.state.answer.toLowerCase(), {
+    let answer2 = htmlToText(errorAnswer.toLowerCase(), {
       wordwrap: false,
       uppercase: false,
     }).replace(/\_/g, "");
@@ -354,9 +390,9 @@ class SingleTextEditor extends Component {
       answer2: answer2,
     };
     // let el = document.querySelectorAll(
-    //   `[data-initial='${this.state.correct_option}']`
+    //   `[data-initial='${props.correct_option}']`
     // )[0];
-    let el = document.getElementById(this.state.chosenElement);
+    let el = document.getElementById(chosenElement);
     e.target.innerHTML = "Checking...";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
@@ -367,31 +403,23 @@ class SingleTextEditor extends Component {
     })
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
         if (
           !e.target.nextSibling ||
           (e.target.nextSibling && e.target.nextSibling.innerHTML !== "Show")
         ) {
           let button2 = document.createElement("button");
           button2.innerHTML = "Show";
-          button2.className = "mini_button";
-          button2.addEventListener("click", this.show);
+          button2.className = "show_button";
+          button2.addEventListener("click", show);
           e.target.after(button2);
         }
-        console.log("here 00000");
-
         if (parseFloat(res.res) > 69) {
-          this.setState({
-            result: true,
-          });
-          this.props.getResults(1);
+          setResult(true);
+          props.getResults(1);
           el.style.background = "#D9EAD3";
           e.target.innerHTML = "Check";
-          console.log("here &&&&");
         } else {
-          this.setState({
-            result: false,
-          });
+          setResult(false);
           el.style.background = "#FCE5CD";
           e.target.innerHTML = "Check";
           e.target.className = "mini_button";
@@ -402,15 +430,17 @@ class SingleTextEditor extends Component {
         }
       })
       .catch((err) => console.log(err));
-
-    this.setState({ shown: false });
+    setShown(false);
   };
 
-  quizCheck = async (e) => {
-    this.setState({ checking: true });
+  // check the corrections to the errors
+
+  // check the guesses to the quizes
+  const quizCheck = async (e) => {
+    setChecking(true);
     let data = {
-      answer1: this.state.quiz.answer,
-      answer2: this.state.quiz_guess,
+      answer1: quiz.answer,
+      answer2: quizGuess,
     };
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
@@ -422,62 +452,52 @@ class SingleTextEditor extends Component {
       .then((response) => response.json())
       .then((res) => {
         if (parseFloat(res.res) > 69) {
-          this.setState({
-            quiz_result: true,
-          });
-          this.setState({ checking: false });
+          setQuizResult(true);
+          setChecking(false);
         } else {
-          this.setState({
-            quiz_result: false,
-          });
-          this.setState({ checking: false });
+          setQuizResult(false);
+          setChecking(false);
         }
       })
       .catch((err) => console.log(err));
   };
 
-  onTest = (e) => {
-    this.setState((prevState) => ({
-      attempts: prevState.attempts + 1,
-    }));
-  };
-
-  onMouseClick = (e) => {
+  // start interaction with the piece of text
+  const onMouseClick = (e) => {
     let z = document.createElement("span");
     let id = uuidv4();
     z.contentEditable = true;
     z.innerHTML = e.target.innerHTML;
     z.className = "edit";
-    z.setAttribute("data-initial", e.target.getAttribute("data"));
+    z.setAttribute("data-initial", e.target.getAttribute("error_data"));
     z.setAttribute("id", id);
-    z.addEventListener("input", this.changeState);
+    z.addEventListener("input", changeState);
     let n = e.target.parentNode.replaceChild(z, e.target);
-
     let button = document.createElement("button");
     button.innerHTML = "Check";
-
     button.className = "mini_button";
     button.tabIndex = 0;
-    button.addEventListener("click", this.check);
+    // button.addEventListener("click", check);
     z.after(button);
     let wrong_option = htmlToText(e.target.innerHTML, {
       wordwrap: false,
       uppercase: false,
     });
-    this.setState({
-      answer: "",
-      correct_option:
-        e.target.getAttribute("error_data") || e.target.getAttribute("data"),
-      wrong_option: wrong_option,
-      chosenElement: id,
-    });
+    setErrorAnswer("");
+    setCorrectErrorOption(
+      e.target.getAttribute("error_data") || e.target.getAttribute("data")
+    );
+    setWrongErrorOption(wrong_option);
+    setChosenElement(id);
   };
 
-  changeState = (e) => {
-    this.setState({ answer: e.target.innerHTML });
+  // ???
+  const changeState = (e) => {
+    setErrorAnswer(e.target.innerHTML);
   };
 
-  onReveal = (e) => {
+  // ???
+  const onReveal = (e) => {
     let span = document.createElement("span");
     span.innerHTML = ` (${e.target.getAttribute("data")})`;
     if (
@@ -491,7 +511,9 @@ class SingleTextEditor extends Component {
     }
   };
 
-  show = (e) => {
+  // ???
+  const show = (e) => {
+    e.preventDefault();
     e.target.previousSibling.previousSibling.innerHTML =
       e.target.previousSibling.previousSibling.getAttribute("data-initial");
     e.target.style.pointerEvents = "none";
@@ -501,11 +523,12 @@ class SingleTextEditor extends Component {
     e.target.previousSibling.previousSibling.style.pointerEvents = "none";
   };
 
-  onShow = () => {
+  // ???
+  const onShow = () => {
     const elements = document
-      .getElementById(this.props.textEditor.id + 1)
+      .getElementById(props.textEditor.id + 1)
       .querySelectorAll("#id, .quiz, .editor_note");
-    if (this.state.mistakesShown) {
+    if (props.mistakesShown) {
       elements.forEach((element) => {
         element.classList.remove("edit");
       });
@@ -514,227 +537,232 @@ class SingleTextEditor extends Component {
         element.className = "edit";
       });
     }
-    this.setState((prev) => ({ mistakesShown: !prev.mistakesShown }));
+    setState((prev) => ({ mistakesShown: !prev.mistakesShown }));
   };
 
-  render() {
-    const { textEditor, me, lessonID, story, complexity } = this.props;
-    return (
-      <>
-        {me &&
-          (me.id === textEditor.user.id || me.permissions.includes("ADMIN")) &&
-          !story && (
-            <>
-              <StyledButton
-                onClick={(e) =>
-                  this.setState((prev) => ({ update: !prev.update }))
-                }
-              >
-                {this.props.update ? "Назад" : "Изменить"}
-              </StyledButton>
-              <DeleteSingleTextEditor
-                id={this.props.textEditor.id}
-                lessonID={this.props.lessonID}
-              />
-            </>
-          )}
-        <Styles id={textEditor.id + 1} width={story}>
-          {!this.state.update && (
-            <div>
-              <TextBar id={textEditor.id}>
-                <EditText story={story}>
-                  <Mutation
-                    mutation={CREATE_TEXTEDITORRESULT_MUTATION}
-                    variables={{
-                      lessonId: this.props.lessonID,
-                      textEditorId: this.props.textEditor.id,
-                      attempts: this.state.attempts,
-                      correct: this.state.correct_option,
-                      wrong: this.state.wrong_option,
-                      guess: htmlToText(this.state.answer, {
-                        wordwrap: false,
-                      }),
-                      result: this.state.result,
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: SINGLE_LESSON_QUERY,
-                        variables: { id: this.props.lessonID },
-                      },
-                      {
-                        query: CURRENT_USER_QUERY,
-                      },
-                    ]}
-                  >
-                    {(createTextEditorResult, { loading, error }) => (
-                      <div
-                        onClick={async (e) => {
-                          const res1 = this.onTest();
-                          if (
-                            e.target.getAttribute("type") === "quiz" ||
-                            e.target.parentElement.getAttribute("type") ===
-                              "quiz"
-                          ) {
-                            e.target.className = "edit";
+  const switchUpdate = () => {
+    setUpdate(!update);
+  };
 
-                            this.setState({
-                              showQuiz: true,
-                              quiz: {
-                                question:
-                                  e.target.getAttribute("type") === "quiz"
-                                    ? e.target.getAttribute("question")
-                                    : e.target.parentElement.getAttribute(
-                                        "question"
-                                      ),
-                                answer:
-                                  e.target.getAttribute("type") === "quiz"
-                                    ? e.target.getAttribute("answer")
-                                    : e.target.parentElement.getAttribute(
-                                        "answer"
-                                      ),
-                                ifRight:
-                                  e.target.getAttribute("type") === "quiz"
-                                    ? e.target.getAttribute("ifRight")
-                                    : e.target.parentElement.getAttribute(
-                                        "ifRight"
-                                      ),
-                                ifWrong:
-                                  e.target.getAttribute("type") === "quiz"
-                                    ? e.target.getAttribute("ifWrong")
-                                    : e.target.parentElement.getAttribute(
-                                        "ifWrong"
-                                      ),
-                              },
-                              quiz_result: "no",
-                            });
-                          }
-                          if (
-                            e.target.getAttribute("type") === "note" ||
-                            e.target.parentElement.getAttribute("type") ===
-                              "note"
-                          ) {
-                            e.target.className = "edit";
-                            this.setState({
-                              showNote: true,
-                              note:
-                                e.target.getAttribute("type") === "note"
-                                  ? e.target.getAttribute("text")
-                                  : e.target.parentElement.getAttribute("text"),
-                            });
-                          }
-                          if (e.target.id === "id") {
-                            if (this.state.total > 0) {
-                              const res2 = await this.onMouseClick(e);
-                            } else if (
-                              this.state.total == 0 ||
-                              this.state.total == null
-                            ) {
-                              const res3 = await this.onReveal(e);
-                            }
-                          }
-                          if (this.state.shown) {
-                            setTimeout(() => {
-                              const res2 = createTextEditorResult();
-                            }, 3000);
-                          }
-                        }}
-                      >
-                        {renderHTML(this.state.text)}
-                      </div>
-                    )}
-                  </Mutation>
-                </EditText>
-              </TextBar>
-              <Buttons>
-                <StyledButton
-                  onClick={this.onShow}
-                  variant="contained"
-                  color="primary"
-                >
-                  {this.state.mistakesShown ? "Hide mistakes" : "Show mistakes"}
-                </StyledButton>
-              </Buttons>
-            </div>
-          )}
-          <WindowColumn>
-            {this.state.showNote && (
-              <Window>
-                <div className="questionBox">
-                  <IconBlock>
-                    <div className="nameBlock">
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
-                    </div>
-                    <div
-                      className="cancelBlock"
-                      onClick={(e) => this.setState({ showNote: false })}
-                    >
-                      <img className="cancel" src="../../static/cancel.svg" />
-                    </div>
-                  </IconBlock>
-                </div>
-                <div className="answerBox">
-                  <Comment>{this.state.note}</Comment>
-                </div>
-              </Window>
-            )}
-            {this.state.showQuiz && (
-              <Window>
-                <div className="questionBox">
-                  <IconBlock>
-                    <div className="nameBlock">
-                      <img className="icon" src="../../static/hipster.svg" />
-                      <div className="name">BeSavvy</div>
-                    </div>
-                    <div
-                      className="cancelBlock"
-                      onClick={(e) => this.setState({ showQuiz: false })}
-                    >
-                      <img className="cancel" src="../../static/cancel.svg" />
-                    </div>
-                  </IconBlock>
-                  <div>{this.state.quiz.question}</div>
-                </div>
-                <div className="answerBox">
-                  <Input
-                    color={this.state.quiz_result}
-                    onChange={(e) => {
-                      this.setState({ quiz_guess: e.target.value });
-                    }}
-                  />
-                  <button onClick={this.quizCheck}>
-                    {this.state.checking ? "Проверяем..." : "Ответить"}
-                  </button>
-                  {this.state.quiz_result === false && (
-                    <Comment>{this.state.quiz.ifWrong}</Comment>
-                  )}
-                  {this.state.quiz_result === true && (
-                    <Comment>{this.state.quiz.ifRight}</Comment>
-                  )}
-                </div>
-              </Window>
-            )}
-          </WindowColumn>
-        </Styles>
-        {this.state.update && (
-          <UpdateTextEditor
-            lessonID={lessonID}
-            id={this.props.textEditor.id}
-            text={this.state.text}
-            complexity={complexity}
-            totalMistakes={this.state.total}
-          />
+  const getResult = (data) => {
+    props.getResult(data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+  };
+
+  const { textEditor, me, lessonID, story, complexity, text } = props;
+  return (
+    <>
+      {me &&
+        (me.id === textEditor.user.id || me.permissions.includes("ADMIN")) &&
+        !story && (
+          <>
+            <StyledButton onClick={(e) => setUpdate(!update)}>
+              {update ? "Назад" : "Изменить"}
+            </StyledButton>
+            <DeleteSingleTextEditor
+              id={props.textEditor.id}
+              lessonID={props.lessonID}
+            />
+          </>
         )}
-      </>
-    );
-  }
-}
+      <Styles id={textEditor.id + 1} width={story}>
+        {!update && (
+          <div>
+            <TextBar id={textEditor.id}>
+              <EditText story={story}>
+                <Mutation
+                  mutation={CREATE_TEXTEDITORRESULT_MUTATION}
+                  variables={{
+                    lessonId: props.lessonID,
+                    textEditorId: props.textEditor.id,
+                    attempts: props.attempts,
+                    correct: props.correct_option,
+                    wrong: props.wrong_option,
+                    guess: htmlToText(props.answer, {
+                      wordwrap: false,
+                    }),
+                    result: props.result,
+                  }}
+                  refetchQueries={() => [
+                    {
+                      query: SINGLE_LESSON_QUERY,
+                      variables: { id: props.lessonID },
+                    },
+                    {
+                      query: CURRENT_USER_QUERY,
+                    },
+                  ]}
+                >
+                  {(createTextEditorResult, { loading, error }) => (
+                    <div
+                      onClick={async (e) => {
+                        // update the numberr of attempts made by the student
+                        setAttempts(attempts + 1);
+                        if (e.target.getAttribute("class") == "mini_button") {
+                          check(e);
+                        }
+
+                        // 1. Provide the student with data, quiz part of text
+                        if (
+                          e.target.getAttribute("type") === "quiz" ||
+                          e.target.parentElement.getAttribute("type") === "quiz"
+                        ) {
+                          // 1.1 add styles to the text with a mistake
+                          e.target.className = "edit";
+                          // 1.2 add data necessary tp prove student with feedback to state
+                          setShowQuiz(true);
+                          setQuiz({
+                            question:
+                              e.target.getAttribute("type") === "quiz"
+                                ? e.target.getAttribute("question")
+                                : e.target.parentElement.getAttribute(
+                                    "question"
+                                  ),
+                            answer:
+                              e.target.getAttribute("type") === "quiz"
+                                ? e.target.getAttribute("answer")
+                                : e.target.parentElement.getAttribute("answer"),
+                            ifRight:
+                              e.target.getAttribute("type") === "quiz"
+                                ? e.target.getAttribute("ifRight")
+                                : e.target.parentElement.getAttribute(
+                                    "ifRight"
+                                  ),
+                            ifWrong:
+                              e.target.getAttribute("type") === "quiz"
+                                ? e.target.getAttribute("ifWrong")
+                                : e.target.parentElement.getAttribute(
+                                    "ifWrong"
+                                  ),
+                          });
+                        }
+                        if (
+                          e.target.getAttribute("type") === "note" ||
+                          e.target.parentElement.getAttribute("type") === "note"
+                        ) {
+                          e.target.className = "edit";
+                          setShowNote(true);
+                          setNote(
+                            e.target.getAttribute("type") === "note"
+                              ? e.target.getAttribute("text")
+                              : e.target.parentElement.getAttribute("text")
+                          );
+                        }
+                        if (
+                          e.target.id === "id" ||
+                          e.target.getAttribute("type") === "error" ||
+                          e.target.parentElement.getAttribute("type") ===
+                            "error"
+                        ) {
+                          if (total > 0) {
+                            const res2 = await onMouseClick(e);
+                          } else if (props.total == 0 || props.total == null) {
+                            const res3 = await onReveal(e);
+                          }
+                        }
+                        if (props.shown) {
+                          setTimeout(() => {
+                            const res2 = createTextEditorResult();
+                          }, 3000);
+                        }
+                      }}
+                    >
+                      {renderHTML(text)}
+                    </div>
+                  )}
+                </Mutation>
+              </EditText>
+            </TextBar>
+            <Buttons>
+              <StyledButton
+                onClick={onShow}
+                variant="contained"
+                color="primary"
+              >
+                {props.mistakesShown ? "Hide mistakes" : "Show mistakes"}
+              </StyledButton>
+            </Buttons>
+          </div>
+        )}
+        <WindowColumn>
+          {showNote && (
+            <Window>
+              <div className="questionBox">
+                <IconBlock>
+                  <div className="nameBlock">
+                    <img className="icon" src="../../static/hipster.svg" />
+                    <div className="name">BeSavvy</div>
+                  </div>
+                  <div
+                    className="cancelBlock"
+                    onClick={(e) => setShowNote(false)}
+                  >
+                    <img className="cancel" src="../../static/cancel.svg" />
+                  </div>
+                </IconBlock>
+              </div>
+              <div className="answerBox">
+                <Comment>{note}</Comment>
+              </div>
+            </Window>
+          )}
+          {showQuiz && (
+            <Window>
+              <div className="questionBox">
+                <IconBlock>
+                  <div className="nameBlock">
+                    <img className="icon" src="../../static/hipster.svg" />
+                    <div className="name">BeSavvy</div>
+                  </div>
+                  <div
+                    className="cancelBlock"
+                    onClick={(e) => setShowQuiz(false)}
+                  >
+                    <img className="cancel" src="../../static/cancel.svg" />
+                  </div>
+                </IconBlock>
+                <div>{quiz.question}</div>
+              </div>
+              <div className="answerBox">
+                <Input
+                  color={quizResult}
+                  onChange={(e) => {
+                    setQuizQuess(e.target.value);
+                  }}
+                />
+                <button onClick={(e) => quizCheck()}>
+                  {checking ? "Проверяем..." : "Ответить"}
+                </button>
+                {quizResult === false && <Comment>{quiz.ifWrong}</Comment>}
+                {quizResult === true && <Comment>{quiz.ifRight}</Comment>}
+              </div>
+            </Window>
+          )}
+        </WindowColumn>
+      </Styles>
+      {update && (
+        <UpdateTextEditor
+          lessonID={lessonID}
+          id={props.textEditor.id}
+          text={text}
+          complexity={complexity}
+          totalMistakes={total}
+          getResult={getResult}
+          switchUpdate={switchUpdate}
+          passUpdated={passUpdated}
+        />
+      )}
+    </>
+  );
+};
 
 SingleTextEditor.propTypes = {
   lessonID: PropTypes.string.isRequired,
   textEditor: PropTypes.object.isRequired,
   me: PropTypes.object.isRequired,
-  userData: PropTypes.object.isRequired,
 };
 
 export default SingleTextEditor;

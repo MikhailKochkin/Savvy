@@ -36,7 +36,6 @@ import renderHTML from "react-render-html";
 import TextEditorGroup from "./textEditors/TextEditorGroup";
 
 const ButtonTwo = styled.button`
-  border: none;
   background: none;
   padding: 10px 20px;
   border: 2px solid #69696a;
@@ -108,7 +107,6 @@ const LessonBlock = (props) => {
   const [isAdded, setIsAdded] = useState(saved);
   const [updated, setUpdated] = useState(false);
   let d;
-
   if (el.type && el.type.toLowerCase() == "note" && !el.data && !updated) {
     d = lesson.notes.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "newtest" && !el.data) {
@@ -132,7 +130,6 @@ const LessonBlock = (props) => {
   } else {
     d = null;
   }
-
   const [data, setData] = useState(d);
   const [type, setType] = useState(props.el_type ? props.el_type : "");
   const [idNum, setIdNum] = useState(props.el_id ? props.el_id : "");
@@ -237,6 +234,16 @@ const LessonBlock = (props) => {
         "TextEditor",
         res.data.createTextEditor
       );
+    } else if (res.data.updateTextEditor) {
+      setIsAdded(true);
+      setType("TextEditor");
+      setIdNum(res.data.updateTextEditor.id);
+      props.addToLesson(
+        res.data.updateTextEditor.id,
+        index,
+        "TextEditor",
+        res.data.updateTextEditor
+      );
     } else if (res.data.createProblem) {
       setType("Problem");
       setIdNum(res.data.createProblem.id);
@@ -245,6 +252,15 @@ const LessonBlock = (props) => {
         index,
         "Problem",
         res.data.createProblem
+      );
+    } else if (res.data.updateProblem) {
+      setType("Problem");
+      setIdNum(res.data.updateProblem.id);
+      props.addToLesson(
+        res.data.updateProblem.id,
+        index,
+        "Problem",
+        res.data.updateProblem
       );
     } else if (res.data.createTestPractice) {
       setType("TestPractice");
@@ -354,6 +370,8 @@ const LessonBlock = (props) => {
                 lesson={lesson}
                 miniforum={lesson.miniforums.find((m) => m.value == data.id)}
                 getResults={getResults}
+                passUpdated={passUpdated}
+                getResult={getResult}
               />
             )}
           </>
@@ -494,23 +512,25 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
               />
             )}
-            {(isSaved || d != null) &&
-              data &&
-              data.__typename == "TextEditor" && (
+            {(isSaved || d != null) && data && data.__typename == "TextEditor" && (
+              <>
                 <TextEditor
                   key={data.id}
                   id={data.id}
+                  text={data.text}
                   complexity={data.complexity}
                   textEditor={data}
                   me={me}
                   story={false}
                   lessonID={lesson.id}
                   getResults={getResults}
+                  getResult={getResult}
+                  passUpdated={passUpdated}
                 />
-              )}
+              </>
+            )}
           </>
         )}
-        {console.log("type.toLowerCase()", type.toLowerCase(), data)}
         {type.toLowerCase() == "construction" && (
           <>
             {!isSaved && d == null && (
@@ -524,7 +544,6 @@ const LessonBlock = (props) => {
               data &&
               data.__typename.toLowerCase() == "construction" && (
                 <>
-                  {console.log("data.elements", data.elements)}
                   {data.elements == null && (
                     <SingleConstructor
                       key={data.id}
@@ -535,7 +554,6 @@ const LessonBlock = (props) => {
                       variants={data.variants}
                       me={me}
                       arr={Array(data.answer.length).fill("")}
-                      story={true}
                     />
                   )}
                   {data.elements !== null && (
@@ -543,8 +561,10 @@ const LessonBlock = (props) => {
                       key={data.id}
                       lessonID={lesson.id}
                       construction={data}
+                      elements={data.elements.elements}
                       complexity={data.complexity}
                       me={me}
+                      story={false}
                       getResults={getResults}
                       getResult={getResult}
                       passUpdated={passUpdated}

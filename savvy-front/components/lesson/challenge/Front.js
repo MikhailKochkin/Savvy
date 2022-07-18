@@ -80,7 +80,8 @@ const Front = (props) => {
       </Header> */}
       <LessonPart>
         <div className="intro">{renderHTML(props.text)}</div>
-        {!props.completed.length > 0 ? (
+        {!props.completed.length > 0 ||
+        props.me.permissions.includes("ADMIN") ? (
           <Button
             type="submit"
             variant="contained"
@@ -97,13 +98,13 @@ const Front = (props) => {
             text="Вы уже прошли это испытание. Ваш результат:"
           />
         )}
-        {props.me.permissions.includes("ADMIN") && (
+        {/* {props.me.permissions.includes("ADMIN") && (
           <Result
             results={results}
             // completed={[]}
             text="Вы уже прошли это испытание. Ваш результат:"
           />
-        )}
+        )} */}
       </LessonPart>
     </>
   );

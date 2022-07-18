@@ -284,6 +284,7 @@ const StoryEx = (props) => {
         <SingleTextEditor
           key={el.id}
           lessonID={lesson.id}
+          text={el.text}
           complexity={el.complexity}
           getResults={getResults}
           textEditor={el}
@@ -302,6 +303,9 @@ const StoryEx = (props) => {
             construction={el}
             complexity={el.complexity}
             me={me}
+            story={true}
+            elements={el.elements.elements}
+            getResults={getResults}
           />
         ) : (
           <SingleConstructor

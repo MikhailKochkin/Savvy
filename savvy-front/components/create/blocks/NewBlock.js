@@ -14,11 +14,29 @@ import SingleQuiz from "../../lesson/quizes/SingleQuiz";
 const Block = styled.div`
   font-size: 1.5rem;
   margin: 1% 4%;
-  border: 1px solid #c4c4c4;
+  border: 1px solid #dee2e6;
   border-radius: 10px;
   padding: 2%;
   margin: 30px 0;
   width: 100%;
+`;
+
+const ButtonTwo = styled.button`
+  background: none;
+  padding: 10px 20px;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-right: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
 `;
 
 const NewBlock = (props) => {
@@ -30,15 +48,17 @@ const NewBlock = (props) => {
     props.add(props.obj.id, props.obj.index);
   };
 
+  const passUpdated = () => {
+    // setSaved(false);
+  };
+
   const { lesson, me } = props;
 
   const getResult = async (res) => {
-    console.log("res", res);
     setSaved(true);
     if (res.data.createNote) {
       setType("Note");
       setData(res.data.createNote);
-      console.log("here");
       props.getData(
         res.data.createNote.id,
         res.data.createNote.__typename,
@@ -81,6 +101,8 @@ const NewBlock = (props) => {
           id={data.id}
           complexity={data.complexity}
           lessonID={lesson.id}
+          getResult={getResult}
+          passUpdated={passUpdated}
         />
       )}
 
@@ -104,6 +126,8 @@ const NewBlock = (props) => {
           user_name={data.user}
           me={me}
           lessonID={lesson.id}
+          getResult={getResult}
+          passUpdated={passUpdated}
         />
       )}
 
@@ -131,12 +155,18 @@ const NewBlock = (props) => {
       )}
       {!saved && (
         <>
-          <button onClick={(e) => setType("Note")}>Добавить заметку</button>
-          <button onClick={(e) => setType("NewTest")}>Добавить тест</button>
-          <button onClick={(e) => setType("Quiz")}>Добавить вопрос</button>
+          <ButtonTwo onClick={(e) => setType("Note")}>
+            Добавить заметку
+          </ButtonTwo>
+          <ButtonTwo onClick={(e) => setType("NewTest")}>
+            Добавить тест
+          </ButtonTwo>
+          <ButtonTwo onClick={(e) => setType("Quiz")}>
+            Добавить вопрос
+          </ButtonTwo>
         </>
       )}
-      {saved && <button onClick={(e) => add()}>Add Block</button>}
+      {saved && <ButtonTwo onClick={(e) => add()}>Add Block</ButtonTwo>}
     </Block>
   );
 };

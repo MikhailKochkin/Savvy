@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
@@ -16,14 +16,14 @@ import HoverEditor from "../../editor/HoverEditor";
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
     $answer: String
-    $revealed: [String!]
     $lessonId: String
+    $revealed: [String]
     $problemID: String
   ) {
     createProblemResult(
       answer: $answer
-      revealed: $revealed
       lessonId: $lessonId
+      revealed: $revealed
       problemID: $problemID
     ) {
       id
@@ -134,7 +134,7 @@ const Frame = styled.div`
   border-radius: 10px;
   width: 100%;
   margin: 1.5% 0;
-  height: 120px;
+  min-height: 120px;
   padding: 0% 3%;
   .com {
     border-top: 1px solid #c4c4c4;
@@ -158,7 +158,7 @@ const Buttons = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  pointer-events: ${(props) => (props.block ? "none" : "auto")};
+  /* pointer-events: ${(props) => (props.block ? "none" : "auto")}; */
   @media (max-width: 800px) {
     width: 50%;
   }
@@ -170,6 +170,7 @@ const Button2 = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   background: #000000;
+  margin-left: 2%;
   padding: 10px 10px;
   font-weight: 600;
   color: #fff;
@@ -186,7 +187,6 @@ const Button2 = styled.div`
 const StyledButton = withStyles({
   root: {
     margin: "4% 0",
-    marginRight: "2%",
     fontSize: "1.6rem",
     borderRadius: "10px",
     fontFamily: "Montserrat",
@@ -202,59 +202,41 @@ const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   ssr: false,
 });
 
-class SingleProblem extends Component {
-  state = {
-    answer: "",
-    showAnswer: false,
-    revealed: [],
-    update: false,
-    teacher_answer: "",
-    isOldFinished: false,
-    isNewFinished: false,
+const SingleProblem = (props) => {
+  const [update, setUpdate] = useState(false);
+  const [answer, setAnswer] = useState("");
+  const [showAnswerButton, setShowAnswerButton] = useState(false);
+  const [showAnswerText, setShowAnswerText] = useState(false);
+  const [teacherAnswer, setTeacherAnswer] = useState("");
+  const [isOldFinished, setIsOldFinished] = useState(false);
+  const [isNewFinished, setIsNewFinished] = useState(false);
+  const [revealAnswer, setRevealAnswer] = useState(false);
+
+  const myCallback = (dataFromChild, name) => {
+    setAnswer(dataFromChild);
   };
 
-  handleChange = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  myCallback = (dataFromChild, name) => {
-    let st = name;
-    this.setState({
-      [st]: dataFromChild,
-    });
-  };
-
-  onCheck = (data) => {
-    if (!this.state.revealed.includes(data)) {
-      this.setState((prevState) => ({
-        revealed: [...prevState.revealed, data],
-      }));
-    }
-  };
-
-  onFinish = (status, type) => {
-    console.log("status, type", status, type);
+  const onFinish = (status, type) => {
     if (type == "old") {
-      this.setState({ isOldFinished: true });
+      setIsOldFinished(true);
     } else if (type == "new") {
-      this.setState({ isNewFinished: true });
+      setIsNewFinished(true);
     }
   };
 
-  onMouseClick = (e) => {
+  const onMouseClick = (e) => {
     let answer = e.target.innerHTML.toLowerCase().trim();
     if (
       e.target.getAttribute("concealed") === "true" &&
-      ((answer !== "ответ" && answer !== "ответ." && answer !== "ответ:") ||
-        this.state.revealAnswer)
+      ((answer.toLowerCase() !== "ответ" &&
+        answer.toLowerCase() !== "ответ." &&
+        answer.toLowerCase() !== "ответ:" &&
+        answer.toLowerCase() !== "answer") ||
+        revealAnswer)
     ) {
       e.target.id = "no-conceal";
       e.target.innerHTML = e.target.getAttribute("data");
       e.target.setAttribute("concealed", "false");
-
-      this.onCheck(e.target.innerHTML);
     } else if (e.target.parentElement.getAttribute("concealed") === "false") {
       e.target.parentElement.id = "conceal";
       e.target.parentElement.setAttribute("concealed", "true");
@@ -263,15 +245,13 @@ class SingleProblem extends Component {
     }
   };
 
-  componentDidMount() {
+  useEffect(() => {
     const elements = document
-      .getElementById(this.props.problem.id)
+      .getElementById(props.problem.id)
       .querySelectorAll("#conceal");
     let p;
-
     elements.forEach((element) => {
       let answer = element.getAttribute("data-text").toLowerCase();
-
       if (
         element.getAttribute("concealed") === "true" ||
         (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:")
@@ -281,142 +261,142 @@ class SingleProblem extends Component {
         element.innerHTML = hint;
         element.setAttribute("data", data);
         element.setAttribute("concealed", true);
-        element.addEventListener("click", this.onMouseClick);
+        element.addEventListener("click", onMouseClick);
       } else {
-        this.setState({ teacher_answer: element.innerHTML });
+        setTeacherAnswer(element.innerHTML);
         element.style.display = "none";
       }
     });
-    // elements[0].style.display = "none";
-  }
-  render() {
-    const { problem, me, lesson, story, complexity, author } = this.props;
+  }, []);
 
-    return (
-      <>
-        {me && !story && (
-          <StyledButton
-            onClick={(e) =>
-              this.setState((prevState) => ({
-                update: !prevState.update,
-              }))
-            }
-          >
-            Изменить
-          </StyledButton>
-        )}
-        {me && !story ? (
-          <DeleteSingleProblem id={problem.id} lessonId={this.props.lessonID} />
-        ) : null}
-        {!this.state.update && (
-          <TextBar id={problem.id} story={story}>
-            <div id="text">{renderHTML(problem.text)}</div>
-            {problem.nodeID && (
-              <Interactive
-                lesson={lesson}
-                me={me}
-                problem={problem}
-                story={story}
-                author={author}
-                onFinish={this.onFinish}
-              />
-            )}
-            {problem.steps && problem.steps.problemItems.length >= 1 && (
-              <NewInteractive
-                lesson={lesson}
-                me={me}
-                problem={problem}
-                story={story}
-                author={author}
-                onFinish={this.onFinish}
-              />
-            )}
-            {/* {(this.state.isOldFinished || this.state.isNewFinished) && ( */}
-            <ResponseArea>
-              <h2>Write down the answer</h2>
-              <Frame story={story}>
-                <DynamicHoverEditor
-                  index={1}
-                  name="answer"
-                  getEditorText={this.myCallback}
-                  placeholder={`Write something`}
-                />
-              </Frame>
-              <Mutation
-                mutation={CREATE_PROBLEMRESULT_MUTATION}
-                variables={{
-                  lessonId: this.props.lessonID,
-                  answer: this.state.answer,
-                  revealed: this.state.revealed,
-                  problemID: this.props.problem.id,
-                }}
-              >
-                {(createProblemResult, { loading, error }) => (
-                  <Buttons story={story} block={this.state.revealAnswer}>
-                    <StyledButton
-                      variant="contained"
-                      color="primary"
-                      onClick={async (e) => {
-                        // Stop the form from submitting
-                        e.preventDefault();
-                        // call the mutation
-                        if (this.state.answer !== "") {
-                          const res = await createProblemResult();
-                          this.props.getResults(3);
-                          const res2 = await this.setState({
-                            showAnswerButton: true,
-                          });
-                          console.log("Yes");
-                        } else {
-                          console.log("No");
-                        }
-                      }}
-                    >
-                      {loading ? "Answering..." : "Answer"}
-                    </StyledButton>
-                    {this.state.showAnswerButton && (
-                      <Button2
-                        onClick={(e) =>
-                          this.setState((prevState) => ({
-                            showAnswerText: !prevState.showAnswer,
-                          }))
-                        }
-                      >
-                        Show the correct answer
-                      </Button2>
-                    )}
-                  </Buttons>
-                )}
-              </Mutation>
-              {this.state.showAnswerText && (
-                <div>
-                  <h2>Ответ</h2>
-                  {renderHTML(this.state.teacher_answer)}
-                </div>
-              )}
-            </ResponseArea>
-          </TextBar>
-        )}
-        {this.state.update && (
-          <>
-            <UpdateProblem
-              id={problem.id}
-              text={problem.text}
-              lessonID={this.props.lessonID}
-              nodeID={problem.nodeID ? problem.nodeID : null}
-              nodeType={problem.nodeType ? problem.nodeType : null}
-              complexity={complexity}
-              quizes={lesson.quizes}
-              newTests={lesson.newTests}
-              notes={lesson.notes}
+  const { problem, me, lesson, story, complexity, author } = props;
+
+  const switchUpdate = () => {
+    setUpdate(!update);
+  };
+
+  const getResult = (data) => {
+    props.getResult(data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+  };
+
+  return (
+    <>
+      {me && !story && (
+        <StyledButton onClick={(e) => setUpdate(!update)}>
+          Изменить
+        </StyledButton>
+      )}
+      {me && !story ? (
+        <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
+      ) : null}
+      {!update && (
+        <TextBar id={problem.id} story={story}>
+          <div id="text">{renderHTML(problem.text)}</div>
+          {problem.nodeID && (
+            <Interactive
+              lesson={lesson}
+              me={me}
+              problem={problem}
+              story={story}
+              author={author}
+              onFinish={onFinish}
             />
-          </>
-        )}
-      </>
-    );
-  }
-}
-
+          )}
+          {problem.steps && problem.steps.problemItems.length >= 1 && (
+            <NewInteractive
+              lesson={lesson}
+              me={me}
+              problem={problem}
+              story={story}
+              author={author}
+              onFinish={onFinish}
+            />
+          )}
+          <ResponseArea>
+            <h2>Write down the answer</h2>
+            <Frame story={story}>
+              <DynamicHoverEditor
+                index={1}
+                name="answer"
+                getEditorText={myCallback}
+                placeholder={`Write something`}
+              />
+            </Frame>
+            <Mutation
+              mutation={CREATE_PROBLEMRESULT_MUTATION}
+              variables={{
+                lessonId: props.lessonID,
+                answer: answer,
+                revealed: [],
+                problemID: props.problem.id,
+              }}
+            >
+              {(createProblemResult, { loading, error }) => (
+                <Buttons story={story} block={revealAnswer}>
+                  <StyledButton
+                    variant="contained"
+                    color="primary"
+                    onClick={async (e) => {
+                      // Stop the form from submitting
+                      e.preventDefault();
+                      // call the mutation
+                      if (answer !== "") {
+                        const res = await createProblemResult();
+                        props.getResults(3);
+                        setShowAnswerButton(true);
+                        setRevealAnswer(true);
+                        console.log("Yes");
+                      } else {
+                        console.log("No");
+                      }
+                    }}
+                  >
+                    {loading ? "Answering..." : "Answer"}
+                  </StyledButton>
+                  {showAnswerButton && (
+                    <Button2
+                      onClick={(e) => setShowAnswerText(!showAnswerText)}
+                    >
+                      Show the correct answer
+                    </Button2>
+                  )}
+                </Buttons>
+              )}
+            </Mutation>
+            {showAnswerText && (
+              <div>
+                <h2>Ответ</h2>
+                {renderHTML(teacherAnswer)}
+              </div>
+            )}
+          </ResponseArea>
+        </TextBar>
+      )}
+      {update && (
+        <>
+          <UpdateProblem
+            id={problem.id}
+            text={problem.text}
+            lessonID={props.lessonID}
+            nodeID={problem.nodeID ? problem.nodeID : null}
+            nodeType={problem.nodeType ? problem.nodeType : null}
+            complexity={complexity}
+            quizes={lesson.quizes}
+            newTests={lesson.newTests}
+            notes={lesson.notes}
+            getResult={getResult}
+            switchUpdate={switchUpdate}
+            passUpdated={passUpdated}
+          />
+        </>
+      )}
+    </>
+  );
+};
 SingleProblem.propTypes = {
   lessonID: PropTypes.string,
   story: PropTypes.string,

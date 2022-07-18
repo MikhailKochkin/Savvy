@@ -75,6 +75,7 @@ class TextEditorGroup extends Component {
           <SingleTextEditor
             key={textEditor.id}
             id={textEditor.id}
+            text={textEditor.text}
             complexity={textEditor.complexity}
             textEditor={textEditor}
             me={this.props.me}

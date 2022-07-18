@@ -107,7 +107,6 @@ const Clause = (props) => {
       })
         .then((response) => response.json())
         .then((res) => {
-          console.log(res);
           setComments(res);
           setProgress(false);
         })

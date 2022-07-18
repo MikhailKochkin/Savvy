@@ -66,9 +66,9 @@ const CaseCard = styled.div`
   background: white;
   padding: 4px;
   border: 1px solid #edefed;
-  border-radius: 10px;
   margin: 2%;
-  width: 285px;
+  width: 295px;
+  height: 295px;
   line-height: 1.2;
   @media (max-width: 950px) {
     padding: 2%;
@@ -100,25 +100,22 @@ const Title2 = styled.p`
 `;
 
 const Button = styled.button`
-  border: 1px solid #112a62;
-  color: #112a62;
-  padding: 5px 12px;
-  background: white;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  border-radius: 5px;
-  width: 100%;
-  cursor: pointer;
+  background: #00c3ff;
+  border-radius: 20px;
+  width: 210px;
+  padding: 10px;
+  border: none;
+  color: white;
+  font-family: Montserrat;
+  font-size: 1.6rem;
   outline: 0;
+  margin-bottom: 15px;
+  cursor: pointer;
+  &:hover {
+    background: #0195c2;
+  }
   a {
-    color: #112a62;
-  }
-  &:active {
-    border: 2px solid #112a62;
-  }
-  @media (max-width: 950px) {
-    margin: 0;
+    color: #fff;
   }
 `;
 
@@ -167,7 +164,8 @@ const Additional = styled.div`
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const Educator = (props) => {
@@ -196,35 +194,18 @@ const Educator = (props) => {
         <Container>
           <Uni me={me} />
           <Courses>
-            <Title primary> Опубликованные курсы </Title>
-            <Row>
-              {publishedCourses.length === 0 && (
-                <p>У вас еще нет запущенных курсов.</p>
-              )}
-              {publishedCourses.map((coursePage) => (
-                <Course
-                  key={coursePage.id}
-                  id={coursePage.id}
-                  coursePage={coursePage}
-                  me={me}
-                />
-              ))}
-            </Row>
-          </Courses>
-          <Courses>
             <Title primary> Курсы в разработке </Title>
             <Row>
               <CaseCard>
                 <Additional>
-                  {me && (
+                  {/* {me && (
                     <>
-                      <Img />
-                      <Title2>Ваш новый курс</Title2>
+                      <Title2>Самый лучший курс</Title2>
                       <Author>
                         {me.name} {me.surname}
                       </Author>
                     </>
-                  )}
+                  )} */}
                   <>
                     <Link href="/create">
                       <Button>
@@ -235,6 +216,22 @@ const Educator = (props) => {
                 </Additional>
               </CaseCard>
               {developedCourses.map((coursePage) => (
+                <Course
+                  key={coursePage.id}
+                  id={coursePage.id}
+                  coursePage={coursePage}
+                  me={me}
+                />
+              ))}
+            </Row>
+          </Courses>
+          <Courses>
+            <Title primary> Опубликованные курсы </Title>
+            <Row>
+              {publishedCourses.length === 0 && (
+                <p>У вас еще нет запущенных курсов.</p>
+              )}
+              {publishedCourses.map((coursePage) => (
                 <Course
                   key={coursePage.id}
                   id={coursePage.id}

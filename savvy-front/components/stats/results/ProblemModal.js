@@ -142,7 +142,6 @@ class ProblemModal extends Component {
       checker(first_element);
     };
     solution_builder();
-    console.log("arr", arr);
     return (
       <Box key={problem.id}>
         <div>

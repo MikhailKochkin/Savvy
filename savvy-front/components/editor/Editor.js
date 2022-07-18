@@ -1,7 +1,13 @@
 export const thisIsAnUnusedExport =
   "this export only exists to disable fast refresh for this file";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import isUrl from "is-url";
 import {
   createEditor,
@@ -213,7 +219,7 @@ const Note = styled.span`
 
 const Conceal = styled.div`
   color: #3a5a40;
-  border-bottom: 1px solid #3a5a40;
+  /* border-bottom: 1px solid #3a5a40; */
   /* font-size: 2rem;
   width: 100%;
   margin: 3% 0;
@@ -249,7 +255,7 @@ const serialize = (node) => {
         text = `<span className="editor_note" type="note" text="${node.note}">${text}</span>`;
       }
       if (styles.includes("quiz")) {
-        text = `<span type="quiz" className="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
+        text = `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${text}</span>`;
       }
       return text;
     } else {
@@ -291,7 +297,7 @@ const serialize = (node) => {
     case "note":
       return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
     case "quiz":
-      return `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}"`;
+      return `<span className="editor_quiz" type="quiz" question="${node.question}" answer="${node.answer}" ifRight="${node.ifRight}" ifWrong="${node.ifWrong}">${children}</span>`;
     case "video":
       return `<iframe src="${escapeHtml(
         node.src
@@ -330,7 +336,6 @@ const deserialize = (el) => {
   //   return null;
   // }
   // let children = Array.from(el.childNodes).map(deserialize);
-  // console.log(1, el.nodeName, TEXT_TAGS[el.nodeName]);
 
   if (TEXT_TAGS[nodeName]) {
     const attrs = TEXT_TAGS[nodeName](el);
@@ -369,14 +374,17 @@ const deserialize = (el) => {
           : el.getAttribute("data"),
         id: "id",
       },
-      children
+      children.length > 0 ? children : [{ text: "" }]
     );
   }
 
   if (el.getAttribute("classname") == "article") {
     return jsx("element", { type: "article" }, children);
   }
-  if (el.getAttribute("classname") == "quiz") {
+  if (
+    el.getAttribute("classname") == "quiz" ||
+    el.getAttribute("classname") == "editor_quiz"
+  ) {
     return jsx(
       "element",
       {
@@ -386,16 +394,15 @@ const deserialize = (el) => {
         ifRight: el.getAttribute("ifRight"),
         ifWrong: el.getAttribute("ifWrong"),
       },
-      children
+      children.length > 0 ? children : [{ text: "" }]
     );
   }
 
   if (el.getAttribute("id") == "conceal") {
-    console.log(8);
     return jsx(
       "element",
       { type: "conceal", data: el.getAttribute("data-text") },
-      children
+      children.length > 0 ? children : [{ text: "" }]
     );
   }
 
@@ -422,7 +429,6 @@ const deserialize = (el) => {
       children.length > 0 ? children : [{ text: "" }]
     );
   }
-
   switch (el.nodeName) {
     case "BODY":
       return jsx("fragment", {}, children);
@@ -445,7 +451,11 @@ const deserialize = (el) => {
     case "LI":
       return jsx("element", { type: "list-item" }, children);
     case "H2":
-      return jsx("element", { type: "header" }, children);
+      return jsx(
+        "element",
+        { type: "header" },
+        children.length > 0 ? children : [{ text: "" }]
+      );
     case "P":
       return jsx(
         "element",
@@ -458,7 +468,9 @@ const deserialize = (el) => {
       return jsx(
         "element",
         { type: "link", url: el.getAttribute("href") },
-        children
+        children.length > 0 && children[0] !== undefined
+          ? children
+          : [{ text: "link" }]
       );
     default:
       return el.textContent;
@@ -557,14 +569,23 @@ const CustomEditor = {
     });
   },
 
-  addComment(editor) {
-    let my_data = prompt("Комментарий: ");
-    Transforms.setNodes(
-      editor,
-      { type: "note", note: my_data },
-      { match: (n) => Text.isText(n), split: true }
-    );
-  },
+  // addError(editor) {
+  //   let correct = prompt("Правильный ответ: ");
+  //   Transforms.setNodes(
+  //     editor,
+  //     { type: "error", error: true, error_text: correct, error_data: correct },
+  //     { match: (n) => Text.isText(n), split: true }
+  //   );
+  // },
+
+  // addComment(editor) {
+  //   let my_data = prompt("Комментарий: ");
+  //   Transforms.setNodes(
+  //     editor,
+  //     { type: "note", note: my_data },
+  //     { match: (n) => Text.isText(n), split: true }
+  //   );
+  // },
 
   makeList(editor, format) {
     const isActive = isBlockActive(editor, format);
@@ -596,34 +617,36 @@ const CustomEditor = {
     Transforms.wrapNodes(editor, block);
   },
 
-  addQuiz(editor) {
-    let question = prompt("Вопрос: ");
-    let answer = prompt("Ответ: ");
-    let ifRight = prompt("Если правильно: ");
-    let ifWrong = prompt("Если неправильно: ");
-    Transforms.setNodes(
-      editor,
-      { type: "quiz", quiz: true, question, answer, ifRight, ifWrong },
-      { match: (n) => Text.isText(n), split: true }
-    );
-  },
-
-  addError(editor) {
-    let correct = prompt("Правильный ответ: ");
-    Transforms.setNodes(
-      editor,
-      { type: "error", error: true, error_text: correct, error_data: correct },
-      { match: (n) => Text.isText(n), split: true }
-    );
-  },
+  // addQuiz(editor) {
+  //   let q = prompt("Вопрос: ");
+  //   let a = prompt("Ответ: ");
+  //   let ifr = prompt("Если правильно: ");
+  //   let ifw = prompt("Если неправильно: ");
+  //   Transforms.setNodes(
+  //     editor,
+  //     {
+  //       type: "quiz",
+  //       quiz: true,
+  //       question: q,
+  //       answer: a,
+  //       ifRight: ifr,
+  //       ifWrong: ifw,
+  //     },
+  //     { match: (n) => Text.isText(n), split: true }
+  //   );
+  // },
 };
 
 const withLinks = (editor) => {
   const { insertData, insertText, isInline } = editor;
 
-  editor.isInline = (element) => {
-    return element.type === "link" ? true : isInline(element);
-  };
+  // editor.isInline = (element) => {
+  //   return element.type === "link" ? true : isInline(element);
+  // };
+
+  editor.isInline = (element) =>
+    ["link", "note", "error", "quiz"].includes(element.type) ||
+    isInline(element);
 
   editor.insertText = (text) => {
     if (text && isUrl(text)) {
@@ -644,6 +667,92 @@ const withLinks = (editor) => {
   };
 
   return editor;
+};
+
+const insertComment = (editor, data) => {
+  if (editor.selection) {
+    wrapComment(editor, data);
+  }
+};
+
+const wrapComment = (editor, data) => {
+  // if (isCommentActive(editor)) {
+  //   unwrapLink(editor);
+  // }
+
+  const { selection } = editor;
+  // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
+  const isCollapsed = selection && Range.isCollapsed(selection);
+
+  const com = {
+    type: "note",
+    note: data,
+    children: isCollapsed ? [{ text: data }] : [],
+  };
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, com);
+  } else {
+    Transforms.wrapNodes(editor, com, { split: true });
+    // Collapse the selection to a single point. In ourr case the end point.
+    Transforms.collapse(editor, { edge: "end" });
+  }
+};
+
+const insertError = (editor, data) => {
+  if (editor.selection) {
+    wrapError(editor, data);
+  }
+};
+
+const wrapError = (editor, data) => {
+  const { selection } = editor;
+  // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
+  const isCollapsed = selection && Range.isCollapsed(selection);
+  const com = {
+    type: "error",
+    error: true,
+    error_text: data,
+    error_data: data,
+    children: isCollapsed ? [{ text: data }] : [],
+  };
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, com);
+  } else {
+    Transforms.wrapNodes(editor, com, { split: true });
+    // Collapse the selection to a single point. In ourr case the end point.
+    Transforms.collapse(editor, { edge: "end" });
+  }
+};
+
+const insertQuiz = (editor, q, a, ifr, ifw) => {
+  if (editor.selection) {
+    wrapQuiz(editor, q, a, ifr, ifw);
+  }
+};
+
+const wrapQuiz = (editor, q, a, ifr, ifw) => {
+  const { selection } = editor;
+  // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
+  const isCollapsed = selection && Range.isCollapsed(selection);
+
+  const com = {
+    type: "quiz",
+    quiz: true,
+    question: q,
+    answer: a,
+    ifRight: ifr,
+    ifWrong: ifw,
+    children: isCollapsed ? [{ text: a }] : [],
+  };
+
+  if (isCollapsed) {
+    Transforms.insertNodes(editor, com);
+  } else {
+    Transforms.wrapNodes(editor, com, { split: true });
+    // Collapse the selection to a single point. In ourr case the end point.
+    Transforms.collapse(editor, { edge: "end" });
+  }
 };
 
 const insertLink = (editor, url) => {
@@ -688,89 +797,25 @@ const wrapLink = (editor, url) => {
   }
 };
 
-const withTables = (editor) => {
-  const { deleteBackward, deleteForward, insertBreak } = editor;
-
-  editor.deleteBackward = (unit) => {
-    const { selection } = editor;
-
-    if (selection && Range.isCollapsed(selection)) {
-      const [cell] = Editor.nodes(editor, {
-        match: (n) =>
-          !Editor.isEditor(n) &&
-          SlateElement.isElement(n) &&
-          n.type === "table-cell",
-      });
-
-      if (cell) {
-        const [, cellPath] = cell;
-        const start = Editor.start(editor, cellPath);
-
-        if (Point.equals(selection.anchor, start)) {
-          return;
-        }
-      }
-    }
-
-    deleteBackward(unit);
-  };
-
-  editor.deleteForward = (unit) => {
-    const { selection } = editor;
-
-    if (selection && Range.isCollapsed(selection)) {
-      const [cell] = Editor.nodes(editor, {
-        match: (n) =>
-          !Editor.isEditor(n) &&
-          SlateElement.isElement(n) &&
-          n.type === "table-cell",
-      });
-
-      if (cell) {
-        const [, cellPath] = cell;
-        const end = Editor.end(editor, cellPath);
-
-        if (Point.equals(selection.anchor, end)) {
-          return;
-        }
-      }
-    }
-
-    deleteForward(unit);
-  };
-
-  editor.insertBreak = () => {
-    const { selection } = editor;
-
-    if (selection) {
-      const [table] = Editor.nodes(editor, {
-        match: (n) =>
-          !Editor.isEditor(n) &&
-          SlateElement.isElement(n) &&
-          n.type === "table",
-      });
-
-      if (table) {
-        return;
-      }
-    }
-
-    insertBreak();
-  };
-
-  return editor;
-};
-
 const App = (props) => {
-  let html;
-  props.value ? (html = props.value) : (html = `<p></p>`);
-  const document = new DOMParser().parseFromString(html, "text/html");
-  const initial = deserialize(document.body);
-  const [value, setValue] = useState(initial);
+  const initialValue = [
+    {
+      type: "paragraph",
+      children: [{ text: "" }],
+    },
+  ];
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    let html;
+    props.value ? (html = props.value) : (html = `<p></p>`);
+    const document = new DOMParser().parseFromString(html, "text/html");
+    const initial = deserialize(document.body);
+    setValue(initial);
+  }, []);
 
   const editor = useMemo(
-    () =>
-      withLinks(withTables(withEmbeds(withHistory(withReact(createEditor()))))),
+    () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
     []
   );
 
@@ -845,10 +890,11 @@ const App = (props) => {
       editor={editor}
       value={value}
       onChange={(value) => {
+        setValue(value);
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
-        setValue(value);
         props.getEditorText(arr.join(""));
+        // console.log("arr.join()", arr.join(""));
       }}
     >
       <FormatToolBar>
@@ -984,7 +1030,9 @@ const App = (props) => {
               <ButtonStyle
                 onMouseDown={(event) => {
                   event.preventDefault();
-                  CustomEditor.addComment(editor);
+                  const data = window.prompt("Напишите комментарий:");
+                  if (!data) return;
+                  insertComment(editor, data);
                 }}
               >
                 <BiCommentAdd value={{ className: "react-icons" }} />
@@ -992,7 +1040,9 @@ const App = (props) => {
               <ButtonStyle
                 onMouseDown={(event) => {
                   event.preventDefault();
-                  CustomEditor.addError(editor);
+                  const data = window.prompt("Правильный вариант:");
+                  if (!data) return;
+                  insertError(editor, data);
                 }}
               >
                 <BiCommentError value={{ className: "react-icons" }} />
@@ -1000,7 +1050,12 @@ const App = (props) => {
               <ButtonStyle
                 onMouseDown={(event) => {
                   event.preventDefault();
-                  CustomEditor.addQuiz(editor);
+                  // CustomEditor.addQuiz(editor);
+                  let q = window.prompt("Вопрос: ");
+                  let a = window.prompt("Ответ: ");
+                  let ifr = window.prompt("Если правильно: ");
+                  let ifw = window.prompt("Если неправильно: ");
+                  insertQuiz(editor, q, a, ifr, ifw);
                 }}
               >
                 <BiCommentCheck value={{ className: "react-icons" }} />
@@ -1014,6 +1069,19 @@ const App = (props) => {
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         placeholder="Write something..."
+        onKeyDown={(event) => {
+          // if (event.key === "`" && event.ctrlKey) {
+          //   event.preventDefault();
+          //   const [match] = Editor.nodes(editor, {
+          //     match: (n) => n.type === "code",
+          //   });
+          //   Transforms.setNodes(
+          //     editor,
+          //     { type: match ? "paragraph" : "code" },
+          //     { match: (n) => Editor.isBlock(editor, n) }
+          //   );
+          // }
+        }}
       />
     </Slate>
   );
@@ -1043,10 +1111,6 @@ const Leaf = ({ attributes, children, leaf }) => {
 
   if (leaf.error) {
     children = <ErrorElement>{children}</ErrorElement>;
-  }
-
-  if (leaf.note) {
-    children = <NoteElement>{children}</NoteElement>;
   }
 
   return <span {...attributes}>{children}</span>;
@@ -1080,6 +1144,10 @@ const HeaderElement = (props) => {
 
 const LinkElement = (props) => {
   return <Link {...props.attributes}>{props.children}</Link>;
+};
+
+const NoteElement = (props) => {
+  return <Note {...props.attributes}>{props.children}</Note>;
 };
 
 const ErrorElement = (props) => {
@@ -1116,10 +1184,6 @@ const CenterElement = (props) => {
 
 const ArticleElement = (props) => {
   return <Article {...props.attributes}>{props.children}</Article>;
-};
-
-const NoteElement = (props) => {
-  return <Note {...props.attributes}>{props.children}</Note>;
 };
 
 const ConcealElement = (props) => {
@@ -1176,25 +1240,6 @@ const VideoElement = ({ attributes, children, element }) => {
       </div>
       {children}
     </div>
-  );
-};
-
-const UrlInput = ({ url, onChange }) => {
-  const [value, setValue] = React.useState(url);
-  return (
-    <input
-      value={value}
-      onClick={(e) => e.stopPropagation()}
-      style={{
-        marginTop: "5px",
-        boxSizing: "border-box",
-      }}
-      onChange={(e) => {
-        const newUrl = e.target.value;
-        setValue(newUrl);
-        onChange(newUrl);
-      }}
-    />
   );
 };
 

@@ -2351,6 +2351,7 @@ export interface NexusGenObjects {
     title: string; // String!
   }
   User: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     description?: string | null; // String
     email: string; // String!
     id: string; // String!
@@ -2363,6 +2364,7 @@ export interface NexusGenObjects {
     status?: string | null; // String
     surname?: string | null; // String
     tags: string[]; // [String!]!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   UserLevel: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3082,6 +3084,7 @@ export interface NexusGenFieldTypes {
     company: NexusGenRootTypes['Company'] | null; // Company
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisits: NexusGenRootTypes['CourseVisit'][]; // [CourseVisit!]!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string | null; // String
     email: string; // String!
     id: string; // String!
@@ -3102,6 +3105,7 @@ export interface NexusGenFieldTypes {
     tags: string[]; // [String!]!
     teacherFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
     uni: NexusGenRootTypes['Uni'] | null; // Uni
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   UserLevel: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3812,6 +3816,7 @@ export interface NexusGenFieldTypeNames {
     company: 'Company'
     coursePages: 'CoursePage'
     courseVisits: 'CourseVisit'
+    createdAt: 'DateTime'
     description: 'String'
     email: 'String'
     id: 'String'
@@ -3832,6 +3837,7 @@ export interface NexusGenFieldTypeNames {
     tags: 'String'
     teacherFeedback: 'Feedback'
     uni: 'Uni'
+    updatedAt: 'DateTime'
   }
   UserLevel: { // field return type name
     createdAt: 'DateTime'
@@ -4103,10 +4109,12 @@ export interface NexusGenArgTypes {
       lessonId?: string | null; // String
     }
     createCoursePage: { // args
+      audience?: string | null; // String
       courseType?: string | null; // String
       description?: string | null; // String
       image?: string | null; // String
       published?: boolean | null; // Boolean
+      result?: string | null; // String
       title?: string | null; // String
     }
     createCourseVisit: { // args

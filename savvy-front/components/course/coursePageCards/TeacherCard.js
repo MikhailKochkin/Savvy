@@ -40,6 +40,7 @@ const Button = styled.button`
   color: white;
   font-weight: 600;
   font-size: 1.4rem;
+  font-family: Montserrat;
   outline: none;
   cursor: pointer;
   border: none;
@@ -57,6 +58,7 @@ const Button2 = styled.button`
   height: 38px;
   color: #112a62;
   font-size: 1.4rem;
+  font-family: Montserrat;
   outline: none;
   cursor: pointer;
   margin-top: 10px;

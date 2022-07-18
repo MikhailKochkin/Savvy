@@ -25,7 +25,6 @@ const NewProblemBuilder = (props) => {
   ]);
 
   const getData = (id, type, index) => {
-    console.log("id, index", id, type, index);
     let new_values = values;
     new_values.find((el) => el.index == index).id = id;
     new_values.find((el) => el.index == index).type = type;

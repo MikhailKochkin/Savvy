@@ -231,7 +231,11 @@ const deserialize = (el) => {
     case "DIV":
       return jsx("element", { type: "div" }, children);
     case "H2":
-      return jsx("element", { type: "header" }, children);
+      return jsx(
+        "element",
+        { type: "header" },
+        children.length > 0 ? children : [{ text: "" }]
+      );
     case "P":
       return jsx(
         "element",
@@ -242,7 +246,7 @@ const deserialize = (el) => {
       return jsx(
         "element",
         { type: "link", url: el.getAttribute("href") },
-        children
+        children.length > 0 ? children : [{ text: "" }]
       );
     default:
       return el.textContent;

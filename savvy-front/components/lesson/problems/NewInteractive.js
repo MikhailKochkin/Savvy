@@ -86,15 +86,12 @@ const NewInteractive = (props) => {
   }, [0]);
 
   const updateArray = (data) => {
-    console.log("data", data);
     let next_el = problem.steps.problemItems.find(
       (el) => el.id == componentList.at(-1).next.true.value
     );
-    console.log("next_el", next_el);
     if (next_el) {
       setComponentList([...componentList, next_el]);
     } else {
-      console.log("!!!");
       props.onFinish(true, "new");
     }
   };
@@ -108,7 +105,6 @@ const NewInteractive = (props) => {
       <div className="suggestion">
         <Button onClick={(e) => setIsShown(true)}>Start the problem</Button>
       </div>
-      {console.log("componentList", componentList)}
       {isShown && (
         <Questions>
           {[...componentList].map((com) => {
