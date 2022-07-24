@@ -9,13 +9,13 @@ import { v4 as uuidv4 } from "uuid";
 import Error from "../ErrorMessage";
 import Signin from "./SignIn";
 
-const UPDATE_USER_MUTATION = gql`
-  mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
-    updateUser(id: $id, tags: $tags) {
-      id
-    }
-  }
-`;
+// const UPDATE_USER_MUTATION = gql`
+//   mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
+//     updateUser(id: $id, tags: $tags) {
+//       id
+//     }
+//   }
+// `;
 
 // const CREATE_CLIENT = gql`
 //   mutation createBusinessClient(
@@ -281,8 +281,8 @@ const Form = (props) => {
   const [signup, { data: data2, loading: loading2, error: error2 }] =
     useMutation(SIGNUP_MUTATION);
 
-  const [updateUser, { data: data3, loading: loading3, error: error3 }] =
-    useMutation(UPDATE_USER_MUTATION);
+  // const [updateUser, { data: data3, loading: loading3, error: error3 }] =
+  //   useMutation(UPDATE_USER_MUTATION);
 
   let password = uuidv4();
 
@@ -297,12 +297,12 @@ const Form = (props) => {
             id="useful_to_destination"
             onClick={async (e) => {
               e.preventDefault();
-              updateUser({
-                variables: {
-                  id: me.id,
-                  tags: [...new Set([...me.tags, ...useful.tags])],
-                },
-              });
+              // updateUser({
+              //   variables: {
+              //     id: me.id,
+              //     tags: [...new Set([...me.tags, ...useful.tags])],
+              //   },
+              // });
               location.href = material.link;
             }}
           >
