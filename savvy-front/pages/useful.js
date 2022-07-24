@@ -24,11 +24,11 @@ export const getServerSideProps = async ({ locale }) => ({
   },
 });
 const useful = (props) => {
-  const { data, loading, error } = useQuery(USEFUL_QUERY, {
-    variables: { id: props.query.id },
-  });
-  if (loading) return <p>Загрузка..</p>;
-  if (error) return console.log(error);
+  // const { data, loading, error } = useQuery(USEFUL_QUERY, {
+  //   variables: { id: props.query.id },
+  // });
+  // if (loading) return <p>Загрузка..</p>;
+  // if (error) return console.log(error);
 
   const data2 = {
     post1: {
@@ -114,7 +114,7 @@ const useful = (props) => {
     <>
       <Useful
         me={me}
-        useful={data.useful}
+        useful={data2.useful}
         id={props.query.id}
         material={material}
       />
