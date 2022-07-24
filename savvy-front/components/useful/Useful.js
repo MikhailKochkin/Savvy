@@ -304,7 +304,7 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Form>
-          <ContactForm useful={useful} me={me} material={material} />
+          {/* <ContactForm useful={useful} me={me} material={material} /> */}
           <ImageBlock>
             <Description>
               <Image useful={useful} src={useful.image} />
