@@ -1,8 +1,21 @@
 import styled from "styled-components";
 import "react-phone-number-input/style.css";
-import Modal from "styled-react-modal";
+import { useQuery, gql } from "@apollo/client";
 
 import ContactForm from "./ContactForm";
+
+const USEFUL_QUERY = gql`
+  query USEFUL_QUERY($id: String!) {
+    useful(where: { id: $id }) {
+      id
+      header
+      buttonText
+      link
+      image
+      tags
+    }
+  }
+`;
 
 const Styles = styled.div`
   padding: 50px 0;
@@ -297,14 +310,17 @@ const Form = styled.div`
 `;
 
 const Action = (props) => {
-  const d = props.data;
-  let useful = props.useful;
-  const { me, material } = props;
+  const { data, loading, error } = useQuery(USEFUL_QUERY, {
+    variables: { id: props.id },
+  });
+  if (loading) return <p>Загрузка..</p>;
+  const useful = data.useful;
+  const { me } = props;
   return (
     <Styles id="c2a">
       <Container>
         <Form>
-          <ContactForm useful={useful} me={me} material={material} />
+          <ContactForm useful={useful} me={me} />
           <ImageBlock>
             <Description>
               <Image useful={useful} src={useful.image} />
