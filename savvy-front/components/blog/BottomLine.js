@@ -88,8 +88,9 @@ const Ad = (props) => {
       <div className="bottomline_text">
         <span>{`🔥 Узнайте больше на курсе "${post.coursePage.title}"`}</span>
       </div>
-      <button id="blog_to_course">
+      <button>
         <a
+          id="blog_to_course"
           href={`https://besavvy.app/coursePage?id=${post.coursePage.id}`}
           target="_blank"
         >
