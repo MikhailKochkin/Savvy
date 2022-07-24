@@ -283,7 +283,7 @@ const Signin = (props) => {
               color="primary"
               className={classes.button}
             >
-              {loading ? "..." : props.material.button_text}
+              {loading ? "..." : "Войти"}
             </button>
             {/* <Transit>
               <div>
