@@ -17,27 +17,27 @@ const UPDATE_USER_MUTATION = gql`
   }
 `;
 
-const CREATE_CLIENT = gql`
-  mutation createBusinessClient(
-    $email: String!
-    $name: String!
-    $number: String!
-    $type: String!
-    $communication_medium: String!
-    $comment: String!
-  ) {
-    createBusinessClient(
-      email: $email
-      name: $name
-      number: $number
-      type: $type
-      communication_medium: $communication_medium
-      comment: $comment
-    ) {
-      id
-    }
-  }
-`;
+// const CREATE_CLIENT = gql`
+//   mutation createBusinessClient(
+//     $email: String!
+//     $name: String!
+//     $number: String!
+//     $type: String!
+//     $communication_medium: String!
+//     $comment: String!
+//   ) {
+//     createBusinessClient(
+//       email: $email
+//       name: $name
+//       number: $number
+//       type: $type
+//       communication_medium: $communication_medium
+//       comment: $comment
+//     ) {
+//       id
+//     }
+//   }
+// `;
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -275,8 +275,8 @@ const Form = (props) => {
   const router = useRouter();
   const { t } = useTranslation("common");
 
-  const [createBusinessClient, { data, loading, error }] =
-    useMutation(CREATE_CLIENT);
+  // const [createBusinessClient, { data, loading, error }] =
+  //   useMutation(CREATE_CLIENT);
 
   const [signup, { data: data2, loading: loading2, error: error2 }] =
     useMutation(SIGNUP_MUTATION);
@@ -297,7 +297,6 @@ const Form = (props) => {
             id="useful_to_destination"
             onClick={async (e) => {
               e.preventDefault();
-              console.log([...new Set([...me.tags, ...useful.tags])]);
               updateUser({
                 variables: {
                   id: me.id,
@@ -345,7 +344,7 @@ const Form = (props) => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <button
-                    id="useful_to_destination"
+                    id="useful_to_signup"
                     type="submit"
                     onClick={async (e) => {
                       e.preventDefault();
