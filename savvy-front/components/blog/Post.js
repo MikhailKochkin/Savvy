@@ -239,7 +239,7 @@ const Post = (props) => {
   moment.locale("ru");
   return (
     <>
-      <BottomLine />
+      <BottomLine post={post} />
       <Styles>
         <div className="title">
           <Link
@@ -304,7 +304,7 @@ const Post = (props) => {
           )}
         </PostContainer>
       </Styles>
-      <ContactForm />
+      {/* <ContactForm /> */}
       {/* <Banner>
         <div className="header">📫 Новостная рассылка</div>
         <div className="comment">

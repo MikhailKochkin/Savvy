@@ -8,6 +8,7 @@ import Exercises from "./Exercises";
 import Loading from "../Loading";
 import UserAnalytics from "./UserAnalytics";
 import Lessons from "./lessons/Lessons";
+import Money from "./Money";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -15,6 +16,14 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       id
       title
       courseType
+      orders {
+        id
+        isPaid
+        price
+        createdAt
+        updatedAt
+        promocode
+      }
       new_students {
         id
         name
@@ -229,6 +238,13 @@ const Stats = (props) => {
             >
               Визиты
             </div>
+            <div
+              className="button"
+              name="applications"
+              onClick={(e) => setPage("money")}
+            >
+              Выплаты
+            </div>
           </div>
           <div className="data">
             {page === "student_results" && (
@@ -252,6 +268,10 @@ const Stats = (props) => {
                 lessons={coursePage.lessons}
                 students={coursePage.new_students}
               />
+            )}
+
+            {page === "money" && (
+              <Money id={coursePage.id} orders={coursePage.orders} />
             )}
           </div>
         </Container>

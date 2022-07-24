@@ -561,6 +561,7 @@ input CoursePageWhereInput {
   examQuestionId: StringNullableFilter
   id: StringFilter
   image: StringFilter
+  lawrdles: LawrdleListRelationFilter
   lessons: LessonListRelationFilter
   methods: StringNullableFilter
   new_students: UserListRelationFilter
@@ -1025,6 +1026,64 @@ input JsonNullableListFilter {
   equals: [Json!]
 }
 
+type Lawrdle {
+  active: Boolean!
+  author: User!
+  authorId: String!
+  buttonText: String
+  createdAt: DateTime!
+  id: String!
+  link: String
+  story: String!
+  updatedAt: DateTime!
+  word: String!
+}
+
+input LawrdleListRelationFilter {
+  every: LawrdleWhereInput
+  none: LawrdleWhereInput
+  some: LawrdleWhereInput
+}
+
+input LawrdleOrderByInput {
+  active: SortOrder
+  authorId: SortOrder
+  buttonText: SortOrder
+  coursePageId: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  link: SortOrder
+  pros: SortOrder
+  story: SortOrder
+  tags: SortOrder
+  updatedAt: SortOrder
+  word: SortOrder
+}
+
+input LawrdleWhereInput {
+  active: BoolFilter
+  AND: [LawrdleWhereInput!]
+  author: UserWhereInput
+  authorId: StringFilter
+  buttonText: StringNullableFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  link: StringNullableFilter
+  NOT: [LawrdleWhereInput!]
+  OR: [LawrdleWhereInput!]
+  pros: StringNullableListFilter
+  story: StringFilter
+  tags: StringNullableListFilter
+  updatedAt: DateTimeFilter
+  word: StringFilter
+}
+
+input LawrdleWhereUniqueInput {
+  id: String
+}
+
 input LegalPortfolioListRelationFilter {
   every: LegalPortfolioWhereInput
   none: LegalPortfolioWhereInput
@@ -1311,6 +1370,7 @@ type Mutation {
   createDocumentResult(answers: [String], documentId: String, drafts: [String], lessonId: String): DocumentResult
   createFeedback(lessonId: String, studentId: String, text: String): Feedback
   createForum(lessonId: String, text: String): Forum
+  createLawrdle(active: Boolean, authorId: String, buttonText: String, coursePageId: String, link: String, story: String, tags: [String], word: String): Lawrdle
   createLesson(coursePageID: String, description: String, name: String, number: Int, text: String): Lesson
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
   createMiniForum(lessonId: String, type: String, value: String): MiniForum
@@ -1333,6 +1393,7 @@ type Mutation {
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, wrong: String): TextEditorResult
+  createUseful(buttonText: String, header: String, image: String, link: String, tags: [String]): Useful
   deleteChat(id: String): Chat
   deleteClause(id: String): Clause
   deleteClient(id: String): BusinessClient
@@ -1736,7 +1797,7 @@ input PointAWhereInput {
 }
 
 type Post {
-  coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
+  coursePage: CoursePage
   createdAt: DateTime!
   id: String!
   image: String
@@ -1758,6 +1819,7 @@ input PostListRelationFilter {
 }
 
 input PostOrderByInput {
+  coursePageId: SortOrder
   createdAt: SortOrder
   id: SortOrder
   image: SortOrder
@@ -1773,7 +1835,8 @@ input PostOrderByInput {
 
 input PostWhereInput {
   AND: [PostWhereInput!]
-  coursePages: CoursePageListRelationFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
   image: StringNullableFilter
@@ -1936,6 +1999,8 @@ type Query {
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int, orderBy: [CourseVisitOrderByInput!], where: CourseVisitWhereInput): [CourseVisit!]!
   feedbacks(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int, orderBy: [FeedbackOrderByInput!], where: FeedbackWhereInput): [Feedback!]!
+  lawrdle(where: LawrdleWhereUniqueInput!): Lawrdle
+  lawrdles(after: LawrdleWhereUniqueInput, before: LawrdleWhereUniqueInput, first: Int, last: Int, orderBy: [LawrdleOrderByInput!], where: LawrdleWhereInput): [Lawrdle!]!
   lesson(where: LessonWhereUniqueInput!): Lesson
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int, orderBy: [LessonResultOrderByInput!], where: LessonResultWhereInput): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int, where: LessonWhereInput): [Lesson!]!
@@ -1954,6 +2019,7 @@ type Query {
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByInput!], where: TestResultWhereInput): [TestResult!]!
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int, orderBy: [TextEditorResultOrderByInput!], where: TextEditorResultWhereInput): [TextEditorResult!]!
+  useful(where: UsefulWhereUniqueInput!): Useful
   user(where: UserWhereUniqueInput!): User
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
 }
@@ -2674,6 +2740,21 @@ input UniWhereInput {
   updatedAt: DateTimeFilter
 }
 
+type Useful {
+  buttonText: String!
+  createdAt: DateTime!
+  header: String!
+  id: String!
+  image: String!
+  link: String!
+  tags: [String!]!
+  updatedAt: DateTime!
+}
+
+input UsefulWhereUniqueInput {
+  id: String
+}
+
 type User {
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
   company: Company
@@ -2792,6 +2873,7 @@ input UserWhereInput {
   id: StringFilter
   image: StringNullableFilter
   isFamiliar: BoolFilter
+  lawrdles: LawrdleListRelationFilter
   legalPortfolio: LegalPortfolioWhereInput
   legalPortfolioId: StringNullableFilter
   lessonResults: LessonResultListRelationFilter

@@ -15,4 +15,5 @@ module.exports = {
   ...require("./Post"),
   ...require("./Stats"),
   ...require("./Certificate"),
+  ...require("./Promotion"),
 };

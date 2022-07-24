@@ -27,6 +27,15 @@ const POST_QUERY = gql`
         surname
         image
       }
+      coursePage {
+        id
+        title
+        user {
+          id
+          name
+          surname
+        }
+      }
       createdAt
     }
   }

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -202,8 +202,7 @@ model CoursePage {
   authors           User[]            @relation("AuthorsCoursePage")
   careerTrackUnit   CareerTrackUnit[]
   careerTrack       CareerTrack[]     @relation("CoursePageForCareer")
-  posts             Post[]            
-  lawrdles          Lawrdle[]         
+  posts             Post[]            @relation("PostCoursePages")
   new_students      User[]            @relation("UserSubjects")
   certificates      Certificate[]
 }
@@ -467,7 +466,7 @@ model Post {
   id          String       @id @default(cuid())
   title       String?
   text        String?
-  language    String?      @default("ru")
+  language    String?      @default("en")
   summary     String?
   image       String?
   createdAt   DateTime     @default(now())
@@ -475,9 +474,8 @@ model Post {
   likes       Int?         @default(1)
   tags        String[]
   userId      String
-  coursePageId String?
   user        User         @relation(fields: [userId], references: [id])
-  coursePage CoursePage?   @relation(fields: [coursePageId], references: [id])
+  coursePages CoursePage[] @relation("PostCoursePages")
 }
 
 model Problem {
@@ -919,31 +917,14 @@ model Test {
 }
 
 model Lawrdle {
-  id          String   @id @default(cuid())
+  id          String   @id
   word        String
   story       String
   authorId    String
   active      Boolean
-  buttonText  String?
-  link        String?
-  pros        String[]
-  tags        String[]
   author      User     @relation(fields: [authorId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  coursePageId  String?
-  coursePage  CoursePage?  @relation(fields: [coursePageId], references: [id])
-}
-
-model Useful {
-  id          String   @id @default(cuid())
-  header      String
-  buttonText  String
-  link        String
-  image       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  tags        String[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
 }
 
 enum CheckType {

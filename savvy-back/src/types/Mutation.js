@@ -89,7 +89,7 @@ const AuthorNotification = (lesson, course, lessonID) => `
   ">
     <h2>Привет!</h2>
     <p>Пришел новый вопрос по уроку "${lesson}" курса "${course}"</p>
-    <button><a href="https://besavvy.app/lesson?id=${lessonID}&type=regular">Перейти</a></button>
+    <button><a href="https://besavvy.app/lesson?id=${lessonID}&type=story">Перейти</a></button>
   </div>
 `;
 
@@ -259,6 +259,7 @@ const Mutation = mutationType({
         const updates = { ...args };
         delete updates.tags;
         delete updates.id;
+        console.log("args", args);
         const user = await ctx.prisma.user.update({
           data: {
             tags: {
@@ -2214,7 +2215,7 @@ const Mutation = mutationType({
           },
           confirmation: {
             type: "redirect",
-            return_url: `https://besavvy.app/coursePage?id=${coursePage.id}`,
+            return_url: `https://besavvy.app/onboarding?id=${coursePage.id}`,
           },
           capture: true,
         };
@@ -3133,6 +3134,68 @@ const Mutation = mutationType({
             },
           });
           return client;
+        },
+      }),
+      t.field("createLawrdle", {
+        type: "Lawrdle",
+        args: {
+          authorId: stringArg(),
+          word: stringArg(),
+          story: stringArg(),
+          active: booleanArg(),
+          buttonText: stringArg(),
+          link: stringArg(),
+          coursePageId: stringArg(),
+          tags: list(stringArg()),
+        },
+        resolve: async (_, args, ctx) => {
+          console.log(args);
+          const authorId = args.authorId;
+          delete args.authorId;
+          const coursePageId = args.coursePageId;
+          delete args.coursePageId;
+          const tags = args.tags;
+          delete args.tags;
+          const Lawrdle = await ctx.prisma.lawrdle.create({
+            data: {
+              author: {
+                connect: { id: authorId },
+              },
+              coursePage: {
+                connect: { id: coursePageId },
+              },
+              tags: {
+                set: [...tags],
+              },
+              ...args,
+            },
+          });
+
+          return Lawrdle;
+        },
+      }),
+      t.field("createUseful", {
+        type: "Useful",
+        args: {
+          header: stringArg(),
+          buttonText: stringArg(),
+          image: stringArg(),
+          link: stringArg(),
+          tags: list(stringArg()),
+        },
+        resolve: async (_, args, ctx) => {
+          const tags = args.tags;
+          delete args.tags;
+          console.log("args", args);
+          const Useful = await ctx.prisma.useful.create({
+            data: {
+              tags: {
+                set: [...tags],
+              },
+              ...args,
+            },
+          });
+          return Useful;
         },
       });
   },

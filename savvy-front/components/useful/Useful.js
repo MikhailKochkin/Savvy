@@ -298,23 +298,24 @@ const Form = styled.div`
 
 const Action = (props) => {
   const d = props.data;
+  let useful = props.useful;
   const { me, material } = props;
   return (
     <Styles id="c2a">
       <Container>
         <Form>
-          <ContactForm me={me} material={material} />
+          <ContactForm useful={useful} me={me} material={material} />
           <ImageBlock>
             <Description>
-              <Image src={material.image_url} />
+              <Image useful={useful} src={useful.image} />
             </Description>
           </ImageBlock>
         </Form>
-        <Bottom>
+        {/* <Bottom>
           {material.description.map((d) => (
             <div className="explainer_block">{d}</div>
           ))}
-        </Bottom>
+        </Bottom> */}
       </Container>
     </Styles>
   );

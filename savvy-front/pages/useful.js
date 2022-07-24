@@ -1,7 +1,22 @@
 import React from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useQuery, gql } from "@apollo/client";
+
 import { useUser } from "../components/User";
 import Useful from "../components/useful/Useful";
+
+const USEFUL_QUERY = gql`
+  query USEFUL_QUERY($id: String!) {
+    useful(where: { id: $id }) {
+      id
+      header
+      buttonText
+      link
+      image
+      tags
+    }
+  }
+`;
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -9,7 +24,13 @@ export const getServerSideProps = async ({ locale }) => ({
   },
 });
 const useful = (props) => {
-  const data = {
+  const { data, loading, error } = useQuery(USEFUL_QUERY, {
+    variables: { id: props.query.id },
+  });
+  if (loading) return <p>Загрузка..</p>;
+  if (error) return console.log(error);
+
+  const data2 = {
     post1: {
       link: "https://besavvy.app/ru/lesson?id=cl1xos6xr46971izxzt5tgxcp&type=story",
       description: [
@@ -74,23 +95,29 @@ const useful = (props) => {
   };
   let material;
   if (props.query.id == "post1") {
-    material = data.post1;
+    material = data2.post1;
   } else if (props.query.id == "contracts") {
-    material = data.contracts;
+    material = data2.contracts;
   } else if (props.query.id == "conclude") {
-    material = data.conclude;
+    material = data2.conclude;
   } else if (props.query.id == "ip") {
-    material = data.ip;
+    material = data2.ip;
   } else if (props.query.id == "vocabulary") {
-    material = data.vocabulary;
+    material = data2.vocabulary;
   } else {
-    material = data.post1;
+    material = data2.post1;
   }
+
   const me = useUser();
 
   return (
     <>
-      <Useful me={me} id={props.query.id} material={material} />
+      <Useful
+        me={me}
+        useful={data.useful}
+        id={props.query.id}
+        material={material}
+      />
     </>
   );
 };

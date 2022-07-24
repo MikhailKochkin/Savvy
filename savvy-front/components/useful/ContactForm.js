@@ -9,6 +9,14 @@ import { v4 as uuidv4 } from "uuid";
 import Error from "../ErrorMessage";
 import Signin from "./SignIn";
 
+const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
+    updateUser(id: $id, tags: $tags) {
+      id
+    }
+  }
+`;
+
 const CREATE_CLIENT = gql`
   mutation createBusinessClient(
     $email: String!
@@ -179,6 +187,10 @@ const Contact = styled.div`
     cursor: pointer;
     font-size: 1.8rem;
     transition: ease-in 0.2s;
+    a {
+      width: 100%;
+      height: 100%;
+    }
     &:hover {
       background-color: #dfc201;
     }
@@ -199,6 +211,8 @@ const Contact = styled.div`
       width: 100%;
       height: 50px;
       font-size: 2.2rem;
+      a {
+      }
     }
     #legal {
       width: 95%;
@@ -267,22 +281,33 @@ const Form = (props) => {
   const [signup, { data: data2, loading: loading2, error: error2 }] =
     useMutation(SIGNUP_MUTATION);
 
+  const [updateUser, { data: data3, loading: loading3, error: error3 }] =
+    useMutation(UPDATE_USER_MUTATION);
+
   let password = uuidv4();
 
   const d = props.data;
-  const { me, material } = props;
+  const { me, material, useful } = props;
   return (
     <Contact>
       <div id="form_container">
-        <div className="h2">{material.header_text}</div>
+        <div className="h2">{useful.header}</div>
         {me && (
           <button
+            id="useful_to_destination"
             onClick={async (e) => {
               e.preventDefault();
+              console.log([...new Set([...me.tags, ...useful.tags])]);
+              updateUser({
+                variables: {
+                  id: me.id,
+                  tags: [...new Set([...me.tags, ...useful.tags])],
+                },
+              });
               location.href = material.link;
             }}
           >
-            {material.button_text}
+            Перейти
           </button>
         )}
         {!me && (
@@ -320,8 +345,8 @@ const Form = (props) => {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                   <button
+                    id="useful_to_destination"
                     type="submit"
-                    id="english_application_button1"
                     onClick={async (e) => {
                       e.preventDefault();
                       if (!EmailValidator.validate(email)) {
@@ -345,21 +370,10 @@ const Form = (props) => {
                           },
                         });
                         location.href = material.link;
-
-                        const res = await createBusinessClient({
-                          variables: {
-                            type: asPath ? asPath : "Unknown",
-                            email,
-                            name: name + " " + surname,
-                            number,
-                            comment: material.material_type,
-                            communication_medium: "email",
-                          },
-                        });
                       }
                     }}
                   >
-                    {loading2 ? "..." : material.button_text}
+                    {loading2 ? "..." : useful.buttonText}
                   </button>
                 </form>
                 <Nav onClick={(e) => setStep("signin")}>

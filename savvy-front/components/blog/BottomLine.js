@@ -18,7 +18,7 @@ const Banner = styled.div`
   z-index: 3;
   justify-content: center;
   .bottomline_text {
-    max-width: 45%;
+    max-width: 85%;
     min-width: 35%;
     font-size: 1.8rem;
     height: 100%;
@@ -40,6 +40,9 @@ const Banner = styled.div`
     cursor: pointer;
     z-index: 4;
     transition: ease-in 0.2s;
+    a {
+      color: #000;
+    }
     &:hover {
       background-color: #4ac3d3;
       border: 1px solid #1864ab;
@@ -77,14 +80,23 @@ const Ad = (props) => {
       inline: "nearest",
     });
   };
-  const d = props.data;
+  const post = props.post;
+  console.log("post", post);
   return (
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <div className="bottomline_text">
-        <span>{t("discount")}</span>
+        <span>{`🔥 Узнайте больше на курсе "${post.coursePage.title}"`}</span>
       </div>
-      <button onClick={(e) => slide()}>{t("c2a")}</button>
+      <button id="blog_to_course">
+        <a
+          href={`https://besavvy.app/coursePage?id=${post.coursePage.id}`}
+          target="_blank"
+        >
+          {" "}
+          На страницу курса
+        </a>
+      </button>
     </Banner>
   );
 };

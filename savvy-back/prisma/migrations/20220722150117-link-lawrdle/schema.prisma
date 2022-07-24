@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -477,7 +477,7 @@ model Post {
   userId      String
   coursePageId String?
   user        User         @relation(fields: [userId], references: [id])
-  coursePage CoursePage?   @relation(fields: [coursePageId], references: [id])
+  coursePages CoursePage?   @relation(fields: [coursePageId], references: [id])
 }
 
 model Problem {

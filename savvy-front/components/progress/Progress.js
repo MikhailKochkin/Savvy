@@ -3,7 +3,7 @@ import { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import CourseBox from "./CourseBox";
-import KPI from "./KPI";
+// import KPI from "./KPI";
 
 const Styles = styled.div`
   display: flex;
@@ -224,7 +224,7 @@ const Progress = (props) => {
   return (
     <Styles>
       <Container>
-        <KPI coursePages={coursePages} users={users} />
+        {/* <KPI coursePages={coursePages} users={users} /> */}
         <select onChange={(e) => setOption(e.target.value)}>
           <option value="cjtreu3md00fp0897ga13aktp">
             Старт в Гражданском Праве (общая часть)

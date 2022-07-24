@@ -40,6 +40,7 @@ const UPDATE_POST_MUTATION = gql`
     $text: String
     $summary: String
     $image: String
+    $tags: [String]
   ) {
     updatePost(
       id: $id
@@ -47,6 +48,7 @@ const UPDATE_POST_MUTATION = gql`
       summary: $summary
       image: $image
       title: $title
+      tags: $tags
     ) {
       id
       text
@@ -64,6 +66,7 @@ const UpdatePost = (props) => {
   const [title, setTitle] = useState(props.title);
   const [summary, setSummary] = useState(props.summary);
   const [image, setImage] = useState(props.image);
+  const [tags, setTags] = useState();
   const [upload, setUpload] = useState(false);
   const getText = (d) => setText(d);
   const { id } = props;
@@ -109,6 +112,14 @@ const UpdatePost = (props) => {
         name="file"
         placeholder="Загрузите изображение..."
         onChange={uploadFile}
+      />
+      <input
+        className="second"
+        type="text"
+        placeholder="Запишите теги, через запятую без пробелов: тег1,тег2,тег3"
+        required
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
       />
       <Img src={image} alt="Upload Preview" />
 

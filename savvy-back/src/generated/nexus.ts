@@ -375,6 +375,7 @@ export interface NexusGenInputs {
     examQuestionId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lawrdles?: NexusGenInputs['LawrdleListRelationFilter'] | null; // LawrdleListRelationFilter
     lessons?: NexusGenInputs['LessonListRelationFilter'] | null; // LessonListRelationFilter
     methods?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     new_students?: NexusGenInputs['UserListRelationFilter'] | null; // UserListRelationFilter
@@ -715,6 +716,47 @@ export interface NexusGenInputs {
   }
   JsonNullableListFilter: { // input type
     equals?: NexusGenScalars['Json'][] | null; // [Json!]
+  }
+  LawrdleListRelationFilter: { // input type
+    every?: NexusGenInputs['LawrdleWhereInput'] | null; // LawrdleWhereInput
+    none?: NexusGenInputs['LawrdleWhereInput'] | null; // LawrdleWhereInput
+    some?: NexusGenInputs['LawrdleWhereInput'] | null; // LawrdleWhereInput
+  }
+  LawrdleOrderByInput: { // input type
+    active?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    authorId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    buttonText?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    link?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    pros?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    story?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    word?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  LawrdleWhereInput: { // input type
+    active?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
+    AND?: NexusGenInputs['LawrdleWhereInput'][] | null; // [LawrdleWhereInput!]
+    author?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    authorId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    buttonText?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
+    coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    link?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['LawrdleWhereInput'][] | null; // [LawrdleWhereInput!]
+    OR?: NexusGenInputs['LawrdleWhereInput'][] | null; // [LawrdleWhereInput!]
+    pros?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    story?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    word?: NexusGenInputs['StringFilter'] | null; // StringFilter
+  }
+  LawrdleWhereUniqueInput: { // input type
+    id?: string | null; // String
   }
   LegalPortfolioListRelationFilter: { // input type
     every?: NexusGenInputs['LegalPortfolioWhereInput'] | null; // LegalPortfolioWhereInput
@@ -1145,6 +1187,7 @@ export interface NexusGenInputs {
     some?: NexusGenInputs['PostWhereInput'] | null; // PostWhereInput
   }
   PostOrderByInput: { // input type
+    coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1159,7 +1202,8 @@ export interface NexusGenInputs {
   }
   PostWhereInput: { // input type
     AND?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
-    coursePages?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
+    coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
+    coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -1729,6 +1773,9 @@ export interface NexusGenInputs {
     title?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
+  UsefulWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   UserCoursePagesOrderByInput: { // input type
     title?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
@@ -1806,6 +1853,7 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     isFamiliar?: NexusGenInputs['BoolFilter'] | null; // BoolFilter
+    lawrdles?: NexusGenInputs['LawrdleListRelationFilter'] | null; // LawrdleListRelationFilter
     legalPortfolio?: NexusGenInputs['LegalPortfolioWhereInput'] | null; // LegalPortfolioWhereInput
     legalPortfolioId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lessonResults?: NexusGenInputs['LessonResultListRelationFilter'] | null; // LessonResultListRelationFilter
@@ -2072,6 +2120,17 @@ export interface NexusGenObjects {
     text?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
+  }
+  Lawrdle: { // root type
+    active: boolean; // Boolean!
+    authorId: string; // String!
+    buttonText?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    link?: string | null; // String
+    story: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    word: string; // String!
   }
   Lesson: { // root type
     assignment?: boolean | null; // Boolean
@@ -2350,6 +2409,16 @@ export interface NexusGenObjects {
     paidMonths?: number | null; // Int
     title: string; // String!
   }
+  Useful: { // root type
+    buttonText: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    header: string; // String!
+    id: string; // String!
+    image: string; // String!
+    link: string; // String!
+    tags: string[]; // [String!]!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   User: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description?: string | null; // String
@@ -2611,6 +2680,18 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
+  Lawrdle: { // field return type
+    active: boolean; // Boolean!
+    author: NexusGenRootTypes['User']; // User!
+    authorId: string; // String!
+    buttonText: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    link: string | null; // String
+    story: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    word: string; // String!
+  }
   Lesson: { // field return type
     assignment: boolean | null; // Boolean
     challenge_num: number | null; // Int
@@ -2700,6 +2781,7 @@ export interface NexusGenFieldTypes {
     createDocumentResult: NexusGenRootTypes['DocumentResult'] | null; // DocumentResult
     createFeedback: NexusGenRootTypes['Feedback'] | null; // Feedback
     createForum: NexusGenRootTypes['Forum'] | null; // Forum
+    createLawrdle: NexusGenRootTypes['Lawrdle'] | null; // Lawrdle
     createLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     createLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createMiniForum: NexusGenRootTypes['MiniForum'] | null; // MiniForum
@@ -2722,6 +2804,7 @@ export interface NexusGenFieldTypes {
     createTestResult: NexusGenRootTypes['TestResult'] | null; // TestResult
     createTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     createTextEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
+    createUseful: NexusGenRootTypes['Useful'] | null; // Useful
     deleteChat: NexusGenRootTypes['Chat'] | null; // Chat
     deleteClause: NexusGenRootTypes['Clause'] | null; // Clause
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
@@ -2832,7 +2915,7 @@ export interface NexusGenFieldTypes {
     url: string | null; // String
   }
   Post: { // field return type
-    coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
+    coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
     image: string | null; // String
@@ -2889,6 +2972,8 @@ export interface NexusGenFieldTypes {
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     courseVisits: NexusGenRootTypes['CourseVisit'][]; // [CourseVisit!]!
     feedbacks: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
+    lawrdle: NexusGenRootTypes['Lawrdle'] | null; // Lawrdle
+    lawrdles: NexusGenRootTypes['Lawrdle'][]; // [Lawrdle!]!
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
@@ -2907,6 +2992,7 @@ export interface NexusGenFieldTypes {
     testResults: NexusGenRootTypes['TestResult'][]; // [TestResult!]!
     textEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
     textEditorResults: NexusGenRootTypes['TextEditorResult'][]; // [TextEditorResult!]!
+    useful: NexusGenRootTypes['Useful'] | null; // Useful
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -3078,6 +3164,16 @@ export interface NexusGenFieldTypes {
     paidMonths: number | null; // Int
     teachers: NexusGenRootTypes['User'][]; // [User!]!
     title: string; // String!
+  }
+  Useful: { // field return type
+    buttonText: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    header: string; // String!
+    id: string; // String!
+    image: string; // String!
+    link: string; // String!
+    tags: string[]; // [String!]!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   User: { // field return type
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
@@ -3343,6 +3439,18 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  Lawrdle: { // field return type name
+    active: 'Boolean'
+    author: 'User'
+    authorId: 'String'
+    buttonText: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    link: 'String'
+    story: 'String'
+    updatedAt: 'DateTime'
+    word: 'String'
+  }
   Lesson: { // field return type name
     assignment: 'Boolean'
     challenge_num: 'Int'
@@ -3432,6 +3540,7 @@ export interface NexusGenFieldTypeNames {
     createDocumentResult: 'DocumentResult'
     createFeedback: 'Feedback'
     createForum: 'Forum'
+    createLawrdle: 'Lawrdle'
     createLesson: 'Lesson'
     createLessonResult: 'LessonResult'
     createMiniForum: 'MiniForum'
@@ -3454,6 +3563,7 @@ export interface NexusGenFieldTypeNames {
     createTestResult: 'TestResult'
     createTextEditor: 'TextEditor'
     createTextEditorResult: 'TextEditorResult'
+    createUseful: 'Useful'
     deleteChat: 'Chat'
     deleteClause: 'Clause'
     deleteClient: 'BusinessClient'
@@ -3564,7 +3674,7 @@ export interface NexusGenFieldTypeNames {
     url: 'String'
   }
   Post: { // field return type name
-    coursePages: 'CoursePage'
+    coursePage: 'CoursePage'
     createdAt: 'DateTime'
     id: 'String'
     image: 'String'
@@ -3621,6 +3731,8 @@ export interface NexusGenFieldTypeNames {
     courseVisit: 'CourseVisit'
     courseVisits: 'CourseVisit'
     feedbacks: 'Feedback'
+    lawrdle: 'Lawrdle'
+    lawrdles: 'Lawrdle'
     lesson: 'Lesson'
     lessonResults: 'LessonResult'
     lessons: 'Lesson'
@@ -3639,6 +3751,7 @@ export interface NexusGenFieldTypeNames {
     testResults: 'TestResult'
     textEditorResult: 'TextEditorResult'
     textEditorResults: 'TextEditorResult'
+    useful: 'Useful'
     user: 'User'
     users: 'User'
   }
@@ -3810,6 +3923,16 @@ export interface NexusGenFieldTypeNames {
     paidMonths: 'Int'
     teachers: 'User'
     title: 'String'
+  }
+  Useful: { // field return type name
+    buttonText: 'String'
+    createdAt: 'DateTime'
+    header: 'String'
+    id: 'String'
+    image: 'String'
+    link: 'String'
+    tags: 'String'
+    updatedAt: 'DateTime'
   }
   User: { // field return type name
     certificates: 'Certificate'
@@ -4141,6 +4264,16 @@ export interface NexusGenArgTypes {
       lessonId?: string | null; // String
       text?: string | null; // String
     }
+    createLawrdle: { // args
+      active?: boolean | null; // Boolean
+      authorId?: string | null; // String
+      buttonText?: string | null; // String
+      coursePageId?: string | null; // String
+      link?: string | null; // String
+      story?: string | null; // String
+      tags?: Array<string | null> | null; // [String]
+      word?: string | null; // String
+    }
     createLesson: { // args
       coursePageID?: string | null; // String
       description?: string | null; // String
@@ -4269,6 +4402,13 @@ export interface NexusGenArgTypes {
       result?: boolean | null; // Boolean
       textEditorId?: string | null; // String
       wrong?: string | null; // String
+    }
+    createUseful: { // args
+      buttonText?: string | null; // String
+      header?: string | null; // String
+      image?: string | null; // String
+      link?: string | null; // String
+      tags?: Array<string | null> | null; // [String]
     }
     deleteChat: { // args
       id?: string | null; // String
@@ -4548,14 +4688,6 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
     }
   }
-  Post: {
-    coursePages: { // args
-      after?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
-      before?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
-      first?: number | null; // Int
-      last?: number | null; // Int
-    }
-  }
   Problem: {
     problemResults: { // args
       after?: NexusGenInputs['ProblemResultWhereUniqueInput'] | null; // ProblemResultWhereUniqueInput
@@ -4624,6 +4756,17 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['FeedbackOrderByInput'][] | null; // [FeedbackOrderByInput!]
       where?: NexusGenInputs['FeedbackWhereInput'] | null; // FeedbackWhereInput
+    }
+    lawrdle: { // args
+      where: NexusGenInputs['LawrdleWhereUniqueInput']; // LawrdleWhereUniqueInput!
+    }
+    lawrdles: { // args
+      after?: NexusGenInputs['LawrdleWhereUniqueInput'] | null; // LawrdleWhereUniqueInput
+      before?: NexusGenInputs['LawrdleWhereUniqueInput'] | null; // LawrdleWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['LawrdleOrderByInput'][] | null; // [LawrdleOrderByInput!]
+      where?: NexusGenInputs['LawrdleWhereInput'] | null; // LawrdleWhereInput
     }
     lesson: { // args
       where: NexusGenInputs['LessonWhereUniqueInput']; // LessonWhereUniqueInput!
@@ -4724,6 +4867,9 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['TextEditorResultOrderByInput'][] | null; // [TextEditorResultOrderByInput!]
       where?: NexusGenInputs['TextEditorResultWhereInput'] | null; // TextEditorResultWhereInput
+    }
+    useful: { // args
+      where: NexusGenInputs['UsefulWhereUniqueInput']; // UsefulWhereUniqueInput!
     }
     user: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!

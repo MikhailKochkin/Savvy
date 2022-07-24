@@ -14,7 +14,7 @@ const Post = objectType({
     t.model.text();
     t.model.user();
     t.model.tags();
-    t.model.coursePages();
+    t.model.coursePage();
     t.model.createdAt();
     t.model.updatedAt();
   },
