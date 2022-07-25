@@ -199,7 +199,9 @@ const Landing = (props) => {
             <h1>{t("h1")}</h1>
             <div>{t("h2")}</div>
             <Buttons>
-              <button onClick={(e) => slide()}>{t("c2a")}</button>
+              <button id="main_page_button" onClick={(e) => slide()}>
+                {t("c2a")}
+              </button>
             </Buttons>
           </div>
           <div className="video_box">
