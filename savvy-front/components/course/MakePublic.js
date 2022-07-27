@@ -58,7 +58,7 @@ class MakePublic extends Component {
       >
         {(updateCoursePage) => (
           <Button onClick={(e) => this.onClick(e, updateCoursePage)}>
-            {this.state.published ? "Отозвать" : "Опубликовать"}
+            {this.state.published ? "Hide" : "Publish"}
           </Button>
         )}
       </Mutation>

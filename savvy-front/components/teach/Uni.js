@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PropTypes from "prop-types";
-// import HrPaymentBox from "./HrPaymentBox";
+import { useTranslation } from "next-i18next";
 
 const UniInfo = styled.div`
   width: 80%;
@@ -91,9 +91,11 @@ const Box = styled.div`
 
 const Uni = (props) => {
   const { me } = props;
+  const { t } = useTranslation("educator");
+
   return (
     <UniInfo>
-      <Title primary>Кабинет преподавателя</Title>
+      <Title primary> {t("My_Courses")}</Title>
       {me && <Name>{me.surname ? `${me.name} ${me.surname}` : me.name}</Name>}
     </UniInfo>
   );

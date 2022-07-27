@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import Link from "next/link";
 import PropTypes from "prop-types";
+import { useTranslation } from "next-i18next";
+
 import Course from "../course/Course";
 import Uni from "./Uni";
 import EducatorImage from "./EducatorImage";
@@ -170,6 +172,8 @@ const Additional = styled.div`
 
 const Educator = (props) => {
   const { me } = props;
+  const { t } = useTranslation("educator");
+
   let publishedCourses = [];
   let developedCourses = [];
 
@@ -194,7 +198,7 @@ const Educator = (props) => {
         <Container>
           <Uni me={me} />
           <Courses>
-            <Title primary> Курсы в разработке </Title>
+            <Title primary> {t("Courses_In_Development")}</Title>
             <Row>
               <CaseCard>
                 <Additional>
@@ -209,7 +213,7 @@ const Educator = (props) => {
                   <>
                     <Link href="/create">
                       <Button>
-                        <a>Создать курс</a>
+                        <a>{t("Create_Course")}</a>
                       </Button>
                     </Link>
                   </>
@@ -226,11 +230,9 @@ const Educator = (props) => {
             </Row>
           </Courses>
           <Courses>
-            <Title primary> Опубликованные курсы </Title>
+            <Title primary>{t("Courses_In_Production")}</Title>
             <Row>
-              {publishedCourses.length === 0 && (
-                <p>У вас еще нет запущенных курсов.</p>
-              )}
+              {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
               {publishedCourses.map((coursePage) => (
                 <Course
                   key={coursePage.id}

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import smoothscroll from "smoothscroll-polyfill";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_QUIZ_MUTATION = gql`
@@ -102,11 +104,13 @@ const Section = styled.div`
 
 const TestBlock = (props) => {
   const [c, setC] = useState(props.value ? props.value.id : "");
-  const [t, setT] = useState(props.t.value);
+  const [tr, setT] = useState(props.tr.value);
   const [f, setF] = useState(props.f.value);
   const [type, setType] = useState(props.type ? props.type : "");
   const [t_type, setT_type] = useState(props.t.type);
   const [f_type, setF_type] = useState(props.f.type);
+
+  const { t } = useTranslation("lesson");
 
   const handleChoice = (el) => {
     props.getNewBlock(el, c, props.color);
@@ -201,7 +205,7 @@ const TestBlock = (props) => {
             <option value="">Конец</option>
           </select>
           {t_type === "newtest" && (
-            <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
+            <select defaultValue={tr} onChange={(e) => setT(e.target.value)}>
               <option value={undefined}>Не выбран</option>
 
               {props.newTests.map((q) => (
@@ -211,7 +215,7 @@ const TestBlock = (props) => {
             </select>
           )}
           {t_type === "quiz" && (
-            <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
+            <select defaultValue={tr} onChange={(e) => setT(e.target.value)}>
               <option>Выберите</option>
 
               {props.quizes.map((q) => (
@@ -221,7 +225,7 @@ const TestBlock = (props) => {
             </select>
           )}
           {t_type === "note" && (
-            <select defaultValue={t} onChange={(e) => setT(e.target.value)}>
+            <select defaultValue={tr} onChange={(e) => setT(e.target.value)}>
               <option>Выберите</option>
 
               {props.notes.map((q) => (
@@ -230,7 +234,7 @@ const TestBlock = (props) => {
               <option value="">Конец</option>
             </select>
           )}
-          <button onClick={(e) => handleChoice(t)}>Новый блок</button>
+          <button onClick={(e) => handleChoice(tr)}>Новый блок</button>
         </div>
         <div className="section">
           <div>В случае неправильного ответа</div>{" "}
@@ -364,7 +368,7 @@ const TestBlock = (props) => {
                       console.log("Изменено");
                     }}
                   >
-                    {loading ? "Сохраняем..." : "Сохранить"}
+                    {loading ? t("saving") : t("save")}
                   </button>
                 )}
               </Mutation>

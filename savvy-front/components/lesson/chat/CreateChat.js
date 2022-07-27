@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import CreateMessage from "./CreateMessage";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import _ from "lodash";
 
@@ -98,6 +100,7 @@ const CreateChat = (props) => {
   const [num, setNum] = useState(1);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
+  const { t } = useTranslation("lesson");
 
   const getMessage = (data) => {
     setMessages([...messages, data]);
@@ -179,7 +182,7 @@ const CreateChat = (props) => {
             props.getResult(res);
           }}
         >
-          {loading ? "Сохраняем..." : "Сохранить"}
+          {loading ? t("saving") : t("save")}
         </ButtonTwo>
       </Bottom>
     </Styles>

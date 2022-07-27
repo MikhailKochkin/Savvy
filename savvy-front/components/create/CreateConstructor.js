@@ -4,6 +4,8 @@ import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
@@ -234,6 +236,9 @@ const CreateConstructor = (props) => {
   // const [hasText, setHasText] = useState(false);
   // const [type, setType] = useState("equal");
   const [columnsNum, setColumns] = useState(3);
+
+  const { t } = useTranslation("lesson");
+
   const [elements, setElements] = useState([
     {
       place: 0,
@@ -398,7 +403,7 @@ const CreateConstructor = (props) => {
               props.getResult(res);
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? t("saving") : t("save")}
           </ButtonTwo>
         )}
       </Mutation>

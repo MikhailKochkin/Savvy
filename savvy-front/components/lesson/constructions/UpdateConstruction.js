@@ -5,6 +5,8 @@ import _ from "lodash";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
+
 // import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
@@ -247,6 +249,8 @@ const UpdateConstruction = (props) => {
   const [answersNumber, setAnswersNumber] = useState();
   const [type, setType] = useState(props.type);
   const [partsNumber, setPartsNumber] = useState("");
+  const { t } = useTranslation("lesson");
+
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -424,7 +428,7 @@ const UpdateConstruction = (props) => {
               alert("Сохранили!");
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? t("saving") : t("save")}
           </Button>
         )}
       </Mutation>

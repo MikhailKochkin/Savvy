@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CreateNewTest from "../create/CreateNewTest";
 import SingleTest from "./tests/SingleTest";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 import CreateQuiz from "../create/CreateQuiz";
 import SingleQuiz from "./quizes/SingleQuiz";
@@ -106,6 +107,8 @@ const LessonBlock = (props) => {
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
   const [updated, setUpdated] = useState(false);
+  const { t } = useTranslation("lesson");
+
   let d;
   if (el.type && el.type.toLowerCase() == "note" && !el.data && !updated) {
     d = lesson.notes.find((n) => n.id == el.id);
@@ -307,21 +310,27 @@ const LessonBlock = (props) => {
       >
         {!isSaved && (
           <Menu>
-            <ButtonTwo onClick={(e) => addBlock("Note")}>Лонгрид</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("NewTest")}>Тест</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Quiz")}>Вопрос</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("TestPractice")}>
-              Блок вопросов
+            <ButtonTwo onClick={(e) => addBlock("Chat")}>{t("Chat")}</ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Note")}>{t("Note")}</ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("NewTest")}>
+              {t("NewTest")}
             </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Chat")}>Диалог</ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Problem")}>Задача</ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Quiz")}>{t("Quiz")}</ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("TestPractice")}>
+              {t("TestPractice")}
+            </ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Problem")}>
+              {t("Problem")}
+            </ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("TextEditor")}>
-              Редактор
+              {t("TextEditor")}
             </ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("Construction")}>
-              Конструктор
+              {t("Construction")}
             </ButtonTwo>
-            <ButtonTwo onClick={(e) => addBlock("Forum")}>Форум</ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Forum")}>
+              {t("Forum")}
+            </ButtonTwo>
           </Menu>
         )}
         {type.toLowerCase() == "note" && (
@@ -592,7 +601,7 @@ const LessonBlock = (props) => {
           <div className="first">
             {" "}
             <ButtonTwo onClick={(e) => props.remove(idNum)}>
-              Убрать блок
+              {t("remove_block")}
             </ButtonTwo>
           </div>
           {isSaved && (
@@ -602,7 +611,7 @@ const LessonBlock = (props) => {
                   props.addPlace(idNum);
                 }}
               >
-                Новый блок
+                {t("new_block")}
               </ButtonTwo>
             </div>
           )}

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import _ from "lodash";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
+import { useTranslation } from "next-i18next";
+
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import dynamic from "next/dynamic";

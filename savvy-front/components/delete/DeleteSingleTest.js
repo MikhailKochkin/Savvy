@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { useTranslation } from "next-i18next";
 
 const DELETE_TEST_MUTATION = gql`
   mutation DELETE_TEST_MUTATION($id: String!) {
@@ -24,6 +25,8 @@ const useStyles = makeStyles({
 
 const DeleteSingleTest = (props) => {
   const { testId, lessonId } = props;
+  const { t } = useTranslation("lesson");
+
   const classes = useStyles();
   return (
     <Mutation
@@ -41,18 +44,14 @@ const DeleteSingleTest = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (
-              confirm(
-                "Вы точно хотите удалить этот тест? Тест исчезнет после перезагрузки страницы."
-              )
-            ) {
+            if (confirm("Are you sure")) {
               deleteTest().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? "Удаляем..." : "Удалить"}
+          {loading ? t("deleting") : t("delete")}
         </Button>
       )}
     </Mutation>

@@ -57,7 +57,6 @@ class QuizGroup extends Component {
                 quizes={this.props.quizes}
                 notes={this.props.notes}
                 tests={this.props.tests}
-                notes={this.props.notes}
                 next={quiz.next}
                 getData={this.updateArray}
               />

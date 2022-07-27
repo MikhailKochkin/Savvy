@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+
 import UpdateMessage from "./UpdateMessage";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
@@ -75,6 +77,7 @@ const UpdateChat = (props) => {
   const [mess, setMess] = useState(props.messages.messagesList);
   const [num, setNum] = useState(props.messages.messagesList.length);
   const [isSecret, setIsSecret] = useState(props.isSecret);
+  const { t } = useTranslation("lesson");
 
   const [updateChat, { data, loading, error }] = useMutation(
     UPDATE_CHAT_MUTATION,
@@ -157,7 +160,7 @@ const UpdateChat = (props) => {
           props.passUpdated();
         }}
       >
-        {loading ? "Сохраняем..." : "Сохранить"}
+        {loading ? t("saving") : t("save")}
       </ButtonTwo>
     </Styles>
   );

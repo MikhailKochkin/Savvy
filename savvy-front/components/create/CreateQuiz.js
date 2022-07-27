@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
@@ -158,6 +160,7 @@ const CreateQuiz = (props) => {
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
   const [type, setType] = useState("TEST");
+  const { t } = useTranslation("lesson");
 
   const { lessonID } = props;
   return (
@@ -237,7 +240,7 @@ const CreateQuiz = (props) => {
                 </AnswerOption>
 
                 <ButtonTwo type="submit">
-                  {loading ? "Сохраняем..." : "Сохранить"}
+                  {loading ? t("saving") : t("save")}
                 </ButtonTwo>
                 <Message id="Message">Вы создали новый вопрос!</Message>
               </Answers>

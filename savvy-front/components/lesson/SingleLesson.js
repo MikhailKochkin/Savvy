@@ -3,40 +3,13 @@ import gql from "graphql-tag";
 import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
-import renderHTML from "react-render-html";
 import Link from "next/link";
-import Note from "./notes/Note";
-import Document from "./documents/Document";
-// import Exams from "./exams/Exams";
-import Forum from "./forum/Forum";
-import Chat from "./chat/Chat";
-import TestGroup from "./tests/TestGroup";
-import ShotsGroup from "./shots/ShotsGroup";
-import TestPractices from "./testblocks/TestPractices";
-import QuizGroup from "./quizes/QuizGroup";
-import ProblemGroup from "./problems/ProblemGroup";
-import NewProblem from "./problems/NewProblem";
-import ConstructorGroup from "./constructions/ConstructorGroup";
-import TextEditorGroup from "./textEditors/TextEditorGroup";
 import PleaseSignIn from "../auth/PleaseSignIn";
-import CreateNewTest from "../create/CreateNewTest";
-import CreateQuiz from "../create/CreateQuiz";
-import CreateTestBlock from "./testblocks/CreateTestBlock";
-import CreateShot from "../create/CreateShot";
-import CreateConstructor from "../create/CreateConstructor";
-import CreateTextEditor from "../create/CreateTextEditor";
-import CreateProblem from "../create/CreateProblem";
-import CreateNote from "../create/CreateNote";
-import CreateChat from "./chat/CreateChat";
-import ChangeForum from "./forum/ChangeForum";
 import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
-import SingleLesson_Menu from "./SingleLesson_Menu";
-import CreateDocument from "./documents/CreateDocument";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
-import UpdateLesson from "./UpdateLesson";
-import HowTo from "./HowTo";
 import { useUser } from "../User";
 import LessonBuilder from "./LessonBuilder";
+import { useTranslation } from "next-i18next";
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {
@@ -453,6 +426,8 @@ const SingleLesson = (props) => {
   const [width, setWidth] = useState(800);
   const [isMenuShown, setIsMenuShown] = useState(true);
 
+  const { t } = useTranslation("lesson");
+
   const onResize = (width) => {
     setWidth(width);
   };
@@ -504,7 +479,7 @@ const SingleLesson = (props) => {
                   )}
 
                   <Head>
-                    {width > 800 ? (
+                    {width > 800 && (
                       <Link
                         href={{
                           pathname: "/course",
@@ -515,13 +490,14 @@ const SingleLesson = (props) => {
                       >
                         <span>Back to course </span>
                       </Link>
-                    ) : (
-                      width < 800 && (
-                        <span onClick={(e) => openNav()}>Навигация</span>
-                      )
                     )}
+                    {/* // : (
+                      // width < 800 && (
+                      //   // <span onClick={(e) => openNav()}>Навигация</span>
+                      // )
+                    // )} */}
                     <span>
-                      Урок {lesson.number}. {lesson.name}
+                      {t("lesson")} {lesson.number}. {lesson.name}
                     </span>
                   </Head>
                   {me &&
@@ -537,7 +513,7 @@ const SingleLesson = (props) => {
                             },
                           }}
                         >
-                          <span>{` ➡️ Открыть интерфейс студента `}</span>
+                          <span>{` ➡️ ${t("to_student_page")} `}</span>
                         </Link>
 
                         {/* <>

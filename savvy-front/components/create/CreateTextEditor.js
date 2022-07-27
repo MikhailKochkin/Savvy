@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 
@@ -114,105 +116,96 @@ const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   ssr: false,
 });
 
-export default class CreateTextEditor extends Component {
-  state = {
-    name: "Test",
-    text: "",
-    totalMistakes: 1,
+const CreateTextEditor = (props) => {
+  const [name, setName] = useState("Editor");
+  const [text, setText] = useState("");
+
+  const [totalMistakes, setTotalMistakes] = useState(1);
+  const { t } = useTranslation("lesson");
+
+  const myCallback = (dataFromChild) => {
+    setText(dataFromChild);
   };
 
-  myCallback = (dataFromChild) => {
-    this.setState({
-      text: dataFromChild,
-    });
-  };
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
+  const placeholder = `<h2><div className="align-center" style="text-align:center"><p>Доверенность</p></div></h2><div className="align-right" style="text-align:right"><p>21 июня 2022</p><p>г. Москва</p></div><p><b>ООО АККИО</b> , юридическое лицо, созданное и осуществляющее свою деятельность в соответствии с законодательством Российской Федерации, зарегистрированное за основным государственным регистрационным номером (ОГРН)  ...</p>`;
 
-  render() {
-    const placeholder = `<h2><div className="align-center" style="text-align:center"><p>Доверенность</p></div></h2><div className="align-right" style="text-align:right"><p>21 июня 2022</p><p>г. Москва</p></div><p><b>ООО АККИО</b> , юридическое лицо, созданное и осуществляющее свою деятельность в соответствии с законодательством Российской Федерации, зарегистрированное за основным государственным регистрационным номером (ОГРН)  ...</p>`;
+  const { lessonID } = props;
+  return (
+    <Width>
+      <Title>Редактор</Title>
+      <Explainer>
+        <p>
+          Задача редактора – воссоздать опыт работы над реальным документом
+          вместе с наставником. Для этого мы создали разные инструменты. Сейчас
+          покажем, как они работают:
+        </p>
+        <p>
+          <BiCommentAdd className="icon" value={{ className: "react-icons" }} />
+          Позволит вам добавить{" "}
+          <span id="green">скрытый комментарий в текст</span>. Предложите
+          студенту найти пункт в документе, который нужно разобрать. При нажатии
+          на правильный пункт студент увидит ваш комментарий.
+        </p>
+        <p>
+          <BiCommentError
+            className="icon"
+            value={{ className: "react-icons" }}
+          />
+          Позволит вам добавить <span id="red">ошибку в текст</span> и
+          исправленный вариант. Предложите студенту найти пункт в документе, в
+          котором содержится ошибка. При нажатии на правильный пункт студент
+          получит возможность отредактировать текст, автоматически проверить
+          свой ответ и увидеть ваш вариант.
+        </p>
+        <p>
+          <BiCommentCheck
+            className="icon"
+            value={{ className: "react-icons" }}
+          />
+          Позволит вам <span id="orange">задать вопрос</span> к определенному
+          фрагменту текста. Задайте вопрос, ответ, а также комментарии на случай
+          правильного и неправильного ответов.
+        </p>
+      </Explainer>
 
-    const { lessonID } = this.props;
-    return (
-      <Width>
-        <Title>Редактор</Title>
-        <Explainer>
-          <p>
-            Задача редактора – воссоздать опыт работы над реальным документом
-            вместе с наставником. Для этого мы создали разные инструменты.
-            Сейчас покажем, как они работают:
-          </p>
-          <p>
-            <BiCommentAdd
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-            Позволит вам добавить{" "}
-            <span id="green">скрытый комментарий в текст</span>. Предложите
-            студенту найти пункт в документе, который нужно разобрать. При
-            нажатии на правильный пункт студент увидит ваш комментарий.
-          </p>
-          <p>
-            <BiCommentError
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-            Позволит вам добавить <span id="red">ошибку в текст</span> и
-            исправленный вариант. Предложите студенту найти пункт в документе, в
-            котором содержится ошибка. При нажатии на правильный пункт студент
-            получит возможность отредактировать текст, автоматически проверить
-            свой ответ и увидеть ваш вариант.
-          </p>
-          <p>
-            <BiCommentCheck
-              className="icon"
-              value={{ className: "react-icons" }}
-            />
-            Позволит вам <span id="orange">задать вопрос</span> к определенному
-            фрагменту текста. Задайте вопрос, ответ, а также комментарии на
-            случай правильного и неправильного ответов.
-          </p>
-        </Explainer>
+      <DynamicLoadedEditor
+        getEditorText={myCallback}
+        complex={true}
+        value={placeholder}
+      />
 
-        <DynamicLoadedEditor
-          getEditorText={this.myCallback}
-          complex={true}
-          value={placeholder}
-        />
+      <Mutation
+        mutation={CREATE_TEXTEDITOR_MUTATION}
+        variables={{
+          lessonId: lessonID,
+          totalMistakes: parseInt(totalMistakes),
+          text: text,
+          name: name,
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID },
+          },
+        ]}
+        awaitRefetchQueries={true}
+      >
+        {(createTextEditor, { loading, error }) => (
+          <ButtonTwo
+            onClick={async (e) => {
+              e.preventDefault();
+              document.getElementById("Message").style.display = "block";
+              const res = await createTextEditor();
+              props.getResult(res);
+            }}
+          >
+            {loading ? t("saving") : t("save")}
+          </ButtonTwo>
+        )}
+      </Mutation>
+      {/* <Message id="Message">Вы создали новый редактор!</Message> */}
+    </Width>
+  );
+};
 
-        <Mutation
-          mutation={CREATE_TEXTEDITOR_MUTATION}
-          variables={{
-            lessonId: lessonID,
-            totalMistakes: parseInt(this.state.totalMistakes),
-            text: this.state.text,
-            name: this.state.name,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-          awaitRefetchQueries={true}
-        >
-          {(createTextEditor, { loading, error }) => (
-            <ButtonTwo
-              onClick={async (e) => {
-                e.preventDefault();
-                document.getElementById("Message").style.display = "block";
-                const res = await createTextEditor();
-                this.props.getResult(res);
-              }}
-            >
-              {loading ? "Сохраняем..." : "Сохранить"}
-            </ButtonTwo>
-          )}
-        </Mutation>
-        <Message id="Message">Вы создали новый редактор!</Message>
-      </Width>
-    );
-  }
-}
+export default CreateTextEditor;

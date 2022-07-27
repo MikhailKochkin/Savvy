@@ -445,7 +445,7 @@ const NewSingleLesson = (props) => {
                         }}
                       >
                         {/* <span>{t("switch")}</span> */}
-                        <span>К разработке</span>
+                        <span>{t("to_development")}</span>
                       </Link>
                     )}
                 </div>

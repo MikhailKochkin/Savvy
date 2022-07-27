@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Router from "next/router";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useTranslation } from "next-i18next";
+
 import { CURRENT_USER_QUERY } from "../User";
 
 const CREATE_LESSON_MUTATION = gql`
@@ -83,6 +85,8 @@ const CreateLes = (props) => {
   const [number, setNumber] = useState(0);
   const [description, setDescription] = useState("");
 
+  const { t } = useTranslation("create");
+
   const [createLesson, { data, loading, error }] = useMutation(
     CREATE_LESSON_MUTATION
   );
@@ -99,7 +103,7 @@ const CreateLes = (props) => {
           type="text"
           id="name"
           name="name"
-          placeholder="Название"
+          placeholder={t("Name")}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -108,7 +112,7 @@ const CreateLes = (props) => {
           type="number"
           id="number"
           name="number"
-          placeholder="Номер"
+          placeholder={t("Number")}
           onChange={(e) => setNumber(e.target.value)}
         />
 
@@ -117,7 +121,7 @@ const CreateLes = (props) => {
             index={1}
             name="description"
             getEditorText={myCallback2}
-            placeholder="Краткое описание"
+            placeholder={t("Description")}
           />
         </Frame>
         <input
@@ -127,7 +131,7 @@ const CreateLes = (props) => {
           name="fav_language"
           value={true}
         />
-        <label for="model">Базовая модель урока</label>
+        <label for="model">{t("Model")}</label>
         <Buttons>
           <Button
             onClick={async (e) => {
@@ -151,7 +155,7 @@ const CreateLes = (props) => {
               });
             }}
           >
-            {loading ? "Создаем урок..." : "Создать"}
+            {loading ? t("Creating") : t("Create")}
           </Button>
           <Link
             href={{
@@ -159,7 +163,7 @@ const CreateLes = (props) => {
               query: { id: props.id },
             }}
           >
-            <div>Вернуться на страницу курса</div>
+            <div>{t("Back")}</div>
           </Link>
         </Buttons>
       </>

@@ -960,6 +960,7 @@ const Lawrdle = (props) => {
             </div>
           </div>
           <div>
+            {console.log("lawrdle.link", lawrdle.link)}
             <ButtonTwo>
               <a id="lawrdle_to_course" href={lawrdle.link} target="_blank">
                 {lawrdle.buttonText}

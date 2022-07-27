@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { useTranslation } from "next-i18next";
 
 const DELETE_NOTE_MUTATION = gql`
   mutation DELETE_NOTE_MUTATION($id: String!) {
@@ -23,6 +24,8 @@ const useStyles = makeStyles({
 
 const DeleteNote = (props) => {
   const { lessonID, noteID } = props;
+  const { t } = useTranslation("lesson");
+
   const classes = useStyles();
   return (
     <Mutation
@@ -40,14 +43,14 @@ const DeleteNote = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm("Вы точно хотите удалить эту заметку?")) {
+            if (confirm("Are you sure")) {
               deleteNote().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? "Удаляем..." : "Удалить"}
+          {loading ? t("deleting") : t("delete")}
         </Button>
       )}
     </Mutation>

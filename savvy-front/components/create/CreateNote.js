@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { useTranslation } from "next-i18next";
 
 const CREATE_NOTE_MUTATION = gql`
   mutation CREATE_NOTE_MUTATION($text: String!, $lessonId: String!) {
@@ -87,54 +88,51 @@ const DynamicLoadedEditor = dynamic(import("../editor/Editor"), {
   ssr: false,
 });
 
-export default class CreateSingleNote extends Component {
-  state = {
-    text: "",
-  };
+const CreateSingleNote = (props) => {
+  const [text, setText] = useState("");
 
-  myCallback = (dataFromChild) => {
-    this.setState({
-      text: dataFromChild,
-    });
-  };
+  const { t } = useTranslation("lesson");
 
-  render() {
-    const { lessonID } = this.props;
-    return (
-      <Container>
-        <Explainer></Explainer>
-        <Editor>
-          <DynamicLoadedEditor getEditorText={this.myCallback} simple={true} />
-        </Editor>
-        <Mutation
-          mutation={CREATE_NOTE_MUTATION}
-          variables={{
-            lessonId: lessonID,
-            ...this.state,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: lessonID },
-            },
-          ]}
-          awaitRefetchQueries={true}
-        >
-          {(createNote, { loading, error }) => (
-            <ButtonTwo
-              onClick={async (e) => {
-                e.preventDefault();
-                const res = await createNote();
-                document.getElementById("Message").style.display = "block";
-                this.props.getResult(res);
-              }}
-            >
-              {loading ? "Сохраняем..." : "Cохранить"}
-            </ButtonTwo>
-          )}
-        </Mutation>
-        <Message id="Message">Готово</Message>
-      </Container>
-    );
-  }
-}
+  const myCallback = (dataFromChild) => {
+    setText(dataFromChild);
+  };
+  const { lessonID } = props;
+  return (
+    <Container>
+      <Explainer></Explainer>
+      <Editor>
+        <DynamicLoadedEditor getEditorText={myCallback} simple={true} />
+      </Editor>
+      <Mutation
+        mutation={CREATE_NOTE_MUTATION}
+        variables={{
+          lessonId: lessonID,
+          text,
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: lessonID },
+          },
+        ]}
+        awaitRefetchQueries={true}
+      >
+        {(createNote, { loading, error }) => (
+          <ButtonTwo
+            onClick={async (e) => {
+              e.preventDefault();
+              const res = await createNote();
+              // document.getElementById("Message").style.display = "block";
+              props.getResult(res);
+            }}
+          >
+            {loading ? t("saving") : t("save")}
+          </ButtonTwo>
+        )}
+      </Mutation>
+      {/* <Message id="Message">Готово</Message> */}
+    </Container>
+  );
+};
+
+export default CreateSingleNote;

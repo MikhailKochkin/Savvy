@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "next-i18next";
 
 import CreateNote from "../CreateNote";
 import Note from "../../lesson/notes/Note";
@@ -44,6 +45,8 @@ const NewBlock = (props) => {
   const [data, setData] = useState(null);
   const [saved, setSaved] = useState(false);
   const getData = (d) => props.getData(d);
+  const { t } = useTranslation("lesson");
+
   const add = () => {
     props.add(props.obj.id, props.obj.index);
   };

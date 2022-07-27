@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+
 import MakePublic from "../MakePublic";
 
 const Payment = styled.div`
@@ -67,69 +69,66 @@ const Button2 = styled.button`
   }
 `;
 
-class TeacherCard extends Component {
-  switch = () => {
-    this.props.getPage();
-  };
-  render() {
-    const { id, coursePage } = this.props;
-    return (
-      <Payment>
-        <Header>Инструменты преподавателя</Header>
-        <Buttons>
-          <Link
-            href={{
-              pathname: "/createLesson",
-              query: { id: this.props.id },
-            }}
-          >
-            <a>
-              <Button>Составить урок</Button>
-            </a>
-          </Link>
-          <Link
-            href={{
-              pathname: "/updateCoursePage",
-              query: { id },
-            }}
-          >
-            <a>
-              <Button>Изменить</Button>
-            </a>
-          </Link>
-          <MakePublic published={coursePage.published} id={coursePage.id} />
+const TeacherCard = (props) => {
+  const { id, coursePage } = props;
+  const { t } = useTranslation("create");
+
+  return (
+    <Payment>
+      <Header>{t("Tools")}</Header>
+      <Buttons>
+        <Link
+          href={{
+            pathname: "/createLesson",
+            query: { id: props.id },
+          }}
+        >
+          <a>
+            <Button>{t("Create_Lesson")}</Button>
+          </a>
+        </Link>
+        <Link
+          href={{
+            pathname: "/updateCoursePage",
+            query: { id },
+          }}
+        >
+          <a>
+            <Button>{t("Update_Lesson")}</Button>
+          </a>
+        </Link>
+        <MakePublic published={coursePage.published} id={coursePage.id} />
+        <Link
+          href={{
+            pathname: "/stats",
+            query: {
+              id,
+              name: "stats",
+            },
+          }}
+        >
+          <a>
+            <Button2>{t("Stats")}</Button2>
+          </a>
+        </Link>
+        {coursePage.courseType === "PRIVATE" && (
           <Link
             href={{
               pathname: "/stats",
               query: {
                 id,
-                name: "stats",
+                name: "applications",
               },
             }}
           >
             <a>
-              <Button2>Статистика</Button2>
+              <Button2>{t("Applications")}</Button2>
             </a>
           </Link>
-          {coursePage.courseType === "PEIVATE" && (
-            <Link
-              href={{
-                pathname: "/stats",
-                query: {
-                  id,
-                  name: "applications",
-                },
-              }}
-            >
-              <a>
-                <Button2>Заявки</Button2>
-              </a>
-            </Link>
-          )}
-        </Buttons>
-      </Payment>
-    );
-  }
-}
+        )}
+      </Buttons>
+    </Payment>
+  );
+};
 
 export default TeacherCard;

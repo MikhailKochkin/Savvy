@@ -4,6 +4,7 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import _ from "lodash";
+import { useTranslation } from "next-i18next";
 
 import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
@@ -220,6 +221,7 @@ const CreateNewTest = (props) => {
   const [correct, setCorrect] = useState([false, false]);
   const [question, setQuestion] = useState();
   const [type, setType] = useState("TEST");
+  const { t } = useTranslation("lesson");
 
   const handleArray = (val, i) => {
     let arr = [...answers];
@@ -395,7 +397,7 @@ const CreateNewTest = (props) => {
                 props.getResult(res3);
               }}
             >
-              {loading ? "Сохраняем..." : "Сохранить"}
+              {loading ? t("saving") : t("save")}
             </ButtonTwo>
             <Message id="Message">Вы создали новый тестовый вопрос!</Message>
           </div>

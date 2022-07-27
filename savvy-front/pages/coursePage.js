@@ -4,7 +4,12 @@ import { useUser } from "../components/User";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["coursePage", "nav", "auth"])),
+    ...(await serverSideTranslations(locale, [
+      "coursePage",
+      "nav",
+      "auth",
+      "create",
+    ])),
   },
 });
 

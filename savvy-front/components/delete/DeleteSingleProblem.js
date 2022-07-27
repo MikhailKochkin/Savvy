@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { useTranslation } from "next-i18next";
 
 const DELETE_PROBLEM_MUTATION = gql`
   mutation DELETE_PROBLEM_MUTATION($id: String!) {
@@ -22,6 +23,8 @@ const useStyles = makeStyles({
 });
 
 const DeleteSingleProblem = (props) => {
+  const { t } = useTranslation("lesson");
+
   // const update = (cache, payload) => {
   //   // manually update the cache on the client, so it matches the server
   //   // 1. Read the cache for the items we want
@@ -59,14 +62,14 @@ const DeleteSingleProblem = (props) => {
           className={classes.button}
           color="secondary"
           onClick={() => {
-            if (confirm("Вы точно хотите удалить эту задачу?")) {
+            if (confirm("Are you sure")) {
               deleteProblem().catch((error) => {
                 alert(error.message);
               });
             }
           }}
         >
-          {loading ? "Удаляем..." : "Удалить"}
+          {loading ? t("deleting") : t("delete")}
         </Button>
       )}
     </Mutation>

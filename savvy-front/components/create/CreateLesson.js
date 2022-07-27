@@ -68,7 +68,7 @@ export default class CreateLesson extends Component {
                 // selected={this.state.page === "lesson"}
                 // onClick={(e) => this.setState({ page: "lesson" })}
                 >
-                  Новый урок
+                  New Lesson
                 </Span>{" "}
               </Title>
               <CreateLes id={id} />

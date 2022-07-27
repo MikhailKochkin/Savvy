@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
+import { useTranslation } from "next-i18next";
 
 const CREATE_LESSON_MUTATION = gql`
   mutation CREATE_LESSON_MUTATION(
@@ -147,6 +148,8 @@ const LessonElement = (props) => {
     return setDescription(dataFromChild);
   };
 
+  const { t } = useTranslation("create");
+
   const [createLesson, { data, loading, error }] = useMutation(
     CREATE_LESSON_MUTATION
   );
@@ -165,7 +168,7 @@ const LessonElement = (props) => {
           type="text"
           id="name"
           name="name"
-          placeholder="Название урока"
+          placeholder={t("Lesson_Name")}
           onChange={(e) => setName(e.target.value)}
         />
         <Frame>
@@ -174,7 +177,7 @@ const LessonElement = (props) => {
             name="description"
             getEditorText={myCallback}
             value={description}
-            placeholder="Описание урока"
+            placeholder={t("Lesson_Description")}
           />
         </Frame>
         <Buttons>
@@ -194,7 +197,7 @@ const LessonElement = (props) => {
               setSaved(true);
             }}
           >
-            {loading ? "Сохраняем.." : saved ? "Готово" : "Сохранить"}
+            {loading ? t("Saving") : saved ? t("Done") : t("Save")}
           </ButtonTwo>
           <ButtonOne
             onClick={(e) => {
@@ -202,7 +205,7 @@ const LessonElement = (props) => {
               props.addLesson(lesson.id, number);
             }}
           >
-            Добавить урок
+            {t("Add_Lesson")}
           </ButtonOne>
           <ButtonOne
             onClick={(e) => {
@@ -210,7 +213,7 @@ const LessonElement = (props) => {
               props.removeLesson(lesson.id, number);
             }}
           >
-            Убрать урок
+            {t("Remove_Lesson")}
           </ButtonOne>
         </Buttons>
       </Fieldset>

@@ -3,6 +3,7 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
+import { useTranslation } from "next-i18next";
 
 const DELETE_SHOT_MUTATION = gql`
   mutation DELETE_SHOT_MUTATION($id: String!) {
@@ -32,6 +33,8 @@ const Button = styled.button`
 `;
 
 class DeleteSingleQuiz extends Component {
+  // const { t } = useTranslation("lesson");
+
   render() {
     const { shotID, lessonID } = this.props;
     return (

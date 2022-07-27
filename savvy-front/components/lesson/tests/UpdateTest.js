@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_TEST_MUTATION = gql`
   mutation UPDATE_TEST_MUTATION(
@@ -175,6 +177,8 @@ const UpdateTest = (props) => {
   const [ifWrong, setIfWrong] = useState(props.ifWrong);
   const [type, setType] = useState(props.type);
 
+  const { t } = useTranslation("lesson");
+
   const handleArray = (val, name, i) => {
     let arr = [...answers];
     arr[i - 1] = val;
@@ -208,21 +212,21 @@ const UpdateTest = (props) => {
   const { testID, mes, lessonID } = props;
   return (
     <Styles>
-      <label for="types">Тип задания</label>
+      <label for="types">{t("type")}</label>
       <select
         name="types"
         id="types"
         defaultValue={type}
         onChange={(e) => setType(e.target.value)}
       >
-        <option value="TEST">Тест</option>
-        <option value="FORM">Форма</option>
+        <option value="TEST">{t("test")}</option>
+        <option value="FORM">{t("form")}</option>
       </select>
       <Comment>
         <DynamicLoadedEditor
           id="question"
           name="question"
-          placeholder="Вопрос"
+          placeholder={t("question")}
           value={question}
           getEditorText={setIf}
         />
@@ -232,7 +236,7 @@ const UpdateTest = (props) => {
           value={complexity}
           onChange={(e) => setComplexity(parseInt(e.target.value))}
         >
-          <option value={0}>Выберите сложность</option>
+          <option value={0}>{t("difficulty")}</option>
           <option value={1}>1</option>
           <option value={2}>2</option>
           <option value={3}>3</option>
@@ -257,8 +261,8 @@ const UpdateTest = (props) => {
                 defaultValue={answer[1]}
                 onChange={(e) => handleCorrect(e.target.value, i)}
               >
-                <option value={true}>Правильно!</option>
-                <option value={false}>Не совсем...</option>
+                <option value={true}>{t("correct")}!</option>
+                <option value={false}>{t("wrong")}...</option>
               </select>
               <div className="comment">
                 <DynamicLoadedEditor
@@ -277,7 +281,7 @@ const UpdateTest = (props) => {
           id="ifRight"
           name="ifRight"
           value={ifRight}
-          placeholder="Фидбэк по правильному ответу"
+          placeholder={t("feedback_positive")}
           getEditorText={setIf}
         />
       </Comment>
@@ -286,7 +290,7 @@ const UpdateTest = (props) => {
           id="ifWrong"
           name="ifWrong"
           value={ifWrong}
-          placeholder="Фидбэк по неправильному ответу"
+          placeholder={t("feedback_negative")}
           getEditorText={setIf}
         />
       </Comment>
@@ -321,7 +325,7 @@ const UpdateTest = (props) => {
               props.passUpdated();
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? t("saving") : t("save")}
           </ButtonTwo>
         )}
       </Mutation>

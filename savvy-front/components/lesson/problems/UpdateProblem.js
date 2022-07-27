@@ -4,6 +4,8 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import ProblemBuilder from "../../create/ProblemBuilder";
 
@@ -137,6 +139,9 @@ const UpdateProblem = (props) => {
     props.complexity ? props.complexity : 0
   );
   const getText = (d) => setText(d);
+
+  const { t } = useTranslation("lesson");
+
   const handleChange = (type, id) => {
     setNodeID(id);
     setNodeType(type);
@@ -210,7 +215,7 @@ const UpdateProblem = (props) => {
                 props.passUpdated();
               }}
             >
-              {loading ? "Сохраняем..." : "Сохранить"}
+              {loading ? t("saving") : t("save")}
             </ButtonTwo>
           )}
         </Mutation>

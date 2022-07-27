@@ -3,9 +3,13 @@ import TestBlock from "../lesson/problems/TestBlock";
 import * as _ from "lodash";
 import { arrayOf, objectOf } from "prop-types";
 import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "next-i18next";
+
 import NewBlock from "./blocks/NewBlock";
 
 const NewProblemBuilder = (props) => {
+  const { t } = useTranslation("lesson");
+
   const [values, setValues] = useState([
     {
       id: "temp",

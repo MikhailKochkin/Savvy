@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";
 
 const UPDATE_CONSTRUCTION_MUTATION = gql`
@@ -225,6 +227,8 @@ const UpdateNewConstructor = (props) => {
   const [columnsNum, setColumns] = useState(construction.columnsNum);
   const [elements, setElements] = useState(construction.elements.elements);
 
+  const { t } = useTranslation("lesson");
+
   const myCallback2 = (dataFromChild, name) => {
     if (name == "hint") {
       setHint(dataFromChild);
@@ -258,7 +262,6 @@ const UpdateNewConstructor = (props) => {
     }
   );
 
-  let t;
   const { lessonId } = props;
   return (
     <Center>
@@ -359,7 +362,7 @@ const UpdateNewConstructor = (props) => {
           props.passUpdated();
         }}
       >
-        {loading ? "Сохраняем..." : "Сохранить"}
+        {loading ? t("saving") : t("save")}
       </ButtonTwo>
     </Center>
   );

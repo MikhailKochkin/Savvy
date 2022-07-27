@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
+import { useTranslation } from "next-i18next";
 
 const CREATE_TEST_PRACTICE = gql`
   mutation createTestPractice(
@@ -58,6 +59,7 @@ const CreateTestBlock = (props) => {
 
   const tests = props.lesson.newTests;
   const quizes = props.lesson.quizes;
+  const { t } = useTranslation("lesson");
 
   const addTest = (e) => {
     if (!tasks.includes(e.target.value)) {
@@ -130,7 +132,7 @@ const CreateTestBlock = (props) => {
             props.getResult(res);
           }}
         >
-          {loading ? "Сохраняем..." : "Сохранить"}
+          {loading ? t("saving") : t("save")}
         </ButtonTwo>
       </form>
     </Styles>

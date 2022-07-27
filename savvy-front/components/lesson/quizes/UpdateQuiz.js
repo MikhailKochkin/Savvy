@@ -3,6 +3,8 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_QUIZ_MUTATION = gql`
@@ -161,6 +163,8 @@ const UpdateQuiz = (props) => {
   const [falseVal, setFalseVal] = useState(
     props.next && props.next.false ? props.next.false : ""
   );
+  const { t } = useTranslation("lesson");
+
   const { lessonID, quizId } = props;
   return (
     <Container>
@@ -250,7 +254,7 @@ const UpdateQuiz = (props) => {
               props.passUpdated();
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? t("saving") : t("save")}
           </Button>
         )}
       </Mutation>

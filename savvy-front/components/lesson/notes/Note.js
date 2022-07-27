@@ -3,6 +3,8 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+
 import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
 import Chat from "../questions/Chat";
@@ -299,6 +301,8 @@ const Note = (props) => {
   const [isRevealed, setIsRevealed] = useState(!props.note.isSecret);
   const [shiver, setShiver] = useState(false);
 
+  const { t } = useTranslation("lesson");
+
   useEffect(() => {
     let el = document.getElementById("wide");
     if (el && props.story) {
@@ -375,7 +379,7 @@ const Note = (props) => {
       <Buttons>
         {!exam && !story && (
           <StyledButton onClick={(e) => setUpdate(!update)}>
-            {!update ? "Изменить" : "Назад"}
+            {!update ? t("update") : t("back")}
           </StyledButton>
         )}
         {me && !props.story && !props.exam && (
@@ -412,7 +416,7 @@ const Note = (props) => {
                           }
                         }}
                       >
-                        Открыть материал
+                        {t("toOpen")}
                       </div>
                     </div>
                   </Secret>

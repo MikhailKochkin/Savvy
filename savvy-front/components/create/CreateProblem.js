@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
+
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -114,6 +116,7 @@ const CreateProblem = (props) => {
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
+  const { t } = useTranslation("lesson");
 
   const getSteps = (val) => {
     setSteps([...val]);
@@ -174,7 +177,7 @@ const CreateProblem = (props) => {
                 props.getResult(res);
               }}
             >
-              {loading ? "Сохраняем..." : "Сохранить"}
+              {loading ? t("saving") : t("save")}
             </ButtonTwo>
             {error ? error : null}
           </>

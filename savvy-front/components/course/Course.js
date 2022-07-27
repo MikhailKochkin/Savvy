@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { Mutation, Query } from "@apollo/client/react/components";
+import { useTranslation } from "next-i18next";
 
 const SINGLE_COURSE_VISIT_QUERY = gql`
   query SINGLE_COURSE_VISIT_QUERY($coursePageId: String!, $student: String!) {
@@ -149,227 +150,209 @@ const Details = styled.div`
   margin-left: ${(props) => (props.authors ? "0" : "10px")};
 `;
 
-export default class Course extends Component {
-  state = {
-    revealApplication: false,
-    isOpen: false,
-    auth: "signin",
-  };
-  static propTypes = {
-    coursePage: PropTypes.object.isRequired,
-  };
+const Course = (props) => {
+  // static propTypes = {
+  //   coursePage: PropTypes.object.isRequired,
+  // };
 
-  toggleModal = (e) => {
-    this.setState((prevState) => ({ isOpen: !prevState.isOpen }));
-  };
+  const { t } = useTranslation("course");
 
-  changeState = (dataFromChild) => {
-    this.setState({
-      auth: dataFromChild,
-    });
-  };
-
-  render() {
-    const { coursePage, id, me } = this.props;
-    let forums = [];
-    let ratings = [];
-    let average;
-    if (coursePage && coursePage.lessons) {
-      coursePage.lessons.map((l) =>
-        forums.push(l.forum ? l.forum.rating : null)
-      );
-      forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
-      forums.map((f) => f.map((r) => ratings.push(r.rating)));
-      average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
-        2
-      );
-    }
-    return (
-      <CaseCard>
-        <img src={coursePage.image} />
-        <Box>
-          <div className="content">
-            <div>
-              <div className="title">{coursePage.title}</div>
-              <div className="author">
-                {coursePage.authors.length == 0 && coursePage.user.image && (
-                  <img src={coursePage.user.image} />
+  const { coursePage, id, me } = props;
+  let forums = [];
+  let ratings = [];
+  let average;
+  if (coursePage && coursePage.lessons) {
+    coursePage.lessons.map((l) => forums.push(l.forum ? l.forum.rating : null));
+    forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
+    forums.map((f) => f.map((r) => ratings.push(r.rating)));
+    average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
+  }
+  return (
+    <CaseCard>
+      <img src={coursePage.image} />
+      <Box>
+        <div className="content">
+          <div>
+            <div className="title">{coursePage.title}</div>
+            <div className="author">
+              {coursePage.authors.length == 0 && coursePage.user.image && (
+                <img src={coursePage.user.image} />
+              )}
+              <Details authors={coursePage.authors.length > 0}>
+                {coursePage.authors.length > 0 ? (
+                  <div className="name">
+                    {coursePage.authors.map((a, i) => (
+                      <span key={i + "dfdg"}>
+                        {a.name[0].toUpperCase()}. {a.surname}
+                        {i + 1 === coursePage.authors.length ? " " : ", "}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="name">
+                    {coursePage.user.name} {coursePage.user.surname}
+                  </div>
                 )}
-                <Details authors={coursePage.authors.length > 0}>
+                <div className="company">
                   {coursePage.authors.length > 0 ? (
-                    <div className="name">
+                    <>
                       {coursePage.authors.map((a, i) => (
-                        <span key={i + "dfdg"}>
-                          {a.name[0].toUpperCase()}. {a.surname}
+                        <span key={i + "sdfgv"}>
+                          {a.company.name}
                           {i + 1 === coursePage.authors.length ? " " : ", "}
                         </span>
                       ))}
-                    </div>
+                    </>
                   ) : (
-                    <div className="name">
-                      {coursePage.user.name} {coursePage.user.surname}
-                    </div>
+                    <>
+                      {coursePage.user.company
+                        ? coursePage.user.company.name
+                        : "BeSavvy"}
+                    </>
                   )}
-                  <div className="company">
-                    {coursePage.authors.length > 0 ? (
-                      <>
-                        {coursePage.authors.map((a, i) => (
-                          <span key={i + "sdfgv"}>
-                            {a.company.name}
-                            {i + 1 === coursePage.authors.length ? " " : ", "}
-                          </span>
-                        ))}
-                      </>
-                    ) : (
-                      <>
-                        {coursePage.user.company
-                          ? coursePage.user.company.name
-                          : "BeSavvy"}
-                      </>
-                    )}
-                  </div>
-                </Details>
-              </div>
-              {average >= 0 ? (
-                <div className="rating">
-                  <div>Оценка курса: </div>
-                  <div className="num">{average}</div>
                 </div>
-              ) : null}
+              </Details>
             </div>
-            <div>
-              {!me && (
-                // <SignUpbutton onClick={this.toggleModal}>Войти</SignUpbutton>
-                <Link
-                  href={{
-                    pathname: "/course",
-                    query: { id },
-                  }}
-                >
-                  <a>
-                    <button
-                      onClick={() => {
-                        console.log(0);
-                      }}
-                    >
-                      Перейти
-                    </button>
-                  </a>
-                </Link>
-              )}
-              {me && (
-                <Query
-                  query={SINGLE_COURSE_VISIT_QUERY}
-                  variables={{
-                    coursePageId: id,
-                    student: me.id,
-                  }}
-                >
-                  {({ data, error, loading }) => {
-                    if (loading) return <p></p>;
-                    if (error) return <p>Error: {error.message}</p>;
-                    return (
-                      <>
-                        {data.courseVisits.length === 0 && (
-                          <Mutation
-                            mutation={CREATE_COURSE_VISIT_MUTATION}
-                            variables={{
-                              coursePageId: id,
-                              visitsNumber: 1,
-                              studentId: me.id,
-                            }}
-                            refetchQueries={() => [
-                              {
-                                query: SINGLE_COURSE_VISIT_QUERY,
-                                variables: {
-                                  coursePageId: id,
-                                  student: me.id,
-                                },
-                              },
-                            ]}
-                          >
-                            {(createCourseVisit, { loading, error }) => {
-                              return (
-                                <>
-                                  <>
-                                    {me && coursePage && (
-                                      <Link
-                                        href={{
-                                          pathname: "/course",
-                                          query: { id },
-                                        }}
-                                      >
-                                        <a>
-                                          <button
-                                            onClick={() => {
-                                              console.log(1);
-                                              createCourseVisit();
-                                            }}
-                                          >
-                                            Перейти
-                                          </button>
-                                        </a>
-                                      </Link>
-                                    )}
-                                  </>
-                                </>
-                              );
-                            }}
-                          </Mutation>
-                        )}
-                        {data.courseVisits.length > 0 && (
-                          <Mutation
-                            mutation={UPDATE_COURSE_VISIT_MUTATION}
-                            variables={{
-                              id: data.courseVisits[0].id,
-                              visitsNumber:
-                                data.courseVisits[0].visitsNumber + 1,
-                            }}
-                            refetchQueries={() => [
-                              {
-                                query: SINGLE_COURSE_VISIT_QUERY,
-                                variables: {
-                                  coursePageId: id,
-                                  student: me.id,
-                                },
-                              },
-                            ]}
-                          >
-                            {(updateCourseVisit, { loading, error }) => {
-                              return (
-                                me &&
-                                coursePage && (
-                                  <Link
-                                    href={{
-                                      pathname: "/course",
-                                      query: { id },
-                                    }}
-                                  >
-                                    <a>
-                                      <button
-                                        onClick={() => {
-                                          console.log(2);
-                                          updateCourseVisit();
-                                        }}
-                                      >
-                                        Перейти
-                                      </button>
-                                    </a>
-                                  </Link>
-                                )
-                              );
-                            }}
-                          </Mutation>
-                        )}
-                      </>
-                    );
-                  }}
-                </Query>
-              )}
-            </div>
+            {average >= 0 ? (
+              <div className="rating">
+                <div> {t("rating")}:</div>
+                <div className="num">{average}</div>
+              </div>
+            ) : null}
           </div>
-        </Box>
-      </CaseCard>
-    );
-  }
-}
+          <div>
+            {!me && (
+              // <SignUpbutton onClick={this.toggleModal}>Войти</SignUpbutton>
+              <Link
+                href={{
+                  pathname: "/course",
+                  query: { id },
+                }}
+              >
+                <a>
+                  <button
+                    onClick={() => {
+                      console.log(0);
+                    }}
+                  >
+                    {t("open")}
+                  </button>
+                </a>
+              </Link>
+            )}
+            {me && (
+              <Query
+                query={SINGLE_COURSE_VISIT_QUERY}
+                variables={{
+                  coursePageId: id,
+                  student: me.id,
+                }}
+              >
+                {({ data, error, loading }) => {
+                  if (loading) return <p></p>;
+                  if (error) return <p>Error: {error.message}</p>;
+                  return (
+                    <>
+                      {data.courseVisits.length === 0 && (
+                        <Mutation
+                          mutation={CREATE_COURSE_VISIT_MUTATION}
+                          variables={{
+                            coursePageId: id,
+                            visitsNumber: 1,
+                            studentId: me.id,
+                          }}
+                          refetchQueries={() => [
+                            {
+                              query: SINGLE_COURSE_VISIT_QUERY,
+                              variables: {
+                                coursePageId: id,
+                                student: me.id,
+                              },
+                            },
+                          ]}
+                        >
+                          {(createCourseVisit, { loading, error }) => {
+                            return (
+                              <>
+                                <>
+                                  {me && coursePage && (
+                                    <Link
+                                      href={{
+                                        pathname: "/course",
+                                        query: { id },
+                                      }}
+                                    >
+                                      <a>
+                                        <button
+                                          onClick={() => {
+                                            console.log(1);
+                                            createCourseVisit();
+                                          }}
+                                        >
+                                          {t("open")}
+                                        </button>
+                                      </a>
+                                    </Link>
+                                  )}
+                                </>
+                              </>
+                            );
+                          }}
+                        </Mutation>
+                      )}
+                      {data.courseVisits.length > 0 && (
+                        <Mutation
+                          mutation={UPDATE_COURSE_VISIT_MUTATION}
+                          variables={{
+                            id: data.courseVisits[0].id,
+                            visitsNumber: data.courseVisits[0].visitsNumber + 1,
+                          }}
+                          refetchQueries={() => [
+                            {
+                              query: SINGLE_COURSE_VISIT_QUERY,
+                              variables: {
+                                coursePageId: id,
+                                student: me.id,
+                              },
+                            },
+                          ]}
+                        >
+                          {(updateCourseVisit, { loading, error }) => {
+                            return (
+                              me &&
+                              coursePage && (
+                                <Link
+                                  href={{
+                                    pathname: "/course",
+                                    query: { id },
+                                  }}
+                                >
+                                  <a>
+                                    <button
+                                      onClick={() => {
+                                        console.log(2);
+                                        updateCourseVisit();
+                                      }}
+                                    >
+                                      {t("open")}
+                                    </button>
+                                  </a>
+                                </Link>
+                              )
+                            );
+                          }}
+                        </Mutation>
+                      )}
+                    </>
+                  );
+                }}
+              </Query>
+            )}
+          </div>
+        </div>
+      </Box>
+    </CaseCard>
+  );
+};
+
+export default Course;

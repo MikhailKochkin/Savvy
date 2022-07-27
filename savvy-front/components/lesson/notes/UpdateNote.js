@@ -4,6 +4,7 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { useTranslation } from "next-i18next";
 
 const UPDATE_NOTE_MUTATION = gql`
   mutation UPDATE_NOTE_MUTATION(
@@ -127,6 +128,7 @@ const UpdateNote = (props) => {
   );
 
   const getText = (d) => setText(d);
+  const { t } = useTranslation("lesson");
 
   const { id, lessonID } = props;
   return (
@@ -161,7 +163,7 @@ const UpdateNote = (props) => {
           </a>
         </button> */}
         <button onClick={(e) => setShow(!show)}>
-          {show ? "Закрыть" : "Открыть редактор"}
+          {show ? t("close") : t("open")}
         </button>
         {show && <DynamicLoadedEditor getEditorText={getText} value={text} />}
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
@@ -191,7 +193,7 @@ const UpdateNote = (props) => {
                 props.passUpdated();
               }}
             >
-              {loading ? "Сохраняем..." : "Сохранить"}
+              {loading ? t("saving") : t("save")}
             </ButtonTwo>
           )}
         </Mutation>

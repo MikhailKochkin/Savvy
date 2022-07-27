@@ -5,6 +5,8 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Router from "next/router";
 import _ from "lodash";
+import { useTranslation } from "next-i18next";
+
 import Error from "../ErrorMessage";
 import CreateLessons from "./CreateLessons";
 import { CURRENT_USER_QUERY } from "../User";
@@ -231,6 +233,8 @@ const CreateCourse = (props) => {
   const [image, setImage] = useState("");
   const [courseId, setCourseId] = useState();
 
+  const { t } = useTranslation("create");
+
   const myCallback = (dataFromChild, name) => {
     let st = name;
     if (st === "audience") {
@@ -281,15 +285,15 @@ const CreateCourse = (props) => {
           {(createCoursePage, { loading, error }) => (
             <Form>
               <Error error={error} />
-              <Title>Давайте разработаем ваш курс вместе</Title>
-              <Title2>Шаг 1.</Title2>
+              <Title>{t("Develop_Together")}</Title>
+              <Title2>{t("Step")} 1.</Title2>
               <Fieldset>
                 <input
                   className="input"
                   type="text"
                   id="title"
                   name="title"
-                  placeholder="Название курса"
+                  placeholder={t("Course_Name")}
                   onChange={(e) => setTitle(e.target.value)}
                 />
                 <Frame>
@@ -298,7 +302,7 @@ const CreateCourse = (props) => {
                     name="description"
                     getEditorText={myCallback}
                     value={description}
-                    placeholder="Его краткое описание: о чем будет ваш курс?"
+                    placeholder={t("Description")}
                   />
                 </Frame>
                 <Frame>
@@ -307,7 +311,7 @@ const CreateCourse = (props) => {
                     name="result"
                     getEditorText={myCallback}
                     value={result}
-                    placeholder="Чему ваши студенты научатся по итогам курса?"
+                    placeholder={t("Goal")}
                   />
                 </Frame>
                 <Frame>
@@ -316,7 +320,7 @@ const CreateCourse = (props) => {
                     name="audience"
                     getEditorText={myCallback}
                     value={audience}
-                    placeholder="Для кого вы делаете курс? Кто ваша целевая аудитория?"
+                    placeholder={t("TA")}
                   />
                 </Frame>
 
@@ -355,31 +359,23 @@ const CreateCourse = (props) => {
                     }}
                   >
                     {loading
-                      ? "Создаем.."
+                      ? t("Creating")
                       : courseId
-                      ? "Готово"
-                      : "Создать курс"}
+                      ? t("Done")
+                      : t("Create")}
                   </ButtonTwo>
                 </Buttons>
               </Fieldset>
               {courseId && (
                 <>
-                  <Title2>Шаг 2.</Title2>
+                  <Title2>{t("Step")} 2.</Title2>
                   <Comment>
-                    <p>
-                      Создайте программу своего курса. Мы дадим рекомендации по
-                      созданию программы. Вы можете следовать им или построить
-                      программу полностью самостоятельно.{" "}
-                    </p>
-                    <p>
-                      Не беспокойтесь, если вы позже захотите внести изменения в
-                      программу или добавить новые уроки, это можно будет
-                      сделать в любой момент.
-                    </p>
+                    <p>{t("Design_Syllabus")}</p>
+                    <p>{t("No_Worry")}</p>
                   </Comment>
                   <CreateLessons courseId={courseId} />
                   <Row>
-                    <div className="comment">Закончили программу?</div>
+                    <div className="comment">{t("Finished?")}</div>
                     <ButtonOne
                       onClick={(e) => {
                         e.preventDefault();
@@ -389,7 +385,7 @@ const CreateCourse = (props) => {
                         });
                       }}
                     >
-                      На страницу курса
+                      {t("To_CoursePage")}
                     </ButtonOne>
                   </Row>
                 </>

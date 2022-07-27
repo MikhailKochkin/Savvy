@@ -5,6 +5,7 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Option from "../Option";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
+import { useTranslation } from "next-i18next";
 
 import {
   BiCommentAdd,
@@ -180,6 +181,8 @@ const UpdateTextEditor = (props) => {
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
+  const { t } = useTranslation("lesson");
+
   const getText = (d) => {
     setText(d);
   };
@@ -294,7 +297,7 @@ const UpdateTextEditor = (props) => {
                 props.passUpdated();
               }}
             >
-              {loading ? "Сохраняем..." : "Сохранить"}
+              {loading ? t("saving") : t("save")}
             </Button>
           )}
         </Mutation>

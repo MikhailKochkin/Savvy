@@ -1,9 +1,11 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
+import { useTranslation } from "next-i18next";
+
 import AreYouATeacher from "../auth/AreYouATeacher";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import StoryUpdate from "./StoryUpdate";
@@ -136,8 +138,52 @@ const Row = styled.div`
   flex-direction: row;
   margin-bottom: 15px;
   .description {
-    width: 40%;
+    width: 25%;
     line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .input {
+    width: 75%;
+    .explainer {
+      font-size: 1.2rem;
+      color: #000000;
+      margin-top: 5px;
+    }
+
+    input {
+      padding: 10px;
+      width: 100%;
+      outline: 0;
+      border: 1px solid #ccc;
+      border-radius: 3.5px;
+      font-size: 1.4rem;
+      font-family: Montserrat;
+    }
+    select {
+      width: 100%;
+      font-size: 1.4rem;
+      outline: none;
+      font-family: Montserrat;
+      line-height: 1.3;
+      padding: 10px;
+      max-width: 100%;
+      box-sizing: border-box;
+      margin: 0;
+      border: 1px solid #c5c5c5;
+      border-radius: 4px;
+      background: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"),
+        linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
+      background-repeat: no-repeat, repeat;
+      background-position: right 0.7em top 50%, 0 0;
+      background-size: 0.65em auto, 100%;
+    }
   }
 `;
 
@@ -177,202 +223,227 @@ const DynamicHoverEditor = dynamic(import("../editor/HoverEditor"), {
   ssr: false,
 });
 
-export default class UpdateLesson extends Component {
-  state = {
-    challenge_num: this.props.lesson.challenge_num,
-    type: this.props.lesson.type,
-    assignment: this.props.lesson.assignment,
-    text: this.props.lesson.text,
-  };
-  handleName = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-  handleBoolean = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value === "true" });
-  };
-  handleNumber = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    const val = Math.round(value);
-    this.setState({ [name]: val });
+const UpdateLesson = (props) => {
+  const [name, setName] = useState(props.lesson.name);
+  const [number, setNumber] = useState(props.lesson.number);
+  const [open, setOpen] = useState(props.lesson.open);
+  const [challenge_num, setChallenge_num] = useState(
+    props.lesson.challenge_num
+  );
+  const [type, setType] = useState(props.lesson.type);
+  const [assignment, setAssignment] = useState(props.lesson.assignment);
+  const [text, setText] = useState(props.lesson.text);
+  const [description, setDescription] = useState(props.lesson.description);
+
+  const { t } = useTranslation("lesson");
+
+  // handleName = (e) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   this.setState({ [name]: value });
+  // };
+  // handleBoolean = (e) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   this.setState({ [name]: value === "true" });
+  // };
+  // handleNumber = (e) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   const val = Math.round(value);
+  //   this.setState({ [name]: val });
+  // };
+
+  const myCallback = (dataFromChild) => {
+    setText(dataFromChild);
   };
 
-  myCallback = (dataFromChild) => {
-    this.setState({
-      text: dataFromChild,
-    });
+  const myCallback2 = (dataFromChild, name) => {
+    setDescription(dataFromChild);
   };
 
-  myCallback2 = (dataFromChild, name) => {
-    let st = name;
-    this.setState({
-      [st]: dataFromChild,
-    });
-  };
-
-  render() {
-    const { lessonID, description, lesson, change } = this.props;
-    return (
-      <Styles>
-        <Container>
-          <Title>Настройки урока</Title>
-          <Row>
-            <div className="description">Название</div>
+  const { lessonID, lesson, change } = props;
+  return (
+    <Styles>
+      <Container>
+        <Title>{t("settings")}</Title>
+        <Row>
+          <div className="description">{t("name")}</div>
+          <div className="input">
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Название урока"
-              defaultValue={lesson.name}
-              onChange={this.handleName}
+              // placeholder="Название урока"
+              defaultValue={name}
+              onChange={(e) => setName(e.target.value)}
             />
-          </Row>
-          <Row>
-            <div className="description">Номер</div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">{t("number")}</div>
+          <div className="input">
             <input
               type="number"
               id="number"
               name="number"
-              placeholder="Номер урока"
-              defaultValue={lesson.number}
-              onChange={this.handleNumber}
+              defaultValue={number}
+              onChange={(e) => setNumber(parseInt(e.target.value))}
             />
-          </Row>
-          <Row>
-            <div className="description">Урок</div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">{t("lesson")}</div>
+          <div className="input">
             <select
               name="open"
-              defaultValue={lesson.open === true}
-              onChange={this.handleBoolean}
+              defaultValue={open}
+              onChange={(e) => setOpen(e.target.value)}
             >
-              <option value={true}>Открытый</option>
-              <option value={false}>Закрытый</option>
+              <option value={true}>{t("open")}</option>
+              <option value={false}>{t("closed")}</option>
             </select>
-          </Row>
-          <Row>
-            <div className="description">Режим урока</div>
+            <div className="explainer">{t("open_lesson")}</div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">{t("lesson_status")}</div>
+          <div className="input">
             <select
               name="type"
               defaultValue={lesson.type}
-              onChange={this.handleName}
+              onChange={(e) => setType(e.target.value)}
             >
-              <option value="REGULAR">Разработка</option>
-              <option value="STORY">История</option>
-              <option value="CHALLENGE">Испытание</option>
+              <option value="REGULAR">{t("regular")}</option>
+              <option value="STORY">{t("story")}</option>
+              <option value="CHALLENGE">{t("challenge")}</option>
             </select>
-          </Row>
-          <Row>
-            <div className="description">Практическое задание</div>
+            <div className="explainer">{t("status_explainer")}</div>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">{t("assignment")}</div>
+          <div className="input">
             <select
               name="assignment"
-              defaultValue={lesson.assignment == true}
-              onChange={this.handleBoolean}
+              defaultValue={assignment}
+              onChange={(e) => setAssignment(e.target.value)}
             >
-              <option value={true}>Да</option>
-              <option value={false}>Нет</option>
+              <option value={true}>{t("yes")}</option>
+              <option value={false}>{t("no")}</option>
             </select>
-          </Row>
+          </div>
+        </Row>
+        {/* <Row>
+          <div className="description">Игра в уроке</div>
+                    <div className="input">
+
+          <select
+            name="hasSecret"
+            defaultValue={lesson.hasSecret === true}
+            // onChange={this.handleBoolean}
+          >
+            <option value={true}>Да</option>
+            <option value={false}>Нет</option>
+          </select>
+          </div>
+        </Row>
+        <Row>
+          <div className="description">Очки в игре</div>
+          <input
+            type="number"
+            id="totalPoints"
+            name="totalPoints"
+            placeholder="# для открытия секретов"
+            defaultValue={lesson.totalPoints}
+            // onChange={this.handleNumber}
+          />
+        </Row> */}
+        {type === "CHALLENGE" && (
           <Row>
-            <div className="description">Игра в уроке</div>
-            <select
-              name="hasSecret"
-              defaultValue={lesson.hasSecret === true}
-              onChange={this.handleBoolean}
-            >
-              <option value={true}>Да</option>
-              <option value={false}>Нет</option>
-            </select>
-          </Row>
-          <Row>
-            <div className="description">Очки в игре</div>
-            <input
-              type="number"
-              id="totalPoints"
-              name="totalPoints"
-              placeholder="# для открытия секретов"
-              defaultValue={lesson.totalPoints}
-              onChange={this.handleNumber}
-            />
-          </Row>
-          {this.state.type === "CHALLENGE" && (
-            <Row>
-              <div className="description"># заданий в испытании</div>
+            <div className="description">{t("num_challenge")}</div>
+            <div className="input">
               <input
                 type="number"
                 id="challenge_num"
                 name="challenge_num"
-                placeholder="Количество заданий"
-                defaultValue={this.state.challenge_num}
-                onChange={this.handleNumber}
+                // placeholder="Количество заданий"
+                defaultValue={challenge_num}
+                onChange={(e) => setChallenge_num(e.target.value)}
               />
-            </Row>
-          )}
-          <Row>
-            <div className="description">Описание урока</div>
+            </div>
+          </Row>
+        )}
+        <Row>
+          <div className="description">{t("description")}</div>
+          <div className="input">
             <Frame>
               <DynamicHoverEditor
                 index={1}
                 name="description"
-                getEditorText={this.myCallback2}
-                placeholder="Описание"
+                getEditorText={myCallback2}
                 value={description}
               />
             </Frame>
-          </Row>
-          {/* <Frame>
+          </div>
+        </Row>
+        {/* <Frame>
             <DynamicHoverEditor
               index={1}
               name="change"
-              getEditorText={this.myCallback2}
+              getEditorText={myCallback2}
               placeholder="Как измениться ученик после прохождения урока"
               value={change}
             />
           </Frame> */}
-          <Row>
-            <div className="description">Комментарии</div>
+        <Row>
+          <div className="description">{t("comments")}</div>
+          <div className="input">
             <Frame>
-              <DynamicHoverEditor
-                value={this.state.text}
-                getEditorText={this.myCallback}
-                previousText={lesson.text}
-              />
+              <DynamicHoverEditor value={text} getEditorText={myCallback} />
             </Frame>
-          </Row>
-          <Mutation
-            mutation={UPDATE_LESSON_MUTATION}
-            variables={{
-              id: lessonID,
-              ...this.state,
-            }}
-            refetchQueries={() => [
-              {
-                query: SINGLE_LESSON_QUERY,
-                variables: { id: lessonID },
-              },
-            ]}
-          >
-            {(updateLesson, { loading, error }) => (
-              <ButtonTwo
-                onClick={async (e) => {
-                  // Stop the form from submitting
-                  e.preventDefault();
-                  // call the mutation
-                  const res = await updateLesson();
-                  // change the page to the single case page
-                }}
-              >
-                {loading ? "Сохраняем..." : "Сохранить"}
-              </ButtonTwo>
-            )}
-          </Mutation>
-        </Container>
-        {/* <StoryUpdate lesson={lesson} />
-        <ShortStoryUpdate lesson={lesson} /> */}
-      </Styles>
-    );
-  }
-}
+          </div>
+        </Row>
+        <Mutation
+          mutation={UPDATE_LESSON_MUTATION}
+          variables={{
+            id: lessonID,
+            number,
+            name,
+            text,
+            description,
+            type,
+            change,
+            assignment,
+            challenge_num,
+            open,
+            // hasSecret,
+            // totalPoints
+          }}
+          refetchQueries={() => [
+            {
+              query: SINGLE_LESSON_QUERY,
+              variables: { id: lessonID },
+            },
+          ]}
+        >
+          {(updateLesson, { loading, error }) => (
+            <ButtonTwo
+              onClick={async (e) => {
+                // Stop the form from submitting
+                e.preventDefault();
+                // call the mutation
+                const res = await updateLesson();
+                // change the page to the single case page
+              }}
+            >
+              {loading ? t("saving") : t("save")}
+            </ButtonTwo>
+          )}
+        </Mutation>
+      </Container>
+    </Styles>
+  );
+};
+
+export default UpdateLesson;
