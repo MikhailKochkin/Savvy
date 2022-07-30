@@ -167,6 +167,7 @@ const Course = (props) => {
     forums.map((f) => f.map((r) => ratings.push(r.rating)));
     average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
   }
+  console.log("average", average);
   return (
     <CaseCard>
       <img src={coursePage.image} />
@@ -193,7 +194,7 @@ const Course = (props) => {
                     {coursePage.user.name} {coursePage.user.surname}
                   </div>
                 )}
-                <div className="company">
+                {/* <div className="company">
                   {coursePage.authors.length > 0 ? (
                     <>
                       {coursePage.authors.map((a, i) => (
@@ -210,15 +211,15 @@ const Course = (props) => {
                         : "BeSavvy"}
                     </>
                   )}
-                </div>
+                </div> */}
               </Details>
             </div>
-            {average >= 0 ? (
+            {/* {average >= 0 ? (
               <div className="rating">
                 <div> {t("rating")}:</div>
                 <div className="num">{average}</div>
               </div>
-            ) : null}
+            ) : null} */}
           </div>
           <div>
             {!me && (
