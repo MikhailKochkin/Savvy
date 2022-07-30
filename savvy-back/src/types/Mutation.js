@@ -259,7 +259,6 @@ const Mutation = mutationType({
         const updates = { ...args };
         delete updates.tags;
         delete updates.id;
-        console.log("args", args);
         const user = await ctx.prisma.user.update({
           data: {
             tags: {
