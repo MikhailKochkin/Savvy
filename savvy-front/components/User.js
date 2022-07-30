@@ -87,6 +87,9 @@ const CURRENT_USER_QUERY = gql`
       coursePages {
         id
       }
+      co_coursePages {
+        id
+      }
       lessons {
         id
       }

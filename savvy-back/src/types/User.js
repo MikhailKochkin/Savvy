@@ -27,6 +27,7 @@ const User = objectType({
     t.model.studentFeedback();
     t.model.teacherFeedback();
     t.model.coursePages({ ordering: { title: true } });
+    t.model.co_coursePages({ ordering: { title: true } });
     t.model.company();
     t.model.lessonResults();
   },

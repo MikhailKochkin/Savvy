@@ -2757,6 +2757,7 @@ input UsefulWhereUniqueInput {
 
 type User {
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
+  co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
   company: Company
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCoursePagesOrderByInput!]): [CoursePage!]!
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int): [CourseVisit!]!
@@ -2782,6 +2783,10 @@ type User {
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
   uni: Uni
   updatedAt: DateTime!
+}
+
+input UserCo_coursePagesOrderByInput {
+  title: SortOrder
 }
 
 input UserCoursePagesOrderByInput {

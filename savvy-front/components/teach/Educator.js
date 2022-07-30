@@ -176,6 +176,7 @@ const Educator = (props) => {
 
   let publishedCourses = [];
   let developedCourses = [];
+  let coauthoredCourses = [];
 
   if (me) {
     const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
@@ -189,6 +190,9 @@ const Educator = (props) => {
     );
     developedCourses = data.coursePages.filter(
       (coursePage) => coursePage.published === false
+    );
+    coauthoredCourses = data.coursePages.filter(
+      (coursePage) => coursePage.authors.length > 0
     );
   }
   return (
@@ -230,10 +234,24 @@ const Educator = (props) => {
             </Row>
           </Courses>
           <Courses>
-            <Title primary>{t("Courses_In_Production")}</Title>
+            <Title primary>{t("Courses_Coauthored")}</Title>
             <Row>
               {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
               {publishedCourses.map((coursePage) => (
+                <Course
+                  key={coursePage.id}
+                  id={coursePage.id}
+                  coursePage={coursePage}
+                  me={me}
+                />
+              ))}
+            </Row>
+          </Courses>
+          <Courses>
+            <Title primary>{t("Courses_In_Production")}</Title>
+            <Row>
+              {coauthoredCourses.length === 0 && <p>{t("No_Courses")}</p>}
+              {coauthoredCourses.map((coursePage) => (
                 <Course
                   key={coursePage.id}
                   id={coursePage.id}

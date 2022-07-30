@@ -14,6 +14,14 @@ const UPDATE_PUBLISHED_MUTATION = gql`
   }
 `;
 
+const UPDATE_LESSON_MUTATION = gql`
+  mutation UPDATE_LESSON_MUTATION($id: String!, $number: Int) {
+    updateLesson(id: $id, number: $number) {
+      id
+    }
+  }
+`;
+
 const CREATE_LESSONRESULT_MUTATION = gql`
   mutation CREATE_LESSONRESULT_MUTATION($visitsNumber: Int, $lessonID: String) {
     createLessonResult(visitsNumber: $visitsNumber, lessonID: $lessonID) {
@@ -130,6 +138,16 @@ const Text = styled.div`
     font-size: 1.9rem;
     font-weight: bold;
     line-height: 1.5;
+    input {
+      border: none;
+      background: none;
+      font-family: Montserrat;
+      outline: 0;
+      width: 45px;
+      font-size: 1.9rem;
+      font-weight: bold;
+      line-height: 1.5;
+    }
   }
   .lesson_description {
     font-size: 1.4rem;
@@ -283,12 +301,22 @@ const LessonHeader = (props) => {
     UPDATE_LESSONRESULT_MUTATION
   );
 
+  const [updateLesson, { lesson_data }] = useMutation(UPDATE_LESSON_MUTATION);
+
   const [updatePublished, { published_data }] = useMutation(
     UPDATE_PUBLISHED_MUTATION
   );
 
-  const { lesson, name, author, lessonResult, coursePageId, statements, me } =
-    props;
+  const {
+    lesson,
+    name,
+    author,
+    lessonResult,
+    coursePageId,
+    statements,
+    me,
+    i_am_author,
+  } = props;
   let color;
   let progress;
   let visit;
@@ -346,7 +374,27 @@ const LessonHeader = (props) => {
         <div>
           <Text>
             <div className="lesson_name">
-              {lesson.number}. {name}{" "}
+              {me &&
+              (me.id === author ||
+                me.permissions.includes("ADMIN") ||
+                i_am_author) ? (
+                <input
+                  name="number"
+                  type="number"
+                  defaultValue={lesson.number}
+                  onChange={async (e) => {
+                    return updateLesson({
+                      variables: {
+                        id: lesson.id,
+                        number: parseInt(e.target.value),
+                      },
+                    });
+                  }}
+                />
+              ) : (
+                `${lesson.number}. `
+              )}
+              {name}{" "}
             </div>
             <div className="lesson_description">
               {lesson.description &&
@@ -359,7 +407,10 @@ const LessonHeader = (props) => {
             {time} {t("minutes")}
           </Time>
           <Buttons>
-            {me && (me.id === author || me.permissions.includes("ADMIN")) ? (
+            {me &&
+            (me.id === author ||
+              me.permissions.includes("ADMIN") ||
+              i_am_author) ? (
               <>
                 <ToggleQuestion>
                   <label className="switch">
@@ -394,7 +445,9 @@ const LessonHeader = (props) => {
             ) : null}
             {me &&
               !lesson.published &&
-              (me.id === author || me.permissions.includes("ADMIN")) && (
+              (me.id === author ||
+                me.permissions.includes("ADMIN") ||
+                i_am_author) && (
                 <Link
                   // author or admin or openLesson if the lesson is not published.
                   href={{
@@ -492,7 +545,9 @@ const LessonHeader = (props) => {
                           me &&
                           lesson &&
                           visit == undefined &&
-                          (me.id === author || me.permissions.includes("ADMIN"))
+                          (me.id === author ||
+                            me.permissions.includes("ADMIN") ||
+                            i_am_author)
                         ) {
                           createLessonResult({
                             variables: {
@@ -508,7 +563,9 @@ const LessonHeader = (props) => {
                           me &&
                           lesson &&
                           visit !== undefined &&
-                          (me.id === author || me.permissions.includes("ADMIN"))
+                          (me.id === author ||
+                            me.permissions.includes("ADMIN") ||
+                            i_am_author)
                         ) {
                           updateLessonResult({
                             variables: {

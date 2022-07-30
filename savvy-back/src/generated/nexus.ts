@@ -1776,6 +1776,9 @@ export interface NexusGenInputs {
   UsefulWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  UserCo_coursePagesOrderByInput: { // input type
+    title?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   UserCoursePagesOrderByInput: { // input type
     title?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
@@ -3177,6 +3180,7 @@ export interface NexusGenFieldTypes {
   }
   User: { // field return type
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
+    co_coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     company: NexusGenRootTypes['Company'] | null; // Company
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisits: NexusGenRootTypes['CourseVisit'][]; // [CourseVisit!]!
@@ -3936,6 +3940,7 @@ export interface NexusGenFieldTypeNames {
   }
   User: { // field return type name
     certificates: 'Certificate'
+    co_coursePages: 'CoursePage'
     company: 'Company'
     coursePages: 'CoursePage'
     courseVisits: 'CourseVisit'
@@ -4921,6 +4926,13 @@ export interface NexusGenArgTypes {
       before?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
+    }
+    co_coursePages: { // args
+      after?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
+      before?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['UserCo_coursePagesOrderByInput'][] | null; // [UserCo_coursePagesOrderByInput!]
     }
     coursePages: { // args
       after?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput

@@ -111,7 +111,7 @@ const TeacherCard = (props) => {
             <Button2>{t("Stats")}</Button2>
           </a>
         </Link>
-        {coursePage.courseType === "PRIVATE" && (
+        {/* {coursePage.courseType === "PRIVATE" && (
           <Link
             href={{
               pathname: "/stats",
@@ -125,7 +125,7 @@ const TeacherCard = (props) => {
               <Button2>{t("Applications")}</Button2>
             </a>
           </Link>
-        )}
+        )} */}
       </Buttons>
     </Payment>
   );

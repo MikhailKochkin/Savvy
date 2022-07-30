@@ -264,6 +264,10 @@ const CoursePage = (props) => {
       }
     });
 
+  let i_am_author = false;
+  if (me && coursePage.authors.filter((auth) => auth.id == me.id).length > 0) {
+    i_am_author = true;
+  }
   return (
     <>
       <div id="root"></div>
@@ -303,6 +307,7 @@ const CoursePage = (props) => {
                 {me &&
                   me.permissions &&
                   me.id !== coursePage.user.id &&
+                  !i_am_author &&
                   !me.new_subjects.find((c) => c.id == coursePage.id) &&
                   !me.permissions.includes("ADMIN") && (
                     <RegisterCard me={me} coursePage={coursePage} />
@@ -311,7 +316,8 @@ const CoursePage = (props) => {
                 {me &&
                   me.permissions &&
                   (me.id === coursePage.user.id ||
-                    me.permissions.includes("ADMIN")) && (
+                    me.permissions.includes("ADMIN") ||
+                    i_am_author) && (
                     <TeacherCard id={coursePage.id} coursePage={coursePage} />
                   )}
                 {/* Карточка ученика */}
@@ -373,6 +379,7 @@ const CoursePage = (props) => {
                             name={lesson.name}
                             lesson={lesson}
                             lessonResult={maxes[index]}
+                            i_am_author={i_am_author}
                             statements={
                               lesson.forum ? lesson.forum.statements : null
                             }

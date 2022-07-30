@@ -14,6 +14,7 @@ const UPDATE_USER_MUTATION = gql`
     $status: Status
     $image: String
     $isFamiliar: Boolean
+    $tags: [String]
   ) {
     updateUser(
       id: $id
@@ -23,6 +24,7 @@ const UPDATE_USER_MUTATION = gql`
       status: $status
       image: $image
       isFamiliar: $isFamiliar
+      tags: $tags
     ) {
       id
       name
@@ -200,6 +202,7 @@ const Account = (props) => {
           surname,
           status,
           image,
+          tags: props.me.tags,
         }}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
       >

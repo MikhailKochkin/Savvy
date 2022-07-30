@@ -298,7 +298,7 @@ const UpdateLesson = (props) => {
             <select
               name="open"
               defaultValue={open}
-              onChange={(e) => setOpen(e.target.value)}
+              onChange={(e) => setOpen(e.target.value == "true")}
             >
               <option value={true}>{t("open")}</option>
               <option value={false}>{t("closed")}</option>
@@ -327,7 +327,7 @@ const UpdateLesson = (props) => {
             <select
               name="assignment"
               defaultValue={assignment}
-              onChange={(e) => setAssignment(e.target.value)}
+              onChange={(e) => setAssignment(e.target.value == "true")}
             >
               <option value={true}>{t("yes")}</option>
               <option value={false}>{t("no")}</option>
@@ -441,6 +441,7 @@ const UpdateLesson = (props) => {
             </ButtonTwo>
           )}
         </Mutation>
+        {/* <StoryUpdate lesson={lesson} /> */}
       </Container>
     </Styles>
   );

@@ -61,6 +61,8 @@ const AreYouEnrolled = (props) =>
               .length == 0 &&
             data.me.coursePages.filter((c) => c.id == props.subject).length ==
               0 &&
+            data.me.co_coursePages.filter((c) => c.id == props.subject)
+              .length == 0 &&
             !data.me.permissions.includes("ADMIN")
           ) {
             return (
