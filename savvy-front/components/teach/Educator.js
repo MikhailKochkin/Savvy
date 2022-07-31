@@ -232,15 +232,6 @@ const Educator = (props) => {
   const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
     variables: { id: me.id },
   });
-  if (loading) return <Loading />;
-  if (error) return <p>Error: {error.message}</p>;
-
-  publishedCourses = data.coursePages.filter(
-    (coursePage) => coursePage.published === true
-  );
-  developedCourses = data.coursePages.filter(
-    (coursePage) => coursePage.published === false
-  );
 
   const {
     loading: loading2,
@@ -249,10 +240,19 @@ const Educator = (props) => {
   } = useQuery(MY_CO_AUTHORED_COURSES_QUERY, {
     variables: { id: me.id },
   });
-  if (loading2) return <Loading />;
+  if (loading) return <p>Загрузка 1 ...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  if (loading2) return <p>Загрузка 2 ...</p>;
   if (error2) return <p>Error: {error2.message}</p>;
 
   console.log("data2.coursePages", data2.coursePages);
+
+  publishedCourses = data.coursePages.filter(
+    (coursePage) => coursePage.published === true
+  );
+  developedCourses = data.coursePages.filter(
+    (coursePage) => coursePage.published === false
+  );
 
   coauthoredCourses = data2.coursePages;
 
