@@ -11,7 +11,14 @@ export const getServerSideProps = async ({ locale }) => ({
 
 const EducatorPage = () => {
   const me = useUser();
-  return <Educator me={me} />;
+
+  return (
+    <>
+      {!me && <div>Загружаем...</div>}
+
+      {me && <Educator me={me} />}
+    </>
+  );
 };
 
 export default EducatorPage;

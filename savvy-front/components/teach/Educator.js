@@ -61,6 +61,57 @@ const MY_COURSES_QUERY = gql`
   }
 `;
 
+const MY_CO_AUTHORED_COURSES_QUERY = gql`
+  query MY_CO_AUTHORED_COURSES_QUERY($id: String!) {
+    coursePages(where: { authors: { some: { id: { equals: $id } } } }) {
+      id
+      title
+      user {
+        id
+        name
+        surname
+        image
+        uni {
+          id
+          title
+        }
+        company {
+          id
+          name
+        }
+      }
+      authors {
+        id
+        name
+        surname
+        image
+        uni {
+          id
+          title
+        }
+        company {
+          id
+          name
+        }
+      }
+      lessons {
+        id
+        forum {
+          id
+          rating {
+            id
+            rating
+          }
+        }
+      }
+      description
+      courseType
+      image
+      published
+    }
+  }
+`;
+
 const CaseCard = styled.div`
   display: flex;
   flex-direction: column;
@@ -178,23 +229,33 @@ const Educator = (props) => {
   let developedCourses = [];
   let coauthoredCourses = [];
 
-  if (me) {
-    const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
-      variables: { id: me.id },
-    });
-    if (loading) return <Loading />;
-    if (error) return <p>Error: {error.message}</p>;
+  const { loading, error, data } = useQuery(MY_COURSES_QUERY, {
+    variables: { id: me.id },
+  });
+  if (loading) return <Loading />;
+  if (error) return <p>Error: {error.message}</p>;
 
-    publishedCourses = data.coursePages.filter(
-      (coursePage) => coursePage.published === true
-    );
-    developedCourses = data.coursePages.filter(
-      (coursePage) => coursePage.published === false
-    );
-    coauthoredCourses = data.coursePages.filter(
-      (coursePage) => coursePage.authors.length > 0
-    );
-  }
+  publishedCourses = data.coursePages.filter(
+    (coursePage) => coursePage.published === true
+  );
+  developedCourses = data.coursePages.filter(
+    (coursePage) => coursePage.published === false
+  );
+
+  const {
+    loading: loading2,
+    error: error2,
+    data: data2,
+  } = useQuery(MY_CO_AUTHORED_COURSES_QUERY, {
+    variables: { id: me.id },
+  });
+  if (loading2) return <Loading />;
+  if (error2) return <p>Error: {error2.message}</p>;
+
+  console.log("data2.coursePages", data2.coursePages);
+
+  coauthoredCourses = data2.coursePages;
+
   return (
     <PleaseSignIn>
       <Styles>
@@ -236,8 +297,8 @@ const Educator = (props) => {
           <Courses>
             <Title primary>{t("Courses_Coauthored")}</Title>
             <Row>
-              {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
-              {publishedCourses.map((coursePage) => (
+              {coauthoredCourses.length === 0 && <p>{t("No_Courses")}</p>}
+              {coauthoredCourses.map((coursePage) => (
                 <Course
                   key={coursePage.id}
                   id={coursePage.id}
@@ -250,8 +311,8 @@ const Educator = (props) => {
           <Courses>
             <Title primary>{t("Courses_In_Production")}</Title>
             <Row>
-              {coauthoredCourses.length === 0 && <p>{t("No_Courses")}</p>}
-              {coauthoredCourses.map((coursePage) => (
+              {publishedCourses.length === 0 && <p>{t("No_Courses")}</p>}
+              {publishedCourses.map((coursePage) => (
                 <Course
                   key={coursePage.id}
                   id={coursePage.id}
