@@ -18,6 +18,7 @@ const Query = queryType({
     t.crud.lawrdle({ filtering: true });
     t.crud.lawrdles({ ordering: true, filtering: true });
     t.crud.useful({ filtering: true });
+    t.crud.usefuls({ filtering: true });
     t.crud.businessClients({ ordering: true, filtering: true });
     t.crud.coursePages({ ordering: true, filtering: true });
     t.crud.coursePage({ ordering: true, filtering: true });

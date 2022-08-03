@@ -65,9 +65,15 @@ export interface NexusGenInputs {
   BoolNullableListFilter: { // input type
     equals?: boolean[] | null; // [Boolean!]
   }
+  BusinessClientListRelationFilter: { // input type
+    every?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
+    none?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
+    some?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
+  }
   BusinessClientOrderByInput: { // input type
     comment?: NexusGenEnums['SortOrder'] | null; // SortOrder
     communication_medium?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     email?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -81,6 +87,8 @@ export interface NexusGenInputs {
     AND?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
     comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     communication_medium?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
+    coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     email?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -362,6 +370,7 @@ export interface NexusGenInputs {
     authors?: NexusGenInputs['UserListRelationFilter'] | null; // UserListRelationFilter
     banner?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     batch?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    businessClients?: NexusGenInputs['BusinessClientListRelationFilter'] | null; // BusinessClientListRelationFilter
     careerTrack?: NexusGenInputs['CareerTrackListRelationFilter'] | null; // CareerTrackListRelationFilter
     careerTrackUnit?: NexusGenInputs['CareerTrackUnitListRelationFilter'] | null; // CareerTrackUnitListRelationFilter
     certificates?: NexusGenInputs['CertificateListRelationFilter'] | null; // CertificateListRelationFilter
@@ -1773,6 +1782,19 @@ export interface NexusGenInputs {
     title?: NexusGenInputs['StringFilter'] | null; // StringFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
+  UsefulWhereInput: { // input type
+    AND?: NexusGenInputs['UsefulWhereInput'][] | null; // [UsefulWhereInput!]
+    buttonText?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    header?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    image?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    link?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['UsefulWhereInput'][] | null; // [UsefulWhereInput!]
+    OR?: NexusGenInputs['UsefulWhereInput'][] | null; // [UsefulWhereInput!]
+    tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
   UsefulWhereUniqueInput: { // input type
     id?: string | null; // String
   }
@@ -1949,6 +1971,7 @@ export interface NexusGenObjects {
   BusinessClient: { // root type
     comment?: string | null; // String
     communication_medium?: string | null; // String
+    coursePageId?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
@@ -2470,6 +2493,8 @@ export interface NexusGenFieldTypes {
   BusinessClient: { // field return type
     comment: string | null; // String
     communication_medium: string | null; // String
+    coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
+    coursePageId: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
@@ -2996,6 +3021,7 @@ export interface NexusGenFieldTypes {
     textEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
     textEditorResults: NexusGenRootTypes['TextEditorResult'][]; // [TextEditorResult!]!
     useful: NexusGenRootTypes['Useful'] | null; // Useful
+    usefuls: NexusGenRootTypes['Useful'][]; // [Useful!]!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -3230,6 +3256,8 @@ export interface NexusGenFieldTypeNames {
   BusinessClient: { // field return type name
     comment: 'String'
     communication_medium: 'String'
+    coursePage: 'CoursePage'
+    coursePageId: 'String'
     createdAt: 'DateTime'
     email: 'String'
     id: 'String'
@@ -3756,6 +3784,7 @@ export interface NexusGenFieldTypeNames {
     textEditorResult: 'TextEditorResult'
     textEditorResults: 'TextEditorResult'
     useful: 'Useful'
+    usefuls: 'Useful'
     user: 'User'
     users: 'User'
   }
@@ -4178,6 +4207,7 @@ export interface NexusGenArgTypes {
     createBusinessClient: { // args
       comment?: string | null; // String
       communication_medium?: string | null; // String
+      coursePageId?: string | null; // String
       email?: string | null; // String
       name?: string | null; // String
       number?: string | null; // String
@@ -4875,6 +4905,13 @@ export interface NexusGenArgTypes {
     }
     useful: { // args
       where: NexusGenInputs['UsefulWhereUniqueInput']; // UsefulWhereUniqueInput!
+    }
+    usefuls: { // args
+      after?: NexusGenInputs['UsefulWhereUniqueInput'] | null; // UsefulWhereUniqueInput
+      before?: NexusGenInputs['UsefulWhereUniqueInput'] | null; // UsefulWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      where?: NexusGenInputs['UsefulWhereInput'] | null; // UsefulWhereInput
     }
     user: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!

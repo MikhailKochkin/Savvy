@@ -17,7 +17,7 @@
   "refund": "✅ Если вам не подойдет курс, мы вернем деньги.",
   "apply_coupon": "Apply Coupon",
   "step1": "Step 1. Choose an option",
-  "step1option1": "Get a consultation",
+  "step1option1": "Learn more",
   "step1option2": "Buy the course",
   "step1option3": "Pay in installments",
   "step2": "Step 2.",
@@ -28,5 +28,6 @@
   "buy": "Enroll now",
   "start": "Open",
   "min": "min",
-  "offer_buy": "Join the course"
+  "start_open_lesson": "Open lesson",
+  "demo_lesson_offer": "Btw we gave you access to one of the lessons. Check it out right now "
 }

@@ -141,7 +141,9 @@ const NewCoursePage = (props) => {
       <div>
         <Details data={prog} />
         <Goal data={prog} />
-        <BottomLine data={prog} />
+        {!loading && data && (
+          <BottomLine me={me} data={data.coursePage.lessons} />
+        )}
         {!loading && data ? (
           <Syllabus
             id={props.id}

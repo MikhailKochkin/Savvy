@@ -2869,10 +2869,14 @@ const Mutation = mutationType({
         number: stringArg(),
         communication_medium: stringArg(),
         comment: stringArg(),
+        coursePageId: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const new_client = await ctx.prisma.businessClient.create({
           data: {
+            coursePage: {
+              connect: { id: args.coursePageId },
+            },
             ...args,
           },
         });

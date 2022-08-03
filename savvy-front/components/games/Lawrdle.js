@@ -501,36 +501,26 @@ const Lawrdle = (props) => {
       alert("Такого слова не существует!");
       return;
     }
+
+    // 2.5 create the dictionary with indexes of correct letters
     let arr = [];
-    // let dict1 = {};
-    // let dict2 = {};
-    // let new_word = "работа";
-    // // dict
-    // the_word.split("").map((char, i) => {
-    //   if (!dict2[char]) {
-    //     dict2[char] = [i];
-    //   } else {
-    //     dict2[char] = [...dict2[char], i];
-    //   }
-    // });
-    // new_word.split("").map((char, i) => {
-    //   if (!dict1[char]) {
-    //     dict1[char] = [i];
-    //   } else {
-    //     dict1[char] = [...dict1[char], i];
-    //   }
-    // });
-    // console.log("dict", dict1, dict2);
+    let correct_word_dict = {};
+
+    the_word.split("").map((char, i) => {
+      if (!correct_word_dict[char]) {
+        correct_word_dict[char] = [i];
+      } else {
+        correct_word_dict[char] = [...correct_word_dict[char], i];
+      }
+    });
+
+    table[activeRowNum].slice(0, the_word.split("").length).map((letter, i) => {
+      console.log("letter dict", letter, i, correct_word_dict[letter]);
+    });
 
     // 3. Show if the user if they have found correct letters
     table[activeRowNum].slice(0, the_word.split("").length).map((letter, i) => {
-      if (
-        the_word.split("").includes(letter) &&
-        the_word.split("").indexOf(letter) ==
-          table[activeRowNum]
-            .slice(0, the_word.split("").length)
-            .indexOf(letter)
-      ) {
+      if (correct_word_dict[letter] && correct_word_dict[letter].includes(i)) {
         let green_but = document.getElementById(letter);
         green_but.style.background = "#6aaa64";
         green_but.style.color = "#fff";
@@ -539,7 +529,10 @@ const Lawrdle = (props) => {
         cell.style.borderColor = "#6AAA63";
         cell.style.color = "#fff";
         arr.push("🟩");
-      } else if (the_word.split("").includes(letter)) {
+      } else if (
+        correct_word_dict[letter] &&
+        !correct_word_dict[letter].includes(i)
+      ) {
         let yellow_but = document.getElementById(letter);
         yellow_but.style.background = "#c9b458";
         yellow_but.style.color = "#fff";
@@ -960,7 +953,6 @@ const Lawrdle = (props) => {
             </div>
           </div>
           <div>
-            {console.log("lawrdle.link", lawrdle.link)}
             <ButtonTwo>
               <a id="lawrdle_to_course" href={lawrdle.link} target="_blank">
                 {lawrdle.buttonText}

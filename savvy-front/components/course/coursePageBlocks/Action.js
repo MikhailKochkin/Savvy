@@ -45,6 +45,7 @@ const CREATE_CLIENT = gql`
     $type: String!
     $communication_medium: String!
     $comment: String!
+    $coursePageId: String
   ) {
     createBusinessClient(
       email: $email
@@ -53,6 +54,7 @@ const CREATE_CLIENT = gql`
       type: $type
       communication_medium: $communication_medium
       comment: $comment
+      coursePageId: $coursePageId
     ) {
       id
     }
@@ -94,7 +96,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  width: 75%;
+  width: 80%;
   height: 90%;
   display: flex;
   flex-direction: row;
@@ -262,9 +264,7 @@ const Description = styled.div`
 
 const Contact = styled.div`
   width: 48%;
-  min-width: 460px;
-  max-width: 480px;
-  /* height: 400px; */
+  max-width: 515px;
   border-radius: 25px;
   display: flex;
   flex-direction: row;
@@ -325,6 +325,13 @@ const Contact = styled.div`
       font-weight: 700;
       font-size: 1.8rem;
       line-height: 1.5;
+    }
+    .explainer {
+      width: 80%;
+      line-height: 1.7rem;
+      color: #393939;
+      margin-bottom: 20px;
+      font-size: 1.4rem;
     }
     form {
       width: 80%;
@@ -411,9 +418,12 @@ const Contact = styled.div`
         width: 100%;
       }
     }
+
     #form_container {
       width: 100%;
-
+      .explainer {
+        width: 100%;
+      }
       .variants {
         width: 100%;
         flex-direction: column;
@@ -692,12 +702,18 @@ const Action = (props) => {
 
                   <div className="h2">
                     {t("step2")}
-                    {step == "apply" && " Заполните заявку"}
+                    {step == "apply" &&
+                      " Подпишитесь на полезные материалы по теме курса"}
                     {step == "buy" && " Оплатите курс"}
                     {step == "open" && " Открываем доступ"}
                   </div>
                   {step == "apply" && (
                     <>
+                      <div className="explainer">
+                        Если пока не готовы присоединиться, раз в 2 недели будем
+                        бесплатно присылать полезные материалы и новости по теме
+                        курса.
+                      </div>
                       <form>
                         <div className="names">
                           <input
@@ -729,7 +745,7 @@ const Action = (props) => {
                         />
                         <button
                           type="submit"
-                          id="english_application_button1"
+                          id="coursePage_subscribe_button"
                           onClick={async (e) => {
                             e.preventDefault();
                             if (!EmailValidator.validate(email)) {
@@ -756,20 +772,24 @@ const Action = (props) => {
                                   number,
                                   communication_medium: "Consultation",
                                   comment: "consult",
+                                  coursePageId: coursePage.id,
                                 },
                               });
-                              Router.push({
-                                pathname: "/hello",
-                                query: {
-                                  name: name + " " + surname,
-                                  email: email,
-                                  number: number,
-                                },
-                              });
+                              alert(
+                                "Добавили вас в рассылку. Скоро вернемся с полезностями!"
+                              );
+                              // Router.push({
+                              //   pathname: "/hello",
+                              //   query: {
+                              //     name: name + " " + surname,
+                              //     email: email,
+                              //     number: number,
+                              //   },
+                              // });
                             }
                           }}
                         >
-                          {loading ? "Записываем..." : "Оставить заявку"}
+                          {loading ? "Записываем..." : "Подписаться"}
                         </button>
                       </form>
                       <div id="legal">
@@ -801,7 +821,7 @@ const Action = (props) => {
                         </div>
                         <button
                           type="submit"
-                          id="english_application_button1"
+                          id="coursePage_open_course_button"
                           onClick={async (e) => {
                             e.preventDefault();
                             let results = [];
@@ -862,6 +882,7 @@ const Action = (props) => {
                       </div>
                       {!loading_data && (
                         <button
+                          id="coursePage_buy_button"
                           className="buy"
                           onClick={async (e) => {
                             e.preventDefault();
@@ -986,7 +1007,7 @@ const Action = (props) => {
                       />
                       <button
                         type="submit"
-                        id="english_application_button1"
+                        id="coursePage_apply_button"
                         onClick={async (e) => {
                           e.preventDefault();
                           if (!EmailValidator.validate(email)) {

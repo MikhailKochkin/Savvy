@@ -71,6 +71,8 @@ const BusinessClient = objectType({
     t.model.comment();
     t.model.tags();
     t.model.number();
+    t.model.coursePageId();
+    t.model.coursePage();
     t.model.communication_medium();
     t.model.createdAt();
     t.model.updatedAt();

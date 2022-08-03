@@ -137,7 +137,9 @@ const Goal = (props) => {
             )}
           </h2>
 
-          <button onClick={(e) => slide()}>{t("get_started")}</button>
+          <button id="advantages_to_enroll" onClick={(e) => slide()}>
+            {t("get_started")}
+          </button>
         </div>
         <div id="goal_examples">
           {d.goals.map((g) => (

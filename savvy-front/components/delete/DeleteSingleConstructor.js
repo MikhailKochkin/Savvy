@@ -33,6 +33,8 @@ const Button = styled.button`
 `;
 
 const DeleteSingleConstruction = (props) => {
+  const { t } = useTranslation("lesson");
+
   const { id } = props;
   return (
     <Mutation

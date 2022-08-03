@@ -57,6 +57,8 @@ input BoolNullableListFilter {
 type BusinessClient {
   comment: String
   communication_medium: String
+  coursePage: CoursePage
+  coursePageId: String
   createdAt: DateTime!
   email: String!
   id: String!
@@ -67,9 +69,16 @@ type BusinessClient {
   updatedAt: DateTime!
 }
 
+input BusinessClientListRelationFilter {
+  every: BusinessClientWhereInput
+  none: BusinessClientWhereInput
+  some: BusinessClientWhereInput
+}
+
 input BusinessClientOrderByInput {
   comment: SortOrder
   communication_medium: SortOrder
+  coursePageId: SortOrder
   createdAt: SortOrder
   email: SortOrder
   id: SortOrder
@@ -84,6 +93,8 @@ input BusinessClientWhereInput {
   AND: [BusinessClientWhereInput!]
   comment: StringNullableFilter
   communication_medium: StringNullableFilter
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
   email: StringFilter
   id: StringFilter
@@ -548,6 +559,7 @@ input CoursePageWhereInput {
   authors: UserListRelationFilter
   banner: StringNullableFilter
   batch: StringNullableFilter
+  businessClients: BusinessClientListRelationFilter
   careerTrack: CareerTrackListRelationFilter
   careerTrackUnit: CareerTrackUnitListRelationFilter
   certificates: CertificateListRelationFilter
@@ -1355,7 +1367,7 @@ input MiniForumWhereUniqueInput {
 
 type Mutation {
   checkAssignment(checked: Boolean, id: String): LessonResult
-  createBusinessClient(comment: String, communication_medium: String, email: String, name: String, number: String, type: String): User
+  createBusinessClient(comment: String, communication_medium: String, coursePageId: String, email: String, name: String, number: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
@@ -2020,6 +2032,7 @@ type Query {
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
   textEditorResults(after: TextEditorResultWhereUniqueInput, before: TextEditorResultWhereUniqueInput, first: Int, last: Int, orderBy: [TextEditorResultOrderByInput!], where: TextEditorResultWhereInput): [TextEditorResult!]!
   useful(where: UsefulWhereUniqueInput!): Useful
+  usefuls(after: UsefulWhereUniqueInput, before: UsefulWhereUniqueInput, first: Int, last: Int, where: UsefulWhereInput): [Useful!]!
   user(where: UserWhereUniqueInput!): User
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
 }
@@ -2749,6 +2762,20 @@ type Useful {
   link: String!
   tags: [String!]!
   updatedAt: DateTime!
+}
+
+input UsefulWhereInput {
+  AND: [UsefulWhereInput!]
+  buttonText: StringFilter
+  createdAt: DateTimeFilter
+  header: StringFilter
+  id: StringFilter
+  image: StringFilter
+  link: StringFilter
+  NOT: [UsefulWhereInput!]
+  OR: [UsefulWhereInput!]
+  tags: StringNullableListFilter
+  updatedAt: DateTimeFilter
 }
 
 input UsefulWhereUniqueInput {

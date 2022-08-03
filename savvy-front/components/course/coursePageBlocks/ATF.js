@@ -90,7 +90,7 @@ const Buttons = styled.div`
   flex-direction: row;
   justify-content: center;
   margin: 30px 0;
-  #syl_button {
+  #atf_look_at_syllabus_button {
     width: 45%;
     height: 50px;
     font-size: 2rem;
@@ -104,7 +104,7 @@ const Buttons = styled.div`
       background: #c2c2c2;
     }
   }
-  #buy_button {
+  #atf_buy_button {
     width: 45%;
     margin-left: 50px;
     background: #175ffe;
@@ -124,11 +124,11 @@ const Buttons = styled.div`
   @media (max-width: 800px) {
     flex-direction: column;
     width: 100%;
-    #syl_button {
+    #atf_look_at_syllabus_button {
       width: 100%;
       margin-bottom: 20px;
     }
-    #buy_button {
+    #atf_buy_button {
       width: 100%;
       margin-left: 0;
     }
@@ -262,10 +262,10 @@ const ATF = (props) => {
             <h1>{renderHTML(d.header)}</h1>
             <h2>{d.subheader}</h2>
             <Buttons>
-              <button id="syl_button" onClick={(e) => slide()}>
+              <button id="atf_look_at_syllabus_button" onClick={(e) => slide()}>
                 {t("syllabus")}
               </button>
-              <button id="buy_button" onClick={(e) => slide2()}>
+              <button id="atf_buy_button" onClick={(e) => slide2()}>
                 {t("enroll")}
               </button>
             </Buttons>
