@@ -247,7 +247,7 @@ const LessonHeader = (props) => {
               },
             }}
           >
-            <A id="curriculum_to_demolesson">
+            <A id="curriculum_to_demo_lesson">
               {t("start")}
               {/* <Button>{t("start")}</Button> */}
             </A>
