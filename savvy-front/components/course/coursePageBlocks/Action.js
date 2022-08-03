@@ -112,6 +112,8 @@ const Description = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   width: 48%;
+  max-width: 575px;
+
   min-width: 460px;
   border: 1px solid #e7ebef;
   padding: 2% 4%;
@@ -264,7 +266,7 @@ const Description = styled.div`
 
 const Contact = styled.div`
   width: 48%;
-  max-width: 515px;
+  max-width: 575px;
   border-radius: 25px;
   display: flex;
   flex-direction: row;
