@@ -2417,6 +2417,7 @@ const Mutation = mutationType({
         // 2. check at yookassa if any order is paid
         if (order.paymentID) {
           const payment = await community_checkout.getPayment(order.paymentID);
+
           if (payment.status == "succeeded") {
             const notification = await client.sendEmail({
               From: "Mikhail@besavvy.app",
@@ -2872,10 +2873,12 @@ const Mutation = mutationType({
         coursePageId: stringArg(),
       },
       resolve: async (_, args, ctx) => {
+        const coursePageId = args.coursePageId;
+        delete args.coursePageId;
         const new_client = await ctx.prisma.businessClient.create({
           data: {
             coursePage: {
-              connect: { id: args.coursePageId },
+              connect: { id: coursePageId },
             },
             ...args,
           },

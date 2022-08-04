@@ -839,7 +839,6 @@ const Action = (props) => {
                                 return updated_res;
                               })
                             );
-                            console.log(2);
 
                             const checked_orders2 = checked_orders.filter(
                               (c) =>
@@ -848,7 +847,6 @@ const Action = (props) => {
                             );
 
                             if (checked_orders2.length > 0) {
-                              console.log("> 0");
                               let enroll = await enrollOnCourse({
                                 variables: {
                                   id: me.id,
