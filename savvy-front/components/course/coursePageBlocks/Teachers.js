@@ -3,8 +3,8 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 
 const Styles = styled.div`
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  min-height: 60vh;
   background: #fff;
   border-top: 1px solid #dce2e7;
   display: flex;
@@ -12,25 +12,25 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   padding: 60px 0;
+  @media (max-width: 800px) {
+    padding: 30px 0;
+  }
 `;
 
 const Container = styled.div`
-  width: 80%;
+  width: 85%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   h2 {
-    text-align: left;
-    font-weight: 400;
-    font-size: 4rem;
     line-height: 1.4;
-    width: 100%;
-    margin-bottom: 80px;
+    font-weight: 700;
+    font-size: 2.8rem;
   }
   @media (max-width: 800px) {
     h2 {
-      margin-bottom: 40px;
+      margin-bottom: 0px;
       font-size: 3.2rem;
     }
   }
@@ -40,7 +40,7 @@ const TeachersList = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
   @media (max-width: 800px) {
@@ -92,6 +92,7 @@ const TeacherBox = styled.div`
     width: 85%;
     font-size: 1.4rem;
     line-height: 1.5;
+    margin-top: 30px;
   }
   .header {
     font-weight: 600;
@@ -114,37 +115,54 @@ const TeacherBox = styled.div`
 `;
 
 const TeacherBoxBig = styled.div`
-  width: 340px;
+  width: 75%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   margin-right: 15%;
+  margin-top: 40px;
   position: relative;
+  .upper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
   .image_container {
-    width: 340px;
-    height: 460px;
+    width: 140px;
+    height: 140px;
     position: relative;
     margin-bottom: 15px;
     img {
-      width: 100%;
-      height: 100%;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
       object-fit: cover;
+      border: 1px solid #dde2e1;
     }
   }
+  .info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-left: 30px;
+  }
+
   .name {
     color: #313d48;
-    font-size: 2.8rem;
+    font-size: 2rem;
     text-align: left;
     line-height: 1.4;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 2%;
   }
   .work {
     border-top: 1px solid black;
-    padding-top: 3%;
+    padding-top: 2%;
     color: #687481;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 500;
     margin-bottom: 20px;
     text-align: left;
@@ -156,6 +174,7 @@ const TeacherBoxBig = styled.div`
     width: 100%;
     font-size: 1.6rem;
     line-height: 1.5;
+    margin-top: 10px;
   }
   .header {
     font-weight: 600;
@@ -173,13 +192,29 @@ const TeacherBoxBig = styled.div`
     font-size: 1.4rem;
   }
   @media (max-width: 800px) {
+    width: 90%;
+
     margin-right: 0;
     margin-bottom: 40px;
+    .upper {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    .info {
+      margin-left: 0px;
+    }
+    .work {
+      padding-top: 0;
+      margin-bottom: 0px;
+    }
   }
 `;
 
 const Teachers = (props) => {
   const d = props.data;
+  const { coursePage } = props;
   let colors = [
     "#4db0de",
     "#9D5AE5",
@@ -188,42 +223,36 @@ const Teachers = (props) => {
     "#F18F01",
     "#F18F01",
   ];
+  let authors;
+  if (coursePage.authors.length > 0) {
+    authors = coursePage.authors;
+  } else {
+    authors = [coursePage.user];
+  }
   return (
     <Styles>
       <Container>
-        <h2>{d.authors_intro}</h2>
+        <h2>Автор</h2>
         <TeachersList>
-          {d.authors.map((a, i) => {
-            if (d.authors.length > 2) {
-              return (
-                <TeacherBox>
-                  <div className="image_container">
-                    <img src={a.image} layout="fill" />
-                  </div>
+          {authors.map((a, i) => (
+            <TeacherBoxBig>
+              <div className="upper">
+                <div className="image_container">
+                  <img src={a.image} layout="fill" />
+                </div>
+                <div className="info">
                   <div className="name">
-                    {a.name} <br />
-                    {a.surname}
+                    {a.name} {a.surname}
                   </div>
-                  <div className="work">{a.title}</div>
-                  <div className="description">{renderHTML(a.info)}</div>
-                </TeacherBox>
-              );
-            } else {
-              return (
-                <TeacherBoxBig>
-                  <div className="image_container">
-                    <img src={a.image} layout="fill" />
-                  </div>
-                  <div className="name">
-                    {a.name} <br />
-                    {a.surname}
-                  </div>
-                  <div className="work">{a.title}</div>
-                  <div className="description">{renderHTML(a.info)}</div>
-                </TeacherBoxBig>
-              );
-            }
-          })}
+                  {a.work && <div className="work">{renderHTML(a.work)}</div>}
+                </div>
+              </div>
+
+              {a.description && (
+                <div className="description">{renderHTML(a.description)}</div>
+              )}
+            </TeacherBoxBig>
+          ))}
         </TeachersList>
       </Container>
     </Styles>

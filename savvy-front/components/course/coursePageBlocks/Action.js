@@ -6,7 +6,6 @@ import Modal from "styled-react-modal";
 import Router from "next/router";
 import { useRouter } from "next/router";
 import "react-phone-number-input/style.css";
-import ReactGA from "react-ga";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
@@ -81,13 +80,17 @@ const ENROLL_COURSE_MUTATION = gql`
 const Styles = styled.div`
   padding: 50px 0;
   min-height: 85vh;
-  width: 100vw;
-  background-image: url("/static/pattern5.svg");
+  width: 100%;
+  /* background-image: url("/static/pattern5.svg"); */
   background-size: contain;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: -webkit-sticky;
+  position: sticky;
+  top: -20px;
+  z-index: 5;
   @media (max-width: 800px) {
     height: auto;
     padding: 0;
@@ -96,7 +99,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  width: 80%;
+  width: 100%;
   height: 90%;
   display: flex;
   flex-direction: row;
@@ -107,175 +110,40 @@ const Container = styled.div`
   }
 `;
 
-const Description = styled.div`
+const Contact = styled.div`
+  width: 100%;
+  width: 340px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  width: 48%;
-  max-width: 575px;
-
-  min-width: 460px;
-  border: 1px solid #e7ebef;
-  padding: 2% 4%;
-  background: #fff;
-  border-radius: 25px;
-  .comment {
-    div {
-      margin: 10px 0;
-    }
-  }
-  .highlight {
-    padding-bottom: 1px;
-    border-bottom: 3px solid #f9d801;
-    font-weight: 600;
-  }
-  #header {
-    font-size: 3.4rem;
-    line-height: 1.2;
-    width: 70%;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-  #info {
-    div {
-      line-height: 1.4;
-      margin: 10px 0;
-    }
-  }
-  #promo {
-    margin-top: 10%;
-    input {
-      width: 100%;
-      padding: 13px 6px;
-      border: 1px solid #d8d8d8;
-      border-radius: 5px;
-      outline: 0;
-      font-family: Montserrat;
-      font-size: 1.6rem;
-    }
-  }
-  #details {
-    font-size: 1.6rem;
-    line-height: 1.4;
-    width: 100%;
-    .arrow {
-      width: 50%;
-    }
-    #prices {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      .buy {
-        text-decoration: underline;
-        cursor: pointer;
-      }
-      .full {
-        width: 70%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        span {
-          font-size: 3.4rem;
-        }
-      }
-      .parts {
-        width: 48%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-end;
-        span {
-          font-size: 2rem;
-        }
-      }
-    }
-    #price {
-      border-bottom: 2px solid white;
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-    }
-    div {
-      margin: 5px 0;
-    }
-    span {
-      font-weight: 500;
-    }
-  }
-  .buy_button {
-    width: 100%;
-    padding: 2%;
-    font-family: Montserrat;
-    border: none;
-    background: #f9d801;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    outline: 0;
-    cursor: pointer;
-    font-size: 1.8rem;
-    transition: ease-in 0.2s;
-    &:hover {
-      background-color: #dfc201;
-    }
-  }
-  @media (max-width: 800px) {
-    height: auto;
-    justify-content: space-between;
-    min-height: 350px;
-    padding: 20px 20px;
-    width: 100%;
-    min-width: 100px;
-    margin-bottom: 40px;
-    #description {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    #header {
-      font-size: 2.6rem;
-      width: 95%;
-      margin-top: 10px;
-    }
-    #promo {
-      margin-top: 0;
-    }
-    #details {
-      margin-top: 0;
-      .arrow {
-        width: 70%;
-      }
-      #prices {
-        flex-direction: row;
-        .full {
-          width: 90%;
-          span {
-            font-size: 2.2rem;
-          }
-        }
-        .parts {
-          width: 90%;
-          margin-top: 10px;
-
-          span {
-            font-size: 2.2rem;
-          }
-        }
-      }
-    }
-  }
-`;
-
-const Contact = styled.div`
-  width: 48%;
-  max-width: 575px;
-  border-radius: 25px;
-  display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   background: #fff;
   border: 1px solid #e7ebef;
-  border-radius: 25px;
-  padding: 30px 0;
+  padding: 20px;
+  box-shadow: 0px 0px 7px 4px rgba(217, 217, 217, 0.35);
+  -webkit-box-shadow: 0px 0px 7px 4px rgba(217, 217, 217, 0.35);
+  -moz-box-shadow: 0px 0px 7px 4px rgba(217, 217, 217, 0.35);
+  .guarantee {
+    font-size: 1.3rem;
+    color: #4b5563;
+  }
+
+  .price {
+    font-weight: 600;
+    font-size: 3.2rem;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  .open {
+    line-height: 1.4;
+    /* margin-top: 20px; */
+    border-top: 1px solid #e7ebef;
+    padding: 15px 0;
+    div {
+      margin-bottom: 15px;
+    }
+  }
   #form_container {
     display: flex;
     width: 100%;
@@ -291,62 +159,11 @@ const Contact = styled.div`
       justify-content: flex-start;
       font-size: 1.4rem;
       margin-bottom: 15px;
-      .variants_form {
-        display: flex;
-        flex-direction: row;
-        padding: 5px;
-        margin-right: 20px;
-        align-items: center;
-        justify-content: flex-start;
-        border: 1px solid #d8d8d8;
-        border-radius: 10px;
-        margin-right: 6px;
-        margin-bottom: 6px;
-        width: 100%;
-        height: 50px;
-        label {
-          line-height: 1.4;
-          font-size: 1.5rem;
-        }
-        div {
-          width: 40px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          input {
-            margin: 0;
-            padding: 0;
-          }
-        }
-      }
     }
-    .h2 {
-      width: 80%;
-      margin-bottom: 20px;
-      font-weight: 700;
-      font-size: 1.8rem;
-      line-height: 1.5;
-    }
-    .explainer {
-      width: 80%;
-      line-height: 1.7rem;
-      color: #393939;
-      margin-bottom: 20px;
-      font-size: 1.4rem;
-    }
-    form {
-      width: 80%;
-      .names {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-        input {
-          width: 48%;
-        }
-      }
-    }
+  }
+  .details {
+    margin: 30px 0;
+    width: 100%;
   }
   input {
     width: 100%;
@@ -358,36 +175,6 @@ const Contact = styled.div`
     outline: 0;
     cursor: pointer;
     font-size: 1.4rem;
-  }
-  #explainer {
-    width: 100%;
-    font-size: 1.4rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
-  #legal {
-    width: 80%;
-    font-size: 1.3rem;
-    line-height: 1.5;
-    a {
-      text-decoration: underline;
-    }
-  }
-  button {
-    width: 100%;
-    padding: 2%;
-    font-family: Montserrat;
-    border: none;
-    background: #f9d801;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    outline: 0;
-    cursor: pointer;
-    font-size: 1.8rem;
-    transition: ease-in 0.2s;
-    &:hover {
-      background-color: #dfc201;
-    }
   }
   @media (max-width: 800px) {
     width: 100%;
@@ -453,64 +240,59 @@ const Contact = styled.div`
   }
 `;
 
-const Form = styled.div`
-  width: 100%;
-  height: 90%;
-  /* padding: 4%; */
-  color: black;
-  display: flex;
-  flex-direction: row;
-  align-items: space-between;
-  justify-content: center;
-  justify-content: ${(props) =>
-    props.space == "en" ? "center" : "space-between"};
-  .PhoneInput {
-    width: 80%;
-    height: 22px;
-    select {
-    }
+const ButtonOpen = styled.a`
+  width: 292px;
+  height: 48px;
+  border: 2px solid #175ffe;
+  padding: 2%;
+  font-family: Montserrat;
+  border: none;
+  text-align: center;
+  background: #175ffe;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.8rem;
+  transition: ease-in 0.2s;
+  color: #fff;
+  &:hover {
+    background-color: #0b44bf;
   }
-  @media (max-width: 800px) {
-    flex-direction: column;
-    border-radius: 0;
-    padding: 6% 4%;
-    #description {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    #header {
-      width: 95%;
-    }
-    input {
-      width: 100%;
-      height: 50px;
-      font-size: 1.6rem;
-    }
-    button {
-      width: 100%;
-      height: 50px;
-      font-size: 2.2rem;
-    }
-    #legal {
-      width: 95%;
-    }
-    #details {
-      width: 95%;
-      font-size: 1.9rem;
-    }
-    #form {
-      width: 100%;
-      border: none;
-    }
-    #form_container {
-      width: 95%;
-      .h2 {
-        width: 100%;
-      }
-      form {
-        width: 100%;
-      }
-    }
+`;
+
+const ButtonBuy = styled.button`
+  width: 100%;
+  width: 292px;
+  height: 48px;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 2px solid #252f3f;
+  background: none;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.8rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #e3e4ec;
+  }
+`;
+
+const OpenCourse = styled.button`
+  width: 100%;
+  width: 292px;
+  height: 40px;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 1px solid #aeaeae;
+  background: none;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #e2e2e2;
   }
 `;
 
@@ -611,40 +393,152 @@ const Action = (props) => {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
   }
 
+  const getNoun = (number, one, two, five) => {
+    let n = Math.abs(number);
+    n %= 100;
+    if (n >= 5 && n <= 20) {
+      return five;
+    }
+    n %= 10;
+    if (n === 1) {
+      return one;
+    }
+    if (n >= 2 && n <= 4) {
+      return two;
+    }
+    return five;
+  };
+
+  let demo_lesson = coursePage.lessons
+    .filter((l) => l.open == true)
+    .sort((les) => les.number > les.number)[0];
+
   return (
     <Styles id="c2a">
       <Container>
-        <Form space={router.locale}>
+        <Contact>
+          <div className="price">{coursePage.price} ₽</div>
+          <ButtonOpen
+            id="coursePage_to_demolesson"
+            href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
+            target="_blank"
+          >
+            {t("start_open_lesson")}
+          </ButtonOpen>
+
+          <ButtonBuy
+            id="coursePage_buy_button"
+            onClick={async (e) => {
+              e.preventDefault();
+              if (!me) {
+                alert(
+                  `Сейчас мы откроем страницу регистрации. Создайте аккаунт, а потом нажмите на конпку "Купить" еще раз.`
+                );
+                toggleModal();
+              } else {
+                const res = await createOrder({
+                  variables: {
+                    coursePageId: coursePage.id,
+                    price: coursePage.price,
+                    userId: me.id,
+                    // comment: props.comment,
+                  },
+                });
+                location.href = res.data.createOrder.url;
+              }
+            }}
+          >
+            {loading_data ? "Готовим покупку..." : t("buy")}
+          </ButtonBuy>
+          <div className="guarantee">Гарантия возврата денег</div>
+          <div className="details">
+            <div className="">
+              ◼️ {coursePage.lessons.length} онлайн{" "}
+              {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}
+            </div>
+            <div className="">◼️ 4 вебинара</div>
+            <div className="">◼️ Пожизненный доступ</div>
+            <div className="">◼️ Чат с автором курса</div>
+            <div className="">◼️ Сертификат об окончании</div>
+          </div>
+          <div className="open">
+            <div className="">
+              После покупки нажмите сюда, чтобы получить доступ к курсу
+            </div>
+            <OpenCourse
+              id="coursePage_open_course_button"
+              onClick={async (e) => {
+                e.preventDefault();
+                let results = [];
+                console.log(1);
+                let checked_orders = await Promise.all(
+                  my_orders.map(async (o) => {
+                    let updated_res = await updateOrderAuto({
+                      variables: {
+                        userId: me.id,
+                        id: o.id,
+                      },
+                    });
+                    return updated_res;
+                  })
+                );
+
+                const checked_orders2 = checked_orders.filter(
+                  (c) =>
+                    c.data.updateOrderAuto !== null &&
+                    c.data.updateOrderAuto.isPaid == true
+                );
+
+                if (checked_orders2.length > 0) {
+                  let enroll = await enrollOnCourse({
+                    variables: {
+                      id: me.id,
+                      coursePageId: coursePage.id,
+                    },
+                  });
+                  Router.push({
+                    pathname: "/course",
+                    query: {
+                      id: coursePage.id,
+                    },
+                  });
+                } else {
+                  alert(
+                    "Не нашли ваш платеж. Если вы считаете, что произошла ошибка, напишите нам."
+                  );
+                }
+              }}
+            >
+              {updated_loading || enroll_loading
+                ? "Проверяем..."
+                : "Открыть доступ"}
+            </OpenCourse>
+          </div>
+        </Contact>
+      </Container>
+      <StyledModal
+        isOpen={isOpen}
+        onBackgroundClick={toggleModal}
+        onEscapeKeydown={toggleModal}
+      >
+        {auth === "signin" && (
+          <Signin getData={changeState} closeNavBar={toggleModal} />
+        )}
+        {auth === "signup" && (
+          <Signup getData={changeState} closeNavBar={toggleModal} />
+        )}
+        {auth === "reset" && <RequestReset getData={changeState} />}
+      </StyledModal>
+    </Styles>
+  );
+};
+
+export default Action;
+
+{
+  /* <Form space={router.locale}>
           {router.locale == "ru" && (
             <>
-              <Description>
-                <div id="header">
-                  <span>{t("price")}</span>
-                </div>
-                <div id="info">
-                  <div>{t("bonus")}</div>
-                  <div>{t("refund")}</div>
-                </div>
-                <div id="details">
-                  <br />
-                  <div className="arrow"> {props.data.price.full_explain}</div>
-                  <div id="prices">
-                    <div className="full">
-                      <span>
-                        {" "}
-                        {numberWithSpaces(Math.ceil(price / 10))} ₽/мес
-                      </span>
-                    </div>
-                    <div className="parts">
-                      <span> {numberWithSpaces(price)} ₽</span>
-                    </div>
-                  </div>
-                </div>
-                <div id="promo">
-                  <div>{t("apply_coupon")}</div>
-                  <input onChange={(e) => addPromo(e.target.value)} />
-                </div>
-              </Description>
               <Contact>
                 <div id="form_container">
                   <div className="h2">{t("step1")}</div>
@@ -698,7 +592,7 @@ const Action = (props) => {
                       </div>
                       <label for="html">
                         Открыть доступ к оплаченному курсу
-                      </label>
+                      </label> 
                     </div>
                   </div>
 
@@ -813,66 +707,6 @@ const Action = (props) => {
                       </div>
                     </>
                   )}
-                  {step == "open" && (
-                    <>
-                      <form>
-                        <div id="explainer">
-                          Проверьте, что вы открываете курс с того же аккаунта,
-                          с которого платили. После проверки оплаты мы перенесем
-                          вас на страницу курса.
-                        </div>
-                        <button
-                          type="submit"
-                          id="coursePage_open_course_button"
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            let results = [];
-                            console.log(1);
-                            let checked_orders = await Promise.all(
-                              my_orders.map(async (o) => {
-                                let updated_res = await updateOrderAuto({
-                                  variables: {
-                                    userId: me.id,
-                                    id: o.id,
-                                  },
-                                });
-                                return updated_res;
-                              })
-                            );
-
-                            const checked_orders2 = checked_orders.filter(
-                              (c) =>
-                                c.data.updateOrderAuto !== null &&
-                                c.data.updateOrderAuto.isPaid == true
-                            );
-
-                            if (checked_orders2.length > 0) {
-                              let enroll = await enrollOnCourse({
-                                variables: {
-                                  id: me.id,
-                                  coursePageId: coursePage.id,
-                                },
-                              });
-                              Router.push({
-                                pathname: "/course",
-                                query: {
-                                  id: coursePage.id,
-                                },
-                              });
-                            } else {
-                              alert(
-                                "Не нашли ваш платеж. Если вы считаете, что произошла ошибка, напишите нам."
-                              );
-                            }
-                          }}
-                        >
-                          {updated_loading || enroll_loading
-                            ? "Проверяем..."
-                            : "Открыть курс"}
-                        </button>
-                      </form>
-                    </>
-                  )}
                   {step == "buy" && (
                     <form>
                       <div id="explainer">
@@ -927,11 +761,10 @@ const Action = (props) => {
                       </div>
                     </form>
                   )}
-                </div>
               </Contact>
             </>
           )}
-          {router.locale == "en" && (
+           {router.locale == "en" && (
             <>
               <Contact>
                 <div id="form_container">
@@ -1055,29 +888,11 @@ const Action = (props) => {
                         оферты
                       </a>
                       .
-                    </div> */}
+                    </div>
                   </>
                 </div>
               </Contact>
             </>
           )}
-        </Form>
-      </Container>
-      <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={toggleModal}
-        onEscapeKeydown={toggleModal}
-      >
-        {auth === "signin" && (
-          <Signin getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "signup" && (
-          <Signup getData={changeState} closeNavBar={toggleModal} />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal>
-    </Styles>
-  );
-};
-
-export default Action;
+        </Form> */
+}

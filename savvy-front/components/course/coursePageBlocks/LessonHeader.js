@@ -42,7 +42,7 @@ const TextBar = styled.div`
   flex-direction: column;
   justify-content: space-between;
   background: #fff;
-  width: 320px;
+  width: 300px;
   max-height: 430px;
   border-radius: 2rem;
   font-size: 1.6rem;
@@ -61,7 +61,7 @@ const TextBar = styled.div`
     border-radius: 50%;
     position: absolute;
     top: -15px;
-    left: 290px;
+    left: 280px;
   }
   .image {
     width: 100%;
@@ -217,7 +217,7 @@ const LessonHeader = (props) => {
   return (
     <>
       <TextBar color={color}>
-        {lesson && lesson.open && <div className="open">🔓</div>}
+        {/* {lesson && lesson.open && <div className="open">🔓</div>} */}
         <div>
           <Text>
             <div className="lesson_name">

@@ -11,6 +11,8 @@ const CURRENT_USER_QUERY = gql`
       permissions
       tags
       image
+      work
+      description
       certificates {
         id
         createdAt

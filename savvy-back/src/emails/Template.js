@@ -525,7 +525,7 @@ const Template = (comment) => `
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        &copy; 2021 BeSavvy
+                        &copy; 2022 BeSavvy
                       </p>
                     </td>
                   </tr>

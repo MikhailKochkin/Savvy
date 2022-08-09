@@ -13,6 +13,10 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       banner
       audience
       result
+      goals
+      header
+      price
+      subheader
       tariffs
       methods
       video

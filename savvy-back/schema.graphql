@@ -483,14 +483,18 @@ type CoursePage {
   company: Company
   courseType: CourseType
   createdAt: DateTime!
+  currency: String
   description: String!
   discountPrice: Int
+  goals: [String!]!
+  header: [String!]!
   id: String!
   image: String!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   methods: String
   new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, where: UserWhereInput): [User!]!
   news: String
+  nextStart: DateTime
   numInCareerTrack: Int
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   price: Int
@@ -499,6 +503,7 @@ type CoursePage {
   result: String
   reviews: Json
   students: [String!]!
+  subheader: [String!]!
   subscription: Boolean
   subscriptionPrice: Int
   tags: [String!]!
@@ -506,6 +511,7 @@ type CoursePage {
   title: String!
   uni: Uni
   updatedAt: DateTime!
+  uptodateAt: DateTime
   user: User!
   video: String
   weeks: Int
@@ -524,13 +530,17 @@ input CoursePageOrderByInput {
   companyId: SortOrder
   courseType: SortOrder
   createdAt: SortOrder
+  currency: SortOrder
   description: SortOrder
   discountPrice: SortOrder
   examQuestionId: SortOrder
+  goals: SortOrder
+  header: SortOrder
   id: SortOrder
   image: SortOrder
   methods: SortOrder
   news: SortOrder
+  nextStart: SortOrder
   numInCareerTrack: SortOrder
   openLesson: SortOrder
   price: SortOrder
@@ -539,6 +549,7 @@ input CoursePageOrderByInput {
   result: SortOrder
   reviews: SortOrder
   students: SortOrder
+  subheader: SortOrder
   subscription: SortOrder
   subscriptionPrice: SortOrder
   tags: SortOrder
@@ -547,6 +558,7 @@ input CoursePageOrderByInput {
   uniId: SortOrder
   uniID: SortOrder
   updatedAt: SortOrder
+  uptodateAt: SortOrder
   userId: SortOrder
   video: SortOrder
   weeks: SortOrder
@@ -567,10 +579,13 @@ input CoursePageWhereInput {
   companyId: StringNullableFilter
   courseType: EnumCourseTypeNullableFilter
   createdAt: DateTimeFilter
+  currency: StringNullableFilter
   description: StringFilter
   discountPrice: IntNullableFilter
   examQuestion: ExamQuestionWhereInput
   examQuestionId: StringNullableFilter
+  goals: StringNullableListFilter
+  header: StringNullableListFilter
   id: StringFilter
   image: StringFilter
   lawrdles: LawrdleListRelationFilter
@@ -578,6 +593,7 @@ input CoursePageWhereInput {
   methods: StringNullableFilter
   new_students: UserListRelationFilter
   news: StringNullableFilter
+  nextStart: DateTimeNullableFilter
   NOT: [CoursePageWhereInput!]
   numInCareerTrack: IntNullableFilter
   openLesson: StringNullableFilter
@@ -592,6 +608,7 @@ input CoursePageWhereInput {
   result: StringNullableFilter
   reviews: JsonNullableFilter
   students: StringNullableListFilter
+  subheader: StringNullableListFilter
   subscription: BoolNullableFilter
   subscriptionPrice: IntNullableFilter
   tags: StringNullableListFilter
@@ -601,6 +618,7 @@ input CoursePageWhereInput {
   uniId: StringNullableFilter
   uniID: StringNullableFilter
   updatedAt: DateTimeFilter
+  uptodateAt: DateTimeNullableFilter
   user: UserWhereInput
   userId: StringFilter
   video: StringNullableFilter
@@ -1427,6 +1445,7 @@ type Mutation {
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(comment: String, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
+  sendMessage(comment: String, email: String, id: String, message: String): User
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
@@ -1436,7 +1455,7 @@ type Mutation {
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, hint: String, id: String, name: String, type: String, variants: [String]): Construction
-  updateCoursePage(audience: String, authors: String, description: String, id: String, image: String, methods: String, news: String, promocode: PromocodeList, result: String, tariffs: String, title: String, video: String): CoursePage
+  updateCoursePage(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, news: String, nextStart: DateTime, price: Int, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
@@ -1455,7 +1474,7 @@ type Mutation {
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
-  updateUser(email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String]): User
+  updateUser(description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
 }
 
 input NestedBoolFilter {
@@ -2785,6 +2804,7 @@ input UsefulWhereUniqueInput {
 type User {
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
   co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
+  comment: String
   company: Company
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCoursePagesOrderByInput!]): [CoursePage!]!
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int): [CourseVisit!]!
@@ -2796,6 +2816,7 @@ type User {
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   level: UserLevel
+  message: String
   name: String!
   new_subjects(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
   number: String
@@ -2810,6 +2831,7 @@ type User {
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
   uni: Uni
   updatedAt: DateTime!
+  work: String
 }
 
 input UserCo_coursePagesOrderByInput {
@@ -2848,6 +2870,7 @@ input UserListRelationFilter {
 input UserOrderByInput {
   careerTrackId: SortOrder
   careerTrackID: SortOrder
+  comment: SortOrder
   companyId: SortOrder
   coverLetter: SortOrder
   createdAt: SortOrder
@@ -2859,6 +2882,7 @@ input UserOrderByInput {
   isFamiliar: SortOrder
   legalPortfolioId: SortOrder
   levelId: SortOrder
+  message: SortOrder
   name: SortOrder
   number: SortOrder
   password: SortOrder
@@ -2873,6 +2897,7 @@ input UserOrderByInput {
   uniId: SortOrder
   uniID: SortOrder
   updatedAt: SortOrder
+  work: SortOrder
 }
 
 input UserWhereInput {
@@ -2885,6 +2910,7 @@ input UserWhereInput {
   chats: ChatListRelationFilter
   clauses: ClauseListRelationFilter
   co_coursePages: CoursePageListRelationFilter
+  comment: StringNullableFilter
   company: CompanyWhereInput
   companyId: StringNullableFilter
   constructionResults: ConstructionResultListRelationFilter
@@ -2912,6 +2938,7 @@ input UserWhereInput {
   lessons: LessonListRelationFilter
   level: UserLevelWhereInput
   levelId: StringNullableFilter
+  message: StringNullableFilter
   miniforums: MiniForumListRelationFilter
   name: StringFilter
   new_subjects: CoursePageListRelationFilter
@@ -2955,6 +2982,7 @@ input UserWhereInput {
   uniId: StringNullableFilter
   uniID: StringNullableFilter
   updatedAt: DateTimeFilter
+  work: StringNullableFilter
 }
 
 input UserWhereUniqueInput {

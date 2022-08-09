@@ -44,8 +44,6 @@
     "nuka-carousel": "^4.7.4",
     "prop-types": "^15.7.2",
     "react": "16.14",
-    "react-add-to-calendar": "^0.1.5",
-    "react-big-calendar": "^0.38.4",
     "react-calendly": "^2.2.2",
     "react-chartjs-2": "^2.11.1",
     "react-cookie-consent": "^7.3.1",

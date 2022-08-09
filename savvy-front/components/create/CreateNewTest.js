@@ -200,10 +200,10 @@ const Comment = styled.div`
   font-size: 1.4rem;
   outline: 0;
   &#ifRight {
-    border: 1px solid #84bc9c;
+    border: 1px solid #c4c4c4;
   }
   &#ifWrong {
-    border: 1px solid #de6b48;
+    border: 1px solid #c4c4c4;
   }
 `;
 

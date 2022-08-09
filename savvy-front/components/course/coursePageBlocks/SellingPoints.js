@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background: #fff;
   border-top: 1px solid #dce2e7;
@@ -17,22 +17,18 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  width: 80%;
+  width: 85%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
   h2 {
-    text-align: left;
-    font-weight: 400;
-    font-size: 4rem;
     line-height: 1.4;
-    width: 100%;
-    margin: 80px 0;
+    font-weight: 700;
+    font-size: 2.8rem;
   }
   h2 {
     margin-bottom: 40px;
-    font-size: 3.2rem;
   }
 `;
 
@@ -40,7 +36,7 @@ const PointsBox = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: space-around;
   width: 100%;
   @media (max-width: 1040px) {
@@ -49,12 +45,13 @@ const PointsBox = styled.div`
 `;
 
 const Point = styled.div`
-  width: 250px;
+  width: 270px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 80px;
+  margin-bottom: 60px;
   border: 1px solid #dce2e6;
   padding: 20px;
+  margin-right: 60px;
   @media (max-width: 1040px) {
     flex-direction: column;
     width: 90%;

@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const UPDATE_COURSEPAGE_MUTATION = gql`
   mutation UPDATE_COURSEPAGE_MUTATION(
@@ -14,6 +16,11 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $result: String
     $tariffs: String
     $methods: String
+    $nextStart: DateTime
+    $price: Int
+    $goals: [String]
+    $header: [String]
+    $subheader: [String]
     $image: String
     $video: String # $banner: String
   ) {
@@ -26,6 +33,11 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       result: $result
       tariffs: $tariffs
       methods: $methods
+      nextStart: $nextStart
+      price: $price
+      goals: $goals
+      header: $header
+      subheader: $subheader
       image: $image
       video: $video #   banner: $banner
     ) {
@@ -168,7 +180,18 @@ const UpdateForm = (props) => {
   const [tariffs, setTariffs] = useState(props.coursePage.tariffs);
   const [methods, setMethods] = useState(props.coursePage.methods);
   const [video, setVideo] = useState(props.coursePage.video);
+  const [price, setPrice] = useState(props.coursePage.price);
   const [news, setNews] = useState(props.coursePage.news);
+  const [goals, setGoals] = useState(
+    props.coursePage.goals.length > 0 ? props.coursePage.goals : [""]
+  );
+  const [header, setHeader] = useState(
+    props.coursePage.header.length > 0 ? props.coursePage.header : [""]
+  );
+  const [subheader, setSubheader] = useState(
+    props.coursePage.subheader.length > 0 ? props.coursePage.subheader : [""]
+  );
+  const [startDate, setStartDate] = useState(new Date());
 
   const [updateCoursePage, { data, loading }] = useMutation(
     UPDATE_COURSEPAGE_MUTATION
@@ -190,6 +213,24 @@ const UpdateForm = (props) => {
     const file = await res.json();
     setImage(file.secure_url);
     setUpload(false);
+  };
+
+  const myCallbackGoal = (res, name, i) => {
+    let new_goals = [...goals];
+    new_goals[i] = res;
+    setGoals([...new_goals]);
+  };
+
+  const myCallbackHeader = (res, name, i) => {
+    let new_g = [...header];
+    new_g[i] = res;
+    setHeader([...new_g]);
+  };
+
+  const myCallbackSubheader = (res, name, i) => {
+    let new_g = [...subheader];
+    new_g[i] = res;
+    setSubheader([...new_g]);
   };
 
   const myCallback = (dataFromChild, name) => {
@@ -233,6 +274,16 @@ const UpdateForm = (props) => {
         />
         <input
           className="second"
+          type="number"
+          id="description"
+          name="description"
+          placeholder="Цена"
+          required
+          defaultValue={price}
+          onChange={(e) => setPrice(parseInt(e.target.value))}
+        />
+        <input
+          className="second"
           type="text"
           id="video"
           name="video"
@@ -249,6 +300,63 @@ const UpdateForm = (props) => {
           defaultValue={news}
           onChange={(e) => setNews(e.target.value)}
         />
+        {header.map((g, i) => (
+          <input
+            index={i}
+            name="goal"
+            onChange={(e) =>
+              myCallbackHeader(e.target.value, e.target.name, parseInt(i))
+            }
+            defaultValue={g}
+            placeholder="Заголовок..."
+          />
+        ))}
+        <button
+          onClick={(e) => {
+            setHeader([...header, ""]);
+            e.preventDefault();
+          }}
+        >
+          +1
+        </button>
+        {subheader.map((g, i) => (
+          <input
+            index={i}
+            name="goal"
+            onChange={(e) =>
+              myCallbackSubheader(e.target.value, e.target.name, parseInt(i))
+            }
+            defaultValue={g}
+            placeholder="Подзаголовок..."
+          />
+        ))}
+        <button
+          onClick={(e) => {
+            setSubheader([...subheader, ""]);
+            e.preventDefault();
+          }}
+        >
+          +1
+        </button>
+        {goals.map((g, i) => (
+          <Frame>
+            <DynamicLoadedEditor
+              index={i}
+              name="goal"
+              getEditorText={myCallbackGoal}
+              value={g}
+              placeholder="Результат ..."
+            />
+          </Frame>
+        ))}
+        <button
+          onClick={(e) => {
+            setGoals([...goals, ""]);
+            e.preventDefault();
+          }}
+        >
+          +1
+        </button>
 
         <Frame>
           <DynamicLoadedEditor
@@ -286,6 +394,14 @@ const UpdateForm = (props) => {
             placeholder="Как работают тарифы на курсе..."
           />
         </Frame>
+        <DatePicker
+          selected={startDate}
+          dateFormat="dd/MM/yyyy"
+          onChange={(date) => {
+            return setStartDate(date);
+          }}
+        />
+
         {/* <label for="file">
           <div className="upload">
             {upload === false ? "Загрузите новый логотип курса" : null}
@@ -315,6 +431,11 @@ const UpdateForm = (props) => {
                   news,
                   description: description,
                   audience,
+                  goals,
+                  price,
+                  header,
+                  nextStart: startDate.toISOString(),
+                  subheader,
                   result,
                   tariffs,
                   methods,

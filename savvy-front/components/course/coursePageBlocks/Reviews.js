@@ -4,29 +4,26 @@ import { useTranslation } from "next-i18next";
 import renderHTML from "react-render-html";
 
 const Styles = styled.div`
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  /* min-height: 100vh; */
   background: #f7f7f7;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 0;
+  padding: 60px 0;
 `;
 
 const Container = styled.div`
-  width: 80%;
+  width: 85%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
   h2 {
-    text-align: left;
-    font-weight: 400;
-    font-size: 4rem;
     line-height: 1.4;
-    width: 100%;
-    margin: 80px 0;
+    font-weight: 700;
+    font-size: 2.8rem;
   }
   @media (max-width: 800px) {
     h2 {
@@ -38,26 +35,29 @@ const Container = styled.div`
 
 const ReviewsList = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* flex-wrap: wrap; */
   align-items: space-between;
   width: 100%;
 `;
 
 const Review = styled.div`
-  width: 450px;
+  /* width: 450px; */
   margin-right: 50px;
   display: flex;
   background: #fff;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
   margin-bottom: 40px;
-  box-shadow: 0px 0px 10px rgba(129, 129, 129, 0.45);
-  border-radius: 5px;
+  /* box-shadow: 0px 0px 10px rgba(129, 129, 129, 0.45); */
+  /* border-radius: 5px; */
   position: relative;
   .img_component {
-    width: 100%;
-    height: 150px;
+    width: 100px;
+    margin: 15px;
+    height: 100px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     position: relative;
@@ -65,11 +65,12 @@ const Review = styled.div`
       object-fit: cover;
       width: 100%;
       height: 100%;
+      border-radius: 50%;
       z-index: 1;
     }
   }
   .author {
-    width: 100%;
+    /* width: 30%; */
   }
   .text {
     width: 100%;
@@ -94,7 +95,7 @@ const Review = styled.div`
     font-weight: 300;
     line-height: 1.4;
     font-size: 1.4rem;
-    padding: 4%;
+    padding: 15px;
   }
   @media (max-width: 1040px) {
     width: 100%;
@@ -108,7 +109,9 @@ const Review = styled.div`
     }
     .img_component {
       width: 100%;
-      height: 200px;
+      width: 80px;
+      margin: 15px;
+      height: 80px;
     }
     .name {
       font-size: 1.8rem;
@@ -139,6 +142,7 @@ const Reviews = (props) => {
               <div className="text">
                 <div className="name">
                   <div>{r.name}</div>
+                  <div>⭐️⭐️⭐️⭐️⭐️</div>
                 </div>
                 <div className="description">{renderHTML(r.info)}</div>
               </div>

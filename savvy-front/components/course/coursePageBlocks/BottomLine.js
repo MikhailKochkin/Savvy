@@ -1,39 +1,59 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
+import { useQuery, gql } from "@apollo/client";
 
 import { useTranslation } from "next-i18next";
 import ReactResizeDetector from "react-resize-detector";
+
+const SINGLE_COURSEPAGE_QUERY = gql`
+  query SINGLE_COURSEPAGE_QUERY($id: String!) {
+    coursePage(where: { id: $id }) {
+      id
+      title
+      user {
+        id
+        name
+        surname
+      }
+    }
+  }
+`;
 
 const Banner = styled.div`
   width: 100%;
   min-height: 10vh;
   background-image: url("/static/pattern.svg");
   background-size: cover;
-  color: #fff;
-  /* position: -webkit-sticky;
+  color: #dfe1ec;
+  position: -webkit-sticky;
   position: sticky;
-  top: 0px; */
-  position: fixed;
-  bottom: 0;
+  top: 0px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   z-index: 3;
   justify-content: center;
   /* padding-right: 300px; */
   .bottomline_text {
+    max-width: 95%;
+    min-width: 45%;
+    font-size: 1.6rem;
+    height: 100%;
+    line-height: 1.6;
+    font-weight: 600;
+    padding: 10px;
+    margin-right: 50px;
+  }
+  .more_bottomline_text {
     max-width: 65%;
     min-width: 45%;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     height: 100%;
     line-height: 1.6;
     font-weight: 500;
     padding: 10px;
     margin-right: 50px;
-    span {
-    }
-    /* opacity: 0.9; */
   }
   button {
     background: #fcc419;
@@ -79,21 +99,28 @@ const Banner = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
-    padding: 20px 0;
-    background-size: contain;
+    /* position: fixed; */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0px;
+    padding: 10px 0;
+    background-size: cover;
 
     .bottomline_text {
       width: 90%;
       max-width: 90%;
       padding: 0;
       margin: 0;
-      margin-bottom: 15px;
     }
     button {
       min-width: 90%;
       font-size: 1.8rem;
     }
   }
+`;
+
+const Container = styled.div`
+  width: 85%;
 `;
 
 const StyledModal = Modal.styled`
@@ -139,26 +166,44 @@ const Ad = (props) => {
   const onResize = (width, height) => {
     setWidth(width);
   };
-  const { t } = useTranslation("coursePage");
 
-  let demo_lesson = props.data
-    .filter((l) => l.open == true)
-    .sort((les) => les.number > les.number)[0];
+  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+    variables: { id: props.id },
+  });
+
+  if (loading) return <div></div>;
+
+  const course = data.coursePage;
+  // const { t } = useTranslation("coursePage");
+
+  // let demo_lesson = props.data
+  //   .filter((l) => l.open == true)
+  //   .sort((les) => les.number > les.number)[0];
 
   return (
     <Banner>
-      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <div className="bottomline_text">
-        <span>🖐🏻 {t("demo_lesson_offer")}</span>
-      </div>
-
+      <Container>
+        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+        <div className="bottomline_text">
+          <span>
+            🚀 Курс "{course.title}". Автор – {course.user.name}{" "}
+            {course.user.surname}
+          </span>
+        </div>
+        {/* <div className="more_bottomline_text">
+          <span>
+            🖐🏻 Курс: Юридический английский для профессионалов. Базовый уровень.
+          </span>
+        </div> */}
+        {/* 
       <a
         href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
         target="_blank"
         id="bottomline_coursepage_to_demo_lesson"
       >
         {t("start_open_lesson")}
-      </a>
+      </a> */}
+      </Container>
     </Banner>
   );
 };

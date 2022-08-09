@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
+import dynamic from "next/dynamic";
+
 import { CURRENT_USER_QUERY } from "./User";
 import { Unis, Companies } from "../config";
 
@@ -13,6 +15,8 @@ const UPDATE_USER_MUTATION = gql`
     $email: String
     $status: Status
     $image: String
+    $work: String
+    $description: String
     $isFamiliar: Boolean
     $tags: [String]
   ) {
@@ -23,6 +27,8 @@ const UPDATE_USER_MUTATION = gql`
       surname: $surname
       status: $status
       image: $image
+      description: $description
+      work: $work
       isFamiliar: $isFamiliar
       tags: $tags
     ) {
@@ -106,6 +112,19 @@ const Fieldset = styled.fieldset`
   }
 `;
 
+const Frame = styled.div`
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  width: 90%;
+  margin-bottom: 3%;
+  margin-left: 2%;
+
+  padding: 0 1%;
+  .com {
+    border-top: 1px solid #c4c4c4;
+  }
+`;
+
 const Comment = styled.div`
   font-size: 1.4rem;
   color: #767676;
@@ -160,6 +179,11 @@ const Green = styled.div`
   display: ${(props) => (props.show ? "block" : "none")};
 `;
 
+const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
 const Account = (props) => {
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState(props.me.status);
@@ -168,9 +192,20 @@ const Account = (props) => {
   const [email, setEmail] = useState(props.me.email);
   const [image, setImage] = useState(props.me.image ? props.me.image : "");
   const [upload, setUpload] = useState(false);
+  const [description, setDescription] = useState(props.me.description);
+  const [work, setWork] = useState(props.me.work);
+
   // careerTrackID
   // uniID
   // company
+
+  const myCallback = (data) => {
+    setWork(data);
+  };
+
+  const myCallback2 = (data) => {
+    setDescription(data);
+  };
 
   const uploadFile = async (e) => {
     setUpload(true);
@@ -202,6 +237,8 @@ const Account = (props) => {
           surname,
           status,
           image,
+          work,
+          description,
           tags: props.me.tags,
         }}
         refetchQueries={[{ query: CURRENT_USER_QUERY }]}
@@ -239,7 +276,6 @@ const Account = (props) => {
                     value={me.email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <br />
                   <>
                     <select
                       defaultValue={me.status}
@@ -257,6 +293,28 @@ const Account = (props) => {
                       искать сотрудников в качестве HR.
                     </Comment>
                   </>
+                  {status == "AUTHOR" && (
+                    <>
+                      <Frame>
+                        <DynamicLoadedEditor
+                          index={0}
+                          name="description"
+                          getEditorText={myCallback}
+                          value={work}
+                          placeholder="Where do you work?"
+                        />
+                      </Frame>
+                      <Frame>
+                        <DynamicLoadedEditor
+                          index={0}
+                          name="description"
+                          getEditorText={myCallback2}
+                          value={description}
+                          placeholder="Tell us about your experience"
+                        />
+                      </Frame>
+                    </>
+                  )}
                   <input
                     // style={{ display: "none" }}
                     className="second"

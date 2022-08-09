@@ -320,6 +320,7 @@ const LessonHeader = (props) => {
   let color;
   let progress;
   let visit;
+  console.log("i_am_author", i_am_author);
 
   if (me) {
     visit = lessonResult;
@@ -469,6 +470,7 @@ const LessonHeader = (props) => {
                 me.new_subjects.filter((s) => s.id == coursePageId).length >
                   0 ||
                 me.id === lesson.user.id ||
+                i_am_author ||
                 lesson.open) && (
                 <Link
                   href={{

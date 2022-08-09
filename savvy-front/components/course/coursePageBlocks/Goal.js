@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 const Styles = styled.div`
-  width: 100vw;
+  width: 100%;
   min-height: 70vh;
   background: #fff;
   display: flex;
@@ -14,15 +14,16 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0;
-  border-top: 1px solid #dce2e7;
+  /* border-top: 1px solid #dce2e7; */
   @media (max-width: 800px) {
+    min-height: 40vh;
   }
 `;
 
 const Container = styled.div`
-  width: 80%;
+  width: 85%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   color: #313d48;
@@ -39,28 +40,37 @@ const Container = styled.div`
     cursor: pointer;
   }
   #goal_message {
-    width: 40%;
+    width: 90%;
     /* height: 150px; */
     h2 {
       line-height: 1.4;
-      font-weight: 500;
+      font-weight: 700;
       font-size: 2.8rem;
     }
   }
   #goal_examples {
-    width: 40%;
+    width: 90%;
     /* height: 150px; */
     font-size: 2rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: space-between;
     justify-content: space-between;
     div {
     }
     .example {
       display: flex;
+      width: 46%;
       flex-direction: row;
-      margin: 15px 0;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-right: 10px;
+      font-size: 1.6rem;
+      margin: 10px 0;
+      p {
+        margin: 0;
+      }
       .icon {
         margin-right: 20px;
         color: #327998;
@@ -69,9 +79,8 @@ const Container = styled.div`
         align-items: center;
         justify-content: center;
       }
-
       div {
-        line-height: 1.2;
+        line-height: 1.5;
         span {
           font-size: 3.6rem;
         }
@@ -80,20 +89,23 @@ const Container = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: column;
+    margin: 50px 0;
     #goal_message {
       height: auto;
       width: 90%;
-      margin-bottom: 30px;
       button {
         width: 90%;
       }
     }
     #goal_examples {
       height: auto;
+      flex-direction: column;
+
       width: 100%;
       .example {
-        margin: 20px 0;
-        line-height: 1.4;
+        margin: 10px 0;
+        line-height: 1.8;
+        width: 100%;
       }
     }
   }
@@ -111,40 +123,35 @@ const Goal = (props) => {
       inline: "nearest",
     });
   };
-  const d = props.data;
+
+  const { coursePage } = props;
   return (
     <Styles>
       <Container>
         <div id="goal_message">
           <h2>
-            {d.goal_header ? (
+            {/* {d.goal_header ? (
               renderHTML(d.goal_header)
-            ) : (
-              <>
-                {router.locale == "ru" ? (
-                  <>
-                    Вы получите новые знания. <br />
-                    Новые навыки.
-                    <br /> И новые знакомства с экспертами.
-                  </>
-                ) : (
-                  <>
-                    Get new knowledge. <br /> Master new skills. <br /> Join the
-                    community.
-                  </>
-                )}
-              </>
-            )}
+            ) : ( */}
+            <>
+              {router.locale == "ru" ? (
+                <>Чему вы научитесь</>
+              ) : (
+                <>What you will learn</>
+              )}
+            </>
+            {/* )} */}
           </h2>
-
+          {/* 
           <button id="advantages_to_enroll" onClick={(e) => slide()}>
             {t("get_started")}
-          </button>
+          </button> */}
         </div>
         <div id="goal_examples">
-          {d.goals.map((g) => (
+          {coursePage.goals.map((g) => (
             <div className="example">
               <div className="icon">
+                ☑️
                 {/* <Icon size={25} icon={graduationCap} /> */}
               </div>
               <div>{renderHTML(g)}</div>

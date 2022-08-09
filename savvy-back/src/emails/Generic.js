@@ -1,4 +1,5 @@
-const ReminderEmail = (name, course, coursePageID) => `
+const GenericEmail = (text) => `
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
@@ -9,7 +10,7 @@ const ReminderEmail = (name, course, coursePageID) => `
     <style type="text/css" rel="stylesheet" media="all">
       /* Base ------------------------------ */
 
-      @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700&display=swap");
+      @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap&subset=cyrillic");
       body {
         width: 100% !important;
         height: 100%;
@@ -45,7 +46,7 @@ const ReminderEmail = (name, course, coursePageID) => `
       body,
       td,
       th {
-        font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+        font-family: Arial;
       }
 
       h1 {
@@ -421,18 +422,6 @@ const ReminderEmail = (name, course, coursePageID) => `
         }
       }
     </style>
-    <!--[if mso]>
-      <style type="text/css">
-        .f-fallback {
-          font-family: Arial, sans-serif;
-        }
-      </style>
-    <![endif]-->
-  </head>
-  <body>
-  <!--<span class="preheader"
-      >Онлайн-курсы трудно проходить до конца, но у тебя получится, я уверен!</span
-    >-->
     <table
       class="email-wrapper"
       width="100%"
@@ -452,7 +441,7 @@ const ReminderEmail = (name, course, coursePageID) => `
             <tr>
               <td class="email-masthead">
                 <a
-                  href="https://example.com"
+                  href="https://besavvy.app"
                   class="f-fallback email-masthead_name"
                 >
                   BeSavvy
@@ -479,70 +468,12 @@ const ReminderEmail = (name, course, coursePageID) => `
                   <tr>
                     <td class="content-cell">
                       <div class="f-fallback">
-                        <h1>${name}, привет!</h1>
+                          ${text}
+                        <p>Успехов, <br />Миша из BeSavvy</p>
                         <p>
-                            Это Миша, основатель BeSavvy, платформы интерактивных онлайн курсов для юристов.</p>
-                        <p>
-                            Я увидел тебя среди участников курса "${course}". К сожалению, что-то пошло не так и у тебя не получилось пройти курс до конца.
-                        </p>
-                        <p>
-                            Может все-таки попробуем добить его до конца?
-                        </p>
-                        <!-- Action -->
-                        <table
-                          class="body-action"
-                          align="center"
-                          width="100%"
-                          cellpadding="0"
-                          cellspacing="0"
-                          role="presentation"
-                        >
-                          <tr>
-                            <td align="center">
-                              <!-- Border based button
-           https://litmus.com/blog/a-guide-to-bulletproof-buttons-in-email-design -->
-                              <table
-                                width="100%"
-                                border="0"
-                                cellspacing="0"
-                                cellpadding="0"
-                                role="presentation"
-                              >
-                                <tr>
-                                  <td align="center">
-                                    <a
-                                    href="https://besavvy.app/course?id=${coursePageID}"
-                                      class="f-fallback button"
-                                      target="_blank"
-                                      >На курс</a
-                                    >
-                                  </td>
-                                </tr>
-                              </table>
-                            </td>
-                          </tr>
-                        </table>
+                          <strong>P.S.</strong> Я всегда очень буду рад обратному письму. Поделитесь любыми мыслями и идеями, любая обратная связь от пользователей платформы – это большой подарок для меня 🎁.</p>
 
-                        <p>Мы кстати доработали этот курс с точки зрения функционала и контента. Так что теперь стало еще удобнее и интереснее его проходить. 😄</p>
-                        <p>
-                            <p>Успехов, <br />Михаил и команда BeSavvy</p>
-                        </p>
-                        <p>
-                          <strong>P.S.</strong> Что-то мешает проходить курс? Технические неполадки, непонятный материал или что-то еще?
-                          Опиши свою проблему в ответе на это письмо. Я помогу.
-                        </p>
                         <!-- Sub copy -->
-                        <table class="body-sub" role="presentation">
-                          <tr>
-                            <td>
-                              <p class="f-fallback sub">
-                                Если у вас не работает кнопка выше, просто
-                                скопируйте в поисковую строку:
-                              </p>
-                              <p class="f-fallback sub">https://besavvy.app/course?id=${coursePageID}</p>
-                            </td>
-                          </tr>
-                        </table>
                       </div>
                     </td>
                   </tr>
@@ -574,7 +505,6 @@ const ReminderEmail = (name, course, coursePageID) => `
       </tr>
     </table>
   </body>
-</html>
-`;
+</html>`;
 
-exports.ReminderEmail = ReminderEmail;
+exports.GenericEmail = GenericEmail;

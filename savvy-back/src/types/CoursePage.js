@@ -19,7 +19,13 @@ const CoursePage = objectType({
     t.model.applications();
     t.model.published();
     t.model.uni();
+    t.model.currency();
     t.model.tags();
+    t.model.header();
+    t.model.subheader();
+    t.model.nextStart();
+    t.model.uptodateAt();
+    t.model.goals();
     t.model.courseType();
     t.model.students();
     t.model.new_students({ filtering: true });

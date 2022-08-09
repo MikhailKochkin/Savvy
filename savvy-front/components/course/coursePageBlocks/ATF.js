@@ -3,26 +3,50 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import renderHTML from "react-render-html";
 import { useRouter } from "next/router";
+import { useQuery, gql } from "@apollo/client";
+import moment from "moment";
+
+import Loading from "../../Loading";
+
+const SINGLE_COURSEPAGE_QUERY = gql`
+  query SINGLE_COURSEPAGE_QUERY($id: String!) {
+    coursePage(where: { id: $id }) {
+      id
+      title
+      user {
+        id
+        image
+      }
+      authors {
+        id
+        image
+      }
+      nextStart
+      header
+      subheader
+      new_students {
+        id
+      }
+    }
+  }
+`;
 
 const BImage = styled.div`
   /* background-image: url("./static/back_image.png"); */
-  width: 100vw;
-  min-height: 90vh;
+  width: 100%;
+  /* min-height: 90vh; */
   max-height: 1200px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  img {
-    object-fit: cover;
-    filter: brightness(40%);
-  }
+
   background-image: url("/static/pattern6.svg");
   background-size: contain;
   @media (max-width: 800px) {
-    padding: 50px 0;
+    /* padding: 50px 0; */
     min-height: 60vh;
-    background-size: cover;
+    background-size: contain;
   }
 `;
 
@@ -38,17 +62,22 @@ const InfoBlock = styled.div`
 
 const Container = styled.div`
   /* background-image: url("./static/back_image.png"); */
-  width: 70%;
+  width: 85%;
   max-width: 1050px;
+  margin-top: 50px;
   /* height: 50%; */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  .date {
+    font-weight: bold;
+    color: #252f3f;
+  }
 
   h1 {
-    font-size: 6rem;
+    font-size: 5.6rem;
     line-height: 1.2;
-    text-align: center;
+    /* text-align: center; */
     font-weight: 800;
     margin: 0;
     margin-bottom: 20px;
@@ -63,9 +92,9 @@ const Container = styled.div`
     }
   }
   h2 {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     line-height: 1.4;
-    text-align: center;
+    /* text-align: center; */
     width: 75%;
     font-weight: 400;
     color: #4b5563;
@@ -173,6 +202,29 @@ const TimeLeft = styled.div`
   }
 `;
 
+const NextMeeting = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  .image_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-right: 15px;
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+      object-fit: cover;
+      border: 1px solid #dde2e1;
+    }
+  }
+`;
+
 const ATF = (props) => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
@@ -181,34 +233,41 @@ const ATF = (props) => {
   const { t } = useTranslation("coursePage");
   const router = useRouter();
 
-  const d = props.data;
-  useEffect(() => {
-    const interval = setInterval(() => {
-      var countDownDate = new Date(d.start_eng).getTime(); // Get today's date and time
-      var now = new Date().getTime();
+  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+    variables: { id: props.id },
+  });
 
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
+  if (loading) return <Loading />;
 
-      // Time calculations for days, hours, minutes and seconds
-      var days_calculation = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours_calculation = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      var minutes_calculation = Math.floor(
-        (distance % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      var seconds_calculation = Math.floor((distance % (1000 * 60)) / 1000);
+  const course = data.coursePage;
 
-      // Display the result
-      setDays(days_calculation);
-      setHours(hours_calculation);
-      setMinutes(minutes_calculation);
-      setSeconds(seconds_calculation);
-    }, 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     var countDownDate = new Date(d.start_eng).getTime(); // Get today's date and time
+  //     var now = new Date().getTime();
 
-    return () => clearInterval(interval);
-  }, []);
+  //     // Find the distance between now and the count down date
+  //     var distance = countDownDate - now;
+
+  //     // Time calculations for days, hours, minutes and seconds
+  //     var days_calculation = Math.floor(distance / (1000 * 60 * 60 * 24));
+  //     var hours_calculation = Math.floor(
+  //       (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  //     );
+  //     var minutes_calculation = Math.floor(
+  //       (distance % (1000 * 60 * 60)) / (1000 * 60)
+  //     );
+  //     var seconds_calculation = Math.floor((distance % (1000 * 60)) / 1000);
+
+  //     // Display the result
+  //     setDays(days_calculation);
+  //     setHours(hours_calculation);
+  //     setMinutes(minutes_calculation);
+  //     setSeconds(seconds_calculation);
+  //   }, 1000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const getEngNoun = (number, one, two) => {
     let n = Math.abs(number);
@@ -236,40 +295,54 @@ const ATF = (props) => {
     return five;
   };
 
-  const slide = () => {
-    var my_element = document.getElementById("syllabus");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
-
-  const slide2 = () => {
-    var my_element = document.getElementById("c2a");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
+  moment.locale("ru");
+  console.log("course.nextStart", course.nextStart);
   return (
     <div id="ATF">
       <BImage>
         {/* <Image src={`/static/${d.image}`} layout="fill" /> */}
         <InfoBlock>
           <Container>
-            <h1>{renderHTML(d.header)}</h1>
-            <h2>{d.subheader}</h2>
-            <Buttons>
+            {/* <div>
+              Рейтинг: ⭐️⭐️⭐️⭐️⭐️, число студентов:{" "}
+              {course.new_students.length}
+            </div> */}
+            <h1>
+              {course.header.length > 0 ? renderHTML(course.header[0]) : ""}
+            </h1>
+            <h2>
+              {course.subheader.length > 0
+                ? renderHTML(course.subheader[0])
+                : ""}
+            </h2>
+            {/* <div>Курс актуален на 1 августа 2022 года</div> */}
+            <NextMeeting>
+              <div className="image_container">
+                {course.authors.length > 0 ? (
+                  course.authors.map((auth) => <img src={auth.image} />)
+                ) : (
+                  <img src={course.user.image} />
+                )}
+              </div>
+              <div>
+                Следующий вебинар{" "}
+                {course.authors.length > 1 ? "авторов" : "автора"} –
+                <span className="date">
+                  {" "}
+                  {moment(course.nextStart).format("LL")}
+                </span>
+              </div>
+            </NextMeeting>
+
+            {/* <Buttons>
               <button id="atf_look_at_syllabus_button" onClick={(e) => slide()}>
                 {t("syllabus")}
               </button>
               <button id="atf_buy_button" onClick={(e) => slide2()}>
                 {t("enroll")}
               </button>
-            </Buttons>
-            <TimeLeft>
+            </Buttons> */}
+            {/* <TimeLeft>
               <div id="clock">
                 <div className="clock_section">
                   <div className="clock_time">{days}</div>
@@ -304,7 +377,7 @@ const ATF = (props) => {
                   </div>
                 </div>
               </div>
-            </TimeLeft>
+            </TimeLeft> */}
           </Container>
         </InfoBlock>
       </BImage>

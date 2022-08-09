@@ -106,14 +106,14 @@ const RegisterCard = (props) => {
               {applied && <Paid>{t("applied")}</Paid>}
               {me && (
                 <>
-                  {coursePage.courseType !== "FORMONEY" && (
-                    <EnrollCoursePage
-                      coursePage={coursePage}
-                      studentsArray={studentsArray}
-                      subjectArray={subjectArray}
-                      meData={me}
-                    />
-                  )}
+                  {/* {coursePage.courseType !== "FORMONEY" && ( */}
+                  <EnrollCoursePage
+                    coursePage={coursePage}
+                    studentsArray={studentsArray}
+                    subjectArray={subjectArray}
+                    meData={me}
+                  />
+                  {/* )} */}
                 </>
               )}
             </Part2>

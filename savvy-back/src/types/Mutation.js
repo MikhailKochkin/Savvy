@@ -23,7 +23,7 @@ const ClientReminder = require("../emails/ClientReminder");
 const WelcomeEmail = require("../emails/Welcome");
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
-const Demo_school = require("../emails/Demo_school");
+const GenericEmail = require("../emails/Generic");
 const Template = require("../emails/Template");
 
 const NextWeekEmail = require("../emails/nextWeek");
@@ -248,6 +248,8 @@ const Mutation = mutationType({
         tags: list(stringArg()),
         surname: stringArg(),
         email: stringArg(),
+        description: stringArg(),
+        work: stringArg(),
         status: arg({
           type: "Status", // name should match the name you provided
         }),
@@ -270,6 +272,36 @@ const Mutation = mutationType({
             id: args.id,
           },
         });
+        return user;
+      },
+    });
+
+    t.field("sendMessage", {
+      type: "User",
+      args: {
+        id: stringArg(),
+        email: stringArg(),
+        message: stringArg(),
+        comment: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        const user = await ctx.prisma.user.update({
+          data: {
+            ...updates,
+          },
+          where: {
+            id: args.id,
+          },
+        });
+
+        const SendGenericEmail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: args.email,
+          Subject: "Какие впечатления от BeSavvy?",
+          HtmlBody: GenericEmail.GenericEmail(args.message),
+        });
+
         return user;
       },
     });
@@ -530,6 +562,8 @@ const Mutation = mutationType({
         description: stringArg(),
         audience: stringArg(),
         result: stringArg(),
+        price: intArg(),
+        currency: stringArg(),
         news: stringArg(),
         authors: stringArg(),
         promocode: arg({
@@ -539,12 +573,39 @@ const Mutation = mutationType({
         methods: stringArg(),
         image: stringArg(),
         video: stringArg(),
+        header: list(stringArg()),
+        subheader: list(stringArg()),
+        nextStart: arg({
+          type: "DateTime",
+        }),
+        uptodateAt: arg({
+          type: "DateTime",
+        }),
+        goals: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
         delete updates.id;
+        const header = args.header;
+        const subheader = args.subheader;
+        const goals = args.goals;
+        delete updates.header;
+        delete updates.subheader;
+        delete updates.goals;
+
         const updatedCoursePage = await ctx.prisma.coursePage.update({
-          data: updates,
+          data: {
+            header: {
+              set: [...header],
+            },
+            subheader: {
+              set: [...subheader],
+            },
+            goals: {
+              set: [...goals],
+            },
+            ...updates,
+          },
           where: {
             id: args.id,
           },

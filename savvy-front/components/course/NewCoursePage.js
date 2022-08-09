@@ -1,6 +1,8 @@
-import React from "react";
+import { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useRouter } from "next/router";
+import styled from "styled-components";
+import ReactResizeDetector from "react-resize-detector";
 
 import { useUser } from "../User";
 import ATF from "./coursePageBlocks/ATF";
@@ -10,6 +12,9 @@ import SellingPoints from "./coursePageBlocks/SellingPoints";
 import Teachers from "./coursePageBlocks/Teachers";
 import Reviews from "./coursePageBlocks/Reviews";
 import Action from "./coursePageBlocks/Action";
+import MobileAction from "./coursePageBlocks/MobileAction";
+import MobileBuy from "./coursePageBlocks/MobileBuy";
+
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
@@ -22,8 +27,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
     coursePage(where: { id: $id }) {
       id
       title
-      image
-      news
       price
       discountPrice
       video
@@ -54,13 +57,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         open
         description
         structure
-        # forum {
-        #   id
-        #   rating {
-        #     id
-        #     rating
-        #   }
-        # }
         published
         coursePage {
           id
@@ -68,15 +64,6 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         user {
           id
         }
-        # lessonResults {
-        #   id
-        #   visitsNumber
-        #   lessonID
-        #   progress
-        #   student {
-        #     id
-        #   }
-        # }
       }
       description
       courseType
@@ -88,12 +75,16 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       # new_students {
       #   id
       # }
+      goals
+      nextStart
       user {
         id
         name
+        description
         surname
         image
         description
+        work
         status
         uni {
           id
@@ -107,10 +98,12 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       authors {
         id
         name
+        description
         surname
         image
         description
         status
+        work
         uni {
           id
           title
@@ -124,7 +117,54 @@ const SINGLE_COURSEPAGE_QUERY = gql`
   }
 `;
 
+const Styles = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  max-width: 1200px;
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+  /* justify-content: center;
+  align-items: center; */
+`;
+
+const Main = styled.div`
+  width: 70%;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const Money = styled.div`
+  width: 30%;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+
+  z-index: 4;
+  /* @media (max-width: 800px) {
+    position: relative;
+  } */
+  /* display: flex;
+  flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* background: #1c1d1f; */
+`;
+
 const NewCoursePage = (props) => {
+  const [width, setWidth] = useState(0);
+  const onResize = (width, height) => {
+    setWidth(width);
+  };
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.id },
   });
@@ -136,36 +176,38 @@ const NewCoursePage = (props) => {
 
   let prog = programs.find((x) => x.id === props.id);
   return (
-    <div>
-      <ATF data={prog} />
-      <div>
-        <Details data={prog} />
-        <Goal data={prog} />
-        {!loading && data && (
-          <BottomLine me={me} data={data.coursePage.lessons} />
-        )}
-        {!loading && data ? (
-          <Syllabus
-            id={props.id}
-            lessons={data.coursePage.lessons}
-            coursePageId={data.coursePage.id}
-          />
-        ) : (
-          <p>Загружаем программу курса ...</p>
-        )}
-        {/* {!loading && data && (
-          <Action me={me} coursePage={data.coursePage} data={prog} />
-        )} */}
-        <SellingPoints data={prog} />
-        <Teachers data={prog} />
-        {prog.reviews.length > 0 && <Reviews data={prog} />}
-        {!loading && data && (
-          <Action me={me} coursePage={data.coursePage} data={prog} />
-        )}
-
-        <QA data={prog} />
-      </div>
-    </div>
+    <Styles>
+      <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+      <BottomLine me={me} id={props.id} />
+      <Container>
+        <Main>
+          <ATF data={prog} id={props.id} />
+          {data && !loading && (
+            <>
+              {width < 880 && (
+                <MobileBuy coursePage={data.coursePage} me={me} />
+              )}
+              {width < 880 && <MobileAction coursePage={data.coursePage} />}
+              <Goal data={prog} coursePage={data.coursePage} />
+              <Syllabus
+                id={props.id}
+                lessons={data.coursePage.lessons}
+                coursePageId={data.coursePage.id}
+              />
+              <Teachers coursePage={data.coursePage} data={prog} />
+              <SellingPoints data={prog} />
+              {prog.reviews.length > 0 && <Reviews data={prog} />}
+              <QA data={prog} />
+            </>
+          )}
+        </Main>
+        <Money>
+          {!loading && data && width > 880 && (
+            <Action me={me} coursePage={data.coursePage} data={prog} />
+          )}
+        </Money>
+      </Container>
+    </Styles>
   );
 };
 

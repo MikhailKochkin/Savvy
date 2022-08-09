@@ -93,6 +93,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         surname
         image
         description
+        work
         status
         uni {
           id
@@ -296,7 +297,13 @@ const CoursePage = (props) => {
                           : coursePage.user.name}{" "}
                       </p>
                     </div>
-                    <p className="track2">{coursePage.user.description}</p>
+                    {coursePage.user.work ? (
+                      <p className="track2">
+                        {renderHTML(coursePage.user.work)}
+                      </p>
+                    ) : (
+                      ""
+                    )}
                   </>
                 )}
               </Data>
