@@ -320,7 +320,6 @@ const LessonHeader = (props) => {
   let color;
   let progress;
   let visit;
-  console.log("i_am_author", i_am_author);
 
   if (me) {
     visit = lessonResult;

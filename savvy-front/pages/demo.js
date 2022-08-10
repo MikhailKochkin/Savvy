@@ -2,6 +2,18 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, [
+      "lesson",
+      "nav",
+      "auth",
+      "create",
+    ])),
+  },
+});
 
 const DynamicNewSingleLesson = dynamic(
   import("../components/demo/DemoLesson"),
@@ -10,10 +22,15 @@ const DynamicNewSingleLesson = dynamic(
   }
 );
 
-const demo = () => {
+const demo = (props) => {
+  console.log(props.query.lang);
   return (
     <div>
-      <DynamicNewSingleLesson id="ckfc5hguf03ou0702y6fmm4wq" />
+      {props.query.lang == "eng" ? (
+        <DynamicNewSingleLesson id="ck8a84ar900e4070177xa0d6p" />
+      ) : (
+        <DynamicNewSingleLesson id="ckfc5hguf03ou0702y6fmm4wq" />
+      )}
     </div>
   );
 };

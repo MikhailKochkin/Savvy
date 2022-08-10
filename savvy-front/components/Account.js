@@ -284,7 +284,7 @@ const Account = (props) => {
                     >
                       <option value="NAN">Не выбран</option>
                       <option value="STUDENT">Студент</option>
-                      <option value="AUTHOR">Преподаватель</option>
+                      <option value="AUTHOR">Автор</option>
                       <option value="HR">HR</option>
                     </select>
                     <Comment>
@@ -304,6 +304,7 @@ const Account = (props) => {
                           placeholder="Where do you work?"
                         />
                       </Frame>
+                      <Comment>Кратко укажите кем и где вы работаете.</Comment>
                       <Frame>
                         <DynamicLoadedEditor
                           index={0}
@@ -313,6 +314,12 @@ const Account = (props) => {
                           placeholder="Tell us about your experience"
                         />
                       </Frame>
+                      <Comment>
+                        Детально опишите свой опыт. Эта информация будет
+                        помещена на лендинги курсов. Подробно объясните, почему
+                        вам стоит доверять и почему вы обладаете экспертизой по
+                        теме ваших курсов.
+                      </Comment>
                     </>
                   )}
                   <input

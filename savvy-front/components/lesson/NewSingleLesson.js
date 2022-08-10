@@ -229,6 +229,9 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
+        authors {
+          id
+        }
         lessons {
           id
           number
@@ -401,6 +404,16 @@ const NewSingleLesson = (props) => {
     (l) => l.number === lesson.number + 1
   );
 
+  let i_am_author = false;
+  if (
+    me &&
+    lesson.coursePage.authors.filter((auth) => auth.id == me.id).length > 0
+  ) {
+    i_am_author = true;
+  }
+
+  console.log("i_am_author 2", i_am_author);
+
   return (
     <PleaseSignIn>
       <div id="root"></div>
@@ -434,6 +447,7 @@ const NewSingleLesson = (props) => {
                 <div className="block">
                   {me &&
                     (lesson.user.id === me.id ||
+                      i_am_author ||
                       me.permissions.includes("ADMIN")) && (
                       <Link
                         href={{

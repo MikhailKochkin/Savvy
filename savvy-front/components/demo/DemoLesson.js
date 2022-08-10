@@ -1,14 +1,13 @@
 import { useState } from "react";
-import gql from "graphql-tag";
 import styled from "styled-components";
-import { Query } from "@apollo/client/react/components";
+import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import CircularProgress from "@material-ui/core/CircularProgress";
-// import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { CSSTransitionGroup } from "react-transition-group";
+import { useTranslation } from "next-i18next";
 import DemoStoryEx from "./DemoStoryEx";
-// import Panel from "./Panel";
+import { useUser } from "../User";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -19,22 +18,30 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       number
       type
       structure
+      short_structure
       change
       open
-      lessonResults {
-        id
-        student {
-          id
-        }
-        progress
-      }
+      totalPoints
+      hasSecret
+      # lessonResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   progress
+      # }
       createdAt
       user {
         id
+        name
+        surname
+        image
       }
       notes {
         id
+        link_clicks
         text
+        isSecret
         complexity
         next
         user {
@@ -44,6 +51,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       chats {
         id
         name
+        isSecret
+        link_clicks
         complexity
         messages
         user {
@@ -68,6 +77,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         answers
         type
         correct
+        comments
         complexity
         ifRight
         ifWrong
@@ -78,10 +88,16 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           id
         }
       }
+      testPractices {
+        id
+        tasks
+        tasksNum
+      }
       problems {
         id
         text
         nodeID
+        steps
         complexity
         nodeType
         user {
@@ -93,6 +109,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         name
         answer
+        elements
+        columnsNum
         complexity
         variants
         hint
@@ -138,6 +156,33 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           id
         }
       }
+      miniforums {
+        id
+        type
+        value
+        statements {
+          id
+          text
+          comments
+          createdAt
+          user {
+            id
+            name
+            surname
+          }
+        }
+        lesson {
+          id
+          user {
+            id
+          }
+        }
+        user {
+          id
+          name
+          surname
+        }
+      }
       forum {
         id
         text
@@ -151,6 +196,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         statements {
           id
           text
+          comments
           createdAt
           user {
             id
@@ -177,64 +223,6 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           surname
         }
       }
-      shotResults {
-        id
-        student {
-          id
-        }
-        shot {
-          id
-        }
-        answer
-      }
-      testResults {
-        id
-        student {
-          id
-        }
-        testID
-        answer
-        # attempts
-      }
-      quizResults {
-        id
-        student {
-          id
-        }
-        answer
-        quiz {
-          id
-        }
-      }
-      problemResults {
-        id
-        student {
-          id
-        }
-        answer
-        problem {
-          id
-        }
-      }
-      textEditorResults {
-        id
-        student {
-          id
-        }
-        textEditor {
-          id
-        }
-      }
-      constructionResults {
-        id
-        answer
-        student {
-          id
-        }
-        construction {
-          id
-        }
-      }
       coursePage {
         id
         lessons {
@@ -242,26 +230,16 @@ const NEW_SINGLE_LESSON_QUERY = gql`
           number
           type
           published
-          lessonResults {
-            id
-            visitsNumber
-            lessonID
-            student {
-              id
-            }
-          }
+          # lessonResults {
+          #   id
+          #   visitsNumber
+          #   lessonID
+          #   student {
+          #     id
+          #   }
+          # }
         }
       }
-      # exams {
-      #   id
-      #   name
-      #   question
-      #   nodeID
-      #   nodeType
-      #   user {
-      #     id
-      #   }
-      # }
     }
   }
 `;
@@ -271,7 +249,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
-  padding-bottom: 5%;
+  background-image: url("/static/law_pattern.svg");
+  background-size: contain;
 `;
 
 const Head = styled.div`
@@ -280,6 +259,7 @@ const Head = styled.div`
   justify-content: space-between;
   align-items: center;
   color: white;
+  cursor: pointer;
   min-height: 10vh;
   background: #1a2980; /* fallback for old browsers */
   background: -webkit-linear-gradient(
@@ -290,9 +270,8 @@ const Head = styled.div`
   background: linear-gradient(to right, #26d0ce, #1a2980);
   width: 100%;
   font-size: 2rem;
-  span {
-    margin: 0 3%;
-    margin-right: 3%;
+  padding: 0 20px;
+  .block {
   }
   #back {
     &:hover {
@@ -354,7 +333,7 @@ const Progress = styled.div`
 
 const LessonPart = styled.div`
   display: flex;
-  padding: 0.5% 2%;
+  padding: 0% 2%;
   width: 100%;
   flex-direction: column;
   justify-content: center;
@@ -362,8 +341,9 @@ const LessonPart = styled.div`
   border-radius: 2px;
   margin: 0 0 20px 0;
   h1 {
-    max-width: 600px;
+    max-width: 650px;
     line-height: 1.4;
+    font-weight: 600;
   }
   @media (max-width: 1500px) {
     width: 55%;
@@ -395,10 +375,11 @@ const LessonPart = styled.div`
   }
 `;
 
-const DemoLesson = (props) => {
+const NewSingleLesson = (props) => {
   const [width, setWidth] = useState(0);
-  const onResize = (width) => setWidth(width);
+  const { t } = useTranslation("lesson");
 
+  const onResize = (width) => setWidth(width);
   const me = {
     company: {
       __typename: "Company",
@@ -436,102 +417,57 @@ const DemoLesson = (props) => {
     __typename: "User",
     __proto__: Object,
   };
+  const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
+    variables: { id: props.id },
+    fetchPolicy: "no-cache",
+  });
+  if (loading)
+    return (
+      <Progress>
+        <CircularProgress />
+      </Progress>
+    );
+
+  let lesson = data.lesson;
+  let next = lesson.coursePage.lessons.find(
+    (l) => l.number === lesson.number + 1
+  );
+
   return (
     <>
       <div id="root"></div>
-      <Query
-        query={NEW_SINGLE_LESSON_QUERY}
-        variables={{
-          id: props.id,
-        }}
-        fetchPolicy="no-cache"
-      >
-        {({ data, error, loading }) => {
-          if (error) return <Error error={error} />;
-          if (loading)
-            return (
-              <Progress>
-                <CircularProgress />
-              </Progress>
-            );
-          let lesson = data.lesson;
-          // if (lesson === undefined) return <Reload />;
-          let next = lesson.coursePage.lessons.find(
-            (l) => l.number === lesson.number + 1
-          );
-          let my_result;
-          if (me) {
-            my_result = lesson.lessonResults.find(
-              (l) => l.student.id === me.id
-            );
-          }
-          return (
-            <>
-              {lesson && (
-                <Container>
-                  <ReactResizeDetector
-                    handleWidth
-                    handleHeight
-                    onResize={onResize}
-                  />
-                  <Head>
-                    {width > 800 && (
-                      <Link
-                        href={{
-                          pathname: "/course",
-                          query: {
-                            id: lesson.coursePage.id,
-                          },
-                        }}
-                      >
-                        <span>
-                          {/* <Icon size={"1.5em"} icon={arrowLeft} id="back" /> */}
-                        </span>
-                      </Link>
-                    )}
-                    <span>
-                      {me &&
-                        (lesson.user.id === me.id ||
-                          me.permissions.includes("ADMIN")) && (
-                          <div>
-                            {/* Режим истории → */}
-                            <Link
-                              href={{
-                                pathname: "/lesson",
-                                query: {
-                                  id: lesson.id,
-                                  type: "regular",
-                                },
-                              }}
-                            >
-                              <span>Переключить</span>
-                            </Link>
-                          </div>
-                        )}
-                    </span>
-                  </Head>
-                  <LessonPart>
-                    <h1>Демо урок</h1>
-                    <CSSTransitionGroup transitionName="example">
-                      <DemoStoryEx
-                        tasks={lesson.structure.lessonItems}
-                        me={me}
-                        lesson={lesson}
-                        next={next}
-                        my_result={my_result}
-                        coursePageID={lesson.coursePage.id}
-                      />
-                    </CSSTransitionGroup>
-                  </LessonPart>
-                </Container>
-              )}
-            </>
-          );
-        }}
-      </Query>
+
+      {lesson && (
+        <Container>
+          <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
+
+          <Head></Head>
+          <LessonPart>
+            {/* <h1>Demo lesson</h1> */}
+            <CSSTransitionGroup transitionName="example">
+              <DemoStoryEx
+                id={props.id}
+                tasks={
+                  props.add == "offer"
+                    ? [
+                        ...lesson.structure.lessonItems,
+                        { id: 1, type: "offer" },
+                      ]
+                    : lesson.structure.lessonItems
+                }
+                me={me}
+                size={props.size == "short" ? "short" : "long"}
+                lesson={lesson}
+                next={next}
+                coursePageID={lesson.coursePage.id}
+              />
+            </CSSTransitionGroup>
+          </LessonPart>
+        </Container>
+      )}
     </>
   );
 };
 
-export default DemoLesson;
+export default NewSingleLesson;
 export { NEW_SINGLE_LESSON_QUERY };

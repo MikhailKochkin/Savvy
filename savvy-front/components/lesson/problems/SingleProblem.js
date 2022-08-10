@@ -7,11 +7,12 @@ import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import Interactive from "./Interactive";
 import NewInteractive from "./NewInteractive";
 import UpdateProblem from "./UpdateProblem";
-import HoverEditor from "../../editor/HoverEditor";
 
 const CREATE_PROBLEMRESULT_MUTATION = gql`
   mutation CREATE_PROBLEMRESULT_MUTATION(
@@ -211,6 +212,7 @@ const SingleProblem = (props) => {
   const [isOldFinished, setIsOldFinished] = useState(false);
   const [isNewFinished, setIsNewFinished] = useState(false);
   const [revealAnswer, setRevealAnswer] = useState(false);
+  const { t } = useTranslation("lesson");
 
   const myCallback = (dataFromChild, name) => {
     setAnswer(dataFromChild);
@@ -287,7 +289,7 @@ const SingleProblem = (props) => {
     <>
       {me && !story && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          Изменить
+          {!update ? t("update") : t("back")}
         </StyledButton>
       )}
       {me && !story ? (
@@ -317,7 +319,7 @@ const SingleProblem = (props) => {
             />
           )}
           <ResponseArea>
-            <h2>Write down the answer</h2>
+            <h2>{t("write_answer")}</h2>
             <Frame story={story}>
               <DynamicHoverEditor
                 index={1}
@@ -355,13 +357,13 @@ const SingleProblem = (props) => {
                       }
                     }}
                   >
-                    {loading ? "Answering..." : "Answer"}
+                    {loading ? t("checking") : t("check")}
                   </StyledButton>
                   {showAnswerButton && (
                     <Button2
                       onClick={(e) => setShowAnswerText(!showAnswerText)}
                     >
-                      Show the correct answer
+                      {t("show_answer")}
                     </Button2>
                   )}
                 </Buttons>
@@ -369,7 +371,7 @@ const SingleProblem = (props) => {
             </Mutation>
             {showAnswerText && (
               <div>
-                <h2>Ответ</h2>
+                <h2>{t("answer")}</h2>
                 {renderHTML(teacherAnswer)}
               </div>
             )}

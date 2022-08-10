@@ -1,3 +1,4 @@
+import { NEW_SINGLE_LESSON_QUERY } from "./DemoLesson";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
@@ -5,16 +6,21 @@ import _ from "lodash";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
-import { NEW_SINGLE_LESSON_QUERY } from "./DemoLesson";
-// import { withTranslation } from "../../i18n";
+import { useTranslation } from "next-i18next";
 
-const Styles = styled.div`
+// import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
+// import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
+// import { NEW_SINGLE_LESSON_QUERY } from "./NewSingleLesson";
+import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
+
+const Buttons = styled.div`
   display: flex;
   flex-direction: row;
   .arrow_box {
     cursor: pointer;
     padding: 10px 2%;
     width: 60px;
+    margin-right: 15px;
     height: 60px;
     border-radius: 50%;
     display: flex;
@@ -32,6 +38,11 @@ const Styles = styled.div`
   a {
     width: 30%;
   }
+`;
+
+const Styles = styled.div`
+  display: flex;
+  flex-direction: row;
   .firstColumn {
     width: 4vw;
     transition: 0.5s;
@@ -96,11 +107,6 @@ const Styles = styled.div`
         }
       }
     }
-    .bar {
-      height: 400px;
-      width: 5px;
-      background: #b6bce2;
-    }
     .menu {
       display: flex;
       flex-direction: column;
@@ -124,6 +130,145 @@ const Styles = styled.div`
   }
 `;
 
+const MenuColumn = styled.div`
+  width: ${(props) => (props.open ? "30vw" : "0px")};
+  display: ${(props) => (props.open ? "flex" : "none")};
+  height: 100vh;
+  background: #fff;
+  border-left: 1px solid #d4d4d4;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0%;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  @media (max-width: 800px) {
+  width: ${(props) => (props.open ? "100vw" : "0px")};
+  }
+  .container {
+    width: 80%;
+    margin: 40px 0;
+    .lesson_number {
+      color: #8a8a8a;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1.8rem;
+
+    }
+    .lesson_name {
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 600;
+      margin-top: 10px;
+      line-height: 1.3;
+    }
+    .bar {
+      margin-top: 30px;
+      height: 5px;
+      width: 100%;
+      background: #b6bce2;
+    }
+    .questions {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-top: 50px;
+      line-height: 1.3;
+      }
+      .go_to_chat {
+        width: 70%;
+        font-weight: 500;
+        line-height: 1.3;
+              margin-top: 10px;
+
+        font-size: 1.6rem;
+      }
+      button {
+        border: 1px solid #c2c2c2;
+        border-radius: 12px;
+        padding: 3% 4%;
+        cursor: pointer;
+        margin-top: 10px;
+          background: none;
+          outline: 0;
+          font-family: Montserrat;
+          font-size: 1.6rem;
+          font-weight: 500;
+          -moz-appearance: none;
+          -webkit-appearance: none;
+          appearance: none;
+          text-indent: 0.01px;
+          text-align-last: center;
+          text-align: center;
+          text-overflow: "";
+                  transition: 0.5s;
+
+          &:hover {
+          border: 1px solid #1a2980;
+        }
+      }
+    .nav {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: 100%;
+      margin-top: 30px;
+      #text {
+        max-width: 215px;
+        font-weight: 500;
+        line-height: 1.3;
+        font-size: 1.6rem;
+      }
+      #button_square {
+        margin-top: 10px;
+         margin-left: 20px;
+        border: 1px solid #c2c2c2;
+        color: #c2c2c2;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: 0.5s;
+        &:hover {
+          border: 1px solid #1a2980;
+        }
+        select {
+          border: none;
+          display: inline-block;
+          background: none;
+          outline: 0;
+          font-family: Montserrat;
+          font-size: 1.6rem;
+          font-weight: 500;
+          -moz-appearance: none;
+          -webkit-appearance: none;
+          appearance: none;
+          text-indent: 0.01px;
+          text-align-last: center;
+          text-align: center
+          text-overflow: "";
+          cursor: pointer;
+          /* &:hover {
+            color: #1a2980;
+          } */
+        }
+        option {
+          color: #c2c2c2;
+          &:hover {
+            color: #1a2980;
+          }
+        }
+      }
+      
+    }
+  }
+`;
+
 const Complexity = styled.div`
   margin-bottom: 10px;
   width: 45px;
@@ -137,9 +282,9 @@ const Complexity = styled.div`
 `;
 
 const Progress = styled.div`
-  width: 100%;
+  height: 100%;
   background: #3f51b5;
-  height: ${(props) => props.progress};
+  width: ${(props) => props.progress};
   transition: all 0.5s;
 `;
 
@@ -147,9 +292,12 @@ const Block = styled.div`
   min-height: 50vh;
   display: ${(props) => (props.show === "final" ? "none" : "flex")};
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  width: 95vw;
+  width: ${(props) => (props.open ? "70vw" : "100vw")};
+  @media (max-width: 800px) {
+    /* width: ${(props) => (props.open ? "0vw" : "95vw")}; */
+  }
 `;
 
 const Stepper = styled.div`
@@ -161,7 +309,109 @@ const Stepper = styled.div`
 `;
 
 const Content = styled.div`
-  width: 96vw;
+  width: ${(props) => (props.open ? "70vw" : "100vw")};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .arrowmenu {
+    cursor: pointer;
+    padding: 10px 2%;
+    width: 75px;
+    height: 75px;
+    margin-right: 15px;
+    border-radius: 50%;
+    border: 2px solid #dde1f8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    position: fixed;
+    background: #fff;
+    bottom: 15px;
+    right: 0;
+    z-index: 4;
+    &:hover {
+      background: #dde1f8;
+    }
+  }
+  .arrowmenu2 {
+    cursor: pointer;
+    width: 75px;
+    height: 75px;
+    margin-right: 15px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    position: fixed;
+    transition: 0.3s ease;
+    background: ${(props) => {
+      if (props.angle >= 360) {
+        return `conic-gradient(#ffb703 0deg ${props.angle + "deg"}, #ade8f4 ${
+          props.angle + "deg"
+        } 360deg)`;
+      } else {
+        return `conic-gradient(#023e8a 0deg ${props.angle + "deg"}, #ade8f4 ${
+          props.angle + "deg"
+        } 360deg)`;
+      }
+    }};
+
+    /* background: conic-gradient(#023e8a 0deg 90deg, #ade8f4 90deg 360deg); */
+    border: 1px solid black;
+    bottom: 15px;
+    left: 15px;
+    z-index: 4;
+    &:hover {
+      /* background: #dde1f8; */
+    }
+    .inner {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      border: 1px solid black;
+      background: ${(props) => (props.angle >= 360 ? "#fff" : "#dcf0f4")};
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+  }
+  .arrow {
+    width: 30px;
+  }
+  h1 {
+    max-width: 650px;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+  @media (max-width: 1650px) {
+    .arrowmenu {
+      width: 60px;
+      height: 60px;
+    }
+    .arrowmenu2 {
+      width: 60px;
+      height: 60px;
+      .inner {
+        width: 48px;
+        height: 48px;
+      }
+    }
+    .arrow {
+      width: 25px;
+    }
+  }
+  @media (max-width: 800px) {
+    width: ${(props) => (props.open ? "0vw" : "100vw")};
+  }
 `;
 
 const Message = styled.div`
@@ -240,6 +490,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
+  const [open, setOpen] = useState(false);
   const [num, setNum] = useState(
     props.my_result &&
       props.my_result.progress !== null &&
@@ -250,9 +501,11 @@ const Feed = (props) => {
   );
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
-
   const classes = useStyles();
-
+  const { t } = useTranslation("lesson");
+  const getResults = (el) => {
+    console.log("res2", el);
+  };
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
@@ -312,7 +565,7 @@ const Feed = (props) => {
     }
   };
   let visited;
-  if (props.next && props.next.lessonResults) {
+  if (props.me && props.next && props.next.lessonResults) {
     visited = props.next.lessonResults.filter(
       (l) => l.student.id === props.me.id
     );
@@ -362,62 +615,53 @@ const Feed = (props) => {
   } else {
     color = "#55a630";
   }
-
-  // let complex_messages = [
-  //   "💪🏻 Усложняем задание",
-  //   "🤟🏻 Давайте попробуем что-то поинтереснее",
-  //   "✈️ Новый уровень сложности",
-  //   "🧨 Немного усложним задачу",
-  //   "🕹 Level up",
-  // ];
-
-  // const randomIntFromInterval = (min, max) => {
-  //   return Math.floor(Math.random() * (max - min + 1) + min);
-  // };
   return (
     <>
-      <Message visible={visible}>
-        <div id="message_text">💪🏻 Повышаем уровень сложности</div>
-      </Message>
       <Styles>
-        <div className="firstColumn">
-          <div className="slider">
-            <Complexity color={color}></Complexity>
-            <div className="bar">
-              <Progress
-                className="progress"
-                progress={
-                  parseInt((100 * (num + 1)) / props.components.length) + "%"
-                }
-              ></Progress>
+        <Content
+          open={open}
+          className="second"
+          angle={props.experience * (360 / props.total)}
+        >
+          <Message visible={visible}>
+            <div id="message_text">
+              🚀 {t("level_up")} {complexity}
             </div>
-            <div className="num">
-              <select
-                id="num"
-                name="num"
-                value={num - 1}
-                onChange={(e) => search(parseInt(e.target.value))}
-              >
-                {props.components.map((el, i) => (
-                  <option value={i - 1}>{i + 1}</option>
-                ))}
-              </select>
+          </Message>
+          {props.hasSecret && (
+            <div
+              className="arrowmenu2"
+              onClick={(e) => {
+                setOpen(!open);
+              }}
+            >
+              <div className="inner">{props.experience}</div>
             </div>
+          )}
+          <div
+            className="arrowmenu"
+            onClick={(e) => {
+              setOpen(!open);
+            }}
+          >
+            <img className="arrow" src="../../static/burger_menu.svg" />
           </div>
-        </div>
-        <Content className="second">
-          <>
-            {props.components.slice(0, num + 2).map((c, i) => (
-              <Block
-                show={i === num + 1 ? "final" : "no"}
-                className={i === num + 1 ? "final" : "no"}
-              >
-                {c}
-                <>
-                  {props.components.length > num + 1 && i === num && (
+          {props.components.slice(0, num + 2).map((c, i) => (
+            <Block
+              open={open}
+              show={i === num + 1 ? "final" : "no"}
+              className={i === num + 1 ? "final" : "no"}
+            >
+              {c}
+              <Buttons>
+                {props.components.length > num + 1 && i === num && (
+                  <>
                     <div
                       className="arrow_box"
                       onClick={(e) => {
+                        // if (props.my_result.progress < num + 2) {
+                        //   let res = updateLessonResult();
+                        // }
                         let res2 = move();
                       }}
                     >
@@ -426,43 +670,56 @@ const Feed = (props) => {
                         src="../../static/down-arrow.svg"
                       />
                     </div>
-                  )}
-                </>
-              </Block>
-            ))}
-          </>
-          <Stepper>
-            {props.me &&
-              props.components.length === num + 1 &&
-              props.next &&
-              props.next.published && (
-                <>
-                  (
-                  <Link
-                    // The user HAS not yet visited the next lesson page
-                    href={{
-                      pathname: "/lesson",
-                      query: {
-                        id: props.next.id,
-                        type: props.next.type.toLowerCase(),
-                      },
-                    }}
-                  >
-                    <a>
-                      <Button className={classes.button} onClick={() => {}}>
-                        Следующий урок
-                      </Button>
-                    </a>
-                  </Link>
-                  )
-                </>
-              )}
-          </Stepper>
+                  </>
+                )}
+              </Buttons>
+            </Block>
+          ))}
         </Content>
+        <MenuColumn open={open} className="lastColumn">
+          <div className="container">
+            <div className="lesson_number">
+              {t("lesson")} {props.lesson_number}.
+            </div>
+            <div className="lesson_name">{props.lesson_name}</div>
+            <div className="lesson_number">
+              {t("complexity")} {complexity}
+            </div>
+            <div className="bar">
+              <Progress
+                className="progress"
+                progress={
+                  parseInt((100 * (num + 1)) / props.components.length) + "%"
+                }
+              ></Progress>
+            </div>
+            <div className="nav">
+              <div id="text">{t("choose_section")}</div>
+              <div id="button_square">
+                <select
+                  id="num"
+                  name="num"
+                  value={num - 1}
+                  onChange={(e) => search(parseInt(e.target.value))}
+                >
+                  {props.components.map((el, i) => (
+                    <option value={i - 1}>{i + 1}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="questions">{t("have_questions")}</div>
+            <div className="go_to_chat">{t("chat_help")}</div>
+            <button onClick={(e) => search(props.components.length - 2)}>
+              {t("get_to_chat")}
+            </button>
+            <br />
+            <button onClick={(e) => setOpen(false)}>{t("close_menu")}</button>
+          </div>
+        </MenuColumn>
       </Styles>
     </>
   );
 };
 
-// export default withTranslation("story")(Feed);
 export default Feed;
