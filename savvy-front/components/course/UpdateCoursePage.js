@@ -36,14 +36,14 @@ const Width = styled.div`
 
 const UpdateCoursePage = (props) => {
   const me = useUser();
-  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
-    variables: { id: props.id },
-  });
-  if (loading) return <p>Loading...</p>;
+  // const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+  //   variables: { id: props.id },
+  // });
+  // if (loading) return <p>Loading...</p>;
   return (
     <Width>
       <div id="root">Hello World!</div>
-      {data && <UpdateForm coursePage={data.coursePage} me={me} />}
+      {/* {data && <UpdateForm coursePage={data.coursePage} me={me} />} */}
     </Width>
   );
 };
