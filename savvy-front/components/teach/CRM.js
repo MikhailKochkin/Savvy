@@ -82,7 +82,9 @@ const CRM = () => {
     },
   });
   console.log("new Date(now()).getTime()", subtractDays(7).toISOString());
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading 1...</p>;
+  if (loading2) return <p>Loading 2...</p>;
+
   const authors = data.users;
   const new_users = data2.users;
 
