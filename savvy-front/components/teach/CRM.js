@@ -71,27 +71,28 @@ const CRM = () => {
     date.setDate(date.getDate() - numOfDays);
     return date;
   };
-  const { loading, error, data } = useQuery(AUTHORS_QUERY);
-  const {
-    loading: loading2,
-    error: error2,
-    data: data2,
-  } = useQuery(LAST_WEEK_USERS_QUERY, {
-    variables: {
-      date: subtractDays(7).toISOString(),
-    },
-  });
-  console.log("new Date(now()).getTime()", subtractDays(7).toISOString());
-  if (loading) return <p>Loading 1...</p>;
-  if (loading2) return <p>Loading 2...</p>;
+  // const { loading, error, data } = useQuery(AUTHORS_QUERY);
+  // const {
+  //   loading: loading2,
+  //   error: error2,
+  //   data: data2,
+  // } = useQuery(LAST_WEEK_USERS_QUERY, {
+  //   variables: {
+  //     date: subtractDays(7).toISOString(),
+  //   },
+  // });
+  // console.log("new Date(now()).getTime()", subtractDays(7).toISOString());
+  // if (loading) return <p>Loading 1...</p>;
+  // if (loading2) return <p>Loading 2...</p>;
 
-  const authors = data.users;
-  const new_users = data2.users;
+  // const authors = data.users;
+  // const new_users = data2.users;
 
   return (
     <Styles>
       <Container>
-        <select
+        <div>Hello World</div>
+        {/* <select
           name="page"
           defaultValue={page}
           onChange={(e) => setPage(e.target.value)}
@@ -140,7 +141,7 @@ const CRM = () => {
                 //   url={c.type}
                 //   communication_medium={c.communication_medium}
               />
-            ))}
+            ))}*/}
       </Container>
     </Styles>
   );
