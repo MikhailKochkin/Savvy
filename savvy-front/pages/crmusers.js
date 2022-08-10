@@ -1,14 +1,15 @@
 import CRM from "../components/teach/CRM";
 import { useUser } from "../components/User";
 
-const crm_page = () => {
+const crmusers = () => {
   // const me = useUser();
 
   return (
     <>
-      <CRM />
+      <div>Hello World</div>
+      {/* <CRM /> */}
     </>
   );
 };
 
-export default crm_page;
+export default crmusers;
