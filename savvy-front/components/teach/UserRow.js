@@ -3,7 +3,7 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
 import renderHTML from "react-render-html";
 
 const SEND_MESSAGE_MUTATION = gql`

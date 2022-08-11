@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 const UPDATE_COURSEPAGE_MUTATION = gql`
   mutation UPDATE_COURSEPAGE_MUTATION(
@@ -394,13 +394,13 @@ const UpdateForm = (props) => {
             placeholder="Как работают тарифы на курсе..."
           />
         </Frame>
-        <DatePicker
+        {/* <DatePicker
           selected={startDate}
           dateFormat="dd/MM/yyyy"
           onChange={(date) => {
             return setStartDate(date);
           }}
-        />
+        /> */}
 
         {/* <label for="file">
           <div className="upload">
