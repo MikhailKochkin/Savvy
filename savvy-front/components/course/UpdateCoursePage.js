@@ -1,7 +1,7 @@
 import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 // import { useUser } from "../User";
-// import UpdateForm from "./UpdateForm";
+import UpdateForm from "./UpdateForm";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -44,7 +44,12 @@ const UpdateCoursePage = (props) => {
   return (
     <Width>
       <div id="root">Hello World!</div>
-      {/* {data && <UpdateForm coursePage={data.coursePage} me={me} />} */}
+      {data && (
+        <UpdateForm
+          coursePage={data.coursePage}
+          // me={me}
+        />
+      )}
     </Width>
   );
 };
