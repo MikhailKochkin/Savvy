@@ -1,4 +1,4 @@
-// import { useQuery, gql } from "@apollo/client";
+import { useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 // import { useUser } from "../User";
 // import UpdateForm from "./UpdateForm";
@@ -36,10 +36,11 @@ const Width = styled.div`
 
 const UpdateCoursePage = (props) => {
   // const me = useUser();
-  // const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
-  //   variables: { id: props.id },
-  // });
-  // if (loading) return <p>Loading...</p>;
+  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+    variables: { id: props.id },
+  });
+  if (loading) return <p>Loading...</p>;
+  console.log("data", data);
   return (
     <Width>
       <div id="root">Hello World!</div>
