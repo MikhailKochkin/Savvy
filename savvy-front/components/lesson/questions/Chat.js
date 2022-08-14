@@ -44,6 +44,9 @@ const Opener = styled.div`
       background: #f3f3f3;
     }
   }
+  @media (max-width: 800px) {
+    width: 100%;
+  }
 `;
 
 const Styles = styled.div`
@@ -153,7 +156,8 @@ const Styles = styled.div`
     margin: 5px 0;
   }
   @media (max-width: 800px) {
-    width: 90%;
+    width: 95%;
+    font-size: 1.4rem;
   }
 `;
 

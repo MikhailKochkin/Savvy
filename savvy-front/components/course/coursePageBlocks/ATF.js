@@ -105,6 +105,9 @@ const Container = styled.div`
     h1 {
       font-size: 3.6rem;
       line-height: 1.4;
+      span {
+        display: inline;
+      }
     }
     h2 {
       font-size: 2rem;

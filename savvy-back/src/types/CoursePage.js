@@ -20,6 +20,7 @@ const CoursePage = objectType({
     t.model.published();
     t.model.uni();
     t.model.currency();
+    t.model.installments();
     t.model.tags();
     t.model.header();
     t.model.subheader();

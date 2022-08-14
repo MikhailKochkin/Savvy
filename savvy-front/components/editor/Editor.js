@@ -122,6 +122,9 @@ const ButtonStyle = styled.button`
   border-radius: 5px;
   outline: none;
   width: 37px;
+  border: none;
+  /* background: none; */
+  border: 1px solid #787878;
   &:hover {
     background: #112862;
     color: white;
@@ -179,6 +182,32 @@ const Link = styled.a`
     /* background: #26ba8d;
     color: #fff;
     padding: 2px 0; */
+  }
+`;
+
+const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 7px;
+  margin: 3px;
+  border-radius: 5px;
+  border: 1px solid #787878;
+  background: #efefef;
+  outline: none;
+  width: 37px;
+  &:hover {
+    background: #112862;
+    color: white;
+  }
+  .react-icons {
+    width: 100px;
+    /* vertical-align: middle; */
+  }
+  input {
+    display: none;
   }
 `;
 
@@ -509,6 +538,41 @@ const isElementActive = (editor, format) => {
   });
 
   return !!match;
+};
+
+const uploadFile = async (e, editor) => {
+  const files = e.target.files;
+  const data = new FormData();
+  data.append("file", files[0]);
+  data.append("upload_preset", "savvy-app");
+  const res = await fetch(
+    "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+    {
+      method: "POST",
+      body: data,
+    }
+  );
+  const file = await res.json();
+  let link = file.secure_url;
+
+  console.log("editor", editor);
+
+  // editor.selection.anchor.path == [0, 0] &&
+  //   editor.selection.anchor.offset == 0 &&
+  //   editor.insertBreak();
+  editor.insertNode({
+    type: "image",
+    src: link,
+    children: [{ text: "" }],
+  });
+  editor.insertNode({
+    type: "paragraph",
+    children: [
+      {
+        text: "",
+      },
+    ],
+  });
 };
 
 const toggleElement = (editor, format) => {
@@ -973,14 +1037,21 @@ const App = (props) => {
           >
             <BiAlignRight value={{ className: "react-icons" }} />
           </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              CustomEditor.addImageElement(editor);
-            }}
-          >
+          <Label for="inputTag">
+            {/* Select Image */}
             <BiImageAdd value={{ className: "react-icons" }} />
-          </ButtonStyle>
+            {/* </ButtonStyle>{" "} */}
+            <input
+              id="inputTag"
+              type="file"
+              class="custom-file-input"
+              onChange={(e) => uploadFile(e, editor)}
+              // onMouseDown={(event) => {
+              //   event.preventDefault();
+              //   CustomEditor.addImageElement(editor);
+              // }}
+            />
+          </Label>
           <ButtonStyle
             onMouseDown={(event) => {
               event.preventDefault();

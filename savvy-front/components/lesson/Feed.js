@@ -16,6 +16,7 @@ const Buttons = styled.div`
   display: flex;
   flex-direction: row;
   .arrow_box {
+    z-index: 4;
     cursor: pointer;
     padding: 10px 2%;
     width: 60px;

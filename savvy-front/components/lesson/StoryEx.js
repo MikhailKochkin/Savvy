@@ -5,7 +5,7 @@ import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Note from "./notes/Note";
-import Offer from "./Offer";
+// import Offer from "./Offer";
 import Shots from "./shots/Shots";
 import SingleTest from "./tests/SingleTest";
 import Chat from "./chat/Chat";
@@ -245,24 +245,26 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
-    } else if (task.type.toLowerCase() === "offer") {
-      item = (
-        <Offer
-          key={1}
-          name={"el.name"}
-          me={me}
-          author={lesson.user}
-          complexity={1} // messages={el.messages}
-          length={[false, false]}
-          id={1}
-          true={[true, false]}
-          lessonId={lesson.id}
-          story={true}
-          coursePageId={coursePageID}
-        />
-      );
-      components.push(item);
-    } else if (task.type.toLowerCase() === "problem") {
+    }
+    // else if (task.type.toLowerCase() === "offer") {
+    //   item = (
+    //     <Offer
+    //       key={1}
+    //       name={"el.name"}
+    //       me={me}
+    //       author={lesson.user}
+    //       complexity={1} // messages={el.messages}
+    //       length={[false, false]}
+    //       id={1}
+    //       true={[true, false]}
+    //       lessonId={lesson.id}
+    //       story={true}
+    //       coursePageId={coursePageID}
+    //     />
+    //   );
+    //   components.push(item);
+    // }
+    else if (task.type.toLowerCase() === "problem") {
       el = lesson.problems.find((problem) => problem.id === task.id);
       item = (
         <SingleProblem

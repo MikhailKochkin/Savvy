@@ -108,6 +108,23 @@ const Info = styled.div`
   }
 `;
 
+const PriceBox = styled.div`
+  width: 292px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  .price_small {
+    font-weight: 600;
+    font-size: 3.2rem;
+    /* text-align: left; */
+  }
+  div {
+    margin-right: 10px;
+  }
+`;
+
 const StyledModal = Modal.styled`
   display: flex;
   flex-direction: column;
@@ -148,6 +165,14 @@ const StyledModal = Modal.styled`
 const MobileBuy = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
+  const [installments, setInstallments] = useState(
+    props.coursePage.installments
+  );
+  const [price, setPrice] = useState(
+    props.coursePage.installments && props.coursePage.installments > 1
+      ? props.coursePage.price / props.coursePage.installments
+      : props.coursePage.price
+  );
   const toggleModal = (e) => setIsOpen(!isOpen);
 
   const [
@@ -176,8 +201,17 @@ const MobileBuy = (props) => {
   const { me, coursePage } = props;
   return (
     <Styles>
-      <div className="price">{coursePage.price} ₽</div>
-
+      {/* <div className="price">{coursePage.price} ₽</div> */}
+      {installments && (
+        <PriceBox>
+          <div>
+            {installments}{" "}
+            {getNoun(installments, "платёж", "платежа", "платежей")} по
+          </div>
+          {installments && <div className="price_small">{price} ₽</div>}
+        </PriceBox>
+      )}
+      {!installments && <div className="price">{price} ₽</div>}
       <ButtonBuy
         id="mobile_coursePage_buy_button"
         onClick={async (e) => {
@@ -191,7 +225,7 @@ const MobileBuy = (props) => {
             const res = await createOrder({
               variables: {
                 coursePageId: coursePage.id,
-                price: coursePage.price,
+                price: price,
                 userId: me.id,
                 // comment: props.comment,
               },
@@ -200,11 +234,19 @@ const MobileBuy = (props) => {
           }
         }}
       >
-        {loading_data ? "Готовим покупку..." : t("buy")}
+        {installments &&
+          (loading_data ? `Готовим покупку...` : t("buy_installments"))}
+        {!installments && (loading_data ? `Готовим покупку...` : t("buy"))}
       </ButtonBuy>
       <Info>
         <div className="guarantee">Гарантия возврата денег</div>
         <div className="details">
+          {installments && (
+            <div className="">
+              Рассрочка на {installments - 1}{" "}
+              {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
+            </div>
+          )}
           <div className="">
             {coursePage.lessons.length} онлайн{" "}
             {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}

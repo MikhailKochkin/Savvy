@@ -1,13 +1,12 @@
-// import CRM from "../components/teach/CRM";
-// import { useUser } from "../components/User";
+import CRM from "../components/teach/CRM";
+import { useUser } from "../components/User";
 
 const crm = () => {
-  // const me = useUser();
+  const me = useUser();
 
   return (
     <>
-      <div>Hello World</div>
-      {/* <CRM /> */}
+      <CRM />
     </>
   );
 };

@@ -67,6 +67,7 @@ const Styles = styled.div`
   }
   @media (max-width: 800px) {
     width: 100%;
+    font-size: 1.4rem;
   }
 `;
 
@@ -126,7 +127,11 @@ const Message = styled.div`
         }
       }
     }
+    @media (max-width: 800px) {
+      font-size: 1.4rem;
+    }
   }
+
   .student_text {
     min-width: 20%;
     max-width: 70%;

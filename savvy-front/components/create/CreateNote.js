@@ -28,7 +28,7 @@ const Explainer = styled.div``;
 const Container = styled.div`
   width: 95%;
   margin: 3% 0;
-  input {
+  /* input {
     height: 50%;
     width: 100%;
     margin: 1% 0;
@@ -37,6 +37,16 @@ const Container = styled.div`
     padding: 2%;
     font-size: 1.6rem;
     outline: 0;
+  } */
+  .image {
+    /* height: 50%;
+    width: 100%;
+    margin: 1% 0;
+    border: 1px solid #c4c4c4;
+    border-radius: 3.5px;
+    padding: 2%;
+    font-size: 1.6rem;
+    outline: 0; */
   }
   @media (max-width: 850px) {
     width: 85%;
@@ -96,6 +106,23 @@ const CreateSingleNote = (props) => {
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
+
+  const uploadFile = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "savvy-app");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    alert(file.secure_url);
+  };
+
   const { lessonID } = props;
   return (
     <Container>

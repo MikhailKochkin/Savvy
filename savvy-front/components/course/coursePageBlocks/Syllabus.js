@@ -91,7 +91,7 @@ const CoursePage = (props) => {
                         </>
                       ))}
                   </Lessons>
-                  {open == 6 && (
+                  {open == 6 && props.lessons.length > 6 && (
                     <Button
                       id="show_all_lessons"
                       onClick={(e) => setOpen(props.lessons.length)}

@@ -186,6 +186,7 @@ const TextBar = styled.div`
   @media (max-width: 800px) {
     width: 100%;
     padding-left: 5px;
+    font-size: 1.4rem;
   }
 `;
 
@@ -627,6 +628,7 @@ const SingleTest = (props) => {
                   commentsList.map((com, i) => {
                     return com ? renderHTML(com) : null;
                   })}
+                {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
               </div>
               <IconBlock>
                 {author && author.image != null ? (

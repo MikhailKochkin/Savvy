@@ -490,6 +490,7 @@ type CoursePage {
   header: [String!]!
   id: String!
   image: String!
+  installments: Int
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   methods: String
   new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, where: UserWhereInput): [User!]!
@@ -538,6 +539,7 @@ input CoursePageOrderByInput {
   header: SortOrder
   id: SortOrder
   image: SortOrder
+  installments: SortOrder
   methods: SortOrder
   news: SortOrder
   nextStart: SortOrder
@@ -588,6 +590,7 @@ input CoursePageWhereInput {
   header: StringNullableListFilter
   id: StringFilter
   image: StringFilter
+  installments: IntNullableFilter
   lawrdles: LawrdleListRelationFilter
   lessons: LessonListRelationFilter
   methods: StringNullableFilter

@@ -55,9 +55,10 @@ const Container = styled.div`
     img {
       display: block;
       width: 100%;
+      object-fit: cover;
       max-height: 50em;
       box-shadow: "0 0 0 2px blue;";
-      width: 50vw;
+      /* width: 50vw; */
     }
     iframe {
       width: 50%;
@@ -101,6 +102,7 @@ const Container = styled.div`
   @media (max-width: 800px) {
     flex-direction: row;
     width: 90%;
+    font-size: 1.4rem;
   }
 `;
 
@@ -201,8 +203,9 @@ const NoteStyles = styled.div`
   img {
     display: block;
     width: 100%;
-    max-height: 50em;
+    /* max-height: 50em; */
     box-shadow: "0 0 0 2px blue;";
+    object-fit: contain;
   }
   p {
     margin: 20px 0;

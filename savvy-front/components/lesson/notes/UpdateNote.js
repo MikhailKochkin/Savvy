@@ -51,14 +51,6 @@ const Container = styled.div`
   }
 
   input {
-    padding: 0.5%;
-    height: 75%;
-    width: 100%;
-    outline: 0;
-    border: 1px solid #ccc;
-    border-radius: 3.5px;
-    padding: 2%;
-    font-size: 1.4rem;
   }
 `;
 
@@ -130,6 +122,23 @@ const UpdateNote = (props) => {
   const getText = (d) => setText(d);
   const { t } = useTranslation("lesson");
 
+  const uploadFile = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "savvy-app");
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    const file = await res.json();
+    alert(file.secure_url);
+    e.target.value = null;
+  };
+
   const { id, lessonID } = props;
   return (
     <>
@@ -162,6 +171,7 @@ const UpdateNote = (props) => {
             Создать таблицу
           </a>
         </button> */}
+
         <button onClick={(e) => setShow(!show)}>
           {show ? t("close") : t("open")}
         </button>

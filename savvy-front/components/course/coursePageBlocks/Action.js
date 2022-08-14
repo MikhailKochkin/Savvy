@@ -127,14 +127,6 @@ const Contact = styled.div`
     font-size: 1.3rem;
     color: #4b5563;
   }
-
-  .price {
-    font-weight: 600;
-    font-size: 3.2rem;
-    width: 100%;
-    text-align: left;
-    margin-bottom: 15px;
-  }
   .open {
     line-height: 1.4;
     /* margin-top: 20px; */
@@ -143,6 +135,12 @@ const Contact = styled.div`
     div {
       margin-bottom: 15px;
     }
+  }
+  .price {
+    font-weight: 600;
+    font-size: 3.2rem;
+    text-align: left;
+    width: 100%;
   }
   #form_container {
     display: flex;
@@ -175,6 +173,19 @@ const Contact = styled.div`
     outline: 0;
     cursor: pointer;
     font-size: 1.4rem;
+  }
+  #promo {
+    /* margin-top: 10%; */
+    margin: 10px 0;
+    input {
+      width: 100%;
+      padding: 13px 6px;
+      border: 1px solid #d8d8d8;
+      border-radius: 5px;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1.6rem;
+    }
   }
   @media (max-width: 800px) {
     width: 100%;
@@ -237,6 +248,23 @@ const Contact = styled.div`
         }
       }
     }
+  }
+`;
+
+const PriceBox = styled.div`
+  width: 292px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  .price_small {
+    font-weight: 600;
+    font-size: 3.2rem;
+    /* text-align: left; */
+  }
+  div {
+    margin-right: 10px;
   }
 `;
 
@@ -340,8 +368,14 @@ const Action = (props) => {
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
-  const [step, setStep] = useState("apply");
-  const [price, setPrice] = useState(props.data.price.price);
+  const [installments, setInstallments] = useState(
+    props.coursePage.installments
+  );
+  const [price, setPrice] = useState(
+    props.coursePage.installments && props.coursePage.installments > 1
+      ? props.coursePage.price / props.coursePage.installments
+      : props.coursePage.price
+  );
   const [isPromo, setIsPromo] = useState(false);
   const { t } = useTranslation("coursePage");
   const router = useRouter();
@@ -350,15 +384,18 @@ const Action = (props) => {
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   const addPromo = (val) => {
     props.coursePage.promocode.promocodes.map((p) => {
+      console.log(
+        "p.name.toLowerCase() == val.toLowerCase()",
+        p.name.toLowerCase() == val.toLowerCase(),
+        isPromo.toS
+      );
       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
+        console.log("price * p.value", price * p.value, isPromo.toString());
+
         setPrice(price * p.value);
         setIsPromo(true);
       }
     });
-  };
-
-  const numberWithSpaces = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 
   const { asPath } = useRouter();
@@ -388,6 +425,7 @@ const Action = (props) => {
 
   const d = props.data;
   const { me, coursePage } = props;
+  console.log("price / installments", price, installments);
   let my_orders = [];
   if (me) {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
@@ -417,7 +455,16 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Contact>
-          <div className="price">{coursePage.price} ₽</div>
+          {installments && (
+            <PriceBox>
+              <div>
+                {installments}{" "}
+                {getNoun(installments, "платёж", "платежа", "платежей")} по
+              </div>
+              {installments && <div className="price_small">{price} ₽</div>}
+            </PriceBox>
+          )}
+          {!installments && <div className="price">{price} ₽</div>}
           <ButtonOpen
             id="coursePage_to_demolesson"
             href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
@@ -425,7 +472,6 @@ const Action = (props) => {
           >
             {t("start_open_lesson")}
           </ButtonOpen>
-
           <ButtonBuy
             id="coursePage_buy_button"
             onClick={async (e) => {
@@ -439,19 +485,26 @@ const Action = (props) => {
                 const res = await createOrder({
                   variables: {
                     coursePageId: coursePage.id,
-                    price: coursePage.price,
+                    price: price,
                     userId: me.id,
-                    // comment: props.comment,
                   },
                 });
                 location.href = res.data.createOrder.url;
               }
             }}
           >
-            {loading_data ? "Готовим покупку..." : t("buy")}
+            {installments &&
+              (loading_data ? `Готовим покупку...` : t("buy_installments"))}
+            {!installments && (loading_data ? `Готовим покупку...` : t("buy"))}
           </ButtonBuy>
           <div className="guarantee">Гарантия возврата денег</div>
           <div className="details">
+            {installments && (
+              <div className="">
+                ◼️ рассрочка на {installments - 1}{" "}
+                {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
+              </div>
+            )}
             <div className="">
               ◼️ {coursePage.lessons.length} онлайн{" "}
               {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}
@@ -460,6 +513,14 @@ const Action = (props) => {
             <div className="">◼️ Пожизненный доступ</div>
             <div className="">◼️ Чат с автором курса</div>
             <div className="">◼️ Сертификат об окончании</div>
+            {props.coursePage.promocode && (
+              <div id="promo">
+                <input
+                  placeholder="Промокод"
+                  onChange={(e) => addPromo(e.target.value)}
+                />
+              </div>
+            )}
           </div>
           <div className="open">
             <div className="">

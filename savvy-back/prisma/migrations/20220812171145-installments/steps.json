@@ -1,0 +1,12 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "CoursePage",
+      "field": "installments",
+      "type": "Int",
+      "arity": "Optional"
+    }
+  ]
+}

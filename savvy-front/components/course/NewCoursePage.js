@@ -36,6 +36,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       tariffs
       methods
       reviews
+      installments
       subscriptionPrice
       subscription
       promocode

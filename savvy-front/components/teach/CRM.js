@@ -81,7 +81,6 @@ const CRM = () => {
       date: subtractDays(7).toISOString(),
     },
   });
-  console.log("new Date(now()).getTime()", subtractDays(7).toISOString());
   if (loading) return <p>Loading 1...</p>;
   if (loading2) return <p>Loading 2...</p>;
 

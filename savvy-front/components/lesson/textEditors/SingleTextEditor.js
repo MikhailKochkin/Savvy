@@ -54,7 +54,7 @@ const TextBar = styled.div`
   border-radius: 5px;
   @media (max-width: 800px) {
     width: 100%;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
   img {
     display: block;
@@ -342,6 +342,7 @@ const SingleTextEditor = (props) => {
   const [shown, setShown] = useState(false);
   const [result, setResult] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [mistakesShown, setMistakesShown] = useState(false);
   // const [correctErrorOption, setCorrectErrorOption] = useState();
 
   const total = props.textEditor.totalMistakes;
@@ -528,7 +529,7 @@ const SingleTextEditor = (props) => {
     const elements = document
       .getElementById(props.textEditor.id + 1)
       .querySelectorAll("#id, .quiz, .editor_note");
-    if (props.mistakesShown) {
+    if (mistakesShown) {
       elements.forEach((element) => {
         element.classList.remove("edit");
       });
@@ -537,7 +538,7 @@ const SingleTextEditor = (props) => {
         element.className = "edit";
       });
     }
-    setState((prev) => ({ mistakesShown: !prev.mistakesShown }));
+    setMistakesShown(!mistakesShown);
   };
 
   const switchUpdate = () => {
@@ -682,7 +683,7 @@ const SingleTextEditor = (props) => {
                 variant="contained"
                 color="primary"
               >
-                {props.mistakesShown ? "Hide mistakes" : "Show mistakes"}
+                {mistakesShown ? "Hide mistakes" : "Show mistakes"}
               </StyledButton>
             </Buttons>
           </div>

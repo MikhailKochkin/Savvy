@@ -19,11 +19,10 @@ const CLIENTS_QUERY = gql`
 `;
 
 const client_data = () => {
-  // const { loading, error, data } = useQuery(CLIENTS_QUERY);
-  // if (loading) return <p>Loading...</p>;
-  // let initial_clients = data.businessClients;
-  // return <ClientData initial_clients={initial_clients} />;
-  return <div>Hello World</div>;
+  const { loading, error, data } = useQuery(CLIENTS_QUERY);
+  if (loading) return <p>Loading...</p>;
+  let initial_clients = data.businessClients;
+  return <ClientData initial_clients={initial_clients} />;
 };
 
 export default client_data;

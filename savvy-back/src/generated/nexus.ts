@@ -344,6 +344,7 @@ export interface NexusGenInputs {
     header?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    installments?: NexusGenEnums['SortOrder'] | null; // SortOrder
     methods?: NexusGenEnums['SortOrder'] | null; // SortOrder
     news?: NexusGenEnums['SortOrder'] | null; // SortOrder
     nextStart?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -393,6 +394,7 @@ export interface NexusGenInputs {
     header?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    installments?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     lawrdles?: NexusGenInputs['LawrdleListRelationFilter'] | null; // LawrdleListRelationFilter
     lessons?: NexusGenInputs['LessonListRelationFilter'] | null; // LessonListRelationFilter
     methods?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2106,6 +2108,7 @@ export interface NexusGenObjects {
     header: string[]; // [String!]!
     id: string; // String!
     image: string; // String!
+    installments?: number | null; // Int
     methods?: string | null; // String
     news?: string | null; // String
     nextStart?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -2655,6 +2658,7 @@ export interface NexusGenFieldTypes {
     header: string[]; // [String!]!
     id: string; // String!
     image: string; // String!
+    installments: number | null; // Int
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     methods: string | null; // String
     new_students: NexusGenRootTypes['User'][]; // [User!]!
@@ -3428,6 +3432,7 @@ export interface NexusGenFieldTypeNames {
     header: 'String'
     id: 'String'
     image: 'String'
+    installments: 'Int'
     lessons: 'Lesson'
     methods: 'String'
     new_students: 'User'

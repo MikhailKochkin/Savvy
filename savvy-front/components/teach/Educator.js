@@ -182,6 +182,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 50px;
 `;
 const Courses = styled.div`
   width: 80%;
@@ -259,7 +260,7 @@ const Educator = (props) => {
   return (
     <PleaseSignIn>
       <Styles>
-        <EducatorImage />
+        {/* <EducatorImage /> */}
         <Container>
           <Uni me={me} />
           <Courses>

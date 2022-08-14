@@ -194,7 +194,7 @@ const CreateTextEditor = (props) => {
           <ButtonTwo
             onClick={async (e) => {
               e.preventDefault();
-              document.getElementById("Message").style.display = "block";
+              // document.getElementById("Message").style.display = "block";
               const res = await createTextEditor();
               props.getResult(res);
             }}

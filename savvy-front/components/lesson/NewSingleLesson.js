@@ -11,7 +11,7 @@ import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
-import Panel from "./Panel";
+import Offer from "./Offer";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -268,13 +268,16 @@ const Head = styled.div`
   color: white;
   cursor: pointer;
   min-height: 10vh;
-  background: #1a2980; /* fallback for old browsers */
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
+  color: #dfe1ec;
+  /* background: #1a2980;
   background: -webkit-linear-gradient(
     to right,
     #26d0ce,
     #1a2980
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26d0ce, #1a2980);
+  ); 
+  background: linear-gradient(to right, #26d0ce, #1a2980); */
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
@@ -405,6 +408,8 @@ const NewSingleLesson = (props) => {
   );
 
   let i_am_author = false;
+  let i_am_student = false;
+
   if (
     me &&
     lesson.coursePage.authors.filter((auth) => auth.id == me.id).length > 0
@@ -412,10 +417,18 @@ const NewSingleLesson = (props) => {
     i_am_author = true;
   }
 
-  console.log("i_am_author 2", i_am_author);
+  if (
+    me &&
+    me.coursePages.filter((c) => c.id == lesson.coursePage.id).length > 0
+  ) {
+    i_am_student = true;
+  }
+  console.log("i_am_student", i_am_student);
+  console.log("i_am_author", i_am_author);
 
   return (
     <PleaseSignIn>
+      {i_am_student && <Offer me={me} coursePageId={lesson.coursePage.id} />}
       <div id="root"></div>
       <>
         {lesson && (
@@ -432,7 +445,18 @@ const NewSingleLesson = (props) => {
               />
 
               <Head>
-                {width > 800 && (
+                {lesson.open ? (
+                  <Link
+                    href={{
+                      pathname: "/coursePage",
+                      query: {
+                        id: lesson.coursePage.id,
+                      },
+                    }}
+                  >
+                    <span>На страницу курса</span>
+                  </Link>
+                ) : (
                   <Link
                     href={{
                       pathname: "/course",
@@ -441,28 +465,30 @@ const NewSingleLesson = (props) => {
                       },
                     }}
                   >
-                    <span>Back to course</span>
+                    <span>На страницу курса</span>
                   </Link>
                 )}
-                <div className="block">
-                  {me &&
-                    (lesson.user.id === me.id ||
-                      i_am_author ||
-                      me.permissions.includes("ADMIN")) && (
-                      <Link
-                        href={{
-                          pathname: "/lesson",
-                          query: {
-                            id: lesson.id,
-                            type: "regular",
-                          },
-                        }}
-                      >
-                        {/* <span>{t("switch")}</span> */}
-                        <span>{t("to_development")}</span>
-                      </Link>
-                    )}
-                </div>
+                {width > 800 && (
+                  <div className="block">
+                    {me &&
+                      (lesson.user.id === me.id ||
+                        i_am_author ||
+                        me.permissions.includes("ADMIN")) && (
+                        <Link
+                          href={{
+                            pathname: "/lesson",
+                            query: {
+                              id: lesson.id,
+                              type: "regular",
+                            },
+                          }}
+                        >
+                          {/* <span>{t("switch")}</span> */}
+                          <span>{t("to_development")}</span>
+                        </Link>
+                      )}
+                  </div>
+                )}
               </Head>
               <LessonPart>
                 {/* <h1>
