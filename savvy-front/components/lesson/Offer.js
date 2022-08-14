@@ -85,12 +85,14 @@ const Banner = styled.div`
     color: #000;
     border: 1px solid #fcc419;
     border-radius: 5px;
-    width: 220px;
+    width: 250px;
+    min-width:
     font-family: Montserrat;
     font-size: 1.7rem;
     font-weight: 400;
     height: 45px;
     opacity: 1;
+    text-align: center;
     cursor: pointer;
     z-index: 4;
     transition: ease-in 0.2s;
@@ -234,9 +236,8 @@ const Ad = (props) => {
             <div className="bottomline_text">
               {width < 500 && (
                 <span>
-                  {/* 🚀 Откройте доступ к курсу  */}Курс "{course.title}" со
-                  скидкой 20% – <br /> {course.price * 0.8} ₽ вместо{" "}
-                  {course.price} ₽
+                  {/* 🚀 Откройте доступ к курсу  */}Курс со скидкой 20% –{" "}
+                  <br /> {course.price * 0.8} ₽ вместо {course.price} ₽
                   {/* "{course.title}". Автор – {course.user.name}{" "}
             {course.user.surname} */}
                 </span>

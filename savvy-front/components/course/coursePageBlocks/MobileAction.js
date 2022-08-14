@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import Router from "next/router";
 
 const Styles = styled.div`
   width: 100%;
@@ -16,7 +17,7 @@ const Styles = styled.div`
   height: 100px;
 `;
 
-const ButtonOpen = styled.a`
+const ButtonOpen = styled.button`
   width: 90%;
   height: 48px;
   border-top: 2px solid #175ffe;
@@ -42,13 +43,22 @@ const MobileAction = (props) => {
     .filter((l) => l.open == true)
     .sort((les) => les.number > les.number)[0];
 
-  console.log("demo_lesson", demo_lesson);
   return (
     <Styles>
       <ButtonOpen
         id="bottomline_coursepage_to_demo_lesson"
-        href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-        target="_blank"
+        // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
+        // target="_blank"
+        onClick={(e) => {
+          e.preventDefault();
+          Router.push({
+            pathname: "/lesson",
+            query: {
+              id: demo_lesson.id,
+              type: "story",
+            },
+          });
+        }}
       >
         {t("start_open_lesson")}
       </ButtonOpen>

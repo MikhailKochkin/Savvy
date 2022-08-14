@@ -428,7 +428,7 @@ const NewSingleLesson = (props) => {
 
   return (
     <PleaseSignIn>
-      {i_am_student && <Offer me={me} coursePageId={lesson.coursePage.id} />}
+      {!i_am_student && <Offer me={me} coursePageId={lesson.coursePage.id} />}
       <div id="root"></div>
       <>
         {lesson && (

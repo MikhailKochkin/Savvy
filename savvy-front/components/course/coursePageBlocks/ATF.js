@@ -299,7 +299,6 @@ const ATF = (props) => {
   };
 
   moment.locale("ru");
-  console.log("course.nextStart", course.nextStart);
   return (
     <div id="ATF">
       <BImage>

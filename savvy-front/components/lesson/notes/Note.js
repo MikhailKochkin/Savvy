@@ -184,10 +184,9 @@ const NoteStyles = styled.div`
   max-width: 570px;
   background: #fff;
   margin: 2% 0 0 0;
-  font-size: 1.6rem;
   filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
   @media (max-width: 800px) {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     width: 100%;
     order: 3;
     h2 {

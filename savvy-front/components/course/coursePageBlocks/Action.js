@@ -268,7 +268,7 @@ const PriceBox = styled.div`
   }
 `;
 
-const ButtonOpen = styled.a`
+const ButtonOpen = styled.button`
   width: 292px;
   height: 48px;
   border: 2px solid #175ffe;
@@ -467,11 +467,23 @@ const Action = (props) => {
           {!installments && <div className="price">{price} ₽</div>}
           <ButtonOpen
             id="coursePage_to_demolesson"
-            href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-            target="_blank"
+            // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
+            // target="_blank"
+
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push({
+                pathname: "/lesson",
+                query: {
+                  id: demo_lesson.id,
+                  type: "story",
+                },
+              });
+            }}
           >
             {t("start_open_lesson")}
           </ButtonOpen>
+
           <ButtonBuy
             id="coursePage_buy_button"
             onClick={async (e) => {
