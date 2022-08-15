@@ -5,6 +5,7 @@ import moment from "moment";
 import dynamic from "next/dynamic";
 import UserRow from "./UserRow";
 import TagUsers from "./TagUsers";
+import Open from "./Open";
 
 const AUTHORS_QUERY = gql`
   query AUTHORS_QUERY {
@@ -91,17 +92,17 @@ const CRM = () => {
   return (
     <Styles>
       <Container>
-        <div>Hello World</div>
         <select
           name="page"
           defaultValue={page}
           onChange={(e) => setPage(e.target.value)}
         >
           <option value={"TAGS"}>По тегам</option>
+          <option value={"OPEN"}>По открытым урокам</option>
           <option value={"AUTHORS"}>Авторы</option>
           <option value={"NEW_STUDENTS"}>Новые студенты</option>
         </select>
-
+        {page == "OPEN" && <Open />}
         {page == "TAGS" && <TagUsers />}
         {page == "NEW_STUDENTS" &&
           [...new_users]
