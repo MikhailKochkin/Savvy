@@ -4,6 +4,7 @@ import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import UserRow from "./UserRow";
+import TagUsers from "./TagUsers";
 
 const AUTHORS_QUERY = gql`
   query AUTHORS_QUERY {
@@ -66,7 +67,7 @@ const Container = styled.div`
 `;
 
 const CRM = () => {
-  const [page, setPage] = useState("AUTHORS");
+  const [page, setPage] = useState("TAGS");
   const subtractDays = (numOfDays, date = new Date()) => {
     date.setDate(date.getDate() - numOfDays);
     return date;
@@ -96,9 +97,12 @@ const CRM = () => {
           defaultValue={page}
           onChange={(e) => setPage(e.target.value)}
         >
+          <option value={"TAGS"}>По тегам</option>
           <option value={"AUTHORS"}>Авторы</option>
           <option value={"NEW_STUDENTS"}>Новые студенты</option>
         </select>
+
+        {page == "TAGS" && <TagUsers />}
         {page == "NEW_STUDENTS" &&
           [...new_users]
             .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))

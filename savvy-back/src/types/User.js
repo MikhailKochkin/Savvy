@@ -15,6 +15,7 @@ const User = objectType({
     t.model.work();
     t.model.password();
     t.model.description();
+    t.model.messages();
     t.model.resume();
     t.model.status();
     t.model.tags();
@@ -47,6 +48,18 @@ const Feedback = objectType({
     t.model.lesson();
     t.model.teacher();
     t.model.student();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+const Message = objectType({
+  name: "Message",
+  definition(t) {
+    t.model.id();
+    t.model.text();
+    t.model.userId();
+    t.model.user();
     t.model.createdAt();
     t.model.updatedAt();
   },
@@ -114,6 +127,7 @@ module.exports = {
   User,
   Feedback,
   UserLevel,
+  Message,
   BusinessClient,
   ConfUser,
   CommunityMember,

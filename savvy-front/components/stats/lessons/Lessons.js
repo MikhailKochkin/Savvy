@@ -43,12 +43,13 @@ const Lessons = (props) => {
           if (isNaN(average)) {
             average = "Нет оценок";
           }
+          console.log("l", l.structure);
           return (
             <MiniStyles>
               <Header>
                 {l.number}. {l.name}.({l.id}) {average}
               </Header>
-              <LessonResult res={l.lessonResults} />
+              <LessonResult structure={l.structure} res={l.lessonResults} />
             </MiniStyles>
           );
         })}

@@ -277,32 +277,38 @@ const Mutation = mutationType({
     });
 
     t.field("sendMessage", {
-      type: "User",
+      type: "Message",
       args: {
-        id: stringArg(),
-        email: stringArg(),
-        message: stringArg(),
-        comment: stringArg(),
+        userId: stringArg(),
+        text: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        const updates = { ...args };
-        const user = await ctx.prisma.user.update({
+        console.log("args", args);
+        const userId = args.userId;
+        delete args.userId;
+        const message = await ctx.prisma.message.create({
           data: {
-            ...updates,
-          },
-          where: {
-            id: args.id,
+            user: {
+              connect: {
+                id: userId,
+              },
+            },
+            ...args,
           },
         });
 
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: userId },
+        });
+        console.log("user", user.email);
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
-          To: args.email,
+          To: user.email,
           Subject: "Какие впечатления от BeSavvy?",
-          HtmlBody: GenericEmail.GenericEmail(args.message),
+          HtmlBody: GenericEmail.GenericEmail(args.text),
         });
 
-        return user;
+        return message;
       },
     });
 

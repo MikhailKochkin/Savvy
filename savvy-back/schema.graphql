@@ -1331,7 +1331,12 @@ enum Level {
 }
 
 type Message {
-  message: String
+  createdAt: DateTime!
+  id: String!
+  text: String
+  updatedAt: DateTime!
+  user: User
+  userId: String
 }
 
 input MessageElement {
@@ -1342,8 +1347,30 @@ input MessageElement {
   text: String
 }
 
+input MessageListRelationFilter {
+  every: MessageWhereInput
+  none: MessageWhereInput
+  some: MessageWhereInput
+}
+
 input Messages {
   messagesList: [MessageElement]
+}
+
+input MessageWhereInput {
+  AND: [MessageWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  NOT: [MessageWhereInput!]
+  OR: [MessageWhereInput!]
+  text: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+}
+
+input MessageWhereUniqueInput {
+  id: String
 }
 
 type MiniForum {
@@ -1448,7 +1475,7 @@ type Mutation {
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(comment: String, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
-  sendMessage(comment: String, email: String, id: String, message: String): User
+  sendMessage(text: String, userId: String): Message
   signin(email: String, password: String): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
@@ -2819,7 +2846,7 @@ type User {
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int): [LessonResult!]!
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   level: UserLevel
-  message: String
+  messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int, last: Int): [Message!]!
   name: String!
   new_subjects(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
   number: String
@@ -2885,7 +2912,6 @@ input UserOrderByInput {
   isFamiliar: SortOrder
   legalPortfolioId: SortOrder
   levelId: SortOrder
-  message: SortOrder
   name: SortOrder
   number: SortOrder
   password: SortOrder
@@ -2941,7 +2967,7 @@ input UserWhereInput {
   lessons: LessonListRelationFilter
   level: UserLevelWhereInput
   levelId: StringNullableFilter
-  message: StringNullableFilter
+  messages: MessageListRelationFilter
   miniforums: MiniForumListRelationFilter
   name: StringFilter
   new_subjects: CoursePageListRelationFilter

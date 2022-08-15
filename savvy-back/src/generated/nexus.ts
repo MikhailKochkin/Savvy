@@ -924,6 +924,25 @@ export interface NexusGenInputs {
     reactions?: Array<NexusGenInputs['Reaction'] | null> | null; // [Reaction]
     text?: string | null; // String
   }
+  MessageListRelationFilter: { // input type
+    every?: NexusGenInputs['MessageWhereInput'] | null; // MessageWhereInput
+    none?: NexusGenInputs['MessageWhereInput'] | null; // MessageWhereInput
+    some?: NexusGenInputs['MessageWhereInput'] | null; // MessageWhereInput
+  }
+  MessageWhereInput: { // input type
+    AND?: NexusGenInputs['MessageWhereInput'][] | null; // [MessageWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['MessageWhereInput'][] | null; // [MessageWhereInput!]
+    OR?: NexusGenInputs['MessageWhereInput'][] | null; // [MessageWhereInput!]
+    text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+  }
+  MessageWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   Messages: { // input type
     messagesList?: Array<NexusGenInputs['MessageElement'] | null> | null; // [MessageElement]
   }
@@ -1848,7 +1867,6 @@ export interface NexusGenInputs {
     isFamiliar?: NexusGenEnums['SortOrder'] | null; // SortOrder
     legalPortfolioId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     levelId?: NexusGenEnums['SortOrder'] | null; // SortOrder
-    message?: NexusGenEnums['SortOrder'] | null; // SortOrder
     name?: NexusGenEnums['SortOrder'] | null; // SortOrder
     number?: NexusGenEnums['SortOrder'] | null; // SortOrder
     password?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1903,7 +1921,7 @@ export interface NexusGenInputs {
     lessons?: NexusGenInputs['LessonListRelationFilter'] | null; // LessonListRelationFilter
     level?: NexusGenInputs['UserLevelWhereInput'] | null; // UserLevelWhereInput
     levelId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
-    message?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    messages?: NexusGenInputs['MessageListRelationFilter'] | null; // MessageListRelationFilter
     miniforums?: NexusGenInputs['MiniForumListRelationFilter'] | null; // MiniForumListRelationFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     new_subjects?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
@@ -2219,7 +2237,11 @@ export interface NexusGenObjects {
     visitsNumber?: number | null; // Int
   }
   Message: { // root type
-    message?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    text?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
   }
   MiniForum: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2479,7 +2501,6 @@ export interface NexusGenObjects {
     email: string; // String!
     id: string; // String!
     image?: string | null; // String
-    message?: string | null; // String
     name: string; // String!
     number?: string | null; // String
     password: string; // String!
@@ -2815,7 +2836,12 @@ export interface NexusGenFieldTypes {
     visitsNumber: number | null; // Int
   }
   Message: { // field return type
-    message: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    text: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
   }
   MiniForum: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2891,7 +2917,7 @@ export interface NexusGenFieldTypes {
     resetPassword: NexusGenRootTypes['User'] | null; // User
     sendBusinessClientEmail: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     sendEmailToStudent: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
-    sendMessage: NexusGenRootTypes['User'] | null; // User
+    sendMessage: NexusGenRootTypes['Message'] | null; // Message
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -3257,7 +3283,7 @@ export interface NexusGenFieldTypes {
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     level: NexusGenRootTypes['UserLevel'] | null; // UserLevel
-    message: string | null; // String
+    messages: NexusGenRootTypes['Message'][]; // [Message!]!
     name: string; // String!
     new_subjects: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     number: string | null; // String
@@ -3589,7 +3615,12 @@ export interface NexusGenFieldTypeNames {
     visitsNumber: 'Int'
   }
   Message: { // field return type name
-    message: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    text: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
   }
   MiniForum: { // field return type name
     createdAt: 'DateTime'
@@ -3665,7 +3696,7 @@ export interface NexusGenFieldTypeNames {
     resetPassword: 'User'
     sendBusinessClientEmail: 'BusinessClient'
     sendEmailToStudent: 'CourseVisit'
-    sendMessage: 'User'
+    sendMessage: 'Message'
     signin: 'AuthPayload'
     signout: 'SignOut'
     signup: 'AuthPayload'
@@ -4031,7 +4062,7 @@ export interface NexusGenFieldTypeNames {
     lessonResults: 'LessonResult'
     lessons: 'Lesson'
     level: 'UserLevel'
-    message: 'String'
+    messages: 'Message'
     name: 'String'
     new_subjects: 'CoursePage'
     number: 'String'
@@ -4569,10 +4600,8 @@ export interface NexusGenArgTypes {
       reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
     }
     sendMessage: { // args
-      comment?: string | null; // String
-      email?: string | null; // String
-      id?: string | null; // String
-      message?: string | null; // String
+      text?: string | null; // String
+      userId?: string | null; // String
     }
     signin: { // args
       email?: string | null; // String
@@ -5060,6 +5089,12 @@ export interface NexusGenArgTypes {
     lessons: { // args
       after?: NexusGenInputs['LessonWhereUniqueInput'] | null; // LessonWhereUniqueInput
       before?: NexusGenInputs['LessonWhereUniqueInput'] | null; // LessonWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    messages: { // args
+      after?: NexusGenInputs['MessageWhereUniqueInput'] | null; // MessageWhereUniqueInput
+      before?: NexusGenInputs['MessageWhereUniqueInput'] | null; // MessageWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }
