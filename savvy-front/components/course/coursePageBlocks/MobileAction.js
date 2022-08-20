@@ -17,7 +17,7 @@ const Styles = styled.div`
   height: 100px;
 `;
 
-const ButtonOpen = styled.button`
+const ButtonOpen = styled.a`
   width: 90%;
   height: 48px;
   border-top: 2px solid #175ffe;
@@ -45,7 +45,7 @@ const MobileAction = (props) => {
 
   return (
     <Styles>
-      <ButtonOpen
+      {/* <ButtonOpen
         id="bottomline_coursepage_to_demo_lesson"
         // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
         // target="_blank"
@@ -61,6 +61,21 @@ const MobileAction = (props) => {
         }}
       >
         {t("start_open_lesson")}
+      </ButtonOpen> */}
+      <ButtonOpen
+        id="coursePage_to_demolesson"
+        // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
+        // target="_blank"
+
+        onClick={(e) => {
+          e.preventDefault();
+          alert(
+            `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Он ответит на любой вопрос по курсам. Задайте ему свой вопрос или просто скопируйте этот текст: Привет, расскажи про курс "${props.coursePage.title}" `
+          );
+          location.href = "https://t.me/mikkochkin";
+        }}
+      >
+        Получить консультацию
       </ButtonOpen>
     </Styles>
   );

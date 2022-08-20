@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import UserRow from "./UserRow";
 import TagUsers from "./TagUsers";
 import Open from "./Open";
+import Requests from "./Requests";
 
 const AUTHORS_QUERY = gql`
   query AUTHORS_QUERY {
@@ -98,12 +99,15 @@ const CRM = () => {
           onChange={(e) => setPage(e.target.value)}
         >
           <option value={"TAGS"}>По тегам</option>
+          <option value={"REQUESTS"}>По заявкам</option>
           <option value={"OPEN"}>По открытым урокам</option>
           <option value={"AUTHORS"}>Авторы</option>
           <option value={"NEW_STUDENTS"}>Новые студенты</option>
         </select>
         {page == "OPEN" && <Open />}
         {page == "TAGS" && <TagUsers />}
+        {page == "REQUESTS" && <Requests />}
+
         {page == "NEW_STUDENTS" &&
           [...new_users]
             .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))

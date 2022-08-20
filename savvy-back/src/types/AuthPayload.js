@@ -8,8 +8,8 @@ const AuthPayload = objectType({
   },
 });
 
-const Message = objectType({
-  name: "Message",
+const AuthMessage = objectType({
+  name: "AuthMessage",
   definition(t) {
     t.string("message");
   },
@@ -38,4 +38,10 @@ const SignOut = objectType({
   },
 });
 
-module.exports = { AuthPayload, SignOut, PaymentInfo, PaymentInfo2, Message };
+module.exports = {
+  AuthPayload,
+  SignOut,
+  PaymentInfo,
+  PaymentInfo2,
+  AuthMessage,
+};

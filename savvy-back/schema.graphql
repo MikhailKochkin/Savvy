@@ -35,6 +35,10 @@ input ApplicationWhereUniqueInput {
   id: String
 }
 
+type AuthMessage {
+  message: String
+}
+
 type AuthPayload {
   token: String
   user: User
@@ -1471,7 +1475,7 @@ type Mutation {
   deleteTextEditor(id: String): TextEditor
   enrollOnCourse(coursePageId: String, id: String): User
   remind(id: String, reminders: [DateTime]): CourseVisit
-  requestReset(email: String): Message
+  requestReset(email: String): AuthMessage
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(comment: String, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit

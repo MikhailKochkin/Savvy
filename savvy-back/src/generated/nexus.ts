@@ -2002,6 +2002,9 @@ export interface NexusGenObjects {
     id: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  AuthMessage: { // root type
+    message?: string | null; // String
+  }
   AuthPayload: { // root type
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
@@ -2537,6 +2540,9 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
+  AuthMessage: { // field return type
+    message: string | null; // String
+  }
   AuthPayload: { // field return type
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
@@ -2913,7 +2919,7 @@ export interface NexusGenFieldTypes {
     deleteTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     enrollOnCourse: NexusGenRootTypes['User'] | null; // User
     remind: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
-    requestReset: NexusGenRootTypes['Message'] | null; // Message
+    requestReset: NexusGenRootTypes['AuthMessage'] | null; // AuthMessage
     resetPassword: NexusGenRootTypes['User'] | null; // User
     sendBusinessClientEmail: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     sendEmailToStudent: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
@@ -3316,6 +3322,9 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     updatedAt: 'DateTime'
   }
+  AuthMessage: { // field return type name
+    message: 'String'
+  }
   AuthPayload: { // field return type name
     token: 'String'
     user: 'User'
@@ -3692,7 +3701,7 @@ export interface NexusGenFieldTypeNames {
     deleteTextEditor: 'TextEditor'
     enrollOnCourse: 'User'
     remind: 'CourseVisit'
-    requestReset: 'Message'
+    requestReset: 'AuthMessage'
     resetPassword: 'User'
     sendBusinessClientEmail: 'BusinessClient'
     sendEmailToStudent: 'CourseVisit'

@@ -268,7 +268,7 @@ const PriceBox = styled.div`
   }
 `;
 
-const ButtonOpen = styled.button`
+const ButtonOpen = styled.a`
   width: 292px;
   height: 48px;
   border: 2px solid #175ffe;
@@ -283,6 +283,9 @@ const ButtonOpen = styled.button`
   font-size: 1.8rem;
   transition: ease-in 0.2s;
   color: #fff;
+  a {
+    color: #fff;
+  }
   &:hover {
     background-color: #0b44bf;
   }
@@ -472,16 +475,21 @@ const Action = (props) => {
 
             onClick={(e) => {
               e.preventDefault();
-              Router.push({
-                pathname: "/lesson",
-                query: {
-                  id: demo_lesson.id,
-                  type: "story",
-                },
-              });
+              alert(
+                `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Он ответит на любой вопрос по нашим курсам. Задайте ему свой вопрос или просто скопируйте этот текст: Привет, расскажи про курс "${coursePage.title}" `
+              );
+              location.href = "https://t.me/mikkochkin";
+
+              // Router.push({
+              //   pathname: "/lesson",
+              //   query: {
+              //     id: demo_lesson.id,
+              //     type: "story",
+              //   },
+              // });
             }}
           >
-            {t("start_open_lesson")}
+            Получить консультацию
           </ButtonOpen>
 
           <ButtonBuy
