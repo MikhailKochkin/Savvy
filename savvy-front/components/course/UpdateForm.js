@@ -101,6 +101,11 @@ const Fieldset = styled.fieldset`
       border: 1px dashed #112a62;
     }
   }
+  .open_landing {
+    cursor: pointer;
+    font-weight: bold;
+    color: #112a62;
+  }
 `;
 
 const Circle = styled.div`
@@ -499,6 +504,14 @@ const UpdateForm = (props) => {
             placeholder="Как работают тарифы на курсе..."
           />
         </Frame> */}
+        <Link
+          href={{
+            pathname: "/coursePage",
+            query: { id: coursePage.id },
+          }}
+        >
+          <div className="open_landing">Открыть лендинг курса</div>
+        </Link>
       </Fieldset>
       <Buttons>
         <Button
