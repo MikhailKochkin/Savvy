@@ -327,7 +327,7 @@ const Programs = () => {
   if (loading) return <LoadingDummy />;
   return (
     <Styles id="course_search">
-      <Container moreThanOne={programs.length > 1 ? true : false}>
+      <Container moreThanOne={data.coursePages.length > 1 ? true : false}>
         {data.coursePages.map((p, i) => (
           <Program
             key={i}
