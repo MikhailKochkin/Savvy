@@ -11,6 +11,8 @@ import CreateTestBlock from "./testblocks/CreateTestBlock";
 import TestPractice from "./testblocks/TB";
 
 import CreateShot from "../create/CreateShot";
+import Shots from "./shots/Shots";
+
 import CreateConstructor from "../create/CreateConstructor";
 
 import NewConstructor from "./constructions/NewConstructor";
@@ -128,6 +130,8 @@ const LessonBlock = (props) => {
     d = lesson.forum;
   } else if (el.type && el.type.toLowerCase() == "construction" && !el.data) {
     d = lesson.constructions.find((n) => n.id == el.id);
+  } else if (el.type && el.type.toLowerCase() == "shot" && !el.data) {
+    d = lesson.shots.find((n) => n.id == el.id);
   } else if (el.data) {
     d = el.data;
   } else {
@@ -247,6 +251,25 @@ const LessonBlock = (props) => {
         "TextEditor",
         res.data.updateTextEditor
       );
+    } else if (res.data.createShot) {
+      setType("Shot");
+      setIdNum(res.data.createShot.id);
+      props.addToLesson(
+        res.data.createShot.id,
+        index,
+        "Shot",
+        res.data.createShot
+      );
+    } else if (res.data.updateShot) {
+      console.log("get result", "Shot");
+      setType("Shot");
+      setIdNum(res.data.updateShot.id);
+      props.addToLesson(
+        res.data.updateShot.id,
+        index,
+        "Shot",
+        res.data.updateShot
+      );
     } else if (res.data.createProblem) {
       setType("Problem");
       setIdNum(res.data.createProblem.id);
@@ -312,6 +335,7 @@ const LessonBlock = (props) => {
           <Menu>
             <ButtonTwo onClick={(e) => addBlock("Chat")}>{t("Chat")}</ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("Note")}>{t("Note")}</ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Shot")}>{t("Shot")}</ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("NewTest")}>
               {t("NewTest")}
             </ButtonTwo>
@@ -356,6 +380,35 @@ const LessonBlock = (props) => {
                 getResult={getResult}
                 passUpdated={passUpdated}
               />
+            )}
+          </>
+        )}
+        {type.toLowerCase() == "shot" && (
+          <>
+            {!isSaved && el.id == undefined && (
+              <CreateShot
+                lessonID={lesson.id}
+                getResult={getResult}
+                isSaved={isSaved}
+              />
+            )}
+            {(isSaved || d != null) && data && data.__typename == "Shot" && (
+              <>
+                <Shots
+                  key={data.id}
+                  comments={data.comments}
+                  parts={data.parts}
+                  shotUser={data.user.id}
+                  me={me}
+                  shotID={data.id}
+                  lessonID={lesson.id}
+                  title={data.title}
+                  userData={[]}
+                  story={false}
+                  getResult={getResult}
+                  passUpdated={passUpdated}
+                />
+              </>
             )}
           </>
         )}

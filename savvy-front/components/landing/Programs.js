@@ -1,8 +1,38 @@
 import React from "react";
-import Program from "./Program";
+import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import { useRouter } from "next/router";
+import Program from "./Program";
+import LoadingDummy from "../Loading";
+
+const COURSES_QUERY = gql`
+  query COURSES_QUERY {
+    coursePages(
+      where: { published: { equals: true } }
+      orderBy: { createdAt: asc }
+    ) {
+      id
+      title
+      description
+      nextStart
+      installments
+      price
+      image
+      tags
+      user {
+        id
+        name
+        surname
+      }
+      authors {
+        id
+        name
+        surname
+      }
+    }
+  }
+`;
 
 const Styles = styled.div`
   display: flex;
@@ -293,21 +323,22 @@ const Programs = () => {
   let programs;
   router.locale == "ru" ? (programs = rus_programs) : (programs = eng_programs);
 
+  const { loading, error, data } = useQuery(COURSES_QUERY);
+  if (loading) return <LoadingDummy />;
   return (
     <Styles id="course_search">
       <Container moreThanOne={programs.length > 1 ? true : false}>
-        {programs.map((p, i) => (
+        {data.coursePages.map((p, i) => (
           <Program
             key={i}
-            img={p.img}
+            img={p.image}
             title={p.title}
             description={p.description}
-            term={p.term}
+            nextStart={p.nextStart}
             price={p.price}
             installments={p.installments}
-            conditions={p.conditions}
-            pathname={p.pathname}
-            query={p.query}
+            // conditions={p.conditions}
+            id={p.id}
           />
         ))}
       </Container>

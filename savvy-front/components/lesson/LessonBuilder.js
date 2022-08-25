@@ -416,6 +416,7 @@ const LessonBuilder = (props) => {
           lesson={lesson}
           // change={lesson.change}
         />
+        {console.log("elements", elements)}
         <BuilderPart>
           {elements.map((el, i) => {
             return (

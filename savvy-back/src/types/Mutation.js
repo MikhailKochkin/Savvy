@@ -523,6 +523,22 @@ const Mutation = mutationType({
         return published;
       },
     });
+    t.field("publishCourse", {
+      type: "CoursePage",
+      args: {
+        id: stringArg(),
+        published: booleanArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const published = await ctx.prisma.coursePage.update({
+          data: { published: args.published },
+          where: {
+            id: args.id,
+          },
+        });
+        return published;
+      },
+    });
     t.field("createLessonResult", {
       type: "LessonResult",
       args: {
@@ -1975,6 +1991,7 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         const parts = args.parts;
         const comments = args.comments;
+        console.log("parts", parts, comments);
         const lessonId = args.lessonId;
         delete args.parts;
         delete args.comments;

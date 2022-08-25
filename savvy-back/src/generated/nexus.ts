@@ -2918,6 +2918,7 @@ export interface NexusGenFieldTypes {
     deleteStatement: NexusGenRootTypes['Statement'] | null; // Statement
     deleteTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     enrollOnCourse: NexusGenRootTypes['User'] | null; // User
+    publishCourse: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     remind: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     requestReset: NexusGenRootTypes['AuthMessage'] | null; // AuthMessage
     resetPassword: NexusGenRootTypes['User'] | null; // User
@@ -3700,6 +3701,7 @@ export interface NexusGenFieldTypeNames {
     deleteStatement: 'Statement'
     deleteTextEditor: 'TextEditor'
     enrollOnCourse: 'User'
+    publishCourse: 'CoursePage'
     remind: 'CourseVisit'
     requestReset: 'AuthMessage'
     resetPassword: 'User'
@@ -4585,6 +4587,10 @@ export interface NexusGenArgTypes {
     enrollOnCourse: { // args
       coursePageId?: string | null; // String
       id?: string | null; // String
+    }
+    publishCourse: { // args
+      id?: string | null; // String
+      published?: boolean | null; // Boolean
     }
     remind: { // args
       id?: string | null; // String

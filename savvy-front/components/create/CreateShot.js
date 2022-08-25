@@ -1,11 +1,8 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-import { useTranslation } from "next-i18next";
-
-import { Message } from "../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import dynamic from "next/dynamic";
 
@@ -23,8 +20,18 @@ const CREATE_SHOTS_MUTATION = gql`
       lessonId: $lessonId
     ) {
       id
+      title
+      parts
+      comments
+      user {
+        id
+      }
     }
   }
+`;
+
+const Styles = styled.div`
+  displa: flex;
 `;
 
 const TestCreate = styled.div`
@@ -41,7 +48,7 @@ const TestCreate = styled.div`
     border: 1px solid #c4c4c4;
     width: 90%;
     height: 40px;
-    padding: 1.5% 20px;
+    padding: 1.5% 5px;
     font-size: 1.6rem;
     outline: 0;
   }
@@ -123,166 +130,117 @@ const Advice = styled.p`
   width: 80%;
 `;
 
-const Title = styled.div`
-  font-size: 2.2rem;
-  font-weight: 600;
-  padding: 2%;
-  padding-top: 0;
-`;
-
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
-class CreateShot extends Component {
-  state = {
-    final_p: [],
-    final_c: [],
-    steps: 1,
+const CreateShot = (props) => {
+  const [parts, setParts] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [title, setTitle] = useState("Презентация");
+
+  const myCallback = (dataFromChild, name, index) => {
+    let new_parts = parts;
+    new_parts[index] = dataFromChild;
+    setParts([...new_parts]);
   };
 
-  myCallback = (dataFromChild, name) => {
-    let st = name;
-    this.setState({
-      [st]: dataFromChild,
-    });
+  const myCallback2 = (dataFromChild, name, index) => {
+    let new_comments = comments;
+    new_comments[index] = dataFromChild;
+    setComments([...new_comments]);
   };
 
-  more = () => {
-    this.setState((prev) => ({ steps: prev.steps + 1 }));
+  const more = () => {
+    setParts([...parts, ""]);
+    setComments([...comments, ""]);
   };
 
-  remove = () => {
-    if (this.state.steps > 1) {
-      this.setState({
-        [`comment${this.state.steps}`]: undefined,
-        [`part${this.state.steps}`]: undefined,
-      });
-      this.setState((prev) => ({ steps: prev.steps - 1 }));
+  const remove = () => {
+    if (parts.length > 1) {
+      let new_parts = [...parts];
+      new_parts.pop();
+
+      let new_comments = [...comments];
+      new_comments.pop();
+      setParts([...new_parts]);
+      setComments([...new_comments]);
     }
   };
 
-  save = () => {
-    let parts = [];
-    let comments = [];
-    Object.entries(this.state)
-      .filter((text) => text[0].includes("part"))
-      .map((t) => parts.push(t[1]));
-    Object.entries(this.state)
-      .filter((text) => text[0].includes("comment"))
-      .map((t) => comments.push(t[1]));
-    parts = parts.filter((el) => el !== undefined);
-    comments = comments.filter((el) => el !== undefined);
-    this.setState({
-      final_p: parts,
-      final_c: comments,
-    });
-  };
-
-  handleChange = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  render() {
-    let rows = [];
-    let part;
-    let comment;
-    _.times(this.state.steps, (i) => {
-      part = `part${i + 1}`;
-      comment = `comment${i + 1}`;
-      rows.push(
-        <Row>
-          <Frame>
-            <DynamicLoadedEditor
-              index={i + 1}
-              name={part}
-              getEditorText={this.myCallback}
-              placeholder={`Часть ${i + 1}`}
+  return (
+    <Styles>
+      <Advice>
+        Составьте слайды. Слайд состоит из двух частей: текста и комментария.
+        Заполните информацию по каждому пункту для каждого слайда.
+      </Advice>
+      <Mutation
+        mutation={CREATE_SHOTS_MUTATION}
+        variables={{
+          lessonId: props.lessonID,
+          parts: parts,
+          comments: comments,
+          title: title,
+        }}
+        refetchQueries={() => [
+          {
+            query: SINGLE_LESSON_QUERY,
+            variables: { id: props.lessonID },
+          },
+        ]}
+        awaitRefetchQueries={true}
+      >
+        {(createShot, { loading, error }) => (
+          <TestCreate>
+            <input
+              id="title"
+              name="title"
+              spellCheck={true}
+              placeholder="Название документа"
+              autoFocus
+              required
+              defaultValue={"Презентация"}
+              onChange={(e) => setTitle(e.target.value)}
             />
-            <div className="com">
-              <DynamicLoadedEditor
-                index={i + 1}
-                name={comment}
-                placeholder={`Комментарий к части ${i + 1}`}
-                getEditorText={this.myCallback}
-              />
-            </div>
-          </Frame>
-        </Row>
-      );
-    });
-    return (
-      <>
-        <Advice>
-          Составьте алгоритм. Для этого опишите каждый его элемент в разделе
-          "Часть". Объяснить особенности каждого элемента можно в разделе
-          "Комментарий". Количество элементов не ограничено.
-        </Advice>
-        <Title>Новый алгоритм</Title>
-        <Mutation
-          mutation={CREATE_SHOTS_MUTATION}
-          variables={{
-            lessonId: this.props.lessonID,
-            parts: this.state.final_p,
-            comments: this.state.final_c,
-            title: this.state.title,
-          }}
-          refetchQueries={() => [
-            {
-              query: SINGLE_LESSON_QUERY,
-              variables: { id: this.props.lessonID },
-            },
-          ]}
-          awaitRefetchQueries={true}
-        >
-          {(createShot, { loading, error }) => (
-            <TestCreate>
-              <input
-                id="title"
-                name="title"
-                spellCheck={true}
-                placeholder="Название документа"
-                autoFocus
-                required
-                value={this.state.title}
-                onChange={this.handleChange}
-              />
-              {rows.map((row) => row)}
-              <More onClick={this.more}>Новый блок</More>
-              <Remove onClick={this.remove}>Убрать блок</Remove>
-              <Save
-                onClick={async (e) => {
-                  e.preventDefault();
-                  document.getElementById("Message").style.display = "block";
-                  setTimeout(function () {
-                    document.getElementById("Message")
-                      ? (document.getElementById("Message").style.display =
-                          "none")
-                      : "none";
-                  }, 2500);
-                  if (
-                    this.state.comment1 === undefined ||
-                    this.state.part1 === undefined
-                  ) {
-                    alert("В вашем документе недостаточно частей");
-                  } else {
-                    const res = await this.save();
-                    const res2 = await createShot();
-                  }
-                }}
-              >
-                {loading ? "Сохраняем..." : "Сохранить"}
-              </Save>
-              <Message id="Message">Вы создали новый вопрос!</Message>
-            </TestCreate>
-          )}
-        </Mutation>
-      </>
-    );
-  }
-}
+            <>
+              {_.times(parts.length, (i) => (
+                <Row>
+                  <Frame>
+                    <DynamicLoadedEditor
+                      index={i}
+                      // name={part}
+                      getEditorText={myCallback}
+                      placeholder={`Текст ${i + 1}`}
+                    />
+                    <div className="com">
+                      <DynamicLoadedEditor
+                        index={i}
+                        // name={comment}
+                        placeholder={`Комментарий к тексту ${i + 1}`}
+                        getEditorText={myCallback2}
+                      />
+                    </div>
+                  </Frame>
+                </Row>
+              ))}
+            </>
+            <More onClick={(e) => more()}>Новый слайд</More>
+            <Remove onClick={(e) => remove()}>Убрать слайд</Remove>
+            <Save
+              onClick={async (e) => {
+                e.preventDefault();
+                const res2 = await createShot();
+                props.getResult(res2);
+              }}
+            >
+              {loading ? "Сохраняем..." : "Сохранить"}
+            </Save>
+          </TestCreate>
+        )}
+      </Mutation>
+    </Styles>
+  );
+};
 
 export default CreateShot;

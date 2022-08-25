@@ -186,8 +186,9 @@ const Ad = (props) => {
         <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <div className="bottomline_text">
           <span>
-            🚀 Курс "{course.title}". Автор – {course.user.name}{" "}
-            {course.user.surname}
+            🚀 Курс "{course.title}"
+            {/* Автор – {course.user.name}{" "}
+            {course.user.surname} */}
           </span>
         </div>
         {/* <div className="more_bottomline_text">

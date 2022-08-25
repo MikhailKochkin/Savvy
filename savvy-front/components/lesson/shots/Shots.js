@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
 import { Mutation } from "@apollo/client/react/components";
@@ -22,13 +22,14 @@ const CREATE_SHOTRESULT_MUTATION = gql`
 `;
 
 const Commentary = styled.div`
-  border-bottom: 1px solid #edefed;
   padding: 1% 2%;
-  margin: 1% 0;
+  margin-bottom: 40px;
 `;
 
 const Text = styled.div`
   margin-top: 20px;
+  border-bottom: 1px solid #edefed;
+
   p {
     padding: 1% 2%;
     margin: 1% 0;
@@ -49,7 +50,6 @@ const Text = styled.div`
     background: #f29ca3;
     padding: 0.5% 0.3%;
   }
-  margin-bottom: 40px;
   /* span {
     padding: 0.5% 0.3%;
   } */
@@ -98,6 +98,7 @@ const SwitchButton = styled.div`
   font-size: 1.4rem;
   color: #112a62;
   width: 20%;
+  margin-bottom: 20px;
   cursor: pointer;
   outline: none;
   text-align: center;
@@ -163,141 +164,140 @@ const Progress = styled.div`
   transition: all 0.5s;
 `;
 
-class Shots extends Component {
-  state = {
-    num: 1,
-    page: "show",
-  };
-  plus = () => {
-    if (this.state.num < this.props.parts.length) {
-      this.setState((prev) => ({ num: prev.num + 1 }));
-    }
-  };
-  minus = () => {
-    if (this.state.num > 1) {
-      this.setState((prev) => ({ num: prev.num - 1 }));
-    }
-  };
-  switch = (e) => {
-    e.preventDefault();
-    const name = e.target.getAttribute("name");
-    this.setState({ page: name });
-  };
-  render() {
-    const { comments, parts, shotID, lessonID, me, shotUser, title, userData } =
-      this.props;
-    const visible = [];
-    for (let i = 0; i < this.state.num; i++) {
-      visible.push(parts[i]);
-    }
-    const data = userData
-      .filter((result) => result.shot.id === shotID)
-      .filter((result) => result.student.id === me.id);
+const Shots = (props) => {
+  const [num, setNum] = useState(1);
+  const [update, setUpdate] = useState(false);
 
-    let width;
-    if (this.props.problem) {
-      width = "50%";
-    } else if (this.props.story) {
-      width = "540px";
-    } else {
-      width = "100%";
-    }
-    return (
-      <Styles width={width}>
-        {this.state.page === "show" && (
+  const { comments, parts, shotID, lessonID, me, shotUser, title, userData } =
+    props;
+
+  let width;
+  if (props.problem) {
+    width = "50%";
+  } else if (props.story) {
+    width = "540px";
+  } else {
+    width = "100%";
+  }
+
+  const getResult = (data) => {
+    props.getResult(data);
+    console.log("shots", data);
+  };
+
+  const passUpdated = () => {
+    props.passUpdated(true);
+    console.log("passUpdated");
+  };
+
+  const switchUpdate = () => {
+    setUpdate(!update);
+    console.log("update");
+  };
+
+  return (
+    <Styles width={width}>
+      {me && !props.story && (
+        <DeleteSingleShot shotID={shotID} lessonID={lessonID} />
+      )}
+      {me && !props.story && (
+        <SwitchButton name="update" onClick={(e) => setUpdate(!update)}>
+          Изменить
+        </SwitchButton>
+      )}
+
+      {!update && (
+        <>
+          <Title>{title}</Title>
+          <div className="step">Step {num}</div>
           <>
-            <Title>{title}</Title>
-            <div className="step">Step {this.state.num}</div>
-            <>
+            <Text>
+              <div key={num - 1}>{renderHTML(parts[num - 1])}</div>
+            </Text>
+            {comments.length > 0 && (
               <Commentary>
-                <>{renderHTML(comments[this.state.num - 1])}</>
+                <>{renderHTML(comments[num - 1])}</>
               </Commentary>
-              <Text>
-                <div key={this.state.num - 1}>
-                  {renderHTML(visible[this.state.num - 1])}
-                </div>
-              </Text>
-            </>
-            <Buttons>
-              <Mutation
-                mutation={CREATE_SHOTRESULT_MUTATION}
-                variables={{
-                  lessonId: lessonID,
-                  shotId: shotID,
-                  answer: "Looked through",
-                }}
-                refetchQueries={() => [
-                  {
-                    query: SINGLE_LESSON_QUERY,
-                    variables: { id: this.props.lessonID },
-                  },
-                  {
-                    query: CURRENT_USER_QUERY,
-                  },
-                ]}
-              >
-                {(createShotResult, { loading, error }) => (
-                  <>
-                    <Circle color={this.state.num < 2} onClick={this.minus}>
+            )}
+          </>
+          <Buttons>
+            <Mutation
+              mutation={CREATE_SHOTRESULT_MUTATION}
+              variables={{
+                lessonId: lessonID,
+                shotId: shotID,
+                answer: "Looked through",
+              }}
+              refetchQueries={() => [
+                {
+                  query: SINGLE_LESSON_QUERY,
+                  variables: { id: props.lessonID },
+                },
+                {
+                  query: CURRENT_USER_QUERY,
+                },
+              ]}
+            >
+              {(createShotResult, { loading, error }) => (
+                <>
+                  {num > 1 ? (
+                    <Circle color={num < 2} onClick={(e) => setNum(num - 1)}>
                       <span>&#8249;</span>
                     </Circle>
-                    <div className="bar">
-                      <Progress
-                        className="progress"
-                        progress={
-                          parseInt((100 * this.state.num) / parts.length) + "%"
-                        }
-                      ></Progress>
-                    </div>
+                  ) : (
+                    <Circle color={num < 2}>
+                      <span>&#8249;</span>
+                    </Circle>
+                  )}
+
+                  <div className="bar">
+                    <Progress
+                      className="progress"
+                      progress={parseInt((100 * num) / parts.length) + "%"}
+                    ></Progress>
+                  </div>
+                  {num < parts.length ? (
                     <Circle
-                      color={this.state.num === parts.length}
+                      color={num === parts.length}
                       onClick={async (e) => {
                         // Stop the form from submitting
                         e.preventDefault();
                         // call the mutation
-                        const res = await this.plus();
-                        if (this.state.num + 1 === parts.length) {
+                        setNum(num + 1);
+                        if (num + 1 === parts.length) {
                           const res2 = await createShotResult();
                         }
                       }}
                     >
                       <span>&#8250;</span>
                     </Circle>
-                  </>
-                )}
-              </Mutation>
-            </Buttons>
-            {me && !this.props.story && (
-              <DeleteSingleShot shotID={shotID} lessonID={lessonID} />
-            )}
-            {me && !this.props.story && (
-              <SwitchButton name="update" onClick={this.switch}>
-                Изменить
-              </SwitchButton>
-            )}
-          </>
-        )}
-        {this.state.page === "update" && (
-          <>
-            {me && me.id === shotUser && (
-              <>
-                <UpdateShots
-                  shotID={shotID}
-                  lessonID={lessonID}
-                  parts={parts}
-                  comments={comments}
-                  title={title}
-                />
-                <SwitchButton name="show" onClick={this.switch}>
-                  Вернуться к раскадровке
-                </SwitchButton>
-              </>
-            )}
-          </>
-        )}
-      </Styles>
-    );
-  }
-}
+                  ) : (
+                    <Circle color={true}>
+                      <span>&#8250;</span>
+                    </Circle>
+                  )}
+                </>
+              )}
+            </Mutation>
+          </Buttons>
+        </>
+      )}
+      {update && (
+        <>
+          <UpdateShots
+            shotID={shotID}
+            lessonID={lessonID}
+            parts={parts}
+            comments={comments}
+            title={title}
+            getResult={getResult}
+            switchUpdate={switchUpdate}
+            passUpdated={passUpdated}
+          />
+        </>
+      )}
+    </Styles>
+  );
+};
 
 export default Shots;

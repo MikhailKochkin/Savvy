@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import moment from "moment";
 
 const Card = styled.div`
   background: #ffffff;
@@ -71,6 +72,12 @@ const Down = styled.div`
     margin-bottom: 10px;
     padding: 15px 0;
   }
+  .price_container {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
   .price_box_price {
     font-size: 2rem;
     /* text-decoration: line-through; */
@@ -80,7 +87,7 @@ const Down = styled.div`
     font-size: 2rem;
   }
   .price_box {
-    width: 140px;
+    width: 160px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -108,6 +115,24 @@ const Down = styled.div`
 
 const Program = (props) => {
   const { t } = useTranslation("landing");
+  moment.locale("ru");
+
+  const getNoun = (number, one, two, five) => {
+    let n = Math.abs(number);
+    n %= 100;
+    if (n >= 5 && n <= 20) {
+      return five;
+    }
+    n %= 10;
+    if (n === 1) {
+      return one;
+    }
+    if (n >= 2 && n <= 4) {
+      return two;
+    }
+    return five;
+  };
+
   return (
     <Card>
       <Up>
@@ -118,19 +143,49 @@ const Program = (props) => {
       </Up>
       <Down>
         <div className="price">
-          <div className="price_box">
-            <div className="price_box_price">{props.price}</div>
-            <div className="price_box_description">{t("full_price")}</div>
-          </div>
-          <div className="price_box">
-            <div className="price_box_discount">{props.installments}</div>
-            <div className="price_box_description">{props.conditions}</div>
+          <div className="price_container">
+            <div className="price_box">
+              <div className="price_box_price">
+                {parseInt(parseInt(props.price) / 1000)}{" "}
+                {parseInt(props.price) % 1000}₽
+              </div>
+              <div className="price_box_description">{t("full_price")}</div>
+            </div>
+            <div className="price_box">
+              {props.installments && (
+                <>
+                  <div className="price_box_discount">
+                    Рассрочка
+                    {""}
+                  </div>
+                  <div className="price_box_description">
+                    на {props.installments - 1}{" "}
+                    {getNoun(
+                      props.installments - 1,
+                      "месяц",
+                      "месяца",
+                      "месяцев"
+                    )}
+                  </div>
+                </>
+              )}
+              {!props.installments && (
+                <>
+                  <div className="price_box_discount">
+                    {moment(props.nextStart).format("Do MMMM")}
+                  </div>
+                  <div className="price_box_description"> След. занятие</div>
+                </>
+              )}
+            </div>
           </div>
         </div>
         <Link
           href={{
-            pathname: props.pathname,
-            query: props.query,
+            pathname: "/coursePage",
+            query: {
+              id: props.id,
+            },
           }}
         >
           <button>{t("learn_more")}</button>

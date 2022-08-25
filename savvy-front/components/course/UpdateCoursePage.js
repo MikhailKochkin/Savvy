@@ -19,6 +19,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       subheader
       tariffs
       methods
+      nextStart
       video
       news
       user {
@@ -40,10 +41,9 @@ const UpdateCoursePage = (props) => {
     variables: { id: props.id },
   });
   if (loading) return <p>Loading...</p>;
-  console.log("data", data);
   return (
     <Width>
-      <div id="root">Hello World!</div>
+      <div id="root"></div>
       {data && (
         <UpdateForm
           coursePage={data.coursePage}

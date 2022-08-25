@@ -1474,6 +1474,7 @@ type Mutation {
   deleteStatement(id: String): Statement
   deleteTextEditor(id: String): TextEditor
   enrollOnCourse(coursePageId: String, id: String): User
+  publishCourse(id: String, published: Boolean): CoursePage
   remind(id: String, reminders: [DateTime]): CourseVisit
   requestReset(email: String): AuthMessage
   resetPassword(confirmPassword: String, password: String, resetToken: String): User

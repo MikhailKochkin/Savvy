@@ -174,7 +174,6 @@ const NewCoursePage = (props) => {
   const router = useRouter();
 
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
-
   let prog = programs.find((x) => x.id === props.id);
   return (
     <Styles>

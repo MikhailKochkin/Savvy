@@ -1,31 +1,26 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-import { Message } from "../../styles/Button";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import dynamic from "next/dynamic";
-import Shots from "./Shots";
-
-const SINGLE_SHOT_QUERY = gql`
-  query SINGLE_SHOT_QUERY($id: ID!) {
-    shot(where: { id: $id }) {
-      comments
-      parts
-    }
-  }
-`;
 
 const UPDATE_SHOTS_MUTATION = gql`
   mutation UPDATE_SHOTS_MUTATION(
     $id: String!
-    $title: String!
+    $title: String
     $parts: [String!]
     $comments: [String!]
   ) {
     updateShot(id: $id, title: $title, parts: $parts, comments: $comments) {
       id
+      title
+      parts
+      comments
+      user {
+        id
+      }
     }
   }
 `;
@@ -44,7 +39,7 @@ const TestCreate = styled.div`
     border: 1px solid #c4c4c4;
     width: 90%;
     height: 40px;
-    padding: 1.5% 20px;
+    padding: 1.5% 5px;
     font-size: 1.6rem;
     outline: 0;
   }
@@ -119,156 +114,108 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   ssr: false,
 });
 
-class CreateShot extends Component {
-  state = {
-    final_p: [],
-    final_c: [],
-    steps: this.props.comments.length,
-    comments: this.props.comments,
-    parts: this.props.parts,
-    title: this.props.title,
+const CreateShot = (props) => {
+  const [parts, setParts] = useState([...props.parts]);
+  const [comments, setComments] = useState([...props.comments]);
+  const [title, setTitle] = useState(props.title);
+
+  const myCallback = (dataFromChild, name, index) => {
+    let new_parts = parts;
+    new_parts[index] = dataFromChild;
+    setParts([...new_parts]);
   };
 
-  myCallback = (dataFromChild, name, index) => {
-    if (name === "part") {
-      let arr = [...this.state.parts];
-      arr[index] = dataFromChild;
-      this.setState({ parts: arr });
-    } else if (name === "comment") {
-      let arr = [...this.state.comments];
-      arr[index] = dataFromChild;
-      this.setState({ comments: arr });
+  const myCallback2 = (dataFromChild, name, index) => {
+    let new_comments = comments;
+    new_comments[index] = dataFromChild;
+    setComments([...new_comments]);
+  };
+
+  const more = () => {
+    setParts([...parts, ""]);
+    setComments([...comments, ""]);
+  };
+
+  const remove = () => {
+    if (parts.length > 1) {
+      let new_parts = [...parts];
+      new_parts.pop();
+
+      let new_comments = [...comments];
+      new_comments.pop();
+      setParts([...new_parts]);
+      setComments([...new_comments]);
     }
   };
 
-  more = () => {
-    this.setState((prev) => ({ steps: prev.steps + 1 }));
-  };
-
-  remove = () => {
-    if (this.state.steps > 1) {
-      this.setState({
-        [`comment${this.state.steps}`]: undefined,
-        [`part${this.state.steps}`]: undefined,
-      });
-      this.setState((prev) => ({ steps: prev.steps - 1 }));
-    }
-  };
-
-  // save = () => {
-  //   let parts = [];
-  //   let comments = [];
-  //   Object.entries(this.state)
-  //     .filter((text) => text[0].includes("part"))
-  //     .map((t) => parts.push(t[1]));
-  //   Object.entries(this.state)
-  //     .filter((text) => text[0].includes("comment"))
-  //     .map((t) => comments.push(t[1]));
-  //   parts = parts.filter((el) => el !== undefined);
-  //   comments = comments.filter((el) => el !== undefined);
-  //   console.log(parts, comments);
-  //   this.setState({
-  //     final_p: parts,
-  //     final_c: comments,
-  //   });
-  // };
-
-  handleChange = (e) => {
-    e.preventDefault();
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  render() {
-    const { parts, comments, shotID } = this.props;
-    let rows = [];
-    _.times(this.state.steps, (i) => {
-      // part = `part${i + 1}`;
-      // comment = `comment${i + 1}`;
-      rows.push(
-        <Row>
-          <Frame>
-            <p>Текст</p>
-            <DynamicLoadedEditor
-              index={i}
-              name="part"
-              getEditorText={this.myCallback}
-              value={parts[i]}
-            />
-            <p>Комментарий</p>
-            <div className="com">
-              <DynamicLoadedEditor
-                index={i}
-                name="comment"
-                value={comments[i]}
-                getEditorText={this.myCallback}
-              />
-            </div>
-          </Frame>
-        </Row>
-      );
-    });
-    return (
-      <Mutation
-        mutation={UPDATE_SHOTS_MUTATION}
-        variables={{
-          id: shotID,
-          parts: this.state.parts,
-          comments: this.state.comments,
-          title: this.state.title,
-        }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: this.props.lessonID },
-          },
-        ]}
-        awaitRefetchQueries={true}
-      >
-        {(updateShot, { loading, error }) => (
-          <TestCreate>
-            <input
-              id="title"
-              name="title"
-              spellCheck={true}
-              placeholder="Название документа"
-              autoFocus
-              required
-              value={this.state.title}
-              onChange={this.handleChange}
-            />
-            {rows.map((row) => row)}
-            <More onClick={this.more}>Новый блок</More>
-            <Remove onClick={this.remove}>Убрать блок</Remove>
-            <Save
-              onClick={async (e) => {
-                e.preventDefault();
-                // document.getElementById("Message").style.display = "block";
-                // setTimeout(function() {
-                //   document.getElementById("Message")
-                //     ? (document.getElementById("Message").style.display =
-                //         "none")
-                //     : "none";
-                // }, 2500);
-                // if (
-                //   this.state.comment1 === undefined ||
-                //   this.state.part1 === undefined
-                // ) {
-                //   alert("В вашем документе недостаточно частей");
-                // } else {
-                const res2 = await updateShot();
-                //   console.log("Success");
-                // }
-              }}
-            >
-              {loading ? "Изменяем..." : "Изменить"}
-            </Save>
-            {/* <Message id="Message">Вы внесли изменения!</Message> */}
-          </TestCreate>
-        )}
-      </Mutation>
-    );
-  }
-}
+  return (
+    <Mutation
+      mutation={UPDATE_SHOTS_MUTATION}
+      variables={{
+        id: props.shotID,
+        parts: parts,
+        comments: comments,
+        title: title,
+      }}
+      refetchQueries={() => [
+        {
+          query: SINGLE_LESSON_QUERY,
+          variables: { id: props.lessonID },
+        },
+      ]}
+      awaitRefetchQueries={true}
+    >
+      {(updateShot, { loading, error }) => (
+        <TestCreate>
+          <input
+            id="title"
+            name="title"
+            spellCheck={true}
+            placeholder="Название документа"
+            autoFocus
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <>
+            {_.times(parts.length, (i) => (
+              <Row>
+                <Frame>
+                  <DynamicLoadedEditor
+                    index={i}
+                    value={parts[i]}
+                    getEditorText={myCallback}
+                    placeholder={`Текст ${i + 1}`}
+                  />
+                  <div className="com">
+                    <DynamicLoadedEditor
+                      index={i}
+                      value={comments[i]}
+                      placeholder={`Комментарий к тексту ${i + 1}`}
+                      getEditorText={myCallback2}
+                    />
+                  </div>
+                </Frame>
+              </Row>
+            ))}
+          </>
+          <More onClick={(e) => more()}>Новый слайд</More>
+          <Remove onClick={(e) => remove()}>Убрать слайд</Remove>
+          <Save
+            onClick={async (e) => {
+              e.preventDefault();
+              const res2 = await updateShot();
+              props.getResult(res2);
+              props.switchUpdate();
+              props.passUpdated();
+            }}
+          >
+            {loading ? "Сохраняем..." : "Сохранить"}
+          </Save>
+        </TestCreate>
+      )}
+    </Mutation>
+  );
+};
 
 export default CreateShot;

@@ -103,6 +103,34 @@ const Fieldset = styled.fieldset`
   }
 `;
 
+const Circle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30%;
+  @media (max-width: 800px) {
+    width: 65%;
+  }
+  cursor: pointer;
+  border: 1px solid grey;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 15px;
+  margin-right: 15px;
+  button {
+    border: none;
+    cursor: pointer;
+
+    background: none;
+    font-family: Montserrat;
+  }
+`;
+
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
@@ -142,6 +170,13 @@ const Title = styled.div`
   font-weight: 600;
 `;
 
+const Explainer = styled.div`
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 5px;
+`;
+
 const Img = styled.img`
   height: 200px;
   object-fit: cover;
@@ -151,6 +186,10 @@ const Img = styled.img`
 const Frame = styled.div`
   height: 60%;
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 15px;
   border: 1px solid #e5e5e5;
   border-radius: 3.5px;
@@ -161,6 +200,11 @@ const Frame = styled.div`
     margin: 0.8%;
     margin-left: 0.6%;
   }
+`;
+
+const Circles = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
@@ -191,7 +235,7 @@ const UpdateForm = (props) => {
   const [subheader, setSubheader] = useState(
     props.coursePage.subheader.length > 0 ? props.coursePage.subheader : [""]
   );
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(props.coursePage.nextStart);
 
   const [updateCoursePage, { data, loading }] = useMutation(
     UPDATE_COURSEPAGE_MUTATION
@@ -248,30 +292,29 @@ const UpdateForm = (props) => {
   const { coursePage, me } = props;
   return (
     <Form>
-      <Title>Внесите изменения в информацию о курсе</Title>
-      <Fieldset
-      //   disabled={loading} aria-busy={loading}
-      >
+      <Title>Базовая информация о курсе</Title>
+      <Fieldset>
+        <Explainer>Название курса (для карточки курса)</Explainer>
         <input
           className="second"
           type="text"
           id="title"
           name="title"
-          placeholder="Новое название курса"
           defaultValue={title}
           required
           onChange={(e) => setTitle(e.target.value)}
         />
+        <Explainer>Краткое описание курса (для карточки курса)</Explainer>
         <input
           className="second"
           type="text"
           id="description"
           name="description"
-          placeholder="Новое описание"
           required
           defaultValue={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+        <Explainer>Цена курса</Explainer>
         <input
           className="second"
           type="number"
@@ -282,133 +325,15 @@ const UpdateForm = (props) => {
           defaultValue={price}
           onChange={(e) => setPrice(parseInt(e.target.value))}
         />
+        <Explainer>Дата старта курса / следующего вебинара автора</Explainer>
+
         <input
-          className="second"
-          type="text"
-          id="video"
-          name="video"
-          placeholder="Видео курса"
-          required
-          defaultValue={video}
-          onChange={(e) => setVideo(e.target.value)}
+          id="start"
+          name="trip-start"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
         />
-        <textarea
-          type="text"
-          id="news"
-          name="news"
-          placeholder="Новости курса"
-          defaultValue={news}
-          onChange={(e) => setNews(e.target.value)}
-        />
-        {header.map((g, i) => (
-          <input
-            index={i}
-            name="goal"
-            onChange={(e) =>
-              myCallbackHeader(e.target.value, e.target.name, parseInt(i))
-            }
-            defaultValue={g}
-            placeholder="Заголовок..."
-          />
-        ))}
-        <button
-          onClick={(e) => {
-            setHeader([...header, ""]);
-            e.preventDefault();
-          }}
-        >
-          +1
-        </button>
-        {subheader.map((g, i) => (
-          <input
-            index={i}
-            name="goal"
-            onChange={(e) =>
-              myCallbackSubheader(e.target.value, e.target.name, parseInt(i))
-            }
-            defaultValue={g}
-            placeholder="Подзаголовок..."
-          />
-        ))}
-        <button
-          onClick={(e) => {
-            setSubheader([...subheader, ""]);
-            e.preventDefault();
-          }}
-        >
-          +1
-        </button>
-        {goals.map((g, i) => (
-          <Frame>
-            <DynamicLoadedEditor
-              index={i}
-              name="goal"
-              getEditorText={myCallbackGoal}
-              value={g}
-              placeholder="Результат ..."
-            />
-          </Frame>
-        ))}
-        <button
-          onClick={(e) => {
-            setGoals([...goals, ""]);
-            e.preventDefault();
-          }}
-        >
-          +1
-        </button>
-
-        <Frame>
-          <DynamicLoadedEditor
-            index={1}
-            name="result"
-            getEditorText={myCallback}
-            value={result}
-            placeholder="Результаты студентов по итогам курса..."
-          />
-        </Frame>
-        <Frame>
-          <DynamicLoadedEditor
-            index={1}
-            name="methods"
-            getEditorText={myCallback}
-            value={methods}
-            placeholder="Методики преподавания..."
-          />
-        </Frame>
-        <Frame>
-          <DynamicLoadedEditor
-            index={1}
-            name="audience"
-            getEditorText={myCallback}
-            value={audience}
-            placeholder="Для кого этот курс..."
-          />
-        </Frame>
-        <Frame>
-          <DynamicLoadedEditor
-            index={1}
-            name="tariffs"
-            getEditorText={myCallback}
-            value={tariffs}
-            placeholder="Как работают тарифы на курсе..."
-          />
-        </Frame>
-        {/* <DatePicker
-          selected={startDate}
-          dateFormat="dd/MM/yyyy"
-          onChange={(date) => {
-            return setStartDate(date);
-          }}
-        /> */}
-
-        {/* <label for="file">
-          <div className="upload">
-            {upload === false ? "Загрузите новый логотип курса" : null}
-            {upload === "pending" ? "Идет Loading..." : null}
-            // {upload === true ? "Загрузка прошла успешно!" : null}
-          </div>
-        </label> */}
+        <Explainer>Изображение курса для главной страницы сайта</Explainer>
         <input
           // style={{ display: "none" }}
           className="second"
@@ -420,43 +345,197 @@ const UpdateForm = (props) => {
         />
         {upload && "Загружаем.."}
         <Img src={image ? image : coursePage.image} alt="Upload Preview" />
-        <Buttons>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              return updateCoursePage({
-                variables: {
-                  id: props.coursePage.id,
-                  title,
-                  news,
-                  description: description,
-                  audience,
-                  goals,
-                  price,
-                  header,
-                  nextStart: startDate.toISOString(),
-                  subheader,
-                  result,
-                  tariffs,
-                  methods,
-                  image,
-                  video,
-                },
-              });
-            }}
-          >
-            {loading ? "Меняем..." : "Изменить"}
-          </Button>
-          <Link
-            href={{
-              pathname: "/course",
-              query: { id: coursePage.id },
-            }}
-          >
-            <div>Вернуться на страницу урока</div>
-          </Link>
-        </Buttons>
       </Fieldset>
+      <Title>Информация для лендинга курса</Title>
+      <Fieldset>
+        <Explainer>Заголовок лендинга</Explainer>
+
+        {header.map((g, i) => (
+          <input
+            index={i}
+            name="goal"
+            onChange={(e) =>
+              myCallbackHeader(e.target.value, e.target.name, parseInt(i))
+            }
+            defaultValue={g}
+            placeholder="Заголовок..."
+          />
+        ))}
+        {/* <button
+          onClick={(e) => {
+            setHeader([...header, ""]);
+            e.preventDefault();
+          }}
+        >
+          +1
+        </button> */}
+        <Explainer>Подзаголовок лендинга</Explainer>
+        {subheader.map((g, i) => (
+          <input
+            index={i}
+            name="goal"
+            onChange={(e) =>
+              myCallbackSubheader(e.target.value, e.target.name, parseInt(i))
+            }
+            defaultValue={g}
+            placeholder="Подзаголовок..."
+          />
+        ))}
+        {/* <button
+          onClick={(e) => {
+            setSubheader([...subheader, ""]);
+            e.preventDefault();
+          }}
+        >
+          +1
+        </button> */}
+        <Explainer>Результаты студентов по итогам курса</Explainer>
+
+        {goals.map((g, i) => (
+          <Frame>
+            {i + 1}.
+            <DynamicLoadedEditor
+              index={i}
+              name="goal"
+              getEditorText={myCallbackGoal}
+              value={g}
+              placeholder="Результат ..."
+            />
+          </Frame>
+        ))}
+        <Circles>
+          <Circle>
+            <button
+              className="number_button"
+              onClick={(e) => {
+                e.preventDefault();
+                let new_goals = goals;
+                new_goals.pop();
+                setGoals([...new_goals]);
+              }}
+            >
+              -1
+            </button>
+          </Circle>
+          <Circle>
+            <button
+              className="number_button"
+              onClick={(e) => {
+                setGoals([...goals, ""]);
+                e.preventDefault();
+              }}
+            >
+              +1
+            </button>
+          </Circle>
+        </Circles>
+        <Explainer>
+          Ссылка на видео о курсе (необязательно для лендинга)
+        </Explainer>
+        <input
+          className="second"
+          type="text"
+          id="video"
+          name="video"
+          placeholder="Видео о курсе"
+          required
+          defaultValue={video}
+          onChange={(e) => setVideo(e.target.value)}
+        />
+        <Explainer>
+          Новости курса: когда стартует новый поток, какие планы у автора, какие
+          изменения были только что внесены.
+        </Explainer>
+        <textarea
+          type="text"
+          id="news"
+          name="news"
+          placeholder="Новости курса"
+          defaultValue={news}
+          onChange={(e) => setNews(e.target.value)}
+        />
+        {/* <Explainer>Результаты студентов по итогам курса</Explainer>
+        <Frame>
+          <DynamicLoadedEditor
+            index={1}
+            name="result"
+            getEditorText={myCallback}
+            value={result}
+            placeholder="Результаты студентов по итогам курса..."
+          />
+        </Frame> */}
+        <Explainer>
+          В каком формате будет проходить обучение? Симуляторы, живые встречи,
+          онлайн-встречи, практические задания и так далее.
+        </Explainer>
+        <Frame>
+          <DynamicLoadedEditor
+            index={1}
+            name="methods"
+            getEditorText={myCallback}
+            value={methods}
+            placeholder="Методики преподавания..."
+          />
+        </Frame>
+        <Explainer>
+          Для кого этот курс? Опишите, чтобы ваши студенты смогли узнать себя.
+        </Explainer>
+
+        <Frame>
+          <DynamicLoadedEditor
+            index={1}
+            name="audience"
+            getEditorText={myCallback}
+            value={audience}
+            placeholder="Для кого этот курс..."
+          />
+        </Frame>
+        {/* <Frame>
+          <DynamicLoadedEditor
+            index={1}
+            name="tariffs"
+            getEditorText={myCallback}
+            value={tariffs}
+            placeholder="Как работают тарифы на курсе..."
+          />
+        </Frame> */}
+      </Fieldset>
+      <Buttons>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            return updateCoursePage({
+              variables: {
+                id: props.coursePage.id,
+                title,
+                news,
+                description: description,
+                audience,
+                goals,
+                price,
+                header,
+                nextStart: startDate,
+                subheader,
+                result,
+                tariffs,
+                methods,
+                image,
+                video,
+              },
+            });
+          }}
+        >
+          {loading ? "Меняем..." : "Изменить"}
+        </Button>
+        <Link
+          href={{
+            pathname: "/course",
+            query: { id: coursePage.id },
+          }}
+        >
+          <div>Вернуться на страницу урока</div>
+        </Link>
+      </Buttons>
     </Form>
   );
 };

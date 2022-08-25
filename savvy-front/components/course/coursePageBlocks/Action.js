@@ -478,7 +478,8 @@ const Action = (props) => {
               alert(
                 `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Он ответит на любой вопрос по нашим курсам. Задайте ему свой вопрос или просто скопируйте этот текст: Привет, расскажи про курс "${coursePage.title}" `
               );
-              location.href = "https://t.me/mikkochkin";
+              location.href =
+                "https://t.me/BeSavvyMentorBot?start=link_vINBAwrN4O";
 
               // Router.push({
               //   pathname: "/lesson",

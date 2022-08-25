@@ -6,7 +6,7 @@ import { SINGLE_COURSEPAGE_QUERY } from "./CoursePage";
 
 const MAKE_PUBLIC_MUTATION = gql`
   mutation MAKE_PUBLIC_MUTATION($id: String!, $published: Boolean) {
-    updateCoursePage(id: $id, published: $published) {
+    publishCourse(id: $id, published: $published) {
       id
     }
   }
