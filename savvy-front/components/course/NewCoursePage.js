@@ -18,7 +18,6 @@ import MobileBuy from "./coursePageBlocks/MobileBuy";
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
-import { programs } from "./programs";
 
 import moment from "moment";
 
@@ -174,38 +173,37 @@ const NewCoursePage = (props) => {
   const router = useRouter();
 
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
-  let prog = programs.find((x) => x.id === props.id);
   return (
     <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
       <BottomLine me={me} id={props.id} />
       <Container>
         <Main>
-          <ATF data={prog} id={props.id} />
+          <ATF id={props.id} />
           {data && !loading && (
             <>
               {width < 880 && (
                 <MobileBuy coursePage={data.coursePage} me={me} />
               )}
               {width < 880 && <MobileAction coursePage={data.coursePage} />}
-              <Goal data={prog} coursePage={data.coursePage} />
+              <Goal coursePage={data.coursePage} />
               <Syllabus
                 id={props.id}
                 lessons={data.coursePage.lessons}
                 coursePageId={data.coursePage.id}
               />
-              <Teachers coursePage={data.coursePage} data={prog} />
-              <SellingPoints data={prog} />
-              {prog && prog.reviews && prog.reviews.length > 0 && (
+              <Teachers coursePage={data.coursePage} />
+              <SellingPoints />
+              {/* {prog && prog.reviews && prog.reviews.length > 0 && (
                 <Reviews data={prog} />
-              )}
-              <QA data={prog} />
+              )} */}
+              <QA />
             </>
           )}
         </Main>
         <Money>
           {!loading && data && width > 880 && (
-            <Action me={me} coursePage={data.coursePage} data={prog} />
+            <Action me={me} coursePage={data.coursePage} />
           )}
         </Money>
       </Container>
