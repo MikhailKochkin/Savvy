@@ -72,6 +72,7 @@ const CoursePage = (props) => {
                   </Total>
                   <Lessons>
                     {[...props.lessons]
+                      .filter((l) => l.type !== "HIDDEN")
                       .sort((a, b) => (a.number > b.number ? 1 : -1))
                       .slice(0, open)
                       .map((lesson, index) => (

@@ -156,6 +156,7 @@ const NewBlock = (props) => {
           lessonID={lesson.id}
         />
       )}
+      <h3>Наводящие вопросы:</h3>
       {!saved && (
         <>
           <ButtonTwo onClick={(e) => setType("Note")}>

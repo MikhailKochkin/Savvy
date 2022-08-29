@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import AreYouATeacher from "../auth/AreYouATeacher";
-import PleaseSignIn from "../auth/PleaseSignIn";
+// import AreYouATeacher from "../auth/AreYouATeacher";
+// import PleaseSignIn from "../auth/PleaseSignIn";
 import CreateLes from "./CreateLes";
 
 const Width = styled.div`
@@ -59,23 +59,14 @@ export default class CreateLesson extends Component {
   render() {
     const { id } = this.props;
     return (
-      <PleaseSignIn>
-        <AreYouATeacher subject={this.props.id}>
-          <Width>
-            <Container>
-              <Title>
-                <Span
-                // selected={this.state.page === "lesson"}
-                // onClick={(e) => this.setState({ page: "lesson" })}
-                >
-                  New Lesson
-                </Span>{" "}
-              </Title>
-              <CreateLes id={id} />
-            </Container>
-          </Width>
-        </AreYouATeacher>
-      </PleaseSignIn>
+      <Width>
+        <Container>
+          <Title>
+            <Span>New Lesson</Span>{" "}
+          </Title>
+          <CreateLes id={id} />
+        </Container>
+      </Width>
     );
   }
 }

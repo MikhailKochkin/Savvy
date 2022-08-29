@@ -74,6 +74,7 @@
   "regular": "In progress",
   "story": "Story",
   "challenge": "Challenge",
+  "hidden": "Hidden",
   "status_explainer": "Define the status of your lesson. Lessons in development are not shown on the main page. Challenge lessons do not teach, but test the students.",
   "assignment": "Is there a practical assignment?",
   "num_challenge": "Number of questions",

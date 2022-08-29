@@ -378,6 +378,7 @@ const CoursePage = (props) => {
                   <Lessons>
                     {[...coursePage.lessons]
                       .sort((a, b) => (a.number > b.number ? 1 : -1))
+                      .filter((l) => l.type !== "HIDDEN")
                       .map((lesson, index) => (
                         <>
                           <LessonHeader

@@ -6,6 +6,7 @@ import Phone from "./Phone";
 import NewNav from "./NewNav";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
+import MainImage from "./MainImage";
 
 const Styles = styled.div`
   width: 100%;
@@ -44,7 +45,9 @@ const Info = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-
+    @media (max-width: 900px) {
+      align-items: flex-start;
+    }
     .video_box {
       display: flex;
       flex-direction: column;
@@ -69,7 +72,7 @@ const Info = styled.div`
 
     .text {
       h1 {
-        font-size: 6rem;
+        font-size: 5.2rem;
         line-height: 1.1;
         text-align: left;
         font-weight: 700;
@@ -127,13 +130,13 @@ const Block = styled.div`
 const Buttons = styled.div`
   width: 100%;
   button {
-    background: #1b65f1;
-    color: #fff;
-    border-radius: 5px;
-    font-weight: 500;
+    background: none;
+    color: #1a1a1a;
+    border-radius: 20px;
+    font-weight: 600;
     margin-top: 25px;
     margin-bottom: 15px;
-    border: none;
+    border: 4px solid #7000ff;
     width: 290px;
     padding: 15px 0;
     outline: 0;
@@ -142,7 +145,8 @@ const Buttons = styled.div`
     font-size: 1.8rem;
     transition: 0.3s;
     &:hover {
-      background: #0135a9;
+      background: #7000ff;
+      color: #fff;
     }
 
     div {
@@ -196,18 +200,22 @@ const Landing = (props) => {
         <NewNav />
         <div className="container">
           <div className="text">
-            <h1>{t("h1")}</h1>
-            <div>{t("h2")}</div>
+            <h1>Получите практические навыки юриста</h1>
+            <div>
+              Больше 20 интерактивных курсов от экспертов из Алруд, DLA Piper,
+              Birch Legal и Никольская Консалтинг
+            </div>
             <Buttons>
               <button id="main_page_button" onClick={(e) => slide()}>
-                {t("c2a")}
+                Выбрать курс
               </button>
             </Buttons>
           </div>
           <div className="video_box">
-            <video loop="loop" autoplay="autoplay" playsinline muted>
+            {/* <video loop="loop" autoplay="autoplay" playsinline muted>
               <source src="static/v4.webm" type="video/webm" />
-            </video>
+            </video> */}
+            <MainImage />
           </div>
           {/* <Phone /> */}
         </div>

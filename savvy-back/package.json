@@ -59,8 +59,8 @@
     ]
   },
   "main": "index.js",
+  "author": "M.Kochkin",
   "devDependencies": {
     "@prisma/cli": "^2.12.0"
-  },
-  "author": "M.Kochkin"
+  }
 }

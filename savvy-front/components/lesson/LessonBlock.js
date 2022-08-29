@@ -653,7 +653,13 @@ const LessonBlock = (props) => {
         <Buttons>
           <div className="first">
             {" "}
-            <ButtonTwo onClick={(e) => props.remove(idNum)}>
+            <ButtonTwo
+              onClick={(e) => {
+                if (confirm("Are you sure?")) {
+                  props.remove(idNum);
+                }
+              }}
+            >
               {t("remove_block")}
             </ButtonTwo>
           </div>
