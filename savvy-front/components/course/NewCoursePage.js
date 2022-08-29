@@ -196,7 +196,9 @@ const NewCoursePage = (props) => {
               />
               <Teachers coursePage={data.coursePage} data={prog} />
               <SellingPoints data={prog} />
-              {prog.reviews.length > 0 && <Reviews data={prog} />}
+              {prog && prog.reviews && prog.reviews.length > 0 && (
+                <Reviews data={prog} />
+              )}
               <QA data={prog} />
             </>
           )}

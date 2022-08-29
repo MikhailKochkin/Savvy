@@ -62,7 +62,6 @@ const Bubble = styled.div`
     background: #e3ad0b;
     color: #fff;
     padding: 20px 40px;
-    margin-top: 20px;
   }
   &#orange2 {
     border-color: #e3ad0b;
@@ -120,6 +119,7 @@ const Bubble = styled.div`
       background: none;
       color: #1a1a1a;
       padding: 20px 20px;
+      margin-top: 20px;
     }
     &#orange2 {
       border-color: #e3ad0b;

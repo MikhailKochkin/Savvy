@@ -105,13 +105,42 @@ const Point = styled.div`
 const SellingPoints = (props) => {
   const d = props.data;
   const { t } = useTranslation("coursePage");
-
+  const sps = [
+    {
+      selling_point: "Интерактивные мини-уроки",
+      selling_point_details:
+        "Мы понятно разберем сложные темы на мини-уроках и сразу начнем применять новые знания на практике с помощью симуляторов.",
+      image:
+        "https://images.unsplash.com/photo-1562564055-71e051d33c19?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80",
+    },
+    {
+      selling_point: "Отработка навыков",
+      selling_point_details:
+        "Сразу начнем применять свои знания на практике с помощью тестов, задач, редакторов и конструкторов документов.",
+      image:
+        "https://images.unsplash.com/photo-1600195077909-46e573870d99?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    },
+    {
+      selling_point: "Практические задания",
+      selling_point_details:
+        "Мы даем вам практические задания, по которым можно получить обратную связь от преподавателей.",
+      image:
+        "https://images.unsplash.com/photo-1589386417686-0d34b5903d23?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    },
+    {
+      selling_point: "Помощь кураторов",
+      selling_point_details:
+        "У вас будет доступ 24/7 к кураторам и преподавателям, которые помогут вам с любым техническим и учебным вопросом.",
+      image:
+        "https://images.unsplash.com/photo-1459499362902-55a20553e082?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1049&q=80",
+    },
+  ];
   return (
     <Styles>
       <Container>
         <h2>{t("program_includes")}</h2>
         <PointsBox>
-          {d.sps.map((s, i) => (
+          {sps.map((s, i) => (
             <Point>
               <div className="number">{i + 1}</div>
               <div className="info">
