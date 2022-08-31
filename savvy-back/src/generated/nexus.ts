@@ -4763,6 +4763,7 @@ export interface NexusGenArgTypes {
       image?: string | null; // String
       likes?: number | null; // Int
       summary?: string | null; // String
+      tags?: Array<string | null> | null; // [String]
       text?: string | null; // String
       title?: string | null; // String
     }

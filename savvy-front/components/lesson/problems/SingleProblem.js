@@ -253,20 +253,22 @@ const SingleProblem = (props) => {
       .querySelectorAll("#conceal");
     let p;
     elements.forEach((element) => {
-      let answer = element.getAttribute("data-text").toLowerCase();
-      if (
-        element.getAttribute("concealed") === "true" ||
-        (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:")
-      ) {
-        let data = element.innerHTML;
-        let hint = element.getAttribute("data-text");
-        element.innerHTML = hint;
-        element.setAttribute("data", data);
-        element.setAttribute("concealed", true);
-        element.addEventListener("click", onMouseClick);
-      } else {
-        setTeacherAnswer(element.innerHTML);
-        element.style.display = "none";
+      if (element.getAttribute("data-text")) {
+        let answer = element.getAttribute("data-text").toLowerCase();
+        if (
+          element.getAttribute("concealed") === "true" ||
+          (answer !== "ответ" && answer !== "ответ." && answer !== "ответ:")
+        ) {
+          let data = element.innerHTML;
+          let hint = element.getAttribute("data-text");
+          element.innerHTML = hint;
+          element.setAttribute("data", data);
+          element.setAttribute("concealed", true);
+          element.addEventListener("click", onMouseClick);
+        } else {
+          setTeacherAnswer(element.innerHTML);
+          element.style.display = "none";
+        }
       }
     });
   }, []);

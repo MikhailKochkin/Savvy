@@ -1500,7 +1500,7 @@ type Mutation {
   updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String): Note
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
-  updatePost(id: String, image: String, likes: Int, summary: String, text: String, title: String): Post
+  updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
   updateProblem(complexity: Int, id: String, isSecret: Boolean, text: String): Problem
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz

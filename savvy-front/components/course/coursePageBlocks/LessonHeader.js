@@ -205,13 +205,13 @@ const LessonHeader = (props) => {
 
   let time;
   if (lesson.structure && lesson.structure.lessonItems) {
-    if (lesson.structure.lessonItems.length * 5 < 60) {
-      time = 60;
+    if (lesson.structure.lessonItems.length * 3 < 40) {
+      time = 40;
     } else {
-      time = lesson.structure.lessonItems.length * 5;
+      time = lesson.structure.lessonItems.length * 3;
     }
   } else {
-    time = 65;
+    time = 40;
   }
 
   return (

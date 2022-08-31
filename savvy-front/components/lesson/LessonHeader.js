@@ -356,7 +356,7 @@ const LessonHeader = (props) => {
 
   let time;
   if (lesson.structure && lesson.structure.lessonItems) {
-    time = lesson.structure.lessonItems.length * 5;
+    time = lesson.structure.lessonItems.length * 3;
   } else {
     time = 30;
   }

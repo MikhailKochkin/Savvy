@@ -83,6 +83,8 @@ const IconBlock = styled.div`
     height: 55px;
     width: 55px;
     display: flex;
+    object-fit: cover;
+
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -150,6 +152,8 @@ const Question = styled.div`
     padding: 2% 3%;
     height: 55px;
     width: 55px;
+    object-fit: cover;
+
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -180,6 +184,8 @@ const Question = styled.div`
     padding: 2%;
     height: 55px;
     width: 55px;
+    object-fit: cover;
+
     display: flex;
     flex-direction: row;
     align-items: center;

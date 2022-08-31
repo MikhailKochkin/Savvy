@@ -88,6 +88,8 @@ const Container = styled.div`
       border-radius: 50%;
       height: 55px;
       width: 55px;
+      object-fit: cover;
+
       display: flex;
       flex-direction: row;
       align-items: center;

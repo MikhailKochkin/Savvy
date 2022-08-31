@@ -321,6 +321,15 @@ const LessonBlock = (props) => {
   };
   return (
     <>
+      {props.index == 0 && (
+        <ButtonTwo
+          onClick={(e) => {
+            props.addPlace(0);
+          }}
+        >
+          Добавить первый блок
+        </ButtonTwo>
+      )}
       {props.comment && <Box>{renderHTML(props.comment)}</Box>}
 
       <Styles

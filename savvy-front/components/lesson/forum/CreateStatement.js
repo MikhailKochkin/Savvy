@@ -22,6 +22,8 @@ const IconBlock = styled.div`
     margin: 5px;
     border-radius: 50%;
     height: 55px;
+    object-fit: cover;
+
     width: 55px;
     display: flex;
     flex-direction: row;

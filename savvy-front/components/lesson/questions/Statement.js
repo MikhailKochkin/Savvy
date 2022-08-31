@@ -110,6 +110,8 @@ const Comment = styled.div`
     padding: 2%;
     height: 55px;
     width: 55px;
+    object-fit: cover;
+
     display: flex;
     flex-direction: row;
     align-items: center;

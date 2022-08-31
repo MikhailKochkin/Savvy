@@ -251,7 +251,8 @@ const MobileBuy = (props) => {
             {coursePage.lessons.length} онлайн{" "}
             {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}
           </div>
-          <div className="">4 вебинара</div>
+          {price > 4000 && <div className="">◼️ 4 вебинара</div>}
+
           <div className="">Пожизненный доступ</div>
           <div className="">Чат с автором курса</div>
           <div className="">Сертификат об окончании</div>

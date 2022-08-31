@@ -2596,11 +2596,25 @@ const Mutation = mutationType({
         title: stringArg(),
         id: stringArg(),
         likes: intArg(),
+        tags: list(stringArg()),
       },
-      resolve: async (_, { text, id, likes, summary, image, title }, ctx) => {
+      resolve: async (
+        _,
+        { text, id, likes, summary, image, title, tags },
+        ctx
+      ) => {
         const updatedPost = await ctx.prisma.post.update({
           where: { id },
-          data: { text, likes, summary, image, title },
+          data: {
+            tags: {
+              set: [...tags],
+            },
+            text,
+            likes,
+            summary,
+            image,
+            title,
+          },
         });
         return updatedPost;
       },

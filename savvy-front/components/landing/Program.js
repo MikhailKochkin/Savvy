@@ -146,7 +146,9 @@ const Program = (props) => {
           <div className="price_container">
             <div className="price_box">
               <div className="price_box_price">
-                {parseInt(parseInt(props.price) / 1000)}{" "}
+                {parseInt(parseInt(props.price) / 1000) > 0
+                  ? parseInt(parseInt(props.price) / 1000)
+                  : ""}{" "}
                 {parseInt(props.price) % 1000}₽
               </div>
               <div className="price_box_description">{t("full_price")}</div>

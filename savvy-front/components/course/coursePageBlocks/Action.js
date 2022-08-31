@@ -428,7 +428,6 @@ const Action = (props) => {
 
   const d = props.data;
   const { me, coursePage } = props;
-  console.log("price / installments", price, installments);
   let my_orders = [];
   if (me) {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
@@ -530,7 +529,7 @@ const Action = (props) => {
               ◼️ {coursePage.lessons.length} онлайн{" "}
               {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}
             </div>
-            <div className="">◼️ 4 вебинара</div>
+            {price > 4000 && <div className="">◼️ 4 вебинара</div>}
             <div className="">◼️ Пожизненный доступ</div>
             <div className="">◼️ Чат с автором курса</div>
             <div className="">◼️ Сертификат об окончании</div>
