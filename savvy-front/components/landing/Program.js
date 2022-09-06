@@ -133,6 +133,9 @@ const Program = (props) => {
     return five;
   };
 
+  let course_date = new Date(props.nextStart);
+  let now_date = new Date();
+
   return (
     <Card>
       <Up>
@@ -171,14 +174,24 @@ const Program = (props) => {
                   </div>
                 </>
               )}
-              {!props.installments && (
-                <>
-                  <div className="price_box_discount">
-                    {moment(props.nextStart).format("Do MMMM")}
-                  </div>
-                  <div className="price_box_description"> След. занятие</div>
-                </>
-              )}
+              {!props.installments &&
+                (props.nextStart &&
+                course_date.getTime() > now_date.getTime() ? (
+                  <>
+                    <div className="price_box_discount">
+                      {moment(props.nextStart).format("Do MMMM")}
+                    </div>
+                    <div className="price_box_description"> След. занятие</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="price_box_discount">
+                      {props.lessons.length}{" "}
+                      {getNoun(props.lessons.length, "урок", "урока", "уроков")}
+                    </div>
+                    <div className="price_box_description">в курсе </div>
+                  </>
+                ))}
             </div>
           </div>
         </div>

@@ -326,14 +326,29 @@ const ATF = (props) => {
                   <img src={course.user.image} />
                 )}
               </div>
-              <div>
-                Следующий вебинар{" "}
-                {course.authors.length > 1 ? "авторов" : "автора"} –
-                <span className="date">
-                  {" "}
-                  {moment(course.nextStart).format("LL")}
-                </span>
-              </div>
+              {course.nextStart ? (
+                <div>
+                  Следующий вебинар{" "}
+                  {course.authors.length > 1 ? "авторов" : "автора"} –
+                  <span className="date">
+                    {" "}
+                    {moment(course.nextStart).format("LL")}
+                  </span>
+                </div>
+              ) : (
+                <div>
+                  {course.authors.length > 0 ? (
+                    <div>
+                      Авторы курса:{" "}
+                      {course.authors.map((c) => (c.name, c.surname))}
+                    </div>
+                  ) : (
+                    <div>
+                      Автор курса: {course.user.name} {course.user.surname}
+                    </div>
+                  )}
+                </div>
+              )}
             </NextMeeting>
 
             {/* <Buttons>

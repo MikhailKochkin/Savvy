@@ -22,6 +22,9 @@ const COURSES_QUERY = gql`
       price
       image
       tags
+      lessons {
+        id
+      }
       user {
         id
         name
@@ -387,7 +390,6 @@ const Programs = () => {
   const { loading, error, data } = useQuery(COURSES_QUERY);
   if (loading) return <LoadingDummy />;
   const filtered_courses = data.coursePages.filter((c) => c.tags.includes(tag));
-  console.log("filtered_courses", filtered_courses);
   return (
     <Styles id="course_search">
       <Search>
@@ -448,6 +450,7 @@ const Programs = () => {
             key={i}
             img={p.image}
             title={p.title}
+            lessons={p.lessons}
             description={p.description}
             nextStart={p.nextStart}
             price={p.price}

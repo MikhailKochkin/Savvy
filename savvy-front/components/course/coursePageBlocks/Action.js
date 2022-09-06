@@ -387,14 +387,7 @@ const Action = (props) => {
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   const addPromo = (val) => {
     props.coursePage.promocode.promocodes.map((p) => {
-      console.log(
-        "p.name.toLowerCase() == val.toLowerCase()",
-        p.name.toLowerCase() == val.toLowerCase(),
-        isPromo.toS
-      );
       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
-        console.log("price * p.value", price * p.value, isPromo.toString());
-
         setPrice(price * p.value);
         setIsPromo(true);
       }

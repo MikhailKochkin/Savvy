@@ -7,6 +7,7 @@ import { useTranslation } from "next-i18next";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
+import { CURRENT_USER_QUERY } from "../../User";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -32,11 +33,28 @@ const CREATE_ORDER_MUTATION = gql`
   }
 `;
 
+const UPDATE_ORDER = gql`
+  mutation UPDATE_ORDER($id: String!, $userId: String!) {
+    updateOrderAuto(id: $id, userId: $userId) {
+      id
+      isPaid
+    }
+  }
+`;
+
+const ENROLL_COURSE_MUTATION = gql`
+  mutation ENROLL_COURSE_MUTATION($id: String!, $coursePageId: String) {
+    enrollOnCourse(id: $id, coursePageId: $coursePageId) {
+      id
+    }
+  }
+`;
+
 const Styles = styled.div`
   width: 100%;
   border-top: 2px solid #d6d6d6;
   border-bottom: 2px solid #d6d6d6;
-  padding: 40px 0;
+  padding: 20px 0;
   margin-top: 40px;
 
   display: flex;
@@ -77,7 +95,7 @@ const ButtonBuy = styled.button`
 `;
 
 const Info = styled.div`
-  width: 80%;
+  width: 90%;
   .guarantee {
     font-size: 1.3rem;
     color: #4b5563;
@@ -99,11 +117,24 @@ const Info = styled.div`
   }
   .open {
     line-height: 1.4;
-    /* margin-top: 20px; */
+    margin-top: 20px;
     border-top: 1px solid #e7ebef;
     padding: 15px 0;
     div {
       margin-bottom: 15px;
+    }
+  }
+  #promo {
+    /* margin-top: 10%; */
+    margin: 10px 0;
+    input {
+      width: 100%;
+      padding: 13px 6px;
+      border: 1px solid #d8d8d8;
+      border-radius: 5px;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1.6rem;
     }
   }
 `;
@@ -122,6 +153,22 @@ const PriceBox = styled.div`
   }
   div {
     margin-right: 10px;
+  }
+`;
+
+const OpenCourse = styled.button`
+  width: 100%;
+  height: 48px;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 1px solid #aeaeae;
+  background: none;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #e2e2e2;
   }
 `;
 
@@ -168,12 +215,38 @@ const MobileBuy = (props) => {
   const [installments, setInstallments] = useState(
     props.coursePage.installments
   );
+  const [isPromo, setIsPromo] = useState(false);
+
   const [price, setPrice] = useState(
     props.coursePage.installments && props.coursePage.installments > 1
       ? props.coursePage.price / props.coursePage.installments
       : props.coursePage.price
   );
   const toggleModal = (e) => setIsOpen(!isOpen);
+
+  const addPromo = (val) => {
+    props.coursePage.promocode.promocodes.map((p) => {
+      if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
+        setPrice(price * p.value);
+        setIsPromo(true);
+      }
+    });
+  };
+
+  const [
+    updateOrderAuto,
+    { data: updated_data, loading: updated_loading, error: updated_error },
+  ] = useMutation(UPDATE_ORDER);
+
+  const [
+    enrollOnCourse,
+    { data: enroll_data, loading: enroll_loading, error: enroll_error },
+  ] = useMutation(ENROLL_COURSE_MUTATION, {
+    refetchQueries: [
+      CURRENT_USER_QUERY, // DocumentNode object parsed with gql
+      "me", // Query name
+    ],
+  });
 
   const [
     createOrder,
@@ -197,8 +270,13 @@ const MobileBuy = (props) => {
     }
     return five;
   };
-
   const { me, coursePage } = props;
+
+  let my_orders = [];
+  if (me) {
+    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+  }
+
   return (
     <Styles>
       {/* <div className="price">{coursePage.price} ₽</div> */}
@@ -251,11 +329,73 @@ const MobileBuy = (props) => {
             {coursePage.lessons.length} онлайн{" "}
             {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}
           </div>
-          {price > 4000 && <div className="">◼️ 4 вебинара</div>}
+          {price > 4000 && <div className="">4 вебинара</div>}
 
           <div className="">Пожизненный доступ</div>
           <div className="">Чат с автором курса</div>
           <div className="">Сертификат об окончании</div>
+        </div>
+        {props.coursePage.promocode && (
+          <div id="promo">
+            <input
+              placeholder="Промокод"
+              onChange={(e) => addPromo(e.target.value)}
+            />
+          </div>
+        )}
+        <div className="open">
+          <div className="">
+            После покупки нажмите сюда, чтобы получить доступ к курсу
+          </div>
+          <OpenCourse
+            id="coursePage_open_course_button"
+            onClick={async (e) => {
+              e.preventDefault();
+              let results = [];
+              console.log(1);
+              let checked_orders = await Promise.all(
+                my_orders.map(async (o) => {
+                  let updated_res = await updateOrderAuto({
+                    variables: {
+                      userId: me.id,
+                      id: o.id,
+                    },
+                  });
+                  return updated_res;
+                })
+              );
+
+              const checked_orders2 = checked_orders.filter(
+                (c) =>
+                  c.data.updateOrderAuto !== null &&
+                  c.data.updateOrderAuto.isPaid == true
+              );
+              console.log("checked_orders2", checked_orders2, checked_orders);
+
+              if (checked_orders2.length > 0) {
+                let enroll = await enrollOnCourse({
+                  variables: {
+                    id: me.id,
+                    coursePageId: coursePage.id,
+                  },
+                });
+                Router.push({
+                  pathname: "/course",
+                  query: {
+                    id: coursePage.id,
+                  },
+                });
+              } else {
+                alert(
+                  "Не нашли ваш платеж. Если вы считаете, что произошла ошибка, напишите нам."
+                );
+              }
+            }}
+          >
+            {updated_loading || enroll_loading
+              ? "Проверяем..."
+              : "Открыть доступ"}
+          </OpenCourse>
         </div>
       </Info>
       <StyledModal
