@@ -15,10 +15,16 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       title
       user {
         id
+        name
+        surname
+        work
         image
       }
       authors {
         id
+        name
+        surname
+        work
         image
       }
       nextStart
@@ -344,7 +350,9 @@ const ATF = (props) => {
                     </div>
                   ) : (
                     <div>
-                      Автор курса: {course.user.name} {course.user.surname}
+                      {console.log("course.user", course.user)}
+                      Автор курса: {course.user.name} {course.user.surname}.{" "}
+                      {course.user.work}
                     </div>
                   )}
                 </div>
