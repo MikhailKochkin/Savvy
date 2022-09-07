@@ -409,7 +409,7 @@ const CoursePage = (props) => {
                     {me.studentFeedback.filter(
                       (f) => f.lesson.coursePage.id == coursePage.id
                     ).length === 0 ? (
-                      <p>Обратной связи нет {t("no_feedback_yet")}</p>
+                      <p>{t("no_feedback_yet")}</p>
                     ) : null}
                     {me.studentFeedback
                       .filter((f) => f.lesson.coursePage.id == coursePage.id)
@@ -466,7 +466,6 @@ const CoursePage = (props) => {
           </LessonStyles>
         </Container>
       </>
-      );
     </>
   );
 };

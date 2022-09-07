@@ -304,8 +304,8 @@ const Signup = (props) => {
               defaultValue={"STUDENT"}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option value={"STUDENT"}>Статус на сайте – Студент</option>
-              <option value={"AUTHOR"}>Статус на сайте – Автор курсов</option>
+              <option value={"STUDENT"}>{t("status_student")}</option>
+              <option value={"AUTHOR"}>{t("status_author")}</option>
             </Select>
             <PhoneInput
               className="number"

@@ -423,12 +423,13 @@ const NewSingleLesson = (props) => {
   ) {
     i_am_student = true;
   }
-  console.log("i_am_student", i_am_student);
-  console.log("i_am_author", i_am_author);
+  console.log("lesson.type", lesson.open);
 
   return (
     <PleaseSignIn>
-      {!i_am_student && <Offer me={me} coursePageId={lesson.coursePage.id} />}
+      {!i_am_student && lesson.open && (
+        <Offer me={me} coursePageId={lesson.coursePage.id} />
+      )}
       <div id="root"></div>
       <>
         {lesson && (
@@ -454,7 +455,7 @@ const NewSingleLesson = (props) => {
                       },
                     }}
                   >
-                    <span>На страницу курса</span>
+                    <span>{t("back_to_course")}</span>
                   </Link>
                 ) : (
                   <Link
@@ -465,7 +466,7 @@ const NewSingleLesson = (props) => {
                       },
                     }}
                   >
-                    <span>На страницу курса</span>
+                    <span>{t("back_to_course")}</span>
                   </Link>
                 )}
                 {width > 800 && (

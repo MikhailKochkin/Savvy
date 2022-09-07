@@ -9,7 +9,7 @@ const Payment = styled.div`
   box-sizing: border-box;
   border-radius: 10px;
   width: 290px;
-  min-height: 290px;
+  min-height: 190px;
   padding: 2% 4%;
 
   .results {
@@ -303,7 +303,7 @@ class StudentCard extends Component {
           <div>{coursePage.news}</div>
         </div> */}
         <div className="results">
-          <h2>Результаты</h2>
+          <h2>Results</h2>
           <div className="bar">
             <Progress
               className="progress"
@@ -332,10 +332,7 @@ class StudentCard extends Component {
               <div>{coursePage.lessons.length}</div>
             </Full>
           </div>
-          {/* <div>
-            Результаты по урокам: {status} / {coursePage.lessons.length}
-          </div> */}
-          {ratio < 33 && (
+          {/* {ratio < 33 && (
             <div className="quote">
               <div className="imessage">
                 <p class="from-me">
@@ -379,7 +376,7 @@ class StudentCard extends Component {
               </div>
               <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625686040/savvy/%D0%9C%D0%B8%D1%88%D0%B0_1_kdulb7.png" />
             </div>
-          )}
+          )} */}
         </div>
         {/* {coursePage.examQuestion && (
           <div className="final">
