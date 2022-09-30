@@ -372,14 +372,16 @@ const ATF = (props) => {
                           <div>
                             {c.name} {c.surname}
                           </div>
-                          <div>{c.work && renderHTML(c.work)}</div>
+                          <div>{c && c.work && renderHTML(c.work)}</div>
                         </div>
                       ))}
                     </AuthorsInfo>
                   ) : (
                     <div>
                       Автор курса: {course.user.name} {course.user.surname}.{" "}
-                      {c.work && renderHTML(course.user.work)}
+                      {course.user &&
+                        course.user.work &&
+                        renderHTML(course.user.work)}
                     </div>
                   )}
                 </div>
