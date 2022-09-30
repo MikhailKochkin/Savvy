@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import renderHTML from "react-render-html";
-import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { useMutation, gql } from "@apollo/client";
 import Button from "@material-ui/core/Button";
 import { htmlToText } from "html-to-text";
 import { withStyles } from "@material-ui/core/styles";
@@ -16,11 +15,12 @@ import { v4 as uuidv4 } from "uuid";
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
     $attempts: Int
-    $wrong: String!
-    $correct: String!
+    $wrong: String
+    $correct: String
     $guess: String!
     $lessonId: String
     $textEditorId: String
+    $type: String
     $result: Boolean
   ) {
     createTextEditorResult(
@@ -30,6 +30,7 @@ const CREATE_TEXTEDITORRESULT_MUTATION = gql`
       guess: $guess
       lessonId: $lessonId
       textEditorId: $textEditorId
+      type: $type
       result: $result
     ) {
       id
@@ -342,37 +343,14 @@ const SingleTextEditor = (props) => {
   const [shown, setShown] = useState(false);
   const [result, setResult] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [type, setType] = useState("");
   const [mistakesShown, setMistakesShown] = useState(false);
-  // const [correctErrorOption, setCorrectErrorOption] = useState();
+
+  const [createTextEditorResult, { data, loading, error }] = useMutation(
+    CREATE_TEXTEDITORRESULT_MUTATION
+  );
 
   const total = props.textEditor.totalMistakes;
-
-  // state = {
-  //   shown: false,
-  //   mistakesShown: false,
-  //   answer: "",
-  //   correct_option: "",
-  //   wrong_option: "",
-  //   attempts: 0,
-  //   chosenElement: "",
-  //   total: props.textEditor.totalMistakes,
-  //   text: props.textEditor.text,
-  //   update: false,
-  //   result: false,
-  //   inputColor: "#c0d6df",
-  //   recieved: [],
-  //   checking: false,
-  //   showQuiz: false,
-  //   quiz: {
-  //     question: "",
-  //     answer: "",
-  //   },
-  //   quiz_guess: "",
-  //   quizresult: "no",
-  //   quizAnswered: false,
-  //   showNote: false,
-  //   note: "",
-  // };
 
   const check = async (e) => {
     e.persist();
@@ -390,9 +368,7 @@ const SingleTextEditor = (props) => {
       answer1: answer1,
       answer2: answer2,
     };
-    // let el = document.querySelectorAll(
-    //   `[data-initial='${props.correct_option}']`
-    // )[0];
+
     let el = document.getElementById(chosenElement);
     e.target.innerHTML = "Checking...";
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
@@ -415,11 +391,14 @@ const SingleTextEditor = (props) => {
           e.target.after(button2);
         }
         if (parseFloat(res.res) > 69) {
+          console.log("true result");
           setResult(true);
           props.getResults(1);
           el.style.background = "#D9EAD3";
           e.target.innerHTML = "Check";
+          return true;
         } else {
+          console.log("false result");
           setResult(false);
           el.style.background = "#FCE5CD";
           e.target.innerHTML = "Check";
@@ -428,10 +407,12 @@ const SingleTextEditor = (props) => {
             alert(res.comment);
           }
           setTimeout(() => (el.style.background = "#bef1ed"), 3000);
+          return false;
         }
       })
       .catch((err) => console.log(err));
     setShown(false);
+    return r;
   };
 
   // check the corrections to the errors
@@ -443,6 +424,7 @@ const SingleTextEditor = (props) => {
       answer1: quiz.answer,
       answer2: quizGuess,
     };
+
     const r = await fetch("https://arcane-refuge-67529.herokuapp.com/checker", {
       method: "POST", // or 'PUT'
       headers: {
@@ -455,12 +437,16 @@ const SingleTextEditor = (props) => {
         if (parseFloat(res.res) > 69) {
           setQuizResult(true);
           setChecking(false);
+          return true;
         } else {
           setQuizResult(false);
           setChecking(false);
+          return false;
         }
       })
       .catch((err) => console.log(err));
+
+    return r;
   };
 
   // start interaction with the piece of text
@@ -574,7 +560,7 @@ const SingleTextEditor = (props) => {
           <div>
             <TextBar id={textEditor.id}>
               <EditText story={story}>
-                <Mutation
+                {/* <Mutation
                   mutation={CREATE_TEXTEDITORRESULT_MUTATION}
                   variables={{
                     lessonId: props.lessonID,
@@ -582,6 +568,7 @@ const SingleTextEditor = (props) => {
                     attempts: props.attempts,
                     correct: props.correct_option,
                     wrong: props.wrong_option,
+                    type: type,
                     guess: htmlToText(props.answer, {
                       wordwrap: false,
                     }),
@@ -597,84 +584,107 @@ const SingleTextEditor = (props) => {
                     },
                   ]}
                 >
-                  {(createTextEditorResult, { loading, error }) => (
-                    <div
-                      onClick={async (e) => {
-                        // update the numberr of attempts made by the student
-                        setAttempts(attempts + 1);
-                        if (e.target.getAttribute("class") == "mini_button") {
-                          check(e);
-                        }
+                  {(createTextEditorResult, { loading, error }) => ( */}
+                <div
+                  onClick={async (e) => {
+                    // update the number of attempts made by the student
+                    setAttempts(attempts + 1);
+                    if (e.target.getAttribute("class") == "mini_button") {
+                      const ch = await check(e);
+                      setTimeout(() => {
+                        console.log("res", ch);
+                        const res2 = createTextEditorResult({
+                          variables: {
+                            lessonId: props.lessonID,
+                            textEditorId: props.textEditor.id,
+                            attempts: attempts,
+                            correct: correctErrorOption,
+                            wrong: wrongErrorOption,
+                            type: "error",
+                            guess: errorAnswer,
+                            result: ch,
+                          },
+                        });
+                      }, 1000);
+                    }
+                    // 1. Comment / Note
+                    if (
+                      e.target.getAttribute("type") === "note" ||
+                      e.target.parentElement.getAttribute("type") === "note"
+                    ) {
+                      let val =
+                        e.target.getAttribute("type") === "note"
+                          ? e.target.getAttribute("text")
+                          : e.target.parentElement.getAttribute("text");
+                      e.target.className = "edit";
+                      setShowNote(true);
+                      setNote(val);
+                      setType("note");
+                      console.log("e.target.text", val);
+                      setTimeout(() => {
+                        const res2 = createTextEditorResult({
+                          variables: {
+                            lessonId: props.lessonID,
+                            textEditorId: props.textEditor.id,
+                            attempts: attempts,
+                            correct: val,
+                            wrong: "",
+                            type: "note",
+                            guess: "opened",
+                            result: true,
+                          },
+                        });
+                      }, 3000);
+                    }
+                    // 2. Error
+                    if (
+                      e.target.id === "id" ||
+                      e.target.getAttribute("type") === "error" ||
+                      e.target.parentElement.getAttribute("type") === "error"
+                    ) {
+                      if (total > 0) {
+                        const res2 = await onMouseClick(e);
+                      } else if (props.total == 0 || props.total == null) {
+                        const res3 = await onReveal(e);
+                      }
+                      setType("error");
+                    }
 
-                        // 1. Provide the student with data, quiz part of text
-                        if (
-                          e.target.getAttribute("type") === "quiz" ||
-                          e.target.parentElement.getAttribute("type") === "quiz"
-                        ) {
-                          // 1.1 add styles to the text with a mistake
-                          e.target.className = "edit";
-                          // 1.2 add data necessary tp prove student with feedback to state
-                          setShowQuiz(true);
-                          setQuiz({
-                            question:
-                              e.target.getAttribute("type") === "quiz"
-                                ? e.target.getAttribute("question")
-                                : e.target.parentElement.getAttribute(
-                                    "question"
-                                  ),
-                            answer:
-                              e.target.getAttribute("type") === "quiz"
-                                ? e.target.getAttribute("answer")
-                                : e.target.parentElement.getAttribute("answer"),
-                            ifRight:
-                              e.target.getAttribute("type") === "quiz"
-                                ? e.target.getAttribute("ifRight")
-                                : e.target.parentElement.getAttribute(
-                                    "ifRight"
-                                  ),
-                            ifWrong:
-                              e.target.getAttribute("type") === "quiz"
-                                ? e.target.getAttribute("ifWrong")
-                                : e.target.parentElement.getAttribute(
-                                    "ifWrong"
-                                  ),
-                          });
-                        }
-                        if (
-                          e.target.getAttribute("type") === "note" ||
-                          e.target.parentElement.getAttribute("type") === "note"
-                        ) {
-                          e.target.className = "edit";
-                          setShowNote(true);
-                          setNote(
-                            e.target.getAttribute("type") === "note"
-                              ? e.target.getAttribute("text")
-                              : e.target.parentElement.getAttribute("text")
-                          );
-                        }
-                        if (
-                          e.target.id === "id" ||
-                          e.target.getAttribute("type") === "error" ||
-                          e.target.parentElement.getAttribute("type") ===
-                            "error"
-                        ) {
-                          if (total > 0) {
-                            const res2 = await onMouseClick(e);
-                          } else if (props.total == 0 || props.total == null) {
-                            const res3 = await onReveal(e);
-                          }
-                        }
-                        if (props.shown) {
-                          setTimeout(() => {
-                            const res2 = createTextEditorResult();
-                          }, 3000);
-                        }
-                      }}
-                    >
-                      {renderHTML(text)}
-                    </div>
-                  )}
-                </Mutation>
+                    // 3. Quiz. Provide the student with data, quiz part of text
+                    if (
+                      e.target.getAttribute("type") === "quiz" ||
+                      e.target.parentElement.getAttribute("type") === "quiz"
+                    ) {
+                      // 1.1 add styles to the text with a mistake
+                      e.target.className = "edit";
+                      // 1.2 add data necessary tp prove student with feedback to state
+                      setShowQuiz(true);
+                      setQuiz({
+                        question:
+                          e.target.getAttribute("type") === "quiz"
+                            ? e.target.getAttribute("question")
+                            : e.target.parentElement.getAttribute("question"),
+                        answer:
+                          e.target.getAttribute("type") === "quiz"
+                            ? e.target.getAttribute("answer")
+                            : e.target.parentElement.getAttribute("answer"),
+                        ifRight:
+                          e.target.getAttribute("type") === "quiz"
+                            ? e.target.getAttribute("ifRight")
+                            : e.target.parentElement.getAttribute("ifRight"),
+                        ifWrong:
+                          e.target.getAttribute("type") === "quiz"
+                            ? e.target.getAttribute("ifWrong")
+                            : e.target.parentElement.getAttribute("ifWrong"),
+                      });
+                      setType("quiz");
+                    }
+                  }}
+                >
+                  {renderHTML(text)}
+                </div>
+                {/* )}
+                </Mutation> */}
               </EditText>
             </TextBar>
             <Buttons>
@@ -734,7 +744,26 @@ const SingleTextEditor = (props) => {
                     setQuizQuess(e.target.value);
                   }}
                 />
-                <button onClick={(e) => quizCheck()}>
+                <button
+                  onClick={async (e) => {
+                    const res = await quizCheck();
+                    console.log("res", res);
+                    setTimeout(() => {
+                      const res2 = createTextEditorResult({
+                        variables: {
+                          lessonId: props.lessonID,
+                          textEditorId: props.textEditor.id,
+                          attempts: attempts,
+                          correct: quiz.answer,
+                          wrong: quizGuess,
+                          type: "quiz",
+                          guess: quizGuess,
+                          result: res,
+                        },
+                      });
+                    }, 3000);
+                  }}
+                >
                   {checking ? "Проверяем..." : "Ответить"}
                 </button>
                 {quizResult === false && <Comment>{quiz.ifWrong}</Comment>}

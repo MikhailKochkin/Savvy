@@ -1456,7 +1456,7 @@ type Mutation {
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
-  createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, wrong: String): TextEditorResult
+  createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
   createUseful(buttonText: String, header: String, image: String, link: String, tags: [String]): Useful
   deleteChat(id: String): Chat
   deleteClause(id: String): Clause
@@ -2703,7 +2703,7 @@ input TextEditorListRelationFilter {
 
 type TextEditorResult {
   attempts: Int
-  correct: String!
+  correct: String
   createdAt: DateTime!
   guess: String!
   id: String!
@@ -2714,8 +2714,9 @@ type TextEditorResult {
   studentId: String!
   textEditor: TextEditor
   textEditorId: String
+  type: String
   updatedAt: DateTime!
-  wrong: String!
+  wrong: String
 }
 
 input TextEditorResultListRelationFilter {
@@ -2734,6 +2735,7 @@ input TextEditorResultOrderByInput {
   result: SortOrder
   studentId: SortOrder
   textEditorId: SortOrder
+  type: SortOrder
   updatedAt: SortOrder
   wrong: SortOrder
 }
@@ -2741,7 +2743,7 @@ input TextEditorResultOrderByInput {
 input TextEditorResultWhereInput {
   AND: [TextEditorResultWhereInput!]
   attempts: IntNullableFilter
-  correct: StringFilter
+  correct: StringNullableFilter
   createdAt: DateTimeFilter
   guess: StringFilter
   id: StringFilter
@@ -2754,8 +2756,9 @@ input TextEditorResultWhereInput {
   studentId: StringFilter
   textEditor: TextEditorWhereInput
   textEditorId: StringNullableFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
-  wrong: StringFilter
+  wrong: StringNullableFilter
 }
 
 input TextEditorResultWhereUniqueInput {

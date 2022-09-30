@@ -101,6 +101,9 @@ const Option = styled.div`
   margin-right: 15px;
   margin-bottom: 15px;
   cursor: pointer;
+  &#create {
+    border: 2px solid #8d8d8d;
+  }
   @media (max-width: 800px) {
     font-size: 1.3rem;
   }
@@ -401,6 +404,9 @@ const Programs = () => {
           <Option active={tag == "corp"} onClick={(e) => move("corp")}>
             Работать с корпоративным правом
           </Option>
+          <Option active={tag == "ip"} onClick={(e) => move("ip")}>
+            Работать в IT/IP
+          </Option>
           <Option
             active={tag == "real_estate"}
             onClick={(e) => move("real_estate")}
@@ -434,7 +440,7 @@ const Programs = () => {
           <Option active={tag == "tech"} onClick={(e) => move("tech")}>
             Погрузиться в юридические технологии
           </Option>
-          <Option>
+          <Option id="create">
             <a href="https://t.me/MikKochkin" target="_blank">
               Создать свой курс на BeSavvy
             </a>

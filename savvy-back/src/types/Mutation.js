@@ -80,7 +80,7 @@ const newOrderEmail = (client, surname, email, course, price) => `
   </div>
 `;
 
-const AuthorNotification = (lesson, course, lessonID) => `
+const AuthorNotification = (lesson, course, lessonID, text) => `
   <div className="email" style="
     padding: 20px;
     font-family: sans-serif;
@@ -89,6 +89,9 @@ const AuthorNotification = (lesson, course, lessonID) => `
   ">
     <h2>Привет!</h2>
     <p>Пришел новый вопрос по уроку "${lesson}" курса "${course}"</p>
+    <p>Вопрос звучит так:</p>
+    <p><i>"${text}"</i></p>
+    <p>Ответить можно прямо в чате. Перейдите к курсу по ссылке.</p>
     <button><a href="https://besavvy.app/lesson?id=${lessonID}&type=story">Перейти</a></button>
   </div>
 `;
@@ -1282,6 +1285,7 @@ const Mutation = mutationType({
         wrong: stringArg(),
         correct: stringArg(),
         guess: stringArg(),
+        type: stringArg(),
         result: booleanArg(),
       },
       resolve: async (_, args, ctx) => {
@@ -1748,21 +1752,22 @@ const Mutation = mutationType({
             HtmlBody: AuthorNotification(
               lesson[0].name,
               lesson[0].coursePage.title,
-              lesson[0].id
+              lesson[0].id,
+              args.text
             ),
           });
-          if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
-            const newMail2 = await client.sendEmail({
-              From: "Mikhail@besavvy.app",
-              To: "mi.kochkin@ya.ru",
-              Subject: "(Другой автор) Новое сообщение на форуме",
-              HtmlBody: AuthorNotification(
-                lesson[0].name,
-                lesson[0].coursePage.title,
-                lesson[0].id
-              ),
-            });
-          }
+          // if (author[0].email.toLowerCase() !== "mi.kochkin@ya.ru") {
+          //   const newMail2 = await client.sendEmail({
+          //     From: "Mikhail@besavvy.app",
+          //     To: "mi.kochkin@ya.ru",
+          //     Subject: "(Другой автор) Новое сообщение на форуме",
+          //     HtmlBody: AuthorNotification(
+          //       lesson[0].name,
+          //       lesson[0].coursePage.title,
+          //       lesson[0].id
+          //     ),
+          //   });
+          // }
           statement = await ctx.prisma.statement.create({
             data: {
               user: {
@@ -1857,10 +1862,11 @@ const Mutation = mutationType({
         //remove the ID from updates
         delete updates.id;
         //run the update method
-
+        console.log("comments initial", args.comments.join(", "));
         const statement = await ctx.prisma.statement.findUnique({
           where: { id: args.id },
         });
+        console.log("statement", statement);
 
         const student = await ctx.prisma.user.findUnique({
           where: { id: statement.userId },
@@ -1869,15 +1875,17 @@ const Mutation = mutationType({
         const lesson = await ctx.prisma.lesson.findUnique({
           where: { forumId: statement.forumId },
         });
-
+        console.log("args.comments[0]", args.comments[0]);
         const commentEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: student.email,
-          Subject: "BeSavvy: ответ на комментарий по курсу",
+          Subject: "BeSavvy: ответили на ваш вопрос",
           HtmlBody: CommentEmail.CommentEmail(
             student.name,
             lesson.name,
-            lesson.id
+            lesson.id,
+            statement.text,
+            args.comments.join(", ")
           ),
         });
         return ctx.prisma.statement.update({
@@ -2057,10 +2065,6 @@ const Mutation = mutationType({
           { where },
           `{ id, user { id } }`
         );
-        const ownsTest = C.userId === ctx.res.req.userId;
-        if (!ownsTest) {
-          throw new Error("К сожалению, у вас нет полномочий на это.");
-        }
         //3. Delete it
         return ctx.prisma.shot.delete({ where });
       },

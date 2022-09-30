@@ -14,6 +14,7 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0;
+  margin-bottom: 50px;
   /* border-top: 1px solid #dce2e7; */
   @media (max-width: 800px) {
     min-height: 40vh;
@@ -27,6 +28,11 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   color: #313d48;
+  h2 {
+    line-height: 1.4;
+    font-weight: 700;
+    font-size: 2.8rem;
+  }
   button {
     background: #327998;
     color: #fff;
@@ -42,11 +48,6 @@ const Container = styled.div`
   #goal_message {
     width: 90%;
     /* height: 150px; */
-    h2 {
-      line-height: 1.4;
-      font-weight: 700;
-      font-size: 2.8rem;
-    }
   }
   #goal_examples {
     width: 90%;
@@ -57,7 +58,16 @@ const Container = styled.div`
     flex-wrap: wrap;
     align-items: space-between;
     justify-content: space-between;
+    margin-bottom: 20px;
     div {
+    }
+    .audience {
+      font-size: 1.6rem;
+      /* margin: 10px 0; */
+      width: 90%;
+      /* p {
+        margin: 0;
+      } */
     }
     .example {
       display: flex;
@@ -157,6 +167,24 @@ const Goal = (props) => {
               <div>{renderHTML(g)}</div>
             </div>
           ))}
+        </div>
+        <h2>
+          {/* {d.goal_header ? (
+              renderHTML(d.goal_header)
+            ) : ( */}
+          <>
+            {router.locale == "ru" ? (
+              <>Для кого этот курс?</>
+            ) : (
+              <>Who is that course for?</>
+            )}
+          </>
+          {/* )} */}
+        </h2>
+        <div id="goal_examples">
+          <div className="audience">
+            {coursePage.audience && renderHTML(coursePage.audience)}
+          </div>
         </div>
       </Container>
     </Styles>

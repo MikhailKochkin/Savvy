@@ -160,7 +160,7 @@ const Contact = styled.div`
     }
   }
   .details {
-    margin: 30px 0;
+    margin-top: 20px;
     width: 100%;
   }
   input {
@@ -460,7 +460,7 @@ const Action = (props) => {
             </PriceBox>
           )}
           {!installments && <div className="price">{price} ₽</div>}
-          <ButtonOpen
+          {/* <ButtonOpen
             id="coursePage_to_demolesson"
             // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
             // target="_blank"
@@ -483,9 +483,9 @@ const Action = (props) => {
             }}
           >
             Оставить заявку
-          </ButtonOpen>
+          </ButtonOpen> */}
 
-          <ButtonBuy
+          <ButtonOpen
             id="coursePage_buy_button"
             onClick={async (e) => {
               e.preventDefault();
@@ -509,7 +509,7 @@ const Action = (props) => {
             {installments &&
               (loading_data ? `Готовим покупку...` : t("buy_installments"))}
             {!installments && (loading_data ? `Готовим покупку...` : t("buy"))}
-          </ButtonBuy>
+          </ButtonOpen>
           <div className="guarantee">Гарантия возврата денег</div>
           <div className="details">
             {installments && (

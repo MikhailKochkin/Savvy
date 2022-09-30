@@ -58,7 +58,7 @@ class AnswerOption extends Component {
         onClick={this.change}
         color={color}
       >
-        {renderHTML(this.props.answer)}
+        {this.props.answer && renderHTML(this.props.answer)}
       </StyledButton>
     );
   }

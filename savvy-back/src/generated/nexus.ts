@@ -1756,13 +1756,14 @@ export interface NexusGenInputs {
     result?: NexusGenEnums['SortOrder'] | null; // SortOrder
     studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     textEditorId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    type?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     wrong?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   TextEditorResultWhereInput: { // input type
     AND?: NexusGenInputs['TextEditorResultWhereInput'][] | null; // [TextEditorResultWhereInput!]
     attempts?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
-    correct?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    correct?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     guess?: NexusGenInputs['StringFilter'] | null; // StringFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -1775,8 +1776,9 @@ export interface NexusGenInputs {
     studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     textEditor?: NexusGenInputs['TextEditorWhereInput'] | null; // TextEditorWhereInput
     textEditorId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
-    wrong?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    wrong?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   TextEditorResultWhereUniqueInput: { // input type
     id?: string | null; // String
@@ -2470,7 +2472,7 @@ export interface NexusGenObjects {
   }
   TextEditorResult: { // root type
     attempts?: number | null; // Int
-    correct: string; // String!
+    correct?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     guess: string; // String!
     id: string; // String!
@@ -2478,8 +2480,9 @@ export interface NexusGenObjects {
     result?: boolean | null; // Boolean
     studentId: string; // String!
     textEditorId?: string | null; // String
+    type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    wrong: string; // String!
+    wrong?: string | null; // String
   }
   Uni: { // root type
     capacity?: number | null; // Int
@@ -3244,7 +3247,7 @@ export interface NexusGenFieldTypes {
   }
   TextEditorResult: { // field return type
     attempts: number | null; // Int
-    correct: string; // String!
+    correct: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     guess: string; // String!
     id: string; // String!
@@ -3255,8 +3258,9 @@ export interface NexusGenFieldTypes {
     studentId: string; // String!
     textEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     textEditorId: string | null; // String
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
-    wrong: string; // String!
+    wrong: string | null; // String
   }
   Uni: { // field return type
     capacity: number | null; // Int
@@ -4038,6 +4042,7 @@ export interface NexusGenFieldTypeNames {
     studentId: 'String'
     textEditor: 'TextEditor'
     textEditorId: 'String'
+    type: 'String'
     updatedAt: 'DateTime'
     wrong: 'String'
   }
@@ -4530,6 +4535,7 @@ export interface NexusGenArgTypes {
       lessonId?: string | null; // String
       result?: boolean | null; // Boolean
       textEditorId?: string | null; // String
+      type?: string | null; // String
       wrong?: string | null; // String
     }
     createUseful: { // args

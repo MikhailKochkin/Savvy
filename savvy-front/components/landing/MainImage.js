@@ -168,7 +168,7 @@ const MainImage = () => {
         </Row>
         <Row id="row3">
           <Bubble id="purple2">Тренажер для подготовки к экзаменам</Bubble>
-          <Bubble id="grey2">Клуб выпускников</Bubble>
+          <Bubble id="grey2">Сообщество выпускников</Bubble>
         </Row>
         <Row id="row4">
           <Bubble id="grey3">Обучение на реальных проектах</Bubble>

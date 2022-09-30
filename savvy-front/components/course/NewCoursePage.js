@@ -20,6 +20,7 @@ import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
 
 import moment from "moment";
+import renderHTML from "react-render-html";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -193,7 +194,7 @@ const NewCoursePage = (props) => {
                 coursePageId={data.coursePage.id}
               />
               <Teachers coursePage={data.coursePage} />
-              <SellingPoints />
+              <SellingPoints coursePage={data.coursePage} />
               {/* {prog && prog.reviews && prog.reviews.length > 0 && (
                 <Reviews data={prog} />
               )} */}

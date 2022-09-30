@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   width: 100%;
@@ -28,6 +29,10 @@ const Container = styled.div`
     font-size: 2.8rem;
   }
   h2 {
+    margin-bottom: 40px;
+  }
+  .text {
+    width: 80%;
     margin-bottom: 40px;
   }
 `;
@@ -139,6 +144,9 @@ const SellingPoints = (props) => {
     <Styles>
       <Container>
         <h2>{t("program_includes")}</h2>
+        <div className="text">
+          {props.coursePage.methods && renderHTML(props.coursePage.methods)}
+        </div>
         <PointsBox>
           {sps.map((s, i) => (
             <Point>
@@ -150,6 +158,11 @@ const SellingPoints = (props) => {
             </Point>
           ))}
         </PointsBox>
+        <h2>Результаты по итогам курса</h2>
+
+        <div className="text">
+          {props.coursePage.result && renderHTML(props.coursePage.result)}
+        </div>
       </Container>
     </Styles>
   );

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -656,8 +656,8 @@ model TextEditor {
 model TextEditorResult {
   id           String      @id @default(cuid())
   attempts     Int?
-  wrong        String?
-  correct      String?
+  wrong        String
+  correct      String
   guess        String
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt

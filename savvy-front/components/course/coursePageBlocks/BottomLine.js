@@ -38,7 +38,7 @@ const Banner = styled.div`
   .bottomline_text {
     max-width: 95%;
     min-width: 45%;
-    font-size: 1.6rem;
+    font-size: 1.9rem;
     height: 100%;
     line-height: 1.6;
     font-weight: 600;

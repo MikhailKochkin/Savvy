@@ -46,7 +46,7 @@ const BImage = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
+  margin-bottom: 50px;
   background-image: url("/static/pattern6.svg");
   background-size: contain;
   @media (max-width: 800px) {
@@ -98,12 +98,13 @@ const Container = styled.div`
     }
   }
   h2 {
-    font-size: 2.4rem;
+    font-size: 2.2rem;
     line-height: 1.4;
-    /* text-align: center; */
+    margin-top: 10px;
     width: 75%;
     font-weight: 400;
     color: #4b5563;
+    margin-bottom: 30px;
   }
   @media (max-width: 800px) {
     width: 90%;
@@ -211,6 +212,21 @@ const TimeLeft = styled.div`
   }
 `;
 
+const AuthorsInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  .info {
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
 const NextMeeting = styled.div`
   display: flex;
   flex-direction: row;
@@ -222,7 +238,7 @@ const NextMeeting = styled.div`
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-right: 15px;
+    margin-right: 5px;
     img {
       width: 50px;
       height: 50px;
@@ -325,13 +341,13 @@ const ATF = (props) => {
             </h2>
             {/* <div>Курс актуален на 1 августа 2022 года</div> */}
             <NextMeeting>
-              <div className="image_container">
+              {/* <div className="image_container">
                 {course.authors.length > 0 ? (
                   course.authors.map((auth) => <img src={auth.image} />)
                 ) : (
                   <img src={course.user.image} />
                 )}
-              </div>
+              </div> */}
               {course.nextStart ? (
                 <div>
                   Следующий вебинар{" "}
@@ -344,15 +360,26 @@ const ATF = (props) => {
               ) : (
                 <div>
                   {course.authors.length > 0 ? (
-                    <div>
-                      Авторы курса:{" "}
-                      {course.authors.map((c) => (c.name, c.surname))}
-                    </div>
+                    <AuthorsInfo>
+                      <div>
+                        <b>Авторы курса: </b>
+                      </div>
+                      {course.authors.map((c) => (
+                        <div className="info">
+                          <div className="image_container">
+                            <img src={c.image} />
+                          </div>
+                          <div>
+                            {c.name} {c.surname}
+                          </div>
+                          <div>{c.work && renderHTML(c.work)}</div>
+                        </div>
+                      ))}
+                    </AuthorsInfo>
                   ) : (
                     <div>
-                      {console.log("course.user", course.user)}
                       Автор курса: {course.user.name} {course.user.surname}.{" "}
-                      {course.user.work}
+                      {c.work && renderHTML(course.user.work)}
                     </div>
                   )}
                 </div>

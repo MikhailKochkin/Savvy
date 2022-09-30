@@ -1,4 +1,4 @@
-const CommentEmail = (name, lesson, lessonId) => `
+const CommentEmail = (name, lesson, lessonId, text, comment) => `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
@@ -481,9 +481,13 @@ const CommentEmail = (name, lesson, lessonId) => `
                         <p>
                           Спасибо, что используете BeSavvy. Преподаватель ответил на ваш комментарий к уроку "${lesson}" .
                         </p>
+                        <p> Комментарий звучит так: </p>
+                        <p><i>"${text}"</i></p>
                         <p>
-                          Посмотрите комментарий, нажав на кнопку ниже.
+                        Ответ звучит так:
                         </p>
+                         <p><i>"${comment}"</i></p>
+
                         <table
                           width="100%"
                           border="0"
@@ -527,7 +531,7 @@ const CommentEmail = (name, lesson, lessonId) => `
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        &copy; 2021 BeSavvy
+                        &copy; 2022 BeSavvy
                       </p>
                     </td>
                   </tr>

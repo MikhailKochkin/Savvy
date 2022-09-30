@@ -28,6 +28,15 @@ const TextBox = styled.div`
   #id {
     color: #001f4e;
   }
+  .editor_note {
+    color: #81b29a;
+  }
+  .editor_error {
+    color: #e07a5f !important;
+  }
+  .editor_quiz {
+    color: #f2cc8f;
+  }
 `;
 
 const Block = styled.div`
@@ -45,32 +54,79 @@ const TexteditorModal = (props) => {
   const { texteditor, student, results } = props;
   useEffect(() => {
     let res;
+
     if (results.filter((t) => t.textEditor.id === texteditor.id).length > 0) {
-      if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
-        res = results.filter((t) => t.textEditor.id === texteditor.id);
-      const elements = document
+      res = results.filter((t) => t.textEditor.id === texteditor.id);
+      const error_elements = document
         .getElementById(texteditor.id)
-        .querySelectorAll("#id");
-      elements.forEach((element) => {
+        .querySelectorAll(".editor_error");
+      const note_elements = document
+        .getElementById(texteditor.id)
+        .querySelectorAll(".editor_note");
+
+      const quiz_elements = document
+        .getElementById(texteditor.id)
+        .querySelectorAll(".editor_quiz");
+
+      error_elements.forEach((element) => {
         if (
-          res.filter((r) => r.correct == element.getAttribute("data")).length >
-          0
+          res.filter((r) => r.correct == element.getAttribute("error_data"))
+            .length > 0
         ) {
           let answers = res.filter(
-            (r) => r.correct == element.getAttribute("data")
+            (r) => r.correct == element.getAttribute("error_data")
           );
-          if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
-            var guesses_arr = answers.map(function (obj) {
-              return obj.guess;
-            });
-          if (guesses_arr.leength == 0) {
+          var guesses_arr = answers.map(function (obj) {
+            return obj.guess;
+          });
+
+          if (guesses_arr.length == 0) {
             guesses_arr = ["––"];
           }
-          if (texteditor.id == "ck9k4st6j04ys07341ols5zbl")
-            element.innerHTML = `${answers[0].wrong} / ${
-              answers[0].correct
-            } / ${guesses_arr.join(", ")}`;
+          element.innerHTML = `${answers[0].wrong} / ${
+            answers[0].correct
+          } / <b>Ответы: </b>${[...new Set(guesses_arr)].join(", ")}`;
         }
+      });
+
+      note_elements.forEach((element) => {
+        let answers = res.filter(
+          (r) => r.correct == element.getAttribute("text")
+        );
+
+        var guesses_arr = answers.map(function (obj) {
+          return obj.guess;
+        });
+        element.innerHTML = `${element.innerHTML} / ${
+          guesses_arr.length > 0
+            ? "<b>Элемент открыт</b>"
+            : "<b>Элемент не открыт</b>"
+        }`;
+      });
+      quiz_elements.forEach((element) => {
+        // if (
+        //   res.filter((r) => r.correct == element.getAttribute("quiz_data"))
+        //     .length > 0
+        // ) {
+        console.log("quiz res", res, element.getAttribute("answer"));
+
+        let answers = res.filter(
+          (r) => r.correct == element.getAttribute("answer")
+        );
+
+        console.log("answers", answers);
+
+        var guesses_arr = answers.map(function (obj) {
+          return obj.guess;
+        });
+
+        if (guesses_arr.length == 0) {
+          guesses_arr = ["––"];
+        }
+        element.innerHTML = `${element.innerHTML}. <b>Ответы:</b> ${[
+          ...new Set(guesses_arr),
+        ].join(", ")}`;
+        // }
       });
     }
   }, [0]);
@@ -83,7 +139,7 @@ const TexteditorModal = (props) => {
         </Text>
       </TextBox>
       <div className="column">
-        {results && results.length > 0
+        {/* {results && results.length > 0
           ? results
               .filter((t) => t.textEditor.id === texteditor.id)
               .map((t) => (
@@ -94,7 +150,7 @@ const TexteditorModal = (props) => {
                   <div>Попытка {t.attempts} </div>
                 </Block>
               ))
-          : null}
+          : null} */}
       </div>
     </Box>
   );

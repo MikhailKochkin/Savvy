@@ -72,11 +72,11 @@ const Info = styled.div`
 
     .text {
       h1 {
-        font-size: 5.2rem;
+        font-size: 5rem;
         line-height: 1.1;
         text-align: left;
         font-weight: 700;
-        width: 70%;
+        width: 95%;
         opacity: 0.9;
         /* margin-top: 10%; */
         color: #000000;
@@ -200,10 +200,13 @@ const Landing = (props) => {
         <NewNav />
         <div className="container">
           <div className="text">
-            <h1>Получите практические навыки юриста</h1>
+            <h1>Берём решение карьерных задач юристов на себя</h1>
             <div>
+              Поможем получить практические навыки и карьерный рост с помощью
+              интерактивных курсов, работы 1-на-1 и нетворкинга.
+              {/* 
               Больше 20 интерактивных курсов от экспертов из Алруд, DLA Piper,
-              Birch Legal и Никольская Консалтинг
+              Birch Legal и Никольская Консалтинг */}
             </div>
             <Buttons>
               <button id="main_page_button" onClick={(e) => slide()}>

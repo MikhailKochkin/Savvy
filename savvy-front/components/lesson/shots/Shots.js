@@ -211,9 +211,11 @@ const Shots = (props) => {
           <Title>{title}</Title>
           <div className="step">Step {num}</div>
           <>
-            <Text>
-              <div key={num - 1}>{renderHTML(parts[num - 1])}</div>
-            </Text>
+            {parts[num - 1] && (
+              <Text>
+                <div key={num - 1}>{renderHTML(parts[num - 1])}</div>
+              </Text>
+            )}
             {comments.length > 0 && (
               <Commentary>
                 <>{renderHTML(comments[num - 1])}</>
