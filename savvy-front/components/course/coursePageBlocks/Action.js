@@ -141,6 +141,30 @@ const Contact = styled.div`
     font-size: 3.2rem;
     text-align: left;
     width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-bottom: 10px;
+    .discount {
+      font-weight: 600;
+      font-size: 2rem;
+      text-decoration: line-through;
+    }
+    .bubble {
+      background: #f7003e;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.8rem;
+      height: 55px;
+      width: 55px;
+      margin-left: 15px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #6e6c6d;
+    }
   }
   #form_container {
     display: flex;
@@ -459,7 +483,23 @@ const Action = (props) => {
               {installments && <div className="price_small">{price} ₽</div>}
             </PriceBox>
           )}
-          {!installments && <div className="price">{price} ₽</div>}
+          {!installments && !props.coursePage.discountPrice && (
+            <div className="price">{price} ₽</div>
+          )}
+          {!installments && props.coursePage.discountPrice && (
+            <div className="price">
+              <div>
+                {props.coursePage.discountPrice}{" "}
+                <span className="discount">{price}</span> ₽
+              </div>
+              <div className="bubble">
+                -
+                {100 - parseInt((props.coursePage.discountPrice / price) * 100)}
+                %
+              </div>
+            </div>
+          )}
+
           {/* <ButtonOpen
             id="coursePage_to_demolesson"
             // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
@@ -498,7 +538,9 @@ const Action = (props) => {
                 const res = await createOrder({
                   variables: {
                     coursePageId: coursePage.id,
-                    price: price,
+                    price: props.coursePage.discountPrice
+                      ? props.coursePage.discountPrice
+                      : price,
                     userId: me.id,
                   },
                 });

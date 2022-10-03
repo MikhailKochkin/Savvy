@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
 
@@ -141,7 +142,9 @@ const Program = (props) => {
       <Up>
         <img src={props.img} />
         <div className="title">{props.title}</div>
-        <div className="description">{props.description}</div>
+        <div className="description">
+          {props.description && renderHTML(props.description)}
+        </div>
         <div className="term">{props.term}</div>
       </Up>
       <Down>

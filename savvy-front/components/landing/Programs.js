@@ -22,6 +22,7 @@ const COURSES_QUERY = gql`
       price
       image
       tags
+      createdAt
       lessons {
         id
       }
@@ -447,24 +448,32 @@ const Programs = () => {
           </Option>
         </Tags>
       </Search>
+      {console.log(
+        "ddd",
+        filtered_courses.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        )
+      )}
       <Container
         id="course_container"
         moreThanOne={data.coursePages.length > 1 ? true : false}
       >
-        {filtered_courses.map((p, i) => (
-          <Program
-            key={i}
-            img={p.image}
-            title={p.title}
-            lessons={p.lessons}
-            description={p.description}
-            nextStart={p.nextStart}
-            price={p.price}
-            installments={p.installments}
-            // conditions={p.conditions}
-            id={p.id}
-          />
-        ))}
+        {filtered_courses
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .map((p, i) => (
+            <Program
+              key={i}
+              img={p.image}
+              title={p.title}
+              lessons={p.lessons}
+              description={p.description}
+              nextStart={p.nextStart}
+              price={p.price}
+              installments={p.installments}
+              // conditions={p.conditions}
+              id={p.id}
+            />
+          ))}
       </Container>
     </Styles>
   );

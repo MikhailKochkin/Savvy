@@ -60,7 +60,7 @@ const Info = styled.div`
     }
     @media (max-width: 900px) {
       flex-direction: column;
-      max-height: 150vh;
+      max-height: 180vh;
       width: 90%;
 
       .video_box {

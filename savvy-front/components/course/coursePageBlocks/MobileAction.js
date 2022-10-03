@@ -19,21 +19,20 @@ const Styles = styled.div`
 
 const ButtonOpen = styled.a`
   width: 90%;
+  /* width: 292px; */
   height: 48px;
-  border-top: 2px solid #175ffe;
   padding: 2%;
   font-family: Montserrat;
-  border: none;
-  text-align: center;
-  background: #175ffe;
+  border: 2px solid #252f3f;
+  background: none;
+  margin-bottom: 10px;
   outline: 0;
+  text-align: center;
   cursor: pointer;
   font-size: 1.8rem;
   transition: ease-in 0.2s;
-  color: #fff;
-  /* position: -webkit-sticky; */
   &:hover {
-    background-color: #0b44bf;
+    background-color: #e3e4ec;
   }
 `;
 
@@ -42,6 +41,15 @@ const MobileAction = (props) => {
   let demo_lesson = props.coursePage.lessons
     .filter((l) => l.open == true)
     .sort((les) => les.number > les.number)[0];
+
+  const slide = () => {
+    var my_element = document.getElementById("header2");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
 
   return (
     <Styles>
@@ -69,13 +77,14 @@ const MobileAction = (props) => {
 
         onClick={(e) => {
           e.preventDefault();
-          alert(
-            `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Оставьте свой вопрос и он ответит в течение пары часов. Можете просто скопировать этот текст: Привет, расскажи про курс "${props.coursePage.title}"`
-          );
-          location.href = "https://t.me/BeSavvyMentorBot?start=link_vINBAwrN4O";
+          slide();
+          // alert(
+          //   `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Оставьте свой вопрос и он ответит в течение пары часов. Можете просто скопировать этот текст: Привет, расскажи про курс "${props.coursePage.title}"`
+          // );
+          // location.href = "https://t.me/BeSavvyMentorBot?start=link_vINBAwrN4O";
         }}
       >
-        Оставить заявку
+        Купить курс
       </ButtonOpen>
     </Styles>
   );

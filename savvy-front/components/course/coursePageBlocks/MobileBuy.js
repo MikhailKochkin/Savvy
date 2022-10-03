@@ -70,27 +70,53 @@ const Styles = styled.div`
   .price {
     font-weight: 600;
     font-size: 3.2rem;
+    text-align: left;
     width: 100%;
-    text-align: center;
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    .discount {
+      font-weight: 600;
+      font-size: 2rem;
+      text-decoration: line-through;
+    }
+    .bubble {
+      background: #f7003e;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.8rem;
+      height: 55px;
+      width: 55px;
+      margin-left: 15px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #6e6c6d;
+    }
   }
 `;
 
 const ButtonBuy = styled.button`
   width: 90%;
-  /* width: 292px; */
   height: 48px;
+  border-top: 2px solid #175ffe;
   padding: 2%;
   font-family: Montserrat;
-  border: 2px solid #252f3f;
-  background: none;
-  margin-bottom: 10px;
+  border: none;
+  text-align: center;
+  background: #175ffe;
   outline: 0;
   cursor: pointer;
   font-size: 1.8rem;
   transition: ease-in 0.2s;
+  color: #fff;
+  margin-bottom: 7px;
+  /* position: -webkit-sticky; */
   &:hover {
-    background-color: #e3e4ec;
+    background-color: #0b44bf;
   }
 `;
 
@@ -278,7 +304,7 @@ const MobileBuy = (props) => {
   }
 
   return (
-    <Styles>
+    <Styles id="buy_section">
       {/* <div className="price">{coursePage.price} ₽</div> */}
       {installments && (
         <PriceBox>
@@ -289,7 +315,21 @@ const MobileBuy = (props) => {
           {installments && <div className="price_small">{price} ₽</div>}
         </PriceBox>
       )}
-      {!installments && <div className="price">{price} ₽</div>}
+      {/* {!installments && <div className="price">{price} ₽</div>} */}
+      {!installments && !props.coursePage.discountPrice && (
+        <div className="price">{price} ₽</div>
+      )}
+      {!installments && props.coursePage.discountPrice && (
+        <div className="price">
+          <div>
+            {props.coursePage.discountPrice}{" "}
+            <span className="discount">{price}</span> ₽
+          </div>
+          <div className="bubble">
+            -{100 - parseInt((props.coursePage.discountPrice / price) * 100)}%
+          </div>
+        </div>
+      )}
       <ButtonBuy
         id="mobile_coursePage_buy_button"
         onClick={async (e) => {
@@ -303,7 +343,9 @@ const MobileBuy = (props) => {
             const res = await createOrder({
               variables: {
                 coursePageId: coursePage.id,
-                price: price,
+                price: props.coursePage.discountPrice
+                  ? props.coursePage.discountPrice
+                  : price,
                 userId: me.id,
                 // comment: props.comment,
               },

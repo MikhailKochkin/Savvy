@@ -112,7 +112,7 @@ const Styles = styled.div`
   .menu_bar {
     width: 100%;
     max-width: 1140px;
-    padding-left: 30px;
+    padding-left: 20px;
     color: black;
     display: flex;
     /* margin-top: 20px; */

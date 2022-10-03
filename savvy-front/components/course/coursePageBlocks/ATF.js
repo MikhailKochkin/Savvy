@@ -334,7 +334,7 @@ const ATF = (props) => {
             <h1>
               {course.header.length > 0 ? renderHTML(course.header[0]) : ""}
             </h1>
-            <h2>
+            <h2 id="header2">
               {course.subheader.length > 0
                 ? renderHTML(course.subheader[0])
                 : ""}
