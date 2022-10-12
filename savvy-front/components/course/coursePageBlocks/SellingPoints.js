@@ -1,17 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: #f4f8fc;
   border-top: 1px solid #dce2e7;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: 50px;
   @media (max-width: 1040px) {
     padding: 30px 0;
   }
@@ -29,11 +31,9 @@ const Container = styled.div`
     font-size: 2.8rem;
   }
   h2 {
-    margin-bottom: 40px;
   }
   .text {
     width: 80%;
-    margin-bottom: 40px;
   }
 `;
 
@@ -54,6 +54,7 @@ const Point = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 60px;
+  background: #fff;
   border: 1px solid #dce2e6;
   padding: 20px;
   margin-right: 60px;
@@ -107,9 +108,49 @@ const Point = styled.div`
   }
 `;
 
+const Bubble = styled.div`
+  border-radius: 20px;
+  background-color: #fff;
+  /* background-position: center center; */
+  border: 2px solid #7000ff;
+  border-style: solid;
+  padding: 10px 25px;
+  width: 80%;
+  .pattern {
+    width: 100%;
+    /* height: 220px; */
+    div {
+      border: 1px solid blue;
+      img {
+        background-repeat: no-repeat;
+        width: 40%;
+        height: 180px;
+      }
+    }
+    /* background-image: url("/static/pattern3.svg");
+    background-size: contain;
+    background-repeat: no-repeat; */
+  }
+`;
+
+const Blue = styled.div`
+  background: #171e2e;
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
+  color: #dee1ec;
+  padding: 10px 30px;
+  border-radius: 15px;
+  width: 85%;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
 const SellingPoints = (props) => {
   const d = props.data;
+  const router = useRouter();
   const { t } = useTranslation("coursePage");
+
   const sps = [
     {
       selling_point: "Интерактивные мини-уроки",
@@ -140,6 +181,34 @@ const SellingPoints = (props) => {
         "https://images.unsplash.com/photo-1459499362902-55a20553e082?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1049&q=80",
     },
   ];
+
+  const sps_eng = [
+    {
+      selling_point: "Learning quickly",
+      selling_point_details:
+        "Learn from real-life experience of your instructors in the form of stories, dialogues and videos.",
+    },
+    {
+      selling_point: "Mastering new skills",
+      selling_point_details:
+        "Master new skills online using our AI-powered tools: doc editors, contract builders and online case studies.",
+      image:
+        "https://images.unsplash.com/photo-1600195077909-46e573870d99?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    },
+    {
+      selling_point: "Practical assignments",
+      selling_point_details: "Get real feedback on your practical assignments.",
+      image:
+        "https://images.unsplash.com/photo-1589386417686-0d34b5903d23?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+    },
+    {
+      selling_point: "Getting help",
+      selling_point_details:
+        "Ask questions 24/7 to your instructors on Discord or book an e-meeting.",
+      image:
+        "https://images.unsplash.com/photo-1459499362902-55a20553e082?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1049&q=80",
+    },
+  ];
   return (
     <Styles>
       <Container>
@@ -148,21 +217,33 @@ const SellingPoints = (props) => {
           {props.coursePage.methods && renderHTML(props.coursePage.methods)}
         </div>
         <PointsBox>
-          {sps.map((s, i) => (
-            <Point>
-              <div className="number">{i + 1}</div>
-              <div className="info">
-                <div className="header">{s.selling_point}</div>
-                <div className="text">{s.selling_point_details}</div>
-              </div>
-            </Point>
-          ))}
+          {router.locale == "ru" &&
+            sps.map((s, i) => (
+              <Point>
+                <div className="number">{i + 1}</div>
+                <div className="info">
+                  <div className="header">{s.selling_point}</div>
+                  <div className="text">{s.selling_point_details}</div>
+                </div>
+              </Point>
+            ))}
+          {router.locale !== "ru" &&
+            sps_eng.map((s, i) => (
+              <Point>
+                <div className="number">{i + 1}</div>
+                <div className="info">
+                  <div className="header">{s.selling_point}</div>
+                  <div className="text">{s.selling_point_details}</div>
+                </div>
+              </Point>
+            ))}
         </PointsBox>
-        <h2>Результаты по итогам курса</h2>
-
-        <div className="text">
-          {props.coursePage.result && renderHTML(props.coursePage.result)}
-        </div>
+        <Blue>
+          <h2>{t("results")}</h2>
+          <div className="text">
+            {props.coursePage.result && renderHTML(props.coursePage.result)}
+          </div>
+        </Blue>
       </Container>
     </Styles>
   );

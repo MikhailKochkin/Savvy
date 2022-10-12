@@ -111,9 +111,14 @@ const Option = styled.div`
 `;
 
 const Programs = () => {
-  const [tag, setTag] = useState("english");
-  moment.locale("ru");
   const router = useRouter();
+
+  const [tag, setTag] = useState(
+    router.locale == "ru" ? "english" : "english_eng"
+  );
+  moment.locale("ru");
+
+  router.locale == "ru";
 
   useEffect(() => {
     // kick off the polyfill!
@@ -393,67 +398,89 @@ const Programs = () => {
 
   const { loading, error, data } = useQuery(COURSES_QUERY);
   if (loading) return <LoadingDummy />;
+  console.log("tag", tag);
   const filtered_courses = data.coursePages.filter((c) => c.tags.includes(tag));
+  console.log("filtered_courses", data.coursePages);
+
   return (
     <Styles id="course_search">
       <Search>
-        <div id="want">😏 Я хочу ...</div>
-        <Tags>
-          <Option active={tag == "english"} onClick={(e) => move("english")}>
-            Выучить Legal English
-          </Option>
-          <Option active={tag == "corp"} onClick={(e) => move("corp")}>
-            Работать с корпоративным правом
-          </Option>
-          <Option active={tag == "ip"} onClick={(e) => move("ip")}>
-            Работать в IT/IP
-          </Option>
-          <Option
-            active={tag == "real_estate"}
-            onClick={(e) => move("real_estate")}
-          >
-            Работать с недвижимостью
-          </Option>
-          {/* <Option onClick={(e) => setTag("real_estate")}>
+        {router.locale == "ru" && (
+          <>
+            <div id="want">😏 Я хочу ...</div>
+            <Tags>
+              <Option
+                active={tag == "english"}
+                onClick={(e) => move("english")}
+              >
+                Выучить Legal English
+              </Option>
+              <Option active={tag == "corp"} onClick={(e) => move("corp")}>
+                Работать с корпоративным правом
+              </Option>
+              <Option active={tag == "ip"} onClick={(e) => move("ip")}>
+                Работать в IT/IP
+              </Option>
+              <Option
+                active={tag == "real_estate"}
+                onClick={(e) => move("real_estate")}
+              >
+                Работать с недвижимостью
+              </Option>
+              {/* <Option onClick={(e) => setTag("real_estate")}>
             Больше зарабатывать
           </Option> */}
-          <Option
-            active={tag == "law_school"}
-            onClick={(e) => move("law_school")}
-          >
-            Закончить юрфак
-          </Option>
-          <Option
-            active={tag == "litigation"}
-            onClick={(e) => move("litigation")}
-          >
-            Стать судебным юристом
-          </Option>
-          <Option
-            active={tag == "first_job"}
-            onClick={(e) => move("first_job")}
-          >
-            Найти первую работу
-          </Option>
-          <Option active={tag == "civil"} onClick={(e) => move("civil")}>
-            Отточить знания гражданского права
-          </Option>
-          <Option active={tag == "tech"} onClick={(e) => move("tech")}>
-            Погрузиться в юридические технологии
-          </Option>
-          <Option id="create">
-            <a href="https://t.me/MikKochkin" target="_blank">
-              Создать свой курс на BeSavvy
-            </a>
-          </Option>
-        </Tags>
+              <Option
+                active={tag == "law_school"}
+                onClick={(e) => move("law_school")}
+              >
+                Закончить юрфак
+              </Option>
+              <Option
+                active={tag == "litigation"}
+                onClick={(e) => move("litigation")}
+              >
+                Стать судебным юристом
+              </Option>
+              <Option
+                active={tag == "first_job"}
+                onClick={(e) => move("first_job")}
+              >
+                Найти первую работу
+              </Option>
+              <Option active={tag == "civil"} onClick={(e) => move("civil")}>
+                Отточить знания гражданского права
+              </Option>
+              <Option active={tag == "tech"} onClick={(e) => move("tech")}>
+                Погрузиться в юридические технологии
+              </Option>
+              <Option id="create">
+                <a href="https://t.me/MikKochkin" target="_blank">
+                  Создать свой курс на BeSavvy
+                </a>
+              </Option>
+            </Tags>
+          </>
+        )}
+        {router.locale == "en" && (
+          <>
+            <div id="want">😏 I want to ...</div>
+            <Tags>
+              <Option
+                active={tag == "english_eng"}
+                onClick={(e) => move("english")}
+              >
+                Master Legal English
+              </Option>
+              <Option id="create">
+                <a href="https://t.me/MikKochkin" target="_blank">
+                  Create your own course
+                </a>
+              </Option>
+            </Tags>
+          </>
+        )}
       </Search>
-      {console.log(
-        "ddd",
-        filtered_courses.sort(
-          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-        )
-      )}
       <Container
         id="course_container"
         moreThanOne={data.coursePages.length > 1 ? true : false}

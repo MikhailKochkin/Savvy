@@ -121,6 +121,19 @@ const Container = styled.div`
   }
 `;
 
+const Blue = styled.div`
+  background: #171e2e;
+  background-image: url("/static/pattern.svg");
+  background-size: cover;
+  color: #dee1ec;
+  padding: 10px 30px;
+  border-radius: 15px;
+  width: 85%;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
 const Goal = (props) => {
   const { t } = useTranslation("coursePage");
   const router = useRouter();
@@ -168,24 +181,26 @@ const Goal = (props) => {
             </div>
           ))}
         </div>
-        <h2>
-          {/* {d.goal_header ? (
+        <Blue>
+          <h2>
+            {/* {d.goal_header ? (
               renderHTML(d.goal_header)
             ) : ( */}
-          <>
-            {router.locale == "ru" ? (
-              <>Для кого этот курс?</>
-            ) : (
-              <>Who is that course for?</>
-            )}
-          </>
-          {/* )} */}
-        </h2>
-        <div id="goal_examples">
-          <div className="audience">
-            {coursePage.audience && renderHTML(coursePage.audience)}
+            <>
+              {router.locale == "ru" ? (
+                <>Для кого этот курс?</>
+              ) : (
+                <>Who is this course for?</>
+              )}
+            </>
+            {/* )} */}
+          </h2>
+          <div id="goal_examples">
+            <div className="audience">
+              {coursePage.audience && renderHTML(coursePage.audience)}
+            </div>
           </div>
-        </div>
+        </Blue>
       </Container>
     </Styles>
   );

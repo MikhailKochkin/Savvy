@@ -395,6 +395,7 @@ const Action = (props) => {
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
+  const [promo, setPromo] = useState("");
   const [installments, setInstallments] = useState(
     props.coursePage.installments
   );
@@ -414,6 +415,7 @@ const Action = (props) => {
       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
         setPrice(price * p.value);
         setIsPromo(true);
+        setPromo(val);
       }
     });
   };
@@ -500,39 +502,31 @@ const Action = (props) => {
             </div>
           )}
 
-          {/* <ButtonOpen
+          <ButtonOpen
             id="coursePage_to_demolesson"
             // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
             // target="_blank"
 
             onClick={(e) => {
               e.preventDefault();
-              alert(
-                `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Он ответит на любой вопрос по нашим курсам. Задайте ему свой вопрос или просто скопируйте этот текст: Привет, расскажи про курс "${coursePage.title}" `
-              );
-              location.href =
-                "https://t.me/BeSavvyMentorBot?start=link_vINBAwrN4O";
-
-              // Router.push({
-              //   pathname: "/lesson",
-              //   query: {
-              //     id: demo_lesson.id,
-              //     type: "story",
-              //   },
-              // });
+              Router.push({
+                pathname: "/course",
+                query: {
+                  id: coursePage.id,
+                  // type: "story",
+                },
+              });
             }}
           >
-            Оставить заявку
-          </ButtonOpen> */}
+            {t("start_open_lesson")}
+          </ButtonOpen>
 
-          <ButtonOpen
+          <ButtonBuy
             id="coursePage_buy_button"
             onClick={async (e) => {
               e.preventDefault();
               if (!me) {
-                alert(
-                  `Сейчас мы откроем диалог с директором BeSavvy Михаилом Кочкиным. Оставьте свой вопрос и он ответит в течение пары часов. Можете просто скопировать этот текст: Привет, расскажи про курс "${props.coursePage.title}"`
-                );
+                alert(`Set up an account on BeSavvy`);
                 toggleModal();
               } else {
                 const res = await createOrder({
@@ -542,32 +536,32 @@ const Action = (props) => {
                       ? props.coursePage.discountPrice
                       : price,
                     userId: me.id,
+                    promocode: promo,
                   },
                 });
                 location.href = res.data.createOrder.url;
               }
             }}
           >
-            {installments &&
-              (loading_data ? `Готовим покупку...` : t("buy_installments"))}
-            {!installments && (loading_data ? `Готовим покупку...` : t("buy"))}
-          </ButtonOpen>
-          <div className="guarantee">Гарантия возврата денег</div>
+            {installments && (loading_data ? `...` : t("buy_installments"))}
+            {!installments && (loading_data ? `...` : t("buy"))}
+          </ButtonBuy>
+          <div className="guarantee">{t("guarantee")}</div>
           <div className="details">
-            {installments && (
+            {/* {installments && (
               <div className="">
                 ◼️ рассрочка на {installments - 1}{" "}
                 {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
               </div>
-            )}
+            )} */}
             <div className="">
-              ◼️ {coursePage.lessons.length} онлайн{" "}
-              {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")}
+              ◼️ {coursePage.lessons.length} {t("online_lessons")}
+              {/* {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")} */}
             </div>
-            {price > 4000 && <div className="">◼️ 4 вебинара</div>}
-            <div className="">◼️ Пожизненный доступ</div>
-            <div className="">◼️ Чат с автором курса</div>
-            <div className="">◼️ Сертификат об окончании</div>
+            {price > 4000 && <div className="">◼️ {t("webinars")}</div>}
+            <div className="">◼️ {t("access")}</div>
+            <div className="">◼️ {t("chat")}</div>
+            <div className="">◼️ {t("certificate")}</div>
             {props.coursePage.promocode && (
               <div id="promo">
                 <input
@@ -578,9 +572,7 @@ const Action = (props) => {
             )}
           </div>
           <div className="open">
-            <div className="">
-              После покупки нажмите сюда, чтобы получить доступ к курсу
-            </div>
+            <div className="">{t("after")}</div>
             <OpenCourse
               id="coursePage_open_course_button"
               onClick={async (e) => {
@@ -619,15 +611,11 @@ const Action = (props) => {
                     },
                   });
                 } else {
-                  alert(
-                    "Не нашли ваш платеж. Если вы считаете, что произошла ошибка, напишите нам."
-                  );
+                  alert("Payment not found.");
                 }
               }}
             >
-              {updated_loading || enroll_loading
-                ? "Проверяем..."
-                : "Открыть доступ"}
+              {updated_loading || enroll_loading ? t("check") : t("open_acess")}
             </OpenCourse>
           </div>
         </Contact>

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   width: 100%;
@@ -215,6 +216,8 @@ const TeacherBoxBig = styled.div`
 const Teachers = (props) => {
   const d = props.data;
   const { coursePage } = props;
+  const { t } = useTranslation("coursePage");
+
   let colors = [
     "#4db0de",
     "#9D5AE5",
@@ -232,7 +235,7 @@ const Teachers = (props) => {
   return (
     <Styles>
       <Container>
-        <h2>Автор</h2>
+        <h2>{t("course_authors")}</h2>
         <TeachersList>
           {authors.map((a, i) => (
             <TeacherBoxBig>

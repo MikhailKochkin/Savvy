@@ -5,6 +5,7 @@ import moment from "moment";
 import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import renderHTML from "react-render-html";
+import { useTranslation } from "next-i18next";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION($id: String!, $comment: String) {
@@ -138,16 +139,14 @@ const Row = styled.div`
 `;
 
 const DeleteClient = (props) => {
+  const { t } = useTranslation("lesson");
+
   const { clientId } = props;
   const [deleteClient, { data, loading }] = useMutation(DELETE_CLIENT_MUTATION);
   return (
     <button
       onClick={() => {
-        if (
-          confirm(
-            "Вы точно хотите удалить эту запись? Запись исчезнет после перезагрузки страницы."
-          )
-        ) {
+        if (confirm("Sure?")) {
           deleteClient({
             variables: {
               id: props.clientId,
@@ -158,7 +157,7 @@ const DeleteClient = (props) => {
         }
       }}
     >
-      {loading ? "Удаляем..." : "Удалить"}
+      {loading ? t("deleting") : t("delete")}
     </button>
   );
 };

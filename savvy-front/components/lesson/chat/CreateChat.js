@@ -140,9 +140,17 @@ const CreateChat = (props) => {
       ))}
       <Bottom>
         <div className="number_box">
-          {/* <div className="number">
-            <button onClick={(e) => setNum(num - 1)}>-1</button>
-          </div> */}
+          <div className="number">
+            <button
+              onClick={(e) => {
+                let old_messages = [...messages];
+                let popped = old_messages.pop();
+                setMessages([...old_messages]);
+              }}
+            >
+              -1
+            </button>
+          </div>
           <div className="number">
             <button
               onClick={(e) => {

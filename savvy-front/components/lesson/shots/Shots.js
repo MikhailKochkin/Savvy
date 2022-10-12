@@ -3,9 +3,10 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
+import { useTranslation } from "next-i18next";
+
 import DeleteSingleShot from "../../delete/DeleteSingleShot";
 import UpdateShots from "./UpdateShots";
-
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import { CURRENT_USER_QUERY } from "../../User";
 
@@ -167,6 +168,7 @@ const Progress = styled.div`
 const Shots = (props) => {
   const [num, setNum] = useState(1);
   const [update, setUpdate] = useState(false);
+  const { t } = useTranslation("lesson");
 
   const { comments, parts, shotID, lessonID, me, shotUser, title, userData } =
     props;
@@ -202,7 +204,7 @@ const Shots = (props) => {
       )}
       {me && !props.story && (
         <SwitchButton name="update" onClick={(e) => setUpdate(!update)}>
-          Изменить
+          {update ? t("back") : t("update")}
         </SwitchButton>
       )}
 

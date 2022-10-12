@@ -6,11 +6,13 @@ import { useMutation, gql } from "@apollo/client";
 import Button from "@material-ui/core/Button";
 import { htmlToText } from "html-to-text";
 import { withStyles } from "@material-ui/core/styles";
+import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from "next-i18next";
+
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
 import { CURRENT_USER_QUERY } from "../../User";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import { v4 as uuidv4 } from "uuid";
 
 const CREATE_TEXTEDITORRESULT_MUTATION = gql`
   mutation CREATE_TEXTEDITORRESULT_MUTATION(
@@ -346,6 +348,8 @@ const SingleTextEditor = (props) => {
   const [type, setType] = useState("");
   const [mistakesShown, setMistakesShown] = useState(false);
 
+  const { t } = useTranslation("lesson");
+
   const [createTextEditorResult, { data, loading, error }] = useMutation(
     CREATE_TEXTEDITORRESULT_MUTATION
   );
@@ -547,7 +551,7 @@ const SingleTextEditor = (props) => {
         !story && (
           <>
             <StyledButton onClick={(e) => setUpdate(!update)}>
-              {update ? "Назад" : "Изменить"}
+              {update ? t("back") : t("update")}
             </StyledButton>
             <DeleteSingleTextEditor
               id={props.textEditor.id}
@@ -764,7 +768,7 @@ const SingleTextEditor = (props) => {
                     }, 3000);
                   }}
                 >
-                  {checking ? "Проверяем..." : "Ответить"}
+                  {checking ? t("checking") : t("check")}
                 </button>
                 {quizResult === false && <Comment>{quiz.ifWrong}</Comment>}
                 {quizResult === true && <Comment>{quiz.ifRight}</Comment>}

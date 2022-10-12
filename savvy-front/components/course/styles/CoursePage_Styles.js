@@ -28,7 +28,8 @@ export const CourseInfo = styled.div`
 `;
 
 export const LessonsInfo = styled.div`
-  margin-top: 2%;
+  margin-top: 30px;
+
   padding: 0 3%;
   h1 {
     line-height: 1.2;
@@ -46,6 +47,10 @@ export const Data = styled.div`
   background: #fff;
   border-radius: 2rem;
   padding: 2% 3%;
+  box-shadow: 0 4px 6px -7px rgb(0 0 0 / 5%), 0 4px 30px -9px rgb(0 0 0 / 10%);
+  .description {
+    margin-top: 20px;
+  }
   p {
     margin: 0;
   }
@@ -105,6 +110,8 @@ export const PayBox = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2% 2%;
+  box-shadow: 0 4px 6px -7px rgb(0 0 0 / 5%), 0 4px 30px -9px rgb(0 0 0 / 10%);
+
   @media (max-width: 1000px) {
     margin-top: 20px;
     margin-left: 0px;
@@ -130,6 +137,24 @@ export const Lessons = styled.div`
   justify-content: space-between;
   @media (max-width: 800px) {
     /* height: 200px; */
+  }
+`;
+
+export const Syllabus = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .week_number {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+  @media (max-width: 800px) {
+    .week_number {
+      margin: 15px 0;
+    }
   }
 `;
 
@@ -167,7 +192,8 @@ export const Header2 = styled.div`
 
 export const Total = styled.div`
   font-size: 1.6rem;
-  margin: 1.5% 0;
+  margin: 30px 0;
+
   @media (max-width: 800px) {
     font-size: 1.8rem;
     margin-bottom: 6%;

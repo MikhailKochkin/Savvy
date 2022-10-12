@@ -4,6 +4,7 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import Button from "@material-ui/core/Button";
@@ -117,13 +118,15 @@ const CreateProblem = (props) => {
     setText(dataFromChild);
   };
   const { t } = useTranslation("lesson");
+  const router = useRouter();
 
   const getSteps = (val) => {
     setSteps([...val]);
   };
 
   const { lessonID, lesson } = props;
-  const placeholder = `<h2><p>План задачи</p></h2><p>1. Заголовок: название задачи. Сделайте его заголовком, нажав на кнопку <b>H</b>.</p><p>2. Опишите условия кейса</p><p>3. Запишите вопрос к задаче. Визуально выделите его, нажав на кнопку с двумя точками.</p><p>4. Ответ к задаче. Его нужно будет скрыть от студента, нажав на кнопку с минусом по центру диалогового окна. В появившемся окне напишите слово "Ответ". Ответ станет доступен только после решения задачи студентом.</p>`;
+  const rus_placeholder = `<h2><p>План задачи</p></h2><p>1. Заголовок: название задачи. Сделайте его заголовком, нажав на кнопку <b>H</b>.</p><p>2. Опишите условия кейса</p><p>3. Запишите вопрос к задаче. Визуально выделите его, нажав на кнопку с двумя точками.</p><p>4. Ответ к задаче. Его нужно будет скрыть от студента, нажав на кнопку с минусом по центру диалогового окна. В появившемся окне напишите слово "Ответ". Ответ станет доступен только после решения задачи студентом.</p>`;
+  const eng_placeholder = `<h2><p>Case Study plan</p></h2><p>1. Title: the name of the case study. Add title styles by pressing <b>the H button </b>.</p><p>2. Explain the case</p><p>3. Write down the question to the case. Highlight it visually by clicking on the button with two dots.</p><p>4. Write down the solution to case study. You can hide it from the student by clicking on the button with a minus in the middle of the dialog box. In the window that appears, type the word "Answer". The answer will be available only after the student has solved the problem.</p>`;
   // const getNode = (type, id) => {
   //   setNodeID(id);
   //   setNodeType(type);
@@ -131,11 +134,11 @@ const CreateProblem = (props) => {
 
   return (
     <Styles>
-      <Title>Новая задача</Title>
+      <Title>{t("Problem")}</Title>
       <DynamicLoadedEditor
         getEditorText={myCallback}
         problem={true}
-        value={placeholder}
+        value={router.locale == "ru" ? rus_placeholder : eng_placeholder}
       />
       <NewProblemBuilder
         lessonID={lesson.id}

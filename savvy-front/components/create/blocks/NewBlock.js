@@ -94,6 +94,8 @@ const NewBlock = (props) => {
       {!saved && type == "Note" && (
         <CreateNote lessonID={lesson.id} getResult={getResult} />
       )}
+      <h3>{t("guiding_questions")}</h3>
+
       {saved && type == "Note" && data && (
         <Note
           text={data.text}
@@ -156,17 +158,16 @@ const NewBlock = (props) => {
           lessonID={lesson.id}
         />
       )}
-      <h3>Наводящие вопросы:</h3>
       {!saved && (
         <>
           <ButtonTwo onClick={(e) => setType("Note")}>
-            Добавить заметку
+            {t("add_note")}{" "}
           </ButtonTwo>
           <ButtonTwo onClick={(e) => setType("NewTest")}>
-            Добавить тест
+            {t("add_test")}
           </ButtonTwo>
           <ButtonTwo onClick={(e) => setType("Quiz")}>
-            Добавить вопрос
+            {t("add_quiz")}
           </ButtonTwo>
         </>
       )}

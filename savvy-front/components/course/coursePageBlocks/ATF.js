@@ -219,11 +219,14 @@ const AuthorsInfo = styled.div`
   justify-content: flex-start;
   .info {
     margin-top: 10px;
-
+    line-height: 1.6;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    .names {
+      margin-right: 15px;
+    }
   }
 `;
 
@@ -362,7 +365,7 @@ const ATF = (props) => {
                   {course.authors.length > 0 ? (
                     <AuthorsInfo>
                       <div>
-                        <b>Авторы курса: </b>
+                        <b>{t("course_authors")}</b>
                       </div>
                       {course.authors.map((c) => (
                         <div className="info">
@@ -377,12 +380,34 @@ const ATF = (props) => {
                       ))}
                     </AuthorsInfo>
                   ) : (
-                    <div>
-                      Автор курса: {course.user.name} {course.user.surname}.{" "}
-                      {course.user &&
-                        course.user.work &&
-                        renderHTML(course.user.work)}
-                    </div>
+                    <AuthorsInfo>
+                      <div>
+                        <b>{t("course_authors")}</b>
+                      </div>
+                      <div className="info">
+                        <div className="image_container">
+                          <img src={course.user.image} />
+                        </div>
+                        <div className="names">
+                          {course.user.name} {course.user.surname}
+                        </div>{" "}
+                        <div>
+                          {course.user &&
+                            course.user.work &&
+                            renderHTML(course.user.work)}
+                        </div>
+                      </div>
+                    </AuthorsInfo>
+                    // <div>
+                    //   Автор курса:
+                    //   <div className="image_container">
+                    //     <img src={c.image} />
+                    //   </div>
+                    //   {course.user.name} {course.user.surname}.{" "}
+                    //   {course.user &&
+                    //     course.user.work &&
+                    //     renderHTML(course.user.work)}
+                    // </div>
                   )}
                 </div>
               )}

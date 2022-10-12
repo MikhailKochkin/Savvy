@@ -32,42 +32,36 @@ const Button = styled.button`
   }
 `;
 
-class DeleteSingleQuiz extends Component {
-  // const { t } = useTranslation("lesson");
+const DeleteSingleQuiz = (props) => {
+  const { t } = useTranslation("lesson");
 
-  render() {
-    const { shotID, lessonID } = this.props;
-    return (
-      <Mutation
-        mutation={DELETE_SHOT_MUTATION}
-        variables={{ id: shotID }}
-        refetchQueries={() => [
-          {
-            query: SINGLE_LESSON_QUERY,
-            variables: { id: lessonID },
-          },
-        ]}
-      >
-        {(deleteShot, { error, loading }) => (
-          <Button
-            onClick={() => {
-              if (
-                confirm(
-                  "Вы точно хотите удалить эту раскадровку? Она исчезнет после перезагрузки страницы."
-                )
-              ) {
-                deleteShot().catch((error) => {
-                  alert(error.message);
-                });
-              }
-            }}
-          >
-            {loading ? "Удаляем..." : "Удалить"}
-          </Button>
-        )}
-      </Mutation>
-    );
-  }
-}
+  const { shotID, lessonID } = props;
+  return (
+    <Mutation
+      mutation={DELETE_SHOT_MUTATION}
+      variables={{ id: shotID }}
+      refetchQueries={() => [
+        {
+          query: SINGLE_LESSON_QUERY,
+          variables: { id: lessonID },
+        },
+      ]}
+    >
+      {(deleteShot, { error, loading }) => (
+        <Button
+          onClick={() => {
+            if (confirm("Sure?")) {
+              deleteShot().catch((error) => {
+                alert(error.message);
+              });
+            }
+          }}
+        >
+          {loading ? t("deleting") : t("delete")}
+        </Button>
+      )}
+    </Mutation>
+  );
+};
 
 export default DeleteSingleQuiz;

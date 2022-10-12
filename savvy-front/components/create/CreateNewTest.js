@@ -128,7 +128,8 @@ const AnswerOption = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2% 0;
-  border-bottom: 1px solid #edefed;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed #dee2e6;
   .question {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
@@ -281,7 +282,7 @@ const CreateNewTest = (props) => {
       >
         {(createNewTest, { loading, error }) => (
           <div className="styles">
-            <label for="types">Тип задания</label>
+            <label for="types">{t("type")}</label>
             <br />
             <select
               name="types"
@@ -289,15 +290,15 @@ const CreateNewTest = (props) => {
               defaultValue={type}
               onChange={(e) => setType(e.target.value)}
             >
-              <option value="TEST">Тест</option>
-              <option value="FORM">Форма</option>
+              <option value="TEST">Test</option>
+              <option value="FORM">Form</option>
             </select>
 
             <Comment>
               <DynamicLoadedEditor
                 id="question"
                 name="question"
-                placeholder="Вопрос"
+                placeholder="Question"
                 getEditorText={setIf}
               />
             </Comment>
@@ -312,7 +313,7 @@ const CreateNewTest = (props) => {
                       <DynamicLoadedEditor
                         index={i + 1}
                         name={i}
-                        placeholder={`Вариант ответа ${i + 1}`}
+                        placeholder={`Answer ${i + 1}`}
                         value={val}
                         getEditorText={myCallback}
                       />
@@ -321,8 +322,8 @@ const CreateNewTest = (props) => {
                       defaultValue={false}
                       onChange={(e) => handleCorrect(e.target.value, i)}
                     >
-                      <option value={true}>Правильно</option>
-                      <option value={false}>Неправильно</option>
+                      <option value={true}>{t("correct")}</option>
+                      <option value={false}>{t("wrong")}</option>
                     </select>
                     <div className="comment">
                       <DynamicLoadedEditor
@@ -330,7 +331,7 @@ const CreateNewTest = (props) => {
                         name={i}
                         value={val2}
                         getEditorText={handleArray2}
-                        placeholder={`Пояснение к ответу ${i + 1}`}
+                        placeholder={`Explainer ${i + 1}`}
                       />
                     </div>
                   </AnswerOption>
@@ -374,7 +375,7 @@ const CreateNewTest = (props) => {
               <DynamicLoadedEditor
                 id="ifWrong"
                 name="ifWrong"
-                placeholder={`Объяснение вопроса`}
+                placeholder={`Explanation`}
                 getEditorText={setIf}
               />
             </Comment>
@@ -382,7 +383,7 @@ const CreateNewTest = (props) => {
               <DynamicLoadedEditor
                 id="ifRight"
                 name="ifRight"
-                placeholder={`Подводка к следующему блоку`}
+                placeholder={`Link to the next block`}
                 getEditorText={setIf}
               />
             </Comment>
@@ -399,7 +400,7 @@ const CreateNewTest = (props) => {
             >
               {loading ? t("saving") : t("save")}
             </ButtonTwo>
-            <Message id="Message">Вы создали новый тестовый вопрос!</Message>
+            {/* <Message id="Message">!</Message> */}
           </div>
         )}
       </Mutation>

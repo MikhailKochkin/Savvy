@@ -56,6 +56,23 @@ const ButtonTwo = styled.button`
   }
 `;
 
+const ButtonThree = styled.button`
+  background: none;
+  padding: 10px 20px;
+  border: 2px solid #69696a;
+  border-radius: 5px;
+  font-family: Montserrat;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #323334;
+  cursor: pointer;
+  margin: 30px 0;
+  transition: 0.3s;
+  &:hover {
+    background: #f4f4f4;
+  }
+`;
+
 const Menu = styled.div`
   border-bottom: 1px solid #adb5bd;
   width: 100%;
@@ -322,13 +339,13 @@ const LessonBlock = (props) => {
   return (
     <>
       {props.index == 0 && (
-        <ButtonTwo
+        <ButtonThree
           onClick={(e) => {
             props.addPlace(0);
           }}
         >
-          Добавить первый блок
-        </ButtonTwo>
+          {t("add_first")}
+        </ButtonThree>
       )}
       {props.comment && <Box>{renderHTML(props.comment)}</Box>}
 

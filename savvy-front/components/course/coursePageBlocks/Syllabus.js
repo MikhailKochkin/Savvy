@@ -97,7 +97,7 @@ const CoursePage = (props) => {
                       id="show_all_lessons"
                       onClick={(e) => setOpen(props.lessons.length)}
                     >
-                      Показать все
+                      {t("show")}
                     </Button>
                   )}
                 </>

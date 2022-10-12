@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   width: 100%;
@@ -151,28 +153,32 @@ const Bubble = styled.div`
 `;
 
 const MainImage = () => {
+  const { t } = useTranslation("landing");
+
   return (
     <Styles>
       <Container>
         <Row id="row1">
           <Bubble id="purple1">
-            Симулятор подготовки <br /> договоров
+            {renderHTML(t("bubble1"))}
+            {/* Симулятор подготовки <br /> договоров */}
           </Bubble>
         </Row>
         <Row id="row2">
           <Bubble id="grey1">
-            Занятия с экспертами и <br />
-            авторами курсов
+            {renderHTML(t("bubble2"))}
+            {/* Занятия с экспертами и <br />
+            авторами курсов */}
           </Bubble>
-          <Bubble id="orange1">Решение кейсов</Bubble>
+          <Bubble id="orange1">{t("bubble3")}</Bubble>
         </Row>
         <Row id="row3">
-          <Bubble id="purple2">Тренажер для подготовки к экзаменам</Bubble>
-          <Bubble id="grey2">Сообщество выпускников</Bubble>
+          <Bubble id="purple2">{t("bubble4")}</Bubble>
+          <Bubble id="grey2">{t("bubble5")}</Bubble>
         </Row>
         <Row id="row4">
-          <Bubble id="grey3">Обучение на реальных проектах</Bubble>
-          <Bubble id="orange2">И еще 27 форматов обучения ...</Bubble>
+          <Bubble id="grey3">{t("bubble6")}</Bubble>
+          <Bubble id="orange2">{renderHTML(t("bubble7"))}</Bubble>
         </Row>
       </Container>
     </Styles>

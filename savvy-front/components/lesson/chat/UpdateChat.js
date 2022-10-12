@@ -90,8 +90,8 @@ const UpdateChat = (props) => {
   );
 
   const getMessage = (data) => {
-    let old_mess = [...mess];
-    old_mess.splice(data.number - 1, 1, data);
+    let old_messages = [...mess];
+    old_messages.splice(data.number - 1, 1, data);
     setMess([...old_messages]);
   };
 
@@ -138,12 +138,37 @@ const UpdateChat = (props) => {
           updateText={updateText}
         />
       ))}
-      {/* <button className="but" onClick={(e) => setNum(num - 1)}>
-        -1
-      </button>
-      <button className="but" onClick={(e) => setNum(num + 1)}>
-        +1
-      </button> */}
+      <div className="number">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            let old_messages = [...mess];
+            let popped = old_messages.pop();
+            setMess([...old_messages]);
+          }}
+        >
+          -1
+        </button>
+      </div>
+      <div className="number">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setMess([
+              ...mess,
+              {
+                number: 0,
+                author: "author",
+                text: "",
+                image: "",
+                reactions: [],
+              },
+            ]);
+          }}
+        >
+          +1
+        </button>
+      </div>
       <ButtonTwo
         onClick={async (e) => {
           e.preventDefault();

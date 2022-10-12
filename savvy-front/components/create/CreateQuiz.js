@@ -194,15 +194,15 @@ const CreateQuiz = (props) => {
           >
             <fieldset>
               <Answers>
-                <label for="types">Тип задания</label>
+                <label for="types">{t("type")}</label>
                 <select
                   name="types"
                   id="types"
                   defaultValue={type}
                   onChange={(e) => setType(e.target.value)}
                 >
-                  <option value="TEST">Вопрос</option>
-                  <option value="FORM">Форма</option>
+                  <option value="TEST">Question</option>
+                  <option value="FORM">Form</option>
                 </select>
 
                 <AnswerOption>
@@ -210,14 +210,14 @@ const CreateQuiz = (props) => {
                     <DynamicLoadedEditor
                       id="question"
                       name="question"
-                      placeholder="Вопрос"
+                      placeholder="Question"
                       getEditorText={setQuestion}
                     />
                   </Comment>
                   <textarea
                     id="answer"
                     name="answer"
-                    placeholder="Ответ"
+                    placeholder="Answer"
                     defaultValue={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                   />
@@ -225,7 +225,7 @@ const CreateQuiz = (props) => {
                     <DynamicLoadedEditor
                       id="answer"
                       name="answer"
-                      placeholder="Комментарий в случае правильного ответа"
+                      placeholder="Explainer if the answer is right"
                       getEditorText={setIfRight}
                     />
                   </Comment>
@@ -233,7 +233,7 @@ const CreateQuiz = (props) => {
                     <DynamicLoadedEditor
                       id="answer"
                       name="answer"
-                      placeholder="Комментарий в случае неправильного ответа"
+                      placeholder="Explainer if the answer is wrong"
                       getEditorText={setIfWrong}
                     />
                   </Comment>
@@ -242,7 +242,7 @@ const CreateQuiz = (props) => {
                 <ButtonTwo type="submit">
                   {loading ? t("saving") : t("save")}
                 </ButtonTwo>
-                <Message id="Message">Вы создали новый вопрос!</Message>
+                {/* <Message id="Message">Вы создали новый вопрос!</Message> */}
               </Answers>
             </fieldset>
           </Form>

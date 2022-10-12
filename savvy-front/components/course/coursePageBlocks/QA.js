@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Question from "./Question";
 import Modal from "styled-react-modal";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const Styles = styled.div`
   width: 100%;
@@ -163,14 +164,51 @@ const QA = (props) => {
     },
   ];
 
+  const eng_questions = [
+    {
+      q: "How do I join the course?",
+      a: "It's easy to join - you have to register on the website and check out the first lesson. Then pay for the course and get access to the rest of the classes",
+    },
+    {
+      q: "How long will it take me to complete the course?",
+      a: "2-4 hours per week. It is important for us not to overload you or interfere with your studies/work.",
+    },
+    {
+      q: "Will I have access to the course after I complete it?",
+      a: "Yes, you will have access to the course permanently",
+    },
+    {
+      q: "What is the format of the course?",
+      a: "You take online lessons at your own pace on the besavvy.app platform during the week, ask questions to the instructor in chat and meet them at webinars.",
+    },
+    {
+      q: "How is the homework checked?",
+      a: "Automatically on the platform. For any additional questions, you will be able to write directly to the authors in the chat room.",
+    },
+    {
+      q: "Are we going to have webinars?",
+      a: "Yes, they usually take place every 2 weeks.",
+    },
+    {
+      q: "And if I have a question, will someone be able to help me?",
+      a: "Yes, there is a course chat in Discord, which will be closely monitored by the course creators and authors.",
+    },
+    {
+      q: "I have a question that's not on the list...",
+      a: "Go to the open lesson, you can ask any question there at the very end.",
+    },
+  ];
+
+  const router = useRouter();
+
   return (
     <Styles>
       <Container ref={nodeRef}>
         <h2>{t("faq")}</h2>
         <QuestionsList>
-          {questions.map((m) => (
-            <Question d={m} />
-          ))}
+          {router.locale == "ru" && questions.map((m) => <Question d={m} />)}
+          {router.locale != "ru" &&
+            eng_questions.map((m) => <Question d={m} />)}
         </QuestionsList>
       </Container>
     </Styles>

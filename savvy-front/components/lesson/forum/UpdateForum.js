@@ -3,9 +3,12 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+
+import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 
 const UPDATE_FORUM_MUTATION = gql`
   mutation UPDATE_FORUM_MUTATION($id: String!, $text: String) {
@@ -38,7 +41,7 @@ const Styles = styled.div`
     font-size: 1.5rem;
     margin-bottom: 2%;
   }
-  #Header {
+  #header {
     font-weight: bold;
     font-size: 1.8rem;
     margin-bottom: 0.5%;
@@ -54,9 +57,13 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
 const UpdateForum = (props) => {
   const [text, setText] = useState(props.text);
   const classes = useStyles();
+  const router = useRouter();
+
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
+  const { t } = useTranslation("lesson");
+
   return (
     <Styles>
       <Mutation
@@ -74,10 +81,25 @@ const UpdateForum = (props) => {
       >
         {(updateForum, { loading, error }) => (
           <>
-            <div id="Header">Изменить чат</div>
+            <div id="header">
+              {router.locale == "ru" ? (
+                <div>Изменить чат</div>
+              ) : (
+                <div>Update Chat</div>
+              )}
+            </div>
             <div>
-              Внутри одного урока может быть только один форум. Но вы можете
-              внести в него изменения.
+              {router.locale == "ru" ? (
+                <div>
+                  Внутри одного урока может быть только один форум. Но вы можете
+                  внести в него изменения.
+                </div>
+              ) : (
+                <div>
+                  There can only be one chat in a lesson. But you can update it
+                  anytime.
+                </div>
+              )}
             </div>
             <DynamicLoadedEditor
               getEditorText={myCallback}
@@ -91,10 +113,10 @@ const UpdateForum = (props) => {
               onClick={async (e) => {
                 e.preventDefault();
                 await updateForum();
-                alert("Изменили!");
+                alert("Done!");
               }}
             >
-              {loading ? "Изменяю" : "Изменить"}
+              {loading ? t("saving") : t("save")}
             </Button>
           </>
         )}

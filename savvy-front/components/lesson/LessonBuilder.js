@@ -278,7 +278,7 @@ const LessonBuilder = (props) => {
             num: 4,
             comment: `
       <p>In the next unit, you have an interesting thought experiment to conduct.</p>
-      <p>What questions do you think will pop into your students' minds after reading the previous longreaf? Maybe they have asked you some questions before?</p>
+      <p>What questions do you think will pop into your students' minds after reading the previous longread? Maybe they have asked you some questions before?</p>
       <p>Let's try to formulate these questions now (on behalf of the student) and answer them. It would be a great way to end the theory part of the lesson.</p>
 
       `,

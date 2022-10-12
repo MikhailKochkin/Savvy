@@ -5,6 +5,7 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
 
 const UPDATE_SHOTS_MUTATION = gql`
   mutation UPDATE_SHOTS_MUTATION(
@@ -118,6 +119,7 @@ const CreateShot = (props) => {
   const [parts, setParts] = useState([...props.parts]);
   const [comments, setComments] = useState([...props.comments]);
   const [title, setTitle] = useState(props.title);
+  const { t } = useTranslation("lesson");
 
   const myCallback = (dataFromChild, name, index) => {
     let new_parts = parts;
@@ -171,7 +173,7 @@ const CreateShot = (props) => {
             id="title"
             name="title"
             spellCheck={true}
-            placeholder="Название документа"
+            placeholder="Doc name"
             autoFocus
             required
             value={title}
@@ -185,13 +187,13 @@ const CreateShot = (props) => {
                     index={i}
                     value={parts[i]}
                     getEditorText={myCallback}
-                    placeholder={`Текст ${i + 1}`}
+                    placeholder={`Text ${i + 1}`}
                   />
                   <div className="com">
                     <DynamicLoadedEditor
                       index={i}
                       value={comments[i]}
-                      placeholder={`Комментарий к тексту ${i + 1}`}
+                      placeholder={`Comment ${i + 1}`}
                       getEditorText={myCallback2}
                     />
                   </div>
@@ -199,8 +201,8 @@ const CreateShot = (props) => {
               </Row>
             ))}
           </>
-          <More onClick={(e) => more()}>Новый слайд</More>
-          <Remove onClick={(e) => remove()}>Убрать слайд</Remove>
+          <Remove onClick={(e) => remove()}>-1</Remove>
+          <More onClick={(e) => more()}>+1</More>
           <Save
             onClick={async (e) => {
               e.preventDefault();
@@ -210,7 +212,7 @@ const CreateShot = (props) => {
               props.passUpdated();
             }}
           >
-            {loading ? "Сохраняем..." : "Сохранить"}
+            {loading ? t("saving") : t("save")}
           </Save>
         </TestCreate>
       )}

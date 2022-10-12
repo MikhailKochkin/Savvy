@@ -62,6 +62,7 @@ const TextBar = styled.div`
   padding: 2%;
   padding-left: 2%;
   position: relative;
+  box-shadow: 0 4px 6px -7px rgb(0 0 0 / 5%), 0 4px 30px -9px rgb(0 0 0 / 10%);
   .emoji {
     position: absolute;
     font-size: 2.4rem;

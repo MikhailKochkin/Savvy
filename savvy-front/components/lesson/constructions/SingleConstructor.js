@@ -278,7 +278,7 @@ const SingleConstructor = (props) => {
     <>
       {me.id === construction.user.id && !story && (
         <StyledButton onClick={(e) => setUpdate(!update)}>
-          {update ? "Назад" : "Изменить"}
+          {!update ? t("update") : t("back")}
         </StyledButton>
       )}
       {!update && (

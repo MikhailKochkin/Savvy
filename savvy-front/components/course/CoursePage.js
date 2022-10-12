@@ -25,7 +25,7 @@ import {
   Total,
   Buttons,
   Button,
-  Details,
+  Syllabus,
   Video,
   Comment,
   Lessons,
@@ -44,6 +44,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       audience
       result
       tags
+      weeks
       tariffs
       methods
       reviews
@@ -237,7 +238,7 @@ const CoursePage = (props) => {
       lesResults.push(new_obj);
     });
 
-    // console.log("maxes", maxes);
+    console.log("maxes", maxes);
   }
 
   let openLesson;
@@ -269,6 +270,24 @@ const CoursePage = (props) => {
   if (me && coursePage.authors.filter((auth) => auth.id == me.id).length > 0) {
     i_am_author = true;
   }
+
+  function sliceIntoChunks(arr, chunkSize) {
+    const res = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      const chunk = arr.slice(i, i + chunkSize);
+      res.push(chunk);
+    }
+    return res;
+  }
+  let initial_lessons = [...coursePage.lessons]
+    .sort((a, b) => (a.number > b.number ? 1 : -1))
+    .filter((l) => l.type !== "HIDDEN");
+
+  let broken_lessons = sliceIntoChunks(
+    initial_lessons,
+    coursePage.weeks ? coursePage.weeks : 3
+  );
+  console.log("broken_lessons", broken_lessons);
   return (
     <>
       <div id="root"></div>
@@ -306,6 +325,9 @@ const CoursePage = (props) => {
                     )}
                   </>
                 )}
+                <div className="description">
+                  {coursePage.description && renderHTML(coursePage.description)}
+                </div>
               </Data>
               <PayBox>
                 {/* Карточка регистрации на сайте */}
@@ -341,18 +363,6 @@ const CoursePage = (props) => {
                   )}
               </PayBox>
             </CourseInfo>{" "}
-            {me && (
-              <Certificate
-                completed={(maxes.length / coursePage.lessons.length) * 100}
-                have_cert={have_cert}
-                studentId={me.id}
-                student={me}
-                coursePageId={coursePage.id}
-                coursePage={coursePage}
-                createdAt={have_cert ? cert.createdAt : null}
-                certId={have_cert ? cert.id : null}
-              />
-            )}
             <LessonsInfo>
               <Buttons>
                 <Button
@@ -373,33 +383,55 @@ const CoursePage = (props) => {
                   <Total>
                     {" "}
                     {t("total_lessons")}
-                    {lessons.length}
+                    <b>
+                      {lessons.filter((l) => l.type !== "HIDDEN").length}
+                    </b>{" "}
+                    <br /> {t("course_term")}{" "}
+                    <b>
+                      {parseInt(
+                        lessons.length /
+                          (coursePage.weeks ? coursePage.weeks : 4)
+                      ) == 0
+                        ? 1
+                        : parseInt(
+                            lessons.length /
+                              (coursePage.weeks ? coursePage.weeks : 4)
+                          )}
+                    </b>
                   </Total>
-                  <Lessons>
-                    {[...coursePage.lessons]
-                      .sort((a, b) => (a.number > b.number ? 1 : -1))
-                      .filter((l) => l.type !== "HIDDEN")
-                      .map((lesson, index) => (
-                        <>
-                          <LessonHeader
-                            me={me}
-                            key={lesson.id}
-                            name={lesson.name}
-                            lesson={lesson}
-                            lessonResult={maxes[index]}
-                            i_am_author={i_am_author}
-                            statements={
-                              lesson.forum ? lesson.forum.statements : null
-                            }
-                            coursePage={props.id}
-                            author={coursePage.user.id}
-                            open={index + 1 === 1}
-                            index={index + 1}
-                            coursePageId={coursePage.id}
-                          />
-                        </>
-                      ))}
-                  </Lessons>
+                  <Syllabus>
+                    {[...broken_lessons].map((b, i) => (
+                      <>
+                        <div className="week_number">
+                          {t("week")} {i + 1}
+                        </div>
+                        <Lessons>
+                          {b.map((lesson, index) => (
+                            <>
+                              <LessonHeader
+                                me={me}
+                                key={lesson.id}
+                                name={lesson.name}
+                                lesson={lesson}
+                                lessonResult={maxes.find(
+                                  (m) => m.lesson.id == lesson.id
+                                )}
+                                i_am_author={i_am_author}
+                                statements={
+                                  lesson.forum ? lesson.forum.statements : null
+                                }
+                                coursePage={props.id}
+                                author={coursePage.user.id}
+                                open={index + 1 === 1}
+                                index={index + 1}
+                                coursePageId={coursePage.id}
+                              />
+                            </>
+                          ))}
+                        </Lessons>
+                      </>
+                    ))}
+                  </Syllabus>
                 </>
               )}
 
@@ -421,7 +453,19 @@ const CoursePage = (props) => {
                   <Comment>{t("join_the_course")}</Comment>
                 ))}
             </LessonsInfo>
-            <Details>
+            {me && (
+              <Certificate
+                completed={(maxes.length / coursePage.lessons.length) * 100}
+                have_cert={have_cert}
+                studentId={me.id}
+                student={me}
+                coursePageId={coursePage.id}
+                coursePage={coursePage}
+                createdAt={have_cert ? cert.createdAt : null}
+                certId={have_cert ? cert.id : null}
+              />
+            )}
+            {/* <Details>
               {data.coursePage.audience && (
                 <div className="info">
                   <div className="header">
@@ -462,7 +506,7 @@ const CoursePage = (props) => {
                   <div>{renderHTML(data.coursePage.tariffs)}</div>
                 </div>
               )}
-            </Details>
+            </Details> */}
           </LessonStyles>
         </Container>
       </>

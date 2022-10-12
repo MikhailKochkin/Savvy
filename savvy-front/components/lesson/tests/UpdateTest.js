@@ -82,11 +82,13 @@ const AnswerOption = styled.div`
   display: flex;
   flex-direction: column;
   margin: 2% 0;
+  border-bottom: 1px solid #adb5bd;
+  padding-bottom: 20px;
   .question {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
     width: 80%;
-    min-height: 100px;
+    min-height: 50px;
     padding: 1.5%;
     font-size: 1.4rem;
     outline: 0;
@@ -96,7 +98,7 @@ const AnswerOption = styled.div`
     margin-top: 15px;
     border: 1px solid #c4c4c4;
     width: 80%;
-    min-height: 100px;
+    min-height: 50px;
     padding: 1.5%;
     font-size: 1.4rem;
     outline: 0;
@@ -158,12 +160,40 @@ const Complexity = styled.div`
   }
 `;
 
+const CustomSelect1 = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 30%;
+  @media (max-width: 800px) {
+    width: 65%;
+  }
+  cursor: pointer;
+  border: 1px solid grey;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin-right: 15px;
+  button {
+    border: none;
+    cursor: pointer;
+
+    background: none;
+    font-family: Montserrat;
+  }
+`;
+
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
   ssr: false,
 });
 
 const UpdateTest = (props) => {
+  const [options, setOptions] = useState(props.mes);
   const [answers, setAnswers] = useState(props.answers);
   const [comments, setComments] = useState(
     props.comments ? props.comments : new Array(props.answers.length).fill("")
@@ -210,9 +240,10 @@ const UpdateTest = (props) => {
   };
 
   const { testID, mes, lessonID } = props;
+  console.log("options", options, answers, comments);
   return (
     <Styles>
-      <label for="types">{t("type")}</label>
+      <label for="types">{t("type")}</label>{" "}
       <select
         name="types"
         id="types"
@@ -245,7 +276,7 @@ const UpdateTest = (props) => {
         </select>
       </Complexity>
       <Answers>
-        {mes.map((answer, i) => {
+        {options.map((answer, i) => {
           let an = `answer${i + 1}`;
           return (
             <AnswerOption id={an}>
@@ -255,6 +286,7 @@ const UpdateTest = (props) => {
                   name={i}
                   value={answer[0]}
                   getEditorText={handleArray}
+                  placeholder={`Вариант ответа ${i + 1}`}
                 />
               </div>
               <select
@@ -270,12 +302,44 @@ const UpdateTest = (props) => {
                   name={i}
                   value={answer[2]}
                   getEditorText={handleArray2}
+                  placeholder={`Комментарий к варианту ответа ${i + 1}`}
                 />
               </div>
             </AnswerOption>
           );
         })}
       </Answers>
+      <CustomSelect1>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            let old_options = [...options];
+            let popped = old_options.pop();
+            setOptions([...old_options]);
+            let old_answers = [...answers];
+            old_answers.pop();
+            let old_correct = [...correct];
+            old_correct.pop();
+            let old_comments = [...comments];
+            old_comments.pop();
+            setAnswers([...old_answers]);
+            setCorrect([...old_correct]);
+            setComments([...old_comments]);
+          }}
+        >
+          -1
+        </button>
+      </CustomSelect1>
+      <CustomSelect1>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setOptions([...options, ["", false, ""]]);
+          }}
+        >
+          +1
+        </button>
+      </CustomSelect1>
       <Comment>
         <DynamicLoadedEditor
           id="ifRight"

@@ -46,17 +46,17 @@ class QuizResult extends Component {
           quizes.map((q) => (
             <Box>
               <div>
-                <b>Вопрос: </b>
+                <b>Question: </b>
                 {renderHTML(q.question)}
               </div>
               <div className="column">
                 <div>
-                  <b>Правильный ответ:</b>
+                  <b>Correct answer:</b>
                 </div>{" "}
                 {renderHTML(q.answer)}
               </div>
               <div className="column">
-                <div>Полученные ответы:</div>
+                <div>Received answers:</div>
                 {results && results.length > 0 ? (
                   results
                     .filter((r) => r.quiz.id == q.id)
@@ -64,16 +64,12 @@ class QuizResult extends Component {
                       <div className="block">
                         {t.answer}{" "}
                         {t.correct &&
-                          (t.correct == true ? (
-                            <u>Правильно</u>
-                          ) : (
-                            "Неверно "
-                          ))}{" "}
+                          (t.correct == true ? <u>Correct</u> : "Wrong ")}{" "}
                         ({moment(t.createdAt).format("LLL")})
                       </div>
                     ))
                 ) : (
-                  <span>Не выполнен</span>
+                  <span>Not done</span>
                 )}
               </div>
             </Box>

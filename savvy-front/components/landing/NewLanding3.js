@@ -200,17 +200,16 @@ const Landing = (props) => {
         <NewNav />
         <div className="container">
           <div className="text">
-            <h1>Берём решение карьерных задач юристов на себя</h1>
+            <h1>{t("h1")}</h1>
             <div>
-              Поможем получить практические навыки и карьерный рост с помощью
-              интерактивных курсов, работы 1-на-1 и нетворкинга.
+              {t("h2")}
               {/* 
               Больше 20 интерактивных курсов от экспертов из Алруд, DLA Piper,
               Birch Legal и Никольская Консалтинг */}
             </div>
             <Buttons>
               <button id="main_page_button" onClick={(e) => slide()}>
-                Выбрать курс
+                {t("c2a")}
               </button>
             </Buttons>
           </div>

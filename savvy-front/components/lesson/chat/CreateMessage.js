@@ -158,7 +158,7 @@ const CreateMessage = (props) => {
             index={props.index}
             name="text"
             getEditorText={myCallback2}
-            placeholder="Фраза"
+            placeholder="Message"
             value={props.text}
           />
         </Frame>

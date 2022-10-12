@@ -25,8 +25,8 @@
   "checking": "Answering...",
   "show_correct": "Want to see the correct answer?",
   "outline_color": "We have outlined the correct answers with green color. Take a look at the question.",
-  "correct": "Well done",
-  "wrong": "Not exactly",
+  "correct": "Correct",
+  "wrong": "Incorrect",
   "correct_answer": "Correct answer",
   "yes": "Yes",
   "no": "No",
@@ -91,5 +91,10 @@
   "feedback_negative": "Negative feedback",
   "show_answer": "Show correct answer",
   "answer": "Answer",
-  "back_to_course": "Back to Course Page"
+  "back_to_course": "Back to Course Page",
+  "add_first": "Add first block",
+  "guiding_questions": "Guiding questions",
+  "add_note": "Add note",
+  "add_test": "Add quiz",
+  "add_quiz": "Add question"
 }

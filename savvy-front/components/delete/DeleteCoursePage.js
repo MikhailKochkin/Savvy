@@ -83,7 +83,7 @@ class DeleteCoursePage extends Component {
         {(DeleteCoursePage, { error }) => (
           <Button
             onClick={() => {
-              if (confirm("Вы точно хотите удалить страницу этого курса?")) {
+              if (confirm("Sure?")) {
                 DeleteCoursePage().catch((error) => {
                   alert(error.message);
                 });

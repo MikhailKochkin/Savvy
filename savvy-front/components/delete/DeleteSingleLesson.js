@@ -58,7 +58,7 @@ class DeleteSingleLesson extends Component {
         {(DeleteSandbox, { error }) => (
           <Button
             onClick={() => {
-              if (confirm("Вы точно хотите удалить этот урок?")) {
+              if (confirm("Sure?")) {
                 DeleteSandbox().catch((error) => {
                   alert(error.message);
                 });
@@ -69,7 +69,7 @@ class DeleteSingleLesson extends Component {
               }
             }}
           >
-            <Delete id="remove">Удалить урок</Delete>
+            <Delete id="remove">Delete Lesson</Delete>
           </Button>
         )}
       </Mutation>

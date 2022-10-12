@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import moment from "moment";
 
 const Card = styled.div`
@@ -117,6 +118,7 @@ const Down = styled.div`
 const Program = (props) => {
   const { t } = useTranslation("landing");
   moment.locale("ru");
+  const router = useRouter();
 
   const getNoun = (number, one, two, five) => {
     let n = Math.abs(number);
@@ -186,13 +188,20 @@ const Program = (props) => {
                     </div>
                     <div className="price_box_description"> След. занятие</div>
                   </>
-                ) : (
+                ) : router.locale == "ru" ? (
                   <>
                     <div className="price_box_discount">
                       {props.lessons.length}{" "}
                       {getNoun(props.lessons.length, "урок", "урока", "уроков")}
                     </div>
                     <div className="price_box_description">в курсе </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="price_box_discount">
+                      {props.lessons.length} lessons{" "}
+                    </div>
+                    <div className="price_box_description">in the course </div>
                   </>
                 ))}
             </div>

@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const CREATE_FORUM_MUTATION = gql`
   mutation createForum($lessonId: String!, $text: String) {
@@ -65,6 +67,10 @@ const CreateForum = (props) => {
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
+
+  const { t } = useTranslation("lesson");
+  const router = useRouter();
+
   return (
     <Styles>
       <Mutation
@@ -82,10 +88,10 @@ const CreateForum = (props) => {
       >
         {(createForum, { loading, error }) => (
           <Form>
-            <div id="Header">Новый чат</div>
+            <div id="Header">{t("Forum")}</div>
             <div>
-              Кратко опишите вопрос, который вы хотите обсудить с участниками
-              курса.
+              {/* Кратко опишите вопрос, который вы хотите обсудить с участниками
+              курса. */}
             </div>
             <DynamicLoadedEditor
               getEditorText={myCallback}
@@ -102,10 +108,10 @@ const CreateForum = (props) => {
                 const res = await createForum();
                 props.getResult(res);
 
-                alert("Создали!");
+                // alert("Создали!");
               }}
             >
-              {loading ? "Создаю" : "Создать"}
+              {loading ? t("saving") : t("save")}
             </Button>
           </Form>
         )}

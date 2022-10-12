@@ -190,7 +190,7 @@ const UpdateQuiz = (props) => {
         <DynamicLoadedEditor
           id="question"
           name="question"
-          placeholder={"Вопрос"}
+          placeholder={"Question"}
           value={question}
           getEditorText={setQuestion}
         />
@@ -198,7 +198,7 @@ const UpdateQuiz = (props) => {
       <textarea
         id="answer"
         name="answer"
-        placeholder={"Ответ"}
+        placeholder={"Answer"}
         defaultValue={answer}
         onChange={(e) => setAnswer(e.target.value)}
       />
@@ -207,7 +207,7 @@ const UpdateQuiz = (props) => {
           id="answer"
           name="answer"
           value={ifRight}
-          placeholder={"Фидбэк по правильному ответу"}
+          placeholder={"Explainer for the right answer"}
           getEditorText={setIfRight}
         />
       </Comment>
@@ -215,7 +215,7 @@ const UpdateQuiz = (props) => {
         <DynamicLoadedEditor
           id="answer"
           name="answer"
-          placeholder={"Фидбэк по неправильному ответу"}
+          placeholder={"Explainer for the wrong answer"}
           value={ifWrong}
           getEditorText={setIfWrong}
         />
