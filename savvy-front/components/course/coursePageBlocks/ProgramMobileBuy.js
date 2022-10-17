@@ -185,23 +185,6 @@ const Info = styled.div`
   }
 `;
 
-const PriceBox = styled.div`
-  width: 292px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  .price_small {
-    font-weight: 600;
-    font-size: 3.2rem;
-    /* text-align: left; */
-  }
-  div {
-    margin-right: 10px;
-  }
-`;
-
 const OpenCourse = styled.button`
   width: 100%;
   height: 48px;
@@ -255,29 +238,29 @@ const StyledModal = Modal.styled`
   }
 `;
 
-const MobileBuy = (props) => {
+const ProgramMobileBuy = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
-  const [installments, setInstallments] = useState(
-    props.coursePage.installments
-  );
-  const [isPromo, setIsPromo] = useState(false);
+  //   const [installments, setInstallments] = useState(
+  //     props.coursePage.installments
+  //   );
+  //   const [isPromo, setIsPromo] = useState(false);
 
-  const [price, setPrice] = useState(
-    props.coursePage.installments && props.coursePage.installments > 1
-      ? props.coursePage.price / props.coursePage.installments
-      : props.coursePage.price
-  );
+  //   const [price, setPrice] = useState(
+  //     props.coursePage.installments && props.coursePage.installments > 1
+  //       ? props.coursePage.price / props.coursePage.installments
+  //       : props.coursePage.price
+  //   );
   const toggleModal = (e) => setIsOpen(!isOpen);
 
-  const addPromo = (val) => {
-    props.coursePage.promocode.promocodes.map((p) => {
-      if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
-        setPrice(price * p.value);
-        setIsPromo(true);
-      }
-    });
-  };
+  //   const addPromo = (val) => {
+  //     props.coursePage.promocode.promocodes.map((p) => {
+  //       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
+  //         setPrice(price * p.value);
+  //         setIsPromo(true);
+  //       }
+  //     });
+  //   };
 
   const [
     updateOrderAuto,
@@ -301,52 +284,31 @@ const MobileBuy = (props) => {
   const { t } = useTranslation("coursePage");
   const changeState = (dataFromChild) => setAuth(dataFromChild);
 
-  const getNoun = (number, one, two, five) => {
-    let n = Math.abs(number);
-    n %= 100;
-    if (n >= 5 && n <= 20) {
-      return five;
-    }
-    n %= 10;
-    if (n === 1) {
-      return one;
-    }
-    if (n >= 2 && n <= 4) {
-      return two;
-    }
-    return five;
-  };
-  const { me, coursePage } = props;
+  const { me, program } = props;
+  const first_course = [...program.coursePages].sort(
+    (a, b) => a.numInCareerTrack - b.numInCareerTrack
+  )[0];
 
   let my_orders = [];
   if (me) {
-    my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
+    my_orders = me.orders.filter((o) => o.coursePage.id == first_course.id);
   }
+
+  const total_lessons_number = program.coursePages.reduce(function (acc, obj) {
+    return acc + obj.lessons.length;
+  }, 0);
 
   return (
     <Styles id="buy_section">
-      {/* <div className="price">{coursePage.price} ₽</div> */}
-      {installments && (
-        <PriceBox>
-          <div>
-            {installments}{" "}
-            {getNoun(installments, "платёж", "платежа", "платежей")} по
-          </div>
-          {installments && <div className="price_small">{price} ₽</div>}
-        </PriceBox>
-      )}
-      {/* {!installments && <div className="price">{price} ₽</div>} */}
-      {!installments && !props.coursePage.discountPrice && (
-        <div className="price">{price} ₽</div>
-      )}
-      {!installments && props.coursePage.discountPrice && (
+      {!program.discountPrice && <div className="price">{program.price} ₽</div>}
+      {program.discountPrice && (
         <div className="price">
           <div>
-            {props.coursePage.discountPrice}{" "}
-            <span className="discount">{price}</span> ₽
+            {program.discountPrice}{" "}
+            <span className="discount">{program.price}</span> ₽
           </div>
           <div className="bubble">
-            -{100 - parseInt((props.coursePage.discountPrice / price) * 100)}%
+            -{100 - parseInt((program.discountPrice / program.price) * 100)}%
           </div>
         </div>
       )}
@@ -360,7 +322,7 @@ const MobileBuy = (props) => {
           Router.push({
             pathname: "/course",
             query: {
-              id: coursePage.id,
+              id: first_course.id,
               // type: "story",
             },
           });
@@ -378,10 +340,10 @@ const MobileBuy = (props) => {
           } else {
             const res = await createOrder({
               variables: {
-                coursePageId: coursePage.id,
-                price: props.coursePage.discountPrice
-                  ? props.coursePage.discountPrice
-                  : price,
+                coursePageId: first_course.id,
+                price: program.discountPrice
+                  ? program.discountPrice
+                  : program.price,
                 userId: me.id,
                 promocode: promo,
               },
@@ -390,8 +352,7 @@ const MobileBuy = (props) => {
           }
         }}
       >
-        {installments && (loading_data ? `...` : t("buy_installments"))}
-        {!installments && (loading_data ? `...` : t("buy"))}
+        {loading_data ? `...` : t("buy")}
       </ButtonBuy>
       <Info>
         <div className="guarantee">{t("guarantee")}</div>
@@ -403,22 +364,22 @@ const MobileBuy = (props) => {
             </div>
           )} */}
           <div className="">
-            {coursePage.lessons.length} {t("online_lessons")}
+            {total_lessons_number} {t("online_lessons")}
           </div>
-          {price > 4000 && <div className="">{t("webinars")}</div>}
+          {program.price > 4000 && <div className="">{t("webinars")}</div>}
 
           <div className="">{t("access")}</div>
           <div className="">{t("chat")}</div>
           <div className="">{t("certificate")}</div>
         </div>
-        {props.coursePage.promocode && (
+        {/* {props.program.promocode && (
           <div id="promo">
             <input
               placeholder="Promocode"
               onChange={(e) => addPromo(e.target.value)}
             />
           </div>
-        )}
+        )} */}
         <div className="open">
           <div className="">{t("after")}</div>
           <OpenCourse
@@ -444,19 +405,18 @@ const MobileBuy = (props) => {
                   c.data.updateOrderAuto !== null &&
                   c.data.updateOrderAuto.isPaid == true
               );
-              console.log("checked_orders2", checked_orders2, checked_orders);
 
               if (checked_orders2.length > 0) {
                 let enroll = await enrollOnCourse({
                   variables: {
                     id: me.id,
-                    coursePageId: coursePage.id,
+                    coursePageId: first_course.id,
                   },
                 });
                 Router.push({
                   pathname: "/course",
                   query: {
-                    id: coursePage.id,
+                    id: first_course.id,
                   },
                 });
               } else {
@@ -485,4 +445,4 @@ const MobileBuy = (props) => {
   );
 };
 
-export default MobileBuy;
+export default ProgramMobileBuy;

@@ -36,15 +36,6 @@ const Up = styled.div`
     width: 100%;
     height: 70px;
   }
-  .title {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 2.2rem;
-    line-height: 1.2;
-    color: #496ddb;
-    margin: 10px 20px;
-  }
   .description {
     margin: 10px 20px;
     line-height: 1.4;
@@ -97,28 +88,39 @@ const Down = styled.div`
   .price_box_description {
     font-size: 1.3rem;
   }
-  button {
-    background: #496ddb;
-    border-radius: 5px;
-    border: 1px solid #496ddb;
-    height: 45px;
-    width: 90%;
-    color: #fff;
-    font-family: Montserrat;
-    font-size: 1.6rem;
-    cursor: pointer;
-    margin-bottom: 10px;
-    transition: ease-in 0.2s;
-    &:hover {
-      background: #0135a9;
-    }
-  }
 `;
 
+const Title = styled.div`
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 2.2rem;
+  line-height: 1.2;
+  color: ${(props) => (props.program ? "#7000FF" : "#496ddb")};
+  margin: 10px 20px;
+`;
+
+const Button = styled.button`
+  background: ${(props) => (props.program ? "#7000FF" : "#496ddb")};
+  border-radius: 5px;
+  border: 1px solid;
+  border-color: ${(props) => (props.program ? "#7000FF" : "#496ddb")};
+  height: 45px;
+  width: 90%;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: ease-in 0.2s;
+  &:hover {
+    background: #0135a9;
+  }
+`;
 const Program = (props) => {
   const { t } = useTranslation("landing");
-  moment.locale("ru");
   const router = useRouter();
+  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
 
   const getNoun = (number, one, two, five) => {
     let n = Math.abs(number);
@@ -136,14 +138,11 @@ const Program = (props) => {
     return five;
   };
 
-  let course_date = new Date(props.nextStart);
-  let now_date = new Date();
-
   return (
     <Card>
       <Up>
         <img src={props.img} />
-        <div className="title">{props.title}</div>
+        <Title program={props.program}>{props.title}</Title>
         <div className="description">
           {props.description && renderHTML(props.description)}
         </div>
@@ -162,60 +161,26 @@ const Program = (props) => {
               <div className="price_box_description">{t("full_price")}</div>
             </div>
             <div className="price_box">
-              {props.installments && (
-                <>
-                  <div className="price_box_discount">
-                    Рассрочка
-                    {""}
-                  </div>
-                  <div className="price_box_description">
-                    на {props.installments - 1}{" "}
-                    {getNoun(
-                      props.installments - 1,
-                      "месяц",
-                      "месяца",
-                      "месяцев"
-                    )}
-                  </div>
-                </>
-              )}
-              {!props.installments &&
-                (props.nextStart &&
-                course_date.getTime() > now_date.getTime() ? (
-                  <>
-                    <div className="price_box_discount">
-                      {moment(props.nextStart).format("Do MMMM")}
-                    </div>
-                    <div className="price_box_description"> След. занятие</div>
-                  </>
-                ) : router.locale == "ru" ? (
-                  <>
-                    <div className="price_box_discount">
-                      {props.lessons.length}{" "}
-                      {getNoun(props.lessons.length, "урок", "урока", "уроков")}
-                    </div>
-                    <div className="price_box_description">в курсе </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="price_box_discount">
-                      {props.lessons.length} lessons{" "}
-                    </div>
-                    <div className="price_box_description">in the course </div>
-                  </>
-                ))}
+              <div className="price_box_discount">
+                {props.nextStart
+                  ? moment(props.nextStart).format("DD.MM.YYYY")
+                  : moment(new Date()).format("DD.MM.YYYY")}
+              </div>
+              <div className="price_box_description">{t("cohort_start")}</div>
             </div>
           </div>
         </div>
         <Link
           href={{
-            pathname: "/coursePage",
+            pathname: props.program ? "/program" : "/coursePage",
             query: {
               id: props.id,
             },
           }}
         >
-          <button>{t("learn_more")}</button>
+          <Button program={props.program}>
+            {props.program ? t("learn_more_program") : t("learn_more")}
+          </Button>
         </Link>
       </Down>
     </Card>

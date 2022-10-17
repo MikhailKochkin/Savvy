@@ -107,8 +107,6 @@ const CreateForum = (props) => {
                 e.preventDefault();
                 const res = await createForum();
                 props.getResult(res);
-
-                // alert("Создали!");
               }}
             >
               {loading ? t("saving") : t("save")}

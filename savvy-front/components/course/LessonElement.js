@@ -159,7 +159,7 @@ const LessonElement = (props) => {
   return (
     <Styles>
       <div>
-        Урок {number + 1}. {saved && "✅"}
+        {t("Lesson")} {number + 1}. {saved && "✅"}
       </div>
       <Fieldset>
         <div className="comment">{lesson.comment}</div>

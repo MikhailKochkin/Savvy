@@ -1,10 +1,10 @@
 import React from "react";
-import Program from "../components/programs/Program";
+import Program from "../components/course/Program";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["nav", "auth"])),
+    ...(await serverSideTranslations(locale, ["nav", "auth", "coursePage"])),
   },
 });
 

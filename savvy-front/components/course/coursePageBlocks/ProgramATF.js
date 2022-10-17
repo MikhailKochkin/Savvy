@@ -8,31 +8,31 @@ import moment from "moment";
 
 import Loading from "../../Loading";
 
-const SINGLE_COURSEPAGE_QUERY = gql`
-  query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+const SINGLE_PROGRAM_QUERY = gql`
+  query SINGLE_PROGRAM_QUERY($id: String!) {
+    program(where: { id: $id }) {
       id
       title
-      user {
-        id
-        name
-        surname
-        work
-        image
-      }
-      authors {
-        id
-        name
-        surname
-        work
-        image
-      }
+      #   user {
+      #     id
+      #     name
+      #     surname
+      #     work
+      #     image
+      #   }
+      #   authors {
+      #     id
+      #     name
+      #     surname
+      #     work
+      #     image
+      #   }
       nextStart
       header
       subheader
-      new_students {
-        id
-      }
+      #   new_students {
+      #     id
+      #   }
     }
   }
 `;
@@ -262,13 +262,13 @@ const ATF = (props) => {
   const { t } = useTranslation("coursePage");
   const router = useRouter();
 
-  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+  const { loading, error, data } = useQuery(SINGLE_PROGRAM_QUERY, {
     variables: { id: props.id },
   });
 
   if (loading) return <Loading />;
 
-  const course = data.coursePage;
+  const course = data.program;
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -323,7 +323,8 @@ const ATF = (props) => {
     }
     return five;
   };
-  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
+
+  moment.locale("ru");
   return (
     <div id="ATF">
       <BImage>
@@ -354,51 +355,6 @@ const ATF = (props) => {
                 </span>
               </div>
             </NextMeeting>
-
-            {/* <Buttons>
-              <button id="atf_look_at_syllabus_button" onClick={(e) => slide()}>
-                {t("syllabus")}
-              </button>
-              <button id="atf_buy_button" onClick={(e) => slide2()}>
-                {t("enroll")}
-              </button>
-            </Buttons> */}
-            {/* <TimeLeft>
-              <div id="clock">
-                <div className="clock_section">
-                  <div className="clock_time">{days}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(days, "day", "days")
-                      : getNoun(days, "день", "дня", "дней")}
-                  </div>
-                </div>
-                <div className="clock_section">
-                  <div className="clock_time">{hours}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(days, "hour", "hours")
-                      : getNoun(hours, "час", "часа", "часов")}
-                  </div>
-                </div>
-                <div className="clock_section">
-                  <div className="clock_time">{minutes}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(minutes, "minute", "minutes")
-                      : getNoun(minutes, "минута", "минуты", "минут")}
-                  </div>
-                </div>
-                <div className="clock_section">
-                  <div className="clock_time">{seconds}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(seconds, "second", "seconds")
-                      : getNoun(seconds, "секунда", "секунды", "секунд")}
-                  </div>
-                </div>
-              </div>
-            </TimeLeft> */}
           </Container>
         </InfoBlock>
       </BImage>

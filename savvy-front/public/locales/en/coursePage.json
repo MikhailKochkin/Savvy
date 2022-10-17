@@ -13,6 +13,7 @@
   "show_all": "Show all lessons",
   "online_lessons": "online lessons",
   "webinars": "4 webinars",
+  "program_webinars": "10 webinars",
   "access": "Full lifetime access",
   "chat": "Course chat",
   "certificate": "Certificate of completion",
@@ -42,5 +43,8 @@
   "start": "Open",
   "min": "min",
   "start_open_lesson": "Start learning for free",
-  "demo_lesson_offer": "Btw we gave you access to one of the lessons. Check it out right now "
+  "demo_lesson_offer": "Btw we gave you access to one of the lessons. Check it out right now ",
+  "next_cohort": "Start of next cohort",
+  "program": "Program",
+  "course": "Course"
 }

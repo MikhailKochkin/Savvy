@@ -214,21 +214,34 @@ const TeacherBoxBig = styled.div`
 `;
 
 const Teachers = (props) => {
-  const { coursePage } = props;
+  const { program } = props;
   const { t } = useTranslation("coursePage");
 
-  let authors;
-  if (coursePage.authors.length > 0) {
-    authors = coursePage.authors;
-  } else {
-    authors = [coursePage.user];
-  }
+  let authors = [];
+  program.coursePages.map((c) => authors.push(c.user));
+  program.coursePages.map((c) => c.authors.map((auth) => authors.push(auth)));
+
+  let unique_authors = [];
+
+  authors.map((a) => {
+    if (!unique_authors.find((el) => el.id == a.id)) {
+      unique_authors.push(a);
+    } else {
+      return;
+    }
+  });
+
+  //   if (coursePage.authors.length > 0) {
+  //     authors = coursePage.authors;
+  //   } else {
+  //     authors = [coursePage.user];
+  //   }
   return (
     <Styles>
       <Container>
         <h2>{t("course_authors")}</h2>
         <TeachersList>
-          {authors.map((a, i) => (
+          {unique_authors.map((a, i) => (
             <TeacherBoxBig>
               <div className="upper">
                 <div className="image_container">

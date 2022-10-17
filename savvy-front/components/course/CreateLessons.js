@@ -7,7 +7,6 @@ import LessonElement from "./LessonElement";
 const CreateLessons = (props) => {
   const router = useRouter();
   const { pathname, asPath, query, locale } = router;
-  console.log(locale, query);
   const [lessons, setLessons] = useState([
     {
       id: "df734y31ff3",

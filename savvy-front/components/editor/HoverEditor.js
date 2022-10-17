@@ -104,8 +104,10 @@ const TEXT_TAGS = {
   DEL: () => ({ delete: true }),
   INS: () => ({ insert: true }),
   I: () => ({ italic: true }),
+  EM: () => ({ italic: true }),
   S: () => ({ strikethrough: true }),
   STRONG: () => ({ bold: true }),
+  B: () => ({ bold: true }),
   U: () => ({ underline: true }),
 };
 
@@ -343,6 +345,7 @@ const HoveringMenu = (props) => {
       editor={editor}
       value={value}
       onChange={(value) => {
+        console.log("value", value);
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
         setValue(value);

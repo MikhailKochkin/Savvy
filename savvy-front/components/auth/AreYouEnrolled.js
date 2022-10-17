@@ -69,16 +69,16 @@ const AreYouEnrolled = (props) =>
               <Styles>
                 <Box>
                   <Title>
-                    Вы не зарегистрированы на этот курс. Вы можете сделать это
-                    на главной странице курса.
+                    You are not enrolled. Please fo to the course page to get
+                    access to the course.
                   </Title>
                   <Link
                     href={{
-                      pathname: "/course",
+                      pathname: "/coursePage",
                       query: { id: props.subject },
                     }}
                   >
-                    <a>К странице курса</a>
+                    <a>Go to course page</a>
                   </Link>
                 </Box>
               </Styles>

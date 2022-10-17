@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import renderHTML from "react-render-html";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const Box = styled.div`
   border-bottom: 1px solid grey;
@@ -14,20 +15,19 @@ const Box = styled.div`
   }
 `;
 
-class Feedback extends Component {
-  render() {
-    const { feedback } = this.props;
-    return (
-      <Box>
-        <>
-          <h4>
-            Урок {feedback.lesson.number}. {feedback.lesson.name}
-          </h4>
-          {renderHTML(feedback.text)}
-        </>
-      </Box>
-    );
-  }
-}
+const Feedback = (props) => {
+  const { t } = useTranslation("course");
+  const { feedback } = props;
+  return (
+    <Box>
+      <>
+        <h4>
+          {t("lesson")} {feedback.lesson.number}. {feedback.lesson.name}
+        </h4>
+        {renderHTML(feedback.text)}
+      </>
+    </Box>
+  );
+};
 
 export default Feedback;

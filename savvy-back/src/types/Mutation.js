@@ -121,6 +121,7 @@ const Mutation = mutationType({
         email: stringArg(),
         password: stringArg(),
         isFamiliar: booleanArg(),
+        country: stringArg(),
         status: arg({
           type: "Status", // name should match the name you provided
         }),
@@ -130,7 +131,7 @@ const Mutation = mutationType({
       },
       resolve: async (
         _,
-        { name, surname, email, number, password, status },
+        { name, surname, email, number, password, status, country },
         ctx
       ) => {
         const hashed_password = await bcrypt.hash(password, 10);
@@ -153,6 +154,7 @@ const Mutation = mutationType({
             permissions: { set: ["USER"] },
             password: hashed_password,
             number: number,
+            country: country,
             // uni: { connect: { id: uniID } },
             // company: { connect: { id: company } },
             // careerTrack: { connect: { id: careerTrackID } },
@@ -391,6 +393,115 @@ const Mutation = mutationType({
           },
         });
         return coursePage;
+      },
+    });
+    t.field("createProgram", {
+      type: "Program",
+      args: {
+        title: stringArg(),
+        description: stringArg(),
+        image: stringArg(),
+        audience: stringArg(),
+        result: stringArg(),
+        // news: stringArg(),
+        methods: stringArg(),
+        price: intArg(),
+        header: list(stringArg()),
+        subheader: list(stringArg()),
+        nextStart: arg({
+          type: "DateTime",
+        }),
+        // uptodateAt: arg({
+        //   type: "DateTime",
+        // }),
+        goals: list(stringArg()),
+        // video: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        const header = args.header;
+        const subheader = args.subheader;
+        const goals = args.goals;
+        delete updates.header;
+        delete updates.subheader;
+        delete updates.goals;
+
+        const program = await ctx.prisma.program.create({
+          data: {
+            header: {
+              set: [...header],
+            },
+            subheader: {
+              set: [...subheader],
+            },
+            goals: {
+              set: [...goals],
+            },
+            ...updates,
+          },
+        });
+        return program;
+      },
+    });
+    t.field("updateProgram", {
+      type: "Program",
+      args: {
+        id: stringArg(),
+        title: stringArg(),
+        description: stringArg(),
+        image: stringArg(),
+        audience: stringArg(),
+        result: stringArg(),
+
+        price: intArg(),
+        currency: stringArg(),
+        news: stringArg(),
+        authors: stringArg(),
+        // promocode: arg({
+        //   type: "PromocodeList", // name should match the name you provided
+        // }),
+        // tariffs: stringArg(),
+        methods: stringArg(),
+        image: stringArg(),
+        video: stringArg(),
+        header: list(stringArg()),
+        subheader: list(stringArg()),
+        nextStart: arg({
+          type: "DateTime",
+        }),
+        // uptodateAt: arg({
+        //   type: "DateTime",
+        // }),
+        goals: list(stringArg()),
+      },
+      resolve: async (_, args, ctx) => {
+        const updates = { ...args };
+        delete updates.id;
+        const header = args.header;
+        const subheader = args.subheader;
+        const goals = args.goals;
+        delete updates.header;
+        delete updates.subheader;
+        delete updates.goals;
+
+        const program = await ctx.prisma.program.update({
+          data: {
+            header: {
+              set: [...header],
+            },
+            subheader: {
+              set: [...subheader],
+            },
+            goals: {
+              set: [...goals],
+            },
+            ...updates,
+          },
+          where: {
+            id: args.id,
+          },
+        });
+        return program;
       },
     });
     t.field("createCourseVisit", {

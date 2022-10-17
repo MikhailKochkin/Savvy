@@ -126,6 +126,7 @@ const UpdateMessage = (props) => {
         <br />
 
         <Frame>
+          {console.log("props.text", props.text)}
           <DynamicHoverEditor
             index={props.index}
             name="text"

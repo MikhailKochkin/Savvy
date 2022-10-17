@@ -6,16 +6,11 @@ import { useQuery, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import ReactResizeDetector from "react-resize-detector";
 
-const SINGLE_COURSEPAGE_QUERY = gql`
-  query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
+const SINGLE_PROGRAM_QUERY = gql`
+  query SINGLE_PROGRAM_QUERY($id: String!) {
+    program(where: { id: $id }) {
       id
       title
-      user {
-        id
-        name
-        surname
-      }
     }
   }
 `;
@@ -160,17 +155,26 @@ const StyledModal = Modal.styled`
   }
 `;
 
-const Ad = (props) => {
+const ProgramBottomLine = (props) => {
   const [width, setWidth] = useState(0);
   const { t } = useTranslation("coursePage");
+
   const onResize = (width, height) => {
     setWidth(width);
   };
-  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+
+  const { loading, error, data } = useQuery(SINGLE_PROGRAM_QUERY, {
     variables: { id: props.id },
   });
+
   if (loading) return <div></div>;
-  const course = data.coursePage;
+
+  const course = data.program;
+  // const { t } = useTranslation("coursePage");
+
+  // let demo_lesson = props.data
+  //   .filter((l) => l.open == true)
+  //   .sort((les) => les.number > les.number)[0];
 
   return (
     <Banner>
@@ -178,7 +182,7 @@ const Ad = (props) => {
         <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <div className="bottomline_text">
           <span>
-            🚀 {t("course")} "{course.title}"
+            🚀 {t("program")} "{course.title}"
             {/* Автор – {course.user.name}{" "}
             {course.user.surname} */}
           </span>
@@ -188,4 +192,4 @@ const Ad = (props) => {
   );
 };
 
-export default Ad;
+export default ProgramBottomLine;

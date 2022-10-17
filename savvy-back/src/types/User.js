@@ -18,6 +18,7 @@ const User = objectType({
     t.model.resume();
     t.model.status();
     t.model.tags();
+    t.model.country();
     t.model.level();
     t.model.uni();
     t.model.image();

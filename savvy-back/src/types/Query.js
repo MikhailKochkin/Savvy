@@ -22,6 +22,8 @@ const Query = queryType({
     t.crud.businessClients({ ordering: true, filtering: true });
     t.crud.coursePages({ ordering: true, filtering: true });
     t.crud.coursePage({ ordering: true, filtering: true });
+    t.crud.program({ ordering: true, filtering: true });
+    t.crud.programs({ ordering: true, filtering: true });
     t.crud.courseVisits({ ordering: true, filtering: true });
     t.crud.quizzes({ ordering: true, filtering: true });
     t.crud.courseVisit({ filtering: true });

@@ -38,9 +38,6 @@ const ButtonOpen = styled.a`
 
 const MobileAction = (props) => {
   const { t } = useTranslation("coursePage");
-  let demo_lesson = props.coursePage.lessons
-    .filter((l) => l.open == true)
-    .sort((les) => les.number > les.number)[0];
 
   const slide = () => {
     var my_element = document.getElementById("header2");
@@ -84,7 +81,7 @@ const MobileAction = (props) => {
           // location.href = "https://t.me/BeSavvyMentorBot?start=link_vINBAwrN4O";
         }}
       >
-        Купить курс
+        {t("start_open_lesson")}
       </ButtonOpen>
     </Styles>
   );

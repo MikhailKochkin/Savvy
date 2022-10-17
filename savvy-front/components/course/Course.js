@@ -151,10 +151,6 @@ const Details = styled.div`
 `;
 
 const Course = (props) => {
-  // static propTypes = {
-  //   coursePage: PropTypes.object.isRequired,
-  // };
-
   const { t } = useTranslation("course");
 
   const { coursePage, id, me } = props;
@@ -194,24 +190,6 @@ const Course = (props) => {
                     {coursePage.user.name} {coursePage.user.surname}
                   </div>
                 )}
-                {/* <div className="company">
-                  {coursePage.authors.length > 0 ? (
-                    <>
-                      {coursePage.authors.map((a, i) => (
-                        <span key={i + "sdfgv"}>
-                          {a.company.name}
-                          {i + 1 === coursePage.authors.length ? " " : ", "}
-                        </span>
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {coursePage.user.company
-                        ? coursePage.user.company.name
-                        : "BeSavvy"}
-                    </>
-                  )}
-                </div> */}
               </Details>
             </div>
             {/* {average >= 0 ? (
@@ -223,7 +201,6 @@ const Course = (props) => {
           </div>
           <div>
             {!me && (
-              // <SignUpbutton onClick={this.toggleModal}>Войти</SignUpbutton>
               <Link
                 href={{
                   pathname: "/course",

@@ -98,6 +98,7 @@ const TEXT_TAGS = {
   DEL: () => ({ delete: true }),
   INS: () => ({ insert: true }),
   I: () => ({ italic: true }),
+  EM: () => ({ italic: true }),
   S: () => ({ strikethrough: true }),
   B: () => ({ bold: true }),
   U: () => ({ underline: true }),
@@ -123,7 +124,6 @@ const ButtonStyle = styled.button`
   outline: none;
   width: 37px;
   border: none;
-  /* background: none; */
   border: 1px solid #787878;
   &:hover {
     background: #112862;
@@ -131,7 +131,6 @@ const ButtonStyle = styled.button`
   }
   .react-icons {
     width: 100px;
-    /* vertical-align: middle; */
   }
 `;
 
@@ -359,13 +358,11 @@ const deserialize = (el) => {
 
   const { nodeName } = el;
   let parent = el;
-
   let children = Array.from(parent.childNodes).map(deserialize).flat();
   // if (children.includes(undefined)) {
   //   return null;
   // }
   // let children = Array.from(el.childNodes).map(deserialize);
-
   if (TEXT_TAGS[nodeName]) {
     const attrs = TEXT_TAGS[nodeName](el);
     return children.map((child) => {
@@ -554,8 +551,6 @@ const uploadFile = async (e, editor) => {
   );
   const file = await res.json();
   let link = file.secure_url;
-
-  console.log("editor", editor);
 
   // editor.selection.anchor.path == [0, 0] &&
   //   editor.selection.anchor.offset == 0 &&

@@ -610,6 +610,7 @@ input CoursePageWhereInput {
   PointATest: PointATestListRelationFilter
   posts: PostListRelationFilter
   price: IntNullableFilter
+  programs: ProgramListRelationFilter
   promocode: JsonNullableFilter
   published: BoolNullableFilter
   result: StringNullableFilter
@@ -1446,6 +1447,7 @@ type Mutation {
   createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
   createProblem(lessonId: String, steps: ProblemStructure, text: String): Problem
   createProblemResult(answer: String, lessonId: String, problemID: String, revealed: [String]): ProblemResult
+  createProgram(audience: String, description: String, goals: [String], header: [String], image: String, methods: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String): Program
   createQuiz(answer: String, ifRight: String, ifWrong: String, lessonId: String, question: String, type: String): Quiz
   createQuizResult(answer: String, correct: Boolean, lessonId: String, quiz: String): QuizResult
   createRating(forumId: String, rating: Int): Rating
@@ -1483,7 +1485,7 @@ type Mutation {
   sendMessage(text: String, userId: String): Message
   signin(email: String, password: String): AuthPayload
   signout: SignOut
-  signup(careerTrackID: String, company: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
+  signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
   updateBusinessClient(comment: String, id: String, tags: [String]): BusinessClient
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
@@ -1502,6 +1504,7 @@ type Mutation {
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
   updateProblem(complexity: Int, id: String, isSecret: Boolean, text: String): Problem
+  updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, news: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
@@ -1766,6 +1769,7 @@ input OrderOrderByInput {
   level: SortOrder
   paymentID: SortOrder
   price: SortOrder
+  programId: SortOrder
   promocode: SortOrder
   updatedAt: SortOrder
   userId: SortOrder
@@ -1784,6 +1788,8 @@ input OrderWhereInput {
   OR: [OrderWhereInput!]
   paymentID: StringNullableFilter
   price: IntNullableFilter
+  program: ProgramWhereInput
+  programId: StringNullableFilter
   promocode: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -2045,6 +2051,110 @@ input ProblemWhereUniqueInput {
   id: String
 }
 
+type Program {
+  audience: String
+  batch: String
+  coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
+  createdAt: DateTime!
+  currency: String
+  description: String!
+  discountPrice: Int
+  goals: [String!]!
+  header: [String!]!
+  id: String!
+  image: String!
+  installments: Int
+  methods: String
+  news: String
+  nextStart: DateTime
+  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
+  price: Int
+  promocode: Json
+  published: Boolean
+  result: String
+  reviews: Json
+  subheader: [String!]!
+  tags: [String!]!
+  tariffs: String
+  title: String!
+  updatedAt: DateTime!
+  uptodateAt: DateTime
+  video: String
+}
+
+input ProgramListRelationFilter {
+  every: ProgramWhereInput
+  none: ProgramWhereInput
+  some: ProgramWhereInput
+}
+
+input ProgramOrderByInput {
+  audience: SortOrder
+  batch: SortOrder
+  createdAt: SortOrder
+  currency: SortOrder
+  description: SortOrder
+  discountPrice: SortOrder
+  goals: SortOrder
+  header: SortOrder
+  id: SortOrder
+  image: SortOrder
+  installments: SortOrder
+  methods: SortOrder
+  news: SortOrder
+  nextStart: SortOrder
+  price: SortOrder
+  promocode: SortOrder
+  published: SortOrder
+  result: SortOrder
+  reviews: SortOrder
+  subheader: SortOrder
+  tags: SortOrder
+  tariffs: SortOrder
+  title: SortOrder
+  updatedAt: SortOrder
+  uptodateAt: SortOrder
+  video: SortOrder
+}
+
+input ProgramWhereInput {
+  AND: [ProgramWhereInput!]
+  audience: StringNullableFilter
+  batch: StringNullableFilter
+  coursePages: CoursePageListRelationFilter
+  createdAt: DateTimeFilter
+  currency: StringNullableFilter
+  description: StringFilter
+  discountPrice: IntNullableFilter
+  goals: StringNullableListFilter
+  header: StringNullableListFilter
+  id: StringFilter
+  image: StringFilter
+  installments: IntNullableFilter
+  methods: StringNullableFilter
+  news: StringNullableFilter
+  nextStart: DateTimeNullableFilter
+  NOT: [ProgramWhereInput!]
+  OR: [ProgramWhereInput!]
+  orders: OrderListRelationFilter
+  price: IntNullableFilter
+  promocode: JsonNullableFilter
+  published: BoolNullableFilter
+  result: StringNullableFilter
+  reviews: JsonNullableFilter
+  subheader: StringNullableListFilter
+  tags: StringNullableListFilter
+  tariffs: StringNullableFilter
+  title: StringFilter
+  updatedAt: DateTimeFilter
+  uptodateAt: DateTimeNullableFilter
+  video: StringNullableFilter
+}
+
+input ProgramWhereUniqueInput {
+  id: String
+}
+
 input Promocode {
   name: String
   value: Float
@@ -2077,6 +2187,8 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByInput!], where: PostWhereInput): [Post!]!
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByInput!], where: ProblemResultWhereInput): [ProblemResult!]!
+  program(where: ProgramWhereUniqueInput!): Program
+  programs(after: ProgramWhereUniqueInput, before: ProgramWhereUniqueInput, first: Int, last: Int, orderBy: [ProgramOrderByInput!], where: ProgramWhereInput): [Program!]!
   quizResult(where: QuizResultWhereUniqueInput!): QuizResult
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int, orderBy: [QuizResultOrderByInput!], where: QuizResultWhereInput): [QuizResult!]!
   quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByInput!], where: QuizWhereInput): [Quiz!]!
@@ -2844,6 +2956,7 @@ type User {
   co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
   comment: String
   company: Company
+  country: String
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCoursePagesOrderByInput!]): [CoursePage!]!
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int): [CourseVisit!]!
   createdAt: DateTime!
@@ -2910,6 +3023,7 @@ input UserOrderByInput {
   careerTrackID: SortOrder
   comment: SortOrder
   companyId: SortOrder
+  country: SortOrder
   coverLetter: SortOrder
   createdAt: SortOrder
   description: SortOrder
@@ -2952,6 +3066,7 @@ input UserWhereInput {
   companyId: StringNullableFilter
   constructionResults: ConstructionResultListRelationFilter
   constructions: ConstructionListRelationFilter
+  country: StringNullableFilter
   coursePages: CoursePageListRelationFilter
   courseVisits: CourseVisitListRelationFilter
   coverLetter: StringNullableFilter

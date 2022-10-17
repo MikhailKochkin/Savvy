@@ -7,6 +7,7 @@ import { useUser } from "../../User";
 import Feedback from "../Feedback";
 
 import { Container, Total, Lessons } from "../styles/CoursePage_Styles";
+import ProgramBottomLine from "./ProgramBottomLine";
 
 const LessonStyles = styled.div`
   width: 85%;
@@ -49,11 +50,13 @@ const Button = styled.button`
   }
 `;
 
-const CoursePage = (props) => {
+const ProgramSyllabus = (props) => {
   const [page, setPage] = useState("lessons");
   const [open, setOpen] = useState(6);
   const { t } = useTranslation("coursePage");
-
+  const coursePages = [...props.program.coursePages].sort(
+    (a, b) => a.numInCareerTrack - b.numInCareerTrack
+  );
   const me = useUser();
   return (
     <>
@@ -63,9 +66,14 @@ const CoursePage = (props) => {
           <LessonStyles>
             <LessonsInfo>
               <h2>{t("what_u_will_learn")}</h2>
-              {page === "lessons" && (
+              <div>
+                {coursePages.map((c, i) => (
+                  <Course c={c} i={i} />
+                ))}
+              </div>
+              {/* {page === "lessons" && (
                 <>
-                  {/* <Total> {t("open_lessons")}</Total> */}
+                 <Total> {t("open_lessons")}</Total>
                   <Total>
                     {" "}
                     {t("total_lessons")} {props.lessons.length}
@@ -97,11 +105,11 @@ const CoursePage = (props) => {
                       id="show_all_lessons"
                       onClick={(e) => setOpen(props.lessons.length)}
                     >
-                      {t("show_all")}
+                      {t("show")}
                     </Button>
                   )}
                 </>
-              )}
+              )} */}
             </LessonsInfo>
           </LessonStyles>
         </Container>
@@ -110,4 +118,63 @@ const CoursePage = (props) => {
   );
 };
 
-export default CoursePage;
+import React from "react";
+
+const Styles = styled.div`
+  .row {
+    margin-bottom: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    div {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  }
+  .course_name {
+    font-size: 2rem;
+    font-weight: 500;
+    @media (max-width: 1000px) {
+      width: 80%;
+    }
+  }
+  .lessons {
+    margin-left: 25px;
+    .lesson_row {
+      margin-bottom: 10px;
+    }
+  }
+`;
+
+const Course = (props) => {
+  const [open, setOpen] = useState(false);
+
+  const { i, c } = props;
+  return (
+    <Styles>
+      <div>
+        <div className="row">
+          <div className="course_name" onClick={(e) => setOpen(!open)}>
+            {i + 1}. {c.title}{" "}
+          </div>
+          <div onClick={(e) => setOpen(!open)}>{open ? "⬆️" : "⬇️"}</div>
+        </div>
+        {open && (
+          <div className="lessons">
+            {c.lessons
+              .filter((l) => l.type !== "HIDDEN")
+              .sort((a, b) => (a.number > b.number ? 1 : -1))
+              .map((l, i) => (
+                <div className="lesson_row">
+                  {i + 1}. {l.name}
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+    </Styles>
+  );
+};
+
+export default ProgramSyllabus;

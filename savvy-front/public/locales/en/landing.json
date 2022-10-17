@@ -3,6 +3,7 @@
   "h2": "More than 2500 students have completed our courses developed by lawyers from Big Law firms.",
   "c2a": "Learn more",
   "learn_more": "Learn more",
+  "learn_more_program": "Learn more",
   "bubble1": "Drafting simulator",
   "bubble2": "Meetings with experts",
   "bubble3": "AI-powered case studies",
@@ -24,5 +25,6 @@
   "number": "44 808 157 0192",
   "email": "Email",
   "c2a_button": "Start learning",
-  "data_disclaimer": ""
+  "data_disclaimer": "",
+  "cohort_start": "Cohort start"
 }

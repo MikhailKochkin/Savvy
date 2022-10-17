@@ -4,6 +4,7 @@ import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import Link from "next/link";
 
 import { CURRENT_USER_QUERY } from "./User";
 import { SINGLE_COURSEPAGE_QUERY } from "./course/CoursePage";
@@ -45,6 +46,11 @@ const Button = styled.button`
   font-size: 1.4rem;
   outline: none;
   cursor: pointer;
+  a {
+    color: white;
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
   border: none;
   margin-top: 10px;
   &:hover {
@@ -114,6 +120,24 @@ const EnrollCoursePage = (props) => {
             )
           }
         </Mutation>
+      )}
+      {coursePage.courseType === "FORMONEY" && !show && (
+        <Button
+          onClick={async (e) => {
+            e.preventDefault();
+          }}
+        >
+          <Link
+            href={{
+              pathname: "/coursePage",
+              query: {
+                id: props.coursePage.id,
+              },
+            }}
+          >
+            {t("enroll")}
+          </Link>
+        </Button>
       )}
       {coursePage.courseType === "PRIVATE" && !show && (
         <Mutation

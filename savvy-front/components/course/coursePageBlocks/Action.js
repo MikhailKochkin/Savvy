@@ -316,7 +316,6 @@ const ButtonOpen = styled.a`
 `;
 
 const ButtonBuy = styled.button`
-  width: 100%;
   width: 292px;
   height: 48px;
   padding: 2%;
@@ -565,7 +564,7 @@ const Action = (props) => {
             {props.coursePage.promocode && (
               <div id="promo">
                 <input
-                  placeholder="Промокод"
+                  placeholder="Promocode"
                   onChange={(e) => addPromo(e.target.value)}
                 />
               </div>
