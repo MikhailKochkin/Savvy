@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+
 import { useUser } from "./User";
 import Account from "./Account";
 import MyCourses from "./MyCourses";
@@ -56,13 +58,15 @@ const Data = styled.div`
 
 const AccountPage = (props) => {
   const [page, setPage] = useState("account");
+  const { t } = useTranslation("account");
+
   const me = useUser();
   return (
     <PleaseSignIn>
       <Styles>
         <Container>
           <Menu>
-            <div name="account">Аккаунт</div>
+            <div name="account">{t("account")}</div>
           </Menu>
           <Data>
             {page === "account" && me && <Account me={me} id={props.id} />}
