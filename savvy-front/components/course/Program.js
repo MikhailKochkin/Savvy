@@ -133,10 +133,10 @@ const NewCoursePage = (props) => {
   const onResize = (width, height) => {
     setWidth(width);
   };
-  if (loading) return <Loading />;
-
   const me = useUser();
   const router = useRouter();
+  if (loading) return <Loading />;
+
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
   // console.log("data.program", data.program);
   return (
