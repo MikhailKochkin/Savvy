@@ -287,6 +287,8 @@ const NoteStyles = styled.div`
 
 const Buttons = styled.div`
   margin-top: 3%;
+  display: flex;
+  flex-direction: row;
 `;
 
 const MiniButton = styled.div`
@@ -449,7 +451,6 @@ const Note = (props) => {
         </Container>
       )}
       {miniforum && <Chat me={me} miniforum={miniforum} />}
-
       {update && !story && !exam && (
         <UpdateNote
           text={text}

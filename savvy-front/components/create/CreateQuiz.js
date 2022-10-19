@@ -187,7 +187,7 @@ const CreateQuiz = (props) => {
           <Form
             onSubmit={async (e) => {
               e.preventDefault();
-              document.getElementById("Message").style.display = "block";
+              // document.getElementById("Message").style.display = "block";
               const res = await createQuiz();
               props.getResult(res);
             }}

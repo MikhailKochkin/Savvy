@@ -287,7 +287,6 @@ const CoursePage = (props) => {
     initial_lessons,
     coursePage.weeks ? coursePage.weeks : 3
   );
-  console.log("broken_lessons", broken_lessons);
   return (
     <>
       <div id="root"></div>

@@ -857,21 +857,28 @@ const wrapLink = (editor, url) => {
 };
 
 const App = (props) => {
-  const initialValue = [
-    {
-      type: "paragraph",
-      children: [{ text: "" }],
-    },
-  ];
-  const [value, setValue] = useState(initialValue);
+  let html;
+  props.value ? (html = props.value) : (html = `<p></p>`);
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const initial = deserialize(document.body);
+  const [value, setValue] = useState(initial);
+  // const initialValue = [
+  //   {
+  //     type: "paragraph",
+  //     children: [{ text: "" }],
+  //   },
+  // ];
+  // const [value, setValue] = useState(initialValue);
 
-  useEffect(() => {
-    let html;
-    props.value ? (html = props.value) : (html = `<p></p>`);
-    const document = new DOMParser().parseFromString(html, "text/html");
-    const initial = deserialize(document.body);
-    setValue(initial);
-  }, []);
+  // useEffect(() => {
+  //   let html;
+  //   console.log("props.value ", props.value);
+  //   props.value ? (html = props.value) : (html = `<p></p>`);
+  //   const document = new DOMParser().parseFromString(html, "text/html");
+  //   const initial = deserialize(document.body);
+  //   console.log("initial", initial);
+  //   setValue(initial);
+  // }, []);
 
   const editor = useMemo(
     () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),

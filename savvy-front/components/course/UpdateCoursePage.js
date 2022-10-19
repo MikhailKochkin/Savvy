@@ -15,6 +15,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       result
       goals
       header
+      discountPrice
       price
       subheader
       tariffs

@@ -69,7 +69,7 @@ const AreYouEnrolled = (props) =>
               <Styles>
                 <Box>
                   <Title>
-                    You are not enrolled. Please fo to the course page to get
+                    You are not enrolled. Please go to the course page to get
                     access to the course.
                   </Title>
                   <Link

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-// import DatePicker from "react-datepicker";
+import { useTranslation } from "next-i18next";
 // import "react-datepicker/dist/react-datepicker.css";
 
 const UPDATE_COURSEPAGE_MUTATION = gql`
@@ -230,6 +230,10 @@ const UpdateForm = (props) => {
   const [methods, setMethods] = useState(props.coursePage.methods);
   const [video, setVideo] = useState(props.coursePage.video);
   const [price, setPrice] = useState(props.coursePage.price);
+  const [discountPrice, setDiscountPrice] = useState(
+    props.coursePage.discountPrice
+  );
+
   const [news, setNews] = useState(props.coursePage.news);
   const [goals, setGoals] = useState(
     props.coursePage.goals.length > 0 ? props.coursePage.goals : [""]
@@ -245,6 +249,8 @@ const UpdateForm = (props) => {
   const [updateCoursePage, { data, loading }] = useMutation(
     UPDATE_COURSEPAGE_MUTATION
   );
+
+  const { t } = useTranslation("coursePage");
 
   const uploadFile = async (e) => {
     setUpload(true);
@@ -297,9 +303,9 @@ const UpdateForm = (props) => {
   const { coursePage, me } = props;
   return (
     <Form>
-      <Title>Базовая информация о курсе</Title>
+      <Title>{t("course_info")}</Title>
       <Fieldset>
-        <Explainer>Название курса (для карточки курса)</Explainer>
+        <Explainer> {t("course_name")}</Explainer>
         <input
           className="second"
           type="text"
@@ -309,7 +315,7 @@ const UpdateForm = (props) => {
           required
           onChange={(e) => setTitle(e.target.value)}
         />
-        <Explainer>Краткое описание курса (для карточки курса)</Explainer>
+        <Explainer>{t("course_description")}</Explainer>
         <input
           className="second"
           type="text"
@@ -319,41 +325,48 @@ const UpdateForm = (props) => {
           defaultValue={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <Explainer>Цена курса</Explainer>
+        <Explainer>{t("course_price")}</Explainer>
         <input
           className="second"
           type="number"
           id="description"
           name="description"
-          placeholder="Цена"
           required
           defaultValue={price}
           onChange={(e) => setPrice(parseInt(e.target.value))}
         />
-        <Explainer>Дата старта курса / следующего вебинара автора</Explainer>
-
+        <Explainer>{t("course_discount_price")}</Explainer>
+        <input
+          className="second"
+          type="number"
+          id="description"
+          name="description"
+          required
+          defaultValue={discountPrice}
+          onChange={(e) => setDiscountPrice(parseInt(e.target.value))}
+        />
+        <Explainer>{t("course_next_cohort")}</Explainer>
         <input
           id="start"
           name="trip-start"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
-        <Explainer>Изображение курса для главной страницы сайта</Explainer>
+        <Explainer>{t("course_image")}</Explainer>
         <input
           // style={{ display: "none" }}
           className="second"
           type="file"
           id="file"
           name="file"
-          placeholder="Загрузите новый логотип курса..."
           onChange={uploadFile}
         />
-        {upload && "Загружаем.."}
+        {upload && t("uploading")}
         <Img src={image ? image : coursePage.image} alt="Upload Preview" />
       </Fieldset>
-      <Title>Информация для лендинга курса</Title>
+      <Title>{t("course_landing_info")}</Title>
       <Fieldset>
-        <Explainer>Заголовок лендинга</Explainer>
+        <Explainer>{t("course_header")}</Explainer>
 
         {header.map((g, i) => (
           <input
@@ -363,7 +376,6 @@ const UpdateForm = (props) => {
               myCallbackHeader(e.target.value, e.target.name, parseInt(i))
             }
             defaultValue={g}
-            placeholder="Заголовок..."
           />
         ))}
         {/* <button
@@ -374,7 +386,7 @@ const UpdateForm = (props) => {
         >
           +1
         </button> */}
-        <Explainer>Подзаголовок лендинга</Explainer>
+        <Explainer>{t("course_subheader")}</Explainer>
         {subheader.map((g, i) => (
           <input
             index={i}
@@ -383,7 +395,6 @@ const UpdateForm = (props) => {
               myCallbackSubheader(e.target.value, e.target.name, parseInt(i))
             }
             defaultValue={g}
-            placeholder="Подзаголовок..."
           />
         ))}
         {/* <button
@@ -394,7 +405,7 @@ const UpdateForm = (props) => {
         >
           +1
         </button> */}
-        <Explainer>Результаты студентов по итогам курса</Explainer>
+        <Explainer>{t("course_goals")}</Explainer>
 
         {goals.map((g, i) => (
           <Frame>
@@ -404,7 +415,6 @@ const UpdateForm = (props) => {
               name="goal"
               getEditorText={myCallbackGoal}
               value={g}
-              placeholder="Результат ..."
             />
           </Frame>
         ))}
@@ -434,28 +444,21 @@ const UpdateForm = (props) => {
             </button>
           </Circle>
         </Circles>
-        <Explainer>
-          Ссылка на видео о курсе (необязательно для лендинга)
-        </Explainer>
+        <Explainer>{t("course_video")}</Explainer>
         <input
           className="second"
           type="text"
           id="video"
           name="video"
-          placeholder="Видео о курсе"
           required
           defaultValue={video}
           onChange={(e) => setVideo(e.target.value)}
         />
-        <Explainer>
-          Новости курса: когда стартует новый поток, какие планы у автора, какие
-          изменения были только что внесены.
-        </Explainer>
+        <Explainer>{t("course_news")}</Explainer>
         <textarea
           type="text"
           id="news"
           name="news"
-          placeholder="Новости курса"
           defaultValue={news}
           onChange={(e) => setNews(e.target.value)}
         />
@@ -469,49 +472,41 @@ const UpdateForm = (props) => {
             placeholder="Результаты студентов по итогам курса..."
           />
         </Frame> */}
-        <Explainer>
-          В каком формате будет проходить обучение? Симуляторы, живые встречи,
-          онлайн-встречи, практические задания и так далее.
-        </Explainer>
+        <Explainer>{t("course_format")}</Explainer>
         <Frame>
           <DynamicLoadedEditor
             index={1}
             name="methods"
             getEditorText={myCallback}
             value={methods}
-            placeholder="Методики преподавания..."
           />
         </Frame>
-        <Explainer>
-          Для кого этот курс? Опишите, чтобы ваши студенты смогли узнать себя.
-        </Explainer>
-
+        <Explainer>{t("course_audience")}</Explainer>
         <Frame>
           <DynamicLoadedEditor
             index={1}
             name="audience"
             getEditorText={myCallback}
             value={audience}
-            placeholder="Для кого этот курс..."
           />
         </Frame>
-        {/* <Frame>
+        <Explainer>{t("course_result")}</Explainer>
+        <Frame>
           <DynamicLoadedEditor
             index={1}
-            name="tariffs"
+            name="result"
             getEditorText={myCallback}
-            value={tariffs}
-            placeholder="Как работают тарифы на курсе..."
+            value={result}
           />
-        </Frame> */}
-        <Link
+        </Frame>
+        {/* <Link
           href={{
             pathname: "/coursePage",
             query: { id: coursePage.id },
           }}
         >
           <div className="open_landing">Открыть лендинг курса</div>
-        </Link>
+        </Link> */}
       </Fieldset>
       <Buttons>
         <Button
@@ -538,7 +533,7 @@ const UpdateForm = (props) => {
             });
           }}
         >
-          {loading ? "Меняем..." : "Изменить"}
+          {loading ? t("changing") : t("change")}
         </Button>
         <Link
           href={{
@@ -546,7 +541,7 @@ const UpdateForm = (props) => {
             query: { id: coursePage.id },
           }}
         >
-          <div>Вернуться на страницу урока</div>
+          <div>{t("back")}</div>
         </Link>
       </Buttons>
     </Form>

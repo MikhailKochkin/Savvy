@@ -29,7 +29,13 @@ const UPDATE_NOTE_MUTATION = gql`
 const Container = styled.div`
   width: 600px;
   margin: 1% 0 0 0;
-  margin-top: 5%;
+  margin: 5% 0;
+  display: flex;
+  flex-direction: column;
+  .switch_button {
+    width: 100px;
+    margin-bottom: 10px;
+  }
   h4 {
     padding: 0% 5%;
   }
@@ -39,12 +45,13 @@ const Container = styled.div`
   p > a:hover {
     text-decoration: underline;
   }
+
   @media (max-width: 600px) {
     width: 100%;
   }
   textarea {
     height: 200px;
-    margin: 40px 0;
+    margin: 15px 0;
     width: 90%;
     font-family: "Courier New", Courier, monospace;
     padding: 1%;
@@ -59,6 +66,7 @@ const ButtonTwo = styled.button`
   background: #3f51b5;
   padding: 10px 20px;
   border: 2px solid #3f51b5;
+  width: 150px;
   border-radius: 5px;
   font-family: Montserrat;
   font-size: 1.4rem;
@@ -171,11 +179,12 @@ const UpdateNote = (props) => {
             Создать таблицу
           </a>
         </button> */}
-
-        <button onClick={(e) => setShow(!show)}>
+        <button className="switch_button" onClick={(e) => setShow(!show)}>
           {show ? t("close") : t("open")}
         </button>
+
         {show && <DynamicLoadedEditor getEditorText={getText} value={text} />}
+        <h3>HTML</h3>
         <textarea onChange={(e) => setText(e.target.value)}>{text}</textarea>
 
         <Mutation
