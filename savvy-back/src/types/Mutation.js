@@ -288,7 +288,6 @@ const Mutation = mutationType({
         text: stringArg(),
       },
       resolve: async (_, args, ctx) => {
-        console.log("args", args);
         const userId = args.userId;
 
         delete args.userId;
@@ -306,14 +305,12 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.findUnique({
           where: { id: userId },
         });
-        console.log("user", user.email);
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
-          Subject: `${user.name}, на связи BeSavvy Lawyer`,
+          Subject: `${user.name}, BeSavvy Lawyer is here 👋🏻`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
         });
-
         return message;
       },
     });
