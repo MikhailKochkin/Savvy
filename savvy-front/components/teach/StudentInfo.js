@@ -87,7 +87,7 @@ const StudentInfo = (props) => {
         <div className="row_contact">
           {lr.student.email} / {lr.student.number}
           <button onClick={(e) => setShow(!show)}>
-            {show ? "Закрыть имейл" : "Написать email"}
+            {show ? "Close an email" : "Write an email"}
           </button>
           {lr.student.number && (
             <button>
@@ -96,7 +96,7 @@ const StudentInfo = (props) => {
                 // href={`https://api.whatsapp.com/send?phone=${number}?text=Hello!`}
                 href={`https://wa.me/${lr.student.number}?text=Привет!`}
               >
-                Написать в whatsApp
+                Write on whatsApp
               </a>
             </button>
           )}
