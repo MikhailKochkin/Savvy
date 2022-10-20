@@ -328,7 +328,7 @@ const CoursePage = (props) => {
                   {coursePage.description && renderHTML(coursePage.description)}
                 </div>
               </Data>
-              <PayBox>
+              <PayBox id="info_box">
                 {/* Карточка регистрации на сайте */}
                 {!me && <SignInCard />}
                 {/* Карточка первого урока */}

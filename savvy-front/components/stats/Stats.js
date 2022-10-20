@@ -53,6 +53,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         id
         text
         name
+        open
         assignment
         number
         structure
@@ -65,10 +66,17 @@ const SINGLE_COURSEPAGE_QUERY = gql`
         lessonResults {
           id
           progress
+          createdAt
+          updatedAt
           student {
             id
             name
             surname
+            number
+            email
+            new_subjects {
+              id
+            }
           }
         }
         newTests {

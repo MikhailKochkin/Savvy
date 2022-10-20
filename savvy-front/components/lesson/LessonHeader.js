@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
-import { SINGLE_COURSEPAGE_QUERY } from "../course/CoursePage";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
@@ -63,6 +62,19 @@ const TextBar = styled.div`
   padding-left: 2%;
   position: relative;
   box-shadow: 0 4px 6px -7px rgb(0 0 0 / 5%), 0 4px 30px -9px rgb(0 0 0 / 10%);
+  .open {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: #2e4057;
+    border-radius: 50%;
+    position: absolute;
+    top: -15px;
+    left: 290px;
+  }
   .emoji {
     position: absolute;
     font-size: 2.4rem;
@@ -369,9 +381,19 @@ const LessonHeader = (props) => {
     need_response = [];
   }
 
+  const slide2 = () => {
+    var my_element = document.getElementById("info_box");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
   return (
     <>
       <TextBar color={color}>
+        {lesson && lesson.open && <div className="open">✅</div>}
         <div>
           <Text>
             <div className="lesson_name">
@@ -408,6 +430,11 @@ const LessonHeader = (props) => {
             {time} {t("minutes")}
           </Time>
           <Buttons>
+            {!me && lesson.open && (
+              <Button id="sign_up_open_lesson" onClick={(e) => slide2()}>
+                {t("sign_up_and_open")}
+              </Button>
+            )}
             {me &&
             (me.id === author ||
               me.permissions.includes("ADMIN") ||

@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import LessonResult from "./LessonResult";
 
@@ -47,9 +47,14 @@ const Lessons = (props) => {
           return (
             <MiniStyles>
               <Header>
+                {l.open ? "🔓" : ""}
                 {l.number}. {l.name}.({l.id}) {average}
               </Header>
-              <LessonResult structure={l.structure} res={l.lessonResults} />
+              <LessonResult
+                coursePageId={props.id}
+                structure={l.structure}
+                res={l.lessonResults}
+              />
             </MiniStyles>
           );
         })}
