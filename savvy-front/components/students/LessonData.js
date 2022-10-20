@@ -232,7 +232,7 @@ const LessonData = (props) => {
             </div>
           </Box>
         ) : (
-          <div className="time">Нет данных по заходам на урок</div>
+          <div className="time">No lesson visit data</div>
         )}
       </Data>
 
