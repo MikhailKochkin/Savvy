@@ -1,7 +1,36 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
+
+const GET_RESULTS = gql`
+  query GET_RESULTS($id: String!) {
+    lesson(where: { id: $id }) {
+      id
+      text
+      name
+      open
+      number
+      structure
+      lessonResults {
+        id
+        progress
+        createdAt
+        updatedAt
+        student {
+          id
+          name
+          surname
+          number
+          email
+          new_subjects {
+            id
+          }
+        }
+      }
+    }
+  }
+`;
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION($userId: String!, $text: String!) {
@@ -40,139 +69,159 @@ const Styles = styled.div`
 const LessonResult = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isEmailOpen, setIsEmailOpen] = useState(false);
+  const [show, setShow] = useState(false);
 
   const [message, setMessage] = useState("");
   const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
     useMutation(SEND_MESSAGE_MUTATION);
-
-  let maxes = props.res.filter((r) => r.progress !== 0);
+  const [getData, { loading, error, data }] = useLazyQuery(GET_RESULTS, {
+    variables: { id: props.id },
+  });
   const myCallback = (dataFromChild) => {
     setMessage(dataFromChild);
   };
-  let enrolled_maxes = [...maxes]
-    .filter(
-      (r) =>
-        r.student.new_subjects.filter((subj) => subj.id == props.coursePageId)
-          .length > 0
-    )
-    .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
-  let not_enrolled_maxes = [...props.res]
-    .filter(
-      (r) =>
-        r.student.new_subjects.filter((subj) => subj.id == props.coursePageId)
-          .length == 0
-    )
-    .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+  let maxes;
+  let enrolled_maxes;
+  let not_enrolled_maxes;
+  console.log("data", data);
 
-  // if (props.res.length > 0) {
-  // maxes = props.res.reduce((prev, current) =>
-  //   prev.progress > current.progress ? prev : current
-  // );
-  // }
+  if (data) {
+    maxes = data.lesson.lessonResults.filter((r) => r.progress !== 0);
+
+    enrolled_maxes = [...maxes]
+      .filter(
+        (r) =>
+          r.student.new_subjects.filter((subj) => subj.id == props.coursePageId)
+            .length > 0
+      )
+      .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+
+    not_enrolled_maxes = [...data.lesson.lessonResults]
+      .filter(
+        (r) =>
+          r.student.new_subjects.filter((subj) => subj.id == props.coursePageId)
+            .length == 0
+      )
+      .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
+  }
+
+  if (loading) return <p>Загружаем информацию об уроке...</p>;
   return (
     <Styles>
-      <div>
-        Всего визитов: {maxes.length} {maxes.length == 0 && ""}
-        <button onClick={(e) => setIsOpen(!isOpen)}>
-          {isOpen ? "Close" : "Open"}
-        </button>
-        {isOpen && !props.structure && <p>Урок-испытание</p>}
-        {isOpen && props.structure && (
-          <>
-            <h4>Заинтересованные пользователи:</h4>
-            <ol>
-              {not_enrolled_maxes.length == 0 && <div>Пусто</div>}
-              {[...not_enrolled_maxes].map((r) => (
-                <li>
-                  {r.student.name} {r.student.surname} – {r.progress} /{" "}
-                  {props.structure.lessonItems.length} – {r.updatedAt} –
-                  {r.student.number && (
-                    <button>
-                      <a
-                        target="_blank"
-                        href={`https://wa.me/${r.student.number}?text=Добрый!`}
-                      >
-                        Написать в whatsApp
-                      </a>
-                    </button>
-                  )}
-                  <button onClick={(e) => setIsEmailOpen(!isEmailOpen)}>
-                    Написать по почте
-                  </button>
-                  {isEmailOpen && (
-                    <>
-                      <Editor className="editor">
-                        <DynamicLoadedEditor
-                          getEditorText={myCallback}
-                          value={""}
-                          name="text"
-                        />
-                      </Editor>
-                      <button
-                        onClick={async (e) => {
-                          const res = await sendMessage({
-                            variables: {
-                              userId: r.student.id,
-                              text: message,
-                            },
-                          });
-                        }}
-                      >
-                        {loading1 ? "Sending..." : "Send"}
+      <button
+        onClick={(e) => {
+          getData({
+            variables: { id: props.id },
+          }),
+            setShow(!show);
+        }}
+      >
+        Get data
+      </button>
+      {show && data !== undefined && (
+        <div>
+          Всего визитов: {maxes.length} {maxes.length == 0 && ""}
+          <button onClick={(e) => setIsOpen(!isOpen)}>
+            {isOpen ? "Close" : "Open"}
+          </button>
+          {isOpen && !props.structure && <p>Урок-испытание</p>}
+          {isOpen && props.structure && (
+            <>
+              <h4>Заинтересованные пользователи:</h4>
+              <ol>
+                {not_enrolled_maxes.length == 0 && <div>Пусто</div>}
+                {[...not_enrolled_maxes].map((r) => (
+                  <li>
+                    {r.student.name} {r.student.surname} – {r.progress} /{" "}
+                    {props.structure.lessonItems.length} – {r.updatedAt} –
+                    {r.student.number && (
+                      <button>
+                        <a
+                          target="_blank"
+                          href={`https://wa.me/${r.student.number}?text=Добрый!`}
+                        >
+                          Написать в whatsApp
+                        </a>
                       </button>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ol>
-            <h4>Участники курса:</h4>
-            <ol>
-              {[...enrolled_maxes].map((r) => (
-                <li>
-                  {r.student.name} {r.student.surname} – {r.progress} /{" "}
-                  {props.structure.lessonItems.length} – {r.updatedAt} –
-                  {r.student.number && (
-                    <button>
-                      <a
-                        target="_blank"
-                        href={`https://wa.me/${r.student.number}?text=Добрый!`}
-                      >
-                        Написать в whatsApp
-                      </a>
+                    )}
+                    <button onClick={(e) => setIsEmailOpen(!isEmailOpen)}>
+                      Написать по почте
                     </button>
-                  )}
-                  <button onClick={(e) => setIsEmailOpen(!isEmailOpen)}>
-                    Написать по почте
-                  </button>
-                  {isEmailOpen && (
-                    <>
-                      <Editor className="editor">
-                        <DynamicLoadedEditor
-                          getEditorText={myCallback}
-                          value={""}
-                          name="text"
-                        />
-                      </Editor>
-                      <button
-                        onClick={async (e) => {
-                          const res = await sendMessage({
-                            variables: {
-                              userId: r.student.id,
-                              text: message,
-                            },
-                          });
-                        }}
-                      >
-                        {loading1 ? "Sending..." : "Send"}
+                    {isEmailOpen && (
+                      <>
+                        <Editor className="editor">
+                          <DynamicLoadedEditor
+                            getEditorText={myCallback}
+                            value={""}
+                            name="text"
+                          />
+                        </Editor>
+                        <button
+                          onClick={async (e) => {
+                            const res = await sendMessage({
+                              variables: {
+                                userId: r.student.id,
+                                text: message,
+                              },
+                            });
+                          }}
+                        >
+                          {loading1 ? "Sending..." : "Send"}
+                        </button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              <h4>Участники курса:</h4>
+              <ol>
+                {[...enrolled_maxes].map((r) => (
+                  <li>
+                    {r.student.name} {r.student.surname} – {r.progress} /{" "}
+                    {props.structure.lessonItems.length} – {r.updatedAt} –
+                    {r.student.number && (
+                      <button>
+                        <a
+                          target="_blank"
+                          href={`https://wa.me/${r.student.number}?text=Добрый!`}
+                        >
+                          Написать в whatsApp
+                        </a>
                       </button>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </>
-        )}
-      </div>
+                    )}
+                    <button onClick={(e) => setIsEmailOpen(!isEmailOpen)}>
+                      Написать по почте
+                    </button>
+                    {isEmailOpen && (
+                      <>
+                        <Editor className="editor">
+                          <DynamicLoadedEditor
+                            getEditorText={myCallback}
+                            value={""}
+                            name="text"
+                          />
+                        </Editor>
+                        <button
+                          onClick={async (e) => {
+                            const res = await sendMessage({
+                              variables: {
+                                userId: r.student.id,
+                                text: message,
+                              },
+                            });
+                          }}
+                        >
+                          {loading1 ? "Sending..." : "Send"}
+                        </button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
+        </div>
+      )}
     </Styles>
   );
 };

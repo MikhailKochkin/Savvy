@@ -12,22 +12,6 @@ const LESSONS_QUERY = gql`
       open
       number
       structure
-      lessonResults {
-        id
-        progress
-        createdAt
-        updatedAt
-        student {
-          id
-          name
-          surname
-          number
-          email
-          new_subjects {
-            id
-          }
-        }
-      }
     }
   }
 `;
@@ -96,6 +80,7 @@ const Lessons = (props) => {
               </Header>
               {/* {console.log("l.lessonResults", l.lessonResults)} */}
               <LessonResult
+                id={l.id}
                 coursePageId={props.id}
                 structure={l.structure}
                 res={l.lessonResults}
