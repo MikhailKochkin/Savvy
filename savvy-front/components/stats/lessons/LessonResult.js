@@ -56,15 +56,13 @@ const LessonResult = (props) => {
           .length > 0
     )
     .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
-  let not_enrolled_maxes = [...maxes]
+  let not_enrolled_maxes = [...props.res]
     .filter(
       (r) =>
         r.student.new_subjects.filter((subj) => subj.id == props.coursePageId)
           .length == 0
     )
     .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
-
-  console.log("enrolled_maxes 1", enrolled_maxes);
 
   // if (props.res.length > 0) {
   // maxes = props.res.reduce((prev, current) =>

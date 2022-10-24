@@ -1,40 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
-
 import LessonResult from "./LessonResult";
-
-const STUDENTS_QUERY = gql`
-  query STUDENTS_QUERY($coursePageId: String!) {
-    users(
-      where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
-    ) {
-      id
-      name
-      surname
-      tags
-      email
-      studentFeedback {
-        id
-        lesson {
-          id
-          coursePage {
-            id
-          }
-        }
-      }
-      courseVisits {
-        id
-        reminders
-        visitsNumber
-        coursePage {
-          id
-        }
-        createdAt
-      }
-    }
-  }
-`;
 
 const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
@@ -43,15 +10,8 @@ const LESSONS_QUERY = gql`
       text
       name
       open
-      assignment
       number
       structure
-      coursePage {
-        id
-      }
-      forum {
-        id
-      }
       lessonResults {
         id
         progress
@@ -68,75 +28,6 @@ const LESSONS_QUERY = gql`
           }
         }
       }
-      newTests {
-        id
-        question
-        answers
-        correct
-        next
-      }
-      quizes {
-        id
-        question
-        answer
-        next
-      }
-      forum {
-        rating {
-          id
-          rating
-          user {
-            id
-            name
-            surname
-          }
-        }
-      }
-      # documents {
-      #   id
-      #   title
-      #   documentResults {
-      #     id
-      #     user {
-      #       id
-      #     }
-      #     document {
-      #       id
-      #     }
-      #     answers
-      #     drafts
-      #     createdAt
-      #   }
-      # }
-      notes {
-        id
-        text
-        next
-      }
-      problems {
-        id
-        text
-        nodeID
-        nodeType
-      }
-      texteditors {
-        id
-        text
-        totalMistakes
-      }
-      constructions {
-        id
-        name
-        variants
-        answer
-      }
-      documents {
-        id
-        title
-      }
-      # user {
-      #   id
-      # }
     }
   }
 `;
