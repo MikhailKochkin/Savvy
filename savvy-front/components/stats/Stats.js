@@ -1,157 +1,13 @@
 import { useState } from "react";
-import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 // import Applications from "./applications/Applications";
 import Exercises from "./Exercises";
 import Loading from "../Loading";
-import UserAnalytics from "./UserAnalytics";
 import Lessons from "./lessons/Lessons";
 import Money from "./Money";
-
-const SINGLE_COURSEPAGE_QUERY = gql`
-  query SINGLE_COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
-      id
-      title
-      courseType
-      orders {
-        id
-        isPaid
-        price
-        createdAt
-        updatedAt
-        promocode
-      }
-      new_students {
-        id
-        name
-        surname
-        tags
-        email
-        studentFeedback {
-          id
-          lesson {
-            id
-            coursePage {
-              id
-            }
-          }
-        }
-        courseVisits {
-          id
-          reminders
-          visitsNumber
-          coursePage {
-            id
-          }
-          createdAt
-        }
-      }
-      lessons {
-        id
-        text
-        name
-        open
-        assignment
-        number
-        structure
-        # coursePage {
-        #   id
-        # }
-        # forum {
-        #   id
-        # }
-        lessonResults {
-          id
-          progress
-          createdAt
-          updatedAt
-          student {
-            id
-            name
-            surname
-            number
-            email
-            new_subjects {
-              id
-            }
-          }
-        }
-        newTests {
-          id
-          question
-          answers
-          correct
-          next
-        }
-        quizes {
-          id
-          question
-          answer
-          next
-        }
-        forum {
-          rating {
-            id
-            rating
-            user {
-              id
-              name
-              surname
-            }
-          }
-        }
-        # documents {
-        #   id
-        #   title
-        #   documentResults {
-        #     id
-        #     user {
-        #       id
-        #     }
-        #     document {
-        #       id
-        #     }
-        #     answers
-        #     drafts
-        #     createdAt
-        #   }
-        # }
-        notes {
-          id
-          text
-          next
-        }
-        problems {
-          id
-          text
-          nodeID
-          nodeType
-        }
-        texteditors {
-          id
-          text
-          totalMistakes
-        }
-        constructions {
-          id
-          name
-          variants
-          answer
-        }
-        documents {
-          id
-          title
-        }
-        # user {
-        #   id
-        # }
-      }
-    }
-  }
-`;
+import StudentsData from "./StudentsData";
 
 const Styles = styled.div`
   display: flex;
@@ -206,19 +62,14 @@ const Container = styled.div`
   }
 `;
 
-const DynamicUserAnalytics = dynamic(import("./UserAnalytics"), {
-  loading: () => <Loading />,
-  ssr: false,
-});
-
 const Stats = (props) => {
-  const [page, setPage] = useState("student_results");
+  const [page, setPage] = useState("");
 
-  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
-    variables: { id: props.id },
-  });
-  if (loading) return <Loading />;
-  let coursePage = data.coursePage;
+  // const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+  //   variables: { id: props.id },
+  // });
+  // if (loading) return <Loading />;
+  // let coursePage = data.coursePage;
   return (
     <>
       <div id="root" />
@@ -255,32 +106,24 @@ const Stats = (props) => {
             </div>
           </div>
           <div className="data">
-            {page === "student_results" && (
-              <UserAnalytics
-                coursePage={coursePage.title}
-                coursePageID={coursePage.id}
-                lessons={coursePage.lessons}
-                students={coursePage.new_students}
-              />
-            )}
-            {page === "exercises_results" && (
+            {page === "student_results" && <StudentsData id={props.id} />}
+            {/* {page === "exercises_results" && (
               <Exercises
                 lessons={coursePage.lessons}
                 students={coursePage.new_students}
               />
-            )}
-
+            )}*/}
             {page === "lessons" && (
               <Lessons
-                id={coursePage.id}
-                lessons={coursePage.lessons}
-                students={coursePage.new_students}
+                id={props.id}
+                // lessons={coursePage.lessons}
+                // students={coursePage.new_students}
               />
             )}
-
-            {page === "money" && (
+            {/*{page === "money" && (
               <Money id={coursePage.id} orders={coursePage.orders} />
-            )}
+            )}{" "}
+            */}
           </div>
         </Container>
       </Styles>
@@ -293,4 +136,3 @@ Stats.propTypes = {
 };
 
 export default Stats;
-export { SINGLE_COURSEPAGE_QUERY };

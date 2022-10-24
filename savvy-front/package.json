@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next -p 7777",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
+    "build": "next build",
     "start": "next start -p $PORT",
     "heroku-postbuild": "next build",
     "test": "NODE_ENV=test jest --watch"

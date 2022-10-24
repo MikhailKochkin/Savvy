@@ -212,9 +212,9 @@ const Person = (props) => {
   moment.locale("ru");
   let mail = `mailto:${student.email}`;
 
-  let feedback_num = student.studentFeedback.filter(
-    (f) => f.lesson.coursePage.id == coursePageID
-  ).length;
+  // let feedback_num = student.studentFeedback.filter(
+  //   (f) => f.lesson.coursePage.id == coursePageID
+  // ).length;
 
   // find recent students
   let two_months_ago = new Date();
@@ -313,7 +313,7 @@ const Person = (props) => {
             {student.surname
               ? `${student.name} ${student.surname}`
               : student.name}{" "}
-            – <span> {feedback_num}</span>
+            {/* – <span> {feedback_num}</span> */}
           </div>
           <div className="email">{student.email}</div>
         </Name>

@@ -7,11 +7,11 @@ import Loading from "../Loading";
 import * as _ from "lodash";
 
 const LESSON_RESULTS_QUERY = gql`
-  query LESSON_RESULTS_QUERY($coursePageId: String!) {
+  query LESSON_RESULTS_QUERY($coursePageId: String!, $student_arr: [String!]) {
     lessonResults(
       where: {
         lesson: { coursePageId: { equals: $coursePageId } }
-        student: { new_subjects: { some: { id: { equals: $coursePageId } } } }
+        student: { id: { in: $student_arr } }
       }
     ) {
       id
@@ -57,12 +57,6 @@ const UserAnalytics = (props) => {
   const { coursePageID, coursePage, students, lessons } = props;
   const [number, setNumber] = useState(25);
 
-  const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
-    variables: { coursePageId: coursePageID },
-  });
-  if (loading) return <Loading />;
-
-  const results = data.lessonResults;
   let cloned_elements = _.cloneDeep(students);
   let d = cloned_elements.map((el) =>
     Object.defineProperty(el, "date", {
@@ -79,6 +73,21 @@ const UserAnalytics = (props) => {
     })
   );
   let sorted = d.sort((a, b) => b.date - a.date);
+
+  let student_arr = [];
+  sorted.map((s) => student_arr.push(s.id));
+  console.log("student_arr", student_arr.slice(0, number));
+  const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
+    variables: {
+      coursePageId: coursePageID,
+      student_arr: student_arr.slice(0, number),
+    },
+  });
+  if (loading) return <p>Загружаем информацию о результатах студентов...</p>;
+
+  const results = data.lessonResults;
+  console.log("results", results);
+
   return (
     <Styles>
       <Header>Всего пользователей: {students.length} </Header>

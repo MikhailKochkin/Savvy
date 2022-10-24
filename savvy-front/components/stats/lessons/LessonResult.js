@@ -78,7 +78,8 @@ const LessonResult = (props) => {
         <button onClick={(e) => setIsOpen(!isOpen)}>
           {isOpen ? "Close" : "Open"}
         </button>
-        {isOpen && (
+        {isOpen && !props.structure && <p>Урок-испытание</p>}
+        {isOpen && props.structure && (
           <>
             <h4>Заинтересованные пользователи:</h4>
             <ol>

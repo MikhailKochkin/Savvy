@@ -1,8 +1,34 @@
-import { useState } from "react";
-import styled from "styled-components";
+import React from "react";
 import { gql, useQuery } from "@apollo/client";
+import Loading from "../Loading";
+import UserAnalytics from "./UserAnalytics";
 
-import LessonResult from "./LessonResult";
+const SINGLE_COURSEPAGE_QUERY = gql`
+  query SINGLE_COURSEPAGE_QUERY($id: String!) {
+    coursePage(where: { id: $id }) {
+      id
+      title
+      courseType
+      #   orders {
+      #     id
+      #     isPaid
+      #     price
+      #     createdAt
+      #     updatedAt
+      #     promocode
+      #   }
+      lessons {
+        id
+        text
+        name
+        open
+        assignment
+        number
+        structure
+      }
+    }
+  }
+`;
 
 const STUDENTS_QUERY = gql`
   query STUDENTS_QUERY($coursePageId: String!) {
@@ -52,22 +78,22 @@ const LESSONS_QUERY = gql`
       forum {
         id
       }
-      lessonResults {
-        id
-        progress
-        createdAt
-        updatedAt
-        student {
-          id
-          name
-          surname
-          number
-          email
-          new_subjects {
-            id
-          }
-        }
-      }
+      #   lessonResults {
+      #     id
+      #     progress
+      #     createdAt
+      #     updatedAt
+      #     student {
+      #       id
+      #       name
+      #       surname
+      #       number
+      #       email
+      #       new_subjects {
+      #         id
+      #       }
+      #     }
+      #   }
       newTests {
         id
         question
@@ -141,31 +167,17 @@ const LESSONS_QUERY = gql`
   }
 `;
 
-const Styles = styled.div`
-  border: 2px solid #edefed;
-  margin: 3% 0;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
-`;
-
-const MiniStyles = styled.div`
-  margin-bottom: 5px;
-  border-bottom: 2px solid #edefed;
-  padding: 3%;
-`;
-
-const Header = styled.p`
-  font-size: 1.8rem;
-  /* background: #edefed; */
-  padding: 0.5% 2%;
-  padding-top: 8px;
-  margin: 0;
-  margin-top: -2px;
-  margin-bottom: 5px;
-  /* border-bottom: 2px solid #edefed; */
-`;
-
-const Lessons = (props) => {
+const StudentsData = (props) => {
+  const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
+    variables: { id: props.id },
+  });
+  const {
+    loading: loading1,
+    error: error1,
+    data: data1,
+  } = useQuery(STUDENTS_QUERY, {
+    variables: { coursePageId: props.id },
+  });
   const {
     loading: loading2,
     error: error2,
@@ -173,47 +185,30 @@ const Lessons = (props) => {
   } = useQuery(LESSONS_QUERY, {
     variables: { id: props.id },
   });
+
+  if (loading) return <p>Загружаем информацию о курсе...</p>;
+  if (loading1) return <p>Загружаем информацию о студентах...</p>;
   if (loading2) return <p>Загружаем информацию об уроках...</p>;
 
+  let coursePage = data.coursePage;
+  let students = data1.users;
   let lessons = data2.lessons;
-  {
-    console.log("lessons", lessons);
-  }
+
+  console.log("coursePage", coursePage);
+  console.log("users", students);
+  console.log("lessons", lessons);
 
   return (
-    <Styles>
-      {[...lessons]
-        .sort((a, b) => (a.number > b.number ? 1 : -1))
-        .map((l) => {
-          let ratings = [];
-          l.forum
-            ? l.forum.rating.map((r) => ratings.push(r.rating))
-            : (ratings = [0]);
-          let average = (
-            ratings.reduce((a, b) => a + b, 0) / ratings.length
-          ).toFixed(2);
-          console.log(average == NaN);
-          if (isNaN(average)) {
-            average = "Нет оценок";
-          }
-          console.log("l", l.structure);
-          return (
-            <MiniStyles>
-              <Header>
-                {l.open ? "🔓" : ""}
-                {l.number}. {l.name}.({l.id}) {average}
-              </Header>
-              {/* {console.log("l.lessonResults", l.lessonResults)} */}
-              <LessonResult
-                coursePageId={props.id}
-                structure={l.structure}
-                res={l.lessonResults}
-              />
-            </MiniStyles>
-          );
-        })}
-    </Styles>
+    <div>
+      <UserAnalytics
+        coursePage={coursePage.title}
+        coursePageID={coursePage.id}
+        lessons={lessons}
+        students={students}
+      />
+    </div>
   );
 };
 
-export default Lessons;
+export default StudentsData;
+export { SINGLE_COURSEPAGE_QUERY };

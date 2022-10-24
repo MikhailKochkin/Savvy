@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
+import dynamic from "next/dynamic";
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
@@ -14,8 +15,12 @@ const UPDATE_PUBLISHED_MUTATION = gql`
 `;
 
 const UPDATE_LESSON_MUTATION = gql`
-  mutation UPDATE_LESSON_MUTATION($id: String!, $number: Int) {
-    updateLesson(id: $id, number: $number) {
+  mutation UPDATE_LESSON_MUTATION(
+    $id: String!
+    $number: Int
+    $description: String
+  ) {
+    updateLesson(id: $id, number: $number, description: $description) {
       id
     }
   }
@@ -102,12 +107,6 @@ const TextBar = styled.div`
   }
   img {
     max-height: 150px;
-  }
-  span {
-    cursor: pointer;
-    &:hover {
-      color: red;
-    }
   }
   transition: 0.3s;
   &:hover {
@@ -302,8 +301,26 @@ const ToggleQuestion = styled.div`
   }
 `;
 
+const Frame = styled.div`
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0 1%;
+  .com {
+    border-top: 1px solid #c4c4c4;
+  }
+`;
+
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
 const LessonHeader = (props) => {
   const [published, setPublished] = useState(props.lesson.published);
+  const [number, setNumber] = useState(props.lesson.number);
+  const [description, setDescription] = useState(props.lesson.description);
+
   const { t } = useTranslation("course");
 
   const [createLessonResult, { create_data }] = useMutation(
@@ -390,6 +407,17 @@ const LessonHeader = (props) => {
     });
   };
 
+  const myCallback = (data) => {
+    setDescription(parseInt(data));
+    return updateLesson({
+      variables: {
+        id: lesson.id,
+        number: number,
+        description: data,
+      },
+    });
+  };
+
   return (
     <>
       <TextBar color={color}>
@@ -404,8 +432,9 @@ const LessonHeader = (props) => {
                 <input
                   name="number"
                   type="number"
-                  defaultValue={lesson.number}
+                  defaultValue={number}
                   onChange={async (e) => {
+                    setNumber(parseInt(e.target.value));
                     return updateLesson({
                       variables: {
                         id: lesson.id,
@@ -420,8 +449,22 @@ const LessonHeader = (props) => {
               {name}{" "}
             </div>
             <div className="lesson_description">
-              {lesson.description &&
-                renderHTML(lesson.description.substring(0, 300))}
+              {me &&
+              (me.id === author ||
+                me.permissions.includes("ADMIN") ||
+                i_am_author) ? (
+                <Frame>
+                  <DynamicLoadedEditor
+                    index={0}
+                    name="description"
+                    getEditorText={myCallback}
+                    value={lesson.description}
+                  />
+                </Frame>
+              ) : (
+                lesson.description &&
+                renderHTML(lesson.description.substring(0, 300))
+              )}
             </div>
           </Text>
         </div>
