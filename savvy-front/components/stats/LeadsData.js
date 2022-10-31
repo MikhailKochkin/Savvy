@@ -9,6 +9,14 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       id
       title
       courseType
+      #   orders {
+      #     id
+      #     isPaid
+      #     price
+      #     createdAt
+      #     updatedAt
+      #     promocode
+      #   }
       lessons {
         id
         text

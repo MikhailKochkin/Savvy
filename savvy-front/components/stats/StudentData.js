@@ -383,7 +383,9 @@ const Person = (props) => {
               mutation={UPDATE_COURSE_VISIT_MUTATION}
               variables={{
                 id: courseVisit.id,
-                reminders: [...courseVisit.reminders, new Date()],
+                reminders: courseVisit.reminders
+                  ? [...courseVisit.reminders, new Date()]
+                  : [new Date()],
                 comment: "hello",
                 info: emailInfo,
               }}
@@ -408,7 +410,9 @@ const Person = (props) => {
               mutation={UPDATE_COURSE_VISIT_MUTATION}
               variables={{
                 id: courseVisit.id,
-                reminders: [...courseVisit.reminders, new Date()],
+                reminders: courseVisit.reminders
+                  ? [...courseVisit.reminders, new Date()]
+                  : [new Date()],
                 comment: "problem",
                 info: emailInfo,
               }}
@@ -433,7 +437,9 @@ const Person = (props) => {
               mutation={UPDATE_COURSE_VISIT_MUTATION}
               variables={{
                 id: courseVisit.id,
-                reminders: [...courseVisit.reminders, new Date()],
+                reminders: courseVisit.reminders
+                  ? [...courseVisit.reminders, new Date()]
+                  : [new Date()],
                 comment: "motivation",
                 info: emailInfo,
               }}
@@ -461,6 +467,7 @@ const Person = (props) => {
           lessons={lessons}
         />
         {courseVisit &&
+          courseVisit.reminders &&
           courseVisit.reminders.map((r) => <li>{moment(r).format("LLL")}</li>)}
         {page === "results" &&
           [...lessons]

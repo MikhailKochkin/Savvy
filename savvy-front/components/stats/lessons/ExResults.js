@@ -1,7 +1,7 @@
 import React from "react";
 import { gql, useQuery } from "@apollo/client";
-import Loading from "../Loading";
-import UserAnalytics from "./UserAnalytics";
+
+import StudentData from "../StudentData";
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -22,11 +22,9 @@ const SINGLE_COURSEPAGE_QUERY = gql`
   }
 `;
 
-const STUDENTS_QUERY = gql`
-  query STUDENTS_QUERY($coursePageId: String!) {
-    users(
-      where: { new_subjects: { some: { id: { equals: $coursePageId } } } }
-    ) {
+const STUDENT_QUERY = gql`
+  query STUDENT_QUERY($userId: String!) {
+    user(where: { id: $userId }) {
       id
       name
       surname
@@ -54,9 +52,38 @@ const STUDENTS_QUERY = gql`
   }
 `;
 
-const LESSONS_QUERY = gql`
-  query LESSONS_QUERY($id: String!) {
-    lessons(where: { coursePage: { id: { equals: $id } } }) {
+const LESSON_RESULTS_QUERY = gql`
+  query LESSON_RESULTS_QUERY($lessonId: String!, $studentId: String!) {
+    lessonResults(
+      where: {
+        lesson: { id: { equals: $lessonId } }
+        student: { id: { equals: $studentId } }
+      }
+    ) {
+      id
+      visitsNumber
+      progress
+      checked
+      lesson {
+        id
+        name
+        structure
+        type
+        number
+      }
+      student {
+        id
+        email
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+const LESSON_QUERY = gql`
+  query LESSON_QUERY($id: String!) {
+    lesson(where: { id: $id }) {
       id
       text
       name
@@ -159,44 +186,56 @@ const LESSONS_QUERY = gql`
   }
 `;
 
-const StudentsData = (props) => {
+const ExResults = (props) => {
+  console.log("props.less", props);
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
-    variables: { id: props.id },
+    variables: { id: props.coursePageId },
   });
   const {
     loading: loading1,
     error: error1,
     data: data1,
-  } = useQuery(STUDENTS_QUERY, {
-    variables: { coursePageId: props.id },
+  } = useQuery(STUDENT_QUERY, {
+    variables: { userId: props.userId },
   });
   const {
     loading: loading2,
     error: error2,
     data: data2,
-  } = useQuery(LESSONS_QUERY, {
-    variables: { id: props.id },
+  } = useQuery(LESSON_QUERY, {
+    variables: { id: props.lessondId },
+  });
+
+  const {
+    loading: loading3,
+    error: error3,
+    data: data3,
+  } = useQuery(LESSON_RESULTS_QUERY, {
+    variables: { lessonId: props.lessondId, studentId: props.userId },
   });
 
   if (loading) return <p>Загружаем информацию о курсе...</p>;
   if (loading1) return <p>Загружаем информацию о студентах...</p>;
   if (loading2) return <p>Загружаем информацию об уроках...</p>;
+  if (loading3) return <p>Загружаем информацию о результатах...</p>;
 
   let coursePage = data.coursePage;
-  let students = data1.users;
-  let lessons = data2.lessons;
-
+  let student = data1.user;
+  let lessons = [data2.lesson];
+  let lessonResults = data3.lessonResults;
   return (
     <div>
-      <UserAnalytics
-        coursePage={coursePage.title}
-        coursePageID={coursePage.id}
+      <div>Результаты урока:</div>
+      <StudentData
+        coursePage={coursePage}
+        student={student}
         lessons={lessons}
-        students={students}
+        coursePageID={props.coursePageId}
+        results={lessonResults}
+        courseVisit={[]}
       />
     </div>
   );
 };
 
-export default StudentsData;
-export { SINGLE_COURSEPAGE_QUERY };
+export default ExResults;

@@ -20,6 +20,7 @@ const COURSES_QUERY = gql`
       nextStart
       installments
       price
+      discountPrice
       numInCareerTrack
       image
       tags
@@ -136,9 +137,7 @@ const Programs = () => {
     data: data1,
   } = useQuery(PROGRAMS_QUERY);
 
-  const [tag, setTag] = useState(
-    router.locale == "ru" ? "english" : "english_eng"
-  );
+  const [tag, setTag] = useState(router.locale == "ru" ? "now" : "english_eng");
 
   useEffect(() => {
     // kick off the polyfill!
@@ -171,6 +170,9 @@ const Programs = () => {
           <>
             <div id="want">😏 Я хочу ...</div>
             <Tags>
+              <Option active={tag == "now"} onClick={(e) => move("now")}>
+                Учиться в потоке
+              </Option>
               <Option
                 active={tag == "english"}
                 onClick={(e) => move("english")}
@@ -179,6 +181,9 @@ const Programs = () => {
               </Option>
               <Option active={tag == "corp"} onClick={(e) => move("corp")}>
                 Работать с корпоративным правом
+              </Option>
+              <Option active={tag == "civil"} onClick={(e) => move("civil")}>
+                Изучать гражданское право
               </Option>
               <Option active={tag == "ip"} onClick={(e) => move("ip")}>
                 Работать в IT/IP
@@ -210,11 +215,8 @@ const Programs = () => {
               >
                 Найти первую работу
               </Option>
-              <Option active={tag == "civil"} onClick={(e) => move("civil")}>
-                Отточить знания гражданского права
-              </Option>
               <Option active={tag == "tech"} onClick={(e) => move("tech")}>
-                Погрузиться в юридические технологии
+                Погрузиться в Legal Tech
               </Option>
               <Option id="create">
                 <a href="https://t.me/MikKochkin" target="_blank">
@@ -273,6 +275,7 @@ const Programs = () => {
               description={p.description}
               nextStart={p.nextStart}
               price={p.price}
+              discountPrice={p.discountPrice}
               installments={p.installments}
               // conditions={p.conditions}
               id={p.id}

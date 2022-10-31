@@ -27,21 +27,6 @@ export const CourseInfo = styled.div`
   }
 `;
 
-export const LessonsInfo = styled.div`
-  margin-top: 30px;
-
-  padding: 0 3%;
-  h1 {
-    line-height: 1.2;
-  }
-  .week {
-    font-size: 1.6rem;
-    font-weight: bold;
-    margin: 1% 0;
-    margin-top: 20px;
-  }
-`;
-
 export const Data = styled.div`
   flex: 60%;
   background: #fff;

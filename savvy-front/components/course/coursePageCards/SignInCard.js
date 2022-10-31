@@ -90,7 +90,7 @@ const RegisterCard = () => {
   return (
     <>
       <Payment>
-        <Header>👏🏻 {t("register_header")}</Header>
+        <Header>✍️ {t("register_header")}</Header>
         <div>{t("register_explainer")}</div>
         <SmallButton onClick={(e) => setIsOpen(true)}>
           {t("register_button")}

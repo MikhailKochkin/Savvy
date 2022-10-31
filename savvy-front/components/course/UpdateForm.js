@@ -18,6 +18,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $methods: String
     $nextStart: DateTime
     $price: Int
+    $discountPrice: Int
     $goals: [String]
     $header: [String]
     $subheader: [String]
@@ -33,6 +34,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       result: $result
       tariffs: $tariffs
       methods: $methods
+      discountPrice: $discountPrice
       nextStart: $nextStart
       price: $price
       goals: $goals
@@ -521,6 +523,7 @@ const UpdateForm = (props) => {
                 audience,
                 goals,
                 price,
+                discountPrice,
                 header,
                 nextStart: startDate,
                 subheader,

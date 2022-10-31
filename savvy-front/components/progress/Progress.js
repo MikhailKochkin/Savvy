@@ -25,6 +25,8 @@ const USERS_QUERY = gql`
       name
       surname
       createdAt
+      updatedAt
+      country
       status
       coursePages {
         id
@@ -225,7 +227,7 @@ const Progress = (props) => {
     <Styles>
       <Container>
         <KPI coursePages={coursePages} users={users} />
-        <select onChange={(e) => setOption(e.target.value)}>
+        {/* <select onChange={(e) => setOption(e.target.value)}>
           <option value="cjtreu3md00fp0897ga13aktp">
             Старт в Гражданском Праве (общая часть)
           </option>
@@ -264,7 +266,7 @@ const Progress = (props) => {
             Старт в ценных бумагах
           </option>
         </select>
-        <CourseBox key={coursePage.id} id={coursePage.id} c={coursePage} />
+        <CourseBox key={coursePage.id} id={coursePage.id} c={coursePage} />*/}
       </Container>
     </Styles>
   );

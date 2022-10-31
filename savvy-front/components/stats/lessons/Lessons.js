@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { gql, useQuery } from "@apollo/client";
-import LessonResult from "./LessonResult";
+import LessonResults from "./LessonResults";
 
 const LESSONS_QUERY = gql`
   query LESSONS_QUERY($id: String!) {
@@ -12,6 +12,17 @@ const LESSONS_QUERY = gql`
       open
       number
       structure
+      forum {
+        rating {
+          id
+          rating
+          user {
+            id
+            name
+            surname
+          }
+        }
+      }
     }
   }
 `;
@@ -51,8 +62,16 @@ const Lessons = (props) => {
   if (loading2) return <p>Загружаем информацию об уроках...</p>;
 
   let lessons = data2.lessons;
-  {
-    console.log("lessons", lessons);
+
+  function getMedian(numbers) {
+    const sorted = Array.from(numbers).sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+
+    if (sorted.length % 2 === 0) {
+      return (sorted[middle - 1] + sorted[middle]) / 2;
+    }
+
+    return sorted[middle];
   }
 
   return (
@@ -64,26 +83,28 @@ const Lessons = (props) => {
           l.forum
             ? l.forum.rating.map((r) => ratings.push(r.rating))
             : (ratings = [0]);
+          console.log("ratings", ratings, l.forum);
           let average = (
             ratings.reduce((a, b) => a + b, 0) / ratings.length
           ).toFixed(2);
-          console.log(average == NaN);
+          let median = getMedian(ratings);
+          console.log("median", median);
           if (isNaN(average)) {
             average = "Нет оценок";
           }
-          console.log("l", l.structure);
           return (
             <MiniStyles>
               <Header>
                 {l.open ? "🔓" : ""}
-                {l.number}. {l.name}.({l.id}) {average}
+                {l.number}. {l.name}.({l.id}) {average} / {median}
               </Header>
               {/* {console.log("l.lessonResults", l.lessonResults)} */}
-              <LessonResult
+              <LessonResults
                 id={l.id}
                 coursePageId={props.id}
                 structure={l.structure}
                 res={l.lessonResults}
+                lesson={l}
               />
             </MiniStyles>
           );

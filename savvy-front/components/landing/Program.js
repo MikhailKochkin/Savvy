@@ -75,6 +75,9 @@ const Down = styled.div`
     font-size: 2rem;
     /* text-decoration: line-through; */
     text-decoration-color: #496ddb;
+    span {
+      color: #e9190f;
+    }
   }
   .price_box_discount {
     font-size: 2rem;
@@ -88,6 +91,11 @@ const Down = styled.div`
   .price_box_description {
     font-size: 1.3rem;
   }
+`;
+
+const PriceBoxDescription = styled.div`
+  font-size: 1.3rem;
+  color: ${(props) => (props.discount ? "#E9190F" : "#393939")};
 `;
 
 const Title = styled.div`
@@ -138,6 +146,8 @@ const Program = (props) => {
     return five;
   };
 
+  // let price = props.discountPrice ? props.discountPrice : props.price;
+  let price = props.price;
   return (
     <Card>
       <Up>
@@ -153,12 +163,24 @@ const Program = (props) => {
           <div className="price_container">
             <div className="price_box">
               <div className="price_box_price">
-                {parseInt(parseInt(props.price) / 1000) > 0
-                  ? parseInt(parseInt(props.price) / 1000)
+                {parseInt(parseInt(price) / 1000) > 0
+                  ? parseInt(parseInt(price) / 1000)
                   : ""}{" "}
-                {parseInt(props.price) % 1000}₽
+                {parseInt(price) % 1000}₽{" "}
               </div>
-              <div className="price_box_description">{t("full_price")}</div>
+              <PriceBoxDescription discount={props.discountPrice}>
+                {props.discountPrice ? (
+                  <span>
+                    {t("discount_price")}{" "}
+                    {`-${
+                      100 - parseInt((props.discountPrice / props.price) * 100)
+                    }%`}
+                    !
+                  </span>
+                ) : (
+                  t("full_price")
+                )}
+              </PriceBoxDescription>
             </div>
             <div className="price_box">
               <div className="price_box_discount">

@@ -423,8 +423,6 @@ const NewSingleLesson = (props) => {
   ) {
     i_am_student = true;
   }
-  console.log("lesson.type", lesson.open);
-
   return (
     <PleaseSignIn>
       {!i_am_student && lesson.open && (
@@ -449,7 +447,7 @@ const NewSingleLesson = (props) => {
                 {lesson.open ? (
                   <Link
                     href={{
-                      pathname: "/coursePage",
+                      pathname: "/course",
                       query: {
                         id: lesson.coursePage.id,
                       },

@@ -490,22 +490,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = (props) => {
-  const [open, setOpen] = useState(false);
-  const [num, setNum] = useState(
-    props.my_result &&
-      props.my_result.progress !== null &&
-      props.my_result.progress !== 0 &&
-      props.my_result.progress / props.number_of_tasks < 0.9
-      ? props.my_result.progress - 1
-      : 0
+  const [num, setNum] = useState(0);
+  // props.my_result &&
+  //   props.my_result.progress !== null &&
+  //   props.my_result.progress !== 0 &&
+  //   props.my_result.progress / props.number_of_tasks < 0.9 &&
+  //   !secondRound
+  //   ? props.my_result.progress - 1
+  //   : 0
+  const [result, setResult] = useState(
+    props.my_result ? props.my_result.id : null
   );
+  const [secondRound, setSecondRound] = useState(false);
+  const [progress, setProgress] = useState();
+  const [open, setOpen] = useState(false);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
   const classes = useStyles();
   const { t } = useTranslation("lesson");
-  const getResults = (el) => {
-    console.log("res2", el);
-  };
+
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
@@ -564,6 +567,7 @@ const Feed = (props) => {
       }
     }
   };
+
   let visited;
   if (props.me && props.next && props.next.lessonResults) {
     visited = props.next.lessonResults.filter(
@@ -574,14 +578,29 @@ const Feed = (props) => {
   }
 
   useEffect(() => {
+    // setResult(props.my_result ? props.my_result.id : null);
+  }, [0]);
+  useEffect(() => {
+    console.log("useEffect triggered", props.my_result);
+    setResult(props.my_result ? props.my_result.id : null);
+    setNum(
+      num > 0
+        ? num
+        : props.my_result &&
+          props.my_result.progress !== null &&
+          props.my_result.progress !== 0 &&
+          props.my_result.progress / props.number_of_tasks < 0.9
+        ? props.my_result.progress - 1
+        : 0
+    );
+    setSecondRound(true);
     if (
       props.components.length > num + 1 &&
       props.my_result &&
       props.my_result.progress / props.number_of_tasks < 0.9
     ) {
       if (props.components.length > num + 2) {
-        var my_element =
-          document.getElementsByClassName("final")[0].previousSibling;
+        var my_element = document.getElementsByClassName("final")[0];
         my_element &&
           my_element.scrollIntoView({
             behavior: "smooth",
@@ -600,21 +619,24 @@ const Feed = (props) => {
         });
       }
     }
-  }, [0]);
-  let color;
-  if (props.components[num].props.complexity == 1) {
-    color = "#55a630";
-  } else if (props.components[num].props.complexity == 2) {
-    color = "#3a86ff";
-  } else if (props.components[num].props.complexity == 3) {
-    color = "#f4d35e";
-  } else if (props.components[num].props.complexity == 4) {
-    color = "#f95738";
-  } else if (props.components[num].props.complexity == 5) {
-    color = "#201C35";
-  } else {
-    color = "#55a630";
-  }
+  }, [props.my_result]);
+  // let color;
+  // if (props.components[num].props.complexity == 1) {
+  //   color = "#55a630";
+  // } else if (props.components[num].props.complexity == 2) {
+  //   color = "#3a86ff";
+  // } else if (props.components[num].props.complexity == 3) {
+  //   color = "#f4d35e";
+  // } else if (props.components[num].props.complexity == 4) {
+  //   color = "#f95738";
+  // } else if (props.components[num].props.complexity == 5) {
+  //   color = "#201C35";
+  // } else {
+  //   color = "#55a630";
+  // }
+
+  console.log("comps", props.components.slice(0, num + 2));
+  console.log("num", num);
   return (
     <>
       <Styles>
@@ -646,7 +668,7 @@ const Feed = (props) => {
           >
             <img className="arrow" src="../../static/burger_menu.svg" />
           </div>
-          {props.my_result ? (
+          {result ? (
             <>
               {props.components.slice(0, num + 2).map((c, i) => (
                 <Block
@@ -658,7 +680,7 @@ const Feed = (props) => {
                   <Mutation
                     mutation={UPDATE_LESSONRESULT_MUTATION}
                     variables={{
-                      id: props.my_result.id,
+                      id: result,
                       lessonID: props.lessonID,
                       progress: num + 2,
                     }}
@@ -672,15 +694,26 @@ const Feed = (props) => {
                     {(updateLessonResult, { loading, error }) => {
                       return (
                         <Buttons>
+                          {/* Show move button if it is not the last block in the lesson */}
                           {props.components.length > num + 1 && i === num && (
                             <>
                               <div
+                                id="arrow_box"
                                 className="arrow_box"
-                                onClick={(e) => {
-                                  if (props.my_result.progress < num + 2) {
-                                    let res = updateLessonResult();
+                                onClick={async (e) => {
+                                  //
+                                  // if (result.progress < num + 2) {
+
+                                  if (
+                                    props.components.length - (num + 2) ==
+                                    2
+                                  ) {
+                                    setSecondRound(true);
                                   }
                                   let res2 = move();
+                                  let res = await updateLessonResult();
+                                  // }
+                                  console.log("res", res, num + 2);
                                 }}
                               >
                                 <img
@@ -706,6 +739,7 @@ const Feed = (props) => {
                   className={i === num + 1 ? "final" : "no"}
                 >
                   {c}
+                  <div>{result}</div>
                   <Mutation
                     mutation={CREATE_LESSONRESULT_MUTATION}
                     variables={{
@@ -725,10 +759,19 @@ const Feed = (props) => {
                           {props.components.length > num + 1 && i === num && (
                             <>
                               <div
+                                id="arrow"
                                 className="arrow_box"
-                                onClick={(e) => {
-                                  let res = createLessonResult();
+                                onClick={async (e) => {
                                   let res2 = move();
+                                  console.log("createLessonResult");
+                                  let res = await createLessonResult();
+                                  console.log(
+                                    "res",
+                                    res,
+                                    res.data.createLessonResult.id
+                                  );
+
+                                  setResult(res.data.createLessonResult.id);
                                 }}
                               >
                                 <img

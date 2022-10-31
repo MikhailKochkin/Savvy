@@ -4873,6 +4873,7 @@ export interface NexusGenArgTypes {
       authors?: string | null; // String
       currency?: string | null; // String
       description?: string | null; // String
+      discountPrice?: number | null; // Int
       goals?: Array<string | null> | null; // [String]
       header?: Array<string | null> | null; // [String]
       id?: string | null; // String

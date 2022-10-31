@@ -6,26 +6,22 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 import ReactResizeDetector from "react-resize-detector";
 
-const CREATE_ORDER_MUTATION = gql`
-  mutation createOrder(
-    $coursePageId: String!
-    $userId: String!
-    $price: Int!
-    $promocode: String
+const CREATE_CLIENT = gql`
+  mutation createBusinessClient(
+    $name: String!
+    $email: String!
+    $number: String
+    $coursePageId: String
     $comment: String
   ) {
-    createOrder(
+    createBusinessClient(
+      email: $email
+      name: $name
+      number: $number
       coursePageId: $coursePageId
-      price: $price
-      userId: $userId
-      promocode: $promocode
       comment: $comment
     ) {
-      order {
-        id
-        paymentID
-      }
-      url
+      id
     }
   }
 `;
@@ -203,6 +199,7 @@ const StyledModal = Modal.styled`
 
 const Ad = (props) => {
   const [width, setWidth] = useState(0);
+  const [sent, setSent] = useState(false);
 
   const onResize = (width, height) => {
     setWidth(width);
@@ -212,10 +209,14 @@ const Ad = (props) => {
     variables: { id: props.coursePageId },
   });
 
+  // const [
+  //   createOrder,
+  //   { data: order_data, loading: loading_data, error: error_data },
+  // ] = useMutation(CREATE_ORDER_MUTATION);
   const [
-    createOrder,
-    { data: order_data, loading: loading_data, error: error_data },
-  ] = useMutation(CREATE_ORDER_MUTATION);
+    createBusinessClient,
+    { data: client_data, loading: client_loading, error: client_error },
+  ] = useMutation(CREATE_CLIENT);
 
   if (loading) return <div></div>;
   const course = data.coursePage;
@@ -234,45 +235,31 @@ const Ad = (props) => {
         {data && (
           <>
             <div className="bottomline_text">
-              {width < 500 && (
-                <span>
-                  {/* 🚀 Откройте доступ к курсу  */}Курс со скидкой 20% –{" "}
-                  <br /> {course.price * 0.8} ₽ вместо {course.price} ₽
-                  {/* "{course.title}". Автор – {course.user.name}{" "}
-            {course.user.surname} */}
-                </span>
-              )}
-              {width >= 500 && (
-                <span>
-                  🚀 Откройте доступ к курсу "{course.title}" со скидкой 20% –{" "}
-                  {course.price * 0.8} ₽ вместо {course.price} ₽
-                  {/* "{course.title}". Автор – {course.user.name}{" "}
-            {course.user.surname} */}
-                </span>
-              )}
+              <span>🤔 {t("consider")}</span>
             </div>
-            {/* <div className="more_bottomline_text">
-          <span>
-            🖐🏻 Курс: Юридический английский для профессионалов. Базовый уровень.
-          </span>
-        </div> */}
+            {/* {sent && <p></p>} */}
             <Button
-              // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
               target="_blank"
-              id="bottomline_coursepage_to_demo_lesson"
+              id="bottomline_lesso_to_application"
               onClick={async (e) => {
-                const res = await createOrder({
+                const res = await createBusinessClient({
                   variables: {
                     coursePageId: course.id,
-                    price: course.price * 0.8,
-                    userId: me.id,
+                    name: `${me.name} ${me.surname}`,
+                    email: me.email,
+                    number: me.number ? me.number : "no",
+                    comment: "consult",
                   },
                 });
-                location.href = res.data.createOrder.url;
+                setSent(true);
               }}
             >
-              {/* {t("start_open_lesson")} */}{" "}
-              {loading_data ? "Открываем..." : "Открыть доступ"}
+              <a
+                href="https://calendly.com/mikhail-from-besavvy/call-with-mike-kochkin"
+                target="_blank"
+              >
+                {client_loading ? "..." : t("book")}
+              </a>
             </Button>
           </>
         )}

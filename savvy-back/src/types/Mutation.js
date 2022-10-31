@@ -697,6 +697,7 @@ const Mutation = mutationType({
         audience: stringArg(),
         result: stringArg(),
         price: intArg(),
+        discountPrice: intArg(),
         currency: stringArg(),
         news: stringArg(),
         authors: stringArg(),
@@ -719,6 +720,7 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
+        console.log("args", args);
         delete updates.id;
         const header = args.header;
         const subheader = args.subheader;
@@ -3099,7 +3101,7 @@ const Mutation = mutationType({
           const newEmail = await client.sendEmail({
             From: "Mikhail@besavvy.app",
             To: "Mikhail@besavvy.app",
-            Subject: "Новая заявка на курс",
+            Subject: "Новая заявка на консультацию",
             HtmlBody: makeANiceEmail(
               `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
             ),

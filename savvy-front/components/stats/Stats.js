@@ -83,6 +83,13 @@ const Stats = (props) => {
             >
               Студенты{" "}
             </div>
+            {/* <div
+              className="button"
+              name="leads"
+              onClick={(e) => setPage("leads")}
+            >
+              Лиды{" "}
+            </div> */}
             <div
               className="button"
               name="exercises_results"
@@ -107,6 +114,8 @@ const Stats = (props) => {
           </div>
           <div className="data">
             {page === "student_results" && <StudentsData id={props.id} />}
+            {/* {page === "student_results" && <LeadsData id={props.id} />} */}
+
             {/* {page === "exercises_results" && (
               <Exercises
                 lessons={coursePage.lessons}
@@ -120,10 +129,7 @@ const Stats = (props) => {
                 // students={coursePage.new_students}
               />
             )}
-            {/*{page === "money" && (
-              <Money id={coursePage.id} orders={coursePage.orders} />
-            )}{" "}
-            */}
+            {page === "money" && <Money id={props.id} />}
           </div>
         </Container>
       </Styles>

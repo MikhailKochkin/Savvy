@@ -36,25 +36,25 @@ const ENROLL_COURSE_MUTATION = gql`
 `;
 
 const Button = styled.button`
-  background: #0846d8;
   border-radius: 5px;
+  border: 2px solid #b5b5b5;
   width: 95%;
+  font-family: Montserrat;
   height: 38px;
   outline: 0;
-  color: white;
   font-weight: 600;
   font-size: 1.4rem;
   outline: none;
   cursor: pointer;
+  transition: 0.3s;
+
   a {
-    color: white;
     font-weight: 600;
     font-size: 1.4rem;
   }
-  border: none;
   margin-top: 10px;
   &:hover {
-    background: rgba(8, 70, 216, 0.85);
+    background: #dbdbdc;
   }
   &:active {
     background-color: ${(props) => props.theme.darkGreen};
@@ -135,7 +135,7 @@ const EnrollCoursePage = (props) => {
               },
             }}
           >
-            {t("enroll")}
+            {t("buy_course")}
           </Link>
         </Button>
       )}

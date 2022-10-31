@@ -46,6 +46,7 @@ const UPDATE_LESSONRESULT_MUTATION = gql`
       progress: $progress
     ) {
       id
+      progress
     }
   }
 `;
@@ -79,6 +80,10 @@ const TextBar = styled.div`
     position: absolute;
     top: -15px;
     left: 290px;
+    img {
+      width: 50px;
+      height: 50px;
+    }
   }
   .emoji {
     position: absolute;
@@ -213,32 +218,6 @@ const Buttons = styled.div`
   width: 100%;
   @media (max-width: 800px) {
     justify-content: flex-start;
-  }
-`;
-
-const InProgress = styled.p`
-  justify-self: center;
-  align-self: center;
-  text-align: center;
-  font-size: 1.6rem;
-  padding: 2% 1%;
-  width: 140px;
-  border: 1px solid #716d6d;
-  color: #716d6d;
-  box-sizing: border-box;
-  border-radius: 5px;
-  @media (max-width: 800px) {
-    font-size: 1.4rem;
-  }
-`;
-
-const Info = styled.div`
-  background: rgba(50, 172, 102, 0.05);
-  padding: 2% 4%;
-  margin: 0 0 4% 0;
-  width: 100%;
-  @media (max-width: 800px) {
-    padding: 2% 8%;
   }
 `;
 
@@ -421,7 +400,11 @@ const LessonHeader = (props) => {
   return (
     <>
       <TextBar color={color}>
-        {lesson && lesson.open && <div className="open">✅</div>}
+        {lesson && lesson.open && (
+          <div className="open">
+            <img src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/60/000000/external-free-sales-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png" />
+          </div>
+        )}
         <div>
           <Text>
             <div className="lesson_name">

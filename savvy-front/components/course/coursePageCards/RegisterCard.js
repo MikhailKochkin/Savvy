@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import EnrollCoursePage from "../../EnrollCoursePage";
 import ReactResizeDetector from "react-resize-detector";
 import { useTranslation } from "next-i18next";
+import Link from "next/link";
+import renderHTML from "react-render-html";
+
+import EnrollCoursePage from "../../EnrollCoursePage";
+import { CREATE_LESSONRESULT_MUTATION } from "../../lesson/LessonHeader";
+import { UPDATE_LESSONRESULT_MUTATION } from "../../lesson/LessonHeader";
 
 const Data = styled.div`
   display: flex;
@@ -34,10 +40,20 @@ const Part1 = styled.div`
   justify-content: center;
   align-items: center;
   .message {
-    text-align: center;
+    /* text-align: center; */
     margin-bottom: 10%;
     margin: 0 10px;
     font-size: 1.6rem;
+    .lesson_name {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .lesson_description {
+      font-size: 1.6rem;
+      p {
+        margin: 5px 0;
+      }
+    }
   }
 `;
 
@@ -67,6 +83,40 @@ const Paid = styled.div`
   margin-top: 2%;
 `;
 
+const StartLesson = styled.button`
+  background: #0846d8;
+  border-radius: 5px;
+  width: 95%;
+  height: 38px;
+  outline: 0;
+  font-family: Montserrat;
+
+  color: white;
+  font-weight: 600;
+  font-size: 1.4rem;
+  outline: none;
+  cursor: pointer;
+  a {
+    color: white;
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
+  border: none;
+  margin-top: 10px;
+  transition: 0.3s;
+  &:hover {
+    background: rgba(8, 70, 216, 0.85);
+  }
+  &:active {
+    background-color: ${(props) => props.theme.darkGreen};
+  }
+  &:disabled {
+    &:hover {
+      background-color: #84bc9c;
+    }
+  }
+`;
+
 const RegisterCard = (props) => {
   const { t } = useTranslation("course");
   const [width, setWidth] = useState(800);
@@ -74,6 +124,14 @@ const RegisterCard = (props) => {
   const onResize = (width) => {
     setWidth(width);
   };
+
+  const [createLessonResult, { create_data }] = useMutation(
+    CREATE_LESSONRESULT_MUTATION
+  );
+
+  const [updateLessonResult, { update_data }] = useMutation(
+    UPDATE_LESSONRESULT_MUTATION
+  );
 
   const { coursePage, me, studentsArray, subjectArray } = props;
   let applied;
@@ -84,6 +142,7 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
+  console.log("lessonResults", props.lessonResults);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -91,19 +150,49 @@ const RegisterCard = (props) => {
         <Payment>
           <Text>
             <Part1>
-              {(coursePage.courseType === "PUBLIC" ||
-                coursePage.courseType === "CHALLENGE") && (
-                <>
-                  <div className="message">{t("open_course")}</div>
-                </>
-              )}
-              {(coursePage.courseType === "PRIVATE" ||
-                coursePage.courseType === "FORMONEY") && (
-                <div className="message">{t("private_course")}</div>
-              )}
+              <div className="message">
+                <div className="lesson_name">
+                  {t("lesson")} 1. "
+                  {props.first_lesson ? props.first_lesson.name : ""}"
+                </div>{" "}
+                <div className="lesson_description">
+                  {renderHTML(props.first_lesson.description)}
+                </div>
+              </div>
             </Part1>
             <Part2>
               {applied && <Paid>{t("applied")}</Paid>}
+              <Link
+                href={{
+                  pathname: "/lesson",
+                  query: {
+                    id: props.first_lesson.id,
+                    type: props.first_lesson.type.toLowerCase(),
+                  },
+                }}
+              >
+                <StartLesson
+                  onClick={(e) => {
+                    if (props.lessonResults.length == 0) {
+                      createLessonResult({
+                        variables: {
+                          lessonID: props.first_lesson.id,
+                          visitsNumber: 1,
+                        },
+                      });
+                    } else {
+                      updateLessonResult({
+                        variables: {
+                          id: props.lessonResults[0].id,
+                          visitsNumber: props.lessonResults[0].visitsNumber + 1,
+                        },
+                      });
+                    }
+                  }}
+                >
+                  <a target="_blank">{t("start_lesson1")}</a>
+                </StartLesson>
+              </Link>
               {me && (
                 <>
                   {/* {coursePage.courseType !== "FORMONEY" && ( */}

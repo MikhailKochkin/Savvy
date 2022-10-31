@@ -136,7 +136,7 @@ const Message = styled.div`
     min-width: 20%;
     max-width: 70%;
     border: 2px solid;
-    background: #248bf5;
+    background: #2f80ed;
     color: #fff;
     outline: 0;
     resize: none;
@@ -170,30 +170,6 @@ const IconBlock = styled.div`
     align-items: center;
     justify-content: center;
   }
-  .icon2 {
-    margin: 5px;
-    border-radius: 50%;
-    background: #cb2d3e; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      #ef473a,
-      #cb2d3e
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
   .name {
     font-size: 1.2rem;
     text-align: center;
@@ -201,6 +177,23 @@ const IconBlock = styled.div`
     max-width: 80px;
     margin: 0 7px;
   }
+`;
+
+const Icon = styled.div`
+  margin: 5px;
+  border-radius: 50%;
+  background: #2f80ed; /* fallback for old browsers */
+
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 55px;
+  width: 55px;
+  object-fit: cover;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Secret = styled.div`
@@ -336,25 +329,7 @@ const Chat = (props) => {
           <Messages isRevealed={isRevealed}>
             {!update &&
               messages.messagesList.map((m, i) => {
-                if (m.author === "student") {
-                  return (
-                    <Message
-                      id={"message" + i + id}
-                      key={i}
-                      time={i}
-                      className="student"
-                    >
-                      <IconBlock>
-                        <img className="icon" src="../../static/flash.svg" />
-                        {/* <div>
-                          {me.name[0]} {me.surname[0]}
-                        </div> */}
-                        <div className="name">{me.name}</div>
-                      </IconBlock>
-                      <div className="student_text">{renderHTML(m.text)}</div>
-                    </Message>
-                  );
-                } else {
+                if (m.author === "author") {
                   return (
                     <>
                       <Message
@@ -388,6 +363,26 @@ const Chat = (props) => {
                       )}
                     </>
                   );
+                } else {
+                  return (
+                    <>
+                      <Message
+                        id={"message" + i + id}
+                        key={i}
+                        time={i}
+                        className="student"
+                      >
+                        <IconBlock>
+                          <img className="icon" src="../../static/flash.svg" />
+                          {/* <div>
+                          {me.name[0]} {me.surname[0]}
+                        </div> */}
+                          <div className="name">{me.name}</div>
+                        </IconBlock>
+                        <div className="student_text">{renderHTML(m.text)}</div>
+                      </Message>
+                    </>
+                  );
                 }
               })}
           </Messages>
@@ -414,27 +409,7 @@ const Chat = (props) => {
       {isRevealed && !update && (
         <Messages isRevealed={isRevealed}>
           {messages.messagesList.map((m, i) => {
-            if (m.author === "student") {
-              return (
-                <Message
-                  id={"message" + i + id}
-                  key={i}
-                  time={i}
-                  className="student"
-                >
-                  <IconBlock>
-                    <div className="icon2">
-                      {me.surname
-                        ? `${me.name[0]}${me.surname[0]}`
-                        : `${me.name[0]}${me.name[1]}`}
-                    </div>
-                    {/* <img className="icon" src="../../static/flash.svg" /> */}
-                    <div className="name">{me.name}</div>
-                  </IconBlock>
-                  <div className="student_text">{renderHTML(m.text)}</div>
-                </Message>
-              );
-            } else {
+            if (m.author === "author") {
               return (
                 <>
                   <Message
@@ -464,6 +439,41 @@ const Chat = (props) => {
                     />
                   )}
                 </>
+              );
+            } else {
+              return (
+                <Message
+                  id={"message" + i + id}
+                  key={i}
+                  time={i}
+                  className="student"
+                >
+                  <IconBlock>
+                    <Icon className="icon2" background={m.author}>
+                      {m.author === "student" && (
+                        <>
+                          {me.surname
+                            ? `${me.name[0]}${me.surname[0]}`
+                            : `$
+                          {me.name[0]}${me.name[1]}`}
+                        </>
+                      )}
+                      {m.author === "anya" && <>👩🏻‍💼</>}
+                      {m.author === "mary" && <>👩🏾‍💼</>}
+                      {m.author === "sasha" && <>🧑🏻‍💼</>}
+                      {m.author === "james" && <>🧑🏾‍💼</>}
+                    </Icon>
+                    {/* <img className="icon" src="../../static/flash.svg" /> */}
+                    <div className="name">
+                      {m.author === "student" && me.name}
+                      {m.author === "anya" && <>Anya</>}
+                      {m.author === "mary" && <>Mary</>}
+                      {m.author === "sasha" && <>Sasha</>}
+                      {m.author === "james" && <>James</>}
+                    </div>
+                  </IconBlock>
+                  <div className="student_text">{renderHTML(m.text)}</div>
+                </Message>
               );
             }
           })}

@@ -73,6 +73,7 @@ const Progress = styled.div`
 
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
+  console.log("mememem", me);
   const [experience, setExperience] = useState(0);
 
   const total = props.lesson.totalPoints;
@@ -94,6 +95,7 @@ const StoryEx = (props) => {
   });
   useEffect(() => {
     // when the first query is loaded, then fire this lazy query function
+    console.log("useEffect trigger");
     if (me) {
       fetchQuery({
         variables: {
@@ -102,7 +104,7 @@ const StoryEx = (props) => {
         },
       });
     }
-  }, [me]);
+  }, [props.me]);
   if (stats_error) return <p>{stats_error}</p>;
   if (stats_loading)
     return (
@@ -110,13 +112,14 @@ const StoryEx = (props) => {
         <CircularProgress />
       </Progress>
     );
-
+  console.log("stats_data", stats_data);
   let my_result =
     stats_data && stats_data.lessonResults.length > 0
       ? stats_data.lessonResults.reduce((prev, current) =>
           prev.progress > current.progress ? prev : current
         )
-      : [];
+      : null;
+  console.log("my_result", my_result);
   let components = [];
   tasks.map((task) => {
     let el;
@@ -378,6 +381,7 @@ const StoryEx = (props) => {
             number_of_tasks={tasks.length}
             coursePageID={coursePageID}
             me={me}
+            move={false}
             hasSecret={lesson.hasSecret}
             lesson_number={lesson.number}
             lesson_name={lesson.name}

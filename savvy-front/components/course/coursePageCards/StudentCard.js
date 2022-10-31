@@ -8,9 +8,12 @@ const Payment = styled.div`
   background: #ffffff;
   box-sizing: border-box;
   border-radius: 10px;
-  width: 290px;
+  width: 350px;
   min-height: 190px;
   padding: 2% 4%;
+  @media (max-width: 800px) {
+    width: 310px;
+  }
 
   .results {
     padding: 3% 0;
@@ -289,7 +292,7 @@ class StudentCard extends Component {
     // );
     // 2. See how many lessons the currents user has attended
     let status = 0;
-    lessonResults.map((res) => (res.progress > 5 ? status++ : status));
+    lessonResults.map((res) => (res.progress > 4 ? status++ : status));
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio = (status * 100) / coursePage.lessons.length;
