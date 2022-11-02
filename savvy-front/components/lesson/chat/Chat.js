@@ -454,8 +454,7 @@ const Chat = (props) => {
                         <>
                           {me.surname
                             ? `${me.name[0]}${me.surname[0]}`
-                            : `$
-                          {me.name[0]}${me.name[1]}`}
+                            : `${me.name[0]}${me.name[1]}`}
                         </>
                       )}
                       {m.author === "anya" && <>👩🏻‍💼</>}

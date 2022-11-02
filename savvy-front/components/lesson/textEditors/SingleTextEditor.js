@@ -655,9 +655,11 @@ const SingleTextEditor = (props) => {
                     }
 
                     // 3. Quiz. Provide the student with data, quiz part of text
+                    console.log("e.target", e.target);
                     if (
-                      e.target.getAttribute("type") === "quiz" ||
-                      e.target.parentElement.getAttribute("type") === "quiz"
+                      e.target &&
+                      (e.target.getAttribute("type") === "quiz" ||
+                        e.target.parentElement.getAttribute("type") === "quiz")
                     ) {
                       // 1.1 add styles to the text with a mistake
                       e.target.className = "edit";

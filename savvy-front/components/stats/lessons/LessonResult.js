@@ -38,6 +38,10 @@ const LessonResult = (props) => {
   const [show, setShow] = useState(false);
 
   const [message, setMessage] = useState("");
+
+  const myCallback = (dataFromChild) => {
+    setMessage(dataFromChild);
+  };
   const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
     useMutation(SEND_MESSAGE_MUTATION);
 
@@ -48,7 +52,8 @@ const LessonResult = (props) => {
       <li>
         {r.student.name} {r.student.surname} – visits: {r.visitsNumber} –{" "}
         {r.progress} / {props.structure.lessonItems.length} – Score:{" "}
-        {props.lesson.forum.rating.filter((rat) => rat.user.id == r.student.id)
+        {props.lesson.forum &&
+        props.lesson.forum.rating.filter((rat) => rat.user.id == r.student.id)
           .length > 0
           ? props.lesson.forum.rating.filter(
               (rat) => rat.user.id == r.student.id

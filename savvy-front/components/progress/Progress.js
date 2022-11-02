@@ -203,7 +203,6 @@ const Progress = (props) => {
     variables: { id: option },
   });
   if (loading) return <p>Loading...</p>;
-  let coursePage = data.coursePage;
 
   const {
     loading: loading2,
@@ -211,16 +210,18 @@ const Progress = (props) => {
     data: data2,
   } = useQuery(COURSEPAGES_QUERY);
 
-  if (loading2) return <p>Loading...</p>;
-  let coursePages = data2.coursePages;
-
   const {
     loading: loading3,
     error: error3,
     data: data3,
   } = useQuery(USERS_QUERY);
 
+  if (loading) return <p>Loading...</p>;
+  if (loading2) return <p>Loading...</p>;
   if (loading3) return <p>Loading...</p>;
+
+  let coursePage = data.coursePage;
+  let coursePages = data2.coursePages;
   let users = data3.users;
 
   return (
