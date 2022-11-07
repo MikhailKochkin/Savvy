@@ -281,6 +281,9 @@ const Head = styled.div`
   width: 100%;
   font-size: 2rem;
   padding: 0 20px;
+  span {
+    font-size: 2rem;
+  }
   .block {
   }
   #back {
@@ -454,7 +457,7 @@ const NewSingleLesson = (props) => {
                       },
                     }}
                   >
-                    <span>{t("back_to_course")}</span>
+                    <span>⬅{/* {t("back_to_course")} */}</span>
                   </Link>
                 ) : (
                   <Link
@@ -465,7 +468,7 @@ const NewSingleLesson = (props) => {
                       },
                     }}
                   >
-                    <span>{t("back_to_course")}</span>
+                    <span>⬅</span>
                   </Link>
                 )}
                 {width > 800 && (

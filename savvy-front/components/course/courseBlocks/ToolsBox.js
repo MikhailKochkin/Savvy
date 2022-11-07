@@ -208,7 +208,6 @@ const ToolsBox = (props) => {
 
   let first_lesson = [...lessons].sort((a, b) => a.number - b.number)[0];
   // let first_lesson = lessons[0];
-  console.log("first_lesson", first_lesson);
   return (
     <PayBox>
       {/* Карточка регистрации на сайте */}

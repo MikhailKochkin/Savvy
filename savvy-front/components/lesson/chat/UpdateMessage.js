@@ -285,44 +285,46 @@ const UpdateMessage = (props) => {
         </div>
       </Buttons>
 
-      {reactions.map((r, i) => (
-        <ReactBlock>
-          <Header>Reaction № {i + 1}</Header>
-          <Phrase>
-            <IconBlock>
-              <div className="select_box">
-                {author == "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}
-              </div>
-            </IconBlock>
-            <Frame>
-              <DynamicHoverEditor
-                index={i}
-                name="reaction"
-                getEditorText={myCallback3}
-                value={r.reaction}
-              />
-            </Frame>
-          </Phrase>
+      {reactions &&
+        reactions.length > 0 &&
+        reactions.map((r, i) => (
+          <ReactBlock>
+            <Header>Reaction № {i + 1}</Header>
+            <Phrase>
+              <IconBlock>
+                <div className="select_box">
+                  {author == "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}
+                </div>
+              </IconBlock>
+              <Frame>
+                <DynamicHoverEditor
+                  index={i}
+                  name="reaction"
+                  getEditorText={myCallback3}
+                  value={r.reaction}
+                />
+              </Frame>
+            </Phrase>
 
-          <Header>Response № {i + 1}</Header>
-          <Phrase>
-            <IconBlock>
-              <div className="select_box">
-                {author == "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}
-              </div>
-            </IconBlock>
+            <Header>Response № {i + 1}</Header>
+            <Phrase>
+              <IconBlock>
+                <div className="select_box">
+                  {author == "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}
+                </div>
+              </IconBlock>
 
-            <Frame>
-              <DynamicHoverEditor
-                index={i}
-                name="comment"
-                getEditorText={myCallback3}
-                value={r.comment}
-              />
-            </Frame>
-          </Phrase>
-        </ReactBlock>
-      ))}
+              <Frame>
+                <DynamicHoverEditor
+                  index={i}
+                  name="comment"
+                  getEditorText={myCallback3}
+                  value={r.comment}
+                />
+              </Frame>
+            </Phrase>
+          </ReactBlock>
+        ))}
     </Styles>
   );
 };

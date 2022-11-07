@@ -86,6 +86,7 @@ const Next = styled.div`
     font-family: Montserrat;
     border-radius: 15px;
     cursor: pointer;
+    color: black;
     transition: 0.3s;
     &:hover {
       background: #f4f4f4;
@@ -99,7 +100,7 @@ const Message = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-bottom: 20px;
-  animation: show 200ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+  animation: show 750ms 350ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
 
   // Prestate
   opacity: 0;

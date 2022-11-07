@@ -125,6 +125,19 @@ const StyledHeader = styled.header`
       }
     }
   }
+  .mini_logo {
+    width: 150px;
+    img {
+      height: 24px;
+    }
+    a {
+      font-weight: 500;
+      font-size: 2.2rem;
+      @media (max-width: 990px) {
+        font-size: 1.6rem;
+      }
+    }
+  }
   .logo {
     width: 150px;
     display: flex;
@@ -387,7 +400,10 @@ const Nav = (props) => {
           <>
             <StyledHeader>
               <Span onClick={(e) => openNav()}>
-                <div>Menu</div>
+                {/* <div>BeSavvy</div> */}
+                <div className="mini_logo">
+                  <img src="static/long_logo.svg" />
+                </div>
               </Span>
               <div className="logo">
                 {me ? (
