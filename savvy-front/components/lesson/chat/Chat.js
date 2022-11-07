@@ -100,7 +100,8 @@ const Message = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   margin-bottom: 20px;
-  animation: show 750ms 350ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+  /* animation: show 750ms 350ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards; */
+  animation: show 450ms 150ms forwards;
 
   // Prestate
   opacity: 0;
