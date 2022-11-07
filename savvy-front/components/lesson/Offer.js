@@ -227,7 +227,6 @@ const Ad = (props) => {
   // let demo_lesson = props.data
   //   .filter((l) => l.open == true)
   //   .sort((les) => les.number > les.number)[0];
-  console.log("width", width);
   return (
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />

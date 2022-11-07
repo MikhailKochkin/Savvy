@@ -402,13 +402,13 @@ const LessonsData = (props) => {
             <b>
               {lessons.filter((l) => l.type !== "HIDDEN").length}
             </b> <br /> {t("course_term")}{" "}
-            {console.log(
+            {/* {console.log(
               "coursePage.weeks",
               Math.ceil(
                 lessons.length /
                   Math.ceil(coursePage.weeks ? coursePage.weeks : 3)
               )
-            )}
+            )} */}
             <b>
               {Math.ceil(
                 lessons.length / (coursePage.weeks ? coursePage.weeks : 3)

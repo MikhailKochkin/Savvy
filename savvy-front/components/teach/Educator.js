@@ -246,8 +246,6 @@ const Educator = (props) => {
   if (loading2) return <p>Загрузка 2 ...</p>;
   if (error2) return <p>Error: {error2.message}</p>;
 
-  console.log("data2.coursePages", data2.coursePages);
-
   publishedCourses = data.coursePages.filter(
     (coursePage) => coursePage.published === true
   );

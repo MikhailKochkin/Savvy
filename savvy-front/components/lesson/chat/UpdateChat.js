@@ -37,21 +37,6 @@ const Styles = styled.div`
   }
 `;
 
-const Input = styled.input`
-  width: 50%;
-  background: none;
-  font-size: 1.6rem;
-  border: none;
-  font-family: Montserrat;
-  outline: 0;
-  margin-bottom: 2%;
-  border-bottom: 1px solid #edefed;
-  padding-bottom: 0.5%;
-  &:focus {
-    border-bottom: 1px solid #1a2a81;
-  }
-`;
-
 const ButtonTwo = styled.button`
   border: none;
   background: #3f51b5;
@@ -72,10 +57,36 @@ const ButtonTwo = styled.button`
   }
 `;
 
+const Bottom = styled.div`
+  width: 70%;
+  .number_box {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    .number {
+      cursor: pointer;
+      border: 1px solid grey;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      margin-right: 15px;
+      button {
+        border: none;
+        cursor: pointer;
+        background: none;
+        font-family: Montserrat;
+      }
+    }
+  }
+`;
+
 const UpdateChat = (props) => {
-  const [name, setName] = useState(props.name);
+  // const [name, setName] = useState(props.name);
   const [mess, setMess] = useState(props.messages.messagesList);
-  const [num, setNum] = useState(props.messages.messagesList.length);
   const [isSecret, setIsSecret] = useState(props.isSecret);
   const { t } = useTranslation("lesson");
 
@@ -100,7 +111,6 @@ const UpdateChat = (props) => {
     let new_obj = { ...old_messages[i] };
     new_obj.author = val;
     old_messages[i] = new_obj;
-
     setMess([...old_messages]);
   };
 
@@ -109,18 +119,35 @@ const UpdateChat = (props) => {
     let new_obj = { ...old_mess[i] };
     new_obj.text = val;
     old_mess[i] = new_obj;
-
     setMess([...old_mess]);
   };
+
+  const updateReaction = (val, i) => {
+    let old_mess = [...mess];
+    let new_obj = { ...old_mess[i] };
+    new_obj.reactions = val;
+    old_mess[i] = new_obj;
+    setMess([...old_mess]);
+  };
+
+  const updateImage = (val, i) => {
+    let old_mess = [...mess];
+    let new_obj = { ...old_mess[i] };
+    new_obj.image = val;
+    old_mess[i] = new_obj;
+    setMess([...old_mess]);
+  };
+
+  const updateName = (val, i) => {
+    let old_mess = [...mess];
+    let new_obj = { ...old_mess[i] };
+    new_obj.name = val;
+    old_mess[i] = new_obj;
+    setMess([...old_mess]);
+  };
+
   return (
     <Styles>
-      {/* <Input
-        type="text"
-        placeholder="Название диалога"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <br /> */}
       <select
         defaultValue={isSecret}
         onChange={(e) => setIsSecret(e.target.value == "true")}
@@ -133,60 +160,69 @@ const UpdateChat = (props) => {
           index={i}
           author={mess[i].author}
           text={m.text}
+          name={m.name}
+          reactions={m.reactions}
           getMessage={getMessage}
           updateAuthor={updateAuthor}
           updateText={updateText}
+          updateReaction={updateReaction}
+          updateImage={updateImage}
+          updateName={updateName}
         />
       ))}
-      <div className="number">
-        <button
-          onClick={(e) => {
+      <Bottom>
+        <div className="number_box">
+          <div className="number">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                let old_messages = [...mess];
+                let popped = old_messages.pop();
+                setMess([...old_messages]);
+              }}
+            >
+              -1
+            </button>
+          </div>
+          <div className="number">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setMess([
+                  ...mess,
+                  {
+                    number: 0,
+                    author: "author",
+                    text: "",
+                    image: "",
+                    reactions: [],
+                  },
+                ]);
+              }}
+            >
+              +1
+            </button>
+          </div>
+        </div>
+        <ButtonTwo
+          onClick={async (e) => {
             e.preventDefault();
-            let old_messages = [...mess];
-            let popped = old_messages.pop();
-            setMess([...old_messages]);
-          }}
-        >
-          -1
-        </button>
-      </div>
-      <div className="number">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            setMess([
-              ...mess,
-              {
-                number: 0,
-                author: "author",
-                text: "",
-                image: "",
-                reactions: [],
+            const res = await updateChat({
+              variables: {
+                id: props.id,
+                messages: { messagesList: mess },
+                name,
+                isSecret,
               },
-            ]);
+            });
+            props.getResult(res);
+            props.switchUpdate();
+            props.passUpdated();
           }}
         >
-          +1
-        </button>
-      </div>
-      <ButtonTwo
-        onClick={async (e) => {
-          e.preventDefault();
-          const res = await updateChat({
-            variables: {
-              id: props.id,
-              messages: { messagesList: mess },
-              name,
-              isSecret,
-            },
-          });
-          props.getResult(res);
-          props.switchUpdate();
-          props.passUpdated();
-        }}
-      >
-        {loading ? t("saving") : t("save")}
-      </ButtonTwo>
+          {loading ? t("saving") : t("save")}
+        </ButtonTwo>
+      </Bottom>
     </Styles>
   );
 };

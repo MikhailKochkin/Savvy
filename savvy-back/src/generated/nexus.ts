@@ -921,6 +921,7 @@ export interface NexusGenInputs {
   MessageElement: { // input type
     author?: string | null; // String
     image?: string | null; // String
+    name?: string | null; // String
     number?: number | null; // Int
     reactions?: Array<NexusGenInputs['Reaction'] | null> | null; // [Reaction]
     text?: string | null; // String
@@ -1530,6 +1531,8 @@ export interface NexusGenInputs {
   }
   Reaction: { // input type
     comment?: string | null; // String
+    image?: string | null; // String
+    name?: string | null; // String
     reaction?: string | null; // String
   }
   SandboxListRelationFilter: { // input type

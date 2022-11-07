@@ -142,7 +142,6 @@ const RegisterCard = (props) => {
     ? (applied = true)
     : (applied = false);
 
-  console.log("lessonResults", props.lessonResults);
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />

@@ -25,6 +25,31 @@ const Frame = styled.div`
   }
 `;
 
+const MainFrame = styled.div`
+  height: 60%;
+  width: 80%;
+  margin-bottom: 15px;
+  border: 1px solid #8d99ae;
+  border-radius: 3.5px;
+  padding-left: 1%;
+  font-size: 1.6rem;
+  outline: 0;
+  p {
+    margin-left: 0.6%;
+  }
+`;
+
+const Header = styled.div`
+  margin: 10px 0;
+`;
+
+const ReactBlock = styled.div`
+  margin: 20px 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #cacaca;
+  width: 80%;
+`;
+
 const IconBlock = styled.div`
   display: flex;
   flex-direction: column;
@@ -73,8 +98,17 @@ const IconBlock = styled.div`
     color: #8f93a3;
     max-width: 80px;
     margin: 0 7px;
+    input {
+      width: 50px;
+      border: none;
+      font-family: Montserrat;
+      color: #8f93a3;
+      font-size: 1.2rem;
+      outline: 0;
+    }
   }
 `;
+
 const Phrase = styled.div`
   display: flex;
   flex-direction: row;
@@ -105,17 +139,27 @@ const Phrase = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 75%;
-
-  .but {
-    border: none;
-    background: none;
-    font-family: Montserrat;
+  margin-bottom: 15px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #cacaca;
+  .number {
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 10px;
+    display: flex;
     font-size: 1.4rem;
-    font-style: italic;
-    &:hover {
-      text-decoration: underline;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    height: 25px;
+    margin-right: 15px;
+    button {
+      border: none;
+      cursor: pointer;
+      background: none;
+      font-size: 1.2rem;
+      font-family: Montserrat;
     }
   }
 `;
@@ -127,17 +171,25 @@ const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const UpdateMessage = (props) => {
   const [author, setAuthor] = useState(props.author);
+  const [name, setName] = useState(props.name);
   const [text, setText] = useState(props.text);
+  const [reactions, setReactions] = useState(props.reactions);
+  const [image, setImage] = useState(props.image);
 
-  const myCallback2 = (dataFromChild, name) => {
+  const myCallback2 = (dataFromChild, name, index) => {
     if (name == "text") {
       setText(dataFromChild);
       props.updateText(dataFromChild, props.index);
-    } else if (name == "reaction") {
-      setReaction(dataFromChild);
-    } else if (name == "comment") {
-      setComment(dataFromChild);
     }
+  };
+
+  const myCallback3 = (dataFromChild, name, index) => {
+    let new_reactions = [...reactions];
+    let new_obj = { ...new_reactions[index] };
+    new_obj[name] = dataFromChild;
+    new_reactions[index] = new_obj;
+    setReactions(new_reactions);
+    props.updateReaction(reactions, props.index);
   };
 
   const updateAuthor = (val) => {
@@ -145,18 +197,8 @@ const UpdateMessage = (props) => {
     props.updateAuthor(val, props.index);
   };
 
-  // const add = () => {
-  //   console.log(text);
-  //   props.getMessage({
-  //     number: props.index,
-  //     author,
-  //     text,
-  //     image: "",
-  //   });
-  // };
   return (
     <Styles>
-      {/* <div>{props.index}.</div> */}
       <Phrase>
         <IconBlock>
           <div className="select_box">
@@ -167,17 +209,20 @@ const UpdateMessage = (props) => {
             >
               <option value="author">👩🏼‍🏫</option>
               <option value="student">👨🏻‍🎓</option>
-              <option value="anya">👩🏻‍💼</option>
-              <option value="sasha">🧑🏻‍💼</option>
-              <option value="james">🧑🏾‍💼</option>
-              <option value="mary">👩🏾‍💼</option>
             </select>
           </div>
-          <div className="name">{author}</div>
+          <div className="name">
+            <input
+              onChange={(e) => {
+                setName(e.target.value);
+                props.updateName(e.target.value, props.index);
+              }}
+              defaultValue={props.name}
+            />
+          </div>
         </IconBlock>
-        <br />
 
-        <Frame>
+        <MainFrame>
           <DynamicHoverEditor
             index={props.index}
             name="text"
@@ -185,15 +230,99 @@ const UpdateMessage = (props) => {
             placeholder="Message"
             value={props.text}
           />
-        </Frame>
-        {/* <textarea onChange={(e) => setText(e.target.value)}>
-          {props.text}
-        </textarea> */}
+        </MainFrame>
       </Phrase>
+      <Buttons>
+        <div className="number">
+          <button
+            onClick={(e) => {
+              let link = prompt("Image link: ");
+              if (link) {
+                setImage(link);
+                props.updateImage(link, props.index);
+              }
+            }}
+          >
+            Add image
+          </button>
+        </div>
+        <div className="number">
+          <button
+            onClick={(e) => {
+              let new_reactions = [...reactions];
+              let popped = new_reactions.pop();
+              setReactions([...new_reactions]);
+              props.updateReaction([...new_reactions], props.index);
+            }}
+          >
+            -1 reaction
+          </button>
+        </div>
+        <div className="number">
+          <button
+            onClick={(e) => {
+              setReactions([
+                ...reactions,
+                {
+                  reaction: "",
+                  comment: "",
+                },
+              ]);
+              props.updateReaction(
+                [
+                  ...reactions,
+                  {
+                    reaction: "",
+                    comment: "",
+                  },
+                ],
+                props.index
+              );
+            }}
+          >
+            +1 reaction
+          </button>
+        </div>
+      </Buttons>
 
-      {/* <Buttons>
+      {reactions.map((r, i) => (
+        <ReactBlock>
+          <Header>Reaction № {i + 1}</Header>
+          <Phrase>
+            <IconBlock>
+              <div className="select_box">
+                {author == "author" ? "👨🏻‍🎓" : "👩🏼‍🏫"}
+              </div>
+            </IconBlock>
+            <Frame>
+              <DynamicHoverEditor
+                index={i}
+                name="reaction"
+                getEditorText={myCallback3}
+                value={r.reaction}
+              />
+            </Frame>
+          </Phrase>
 
-            </Buttons> */}
+          <Header>Response № {i + 1}</Header>
+          <Phrase>
+            <IconBlock>
+              <div className="select_box">
+                {author == "author" ? "👩🏼‍🏫" : "👨🏻‍🎓"}
+              </div>
+            </IconBlock>
+
+            <Frame>
+              <DynamicHoverEditor
+                index={i}
+                name="comment"
+                getEditorText={myCallback3}
+                value={r.comment}
+              />
+            </Frame>
+          </Phrase>
+        </ReactBlock>
+      ))}
     </Styles>
   );
 };

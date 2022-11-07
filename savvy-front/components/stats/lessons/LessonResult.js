@@ -46,7 +46,6 @@ const LessonResult = (props) => {
     useMutation(SEND_MESSAGE_MUTATION);
 
   const { r } = props;
-  console.log("props", props.lessondId);
   return (
     <div>
       <li>

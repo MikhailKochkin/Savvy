@@ -1347,6 +1347,7 @@ type Message {
 input MessageElement {
   author: String
   image: String
+  name: String
   number: Int
   reactions: [Reaction]
   text: String
@@ -2373,6 +2374,8 @@ input RatingWhereUniqueInput {
 
 input Reaction {
   comment: String
+  image: String
+  name: String
   reaction: String
 }
 

@@ -353,7 +353,6 @@ const SingleProblem = (props) => {
                         props.getResults(3);
                         setShowAnswerButton(true);
                         setRevealAnswer(true);
-                        console.log("Yes");
                       } else {
                         console.log("No");
                       }

@@ -78,7 +78,6 @@ const Bottom = styled.div`
       button {
         border: none;
         cursor: pointer;
-
         background: none;
         font-family: Montserrat;
       }
@@ -94,10 +93,9 @@ const CreateChat = (props) => {
       author: "author",
       text: "",
       image: "",
-      reactions: [],
+      reactions: new Array(),
     },
   ]);
-  const [num, setNum] = useState(1);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
   const { t } = useTranslation("lesson");
@@ -118,6 +116,24 @@ const CreateChat = (props) => {
     setMessages([...old_messages]);
   };
 
+  const updateReaction = (val, i) => {
+    let old_messages = [...messages];
+    old_messages[i].reactions = val;
+    setMessages([...old_messages]);
+  };
+
+  const updateImage = (val, i) => {
+    let old_messages = [...messages];
+    old_messages[i].image = val;
+    setMessages([...old_messages]);
+  };
+
+  const updateName = (val, i) => {
+    let old_messages = [...messages];
+    old_messages[i].name = val;
+    setMessages([...old_messages]);
+  };
+
   return (
     <Styles>
       {/* <Input
@@ -135,6 +151,9 @@ const CreateChat = (props) => {
             getMessage={getMessage}
             updateAuthor={updateAuthor}
             updateText={updateText}
+            updateReaction={updateReaction}
+            updateImage={updateImage}
+            updateName={updateName}
           />
         </>
       ))}

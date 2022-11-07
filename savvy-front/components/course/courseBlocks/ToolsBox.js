@@ -71,6 +71,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       lessons {
         id
         name
+        number
         description
         type
         assignment
@@ -110,7 +111,6 @@ const LESSON_RESULTS_QUERY = gql`
 const ToolsBox = (props) => {
   // 1. get props and state
   const { me, id } = props;
-  console.log("me", me);
   const { t } = useTranslation("course");
 
   // 2. get course data
@@ -147,7 +147,7 @@ const ToolsBox = (props) => {
   // 5. analyze user's lesson results to provide them wiith up-to-date progress information
   if (stats_data) {
     lessonResults = stats_data.lessonResults;
-    console.log("lessonResults", lessonResults);
+    // console.log("lessonResults", lessonResults);
     // 5.1. Get all lesson results
     const sorted_lessons = lessonResults
       .slice()
@@ -206,8 +206,9 @@ const ToolsBox = (props) => {
     i_am_author = true;
   }
 
-  let first_lesson = lessons[0];
-
+  let first_lesson = [...lessons].sort((a, b) => a.number - b.number)[0];
+  // let first_lesson = lessons[0];
+  console.log("first_lesson", first_lesson);
   return (
     <PayBox>
       {/* Карточка регистрации на сайте */}
@@ -235,7 +236,7 @@ const ToolsBox = (props) => {
           <TeacherCard id={coursePage.id} coursePage={coursePage} />
         )}
       {/* Карточка ученика */}
-      {console.log("student", stats_data)}
+      {/* {console.log("student", stats_data)} */}
       {stats_data &&
         me &&
         me.permissions &&

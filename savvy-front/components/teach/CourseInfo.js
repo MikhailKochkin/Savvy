@@ -96,7 +96,6 @@ const CourseInfo = (props) => {
   if (loading) return <p>Loading...</p>;
 
   let c = data.coursePage;
-  console.log("course", props.courseId, data);
   moment.locale("ru");
 
   return (

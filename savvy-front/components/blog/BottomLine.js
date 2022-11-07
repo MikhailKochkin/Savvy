@@ -81,7 +81,6 @@ const Ad = (props) => {
     });
   };
   const post = props.post;
-  console.log("post", post);
   return (
     <Banner>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />

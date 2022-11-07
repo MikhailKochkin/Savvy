@@ -83,12 +83,11 @@ const Lessons = (props) => {
           l.forum
             ? l.forum.rating.map((r) => ratings.push(r.rating))
             : (ratings = [0]);
-          console.log("ratings", ratings, l.forum);
+          // console.log("ratings", ratings, l.forum);
           let average = (
             ratings.reduce((a, b) => a + b, 0) / ratings.length
           ).toFixed(2);
           let median = getMedian(ratings);
-          console.log("median", median);
           if (isNaN(average)) {
             average = "Нет оценок";
           }

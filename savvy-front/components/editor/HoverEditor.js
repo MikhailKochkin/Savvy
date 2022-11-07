@@ -345,7 +345,7 @@ const HoveringMenu = (props) => {
       editor={editor}
       value={value}
       onChange={(value) => {
-        console.log("value", value);
+        // console.log("value", value);
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
         setValue(value);

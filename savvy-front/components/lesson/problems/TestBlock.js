@@ -365,7 +365,7 @@ const TestBlock = (props) => {
                       } else if (type === "note") {
                         updateNote();
                       }
-                      console.log("Изменено");
+                      // console.log("Изменено");
                     }}
                   >
                     {loading ? t("saving") : t("save")}

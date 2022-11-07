@@ -173,7 +173,6 @@ const CreateUseful = () => {
                 // pros: pros.split(","),
               },
             });
-            console.log("res", res);
             setId(res.data.createUseful.id);
           }}
         >

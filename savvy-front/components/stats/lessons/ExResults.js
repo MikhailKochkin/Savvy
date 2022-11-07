@@ -187,7 +187,6 @@ const LESSON_QUERY = gql`
 `;
 
 const ExResults = (props) => {
-  console.log("props.less", props);
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
     variables: { id: props.coursePageId },
   });

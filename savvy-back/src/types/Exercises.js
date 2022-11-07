@@ -265,6 +265,7 @@ const MessageElement = inputObjectType({
   definition(t) {
     t.int("number");
     t.string("author");
+    t.string("name");
     t.string("text");
     t.string("image");
     t.list.field("reactions", { type: "Reaction" });
@@ -276,6 +277,8 @@ const Reaction = inputObjectType({
   definition(t) {
     t.string("reaction");
     t.string("comment");
+    t.string("name");
+    t.string("image");
   },
 });
 

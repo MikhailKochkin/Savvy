@@ -111,7 +111,6 @@ const CreateStatement = (props) => {
             <Button
               onClick={async (e) => {
                 e.preventDefault();
-                console.log("2");
                 const res = await createStatement();
               }}
             >

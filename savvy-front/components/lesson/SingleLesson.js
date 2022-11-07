@@ -29,6 +29,9 @@ const SINGLE_LESSON_QUERY = gql`
       assignment
       change
       user {
+        name
+        surname
+        image
         id
       }
       coursePage {

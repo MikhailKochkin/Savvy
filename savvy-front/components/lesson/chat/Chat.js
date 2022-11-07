@@ -3,6 +3,7 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
 import { useMutation, gql } from "@apollo/client";
+import _ from "lodash";
 
 import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
@@ -21,6 +22,7 @@ const Styles = styled.div`
   width: 570px;
   margin: 20px 0;
   font-weight: 500;
+  margin-bottom: 100px;
   img {
     display: block;
     width: 100%;
@@ -71,13 +73,45 @@ const Styles = styled.div`
   }
 `;
 
+const Next = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  button {
+    width: 200px;
+    border: 1px solid #cacaca;
+    background: none;
+    padding: 8px 15px;
+    font-family: Montserrat;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      background: #f4f4f4;
+    }
+  }
+`;
+
 const Message = styled.div`
   display: flex;
   transition: 0.2s ease-out;
   flex-direction: row;
   justify-content: flex-end;
   margin-bottom: 20px;
-  opacity: 1;
+  animation: show 200ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+
+  // Prestate
+  opacity: 0;
+  // remove transform for just a fade-in
+  transform: rotateX(90deg);
+  transform-origin: bottom center;
+  @keyframes show {
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
   p {
     margin: 5px 0;
   }
@@ -146,10 +180,14 @@ const Message = styled.div`
     font-family: Montserrat;
     font-size: 1.6rem;
     margin-bottom: 20px;
+    @media (max-width: 800px) {
+      font-size: 1.4rem;
+    }
   }
 `;
 
 const Messages = styled.div`
+  margin: 0 10px;
   filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
 `;
 
@@ -268,11 +306,11 @@ const Secret = styled.div`
       cursor: pointer;
     }
   }
-  /* justify-content: center; */
 `;
 
 const Chat = (props) => {
   const [update, setUpdate] = useState(false);
+  const [num, setNum] = useState(1);
   const [clicks, setClicks] = useState(props.clicks);
   const [isRevealed, setIsRevealed] = useState(!props.isSecret);
   const [shiver, setShiver] = useState(false);
@@ -281,7 +319,6 @@ const Chat = (props) => {
   const [updateChat, { data, loading, error }] =
     useMutation(UPDATE_CHAT_MUTATION);
   const { name, messages, me, story, lessonId, id, author } = props;
-
   const getResult = (data) => {
     props.getResult(data);
   };
@@ -293,6 +330,11 @@ const Chat = (props) => {
   const switchUpdate = () => {
     setUpdate(!update);
   };
+
+  // useEffect(() => {
+  //   console.log("ShowArrow 0 false");
+  //   props.getShowArrow(false);
+  // }, []);
 
   let width;
   if (props.problem) {
@@ -328,7 +370,7 @@ const Chat = (props) => {
         <Secret shiver={shiver}>
           <Messages isRevealed={isRevealed}>
             {!update &&
-              messages.messagesList.map((m, i) => {
+              messages.messagesList.slice(0, num).map((m, i) => {
                 if (m.author === "author") {
                   return (
                     <>
@@ -340,16 +382,22 @@ const Chat = (props) => {
                       >
                         <div className="author_text">{renderHTML(m.text)}</div>
                         <IconBlock>
-                          {author && author.image != null ? (
-                            <img className="icon" src={author.image} />
-                          ) : (
-                            <img
-                              className="icon"
-                              src="../../static/hipster.svg"
-                            />
-                          )}
+                          {m.image && <img className="icon" src={m.image} />}
+                          {!m.image &&
+                            (author && author.image ? (
+                              <img className="icon" src={author.image} />
+                            ) : (
+                              <img
+                                className="icon"
+                                src="../../static/hipster.svg"
+                              />
+                            ))}
                           <div className="name">
-                            {author && author.name ? author.name : "BeSavvy"}
+                            {m.name && m.name.toLowerCase() !== "author"
+                              ? m.name
+                              : author && author.name
+                              ? author.name
+                              : "BeSavvy"}
                           </div>
                         </IconBlock>
                       </Message>
@@ -373,11 +421,19 @@ const Chat = (props) => {
                         className="student"
                       >
                         <IconBlock>
-                          <img className="icon" src="../../static/flash.svg" />
-                          {/* <div>
-                          {me.name[0]} {me.surname[0]}
-                        </div> */}
-                          <div className="name">{me.name}</div>
+                          <Icon className="icon2" background={m.author}>
+                            {m.image && <img className="icon" src={m.image} />}
+                            {me.image ? (
+                              <img className="icon" src={me.image} />
+                            ) : me.surname ? (
+                              `${me.name[0]}${me.surname[0]}`
+                            ) : (
+                              `${me.name[0]}${me.name[1]}`
+                            )}
+                          </Icon>
+                          <div className="name">
+                            {m.name ? m.name : m.author}
+                          </div>
                         </IconBlock>
                         <div className="student_text">{renderHTML(m.text)}</div>
                       </Message>
@@ -408,7 +464,7 @@ const Chat = (props) => {
       )}
       {isRevealed && !update && (
         <Messages isRevealed={isRevealed}>
-          {messages.messagesList.map((m, i) => {
+          {messages.messagesList.slice(0, num).map((m, i) => {
             if (m.author === "author") {
               return (
                 <>
@@ -420,13 +476,22 @@ const Chat = (props) => {
                   >
                     <div className="author_text">{renderHTML(m.text)}</div>
                     <IconBlock>
-                      {author && author.image != null ? (
-                        <img className="icon" src={author.image} />
-                      ) : (
-                        <img className="icon" src="../../static/hipster.svg" />
-                      )}
+                      {m.image && <img className="icon" src={m.image} />}
+                      {!m.image &&
+                        (author && author.image ? (
+                          <img className="icon" src={author.image} />
+                        ) : (
+                          <img
+                            className="icon"
+                            src="../../static/hipster.svg"
+                          />
+                        ))}
                       <div className="name">
-                        {author && author.name ? author.name : "BeSavvy"}
+                        {m.name && m.name.toLowerCase() !== "author"
+                          ? m.name
+                          : author && author.name
+                          ? author.name
+                          : "BeSavvy"}
                       </div>
                     </IconBlock>
                   </Message>
@@ -435,6 +500,8 @@ const Chat = (props) => {
                       reactions={m.reactions}
                       me={me}
                       author={author}
+                      author_image={m.image}
+                      author_name={m.name}
                       initialQuestion={m.text}
                     />
                   )}
@@ -450,25 +517,18 @@ const Chat = (props) => {
                 >
                   <IconBlock>
                     <Icon className="icon2" background={m.author}>
-                      {m.author === "student" && (
-                        <>
-                          {me.surname
-                            ? `${me.name[0]}${me.surname[0]}`
-                            : `${me.name[0]}${me.name[1]}`}
-                        </>
-                      )}
-                      {m.author === "anya" && <>👩🏻‍💼</>}
-                      {m.author === "mary" && <>👩🏾‍💼</>}
-                      {m.author === "sasha" && <>🧑🏻‍💼</>}
-                      {m.author === "james" && <>🧑🏾‍💼</>}
+                      {m.image && <img className="icon" src={m.image} />}
+                      {!m.image &&
+                        (me.image ? (
+                          <img className="icon" src={me.image} />
+                        ) : me.surname ? (
+                          `${me.name[0]}${me.surname[0]}`
+                        ) : (
+                          `${me.name[0]}${me.name[1]}`
+                        ))}
                     </Icon>
-                    {/* <img className="icon" src="../../static/flash.svg" /> */}
                     <div className="name">
-                      {m.author === "student" && me.name}
-                      {m.author === "anya" && <>Anya</>}
-                      {m.author === "mary" && <>Mary</>}
-                      {m.author === "sasha" && <>Sasha</>}
-                      {m.author === "james" && <>James</>}
+                      {m.name && m.name !== "student" ? m.name : author.name}
                     </div>
                   </IconBlock>
                   <div className="student_text">{renderHTML(m.text)}</div>
@@ -477,6 +537,20 @@ const Chat = (props) => {
             }
           })}
         </Messages>
+      )}
+      {!update && num < messages.messagesList.length && (
+        <Next>
+          <button
+            onClick={(e) => {
+              // if (num == messages.messagesList.length - 1) {
+              //   props.getShowArrow(true);
+              // }
+              setNum(num + 1);
+            }}
+          >
+            Next
+          </button>
+        </Next>
       )}
       {update && (
         <UpdateChat

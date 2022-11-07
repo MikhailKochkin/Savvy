@@ -163,8 +163,6 @@ const TagUsers = () => {
     setMessage(dataFromChild);
   };
 
-  console.log("filtered", filtered);
-
   return (
     <Styles>
       <input onChange={(e) => setTag(e.target.value)} />

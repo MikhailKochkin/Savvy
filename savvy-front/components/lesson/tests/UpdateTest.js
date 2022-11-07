@@ -240,7 +240,7 @@ const UpdateTest = (props) => {
   };
 
   const { testID, mes, lessonID } = props;
-  console.log("options", options, answers, comments);
+  // console.log("options", options, answers, comments);
   return (
     <Styles>
       <label for="types">{t("type")}</label>{" "}

@@ -184,17 +184,17 @@ const Shots = (props) => {
 
   const getResult = (data) => {
     props.getResult(data);
-    console.log("shots", data);
+    // console.log("shots", data);
   };
 
   const passUpdated = () => {
     props.passUpdated(true);
-    console.log("passUpdated");
+    // console.log("passUpdated");
   };
 
   const switchUpdate = () => {
     setUpdate(!update);
-    console.log("update");
+    // console.log("update");
   };
 
   return (

@@ -207,7 +207,6 @@ const LessonData = (props) => {
   const [checkAssignment, { data: data1 }] = useMutation(CHECK_MUTATION);
   if (loading) return <Loading />;
   if (error) return `Error! ${error.message}`;
-  console.log("lesson.structure.lessonItems", lesson.structure.lessonItems);
   return (
     <>
       <Data>

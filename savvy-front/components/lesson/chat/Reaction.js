@@ -5,6 +5,60 @@ import { initial } from "lodash";
 import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
+  .stage {
+    margin-top: 26px;
+    margin-left: 10px;
+  }
+  .dot-flashing {
+    position: relative;
+    width: 13px;
+    height: 13px;
+    left: 30px;
+    border-radius: 15px;
+    background-color: #268bf4;
+    color: #9880ff;
+    animation: dotFlashing 1s infinite linear alternate;
+    animation-delay: 0.5s;
+  }
+  .dot-flashing::before,
+  .dot-flashing::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+
+  .dot-flashing::before {
+    left: -22px;
+    width: 13px;
+    height: 13px;
+    border-radius: 15px;
+    background-color: #268bf4;
+    color: #9880ff;
+    animation: dotFlashing 1s infinite alternate;
+    animation-delay: 0s;
+  }
+
+  .dot-flashing::after {
+    left: 22px;
+    width: 13px;
+    height: 13px;
+    border-radius: 15px;
+    background-color: #268bf4;
+    color: #9880ff;
+    animation: dotFlashing 1s infinite alternate;
+    animation-delay: 1s;
+  }
+
+  @keyframes dotFlashing {
+    0% {
+      background-color: #0174f0;
+    }
+    50%,
+    100% {
+      background-color: #8cbdf1;
+    }
+  }
   @media (max-width: 800px) {
   }
 `;
@@ -40,7 +94,7 @@ const Message = styled.div`
   .student_text {
     background: #248bf5;
     color: #fff;
-    min-width: 60%;
+    min-width: 20%;
     max-width: 70%;
     outline: 0;
     resize: none;
@@ -83,6 +137,13 @@ const ReactionsList = styled.div`
   flex-direction: row;
   align-items: flex-start;
   flex-wrap: wrap;
+`;
+
+const WaitingButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  width: 100%;
 `;
 
 const StyledButton = styled.div`
@@ -132,7 +193,13 @@ const Reaction = (props) => {
           <div className="used">
             <Message key={i} time={i} className="student">
               <IconBlock>
-                <img className="icon" src="../../static/flash.svg" />
+                {me.image ? (
+                  <img className="icon" src={me.image} />
+                ) : me.surname ? (
+                  `${me.name[0]}${me.surname[0]}`
+                ) : (
+                  `${me.name[0]}${me.name[1]}`
+                )}
                 <div className="name">{me.name}</div>
               </IconBlock>
               <div className="student_text">{renderHTML(lr.reaction)}</div>
@@ -140,13 +207,19 @@ const Reaction = (props) => {
             <Message key={i} time={i} className="author">
               <div className="author_text">{renderHTML(lr.comment)}</div>
               <IconBlock>
-                {author && author.image != null ? (
-                  <img className="icon" src={author.image} />
-                ) : (
-                  <img className="icon" src="../../static/hipster.svg" />
+                {props.author_image && (
+                  <img className="icon" src={props.author_image} />
                 )}
+                {!props.author_image &&
+                  (author && author.image != null ? (
+                    <img className="icon" src={author.image} />
+                  ) : (
+                    <img className="icon" src="../../static/hipster.svg" />
+                  ))}
                 <div className="name">
-                  {author && author.name ? author.name : "BeSavvy"}
+                  {props.author_name
+                    ? props.author_name
+                    : author && (author.name ? author.name : "BeSavvy")}
                 </div>
               </IconBlock>
             </Message>
@@ -170,14 +243,16 @@ const Reaction = (props) => {
               </Message>
             )}
             <br />
-            <Message
-              //   id={"message" + i + id}
-              //   key={i}
-              //   time={i}
-              className="student"
-            >
+            <Message className="student">
               <IconBlock>
-                <img className="icon" src="../../static/flash.svg" />
+                {me.image ? (
+                  <img className="icon" src={me.image} />
+                ) : me.surname ? (
+                  `${me.name[0]}${me.surname[0]}`
+                ) : (
+                  `${me.name[0]}${me.name[1]}`
+                )}
+                {/* <img className="icon" src="../../static/flash.svg" /> */}
                 <div className="name">{me.name}</div>
               </IconBlock>
               <ReactionsList>
@@ -204,6 +279,25 @@ const Reaction = (props) => {
               </ReactionsList>
             </Message>
           </>
+        )}
+        {leftReactions.length > 0 && (
+          <Message className="student">
+            <IconBlock>
+              {me.image ? (
+                <img className="icon" src={me.image} />
+              ) : me.surname ? (
+                `${me.name[0]}${me.surname[0]}`
+              ) : (
+                `${me.name[0]}${me.name[1]}`
+              )}
+              <div className="name">{me.name}</div>
+            </IconBlock>
+            <WaitingButton>
+              <div class="stage">
+                <div class="dot-flashing"></div>
+              </div>
+            </WaitingButton>
+          </Message>
         )}
       </>
     </Styles>

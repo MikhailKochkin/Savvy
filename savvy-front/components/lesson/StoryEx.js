@@ -73,15 +73,18 @@ const Progress = styled.div`
 
 const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
-  console.log("mememem", me);
   const [experience, setExperience] = useState(0);
-
+  const [showArrow, setShowArrow] = useState(true);
   const total = props.lesson.totalPoints;
 
   const getResults = (res) => {
     // if (experience <= total) {
     setExperience(experience + res);
     // }
+  };
+
+  const getShowArrow = (val) => {
+    setShowArrow(val);
   };
 
   const [
@@ -95,7 +98,6 @@ const StoryEx = (props) => {
   });
   useEffect(() => {
     // when the first query is loaded, then fire this lazy query function
-    console.log("useEffect trigger");
     if (me) {
       fetchQuery({
         variables: {
@@ -112,14 +114,12 @@ const StoryEx = (props) => {
         <CircularProgress />
       </Progress>
     );
-  console.log("stats_data", stats_data);
   let my_result =
     stats_data && stats_data.lessonResults.length > 0
       ? stats_data.lessonResults.reduce((prev, current) =>
           prev.progress > current.progress ? prev : current
         )
       : null;
-  console.log("my_result", my_result);
   let components = [];
   tasks.map((task) => {
     let el;
@@ -239,6 +239,7 @@ const StoryEx = (props) => {
           total={total}
           clicks={el.link_clicks}
           me={me}
+          getShowArrow={getShowArrow}
           author={lesson.user}
           complexity={el.complexity}
           messages={el.messages}
@@ -386,6 +387,7 @@ const StoryEx = (props) => {
             lesson_number={lesson.number}
             lesson_name={lesson.name}
             lessonID={lesson.id}
+            showArrow={showArrow}
             my_result={my_result}
           />
         )}

@@ -581,7 +581,6 @@ const Feed = (props) => {
     // setResult(props.my_result ? props.my_result.id : null);
   }, [0]);
   useEffect(() => {
-    console.log("useEffect triggered", props.my_result);
     setResult(props.my_result ? props.my_result.id : null);
     setNum(
       num > 0
@@ -635,8 +634,6 @@ const Feed = (props) => {
   //   color = "#55a630";
   // }
 
-  console.log("comps", props.components.slice(0, num + 2));
-  console.log("num", num);
   return (
     <>
       <Styles>
@@ -677,56 +674,54 @@ const Feed = (props) => {
                   className={i === num + 1 ? "final" : "no"}
                 >
                   {c}
-                  <Mutation
-                    mutation={UPDATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      id: result,
-                      lessonID: props.lessonID,
-                      progress: num + 2,
-                    }}
-                    refetchQueries={() => [
-                      {
-                        query: NEW_SINGLE_LESSON_QUERY,
-                        variables: { id: props.lessonID },
-                      },
-                    ]}
-                  >
-                    {(updateLessonResult, { loading, error }) => {
-                      return (
-                        <Buttons>
-                          {/* Show move button if it is not the last block in the lesson */}
-                          {props.components.length > num + 1 && i === num && (
-                            <>
-                              <div
-                                id="arrow_box"
-                                className="arrow_box"
-                                onClick={async (e) => {
-                                  //
-                                  // if (result.progress < num + 2) {
-
-                                  if (
-                                    props.components.length - (num + 2) ==
-                                    2
-                                  ) {
-                                    setSecondRound(true);
-                                  }
-                                  let res2 = move();
-                                  let res = await updateLessonResult();
-                                  // }
-                                  console.log("res", res, num + 2);
-                                }}
-                              >
-                                <img
-                                  className="arrow"
-                                  src="../../static/down-arrow.svg"
-                                />
-                              </div>
-                            </>
-                          )}
-                        </Buttons>
-                      );
-                    }}
-                  </Mutation>
+                  {props.showArrow && (
+                    <Mutation
+                      mutation={UPDATE_LESSONRESULT_MUTATION}
+                      variables={{
+                        id: result,
+                        lessonID: props.lessonID,
+                        progress: num + 2,
+                      }}
+                      refetchQueries={() => [
+                        {
+                          query: NEW_SINGLE_LESSON_QUERY,
+                          variables: { id: props.lessonID },
+                        },
+                      ]}
+                    >
+                      {(updateLessonResult, { loading, error }) => {
+                        return (
+                          <Buttons>
+                            {/* Show move button if it is not the last block in the lesson */}
+                            {props.components.length > num + 1 && i === num && (
+                              <>
+                                <div
+                                  id="arrow_box"
+                                  className="arrow_box"
+                                  onClick={async (e) => {
+                                    if (
+                                      props.components.length - (num + 2) ==
+                                      2
+                                    ) {
+                                      setSecondRound(true);
+                                    }
+                                    let res2 = move();
+                                    let res = await updateLessonResult();
+                                    // }
+                                  }}
+                                >
+                                  <img
+                                    className="arrow"
+                                    src="../../static/down-arrow.svg"
+                                  />
+                                </div>
+                              </>
+                            )}
+                          </Buttons>
+                        );
+                      }}
+                    </Mutation>
+                  )}
                 </Block>
               ))}
             </>
@@ -740,51 +735,47 @@ const Feed = (props) => {
                 >
                   {c}
                   <div>{result}</div>
-                  <Mutation
-                    mutation={CREATE_LESSONRESULT_MUTATION}
-                    variables={{
-                      lessonID: props.lessonID,
-                      progress: num + 2,
-                    }}
-                    refetchQueries={[
-                      {
-                        query: NEW_SINGLE_LESSON_QUERY,
-                        variables: { id: props.lessonID },
-                      },
-                    ]}
-                  >
-                    {(createLessonResult, { loading, error }) => {
-                      return (
-                        <Buttons>
-                          {props.components.length > num + 1 && i === num && (
-                            <>
-                              <div
-                                id="arrow"
-                                className="arrow_box"
-                                onClick={async (e) => {
-                                  let res2 = move();
-                                  console.log("createLessonResult");
-                                  let res = await createLessonResult();
-                                  console.log(
-                                    "res",
-                                    res,
-                                    res.data.createLessonResult.id
-                                  );
+                  {props.showArrow && (
+                    <Mutation
+                      mutation={CREATE_LESSONRESULT_MUTATION}
+                      variables={{
+                        lessonID: props.lessonID,
+                        progress: num + 2,
+                      }}
+                      refetchQueries={[
+                        {
+                          query: NEW_SINGLE_LESSON_QUERY,
+                          variables: { id: props.lessonID },
+                        },
+                      ]}
+                    >
+                      {(createLessonResult, { loading, error }) => {
+                        return (
+                          <Buttons>
+                            {props.components.length > num + 1 && i === num && (
+                              <>
+                                <div
+                                  id="arrow"
+                                  className="arrow_box"
+                                  onClick={async (e) => {
+                                    let res2 = move();
+                                    let res = await createLessonResult();
 
-                                  setResult(res.data.createLessonResult.id);
-                                }}
-                              >
-                                <img
-                                  className="arrow"
-                                  src="../../static/down-arrow.svg"
-                                />
-                              </div>
-                            </>
-                          )}
-                        </Buttons>
-                      );
-                    }}
-                  </Mutation>
+                                    setResult(res.data.createLessonResult.id);
+                                  }}
+                                >
+                                  <img
+                                    className="arrow"
+                                    src="../../static/down-arrow.svg"
+                                  />
+                                </div>
+                              </>
+                            )}
+                          </Buttons>
+                        );
+                      }}
+                    </Mutation>
+                  )}
                 </Block>
               ))}
             </>

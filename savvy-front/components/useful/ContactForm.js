@@ -303,7 +303,6 @@ const Form = (props) => {
                   tags: [...new Set([...me.tags, ...useful.tags])],
                 },
               });
-              console.log("useful.link", useful.link);
 
               location.href = useful.link;
             }}

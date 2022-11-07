@@ -202,7 +202,6 @@ const Progress = (props) => {
   const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
     variables: { id: option },
   });
-  if (loading) return <p>Loading...</p>;
 
   const {
     loading: loading2,

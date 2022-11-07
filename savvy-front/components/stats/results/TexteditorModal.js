@@ -108,13 +108,10 @@ const TexteditorModal = (props) => {
         //   res.filter((r) => r.correct == element.getAttribute("quiz_data"))
         //     .length > 0
         // ) {
-        console.log("quiz res", res, element.getAttribute("answer"));
 
         let answers = res.filter(
           (r) => r.correct == element.getAttribute("answer")
         );
-
-        console.log("answers", answers);
 
         var guesses_arr = answers.map(function (obj) {
           return obj.guess;

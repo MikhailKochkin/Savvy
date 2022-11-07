@@ -54,6 +54,7 @@ const AreYouEnrolled = (props) =>
       {({ data }, loading) => {
         if (loading) return <p>Loading...</p>;
         if (!data.me) return null;
+        console.log("props.openLesson", props.openLesson);
         if (data.me) {
           if (
             !props.openLesson &&

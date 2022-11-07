@@ -155,9 +155,6 @@ const Requests = () => {
     setMessage(dataFromChild);
   };
 
-  console.log("users", users);
-  console.log("filtered", filtered);
-
   return (
     <Styles>
       <input onChange={(e) => setTag(e.target.value)} />

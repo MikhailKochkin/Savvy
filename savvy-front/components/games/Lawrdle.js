@@ -514,9 +514,9 @@ const Lawrdle = (props) => {
       }
     });
 
-    table[activeRowNum].slice(0, the_word.split("").length).map((letter, i) => {
-      console.log("letter dict", letter, i, correct_word_dict[letter]);
-    });
+    // table[activeRowNum].slice(0, the_word.split("").length).map((letter, i) => {
+    //   console.log("letter dict", letter, i, correct_word_dict[letter]);
+    // });
 
     // 3. Show if the user if they have found correct letters
     table[activeRowNum].slice(0, the_word.split("").length).map((letter, i) => {

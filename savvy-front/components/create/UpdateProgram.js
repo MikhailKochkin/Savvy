@@ -36,10 +36,8 @@ const UpdateCoursePage = (props) => {
   const { data, loading, error } = useQuery(SINGLE_PROGRAM_QUERY, {
     variables: { id: props.id },
   });
-  console.log("props.id", props.id);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error</p>;
-  console.log("data.program", data.program);
   return (
     <Width>
       <div id="root"></div>

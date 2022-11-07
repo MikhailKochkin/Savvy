@@ -720,7 +720,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
-        console.log("args", args);
         delete updates.id;
         const header = args.header;
         const subheader = args.subheader;

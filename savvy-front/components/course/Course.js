@@ -163,7 +163,6 @@ const Course = (props) => {
     forums.map((f) => f.map((r) => ratings.push(r.rating)));
     average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(2);
   }
-  console.log("average", average);
   return (
     <CaseCard>
       <img src={coursePage.image} />

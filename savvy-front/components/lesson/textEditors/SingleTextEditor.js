@@ -395,14 +395,12 @@ const SingleTextEditor = (props) => {
           e.target.after(button2);
         }
         if (parseFloat(res.res) > 69) {
-          console.log("true result");
           setResult(true);
           props.getResults(1);
           el.style.background = "#D9EAD3";
           e.target.innerHTML = "Check";
           return true;
         } else {
-          console.log("false result");
           setResult(false);
           el.style.background = "#FCE5CD";
           e.target.innerHTML = "Check";
@@ -596,7 +594,7 @@ const SingleTextEditor = (props) => {
                     if (e.target.getAttribute("class") == "mini_button") {
                       const ch = await check(e);
                       setTimeout(() => {
-                        console.log("res", ch);
+                        // console.log("res", ch);
                         const res2 = createTextEditorResult({
                           variables: {
                             lessonId: props.lessonID,
@@ -624,7 +622,6 @@ const SingleTextEditor = (props) => {
                       setShowNote(true);
                       setNote(val);
                       setType("note");
-                      console.log("e.target.text", val);
                       setTimeout(() => {
                         const res2 = createTextEditorResult({
                           variables: {
@@ -655,7 +652,6 @@ const SingleTextEditor = (props) => {
                     }
 
                     // 3. Quiz. Provide the student with data, quiz part of text
-                    console.log("e.target", e.target);
                     if (
                       e.target &&
                       (e.target.getAttribute("type") === "quiz" ||
@@ -753,7 +749,6 @@ const SingleTextEditor = (props) => {
                 <button
                   onClick={async (e) => {
                     const res = await quizCheck();
-                    console.log("res", res);
                     setTimeout(() => {
                       const res2 = createTextEditorResult({
                         variables: {

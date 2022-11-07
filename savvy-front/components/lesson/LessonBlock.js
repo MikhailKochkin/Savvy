@@ -278,7 +278,6 @@ const LessonBlock = (props) => {
         res.data.createShot
       );
     } else if (res.data.updateShot) {
-      console.log("get result", "Shot");
       setType("Shot");
       setIdNum(res.data.updateShot.id);
       props.addToLesson(
@@ -580,6 +579,7 @@ const LessonBlock = (props) => {
               <Chat
                 name={data.name}
                 me={me}
+                author={lesson.user}
                 isSecret={data.isSecret}
                 user={lesson.user.id}
                 messages={data.messages}

@@ -108,7 +108,9 @@ const Money = (props) => {
       </div>
       <div>Доход автора: {parseInt(money_to_authors * 0.9)} ₽</div>
       <div>Число платежей: {paid_sorted_orders.length} </div>
-      <div>Средний чек: {total_money / paid_sorted_orders.length} ₽</div>
+      <div>
+        Средний чек: {parseInt(total_money / paid_sorted_orders.length)} ₽
+      </div>
     </Styles>
   );
 };

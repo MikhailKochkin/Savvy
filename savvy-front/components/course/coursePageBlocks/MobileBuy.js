@@ -444,7 +444,6 @@ const MobileBuy = (props) => {
                   c.data.updateOrderAuto !== null &&
                   c.data.updateOrderAuto.isPaid == true
               );
-              console.log("checked_orders2", checked_orders2, checked_orders);
 
               if (checked_orders2.length > 0) {
                 let enroll = await enrollOnCourse({

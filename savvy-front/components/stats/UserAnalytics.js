@@ -76,7 +76,6 @@ const UserAnalytics = (props) => {
 
   let student_arr = [];
   sorted.map((s) => student_arr.push(s.id));
-  console.log("student_arr", student_arr.slice(0, number));
   const { loading, error, data } = useQuery(LESSON_RESULTS_QUERY, {
     variables: {
       coursePageId: coursePageID,
@@ -86,7 +85,6 @@ const UserAnalytics = (props) => {
   if (loading) return <p>Загружаем информацию о результатах студентов...</p>;
 
   const results = data.lessonResults;
-  console.log("results", results);
 
   return (
     <Styles>
