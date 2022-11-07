@@ -101,19 +101,20 @@ const Message = styled.div`
   justify-content: flex-end;
   margin-bottom: 20px;
   /* animation: show 750ms 350ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards; */
-  animation: show 450ms 150ms forwards;
-
+  /* animation: show 450ms 150ms forwards; */
+  /* animation: fadein 3000ms ease-in; */
   // Prestate
-  opacity: 0;
+  /* opacity: 0; */
   // remove transform for just a fade-in
-  transform: rotateX(90deg);
-  transform-origin: bottom center;
-  @keyframes show {
+  /* transform: rotateX(90deg); */
+  /* transform-origin: bottom center; */
+  /* @keyframes show {
     100% {
       opacity: 1;
       transform: none;
     }
-  }
+  } */
+
   p {
     margin: 5px 0;
   }

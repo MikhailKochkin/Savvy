@@ -426,7 +426,6 @@ const NewSingleLesson = (props) => {
   ) {
     i_am_student = true;
   }
-  console.log("lesson.open 0", lesson.open);
   return (
     <PleaseSignIn>
       {!i_am_student && lesson.open && (
