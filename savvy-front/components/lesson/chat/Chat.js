@@ -88,6 +88,19 @@ const Next = styled.div`
     cursor: pointer;
     color: black;
     transition: 0.3s;
+    animation-duration: 1s;
+    animation-name: animate-fade;
+    /* animation-delay: 0.5s; */
+    animation-fill-mode: both;
+
+    @keyframes animate-fade {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
     &:hover {
       background: #f4f4f4;
     }
@@ -114,6 +127,20 @@ const Message = styled.div`
       transform: none;
     }
   } */
+
+  animation-duration: 0.8s;
+  animation-name: animate-fade;
+  /* animation-delay: 0.5s; */
+  animation-fill-mode: both;
+
+  @keyframes animate-fade {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
 
   p {
     margin: 5px 0;
