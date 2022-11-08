@@ -262,6 +262,7 @@ const MobileBuy = (props) => {
     props.coursePage.installments
   );
   const [isPromo, setIsPromo] = useState(false);
+  const [promo, setPromo] = useState("");
 
   const [price, setPrice] = useState(
     props.coursePage.installments && props.coursePage.installments > 1
@@ -275,6 +276,7 @@ const MobileBuy = (props) => {
       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
         setPrice(price * p.value);
         setIsPromo(true);
+        setPromo(val);
       }
     });
   };
