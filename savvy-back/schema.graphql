@@ -1455,7 +1455,7 @@ type Mutation {
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, miniforumId: String, text: String): Statement
-  createTestPractice(lessonId: String, tasks: [String], tasksNum: Int, text: String): TestPractice
+  createTestPractice(failureText: String, intro: String, lessonId: String, successText: String, tasks: [String], tasksNum: Int, text: String): TestPractice
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
@@ -2641,8 +2641,11 @@ input TestListRelationFilter {
 
 type TestPractice {
   createdAt: DateTime!
+  failureText: String
   id: String!
+  intro: String
   lessonId: String
+  successText: String
   tasks: [String!]!
   tasksNum: Int!
   text: String
@@ -2695,11 +2698,14 @@ input TestPracticeResultWhereInput {
 input TestPracticeWhereInput {
   AND: [TestPracticeWhereInput!]
   createdAt: DateTimeFilter
+  failureText: StringNullableFilter
   id: StringFilter
+  intro: StringNullableFilter
   lesson: LessonWhereInput
   lessonId: StringNullableFilter
   NOT: [TestPracticeWhereInput!]
   OR: [TestPracticeWhereInput!]
+  successText: StringNullableFilter
   tasks: StringNullableListFilter
   tasksNum: IntFilter
   testPracticeResults: TestPracticeResultListRelationFilter

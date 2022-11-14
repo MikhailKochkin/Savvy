@@ -2,6 +2,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
+import dynamic from "next/dynamic";
 
 const CREATE_TEST_PRACTICE = gql`
   mutation createTestPractice(
@@ -9,16 +10,25 @@ const CREATE_TEST_PRACTICE = gql`
     $tasks: [String!]
     $text: String!
     $lessonId: String!
+    $intro: String!
+    $successText: String!
+    $failureText: String!
   ) {
     createTestPractice(
       tasksNum: $tasksNum
       tasks: $tasks
       text: $text
       lessonId: $lessonId
+      intro: $intro
+      successText: $successText
+      failureText: $failureText
     ) {
       id
       tasks
       tasksNum
+      intro
+      successText
+      failureText
     }
   }
 `;
@@ -30,6 +40,23 @@ const Styles = styled.div`
 const Element = styled.div`
   border-bottom: 1px solid grey;
   margin-bottom: 10px;
+`;
+
+const Comment = styled.div`
+  margin: 3% 0;
+  border-radius: 5px;
+  border: 1px solid #c4c4c4;
+  width: 100%;
+  min-height: 100px;
+  padding: 1.5%;
+  font-size: 1.4rem;
+  outline: 0;
+  &#ifRight {
+    border: 1px solid #84bc9c;
+  }
+  &#ifWrong {
+    border: 1px solid #de6b48;
+  }
 `;
 
 const ButtonTwo = styled.button`
@@ -53,9 +80,17 @@ const ButtonTwo = styled.button`
   }
 `;
 
+const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
 const CreateTestBlock = (props) => {
   const [tasks, setTasks] = useState([]);
   const [number, setNumber] = useState(5);
+  const [intro, setIntro] = useState("");
+  const [successText, setSuccessText] = useState("");
+  const [failureText, setFailureText] = useState("");
 
   const tests = props.lesson.newTests;
   const quizes = props.lesson.quizes;
@@ -75,7 +110,6 @@ const CreateTestBlock = (props) => {
 
   const [createTestPractice, { data, loading, error }] =
     useMutation(CREATE_TEST_PRACTICE);
-
   return (
     <Styles>
       <input
@@ -83,6 +117,33 @@ const CreateTestBlock = (props) => {
         value={number}
         onChange={(e) => setNumber(e.target.value)}
       />
+      <Comment>
+        <DynamicLoadedEditor
+          id="question"
+          name="question"
+          placeholder={"Introduction explaining the task"}
+          value={intro}
+          getEditorText={setIntro}
+        />
+      </Comment>
+      <Comment>
+        <DynamicLoadedEditor
+          id="question"
+          name="question"
+          placeholder={"Text for successful students"}
+          value={successText}
+          getEditorText={setSuccessText}
+        />
+      </Comment>
+      <Comment>
+        <DynamicLoadedEditor
+          id="question"
+          name="question"
+          placeholder={"Text for failed students"}
+          value={failureText}
+          getEditorText={setFailureText}
+        />
+      </Comment>
       <p>
         Выберите, какие тесты и вопросы вы хотите включить в испытание. Если вы
         хотите добавить новые тесты или вопросы, не забудьте предварительно
@@ -127,6 +188,9 @@ const CreateTestBlock = (props) => {
                 tasks: tasks,
                 text: "Тест",
                 lessonId: props.lessonId,
+                intro: intro,
+                successText: successText,
+                failureText: failureText,
               },
             });
             props.getResult(res);

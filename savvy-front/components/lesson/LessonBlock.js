@@ -540,6 +540,7 @@ const LessonBlock = (props) => {
 
         {type.toLowerCase() == "testpractice" && (
           <>
+            {console.log("CreateTestBlock")}
             {!isSaved && d == null && (
               <CreateTestBlock
                 lessonId={lesson.id}

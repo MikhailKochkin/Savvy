@@ -260,6 +260,8 @@ const Element = (props) => {
         passResult={props.passResult}
         answers={answers}
         time={time}
+        failureText={props.failureText}
+        successText={props.successText}
         me={props.me}
         lesson={props.lesson.id}
         tasks_number={tasks.length}
@@ -330,8 +332,8 @@ const Element = (props) => {
       <LessonPart>
         <Progress>
           <div className="question">
-            {Math.round(props.tasksNum * 0.8)} {t("out")} {props.tasksNum}{" "}
-            {t("to_proceed")}.
+            {t("get")} {Math.round(props.tasksNum * 0.8)} {t("out")}{" "}
+            {props.tasksNum} {t("to_proceed")}
           </div>
           <div className="circles">
             {_.times(props.tasksNum, (i) => (

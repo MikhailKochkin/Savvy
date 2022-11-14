@@ -21,6 +21,8 @@ const community_checkout = new YooCheckout({
 
 const ClientReminder = require("../emails/ClientReminder");
 const WelcomeEmail = require("../emails/Welcome");
+const WelcomeEmailEng = require("../emails/WelcomeEng");
+
 const PurchaseEmail = require("../emails/Purchase");
 const ReminderEmail = require("../emails/Reminder");
 const GenericEmail = require("../emails/Generic");
@@ -34,6 +36,7 @@ const { argsToArgsConfig } = require("graphql/type/definition");
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 
 const qrcode = require("qrcode-terminal");
+const { exists } = require("fs");
 
 // const { Client } = require("whatsapp-web.js");
 // const wa_client = new Client();
@@ -142,7 +145,7 @@ const Mutation = mutationType({
         });
         if (our_user) {
           throw new Error(
-            `Пользователь с таким имейл уже есть. Войдите в аккаунт или восстановите пароль.`
+            `User with this email already exists. Please sign in or register.`
           );
         }
 
@@ -188,13 +191,29 @@ const Mutation = mutationType({
             maxAge: 31557600000,
           });
         }
-
-        const newEmail = await client.sendEmail({
-          From: "Mikhail@besavvy.app",
-          To: email,
-          Subject: "Расскажу о возможностях BeSavvy",
-          HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
-        });
+        console.log("country", country, country.toLowerCase());
+        if (
+          country.toLowerCase() == "ru" ||
+          country.toLowerCase() == "kz" ||
+          country.toLowerCase() == "by" ||
+          country.toLowerCase() == "am" ||
+          country.toLowerCase() == "tj" ||
+          country.toLowerCase() == "uz"
+        ) {
+          const newEmailRus = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: email,
+            Subject: "Расскажу о возможностях BeSavvy",
+            HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
+          });
+        } else {
+          const newEmailEng = await client.sendEmail({
+            From: "Mikhail@besavvy.app",
+            To: email,
+            Subject: "Hello from BeSavvy",
+            HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
+          });
+        }
 
         return { user, token };
       },
@@ -861,10 +880,17 @@ const Mutation = mutationType({
       args: {
         text: stringArg(),
         tasksNum: intArg(),
+        intro: stringArg(),
+        successText: stringArg(),
+        failureText: stringArg(),
         tasks: list(stringArg()),
         lessonId: stringArg(),
       },
-      resolve: async (_, { lessonId, tasks, tasksNum, text }, ctx) => {
+      resolve: async (
+        _,
+        { lessonId, tasks, tasksNum, text, intro, successText, failureText },
+        ctx
+      ) => {
         const new_data = {
           user: {
             connect: {
@@ -881,6 +907,9 @@ const Mutation = mutationType({
           },
           tasksNum: tasksNum,
           text: text,
+          successText: successText,
+          failureText: failureText,
+          intro: intro,
         };
         const newTP = await ctx.prisma.testPractice.create({ data: new_data });
         return newTP;
@@ -3266,13 +3295,13 @@ const Mutation = mutationType({
         const mailRes = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
-          Subject: "Смена пароля",
-          HtmlBody: makeANiceEmail(`Вот твой токен для смены пароля
+          Subject: "Change password",
+          HtmlBody: makeANiceEmail(`This is your link to change the password
                   \n\n
-                  <a href="${process.env.FRONTEND_URL7}/reset?resetToken=${resetToken}">Нажми сюда, чтобы сменить пароль!</a>`),
+                  <a href="${process.env.FRONTEND_URL7}/reset?resetToken=${resetToken}">Press here and get back your account!</a>`),
         });
         // 4. Return the message
-        return { message: "Спасибо!" };
+        return { message: "Thanks!" };
       },
     }),
       t.field("resetPassword", {

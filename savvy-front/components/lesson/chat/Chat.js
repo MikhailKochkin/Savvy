@@ -8,6 +8,7 @@ import _ from "lodash";
 import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
 import Reaction from "./Reaction";
+import ChangeForum from "../forum/ChangeForum";
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
@@ -341,6 +342,8 @@ const Secret = styled.div`
 const Chat = (props) => {
   const [update, setUpdate] = useState(false);
   const [num, setNum] = useState(1);
+  const [move, setMove] = useState(false);
+
   const [clicks, setClicks] = useState(props.clicks);
   const [isRevealed, setIsRevealed] = useState(!props.isSecret);
   const [shiver, setShiver] = useState(false);
@@ -361,10 +364,23 @@ const Chat = (props) => {
     setUpdate(!update);
   };
 
-  // useEffect(() => {
-  //   console.log("ShowArrow 0 false");
-  //   props.getShowArrow(false);
-  // }, []);
+  useEffect(() => {
+    document.addEventListener("keydown", detectKeyDown, true);
+    // console.log("ShowArrow 0 false");
+    // props.getShowArrow(false);
+    return () => {
+      document.removeEventListener("click", detectKeyDown);
+    };
+  }, []);
+
+  const detectKeyDown = (e) => {
+    console.log("event");
+    if (e.key === "n") {
+      setNum((num) => num + 1);
+    } else if (e.key === "b") {
+      setNum((num) => num - 1);
+    }
+  };
 
   let width;
   if (props.problem) {
@@ -558,7 +574,7 @@ const Chat = (props) => {
                         ))}
                     </Icon>
                     <div className="name">
-                      {m.name && m.name !== "student" ? m.name : author.name}
+                      {m.name && m.name !== "student" ? m.name : me.name}
                     </div>
                   </IconBlock>
                   <div className="student_text">{renderHTML(m.text)}</div>
@@ -568,7 +584,7 @@ const Chat = (props) => {
           })}
         </Messages>
       )}
-      {!update && num < messages.messagesList.length && (
+      {/* {!update && num < messages.messagesList.length && (
         <Next>
           <button
             onClick={(e) => {
@@ -581,7 +597,7 @@ const Chat = (props) => {
             Next
           </button>
         </Next>
-      )}
+      )} */}
       {update && (
         <UpdateChat
           id={id}

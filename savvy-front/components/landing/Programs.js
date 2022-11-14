@@ -20,6 +20,7 @@ const COURSES_QUERY = gql`
       nextStart
       installments
       price
+      currency
       discountPrice
       numInCareerTrack
       image
@@ -271,6 +272,7 @@ const Programs = () => {
               key={i}
               img={p.image}
               title={p.title}
+              currency={p.currency}
               lessons={p.lessons}
               description={p.description}
               nextStart={p.nextStart}

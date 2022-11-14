@@ -55,6 +55,9 @@ const TestPractice = objectType({
     t.model.id();
     t.model.tasks();
     t.model.text();
+    t.model.intro();
+    t.model.successText();
+    t.model.failureText();
     t.model.tasksNum();
     t.model.lessonId();
     t.model.createdAt();

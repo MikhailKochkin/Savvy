@@ -148,6 +148,7 @@ const Program = (props) => {
 
   // let price = props.discountPrice ? props.discountPrice : props.price;
   let price = props.price;
+  console.log("props", props.currency);
   return (
     <Card>
       <Up>
@@ -166,7 +167,8 @@ const Program = (props) => {
                 {parseInt(parseInt(price) / 1000) > 0
                   ? parseInt(parseInt(price) / 1000)
                   : ""}{" "}
-                {parseInt(price) % 1000}₽{" "}
+                {parseInt(price) % 1000}
+                {props.currency == "ruble" ? "₽" : "$"}{" "}
               </div>
               <PriceBoxDescription discount={props.discountPrice}>
                 {props.discountPrice ? (

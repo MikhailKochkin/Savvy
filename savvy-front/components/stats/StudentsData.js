@@ -32,6 +32,7 @@ const STUDENTS_QUERY = gql`
       surname
       tags
       email
+      number
       studentFeedback {
         id
         lesson {

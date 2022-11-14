@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
-import Block from "./Block";
 import { useTranslation } from "next-i18next";
+import renderHTML from "react-render-html";
+
+import Block from "./Block";
 
 const Container = styled.div`
   display: flex;
@@ -87,11 +89,16 @@ const TestPractice = (props) => {
   }
   return (
     <>
+      {console.log("props.testPractice.intro", props.testPractice)}
       {!start && (
         <Container width={width}>
           <img src="/static/test_pattern.svg" />
           <h2>{t("practice")}</h2>
-          <div>{t("practice_explainer")}</div>
+          <div>
+            {props.testPractice.intro
+              ? renderHTML(props.testPractice.intro)
+              : t("practice_explainer")}
+          </div>
           <button onClick={(e) => setStart(true)}>{t("start")}</button>
         </Container>
       )}
@@ -102,6 +109,8 @@ const TestPractice = (props) => {
             tasks={sliced_tasks}
             passResult={passResult}
             tasksNum={props.testPractice.tasksNum}
+            successText={props.testPractice.successText}
+            failureText={props.testPractice.failureText}
             lesson={props.lesson}
             me={props.me}
             restart={restart}

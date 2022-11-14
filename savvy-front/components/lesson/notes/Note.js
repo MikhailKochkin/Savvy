@@ -23,6 +23,53 @@ const Container = styled.div`
   width: ${(props) => props.width};
   font-size: 1.6rem;
   margin: 20px 0;
+  .animated {
+    /* text-transform: uppercase; */
+    background-image: linear-gradient(
+      -225deg,
+      #231557 0%,
+      #44107a 29%,
+      #ff1361 67%
+    );
+    background-size: auto auto;
+    background-clip: border-box;
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    font-size: 5rem;
+    font-weight: 800;
+    animation: 2s anim-lineUp ease-out;
+    animation: textclip 2s linear infinite;
+    p {
+      line-height: 1.3;
+    }
+  }
+  @keyframes textclip {
+    to {
+      background-position: 200% center;
+    }
+  }
+  @keyframes anim-lineUp {
+    0% {
+      opacity: 0;
+      transform: translateY(80%);
+    }
+    20% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
   .arrow_box {
     cursor: pointer;
     padding: 10px 2%;

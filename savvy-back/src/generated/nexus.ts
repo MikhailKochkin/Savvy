@@ -1736,11 +1736,14 @@ export interface NexusGenInputs {
   TestPracticeWhereInput: { // input type
     AND?: NexusGenInputs['TestPracticeWhereInput'][] | null; // [TestPracticeWhereInput!]
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    failureText?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    intro?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
     lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['TestPracticeWhereInput'][] | null; // [TestPracticeWhereInput!]
     OR?: NexusGenInputs['TestPracticeWhereInput'][] | null; // [TestPracticeWhereInput!]
+    successText?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     tasks?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     tasksNum?: NexusGenInputs['IntFilter'] | null; // IntFilter
     testPracticeResults?: NexusGenInputs['TestPracticeResultListRelationFilter'] | null; // TestPracticeResultListRelationFilter
@@ -2535,8 +2538,11 @@ export interface NexusGenObjects {
   }
   TestPractice: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    failureText?: string | null; // String
     id: string; // String!
+    intro?: string | null; // String
     lessonId?: string | null; // String
+    successText?: string | null; // String
     tasks: string[]; // [String!]!
     tasksNum: number; // Int!
     text?: string | null; // String
@@ -3336,8 +3342,11 @@ export interface NexusGenFieldTypes {
   }
   TestPractice: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    failureText: string | null; // String
     id: string; // String!
+    intro: string | null; // String
     lessonId: string | null; // String
+    successText: string | null; // String
     tasks: string[]; // [String!]!
     tasksNum: number; // Int!
     text: string | null; // String
@@ -4155,8 +4164,11 @@ export interface NexusGenFieldTypeNames {
   }
   TestPractice: { // field return type name
     createdAt: 'DateTime'
+    failureText: 'String'
     id: 'String'
+    intro: 'String'
     lessonId: 'String'
+    successText: 'String'
     tasks: 'String'
     tasksNum: 'Int'
     text: 'String'
@@ -4696,7 +4708,10 @@ export interface NexusGenArgTypes {
       text?: string | null; // String
     }
     createTestPractice: { // args
+      failureText?: string | null; // String
+      intro?: string | null; // String
       lessonId?: string | null; // String
+      successText?: string | null; // String
       tasks?: Array<string | null> | null; // [String]
       tasksNum?: number | null; // Int
       text?: string | null; // String

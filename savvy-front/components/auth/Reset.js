@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Router from "next/router";
+import { useTranslation } from "next-i18next";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 
@@ -107,75 +108,73 @@ const Title = styled.div`
   margin-bottom: 10px;
 `;
 
-class Reset extends Component {
-  static propTypes = {
-    resetToken: PropTypes.string.isRequired,
-  };
-  state = {
-    password: "",
-    confirmPassword: "",
-  };
-  switch = () => {
-    this.props.getData("signin");
-  };
-  saveToState = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-  render() {
-    return (
-      <Mutation
-        mutation={RESET_MUTATION}
-        variables={{
-          resetToken: this.props.resetToken,
-          password: this.state.password,
-          confirmPassword: this.state.confirmPassword,
-        }}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
-        {(reset, { error, loading, called }) => (
-          <Form
-            method="post"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              this.state.password !== this.state.confirmPassword
-                ? alert("Пароли не совпадают!")
-                : await reset();
-              this.setState({ password: "", confirmPassword: "" });
-              Router.push({
-                pathname: "/",
-              });
-            }}
-          >
-            <Fieldset disabled={loading} aria-busy={loading}>
-              <Title>Измените пароль</Title>
-              <Error error={error} />
-              <Container>
-                <input
-                  className="second"
-                  type="password"
-                  name="password"
-                  placeholder="Пароль"
-                  value={this.state.password}
-                  onChange={this.saveToState}
-                />
-                <input
-                  className="second"
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Повторите пароль"
-                  value={this.state.confirmPassword}
-                  onChange={this.saveToState}
-                />
-              </Container>
-              <Buttons>
-                <SubmitButton type="submit">Изменить</SubmitButton>
-              </Buttons>
-            </Fieldset>
-          </Form>
-        )}
-      </Mutation>
-    );
-  }
-}
+const Reset = (props) => {
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState("");
+  // const switchPage = () => {
+  //   props.getData("signin");
+  // };
+
+  const { t } = useTranslation("auth");
+
+  return (
+    <Mutation
+      mutation={RESET_MUTATION}
+      variables={{
+        resetToken: props.resetToken,
+        password: password,
+        confirmPassword: confirmPassword,
+      }}
+      refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+    >
+      {(reset, { error, loading, called }) => (
+        <Form
+          method="post"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            password !== confirmPassword
+              ? alert(t("not_match") + "!")
+              : await reset();
+
+            // this.setState({ password: "", confirmPassword: "" });
+            Router.push({
+              pathname: "/",
+            });
+          }}
+        >
+          <Fieldset disabled={loading} aria-busy={loading}>
+            <Title>{t("update_password")}</Title>
+            <Error error={error} />
+            <Container>
+              <input
+                className="second"
+                type="password"
+                name="password"
+                placeholder={t("password")}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <input
+                className="second"
+                type="password"
+                name="confirmPassword"
+                placeholder={t("repeat_the_password")}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Container>
+            <Buttons>
+              <SubmitButton type="submit">{t("update_password")}</SubmitButton>
+            </Buttons>
+          </Fieldset>
+        </Form>
+      )}
+    </Mutation>
+  );
+};
+
+Reset.propTypes = {
+  resetToken: PropTypes.string.isRequired,
+};
 
 export default Reset;

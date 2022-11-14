@@ -485,13 +485,16 @@ const Action = (props) => {
             </PriceBox>
           )}
           {!installments && !props.coursePage.discountPrice && (
-            <div className="price">{price} ₽</div>
+            <div className="price">
+              {price} {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
+            </div>
           )}
           {!installments && props.coursePage.discountPrice && (
             <div className="price">
               <div>
                 {props.coursePage.discountPrice}{" "}
-                <span className="discount">{price}</span> ₽
+                <span className="discount">{price}</span>{" "}
+                {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
               </div>
               <div className="bubble">
                 -

@@ -345,7 +345,7 @@ const ProgramMobileBuy = (props) => {
                   ? program.discountPrice
                   : program.price,
                 userId: me.id,
-                promocode: promo,
+                // promocode: promo,
               },
             });
             location.href = res.data.createOrder.url;

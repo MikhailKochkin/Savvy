@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+import renderHTML from "react-render-html";
 
 const Styles = styled.div`
   font-size: 1.6rem;
@@ -22,13 +23,20 @@ const Final = (props) => {
     <Styles>
       <img src="/static/test_pattern.svg" />
       <p>
-        {t("there_were")} {props.tasks_number} {t("questions")}
+        {t("there_were")}: {props.tasks_number}.{" "}
         <span>
-          {" "}
-          {correct.length} {t("correct_num")}
+          {t("correct_num")}: {correct.length}
         </span>{" "}
       </p>
-      {ratio < 0.8 ? <p>{t("once_more")}</p> : <div>{t("great")}</div>}
+      {ratio < 0.8 ? (
+        <div>
+          {props.failureText ? renderHTML(props.failureText) : t("once_more")}
+        </div>
+      ) : (
+        <div>
+          {props.successText ? renderHTML(props.successText) : t("great")}
+        </div>
+      )}
     </Styles>
   );
 };

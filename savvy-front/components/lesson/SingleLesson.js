@@ -50,6 +50,9 @@ const SINGLE_LESSON_QUERY = gql`
         id
         tasks
         tasksNum
+        intro
+        successText
+        failureText
       }
       notes {
         id

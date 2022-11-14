@@ -149,7 +149,7 @@ const SendButton = styled.div`
   width: 130px;
   transition: all 0.4s;
   a {
-    color: #edefed;
+    color: grey;
   }
   &:hover {
     color: #112a62;
@@ -378,6 +378,16 @@ const Person = (props) => {
       </Header>
       <Open secret={secret}>
         <Buttons>
+          {student.number && (
+            <SendButton>
+              <a
+                target="_blank"
+                href={`https://wa.me/${student.number}?text=Добрый!`}
+              >
+                Написать
+              </a>
+            </SendButton>
+          )}
           {courseVisit && (
             <Mutation
               mutation={UPDATE_COURSE_VISIT_MUTATION}

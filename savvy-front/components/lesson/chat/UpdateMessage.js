@@ -171,7 +171,9 @@ const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const UpdateMessage = (props) => {
   const [author, setAuthor] = useState(props.author);
-  const [name, setName] = useState(props.name);
+  const [name, setName] = useState(
+    props.name ? props.name : props.author == "author" ? "author" : "student"
+  );
   const [text, setText] = useState(props.text);
   const [reactions, setReactions] = useState(props.reactions);
   const [image, setImage] = useState(props.image);
@@ -217,7 +219,7 @@ const UpdateMessage = (props) => {
                 setName(e.target.value);
                 props.updateName(e.target.value, props.index);
               }}
-              defaultValue={props.name}
+              defaultValue={name}
             />
           </div>
         </IconBlock>

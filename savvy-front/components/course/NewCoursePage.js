@@ -34,6 +34,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       result
       tags
       tariffs
+      currency
       methods
       reviews
       installments

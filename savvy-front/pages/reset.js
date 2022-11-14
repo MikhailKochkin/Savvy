@@ -1,6 +1,13 @@
-import Reset from '../components/auth/Reset';
+import Reset from "../components/auth/Reset";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-const ResetPage = props => (
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ["auth"])),
+  },
+});
+
+const ResetPage = (props) => (
   <div>
     <Reset resetToken={props.query.resetToken} />
   </div>

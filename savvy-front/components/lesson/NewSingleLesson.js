@@ -96,6 +96,9 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         tasks
         tasksNum
+        intro
+        successText
+        failureText
       }
       problems {
         id
@@ -256,7 +259,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
+  /* background-image: url("/static/law_pattern.svg"); */
   background-image: url("/static/law_pattern.svg");
+
   background-size: contain;
 `;
 

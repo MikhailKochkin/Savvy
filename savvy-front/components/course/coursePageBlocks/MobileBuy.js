@@ -334,18 +334,25 @@ const MobileBuy = (props) => {
             {installments}{" "}
             {getNoun(installments, "платёж", "платежа", "платежей")} по
           </div>
-          {installments && <div className="price_small">{price} ₽</div>}
+          {installments && (
+            <div className="price_small">
+              {price} {coursePage.currency == "ruble" ? "₽" : "$"}{" "}
+            </div>
+          )}
         </PriceBox>
       )}
       {/* {!installments && <div className="price">{price} ₽</div>} */}
       {!installments && !props.coursePage.discountPrice && (
-        <div className="price">{price} ₽</div>
+        <div className="price">
+          {price} {coursePage.currency == "ruble" ? "₽" : "$"}
+        </div>
       )}
       {!installments && props.coursePage.discountPrice && (
         <div className="price">
           <div>
             {props.coursePage.discountPrice}{" "}
-            <span className="discount">{price}</span> ₽
+            <span className="discount">{price}</span>{" "}
+            {coursePage.currency == "ruble" ? "₽" : "$"}
           </div>
           <div className="bubble">
             -{100 - parseInt((props.coursePage.discountPrice / price) * 100)}%
