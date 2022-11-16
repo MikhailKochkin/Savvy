@@ -218,7 +218,7 @@ const MobileMenu = styled.span`
 const NewNav = (props) => {
   let me = useUser();
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signin");
+  const [auth, setAuth] = useState("signup");
   const { t } = useTranslation("nav");
 
   const toggleModal = (e) => setIsOpen(!isOpen);

@@ -148,7 +148,6 @@ const Program = (props) => {
 
   // let price = props.discountPrice ? props.discountPrice : props.price;
   let price = props.price;
-  console.log("props", props.currency);
   return (
     <Card>
       <Up>

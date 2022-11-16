@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import renderHTML from "react-render-html";
 import styled from "styled-components";
 import Loading from "../../Loading";

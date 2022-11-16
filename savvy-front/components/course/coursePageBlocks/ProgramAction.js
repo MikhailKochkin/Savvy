@@ -389,7 +389,7 @@ const StyledModal = Modal.styled`
 
 const Action = (props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signin");
+  const [auth, setAuth] = useState("signup");
   const [promo, setPromo] = useState("");
 
   const [isPromo, setIsPromo] = useState(false);
@@ -560,7 +560,6 @@ const Action = (props) => {
               onClick={async (e) => {
                 e.preventDefault();
                 let results = [];
-                console.log(1);
                 let checked_orders = await Promise.all(
                   my_orders.map(async (o) => {
                     let updated_res = await updateOrderAuto({

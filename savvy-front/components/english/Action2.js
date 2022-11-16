@@ -306,7 +306,6 @@ const Action = () => {
                         communication_medium: "english",
                       },
                     });
-                    console.log(res);
                   } else {
                     alert("Неправильный имейл");
                   }

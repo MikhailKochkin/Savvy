@@ -153,7 +153,7 @@ const Phone = () => {
 
   const handleType = (count) => {
     // access word count number
-    console.log(count);
+    // console.log(count);
   };
 
   useEffect(() => {

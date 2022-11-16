@@ -131,10 +131,22 @@ const Mutation = mutationType({
         uniID: stringArg(),
         careerTrackID: stringArg(),
         company: stringArg(),
+        traffic_sources: arg({
+          type: "Visits",
+        }),
       },
       resolve: async (
         _,
-        { name, surname, email, number, password, status, country },
+        {
+          name,
+          surname,
+          email,
+          number,
+          password,
+          status,
+          country,
+          traffic_sources,
+        },
         ctx
       ) => {
         const hashed_password = await bcrypt.hash(password, 10);
@@ -163,6 +175,7 @@ const Mutation = mutationType({
             // careerTrack: { connect: { id: careerTrackID } },
             isFamiliar: true,
             status: status,
+            traffic_sources: traffic_sources,
           },
         });
 
@@ -191,7 +204,6 @@ const Mutation = mutationType({
             maxAge: 31557600000,
           });
         }
-        console.log("country", country, country.toLowerCase());
         if (
           country.toLowerCase() == "ru" ||
           country.toLowerCase() == "kz" ||
@@ -223,13 +235,17 @@ const Mutation = mutationType({
       args: {
         email: stringArg(),
         password: stringArg(),
+        traffic_sources: arg({
+          type: "Visits",
+        }),
       },
-      resolve: async (_, { email, password }, ctx) => {
+      resolve: async (_, { email, password, traffic_sources }, ctx) => {
         // 1. check if there is a user with that email
         const low_email = email.toLowerCase();
         const user = await ctx.prisma.user.findUnique({
           where: { email: low_email },
         });
+
         if (!user) {
           throw new Error(`No such user found for email ${email}`);
         }
@@ -239,6 +255,25 @@ const Mutation = mutationType({
         if (!valid) {
           throw new Error("Invalid Password!");
         }
+        let new_traffic_sources = [];
+        if (user.traffic_sources === null) {
+          new_traffic_sources = traffic_sources;
+        } else if (traffic_sources.visitsList.length > 0) {
+          new_traffic_sources = {
+            visitsList: traffic_sources.visitsList.concat(
+              user.traffic_sources.visitsList
+            ),
+          };
+        }
+
+        const updated_user = await ctx.prisma.user.update({
+          data: {
+            traffic_sources: new_traffic_sources,
+          },
+          where: {
+            email: low_email,
+          },
+        });
         // 3. generate the JWT Token
         let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
           expiresIn: 1000 * 60 * 60 * 24 * 365,
@@ -262,6 +297,40 @@ const Mutation = mutationType({
       },
     });
 
+    t.field("recordSession", {
+      type: "User",
+      args: {
+        id: stringArg(),
+        traffic_sources: arg({
+          type: "Visits",
+        }),
+      },
+      resolve: async (_, { id, traffic_sources }, ctx) => {
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: id },
+        });
+        let new_traffic_sources = [];
+        if (user.traffic_sources === null) {
+          new_traffic_sources = traffic_sources;
+        } else if (traffic_sources.visitsList.length > 0) {
+          new_traffic_sources = {
+            visitsList: traffic_sources.visitsList.concat(
+              user.traffic_sources.visitsList
+            ),
+          };
+        }
+
+        const updated_user = await ctx.prisma.user.update({
+          data: {
+            traffic_sources: new_traffic_sources,
+          },
+          where: {
+            id: id,
+          },
+        });
+        return user;
+      },
+    });
     t.field("updateUser", {
       type: "User",
       args: {
@@ -324,6 +393,10 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.findUnique({
           where: { id: userId },
         });
+        // const user = await ctx.prisma.user.findUnique(
+        //   { where: { id: userId } },
+        //   `{ id, user { id } }`
+        // );
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
@@ -2000,11 +2073,9 @@ const Mutation = mutationType({
         //remove the ID from updates
         delete updates.id;
         //run the update method
-        console.log("comments initial", args.comments.join(", "));
         const statement = await ctx.prisma.statement.findUnique({
           where: { id: args.id },
         });
-        console.log("statement", statement);
 
         const student = await ctx.prisma.user.findUnique({
           where: { id: statement.userId },
@@ -2013,7 +2084,6 @@ const Mutation = mutationType({
         const lesson = await ctx.prisma.lesson.findUnique({
           where: { forumId: statement.forumId },
         });
-        console.log("args.comments[0]", args.comments[0]);
         const commentEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: student.email,
@@ -2137,7 +2207,6 @@ const Mutation = mutationType({
       resolve: async (_, args, ctx) => {
         const parts = args.parts;
         const comments = args.comments;
-        console.log("parts", parts, comments);
         const lessonId = args.lessonId;
         delete args.parts;
         delete args.comments;
@@ -3396,7 +3465,6 @@ const Mutation = mutationType({
           tags: list(stringArg()),
         },
         resolve: async (_, args, ctx) => {
-          console.log(args);
           const authorId = args.authorId;
           delete args.authorId;
           const coursePageId = args.coursePageId;
@@ -3433,7 +3501,6 @@ const Mutation = mutationType({
         resolve: async (_, args, ctx) => {
           const tags = args.tags;
           delete args.tags;
-          console.log("args", args);
           const Useful = await ctx.prisma.useful.create({
             data: {
               tags: {

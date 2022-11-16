@@ -1960,6 +1960,7 @@ export interface NexusGenInputs {
     subjects?: NexusGenEnums['SortOrder'] | null; // SortOrder
     surname?: NexusGenEnums['SortOrder'] | null; // SortOrder
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    traffic_sources?: NexusGenEnums['SortOrder'] | null; // SortOrder
     uniId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     uniID?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -2044,6 +2045,7 @@ export interface NexusGenInputs {
     tests?: NexusGenInputs['TestListRelationFilter'] | null; // TestListRelationFilter
     textEditorResults?: NexusGenInputs['TextEditorResultListRelationFilter'] | null; // TextEditorResultListRelationFilter
     textEditors?: NexusGenInputs['TextEditorListRelationFilter'] | null; // TextEditorListRelationFilter
+    traffic_sources?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     uni?: NexusGenInputs['UniWhereInput'] | null; // UniWhereInput
     uniId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     uniID?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2056,6 +2058,15 @@ export interface NexusGenInputs {
     id?: string | null; // String
     legalPortfolioId?: string | null; // String
     levelId?: string | null; // String
+  }
+  Visit: { // input type
+    date?: string | null; // String
+    utm_campaign?: string | null; // String
+    utm_medium?: string | null; // String
+    utm_source?: string | null; // String
+  }
+  Visits: { // input type
+    visitsList?: Array<NexusGenInputs['Visit'] | null> | null; // [Visit]
   }
 }
 
@@ -2628,6 +2639,7 @@ export interface NexusGenObjects {
     status?: string | null; // String
     surname?: string | null; // String
     tags: string[]; // [String!]!
+    traffic_sources?: NexusGenScalars['Json'] | null; // Json
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     work?: string | null; // String
   }
@@ -3036,6 +3048,7 @@ export interface NexusGenFieldTypes {
     deleteTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     enrollOnCourse: NexusGenRootTypes['User'] | null; // User
     publishCourse: NexusGenRootTypes['CoursePage'] | null; // CoursePage
+    recordSession: NexusGenRootTypes['User'] | null; // User
     remind: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     requestReset: NexusGenRootTypes['AuthMessage'] | null; // AuthMessage
     resetPassword: NexusGenRootTypes['User'] | null; // User
@@ -3458,6 +3471,7 @@ export interface NexusGenFieldTypes {
     surname: string | null; // String
     tags: string[]; // [String!]!
     teacherFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
+    traffic_sources: NexusGenScalars['Json'] | null; // Json
     uni: NexusGenRootTypes['Uni'] | null; // Uni
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     work: string | null; // String
@@ -3858,6 +3872,7 @@ export interface NexusGenFieldTypeNames {
     deleteTextEditor: 'TextEditor'
     enrollOnCourse: 'User'
     publishCourse: 'CoursePage'
+    recordSession: 'User'
     remind: 'CourseVisit'
     requestReset: 'AuthMessage'
     resetPassword: 'User'
@@ -4280,6 +4295,7 @@ export interface NexusGenFieldTypeNames {
     surname: 'String'
     tags: 'String'
     teacherFeedback: 'Feedback'
+    traffic_sources: 'Json'
     uni: 'Uni'
     updatedAt: 'DateTime'
     work: 'String'
@@ -4803,6 +4819,10 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       published?: boolean | null; // Boolean
     }
+    recordSession: { // args
+      id?: string | null; // String
+      traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
+    }
     remind: { // args
       id?: string | null; // String
       reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
@@ -4832,6 +4852,7 @@ export interface NexusGenArgTypes {
     signin: { // args
       email?: string | null; // String
       password?: string | null; // String
+      traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
     }
     signup: { // args
       careerTrackID?: string | null; // String
@@ -4844,6 +4865,7 @@ export interface NexusGenArgTypes {
       password?: string | null; // String
       status?: NexusGenEnums['Status'] | null; // Status
       surname?: string | null; // String
+      traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
       uniID?: string | null; // String
     }
     textBusinessClient: { // args

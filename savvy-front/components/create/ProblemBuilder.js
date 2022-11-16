@@ -87,7 +87,6 @@ class ProblemBuilder extends Component {
   };
 
   getNode = (type, id) => {
-    console.log(1, id);
     this.props.getNode(type, id);
   };
 

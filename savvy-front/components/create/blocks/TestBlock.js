@@ -361,7 +361,6 @@ const TestBlock = (props) => {
                       e.preventDefault();
                       // call the mutation
                       if (props.getNode) {
-                        console.log(0);
                         props.getNode(type, c);
                       }
                       if (type === "newtest") {
@@ -371,7 +370,6 @@ const TestBlock = (props) => {
                       } else if (type === "note") {
                         updateNote();
                       }
-                      console.log(1);
                     }}
                   >
                     {loading1 || loading2 || loading3

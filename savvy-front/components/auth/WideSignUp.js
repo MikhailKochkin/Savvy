@@ -253,6 +253,9 @@ const WideSignUp = (props) => {
           method="post"
           onSubmit={async (e) => {
             e.preventDefault();
+            if (country == "") {
+              alert("Choose country");
+            }
             if (!isFamiliar) {
               alert("Не забыли про согласие на обработку персональных данных?");
               return;
@@ -304,7 +307,7 @@ const WideSignUp = (props) => {
               defaultValue={""}
               onChange={(e) => setCountry(e.target.value)}
             >
-              <option>{t("select_country")}</option>
+              <option value="">{t("select_country")}</option>
               <option value="CA">Canada</option>
               <option value="KZ">Kazakhstan</option>
               <option value="GB">United Kingdom</option>

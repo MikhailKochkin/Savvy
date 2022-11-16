@@ -8,6 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
+import { getCookie } from "cookies-next";
 
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
@@ -26,6 +27,7 @@ const SIGNUP_MUTATION = gql`
     $uniID: String
     $country: String
     $careerTrackID: String
+    $traffic_sources: Visits
   ) {
     signup(
       email: $email
@@ -39,6 +41,7 @@ const SIGNUP_MUTATION = gql`
       uniID: $uniID
       country: $country
       careerTrackID: $careerTrackID
+      traffic_sources: $traffic_sources
     ) {
       token
       user {
@@ -232,6 +235,21 @@ const Signup = (props) => {
     props.getData(name);
   };
 
+  // console.log(now_time);
+
+  let visits = [
+    {
+      date: new Date(),
+      utm_source: getCookie("traffic_source"),
+    },
+  ];
+
+  // utm_source => traffic_source
+  // utm_medium => traffic_medium
+  // utm_campaign => traffic_campaign
+
+  // console.log("utm_source", utm_source);
+
   return (
     <Mutation
       mutation={SIGNUP_MUTATION}
@@ -247,6 +265,7 @@ const Signup = (props) => {
         company: company,
         careerTrackID: careerTrackID,
         isFamiliar: isFamiliar,
+        traffic_sources: { visitsList: visits },
       }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >
@@ -255,6 +274,9 @@ const Signup = (props) => {
           method="post"
           onSubmit={async (e) => {
             e.preventDefault();
+            if (country == "") {
+              alert("Choose your country please");
+            }
             if (!isFamiliar) {
               alert("Не забыли про согласие на обработку персональных данных?");
               return;
@@ -318,7 +340,7 @@ const Signup = (props) => {
               defaultValue={""}
               onChange={(e) => setCountry(e.target.value)}
             >
-              <option>{t("select_country")}</option>
+              <option value="">{t("select_country")}</option>
               <option value="CA">Canada</option>
               <option value="KZ">Kazakhstan</option>
               <option value="GB">United Kingdom</option>

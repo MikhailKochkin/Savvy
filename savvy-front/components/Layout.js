@@ -1,7 +1,7 @@
 import React from "react";
 import { initGA, logPageView } from "../utils/analytics";
 import { YMInitializer } from "react-yandex-metrika";
-import { setCookie } from "cookies-next";
+import { setCookie, getCookie } from "cookies-next";
 
 export default class Layout extends React.Component {
   componentDidMount() {
@@ -10,14 +10,32 @@ export default class Layout extends React.Component {
       window.GA_INITIALIZED = true;
     }
     logPageView();
-    // console.log("window.lo", window.location.href);
-    // let url = new URL(window.location.href);
-    // let search_params = url.searchParams;
+    let url = new URL(window.location.href);
+    let search_params;
 
-    // // get value of "id" parameter
-    // // "100"
+    let old_cookie = getCookie("traffic_source");
+
+    let should_change_cookie;
+
+    // if (old_cookie == null) {
+    //   should_change_cookie == true;
+    // } else {
+    //   should_change_cookie == false;
+    // }
+
+    if (url.searchParams) {
+      search_params = url.searchParams;
+    } else {
+      search_params = null;
+    }
+
     // console.log(search_params.get("utm_source"));
-    // setCookie("marketing_source", search_params.get("utm_source"));
+    // if (should_change_cookie) {
+    setCookie("traffic_source", search_params.get("utm_source"));
+    setCookie("traffic_medium", search_params.get("utm_medium"));
+    setCookie("traffic_campaign", search_params.get("utm_campaign"));
+
+    // }
   }
   render() {
     return (

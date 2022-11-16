@@ -1478,15 +1478,16 @@ type Mutation {
   deleteTextEditor(id: String): TextEditor
   enrollOnCourse(coursePageId: String, id: String): User
   publishCourse(id: String, published: Boolean): CoursePage
+  recordSession(id: String, traffic_sources: Visits): User
   remind(id: String, reminders: [DateTime]): CourseVisit
   requestReset(email: String): AuthMessage
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(comment: String, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
   sendMessage(text: String, userId: String): Message
-  signin(email: String, password: String): AuthPayload
+  signin(email: String, password: String, traffic_sources: Visits): AuthPayload
   signout: SignOut
-  signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, uniID: String): AuthPayload
+  signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
   updateBusinessClient(comment: String, id: String, tags: [String]): BusinessClient
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
@@ -2989,6 +2990,7 @@ type User {
   surname: String
   tags: [String!]!
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
+  traffic_sources: Json
   uni: Uni
   updatedAt: DateTime!
   work: String
@@ -3054,6 +3056,7 @@ input UserOrderByInput {
   subjects: SortOrder
   surname: SortOrder
   tags: SortOrder
+  traffic_sources: SortOrder
   uniId: SortOrder
   uniID: SortOrder
   updatedAt: SortOrder
@@ -3139,6 +3142,7 @@ input UserWhereInput {
   tests: TestListRelationFilter
   textEditorResults: TextEditorResultListRelationFilter
   textEditors: TextEditorListRelationFilter
+  traffic_sources: JsonNullableFilter
   uni: UniWhereInput
   uniId: StringNullableFilter
   uniID: StringNullableFilter
@@ -3152,4 +3156,15 @@ input UserWhereUniqueInput {
   id: String
   legalPortfolioId: String
   levelId: String
+}
+
+input Visit {
+  date: String
+  utm_campaign: String
+  utm_medium: String
+  utm_source: String
+}
+
+input Visits {
+  visitsList: [Visit]
 }

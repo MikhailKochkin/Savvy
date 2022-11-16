@@ -89,7 +89,6 @@ const TestPractice = (props) => {
   }
   return (
     <>
-      {console.log("props.testPractice.intro", props.testPractice)}
       {!start && (
         <Container width={width}>
           <img src="/static/test_pattern.svg" />

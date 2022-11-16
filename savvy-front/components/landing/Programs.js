@@ -50,6 +50,7 @@ const PROGRAMS_QUERY = gql`
       title
       description
       nextStart
+      currency
       installments
       price
       image
@@ -256,6 +257,7 @@ const Programs = () => {
             img={p.image}
             title={p.title}
             program={true}
+            currency={p.currency}
             // lessons={p.lessons}
             description={p.description}
             nextStart={p.nextStart}

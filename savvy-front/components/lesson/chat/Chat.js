@@ -347,6 +347,7 @@ const Chat = (props) => {
   const [clicks, setClicks] = useState(props.clicks);
   const [isRevealed, setIsRevealed] = useState(!props.isSecret);
   const [shiver, setShiver] = useState(false);
+  const [showButton, setShowButton] = useState(true);
 
   const { t } = useTranslation("lesson");
   const [updateChat, { data, loading, error }] =
@@ -374,11 +375,12 @@ const Chat = (props) => {
   }, []);
 
   const detectKeyDown = (e) => {
-    console.log("event");
     if (e.key === "n") {
       setNum((num) => num + 1);
     } else if (e.key === "b") {
       setNum((num) => num - 1);
+    } else if (e.key === "s") {
+      setShowButton((showButton) => !showButton);
     }
   };
 
@@ -584,7 +586,7 @@ const Chat = (props) => {
           })}
         </Messages>
       )}
-      {/* {!update && num < messages.messagesList.length && (
+      {showButton && !update && num < messages.messagesList.length && (
         <Next>
           <button
             onClick={(e) => {
@@ -597,7 +599,7 @@ const Chat = (props) => {
             Next
           </button>
         </Next>
-      )} */}
+      )}
       {update && (
         <UpdateChat
           id={id}

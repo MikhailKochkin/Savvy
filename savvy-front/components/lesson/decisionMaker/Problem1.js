@@ -234,7 +234,6 @@ const Simulator = (props) => {
     chosenMeans2.map((c) => {
       arr2.push(c.name);
       arr3.push(c.value);
-      console.log(feedback[c.num][c.num]);
       arr4.push(feedback[c.num][c.num]);
     });
     if (arr_chosen.length > 1) {
@@ -242,7 +241,6 @@ const Simulator = (props) => {
       var i, j;
       for (i = 0; i < n; i++) {
         for (j = i + 1; j < n; j++) {
-          console.log(arr_chosen[i], arr_chosen[j]);
           arr.push([arr_chosen[i].num, arr_chosen[j].num]);
           arr2.push(`${arr_chosen[i].name} & ${arr_chosen[j].name}`);
           arr3.push(synergy[arr_chosen[i].num][arr_chosen[j].num]);

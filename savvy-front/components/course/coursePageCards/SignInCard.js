@@ -80,7 +80,7 @@ const StyledModal = Modal.styled`
 
 const RegisterCard = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signin");
+  const [auth, setAuth] = useState("signup");
   const { t } = useTranslation("course");
 
   const changeState = (dataFromChild) => {

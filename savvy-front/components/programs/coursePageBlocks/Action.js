@@ -518,7 +518,7 @@ const Action = (props) => {
   const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signin");
+  const [auth, setAuth] = useState("signup");
   const [step, setStep] = useState("apply");
   const [price, setPrice] = useState(props.data.price.price);
   const [isPromo, setIsPromo] = useState(false);

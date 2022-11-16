@@ -1,4 +1,4 @@
-const { objectType } = require("@nexus/schema");
+const { objectType, inputObjectType } = require("@nexus/schema");
 
 const User = objectType({
   name: "User",
@@ -18,6 +18,7 @@ const User = objectType({
     t.model.resume();
     t.model.status();
     t.model.tags();
+    t.model.traffic_sources();
     t.model.country();
     t.model.level();
     t.model.uni();
@@ -123,6 +124,23 @@ const CommunityMember = objectType({
   },
 });
 
+const Visits = inputObjectType({
+  name: "Visits",
+  definition(t) {
+    t.list.field("visitsList", { type: "Visit" });
+  },
+});
+
+const Visit = inputObjectType({
+  name: "Visit",
+  definition(t) {
+    t.string("date");
+    t.string("utm_source");
+    t.string("utm_medium");
+    t.string("utm_campaign");
+  },
+});
+
 module.exports = {
   User,
   Feedback,
@@ -131,4 +149,6 @@ module.exports = {
   BusinessClient,
   ConfUser,
   CommunityMember,
+  Visits,
+  Visit,
 };
