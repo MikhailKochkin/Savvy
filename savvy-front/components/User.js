@@ -129,7 +129,7 @@ function useUser() {
   const [recordSession, { record_data }] = useMutation(RECORD_SESSION);
   // 3. run mutation inside useEffect once get me data
   useEffect(() => {
-    if (data.me) {
+    if (data && data.me) {
       const new_record = recordSession({
         variables: {
           id: data.me.id,
