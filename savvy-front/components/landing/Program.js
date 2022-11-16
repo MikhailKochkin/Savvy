@@ -162,13 +162,17 @@ const Program = (props) => {
         <div className="price">
           <div className="price_container">
             <div className="price_box">
-              <div className="price_box_price">
-                {parseInt(parseInt(price) / 1000) > 0
-                  ? parseInt(parseInt(price) / 1000)
-                  : ""}{" "}
-                {parseInt(price) % 1000}
-                {props.currency == "ruble" ? "₽" : "$"}{" "}
-              </div>
+              {props.courseType == "PUBLIC" ? (
+                <div className="price_box_price">{t("free")}</div>
+              ) : (
+                <div className="price_box_price">
+                  {parseInt(parseInt(price) / 1000) > 0
+                    ? parseInt(parseInt(price) / 1000)
+                    : ""}{" "}
+                  {parseInt(price) % 1000}
+                  {props.currency == "ruble" ? "₽" : "$"}{" "}
+                </div>
+              )}
               <PriceBoxDescription discount={props.discountPrice}>
                 {props.discountPrice ? (
                   <span>

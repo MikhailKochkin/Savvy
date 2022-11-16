@@ -70,7 +70,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 60%;
+  width: 90%;
   align-items: center;
   justify-content: center;
 `;

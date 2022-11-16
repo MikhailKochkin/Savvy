@@ -22,7 +22,6 @@ const CURRENT_USER_QUERY = gql`
       tags
       image
       work
-      traffic_sources
       description
       certificates {
         id

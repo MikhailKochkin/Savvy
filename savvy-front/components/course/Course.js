@@ -51,8 +51,11 @@ const CaseCard = styled.div`
   position: relative;
   margin: 2%;
   width: 295px;
-  height: 295px;
+  height: 255px;
   line-height: 1.2;
+  background: #ffffff;
+  box-shadow: 0px 0px 5px rgba(149, 149, 149, 0.5);
+  width: 360px;
   img {
     object-fit: cover;
     width: 100%;
@@ -79,24 +82,14 @@ const CaseCard = styled.div`
   }
 `;
 const Box = styled.div`
-  color: white;
-  background: linear-gradient(
-    270deg,
-    rgba(46, 46, 46, 0.7) 0%,
-    rgba(46, 46, 46, 0.85) 100%
-  );
-  width: 245px;
+  width: 90%;
   height: 100%;
-  position: absolute;
   bottom: 0px;
   left: 50px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  &:hover {
-    background: rgba(46, 46, 46, 0.9);
-  }
   .content {
     height: 85%;
     width: 85%;
@@ -126,19 +119,20 @@ const Box = styled.div`
     }
   }
   button {
-    background: #00c3ff;
-    border-radius: 20px;
-    width: 100%;
-    height: 35px;
-    padding: 2%;
-    border: none;
-    color: white;
+    background: ${(props) => (props.program ? "#7000FF" : "#496ddb")};
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: ${(props) => (props.program ? "#7000FF" : "#496ddb")};
+    height: 45px;
+    width: 90%;
+    color: #fff;
     font-family: Montserrat;
     font-size: 1.6rem;
-    outline: 0;
     cursor: pointer;
+    margin-bottom: 10px;
+    transition: ease-in 0.2s;
     &:hover {
-      background: #0195c2;
+      background: #0135a9;
     }
   }
 `;
@@ -165,7 +159,7 @@ const Course = (props) => {
   }
   return (
     <CaseCard>
-      <img src={coursePage.image} />
+      {/* <img src={coursePage.image} /> */}
       <Box>
         <div className="content">
           <div>

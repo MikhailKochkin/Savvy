@@ -20,6 +20,7 @@ const COURSES_QUERY = gql`
       nextStart
       installments
       price
+      courseType
       currency
       discountPrice
       numInCareerTrack
@@ -281,7 +282,7 @@ const Programs = () => {
               price={p.price}
               discountPrice={p.discountPrice}
               installments={p.installments}
-              // conditions={p.conditions}
+              courseType={p.courseType}
               id={p.id}
             />
           ))}
