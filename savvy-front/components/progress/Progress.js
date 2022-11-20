@@ -28,6 +28,7 @@ const USERS_QUERY = gql`
       updatedAt
       country
       status
+      traffic_sources
       coursePages {
         id
         lessons {

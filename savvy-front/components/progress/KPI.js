@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
 
+import UserData from "./UserData";
+
 const Styles = styled.div`
   margin: 20px 0;
 `;
@@ -23,6 +25,7 @@ const KPI = (props) => {
   const { coursePages, users } = props;
   const [showWeekly, setShowWeekly] = useState(false);
   const [showDaily, setShowDaily] = useState(false);
+  const [showDailyActive, setShowDailyActive] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const subtractDays = (numOfDays, date = new Date()) => {
     date.setDate(date.getDate() - numOfDays);
@@ -35,6 +38,19 @@ const KPI = (props) => {
   let all_courses = coursePages.filter(
     (c) => c.user.id !== "cjqy9i57l000k0821rj0oo8l4" && c.courseType !== "UNI"
   );
+
+  let weekly_users = users.filter(
+    (u) => new Date(u.updatedAt).getTime() > subtractDays(7)
+  );
+
+  let daily_users = weekly_users.filter(
+    (u) => new Date(u.updatedAt).getTime() > subtractDays(1)
+  );
+
+  // // console.log("weekly_users", weekly_users);
+
+  // console.log("daily_users", daily_users);
+
   let ever_active_users = users.filter((u) => u.lessonResults.length > 0);
 
   let weekly_active_users = ever_active_users.filter(
@@ -79,29 +95,77 @@ const KPI = (props) => {
         <div className="data">{all_courses.length + 5}</div>
       </Row>
       <Row>
-        <div className="description"># Weekly Active users</div>
-        <div className="data">{weekly_active_users.length}</div>
+        <div className="description"># Weekly Users</div>
+        <div className="data">{weekly_users.length}</div>
         <button onClick={(e) => setShowWeekly(!showWeekly)}>
           Show Weekly Users
         </button>
       </Row>
       {showWeekly && (
         <div>
-          {weekly_active_users.map((d) => (
-            <li>
-              {d.name} {d.surname} {d.createdAt}
-            </li>
-          ))}
+          {weekly_users
+            .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
+            .map((d) => (
+              <UserData d={d} />
+            ))}
         </div>
       )}
       <Row>
-        <div className="description"># Daily Active users</div>
-        <div className="data">{daily_active_users.length}</div>
+        <div className="description"># Daily Users</div>
+        <div className="data">{daily_users.length}</div>
         <button onClick={(e) => setShowDaily(!showDaily)}>
           Show Daily Users
         </button>
       </Row>
       {showDaily && (
+        <div>
+          {daily_users
+            .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
+            .map((d) => (
+              <UserData d={d} />
+            ))}
+        </div>
+      )}
+      <Row>
+        <div className="description"># Weekly Active users</div>
+        <div className="data">{weekly_active_users.length}</div>
+        <button onClick={(e) => setShowWeekly(!showWeekly)}>
+          Show Weekly Active Users
+        </button>
+      </Row>
+      {showWeekly && (
+        <div>
+          {weekly_active_users
+            .sort((a, b) =>
+              a.lessonResults.filter(
+                (lr) => new Date(lr.updatedAt).getTime() > subtractDays(7)
+              )[0].updatedAt >
+              b.lessonResults.filter(
+                (lr) => new Date(lr.updatedAt).getTime() > subtractDays(7)
+              )[0].updatedAt
+                ? -1
+                : 1
+            )
+            .map((d) => (
+              <li>
+                {d.name} {d.surname} {d.country} –
+                {moment(
+                  d.lessonResults.filter(
+                    (lr) => new Date(lr.updatedAt).getTime() > subtractDays(7)
+                  )[0].updatedAt
+                ).format("DD.MM.YY HH:mm:ss")}
+              </li>
+            ))}
+        </div>
+      )}
+      <Row>
+        <div className="description"># Daily Active users</div>
+        <div className="data">{daily_active_users.length}</div>
+        <button onClick={(e) => setShowDailyActive(!showDailyActive)}>
+          Show Daily Active Users
+        </button>
+      </Row>
+      {showDailyActive && (
         <div>
           {daily_active_users
             .sort((a, b) =>
@@ -116,7 +180,7 @@ const KPI = (props) => {
             )
             .map((d) => (
               <li>
-                {d.name} {d.surname} {d.country}
+                {d.name} {d.surname} {d.country} –
                 {moment(
                   d.lessonResults.filter(
                     (lr) => new Date(lr.updatedAt).getTime() > subtractDays(1)
