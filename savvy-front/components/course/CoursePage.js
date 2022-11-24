@@ -10,6 +10,7 @@ import { useUser } from "../User";
 import CourseData from "./courseBlocks/CourseData";
 import ToolsBox from "./courseBlocks/ToolsBox";
 import LessonsData from "./courseBlocks/LessonsData";
+import TopLine from "./Topline";
 
 import {
   Container,
@@ -161,6 +162,11 @@ const CoursePage = (props) => {
     <>
       <div id="root"></div>
       <>
+        {(!me ||
+          (me &&
+            me.new_subjects.filter((s) => s.id == props.id).length == 0)) && (
+          <TopLine id={props.id} />
+        )}
         <Container>
           <LessonStyles>
             <CourseInfo>
