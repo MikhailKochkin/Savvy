@@ -1,12 +1,22 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { gql } from "@apollo/client";
+import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import { Mutation } from "@apollo/client/react/components";
 import Button from "@material-ui/core/Button";
+import dynamic from "next/dynamic";
+
 import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import LessonData from "./LessonData";
 import Journey from "./Journey";
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION($userId: String!, $text: String!) {
+    sendMessage(userId: $userId, text: $text) {
+      id
+    }
+  }
+`;
 
 const UPDATE_COURSE_VISIT_MUTATION = gql`
   mutation UPDATE_COURSE_VISIT_MUTATION(
@@ -192,6 +202,26 @@ const Tag = styled.div`
   align-items: center;
 `;
 
+const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
+const Editor = styled.div`
+  font-size: 1.6rem;
+  width: 75%;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  outline: 0;
+  padding: 0.5%;
+  font-size: 1.6rem;
+  margin: 15px 0;
+  @media (max-width: 800px) {
+    width: 350px;
+  }
+`;
+
 const StyledButton = withStyles({
   root: {
     margin: "1% 0",
@@ -205,7 +235,11 @@ const Person = (props) => {
   const [secret, setSecret] = useState(true);
   const [tags, setTags] = useState(props.student.tags);
   const [tag, setTag] = useState("");
+  const [message, setMessage] = useState("");
+
   const [page, setPage] = useState("results");
+  const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
+    useMutation(SEND_MESSAGE_MUTATION);
   const { student, lessons, courseVisit, coursePageID, coursePage, results } =
     props;
 
@@ -303,6 +337,10 @@ const Person = (props) => {
     lessons_number: lessons.length,
     completed_lessons_number: Math.round(total),
     lesResultsList: { lesResults: lesResults },
+  };
+
+  const myCallback = (dataFromChild) => {
+    setMessage(dataFromChild);
   };
 
   return (
@@ -470,6 +508,25 @@ const Person = (props) => {
             </Mutation>
           )}
         </Buttons>
+        <Editor className="editor">
+          <DynamicLoadedEditor
+            getEditorText={myCallback}
+            value={""}
+            name="text"
+          />
+        </Editor>
+        <button
+          onClick={async (e) => {
+            const res = await sendMessage({
+              variables: {
+                userId: student.id,
+                text: message,
+              },
+            });
+          }}
+        >
+          {loading1 ? "Sending..." : "Send"}
+        </button>
         <Journey
           student={student}
           maxes={maxes}

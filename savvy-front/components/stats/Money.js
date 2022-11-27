@@ -47,7 +47,10 @@ const Money = (props) => {
   if (loading) return <Loading />;
 
   const coursePage = data.coursePage;
-  const author_promocode = data.coursePage.promocode.promocodes[0];
+  const author_promocode =
+    data.coursePage.promocode.promocodes.length > 0
+      ? data.coursePage.promocode.promocodes[0]
+      : undefined;
   const orders = data.coursePage.orders;
   const dates = [
     // "July 1, 2022 00:00:00",
@@ -90,15 +93,27 @@ const Money = (props) => {
   }, 0);
 
   var money_to_authors = paid_sorted_orders.reduce(function (acc, obj) {
-    return (
-      acc +
-      obj.price *
-        (obj.promocode &&
-        obj.promocode.toLowerCase() == author_promocode.name.toLowerCase()
-          ? 0.8
-          : 0.5)
-    );
+    let proportion;
+    if (obj.promocode && obj.promocode.toLowerCase() == "civilist") {
+      proportion = 0.8;
+    } else if (obj.promocode && obj.promocode.toLowerCase() == "program") {
+      proportion = 0.125;
+    } else {
+      proportion = 0.5;
+    }
+    return acc + obj.price * proportion;
+    // return (
+    //   acc +
+    //   obj.price *
+    //     (obj.promocode &&
+    //     obj.promocode.toLowerCase() == author_promocode.name.toLowerCase()
+    //       ? 0.8
+    //       : 0.5)
+    // );
   }, 0);
+
+  console.log("money_to_authors", money_to_authors * 0.9);
+
   return (
     <Styles>
       <div>Выплаты от {moment(prev_date).format("LLL")}</div>

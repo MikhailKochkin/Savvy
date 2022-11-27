@@ -162,64 +162,71 @@ const Analyzer = (props) => {
   const { elements, lesson } = props;
 
   let lesson_structure = [];
-  elements.map((el, i) => {
-    if (i == 0) {
-      lesson_structure.push([el]);
-    } else {
-      if (elements[i - 1].type.toLowerCase() == el.type.toLowerCase()) {
-        lesson_structure.at(-1).push(el);
-      } else {
+  elements
+    .filter((el) => el.id !== undefined)
+    .map((el, i) => {
+      if (i == 0) {
         lesson_structure.push([el]);
+      } else {
+        if (elements[i - 1].id == undefined) {
+          return;
+        }
+        if (elements[i - 1].type.toLowerCase() == el.type.toLowerCase()) {
+          lesson_structure.at(-1).push(el);
+        } else {
+          lesson_structure.push([el]);
+        }
       }
-    }
-  });
+    });
 
   let lesson_difficulty_map = [];
   let lesson_labels = [];
-  elements.map((el, i) => {
-    if (el.type.toLowerCase() == "quiz") {
-      lesson_difficulty_map.push(2);
-      lesson_labels.push("quiz");
-    } else if (el.type.toLowerCase() == "testpractice") {
-      lesson_difficulty_map.push(3);
-      lesson_labels.push("testpractice");
-    } else if (
-      el.type.toLowerCase() == "texteditor" ||
-      el.type.toLowerCase() == "constructor"
-    ) {
-      lesson_difficulty_map.push(4);
-      if (el.type.toLowerCase() == "texteditor") {
-        lesson_labels.push("text editor");
-      } else if (el.type.toLowerCase() == "constructor") {
-        lesson_labels.push("doc builder");
+  elements
+    .filter((el) => el.id !== undefined)
+    .map((el, i) => {
+      if (el.type.toLowerCase() == "quiz") {
+        lesson_difficulty_map.push(2);
+        lesson_labels.push("quiz");
+      } else if (el.type.toLowerCase() == "testpractice") {
+        lesson_difficulty_map.push(3);
+        lesson_labels.push("testpractice");
+      } else if (
+        el.type.toLowerCase() == "texteditor" ||
+        el.type.toLowerCase() == "constructor"
+      ) {
+        lesson_difficulty_map.push(4);
+        if (el.type.toLowerCase() == "texteditor") {
+          lesson_labels.push("text editor");
+        } else if (el.type.toLowerCase() == "constructor") {
+          lesson_labels.push("doc builder");
+        }
+      } else if (el.type.toLowerCase() == "problem") {
+        lesson_difficulty_map.push(5);
+        lesson_labels.push("problem");
+      } else if (el.type.toLowerCase() == "newtest") {
+        lesson_difficulty_map.push(1);
+        lesson_labels.push("newtest");
+      } else if (el.type.toLowerCase() == "note") {
+        lesson_difficulty_map.push(1);
+        lesson_labels.push("longread");
+      } else if (el.type.toLowerCase() == "chat") {
+        lesson_difficulty_map.push(1);
+        lesson_labels.push("chat");
+      } else if (el.type.toLowerCase() == "forum") {
+        lesson_difficulty_map.push(1);
+        lesson_labels.push("forum");
       }
-    } else if (el.type.toLowerCase() == "problem") {
-      lesson_difficulty_map.push(5);
-      lesson_labels.push("problem");
-    } else if (el.type.toLowerCase() == "newtest") {
-      lesson_difficulty_map.push(1);
-      lesson_labels.push("newtest");
-    } else if (el.type.toLowerCase() == "note") {
-      lesson_difficulty_map.push(1);
-      lesson_labels.push("longread");
-    } else if (el.type.toLowerCase() == "chat") {
-      lesson_difficulty_map.push(1);
-      lesson_labels.push("chat");
-    } else if (el.type.toLowerCase() == "forum") {
-      lesson_difficulty_map.push(1);
-      lesson_labels.push("forum");
-    }
-    //   else {
-    //     lesson_difficulty_map.push(1);
-    //     if (el.type.toLowerCase() == "newTest") {
-    //       lesson_labels.push("test");
-    //     } else if (el.type.toLowerCase() == "note") {
-    //       lesson_labels.push("longread");
-    //     } else if (el.type.toLowerCase() == "chat") {
-    //       lesson_labels.push("chat");
-    //     }
-    //   }
-  });
+      //   else {
+      //     lesson_difficulty_map.push(1);
+      //     if (el.type.toLowerCase() == "newTest") {
+      //       lesson_labels.push("test");
+      //     } else if (el.type.toLowerCase() == "note") {
+      //       lesson_labels.push("longread");
+      //     } else if (el.type.toLowerCase() == "chat") {
+      //       lesson_labels.push("chat");
+      //     }
+      //   }
+    });
 
   // let arr = [1, 2, 2, 2, 3, 4, 4, 4]
   // result = [[1],[2,2,2],[3],[4, 4, 4]]
@@ -253,7 +260,6 @@ const Analyzer = (props) => {
     practiceComment =
       "❌ ⬇️ Are you sure that all these practical assignments are supported by the theory block?";
   }
-  console.log("theory Level", theoryLevel);
   if (theory < 25) {
     theoryComment = "❌ ⬆️ Add more theory and explanations";
   } else if (theory >= 25 && theory < 50) {
@@ -264,71 +270,72 @@ const Analyzer = (props) => {
   }
 
   const analyzeLesson = () => {
-    elements.map((el, i) => {
-      if (
-        el.type.toLowerCase() == "forum" ||
-        (el.type.toLowerCase() == "chat" && i == 0) ||
-        (el.type.toLowerCase() == "newtest" &&
-          lesson.newTests.find((nt) => nt.id == el.id).type &&
-          lesson.newTests.find((nt) => nt.id == el.id).type.toLowerCase() ==
-            "form")
-      ) {
-        communicationElements.push(el);
-        if (el.type.toLowerCase() == "forum") {
-          communicationLevel = communicationLevel + 3;
-        } else if (el.type.toLowerCase() == "chat") {
-          communicationLevel = communicationLevel + 1;
-        } else if (el.type.toLowerCase() == "newtest") {
-          communicationLevel = communicationLevel + 2;
-        }
-      } else if (
-        el.type.toLowerCase() == "note" ||
-        el.type.toLowerCase() == "chat" ||
-        el.type.toLowerCase() == "shot"
-      ) {
-        theoryElements.push(el);
-        if (el.type.toLowerCase() == "note") {
-          theoryLevel = theoryLevel + 3;
-        } else if (el.type.toLowerCase() == "chat") {
-          theoryLevel = theoryLevel + 1;
-        } else if (el.type.toLowerCase() == "shot") {
-          theoryLevel = theoryLevel + 2;
-        }
-      } else if (
-        el.type.toLowerCase() == "newtest" ||
-        el.type.toLowerCase() == "quiz" ||
-        el.type.toLowerCase() == "testpractice" ||
-        el.type.toLowerCase() == "texteditor" ||
-        el.type.toLowerCase() == "document" ||
-        el.type.toLowerCase() == "constructor" ||
-        el.type.toLowerCase() == "problem"
-      ) {
-        practiceElements.push(el);
+    elements
+      .filter((el) => el.id !== undefined)
+      .map((el, i) => {
         if (
+          el.type.toLowerCase() == "forum" ||
+          (el.type.toLowerCase() == "chat" && i == 0) ||
+          (el.type.toLowerCase() == "newtest" &&
+            lesson.newTests.find((nt) => nt.id == el.id).type &&
+            lesson.newTests.find((nt) => nt.id == el.id).type.toLowerCase() ==
+              "form")
+        ) {
+          communicationElements.push(el);
+          if (el.type.toLowerCase() == "forum") {
+            communicationLevel = communicationLevel + 3;
+          } else if (el.type.toLowerCase() == "chat") {
+            communicationLevel = communicationLevel + 1;
+          } else if (el.type.toLowerCase() == "newtest") {
+            communicationLevel = communicationLevel + 2;
+          }
+        } else if (
+          el.type.toLowerCase() == "note" ||
+          el.type.toLowerCase() == "chat" ||
+          el.type.toLowerCase() == "shot"
+        ) {
+          theoryElements.push(el);
+          if (el.type.toLowerCase() == "note") {
+            theoryLevel = theoryLevel + 3;
+          } else if (el.type.toLowerCase() == "chat") {
+            theoryLevel = theoryLevel + 1;
+          } else if (el.type.toLowerCase() == "shot") {
+            theoryLevel = theoryLevel + 2;
+          }
+        } else if (
           el.type.toLowerCase() == "newtest" ||
-          el.type.toLowerCase() == "quiz"
-        ) {
-          practiceLevel = practiceLevel + 1;
-        } else if (
+          el.type.toLowerCase() == "quiz" ||
           el.type.toLowerCase() == "testpractice" ||
-          el.type.toLowerCase() == "problem" ||
-          el.type.toLowerCase() == "document"
-        ) {
-          practiceLevel = practiceLevel + 3;
-        } else if (
+          el.type.toLowerCase() == "texteditor" ||
+          el.type.toLowerCase() == "document" ||
           el.type.toLowerCase() == "constructor" ||
-          el.type.toLowerCase() == "texteditor"
+          el.type.toLowerCase() == "problem"
         ) {
-          practiceLevel = practiceLevel + 2;
+          practiceElements.push(el);
+          if (
+            el.type.toLowerCase() == "newtest" ||
+            el.type.toLowerCase() == "quiz"
+          ) {
+            practiceLevel = practiceLevel + 1;
+          } else if (
+            el.type.toLowerCase() == "testpractice" ||
+            el.type.toLowerCase() == "problem" ||
+            el.type.toLowerCase() == "document"
+          ) {
+            practiceLevel = practiceLevel + 3;
+          } else if (
+            el.type.toLowerCase() == "constructor" ||
+            el.type.toLowerCase() == "texteditor"
+          ) {
+            practiceLevel = practiceLevel + 2;
+          }
         }
-      }
-    });
+      });
 
     total_number = communicationLevel + theoryLevel + practiceLevel;
     setCommunication(Math.round((communicationLevel / total_number) * 100));
     setPractice(Math.round((practiceLevel / total_number) * 100));
     setTheory(Math.round((theoryLevel / total_number) * 100));
-
     setShow(true);
   };
   return (
@@ -343,17 +350,23 @@ const Analyzer = (props) => {
             <div className="box">
               <div>
                 – Estimated time to complete the lesson:{" "}
-                <b>{elements.length * 3} min</b>:
-                {elements.length * 3 >= 30 && elements.length * 3 <= 80 ? (
+                <b>
+                  {elements.filter((el) => el.id !== undefined).length * 3} min
+                </b>
+                :
+                {elements.filter((el) => el.id !== undefined).length * 3 >=
+                  30 && elements.length * 3 <= 80 ? (
                   <div>✅ That's a good lesson size.</div>
                 ) : null}
-                {elements.length * 3 < 30 ? (
+                {elements.filter((el) => el.id !== undefined).length * 3 <
+                30 ? (
                   <div>
                     ❌ ⬆️ Don't you think it's a good idea to make this lesson
                     slighly bigger?
                   </div>
                 ) : null}
-                {elements.length * 3 > 80 ? (
+                {elements.filter((el) => el.id !== undefined).length * 3 >
+                80 ? (
                   <div>
                     ❌ ⬇️ Don't you think it's a good idea to make this lesson
                     slighly smaller? Maybe we can unite separate tests into a
@@ -391,10 +404,6 @@ const Analyzer = (props) => {
               <div>
                 {lesson_structure.map((arr) => {
                   if (arr.length > 3) {
-                    console.log(
-                      "elements.indexOf[arr[0]]",
-                      elements.indexOf(arr[0])
-                    );
                     return (
                       <li>
                         There are probably too many elements of the same type (
@@ -417,11 +426,6 @@ const Analyzer = (props) => {
                 follow this pattern?
               </div>
               <div>
-                {console.log(
-                  "lesson_difficulty_map",
-                  lesson_difficulty_map,
-                  lesson_labels
-                )}
                 <Bar
                   data={{
                     labels: lesson_labels,
