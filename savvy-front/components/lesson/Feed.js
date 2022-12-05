@@ -654,7 +654,9 @@ const Feed = (props) => {
                 setOpen(!open);
               }}
             >
-              <div className="inner">{props.experience}</div>
+              <div className="inner">
+                {props.experience >= props.total ? "🎉" : props.experience}
+              </div>
             </div>
           )}
           <div

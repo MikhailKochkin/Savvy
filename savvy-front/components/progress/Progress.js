@@ -16,30 +16,12 @@ const Container = styled.div`
   width: 70%;
   display: flex;
   flex-direction: column;
-`;
-
-const USERS_QUERY = gql`
-  query USERS_QUERY {
-    users {
-      id
-      name
-      surname
-      createdAt
-      updatedAt
-      country
-      status
-      traffic_sources
-      coursePages {
-        id
-        lessons {
-          id
-        }
-      }
-      lessonResults {
-        id
-        updatedAt
-      }
-    }
+  select {
+    width: 510px;
+  }
+  .bottom_button {
+    width: 210px;
+    margin-top: 20px;
   }
 `;
 
@@ -49,14 +31,23 @@ const COURSEPAGES_QUERY = gql`
       id
       title
       published
+      lessons {
+        forum {
+          rating {
+            id
+            rating
+          }
+          id
+        }
+      }
       courseType
       user {
         id
       }
-      new_students {
-        id
-        name
-      }
+      # new_students {
+      #   id
+      #   name
+      # }
     }
   }
 `;
@@ -198,11 +189,11 @@ const COURSEPAGE_QUERY = gql`
 `;
 
 const Progress = (props) => {
-  const [option, setOption] = useState("cjtreu3md00fp0897ga13aktp");
+  const [course, setCourse] = useState("cjtreu3md00fp0897ga13aktp");
 
-  const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
-    variables: { id: option },
-  });
+  // const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
+  //   variables: { id: option },
+  // });
 
   const {
     loading: loading2,
@@ -210,64 +201,94 @@ const Progress = (props) => {
     data: data2,
   } = useQuery(COURSEPAGES_QUERY);
 
-  const {
-    loading: loading3,
-    error: error3,
-    data: data3,
-  } = useQuery(USERS_QUERY);
+  // if (loading) return <p>Loading...</p>;
+  if (loading2) return <p>Loading1...</p>;
 
-  if (loading) return <p>Loading...</p>;
-  if (loading2) return <p>Loading...</p>;
-  if (loading3) return <p>Loading...</p>;
-
-  let coursePage = data.coursePage;
+  // let coursePage = data.coursePage;
   let coursePages = data2.coursePages;
-  let users = data3.users;
+
+  let rated_courses = [];
+  coursePages
+    .filter((c) => c.courseType.toLowerCase() !== "uni")
+    .map((coursePage) => {
+      let forums = [];
+      let ratings = [];
+      let average;
+      if (coursePage && coursePage.lessons) {
+        coursePage.lessons.map((l) =>
+          forums.push(l.forum ? l.forum.rating : null)
+        );
+        forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
+        forums.map((f) => f.map((r) => ratings.push(r.rating)));
+        average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
+          2
+        );
+      }
+      let new_c = { ...coursePage, rating: average };
+      rated_courses.push(new_c);
+    });
 
   return (
     <Styles>
       <Container>
-        <KPI coursePages={coursePages} users={users} />
-        {/* <select onChange={(e) => setOption(e.target.value)}>
-          <option value="cjtreu3md00fp0897ga13aktp">
-            Старт в Гражданском Праве (общая часть)
-          </option>
-          <option value="ckfy1q60a02f307281abcpgae">
-            Введение в право интеллектуальной собственности
-          </option>
-          <option value="cktrbubdl2237dou9vzn1gb3w">
-            Старт в юридическом английском
-          </option>
-          <option value="ck0pdit6900rt0704h6c5zmer">
-            Legal English. Базовый уровень
-          </option>
-          <option value="ck2f2nk4007dw0785lhixfppw">
-            Legal English. Продвинутый уровень
-          </option>
-          <option value="ck6mc531p02z20748kwpqnt7z">
-            Legal English. Cложности юридического перевода
-          </option>
-          <option value="ck587y4kp00lf07152t0tyywl">
-            Корпоративное право: основы работы с непубличными обществами
-          </option>
-          <option value="ckrza2r9a1377641guuzwhlgcb5">Сделки M&A</option>
-          <option value="ckqut60ya145911gqj58c0qo8a">
-            Основные инструменты договорной работы корпоративного юриста
-          </option>
-          <option value="ckt9rmh4e51981hp97uwp6rft">
-            Как защитить интересы компании в арбитражном суде?
-          </option>
-          <option value="ckwue8197229091h1abn955mbe">Налоговое право</option>
-          <option value="ckum7fc9i644701hqtbnqalqgg">Семейное право</option>
-          <option value="ckup6fss5650821hwe4oqbql91">
-            Правовое регулирование ПО
-          </option>
-          <option value="ckgdgw88c02uv0742v0ttx8pl">Старт в банкротстве</option>
-          <option value="ckx9f5kq487681hx6lojxzvqx">
-            Старт в ценных бумагах
-          </option>
+        <h3>KPI</h3>
+        <KPI coursePages={coursePages} />
+        <h3>Courses rating</h3>
+        <div>
+          <ol>
+            {rated_courses
+              .sort(
+                (a, b) =>
+                  parseFloat(b.rating == "NaN" ? 0 : b.rating) -
+                  parseFloat(a.rating == "NaN" ? 0 : a.rating)
+              )
+              .map((c) => (
+                <li>
+                  {c.title} –{" "}
+                  {c.published == true ? <b>Published</b> : "Not published"} – 
+                  {c.rating == "NaN" ? "0" : c.rating}
+                </li>
+              ))}
+          </ol>
+        </div>
+        <h3>Active courses</h3>
+        <select onChange={(e) => setCourse(e.target.value)}>
+          {coursePages
+            .filter(
+              (c) => c.courseType.toLowerCase() !== "uni" && c.published == true
+            )
+            .map((c) => (
+              <option value={c.id}>{c.title}</option>
+            ))}
         </select>
-        <CourseBox key={coursePage.id} id={coursePage.id} c={coursePage} />*/}
+        <button className="bottom_button">
+          <a
+            target="_blank"
+            href={`https://besavvy.app/ru/stats?id=${course}&name=stats`}
+          >
+            Open stats
+          </a>
+        </button>
+        <h3>Courses in development</h3>
+        <select onChange={(e) => setCourse(e.target.value)}>
+          {coursePages
+            .filter(
+              (c) =>
+                c.courseType.toLowerCase() !== "uni" && c.published == false
+            )
+            .map((c) => (
+              <option value={c.id}>{c.title}</option>
+            ))}
+        </select>
+        <button className="bottom_button">
+          <a
+            target="_blank"
+            href={`https://besavvy.app/ru/stats?id=${course}&name=stats`}
+          >
+            Open stats
+          </a>
+        </button>
+        {/* <CourseBox key={coursePage.id} id={coursePage.id} c={coursePage} /> */}
       </Container>
     </Styles>
   );

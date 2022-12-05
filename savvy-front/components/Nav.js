@@ -271,7 +271,7 @@ const Span = styled.span`
 const Nav = (props) => {
   const [width, setWidth] = useState(800);
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signup");
+  const [auth, setAuth] = useState("signin");
   const router = useRouter();
   const { pathname, asPath, query } = router;
   const { t } = useTranslation("nav");

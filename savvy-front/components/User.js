@@ -23,6 +23,26 @@ const CURRENT_USER_QUERY = gql`
       image
       work
       description
+      teams {
+        id
+        name
+        users {
+          id
+          name
+          surname
+          image
+        }
+      }
+      myTeams {
+        id
+        name
+        users {
+          id
+          name
+          surname
+          image
+        }
+      }
       certificates {
         id
         createdAt

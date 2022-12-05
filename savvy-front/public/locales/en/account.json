@@ -16,5 +16,12 @@
   "upload_image": "Upload your photo",
   "uploading": "Uploading..",
   "update": "Update",
-  "updating..": "Updating.."
+  "updating..": "Updating..",
+  "teams": "Teams",
+  "open": "Open",
+  "save": "Save",
+  "saving": "Saving...",
+  "team_settings": "Teams settings",
+  "my_teams": "My teams",
+  "create_new_team": "Create new team"
 }

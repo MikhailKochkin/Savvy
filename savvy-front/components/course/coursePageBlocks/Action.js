@@ -393,7 +393,7 @@ const Action = (props) => {
   const [surname, setSurname] = useState("");
   const [number, setNumber] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signup");
+  const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
   const [installments, setInstallments] = useState(
     props.coursePage.installments

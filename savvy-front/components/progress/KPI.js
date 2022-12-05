@@ -1,8 +1,52 @@
 import { useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
+import { gql, useQuery } from "@apollo/client";
 
 import UserData from "./UserData";
+
+const USERS_QUERY = gql`
+  query USERS_QUERY {
+    users {
+      id
+      name
+      surname
+      createdAt
+      updatedAt
+      country
+      status
+      traffic_sources
+      orders {
+        id
+        isPaid
+        createdAt
+        updatedAt
+      }
+      new_subjects {
+        id
+        title
+      }
+      coursePages {
+        id
+        lessons {
+          id
+        }
+      }
+      lessonResults {
+        id
+        updatedAt
+        lesson {
+          id
+          open
+          coursePage {
+            id
+            title
+          }
+        }
+      }
+    }
+  }
+`;
 
 const Styles = styled.div`
   margin: 20px 0;
@@ -14,23 +58,39 @@ const Row = styled.div`
   border-bottom: 1px solid grey;
   padding: 10px 0;
   .description {
-    width: 40%;
+    width: 50%;
   }
   .data {
     width: 40%;
   }
+  button {
+    height: 50px;
+    width: 100px;
+    margin: 0;
+  }
 `;
 
 const KPI = (props) => {
-  const { coursePages, users } = props;
+  const { coursePages } = props;
   const [showWeekly, setShowWeekly] = useState(false);
   const [showDaily, setShowDaily] = useState(false);
   const [showDailyActive, setShowDailyActive] = useState(false);
   const [showNew, setShowNew] = useState(false);
+  const [showFresh, setShowFresh] = useState(false);
+  const [showInterested, setShowInterested] = useState(false);
   const subtractDays = (numOfDays, date = new Date()) => {
     date.setDate(date.getDate() - numOfDays);
     return date;
   };
+
+  const {
+    loading: loading3,
+    error: error3,
+    data: data3,
+  } = useQuery(USERS_QUERY);
+
+  if (loading3) return <p>Loading2...</p>;
+  let users = data3.users;
 
   let published_courses = coursePages.filter(
     (c) => c.courseType == "FORMONEY" && c.published == true
@@ -47,16 +107,32 @@ const KPI = (props) => {
     (u) => new Date(u.updatedAt).getTime() > subtractDays(1)
   );
 
-  // // console.log("weekly_users", weekly_users);
-
-  // console.log("daily_users", daily_users);
-
   let ever_active_users = users.filter((u) => u.lessonResults.length > 0);
 
   let weekly_active_users = ever_active_users.filter(
     (u) =>
       u.lessonResults.filter(
         (lr) => new Date(lr.updatedAt).getTime() > subtractDays(7)
+      ).length > 0
+  );
+
+  let interested_users = ever_active_users.filter(
+    (u) =>
+      u.lessonResults.filter(
+        (lr) =>
+          new Date(lr.updatedAt).getTime() > subtractDays(14) &&
+          lr.lesson.open &&
+          u.new_subjects.filter((subj) => subj.id == lr.lesson.coursePage.id)
+            .length == 0
+      ).length > 0
+  );
+
+  let fresh_students = users.filter(
+    (u) =>
+      u.orders.filter(
+        (or) =>
+          new Date(or.createdAt).getTime() > subtractDays(180) &&
+          or.isPaid == true
       ).length > 0
   );
 
@@ -95,7 +171,27 @@ const KPI = (props) => {
         <div className="data">{all_courses.length + 5}</div>
       </Row>
       <Row>
-        <div className="description"># Weekly Users</div>
+        <div className="description">
+          Last week new users (<b>Engage</b>)
+        </div>
+        <div className="data">{last_week_users.length}</div>
+        <button onClick={(e) => setShowNew(!showNew)}>Show New Users</button>
+      </Row>
+      {showNew && (
+        <div>
+          <ol>
+            {last_week_users
+              .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
+              .map((d) => (
+                <UserData d={d} />
+              ))}
+          </ol>
+        </div>
+      )}
+      <Row>
+        <div className="description">
+          # Weekly Users: signed in in the last 7 days (<b>Engage</b>)
+        </div>
         <div className="data">{weekly_users.length}</div>
         <button onClick={(e) => setShowWeekly(!showWeekly)}>
           Show Weekly Users
@@ -103,15 +199,19 @@ const KPI = (props) => {
       </Row>
       {showWeekly && (
         <div>
-          {weekly_users
-            .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
-            .map((d) => (
-              <UserData d={d} />
-            ))}
+          <ol>
+            {weekly_users
+              .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
+              .map((d) => (
+                <UserData d={d} />
+              ))}
+          </ol>
         </div>
       )}
       <Row>
-        <div className="description"># Daily Users</div>
+        <div className="description">
+          # Daily Users: signed in in the last 24 hours (<b>Engage</b>)
+        </div>
         <div className="data">{daily_users.length}</div>
         <button onClick={(e) => setShowDaily(!showDaily)}>
           Show Daily Users
@@ -127,7 +227,54 @@ const KPI = (props) => {
         </div>
       )}
       <Row>
-        <div className="description"># Weekly Active users</div>
+        <div className="description">
+          # Fresh Students: bought a course in the last 6 months (<b>Delight</b>
+          )
+        </div>
+        <div className="data">{fresh_students.length}</div>
+        <button onClick={(e) => setShowFresh(!showFresh)}>
+          Show Fresh Students
+        </button>
+      </Row>
+      {showFresh && (
+        <div>
+          <ol>
+            {" "}
+            {fresh_students
+              .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
+              .map((d) => (
+                <UserData d={d} />
+              ))}
+          </ol>
+        </div>
+      )}
+      <Row>
+        <div className="description">
+          # Interested Students: went through the demo but did not enroll in the
+          last 14 days (<b>Delight</b>)
+        </div>
+        <div className="data">{interested_users.length}</div>
+        <button onClick={(e) => setShowInterested(!showInterested)}>
+          Show interested Students
+        </button>
+      </Row>
+      {showInterested && (
+        <div>
+          <ol>
+            {" "}
+            {interested_users
+              .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
+              .map((d) => (
+                <UserData d={d} />
+              ))}
+          </ol>
+        </div>
+      )}
+
+      <Row>
+        <div className="description">
+          # Weekly Active users: studied in the last 7 days (<b>Recruit</b>){" "}
+        </div>
         <div className="data">{weekly_active_users.length}</div>
         <button onClick={(e) => setShowWeekly(!showWeekly)}>
           Show Weekly Active Users
@@ -159,7 +306,9 @@ const KPI = (props) => {
         </div>
       )}
       <Row>
-        <div className="description"># Daily Active users</div>
+        <div className="description">
+          # Daily Active users: studied in the last 24 hours (<b>Recruit</b>){" "}
+        </div>
         <div className="data">{daily_active_users.length}</div>
         <button onClick={(e) => setShowDailyActive(!showDailyActive)}>
           Show Daily Active Users
@@ -188,20 +337,6 @@ const KPI = (props) => {
                 ).format("DD.MM.YY HH:mm:ss")}
               </li>
             ))}
-        </div>
-      )}
-      <Row>
-        <div className="description">Last week new users</div>
-        <div className="data">{last_week_users.length}</div>
-        <button onClick={(e) => setShowNew(!showNew)}>Show New Users</button>
-      </Row>
-      {showNew && (
-        <div>
-          {last_week_users.map((d) => (
-            <li>
-              {d.name} {d.surname}
-            </li>
-          ))}
         </div>
       )}
       <Row>

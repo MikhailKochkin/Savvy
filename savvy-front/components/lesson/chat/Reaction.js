@@ -193,7 +193,7 @@ const Reaction = (props) => {
           <div className="used">
             <Message key={i} time={i} className="student">
               <IconBlock>
-                {me.image ? (
+                {me && me.image ? (
                   <img className="icon" src={me.image} />
                 ) : me.surname ? (
                   `${me.name[0]}${me.surname[0]}`
@@ -245,7 +245,7 @@ const Reaction = (props) => {
             <br />
             <Message className="student">
               <IconBlock>
-                {me.image ? (
+                {me && me.image ? (
                   <img className="icon" src={me.image} />
                 ) : me.surname ? (
                   `${me.name[0]}${me.surname[0]}`
@@ -283,7 +283,7 @@ const Reaction = (props) => {
         {leftReactions.length > 0 && (
           <Message className="student">
             <IconBlock>
-              {me.image ? (
+              {me && me.image ? (
                 <img className="icon" src={me.image} />
               ) : me.surname ? (
                 `${me.name[0]}${me.surname[0]}`

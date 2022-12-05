@@ -30,18 +30,11 @@ import { IconContext } from "react-icons";
 import {
   BiBold,
   BiUnderline,
-  BiHeading,
   BiItalic,
   BiLinkAlt,
-  BiListOl,
-  BiListUl,
   BiVideoPlus,
   BiImageAdd,
   BiStrikethrough,
-  BiCommentAdd,
-  BiCommentError,
-  BiCommentCheck,
-  BiCommentMinus,
 } from "react-icons/bi";
 import { css } from "emotion";
 import styled from "styled-components";
@@ -169,9 +162,9 @@ const serialize = (node) => {
     case "note":
       return `<span className="editor_note" type="note" text="${node.note}">${children}</span>`;
     case "video":
-      return `<iframe src="${escapeHtml(
+      return `<div className="video"><iframe src="${escapeHtml(
         node.src
-      )}">${children}</iframe><p></p>`;
+      )}" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen="true">${children}</iframe></div><p></p>`;
     case "link":
       return `<a href="${escapeHtml(
         node.url
@@ -408,6 +401,26 @@ const addImageElement = (editor) => {
   });
 };
 
+const addVideoElement = (editor) => {
+  let link = prompt("Video link: ");
+  editor.selection.anchor.path == [0, 0] &&
+    editor.selection.anchor.offset == 0 &&
+    editor.insertBreak();
+  editor.insertNode({
+    type: "video",
+    src: link,
+    children: [{ text: "" }],
+  });
+  editor.insertNode({
+    type: "paragraph",
+    children: [
+      {
+        text: "",
+      },
+    ],
+  });
+};
+
 const withLinks = (editor) => {
   const { insertData, insertText, isInline } = editor;
 
@@ -565,6 +578,7 @@ const HoveringToolbar = () => {
           <FormatButton format="delete" icon={"strikethrough"} />
           <FormatButton format="insert" icon={"underline"} />
           <FormatButton2 format="image" icon={"image"} />
+          <VideoButton format="video" icon={"video"} />
           <LinkButton format="image" icon={"link"} />
         </Menu>
       </IconContext.Provider>
@@ -629,6 +643,24 @@ const FormatButton2 = ({ format, icon }) => {
     >
       <IconBlock>
         <BiImageAdd value={{ className: "react-icons" }} />
+      </IconBlock>
+    </Button>
+  );
+};
+
+const VideoButton = ({ format, icon }) => {
+  const editor = useSlate();
+  return (
+    <Button
+      reversed
+      // active={isFormatActive(editor, format)}
+      onMouseDown={(event) => {
+        event.preventDefault();
+        addVideoElement(editor);
+      }}
+    >
+      <IconBlock>
+        <BiVideoPlus value={{ className: "react-icons" }} />
       </IconBlock>
     </Button>
   );

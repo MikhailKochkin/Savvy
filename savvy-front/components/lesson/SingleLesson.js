@@ -54,6 +54,12 @@ const SINGLE_LESSON_QUERY = gql`
         successText
         failureText
       }
+      teamQuests {
+        id
+        introduction
+        solution
+        tasks
+      }
       notes {
         id
         link_clicks

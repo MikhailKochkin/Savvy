@@ -323,6 +323,23 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
         <Row>
+          <div className="description">Choose a template for this lesson</div>
+          <div className="input">
+            <select
+              className="red"
+              name="open"
+              defaultValue={"standard"}
+              onChange={(e) => props.getTemplate(e.target.value)}
+            >
+              <option value={"standard"}>Standard template</option>
+              <option value={"memory"}>
+                Help students memorize new material
+              </option>
+            </select>
+            <div className="explainer">{t("open_lesson")}</div>
+          </div>
+        </Row>
+        <Row>
           <div className="description">{t("assignment")}</div>
           <div className="input">
             <select

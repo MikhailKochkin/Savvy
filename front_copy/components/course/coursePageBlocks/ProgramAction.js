@@ -389,7 +389,7 @@ const StyledModal = Modal.styled`
 
 const Action = (props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signup");
+  const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
 
   const [isPromo, setIsPromo] = useState(false);

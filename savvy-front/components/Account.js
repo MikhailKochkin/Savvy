@@ -247,7 +247,6 @@ const Account = (props) => {
             <Fieldset disabled={loading} aria-busy={loading}>
               <>
                 <div className="Title">{t("settings")}</div>
-                <Green show={show}>Измнения внесены</Green>
                 <Container>
                   <input
                     className="second"

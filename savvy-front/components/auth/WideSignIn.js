@@ -4,14 +4,24 @@ import gql from "graphql-tag";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import Error from "../ErrorMessage";
-import { CURRENT_USER_QUERY } from "../User";
 import Cookies from "universal-cookie";
 import { useTranslation } from "next-i18next";
+import { getCookie } from "cookies-next";
+
+import Error from "../ErrorMessage";
+import { CURRENT_USER_QUERY } from "../User";
 
 const SIGNIN_MUTATION = gql`
-  mutation SIGNIN_MUTATION($email: String!, $password: String!) {
-    signin(email: $email, password: $password) {
+  mutation SIGNIN_MUTATION(
+    $email: String!
+    $password: String!
+    $traffic_sources: Visits
+  ) {
+    signin(
+      email: $email
+      password: $password
+      traffic_sources: $traffic_sources
+    ) {
       user {
         id
         email
@@ -104,6 +114,12 @@ const WideSignin = (props) => {
   const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
   const { t } = useTranslation("auth");
+  let visits = [
+    {
+      date: new Date(),
+      utm_source: getCookie("traffic_source"),
+    },
+  ];
 
   return (
     <Mutation
@@ -111,6 +127,7 @@ const WideSignin = (props) => {
       variables={{
         email: email,
         password: password,
+        traffic_sources: { visitsList: visits },
       }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >

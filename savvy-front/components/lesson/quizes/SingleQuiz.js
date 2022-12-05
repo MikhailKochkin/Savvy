@@ -137,6 +137,16 @@ const Question = styled.div`
     transition: 0.3s;
     cursor: pointer;
   }
+  .video {
+    height: 489px;
+    width: 275px;
+    iframe {
+      width: 100%;
+      border: none;
+      height: 100%;
+      border-radius: 15px;
+    }
+  }
   .question_box {
     display: flex;
     background: #ffffff;
@@ -210,6 +220,10 @@ const Question = styled.div`
     button {
       width: 50%;
       padding: 3%;
+    }
+    .video {
+      height: 356px;
+      width: 200px;
     }
   }
 `;

@@ -100,5 +100,11 @@
   "book": "Book a call",
   "consider": "Consider buying this course? Book a call with our learning manager!",
   "AddOld": "Add existing block",
-  "add": "Add"
+  "add": "Add",
+  "choose_template": "Choose a template for this lesson",
+  "standard_template": "Standard template",
+  "memorize_template": "Help students memorize new material",
+  "task_for": "The task for",
+  "lesson_has_bonus": "Does this lesson have a bonus?",
+  "required_points": "How many points are required to get the bonus?"
 }

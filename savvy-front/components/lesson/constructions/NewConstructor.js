@@ -54,6 +54,7 @@ const ButtonTwo = styled.button`
   background: #3f51b5;
   padding: 10px 20px;
   width: 200px;
+  height: 50px;
   border: 2px solid #3f51b5;
   border-radius: 5px;
   font-family: Montserrat;
@@ -68,6 +69,9 @@ const ButtonTwo = styled.button`
     background: #2e3b83;
     border: 2px solid #2e3b83;
   }
+  @media (max-width: 800px) {
+    width: 120px;
+  }
 `;
 
 const Block = styled.div`
@@ -78,12 +82,15 @@ const Block = styled.div`
   column-gap: 10px;
   row-gap: 10px;
   box-shadow: 0px 0px 3px 0px rgb(199 199 199);
-  padding: 3% 5%;
+  padding: 15px;
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
   grid-template-rows: auto;
   margin: 30px 0;
+  @media (max-width: 800px) {
+    width: 95%;
+  }
 `;
 
 const Element = styled.div`
@@ -94,7 +101,8 @@ const Element = styled.div`
   height: 100%;
   border: ${(props) =>
     !props.isTest ? "1px solid #fff" : "1px dashed #c4c4c4"};
-  padding: 3% 5%;
+  padding: 15px;
+
   grid-column: ${(props) => {
     return `1/${props.size}`;
   }};
@@ -236,6 +244,8 @@ const NewConstructor = (props) => {
     );
     setCheck(true);
     if (!answersCheck.includes(false)) {
+      props.getResults(2);
+
       createConstructionResult({
         variables: {
           answer: "correct",

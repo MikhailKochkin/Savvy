@@ -3,16 +3,17 @@ import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import Router from "next/router";
-import Error from "../ErrorMessage";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import { getCookie } from "cookies-next";
 
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies, Tracks } from "../../config";
+import Error from "../ErrorMessage";
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -27,6 +28,7 @@ const SIGNUP_MUTATION = gql`
     $country: String
     $uniID: String
     $careerTrackID: String
+    $traffic_sources: Visits
   ) {
     signup(
       email: $email
@@ -40,6 +42,7 @@ const SIGNUP_MUTATION = gql`
       uniID: $uniID
       country: $country
       careerTrackID: $careerTrackID
+      traffic_sources: $traffic_sources
     ) {
       token
       user {
@@ -230,6 +233,13 @@ const WideSignUp = (props) => {
 
   const { t } = useTranslation("auth");
 
+  let visits = [
+    {
+      date: new Date(),
+      utm_source: getCookie("traffic_source"),
+    },
+  ];
+
   return (
     <Mutation
       mutation={SIGNUP_MUTATION}
@@ -245,6 +255,7 @@ const WideSignUp = (props) => {
         country: country,
         careerTrackID: careerTrackID,
         isFamiliar: isFamiliar,
+        traffic_sources: { visitsList: visits },
       }}
       refetchQueries={[{ query: CURRENT_USER_QUERY }]}
     >

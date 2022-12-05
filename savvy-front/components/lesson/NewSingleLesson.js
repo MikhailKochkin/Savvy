@@ -12,6 +12,7 @@ import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
 import Offer from "./Offer";
+import Navigation from "./Navigation";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -99,6 +100,12 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         intro
         successText
         failureText
+      }
+      teamQuests {
+        id
+        introduction
+        solution
+        tasks
       }
       problems {
         id
@@ -235,6 +242,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         authors {
           id
         }
+        courseType
         lessons {
           id
           number
@@ -263,46 +271,6 @@ const Container = styled.div`
   background-image: url("/static/law_pattern.svg");
 
   background-size: contain;
-`;
-
-const Head = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-  min-height: 10vh;
-  background-image: url("/static/pattern.svg");
-  background-size: cover;
-  color: #dfe1ec;
-  /* background: #1a2980;
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); 
-  background: linear-gradient(to right, #26d0ce, #1a2980); */
-  width: 100%;
-  font-size: 2rem;
-  padding: 0 20px;
-  span {
-    font-size: 2rem;
-  }
-  .block {
-  }
-  #back {
-    &:hover {
-      color: #e4e4e4;
-    }
-    cursor: pointer;
-  }
-  @media (max-width: 800px) {
-    font-size: 1.6rem;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 1%;
-  }
 `;
 
 const Head2 = styled.div`
@@ -433,9 +401,11 @@ const NewSingleLesson = (props) => {
   }
   return (
     <PleaseSignIn>
-      {!i_am_student && lesson.open && (
-        <Offer me={me} coursePageId={lesson.coursePage.id} />
-      )}
+      {!i_am_student &&
+        lesson.open &&
+        lesson.coursePage.courseType == "FORMONEY" && (
+          <Offer me={me} coursePageId={lesson.coursePage.id} />
+        )}
       <div id="root"></div>
       <>
         {lesson && (
@@ -451,52 +421,12 @@ const NewSingleLesson = (props) => {
                 onResize={onResize}
               />
 
-              <Head>
-                {lesson.open ? (
-                  <Link
-                    href={{
-                      pathname: "/course",
-                      query: {
-                        id: lesson.coursePage.id,
-                      },
-                    }}
-                  >
-                    <span>⬅{/* {t("back_to_course")} */}</span>
-                  </Link>
-                ) : (
-                  <Link
-                    href={{
-                      pathname: "/course",
-                      query: {
-                        id: lesson.coursePage.id,
-                      },
-                    }}
-                  >
-                    <span>⬅</span>
-                  </Link>
-                )}
-                {width > 800 && (
-                  <div className="block">
-                    {me &&
-                      (lesson.user.id === me.id ||
-                        i_am_author ||
-                        me.permissions.includes("ADMIN")) && (
-                        <Link
-                          href={{
-                            pathname: "/lesson",
-                            query: {
-                              id: lesson.id,
-                              type: "regular",
-                            },
-                          }}
-                        >
-                          {/* <span>{t("switch")}</span> */}
-                          <span>{t("to_development")}</span>
-                        </Link>
-                      )}
-                  </div>
-                )}
-              </Head>
+              <Navigation
+                i_am_author={i_am_author}
+                lesson={lesson}
+                me={me}
+                width={width}
+              />
               <LessonPart>
                 {/* <h1>
                   {t("lesson")} {lesson.number}. {lesson.name}

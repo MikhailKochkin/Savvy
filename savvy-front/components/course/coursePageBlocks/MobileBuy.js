@@ -257,7 +257,7 @@ const StyledModal = Modal.styled`
 
 const MobileBuy = (props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [auth, setAuth] = useState("signup");
+  const [auth, setAuth] = useState("signin");
   const [installments, setInstallments] = useState(
     props.coursePage.installments
   );

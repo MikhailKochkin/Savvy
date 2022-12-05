@@ -77,7 +77,7 @@ const Answers = styled.div`
   -webkit-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   -moz-box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
   box-shadow: 0px 0px 3px 0px rgba(199, 199, 199, 1);
-  padding: 3% 5%;
+  padding: 15px;
   margin: 55px 5% 45px 2%;
   .next {
     margin-bottom: 5px;

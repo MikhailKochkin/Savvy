@@ -171,8 +171,9 @@ const Analyzer = (props) => {
         if (elements[i - 1].id == undefined) {
           return;
         }
+
         if (elements[i - 1].type.toLowerCase() == el.type.toLowerCase()) {
-          lesson_structure.at(-1).push(el);
+          lesson_structure[lesson_structure.length - 1].push(el);
         } else {
           lesson_structure.push([el]);
         }

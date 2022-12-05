@@ -270,7 +270,7 @@ const Buy = styled.div`
 const Headline = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
-  const [auth, setAuth] = useState("signup");
+  const [auth, setAuth] = useState("signin");
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);

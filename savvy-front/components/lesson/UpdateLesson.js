@@ -100,6 +100,9 @@ const Container = styled.div`
     background-position: right 0.7em top 50%, 0 0;
     background-size: 0.65em auto, 100%;
   }
+  .green {
+    border: 2px solid #6a994e;
+  }
 `;
 
 const Button = styled.button`
@@ -184,6 +187,9 @@ const Row = styled.div`
       background-position: right 0.7em top 50%, 0 0;
       background-size: 0.65em auto, 100%;
     }
+    .green {
+      border: 2px solid #6a994e;
+    }
   }
 `;
 
@@ -234,6 +240,8 @@ const UpdateLesson = (props) => {
   const [assignment, setAssignment] = useState(props.lesson.assignment);
   const [text, setText] = useState(props.lesson.text);
   const [description, setDescription] = useState(props.lesson.description);
+  const [hasSecret, setHasSecret] = useState(props.lesson.hasSecret);
+  const [totalPoints, setTotalPoints] = useState(props.lesson.totalPoints);
 
   const { t } = useTranslation("lesson");
 
@@ -293,6 +301,20 @@ const UpdateLesson = (props) => {
           </div>
         </Row>
         <Row>
+          <div className="description">{t("choose_template")}</div>
+          <div className="input">
+            <select
+              name="open"
+              className="green"
+              defaultValue={"standard"}
+              onChange={(e) => props.getTemplate(e.target.value)}
+            >
+              <option value={"standard"}>{t("standard_template")}</option>
+              <option value={"memorize"}>{t("memorize_template")}</option>
+            </select>
+          </div>
+        </Row>
+        <Row>
           <div className="description">{t("lesson")}</div>
           <div className="input">
             <select
@@ -335,31 +357,38 @@ const UpdateLesson = (props) => {
             </select>
           </div>
         </Row>
-        {/* <Row>
-          <div className="description">Игра в уроке</div>
-                    <div className="input">
-
-          <select
-            name="hasSecret"
-            defaultValue={lesson.hasSecret === true}
-            // onChange={this.handleBoolean}
-          >
-            <option value={true}>Да</option>
-            <option value={false}>Нет</option>
-          </select>
+        <Row>
+          <div className="description">{t("lesson_has_bonus")}</div>
+          <div className="input">
+            <select
+              name="hasSecret"
+              defaultValue={hasSecret === true}
+              onChange={(e) => {
+                e.preventDefault();
+                setHasSecret(e.target.value == "true");
+              }}
+            >
+              <option value={true}>{t("yes")}</option>
+              <option value={false}>{t("no")}</option>
+            </select>
+            {console.log("hasSecret", hasSecret)}
           </div>
         </Row>
-        <Row>
-          <div className="description">Очки в игре</div>
-          <input
-            type="number"
-            id="totalPoints"
-            name="totalPoints"
-            placeholder="# для открытия секретов"
-            defaultValue={lesson.totalPoints}
-            // onChange={this.handleNumber}
-          />
-        </Row> */}
+        {hasSecret && (
+          <Row>
+            <div className="description">{t("required_points")}</div>
+            <div className="input">
+              <input
+                type="number"
+                id="totalPoints"
+                name="totalPoints"
+                placeholder={0}
+                defaultValue={totalPoints}
+                onChange={(e) => setTotalPoints(parseInt(e.target.value))}
+              />
+            </div>
+          </Row>
+        )}
         {type === "CHALLENGE" && (
           <Row>
             <div className="description">{t("num_challenge")}</div>
@@ -418,8 +447,8 @@ const UpdateLesson = (props) => {
             assignment,
             challenge_num,
             open,
-            // hasSecret,
-            // totalPoints
+            hasSecret,
+            totalPoints,
           }}
           refetchQueries={() => [
             {

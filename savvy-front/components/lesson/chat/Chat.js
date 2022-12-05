@@ -30,6 +30,21 @@ const Styles = styled.div`
     max-height: 50em;
     box-shadow: "0 0 0 2px blue;";
   }
+  .video {
+    /* border: 1px solid #000000;
+    background: #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 1; */
+    height: 489px;
+    width: 275px;
+    iframe {
+      width: 100%;
+      border: none;
+      height: 100%;
+      border-radius: 15px;
+    }
+  }
   table {
     width: 100%;
     border: 1px solid #edefed;
@@ -71,6 +86,10 @@ const Styles = styled.div`
   @media (max-width: 800px) {
     width: 100%;
     font-size: 1.4rem;
+    .video {
+      height: 356px;
+      width: 200px;
+    }
   }
 `;
 
@@ -283,7 +302,7 @@ const Secret = styled.div`
     -webkit-box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
     -moz-box-shadow: 4px 4px 5px 5px rgba(166, 166, 166, 0.24);
     border-radius: 10px;
-    top: 150px;
+    top: 20px;
     left: 25%;
     img {
       width: 200px;
@@ -375,13 +394,13 @@ const Chat = (props) => {
   }, []);
 
   const detectKeyDown = (e) => {
-    if (e.key === "n") {
-      setNum((num) => num + 1);
-    } else if (e.key === "b") {
-      setNum((num) => num - 1);
-    } else if (e.key === "s") {
-      setShowButton((showButton) => !showButton);
-    }
+    // if (e.key === "n" && e.ctrlKey) {
+    //   setNum((num) => num + 1);
+    // } else if (e.key === "b" && e.ctrlKey) {
+    //   setNum((num) => num - 1);
+    // } else if (e.key === "s") {
+    //   setShowButton((showButton) => !showButton);
+    // }
   };
 
   let width;
@@ -471,7 +490,7 @@ const Chat = (props) => {
                         <IconBlock>
                           <Icon className="icon2" background={m.author}>
                             {m.image && <img className="icon" src={m.image} />}
-                            {me.image ? (
+                            {me && me.image ? (
                               <img className="icon" src={me.image} />
                             ) : me.surname ? (
                               `${me.name[0]}${me.surname[0]}`
@@ -505,7 +524,7 @@ const Chat = (props) => {
                 }
               }}
             >
-              Открыть материал
+              {t("open")}
             </div>
           </div>
         </Secret>
@@ -567,7 +586,7 @@ const Chat = (props) => {
                     <Icon className="icon2" background={m.author}>
                       {m.image && <img className="icon" src={m.image} />}
                       {!m.image &&
-                        (me.image ? (
+                        (me && me.image ? (
                           <img className="icon" src={me.image} />
                         ) : me.surname ? (
                           `${me.name[0]}${me.surname[0]}`

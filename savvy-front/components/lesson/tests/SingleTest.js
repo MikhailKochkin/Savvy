@@ -121,6 +121,21 @@ const TextBar = styled.div`
     transition: 0.3s;
     cursor: pointer;
   }
+  .video {
+    /* border: 1px solid #000000;
+    background: #000000;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 1; */
+    height: 489px;
+    width: 275px;
+    iframe {
+      width: 100%;
+      border: none;
+      height: 100%;
+      border-radius: 15px;
+    }
+  }
   .question_box {
     display: flex;
     flex-direction: row;
@@ -193,6 +208,10 @@ const TextBar = styled.div`
     width: 100%;
     padding-left: 5px;
     font-size: 1.4rem;
+    .video {
+      height: 356px;
+      width: 200px;
+    }
   }
 `;
 

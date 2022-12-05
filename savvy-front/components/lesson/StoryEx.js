@@ -14,7 +14,7 @@ import SingleProblem from "./problems/SingleProblem";
 import SingleTextEditor from "./textEditors/SingleTextEditor";
 import SingleConstructor from "./constructions/SingleConstructor";
 import NewConstructor from "./constructions/NewConstructor";
-
+import TeamQuest from "./teamQuests/TeamQuest";
 import Forum from "./forum/Forum";
 import Document from "./documents/Document";
 import Exam from "./exams/Exam";
@@ -204,6 +204,22 @@ const StoryEx = (props) => {
           getResults={getResults}
           me={me}
           testPractice={el}
+          quizes={lesson.quizes}
+          tests={lesson.newTests}
+          lesson={lesson}
+          story={true}
+        />
+      );
+      components.push(item);
+    } else if (task.type.toLowerCase() === "teamquest") {
+      el = lesson.teamQuests.find((t) => t.id === task.id);
+      item = (
+        <TeamQuest
+          key={el.id}
+          lessonID={lesson.id}
+          // getResults={getResults}
+          me={me}
+          teamQuest={el}
           quizes={lesson.quizes}
           tests={lesson.newTests}
           lesson={lesson}

@@ -12,6 +12,9 @@ import SingleQuiz from "./quizes/SingleQuiz";
 import CreateTestBlock from "./testblocks/CreateTestBlock";
 import TestPractice from "./testblocks/TB";
 
+import CreateTeamQuest from "./teamQuests/CreateTeamQuest";
+import TeamQuest from "./teamQuests/TeamQuest";
+
 import CreateShot from "../create/CreateShot";
 import Shots from "./shots/Shots";
 
@@ -38,7 +41,6 @@ import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import SingleLesson_Menu from "./SingleLesson_Menu";
 import CreateDocument from "./documents/CreateDocument";
 import renderHTML from "react-render-html";
-import TextEditorGroup from "./textEditors/TextEditorGroup";
 
 const ButtonTwo = styled.button`
   background: none;
@@ -131,6 +133,7 @@ const LessonBlock = (props) => {
   const { t } = useTranslation("lesson");
 
   let d;
+
   if (el.type && el.type.toLowerCase() == "note" && !el.data && !updated) {
     d = lesson.notes.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "newtest" && !el.data) {
@@ -151,6 +154,8 @@ const LessonBlock = (props) => {
     d = lesson.constructions.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "shot" && !el.data) {
     d = lesson.shots.find((n) => n.id == el.id);
+  } else if (el.type && el.type.toLowerCase() == "teamquest" && !el.data) {
+    d = lesson.teamQuests.find((n) => n.id == el.id);
   } else if (el.data) {
     d = el.data;
   } else {
@@ -162,7 +167,14 @@ const LessonBlock = (props) => {
 
   useEffect(() => {
     setData(d);
+    console.log("type");
+    if (props.updateTemplate) setType(props.el_type ? props.el_type : "");
   });
+
+  // useEffect(() => {
+  //   console.log("type");
+  //   setType(props.el_type ? props.el_type : "");
+  // }, []);
 
   const addBlock = (type) => {
     setType(type);
@@ -342,6 +354,24 @@ const LessonBlock = (props) => {
         "Construction",
         res.data.createConstruction
       );
+    } else if (res.data.createTeamQuest) {
+      setType("TeamQuest");
+      setIdNum(res.data.createTeamQuest.id);
+      props.addToLesson(
+        res.data.createTeamQuest.id,
+        index,
+        "TeamQuest",
+        res.data.createTeamQuest
+      );
+    } else if (res.data.updateTeamQuest) {
+      setType("TeamQuest");
+      setIdNum(res.data.updateTeamQuest.id);
+      props.addToLesson(
+        res.data.updateTeamQuest.id,
+        index,
+        "Problem",
+        res.data.updateTeamQuest
+      );
     }
     setIsSaved(true);
   };
@@ -357,7 +387,7 @@ const LessonBlock = (props) => {
         </ButtonThree>
       )}
       {props.comment && <Box>{renderHTML(props.comment)}</Box>}
-
+      {type}
       <Styles
         id={props.id}
         isAdded={isAdded}
@@ -392,6 +422,9 @@ const LessonBlock = (props) => {
             </ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("addOld")}>
               {t("AddOld")}
+            </ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("TeamQuest")}>
+              Team Quest
             </ButtonTwo>
           </Menu>
         )}
@@ -576,6 +609,33 @@ const LessonBlock = (props) => {
                   story={true}
                 />
               )}
+          </>
+        )}
+
+        {type.toLowerCase() == "teamquest" && (
+          <>
+            {console.log("dd", !isSaved, d == null)}
+            {!isSaved && d == null && (
+              <CreateTeamQuest
+                lessonId={lesson.id}
+                getResult={getResult}
+                isSaved={isSaved}
+                lesson={lesson}
+              />
+            )}
+            {(isSaved || d != null) && data && data.__typename == "TeamQuest" && (
+              <TeamQuest
+                key={data.id}
+                lessonID={lesson.id}
+                // getResults={getResults}
+                me={me}
+                teamQuest={data}
+                quizes={lesson.quizes}
+                tests={lesson.newTests}
+                lesson={lesson}
+                story={true}
+              />
+            )}
           </>
         )}
 

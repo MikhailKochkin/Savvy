@@ -27,7 +27,7 @@ const Title = styled.p`
 `;
 
 const PleaseSignIn = (props) => {
-  const [auth, setAuth] = useState("signup");
+  const [auth, setAuth] = useState("signin");
   const changeState = (dataFromChild) => setAuth(dataFromChild);
   const me = useUser();
   const router = useRouter();

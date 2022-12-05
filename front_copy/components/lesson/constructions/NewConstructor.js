@@ -78,7 +78,7 @@ const Block = styled.div`
   column-gap: 10px;
   row-gap: 10px;
   box-shadow: 0px 0px 3px 0px rgb(199 199 199);
-  padding: 3% 5%;
+  padding: 15px;
   grid-template-columns: ${(props) => {
     return `repeat(${props.columns}, 1fr)`;
   }};
@@ -94,7 +94,7 @@ const Element = styled.div`
   height: 100%;
   border: ${(props) =>
     !props.isTest ? "1px solid #fff" : "1px dashed #c4c4c4"};
-  padding: 3% 5%;
+  padding: 15px;
   grid-column: ${(props) => {
     return `1/${props.size}`;
   }};
