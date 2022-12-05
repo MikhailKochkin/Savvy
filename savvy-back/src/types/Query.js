@@ -13,6 +13,8 @@ const Query = queryType({
   definition(t) {
     t.crud.user({ filtering: true });
     t.crud.users({ ordering: true, filtering: true });
+    t.crud.team({ filtering: true });
+    t.crud.teams({ ordering: true, filtering: true });
     t.crud.certificate({ filtering: true });
     t.crud.certificates({ ordering: true, filtering: true });
     t.crud.lawrdle({ filtering: true });
@@ -101,6 +103,57 @@ const Query = queryType({
           constructionResults,
           documentResults,
           feedbacks,
+        };
+      },
+    });
+    t.field("questResults", {
+      type: "QuestResults",
+      args: {
+        list_of_ids: list(stringArg()),
+        lessonId: stringArg(),
+      },
+      resolve: async (_, { lessonId, list_of_ids }, ctx) => {
+        const testResults = await ctx.prisma.testResult.findMany({
+          orderBy: { createdAt: "desc" },
+          where: { lessonId, studentId: { in: list_of_ids } },
+        });
+        const quizResults = await ctx.prisma.quizResult.findMany({
+          orderBy: { createdAt: "desc" },
+          where: { lessonId, studentId: { in: list_of_ids } },
+        });
+        const lessonResults = await ctx.prisma.lessonResult.findMany({
+          orderBy: { createdAt: "desc" },
+          where: { lessonId, studentId: { in: list_of_ids } },
+        });
+        // const textEditorResults = await ctx.prisma.textEditorResult.findMany({
+        //   orderBy: { createdAt: "desc" },
+        //   where: { lessonId, student: { id: { equals: userId } } },
+        // });
+        // const problemResults = await ctx.prisma.problemResult.findMany({
+        //   orderBy: { createdAt: "desc" },
+        //   where: { lessonId, student: { id: { equals: userId } } },
+        // });
+        // const constructionResults =
+        //   await ctx.prisma.constructionResult.findMany({
+        //     orderBy: { createdAt: "desc" },
+        //     where: { lessonId, student: { id: { equals: userId } } },
+        //   });
+        // const documentResults = await ctx.prisma.documentResult.findMany({
+        //   orderBy: { createdAt: "desc" },
+        //   where: { lessonId, user: { id: { equals: userId } } },
+        // });
+        // const feedbacks = await ctx.prisma.feedback.findMany({
+        //   orderBy: { createdAt: "desc" },
+        //   where: { lessonId, student: { id: { equals: userId } } },
+        return {
+          testResults,
+          quizResults,
+          lessonResults,
+          // textEditorResults,
+          // problemResults,
+          // constructionResults,
+          // documentResults,
+          // feedbacks,
         };
       },
     });

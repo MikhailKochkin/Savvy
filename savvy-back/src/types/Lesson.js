@@ -31,6 +31,8 @@ const Lesson = objectType({
     t.model.testResults();
     t.model.shotResults();
     t.model.testPractices();
+    t.model.teamQuests();
+    t.model.teamQuestResults();
     t.model.quizResults();
     t.model.problemResults();
     t.model.textEditorResults();

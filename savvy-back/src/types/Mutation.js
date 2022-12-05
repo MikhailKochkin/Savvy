@@ -297,6 +297,55 @@ const Mutation = mutationType({
       },
     });
 
+    t.field("createTeam", {
+      type: "Team",
+      args: {
+        name: stringArg(),
+      },
+      resolve: async (_, { name }, ctx) => {
+        const team = await ctx.prisma.team.create({
+          data: {
+            name,
+            founder: {
+              connect: {
+                id: ctx.res.req.userId,
+              },
+            },
+            users: {
+              connect: {
+                id: ctx.res.req.userId,
+              },
+            },
+          },
+        });
+
+        return team;
+      },
+    });
+
+    t.field("addToTeam", {
+      type: "User",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, { id }, ctx) => {
+        console.log("ctx.res.req.userId", ctx.res.req.userId);
+        const user = await ctx.prisma.user.update({
+          data: {
+            myTeams: {
+              connect: {
+                id: id,
+              },
+            },
+          },
+          where: {
+            id: ctx.res.req.userId,
+          },
+        });
+        return user;
+      },
+    });
+
     t.field("recordSession", {
       type: "User",
       args: {
@@ -986,6 +1035,36 @@ const Mutation = mutationType({
         };
         const newTP = await ctx.prisma.testPractice.create({ data: new_data });
         return newTP;
+      },
+    });
+    t.field("createTeamQuest", {
+      type: "TeamQuest",
+      args: {
+        tasks: arg({
+          type: "QuestList",
+        }),
+        introduction: stringArg(),
+        solution: stringArg(),
+        lessonId: stringArg(),
+      },
+      resolve: async (_, { lessonId, tasks, introduction, solution }, ctx) => {
+        const new_data = {
+          user: {
+            connect: {
+              id: ctx.res.req.userId
+                ? ctx.res.req.userId
+                : "ckmddnbfy180981gwpn2ir82c9",
+            },
+          },
+          lesson: {
+            connect: { id: lessonId },
+          },
+          tasks: tasks,
+          solution: solution,
+          introduction: introduction,
+        };
+        const newTQ = await ctx.prisma.teamQuest.create({ data: new_data });
+        return newTQ;
       },
     });
     t.field("createTestResult", {
@@ -1822,6 +1901,31 @@ const Mutation = mutationType({
           },
         });
         return ProblemResult;
+      },
+    });
+    t.field("createTeamQuestResult", {
+      type: "TeamQuestResult",
+      args: {
+        answer: stringArg(),
+        lessonId: stringArg(),
+        teamQuestId: stringArg(),
+      },
+      resolve: async (_, { answer, lessonId, teamQuestId }, ctx) => {
+        const TQResult = await ctx.prisma.teamQuestResult.create({
+          data: {
+            student: {
+              connect: { id: ctx.res.req.userId },
+            },
+            teamQuest: {
+              connect: { id: teamQuestId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            answer: answer,
+          },
+        });
+        return TQResult;
       },
     });
     t.field("createForum", {

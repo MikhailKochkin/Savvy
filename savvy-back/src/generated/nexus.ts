@@ -901,6 +901,8 @@ export interface NexusGenInputs {
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
     structure?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
+    teamQuests?: NexusGenInputs['TeamQuestListRelationFilter'] | null; // TeamQuestListRelationFilter
     test?: NexusGenInputs['TestListRelationFilter'] | null; // TestListRelationFilter
     testPracticeResults?: NexusGenInputs['TestPracticeResultListRelationFilter'] | null; // TestPracticeResultListRelationFilter
     testPractices?: NexusGenInputs['TestPracticeListRelationFilter'] | null; // TestPracticeListRelationFilter
@@ -1154,6 +1156,7 @@ export interface NexusGenInputs {
     price?: NexusGenEnums['SortOrder'] | null; // SortOrder
     programId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     promocode?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    teamId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
@@ -1173,6 +1176,8 @@ export interface NexusGenInputs {
     program?: NexusGenInputs['ProgramWhereInput'] | null; // ProgramWhereInput
     programId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     promocode?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    team?: NexusGenInputs['TeamWhereInput'] | null; // TeamWhereInput
+    teamId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -1423,6 +1428,14 @@ export interface NexusGenInputs {
   }
   PromocodeList: { // input type
     promocodes?: Array<NexusGenInputs['Promocode'] | null> | null; // [Promocode]
+  }
+  QuestElement: { // input type
+    number?: number | null; // Int
+    type?: string | null; // String
+    value?: string | null; // String
+  }
+  QuestList: { // input type
+    questElements?: Array<NexusGenInputs['QuestElement'] | null> | null; // [QuestElement]
   }
   QuizListRelationFilter: { // input type
     every?: NexusGenInputs['QuizWhereInput'] | null; // QuizWhereInput
@@ -1701,6 +1714,82 @@ export interface NexusGenInputs {
   }
   StringNullableListFilter: { // input type
     equals?: string[] | null; // [String!]
+  }
+  TeamListRelationFilter: { // input type
+    every?: NexusGenInputs['TeamWhereInput'] | null; // TeamWhereInput
+    none?: NexusGenInputs['TeamWhereInput'] | null; // TeamWhereInput
+    some?: NexusGenInputs['TeamWhereInput'] | null; // TeamWhereInput
+  }
+  TeamOrderByInput: { // input type
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    founderId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    image?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  TeamQuestListRelationFilter: { // input type
+    every?: NexusGenInputs['TeamQuestWhereInput'] | null; // TeamQuestWhereInput
+    none?: NexusGenInputs['TeamQuestWhereInput'] | null; // TeamQuestWhereInput
+    some?: NexusGenInputs['TeamQuestWhereInput'] | null; // TeamQuestWhereInput
+  }
+  TeamQuestResultListRelationFilter: { // input type
+    every?: NexusGenInputs['TeamQuestResultWhereInput'] | null; // TeamQuestResultWhereInput
+    none?: NexusGenInputs['TeamQuestResultWhereInput'] | null; // TeamQuestResultWhereInput
+    some?: NexusGenInputs['TeamQuestResultWhereInput'] | null; // TeamQuestResultWhereInput
+  }
+  TeamQuestResultWhereInput: { // input type
+    AND?: NexusGenInputs['TeamQuestResultWhereInput'][] | null; // [TeamQuestResultWhereInput!]
+    answer?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['TeamQuestResultWhereInput'][] | null; // [TeamQuestResultWhereInput!]
+    OR?: NexusGenInputs['TeamQuestResultWhereInput'][] | null; // [TeamQuestResultWhereInput!]
+    student?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    studentId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    teamQuest?: NexusGenInputs['TeamQuestWhereInput'] | null; // TeamQuestWhereInput
+    teamQuestId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
+  TeamQuestResultWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
+  TeamQuestWhereInput: { // input type
+    AND?: NexusGenInputs['TeamQuestWhereInput'][] | null; // [TeamQuestWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    introduction?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['TeamQuestWhereInput'][] | null; // [TeamQuestWhereInput!]
+    OR?: NexusGenInputs['TeamQuestWhereInput'][] | null; // [TeamQuestWhereInput!]
+    solution?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+  }
+  TeamQuestWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
+  TeamWhereInput: { // input type
+    AND?: NexusGenInputs['TeamWhereInput'][] | null; // [TeamWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    founder?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    founderId?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    name?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['TeamWhereInput'][] | null; // [TeamWhereInput!]
+    OR?: NexusGenInputs['TeamWhereInput'][] | null; // [TeamWhereInput!]
+    orders?: NexusGenInputs['OrderListRelationFilter'] | null; // OrderListRelationFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    users?: NexusGenInputs['UserListRelationFilter'] | null; // UserListRelationFilter
+  }
+  TeamWhereUniqueInput: { // input type
+    id?: string | null; // String
   }
   TestListRelationFilter: { // input type
     every?: NexusGenInputs['TestWhereInput'] | null; // TestWhereInput
@@ -2007,6 +2096,7 @@ export interface NexusGenInputs {
     levelId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     messages?: NexusGenInputs['MessageListRelationFilter'] | null; // MessageListRelationFilter
     miniforums?: NexusGenInputs['MiniForumListRelationFilter'] | null; // MiniForumListRelationFilter
+    myTeams?: NexusGenInputs['TeamListRelationFilter'] | null; // TeamListRelationFilter
     name?: NexusGenInputs['StringFilter'] | null; // StringFilter
     new_subjects?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
     newTests?: NexusGenInputs['NewTestListRelationFilter'] | null; // NewTestListRelationFilter
@@ -2039,6 +2129,9 @@ export interface NexusGenInputs {
     surname?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     teacherFeedback?: NexusGenInputs['FeedbackListRelationFilter'] | null; // FeedbackListRelationFilter
+    teamQuestResults?: NexusGenInputs['TeamQuestResultListRelationFilter'] | null; // TeamQuestResultListRelationFilter
+    teamQuests?: NexusGenInputs['TeamQuestListRelationFilter'] | null; // TeamQuestListRelationFilter
+    teams?: NexusGenInputs['TeamListRelationFilter'] | null; // TeamListRelationFilter
     testPracticeResults?: NexusGenInputs['TestPracticeResultListRelationFilter'] | null; // TestPracticeResultListRelationFilter
     testPractices?: NexusGenInputs['TestPracticeListRelationFilter'] | null; // TestPracticeListRelationFilter
     testResults?: NexusGenInputs['TestResultListRelationFilter'] | null; // TestResultListRelationFilter
@@ -2469,6 +2562,11 @@ export interface NexusGenObjects {
     video?: string | null; // String
   }
   Query: {};
+  QuestResults: { // root type
+    lessonResults?: Array<NexusGenRootTypes['LessonResult'] | null> | null; // [LessonResult]
+    quizResults?: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
+    testResults?: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
+  }
   Quiz: { // root type
     answer: string; // String!
     check?: string | null; // String
@@ -2546,6 +2644,32 @@ export interface NexusGenObjects {
     quizResults?: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
     testResults?: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
     textEditorResults?: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
+  }
+  Team: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    image?: string | null; // String
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  TeamQuest: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    introduction: string; // String!
+    lessonId: string; // String!
+    solution?: string | null; // String
+    tasks: NexusGenScalars['Json']; // Json!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId: string; // String!
+  }
+  TeamQuestResult: { // root type
+    answer?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    lessonId?: string | null; // String
+    studentId: string; // String!
+    teamQuestId?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   TestPractice: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2947,6 +3071,8 @@ export interface NexusGenFieldTypes {
     shotResults: NexusGenRootTypes['ShotResult'][]; // [ShotResult!]!
     shots: NexusGenRootTypes['Shot'][]; // [Shot!]!
     structure: NexusGenScalars['Json'] | null; // Json
+    teamQuestResults: NexusGenRootTypes['TeamQuestResult'][]; // [TeamQuestResult!]!
+    teamQuests: NexusGenRootTypes['TeamQuest'][]; // [TeamQuest!]!
     testPractices: NexusGenRootTypes['TestPractice'][]; // [TestPractice!]!
     testResults: NexusGenRootTypes['TestResult'][]; // [TestResult!]!
     text: string; // String!
@@ -2990,6 +3116,7 @@ export interface NexusGenFieldTypes {
     value: string | null; // String
   }
   Mutation: { // field return type
+    addToTeam: NexusGenRootTypes['User'] | null; // User
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createBusinessClient: NexusGenRootTypes['User'] | null; // User
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
@@ -3025,6 +3152,9 @@ export interface NexusGenFieldTypes {
     createShot: NexusGenRootTypes['Shot'] | null; // Shot
     createShotResult: NexusGenRootTypes['ShotResult'] | null; // ShotResult
     createStatement: NexusGenRootTypes['Statement'] | null; // Statement
+    createTeam: NexusGenRootTypes['Team'] | null; // Team
+    createTeamQuest: NexusGenRootTypes['TeamQuest'] | null; // TeamQuest
+    createTeamQuestResult: NexusGenRootTypes['TeamQuestResult'] | null; // TeamQuestResult
     createTestPractice: NexusGenRootTypes['TestPractice'] | null; // TestPractice
     createTestPracticeResult: NexusGenRootTypes['TestPracticeResult'] | null; // TestPracticeResult
     createTestResult: NexusGenRootTypes['TestResult'] | null; // TestResult
@@ -3132,6 +3262,7 @@ export interface NexusGenFieldTypes {
     paymentID: string | null; // String
     price: number | null; // Int
     promocode: string | null; // String
+    team: NexusGenRootTypes['Team'] | null; // Team
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User']; // User!
     userId: string; // String!
@@ -3246,10 +3377,13 @@ export interface NexusGenFieldTypes {
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
     program: NexusGenRootTypes['Program'] | null; // Program
     programs: NexusGenRootTypes['Program'][]; // [Program!]!
+    questResults: NexusGenRootTypes['QuestResults'] | null; // QuestResults
     quizResult: NexusGenRootTypes['QuizResult'] | null; // QuizResult
     quizResults: NexusGenRootTypes['QuizResult'][]; // [QuizResult!]!
     quizzes: NexusGenRootTypes['Quiz'][]; // [Quiz!]!
     stats: NexusGenRootTypes['Stats'] | null; // Stats
+    team: NexusGenRootTypes['Team'] | null; // Team
+    teams: NexusGenRootTypes['Team'][]; // [Team!]!
     testResult: NexusGenRootTypes['TestResult'] | null; // TestResult
     testResults: NexusGenRootTypes['TestResult'][]; // [TestResult!]!
     textEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
@@ -3258,6 +3392,11 @@ export interface NexusGenFieldTypes {
     usefuls: NexusGenRootTypes['Useful'][]; // [Useful!]!
     user: NexusGenRootTypes['User'] | null; // User
     users: NexusGenRootTypes['User'][]; // [User!]!
+  }
+  QuestResults: { // field return type
+    lessonResults: Array<NexusGenRootTypes['LessonResult'] | null> | null; // [LessonResult]
+    quizResults: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
+    testResults: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
   }
   Quiz: { // field return type
     answer: string; // String!
@@ -3352,6 +3491,41 @@ export interface NexusGenFieldTypes {
     quizResults: Array<NexusGenRootTypes['QuizResult'] | null> | null; // [QuizResult]
     testResults: Array<NexusGenRootTypes['TestResult'] | null> | null; // [TestResult]
     textEditorResults: Array<NexusGenRootTypes['TextEditorResult'] | null> | null; // [TextEditorResult]
+  }
+  Team: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    founder: NexusGenRootTypes['User']; // User!
+    id: string; // String!
+    image: string | null; // String
+    name: string; // String!
+    orders: NexusGenRootTypes['Order'][]; // [Order!]!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  }
+  TeamQuest: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    introduction: string; // String!
+    lesson: NexusGenRootTypes['Lesson']; // Lesson!
+    lessonId: string; // String!
+    solution: string | null; // String
+    tasks: NexusGenScalars['Json']; // Json!
+    teamQuestResults: NexusGenRootTypes['TeamQuestResult'][]; // [TeamQuestResult!]!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User']; // User!
+    userId: string; // String!
+  }
+  TeamQuestResult: { // field return type
+    answer: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonId: string | null; // String
+    student: NexusGenRootTypes['User']; // User!
+    studentId: string; // String!
+    teamQuest: NexusGenRootTypes['TeamQuest'] | null; // TeamQuest
+    teamQuestId: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   TestPractice: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3459,6 +3633,7 @@ export interface NexusGenFieldTypes {
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     level: NexusGenRootTypes['UserLevel'] | null; // UserLevel
     messages: NexusGenRootTypes['Message'][]; // [Message!]!
+    myTeams: NexusGenRootTypes['Team'][]; // [Team!]!
     name: string; // String!
     new_subjects: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     number: string | null; // String
@@ -3471,6 +3646,9 @@ export interface NexusGenFieldTypes {
     surname: string | null; // String
     tags: string[]; // [String!]!
     teacherFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
+    teamQuestResults: NexusGenRootTypes['TeamQuestResult'][]; // [TeamQuestResult!]!
+    teamQuests: NexusGenRootTypes['TeamQuest'][]; // [TeamQuest!]!
+    teams: NexusGenRootTypes['Team'][]; // [Team!]!
     traffic_sources: NexusGenScalars['Json'] | null; // Json
     uni: NexusGenRootTypes['Uni'] | null; // Uni
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3771,6 +3949,8 @@ export interface NexusGenFieldTypeNames {
     shotResults: 'ShotResult'
     shots: 'Shot'
     structure: 'Json'
+    teamQuestResults: 'TeamQuestResult'
+    teamQuests: 'TeamQuest'
     testPractices: 'TestPractice'
     testResults: 'TestResult'
     text: 'String'
@@ -3814,6 +3994,7 @@ export interface NexusGenFieldTypeNames {
     value: 'String'
   }
   Mutation: { // field return type name
+    addToTeam: 'User'
     checkAssignment: 'LessonResult'
     createBusinessClient: 'User'
     createCertificate: 'Certificate'
@@ -3849,6 +4030,9 @@ export interface NexusGenFieldTypeNames {
     createShot: 'Shot'
     createShotResult: 'ShotResult'
     createStatement: 'Statement'
+    createTeam: 'Team'
+    createTeamQuest: 'TeamQuest'
+    createTeamQuestResult: 'TeamQuestResult'
     createTestPractice: 'TestPractice'
     createTestPracticeResult: 'TestPracticeResult'
     createTestResult: 'TestResult'
@@ -3956,6 +4140,7 @@ export interface NexusGenFieldTypeNames {
     paymentID: 'String'
     price: 'Int'
     promocode: 'String'
+    team: 'Team'
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
@@ -4070,10 +4255,13 @@ export interface NexusGenFieldTypeNames {
     problemResults: 'ProblemResult'
     program: 'Program'
     programs: 'Program'
+    questResults: 'QuestResults'
     quizResult: 'QuizResult'
     quizResults: 'QuizResult'
     quizzes: 'Quiz'
     stats: 'Stats'
+    team: 'Team'
+    teams: 'Team'
     testResult: 'TestResult'
     testResults: 'TestResult'
     textEditorResult: 'TextEditorResult'
@@ -4082,6 +4270,11 @@ export interface NexusGenFieldTypeNames {
     usefuls: 'Useful'
     user: 'User'
     users: 'User'
+  }
+  QuestResults: { // field return type name
+    lessonResults: 'LessonResult'
+    quizResults: 'QuizResult'
+    testResults: 'TestResult'
   }
   Quiz: { // field return type name
     answer: 'String'
@@ -4176,6 +4369,41 @@ export interface NexusGenFieldTypeNames {
     quizResults: 'QuizResult'
     testResults: 'TestResult'
     textEditorResults: 'TextEditorResult'
+  }
+  Team: { // field return type name
+    createdAt: 'DateTime'
+    founder: 'User'
+    id: 'String'
+    image: 'String'
+    name: 'String'
+    orders: 'Order'
+    updatedAt: 'DateTime'
+    users: 'User'
+  }
+  TeamQuest: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    introduction: 'String'
+    lesson: 'Lesson'
+    lessonId: 'String'
+    solution: 'String'
+    tasks: 'Json'
+    teamQuestResults: 'TeamQuestResult'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+  }
+  TeamQuestResult: { // field return type name
+    answer: 'String'
+    createdAt: 'DateTime'
+    id: 'String'
+    lesson: 'Lesson'
+    lessonId: 'String'
+    student: 'User'
+    studentId: 'String'
+    teamQuest: 'TeamQuest'
+    teamQuestId: 'String'
+    updatedAt: 'DateTime'
   }
   TestPractice: { // field return type name
     createdAt: 'DateTime'
@@ -4283,6 +4511,7 @@ export interface NexusGenFieldTypeNames {
     lessons: 'Lesson'
     level: 'UserLevel'
     messages: 'Message'
+    myTeams: 'Team'
     name: 'String'
     new_subjects: 'CoursePage'
     number: 'String'
@@ -4295,6 +4524,9 @@ export interface NexusGenFieldTypeNames {
     surname: 'String'
     tags: 'String'
     teacherFeedback: 'Feedback'
+    teamQuestResults: 'TeamQuestResult'
+    teamQuests: 'TeamQuest'
+    teams: 'Team'
     traffic_sources: 'Json'
     uni: 'Uni'
     updatedAt: 'DateTime'
@@ -4470,6 +4702,18 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
     }
+    teamQuestResults: { // args
+      after?: NexusGenInputs['TeamQuestResultWhereUniqueInput'] | null; // TeamQuestResultWhereUniqueInput
+      before?: NexusGenInputs['TeamQuestResultWhereUniqueInput'] | null; // TeamQuestResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    teamQuests: { // args
+      after?: NexusGenInputs['TeamQuestWhereUniqueInput'] | null; // TeamQuestWhereUniqueInput
+      before?: NexusGenInputs['TeamQuestWhereUniqueInput'] | null; // TeamQuestWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
     testPractices: { // args
       after?: NexusGenInputs['TestPracticeWhereUniqueInput'] | null; // TestPracticeWhereUniqueInput
       before?: NexusGenInputs['TestPracticeWhereUniqueInput'] | null; // TestPracticeWhereUniqueInput
@@ -4504,6 +4748,9 @@ export interface NexusGenArgTypes {
     }
   }
   Mutation: {
+    addToTeam: { // args
+      id?: string | null; // String
+    }
     checkAssignment: { // args
       checked?: boolean | null; // Boolean
       id?: string | null; // String
@@ -4722,6 +4969,20 @@ export interface NexusGenArgTypes {
       forumId?: string | null; // String
       miniforumId?: string | null; // String
       text?: string | null; // String
+    }
+    createTeam: { // args
+      name?: string | null; // String
+    }
+    createTeamQuest: { // args
+      introduction?: string | null; // String
+      lessonId?: string | null; // String
+      solution?: string | null; // String
+      tasks?: NexusGenInputs['QuestList'] | null; // QuestList
+    }
+    createTeamQuestResult: { // args
+      answer?: string | null; // String
+      lessonId?: string | null; // String
+      teamQuestId?: string | null; // String
     }
     createTestPractice: { // args
       failureText?: string | null; // String
@@ -5248,6 +5509,10 @@ export interface NexusGenArgTypes {
       orderBy?: NexusGenInputs['ProgramOrderByInput'][] | null; // [ProgramOrderByInput!]
       where?: NexusGenInputs['ProgramWhereInput'] | null; // ProgramWhereInput
     }
+    questResults: { // args
+      lessonId?: string | null; // String
+      list_of_ids?: Array<string | null> | null; // [String]
+    }
     quizResult: { // args
       where: NexusGenInputs['QuizResultWhereUniqueInput']; // QuizResultWhereUniqueInput!
     }
@@ -5270,6 +5535,17 @@ export interface NexusGenArgTypes {
     stats: { // args
       lessonId?: string | null; // String
       userId?: string | null; // String
+    }
+    team: { // args
+      where: NexusGenInputs['TeamWhereUniqueInput']; // TeamWhereUniqueInput!
+    }
+    teams: { // args
+      after?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
+      before?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['TeamOrderByInput'][] | null; // [TeamOrderByInput!]
+      where?: NexusGenInputs['TeamWhereInput'] | null; // TeamWhereInput
     }
     testResult: { // args
       where: NexusGenInputs['TestResultWhereUniqueInput']; // TestResultWhereUniqueInput!
@@ -5327,6 +5603,28 @@ export interface NexusGenArgTypes {
     shotResults: { // args
       after?: NexusGenInputs['ShotResultWhereUniqueInput'] | null; // ShotResultWhereUniqueInput
       before?: NexusGenInputs['ShotResultWhereUniqueInput'] | null; // ShotResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
+  Team: {
+    orders: { // args
+      after?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput
+      before?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    users: { // args
+      after?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
+      before?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
+  TeamQuest: {
+    teamQuestResults: { // args
+      after?: NexusGenInputs['TeamQuestResultWhereUniqueInput'] | null; // TeamQuestResultWhereUniqueInput
+      before?: NexusGenInputs['TeamQuestResultWhereUniqueInput'] | null; // TeamQuestResultWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }
@@ -5392,6 +5690,12 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
     }
+    myTeams: { // args
+      after?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
+      before?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
     new_subjects: { // args
       after?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
       before?: NexusGenInputs['CoursePageWhereUniqueInput'] | null; // CoursePageWhereUniqueInput
@@ -5413,6 +5717,24 @@ export interface NexusGenArgTypes {
     teacherFeedback: { // args
       after?: NexusGenInputs['FeedbackWhereUniqueInput'] | null; // FeedbackWhereUniqueInput
       before?: NexusGenInputs['FeedbackWhereUniqueInput'] | null; // FeedbackWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    teamQuestResults: { // args
+      after?: NexusGenInputs['TeamQuestResultWhereUniqueInput'] | null; // TeamQuestResultWhereUniqueInput
+      before?: NexusGenInputs['TeamQuestResultWhereUniqueInput'] | null; // TeamQuestResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    teamQuests: { // args
+      after?: NexusGenInputs['TeamQuestWhereUniqueInput'] | null; // TeamQuestWhereUniqueInput
+      before?: NexusGenInputs['TeamQuestWhereUniqueInput'] | null; // TeamQuestWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    teams: { // args
+      after?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
+      before?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }

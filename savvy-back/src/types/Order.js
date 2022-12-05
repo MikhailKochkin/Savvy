@@ -14,6 +14,7 @@ const Order = objectType({
     t.model.coursePageId();
     t.model.coursePage();
     t.model.user();
+    t.model.team();
     t.model.createdAt();
     t.model.updatedAt();
   },

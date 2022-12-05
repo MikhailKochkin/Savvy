@@ -28,6 +28,10 @@ const User = objectType({
     t.model.permissions();
     t.model.certificates();
     t.model.courseVisits();
+    t.model.teams();
+    t.model.myTeams();
+    t.model.teamQuests();
+    t.model.teamQuestResults();
     t.model.lessons();
     t.model.studentFeedback();
     t.model.teacherFeedback();
@@ -35,6 +39,20 @@ const User = objectType({
     t.model.co_coursePages({ ordering: { title: true } });
     t.model.company();
     t.model.lessonResults();
+  },
+});
+
+const Team = objectType({
+  name: "Team",
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.image();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.founder();
+    t.model.users();
+    t.model.orders();
   },
 });
 
@@ -151,4 +169,5 @@ module.exports = {
   CommunityMember,
   Visits,
   Visit,
+  Team,
 };

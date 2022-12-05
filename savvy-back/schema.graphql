@@ -1190,6 +1190,8 @@ type Lesson {
   shotResults(after: ShotResultWhereUniqueInput, before: ShotResultWhereUniqueInput, first: Int, last: Int): [ShotResult!]!
   shots(after: ShotWhereUniqueInput, before: ShotWhereUniqueInput, first: Int, last: Int): [Shot!]!
   structure: Json
+  teamQuestResults(after: TeamQuestResultWhereUniqueInput, before: TeamQuestResultWhereUniqueInput, first: Int, last: Int): [TeamQuestResult!]!
+  teamQuests(after: TeamQuestWhereUniqueInput, before: TeamQuestWhereUniqueInput, first: Int, last: Int): [TeamQuest!]!
   testPractices(after: TestPracticeWhereUniqueInput, before: TestPracticeWhereUniqueInput, first: Int, last: Int): [TestPractice!]!
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int): [TestResult!]!
   text: String!
@@ -1311,6 +1313,8 @@ input LessonWhereInput {
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
   structure: JsonNullableFilter
+  teamQuestResults: TeamQuestResultListRelationFilter
+  teamQuests: TeamQuestListRelationFilter
   test: TestListRelationFilter
   testPracticeResults: TestPracticeResultListRelationFilter
   testPractices: TestPracticeListRelationFilter
@@ -1420,6 +1424,7 @@ input MiniForumWhereUniqueInput {
 }
 
 type Mutation {
+  addToTeam(id: String): User
   checkAssignment(checked: Boolean, id: String): LessonResult
   createBusinessClient(comment: String, communication_medium: String, coursePageId: String, email: String, name: String, number: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
@@ -1455,6 +1460,9 @@ type Mutation {
   createShot(comments: [String], lessonId: String, parts: [String], title: String): Shot
   createShotResult(answer: String, lessonId: String, shotId: String): ShotResult
   createStatement(forumId: String, miniforumId: String, text: String): Statement
+  createTeam(name: String): Team
+  createTeamQuest(introduction: String, lessonId: String, solution: String, tasks: QuestList): TeamQuest
+  createTeamQuestResult(answer: String, lessonId: String, teamQuestId: String): TeamQuestResult
   createTestPractice(failureText: String, intro: String, lessonId: String, successText: String, tasks: [String], tasksNum: Int, text: String): TestPractice
   createTestPracticeResult(correct: Int, lessonId: String, tasks: [String], testPracticeId: String): TestPracticeResult
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
@@ -1751,6 +1759,7 @@ type Order {
   paymentID: String
   price: Int
   promocode: String
+  team: Team
   updatedAt: DateTime!
   user: User!
   userId: String!
@@ -1773,6 +1782,7 @@ input OrderOrderByInput {
   price: SortOrder
   programId: SortOrder
   promocode: SortOrder
+  teamId: SortOrder
   updatedAt: SortOrder
   userId: SortOrder
 }
@@ -1793,6 +1803,8 @@ input OrderWhereInput {
   program: ProgramWhereInput
   programId: StringNullableFilter
   promocode: StringNullableFilter
+  team: TeamWhereInput
+  teamId: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringFilter
@@ -2191,10 +2203,13 @@ type Query {
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int, orderBy: [ProblemResultOrderByInput!], where: ProblemResultWhereInput): [ProblemResult!]!
   program(where: ProgramWhereUniqueInput!): Program
   programs(after: ProgramWhereUniqueInput, before: ProgramWhereUniqueInput, first: Int, last: Int, orderBy: [ProgramOrderByInput!], where: ProgramWhereInput): [Program!]!
+  questResults(lessonId: String, list_of_ids: [String]): QuestResults
   quizResult(where: QuizResultWhereUniqueInput!): QuizResult
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int, orderBy: [QuizResultOrderByInput!], where: QuizResultWhereInput): [QuizResult!]!
   quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByInput!], where: QuizWhereInput): [Quiz!]!
   stats(lessonId: String, userId: String): Stats
+  team(where: TeamWhereUniqueInput!): Team
+  teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int, orderBy: [TeamOrderByInput!], where: TeamWhereInput): [Team!]!
   testResult(where: TestResultWhereUniqueInput!): TestResult
   testResults(after: TestResultWhereUniqueInput, before: TestResultWhereUniqueInput, first: Int, last: Int, orderBy: [TestResultOrderByInput!], where: TestResultWhereInput): [TestResult!]!
   textEditorResult(where: TextEditorResultWhereUniqueInput!): TextEditorResult
@@ -2208,6 +2223,22 @@ type Query {
 enum QueryMode {
   default
   insensitive
+}
+
+input QuestElement {
+  number: Int
+  type: String
+  value: String
+}
+
+input QuestList {
+  questElements: [QuestElement]
+}
+
+type QuestResults {
+  lessonResults: [LessonResult]
+  quizResults: [QuizResult]
+  testResults: [TestResult]
 }
 
 type Quiz {
@@ -2634,6 +2665,130 @@ input StringNullableListFilter {
   equals: [String!]
 }
 
+type Team {
+  createdAt: DateTime!
+  founder: User!
+  id: String!
+  image: String
+  name: String!
+  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
+  updatedAt: DateTime!
+  users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
+}
+
+input TeamListRelationFilter {
+  every: TeamWhereInput
+  none: TeamWhereInput
+  some: TeamWhereInput
+}
+
+input TeamOrderByInput {
+  createdAt: SortOrder
+  founderId: SortOrder
+  id: SortOrder
+  image: SortOrder
+  name: SortOrder
+  updatedAt: SortOrder
+}
+
+type TeamQuest {
+  createdAt: DateTime!
+  id: String!
+  introduction: String!
+  lesson: Lesson!
+  lessonId: String!
+  solution: String
+  tasks: Json!
+  teamQuestResults(after: TeamQuestResultWhereUniqueInput, before: TeamQuestResultWhereUniqueInput, first: Int, last: Int): [TeamQuestResult!]!
+  updatedAt: DateTime!
+  user: User!
+  userId: String!
+}
+
+input TeamQuestListRelationFilter {
+  every: TeamQuestWhereInput
+  none: TeamQuestWhereInput
+  some: TeamQuestWhereInput
+}
+
+type TeamQuestResult {
+  answer: String
+  createdAt: DateTime!
+  id: String!
+  lesson: Lesson
+  lessonId: String
+  student: User!
+  studentId: String!
+  teamQuest: TeamQuest
+  teamQuestId: String
+  updatedAt: DateTime!
+}
+
+input TeamQuestResultListRelationFilter {
+  every: TeamQuestResultWhereInput
+  none: TeamQuestResultWhereInput
+  some: TeamQuestResultWhereInput
+}
+
+input TeamQuestResultWhereInput {
+  AND: [TeamQuestResultWhereInput!]
+  answer: StringNullableFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  NOT: [TeamQuestResultWhereInput!]
+  OR: [TeamQuestResultWhereInput!]
+  student: UserWhereInput
+  studentId: StringFilter
+  teamQuest: TeamQuestWhereInput
+  teamQuestId: StringNullableFilter
+  updatedAt: DateTimeFilter
+}
+
+input TeamQuestResultWhereUniqueInput {
+  id: String
+}
+
+input TeamQuestWhereInput {
+  AND: [TeamQuestWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  introduction: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringFilter
+  NOT: [TeamQuestWhereInput!]
+  OR: [TeamQuestWhereInput!]
+  solution: StringNullableFilter
+  teamQuestResults: TeamQuestResultListRelationFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringFilter
+}
+
+input TeamQuestWhereUniqueInput {
+  id: String
+}
+
+input TeamWhereInput {
+  AND: [TeamWhereInput!]
+  createdAt: DateTimeFilter
+  founder: UserWhereInput
+  founderId: StringFilter
+  id: StringFilter
+  image: StringNullableFilter
+  name: StringFilter
+  NOT: [TeamWhereInput!]
+  OR: [TeamWhereInput!]
+  orders: OrderListRelationFilter
+  updatedAt: DateTimeFilter
+  users: UserListRelationFilter
+}
+
+input TeamWhereUniqueInput {
+  id: String
+}
+
 input TestListRelationFilter {
   every: TestWhereInput
   none: TestWhereInput
@@ -2978,6 +3133,7 @@ type User {
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   level: UserLevel
   messages(after: MessageWhereUniqueInput, before: MessageWhereUniqueInput, first: Int, last: Int): [Message!]!
+  myTeams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int): [Team!]!
   name: String!
   new_subjects(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int): [CoursePage!]!
   number: String
@@ -2990,6 +3146,9 @@ type User {
   surname: String
   tags: [String!]!
   teacherFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
+  teamQuestResults(after: TeamQuestResultWhereUniqueInput, before: TeamQuestResultWhereUniqueInput, first: Int, last: Int): [TeamQuestResult!]!
+  teamQuests(after: TeamQuestWhereUniqueInput, before: TeamQuestWhereUniqueInput, first: Int, last: Int): [TeamQuest!]!
+  teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int): [Team!]!
   traffic_sources: Json
   uni: Uni
   updatedAt: DateTime!
@@ -3104,6 +3263,7 @@ input UserWhereInput {
   levelId: StringNullableFilter
   messages: MessageListRelationFilter
   miniforums: MiniForumListRelationFilter
+  myTeams: TeamListRelationFilter
   name: StringFilter
   new_subjects: CoursePageListRelationFilter
   newTests: NewTestListRelationFilter
@@ -3136,6 +3296,9 @@ input UserWhereInput {
   surname: StringNullableFilter
   tags: StringNullableListFilter
   teacherFeedback: FeedbackListRelationFilter
+  teamQuestResults: TeamQuestResultListRelationFilter
+  teamQuests: TeamQuestListRelationFilter
+  teams: TeamListRelationFilter
   testPracticeResults: TestPracticeResultListRelationFilter
   testPractices: TestPracticeListRelationFilter
   testResults: TestResultListRelationFilter

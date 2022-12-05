@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -754,10 +754,8 @@ model Team {
   id                  String               @id @default(cuid())
   name                String
   image               String?
-  founderId           String
-  founder             User     @relation(fields: [founderId], references: [id])
   orders              Order[]
-  users               User[]              @relation("joinedTeams")
+  users               User[]
   updatedAt     DateTime   @updatedAt
   createdAt     DateTime   @default(now())
 }
@@ -792,6 +790,8 @@ model User {
   permissions         Permission[]
   uniId               String?
   companyId           String?
+  teamId              String?
+  team                Team?                @relation(fields: [teamId], references: [id])
   legalPortfolioId    String?              @unique
   careerTrackId       String?              @unique
   levelId             String?              @unique
@@ -842,8 +842,6 @@ model User {
   textEditors         TextEditor[]
   textEditorResults   TextEditorResult[]
   lawrdles            Lawrdle[]
-  teams               Team[]              
-  myTeams             Team[]              @relation("joinedTeams")
   teamQuests          TeamQuest[]
   teamQuestResults    TeamQuestResult[]
   co_coursePages      CoursePage[]         @relation("AuthorsCoursePage")

@@ -309,6 +309,23 @@ const Chat = objectType({
   },
 });
 
+const TeamQuest = objectType({
+  name: "TeamQuest",
+  definition(t) {
+    t.model.id();
+    t.model.introduction();
+    t.model.solution();
+    t.model.tasks();
+    t.model.userId();
+    t.model.lessonId();
+    t.model.lesson();
+    t.model.user();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.teamQuestResults();
+  },
+});
+
 module.exports = {
   NewTest,
   Shot,
@@ -329,4 +346,5 @@ module.exports = {
   Clause,
   TestPractice,
   MiniForum,
+  TeamQuest,
 };

@@ -70,6 +70,22 @@ const PromocodeList = inputObjectType({
   },
 });
 
+const QuestElement = inputObjectType({
+  name: "QuestElement",
+  definition(t) {
+    t.string("type");
+    t.string("value");
+    t.int("number");
+  },
+});
+
+const QuestList = inputObjectType({
+  name: "QuestList",
+  definition(t) {
+    t.list.field("questElements", { type: "QuestElement" });
+  },
+});
+
 const Element = inputObjectType({
   name: "Element",
   definition(t) {
@@ -134,4 +150,6 @@ module.exports = {
   ProblemStructure,
   Element,
   ElementsList,
+  QuestElement,
+  QuestList,
 };
