@@ -21,9 +21,13 @@ const Styles = styled.div`
 
 const UserData = (props) => {
   const [show, setShow] = useState(false);
-  const { d } = props;
+  const { d, coursePages } = props;
   let all_results = [];
-  d.lessonResults.map((lr) => all_results.push(lr.lesson.coursePage.title));
+  d.lessonResults.map((lr) =>
+    all_results.push(
+      coursePages.find((c) => c.id == lr.lesson.coursePageID).title
+    )
+  );
   let visited_courses = [...new Set(all_results)];
 
   return (

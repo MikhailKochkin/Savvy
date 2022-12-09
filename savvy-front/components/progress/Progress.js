@@ -52,149 +52,9 @@ const COURSEPAGES_QUERY = gql`
   }
 `;
 
-const COURSEPAGE_QUERY = gql`
-  query COURSEPAGE_QUERY($id: String!) {
-    coursePage(where: { id: $id }) {
-      id
-      title
-      courseType
-      new_students {
-        id
-        name
-        surname
-        tags
-        email
-        studentFeedback {
-          id
-          lesson {
-            id
-            coursePage {
-              id
-            }
-          }
-        }
-        courseVisits {
-          id
-          reminders
-          visitsNumber
-          coursePage {
-            id
-          }
-          createdAt
-        }
-      }
-      lessons {
-        id
-        text
-        name
-        number
-        assignment
-        structure
-        # coursePage {
-        #   id
-        # }
-        # forum {
-        #   id
-        # }
-        newTests {
-          id
-          question
-          answers
-          correct
-          next
-        }
-        quizes {
-          id
-          question
-          answer
-          next
-        }
-        forum {
-          id
-          text
-          lesson {
-            id
-            name
-          }
-          rating {
-            id
-            rating
-            createdAt
-            user {
-              id
-              name
-              surname
-            }
-          }
-          statements {
-            id
-            text
-            createdAt
-            answered
-            comments
-            user {
-              id
-              name
-              surname
-            }
-            forum {
-              id
-              rating {
-                id
-                rating
-              }
-            }
-          }
-          # lesson {
-          #   id
-          #   user {
-          #     id
-          #   }
-          # }
-          # user {
-          #   id
-          #   name
-          #   surname
-          # }
-        }
-        notes {
-          id
-          text
-          next
-        }
-        problems {
-          id
-          text
-          nodeID
-          nodeType
-        }
-        texteditors {
-          id
-          text
-          totalMistakes
-        }
-        constructions {
-          id
-          name
-          variants
-          answer
-        }
-        documents {
-          id
-          title
-        }
-      }
-    }
-  }
-`;
-
 const Progress = (props) => {
   const [course, setCourse] = useState("cjtreu3md00fp0897ga13aktp");
   const [open, setOpen] = useState(false);
-
-  // const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
-  //   variables: { id: option },
-  // });
 
   const {
     loading: loading2,
@@ -202,12 +62,11 @@ const Progress = (props) => {
     data: data2,
   } = useQuery(COURSEPAGES_QUERY);
 
-  // if (loading) return <p>Loading...</p>;
   if (loading2) return <p>Loading1...</p>;
 
+  // if (loading) return <p>Loading...</p>;
   // let coursePage = data.coursePage;
   let coursePages = data2.coursePages;
-
   let rated_courses = [];
   coursePages
     .filter((c) => c.courseType.toLowerCase() !== "uni")

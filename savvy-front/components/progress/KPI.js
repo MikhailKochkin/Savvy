@@ -7,7 +7,7 @@ import UserData from "./UserData";
 
 const USERS_QUERY = gql`
   query USERS_QUERY {
-    users(where: { updatedAt: { gte: "2022-11-15T15:10:10.734Z" } }) {
+    users(where: { updatedAt: { gte: "2022-11-20T15:10:10.734Z" } }) {
       id
       name
       surname
@@ -38,10 +38,7 @@ const USERS_QUERY = gql`
         lesson {
           id
           open
-          coursePage {
-            id
-            title
-          }
+          coursePageID
         }
       }
     }
@@ -124,7 +121,7 @@ const KPI = (props) => {
         (lr) =>
           new Date(lr.updatedAt).getTime() > subtractDays(14) &&
           lr.lesson.open &&
-          u.new_subjects.filter((subj) => subj.id == lr.lesson.coursePage.id)
+          u.new_subjects.filter((subj) => subj.id == lr.lesson.coursePageID)
             .length == 0
       ).length > 0
   );
@@ -185,7 +182,7 @@ const KPI = (props) => {
             {last_week_users
               .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
               .map((d) => (
-                <UserData d={d} />
+                <UserData d={d} coursePages={coursePages} />
               ))}
           </ol>
         </div>
@@ -205,7 +202,7 @@ const KPI = (props) => {
             {weekly_users
               .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
               .map((d) => (
-                <UserData d={d} />
+                <UserData d={d} coursePages={coursePages} />
               ))}
           </ol>
         </div>
@@ -224,7 +221,7 @@ const KPI = (props) => {
           {daily_users
             .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
             .map((d) => (
-              <UserData d={d} />
+              <UserData d={d} coursePages={coursePages} />
             ))}
         </div>
       )}
@@ -245,7 +242,7 @@ const KPI = (props) => {
             {fresh_students
               .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
               .map((d) => (
-                <UserData d={d} />
+                <UserData d={d} coursePages={coursePages} />
               ))}
           </ol>
         </div>
@@ -267,7 +264,7 @@ const KPI = (props) => {
             {interested_users
               .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1))
               .map((d) => (
-                <UserData d={d} />
+                <UserData d={d} coursePages={coursePages} />
               ))}
           </ol>
         </div>
@@ -330,7 +327,7 @@ const KPI = (props) => {
                 : 1
             )
             .map((d) => (
-              <UserData d={d} />
+              <UserData d={d} coursePages={coursePages} />
             ))}
         </div>
       )}
