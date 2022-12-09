@@ -14,6 +14,7 @@ const Lesson = objectType({
     t.model.totalPoints();
     t.model.coursePageID();
     t.model.change();
+    t.model.offers();
     t.model.challenge_num();
     t.model.published();
     t.model.map();

@@ -230,6 +230,128 @@ const Mutation = mutationType({
         return { user, token };
       },
     });
+    t.field("advancedSignup", {
+      type: "AuthPayload",
+      args: {
+        name: stringArg(),
+        surname: stringArg(),
+        number: stringArg(),
+        email: stringArg(),
+        password: stringArg(),
+        isFamiliar: booleanArg(),
+        country: stringArg(),
+        status: arg({
+          type: "Status", // name should match the name you provided
+        }),
+        uniID: stringArg(),
+        careerTrackID: stringArg(),
+        company: stringArg(),
+        traffic_sources: arg({
+          type: "Visits",
+        }),
+      },
+      resolve: async (
+        _,
+        {
+          name,
+          surname,
+          email,
+          number,
+          password,
+          status,
+          country,
+          traffic_sources,
+        },
+        ctx
+      ) => {
+        const hashed_password = await bcrypt.hash(password, 10);
+        const valid = await bcrypt.compare(password, hashed_password);
+
+        const our_user = await ctx.prisma.user.findUnique({
+          where: { email: email.toLowerCase() },
+        });
+        if (our_user) {
+          let token = jwt.sign(
+            { userId: our_user.id },
+            process.env.APP_SECRET,
+            {
+              expiresIn: 1000 * 60 * 60 * 24 * 365,
+            }
+          );
+          console.log("our_user", our_user.id);
+          let user = our_user;
+          return { token, user };
+        } else {
+          const user = await ctx.prisma.user.create({
+            data: {
+              name,
+              surname,
+              email: email.toLowerCase(),
+              permissions: { set: ["USER"] },
+              password: hashed_password,
+              number: number,
+              country: country,
+              // uni: { connect: { id: uniID } },
+              // company: { connect: { id: company } },
+              // careerTrack: { connect: { id: careerTrackID } },
+              isFamiliar: true,
+              status: status,
+              traffic_sources: traffic_sources,
+            },
+          });
+
+          const UserLevel = await ctx.prisma.userLevel.create({
+            data: {
+              user: {
+                connect: { id: user.id },
+              },
+              level: 1,
+            },
+          });
+
+          let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+            expiresIn: 1000 * 60 * 60 * 24 * 365,
+          });
+          if (process.env.NODE_ENV === "production") {
+            ctx.res.cookie("token", token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === "production",
+              sameSite: "None",
+              maxAge: 31557600000,
+            });
+          } else {
+            ctx.res.cookie("token", token, {
+              httpOnly: true,
+              maxAge: 31557600000,
+            });
+          }
+          if (
+            country.toLowerCase() == "ru" ||
+            country.toLowerCase() == "kz" ||
+            country.toLowerCase() == "by" ||
+            country.toLowerCase() == "am" ||
+            country.toLowerCase() == "tj" ||
+            country.toLowerCase() == "uz"
+          ) {
+            const newEmailRus = await client.sendEmail({
+              From: "Mikhail@besavvy.app",
+              To: email,
+              Subject: "Расскажу о возможностях BeSavvy",
+              HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
+            });
+          } else {
+            const newEmailEng = await client.sendEmail({
+              From: "Mikhail@besavvy.app",
+              To: email,
+              Subject: "Hello from BeSavvy",
+              HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
+            });
+          }
+
+          return { user, token };
+        }
+      },
+    });
     t.field("signin", {
       type: "AuthPayload",
       args: {
@@ -1390,6 +1512,35 @@ const Mutation = mutationType({
           },
         });
         return Note;
+      },
+    });
+    t.field("createOffer", {
+      type: "Offer",
+      args: {
+        lessonId: stringArg(),
+        header: stringArg(),
+        text: stringArg(),
+        type: stringArg(),
+        courseId: stringArg(),
+        price: intArg(),
+        discountPrice: intArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const lessonId = args.lessonId;
+        delete args.lessonId;
+        const Offer = await ctx.prisma.offer.create({
+          data: {
+            user: {
+              connect: { id: ctx.res.req.userId },
+            },
+            lesson: {
+              connect: { id: lessonId },
+            },
+            ...args,
+          },
+        });
+
+        return Offer;
       },
     });
     t.field("updateNote", {
@@ -3298,16 +3449,16 @@ const Mutation = mutationType({
           },
         });
 
-        if (args.comment == "consult") {
-          const newEmail = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
-            To: "Mikhail@besavvy.app",
-            Subject: "Новая заявка на консультацию",
-            HtmlBody: makeANiceEmail(
-              `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
-            ),
-          });
-        }
+        // if (args.comment == "consult") {
+        const newEmail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: "Mikhail@besavvy.app",
+          Subject: "Новая заявка на курс",
+          HtmlBody: makeANiceEmail(
+            `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
+          ),
+        });
+        // }
 
         return new_client;
       },
@@ -3408,20 +3559,8 @@ const Mutation = mutationType({
           email: stringArg(),
           conf_number: intArg(),
         },
+
         resolve: async (_, args, ctx) => {
-          const conf_user = await ctx.prisma.confUser.create({
-            data: {
-              ...args,
-            },
-          });
-
-          const newEmail = await client.sendEmail({
-            From: "Mikhail@besavvy.app",
-            To: args.email,
-            Subject: "Рады видеть тебя на BeSavvyCon",
-            HtmlBody: ConfEmail.ConfEmail(),
-          });
-
           return conf_user;
         },
       }),

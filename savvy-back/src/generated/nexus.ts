@@ -334,6 +334,7 @@ export interface NexusGenInputs {
     banner?: NexusGenEnums['SortOrder'] | null; // SortOrder
     batch?: NexusGenEnums['SortOrder'] | null; // SortOrder
     companyId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    countries?: NexusGenEnums['SortOrder'] | null; // SortOrder
     courseType?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     currency?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -368,6 +369,7 @@ export interface NexusGenInputs {
     uptodateAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     video?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    view?: NexusGenEnums['SortOrder'] | null; // SortOrder
     weeks?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   CoursePageWhereInput: { // input type
@@ -383,6 +385,7 @@ export interface NexusGenInputs {
     certificates?: NexusGenInputs['CertificateListRelationFilter'] | null; // CertificateListRelationFilter
     company?: NexusGenInputs['CompanyWhereInput'] | null; // CompanyWhereInput
     companyId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    countries?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     courseType?: NexusGenInputs['EnumCourseTypeNullableFilter'] | null; // EnumCourseTypeNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     currency?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -430,6 +433,7 @@ export interface NexusGenInputs {
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringFilter'] | null; // StringFilter
     video?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    view?: NexusGenInputs['EnumPageViewFilter'] | null; // EnumPageViewFilter
     visits?: NexusGenInputs['CourseVisitListRelationFilter'] | null; // CourseVisitListRelationFilter
     weeks?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
   }
@@ -575,6 +579,12 @@ export interface NexusGenInputs {
     in?: NexusGenEnums['Level'][] | null; // [Level!]
     not?: NexusGenInputs['NestedEnumLevelNullableFilter'] | null; // NestedEnumLevelNullableFilter
     notIn?: NexusGenEnums['Level'][] | null; // [Level!]
+  }
+  EnumPageViewFilter: { // input type
+    equals?: NexusGenEnums['PageView'] | null; // PageView
+    in?: NexusGenEnums['PageView'][] | null; // [PageView!]
+    not?: NexusGenInputs['NestedEnumPageViewFilter'] | null; // NestedEnumPageViewFilter
+    notIn?: NexusGenEnums['PageView'][] | null; // [PageView!]
   }
   EnumPermissionNullableListFilter: { // input type
     equals?: NexusGenEnums['Permission'][] | null; // [Permission!]
@@ -890,6 +900,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
     notes?: NexusGenInputs['NoteListRelationFilter'] | null; // NoteListRelationFilter
     number?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    offers?: NexusGenInputs['OfferListRelationFilter'] | null; // OfferListRelationFilter
     open?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     OR?: NexusGenInputs['LessonWhereInput'][] | null; // [LessonWhereInput!]
     problemResults?: NexusGenInputs['ProblemResultListRelationFilter'] | null; // ProblemResultListRelationFilter
@@ -1013,6 +1024,12 @@ export interface NexusGenInputs {
     in?: NexusGenEnums['Level'][] | null; // [Level!]
     not?: NexusGenInputs['NestedEnumLevelNullableFilter'] | null; // NestedEnumLevelNullableFilter
     notIn?: NexusGenEnums['Level'][] | null; // [Level!]
+  }
+  NestedEnumPageViewFilter: { // input type
+    equals?: NexusGenEnums['PageView'] | null; // PageView
+    in?: NexusGenEnums['PageView'][] | null; // [PageView!]
+    not?: NexusGenInputs['NestedEnumPageViewFilter'] | null; // NestedEnumPageViewFilter
+    notIn?: NexusGenEnums['PageView'][] | null; // [PageView!]
   }
   NestedFloatNullableFilter: { // input type
     equals?: number | null; // Float
@@ -1138,6 +1155,45 @@ export interface NexusGenInputs {
     userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
   NoteWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
+  OfferListRelationFilter: { // input type
+    every?: NexusGenInputs['OfferWhereInput'] | null; // OfferWhereInput
+    none?: NexusGenInputs['OfferWhereInput'] | null; // OfferWhereInput
+    some?: NexusGenInputs['OfferWhereInput'] | null; // OfferWhereInput
+  }
+  OfferOrderByInput: { // input type
+    courseId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    discountPrice?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    header?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    price?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    text?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    type?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  OfferWhereInput: { // input type
+    AND?: NexusGenInputs['OfferWhereInput'][] | null; // [OfferWhereInput!]
+    courseId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    discountPrice?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    header?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    lesson?: NexusGenInputs['LessonWhereInput'] | null; // LessonWhereInput
+    lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['OfferWhereInput'][] | null; // [OfferWhereInput!]
+    OR?: NexusGenInputs['OfferWhereInput'][] | null; // [OfferWhereInput!]
+    price?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    text?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+  }
+  OfferWhereUniqueInput: { // input type
     id?: string | null; // String
   }
   OrderListRelationFilter: { // input type
@@ -2103,6 +2159,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     notes?: NexusGenInputs['NoteListRelationFilter'] | null; // NoteListRelationFilter
     number?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    offers?: NexusGenInputs['OfferListRelationFilter'] | null; // OfferListRelationFilter
     OR?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     orders?: NexusGenInputs['OrderListRelationFilter'] | null; // OrderListRelationFilter
     password?: NexusGenInputs['StringFilter'] | null; // StringFilter
@@ -2166,6 +2223,7 @@ export interface NexusGenInputs {
 export interface NexusGenEnums {
   CourseType: "CHALLENGE" | "FORMONEY" | "PRIVATE" | "PUBLIC" | "UNI"
   Level: "ADVANCED" | "STANDARD"
+  PageView: "CONF" | "COURSE"
   Permission: "ADMIN" | "USER"
   QueryMode: "default" | "insensitive"
   SortOrder: "asc" | "desc"
@@ -2307,6 +2365,7 @@ export interface NexusGenObjects {
     audience?: string | null; // String
     banner?: string | null; // String
     batch?: string | null; // String
+    countries: string[]; // [String!]!
     courseType?: NexusGenEnums['CourseType'] | null; // CourseType
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     currency?: string | null; // String
@@ -2336,6 +2395,7 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     uptodateAt?: NexusGenScalars['DateTime'] | null; // DateTime
     video?: string | null; // String
+    view: NexusGenEnums['PageView']; // PageView!
     weeks?: number | null; // Int
   }
   CourseVisit: { // root type
@@ -2470,6 +2530,19 @@ export interface NexusGenObjects {
     link_clicks?: number | null; // Int
     next?: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
+  }
+  Offer: { // root type
+    courseId?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    discountPrice?: number | null; // Int
+    header: string; // String!
+    id: string; // String!
+    lessonId?: string | null; // String
+    price?: number | null; // Int
+    text: string; // String!
+    type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
   }
@@ -2928,6 +3001,7 @@ export interface NexusGenFieldTypes {
     banner: string | null; // String
     batch: string | null; // String
     company: NexusGenRootTypes['Company'] | null; // Company
+    countries: string[]; // [String!]!
     courseType: NexusGenEnums['CourseType'] | null; // CourseType
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     currency: string | null; // String
@@ -2962,6 +3036,7 @@ export interface NexusGenFieldTypes {
     uptodateAt: NexusGenScalars['DateTime'] | null; // DateTime
     user: NexusGenRootTypes['User']; // User!
     video: string | null; // String
+    view: NexusGenEnums['PageView']; // PageView!
     weeks: number | null; // Int
   }
   CourseVisit: { // field return type
@@ -3061,6 +3136,7 @@ export interface NexusGenFieldTypes {
     newTests: NexusGenRootTypes['NewTest'][]; // [NewTest!]!
     notes: NexusGenRootTypes['Note'][]; // [Note!]!
     number: number | null; // Int
+    offers: NexusGenRootTypes['Offer'][]; // [Offer!]!
     open: boolean | null; // Boolean
     problemResults: NexusGenRootTypes['ProblemResult'][]; // [ProblemResult!]!
     problems: NexusGenRootTypes['Problem'][]; // [Problem!]!
@@ -3117,6 +3193,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addToTeam: NexusGenRootTypes['User'] | null; // User
+    advancedSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createBusinessClient: NexusGenRootTypes['User'] | null; // User
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
@@ -3140,6 +3217,7 @@ export interface NexusGenFieldTypes {
     createMiniStatement: NexusGenRootTypes['Statement'] | null; // Statement
     createNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     createNote: NexusGenRootTypes['Note'] | null; // Note
+    createOffer: NexusGenRootTypes['Offer'] | null; // Offer
     createOrder: NexusGenRootTypes['PaymentInfo'] | null; // PaymentInfo
     createPost: NexusGenRootTypes['Post'] | null; // Post
     createPrivateOrder: NexusGenRootTypes['PaymentInfo'] | null; // PaymentInfo
@@ -3247,6 +3325,21 @@ export interface NexusGenFieldTypes {
     link_clicks: number | null; // Int
     next: NexusGenScalars['Json'] | null; // Json
     text: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
+  }
+  Offer: { // field return type
+    courseId: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    discountPrice: number | null; // Int
+    header: string; // String!
+    id: string; // String!
+    lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    lessonId: string | null; // String
+    price: number | null; // Int
+    text: string; // String!
+    type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
@@ -3371,6 +3464,8 @@ export interface NexusGenFieldTypes {
     me: NexusGenRootTypes['User'] | null; // User
     miniForums: NexusGenRootTypes['MiniForum'][]; // [MiniForum!]!
     newTest: NexusGenRootTypes['NewTest'] | null; // NewTest
+    offer: NexusGenRootTypes['Offer'] | null; // Offer
+    offers: NexusGenRootTypes['Offer'][]; // [Offer!]!
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
     post: NexusGenRootTypes['Post'] | null; // Post
     posts: NexusGenRootTypes['Post'][]; // [Post!]!
@@ -3806,6 +3901,7 @@ export interface NexusGenFieldTypeNames {
     banner: 'String'
     batch: 'String'
     company: 'Company'
+    countries: 'String'
     courseType: 'CourseType'
     createdAt: 'DateTime'
     currency: 'String'
@@ -3840,6 +3936,7 @@ export interface NexusGenFieldTypeNames {
     uptodateAt: 'DateTime'
     user: 'User'
     video: 'String'
+    view: 'PageView'
     weeks: 'Int'
   }
   CourseVisit: { // field return type name
@@ -3939,6 +4036,7 @@ export interface NexusGenFieldTypeNames {
     newTests: 'NewTest'
     notes: 'Note'
     number: 'Int'
+    offers: 'Offer'
     open: 'Boolean'
     problemResults: 'ProblemResult'
     problems: 'Problem'
@@ -3995,6 +4093,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addToTeam: 'User'
+    advancedSignup: 'AuthPayload'
     checkAssignment: 'LessonResult'
     createBusinessClient: 'User'
     createCertificate: 'Certificate'
@@ -4018,6 +4117,7 @@ export interface NexusGenFieldTypeNames {
     createMiniStatement: 'Statement'
     createNewTest: 'NewTest'
     createNote: 'Note'
+    createOffer: 'Offer'
     createOrder: 'PaymentInfo'
     createPost: 'Post'
     createPrivateOrder: 'PaymentInfo'
@@ -4125,6 +4225,21 @@ export interface NexusGenFieldTypeNames {
     link_clicks: 'Int'
     next: 'Json'
     text: 'String'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+  }
+  Offer: { // field return type name
+    courseId: 'String'
+    createdAt: 'DateTime'
+    discountPrice: 'Int'
+    header: 'String'
+    id: 'String'
+    lesson: 'Lesson'
+    lessonId: 'String'
+    price: 'Int'
+    text: 'String'
+    type: 'String'
     updatedAt: 'DateTime'
     user: 'User'
     userId: 'String'
@@ -4249,6 +4364,8 @@ export interface NexusGenFieldTypeNames {
     me: 'User'
     miniForums: 'MiniForum'
     newTest: 'NewTest'
+    offer: 'Offer'
+    offers: 'Offer'
     orders: 'Order'
     post: 'Post'
     posts: 'Post'
@@ -4666,6 +4783,12 @@ export interface NexusGenArgTypes {
       first?: number | null; // Int
       last?: number | null; // Int
     }
+    offers: { // args
+      after?: NexusGenInputs['OfferWhereUniqueInput'] | null; // OfferWhereUniqueInput
+      before?: NexusGenInputs['OfferWhereUniqueInput'] | null; // OfferWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
     problemResults: { // args
       after?: NexusGenInputs['ProblemResultWhereUniqueInput'] | null; // ProblemResultWhereUniqueInput
       before?: NexusGenInputs['ProblemResultWhereUniqueInput'] | null; // ProblemResultWhereUniqueInput
@@ -4750,6 +4873,20 @@ export interface NexusGenArgTypes {
   Mutation: {
     addToTeam: { // args
       id?: string | null; // String
+    }
+    advancedSignup: { // args
+      careerTrackID?: string | null; // String
+      company?: string | null; // String
+      country?: string | null; // String
+      email?: string | null; // String
+      isFamiliar?: boolean | null; // Boolean
+      name?: string | null; // String
+      number?: string | null; // String
+      password?: string | null; // String
+      status?: NexusGenEnums['Status'] | null; // Status
+      surname?: string | null; // String
+      traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
+      uniID?: string | null; // String
     }
     checkAssignment: { // args
       checked?: boolean | null; // Boolean
@@ -4893,6 +5030,15 @@ export interface NexusGenArgTypes {
     createNote: { // args
       lessonId?: string | null; // String
       text?: string | null; // String
+    }
+    createOffer: { // args
+      courseId?: string | null; // String
+      discountPrice?: number | null; // Int
+      header?: string | null; // String
+      lessonId?: string | null; // String
+      price?: number | null; // Int
+      text?: string | null; // String
+      type?: string | null; // String
     }
     createOrder: { // args
       comment?: string | null; // String
@@ -5470,6 +5616,17 @@ export interface NexusGenArgTypes {
     }
     newTest: { // args
       where: NexusGenInputs['NewTestWhereUniqueInput']; // NewTestWhereUniqueInput!
+    }
+    offer: { // args
+      where: NexusGenInputs['OfferWhereUniqueInput']; // OfferWhereUniqueInput!
+    }
+    offers: { // args
+      after?: NexusGenInputs['OfferWhereUniqueInput'] | null; // OfferWhereUniqueInput
+      before?: NexusGenInputs['OfferWhereUniqueInput'] | null; // OfferWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['OfferOrderByInput'][] | null; // [OfferOrderByInput!]
+      where?: NexusGenInputs['OfferWhereInput'] | null; // OfferWhereInput
     }
     orders: { // args
       after?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput

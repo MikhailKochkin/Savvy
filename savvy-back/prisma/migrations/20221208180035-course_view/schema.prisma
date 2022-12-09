@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -169,7 +169,6 @@ model CoursePage {
   updatedAt         DateTime          @updatedAt
   price             Int?
   currency          String?           @default("ruble")
-  countries         String[]
   discountPrice     Int?
   numInCareerTrack  Int?
   published         Boolean?          @default(false)

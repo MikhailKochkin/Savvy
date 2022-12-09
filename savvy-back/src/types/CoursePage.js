@@ -57,6 +57,8 @@ const CoursePage = objectType({
     t.model.installments();
     t.model.tags();
     t.model.header();
+    t.model.view();
+    t.model.countries();
     t.model.subheader();
     t.model.nextStart();
     t.model.uptodateAt();

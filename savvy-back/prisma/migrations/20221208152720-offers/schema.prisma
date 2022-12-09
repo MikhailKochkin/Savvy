@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -163,13 +163,11 @@ model CoursePage {
   title             String
   description       String
   image             String
-  view              PageView          @default(COURSE)              
   courseType        CourseType?
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   price             Int?
   currency          String?           @default("ruble")
-  countries         String[]
   discountPrice     Int?
   numInCareerTrack  Int?
   published         Boolean?          @default(false)
@@ -1104,11 +1102,6 @@ enum Status {
   AUTHOR
   SAVVY_AUTHOR
   HR
-}
-
-enum PageView {
-  COURSE
-  CONF
 }
 
 enum TaskType {

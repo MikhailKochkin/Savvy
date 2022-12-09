@@ -84,6 +84,25 @@ const Note = objectType({
   },
 });
 
+const Offer = objectType({
+  name: "Offer",
+  definition(t) {
+    t.model.id();
+    t.model.text();
+    t.model.header();
+    t.model.type();
+    t.model.courseId();
+    t.model.price();
+    t.model.discountPrice();
+    t.model.userId();
+    t.model.lessonId();
+    t.model.lesson();
+    t.model.user();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 const TextEditor = objectType({
   name: "TextEditor",
   definition(t) {
@@ -347,4 +366,5 @@ module.exports = {
   TestPractice,
   MiniForum,
   TeamQuest,
+  Offer,
 };

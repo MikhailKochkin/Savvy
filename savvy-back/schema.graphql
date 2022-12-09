@@ -485,6 +485,7 @@ type CoursePage {
   banner: String
   batch: String
   company: Company
+  countries: [String!]!
   courseType: CourseType
   createdAt: DateTime!
   currency: String
@@ -519,6 +520,7 @@ type CoursePage {
   uptodateAt: DateTime
   user: User!
   video: String
+  view: PageView!
   weeks: Int
 }
 
@@ -533,6 +535,7 @@ input CoursePageOrderByInput {
   banner: SortOrder
   batch: SortOrder
   companyId: SortOrder
+  countries: SortOrder
   courseType: SortOrder
   createdAt: SortOrder
   currency: SortOrder
@@ -567,6 +570,7 @@ input CoursePageOrderByInput {
   uptodateAt: SortOrder
   userId: SortOrder
   video: SortOrder
+  view: SortOrder
   weeks: SortOrder
 }
 
@@ -583,6 +587,7 @@ input CoursePageWhereInput {
   certificates: CertificateListRelationFilter
   company: CompanyWhereInput
   companyId: StringNullableFilter
+  countries: StringNullableListFilter
   courseType: EnumCourseTypeNullableFilter
   createdAt: DateTimeFilter
   currency: StringNullableFilter
@@ -630,6 +635,7 @@ input CoursePageWhereInput {
   user: UserWhereInput
   userId: StringFilter
   video: StringNullableFilter
+  view: EnumPageViewFilter
   visits: CourseVisitListRelationFilter
   weeks: IntNullableFilter
 }
@@ -848,6 +854,13 @@ input EnumLevelNullableFilter {
   in: [Level!]
   not: NestedEnumLevelNullableFilter
   notIn: [Level!]
+}
+
+input EnumPageViewFilter {
+  equals: PageView
+  in: [PageView!]
+  not: NestedEnumPageViewFilter
+  notIn: [PageView!]
 }
 
 input EnumPermissionNullableListFilter {
@@ -1180,6 +1193,7 @@ type Lesson {
   newTests(after: NewTestWhereUniqueInput, before: NewTestWhereUniqueInput, first: Int, last: Int): [NewTest!]!
   notes(after: NoteWhereUniqueInput, before: NoteWhereUniqueInput, first: Int, last: Int): [Note!]!
   number: Int
+  offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int): [Offer!]!
   open: Boolean
   problemResults(after: ProblemResultWhereUniqueInput, before: ProblemResultWhereUniqueInput, first: Int, last: Int): [ProblemResult!]!
   problems(after: ProblemWhereUniqueInput, before: ProblemWhereUniqueInput, first: Int, last: Int): [Problem!]!
@@ -1302,6 +1316,7 @@ input LessonWhereInput {
   NOT: [LessonWhereInput!]
   notes: NoteListRelationFilter
   number: IntNullableFilter
+  offers: OfferListRelationFilter
   open: BoolNullableFilter
   OR: [LessonWhereInput!]
   problemResults: ProblemResultListRelationFilter
@@ -1425,6 +1440,7 @@ input MiniForumWhereUniqueInput {
 
 type Mutation {
   addToTeam(id: String): User
+  advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
   createBusinessClient(comment: String, communication_medium: String, coursePageId: String, email: String, name: String, number: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
@@ -1448,6 +1464,7 @@ type Mutation {
   createMiniStatement(miniforumId: String, text: String): Statement
   createNewTest(answers: [String], comments: [String], correct: [Boolean], ifRight: String, ifWrong: String, lessonId: String, question: [String], type: String): NewTest
   createNote(lessonId: String, text: String): Note
+  createOffer(courseId: String, discountPrice: Int, header: String, lessonId: String, price: Int, text: String, type: String): Offer
   createOrder(comment: String, coursePageId: String, price: Int, promocode: String, userId: String): PaymentInfo
   createPost(image: String, summary: String, text: String, title: String): Post
   createPrivateOrder(coursePageId: String, promocode: String, userId: String): PaymentInfo
@@ -1569,6 +1586,13 @@ input NestedEnumLevelNullableFilter {
   in: [Level!]
   not: NestedEnumLevelNullableFilter
   notIn: [Level!]
+}
+
+input NestedEnumPageViewFilter {
+  equals: PageView
+  in: [PageView!]
+  not: NestedEnumPageViewFilter
+  notIn: [PageView!]
 }
 
 input NestedFloatNullableFilter {
@@ -1748,6 +1772,65 @@ input NoteWhereUniqueInput {
   id: String
 }
 
+type Offer {
+  courseId: String
+  createdAt: DateTime!
+  discountPrice: Int
+  header: String!
+  id: String!
+  lesson: Lesson
+  lessonId: String
+  price: Int
+  text: String!
+  type: String
+  updatedAt: DateTime!
+  user: User
+  userId: String
+}
+
+input OfferListRelationFilter {
+  every: OfferWhereInput
+  none: OfferWhereInput
+  some: OfferWhereInput
+}
+
+input OfferOrderByInput {
+  courseId: SortOrder
+  createdAt: SortOrder
+  discountPrice: SortOrder
+  header: SortOrder
+  id: SortOrder
+  lessonId: SortOrder
+  price: SortOrder
+  text: SortOrder
+  type: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
+}
+
+input OfferWhereInput {
+  AND: [OfferWhereInput!]
+  courseId: StringNullableFilter
+  createdAt: DateTimeFilter
+  discountPrice: IntNullableFilter
+  header: StringFilter
+  id: StringFilter
+  lesson: LessonWhereInput
+  lessonId: StringNullableFilter
+  NOT: [OfferWhereInput!]
+  OR: [OfferWhereInput!]
+  price: IntNullableFilter
+  text: StringFilter
+  type: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+}
+
+input OfferWhereUniqueInput {
+  id: String
+}
+
 type Order {
   comment: String
   coursePage: CoursePage!
@@ -1812,6 +1895,11 @@ input OrderWhereInput {
 
 input OrderWhereUniqueInput {
   id: String
+}
+
+enum PageView {
+  CONF
+  COURSE
 }
 
 type PaymentInfo {
@@ -2197,6 +2285,8 @@ type Query {
   me: User
   miniForums(after: MiniForumWhereUniqueInput, before: MiniForumWhereUniqueInput, first: Int, last: Int, where: MiniForumWhereInput): [MiniForum!]!
   newTest(where: NewTestWhereUniqueInput!): NewTest
+  offer(where: OfferWhereUniqueInput!): Offer
+  offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int, orderBy: [OfferOrderByInput!], where: OfferWhereInput): [Offer!]!
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int, orderBy: [OrderOrderByInput!], where: OrderWhereInput): [Order!]!
   post(where: PostWhereUniqueInput!): Post
   posts(after: PostWhereUniqueInput, before: PostWhereUniqueInput, first: Int, last: Int, orderBy: [PostOrderByInput!], where: PostWhereInput): [Post!]!
@@ -3270,6 +3360,7 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   notes: NoteListRelationFilter
   number: StringNullableFilter
+  offers: OfferListRelationFilter
   OR: [UserWhereInput!]
   orders: OrderListRelationFilter
   password: StringFilter

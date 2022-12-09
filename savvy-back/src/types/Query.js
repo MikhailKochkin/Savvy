@@ -26,6 +26,8 @@ const Query = queryType({
     t.crud.coursePage({ ordering: true, filtering: true });
     t.crud.program({ ordering: true, filtering: true });
     t.crud.programs({ ordering: true, filtering: true });
+    t.crud.offer({ ordering: true, filtering: true });
+    t.crud.offers({ ordering: true, filtering: true });
     t.crud.courseVisits({ ordering: true, filtering: true });
     t.crud.quizzes({ ordering: true, filtering: true });
     t.crud.courseVisit({ filtering: true });
