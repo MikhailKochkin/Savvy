@@ -176,14 +176,6 @@ const Form = (props) => {
 
             console.log(res.data.createCommunityMember.url);
             location.href = res.data.createCommunityMember.url;
-            //   Router.push({
-            //     pathname: "/hello",
-            //     query: {
-            //       name: name + " " + surname,
-            //       email: email,
-            //       number: number,
-            //     },
-            //   });
           }}
         >
           {loading ? "⚙️ Готовим платеж ... " : "Вступить в сообщество"}

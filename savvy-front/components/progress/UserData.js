@@ -24,9 +24,7 @@ const UserData = (props) => {
   const { d } = props;
   let all_results = [];
   d.lessonResults.map((lr) => all_results.push(lr.lesson.coursePage.title));
-  console.log("all_results", all_results);
   let visited_courses = [...new Set(all_results)];
-  console.log("visited_courses", visited_courses);
 
   return (
     <Styles>

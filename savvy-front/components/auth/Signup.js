@@ -276,6 +276,7 @@ const Signup = (props) => {
             e.preventDefault();
             if (country == "") {
               alert("Choose your country please");
+              return;
             }
             if (!isFamiliar) {
               alert("Не забыли про согласие на обработку персональных данных?");

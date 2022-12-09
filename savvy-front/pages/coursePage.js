@@ -1,6 +1,5 @@
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import NewCoursePage from "../components/course/NewCoursePage";
-import { useUser } from "../components/User";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
@@ -14,8 +13,6 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const CoursePagePage = (props) => {
-  const me = useUser();
-
   return <NewCoursePage id={props.query.id} />;
 };
 

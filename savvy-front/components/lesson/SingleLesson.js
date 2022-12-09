@@ -54,6 +54,21 @@ const SINGLE_LESSON_QUERY = gql`
         successText
         failureText
       }
+      offers {
+        id
+        header
+        text
+        type
+        courseId
+        price
+        discountPrice
+        user {
+          id
+        }
+        lesson {
+          id
+        }
+      }
       teamQuests {
         id
         introduction

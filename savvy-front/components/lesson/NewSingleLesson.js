@@ -119,6 +119,21 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         }
         createdAt
       }
+      offers {
+        id
+        header
+        text
+        type
+        courseId
+        price
+        discountPrice
+        user {
+          id
+        }
+        lesson {
+          id
+        }
+      }
       constructions {
         id
         name

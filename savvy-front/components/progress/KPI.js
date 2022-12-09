@@ -7,7 +7,7 @@ import UserData from "./UserData";
 
 const USERS_QUERY = gql`
   query USERS_QUERY {
-    users {
+    users(where: { updatedAt: { gte: "2022-11-15T15:10:10.734Z" } }) {
       id
       name
       surname
@@ -83,6 +83,8 @@ const KPI = (props) => {
     return date;
   };
 
+  // let six_months_ago = subtractDays(180).toISOString();
+
   const {
     loading: loading3,
     error: error3,
@@ -139,7 +141,7 @@ const KPI = (props) => {
   let daily_active_users = weekly_active_users.filter(
     (u) =>
       u.lessonResults.filter(
-        (lr) => new Date(lr.updatedAt).getTime() > subtractDays(1)
+        (lr) => new Date(moment(lr.updatedAt)).getTime() > subtractDays(1)
       ).length > 0
   );
 
@@ -228,7 +230,7 @@ const KPI = (props) => {
       )}
       <Row>
         <div className="description">
-          # Fresh Students: bought a course in the last 6 months (<b>Delight</b>
+          # Fresh Students: bought a course in the last 2 months (<b>Delight</b>
           )
         </div>
         <div className="data">{fresh_students.length}</div>
@@ -328,14 +330,7 @@ const KPI = (props) => {
                 : 1
             )
             .map((d) => (
-              <li>
-                {d.name} {d.surname} {d.country} –
-                {moment(
-                  d.lessonResults.filter(
-                    (lr) => new Date(lr.updatedAt).getTime() > subtractDays(1)
-                  )[0].updatedAt
-                ).format("DD.MM.YY HH:mm:ss")}
-              </li>
+              <UserData d={d} />
             ))}
         </div>
       )}

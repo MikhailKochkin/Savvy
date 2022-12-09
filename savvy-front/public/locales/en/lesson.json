@@ -106,5 +106,10 @@
   "memorize_template": "Help students memorize new material",
   "task_for": "The task for",
   "lesson_has_bonus": "Does this lesson have a bonus?",
-  "required_points": "How many points are required to get the bonus?"
+  "required_points": "How many points are required to get the bonus?",
+  "buy_at_discount": "Buy at discount",
+  "time_left": "Time left",
+  "hour_short": "h",
+  "minute_short": "min",
+  "second_short": "sec"
 }

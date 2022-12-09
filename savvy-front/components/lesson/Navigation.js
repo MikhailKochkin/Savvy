@@ -139,12 +139,11 @@ const Right = styled.div`
   justify-content: center;
   button {
     margin: 0 10px;
-background: #fcc419;
+    background: #fcc419;
     color: #000;
     border: 1px solid #fcc419;
     border-radius: 5px;
-    width: 120px;
-    min-width:
+    min-width: 130px;
     font-family: Montserrat;
     font-size: 1.2rem;
     font-weight: 400;
@@ -155,15 +154,14 @@ background: #fcc419;
     z-index: 4;
     transition: ease-in 0.2s;
     a {
-          font-family: Montserrat;
-              color: #000;
-
-
+      font-family: Montserrat;
+      color: #000;
     }
     &:hover {
       background-color: #dea702;
       border: 1px solid #dea702;
-    }  }
+    }
+  }
 `;
 
 const Navigation = (props) => {

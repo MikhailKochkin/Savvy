@@ -266,6 +266,7 @@ const WideSignUp = (props) => {
             e.preventDefault();
             if (country == "") {
               alert("Choose country");
+              return;
             }
             if (!isFamiliar) {
               alert("Не забыли про согласие на обработку персональных данных?");

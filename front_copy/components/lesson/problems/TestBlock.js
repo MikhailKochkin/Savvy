@@ -140,10 +140,7 @@ const TestBlock = (props) => {
         🔼
       </Header>
       <div className="body">
-        <Section
-          className="section"
-          // fixed={props.fixed}
-        >
+        <Section className="section">
           <div>Основное задание</div>
           <select defaultValue={type} onChange={(e) => setType(e.target.value)}>
             <option>Выберите тип</option>

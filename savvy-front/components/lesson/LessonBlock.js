@@ -12,6 +12,9 @@ import SingleQuiz from "./quizes/SingleQuiz";
 import CreateTestBlock from "./testblocks/CreateTestBlock";
 import TestPractice from "./testblocks/TB";
 
+import CreateOffer from "./offers/CreateOffer";
+import BannerOffer from "./offers/BannerOffer";
+
 import CreateTeamQuest from "./teamQuests/CreateTeamQuest";
 import TeamQuest from "./teamQuests/TeamQuest";
 
@@ -156,6 +159,8 @@ const LessonBlock = (props) => {
     d = lesson.shots.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "teamquest" && !el.data) {
     d = lesson.teamQuests.find((n) => n.id == el.id);
+  } else if (el.type && el.type.toLowerCase() == "offer" && !el.data) {
+    d = lesson.offers.find((n) => n.id == el.id);
   } else if (el.data) {
     d = el.data;
   } else {
@@ -167,7 +172,6 @@ const LessonBlock = (props) => {
 
   useEffect(() => {
     setData(d);
-    console.log("type");
     if (props.updateTemplate) setType(props.el_type ? props.el_type : "");
   });
 
@@ -178,7 +182,7 @@ const LessonBlock = (props) => {
 
   const addBlock = (type) => {
     setType(type);
-    console.log("type", type);
+    // console.log("type", type);
   };
 
   const getResults = (el) => {
@@ -190,7 +194,6 @@ const LessonBlock = (props) => {
   };
 
   const getOldResult = (name, value, i) => {
-    console.log("res", name, value, index);
     setType(name);
     setIdNum(value);
     props.addToLesson(value, index, name);
@@ -270,6 +273,26 @@ const LessonBlock = (props) => {
         index,
         "Chat",
         res.data.updateChat
+      );
+    } else if (res.data.createOffer) {
+      setIsAdded(true);
+      setType("Offer");
+      setIdNum(res.data.createOffer.id);
+      props.addToLesson(
+        res.data.createOffer.id,
+        index,
+        "Offer",
+        res.data.createOffer
+      );
+    } else if (res.data.updateOffer) {
+      setIsAdded(true);
+      setType("Offer");
+      setIdNum(res.data.updateOffer.id);
+      props.addToLesson(
+        res.data.updateOffer.id,
+        index,
+        "Offer",
+        res.data.updateOffer
       );
     } else if (res.data.createTextEditor) {
       setType("TextEditor");
@@ -426,6 +449,7 @@ const LessonBlock = (props) => {
             <ButtonTwo onClick={(e) => addBlock("TeamQuest")}>
               Team Quest
             </ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Offer")}>Offer</ButtonTwo>
           </Menu>
         )}
         {type.toLowerCase() == "note" && (
@@ -584,6 +608,33 @@ const LessonBlock = (props) => {
           </>
         )}
 
+        {type.toLowerCase() == "offer" && (
+          <>
+            {!isSaved && d == null && (
+              <CreateOffer
+                lessonId={lesson.id}
+                getResult={getResult}
+                isSaved={isSaved}
+              />
+            )}
+            {(isSaved || d != null) && data && data.__typename == "Offer" && (
+              <BannerOffer
+                key={data.id}
+                id={data.id}
+                offer={data}
+                me={me}
+                coursePageId={lesson.coursePage.id}
+                lessonId={lesson.id}
+                user={data.user.id}
+                story={false}
+                getResults={getResults}
+                passUpdated={passUpdated}
+                getResult={getResult}
+              />
+            )}
+          </>
+        )}
+
         {type.toLowerCase() == "testpractice" && (
           <>
             {!isSaved && d == null && (
@@ -614,7 +665,6 @@ const LessonBlock = (props) => {
 
         {type.toLowerCase() == "teamquest" && (
           <>
-            {console.log("dd", !isSaved, d == null)}
             {!isSaved && d == null && (
               <CreateTeamQuest
                 lessonId={lesson.id}
@@ -623,19 +673,21 @@ const LessonBlock = (props) => {
                 lesson={lesson}
               />
             )}
-            {(isSaved || d != null) && data && data.__typename == "TeamQuest" && (
-              <TeamQuest
-                key={data.id}
-                lessonID={lesson.id}
-                // getResults={getResults}
-                me={me}
-                teamQuest={data}
-                quizes={lesson.quizes}
-                tests={lesson.newTests}
-                lesson={lesson}
-                story={true}
-              />
-            )}
+            {(isSaved || d != null) &&
+              data &&
+              data.__typename == "TeamQuest" && (
+                <TeamQuest
+                  key={data.id}
+                  lessonID={lesson.id}
+                  // getResults={getResults}
+                  me={me}
+                  teamQuest={data}
+                  quizes={lesson.quizes}
+                  tests={lesson.newTests}
+                  lesson={lesson}
+                  story={true}
+                />
+              )}
           </>
         )}
 
@@ -673,23 +725,25 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
               />
             )}
-            {(isSaved || d != null) && data && data.__typename == "TextEditor" && (
-              <>
-                <TextEditor
-                  key={data.id}
-                  id={data.id}
-                  text={data.text}
-                  complexity={data.complexity}
-                  textEditor={data}
-                  me={me}
-                  story={false}
-                  lessonID={lesson.id}
-                  getResults={getResults}
-                  getResult={getResult}
-                  passUpdated={passUpdated}
-                />
-              </>
-            )}
+            {(isSaved || d != null) &&
+              data &&
+              data.__typename == "TextEditor" && (
+                <>
+                  <TextEditor
+                    key={data.id}
+                    id={data.id}
+                    text={data.text}
+                    complexity={data.complexity}
+                    textEditor={data}
+                    me={me}
+                    story={false}
+                    lessonID={lesson.id}
+                    getResults={getResults}
+                    getResult={getResult}
+                    passUpdated={passUpdated}
+                  />
+                </>
+              )}
           </>
         )}
         {type.toLowerCase() == "construction" && (

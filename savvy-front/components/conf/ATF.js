@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ReactTooltip from "react-tooltip";
 import { useMutation, gql } from "@apollo/client";
+import moment from "moment";
+import renderHTML from "react-render-html";
+import smoothscroll from "smoothscroll-polyfill";
+import { useRouter } from "next/router";
 
 import * as EmailValidator from "email-validator";
 
@@ -14,18 +18,11 @@ const CREATE_CONF_USER_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  min-height: 100vh;
+  min-height: 110vh;
   width: 100vw;
-  background: radial-gradient(
-    ellipse at bottom,
-    #1b2735 0%,
-    #090a0f 100%
-  ); /* opacity: 1;
-  background-image: radial-gradient(
-    #414141 0.8500000000000001px,
-    #000000 0.8500000000000001px
-  );
-  background-size: 17px 17px;*/
+  background: #090a10;
+  background: linear-gradient(#1b2735 0%, #090a0f 50%, #090a0f 100%);
+
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -348,40 +345,35 @@ const Info = styled.div`
       margin-right: 20px;
     }
     img {
-      width: 55px;
-      height: 55px;
+      width: 65px;
+      height: 65px;
       border-radius: 50px;
       border: 4px solid #999999;
       cursor: pointer;
+      object-fit: cover;
     }
-    #image1 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 4px solid #88ffea;
+    div:nth-child(1) {
+      img {
+        transition: all 0.5s ease-out;
+        &:hover {
+          border: 4px solid #1a75ff;
+        }
       }
     }
-    #image2 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 4px solid #ff4ecd;
+    div:nth-child(2) {
+      img {
+        transition: all 0.5s ease-out;
+        &:hover {
+          border: 4px solid #88ffea;
+        }
       }
     }
-    #image3 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 4px solid #1a75ff;
-      }
-    }
-    #image4 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 4px solid #88ffea;
-      }
-    }
-    #image5 {
-      transition: all 0.5s ease-out;
-      &:hover {
-        border: 4px solid #ff4ecd;
+    div:nth-child(3) {
+      img {
+        transition: all 0.5s ease-out;
+        &:hover {
+          border: 4px solid #ff4ecd;
+        }
       }
     }
   }
@@ -389,13 +381,13 @@ const Info = styled.div`
     h1 {
       font-size: 4.4rem;
       width: 70%;
-      line-height: 1.2;
+      line-height: 1.1;
     }
     h2 {
       font-size: 2rem;
       line-height: 1.4;
 
-      width: 100%;
+      width: 90%;
     }
     .photos {
       flex-wrap: wrap;
@@ -448,8 +440,8 @@ const Form = styled.div`
   );
   border-radius: 12px;
   padding: 4px;
-  margin-bottom: 20px;
-  width: 520px;
+  margin: 30px 0;
+  width: 320px;
   height: 60px;
   display: flex;
   flex-direction: row;
@@ -474,7 +466,7 @@ const Form = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    input {
+    /* input {
       width: 65%;
       background: transparent;
       outline: none;
@@ -484,21 +476,21 @@ const Form = styled.div`
       font-size: 2rem;
       border: none;
       ::placeholder {
-        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        Chrome, Firefox, Opera, Safari 10.1+
         color: #8b8b8b;
-        opacity: 1; /* Firefox */
+        opacity: 1; Firefox
       }
 
       :-ms-input-placeholder {
-        /* Internet Explorer 10-11 */
+        Internet Explorer 10-11
         color: #8b8b8b;
       }
 
       ::-ms-input-placeholder {
-        /* Microsoft Edge */
+        Microsoft Edge
         color: #8b8b8b;
       }
-    }
+    } */
     .button {
       background: #fff;
       color: black;
@@ -588,11 +580,27 @@ const Footer = styled.div`
 `;
 
 const Landing = (props) => {
-  const [email, setEmail] = useState("");
+  const { conf } = props;
+  const router = useRouter();
 
   const [createConfUser, { data, loading, error }] = useMutation(
     CREATE_CONF_USER_MUTATION
   );
+
+  useEffect(() => {
+    // kick off the polyfill!
+    smoothscroll.polyfill();
+  });
+
+  const slide = () => {
+    var my_element = document.getElementById("signup_form");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+  moment.locale(router.locale);
 
   return (
     <Styles>
@@ -609,78 +617,50 @@ const Landing = (props) => {
       </div>
       <Window>
         <Logo>
-          <div>Бесплатная онлайн-конференция BeSavvy</div>
+          <div>Онлайн-конференция BeSavvy Lawyer</div>
         </Logo>
         <Main>
           <Info>
-            <h1>6 ключей к карьере юриста</h1>
+            <h1>
+              {renderHTML(conf.header[0])}
+              {/* {renderHTML(conf.header)} */}
+              {/* 6 ключей к карьере юриста */}
+            </h1>
             <h2>
-              6 спикеров расскажут свои истории о работе и росте в профессии.
-              Выберите путь, который максимально подходит именно вам.
+              {renderHTML(conf.subheader[0])}
+              {/* 6 спикеров расскажут свои истории о работе и росте в
+              профессии. Выберите путь, который максимально подходит именно вам. */}
             </h2>
             <Details>
-              <div className="time">6 октября, 19:00 по Москве</div>
+              <div className="time">
+                {/* 6 октября, 19:00{" "} */}
+                {moment(conf.nextStart)
+                  .utcOffset(0, false)
+                  .format("Do MMMM, HH:mm")}{" "}
+                {conf.countries[0].toLowerCase() == "kz" ? "UTC +6" : "UTC +3"}
+              </div>
               <div className="format">Онлайн</div>
             </Details>
             <div className="photos">
-              <div className="border1">
-                <img
-                  id="image1"
-                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%9C%D0%B8%D1%88%D0%B0_1.png"
-                  data-tip="Михаил Кочкин из BeSavvy"
-                />
-              </div>
-              <div className="border1">
-                <img
-                  id="image2"
-                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/photo_2021-05-27_12.48_2.png"
-                  data-tip="Ксения Даньшина из CMS"
-                />
-              </div>
-              <div className="border1">
-                <img
-                  id="image3"
-                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/photo_2021-05-27_12.47_2.png"
-                  data-tip="Булат Кулахметов из Зарцын и партнеры"
-                />
-              </div>
-              <div className="border1">
-                <img
-                  id="image4"
-                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625401367/savvy/%D0%94%D0%B5%D0%BD%D0%B8_4_b3fqg4.png"
-                  data-tip="Дени Мурдалов из А2"
-                />
-              </div>
-              <div className="border1">
-                <img
-                  id="image5"
-                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1625647696/%D0%AE%D0%BB%D1%8F3.png"
-                  data-tip="Юлия Баймакова из ЕПАМ"
-                />
-              </div>
-              <div className="border1">
-                <img
-                  id="image3"
-                  src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1626079215/%D0%9B%D0%B5%D0%B2_2.png"
-                  data-tip="Лев Толстопятов из Clifford Chance"
-                />
-              </div>
-              <div className="border1">
-                {/* <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1595848224/%D0%9B%D0%A5_1.png" /> */}
-              </div>
-              {/* <div className="border1">
-                  <img src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1595848224/%D0%9B%D0%A5_1.png" />
-                </div> */}
+              {conf.authors.map((auth) => (
+                <div className="border1">
+                  <img
+                    src={auth.image}
+                    data-tip={`${auth.name} ${auth.surname}, ${auth.work}`}
+                  />
+                </div>
+              ))}
               <ReactTooltip place="top" type="light" effect="float" />
             </div>
           </Info>
           <Form>
-            <div className="black">
-              <input
+            <div className="black" onClick={(e) => slide()}>
+              Участвовать
+              {/* <input
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
-              />{" "}
-              <button
+              />{" "} */}
+              {/* <button
                 className="button"
                 onClick={async (e) => {
                   e.preventDefault();
@@ -698,13 +678,13 @@ const Landing = (props) => {
                 }}
               >
                 {loading ? "Сохраняем.." : "Получить билет"}
-              </button>
+              </button> */}
             </div>
           </Form>
           {/* <MainButton onClick={() => signIn()}>
             <div className="black">Получить билет</div>
           </MainButton> */}
-          <Button
+          {/* <Button
             onClick={async (e) => {
               e.preventDefault();
               if (EmailValidator.validate(email)) {
@@ -721,20 +701,20 @@ const Landing = (props) => {
             }}
           >
             {loading ? "Сохраняем.." : "Получить билет"}
-          </Button>
-          <div id="FOMO">
+          </Button> */}
+          {/* <div id="FOMO">
             Сразу поделимся еще 5 письмами о юридической карьере
-          </div>
+          </div> */}
         </Main>
       </Window>
-      <Footer>
+      {/* <Footer>
         <div id="name">ООО "БиСэвви"</div>
         <div id="contact">
           <a href="mailto:anastasia@besavvy.app">
             По всем вопросам и предложениям
           </a>
         </div>
-      </Footer>
+      </Footer> */}
     </Styles>
   );
 };

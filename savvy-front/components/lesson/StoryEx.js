@@ -5,7 +5,7 @@ import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Note from "./notes/Note";
-// import Offer from "./Offer";
+import BannerOffer from "./offers/BannerOffer";
 import Shots from "./shots/Shots";
 import SingleTest from "./tests/SingleTest";
 import Chat from "./chat/Chat";
@@ -121,12 +121,14 @@ const StoryEx = (props) => {
         )
       : null;
   let components = [];
+
   tasks.map((task) => {
     let el;
     let item;
     if (task.type.toLowerCase() === "note") {
       el = lesson.notes.find((note) => note.id === task.id);
       item = (
+        // <BannerOffer me={me} coursePageId={coursePageID} />
         <Note
           text={el.text}
           me={me}
@@ -139,6 +141,22 @@ const StoryEx = (props) => {
           clicks={el.link_clicks}
           complexity={el.complexity}
           miniforum={lesson.miniforums.find((m) => m.value == el.id)}
+        />
+      );
+      components.push(item);
+    } else if (task.type.toLowerCase() === "offer") {
+      el = lesson.offers.find((t) => t.id === task.id);
+      item = (
+        <BannerOffer
+          key={el.id}
+          id={el.id}
+          offer={el}
+          me={me}
+          coursePageId={lesson.coursePage.id}
+          lessonId={lesson.id}
+          user={el.user.id}
+          story={false}
+          getResults={getResults}
         />
       );
       components.push(item);

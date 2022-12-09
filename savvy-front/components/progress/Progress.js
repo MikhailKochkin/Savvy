@@ -190,6 +190,7 @@ const COURSEPAGE_QUERY = gql`
 
 const Progress = (props) => {
   const [course, setCourse] = useState("cjtreu3md00fp0897ga13aktp");
+  const [open, setOpen] = useState(false);
 
   // const { loading, error, data } = useQuery(COURSEPAGE_QUERY, {
   //   variables: { id: option },
@@ -232,7 +233,8 @@ const Progress = (props) => {
     <Styles>
       <Container>
         <h3>KPI</h3>
-        <KPI coursePages={coursePages} />
+        <button onClick={(e) => setOpen(!open)}>Open</button>
+        {open && <KPI coursePages={coursePages} />}
         <h3>Courses rating</h3>
         <div>
           <ol>
