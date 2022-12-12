@@ -8,6 +8,9 @@ const Styles = styled.div`
     flex-basis: 50%;
     border-right: 1px solid #f4f2f2;
     padding: 1%;
+    h2 {
+      line-height: 1.4;
+    }
   }
   .others {
     flex-basis: 50%;
@@ -16,6 +19,16 @@ const Styles = styled.div`
   }
   .header {
     margin-bottom: 10px;
+  }
+  @media (max-width: 800px) {
+    flex-direction: column;
+    .my {
+      padding: 0;
+    }
+    .others {
+      padding: 0;
+    }
+    margin-left: 20px;
   }
 `;
 
@@ -36,7 +49,10 @@ const Result = (props) => {
     <Styles>
       {my && (
         <div className="my">
-          <div className="header">{props.text}</div>
+          <h2>
+            {" "}
+            <div className="header">{props.text}</div>
+          </h2>
           <div>
             Правильных ответов: <b>{my.correct}</b>
           </div>

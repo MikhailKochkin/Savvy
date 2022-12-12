@@ -672,46 +672,13 @@ const SingleTest = (props) => {
 
           {/* 6. Неправильный ответ. Спрашиваем, показать ли объяснение?*/}
 
-          {answerState == "wrong" && ifWrong && props.type !== "FORM" && (
-            <>
-              <div className="question_box">
-                <div className="question_text">{t("show_explainer")}</div>
-                <IconBlock>
-                  {author && author.image != null ? (
-                    <img className="icon" src={author.image} />
-                  ) : (
-                    <img className="icon" src="../../static/hipster.svg" />
-                  )}{" "}
-                  <div className="name">
-                    {author && author.name ? author.name : "BeSavvy"}
-                  </div>
-                </IconBlock>
-              </div>
-
-              <div className="answer">
-                <IconBlock>
-                  {/* <img className="icon" src="../../static/flash.svg" /> */}
-                  <div className="icon2">
-                    {me.surname
-                      ? `${me.name[0]}${me.surname[0]}`
-                      : `${me.name[0]}${me.name[1]}`}
-                  </div>
-                  <div className="name">{me.name}</div>
-                </IconBlock>{" "}
-                <OptionsGroup>
-                  <Option
-                    onClick={(e) => {
-                      setRevealExplainer(true);
-                      setHidden(false);
-                    }}
-                  >
-                    {t("yes")}
-                  </Option>
-                </OptionsGroup>
-              </div>
-              {hidden == false && (
+          {!props.challenge &&
+            answerState == "wrong" &&
+            ifWrong &&
+            props.type !== "FORM" && (
+              <>
                 <div className="question_box">
-                  <div className="question_text">{renderHTML(ifWrong)}</div>
+                  <div className="question_text">{t("show_explainer")}</div>
                   <IconBlock>
                     {author && author.image != null ? (
                       <img className="icon" src={author.image} />
@@ -723,13 +690,50 @@ const SingleTest = (props) => {
                     </div>
                   </IconBlock>
                 </div>
-              )}
-            </>
-          )}
+
+                <div className="answer">
+                  <IconBlock>
+                    {/* <img className="icon" src="../../static/flash.svg" /> */}
+                    <div className="icon2">
+                      {me.surname
+                        ? `${me.name[0]}${me.surname[0]}`
+                        : `${me.name[0]}${me.name[1]}`}
+                    </div>
+                    <div className="name">{me.name}</div>
+                  </IconBlock>{" "}
+                  <OptionsGroup>
+                    <Option
+                      onClick={(e) => {
+                        setRevealExplainer(true);
+                        setHidden(false);
+                      }}
+                    >
+                      {t("yes")}
+                    </Option>
+                  </OptionsGroup>
+                </div>
+                {hidden == false && (
+                  <div className="question_box">
+                    <div className="question_text">{renderHTML(ifWrong)}</div>
+                    <IconBlock>
+                      {author && author.image != null ? (
+                        <img className="icon" src={author.image} />
+                      ) : (
+                        <img className="icon" src="../../static/hipster.svg" />
+                      )}{" "}
+                      <div className="name">
+                        {author && author.name ? author.name : "BeSavvy"}
+                      </div>
+                    </IconBlock>
+                  </div>
+                )}
+              </>
+            )}
 
           {/* 7. Неправильный ответ. Спрашиваем показать ли правильный вариант?*/}
 
-          {answerState == "wrong" &&
+          {!props.challenge &&
+            answerState == "wrong" &&
             props.type !== "FORM" &&
             (revealExplainer == true || !ifWrong) && (
               <>

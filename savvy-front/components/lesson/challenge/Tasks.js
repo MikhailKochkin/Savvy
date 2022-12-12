@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Note from "../notes/Note";
 import SingleTest from "../tests/SingleTest";
 import SingleQuiz from "../quizes/SingleQuiz";
+
 import Final from "./Final";
 
 const Container = styled.div`
@@ -68,11 +69,19 @@ const Container = styled.div`
 const LessonPart = styled.div`
   display: flex;
   /* border: 1px solid #edefed; */
-  padding: 0.5% 2%;
+  /* padding: 0.5% 2%; */
   width: 100%;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border-radius: 2px;
   margin: 0 0 20px 0;
+  .circles {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
   a {
     padding-top: 2%;
     padding-left: 2%;
@@ -101,30 +110,50 @@ const LessonPart = styled.div`
 
 const Header = styled.div`
   border: 1px solid #edefed;
-  background: #1a2980;
-  color: white;
+  background: #d2ecfd;
+  border-radius: 30px;
+  color: #413c58;
   margin-top: 4%;
   border-bottom: 0;
-  width: 100%;
+  width: auto;
+  height: 50px;
   text-align: left;
   padding: 5px 2% 5px 2%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  #questions_num {
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right: 1px solid #413c58;
+  }
+
   @media (max-width: 800px) {
-    width: 100%;
+    width: 80%;
   }
 `;
 
 const Block = styled.div`
   /* border: 1px solid #edefed; */
-  padding: 0.5% 2%;
   color: black;
   width: 100%;
   padding-top: 4%;
   @media (max-width: 800px) {
     width: 100%;
   }
+`;
+
+const Circle = styled.div`
+  background: ${(props) => (props.correct == "true" ? "#72b205" : "#C8C8C8")};
+  /* border: ${(props) =>
+    props.active == "true" ? "1px solid #122961" : "7px solid s#fff"}; */
+  border-radius: 50%;
+  width: ${(props) => (props.active == "true" ? "21px" : "15px")};
+  height: ${(props) => (props.active == "true" ? "21px" : "15px")};
+  margin: 5px;
+  margin-top: 6px;
 `;
 
 function useInterval(callback, delay) {
@@ -150,6 +179,9 @@ function useInterval(callback, delay) {
 const Tasks = (props) => {
   const [tasks, setTasks] = useState(props.tasks);
   const [right, setRight] = useState(0);
+  const [answers, setAnswers] = useState(
+    new Array(props.tasks.length).fill(false)
+  );
   const [wrong, setWrong] = useState(0);
   const [time, setTime] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
@@ -172,6 +204,9 @@ const Tasks = (props) => {
         setActiveStep(activeStep + 1);
       }, 1000);
     } else if (data[0]) {
+      let new_answers = [...answers];
+      new_answers[activeStep] = true;
+      setAnswers([...new_answers]);
       setRight(right + 1);
       setTimeout(function () {
         setActiveStep(activeStep + 1);
@@ -182,16 +217,21 @@ const Tasks = (props) => {
   let item;
   let task = tasks[activeStep];
   if (tasks.length === activeStep) {
+    let offer = props.lesson.offers[0];
     item = (
-      <Final
-        completed={props.completed}
-        results={props.results}
-        wrong={wrong}
-        right={right}
-        time={time}
-        me={props.me}
-        lesson={props.lesson.id}
-      />
+      <>
+        <Final
+          completed={props.completed}
+          results={props.results}
+          wrong={wrong}
+          right={right}
+          time={time}
+          me={props.me}
+          lessonId={props.lesson.id}
+          lesson={props.lesson}
+          offer={offer}
+        />
+      </>
     );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "Note") {
     item = <Note me={props.me} story={true} note={tasks[0]} />;
@@ -215,6 +255,7 @@ const Tasks = (props) => {
         exam={false}
         getData={update}
         getResults={getResults}
+        challenge={true}
       />
     );
   } else if (tasks.length > 0 && tasks[activeStep].__typename === "Quiz") {
@@ -236,6 +277,7 @@ const Tasks = (props) => {
         exam={false}
         getData={update}
         getResults={getResults}
+        challenge={true}
       />
     );
   }
@@ -244,10 +286,10 @@ const Tasks = (props) => {
     <Container>
       <LessonPart>
         <Header>
-          <div>
+          <div id="questions_num">
             {activeStep <= tasks.length - 1
-              ? `Вопрос ${activeStep + 1} из ${tasks.length}`
-              : `Результат:`}
+              ? `${activeStep + 1} из ${tasks.length}`
+              : `Результат: ${right} из ${tasks.length}`}
           </div>
           <div>
             {activeStep <= tasks.length - 1
@@ -257,6 +299,14 @@ const Tasks = (props) => {
               : null}
           </div>
         </Header>
+        <div className="circles">
+          {_.times(tasks.length, (i) => (
+            <Circle
+              active={i == activeStep ? "true" : "false"}
+              correct={answers[i] ? "true" : "false"}
+            ></Circle>
+          ))}
+        </div>
         <Block>{item}</Block>
       </LessonPart>
     </Container>

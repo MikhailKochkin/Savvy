@@ -471,90 +471,8 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Contact>
-          {props.coursePage.courseType == "FORMONEY" && (
-            <>
-              {installments && (
-                <PriceBox>
-                  <div>
-                    {installments}{" "}
-                    {getNoun(installments, "платёж", "платежа", "платежей")} по
-                  </div>
-                  {installments && <div className="price_small">{price} ₽</div>}
-                </PriceBox>
-              )}
-              {!installments && !props.coursePage.discountPrice && (
-                <div className="price">
-                  {price} {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
-                </div>
-              )}
-              {!installments && props.coursePage.discountPrice && (
-                <div className="price">
-                  <div>
-                    {props.coursePage.discountPrice}{" "}
-                    <span className="discount">{price}</span>{" "}
-                    {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
-                  </div>
-                  <div className="bubble">
-                    -
-                    {100 -
-                      parseInt((props.coursePage.discountPrice / price) * 100)}
-                    %
-                  </div>
-                </div>
-              )}
-            </>
-          )}
           {props.coursePage.courseType == "PUBLIC" && (
             <div className="price">{t("free")}</div>
-          )}
-
-          {props.coursePage.courseType == "FORMONEY" && (
-            <>
-              <ButtonOpen
-                id="coursePage_to_demolesson"
-                // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-                // target="_blank"
-
-                onClick={(e) => {
-                  e.preventDefault();
-                  Router.push({
-                    pathname: "/course",
-                    query: {
-                      id: coursePage.id,
-                      // type: "story",
-                    },
-                  });
-                }}
-              >
-                {t("start_open_lesson")}
-              </ButtonOpen>
-
-              <ButtonBuy
-                id="coursePage_buy_button"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  if (!me) {
-                    alert(`Set up an account on BeSavvy`);
-                    toggleModal();
-                  } else {
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: coursePage.id,
-                        price: props.coursePage.discountPrice
-                          ? props.coursePage.discountPrice
-                          : price,
-                        userId: me.id,
-                        promocode: promo,
-                      },
-                    });
-                    location.href = res.data.createOrder.url;
-                  }
-                }}
-              >
-                {installments && (loading_data ? `...` : t("buy_installments"))}
-                {!installments && (loading_data ? `...` : t("buy"))}
-              </ButtonBuy>
-            </>
           )}
 
           {props.coursePage.courseType == "PUBLIC" && (
@@ -586,7 +504,9 @@ const Action = (props) => {
           )}
 
           {props.coursePage.courseType !== "PUBLIC" && (
-            <div className="guarantee">{t("guarantee")}</div>
+            <div className="guarantee">
+              <b>{t("guarantee")}</b>
+            </div>
           )}
           <div className="details">
             {/* {installments && (
@@ -610,6 +530,93 @@ const Action = (props) => {
                   onChange={(e) => addPromo(e.target.value)}
                 />
               </div>
+            )}
+            {props.coursePage.courseType == "FORMONEY" && (
+              <>
+                {installments && (
+                  <PriceBox>
+                    <div>
+                      {installments}{" "}
+                      {getNoun(installments, "платёж", "платежа", "платежей")}{" "}
+                      по
+                    </div>
+                    {installments && (
+                      <div className="price_small">{price} ₽</div>
+                    )}
+                  </PriceBox>
+                )}
+                {!installments && !props.coursePage.discountPrice && (
+                  <div className="price">
+                    {price} {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
+                  </div>
+                )}
+                {!installments && props.coursePage.discountPrice && (
+                  <div className="price">
+                    <div>
+                      {props.coursePage.discountPrice}{" "}
+                      <span className="discount">{price}</span>{" "}
+                      {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
+                    </div>
+                    <div className="bubble">
+                      -
+                      {100 -
+                        parseInt(
+                          (props.coursePage.discountPrice / price) * 100
+                        )}
+                      %
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            {props.coursePage.courseType == "FORMONEY" && (
+              <>
+                <ButtonOpen
+                  id="coursePage_to_demolesson"
+                  // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
+                  // target="_blank"
+
+                  onClick={(e) => {
+                    e.preventDefault();
+                    Router.push({
+                      pathname: "/course",
+                      query: {
+                        id: coursePage.id,
+                        // type: "story",
+                      },
+                    });
+                  }}
+                >
+                  {t("start_open_lesson")}
+                </ButtonOpen>
+
+                <ButtonBuy
+                  id="coursePage_buy_button"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    if (!me) {
+                      alert(`Set up an account on BeSavvy`);
+                      toggleModal();
+                    } else {
+                      const res = await createOrder({
+                        variables: {
+                          coursePageId: coursePage.id,
+                          price: props.coursePage.discountPrice
+                            ? props.coursePage.discountPrice
+                            : price,
+                          userId: me.id,
+                          promocode: promo,
+                        },
+                      });
+                      location.href = res.data.createOrder.url;
+                    }
+                  }}
+                >
+                  {installments &&
+                    (loading_data ? `...` : t("buy_installments"))}
+                  {!installments && (loading_data ? `...` : t("buy"))}
+                </ButtonBuy>
+              </>
             )}
           </div>
           {props.coursePage.courseType !== "PUBLIC" && (

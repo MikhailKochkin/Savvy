@@ -13,6 +13,8 @@ import Tasks from "./Tasks";
 import PleaseSignIn from "../../auth/PleaseSignIn";
 import { useUser } from "../../User";
 import Reload from "../Reload";
+import Loading from "../../Loading";
+import Navigation from "../Navigation";
 
 const useStyles = makeStyles({
   button: {
@@ -36,6 +38,7 @@ const SINGLE_LESSON_QUERY = gql`
       text
       name
       open
+      structure
       challenge_num
       number
       type
@@ -50,6 +53,21 @@ const SINGLE_LESSON_QUERY = gql`
           id
         }
       }
+      offers {
+        id
+        header
+        text
+        type
+        courseId
+        price
+        discountPrice
+        user {
+          id
+        }
+        lesson {
+          id
+        }
+      }
       challengeResults {
         id
         student {
@@ -61,27 +79,30 @@ const SINGLE_LESSON_QUERY = gql`
         wrong
         time
       }
-      testResults {
-        id
-        student {
-          id
-        }
-        testID
-        answer
-        attempts
-      }
-      quizResults {
-        id
-        student {
-          id
-        }
-        answer
-        quiz {
-          id
-        }
-      }
+      # testResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   testID
+      #   answer
+      #   attempts
+      # }
+      # quizResults {
+      #   id
+      #   student {
+      #     id
+      #   }
+      #   answer
+      #   quiz {
+      #     id
+      #   }
+      # }
       coursePage {
         id
+        authors {
+          id
+        }
       }
       quizes {
         id
@@ -125,7 +146,7 @@ const Box = styled.div`
   width: 50%;
   margin-top: 5%;
   @media (max-width: 850px) {
-    width: 95%;
+    width: 100%;
   }
 `;
 
@@ -163,40 +184,6 @@ const Head = styled.div`
   }
 `;
 
-const Head2 = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  padding: 0;
-  background: #1a2980; /* fallback for old browsers */
-  background: -webkit-linear-gradient(
-    to right,
-    #26d0ce,
-    #1a2980
-  ); /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #26d0ce, #1a2980);
-  color: white;
-  width: 100%;
-  text-align: center;
-  font-size: 1.8rem;
-  span {
-    color: #3ddc97;
-    cursor: pointer;
-    &:hover {
-      color: #139a43;
-    }
-  }
-  @media (max-width: 800px) {
-    font-size: 1.8rem;
-    justify-content: space-between;
-    padding: 2% 15px;
-    div {
-      flex: 85%;
-      text-align: right;
-    }
-  }
-`;
-
 const shuffle = (array) => {
   var m = array.length,
     t,
@@ -218,6 +205,7 @@ const Challenge = (props) => {
     setStart(value);
   };
   const me = useUser();
+
   return (
     <PleaseSignIn>
       <Query
@@ -229,11 +217,21 @@ const Challenge = (props) => {
       >
         {({ data, error, loading }) => {
           if (error) return <Error error={error} />;
-          if (loading) return <p>Loading...</p>;
+          if (loading) return <Loading />;
           const lesson = data.lesson;
-          if (lesson === undefined) return <Reload />;
+          // if (lesson === undefined) return <Reload />;
           let all;
           let completed = [];
+          let i_am_author = false;
+          let i_am_student = false;
+
+          if (
+            me &&
+            lesson.coursePage.authors.filter((auth) => auth.id == me.id)
+              .length > 0
+          ) {
+            i_am_author = true;
+          }
           if (lesson) {
             all = shuffle([...lesson.newTests, ...lesson.quizes]).slice(
               0,
@@ -259,43 +257,13 @@ const Challenge = (props) => {
                       handleHeight
                       onResize={onResize}
                     />
-                    <Head>
-                      {width > 800 && (
-                        <Link
-                          href={{
-                            pathname: "/course",
-                            query: {
-                              id: lesson.coursePage.id,
-                            },
-                          }}
-                        >
-                          <span>Back </span>
-                        </Link>
-                      )}
-                      <span>
-                        Урок {lesson.number}. {lesson.name}
-                      </span>
-                    </Head>
-                    {me &&
-                      (lesson.user.id === me.id ||
-                        me.permissions.includes("ADMIN")) && (
-                        <Head2>
-                          <div>
-                            Режим разработки →
-                            <Link
-                              href={{
-                                pathname: "/lesson",
-                                query: {
-                                  id: lesson.id,
-                                  type: "regular",
-                                },
-                              }}
-                            >
-                              <span> Переключить</span>
-                            </Link>
-                          </div>
-                        </Head2>
-                      )}
+                    {console.log("lesson", lesson)}
+                    <Navigation
+                      i_am_author={i_am_author}
+                      lesson={lesson}
+                      me={me}
+                      width={width}
+                    />
                     <Box>
                       <CSSTransitionGroup
                         transitionName="example"

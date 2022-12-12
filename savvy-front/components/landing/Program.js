@@ -10,7 +10,7 @@ const Card = styled.div`
   background: #ffffff;
   box-shadow: 0px 0px 5px rgba(149, 149, 149, 0.5);
   width: 360px;
-  height: 420px;
+  height: 380px;
   /* margin-right: 50px; */
   margin-bottom: 50px;
   display: flex;
@@ -19,11 +19,11 @@ const Card = styled.div`
   img {
     object-fit: cover;
     width: 100%;
-    height: 70px;
+    height: 80px;
   }
   @media (max-width: 1200px) {
     width: 360px;
-    height: 420px;
+    height: 380px;
   }
   @media (max-width: 600px) {
     width: 95%;
@@ -61,8 +61,8 @@ const Down = styled.div`
     height: 80px;
     width: 100%;
     border-top: 1px solid rgba(149, 149, 149, 0.5);
-    border-bottom: 1px solid rgba(149, 149, 149, 0.5);
-    margin-bottom: 10px;
+    /* border-bottom: 1px solid rgba(149, 149, 149, 0.5); */
+    /* margin-bottom: 10px; */
     padding: 15px 0;
   }
   .price_container {
@@ -159,7 +159,7 @@ const Program = (props) => {
         <div className="term">{props.term}</div>
       </Up>
       <Down>
-        <div className="price">
+        {/* <div className="price">
           <div className="price_container">
             <div className="price_box">
               {props.courseType == "PUBLIC" ? (
@@ -196,19 +196,21 @@ const Program = (props) => {
               <div className="price_box_description">{t("cohort_start")}</div>
             </div>
           </div>
+        </div> */}
+        <div className="price">
+          <Link
+            href={{
+              pathname: props.program ? "/program" : "/coursePage",
+              query: {
+                id: props.id,
+              },
+            }}
+          >
+            <Button program={props.program}>
+              {props.program ? t("learn_more_program") : t("learn_more")}
+            </Button>
+          </Link>
         </div>
-        <Link
-          href={{
-            pathname: props.program ? "/program" : "/coursePage",
-            query: {
-              id: props.id,
-            },
-          }}
-        >
-          <Button program={props.program}>
-            {props.program ? t("learn_more_program") : t("learn_more")}
-          </Button>
-        </Link>
       </Down>
     </Card>
   );

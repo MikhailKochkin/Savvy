@@ -400,11 +400,11 @@ const LessonHeader = (props) => {
   return (
     <>
       <TextBar color={color}>
-        {lesson && lesson.open && (
+        {/* {lesson && lesson.open && (
           <div className="open">
             <img src="https://img.icons8.com/external-vitaliy-gorbachev-lineal-color-vitaly-gorbachev/60/000000/external-free-sales-vitaliy-gorbachev-lineal-color-vitaly-gorbachev.png" />
           </div>
-        )}
+        )} */}
         <div>
           <Text>
             <div className="lesson_name">

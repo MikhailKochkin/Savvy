@@ -416,11 +416,11 @@ const NewSingleLesson = (props) => {
   }
   return (
     <PleaseSignIn>
-      {!i_am_student &&
+      {/* {!i_am_student &&
         lesson.open &&
         lesson.coursePage.courseType == "FORMONEY" && (
           <Offer me={me} coursePageId={lesson.coursePage.id} />
-        )}
+        )} */}
       <div id="root"></div>
       <>
         {lesson && (

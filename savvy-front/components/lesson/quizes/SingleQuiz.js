@@ -587,7 +587,9 @@ const SingleQuiz = (props) => {
                     <div className="question_text">
                       {!props.type != "FORM" && "🎉 " + t("correct")}!{" "}
                       {ifRight && ifRight !== "<p></p>" && renderHTML(ifRight)}{" "}
-                      {!props.type != "FORM" && t("show_correct")}
+                      {!props.challenge &&
+                        !props.type != "FORM" &&
+                        t("show_correct")}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -614,7 +616,9 @@ const SingleQuiz = (props) => {
                         props.type != "FORM" &&
                         hint}
                       <br />
-                      {props.type != "FORM" && t("show_correct")}
+                      {!props.challenge &&
+                        props.type != "FORM" &&
+                        t("show_correct")}
                     </div>
                     <IconBlock>
                       {author && author.image != null ? (
@@ -628,7 +632,7 @@ const SingleQuiz = (props) => {
                     </IconBlock>
                   </div>
                 )}
-                {correct !== "" && props.type != "FORM" && (
+                {!props.challenge && correct !== "" && props.type != "FORM" && (
                   <>
                     <div className="answer">
                       <IconBlock>

@@ -5,7 +5,10 @@ import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Result from "./Result";
 import { makeStyles } from "@material-ui/core/styles";
+import styled from "styled-components";
+
 import { SINGLE_LESSON_QUERY } from "./Challenge";
+import BannerOffer from "../offers/BannerOffer";
 
 const CREATE_CHALLENGERESULT_MUTATION = gql`
   mutation CREATE_CHALLENGERESULT_MUTATION(
@@ -25,6 +28,13 @@ const CREATE_CHALLENGERESULT_MUTATION = gql`
   }
 `;
 
+const Styles = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
 const useStyles = makeStyles({
   button: {
     width: "35%",
@@ -42,7 +52,7 @@ const useStyles = makeStyles({
 
 const Final = (props) => {
   const [show, setShown] = useState(false);
-  const { time, right, wrong, lesson } = props;
+  const { time, right, wrong, lesson, lessonId, offer, me } = props;
   const classes = useStyles();
   return (
     <Mutation
@@ -50,18 +60,18 @@ const Final = (props) => {
       variables={{
         correct: right,
         wrong: wrong,
-        lesson: lesson,
+        lesson: lessonId,
         time: time,
       }}
       refetchQueries={() => [
         {
           query: SINGLE_LESSON_QUERY,
-          variables: { id: lesson },
+          variables: { id: lessonId },
         },
       ]}
     >
       {(createChallengeResult, { loading, error }) => (
-        <>
+        <Styles>
           {!show && (
             <Button
               type="submit"
@@ -78,13 +88,25 @@ const Final = (props) => {
             </Button>
           )}
           {show && (
+            <BannerOffer
+              key={offer.id}
+              id={offer.id}
+              offer={offer}
+              me={me}
+              coursePageId={lesson.coursePage.id}
+              lessonId={lesson.id}
+              user={offer.user.id}
+              story={false}
+            />
+          )}
+          {show && (
             <Result
               results={props.results}
               completed={[
                 {
                   correct: right,
                   wrong: wrong,
-                  lesson: lesson,
+                  lesson: lessonId,
                   time: time,
                   student: {
                     id: props.me.id,
@@ -93,10 +115,10 @@ const Final = (props) => {
                   },
                 },
               ]}
-              text="Поздравляем! Вы прошли это испытание. Ваш результат:"
+              text="Поздравляем! Вы прошли испытание. Ваш результат:"
             />
           )}
-        </>
+        </Styles>
       )}
     </Mutation>
   );

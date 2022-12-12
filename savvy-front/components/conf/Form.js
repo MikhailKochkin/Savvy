@@ -149,7 +149,6 @@ const Form = (props) => {
     useMutation(ENROLL_COURSE_MUTATION);
 
   let password = uuidv4();
-  console.log("props.conf.countries", props.conf.countries);
   return (
     <Styles id="signup_form">
       <h2>

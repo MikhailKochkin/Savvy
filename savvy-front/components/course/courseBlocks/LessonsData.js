@@ -378,6 +378,10 @@ const LessonsData = (props) => {
     coursePage.weeks ? coursePage.weeks : 3
   );
 
+  let hidden_lessons = [...coursePage.lessons]
+    .sort((a, b) => (a.number > b.number ? 1 : -1))
+    .filter((l) => l.type == "HIDDEN");
+
   return (
     <LessonsInfo>
       <Buttons>
@@ -452,6 +456,31 @@ const LessonsData = (props) => {
               </>
             ))}
           </Syllabus>
+          {me.permissions.includes("ADMIN") && (
+            <Syllabus>
+              <div className="week_number">Hidden lessons</div>
+              <Lessons>
+                {hidden_lessons.map((lesson, index) => (
+                  <>
+                    <LessonHeader
+                      me={me}
+                      key={lesson.id}
+                      name={lesson.name}
+                      lesson={lesson}
+                      lessonResult={maxes.find((m) => m.lesson.id == lesson.id)}
+                      i_am_author={i_am_author}
+                      statements={lesson.forum ? lesson.forum.statements : null}
+                      coursePage={props.id}
+                      author={coursePage.user.id}
+                      open={index + 1 === 1}
+                      index={index + 1}
+                      coursePageId={coursePage.id}
+                    />
+                  </>
+                ))}
+              </Lessons>
+            </Syllabus>
+          )}
         </>
       )}
 

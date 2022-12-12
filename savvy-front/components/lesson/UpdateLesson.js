@@ -234,7 +234,7 @@ const UpdateLesson = (props) => {
   const [number, setNumber] = useState(props.lesson.number);
   const [open, setOpen] = useState(props.lesson.open);
   const [challenge_num, setChallenge_num] = useState(
-    props.lesson.challenge_num
+    parseInt(props.lesson.challenge_num)
   );
   const [type, setType] = useState(props.lesson.type);
   const [assignment, setAssignment] = useState(props.lesson.assignment);
@@ -445,7 +445,7 @@ const UpdateLesson = (props) => {
             type,
             change,
             assignment,
-            challenge_num,
+            challenge_num: parseInt(challenge_num),
             open,
             hasSecret,
             totalPoints,

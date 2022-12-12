@@ -260,11 +260,12 @@ const Navigation = (props) => {
               me.myTeams[0].users.map((t) => (
                 <Level
                   angle={
+                    lesson.structure &&
                     (filtered_results.find((lr) => lr.student.id == t.id)
                       ? filtered_results.find((lr) => lr.student.id == t.id)
                           .progress
                       : 0) *
-                    (360 / lesson.structure.lessonItems.length)
+                      (360 / lesson.structure.lessonItems.length)
                   }
                 >
                   {console.log("results", results)}

@@ -5,10 +5,27 @@ import Button from "@material-ui/core/Button";
 import Result from "./Result";
 import { makeStyles } from "@material-ui/core/styles";
 
+const Styles = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Container = styled.div`
+  @media (max-width: 800px) {
+    width: 90%;
+  }
+`;
+
+const Header = styled.h1`
+  font-size: 3rem;
+`;
+
 const LessonPart = styled.div`
   display: flex;
   /* border: 1px solid #edefed; */
-  padding: 0.5% 2%;
+  padding: 0.5% 0;
   flex-direction: column;
   border-radius: 2px;
   margin: 0 0 20px 0;
@@ -74,39 +91,41 @@ const Front = (props) => {
     return r.time - n.time;
   });
   return (
-    <>
-      {/* <Header>
-        <div>Испытание</div>
-      </Header> */}
-      <LessonPart>
-        <div className="intro">{renderHTML(props.text)}</div>
-        {!props.completed.length > 0 ||
-        props.me.permissions.includes("ADMIN") ? (
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={(e) => props.getStart(true)}
-          >
-            Начать
-          </Button>
-        ) : (
-          <Result
-            results={results}
-            completed={props.completed}
-            text="Вы уже прошли это испытание. Ваш результат:"
-          />
-        )}
-        {/* {props.me.permissions.includes("ADMIN") && (
+    <Styles>
+      <Container>
+        <Header>
+          <div>Испытание</div>
+        </Header>
+        <LessonPart>
+          <div className="intro">{renderHTML(props.text)}</div>
+          {!props.completed.length > 0 ||
+          props.me.permissions.includes("ADMIN") ? (
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={(e) => props.getStart(true)}
+            >
+              Начать
+            </Button>
+          ) : (
+            <Result
+              results={results}
+              completed={props.completed}
+              text="Вы уже прошли это испытание. Ваш результат:"
+            />
+          )}
+          {/* {props.me.permissions.includes("ADMIN") && (
           <Result
             results={results}
             // completed={[]}
             text="Вы уже прошли это испытание. Ваш результат:"
           />
         )} */}
-      </LessonPart>
-    </>
+        </LessonPart>
+      </Container>
+    </Styles>
   );
 };
 

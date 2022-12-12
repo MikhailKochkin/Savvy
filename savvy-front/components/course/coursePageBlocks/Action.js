@@ -138,7 +138,7 @@ const Contact = styled.div`
   }
   .price {
     font-weight: 600;
-    font-size: 3.2rem;
+    font-size: 2.4rem;
     text-align: left;
     width: 100%;
     display: flex;
@@ -293,12 +293,15 @@ const PriceBox = styled.div`
 `;
 
 const ButtonOpen = styled.a`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 292px;
-  height: 48px;
-  border: 2px solid #175ffe;
+  height: 52px;
   padding: 2%;
   font-family: Montserrat;
-  border: none;
+  border: 2px solid #283d3b;
   text-align: center;
   background: #175ffe;
   margin-bottom: 10px;
@@ -317,12 +320,12 @@ const ButtonOpen = styled.a`
 
 const ButtonBuy = styled.button`
   width: 292px;
-  height: 48px;
+  height: 42px;
   padding: 2%;
   font-family: Montserrat;
   border: 2px solid #252f3f;
   background: none;
-  margin-bottom: 10px;
+  margin: 10px 0;
   outline: 0;
   cursor: pointer;
   font-size: 1.8rem;
@@ -473,43 +476,6 @@ const Action = (props) => {
         <Contact>
           {props.coursePage.courseType == "FORMONEY" && (
             <>
-              {installments && (
-                <PriceBox>
-                  <div>
-                    {installments}{" "}
-                    {getNoun(installments, "платёж", "платежа", "платежей")} по
-                  </div>
-                  {installments && <div className="price_small">{price} ₽</div>}
-                </PriceBox>
-              )}
-              {!installments && !props.coursePage.discountPrice && (
-                <div className="price">
-                  {price} {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
-                </div>
-              )}
-              {!installments && props.coursePage.discountPrice && (
-                <div className="price">
-                  <div>
-                    {props.coursePage.discountPrice}{" "}
-                    <span className="discount">{price}</span>{" "}
-                    {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
-                  </div>
-                  <div className="bubble">
-                    -
-                    {100 -
-                      parseInt((props.coursePage.discountPrice / price) * 100)}
-                    %
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-          {props.coursePage.courseType == "PUBLIC" && (
-            <div className="price">{t("free")}</div>
-          )}
-
-          {props.coursePage.courseType == "FORMONEY" && (
-            <>
               <ButtonOpen
                 id="coursePage_to_demolesson"
                 // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
@@ -528,33 +494,10 @@ const Action = (props) => {
               >
                 {t("start_open_lesson")}
               </ButtonOpen>
-
-              <ButtonBuy
-                id="coursePage_buy_button"
-                onClick={async (e) => {
-                  e.preventDefault();
-                  if (!me) {
-                    alert(`Set up an account on BeSavvy`);
-                    toggleModal();
-                  } else {
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: coursePage.id,
-                        price: props.coursePage.discountPrice
-                          ? props.coursePage.discountPrice
-                          : price,
-                        userId: me.id,
-                        promocode: promo,
-                      },
-                    });
-                    location.href = res.data.createOrder.url;
-                  }
-                }}
-              >
-                {installments && (loading_data ? `...` : t("buy_installments"))}
-                {!installments && (loading_data ? `...` : t("buy"))}
-              </ButtonBuy>
             </>
+          )}
+          {props.coursePage.courseType == "PUBLIC" && (
+            <div className="price">{t("free")}</div>
           )}
 
           {props.coursePage.courseType == "PUBLIC" && (
@@ -603,15 +546,86 @@ const Action = (props) => {
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
-            {props.coursePage.promocode && (
+            <div className="">◼️ {price ? `${price} ₽` : t("free")}</div>
+
+            {/* {props.coursePage.promocode && (
               <div id="promo">
                 <input
                   placeholder="Promocode"
                   onChange={(e) => addPromo(e.target.value)}
                 />
               </div>
+            )} */}
+            {props.coursePage.courseType == "FORMONEY" && (
+              <>
+                {/* {installments && (
+                  <PriceBox>
+                    <div>
+                      {installments}{" "}
+                      {getNoun(installments, "платёж", "платежа", "платежей")}{" "}
+                      по
+                    </div>
+                    {installments && (
+                      <div className="price_small">{price} ₽</div>
+                    )}
+                  </PriceBox>
+                )} */}
+                {/* {!installments && !props.coursePage.discountPrice && (
+                  <div className="price">
+                    {price} {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
+                  </div>
+                )} */}
+                {/* {!installments && props.coursePage.discountPrice && (
+                  <div className="price">
+                    <div>
+                      {props.coursePage.discountPrice}{" "}
+                      <span className="discount">{price}</span>{" "}
+                      {props.coursePage.currency == "ruble" ? "₽" : "$"}{" "}
+                    </div>
+                    <div className="bubble">
+                      -
+                      {100 -
+                        parseInt(
+                          (props.coursePage.discountPrice / price) * 100
+                        )}
+                      %
+                    </div>
+                  </div>
+                )} */}
+              </>
+            )}
+            {props.coursePage.courseType == "FORMONEY" && (
+              <>
+                <ButtonBuy
+                  id="coursePage_buy_button"
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    if (!me) {
+                      alert(`Set up an account on BeSavvy`);
+                      toggleModal();
+                    } else {
+                      const res = await createOrder({
+                        variables: {
+                          coursePageId: coursePage.id,
+                          price: props.coursePage.discountPrice
+                            ? props.coursePage.discountPrice
+                            : price,
+                          userId: me.id,
+                          promocode: promo,
+                        },
+                      });
+                      location.href = res.data.createOrder.url;
+                    }
+                  }}
+                >
+                  {installments &&
+                    (loading_data ? `...` : t("buy_installments"))}
+                  {!installments && (loading_data ? `...` : t("buy"))}
+                </ButtonBuy>
+              </>
             )}
           </div>
+
           {props.coursePage.courseType !== "PUBLIC" && (
             <div className="open">
               <div className="">{t("after")}</div>
