@@ -21,6 +21,7 @@ import Exam from "./exams/Exam";
 import Feed from "./Feed";
 import LessonHeader from "./LessonHeader";
 import TestPractice from "./testblocks/TB";
+import { FaRegCaretSquareDown } from "react-icons/fa";
 
 const LESSON_RESULTS_QUERY = gql`
   query LESSON_RESULTS_QUERY($lessonId: String!, $userId: String!) {
@@ -127,6 +128,7 @@ const StoryEx = (props) => {
     let item;
     if (task.type.toLowerCase() === "note") {
       el = lesson.notes.find((note) => note.id === task.id);
+      if (!el) return;
       item = (
         // <BannerOffer me={me} coursePageId={coursePageID} />
         <Note
@@ -146,6 +148,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "offer") {
       el = lesson.offers.find((t) => t.id === task.id);
+      if (!el) return;
+
       item = (
         <BannerOffer
           key={el.id}
@@ -162,6 +166,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "newtest") {
       el = lesson.newTests.find((t) => t.id === task.id);
+      if (!el) return;
+
       item = (
         <SingleTest
           key={el.id}
@@ -189,6 +195,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "quiz") {
       el = lesson.quizes.find((quiz) => quiz.id === task.id);
+      if (!el) return;
+
       item = (
         <SingleQuiz
           key={el.id}
@@ -215,6 +223,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "testpractice") {
       el = lesson.testPractices.find((t) => t.id === task.id);
+      if (!el) return;
+
       item = (
         <TestPractice
           key={el.id}
@@ -231,6 +241,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "teamquest") {
       el = lesson.teamQuests.find((t) => t.id === task.id);
+      if (!el) return;
+
       item = (
         <TeamQuest
           key={el.id}
@@ -247,6 +259,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "shot") {
       el = lesson.shots.find((shot) => shot.id === task.id);
+      if (!el) return;
+
       item = (
         <Shots
           key={el.id}
@@ -264,6 +278,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "chat") {
       el = lesson.chats.find((chat) => chat.id === task.id);
+      if (!el) return;
+
       item = (
         <Chat
           key={el.id}
@@ -335,6 +351,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "construction") {
       el = lesson.constructions.find((con) => con.id === task.id);
+      if (!el) return;
+
       item =
         el.elements !== null ? (
           <NewConstructor
@@ -363,10 +381,14 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "exam") {
       el = lesson.exams.find((con) => con.id === task.id);
+      if (!el) return;
+
       item = <Exam lesson={lesson} me={props.me} exam={el} story={true} />;
       components.push(item);
     } else if (task.type.toLowerCase() === "document") {
       el = lesson.documents.find((con) => con.id === task.id);
+      if (!el) return;
+
       item = (
         <Document
           key={el.id}
@@ -383,6 +405,8 @@ const StoryEx = (props) => {
       components.push(item);
     } else if (task.type.toLowerCase() === "forum") {
       el = lesson.forum;
+      if (!el) return;
+
       item = (
         <Forum
           key={el.id}
@@ -398,6 +422,8 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+    } else {
+      return;
     }
   });
   return (

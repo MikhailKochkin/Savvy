@@ -259,9 +259,12 @@ const NoteStyles = styled.div`
     margin: 20px 0;
   }
   iframe {
+    min-width: 600px;
     width: 100%;
     height: 400px;
     @media (max-width: 800px) {
+      min-width: 300px;
+      min-height: 200px;
       width: 100%;
       height: auto;
     }

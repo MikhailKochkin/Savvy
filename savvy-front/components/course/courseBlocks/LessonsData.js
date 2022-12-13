@@ -456,7 +456,7 @@ const LessonsData = (props) => {
               </>
             ))}
           </Syllabus>
-          {me.permissions.includes("ADMIN") && (
+          {me && me.permissions && me.permissions.includes("ADMIN") && (
             <Syllabus>
               <div className="week_number">Hidden lessons</div>
               <Lessons>
