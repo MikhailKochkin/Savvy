@@ -2,6 +2,7 @@ import { enableExperimentalFragmentVariables } from "@apollo/client";
 import { useState } from "react";
 import styled from "styled-components";
 import { Bar } from "react-chartjs-2";
+import { LoneAnonymousOperationRule } from "graphql";
 
 const Styles = styled.div`
   width: 660px;
@@ -210,6 +211,9 @@ const Analyzer = (props) => {
       } else if (el.type.toLowerCase() == "note") {
         lesson_difficulty_map.push(1);
         lesson_labels.push("longread");
+      } else if (el.type.toLowerCase() == "shot") {
+        lesson_difficulty_map.push(2);
+        lesson_labels.push("slides");
       } else if (el.type.toLowerCase() == "chat") {
         lesson_difficulty_map.push(1);
         lesson_labels.push("chat");
@@ -339,6 +343,62 @@ const Analyzer = (props) => {
     setTheory(Math.round((theoryLevel / total_number) * 100));
     setShow(true);
   };
+
+  // find value in lesson. Lesson is a loop: learn –> test / practice -> get feedback
+  // 1. Break lesson into chunks by 2 / by 3 / by 4 / by 5
+  const sliceIntoChunks = (arr, chunkSize) => {
+    const res = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      const chunk = arr.slice(i, i + chunkSize);
+      res.push(chunk);
+    }
+    return res;
+  };
+
+  let elems_2 = sliceIntoChunks(elements, 2);
+  let elems_3 = sliceIntoChunks(elements, 3);
+  let elems_4 = sliceIntoChunks(elements, 4);
+
+  // 1. learn
+  let learn_box = ["chat", "note", "shot"];
+  // 1. test
+  let test_box = ["newtest", "quiz", "problem", "texteditor", "constructor"];
+  // 1. feedback
+  let feedback_box = ["chat", "note"];
+  let study_loops = [];
+  // console.log("elements", elements);
+  elements.map((el, i) => {
+    if (learn_box.includes(el.type.toLowerCase())) {
+      console.log(
+        "el.type.toLowerCase()",
+        el.type.toLowerCase(),
+        elements[i + 1],
+        test_box
+      );
+      if (
+        elements[i + 1] &&
+        test_box.includes(elements[i + 1].type.toLowerCase())
+      ) {
+        console.log("sd", el.type, elements[i + 1].type);
+        let index = elements
+          .slice(i + 1)
+          .findIndex((el) => learn_box.includes(el.type.toLowerCase()));
+        study_loops.push(
+          elements
+            .slice(i)
+            .slice(0, index == -1 ? elements.length - 1 : index + 2)
+        );
+        console.log("inde", index);
+      }
+    } else {
+      return;
+    }
+  });
+
+  console.log("study_loops", study_loops);
+  // console.log("elems_3", elems_3);
+  // console.log("elems_4", elems_4);
+
   return (
     <Styles>
       <Container>
@@ -397,7 +457,58 @@ const Analyzer = (props) => {
               </div>
               <div>{practiceComment}</div>
             </div>
+            <div className="box">
+              <div>
+                <b>Study loops</b>
+              </div>
+              <div>
+                <div>
+                  Study loops are a sequence of learning actvities aimed at:
+                </div>
+                <ol>
+                  <li>Provoking interest</li>
+                  <li>Teaching smth new</li>
+                  <li>Testing new knowledge / practicing new skill</li>
+                  <li>Reflecting on the learning experience</li>
+                </ol>
+                <div>
+                  The more study loops your lesson has, the better learning
+                  experience you will have.
+                </div>
+              </div>
+            </div>
+            <div className="box">
+              <div>
+                <b>Your study loops:</b>
+              </div>
+              <div>
+                {study_loops.map((sl, i) => (
+                  <>
+                    <div>Loop {i + 1}.</div>
+                    {console.log("sl", sl, study_loops)}
+                    <div>
+                      {sl.map((el) => (
+                        <li>{el.type}</li>
+                      ))}
+                    </div>
+                    <div>
+                      <b>Comments:</b>
+                    </div>
+                    <div>
+                      {study_loops.length < 4 &&
+                        "❌ ⬆️ This loop's size is probably too small. Are you sure that we have given our student a chance to learn and reflect?"}
 
+                      {study_loops.length >= 4 &&
+                        loop.length <= 7 &&
+                        "✅ This loop's size is great!"}
+
+                      {study_loops.length > 7 &&
+                        "❌ ⬇️This loop's size is probably too big. It may be confusing and overwhelming."}
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
             <div className="box">
               <div>
                 <b>Advice:</b>
@@ -423,8 +534,8 @@ const Analyzer = (props) => {
               </div>
               <div>
                 Look at the difficulty map of your lesson. A good lesson goes
-                from level 1 to level 5 (like a computer game). Does your lesson
-                follow this pattern?
+                from level 1 to level 5 inside<b>one study loop</b> (like a
+                computer game). Does your lesson follow this pattern?
               </div>
               <div>
                 <Bar

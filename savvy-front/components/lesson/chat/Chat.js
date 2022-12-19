@@ -394,9 +394,9 @@ const Chat = (props) => {
   }, []);
 
   const detectKeyDown = (e) => {
-    // if (e.key === "n" && e.ctrlKey) {
+    // if (e.key === "n") {
     //   setNum((num) => num + 1);
-    // } else if (e.key === "b" && e.ctrlKey) {
+    // } else if (e.key === "b") {
     //   setNum((num) => num - 1);
     // } else if (e.key === "s") {
     //   setShowButton((showButton) => !showButton);

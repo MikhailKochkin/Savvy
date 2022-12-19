@@ -36,7 +36,7 @@ const { argsToArgsConfig } = require("graphql/type/definition");
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 
 const qrcode = require("qrcode-terminal");
-const { exists } = require("fs");
+// const { exists } = require("fs");
 
 // const { Client } = require("whatsapp-web.js");
 // const wa_client = new Client();

@@ -101,7 +101,7 @@ const Container = styled.div`
     align-items: center;
     img {
       display: block;
-      width: 100%;
+      width: 70%;
       object-fit: cover;
       max-height: 50em;
       box-shadow: "0 0 0 2px blue;";
@@ -150,7 +150,7 @@ const Container = styled.div`
   }
   @media (max-width: 800px) {
     flex-direction: row;
-    width: 90%;
+    width: 100%;
     font-size: 1.4rem;
   }
 `;

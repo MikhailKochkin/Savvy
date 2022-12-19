@@ -66,7 +66,7 @@ const Program = (props) => {
   return (
     <Styles>
       <Container>
-        <h2>Программа конференции</h2>
+        <h2>Программа вебинара</h2>
         <div>
           {props.conf.goals.map((g, i) => (
             <div className="row">

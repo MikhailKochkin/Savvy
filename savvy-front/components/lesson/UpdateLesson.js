@@ -371,7 +371,6 @@ const UpdateLesson = (props) => {
               <option value={true}>{t("yes")}</option>
               <option value={false}>{t("no")}</option>
             </select>
-            {console.log("hasSecret", hasSecret)}
           </div>
         </Row>
         {hasSecret && (

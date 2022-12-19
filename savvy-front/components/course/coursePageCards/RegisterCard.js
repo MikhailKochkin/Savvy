@@ -145,69 +145,76 @@ const RegisterCard = (props) => {
   return (
     <>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
-      <Data>
-        <Payment>
-          <Text>
-            <Part1>
-              <div className="message">
-                <div className="lesson_name">
-                  {t("lesson")} 1. "
-                  {props.first_lesson ? props.first_lesson.name : ""}"
-                </div>{" "}
-                <div className="lesson_description">
-                  {renderHTML(props.first_lesson.description)}
-                </div>
-              </div>
-            </Part1>
-            <Part2>
-              {applied && <Paid>{t("applied")}</Paid>}
-              <Link
-                href={{
-                  pathname: "/lesson",
-                  query: {
-                    id: props.first_lesson.id,
-                    type: props.first_lesson.type.toLowerCase(),
-                  },
-                }}
-              >
-                <StartLesson
-                  onClick={(e) => {
-                    if (props.lessonResults.length == 0) {
-                      createLessonResult({
-                        variables: {
-                          lessonID: props.first_lesson.id,
-                          visitsNumber: 1,
-                        },
-                      });
-                    } else {
-                      updateLessonResult({
-                        variables: {
-                          id: props.lessonResults[0].id,
-                          visitsNumber: props.lessonResults[0].visitsNumber + 1,
-                        },
-                      });
-                    }
+      {props.first_lesson && (
+        <Data>
+          <Payment>
+            <Text>
+              <Part1>
+                {props.first_lesson && (
+                  <div className="message">
+                    <div className="lesson_name">
+                      {t("lesson")} 1. "
+                      {props.first_lesson ? props.first_lesson.name : ""}"
+                    </div>{" "}
+                    {props.first_lesson.description && (
+                      <div className="lesson_description">
+                        {renderHTML(props.first_lesson.description)}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Part1>
+              <Part2>
+                {applied && <Paid>{t("applied")}</Paid>}
+                <Link
+                  href={{
+                    pathname: "/lesson",
+                    query: {
+                      id: props.first_lesson.id,
+                      type: props.first_lesson.type.toLowerCase(),
+                    },
                   }}
                 >
-                  <a target="_blank">{t("start_lesson1")}</a>
-                </StartLesson>
-              </Link>
-              {me && (
-                <>
-                  {/* {coursePage.courseType !== "FORMONEY" && ( */}
-                  <EnrollCoursePage
-                    coursePage={coursePage}
-                    studentsArray={studentsArray}
-                    subjectArray={subjectArray}
-                    meData={me}
-                  />
-                  {/* )} */}
-                </>
-              )}
-            </Part2>
-          </Text>
-        </Payment>
-      </Data>
+                  <StartLesson
+                    onClick={(e) => {
+                      if (props.lessonResults.length == 0) {
+                        createLessonResult({
+                          variables: {
+                            lessonID: props.first_lesson.id,
+                            visitsNumber: 1,
+                          },
+                        });
+                      } else {
+                        updateLessonResult({
+                          variables: {
+                            id: props.lessonResults[0].id,
+                            visitsNumber:
+                              props.lessonResults[0].visitsNumber + 1,
+                          },
+                        });
+                      }
+                    }}
+                  >
+                    <a target="_blank">{t("start_lesson1")}</a>
+                  </StartLesson>
+                </Link>
+                {me && (
+                  <>
+                    {/* {coursePage.courseType !== "FORMONEY" && ( */}
+                    <EnrollCoursePage
+                      coursePage={coursePage}
+                      studentsArray={studentsArray}
+                      subjectArray={subjectArray}
+                      meData={me}
+                    />
+                    {/* )} */}
+                  </>
+                )}
+              </Part2>
+            </Text>
+          </Payment>
+        </Data>
+      )}
     </>
   );
 };

@@ -218,6 +218,17 @@ input ChallengeResultListRelationFilter {
   some: ChallengeResultWhereInput
 }
 
+input ChallengeResultOrderByInput {
+  correct: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  lessonId: SortOrder
+  studentId: SortOrder
+  time: SortOrder
+  updatedAt: SortOrder
+  wrong: SortOrder
+}
+
 input ChallengeResultWhereInput {
   AND: [ChallengeResultWhereInput!]
   correct: IntNullableFilter
@@ -2270,6 +2281,7 @@ type Query {
   businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
   certificate(where: CertificateWhereUniqueInput!): Certificate
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByInput!], where: CertificateWhereInput): [Certificate!]!
+  challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int, orderBy: [ChallengeResultOrderByInput!], where: ChallengeResultWhereInput): [ChallengeResult!]!
   chat(where: ChatWhereUniqueInput!): Chat
   chats(after: ChatWhereUniqueInput, before: ChatWhereUniqueInput, first: Int, last: Int, orderBy: [ChatOrderByInput!], where: ChatWhereInput): [Chat!]!
   coursePage(where: CoursePageWhereUniqueInput!): CoursePage

@@ -380,7 +380,7 @@ const Info = styled.div`
   @media (max-width: 800px) {
     h1 {
       font-size: 4.4rem;
-      width: 70%;
+      width: 90%;
       line-height: 1.1;
     }
     h2 {
@@ -600,7 +600,7 @@ const Landing = (props) => {
       inline: "nearest",
     });
   };
-  moment.locale(router.locale);
+  moment.locale("ru");
 
   return (
     <Styles>
@@ -617,7 +617,7 @@ const Landing = (props) => {
       </div>
       <Window>
         <Logo>
-          <div>Онлайн-конференция BeSavvy Lawyer</div>
+          <div>Вебинар BeSavvy Lawyer</div>
         </Logo>
         <Main>
           <Info>
@@ -642,14 +642,19 @@ const Landing = (props) => {
               <div className="format">Онлайн</div>
             </Details>
             <div className="photos">
-              {conf.authors.map((auth) => (
-                <div className="border1">
-                  <img
-                    src={auth.image}
-                    data-tip={`${auth.name} ${auth.surname}, ${auth.work}`}
-                  />
-                </div>
-              ))}
+              {conf.authors.map((auth) => {
+                let work = auth.work;
+                return (
+                  <div className="border1">
+                    <img
+                      src={auth.image}
+                      data-tip={`${renderHTML(auth.name)} ${renderHTML(
+                        auth.surname
+                      )}, ${renderHTML(auth.work)}`}
+                    />
+                  </div>
+                );
+              })}
               <ReactTooltip place="top" type="light" effect="float" />
             </div>
           </Info>

@@ -174,6 +174,16 @@ export interface NexusGenInputs {
     none?: NexusGenInputs['ChallengeResultWhereInput'] | null; // ChallengeResultWhereInput
     some?: NexusGenInputs['ChallengeResultWhereInput'] | null; // ChallengeResultWhereInput
   }
+  ChallengeResultOrderByInput: { // input type
+    correct?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    studentId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    time?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    wrong?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   ChallengeResultWhereInput: { // input type
     AND?: NexusGenInputs['ChallengeResultWhereInput'][] | null; // [ChallengeResultWhereInput!]
     correct?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
@@ -3449,6 +3459,7 @@ export interface NexusGenFieldTypes {
     businessClients: NexusGenRootTypes['BusinessClient'][]; // [BusinessClient!]!
     certificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
+    challengeResults: NexusGenRootTypes['ChallengeResult'][]; // [ChallengeResult!]!
     chat: NexusGenRootTypes['Chat'] | null; // Chat
     chats: NexusGenRootTypes['Chat'][]; // [Chat!]!
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
@@ -4349,6 +4360,7 @@ export interface NexusGenFieldTypeNames {
     businessClients: 'BusinessClient'
     certificate: 'Certificate'
     certificates: 'Certificate'
+    challengeResults: 'ChallengeResult'
     chat: 'Chat'
     chats: 'Chat'
     coursePage: 'CoursePage'
@@ -5536,6 +5548,14 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['CertificateOrderByInput'][] | null; // [CertificateOrderByInput!]
       where?: NexusGenInputs['CertificateWhereInput'] | null; // CertificateWhereInput
+    }
+    challengeResults: { // args
+      after?: NexusGenInputs['ChallengeResultWhereUniqueInput'] | null; // ChallengeResultWhereUniqueInput
+      before?: NexusGenInputs['ChallengeResultWhereUniqueInput'] | null; // ChallengeResultWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['ChallengeResultOrderByInput'][] | null; // [ChallengeResultOrderByInput!]
+      where?: NexusGenInputs['ChallengeResultWhereInput'] | null; // ChallengeResultWhereInput
     }
     chat: { // args
       where: NexusGenInputs['ChatWhereUniqueInput']; // ChatWhereUniqueInput!
