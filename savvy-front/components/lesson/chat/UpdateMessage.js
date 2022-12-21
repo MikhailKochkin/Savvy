@@ -233,6 +233,14 @@ const UpdateMessage = (props) => {
             value={props.text}
           />
         </MainFrame>
+        <br />
+        <textarea
+          type="text"
+          id="summary"
+          placeholder="Описание поста"
+          defaultValue={props.text}
+          onChange={(e) => myCallback2(e.target.value, "text")}
+        />
       </Phrase>
       <Buttons>
         <div className="number">

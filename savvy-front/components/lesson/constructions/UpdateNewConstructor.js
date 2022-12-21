@@ -3,6 +3,7 @@ import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { useTranslation } from "next-i18next";
 
@@ -226,6 +227,7 @@ const UpdateNewConstructor = (props) => {
   // const [type, setType] = useState("equal");
   const [columnsNum, setColumns] = useState(construction.columnsNum);
   const [elements, setElements] = useState(construction.elements.elements);
+  const router = useRouter();
 
   const { t } = useTranslation("lesson");
 

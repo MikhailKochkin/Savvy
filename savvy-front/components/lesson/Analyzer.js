@@ -194,12 +194,12 @@ const Analyzer = (props) => {
         lesson_labels.push("testpractice");
       } else if (
         el.type.toLowerCase() == "texteditor" ||
-        el.type.toLowerCase() == "constructor"
+        el.type.toLowerCase() == "construction"
       ) {
         lesson_difficulty_map.push(4);
         if (el.type.toLowerCase() == "texteditor") {
           lesson_labels.push("text editor");
-        } else if (el.type.toLowerCase() == "constructor") {
+        } else if (el.type.toLowerCase() == "construction") {
           lesson_labels.push("doc builder");
         }
       } else if (el.type.toLowerCase() == "problem") {
@@ -313,7 +313,7 @@ const Analyzer = (props) => {
           el.type.toLowerCase() == "testpractice" ||
           el.type.toLowerCase() == "texteditor" ||
           el.type.toLowerCase() == "document" ||
-          el.type.toLowerCase() == "constructor" ||
+          el.type.toLowerCase() == "construction" ||
           el.type.toLowerCase() == "problem"
         ) {
           practiceElements.push(el);
@@ -329,7 +329,7 @@ const Analyzer = (props) => {
           ) {
             practiceLevel = practiceLevel + 3;
           } else if (
-            el.type.toLowerCase() == "constructor" ||
+            el.type.toLowerCase() == "construction" ||
             el.type.toLowerCase() == "texteditor"
           ) {
             practiceLevel = practiceLevel + 2;
@@ -362,24 +362,17 @@ const Analyzer = (props) => {
   // 1. learn
   let learn_box = ["chat", "note", "shot"];
   // 1. test
-  let test_box = ["newtest", "quiz", "problem", "texteditor", "constructor"];
+  let test_box = ["newtest", "quiz", "problem", "texteditor", "construction"];
   // 1. feedback
   let feedback_box = ["chat", "note"];
   let study_loops = [];
-  // console.log("elements", elements);
   elements.map((el, i) => {
-    if (learn_box.includes(el.type.toLowerCase())) {
-      console.log(
-        "el.type.toLowerCase()",
-        el.type.toLowerCase(),
-        elements[i + 1],
-        test_box
-      );
+    if (el.type && learn_box.includes(el.type.toLowerCase())) {
       if (
         elements[i + 1] &&
+        elements[i + 1].type &&
         test_box.includes(elements[i + 1].type.toLowerCase())
       ) {
-        console.log("sd", el.type, elements[i + 1].type);
         let index = elements
           .slice(i + 1)
           .findIndex((el) => learn_box.includes(el.type.toLowerCase()));
@@ -388,14 +381,13 @@ const Analyzer = (props) => {
             .slice(i)
             .slice(0, index == -1 ? elements.length - 1 : index + 2)
         );
-        console.log("inde", index);
       }
     } else {
       return;
     }
   });
 
-  console.log("study_loops", study_loops);
+  // console.log("study_loops", study_loops);
   // console.log("elems_3", elems_3);
   // console.log("elems_4", elems_4);
 
@@ -485,7 +477,7 @@ const Analyzer = (props) => {
                 {study_loops.map((sl, i) => (
                   <>
                     <div>Loop {i + 1}.</div>
-                    {console.log("sl", sl, study_loops)}
+                    {console.log("sl", sl.length)}
                     <div>
                       {sl.map((el) => (
                         <li>{el.type}</li>
@@ -495,14 +487,14 @@ const Analyzer = (props) => {
                       <b>Comments:</b>
                     </div>
                     <div>
-                      {study_loops.length < 4 &&
+                      {sl.length < 4 &&
                         "❌ ⬆️ This loop's size is probably too small. Are you sure that we have given our student a chance to learn and reflect?"}
 
-                      {study_loops.length >= 4 &&
-                        loop.length <= 7 &&
+                      {sl.length >= 4 &&
+                        sl.length <= 7 &&
                         "✅ This loop's size is great!"}
 
-                      {study_loops.length > 7 &&
+                      {sl.length > 7 &&
                         "❌ ⬇️This loop's size is probably too big. It may be confusing and overwhelming."}
                     </div>
                   </>
@@ -534,7 +526,7 @@ const Analyzer = (props) => {
               </div>
               <div>
                 Look at the difficulty map of your lesson. A good lesson goes
-                from level 1 to level 5 inside<b>one study loop</b> (like a
+                from level 1 to level 5 inside <b>one study loop</b> (like a
                 computer game). Does your lesson follow this pattern?
               </div>
               <div>

@@ -228,6 +228,15 @@ const Secret = styled.div`
   }
   /* justify-content: center; */
 `;
+const Screen = styled.div`
+  max-width: 720px;
+  box-shadow: 0px 0px 4px 3px rgba(202, 202, 202, 0.61);
+  -webkit-box-shadow: 0px 0px 4px 3px rgba(202, 202, 202, 0.61);
+  -moz-box-shadow: 0px 0px 4px 3px rgba(202, 202, 202, 0.61);
+  padding: 50px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+`;
 
 const NoteStyles = styled.div`
   max-width: 570px;
@@ -242,6 +251,9 @@ const NoteStyles = styled.div`
       font-size: 2.2rem;
       line-height: 1.4;
     }
+  }
+  .header {
+    background: #e0e0e0;
   }
   h2 {
     font-size: 3.2rem;
@@ -449,6 +461,7 @@ const Note = (props) => {
               <>
                 {isRevealed && (
                   <NoteStyles story={story} isRevealed={isRevealed}>
+                    {/* <div className="header">Меню</div> */}
                     {renderHTML(text)}
                   </NoteStyles>
                 )}

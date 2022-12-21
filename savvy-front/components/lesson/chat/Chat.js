@@ -385,9 +385,13 @@ const Chat = (props) => {
   };
 
   useEffect(() => {
+    const elements = document.getElementById(id).querySelectorAll("#user_name");
+    let p;
+    elements.forEach((element) => {
+      let name = me.name;
+      element.innerHTML = name;
+    });
     document.addEventListener("keydown", detectKeyDown, true);
-    // console.log("ShowArrow 0 false");
-    // props.getShowArrow(false);
     return () => {
       document.removeEventListener("click", detectKeyDown);
     };
