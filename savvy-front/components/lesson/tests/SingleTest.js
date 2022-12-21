@@ -403,6 +403,7 @@ const SingleTest = (props) => {
     if (comments && comments.length > 0) {
       answerNums.map((num) => comments_arr.push(comments[num]));
     }
+
     setCommentsList(comments_arr);
     const res2 = await res();
   };
@@ -462,6 +463,7 @@ const SingleTest = (props) => {
     }
 
     let comments_arr = [];
+    console.log("comments", comments);
 
     if (comments && comments.length > 0) {
       answerNums.map((num) => {
@@ -655,7 +657,7 @@ const SingleTest = (props) => {
                   commentsList.map((com, i) => {
                     return com ? renderHTML(com) : null;
                   })}
-                {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "}
+                {/* {ifWrong && ifWrong !== "<p></p>" && renderHTML(ifWrong)}{" "} */}
               </div>
               <IconBlock>
                 {author && author.image != null ? (

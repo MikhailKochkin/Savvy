@@ -291,7 +291,10 @@ const Element = (props) => {
         type={task.type}
         test={task}
         me={props.me}
+        ifRight={task.ifRight}
+        ifWrong={task.ifWrong}
         user={props.lesson.user.id}
+        comments={task.comments}
         user_name={props.lesson.user}
         // userData={props.lesson.testResults}
         lessonID={props.lesson.id}

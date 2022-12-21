@@ -386,6 +386,14 @@ const Chat = (props) => {
 
   useEffect(() => {
     const elements = document.getElementById(id).querySelectorAll("#user_name");
+    elements.forEach((element) => {
+      let name = me.name;
+      element.innerHTML = name;
+    });
+  }, [num]);
+
+  useEffect(() => {
+    const elements = document.getElementById(id).querySelectorAll("#user_name");
     let p;
     elements.forEach((element) => {
       let name = me.name;

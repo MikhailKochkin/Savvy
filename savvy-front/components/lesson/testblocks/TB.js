@@ -66,6 +66,7 @@ const TestPractice = (props) => {
   const passResult = (val) => {
     props.getResults(3);
   };
+  console.log("props", props);
   let filtered_tests = tests.filter((t) =>
     props.testPractice.tasks.includes(t.id)
   );

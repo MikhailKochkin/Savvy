@@ -651,7 +651,7 @@ const LessonBlock = (props) => {
                 <TestPractice
                   key={data.id}
                   lessonID={lesson.id}
-                  // getResults={getResults}
+                  getResults={getResults}
                   me={me}
                   testPractice={data}
                   quizes={lesson.quizes}

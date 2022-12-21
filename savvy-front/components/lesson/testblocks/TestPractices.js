@@ -3,6 +3,9 @@ import TestPractice from "./TB";
 
 const TestPractices = (props) => {
   const { lesson, me } = props;
+  const getResults = (res) => {
+    props.getResults(res);
+  };
   return (
     <div>
       {props.testPractices.map((t) => (
@@ -11,6 +14,7 @@ const TestPractices = (props) => {
           quizResults={props.quizResults}
           testResults={props.testResults}
           me={me}
+          getResults={getResults}
           testPractice={t}
           quizes={lesson.quizes}
           tests={lesson.newTests}
