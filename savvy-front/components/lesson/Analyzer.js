@@ -375,7 +375,9 @@ const Analyzer = (props) => {
       ) {
         let index = elements
           .slice(i + 1)
-          .findIndex((el) => learn_box.includes(el.type.toLowerCase()));
+          .findIndex(
+            (el) => el.type && learn_box.includes(el.type.toLowerCase())
+          );
         study_loops.push(
           elements
             .slice(i)
@@ -477,7 +479,6 @@ const Analyzer = (props) => {
                 {study_loops.map((sl, i) => (
                   <>
                     <div>Loop {i + 1}.</div>
-                    {console.log("sl", sl.length)}
                     <div>
                       {sl.map((el) => (
                         <li>{el.type}</li>
