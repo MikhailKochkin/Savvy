@@ -60,7 +60,9 @@ input BoolNullableListFilter {
 
 type BusinessClient {
   comment: String
+  communication_history: Json
   communication_medium: String
+  country: String
   coursePage: CoursePage
   coursePageId: String
   createdAt: DateTime!
@@ -68,6 +70,9 @@ type BusinessClient {
   id: String!
   name: String
   number: String
+  sales_cycle: Json
+  source: String
+  surname: String
   tags: [String!]!
   type: String
   updatedAt: DateTime!
@@ -81,13 +86,18 @@ input BusinessClientListRelationFilter {
 
 input BusinessClientOrderByInput {
   comment: SortOrder
+  communication_history: SortOrder
   communication_medium: SortOrder
+  country: SortOrder
   coursePageId: SortOrder
   createdAt: SortOrder
   email: SortOrder
   id: SortOrder
   name: SortOrder
   number: SortOrder
+  sales_cycle: SortOrder
+  source: SortOrder
+  surname: SortOrder
   tags: SortOrder
   type: SortOrder
   updatedAt: SortOrder
@@ -96,7 +106,9 @@ input BusinessClientOrderByInput {
 input BusinessClientWhereInput {
   AND: [BusinessClientWhereInput!]
   comment: StringNullableFilter
+  communication_history: JsonNullableFilter
   communication_medium: StringNullableFilter
+  country: StringNullableFilter
   coursePage: CoursePageWhereInput
   coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
@@ -106,6 +118,9 @@ input BusinessClientWhereInput {
   NOT: [BusinessClientWhereInput!]
   number: StringNullableFilter
   OR: [BusinessClientWhereInput!]
+  sales_cycle: JsonNullableFilter
+  source: StringNullableFilter
+  surname: StringNullableFilter
   tags: StringNullableListFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
@@ -345,6 +360,15 @@ input ClauseWhereUniqueInput {
   id: String
 }
 
+input ClientMessage {
+  date: String
+  message: String
+}
+
+input ClientMessages {
+  messages: [ClientMessage]
+}
+
 type CommunityMember {
   createdAt: DateTime!
   email: String!
@@ -515,6 +539,7 @@ type CoursePage {
   numInCareerTrack: Int
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   price: Int
+  prices: Json
   promocode: Json
   published: Boolean
   result: String
@@ -564,6 +589,7 @@ input CoursePageOrderByInput {
   numInCareerTrack: SortOrder
   openLesson: SortOrder
   price: SortOrder
+  prices: SortOrder
   promocode: SortOrder
   published: SortOrder
   result: SortOrder
@@ -626,6 +652,7 @@ input CoursePageWhereInput {
   PointATest: PointATestListRelationFilter
   posts: PostListRelationFilter
   price: IntNullableFilter
+  prices: JsonNullableFilter
   programs: ProgramListRelationFilter
   promocode: JsonNullableFilter
   published: BoolNullableFilter
@@ -1453,7 +1480,7 @@ type Mutation {
   addToTeam(id: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
-  createBusinessClient(comment: String, communication_medium: String, coursePageId: String, email: String, name: String, number: String, type: String): User
+  createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
   createChat(lessonId: String, messages: Messages, name: String): Chat
@@ -1518,19 +1545,19 @@ type Mutation {
   remind(id: String, reminders: [DateTime]): CourseVisit
   requestReset(email: String): AuthMessage
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
-  sendBusinessClientEmail(comment: String, id: String): BusinessClient
+  sendBusinessClientEmail(communication_history: ClientMessages, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
   sendMessage(text: String, userId: String): Message
   signin(email: String, password: String, traffic_sources: Visits): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
-  updateBusinessClient(comment: String, id: String, tags: [String]): BusinessClient
+  updateBusinessClient(comment: String, communication_history: ClientMessages, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, hint: String, id: String, name: String, type: String, variants: [String]): Construction
-  updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, news: String, nextStart: DateTime, price: Int, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
+  updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
@@ -2042,6 +2069,21 @@ input PostWhereUniqueInput {
   id: String
 }
 
+input Price {
+  buttonText: String
+  currency: String
+  description: String
+  discount: Float
+  name: String
+  places: Int
+  price: Int
+  timer: String
+}
+
+input Prices {
+  prices: [Price]
+}
+
 type Problem {
   complexity: Int
   createdAt: DateTime!
@@ -2511,6 +2553,15 @@ input Reaction {
   image: String
   name: String
   reaction: String
+}
+
+input SalesCycle {
+  stages: [SalesStage]
+}
+
+input SalesStage {
+  date: String
+  name: String
 }
 
 input SandboxListRelationFilter {

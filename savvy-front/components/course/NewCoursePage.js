@@ -12,7 +12,11 @@ import SellingPoints from "./coursePageBlocks/SellingPoints";
 import Teachers from "./coursePageBlocks/Teachers";
 import Reviews from "./coursePageBlocks/Reviews";
 import Action from "./coursePageBlocks/Action";
+import ActionLeads from "./coursePageBlocks/ActionLeads";
+import Prices from "./coursePageBlocks/Prices";
+
 import MobileAction from "./coursePageBlocks/MobileAction";
+import MobileLeads from "./coursePageBlocks/MobileLeads";
 import MobileBuy from "./coursePageBlocks/MobileBuy";
 
 import Goal from "./coursePageBlocks/Goal";
@@ -34,6 +38,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       result
       tags
       tariffs
+      prices
       currency
       methods
       reviews
@@ -184,9 +189,12 @@ const NewCoursePage = (props) => {
           <ATF id={props.id} />
           {data && !loading && (
             <>
-              {width < 880 && (
-                <MobileBuy coursePage={data.coursePage} me={me} />
-              )}
+              {width < 880 &&
+                (props.form == "lead" ? (
+                  <MobileLeads me={me} coursePage={data.coursePage} />
+                ) : (
+                  <MobileBuy coursePage={data.coursePage} me={me} />
+                ))}
               {width < 880 && <MobileAction coursePage={data.coursePage} />}
               <Goal coursePage={data.coursePage} />
               <Syllabus
@@ -196,6 +204,9 @@ const NewCoursePage = (props) => {
               />
               <Teachers coursePage={data.coursePage} />
               <SellingPoints coursePage={data.coursePage} />
+              {data.coursePage.prices && (
+                <Prices coursePage={data.coursePage} />
+              )}
               {/* {prog && prog.reviews && prog.reviews.length > 0 && (
                 <Reviews data={prog} />
               )} */}
@@ -204,9 +215,14 @@ const NewCoursePage = (props) => {
           )}
         </Main>
         <Money>
-          {!loading && data && width > 880 && (
-            <Action me={me} coursePage={data.coursePage} />
-          )}
+          {!loading &&
+            data &&
+            width > 880 &&
+            (props.form == "lead" ? (
+              <ActionLeads me={me} coursePage={data.coursePage} />
+            ) : (
+              <Action me={me} coursePage={data.coursePage} />
+            ))}
         </Money>
       </Container>
     </Styles>

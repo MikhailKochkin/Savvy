@@ -70,6 +70,57 @@ const PromocodeList = inputObjectType({
   },
 });
 
+const SalesStage = inputObjectType({
+  name: "SalesStage",
+  definition(t) {
+    t.string("name");
+    t.string("date");
+  },
+});
+
+const SalesCycle = inputObjectType({
+  name: "SalesCycle",
+  definition(t) {
+    t.list.field("stages", { type: "SalesStage" });
+  },
+});
+
+const ClientMessage = inputObjectType({
+  name: "ClientMessage",
+  definition(t) {
+    t.string("message");
+    t.string("date");
+  },
+});
+
+const ClientMessages = inputObjectType({
+  name: "ClientMessages",
+  definition(t) {
+    t.list.field("messages", { type: "ClientMessage" });
+  },
+});
+
+const Price = inputObjectType({
+  name: "Price",
+  definition(t) {
+    t.string("name");
+    t.string("description");
+    t.int("price");
+    t.float("discount");
+    t.string("currency");
+    t.string("timer");
+    t.int("places");
+    t.string("buttonText");
+  },
+});
+
+const Prices = inputObjectType({
+  name: "Prices",
+  definition(t) {
+    t.list.field("prices", { type: "Price" });
+  },
+});
+
 const QuestElement = inputObjectType({
   name: "QuestElement",
   definition(t) {
@@ -152,4 +203,10 @@ module.exports = {
   ElementsList,
   QuestElement,
   QuestList,
+  SalesStage,
+  SalesCycle,
+  ClientMessages,
+  ClientMessage,
+  Price,
+  Prices,
 };

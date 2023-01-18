@@ -100,15 +100,20 @@ const BusinessClient = objectType({
   name: "BusinessClient",
   definition(t) {
     t.model.id();
-    t.model.email();
-    t.model.type();
     t.model.name();
+    t.model.surname();
+    t.model.email();
+    t.model.number();
+    t.model.country();
+    t.model.source();
+    t.model.type();
     t.model.comment();
     t.model.tags();
-    t.model.number();
+    t.model.sales_cycle();
+    t.model.communication_history();
+    t.model.communication_medium();
     t.model.coursePageId();
     t.model.coursePage();
-    t.model.communication_medium();
     t.model.createdAt();
     t.model.updatedAt();
   },

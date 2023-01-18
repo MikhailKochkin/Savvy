@@ -255,7 +255,7 @@ const Account = (props) => {
                     placeholder={t("name")}
                     required
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    // onChange={(e) => setName(e.target.value)}
                   />
                   <br />
                   <input

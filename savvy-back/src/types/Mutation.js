@@ -960,12 +960,15 @@ const Mutation = mutationType({
         audience: stringArg(),
         result: stringArg(),
         price: intArg(),
+        prices: arg({
+          type: "Prices",
+        }),
         discountPrice: intArg(),
         currency: stringArg(),
         news: stringArg(),
         authors: stringArg(),
         promocode: arg({
-          type: "PromocodeList", // name should match the name you provided
+          type: "PromocodeList",
         }),
         tariffs: stringArg(),
         methods: stringArg(),
@@ -3331,27 +3334,6 @@ const Mutation = mutationType({
         return Feedback;
       },
     });
-    t.field("updateBusinessClient", {
-      type: "BusinessClient",
-      args: {
-        comment: stringArg(),
-        tags: list(stringArg()),
-        id: stringArg(),
-      },
-      resolve: async (_, { comment, tags, id }, ctx) => {
-        const bclient = await ctx.prisma.businessClient.update({
-          where: { id },
-          data: {
-            tags: {
-              set: [...tags],
-            },
-            comment,
-          },
-        });
-
-        return bclient;
-      },
-    });
     t.field("textBusinessClient", {
       type: "BusinessClient",
       args: {
@@ -3395,32 +3377,36 @@ const Mutation = mutationType({
         return bclient;
       },
     });
-    t.field("deleteClient", {
-      type: "BusinessClient",
-      args: {
-        id: stringArg(),
-      },
-      resolve: async (_, args, ctx) => {
-        const where = { id: args.id };
-        return ctx.prisma.businessClient.delete({ where });
-      },
-    });
     t.field("sendBusinessClientEmail", {
       type: "BusinessClient",
       args: {
-        comment: stringArg(),
+        communication_history: arg({
+          type: "ClientMessages",
+        }),
         id: stringArg(),
       },
-      resolve: async (_, { communication_medium, comment, id }, ctx) => {
+      resolve: async (_, { communication_history, comment, id }, ctx) => {
+        console.log("communication_history", communication_history);
+
         const bc = await ctx.prisma.businessClient.findUnique({
           where: { id: id },
         });
 
+        const updated_bc = await ctx.prisma.businessClient.update({
+          where: { id },
+          data: {
+            communication_history: communication_history,
+          },
+        });
         const newEmail3 = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: bc.email,
-          Subject: `17.08 Полезные материалы от BeSavvy Lawyer 🚀`,
-          HtmlBody: GenericEmail.GenericEmail(comment),
+          Subject: `Полезные материалы от BeSavvy Lawyer 🚀`,
+          HtmlBody: GenericEmail.GenericEmail(
+            communication_history.messages[
+              communication_history.messages.length - 1
+            ].message
+          ),
         });
 
         return bc;
@@ -3429,25 +3415,43 @@ const Mutation = mutationType({
     t.field("createBusinessClient", {
       type: "User",
       args: {
-        email: stringArg(),
         name: stringArg(),
-        type: stringArg(),
+        surname: stringArg(),
+        email: stringArg(),
         number: stringArg(),
-        communication_medium: stringArg(),
+        country: stringArg(),
+        source: stringArg(),
         comment: stringArg(),
+        type: stringArg(),
+        sales_cycle: arg({
+          type: "SalesCycle",
+        }),
+        // communication_history: arg({
+        //   type: "ClientMessages",
+        // }),
+        // communication_medium: stringArg(),
         coursePageId: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const coursePageId = args.coursePageId;
         delete args.coursePageId;
-        const new_client = await ctx.prisma.businessClient.create({
-          data: {
-            coursePage: {
-              connect: { id: coursePageId },
+        let new_client;
+        if (coursePageId) {
+          new_client = await ctx.prisma.businessClient.create({
+            data: {
+              coursePage: {
+                connect: { id: coursePageId },
+              },
+              ...args,
             },
-            ...args,
-          },
-        });
+          });
+        } else {
+          new_client = await ctx.prisma.businessClient.create({
+            data: {
+              ...args,
+            },
+          });
+        }
 
         // if (args.comment == "consult") {
         const newEmail = await client.sendEmail({
@@ -3463,6 +3467,50 @@ const Mutation = mutationType({
         return new_client;
       },
     }),
+      t.field("updateBusinessClient", {
+        type: "BusinessClient",
+        args: {
+          id: stringArg(),
+          comment: stringArg(),
+          number: stringArg(),
+          tags: list(stringArg()),
+          sales_cycle: arg({
+            type: "SalesCycle",
+          }),
+          communication_history: arg({
+            type: "ClientMessages",
+          }),
+        },
+        resolve: async (
+          _,
+          { comment, tags, id, sales_cycle, communication_history },
+          ctx
+        ) => {
+          const bclient = await ctx.prisma.businessClient.update({
+            where: { id },
+            data: {
+              tags: {
+                set: [...tags],
+              },
+              comment,
+              sales_cycle,
+              communication_history,
+            },
+          });
+
+          return bclient;
+        },
+      }),
+      t.field("deleteClient", {
+        type: "BusinessClient",
+        args: {
+          id: stringArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          const where = { id: args.id };
+          return ctx.prisma.businessClient.delete({ where });
+        },
+      }),
       t.field("createCommunityMember", {
         type: "PaymentInfo2",
         args: {

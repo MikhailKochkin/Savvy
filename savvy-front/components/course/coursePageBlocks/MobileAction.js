@@ -81,7 +81,9 @@ const MobileAction = (props) => {
           // location.href = "https://t.me/BeSavvyMentorBot?start=link_vINBAwrN4O";
         }}
       >
-        {t("start_open_lesson")}
+        {props.coursePage.prices && props.coursePage.prices.prices.length > 0
+          ? "Оставить заявку"
+          : t("start_open_lesson")}
       </ButtonOpen>
     </Styles>
   );

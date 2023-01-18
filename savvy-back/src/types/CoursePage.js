@@ -67,6 +67,7 @@ const CoursePage = objectType({
     t.model.students();
     t.model.new_students({ filtering: true });
     t.model.price();
+    t.model.prices();
     t.model.subscriptionPrice();
     t.model.discountPrice();
     t.model.company();

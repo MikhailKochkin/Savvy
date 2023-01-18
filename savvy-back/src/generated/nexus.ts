@@ -72,13 +72,18 @@ export interface NexusGenInputs {
   }
   BusinessClientOrderByInput: { // input type
     comment?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    communication_history?: NexusGenEnums['SortOrder'] | null; // SortOrder
     communication_medium?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    country?: NexusGenEnums['SortOrder'] | null; // SortOrder
     coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
     email?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     name?: NexusGenEnums['SortOrder'] | null; // SortOrder
     number?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    sales_cycle?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    source?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    surname?: NexusGenEnums['SortOrder'] | null; // SortOrder
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
     type?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -86,7 +91,9 @@ export interface NexusGenInputs {
   BusinessClientWhereInput: { // input type
     AND?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
     comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    communication_history?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     communication_medium?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    country?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
     coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -96,6 +103,9 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
     number?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     OR?: NexusGenInputs['BusinessClientWhereInput'][] | null; // [BusinessClientWhereInput!]
+    sales_cycle?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    source?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    surname?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
     type?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -263,6 +273,13 @@ export interface NexusGenInputs {
   ClauseWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  ClientMessage: { // input type
+    date?: string | null; // String
+    message?: string | null; // String
+  }
+  ClientMessages: { // input type
+    messages?: Array<NexusGenInputs['ClientMessage'] | null> | null; // [ClientMessage]
+  }
   CompanyWhereInput: { // input type
     AND?: NexusGenInputs['CompanyWhereInput'][] | null; // [CompanyWhereInput!]
     coursePage?: NexusGenInputs['CoursePageListRelationFilter'] | null; // CoursePageListRelationFilter
@@ -362,6 +379,7 @@ export interface NexusGenInputs {
     numInCareerTrack?: NexusGenEnums['SortOrder'] | null; // SortOrder
     openLesson?: NexusGenEnums['SortOrder'] | null; // SortOrder
     price?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    prices?: NexusGenEnums['SortOrder'] | null; // SortOrder
     promocode?: NexusGenEnums['SortOrder'] | null; // SortOrder
     published?: NexusGenEnums['SortOrder'] | null; // SortOrder
     result?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -423,6 +441,7 @@ export interface NexusGenInputs {
     PointATest?: NexusGenInputs['PointATestListRelationFilter'] | null; // PointATestListRelationFilter
     posts?: NexusGenInputs['PostListRelationFilter'] | null; // PostListRelationFilter
     price?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    prices?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     programs?: NexusGenInputs['ProgramListRelationFilter'] | null; // ProgramListRelationFilter
     promocode?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     published?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
@@ -1340,6 +1359,19 @@ export interface NexusGenInputs {
   PostWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  Price: { // input type
+    buttonText?: string | null; // String
+    currency?: string | null; // String
+    description?: string | null; // String
+    discount?: number | null; // Float
+    name?: string | null; // String
+    places?: number | null; // Int
+    price?: number | null; // Int
+    timer?: string | null; // String
+  }
+  Prices: { // input type
+    prices?: Array<NexusGenInputs['Price'] | null> | null; // [Price]
+  }
   ProblemItem: { // input type
     id?: string | null; // String
     next?: NexusGenInputs['NextType'] | null; // NextType
@@ -1613,6 +1645,13 @@ export interface NexusGenInputs {
     image?: string | null; // String
     name?: string | null; // String
     reaction?: string | null; // String
+  }
+  SalesCycle: { // input type
+    stages?: Array<NexusGenInputs['SalesStage'] | null> | null; // [SalesStage]
+  }
+  SalesStage: { // input type
+    date?: string | null; // String
+    name?: string | null; // String
   }
   SandboxListRelationFilter: { // input type
     every?: NexusGenInputs['SandboxWhereInput'] | null; // SandboxWhereInput
@@ -2266,13 +2305,18 @@ export interface NexusGenObjects {
   }
   BusinessClient: { // root type
     comment?: string | null; // String
+    communication_history?: NexusGenScalars['Json'] | null; // Json
     communication_medium?: string | null; // String
+    country?: string | null; // String
     coursePageId?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     email: string; // String!
     id: string; // String!
     name?: string | null; // String
     number?: string | null; // String
+    sales_cycle?: NexusGenScalars['Json'] | null; // Json
+    source?: string | null; // String
+    surname?: string | null; // String
     tags: string[]; // [String!]!
     type?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2391,6 +2435,7 @@ export interface NexusGenObjects {
     nextStart?: NexusGenScalars['DateTime'] | null; // DateTime
     numInCareerTrack?: number | null; // Int
     price?: number | null; // Int
+    prices?: NexusGenScalars['Json'] | null; // Json
     promocode?: NexusGenScalars['Json'] | null; // Json
     published?: boolean | null; // Boolean
     result?: string | null; // String
@@ -2884,7 +2929,9 @@ export interface NexusGenFieldTypes {
   }
   BusinessClient: { // field return type
     comment: string | null; // String
+    communication_history: NexusGenScalars['Json'] | null; // Json
     communication_medium: string | null; // String
+    country: string | null; // String
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     coursePageId: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2892,6 +2939,9 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     name: string | null; // String
     number: string | null; // String
+    sales_cycle: NexusGenScalars['Json'] | null; // Json
+    source: string | null; // String
+    surname: string | null; // String
     tags: string[]; // [String!]!
     type: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3030,6 +3080,7 @@ export interface NexusGenFieldTypes {
     numInCareerTrack: number | null; // Int
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
     price: number | null; // Int
+    prices: NexusGenScalars['Json'] | null; // Json
     promocode: NexusGenScalars['Json'] | null; // Json
     published: boolean | null; // Boolean
     result: string | null; // String
@@ -3785,7 +3836,9 @@ export interface NexusGenFieldTypeNames {
   }
   BusinessClient: { // field return type name
     comment: 'String'
+    communication_history: 'Json'
     communication_medium: 'String'
+    country: 'String'
     coursePage: 'CoursePage'
     coursePageId: 'String'
     createdAt: 'DateTime'
@@ -3793,6 +3846,9 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     name: 'String'
     number: 'String'
+    sales_cycle: 'Json'
+    source: 'String'
+    surname: 'String'
     tags: 'String'
     type: 'String'
     updatedAt: 'DateTime'
@@ -3931,6 +3987,7 @@ export interface NexusGenFieldTypeNames {
     numInCareerTrack: 'Int'
     orders: 'Order'
     price: 'Int'
+    prices: 'Json'
     promocode: 'Json'
     published: 'Boolean'
     result: 'String'
@@ -4906,11 +4963,14 @@ export interface NexusGenArgTypes {
     }
     createBusinessClient: { // args
       comment?: string | null; // String
-      communication_medium?: string | null; // String
+      country?: string | null; // String
       coursePageId?: string | null; // String
       email?: string | null; // String
       name?: string | null; // String
       number?: string | null; // String
+      sales_cycle?: NexusGenInputs['SalesCycle'] | null; // SalesCycle
+      source?: string | null; // String
+      surname?: string | null; // String
       type?: string | null; // String
     }
     createCertificate: { // args
@@ -5255,7 +5315,7 @@ export interface NexusGenArgTypes {
       resetToken?: string | null; // String
     }
     sendBusinessClientEmail: { // args
-      comment?: string | null; // String
+      communication_history?: NexusGenInputs['ClientMessages'] | null; // ClientMessages
       id?: string | null; // String
     }
     sendEmailToStudent: { // args
@@ -5293,7 +5353,10 @@ export interface NexusGenArgTypes {
     }
     updateBusinessClient: { // args
       comment?: string | null; // String
+      communication_history?: NexusGenInputs['ClientMessages'] | null; // ClientMessages
       id?: string | null; // String
+      number?: string | null; // String
+      sales_cycle?: NexusGenInputs['SalesCycle'] | null; // SalesCycle
       tags?: Array<string | null> | null; // [String]
     }
     updateChat: { // args
@@ -5341,6 +5404,7 @@ export interface NexusGenArgTypes {
       news?: string | null; // String
       nextStart?: NexusGenScalars['DateTime'] | null; // DateTime
       price?: number | null; // Int
+      prices?: NexusGenInputs['Prices'] | null; // Prices
       promocode?: NexusGenInputs['PromocodeList'] | null; // PromocodeList
       result?: string | null; // String
       subheader?: Array<string | null> | null; // [String]

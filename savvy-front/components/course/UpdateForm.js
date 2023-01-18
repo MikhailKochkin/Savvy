@@ -18,6 +18,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $methods: String
     $nextStart: DateTime
     $price: Int
+    $prices: Prices
     $discountPrice: Int
     $goals: [String]
     $header: [String]
@@ -37,6 +38,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       discountPrice: $discountPrice
       nextStart: $nextStart
       price: $price
+      prices: $prices
       goals: $goals
       header: $header
       subheader: $subheader
@@ -209,6 +211,22 @@ const Frame = styled.div`
   }
 `;
 
+const Prices = styled.div`
+  input,
+  textarea {
+    margin-bottom: 5px;
+  }
+  .price_box {
+    border: 1px solid #e5e5e5;
+    width: 80%;
+    margin: 5px 0px;
+    padding: 15px 25px;
+    .text {
+      font-size: 1.2rem;
+    }
+  }
+`;
+
 const Circles = styled.div`
   display: flex;
   flex-direction: row;
@@ -232,6 +250,9 @@ const UpdateForm = (props) => {
   const [methods, setMethods] = useState(props.coursePage.methods);
   const [video, setVideo] = useState(props.coursePage.video);
   const [price, setPrice] = useState(props.coursePage.price);
+  const [prices, setPrices] = useState(
+    props.coursePage.prices ? [...props.coursePage.prices.prices] : []
+  );
   const [discountPrice, setDiscountPrice] = useState(
     props.coursePage.discountPrice
   );
@@ -303,6 +324,7 @@ const UpdateForm = (props) => {
     }
   };
   const { coursePage, me } = props;
+  console.log("coursePage", coursePage);
   return (
     <Form>
       <Title>{t("course_info")}</Title>
@@ -347,6 +369,137 @@ const UpdateForm = (props) => {
           defaultValue={discountPrice}
           onChange={(e) => setDiscountPrice(parseInt(e.target.value))}
         />
+        <Explainer>Pricing options</Explainer>
+        <Prices>
+          {prices.map((p, i) => (
+            <div className="price_box">
+              <div className="text">Name</div>
+              <input
+                name="name"
+                type="text"
+                value={p.name}
+                index={"name" + i}
+                onChange={(e) => {
+                  let newPriceOption = { ...prices[i] };
+                  newPriceOption.name = e.target.value;
+                  let newPrices = [...prices];
+                  newPrices[i] = newPriceOption;
+                  setPrices([...newPrices]);
+                }}
+              />
+              <div className="text">Description</div>
+              <textarea
+                name="description"
+                type="text"
+                value={p.description}
+                index={"description" + i}
+                onChange={(e) => {
+                  let newPriceOption = { ...prices[i] };
+                  newPriceOption.description = e.target.value;
+                  let newPrices = [...prices];
+                  newPrices[i] = newPriceOption;
+                  setPrices([...newPrices]);
+                }}
+              />
+              <div className="text">Price</div>
+              <input
+                name="price"
+                type="number"
+                value={p.price}
+                index={"price" + i}
+                onChange={(e) => {
+                  let newPriceOption = { ...prices[i] };
+                  newPriceOption.price = parseInt(e.target.value);
+                  let newPrices = [...prices];
+                  newPrices[i] = newPriceOption;
+                  setPrices([...newPrices]);
+                }}
+              />
+              <div className="text">Discount</div>
+              <input
+                name="discount"
+                type="number"
+                value={p.discount}
+                step="0.01"
+                index={"discount" + i}
+                onChange={(e) => {
+                  let newPriceOption = { ...prices[i] };
+                  newPriceOption.discount = parseFloat(e.target.value);
+                  let newPrices = [...prices];
+                  newPrices[i] = newPriceOption;
+                  setPrices([...newPrices]);
+                }}
+              />
+              <div className="text">Places</div>
+              <input
+                name="places"
+                type="number"
+                value={p.places}
+                index={"places" + i}
+                onChange={(e) => {
+                  let newPriceOption = { ...prices[i] };
+                  newPriceOption.places = parseInt(e.target.value);
+                  let newPrices = [...prices];
+                  newPrices[i] = newPriceOption;
+                  setPrices([...newPrices]);
+                }}
+              />
+              <div className="text">Currency</div>
+              <input
+                name="currency"
+                type="text"
+                defaultValue="RU"
+                value={p.currency}
+                index={"currency" + i}
+                onChange={(e) => {
+                  let newPriceOption = { ...prices[i] };
+                  newPriceOption.currency = e.target.value;
+                  let newPrices = [...prices];
+                  newPrices[i] = newPriceOption;
+                  setPrices([...newPrices]);
+                }}
+              />
+            </div>
+          ))}
+        </Prices>
+        <Circles>
+          <Circle>
+            <button
+              className="number_button"
+              onClick={(e) => {
+                e.preventDefault();
+                let new_prices = prices;
+                new_prices.pop();
+                setPrices([...new_prices]);
+              }}
+            >
+              -1
+            </button>
+          </Circle>
+          <Circle>
+            <button
+              className="number_button"
+              onClick={(e) => {
+                setPrices([
+                  ...prices,
+                  {
+                    name: "",
+                    description: "",
+                    price: 0,
+                    discount: 1,
+                    timer: "",
+                    places: 0,
+                    currency: "ru",
+                    buttonText: "",
+                  },
+                ]);
+                e.preventDefault();
+              }}
+            >
+              +1
+            </button>
+          </Circle>
+        </Circles>
         <Explainer>{t("course_next_cohort")}</Explainer>
         <input
           id="start"
@@ -366,6 +519,7 @@ const UpdateForm = (props) => {
         {upload && t("uploading")}
         <Img src={image ? image : coursePage.image} alt="Upload Preview" />
       </Fieldset>
+
       <Title>{t("course_landing_info")}</Title>
       <Fieldset>
         <Explainer>{t("course_header")}</Explainer>
@@ -517,6 +671,7 @@ const UpdateForm = (props) => {
             return updateCoursePage({
               variables: {
                 id: props.coursePage.id,
+                prices: { prices: prices },
                 title,
                 news,
                 description: description,

@@ -539,7 +539,8 @@ const Action = (props) => {
               </div>
             )} */}
             <div className="">
-              ◼️ {coursePage.lessons.length} {t("online_lessons")}
+              ◼️ {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
+              {t("online_lessons")}
               {/* {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")} */}
             </div>
             {price > 4000 && <div className="">◼️ {t("webinars")}</div>}

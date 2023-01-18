@@ -17,6 +17,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       header
       discountPrice
       price
+      prices
       subheader
       tariffs
       methods

@@ -7,13 +7,18 @@ const CLIENTS_QUERY = gql`
     businessClients(orderBy: { createdAt: desc }) {
       id
       name
+      surname
+      country
+      source
       email
       number
       tags
-      createdAt
       type
       comment
       communication_medium
+      communication_history
+      sales_cycle
+      createdAt
     }
   }
 `;

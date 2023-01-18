@@ -422,7 +422,8 @@ const MobileBuy = (props) => {
         )}
         <div className="details">
           <div className="">
-            {coursePage.lessons.length} {t("online_lessons")}
+            {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
+            {t("online_lessons")}
           </div>
           {price > 4000 && <div className="">{t("webinars")}</div>}
 

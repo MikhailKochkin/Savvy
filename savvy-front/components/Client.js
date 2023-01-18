@@ -8,8 +8,14 @@ import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
 
 const UPDATE_CLIENT_MUTATION = gql`
-  mutation UPDATE_CLIENT_MUTATION($id: String!, $comment: String) {
-    sendBusinessClientEmail(id: $id, comment: $comment) {
+  mutation UPDATE_CLIENT_MUTATION(
+    $id: String!
+    $communication_history: ClientMessages
+  ) {
+    sendBusinessClientEmail(
+      id: $id
+      communication_history: $communication_history
+    ) {
       id
     }
   }
@@ -49,19 +55,18 @@ const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
 });
 
 const Tag = styled.div`
-  border: 1px solid blue;
-  cursor: pointer;
-  color: blue;
+  font-size: 1rem;
+  margin-bottom: 2%;
+  background: #f8eed7;
+  padding: 2px 6px;
+  margin: 2px;
+  height: 22px;
   border-radius: 5px;
-  display: flex;
-  flex-direction: row;
-  width: 90%;
+
+  display: inline-block;
+  /* flex-direction: row;
   justify-content: center;
-  align-items: center;
-  transition: ease-in 0.2s;
-  &:hover {
-    border: 2px solid blue;
-  }
+  align-items: center; */
 `;
 
 const Row = styled.div`
@@ -73,6 +78,16 @@ const Row = styled.div`
   background: #fff;
   border: 1px solid #eff0f1;
   border-top: 1px solid #fff;
+  form {
+    input {
+      width: 50px;
+      background: none;
+      border: none;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1rem;
+    }
+  }
   .index {
     width: 2%;
     display: flex;
@@ -97,6 +112,10 @@ const Row = styled.div`
   .comment {
     width: 45%;
     padding: 0 2%;
+    h4 {
+      margin: 0;
+      margin-bottom: 10px;
+    }
     .editor {
       font-size: 1.6rem;
       width: 95%;
@@ -106,6 +125,7 @@ const Row = styled.div`
       outline: 0;
       padding: 0.5%;
       font-size: 1.6rem;
+      margin-bottom: 20px;
       @media (max-width: 800px) {
         width: 350px;
       }
@@ -138,6 +158,14 @@ const Row = styled.div`
   }
 `;
 
+const Message = styled.div`
+  margin-bottom: 20px;
+  border-bottom: 1px solid grey;
+  p {
+    margin: 0px 0;
+  }
+`;
+
 const DeleteClient = (props) => {
   const { t } = useTranslation("lesson");
 
@@ -154,16 +182,19 @@ const DeleteClient = (props) => {
           }).catch((error) => {
             alert(error.message);
           });
+          props.updateAfterDelete(true);
         }
       }}
     >
-      {loading ? t("deleting") : t("delete")}
+      {loading ? t("Deleting...") : t("Delete client")}
     </button>
   );
 };
 
 const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
+  const [message, setMessage] = useState("");
+
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
 
@@ -196,30 +227,63 @@ const Client = (props) => {
 
   const myCallback = (dataFromChild) => {
     setComment(dataFromChild);
+    updateBusinessClient({
+      variables: {
+        id: props.id,
+        tags: [...tags],
+        comment: dataFromChild,
+      },
+    });
+  };
+
+  const myCallback2 = (dataFromChild) => {
+    setMessage(dataFromChild);
+  };
+
+  const updateAfterDelete = () => {
+    let el = document.getElementById(props.id);
+    el.style.display = "none";
   };
 
   let number;
   if (props.number.startsWith("8")) {
     number = props.number.replace("8", "+7");
+  } else if (
+    props.number.startsWith("1") ||
+    props.number.startsWith("2") ||
+    props.number.startsWith("3") ||
+    props.number.startsWith("4") ||
+    props.number.startsWith("5") ||
+    props.number.startsWith("6") ||
+    props.number.startsWith("9")
+  ) {
+    number = "+7" + props.number;
+  } else if (props.number.startsWith("7")) {
+    number = "+" + props.number;
   } else {
     number = props.number;
   }
-
-  let comment_for_wa = comment ? comment.replaceAll("</p>", "\n\n") : "";
-  comment_for_wa = comment_for_wa.replaceAll("<p>", "");
+  const updateTags = (val) => {
+    setNewTag(val);
+  };
+  // number = number.replaceAll("-", "");
+  // number = number.replaceAll(" ", "");
+  // let comment_for_wa = comment ? comment.replaceAll("</p>", "\n\n") : "";
+  // comment_for_wa = comment_for_wa.replaceAll("<p>", "");
   // console.log("comment_for_wa", renderHTML(comment_for_wa));
   return (
-    <Row>
+    <Row id={props.id}>
       <div className="index">{props.index + 1}.</div>
       <div className="time">
         {moment(props.createdAt).format("DD-MM-YYYY HH:mm")}
       </div>
       <div className="name">
         <div>{props.name}</div>
+        <div>{props.surname}</div>
         <div>{number}</div>
         <div>{props.email}</div>
-        {props.tags &&
-          props.tags.map((t, i) => (
+        {tags &&
+          tags.map((t, i) => (
             <>
               <Tag
                 onClick={(e) => {
@@ -232,8 +296,48 @@ const Client = (props) => {
               </Tag>
             </>
           ))}
-        <form>
-          <select onChange={(e) => setNewTag(e.target.value)}>
+        <form
+          method="POST"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            let new_arr = [...tags, newTag];
+            setTags(new_arr);
+            setNewTag("");
+
+            let updated_client = updateBusinessClient({
+              variables: {
+                id: props.id,
+                tags: [...new_arr],
+                comment: comment,
+              },
+            });
+            return updated_client;
+          }}
+        >
+          <input
+            type="text"
+            name=""
+            value={newTag}
+            onChange={(e) => setNewTag(e.target.value)}
+            placeholder="..."
+          />
+        </form>
+        {/* <form>
+          <select
+            onChange={(e) => {
+              e.preventDefault();
+              setNewTag(e.target.value);
+              setTags([e.target.value]);
+              let updated_client = updateBusinessClient({
+                variables: {
+                  id: props.id,
+                  tags: tags,
+                  comment: comment,
+                },
+              });
+              return updated_client;
+            }}
+          >
             <option value="">Выберите тег</option>
             <option value="Wrong Number">Wrong Number</option>
             <option value="Reach out">Reach out</option>
@@ -244,43 +348,22 @@ const Client = (props) => {
             <option value="Invoice">Invoice</option>
             <option value="Sell">Sell</option>
           </select>
-          <button
-            onClick={async (e) => {
-              e.preventDefault();
-              setTags([newTag]);
-            }}
-          >
-            Добавить тег
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-
-              updateBusinessClient({
-                variables: {
-                  id: props.id,
-                  tags: tags,
-                  comment: comment,
-                },
-              });
-              alert("Сохранили");
-            }}
-          >
-            Сохранить
-          </button>
-        </form>
+        </form> */}
+        <button>
+          <a target="_blank" href={`https://t.me/${number}`}>
+            Написать в Telegram
+          </a>
+        </button>
         <button>
           <a
             target="_blank"
             // href={`https://api.whatsapp.com/send?phone=${number}?text=Hello!`}
-            href={`https://wa.me/${number}?text=${
-              comment ? comment_for_wa : ""
-            }`}
+            href={`https://wa.me/${number}`}
           >
             Написать в whatsApp
           </a>
         </button>
-        <button
+        {/* <button
           onClick={(e) => {
             e.preventDefault();
             textBusinessClient({
@@ -293,34 +376,70 @@ const Client = (props) => {
           }}
         >
           Написать в WA
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            sendBusinessClientEmail({
-              variables: {
-                id: props.id,
-                comment: comment,
-              },
-            });
-          }}
-        >
-          Написать по имейл
-        </button>
-        <DeleteClient clientId={props.id} />
+        </button> */}
+        <DeleteClient
+          updateAfterDelete={updateAfterDelete}
+          clientId={props.id}
+        />
       </div>
       <div className="comment">
-        {<div>{renderHTML(props.comment ? props.comment : "")}</div>}
-
+        <h4>Комментарий</h4>
         <div className="editor">
           <DynamicLoadedEditor
             getEditorText={myCallback}
-            value={""}
+            value={props.comment}
             name="text"
           />
         </div>
-        <br />
+        <h4>Имейл</h4>
+        {props.communication_history &&
+          props.communication_history.messages &&
+          props.communication_history.messages.map((m) => (
+            <Message>
+              <div>{renderHTML(m.message)}</div>
+              <div> {moment(m.date).format("DD-MM-YYYY HH:mm")}</div>
+            </Message>
+          ))}
+        <div className="editor">
+          <DynamicLoadedEditor
+            getEditorText={myCallback2}
+            value={message}
+            name="text"
+          />
+        </div>
         <button
+          onClick={async (e) => {
+            e.preventDefault();
+            let mess = props.communication_history
+              ? [
+                  ...props.communication_history.messages,
+                  {
+                    message: message,
+                    date: new Date().toISOString(),
+                  },
+                ]
+              : [
+                  {
+                    message: message,
+                    date: new Date().toISOString(),
+                  },
+                ];
+
+            const res = await sendBusinessClientEmail({
+              variables: {
+                id: props.id,
+                communication_history: {
+                  messages: mess,
+                },
+              },
+            });
+            alert("Sent!");
+          }}
+        >
+          Отправить имейл
+        </button>
+        <br />
+        {/* <button
           onClick={(e) => {
             updateBusinessClient({
               variables: {
@@ -333,7 +452,7 @@ const Client = (props) => {
           }}
         >
           Изменить
-        </button>
+        </button> */}
       </div>
       <div className="tags">
         <li>pathname: {url.pathname}</li>
