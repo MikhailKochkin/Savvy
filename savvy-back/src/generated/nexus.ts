@@ -1624,6 +1624,14 @@ export interface NexusGenInputs {
     none?: NexusGenInputs['RatingWhereInput'] | null; // RatingWhereInput
     some?: NexusGenInputs['RatingWhereInput'] | null; // RatingWhereInput
   }
+  RatingOrderByInput: { // input type
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    forumId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    rating?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   RatingWhereInput: { // input type
     AND?: NexusGenInputs['RatingWhereInput'][] | null; // [RatingWhereInput!]
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
@@ -3538,6 +3546,8 @@ export interface NexusGenFieldTypes {
     quizResult: NexusGenRootTypes['QuizResult'] | null; // QuizResult
     quizResults: NexusGenRootTypes['QuizResult'][]; // [QuizResult!]!
     quizzes: NexusGenRootTypes['Quiz'][]; // [Quiz!]!
+    rating: NexusGenRootTypes['Rating'] | null; // Rating
+    ratings: NexusGenRootTypes['Rating'][]; // [Rating!]!
     stats: NexusGenRootTypes['Stats'] | null; // Stats
     team: NexusGenRootTypes['Team'] | null; // Team
     teams: NexusGenRootTypes['Team'][]; // [Team!]!
@@ -4445,6 +4455,8 @@ export interface NexusGenFieldTypeNames {
     quizResult: 'QuizResult'
     quizResults: 'QuizResult'
     quizzes: 'Quiz'
+    rating: 'Rating'
+    ratings: 'Rating'
     stats: 'Stats'
     team: 'Team'
     teams: 'Team'
@@ -5772,6 +5784,17 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['QuizOrderByInput'][] | null; // [QuizOrderByInput!]
       where?: NexusGenInputs['QuizWhereInput'] | null; // QuizWhereInput
+    }
+    rating: { // args
+      where: NexusGenInputs['RatingWhereUniqueInput']; // RatingWhereUniqueInput!
+    }
+    ratings: { // args
+      after?: NexusGenInputs['RatingWhereUniqueInput'] | null; // RatingWhereUniqueInput
+      before?: NexusGenInputs['RatingWhereUniqueInput'] | null; // RatingWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['RatingOrderByInput'][] | null; // [RatingOrderByInput!]
+      where?: NexusGenInputs['RatingWhereInput'] | null; // RatingWhereInput
     }
     stats: { // args
       lessonId?: string | null; // String

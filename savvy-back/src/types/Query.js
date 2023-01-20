@@ -28,6 +28,8 @@ const Query = queryType({
     t.crud.programs({ ordering: true, filtering: true });
     t.crud.offer({ ordering: true, filtering: true });
     t.crud.offers({ ordering: true, filtering: true });
+    t.crud.rating({ ordering: true, filtering: true });
+    t.crud.ratings({ ordering: true, filtering: true });
     t.crud.courseVisits({ ordering: true, filtering: true });
     t.crud.quizzes({ ordering: true, filtering: true });
     t.crud.courseVisit({ filtering: true });

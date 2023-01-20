@@ -2351,6 +2351,8 @@ type Query {
   quizResult(where: QuizResultWhereUniqueInput!): QuizResult
   quizResults(after: QuizResultWhereUniqueInput, before: QuizResultWhereUniqueInput, first: Int, last: Int, orderBy: [QuizResultOrderByInput!], where: QuizResultWhereInput): [QuizResult!]!
   quizzes(after: QuizWhereUniqueInput, before: QuizWhereUniqueInput, first: Int, last: Int, orderBy: [QuizOrderByInput!], where: QuizWhereInput): [Quiz!]!
+  rating(where: RatingWhereUniqueInput!): Rating
+  ratings(after: RatingWhereUniqueInput, before: RatingWhereUniqueInput, first: Int, last: Int, orderBy: [RatingOrderByInput!], where: RatingWhereInput): [Rating!]!
   stats(lessonId: String, userId: String): Stats
   team(where: TeamWhereUniqueInput!): Team
   teams(after: TeamWhereUniqueInput, before: TeamWhereUniqueInput, first: Int, last: Int, orderBy: [TeamOrderByInput!], where: TeamWhereInput): [Team!]!
@@ -2528,6 +2530,15 @@ input RatingListRelationFilter {
   every: RatingWhereInput
   none: RatingWhereInput
   some: RatingWhereInput
+}
+
+input RatingOrderByInput {
+  createdAt: SortOrder
+  forumId: SortOrder
+  id: SortOrder
+  rating: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
 }
 
 input RatingWhereInput {
