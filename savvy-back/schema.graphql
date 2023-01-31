@@ -533,6 +533,7 @@ type CoursePage {
   installments: Int
   lessons(after: LessonWhereUniqueInput, before: LessonWhereUniqueInput, first: Int, last: Int): [Lesson!]!
   methods: String
+  modules: Json
   new_students(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, where: UserWhereInput): [User!]!
   news: String
   nextStart: DateTime
@@ -584,6 +585,7 @@ input CoursePageOrderByInput {
   image: SortOrder
   installments: SortOrder
   methods: SortOrder
+  modules: SortOrder
   news: SortOrder
   nextStart: SortOrder
   numInCareerTrack: SortOrder
@@ -640,6 +642,7 @@ input CoursePageWhereInput {
   lawrdles: LawrdleListRelationFilter
   lessons: LessonListRelationFilter
   methods: StringNullableFilter
+  modules: JsonNullableFilter
   new_students: UserListRelationFilter
   news: StringNullableFilter
   nextStart: DateTimeNullableFilter
@@ -1256,6 +1259,10 @@ type Lesson {
   userId: String!
 }
 
+input LessonInModule {
+  id: String
+}
+
 input LessonItem {
   id: String
   type: String
@@ -1476,8 +1483,19 @@ input MiniForumWhereUniqueInput {
   id: String
 }
 
+input Module {
+  lessonsInModule: [LessonInModule]
+  name: String
+  number: Int
+}
+
+input Modules {
+  modules: [Module]
+}
+
 type Mutation {
   addToTeam(id: String): User
+  addUserToCourse(coursePageId: String, email: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
@@ -1557,7 +1575,7 @@ type Mutation {
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, hint: String, id: String, name: String, type: String, variants: [String]): Construction
-  updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
+  updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, modules: Modules, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson

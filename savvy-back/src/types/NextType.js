@@ -121,6 +121,13 @@ const Prices = inputObjectType({
   },
 });
 
+const QuestList = inputObjectType({
+  name: "QuestList",
+  definition(t) {
+    t.list.field("questElements", { type: "QuestElement" });
+  },
+});
+
 const QuestElement = inputObjectType({
   name: "QuestElement",
   definition(t) {
@@ -130,10 +137,26 @@ const QuestElement = inputObjectType({
   },
 });
 
-const QuestList = inputObjectType({
-  name: "QuestList",
+const LessonInModule = inputObjectType({
+  name: "LessonInModule",
   definition(t) {
-    t.list.field("questElements", { type: "QuestElement" });
+    t.string("id");
+  },
+});
+
+const Module = inputObjectType({
+  name: "Module",
+  definition(t) {
+    t.int("number");
+    t.string("name");
+    t.list.field("lessonsInModule", { type: "LessonInModule" });
+  },
+});
+
+const Modules = inputObjectType({
+  name: "Modules",
+  definition(t) {
+    t.list.field("modules", { type: "Module" });
   },
 });
 
@@ -209,4 +232,7 @@ module.exports = {
   ClientMessage,
   Price,
   Prices,
+  LessonInModule,
+  Module,
+  Modules,
 };

@@ -13,9 +13,15 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       banner
       audience
       result
+      modules
       goals
       header
       discountPrice
+      lessons {
+        id
+        name
+        number
+      }
       price
       prices
       subheader

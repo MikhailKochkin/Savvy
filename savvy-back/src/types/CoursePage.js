@@ -42,6 +42,7 @@ const CoursePage = objectType({
     t.model.description();
     t.model.image();
     t.model.banner();
+    t.model.modules();
     t.model.numInCareerTrack();
     t.model.weeks();
     t.model.subscription();

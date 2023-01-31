@@ -19,6 +19,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $nextStart: DateTime
     $price: Int
     $prices: Prices
+    $modules: Modules
     $discountPrice: Int
     $goals: [String]
     $header: [String]
@@ -39,6 +40,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       nextStart: $nextStart
       price: $price
       prices: $prices
+      modules: $modules
       goals: $goals
       header: $header
       subheader: $subheader
@@ -49,6 +51,14 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       title
       description
       image
+    }
+  }
+`;
+
+const ADD_USER_TO_COURSE_MUTATION = gql`
+  mutation ADD_USER_TO_COURSE_MUTATION($email: String!, $coursePageId: String) {
+    addUserToCourse(email: $email, coursePageId: $coursePageId) {
+      id
     }
   }
 `;
@@ -77,7 +87,7 @@ const Fieldset = styled.fieldset`
   input {
     height: 60%;
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     border: 1px solid #e5e5e5;
     border-radius: 3.5px;
     padding: 2%;
@@ -186,6 +196,28 @@ const Explainer = styled.div`
   margin-bottom: 5px;
 `;
 
+const Module = styled.div`
+  border-bottom: 1px solid grey;
+  margin: 15px 0;
+  select {
+    width: 60%;
+  }
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .number {
+    width: 10%;
+    margin-right: 15px;
+  }
+  .name {
+    name: 90%;
+  }
+`;
+
 const Img = styled.img`
   height: 200px;
   object-fit: cover;
@@ -256,6 +288,14 @@ const UpdateForm = (props) => {
   const [discountPrice, setDiscountPrice] = useState(
     props.coursePage.discountPrice
   );
+  const [modules, setModules] = useState(
+    props.coursePage.modules.modules ? props.coursePage.modules.modules : []
+  );
+  const [availableLessons, setAvailableLessons] = useState(
+    props.coursePage.lessons
+  );
+  const [chosenLesson, setChosenLesson] = useState();
+  const [email, setEmail] = useState("");
 
   const [news, setNews] = useState(props.coursePage.news);
   const [goals, setGoals] = useState(
@@ -272,6 +312,8 @@ const UpdateForm = (props) => {
   const [updateCoursePage, { data, loading }] = useMutation(
     UPDATE_COURSEPAGE_MUTATION
   );
+
+  const [addUserToCourse] = useMutation(ADD_USER_TO_COURSE_MUTATION);
 
   const { t } = useTranslation("coursePage");
 
@@ -324,7 +366,6 @@ const UpdateForm = (props) => {
     }
   };
   const { coursePage, me } = props;
-  console.log("coursePage", coursePage);
   return (
     <Form>
       <Title>{t("course_info")}</Title>
@@ -369,6 +410,152 @@ const UpdateForm = (props) => {
           defaultValue={discountPrice}
           onChange={(e) => setDiscountPrice(parseInt(e.target.value))}
         />
+        <Explainer>Добавить студента</Explainer>
+        <input onChange={(e) => setEmail(e.target.value)} />
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            return addUserToCourse({
+              variables: {
+                coursePageId: props.coursePage.id,
+                email,
+              },
+            });
+          }}
+        >
+          Add
+        </button>
+        <Explainer>Модули курса</Explainer>
+        <div>
+          {[...modules].map((m, i) => (
+            <Module>
+              <Row>
+                <input
+                  index={"mod" + i}
+                  key={i}
+                  className="number"
+                  type="number"
+                  // defaultValue={m ? m.number : 0}
+                  value={m.number}
+                  onChange={(e) => {
+                    // e.preventDefault();
+                    let newModule = { ...modules[i] };
+                    newModule.number = parseInt(e.target.value);
+                    let newModules = [...modules];
+                    newModules[i] = newModule;
+                    return setModules([...newModules]);
+                  }}
+                />
+                <input
+                  onChange={(e) => {
+                    e.preventDefault();
+                    let newModule = { ...modules[i] };
+                    newModule.name = e.target.value;
+                    let newModules = [...modules];
+                    newModules[i] = newModule;
+                    setModules([...newModules]);
+                  }}
+                  // defaultValue={m ? m.name : ""}
+                  className="name"
+                  type="text"
+                />
+              </Row>
+              <div>
+                <select
+                  // defaultValue={me.status}
+                  // value={status}
+                  onChange={(e) => setChosenLesson(e.target.value)}
+                >
+                  {[...availableLessons]
+                    .sort((a, b) => a.number - b.number)
+                    .map((al) => (
+                      <option value={al.id}>{al.name}</option>
+                    ))}
+                </select>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    let newModule = { ...modules[i] };
+                    let newModuleLessons = [...newModule.lessonsInModule];
+                    newModuleLessons.push({
+                      id: chosenLesson,
+                    });
+                    newModule.lessonsInModule = newModuleLessons;
+                    let newModules = [...modules];
+                    newModules[i] = newModule;
+                    setModules([...newModules]);
+                    // setAvailableLessons([
+                    //   ...availableLessons.filter(
+                    //     (al) => al.id !== chosenLesson
+                    //   ),
+                    // ]);
+                    // console.log(
+                    //   "av",
+                    //   ...availableLessons.filter((al) => al.id !== chosenLesson)
+                    // );
+                    // setChosenLesson("");
+                  }}
+                >
+                  Add
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    let newModule = { ...modules[i] };
+                    let newModuleLessons = [...newModule.lessonsInModule];
+                    newModuleLessons.pop();
+                    newModule.lessonsInModule = newModuleLessons;
+
+                    let newModules = [...modules];
+                    newModules[i] = newModule;
+                    setModules([...newModules]);
+                  }}
+                >
+                  Delete
+                </button>
+                {m.lessonsInModule.map((les) => (
+                  <li>
+                    {les.id} –{" "}
+                    {props.coursePage.lessons.find((l) => l.id == les.id).name}
+                  </li>
+                ))}
+              </div>
+            </Module>
+          ))}
+        </div>
+        <Circles>
+          <Circle>
+            <button
+              className="number_button"
+              onClick={(e) => {
+                e.preventDefault();
+                let new_modules = modules;
+                new_modules.pop();
+                setModules([...new_modules]);
+              }}
+            >
+              -1
+            </button>
+          </Circle>
+          <Circle>
+            <button
+              className="number_button"
+              onClick={(e) => {
+                e.preventDefault();
+                setModules([
+                  ...modules,
+                  {
+                    number: modules.length + 1,
+                    name: "",
+                    lessonsInModule: [],
+                  },
+                ]);
+              }}
+            >
+              +1
+            </button>
+          </Circle>
+        </Circles>
         <Explainer>Pricing options</Explainer>
         <Prices>
           {prices.map((p, i) => (
@@ -672,6 +859,7 @@ const UpdateForm = (props) => {
               variables: {
                 id: props.coursePage.id,
                 prices: { prices: prices },
+                modules: { modules: modules },
                 title,
                 news,
                 description: description,

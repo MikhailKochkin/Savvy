@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import styled from "styled-components";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
-
+import Feedback from "../Feedback";
 import Loading from "../../Loading";
 import LessonHeader from "../../lesson/LessonHeader";
 
@@ -20,6 +20,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       result
       tags
       weeks
+      modules
       tariffs
       methods
       reviews
@@ -238,6 +239,7 @@ const LessonsData = (props) => {
   const { me, id } = props;
   const { t } = useTranslation("course");
   const [page, setPage] = useState("lessons");
+  const [format, setFormat] = useState("weeks");
 
   // 2. get course data
   const { loading, error, data } = useQuery(SINGLE_COURSEPAGE_QUERY, {
@@ -382,6 +384,26 @@ const LessonsData = (props) => {
     .sort((a, b) => (a.number > b.number ? 1 : -1))
     .filter((l) => l.type == "HIDDEN");
 
+  let full_modules = [];
+  if (coursePage.modules && coursePage.modules.modules.length > 0) {
+    coursePage.modules.modules.map((m, i) => {
+      let newLessons = [];
+      m.lessonsInModule.map((lim) => {
+        let les = coursePage.lessons.find((les) => les.id == lim.id);
+        if (les.type !== "HIDDEN") {
+          return newLessons.push(les);
+        }
+      });
+      let new_module = {
+        name: m.name,
+        number: m.number,
+        lessons: newLessons,
+      };
+      full_modules.push(new_module);
+    });
+  }
+  console.log("full_modules", full_modules);
+
   return (
     <LessonsInfo>
       <Buttons>
@@ -398,6 +420,7 @@ const LessonsData = (props) => {
           {t("feedback")}
         </Button>
       </Buttons>
+
       {page === "lessons" && (
         <>
           <Total>
@@ -406,13 +429,6 @@ const LessonsData = (props) => {
             <b>
               {lessons.filter((l) => l.type !== "HIDDEN").length}
             </b> <br /> {t("course_term")}{" "}
-            {/* {console.log(
-              "coursePage.weeks",
-              Math.ceil(
-                lessons.length /
-                  Math.ceil(coursePage.weeks ? coursePage.weeks : 3)
-              )
-            )} */}
             <b>
               {Math.ceil(
                 lessons.length / (coursePage.weeks ? coursePage.weeks : 3)
@@ -422,40 +438,102 @@ const LessonsData = (props) => {
                     lessons.length / (coursePage.weeks ? coursePage.weeks : 3)
                   )}
             </b>
+            <Buttons>
+              <Button
+                primary={format === "weeks"}
+                onClick={(e) => setFormat("weeks")}
+              >
+                По неделям
+              </Button>
+              {full_modules.length > 0 && (
+                <Button
+                  primary={format === "modules"}
+                  onClick={(e) => setFormat("modules")}
+                >
+                  По модулям
+                </Button>
+              )}
+            </Buttons>
           </Total>
-          <Syllabus>
-            {[...broken_lessons].map((b, i) => (
-              <>
-                <div className="week_number">
-                  {t("week")} {i + 1}
-                </div>
-                <Lessons>
-                  {b.map((lesson, index) => (
-                    <>
-                      <LessonHeader
-                        me={me}
-                        key={lesson.id}
-                        name={lesson.name}
-                        lesson={lesson}
-                        lessonResult={maxes.find(
-                          (m) => m.lesson.id == lesson.id
-                        )}
-                        i_am_author={i_am_author}
-                        statements={
-                          lesson.forum ? lesson.forum.statements : null
-                        }
-                        coursePage={props.id}
-                        author={coursePage.user.id}
-                        open={index + 1 === 1}
-                        index={index + 1}
-                        coursePageId={coursePage.id}
-                      />
-                    </>
-                  ))}
-                </Lessons>
-              </>
-            ))}
-          </Syllabus>
+          {format == "modules" && (
+            <Syllabus>
+              {full_modules.map((m, i) => (
+                <>
+                  <div className="week_number">
+                    Модуль {i + 1}. {m.name}
+                  </div>
+                  {console.log(
+                    "sort",
+                    m.lessons.sort((a, b) => a.number - b.number)
+                  )}
+                  <Lessons>
+                    {m.lessons
+                      .sort((a, b) => a.number - b.number)
+                      .map((les, index) => {
+                        return (
+                          <>
+                            <LessonHeader
+                              me={me}
+                              key={les.id}
+                              name={les.name}
+                              lesson={les}
+                              lessonResult={maxes.find(
+                                (m) => m.lesson.id == les.id
+                              )}
+                              i_am_author={i_am_author}
+                              // statements={
+                              //   lesson.forum ? lesson.forum.statements : null
+                              // }
+                              coursePage={props.id}
+                              author={coursePage.user.id}
+                              open={index + 1 === 1}
+                              index={index + 1}
+                              coursePageId={coursePage.id}
+                            />
+                          </>
+                        );
+                      })}
+                  </Lessons>
+                </>
+              ))}
+            </Syllabus>
+          )}
+          {format == "weeks" && (
+            <Syllabus>
+              {[...broken_lessons].map((b, i) => (
+                <>
+                  <div className="week_number">
+                    {t("week")} {i + 1}
+                  </div>
+                  <Lessons>
+                    {b.map((lesson, index) => (
+                      <>
+                        <LessonHeader
+                          me={me}
+                          key={lesson.id}
+                          name={lesson.name}
+                          lesson={lesson}
+                          lessonResult={maxes.find(
+                            (m) => m.lesson.id == lesson.id
+                          )}
+                          i_am_author={i_am_author}
+                          statements={
+                            lesson.forum ? lesson.forum.statements : null
+                          }
+                          coursePage={props.id}
+                          author={coursePage.user.id}
+                          open={index + 1 === 1}
+                          index={index + 1}
+                          coursePageId={coursePage.id}
+                        />
+                      </>
+                    ))}
+                  </Lessons>
+                </>
+              ))}
+            </Syllabus>
+          )}
+          {/* } */}
           {me && me.permissions && me.permissions.includes("ADMIN") && (
             <Syllabus>
               <div className="week_number">Hidden lessons</div>

@@ -374,6 +374,7 @@ export interface NexusGenInputs {
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
     installments?: NexusGenEnums['SortOrder'] | null; // SortOrder
     methods?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    modules?: NexusGenEnums['SortOrder'] | null; // SortOrder
     news?: NexusGenEnums['SortOrder'] | null; // SortOrder
     nextStart?: NexusGenEnums['SortOrder'] | null; // SortOrder
     numInCareerTrack?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -429,6 +430,7 @@ export interface NexusGenInputs {
     lawrdles?: NexusGenInputs['LawrdleListRelationFilter'] | null; // LawrdleListRelationFilter
     lessons?: NexusGenInputs['LessonListRelationFilter'] | null; // LessonListRelationFilter
     methods?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    modules?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     new_students?: NexusGenInputs['UserListRelationFilter'] | null; // UserListRelationFilter
     news?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     nextStart?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
@@ -850,6 +852,9 @@ export interface NexusGenInputs {
   LesResultsList: { // input type
     lesResults?: Array<NexusGenInputs['LesResult'] | null> | null; // [LesResult]
   }
+  LessonInModule: { // input type
+    id?: string | null; // String
+  }
   LessonItem: { // input type
     id?: string | null; // String
     type?: string | null; // String
@@ -1013,6 +1018,14 @@ export interface NexusGenInputs {
   }
   MiniForumWhereUniqueInput: { // input type
     id?: string | null; // String
+  }
+  Module: { // input type
+    lessonsInModule?: Array<NexusGenInputs['LessonInModule'] | null> | null; // [LessonInModule]
+    name?: string | null; // String
+    number?: number | null; // Int
+  }
+  Modules: { // input type
+    modules?: Array<NexusGenInputs['Module'] | null> | null; // [Module]
   }
   NestedBoolFilter: { // input type
     equals?: boolean | null; // Boolean
@@ -2439,6 +2452,7 @@ export interface NexusGenObjects {
     image: string; // String!
     installments?: number | null; // Int
     methods?: string | null; // String
+    modules?: NexusGenScalars['Json'] | null; // Json
     news?: string | null; // String
     nextStart?: NexusGenScalars['DateTime'] | null; // DateTime
     numInCareerTrack?: number | null; // Int
@@ -3082,6 +3096,7 @@ export interface NexusGenFieldTypes {
     installments: number | null; // Int
     lessons: NexusGenRootTypes['Lesson'][]; // [Lesson!]!
     methods: string | null; // String
+    modules: NexusGenScalars['Json'] | null; // Json
     new_students: NexusGenRootTypes['User'][]; // [User!]!
     news: string | null; // String
     nextStart: NexusGenScalars['DateTime'] | null; // DateTime
@@ -3262,6 +3277,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addToTeam: NexusGenRootTypes['User'] | null; // User
+    addUserToCourse: NexusGenRootTypes['User'] | null; // User
     advancedSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createBusinessClient: NexusGenRootTypes['User'] | null; // User
@@ -3991,6 +4007,7 @@ export interface NexusGenFieldTypeNames {
     installments: 'Int'
     lessons: 'Lesson'
     methods: 'String'
+    modules: 'Json'
     new_students: 'User'
     news: 'String'
     nextStart: 'DateTime'
@@ -4171,6 +4188,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addToTeam: 'User'
+    addUserToCourse: 'User'
     advancedSignup: 'AuthPayload'
     checkAssignment: 'LessonResult'
     createBusinessClient: 'User'
@@ -4955,6 +4973,10 @@ export interface NexusGenArgTypes {
     addToTeam: { // args
       id?: string | null; // String
     }
+    addUserToCourse: { // args
+      coursePageId?: string | null; // String
+      email?: string | null; // String
+    }
     advancedSignup: { // args
       careerTrackID?: string | null; // String
       company?: string | null; // String
@@ -5413,6 +5435,7 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       image?: string | null; // String
       methods?: string | null; // String
+      modules?: NexusGenInputs['Modules'] | null; // Modules
       news?: string | null; // String
       nextStart?: NexusGenScalars['DateTime'] | null; // DateTime
       price?: number | null; // Int

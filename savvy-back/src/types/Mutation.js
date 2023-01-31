@@ -578,6 +578,51 @@ const Mutation = mutationType({
       },
     });
 
+    t.field("addUserToCourse", {
+      type: "User",
+      args: {
+        coursePageId: stringArg(),
+        email: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const coursePageId = args.coursePageId;
+        delete args.coursePageId;
+        const enrolledUser = await ctx.prisma.user.update({
+          data: {
+            new_subjects: {
+              connect: { id: coursePageId },
+            },
+          },
+          where: {
+            email: args.email,
+          },
+        });
+        const courseVisits = await ctx.prisma.courseVisit.findMany(
+          {
+            where: {
+              student: { email: { equals: args.email } },
+              coursePage: { id: { equals: coursePageId } },
+            },
+          },
+          `{ student { id, name, email } }`
+        );
+        if (courseVisits.length === 0) {
+          const CourseVisit = await ctx.prisma.courseVisit.create({
+            data: {
+              student: {
+                connect: { email: args.email },
+              },
+              coursePage: {
+                connect: { id: coursePageId },
+              },
+              visitsNumber: 1,
+            },
+          });
+        }
+        return enrolledUser;
+      },
+    });
+
     t.field("enrollOnCourse", {
       type: "User",
       args: {
@@ -962,6 +1007,9 @@ const Mutation = mutationType({
         price: intArg(),
         prices: arg({
           type: "Prices",
+        }),
+        modules: arg({
+          type: "Modules",
         }),
         discountPrice: intArg(),
         currency: stringArg(),

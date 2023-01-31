@@ -422,7 +422,14 @@ const Person = (props) => {
                 target="_blank"
                 href={`https://wa.me/${student.number}?text=Добрый!`}
               >
-                Написать
+                Написать в Wh
+              </a>
+            </SendButton>
+          )}
+          {student.number && (
+            <SendButton>
+              <a target="_blank" href={`https://t.me/${student.number}`}>
+                Написать в Tg
               </a>
             </SendButton>
           )}
