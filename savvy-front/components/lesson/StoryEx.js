@@ -76,16 +76,21 @@ const StoryEx = (props) => {
   const { tasks, me, lesson, next, coursePageID } = props;
   const [experience, setExperience] = useState(0);
   const [showArrow, setShowArrow] = useState(true);
+  const [solved, setSolved] = useState([]);
   const total = props.lesson.totalPoints;
-
-  const getResults = (res) => {
-    // if (experience <= total) {
-    setExperience(experience + res);
-    // }
-  };
 
   const getShowArrow = (val) => {
     setShowArrow(val);
+  };
+
+  const moveNext = (id) => {
+    setSolved([...solved, id]);
+  };
+
+  const getResults = (res, id) => {
+    // if (experience <= total) {
+    setExperience(experience + res);
+    // }
   };
 
   const [
@@ -122,6 +127,7 @@ const StoryEx = (props) => {
         )
       : null;
   let components = [];
+  let move_statuses = [];
 
   tasks.map((task) => {
     let el;
@@ -146,6 +152,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "offer") {
       el = lesson.offers.find((t) => t.id === task.id);
       if (!el) return;
@@ -164,6 +171,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "newtest") {
       el = lesson.newTests.find((t) => t.id === task.id);
       if (!el) return;
@@ -172,6 +180,7 @@ const StoryEx = (props) => {
         <SingleTest
           key={el.id}
           id={el.id}
+          moveNext={moveNext}
           getResults={getResults}
           testID={el.id}
           author={lesson.user}
@@ -193,6 +202,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(solved.includes(el.id) ? true : false);
     } else if (task.type.toLowerCase() === "quiz") {
       el = lesson.quizes.find((quiz) => quiz.id === task.id);
       if (!el) return;
@@ -221,6 +231,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "testpractice") {
       el = lesson.testPractices.find((t) => t.id === task.id);
       if (!el) return;
@@ -239,6 +250,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "teamquest") {
       el = lesson.teamQuests.find((t) => t.id === task.id);
       if (!el) return;
@@ -257,6 +269,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "shot") {
       el = lesson.shots.find((shot) => shot.id === task.id);
       if (!el) return;
@@ -276,6 +289,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "chat") {
       el = lesson.chats.find((chat) => chat.id === task.id);
       if (!el) return;
@@ -299,6 +313,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     }
     // else if (task.type.toLowerCase() === "offer") {
     //   item = (
@@ -334,6 +349,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "texteditor") {
       el = lesson.texteditors.find((texteditor) => texteditor.id === task.id);
       item = (
@@ -349,6 +365,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "construction") {
       el = lesson.constructions.find((con) => con.id === task.id);
       if (!el) return;
@@ -379,6 +396,7 @@ const StoryEx = (props) => {
           />
         );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "exam") {
       el = lesson.exams.find((con) => con.id === task.id);
       if (!el) return;
@@ -403,6 +421,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else if (task.type.toLowerCase() === "forum") {
       el = lesson.forum;
       if (!el) return;
@@ -422,6 +441,7 @@ const StoryEx = (props) => {
         />
       );
       components.push(item);
+      move_statuses.push(true);
     } else {
       return;
     }
@@ -435,6 +455,7 @@ const StoryEx = (props) => {
       >
         {me && (
           <Feed
+            move_statuses={move_statuses}
             components={components}
             experience={experience}
             total={total}

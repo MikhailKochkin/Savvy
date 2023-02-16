@@ -80,6 +80,9 @@ export const IconBlock = React.forwardRef(({ className, ...props }, ref) => (
       css`
         font-size: 18px;
         vertical-align: text-bottom;
+        input {
+          /* display: none; */
+        }
       `
     )}
   />

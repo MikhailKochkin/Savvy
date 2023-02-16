@@ -66,25 +66,50 @@ const Progress = (props) => {
 
   // if (loading) return <p>Loading...</p>;
   // let coursePage = data.coursePage;
+
+  const medianFunc = (values) => {
+    // if (values.length === 0) throw new Error("No inputs");
+
+    values.sort(function (a, b) {
+      return a - b;
+    });
+
+    var half = Math.floor(values.length / 2);
+
+    if (values.length % 2) return values[half];
+
+    return (values[half - 1] + values[half]) / 2.0;
+  };
+
   let coursePages = data2.coursePages;
   let rated_courses = [];
+  let median_courses = [];
   coursePages
     .filter((c) => c.courseType.toLowerCase() !== "uni")
     .map((coursePage) => {
       let forums = [];
       let ratings = [];
       let average;
+      let med_val;
+      let number_ratings = 0;
       if (coursePage && coursePage.lessons) {
         coursePage.lessons.map((l) =>
           forums.push(l.forum ? l.forum.rating : null)
         );
         forums = forums.filter((f) => f !== null).filter((f) => f.length !== 0);
         forums.map((f) => f.map((r) => ratings.push(r.rating)));
+        med_val = medianFunc(ratings);
+        number_ratings = ratings.length;
         average = (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(
           2
         );
       }
-      let new_c = { ...coursePage, rating: average };
+      let new_c = {
+        ...coursePage,
+        rating: average,
+        median: med_val,
+        number: number_ratings,
+      };
       rated_courses.push(new_c);
     });
 
@@ -96,6 +121,7 @@ const Progress = (props) => {
         {open && <KPI coursePages={coursePages} />}
         <h3>Courses rating</h3>
         <div>
+          {console.log("rated_courses", rated_courses)}
           <ol>
             {rated_courses
               .sort(
@@ -107,7 +133,9 @@ const Progress = (props) => {
                 <li>
                   {c.title} –{" "}
                   {c.published == true ? <b>Published</b> : "Not published"} – 
-                  {c.rating == "NaN" ? "0" : c.rating}
+                  {c.rating == "NaN" ? "0" : c.rating} /
+                  {c.median == "NaN" ? "NaN" : c.median} /
+                  {c.number == 0 ? 0 : c.number}
                 </li>
               ))}
           </ol>

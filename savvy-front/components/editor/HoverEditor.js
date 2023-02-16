@@ -403,6 +403,7 @@ const addImageElement = (editor) => {
 
 const addVideoElement = (editor) => {
   let link = prompt("Video link: ");
+
   editor.selection.anchor.path == [0, 0] &&
     editor.selection.anchor.offset == 0 &&
     editor.insertBreak();

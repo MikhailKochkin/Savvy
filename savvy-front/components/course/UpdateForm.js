@@ -289,7 +289,9 @@ const UpdateForm = (props) => {
     props.coursePage.discountPrice
   );
   const [modules, setModules] = useState(
-    props.coursePage.modules.modules ? props.coursePage.modules.modules : []
+    props.coursePage.modules && props.coursePage.modules.modules
+      ? props.coursePage.modules.modules
+      : []
   );
   const [availableLessons, setAvailableLessons] = useState(
     props.coursePage.lessons

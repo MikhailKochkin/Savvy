@@ -372,6 +372,8 @@ const SingleTest = (props) => {
   };
 
   const onSend = async () => {
+    props.moveNext(props.id);
+
     const res = () => {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
         setAnswerState("right");
@@ -409,13 +411,14 @@ const SingleTest = (props) => {
   };
 
   const onCheck = async () => {
+    props.moveNext(props.id);
     if (attempts == 0) {
       // pass test data if the student answers for the first time. Needed for problems.
       const res = () => {
         if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
           setAnswerState("right");
           if (!isExperienced) {
-            props.getResults(1);
+            props.getResults(1, props.id);
             setIsExperienced(true);
           }
           setInputColor("rgba(50, 172, 102, 0.25)");

@@ -633,7 +633,7 @@ const Feed = (props) => {
   // } else {
   //   color = "#55a630";
   // }
-
+  console.log("move_statuses", props.move_statuses);
   return (
     <>
       <Styles>
@@ -675,8 +675,9 @@ const Feed = (props) => {
                   show={i === num + 1 ? "final" : "no"}
                   className={i === num + 1 ? "final" : "no"}
                 >
+                  {props.move_statuses[i] ? "Show" : "No show"}
                   {c}
-                  {props.showArrow && (
+                  {props.move_statuses[i] && props.showArrow && (
                     <Mutation
                       mutation={UPDATE_LESSONRESULT_MUTATION}
                       variables={{
