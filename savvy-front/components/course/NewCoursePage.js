@@ -204,10 +204,14 @@ const NewCoursePage = (props) => {
               />
               <Teachers coursePage={data.coursePage} />
               <SellingPoints coursePage={data.coursePage} />
-              {/* {console.log("data.coursePage.prices", data.coursePage.prices)} */}
-              {data.coursePage.prices && data.coursePage.prices.length > 0 && (
-                <Prices coursePage={data.coursePage} />
+              {console.log(
+                "data.coursePage.prices",
+                data.coursePage.prices.prices
               )}
+              {data.coursePage.prices &&
+                data.coursePage.prices.prices.length > 0 && (
+                  <Prices coursePage={data.coursePage} />
+                )}
               {/* {prog && prog.reviews && prog.reviews.length > 0 && (
                 <Reviews data={prog} />
               )} */}

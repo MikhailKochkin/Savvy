@@ -675,7 +675,9 @@ const Feed = (props) => {
                   show={i === num + 1 ? "final" : "no"}
                   className={i === num + 1 ? "final" : "no"}
                 >
-                  {props.move_statuses[i] ? "Show" : "No show"}
+                  {/* {props.move_statuses[i] ? "Show" : "No show"} */}
+                  {/* {props.move_statuses[i] ? "Show" : "No show"} */}
+
                   {c}
                   {props.move_statuses[i] && props.showArrow && (
                     <Mutation

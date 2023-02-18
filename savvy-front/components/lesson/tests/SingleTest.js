@@ -372,7 +372,7 @@ const SingleTest = (props) => {
   };
 
   const onSend = async () => {
-    props.moveNext(props.id);
+    if (props.moveNext) props.moveNext(props.id);
 
     const res = () => {
       if (JSON.stringify(answerOptions) == JSON.stringify(props.true)) {
@@ -411,7 +411,8 @@ const SingleTest = (props) => {
   };
 
   const onCheck = async () => {
-    props.moveNext(props.id);
+    if (props.moveNext) props.moveNext(props.id);
+
     if (attempts == 0) {
       // pass test data if the student answers for the first time. Needed for problems.
       const res = () => {

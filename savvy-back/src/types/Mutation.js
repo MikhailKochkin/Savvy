@@ -3695,6 +3695,13 @@ const Mutation = mutationType({
         const randomBytesPromiseified = promisify(randomBytes);
         const resetToken = (await randomBytesPromiseified(20)).toString("hex");
         const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+        console.log(
+          "args.email.toLowerCase()",
+          args.email.toLowerCase(),
+          user,
+          resetToken,
+          resetTokenExpiry
+        );
         const res = await ctx.prisma.user.update({
           where: { email: args.email.toLowerCase() },
           data: { resetToken, resetTokenExpiry },
