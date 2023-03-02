@@ -58,6 +58,37 @@ input BoolNullableListFilter {
   equals: [Boolean!]
 }
 
+type BotDialogue {
+  createdAt: DateTime!
+  id: String!
+  journey: [String!]!
+  rating: Int
+  updatedAt: DateTime!
+}
+
+input BotDialogueOrderByInput {
+  createdAt: SortOrder
+  id: SortOrder
+  journey: SortOrder
+  rating: SortOrder
+  updatedAt: SortOrder
+}
+
+input BotDialogueWhereInput {
+  AND: [BotDialogueWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  journey: StringNullableListFilter
+  NOT: [BotDialogueWhereInput!]
+  OR: [BotDialogueWhereInput!]
+  rating: IntNullableFilter
+  updatedAt: DateTimeFilter
+}
+
+input BotDialogueWhereUniqueInput {
+  id: String
+}
+
 type BusinessClient {
   comment: String
   communication_history: Json
@@ -1498,6 +1529,7 @@ type Mutation {
   addUserToCourse(coursePageId: String, email: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
+  createBotDialogue(journey: [String]): BotDialogue
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
@@ -1541,7 +1573,7 @@ type Mutation {
   createTestResult(answer: String, lessonID: String, testID: String): TestResult
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
-  createUseful(buttonText: String, header: String, image: String, link: String, tags: [String]): Useful
+  createUseful(buttonText: String, header: String, image: String, link: String, name: String, tags: [String]): Useful
   deleteChat(id: String): Chat
   deleteClause(id: String): Clause
   deleteClient(id: String): BusinessClient
@@ -1570,6 +1602,7 @@ type Mutation {
   signout: SignOut
   signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
+  updateBotDialogue(id: String, journey: [String], rating: Int): BotDialogue
   updateBusinessClient(comment: String, communication_history: ClientMessages, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
@@ -2338,6 +2371,8 @@ input PromocodeList {
 }
 
 type Query {
+  botDialogue(where: BotDialogueWhereUniqueInput!): BotDialogue
+  botDialogues(after: BotDialogueWhereUniqueInput, before: BotDialogueWhereUniqueInput, first: Int, last: Int, orderBy: [BotDialogueOrderByInput!], where: BotDialogueWhereInput): [BotDialogue!]!
   businessClients(after: BusinessClientWhereUniqueInput, before: BusinessClientWhereUniqueInput, first: Int, last: Int, orderBy: [BusinessClientOrderByInput!], where: BusinessClientWhereInput): [BusinessClient!]!
   certificate(where: CertificateWhereUniqueInput!): Certificate
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int, orderBy: [CertificateOrderByInput!], where: CertificateWhereInput): [Certificate!]!
@@ -3276,6 +3311,7 @@ type Useful {
   id: String!
   image: String!
   link: String!
+  name: String
   tags: [String!]!
   updatedAt: DateTime!
 }
@@ -3288,6 +3324,7 @@ input UsefulWhereInput {
   id: StringFilter
   image: StringFilter
   link: StringFilter
+  name: StringNullableFilter
   NOT: [UsefulWhereInput!]
   OR: [UsefulWhereInput!]
   tags: StringNullableListFilter

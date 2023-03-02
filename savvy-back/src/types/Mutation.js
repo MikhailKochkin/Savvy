@@ -3838,6 +3838,7 @@ const Mutation = mutationType({
       t.field("createUseful", {
         type: "Useful",
         args: {
+          name: stringArg(),
           header: stringArg(),
           buttonText: stringArg(),
           image: stringArg(),
@@ -3856,6 +3857,42 @@ const Mutation = mutationType({
             },
           });
           return Useful;
+        },
+      }),
+      t.field("createBotDialogue", {
+        type: "BotDialogue",
+        args: {
+          journey: list(stringArg()),
+        },
+        resolve: async (_, { journey }, ctx) => {
+          const new_data = {
+            journey: {
+              set: [...journey],
+            },
+          };
+          const newBotDialogue = await ctx.prisma.botDialogue.create({
+            data: new_data,
+          });
+          return newBotDialogue;
+        },
+      }),
+      t.field("updateBotDialogue", {
+        type: "BotDialogue",
+        args: {
+          id: stringArg(),
+          journey: list(stringArg()),
+          rating: intArg(),
+        },
+        resolve: async (_, args, ctx) => {
+          const updates = { ...args };
+          delete updates.id;
+          const updatedBotDialogue = await ctx.prisma.botDialogue.update({
+            data: updates,
+            where: {
+              id: args.id,
+            },
+          });
+          return updatedBotDialogue;
         },
       });
   },

@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -880,7 +880,6 @@ model User {
 model BotDialogue {
   id             String    @id @default(cuid())
   journey        String[]
-  rating         Int?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -1081,7 +1080,6 @@ model Lawrdle {
 
 model Useful {
   id          String   @id @default(cuid())
-  name        String?
   header      String
   buttonText  String
   link        String

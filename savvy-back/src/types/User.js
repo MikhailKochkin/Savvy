@@ -164,6 +164,17 @@ const Visit = inputObjectType({
   },
 });
 
+const BotDialogue = objectType({
+  name: "BotDialogue",
+  definition(t) {
+    t.model.id();
+    t.model.journey();
+    t.model.rating();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
 module.exports = {
   User,
   Feedback,
@@ -175,4 +186,5 @@ module.exports = {
   Visits,
   Visit,
   Team,
+  BotDialogue,
 };

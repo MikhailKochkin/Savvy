@@ -65,6 +65,26 @@ export interface NexusGenInputs {
   BoolNullableListFilter: { // input type
     equals?: boolean[] | null; // [Boolean!]
   }
+  BotDialogueOrderByInput: { // input type
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    journey?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    rating?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  BotDialogueWhereInput: { // input type
+    AND?: NexusGenInputs['BotDialogueWhereInput'][] | null; // [BotDialogueWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    journey?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    NOT?: NexusGenInputs['BotDialogueWhereInput'][] | null; // [BotDialogueWhereInput!]
+    OR?: NexusGenInputs['BotDialogueWhereInput'][] | null; // [BotDialogueWhereInput!]
+    rating?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
+  BotDialogueWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   BusinessClientListRelationFilter: { // input type
     every?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
     none?: NexusGenInputs['BusinessClientWhereInput'] | null; // BusinessClientWhereInput
@@ -2119,6 +2139,7 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringFilter'] | null; // StringFilter
     link?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['UsefulWhereInput'][] | null; // [UsefulWhereInput!]
     OR?: NexusGenInputs['UsefulWhereInput'][] | null; // [UsefulWhereInput!]
     tags?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
@@ -2323,6 +2344,13 @@ export interface NexusGenObjects {
   AuthPayload: { // root type
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
+  }
+  BotDialogue: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    journey: string[]; // [String!]!
+    rating?: number | null; // Int
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   BusinessClient: { // root type
     comment?: string | null; // String
@@ -2894,6 +2922,7 @@ export interface NexusGenObjects {
     id: string; // String!
     image: string; // String!
     link: string; // String!
+    name?: string | null; // String
     tags: string[]; // [String!]!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -2948,6 +2977,13 @@ export interface NexusGenFieldTypes {
   AuthPayload: { // field return type
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
+  }
+  BotDialogue: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    journey: string[]; // [String!]!
+    rating: number | null; // Int
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   BusinessClient: { // field return type
     comment: string | null; // String
@@ -3280,6 +3316,7 @@ export interface NexusGenFieldTypes {
     addUserToCourse: NexusGenRootTypes['User'] | null; // User
     advancedSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
+    createBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     createBusinessClient: NexusGenRootTypes['User'] | null; // User
     createCertificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     createChallengeResult: NexusGenRootTypes['ChallengeResult'] | null; // ChallengeResult
@@ -3352,6 +3389,7 @@ export interface NexusGenFieldTypes {
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     textBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    updateBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     updateBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     updateChat: NexusGenRootTypes['Chat'] | null; // Chat
     updateClause: NexusGenRootTypes['Clause'] | null; // Clause
@@ -3531,6 +3569,8 @@ export interface NexusGenFieldTypes {
     video: string | null; // String
   }
   Query: { // field return type
+    botDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
+    botDialogues: NexusGenRootTypes['BotDialogue'][]; // [BotDialogue!]!
     businessClients: NexusGenRootTypes['BusinessClient'][]; // [BusinessClient!]!
     certificate: NexusGenRootTypes['Certificate'] | null; // Certificate
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
@@ -3796,6 +3836,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     image: string; // String!
     link: string; // String!
+    name: string | null; // String
     tags: string[]; // [String!]!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
@@ -3859,6 +3900,13 @@ export interface NexusGenFieldTypeNames {
   AuthPayload: { // field return type name
     token: 'String'
     user: 'User'
+  }
+  BotDialogue: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    journey: 'String'
+    rating: 'Int'
+    updatedAt: 'DateTime'
   }
   BusinessClient: { // field return type name
     comment: 'String'
@@ -4191,6 +4239,7 @@ export interface NexusGenFieldTypeNames {
     addUserToCourse: 'User'
     advancedSignup: 'AuthPayload'
     checkAssignment: 'LessonResult'
+    createBotDialogue: 'BotDialogue'
     createBusinessClient: 'User'
     createCertificate: 'Certificate'
     createChallengeResult: 'ChallengeResult'
@@ -4263,6 +4312,7 @@ export interface NexusGenFieldTypeNames {
     signout: 'SignOut'
     signup: 'AuthPayload'
     textBusinessClient: 'BusinessClient'
+    updateBotDialogue: 'BotDialogue'
     updateBusinessClient: 'BusinessClient'
     updateChat: 'Chat'
     updateClause: 'Clause'
@@ -4442,6 +4492,8 @@ export interface NexusGenFieldTypeNames {
     video: 'String'
   }
   Query: { // field return type name
+    botDialogue: 'BotDialogue'
+    botDialogues: 'BotDialogue'
     businessClients: 'BusinessClient'
     certificate: 'Certificate'
     certificates: 'Certificate'
@@ -4707,6 +4759,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     image: 'String'
     link: 'String'
+    name: 'String'
     tags: 'String'
     updatedAt: 'DateTime'
   }
@@ -4995,6 +5048,9 @@ export interface NexusGenArgTypes {
       checked?: boolean | null; // Boolean
       id?: string | null; // String
     }
+    createBotDialogue: { // args
+      journey?: Array<string | null> | null; // [String]
+    }
     createBusinessClient: { // args
       comment?: string | null; // String
       country?: string | null; // String
@@ -5277,6 +5333,7 @@ export interface NexusGenArgTypes {
       header?: string | null; // String
       image?: string | null; // String
       link?: string | null; // String
+      name?: string | null; // String
       tags?: Array<string | null> | null; // [String]
     }
     deleteChat: { // args
@@ -5384,6 +5441,11 @@ export interface NexusGenArgTypes {
     textBusinessClient: { // args
       comment?: string | null; // String
       id?: string | null; // String
+    }
+    updateBotDialogue: { // args
+      id?: string | null; // String
+      journey?: Array<string | null> | null; // [String]
+      rating?: number | null; // Int
     }
     updateBusinessClient: { // args
       comment?: string | null; // String
@@ -5629,6 +5691,17 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    botDialogue: { // args
+      where: NexusGenInputs['BotDialogueWhereUniqueInput']; // BotDialogueWhereUniqueInput!
+    }
+    botDialogues: { // args
+      after?: NexusGenInputs['BotDialogueWhereUniqueInput'] | null; // BotDialogueWhereUniqueInput
+      before?: NexusGenInputs['BotDialogueWhereUniqueInput'] | null; // BotDialogueWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['BotDialogueOrderByInput'][] | null; // [BotDialogueOrderByInput!]
+      where?: NexusGenInputs['BotDialogueWhereInput'] | null; // BotDialogueWhereInput
+    }
     businessClients: { // args
       after?: NexusGenInputs['BusinessClientWhereUniqueInput'] | null; // BusinessClientWhereUniqueInput
       before?: NexusGenInputs['BusinessClientWhereUniqueInput'] | null; // BusinessClientWhereUniqueInput

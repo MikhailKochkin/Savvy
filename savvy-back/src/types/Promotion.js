@@ -21,6 +21,7 @@ const Useful = objectType({
   definition(t) {
     t.model.id();
     t.model.header();
+    t.model.name();
     t.model.buttonText();
     t.model.link();
     t.model.image();

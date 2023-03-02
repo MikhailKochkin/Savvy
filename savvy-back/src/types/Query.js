@@ -52,6 +52,9 @@ const Query = queryType({
     t.crud.feedbacks({ ordering: true, filtering: true });
     t.crud.lessonResults({ ordering: true, filtering: true });
     t.crud.challengeResults({ ordering: true, filtering: true });
+    t.crud.botDialogue({ ordering: true, filtering: true });
+    t.crud.botDialogues({ ordering: true, filtering: true });
+
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {
