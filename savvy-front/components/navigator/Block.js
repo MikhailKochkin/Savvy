@@ -76,7 +76,15 @@ const TextBar = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+  }
+  .question_container {
+    /* border: 1px solid blue; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-width: 40%;
+    max-width: 70%;
   }
   .question_name {
     margin-left: 5px;
@@ -101,8 +109,8 @@ const TextBar = styled.div`
     color: black;
     border-radius: 25px;
     padding: 2% 5%;
-    min-width: 40%;
-    max-width: 70%;
+    width: 100%;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -312,10 +320,10 @@ const ButtonOpen = styled.a`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 52px;
+  height: 48px;
   padding: 2%;
   font-family: Montserrat;
-  border: 2px solid #283d3b;
+  /* border: 2px solid #283d3b; */
   text-align: center;
   background: #175ffe;
   margin-bottom: 10px;
@@ -341,6 +349,8 @@ const Block = (props) => {
   const [options, setOptions] = useState(props.options);
   const [feedback, setFeedback] = useState();
   const [materialsNumber, setMaterialsNumber] = useState(3);
+  const [type, setType] = useState();
+
   const [hidden, setHidden] = useState(
     new Array(props.options.length).fill(false)
   );
@@ -355,11 +365,32 @@ const Block = (props) => {
   const shuffle = () => {
     setMaterialsNumber(materialsNumber + 3);
   };
+  let my_course;
+  if (props.course)
+    my_course = props.sorted_courses.find((c) => c.id == props.course.id);
 
   const getFeedBackData = (val) => {
-    let my_course = props.sorted_courses.find((c) => c.id == props.course.id);
     if (val == "format" && my_course && my_course.methods) {
       setFeedback(my_course.methods);
+    } else if (val == "discount" && my_course.discountPrice) {
+      setType("discount");
+      setFeedback(
+        `<p>Вы можете <b>сегодня</b> приобрести этот курс со скидкой ${parseInt(
+          (1 - my_course.discountPrice / my_course.price) * 100
+        )}% в этом боте за ${my_course.discountPrice} вместо ${
+          my_course.price
+        } .</p>
+        <p>Я (бот) не знаю, сколько эта скидка продержится, поэтому советую сейчас ей воспользоваться.</p>
+        <p>После оплаты мы свяжемся с вами по почте, которую вы указали при проведении оплаты, и откроем доступ к курсу.</p>`
+      );
+    } else if (val == "payment" && my_course.price) {
+      setType("payment");
+      setFeedback(
+        `<p>Вы можете приобрести этот курс за ${parseInt(
+          my_course.price
+        )} ₽ в этом боте.</p>
+        <p>После оплаты мы свяжемся с вами по почте, которую вы указали при проведении оплаты, и откроем доступ к курсу.</p>`
+      );
     } else if (val == "program" && my_course && my_course.lessons) {
       let uls = [];
       let sorted_lessons = my_course.lessons
@@ -458,6 +489,25 @@ const Block = (props) => {
                   type="format"
                   onAnswerSelected={getFeedBackData}
                 />
+                {my_course && my_course.discountPrice && (
+                  <AnswerOptionWithFeedback
+                    key={44}
+                    answer={"Получить скидку"}
+                    move={"course"}
+                    type="discount"
+                    onAnswerSelected={getFeedBackData}
+                  />
+                )}
+                {my_course && !my_course.discountPrice && my_course.price && (
+                  <AnswerOptionWithFeedback
+                    key={44}
+                    answer={"Купить курс"}
+                    move={"course"}
+                    type="payment"
+                    onAnswerSelected={getFeedBackData}
+                  />
+                )}
+
                 {props.course && props.course.id && (
                   <AnswerOption
                     answer={"Перейти на страницу курса"}
@@ -528,7 +578,6 @@ const Block = (props) => {
 
             {props.type == "posts" && (
               <>
-                {console.log("props.sorted_blogs", props.sorted_blogs)}
                 {props.sorted_blogs &&
                   props.sorted_blogs
                     .slice(
@@ -665,20 +714,44 @@ const Block = (props) => {
         </div>
       </TextBar>
       {feedback && (
-        <TextBar>
-          <div className="question_box">
-            <div className="question_text">
-              {feedback &&
-                (Array.isArray(feedback)
-                  ? feedback.map((f) => renderHTML(f))
-                  : renderHTML(feedback))}
+        <>
+          <TextBar>
+            <div className="question_box">
+              <div className="question_container">
+                <div className="question_text">
+                  {feedback &&
+                    (Array.isArray(feedback)
+                      ? feedback.map((f) => renderHTML(f))
+                      : renderHTML(feedback))}
+                </div>
+                {type == "discount" && (
+                  <ButtonOpen
+                    id="discount_payment"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    Купить со скидкой
+                  </ButtonOpen>
+                )}
+                {type == "payment" && (
+                  <ButtonOpen
+                    id="payment"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    Купить курс
+                  </ButtonOpen>
+                )}
+              </div>
+              <IconBlock>
+                <img className="icon" src="../../static/misha_new.webp" />
+                <div className="name">Михаил</div>
+              </IconBlock>
             </div>
-            <IconBlock>
-              <img className="icon" src="../../static/misha.jpg" />
-              <div className="name">Михаил</div>
-            </IconBlock>
-          </div>
-        </TextBar>
+          </TextBar>
+        </>
       )}
     </Styles>
   );

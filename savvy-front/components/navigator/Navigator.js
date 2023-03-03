@@ -177,6 +177,9 @@ const ButtonBack = styled.button`
 
 const Navigator = (props) => {
   // block types: introduction, segmentation, useful, courses
+  // courses:
+  // topics: law_school, corp, ip, litigation, other, foundation
+  // level: english, exam, upskill, foundation
   const [botMap, setBotMap] = useState([
     {
       type: "introduction",
@@ -186,71 +189,62 @@ const Navigator = (props) => {
         { answer: "Давай", move: "segmentation_interests", update: "" },
       ],
     },
-    // {
-    //   type: "segmentation_level",
-    //   question: "На каком этапе карьеры ты сейчас находишься?",
-    //   options: [
-    //     {
-    //       answer: "Студент",
-    //       move: "segmentation_interests",
-    //       update: "student",
-    //     },
-    //     { answer: "Junior", move: "segmentation_interests", update: "junior" },
-    //     { answer: "Юрист", move: "segmentation_interests", update: "lawyer" },
-    //     {
-    //       answer: "Manager",
-    //       move: "segmentation_interests",
-    //       update: "manager",
-    //     },
-    //   ],
-    // },
     {
       type: "segmentation_interests",
-      question: "В какой сфере работаешь / планируешь работать?",
+      question: "В какой сфере работаете?",
       options: [
-        { answer: "IP/IT", move: "segmentation_goals", update: "ip" },
-        {
-          answer: "Корпоративное право",
-          move: "segmentation_goals",
-          update: "corp",
-        },
         {
           answer: "Пока просто учусь на юр факе",
           move: "segmentation_goals",
           update: "law_school",
         },
-        // {
-        //   answer: "Хочу подтянуть английский",
-        //   move: "segmentation_goals",
-        //   update: "english",
-        // },
+        {
+          answer: "Корпоративное право",
+          move: "segmentation_goals",
+          update: "corp",
+        },
+        { answer: "IP/IT", move: "segmentation_goals", update: "ip" },
+        {
+          answer: "Судебная работа",
+          move: "segmentation_goals",
+          update: "litigation",
+        },
+        {
+          answer: "Другое",
+          move: "segmentation_goals",
+          update: "other",
+        },
       ],
     },
     {
       type: "segmentation_goals",
-      question: "Какую карьерную цель перед собой ставишь?",
+      question: "Какую карьерную цель перед собой ставите?",
       options: [
-        {
-          answer: "Сдать экзамен / пройти собеседование",
-          move: "next_steps",
-          update: "interview",
-        },
         {
           answer: "Освоить Legal English",
           move: "next_steps",
           update: "english",
         },
         {
+          answer: "Сдать экзамен / пройти собеседование",
+          move: "next_steps",
+          update: "exam",
+        },
+        {
           answer: "Повысить квалификацию",
           move: "next_steps",
           update: "upskill",
         },
-        // { answer: "Уехать за рубеж", move: "next_steps", update: "abroad" },
+        {
+          answer: "Повторить основы",
+          move: "next_steps",
+          update: "foundation",
+        },
       ],
     },
     {
       type: "next_steps",
-      question: "Спасибо за информацию. О чем теперь могу вам рассказать?",
+      question: "Отлично. О чем теперь могу рассказать?",
       options: [
         {
           answer: "Курсы",
@@ -433,7 +427,7 @@ const Navigator = (props) => {
         });
         setDialogueId(new_dialogue.data.createBotDialogue.id);
       };
-      getResult();
+      //   getResult();
     },
     [0]
   );
@@ -444,15 +438,15 @@ const Navigator = (props) => {
     let arr = [...journey, new_block];
     setUserDescription([...userDescription, update]);
     if (new_block) setJourney(arr);
-    if (dialogueId) {
-      let updated_res = await updateBotDialogue({
-        variables: {
-          id: dialogueId,
-          rating: rating,
-          journey: [...userDescription, update],
-        },
-      });
-    }
+    // if (dialogueId) {
+    //   let updated_res = await updateBotDialogue({
+    //     variables: {
+    //       id: dialogueId,
+    //       rating: rating,
+    //       journey: [...userDescription, update],
+    //     },
+    //   });
+    // }
 
     if (id && val == "course") {
       setCourse(sorted_courses.find((c) => c.id == id));
