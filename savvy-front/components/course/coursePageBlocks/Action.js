@@ -478,16 +478,12 @@ const Action = (props) => {
             <>
               <ButtonOpen
                 id="coursePage_to_demolesson"
-                // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-                // target="_blank"
-
                 onClick={(e) => {
                   e.preventDefault();
                   Router.push({
                     pathname: "/course",
                     query: {
                       id: coursePage.id,
-                      // type: "story",
                     },
                   });
                 }}

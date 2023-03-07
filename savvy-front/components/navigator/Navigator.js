@@ -58,10 +58,16 @@ const POSTS_QUERY = gql`
 
 const COURSES_QUERY = gql`
   query COURSES_QUERY {
-    coursePages(where: { published: { equals: true } }) {
+    coursePages(
+      where: { published: { equals: true }, courseType: { equals: FORMONEY } }
+    ) {
       id
       title
       description
+      result
+      nextStart
+      tariffs
+      audience
       methods
       nextStart
       installments
@@ -113,6 +119,7 @@ const Container = styled.div`
   align-items: center;
   @media (max-width: 800px) {
     width: 95%;
+    font-size: 1.6rem;
   }
 `;
 
@@ -144,6 +151,8 @@ const ButtonBox = styled.div`
     width: 95%;
     flex-direction: column;
     padding-left: 10px;
+    font-size: 1.6rem;
+
     .comment {
       margin-left: 0px;
       margin-bottom: 5px;
@@ -269,11 +278,38 @@ const Navigator = (props) => {
       ],
     },
     {
+      type: "more_next_steps",
+      question:
+        "Было полезно? Мы подобрали для вас еще полезные материалы по этой теме.",
+      options: [
+        {
+          answer: "Курсы",
+          move: "courses",
+          update: "courses",
+        },
+        {
+          answer: "Бесплатные пособия",
+          move: "usefuls",
+          update: "usefuls",
+        },
+        {
+          answer: "Блоги и подкасты с экспертами",
+          move: "posts",
+          update: "posts",
+        },
+        {
+          answer: "Хочу пообщаться с Михаилом напрямую",
+          move: "contact",
+          update: "call_with_Mike",
+        },
+      ],
+    },
+    {
       type: "courses",
       question: "Вам могут быть интересны эти курсы:",
       options: [
         {
-          answer: "",
+          answer: "Загружаем ...",
           move: "",
           update: "",
         },
@@ -373,7 +409,7 @@ const Navigator = (props) => {
     {
       type: "form",
       question:
-        "Оставьте короткую информацию о себе. Я с вами свяжусь и все обсудим",
+        "Оставьте короткую информацию о себе. Я с вами свяжусь в течение 24 часов.",
       options: [],
     },
   ]);
@@ -483,9 +519,12 @@ const Navigator = (props) => {
 
   let sorted_courses = [];
   if (data) {
+    console.log("data", data.coursePages);
     data.coursePages.map((c) => {
       if (findCommonElement(c.tags, userDescription)) {
         return sorted_courses.push(c);
+      } else if (!findCommonElement(c.tags, userDescription)) {
+        return (sorted_courses = [...sorted_courses, c]);
       }
     });
   }
@@ -495,17 +534,19 @@ const Navigator = (props) => {
     posts_data.posts.map((p) => {
       if (findCommonElement(p.tags, userDescription)) {
         return sorted_blogs.push(p);
+      } else if (!findCommonElement(p.tags, userDescription)) {
+        return (sorted_blogs = [...sorted_blogs, p]);
       }
     });
   }
 
   let sorted_usefuls = [];
   if (useful_data) {
-    console.log("useful_data", useful_data);
-
     useful_data.usefuls.map((u) => {
       if (findCommonElement(u.tags, userDescription)) {
         return sorted_usefuls.push(u);
+      } else if (!findCommonElement(u.tags, userDescription)) {
+        return (sorted_usefuls = [...sorted_usefuls, u]);
       }
     });
   }

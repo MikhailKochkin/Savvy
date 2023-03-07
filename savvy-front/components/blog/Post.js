@@ -10,10 +10,11 @@ import UpdatePost from "./UpdatePost";
 import Modal from "styled-react-modal";
 import ContactForm from "../landing/ContactForm";
 import BottomLine from "./BottomLine";
+import Navigator from "../navigator/Navigator";
 
 const UPDATE_POST_MUTATION = gql`
-  mutation UPDATE_POST_MUTATION($id: String!, $likes: Int) {
-    updatePost(id: $id, likes: $likes) {
+  mutation UPDATE_POST_MUTATION($id: String!, $likes: Int, $tags: [String]) {
+    updatePost(id: $id, likes: $likes, tags: $tags) {
       id
     }
   }
@@ -26,7 +27,7 @@ const Styles = styled.div`
   align-items: center;
   padding-top: 100px;
   @media (max-width: 800px) {
-    padding: 50px 0;
+    padding-top: 50px;
   }
   img {
     display: block;
@@ -74,7 +75,7 @@ const Styles = styled.div`
     font-weight: bold;
     font-size: 1.6rem;
   }
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   .title {
     width: 90%;
   }
@@ -82,7 +83,7 @@ const Styles = styled.div`
 
 const PostContainer = styled.div`
   width: 50%;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
   button {
     margin: 50px 0;
   }
@@ -239,7 +240,7 @@ const Post = (props) => {
   moment.locale("ru");
   return (
     <>
-      <BottomLine post={post} />
+      {/* <BottomLine post={post} /> */}
       <Styles>
         <div className="title">
           <Link
@@ -280,6 +281,7 @@ const Post = (props) => {
                           variables: {
                             id: post.id,
                             likes: likes + 1,
+                            tags: [...post.tags],
                           },
                         });
                         setLikes(likes + 1);
@@ -298,12 +300,15 @@ const Post = (props) => {
               id={post.id}
               text={post.text}
               title={post.title}
+              tags={post.tags}
               summary={post.summary}
               image={post.image}
             />
           )}
         </PostContainer>
       </Styles>
+      <Navigator level={"more_next_steps"} tags={post.tags.join("-")} />
+
       {/* <ContactForm /> */}
       {/* <Banner>
         <div className="header">📫 Новостная рассылка</div>

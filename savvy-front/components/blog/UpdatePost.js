@@ -66,7 +66,7 @@ const UpdatePost = (props) => {
   const [title, setTitle] = useState(props.title);
   const [summary, setSummary] = useState(props.summary);
   const [image, setImage] = useState(props.image);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState(props.tags);
   const [upload, setUpload] = useState(false);
   const getText = (d) => setText(d);
   const { id } = props;
