@@ -519,11 +519,13 @@ const Navigator = (props) => {
 
   let sorted_courses = [];
   if (data) {
-    console.log("data", data.coursePages);
     data.coursePages.map((c) => {
       if (findCommonElement(c.tags, userDescription)) {
         return sorted_courses.push(c);
-      } else if (!findCommonElement(c.tags, userDescription)) {
+      } else if (
+        userDescription.length == 0 &&
+        !findCommonElement(c.tags, userDescription)
+      ) {
         return (sorted_courses = [...sorted_courses, c]);
       }
     });
