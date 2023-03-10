@@ -4,6 +4,7 @@ import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 import CourseBox from "./CourseBox";
 import KPI from "./KPI";
+import BotProgress from "./BotProgress";
 
 const Styles = styled.div`
   display: flex;
@@ -116,6 +117,9 @@ const Progress = (props) => {
   return (
     <Styles>
       <Container>
+        <h3>Bot</h3>
+        <BotProgress />
+
         <h3>KPI</h3>
         <button onClick={(e) => setOpen(!open)}>Open</button>
         {open && <KPI coursePages={coursePages} />}

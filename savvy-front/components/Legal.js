@@ -1420,7 +1420,7 @@ const Legal = (props) => {
               <p>Email: mike@besavvy.app</p>
             </TextBar>
           ) : (
-            <iframe src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1627035914/%D0%9E%D1%84%D0%B5%D1%80%D1%82%D0%B0_BeSavvy.pdf" />
+            <iframe src="https://res.cloudinary.com/mkpictureonlinebase/image/upload/v1678448680/%D0%9E%D1%84%D0%B5%D1%80%D1%82%D0%B0_BeSavvy_1.pdf" />
           )}
         </Center>
       ) : null}

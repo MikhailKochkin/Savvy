@@ -1,4 +1,4 @@
-let ratings = [10, 10, 9, 7, 9, 10, 10, 6, 10, 7, 8, 10, 10, 10, 7, 10, 10, 9];
+let ratings = [10, 7, 10, 4, 10, 10, 10, 10, 3, 10, 10, 6, 7, 7, 10, 10, 10, 8];
 
 totalCount = average = (
   ratings.reduce((a, b) => a + b, 0) / ratings.length
