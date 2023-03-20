@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import renderHTML from "react-render-html";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
@@ -11,6 +11,7 @@ import Modal from "styled-react-modal";
 import ContactForm from "../landing/ContactForm";
 import BottomLine from "./BottomLine";
 import Navigator from "../navigator/Navigator";
+import Loading from "../Loading";
 
 const UPDATE_POST_MUTATION = gql`
   mutation UPDATE_POST_MUTATION($id: String!, $likes: Int, $tags: [String]) {
@@ -20,14 +21,46 @@ const UPDATE_POST_MUTATION = gql`
   }
 `;
 
+const POST_QUERY = gql`
+  query POST_QUERY($id: String!) {
+    post(where: { id: $id }) {
+      id
+      title
+      text
+      tags
+      likes
+      summary
+      language
+      image
+      user {
+        id
+        name
+        surname
+        image
+      }
+      coursePage {
+        id
+        title
+        user {
+          id
+          name
+          surname
+        }
+      }
+      createdAt
+    }
+  }
+`;
+
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 100px;
+  padding-top: 20px;
+  margin-bottom: 50px;
   @media (max-width: 800px) {
-    padding-top: 50px;
+    padding-top: 10px;
   }
   img {
     display: block;
@@ -36,17 +69,17 @@ const Styles = styled.div`
     box-shadow: "0 0 0 2px blue;";
   }
   h1 {
-    font-size: 5rem;
+    font-size: 3rem;
     margin: 0;
     margin-bottom: 30px;
     line-height: 1.2;
     color: #252f3f;
     @media (max-width: 800px) {
-      font-size: 4rem;
+      font-size: 2.6rem;
     }
   }
   h2 {
-    font-size: 3rem;
+    font-size: 2rem;
     margin: 0;
     margin-bottom: 30px;
     line-height: 1.2;
@@ -69,7 +102,7 @@ const Styles = styled.div`
   .text {
     padding: 5% 0;
     border-bottom: 1px solid #001f4e;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
   .date {
     font-weight: bold;
@@ -82,7 +115,7 @@ const Styles = styled.div`
 `;
 
 const PostContainer = styled.div`
-  width: 50%;
+  width: 100%;
   /* margin-bottom: 50px; */
   button {
     margin: 50px 0;
@@ -232,17 +265,28 @@ const Post = (props) => {
     updatePost,
     { data: updated_data, loading: updated_loading, error: updated_error },
   ] = useMutation(UPDATE_POST_MUTATION);
+  const {
+    loading: post_loading,
+    error: post_error,
+    data: post_data,
+  } = useQuery(POST_QUERY, {
+    variables: { id: props.id },
+  });
   const { t } = useTranslation("blog");
 
   const [update, setUpdate] = useState(false);
-  const [likes, setLikes] = useState(props.post.likes);
-  let post = props.post;
+  const [likes, setLikes] = useState(0);
+
+  if (post_loading) return <Loading />;
+  if (post_error) return post_error;
+  let post = post_data.post;
+
   moment.locale("ru");
   return (
     <>
       {/* <BottomLine post={post} /> */}
       <Styles>
-        <div className="title">
+        {/* <div className="title">
           <Link
             href={{
               pathname: "/blog",
@@ -250,7 +294,7 @@ const Post = (props) => {
           >
             <a>{t("back")}</a>
           </Link>
-        </div>
+        </div> */}
         <PostContainer>
           {props.me &&
             props.me.permissions &&
@@ -271,8 +315,7 @@ const Post = (props) => {
                 <span className="date">
                   {moment(post.createdAt).format("DD/MM/YYYY")}
                 </span>
-                <Feedback>
-                  {/* <div className="question">Полезный материал? </div> */}
+                {/* <Feedback>
                   <div className="favorite">
                     <span
                       className="likes"
@@ -291,7 +334,7 @@ const Post = (props) => {
                     </span>
                     {likes}
                   </div>
-                </Feedback>
+                </Feedback> */}
               </Data>
             </>
           )}
@@ -307,39 +350,7 @@ const Post = (props) => {
           )}
         </PostContainer>
       </Styles>
-      <Navigator level={"more_next_steps"} tags={post.tags.join("-")} />
-
-      {/* <ContactForm /> */}
-      {/* <Banner>
-        <div className="header">📫 Новостная рассылка</div>
-        <div className="comment">
-          Раз в неделю мы делаем выжимку всех материалов из блога и социальных
-          сетей и отправляем их на почту.
-        </div>
-        <div className="buttons">
-          Зарегистрируйтесь, чтобы подписаться на рассылку.
-        </div>
-        <Button onClick={(e) => setIsOpen(!isOpen)}>Зарегистрироваться</Button>
-      </Banner> */}
-      {/* <StyledModal
-        isOpen={isOpen}
-        onBackgroundClick={(e) => setIsOpen(!isOpen)}
-        onEscapeKeydown={(e) => setIsOpen(!isOpen)}
-      >
-        {auth === "signin" && (
-          <Signin
-            getData={changeState}
-            closeNavBar={(e) => setIsOpen(!isOpen)}
-          />
-        )}
-        {auth === "signup" && (
-          <Signup
-            getData={changeState}
-            closeNavBar={(e) => setIsOpen(!isOpen)}
-          />
-        )}
-        {auth === "reset" && <RequestReset getData={changeState} />}
-      </StyledModal> */}
+      {/* <Navigator level={"more_next_steps"} tags={post.tags.join("-")} /> */}
     </>
   );
 };

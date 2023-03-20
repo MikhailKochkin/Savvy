@@ -280,6 +280,8 @@ const Nav = (props) => {
     setWidth(width);
   };
 
+  const currentReferal = localStorage.getItem("referal");
+
   const toggleModal = (e) => setIsOpen(!isOpen);
 
   const openNav = () => {
@@ -390,7 +392,11 @@ const Nav = (props) => {
                 <Signin getData={changeState} closeNavBar={toggleModal} />
               )}
               {auth === "signup" && (
-                <Signup getData={changeState} closeNavBar={toggleModal} />
+                <Signup
+                  getData={changeState}
+                  closeNavBar={toggleModal}
+                  currentReferal={currentReferal}
+                />
               )}
               {auth === "reset" && <RequestReset getData={changeState} />}
             </StyledModal>
@@ -483,10 +489,18 @@ const Nav = (props) => {
               onEscapeKeydown={toggleModal}
             >
               {auth === "signin" && (
-                <Signin getData={changeState} closeNavBar={toggleModal} />
+                <Signin
+                  getData={changeState}
+                  closeNavBar={toggleModal}
+                  currentReferal={currentReferal}
+                />
               )}
               {auth === "signup" && (
-                <Signup getData={changeState} closeNavBar={toggleModal} />
+                <Signup
+                  getData={changeState}
+                  closeNavBar={toggleModal}
+                  currentReferal={currentReferal}
+                />
               )}
               {auth === "reset" && <RequestReset getData={changeState} />}
             </StyledModal>

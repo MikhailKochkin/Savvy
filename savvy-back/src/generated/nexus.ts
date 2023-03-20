@@ -70,6 +70,7 @@ export interface NexusGenInputs {
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     journey?: NexusGenEnums['SortOrder'] | null; // SortOrder
     rating?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    source?: NexusGenEnums['SortOrder'] | null; // SortOrder
     updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   BotDialogueWhereInput: { // input type
@@ -80,6 +81,7 @@ export interface NexusGenInputs {
     NOT?: NexusGenInputs['BotDialogueWhereInput'][] | null; // [BotDialogueWhereInput!]
     OR?: NexusGenInputs['BotDialogueWhereInput'][] | null; // [BotDialogueWhereInput!]
     rating?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    source?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
   }
   BotDialogueWhereUniqueInput: { // input type
@@ -2170,6 +2172,7 @@ export interface NexusGenInputs {
     some?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
   }
   UserOrderByInput: { // input type
+    active?: NexusGenEnums['SortOrder'] | null; // SortOrder
     careerTrackId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     careerTrackID?: NexusGenEnums['SortOrder'] | null; // SortOrder
     comment?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -2189,9 +2192,11 @@ export interface NexusGenInputs {
     number?: NexusGenEnums['SortOrder'] | null; // SortOrder
     password?: NexusGenEnums['SortOrder'] | null; // SortOrder
     permissions?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    referal?: NexusGenEnums['SortOrder'] | null; // SortOrder
     resetToken?: NexusGenEnums['SortOrder'] | null; // SortOrder
     resetTokenExpiry?: NexusGenEnums['SortOrder'] | null; // SortOrder
     resume?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    score?: NexusGenEnums['SortOrder'] | null; // SortOrder
     status?: NexusGenEnums['SortOrder'] | null; // SortOrder
     subjects?: NexusGenEnums['SortOrder'] | null; // SortOrder
     surname?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -2203,6 +2208,7 @@ export interface NexusGenInputs {
     work?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
   UserWhereInput: { // input type
+    active?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
     AND?: NexusGenInputs['UserWhereInput'][] | null; // [UserWhereInput!]
     careerTrack?: NexusGenInputs['CareerTrackWhereInput'] | null; // CareerTrackWhereInput
     careerTrackId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2263,11 +2269,13 @@ export interface NexusGenInputs {
     quizes?: NexusGenInputs['QuizListRelationFilter'] | null; // QuizListRelationFilter
     quizResults?: NexusGenInputs['QuizResultListRelationFilter'] | null; // QuizResultListRelationFilter
     ratings?: NexusGenInputs['RatingListRelationFilter'] | null; // RatingListRelationFilter
+    referal?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetToken?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     resetTokenExpiry?: NexusGenInputs['FloatNullableFilter'] | null; // FloatNullableFilter
     resume?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     sandboxPageGoals?: NexusGenInputs['SandboxPageGoalListRelationFilter'] | null; // SandboxPageGoalListRelationFilter
     sandboxPages?: NexusGenInputs['SandboxPageListRelationFilter'] | null; // SandboxPageListRelationFilter
+    score?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     shotResults?: NexusGenInputs['ShotResultListRelationFilter'] | null; // ShotResultListRelationFilter
     shots?: NexusGenInputs['ShotListRelationFilter'] | null; // ShotListRelationFilter
     statements?: NexusGenInputs['StatementListRelationFilter'] | null; // StatementListRelationFilter
@@ -2350,6 +2358,7 @@ export interface NexusGenObjects {
     id: string; // String!
     journey: string[]; // [String!]!
     rating?: number | null; // Int
+    source?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   BusinessClient: { // root type
@@ -2927,6 +2936,7 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   User: { // root type
+    active?: boolean | null; // Boolean
     comment?: string | null; // String
     country?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -2938,7 +2948,9 @@ export interface NexusGenObjects {
     number?: string | null; // String
     password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
+    referal?: string | null; // String
     resume?: string | null; // String
+    score?: number | null; // Int
     status?: string | null; // String
     surname?: string | null; // String
     tags: string[]; // [String!]!
@@ -2983,6 +2995,7 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     journey: string[]; // [String!]!
     rating: number | null; // Int
+    source: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   BusinessClient: { // field return type
@@ -3389,6 +3402,7 @@ export interface NexusGenFieldTypes {
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     textBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    updateActiveUser: NexusGenRootTypes['User'] | null; // User
     updateBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     updateBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     updateChat: NexusGenRootTypes['Chat'] | null; // Chat
@@ -3411,6 +3425,7 @@ export interface NexusGenFieldTypes {
     updatePublished: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateQuiz: NexusGenRootTypes['Quiz'] | null; // Quiz
     updateRating: NexusGenRootTypes['Rating'] | null; // Rating
+    updateScore: NexusGenRootTypes['User'] | null; // User
     updateShot: NexusGenRootTypes['Shot'] | null; // Shot
     updateStatement: NexusGenRootTypes['Statement'] | null; // Statement
     updateStatementChecked: NexusGenRootTypes['Statement'] | null; // Statement
@@ -3841,6 +3856,7 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
   User: { // field return type
+    active: boolean | null; // Boolean
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
     co_coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     comment: string | null; // String
@@ -3864,7 +3880,10 @@ export interface NexusGenFieldTypes {
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
     password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
+    ratings: NexusGenRootTypes['Rating'][]; // [Rating!]!
+    referal: string | null; // String
     resume: string | null; // String
+    score: number | null; // Int
     status: string | null; // String
     studentFeedback: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
     surname: string | null; // String
@@ -3906,6 +3925,7 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     journey: 'String'
     rating: 'Int'
+    source: 'String'
     updatedAt: 'DateTime'
   }
   BusinessClient: { // field return type name
@@ -4312,6 +4332,7 @@ export interface NexusGenFieldTypeNames {
     signout: 'SignOut'
     signup: 'AuthPayload'
     textBusinessClient: 'BusinessClient'
+    updateActiveUser: 'User'
     updateBotDialogue: 'BotDialogue'
     updateBusinessClient: 'BusinessClient'
     updateChat: 'Chat'
@@ -4334,6 +4355,7 @@ export interface NexusGenFieldTypeNames {
     updatePublished: 'Lesson'
     updateQuiz: 'Quiz'
     updateRating: 'Rating'
+    updateScore: 'User'
     updateShot: 'Shot'
     updateStatement: 'Statement'
     updateStatementChecked: 'Statement'
@@ -4764,6 +4786,7 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
   }
   User: { // field return type name
+    active: 'Boolean'
     certificates: 'Certificate'
     co_coursePages: 'CoursePage'
     comment: 'String'
@@ -4787,7 +4810,10 @@ export interface NexusGenFieldTypeNames {
     orders: 'Order'
     password: 'String'
     permissions: 'Permission'
+    ratings: 'Rating'
+    referal: 'String'
     resume: 'String'
+    score: 'Int'
     status: 'String'
     studentFeedback: 'Feedback'
     surname: 'String'
@@ -5050,6 +5076,7 @@ export interface NexusGenArgTypes {
     }
     createBotDialogue: { // args
       journey?: Array<string | null> | null; // [String]
+      source?: string | null; // String
     }
     createBusinessClient: { // args
       comment?: string | null; // String
@@ -5433,6 +5460,7 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       number?: string | null; // String
       password?: string | null; // String
+      referal?: string | null; // String
       status?: NexusGenEnums['Status'] | null; // Status
       surname?: string | null; // String
       traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
@@ -5441,6 +5469,10 @@ export interface NexusGenArgTypes {
     textBusinessClient: { // args
       comment?: string | null; // String
       id?: string | null; // String
+    }
+    updateActiveUser: { // args
+      active?: boolean | null; // Boolean
+      email?: string | null; // String
     }
     updateBotDialogue: { // args
       id?: string | null; // String
@@ -5625,6 +5657,10 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       rating?: number | null; // Int
     }
+    updateScore: { // args
+      id?: string | null; // String
+      score?: number | null; // Int
+    }
     updateShot: { // args
       comments?: Array<string | null> | null; // [String]
       id?: string | null; // String
@@ -5647,6 +5683,7 @@ export interface NexusGenArgTypes {
       totalMistakes?: number | null; // Int
     }
     updateUser: { // args
+      active?: boolean | null; // Boolean
       description?: string | null; // String
       email?: string | null; // String
       id?: string | null; // String
@@ -6065,6 +6102,12 @@ export interface NexusGenArgTypes {
     orders: { // args
       after?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput
       before?: NexusGenInputs['OrderWhereUniqueInput'] | null; // OrderWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    ratings: { // args
+      after?: NexusGenInputs['RatingWhereUniqueInput'] | null; // RatingWhereUniqueInput
+      before?: NexusGenInputs['RatingWhereUniqueInput'] | null; // RatingWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }

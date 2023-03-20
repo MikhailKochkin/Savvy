@@ -6,6 +6,7 @@ import renderHTML from "react-render-html";
 import * as EmailValidator from "email-validator";
 import moment from "moment";
 
+import Post from "../blog/Post";
 import AnswerOption from "./AnswerOption";
 import AnswerOptionWithFeedback from "./AnswerOptionWithFeedback";
 
@@ -57,7 +58,13 @@ const Styles = styled.div`
   animation-name: animate-fade;
   /* animation-delay: 0.5s; */
   animation-fill-mode: both;
-
+  a {
+    border-bottom: 2px solid #26ba8d;
+    padding: 0;
+    transition: 0.3s;
+    color: black;
+    cursor: pointer;
+  }
   @keyframes animate-fade {
     0% {
       opacity: 0;
@@ -75,12 +82,6 @@ const TextBar = styled.div`
   ul {
     list-style-type: none;
     padding-left: 0px;
-  }
-  a {
-    /* border-bottom: 2px solid #26ba8d; */
-    padding: 0;
-    transition: 0.3s;
-    cursor: pointer;
   }
   .video {
     /* border: 1px solid #000000;
@@ -271,6 +272,13 @@ const Options = styled.div`
   max-width: 80%;
 `;
 
+const Material = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+`;
+
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
@@ -340,7 +348,7 @@ const Input = styled.input`
   }
 `;
 
-const ButtonOpen = styled.a`
+const ButtonOpen = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -437,7 +445,6 @@ const Block = (props) => {
       setType("dates");
       let text;
       let today = new Date();
-      console.log("my_course.nextStart", my_course.nextStart);
       if (!my_course.nextStart) {
         text = `<p>На курс можно записаться <b>сегодня</b>. Мы индивидуально подключим вас к курсу и дадим доступ к записям уже прошедших вебинаров.</p>`;
       } else {
@@ -474,7 +481,6 @@ const Block = (props) => {
           }</p>`
         );
       }
-      console.log();
       setFeedback(text.join(" "));
     } else if (val == "price" && my_course.tariffs) {
       setType("price");
@@ -500,6 +506,7 @@ const Block = (props) => {
     } else {
       setFeedback("В боте нет такой информации. Посмотрите страницу курса.");
     }
+    props.updateBotMap("", val);
   };
 
   const getTestData = (number, move, update, id) => {
@@ -516,7 +523,6 @@ const Block = (props) => {
     });
     setHidden([...updated_arr]);
   };
-  console.log("props.sorted_courses 2", props.sorted_courses);
 
   return (
     <Styles>
@@ -533,15 +539,18 @@ const Block = (props) => {
           </IconBlock>
         </div>
         <div className="answer">
-          <IconBlock>
-            <img className="icon" src="../../static/flash.svg" />
-            <div className="name">Вы</div>
-          </IconBlock>
+          {props.type !== "post" && (
+            <IconBlock>
+              <img className="icon" src="../../static/flash.svg" />
+              <div className="name">Вы</div>
+            </IconBlock>
+          )}
           <Options>
             {props.type !== "courses" &&
               props.type !== "posts" &&
               props.type !== "usefuls" &&
               props.type !== "course" &&
+              props.type !== "post" &&
               options.map((o, index) => (
                 <>
                   <AnswerOption
@@ -550,6 +559,7 @@ const Block = (props) => {
                     hidden={!props.hideElems ? false : hidden[index]}
                     move={o.move}
                     type={o.type}
+                    color={o.color}
                     link={o.link}
                     update={o.update}
                     number={index}
@@ -643,7 +653,7 @@ const Block = (props) => {
                 )}
               </>
             )}
-            {props.type == "post" && props.post && props.post.id && (
+            {/* {props.type == "post" && props.post && props.post.id && (
               <>
                 <AnswerOption
                   answer={"Открыть материал"}
@@ -653,18 +663,47 @@ const Block = (props) => {
                   onAnswerSelected={getTestData}
                 />
               </>
-            )}
+            )} */}
             {props.type == "useful" && props.useful && props.useful.id && (
               <>
                 <AnswerOption
-                  answer={"Открыть материал"}
+                  answer={"Отправить материал на почту"}
                   type={"link"}
-                  link={`https://besavvy.app/useful?id=${props.useful.id}&source=navigator`}
+                  link={props.useful.link}
+                  move={"sent"}
+                  // link={`https://besavvy.app/useful?id=${props.useful.id}&source=navigator`}
                   update={"open_useful"}
+                  onAnswerSelected={getTestData}
+                  me={props.me}
+                />
+              </>
+            )}
+            {props.me && props.type == "share_bot" && (
+              <>
+                <AnswerOption
+                  answer={"Отправить ссылку себе на почту, чтобы не потерять"}
+                  type={"link"}
+                  move={"sent"}
+                  link={`https://besavvy.app/referal?id=${props.me.id}`}
+                  update={"send_referal_link"}
+                  onAnswerSelected={getTestData}
+                  me={props.me}
+                />
+              </>
+            )}
+            {!props.me && props.type == "share_bot" && (
+              <>
+                <AnswerOption
+                  answer={"Создать аккаунт на сайте"}
+                  type={"signup"}
+                  // move={"sent"}
+                  // link={`https://besavvy.app/referal?id=${props.referal.id}`}
+                  update={"signup"}
                   onAnswerSelected={getTestData}
                 />
               </>
             )}
+
             {props.type == "courses" && (
               <>
                 {props.sorted_courses
@@ -730,7 +769,6 @@ const Block = (props) => {
                   )}
               </>
             )}
-            {console.log("dfdf", props.sorted_usefuls)}
             {props.type == "usefuls" && props.sorted_usefuls && (
               <>
                 {props.sorted_usefuls
@@ -834,6 +872,51 @@ const Block = (props) => {
             )}
           </Options>
         </div>
+        <Material>
+          {props.type == "post" && props.post && props.post.id && (
+            <Post id={props.post.id} />
+          )}
+        </Material>
+        {props.type == "post" && (
+          <>
+            <div className="question_box">
+              <div className="question_text">
+                У меня по этой теме есть еще материалы.
+              </div>
+              <IconBlock>
+                <img className="icon" src="../../static/misha_new.webp" />
+                <div className="name">Михаил</div>
+              </IconBlock>
+            </div>
+            <div className="answer">
+              {props.type !== "post" && (
+                <IconBlock>
+                  <img className="icon" src="../../static/flash.svg" />
+                  <div className="name">Вы</div>
+                </IconBlock>
+              )}
+              <Options>
+                {options.map((o, index) => (
+                  <>
+                    <AnswerOption
+                      key={index}
+                      answer={o.answer}
+                      hidden={!props.hideElems ? false : hidden[index]}
+                      move={o.move}
+                      type={o.type}
+                      color={o.color}
+                      link={o.link}
+                      update={o.update}
+                      number={index}
+                      onAnswerSelected={getTestData}
+                      lastBlock={props.lastBlock}
+                    />
+                  </>
+                ))}
+              </Options>
+            </div>
+          </>
+        )}
       </TextBar>
       {feedback && (
         <>
@@ -855,7 +938,9 @@ const Block = (props) => {
                         variables: {
                           coursePageId: my_course.id,
                           price: my_course.discountPrice,
-                          userId: "clexttwq3134261fqwiljo29q1",
+                          userId: props.me
+                            ? props.me.id
+                            : "clexttwq3134261fqwiljo29q1",
                         },
                       });
                       location.href = res.data.createOrder.url;
@@ -873,7 +958,9 @@ const Block = (props) => {
                         variables: {
                           coursePageId: my_course.id,
                           price: my_course.price,
-                          userId: "clexttwq3134261fqwiljo29q1",
+                          userId: props.me
+                            ? props.me.id
+                            : "clexttwq3134261fqwiljo29q1",
                         },
                       });
                       location.href = res.data.createOrder.url;

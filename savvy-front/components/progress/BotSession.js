@@ -26,7 +26,6 @@ const BotSession = (props) => {
   let active = session.objects
     .filter((s) => s.journey.length > 0)
     .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-  console.log("active", active);
   return (
     <Block>
       <div>
@@ -52,6 +51,7 @@ const BotSession = (props) => {
                   {moment(s.createdAt).format("HH:mm:ss")} до{" "}
                   {moment(s.updatedAt).format("HH:mm:ss")}
                 </div>
+                <div>Источник: {s.source}</div>
                 <div>{s.journey.join(", ")}</div>
                 <div>
                   <b>Оценка:</b> {s.rating}

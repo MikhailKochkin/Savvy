@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -884,7 +884,6 @@ model BotDialogue {
   id             String    @id @default(cuid())
   journey        String[]
   rating         Int?
-  source         String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

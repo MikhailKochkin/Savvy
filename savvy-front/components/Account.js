@@ -135,6 +135,14 @@ const Comment = styled.div`
   line-height: 1.2;
   width: 90%;
   margin-bottom: 2%;
+  span {
+    color: black;
+  }
+  a {
+    color: #767676;
+    border-bottom: 1px solid #767676;
+    cursor: pointer;
+  }
 `;
 
 const Container = styled.div``;
@@ -266,7 +274,14 @@ const Account = (props) => {
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
                   />
-                  <br />
+                  <Comment>
+                    Баланс: <span>{props.me.score}</span> Узнайте, как увеличить
+                    баланс и покупать курсы за бесплатно{" "}
+                    <a target="_blank" href="https://besavvy.app/navigator">
+                      по ссылке.
+                    </a>
+                  </Comment>
+
                   <input
                     className="second"
                     type="text"

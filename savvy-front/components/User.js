@@ -22,6 +22,7 @@ const CURRENT_USER_QUERY = gql`
       tags
       image
       work
+      score
       description
       teams {
         id

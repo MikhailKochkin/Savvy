@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
-import Block from "./Block";
 import { v4 as uuidv4 } from "uuid";
 import StarRatings from "react-star-ratings";
+import { useRouter } from "next/router";
+
+import Share from "./Share";
+import Block from "./Block";
+
+const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
+    updateUser(id: $id, tags: $tags) {
+      id
+    }
+  }
+`;
 
 const CREATE_BOT_DIALOGUE_MUTATION = gql`
-  mutation CREATE_BOT_DIALOGUE_MUTATION($journey: [String!]) {
-    createBotDialogue(journey: $journey) {
+  mutation CREATE_BOT_DIALOGUE_MUTATION($journey: [String!], $source: String) {
+    createBotDialogue(journey: $journey, source: $source) {
       id
     }
   }
@@ -30,8 +41,7 @@ const USEFUL_QUERY = gql`
     usefuls {
       id
       name
-      header
-      buttonText
+      link
       tags
     }
   }
@@ -106,9 +116,9 @@ const Styles = styled.div`
   min-height: 60vh;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
+  justify-content: flex-start;
   align-items: center;
-  padding: 70px 0;
+  padding-bottom: 70px;
 `;
 
 const Container = styled.div`
@@ -193,9 +203,16 @@ const Navigator = (props) => {
     {
       type: "introduction",
       question:
-        "Привет. Я Навигатор BeSavvy. Я каждый день собираю информацию о том, как юристам развивать карьеру. Поделиться, чем я знаю? ",
+        "<p>Привет. Я Навигатор BeSavvy. </p><p>Я сейчас проверяю, есть ли у тебя аккаунт на сайте, чтобы дать тебе максимально персонализированные рекомендации.</p><p>Я каждый день собираю информацию о том, как юристам развивать карьеру. Поделиться, чем я знаю?</p>",
       options: [
-        { answer: "Давай", move: "segmentation_interests", update: "" },
+        {
+          answer: props.me ? "Давай" : "Давай",
+          move:
+            props.me && props.me.tags.length > 0
+              ? "next_steps_tags_uploaded"
+              : "segmentation_interests",
+          update: "",
+        },
       ],
     },
     {
@@ -253,10 +270,11 @@ const Navigator = (props) => {
     },
     {
       type: "next_steps",
-      question: "Отлично. О чем теперь могу рассказать?",
+      question: "Отлично. Чем могу помочь?",
       options: [
         {
-          answer: "Курсы",
+          answer: "Специальные предложения на курсы",
+          color: "green",
           move: "courses",
           update: "courses",
         },
@@ -274,6 +292,49 @@ const Navigator = (props) => {
           answer: "Хочу пообщаться с Михаилом напрямую",
           move: "contact",
           update: "call_with_Mike",
+        },
+        {
+          answer: "💰 Хочу заработать с BeSavvy",
+          move: "share_bot",
+          update: "share_bot",
+        },
+      ],
+    },
+    {
+      type: "next_steps_tags_uploaded",
+      question:
+        "Отлично. Я вспомнил, что тебя интересует. О чем могу рассказать сегодня?",
+      options: [
+        {
+          answer: "Специальные предложения на курсы",
+          color: "green",
+          move: "courses",
+          update: "courses",
+        },
+        {
+          answer: "Бесплатные пособия",
+          move: "usefuls",
+          update: "usefuls",
+        },
+        {
+          answer: "Блоги и подкасты с экспертами",
+          move: "posts",
+          update: "posts",
+        },
+        {
+          answer: "Хочу пообщаться с Михаилом напрямую",
+          move: "contact",
+          update: "call_with_Mike",
+        },
+        {
+          answer: "Хочу выбрать другие темы",
+          move: "segmentation_interests",
+          update: "change_interests",
+        },
+        {
+          answer: "💰 Хочу заработать с BeSavvy",
+          move: "share_bot",
+          update: "share_bot",
         },
       ],
     },
@@ -374,12 +435,74 @@ const Navigator = (props) => {
     },
     {
       type: "post",
-      question: "Информация по материалу: ",
-      options: [],
+      question: "Загружаю материал: ",
+      options: [
+        {
+          answer: "Специальные предложения на курсы",
+          color: "green",
+          move: "courses",
+          update: "courses",
+        },
+        {
+          answer: "Бесплатные пособия",
+          move: "usefuls",
+          update: "usefuls",
+        },
+        {
+          answer: "Блоги и подкасты с экспертами",
+          move: "posts",
+          update: "posts",
+        },
+        {
+          answer: "Хочу пообщаться с Михаилом напрямую",
+          move: "contact",
+          update: "call_with_Mike",
+        },
+        {
+          answer: "💰 Хочу заработать с BeSavvy",
+          move: "share_bot",
+          update: "share_bot",
+        },
+      ],
+    },
+    {
+      type: "sent",
+      question:
+        "Отправили материал вам на почту. Но я знаю еще много всего интересного. Найдите, что будет вам полезно.",
+      options: [
+        {
+          answer: "Специальные предложения на курсы",
+          color: "green",
+          move: "courses",
+          update: "courses",
+        },
+        {
+          answer: "Бесплатные пособия",
+          move: "usefuls",
+          update: "usefuls",
+        },
+        {
+          answer: "Блоги и подкасты с экспертами",
+          move: "posts",
+          update: "posts",
+        },
+        {
+          answer: "Хочу пообщаться с Михаилом напрямую",
+          move: "contact",
+          update: "call_with_Mike",
+        },
+        {
+          answer: "💰 Хочу заработать с BeSavvy",
+          move: "share_bot",
+          update: "share_bot",
+        },
+      ],
     },
     {
       type: "useful",
-      question: "Информация по материалу: ",
+      question: props.me
+        ? "Вот ссылка на материал."
+        : "Создайте аккаунт на сайте, чтобы скачать материал.",
       options: [],
     },
     {
@@ -387,13 +510,13 @@ const Navigator = (props) => {
       question:
         "Отлично, я буду рад пообщаться с вами напрямую. В каком формате?",
       options: [
-        {
-          answer: "Написать в телеграм",
-          type: "link",
-          link: "https://t.me/mikkochkin",
-          move: "",
-          update: "telegram",
-        },
+        // {
+        //   answer: "Написать в телеграм",
+        //   type: "link",
+        //   link: "https://t.me/mikkochkin",
+        //   move: "",
+        //   update: "telegram",
+        // },
         {
           answer: "Оставить заявку. Я сам вам напишу в одном из мессенджеров.",
           move: "form",
@@ -405,6 +528,19 @@ const Navigator = (props) => {
         //   update: "email",
         // },
       ],
+    },
+    {
+      type: "share_bot",
+      question: `<p>Заработать с BeSavvy легко. Достаточно зарегистироваться на сайте, если вы это еще не сделали. И отправить в чат своих друзей вот эту ссылку. </p>
+        <p>За каждую регистрацию на сайте по этой ссылке вы получите <b>100 рублей</b> на свой счет. Если один из ваших друзей, купит курс на сайте, вы сможете вывести накопленную сумму на свой счет. Следите за балансом в личном кабинете.</p>
+        ${
+          props.me
+            ? `<p>⭐️ Пожалуйста, отправьте эту ссылку
+                <a target="_blank" href="https://besavvy.app/navigator?referal=${props.me.id}">https://besavvy.app/navigator?referal=${props.me.id}</a>
+              в чат своих друзей-юристов.</p>`
+            : `<p>⭐️ Сначала, пожалуйста, зарегистрируйтесь на сайте. Потом мы вам на почту отправим ссылку на бот, которой можно будет поделиться со своими друзьями и коллегами.</p>`
+        }`,
+      options: [],
     },
     {
       type: "form",
@@ -424,6 +560,9 @@ const Navigator = (props) => {
   // interests: law_school, corporate, antitrust, english,
   // goals: exams, interviews, upskilling, new_job
   const [userDescription, setUserDescription] = useState([]);
+  useEffect(() => {
+    localStorage.setItem("referal", props.referal);
+  }, [props.referal]);
   const { loading, error, data } = useQuery(COURSES_QUERY);
   const {
     loading: posts_loading,
@@ -441,6 +580,10 @@ const Navigator = (props) => {
     updateBotDialogue,
     { data: UpdateBotData, loading: UpdateBotLoading },
   ] = useMutation(UPDATE_BOT_DIALOGUE_MUTATION);
+  const router = useRouter();
+
+  const [updateUser, { data: data3, loading: loading3, error: error3 }] =
+    useMutation(UPDATE_USER_MUTATION);
 
   useEffect(
     (e) => {
@@ -459,6 +602,7 @@ const Navigator = (props) => {
         const new_dialogue = await createBotDialogue({
           variables: {
             journey: [],
+            source: router.asPath,
           },
         });
         setDialogueId(new_dialogue.data.createBotDialogue.id);
@@ -468,12 +612,29 @@ const Navigator = (props) => {
     [0]
   );
 
+  useEffect(
+    (e) => {
+      if (props.me) {
+        setUserDescription([...userDescription, ...props.me.tags]);
+      }
+    },
+    [props.me]
+  );
+
   const updateBotMap = async (val, update, id) => {
     let new_map = [...botMap];
     let new_block = new_map.find((dial) => dial.type == val);
     let arr = [...journey, new_block];
     setUserDescription([...userDescription, update]);
     if (new_block) setJourney(arr);
+    if (props.me) {
+      updateUser({
+        variables: {
+          id: props.me.id,
+          tags: [...userDescription, update],
+        },
+      });
+    }
     if (dialogueId) {
       let updated_res = await updateBotDialogue({
         variables: {
@@ -555,6 +716,7 @@ const Navigator = (props) => {
 
   return (
     <Styles>
+      <Share />
       <Container>
         {[...journey].map((b, i) => (
           <Block
@@ -572,6 +734,7 @@ const Navigator = (props) => {
             post={post}
             useful={useful}
             lastBlock={i == journey.length - 1}
+            me={props.me}
           />
         ))}
         <ButtonBox>

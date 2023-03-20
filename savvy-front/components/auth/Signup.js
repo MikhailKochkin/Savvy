@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
 import { gql } from "@apollo/client";
@@ -24,6 +24,7 @@ const SIGNUP_MUTATION = gql`
     $isFamiliar: Boolean!
     $status: Status!
     $company: String
+    $referal: String
     $uniID: String
     $country: String
     $careerTrackID: String
@@ -38,6 +39,7 @@ const SIGNUP_MUTATION = gql`
       isFamiliar: $isFamiliar
       status: $status
       company: $company
+      referal: $referal
       uniID: $uniID
       country: $country
       careerTrackID: $careerTrackID
@@ -248,7 +250,7 @@ const Signup = (props) => {
   // utm_medium => traffic_medium
   // utm_campaign => traffic_campaign
 
-  // console.log("utm_source", utm_source);
+  console.log("props final", props);
 
   return (
     <Mutation
@@ -262,6 +264,7 @@ const Signup = (props) => {
         status: status,
         country: country,
         uniID: uniID,
+        referal: props.currentReferal ? props.currentReferal : undefined,
         company: company,
         careerTrackID: careerTrackID,
         isFamiliar: isFamiliar,

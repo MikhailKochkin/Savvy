@@ -63,6 +63,7 @@ type BotDialogue {
   id: String!
   journey: [String!]!
   rating: Int
+  source: String
   updatedAt: DateTime!
 }
 
@@ -71,6 +72,7 @@ input BotDialogueOrderByInput {
   id: SortOrder
   journey: SortOrder
   rating: SortOrder
+  source: SortOrder
   updatedAt: SortOrder
 }
 
@@ -82,6 +84,7 @@ input BotDialogueWhereInput {
   NOT: [BotDialogueWhereInput!]
   OR: [BotDialogueWhereInput!]
   rating: IntNullableFilter
+  source: StringNullableFilter
   updatedAt: DateTimeFilter
 }
 
@@ -1529,7 +1532,7 @@ type Mutation {
   addUserToCourse(coursePageId: String, email: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
-  createBotDialogue(journey: [String]): BotDialogue
+  createBotDialogue(journey: [String], source: String): BotDialogue
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
   createChallengeResult(correct: Int, lesson: String, time: Int, wrong: Int): ChallengeResult
@@ -1600,8 +1603,9 @@ type Mutation {
   sendMessage(text: String, userId: String): Message
   signin(email: String, password: String, traffic_sources: Visits): AuthPayload
   signout: SignOut
-  signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
+  signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, referal: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   textBusinessClient(comment: String, id: String): BusinessClient
+  updateActiveUser(active: Boolean, email: String): User
   updateBotDialogue(id: String, journey: [String], rating: Int): BotDialogue
   updateBusinessClient(comment: String, communication_history: ClientMessages, id: String, number: String, sales_cycle: SalesCycle, tags: [String]): BusinessClient
   updateChat(id: String, isSecret: Boolean, link_clicks: Int, messages: Messages, name: String): Chat
@@ -1624,11 +1628,12 @@ type Mutation {
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
+  updateScore(id: String, score: Int): User
   updateShot(comments: [String], id: String, parts: [String], title: String): Shot
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
-  updateUser(description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
+  updateUser(active: Boolean, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
 }
 
 input NestedBoolFilter {
@@ -3336,6 +3341,7 @@ input UsefulWhereUniqueInput {
 }
 
 type User {
+  active: Boolean
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
   co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
   comment: String
@@ -3359,7 +3365,10 @@ type User {
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   password: String!
   permissions: [Permission!]!
+  ratings(after: RatingWhereUniqueInput, before: RatingWhereUniqueInput, first: Int, last: Int): [Rating!]!
+  referal: String
   resume: String
+  score: Int
   status: String
   studentFeedback(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int): [Feedback!]!
   surname: String
@@ -3408,6 +3417,7 @@ input UserListRelationFilter {
 }
 
 input UserOrderByInput {
+  active: SortOrder
   careerTrackId: SortOrder
   careerTrackID: SortOrder
   comment: SortOrder
@@ -3427,9 +3437,11 @@ input UserOrderByInput {
   number: SortOrder
   password: SortOrder
   permissions: SortOrder
+  referal: SortOrder
   resetToken: SortOrder
   resetTokenExpiry: SortOrder
   resume: SortOrder
+  score: SortOrder
   status: SortOrder
   subjects: SortOrder
   surname: SortOrder
@@ -3442,6 +3454,7 @@ input UserOrderByInput {
 }
 
 input UserWhereInput {
+  active: BoolNullableFilter
   AND: [UserWhereInput!]
   careerTrack: CareerTrackWhereInput
   careerTrackId: StringNullableFilter
@@ -3502,11 +3515,13 @@ input UserWhereInput {
   quizes: QuizListRelationFilter
   quizResults: QuizResultListRelationFilter
   ratings: RatingListRelationFilter
+  referal: StringNullableFilter
   resetToken: StringNullableFilter
   resetTokenExpiry: FloatNullableFilter
   resume: StringNullableFilter
   sandboxPageGoals: SandboxPageGoalListRelationFilter
   sandboxPages: SandboxPageListRelationFilter
+  score: IntNullableFilter
   shotResults: ShotResultListRelationFilter
   shots: ShotListRelationFilter
   statements: StatementListRelationFilter

@@ -9,6 +9,7 @@ const BOT_SESSIONS_QUERY = gql`
     botDialogues(where: { updatedAt: { gte: "2023-03-03T00:10:10.734Z" } }) {
       id
       rating
+      source
       journey
       createdAt
       updatedAt
@@ -36,7 +37,6 @@ const BotProgress = () => {
   if (data1) {
     sessions = data1.botDialogues;
   }
-  console.log("sessions", sessions.length);
 
   const groupByDay = (array) => {
     const now = new Date();
@@ -69,8 +69,6 @@ const BotProgress = () => {
   };
 
   let grouped_sessions = groupByDay(sessions);
-
-  console.log("updated sessions", groupByDay(sessions));
 
   // 3. count active sessions
 

@@ -663,7 +663,7 @@ const WelcomeEmail = (name, password, email) => `
                   <tr>
                     <td class="content-cell" align="center">
                       <p class="f-fallback sub align-center">
-                        &copy; 2022 BeSavvy
+                        &copy; 2023 BeSavvy
                       </p>
                     </td>
                   </tr>

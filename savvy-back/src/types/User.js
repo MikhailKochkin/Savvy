@@ -13,6 +13,10 @@ const User = objectType({
     t.model.comment();
     t.model.work();
     t.model.password();
+    t.model.referal();
+    t.model.active();
+    t.model.score();
+    t.model.ratings();
     t.model.description();
     t.model.messages();
     t.model.resume();
@@ -170,6 +174,7 @@ const BotDialogue = objectType({
     t.model.id();
     t.model.journey();
     t.model.rating();
+    t.model.source();
     t.model.createdAt();
     t.model.updatedAt();
   },

@@ -5,6 +5,8 @@ import styled from "styled-components";
 import CourseBox from "./CourseBox";
 import KPI from "./KPI";
 import BotProgress from "./BotProgress";
+import ActiveStudents from "./ActiveStudents";
+import EmptyOrders from "./EmptyOrders";
 
 const Styles = styled.div`
   display: flex;
@@ -117,6 +119,10 @@ const Progress = (props) => {
   return (
     <Styles>
       <Container>
+        <h3>Active students</h3>
+        <ActiveStudents />
+        <h3>Empty orders</h3>
+        <EmptyOrders />
         <h3>Bot</h3>
         <BotProgress />
 
@@ -125,7 +131,6 @@ const Progress = (props) => {
         {open && <KPI coursePages={coursePages} />}
         <h3>Courses rating</h3>
         <div>
-          {console.log("rated_courses", rated_courses)}
           <ol>
             {rated_courses
               .sort(
@@ -162,6 +167,14 @@ const Progress = (props) => {
             Open stats
           </a>
         </button>
+        <button className="bottom_button">
+          <a
+            target="_blank"
+            href={`https://besavvy.app/ru/updateCoursePage?id=${course}&name=stats`}
+          >
+            Open update page
+          </a>
+        </button>
         <h3>Courses in development</h3>
         <select onChange={(e) => setCourse(e.target.value)}>
           {coursePages
@@ -179,6 +192,14 @@ const Progress = (props) => {
             href={`https://besavvy.app/ru/stats?id=${course}&name=stats`}
           >
             Open stats
+          </a>
+        </button>
+        <button className="bottom_button">
+          <a
+            target="_blank"
+            href={`https://besavvy.app/ru/updateCoursePage?id=${course}&name=stats`}
+          >
+            Open update page
           </a>
         </button>
         {/* <CourseBox key={coursePage.id} id={coursePage.id} c={coursePage} /> */}

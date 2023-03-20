@@ -125,6 +125,7 @@ const Mutation = mutationType({
         password: stringArg(),
         isFamiliar: booleanArg(),
         country: stringArg(),
+        referal: stringArg(),
         status: arg({
           type: "Status", // name should match the name you provided
         }),
@@ -146,6 +147,7 @@ const Mutation = mutationType({
           status,
           country,
           traffic_sources,
+          referal,
         },
         ctx
       ) => {
@@ -170,6 +172,7 @@ const Mutation = mutationType({
             password: hashed_password,
             number: number,
             country: country,
+            referal: referal,
             // uni: { connect: { id: uniID } },
             // company: { connect: { id: company } },
             // careerTrack: { connect: { id: careerTrackID } },
@@ -224,6 +227,23 @@ const Mutation = mutationType({
             To: email,
             Subject: "Hello from BeSavvy",
             HtmlBody: WelcomeEmailEng.WelcomeEmailEng(name, password, email),
+          });
+        }
+
+        if (referal) {
+          const old_user = await ctx.prisma.user.findUnique({
+            where: { id: referal },
+          });
+
+          console.log("user.score + score", old_user.score, 100);
+
+          const updated_user = await ctx.prisma.user.update({
+            data: {
+              score: old_user.score + 100,
+            },
+            where: {
+              id: referal,
+            },
           });
         }
 
@@ -512,6 +532,7 @@ const Mutation = mutationType({
         tags: list(stringArg()),
         surname: stringArg(),
         email: stringArg(),
+        active: booleanArg(),
         description: stringArg(),
         work: stringArg(),
         status: arg({
@@ -539,7 +560,46 @@ const Mutation = mutationType({
         return user;
       },
     });
+    t.field("updateActiveUser", {
+      type: "User",
+      args: {
+        email: stringArg(),
+        active: booleanArg(),
+      },
+      resolve: async (_, { email, active }, ctx) => {
+        const user = await ctx.prisma.user.update({
+          data: {
+            active: active,
+          },
+          where: {
+            email: email,
+          },
+        });
+        return user;
+      },
+    });
+    t.field("updateScore", {
+      type: "User",
+      args: {
+        id: stringArg(),
+        score: intArg(),
+      },
+      resolve: async (_, { id, score }, ctx) => {
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: id },
+        });
 
+        const updated_user = await ctx.prisma.user.update({
+          data: {
+            score: user.score + score,
+          },
+          where: {
+            id: id,
+          },
+        });
+        return updated_user;
+      },
+    });
     t.field("sendMessage", {
       type: "Message",
       args: {
@@ -3863,12 +3923,14 @@ const Mutation = mutationType({
         type: "BotDialogue",
         args: {
           journey: list(stringArg()),
+          source: stringArg(),
         },
-        resolve: async (_, { journey }, ctx) => {
+        resolve: async (_, { journey, source }, ctx) => {
           const new_data = {
             journey: {
               set: [...journey],
             },
+            source: source,
           };
           const newBotDialogue = await ctx.prisma.botDialogue.create({
             data: new_data,
