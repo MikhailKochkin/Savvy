@@ -184,7 +184,6 @@ const Box = styled.div`
 `;
 
 const Prices = (props) => {
-  console.log("prices", props.coursePage.prices.prices);
   let p = props.coursePage.prices.prices;
   return (
     <Styles>

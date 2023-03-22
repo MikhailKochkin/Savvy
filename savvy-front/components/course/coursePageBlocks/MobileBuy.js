@@ -68,6 +68,44 @@ const Styles = styled.div`
   /* position: fixed; */
   bottom: 0px;
   /* height: 100px; */
+  .choose {
+    width: 100%;
+    height: 42px;
+    padding: 2%;
+    font-family: Montserrat;
+    border: 1px solid #e7ebef;
+    background: none;
+    margin: 10px 0;
+    outline: 0;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: ease-in 0.2s;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: #e3e4ec;
+    }
+  }
+  select {
+    width: 80%;
+    height: 32px;
+    font-family: Montserrat;
+    background: none;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: ease-in 0.2s;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* &:hover {
+      background-color: #e3e4ec;
+    } */
+  }
   .price {
     font-weight: 600;
     font-size: 3.2rem;
@@ -268,11 +306,7 @@ const MobileBuy = (props) => {
   const [isPromo, setIsPromo] = useState(false);
   const [promo, setPromo] = useState("");
 
-  const [price, setPrice] = useState(
-    props.coursePage.installments && props.coursePage.installments > 1
-      ? props.coursePage.price / props.coursePage.installments
-      : props.coursePage.price
-  );
+  const [price, setPrice] = useState(props.coursePage.price);
   const toggleModal = (e) => setIsOpen(!isOpen);
 
   const addPromo = (val) => {
@@ -460,14 +494,17 @@ const MobileBuy = (props) => {
           {installments && (loading_data ? `...` : t("buy_installments"))}
           {!installments && (loading_data ? `...` : t("buy"))}
         </ButtonBuy>
-        {/* {props.coursePage.promocode && (
-          <div id="promo">
-            <input
-              placeholder="Promocode"
-              onChange={(e) => addPromo(e.target.value)}
-            />
-          </div>
-        )} */}
+        {props.coursePage.prices &&
+          props.coursePage.prices.prices &&
+          props.coursePage.prices.prices.length > 1 && (
+            <div className="choose">
+              <select onChange={(e) => setPrice(e.target.value)}>
+                {props.coursePage.prices.prices.map((p) => (
+                  <option value={p.price}>{p.name} модуль</option>
+                ))}
+              </select>
+            </div>
+          )}
         {props.coursePage.courseType !== "PUBLIC" && (
           <div className="open">
             <div className="">{t("after")}</div>

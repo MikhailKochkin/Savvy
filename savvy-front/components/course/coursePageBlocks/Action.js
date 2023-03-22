@@ -105,6 +105,45 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  .choose {
+    width: 292px;
+    height: 42px;
+    padding: 2%;
+    font-family: Montserrat;
+    border: 1px solid #e7ebef;
+    background: none;
+    margin-bottom: 10px;
+    outline: 0;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: ease-in 0.2s;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    &:hover {
+      background-color: #e3e4ec;
+    }
+  }
+  select {
+    width: 242px;
+    height: 32px;
+    font-family: Montserrat;
+    background: none;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: ease-in 0.2s;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* &:hover {
+      background-color: #e3e4ec;
+    } */
+  }
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -398,14 +437,11 @@ const Action = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
+
   const [installments, setInstallments] = useState(
     props.coursePage.installments
   );
-  const [price, setPrice] = useState(
-    props.coursePage.installments && props.coursePage.installments > 1
-      ? props.coursePage.price / props.coursePage.installments
-      : props.coursePage.price
-  );
+  const [price, setPrice] = useState(props.coursePage.price);
   const [isPromo, setIsPromo] = useState(false);
   const { t } = useTranslation("coursePage");
   const router = useRouter();
@@ -469,6 +505,8 @@ const Action = (props) => {
     }
     return five;
   };
+
+  console.log("props.coursePage", props.coursePage.prices.prices);
 
   return (
     <Styles id="c2a">
@@ -619,6 +657,17 @@ const Action = (props) => {
                     (loading_data ? `...` : t("buy_installments"))}
                   {!installments && (loading_data ? `...` : t("buy"))}
                 </ButtonBuy>
+                {props.coursePage.prices &&
+                  props.coursePage.prices.prices &&
+                  props.coursePage.prices.prices.length > 1 && (
+                    <div className="choose">
+                      <select onChange={(e) => setPrice(e.target.value)}>
+                        {props.coursePage.prices.prices.map((p) => (
+                          <option value={p.price}>{p.name} модуль</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
               </>
             )}
           </div>

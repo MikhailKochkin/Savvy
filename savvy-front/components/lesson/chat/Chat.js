@@ -411,6 +411,7 @@ const Chat = (props) => {
     // } else if (e.key === "b") {
     //   setNum((num) => num - 1);
     // } else if (e.key === "s") {
+    //   console.log("s");
     //   setShowButton((showButton) => !showButton);
     // }
   };

@@ -531,7 +531,10 @@ const Block = (props) => {
           <div className="question_text">
             {question && renderHTML(question)}
             {props.type == "course" && props.course && props.course.title}
-            {props.type == "post" && props.post && props.post.title}
+            {props.type == "post" && props.post && props.post.title
+              ? props.post.title
+              : null}
+            <b>{props.type == "post" && props.name ? props.name : null}</b>
           </div>
           <IconBlock>
             <img className="icon" src="../../static/misha_new.webp" />
@@ -664,20 +667,28 @@ const Block = (props) => {
                 />
               </>
             )} */}
-            {props.type == "useful" && props.useful && props.useful.id && (
-              <>
+            {props.type == "useful" &&
+              ((props.useful && props.useful.id) || props.id) &&
+              (!props.me ? (
                 <AnswerOption
-                  answer={"Отправить материал на почту"}
+                  answer={"Создать аккаунт на сайте"}
+                  type={"signup"}
+                  // move={"sent"}
+                  // link={`https://besavvy.app/referal?id=${props.referal.id}`}
+                  update={"signup"}
+                  onAnswerSelected={getTestData}
+                />
+              ) : (
+                <AnswerOption
+                  answer={`Отправить материал на почту`}
                   type={"link"}
-                  link={props.useful.link}
+                  link={props.useful ? props.useful.link : props.email_link}
                   move={"sent"}
-                  // link={`https://besavvy.app/useful?id=${props.useful.id}&source=navigator`}
                   update={"open_useful"}
                   onAnswerSelected={getTestData}
                   me={props.me}
                 />
-              </>
-            )}
+              ))}
             {props.me && props.type == "share_bot" && (
               <>
                 <AnswerOption
@@ -873,9 +884,10 @@ const Block = (props) => {
           </Options>
         </div>
         <Material>
-          {props.type == "post" && props.post && props.post.id && (
-            <Post id={props.post.id} />
-          )}
+          {props.type == "post" &&
+            ((props.post && props.post.id) || props.id) && (
+              <Post id={props.id ? props.id : props.post.id} />
+            )}
         </Material>
         {props.type == "post" && (
           <>

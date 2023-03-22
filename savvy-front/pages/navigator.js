@@ -18,6 +18,9 @@ const navigator = (props) => {
       referal={props.query.referal}
       level={props.query.level}
       tags={props.query.tags}
+      id={props.query.id}
+      name={props.query.name}
+      email_link={props.query.email_link}
     />
   );
 };

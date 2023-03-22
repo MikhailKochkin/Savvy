@@ -32,6 +32,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
       id
       title
       price
+      prices
       discountPrice
       video
       audience

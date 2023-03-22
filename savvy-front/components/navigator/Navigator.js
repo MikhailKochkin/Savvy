@@ -436,6 +436,8 @@ const Navigator = (props) => {
     {
       type: "post",
       question: "Загружаю материал: ",
+      id: props.id ? props.id : null,
+      name: props.name ? props.name : null,
       options: [
         {
           answer: "Специальные предложения на курсы",
@@ -501,9 +503,14 @@ const Navigator = (props) => {
     {
       type: "useful",
       question: props.me
-        ? "Вот ссылка на материал."
-        : "Создайте аккаунт на сайте, чтобы скачать материал.",
+        ? `Вот ссылка на материал ${props.name ? props.name : null}.`
+        : `Создайте аккаунт на сайте, чтобы скачать материал ${
+            props.name ? `<b>"${props.name}".</b>` : null
+          }`,
       options: [],
+      id: props.id ? props.id : null,
+      name: props.name ? props.name : null,
+      email_link: props.email_link,
     },
     {
       type: "contact",
@@ -607,7 +614,7 @@ const Navigator = (props) => {
         });
         setDialogueId(new_dialogue.data.createBotDialogue.id);
       };
-      getResult();
+      // getResult();
     },
     [0]
   );
@@ -635,15 +642,15 @@ const Navigator = (props) => {
         },
       });
     }
-    if (dialogueId) {
-      let updated_res = await updateBotDialogue({
-        variables: {
-          id: dialogueId,
-          rating: rating,
-          journey: [...userDescription, update],
-        },
-      });
-    }
+    // if (dialogueId) {
+    //   let updated_res = await updateBotDialogue({
+    //     variables: {
+    //       id: dialogueId,
+    //       rating: rating,
+    //       journey: [...userDescription, update],
+    //     },
+    //   });
+    // }
 
     if (id && val == "course") {
       setCourse(sorted_courses.find((c) => c.id == id));
@@ -693,14 +700,17 @@ const Navigator = (props) => {
   }
 
   let sorted_blogs = [];
+
   if (posts_data) {
-    posts_data.posts.map((p) => {
-      if (findCommonElement(p.tags, userDescription)) {
-        return sorted_blogs.push(p);
-      } else if (!findCommonElement(p.tags, userDescription)) {
-        return (sorted_blogs = [...sorted_blogs, p]);
-      }
-    });
+    [...posts_data.posts]
+      .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+      .map((p) => {
+        if (findCommonElement(p.tags, userDescription)) {
+          return sorted_blogs.push(p);
+        } else if (!findCommonElement(p.tags, userDescription)) {
+          return (sorted_blogs = [...sorted_blogs]);
+        }
+      });
   }
 
   let sorted_usefuls = [];
@@ -733,6 +743,9 @@ const Navigator = (props) => {
             course={course}
             post={post}
             useful={useful}
+            id={b.id}
+            name={b.name}
+            email_link={b.email_link}
             lastBlock={i == journey.length - 1}
             me={props.me}
           />
