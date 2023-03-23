@@ -500,7 +500,7 @@ const MobileBuy = (props) => {
             <div className="choose">
               <select onChange={(e) => setPrice(e.target.value)}>
                 {props.coursePage.prices.prices.map((p) => (
-                  <option value={p.price}>{p.name} модуль</option>
+                  <option value={p.price}>{p.name} тариф</option>
                 ))}
               </select>
             </div>

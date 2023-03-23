@@ -88,6 +88,10 @@ const EmptyOrders = () => {
                   {moment(o.createdAt).format("LLL")} – {o.coursePage.title}{" "}
                   {o.price} – {o.isPaid ? "Оплачен" : "Не оплачен"}
                 </div>
+                <div key={i}>
+                  Ссылка на курс: https://besavvy.app/coursePage?id=
+                  {o.coursePage.id}
+                </div>
 
                 {o.user.number && (
                   <button>

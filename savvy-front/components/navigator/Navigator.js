@@ -614,7 +614,7 @@ const Navigator = (props) => {
         });
         setDialogueId(new_dialogue.data.createBotDialogue.id);
       };
-      // getResult();
+      getResult();
     },
     [0]
   );
@@ -642,15 +642,15 @@ const Navigator = (props) => {
         },
       });
     }
-    // if (dialogueId) {
-    //   let updated_res = await updateBotDialogue({
-    //     variables: {
-    //       id: dialogueId,
-    //       rating: rating,
-    //       journey: [...userDescription, update],
-    //     },
-    //   });
-    // }
+    if (dialogueId) {
+      let updated_res = await updateBotDialogue({
+        variables: {
+          id: dialogueId,
+          rating: rating,
+          journey: [...userDescription, update],
+        },
+      });
+    }
 
     if (id && val == "course") {
       setCourse(sorted_courses.find((c) => c.id == id));
