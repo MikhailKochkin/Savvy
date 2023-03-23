@@ -506,8 +506,6 @@ const Action = (props) => {
     return five;
   };
 
-  console.log("props.coursePage", props.coursePage.prices.prices);
-
   return (
     <Styles id="c2a">
       <Container>

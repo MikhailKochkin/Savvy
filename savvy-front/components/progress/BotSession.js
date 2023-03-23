@@ -49,8 +49,25 @@ const BotSession = (props) => {
                 <div>
                   {i + 1}. Время сессии: с{" "}
                   {moment(s.createdAt).format("HH:mm:ss")} до{" "}
-                  {moment(s.updatedAt).format("HH:mm:ss")}
+                  {moment(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
+                  <b>
+                    {" "}
+                    {parseInt(
+                      Math.abs(new Date(s.updatedAt) - new Date(s.createdAt)) /
+                        60000
+                    )}
+                    {":"}
+                    {parseInt(
+                      (Math.abs(new Date(s.updatedAt) - new Date(s.createdAt)) /
+                        1000) %
+                        60
+                    )}
+                  </b>
                 </div>
+                {console.log(
+                  "minus",
+                  Math.abs(new Date(s.updatedAt) - new Date(s.createdAt)) / 1000
+                )}
                 <div>Источник: {s.source}</div>
                 <div>{s.journey.join(", ")}</div>
                 <div>
