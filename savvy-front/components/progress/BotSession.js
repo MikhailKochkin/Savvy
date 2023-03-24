@@ -44,6 +44,7 @@ const BotSession = (props) => {
         </div>
         {open && (
           <div>
+            <h4>Активные сессии</h4>
             {active.map((s, i) => (
               <div className="session">
                 <div>
@@ -64,12 +65,37 @@ const BotSession = (props) => {
                     )}
                   </b>
                 </div>
-                {console.log(
-                  "minus",
-                  Math.abs(new Date(s.updatedAt) - new Date(s.createdAt)) / 1000
-                )}
+
                 <div>Источник: {s.source}</div>
                 <div>{s.journey.join(", ")}</div>
+                <div>
+                  <b>Оценка:</b> {s.rating}
+                </div>
+              </div>
+            ))}
+            <h4>Все сессии</h4>
+            {total.map((s, i) => (
+              <div className="session">
+                <div>
+                  {i + 1}. Время сессии: с{" "}
+                  {moment(s.createdAt).format("HH:mm:ss")} до{" "}
+                  {moment(s.updatedAt).format("HH:mm:ss")}. Общее время:{" "}
+                  <b>
+                    {" "}
+                    {parseInt(
+                      Math.abs(new Date(s.updatedAt) - new Date(s.createdAt)) /
+                        60000
+                    )}
+                    {":"}
+                    {parseInt(
+                      (Math.abs(new Date(s.updatedAt) - new Date(s.createdAt)) /
+                        1000) %
+                        60
+                    )}
+                  </b>
+                </div>
+
+                <div>Источник: {s.source}</div>
                 <div>
                   <b>Оценка:</b> {s.rating}
                 </div>

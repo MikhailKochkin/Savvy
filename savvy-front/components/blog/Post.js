@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import renderHTML from "react-render-html";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
@@ -112,6 +112,16 @@ const Styles = styled.div`
   .title {
     width: 90%;
   }
+`;
+
+const ProgressBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 8px;
+  background-color: #3498db;
+  z-index: 9999;
 `;
 
 const PostContainer = styled.div`
@@ -272,10 +282,87 @@ const Post = (props) => {
   } = useQuery(POST_QUERY, {
     variables: { id: props.id },
   });
-  const { t } = useTranslation("blog");
 
+  const { t } = useTranslation("blog");
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [update, setUpdate] = useState(false);
-  const [likes, setLikes] = useState(0);
+  // const [likes, setLikes] = useState(0);
+  const [hasReachedBottom, setHasReachedBottom] = useState(false);
+  const [hasReachedHalf, setHasReachedHalf] = useState(false);
+  const postContainerRef = useRef(null);
+
+  function handleScrollProgress() {
+    const scrollPosition = window.pageYOffset;
+    const componentTop = postContainerRef.current.offsetTop;
+    const componentHeight = postContainerRef.current.offsetHeight;
+    const viewportHeight = window.innerHeight;
+
+    // Calculate the scrollable range of the component
+    const scrollableRange = componentHeight - viewportHeight + componentTop;
+
+    // Calculate the progress based on the scroll position and scrollable range
+    const progress = ((scrollPosition - componentTop) / scrollableRange) * 100;
+
+    // Clamp progress between 0 and 100
+    const clampedProgress = Math.min(Math.max(progress, 0), 100);
+    setScrollProgress(clampedProgress);
+  }
+  useEffect(() => {
+    // ... (existing useEffect code)
+
+    if (post_data && postContainerRef.current) {
+      window.addEventListener("scroll", handleScrollProgress);
+
+      return () => {
+        // ... (existing cleanup code)
+        window.removeEventListener("scroll", handleScrollProgress);
+      };
+    }
+  }, [post_data, postContainerRef.current]);
+
+  useEffect(() => {
+    if (post_data && postContainerRef.current) {
+      function hasScrolledToPosition(position) {
+        const scrollPosition = window.pageYOffset;
+        const viewportHeight = window.innerHeight;
+
+        const componentTop = postContainerRef.current.offsetTop;
+        const componentHeight = postContainerRef.current.offsetHeight;
+
+        if (
+          scrollPosition + viewportHeight >=
+          componentTop + componentHeight * position
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      function handleScroll() {
+        if (!hasReachedHalf && hasScrolledToPosition(0.5)) {
+          console.log("User has scrolled to the middle of the article");
+          // You can add your custom code here to execute when the user scrolls to the middle of the article
+          props.hasReachedHalf(true);
+          setHasReachedHalf(true);
+        }
+
+        if (!hasReachedBottom && hasScrolledToPosition(1)) {
+          console.log("User has scrolled to the bottom of the article");
+          // You can add your custom code here to execute when the user scrolls to the bottom of the article
+          props.hasReachedBottom(true);
+          setHasReachedBottom(true);
+        }
+      }
+
+      window.addEventListener("scroll", handleScroll);
+
+      // Clean up the event listener when the component is unmounted
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [post_data, postContainerRef.current, hasReachedBottom, hasReachedHalf]);
 
   if (post_loading) return <Loading />;
   if (post_error) return post_error;
@@ -285,7 +372,7 @@ const Post = (props) => {
   return (
     <>
       {/* <BottomLine post={post} /> */}
-      <Styles>
+      <Styles id={props.id}>
         {/* <div className="title">
           <Link
             href={{
@@ -295,7 +382,7 @@ const Post = (props) => {
             <a>{t("back")}</a>
           </Link>
         </div> */}
-        <PostContainer>
+        <PostContainer ref={postContainerRef}>
           {props.me &&
             props.me.permissions &&
             props.me.permissions.includes("ADMIN") && (
@@ -349,6 +436,9 @@ const Post = (props) => {
             />
           )}
         </PostContainer>
+        {scrollProgress < 100 && (
+          <ProgressBar style={{ width: `${scrollProgress}%` }} />
+        )}
       </Styles>
       {/* <Navigator level={"more_next_steps"} tags={post.tags.join("-")} /> */}
     </>

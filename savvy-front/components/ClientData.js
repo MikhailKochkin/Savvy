@@ -210,7 +210,7 @@ const ClientData = (props) => {
         </div>
       </div>
       <CreateClient addClients={addClients} />
-      {clients.slice(0, 49).map((c, i) => (
+      {clients.slice(0, 149).map((c, i) => (
         <Client
           id={c.id}
           sort={sort}

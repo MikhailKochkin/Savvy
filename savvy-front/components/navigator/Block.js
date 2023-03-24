@@ -509,6 +509,16 @@ const Block = (props) => {
     props.updateBotMap("", val);
   };
 
+  const hasReachedHalf = () => {
+    console.log("props, has read half of the post");
+    props.updateBotMap(null, "has read half of the post");
+  };
+
+  const hasReachedBottom = () => {
+    console.log("props, has read full postt");
+    props.updateBotMap(null, "has read full post");
+  };
+
   const getTestData = (number, move, update, id) => {
     props.updateBotMap(move, update, id);
     let new_arr = [...hidden];
@@ -886,7 +896,11 @@ const Block = (props) => {
         <Material>
           {props.type == "post" &&
             ((props.post && props.post.id) || props.id) && (
-              <Post id={props.id ? props.id : props.post.id} />
+              <Post
+                id={props.id ? props.id : props.post.id}
+                hasReachedHalf={hasReachedHalf}
+                hasReachedBottom={hasReachedBottom}
+              />
             )}
         </Material>
         {props.type == "post" && (

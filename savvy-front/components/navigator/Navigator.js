@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 import Share from "./Share";
 import Block from "./Block";
+import ExitIntentPopup from "./ExitIntentPopup";
 
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
@@ -127,6 +128,46 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  .exit-intent-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+  }
+
+  .popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    max-width: 500px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
   @media (max-width: 800px) {
     width: 95%;
     font-size: 1.6rem;
@@ -642,6 +683,9 @@ const Navigator = (props) => {
         },
       });
     }
+    console.log("[...userDescription, update]", [...userDescription, update]);
+    console.log("journey", journey);
+
     if (dialogueId) {
       let updated_res = await updateBotDialogue({
         variables: {
@@ -755,7 +799,6 @@ const Navigator = (props) => {
             <ButtonBack onClick={(e) => goBack()}>⬅ Назад</ButtonBack>
           )}
           <div className="comment">Оцените полезность бота:</div>
-
           <div className="stars">
             <StarRatings
               starRatedColor={"rgb(255, 178, 3)"}
@@ -778,6 +821,7 @@ const Navigator = (props) => {
               }}
             />
           </div>
+          <ExitIntentPopup />
         </ButtonBox>
       </Container>
     </Styles>
