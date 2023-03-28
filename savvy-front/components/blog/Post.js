@@ -32,6 +32,8 @@ const POST_QUERY = gql`
       summary
       language
       image
+      lessonId
+      leadin
       user {
         id
         name
@@ -307,6 +309,12 @@ const Post = (props) => {
     const clampedProgress = Math.min(Math.max(progress, 0), 100);
     setScrollProgress(clampedProgress);
   }
+  useEffect(() => {
+    if (post_data) {
+      props.getLessonId(post_data.post.lessonId);
+      props.getLeadIn(post_data.post.leadin);
+    }
+  }, [post_data]);
   useEffect(() => {
     // ... (existing useEffect code)
 

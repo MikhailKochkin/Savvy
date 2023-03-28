@@ -5,13 +5,12 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ["nav", "auth"])),
+    ...(await serverSideTranslations(locale, ["nav", "auth", "lesson"])),
   },
 });
 
 const navigator = (props) => {
   const me = useUser();
-
   return (
     <Navigator
       me={me}

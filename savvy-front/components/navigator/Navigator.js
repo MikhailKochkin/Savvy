@@ -56,6 +56,7 @@ const POSTS_QUERY = gql`
       tags
       language
       summary
+      lessonId
       user {
         id
         name
@@ -153,16 +154,16 @@ const Container = styled.div`
     text-align: center;
   }
 
-  input[type="email"] {
+  /* input[type="email"] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
-  }
+  } */
 
   button {
     padding: 10px 20px;
-    background-color: #3498db;
+    /* background-color: #3498db; */
     color: white;
     border: none;
     cursor: pointer;
@@ -655,7 +656,7 @@ const Navigator = (props) => {
         });
         setDialogueId(new_dialogue.data.createBotDialogue.id);
       };
-      getResult();
+      // getResult();
     },
     [0]
   );
@@ -673,28 +674,29 @@ const Navigator = (props) => {
     let new_map = [...botMap];
     let new_block = new_map.find((dial) => dial.type == val);
     let arr = [...journey, new_block];
+    console.log("update", ...userDescription, update);
     setUserDescription([...userDescription, update]);
     if (new_block) setJourney(arr);
-    if (props.me) {
-      updateUser({
-        variables: {
-          id: props.me.id,
-          tags: [...userDescription, update],
-        },
-      });
-    }
-    console.log("[...userDescription, update]", [...userDescription, update]);
-    console.log("journey", journey);
+    // if (props.me) {
+    //   updateUser({
+    //     variables: {
+    //       id: props.me.id,
+    //       tags: [...userDescription, update],
+    //     },
+    //   });
+    // }
+    // console.log("[...userDescription, update]", [...userDescription, update]);
+    // console.log("journey", journey);
 
-    if (dialogueId) {
-      let updated_res = await updateBotDialogue({
-        variables: {
-          id: dialogueId,
-          rating: rating,
-          journey: [...userDescription, update],
-        },
-      });
-    }
+    // if (dialogueId) {
+    //   let updated_res = await updateBotDialogue({
+    //     variables: {
+    //       id: dialogueId,
+    //       rating: rating,
+    //       journey: [...userDescription, update],
+    //     },
+    //   });
+    // }
 
     if (id && val == "course") {
       setCourse(sorted_courses.find((c) => c.id == id));

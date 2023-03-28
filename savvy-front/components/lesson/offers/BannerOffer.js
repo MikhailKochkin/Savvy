@@ -1,10 +1,32 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
 import renderHTML from "react-render-html";
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $userId: String!
+    $text: String!
+    $link: String
+    $comment: String
+    $coursePageId: String
+    $subject: String
+  ) {
+    sendMessage(
+      userId: $userId
+      text: $text
+      subject: $subject
+      coursePageId: $coursePageId
+      comment: $comment
+      link: $link
+    ) {
+      id
+    }
+  }
+`;
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -214,155 +236,176 @@ const TimeLeft = styled.div`
 
 const BannerOffer = (props) => {
   const { me, offer, coursePageId } = props;
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  // Add a ref for the component
+  const bannerRef = useRef(null);
+  // State for tracking visibility
+  const [mutationFired, setMutationFired] = useState(false);
   const router = useRouter();
-  const addDays = (numOfDays, date = new Date()) => {
-    date.setDate(date.getDate() + numOfDays);
-    return date;
+  const { t } = useTranslation("lesson");
+
+  const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
+    useMutation(SEND_MESSAGE_MUTATION);
+
+  const [createBusinessClient, { data, loading, error }] =
+    useMutation(CREATE_CLIENT);
+
+  // Intersection Observer callback
+  const intersectionObserverCallback = useCallback((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        console.log("visible");
+      } else {
+        setIsVisible(false);
+        console.log("not visible");
+      }
+    });
+  }, []);
+
+  const fireMutation = () => {
+    if (!mutationFired) {
+      setMutationFired(true);
+      console.log("fire");
+      sendMessage({
+        variables: {
+          userId: me.id,
+          subject: "для вас спец предложение от BeSavvy",
+          coursePageId: coursePageId,
+          link: `https://www.besavvy.app/coursePage?id=${coursePageId}`,
+          comment: "offer",
+          text: `
+            <p>Мы хотим сообщить вам о нашей новой акции на курс "<название курса>". В течение следующих 24 часов, вы можете приобрести курс со скидкой 30% по ссылке:</p>
+<p><a href="https://www.besavvy.app/coursePage?id=${coursePageId}">Купить курс</a></p>
+<p>Курс "<название курса>" поможет вам улучшить ваши знания и навыки в <тематика курса>. Наши эксперты сделали его доступным для всех, кто хочет узнать больше о <тематика курса>. Вы сможете учиться на своем собственном темпе, в любое время и в любом месте.</p>
+<p>Если вы не уверены, что курс "<название курса>" подходит именно вам, мы приглашаем вас ознакомиться с отзывами других наших клиентов по ссылке:</p>
+<p><a href="https://example.com/course/reviews">Отзывы клиентов</a></p>
+<p>Не упустите свой шанс на приобретение курса "<название курса>" со скидкой 30%. Это предложение закончится через 24 часа!</p>
+<p>Спасибо за ваше внимание.</p>
+<p>С уважением,
+Команда Example.</p>
+          `,
+        },
+      });
+    }
   };
-  let tomorrow = addDays(1);
-  tomorrow.setHours(0);
-  tomorrow.setMinutes(0);
-  tomorrow.setSeconds(0);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            fireMutation();
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.1 } // Adjust the threshold as needed
+    );
+
+    if (bannerRef.current) {
+      observer.observe(bannerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [bannerRef]);
+
   const [
     createOrder,
     { data: order_data, loading: loading_data, error: error_data },
   ] = useMutation(CREATE_ORDER_MUTATION);
-  const [createBusinessClient, { data, loading, error }] =
-    useMutation(CREATE_CLIENT);
-  const { t } = useTranslation("lesson");
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      var countDownDate = tomorrow; // Get today's date and time
-      var now = new Date().getTime();
+    router.locale === "ru" ? moment.locale("ru") : moment.locale("en");
+    const timer = initializeTimer();
+    return () => clearInterval(timer);
+  }, []);
 
-      // Find the distance between now and the count down date
-      var distance = countDownDate - now;
+  const initializeTimer = () => {
+    const addDays = (numOfDays, date = new Date()) => {
+      date.setDate(date.getDate() + numOfDays);
+      return date;
+    };
 
-      // Time calculations for days, hours, minutes and seconds
-      var days_calculation = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours_calculation = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      var minutes_calculation = Math.floor(
-        (distance % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      var seconds_calculation = Math.floor((distance % (1000 * 60)) / 1000);
+    const tomorrow = addDays(1);
+    tomorrow.setHours(0);
+    tomorrow.setMinutes(0);
+    tomorrow.setSeconds(0);
 
-      // Display the result
-      setDays(days_calculation);
-      setHours(hours_calculation);
-      setMinutes(minutes_calculation);
-      setSeconds(seconds_calculation);
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = tomorrow - now;
+
+      setTimeRemaining({
+        hours: Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
+      });
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
-  const getEngNoun = (number, one, two) => {
-    let n = Math.abs(number);
-    if (n == 1) {
-      return one;
-    }
-    if (n > 1) {
-      return two;
+    return timer;
+  };
+
+  const handleButtonClick = async () => {
+    if (offer.courseId) {
+      const res = await createOrder({
+        variables: {
+          coursePageId: offer.courseId,
+          price: offer.discountPrice,
+          userId: me.id,
+        },
+      });
+      location.href = res.data.createOrder.url;
+    } else {
+      let number = me.number || prompt("Please type your phone number: ");
+
+      const res = await createBusinessClient({
+        variables: {
+          email: me.email,
+          name: me.name + " " + me.surname,
+          number: number,
+          coursePageId: coursePageId,
+        },
+      });
+
+      alert("Thank you! We will be in touch soon!");
     }
   };
 
-  const getNoun = (number, one, two, five) => {
-    let n = Math.abs(number);
-    n %= 100;
-    if (n == 0 || (n >= 5 && n <= 20)) {
-      return five;
-    }
-    n %= 10;
-    if (n === 1) {
-      return one;
-    }
-    if (n >= 2 && n <= 4) {
-      return two;
-    }
-    return five;
-  };
-  router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
   return (
-    <Styles>
+    <Styles ref={bannerRef}>
       <BiggerBlock>
         <Block>
           <Inner>
             <div className="emoji">👋 💣 🔥</div>
-            <div className="cta">
-              {renderHTML(offer.header)}
-              {/* Get full access to the course */}
-            </div>
-
-            {/* <div className="main_text">
-              Join 10,000+ teams creating better experiences 14-Day Free Trial,
-              with an extra 30-Day Money Back Guarantee!
-              Оплатите полный доступ сейчас со скидкой -30% и:
-            </div> */}
-            <ul className="list">
-              {renderHTML(offer.text)}
-              {/* <li>
-                Стоимость курса сегодня: <b>6990</b> вместо 10 000 Р
-              </li>
-              <li>
-                {" "}
-                20 уроков: занимайтесь в удобное время с бессрочным доступом
-              </li>
-              <li>Задавайте вопросы авторам и приходите на встречи с ними</li>
-              <li>Общайтесь и учитесь с 400+ студентами BeSavvy Lawyer</li> */}
-            </ul>
+            <div className="cta">{renderHTML(offer.header)}</div>
+            <ul className="list">{renderHTML(offer.text)}</ul>
             <div>
-              <Button
-                onClick={async (e) => {
-                  if (offer.courseId) {
-                    const res = await createOrder({
-                      variables: {
-                        coursePageId: offer.courseId,
-                        price: offer.discountPrice,
-                        userId: me.id,
-                      },
-                    });
-                    location.href = res.data.createOrder.url;
-                  } else {
-                    let number;
-                    if (!me.number) {
-                      number = prompt("Please type your phone number: ");
-                    } else {
-                      number = me.number;
-                    }
-                    const res = await createBusinessClient({
-                      variables: {
-                        email: me.email,
-                        name: me.name + " " + me.surname,
-                        number: number,
-                        coursePageId: coursePageId,
-                      },
-                    });
-                    alert("Thank you! We will be in touch soon!");
-                  }
-                }}
-              >
+              <Button onClick={handleButtonClick}>
                 {loading_data ? "..." : t("buy_at_discount")}
-                {/* Buy */}
               </Button>
             </div>
             <TimeLeft>
               <div id="clock">
                 <div className="clock_start">{t("time_left")}</div>
                 <div className="clock_section">
-                  <div className="clock_time">{hours}</div>
+                  <div className="clock_time">{timeRemaining.hours}</div>
                   <div>{t("hour_short")}.</div>
                 </div>
                 <div className="clock_section">
-                  <div className="clock_time">{minutes}</div>
+                  <div className="clock_time">{timeRemaining.minutes}</div>
                   <div>{t("minute_short")}.</div>
                 </div>
                 <div className="clock_section">
-                  <div className="clock_time">{seconds}</div>
+                  <div className="clock_time">{timeRemaining.seconds}</div>
                   <div>{t("second_short")}.</div>
                 </div>
               </div>

@@ -59,9 +59,17 @@ const Loading = () => {
     setPhrase(phrases[randomIndex]);
   }, []);
   return (
-    <Block>
-      <CircularProgress />
-    </Block>
+    <Frame>
+      <Phrase>
+        <p className="header">
+          <b>Знаете ли вы?</b>
+        </p>
+        <p> {phrase}</p>
+      </Phrase>
+      <Block>
+        <CircularProgress />
+      </Block>
+    </Frame>
   );
 };
 

@@ -1002,10 +1002,14 @@ export interface NexusGenInputs {
   }
   MessageWhereInput: { // input type
     AND?: NexusGenInputs['MessageWhereInput'][] | null; // [MessageWhereInput!]
+    comment?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    link?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['MessageWhereInput'][] | null; // [MessageWhereInput!]
     OR?: NexusGenInputs['MessageWhereInput'][] | null; // [MessageWhereInput!]
+    subject?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     text?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -1364,6 +1368,8 @@ export interface NexusGenInputs {
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
     language?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    leadin?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     likes?: NexusGenEnums['SortOrder'] | null; // SortOrder
     summary?: NexusGenEnums['SortOrder'] | null; // SortOrder
     tags?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1380,6 +1386,8 @@ export interface NexusGenInputs {
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     language?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    leadin?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     likes?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
     NOT?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
     OR?: NexusGenInputs['PostWhereInput'][] | null; // [PostWhereInput!]
@@ -2601,8 +2609,12 @@ export interface NexusGenObjects {
     visitsNumber?: number | null; // Int
   }
   Message: { // root type
+    comment?: string | null; // String
+    coursePageId?: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    link?: string | null; // String
+    subject?: string | null; // String
     text?: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
@@ -2686,6 +2698,8 @@ export interface NexusGenObjects {
     id: string; // String!
     image?: string | null; // String
     language?: string | null; // String
+    leadin?: string | null; // String
+    lessonId?: string | null; // String
     likes?: number | null; // Int
     summary?: string | null; // String
     tags: string[]; // [String!]!
@@ -3305,8 +3319,12 @@ export interface NexusGenFieldTypes {
     visitsNumber: number | null; // Int
   }
   Message: { // field return type
+    comment: string | null; // String
+    coursePageId: string | null; // String
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    link: string | null; // String
+    subject: string | null; // String
     text: string | null; // String
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
@@ -3328,6 +3346,7 @@ export interface NexusGenFieldTypes {
     addToTeam: NexusGenRootTypes['User'] | null; // User
     addUserToCourse: NexusGenRootTypes['User'] | null; // User
     advancedSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
+    botSignup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     checkAssignment: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     createBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     createBusinessClient: NexusGenRootTypes['User'] | null; // User
@@ -3512,6 +3531,8 @@ export interface NexusGenFieldTypes {
     id: string; // String!
     image: string | null; // String
     language: string | null; // String
+    leadin: string | null; // String
+    lessonId: string | null; // String
     likes: number | null; // Int
     summary: string | null; // String
     tags: string[]; // [String!]!
@@ -4235,8 +4256,12 @@ export interface NexusGenFieldTypeNames {
     visitsNumber: 'Int'
   }
   Message: { // field return type name
+    comment: 'String'
+    coursePageId: 'String'
     createdAt: 'DateTime'
     id: 'String'
+    link: 'String'
+    subject: 'String'
     text: 'String'
     updatedAt: 'DateTime'
     user: 'User'
@@ -4258,6 +4283,7 @@ export interface NexusGenFieldTypeNames {
     addToTeam: 'User'
     addUserToCourse: 'User'
     advancedSignup: 'AuthPayload'
+    botSignup: 'AuthPayload'
     checkAssignment: 'LessonResult'
     createBotDialogue: 'BotDialogue'
     createBusinessClient: 'User'
@@ -4442,6 +4468,8 @@ export interface NexusGenFieldTypeNames {
     id: 'String'
     image: 'String'
     language: 'String'
+    leadin: 'String'
+    lessonId: 'String'
     likes: 'Int'
     summary: 'String'
     tags: 'String'
@@ -5070,6 +5098,11 @@ export interface NexusGenArgTypes {
       traffic_sources?: NexusGenInputs['Visits'] | null; // Visits
       uniID?: string | null; // String
     }
+    botSignup: { // args
+      email?: string | null; // String
+      name?: string | null; // String
+      password?: string | null; // String
+    }
     checkAssignment: { // args
       checked?: boolean | null; // Boolean
       id?: string | null; // String
@@ -5443,6 +5476,10 @@ export interface NexusGenArgTypes {
       reminders?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
     }
     sendMessage: { // args
+      comment?: string | null; // String
+      coursePageId?: string | null; // String
+      link?: string | null; // String
+      subject?: string | null; // String
       text?: string | null; // String
       userId?: string | null; // String
     }

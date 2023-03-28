@@ -491,13 +491,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Feed = (props) => {
   const [num, setNum] = useState(0);
-  // props.my_result &&
-  //   props.my_result.progress !== null &&
-  //   props.my_result.progress !== 0 &&
-  //   props.my_result.progress / props.number_of_tasks < 0.9 &&
-  //   !secondRound
-  //   ? props.my_result.progress - 1
-  //   : 0
   const [result, setResult] = useState(
     props.my_result ? props.my_result.id : null
   );
@@ -512,6 +505,7 @@ const Feed = (props) => {
   const move = async (e) => {
     if (props.components.length > num + 1) {
       const data = await setNum(num + 1);
+      props.passStep(num + 1);
       if (props.components[num + 1].props.complexity > complexity) {
         setComplexity(props.components[num + 1].props.complexity);
         setVisible(true);
@@ -633,7 +627,6 @@ const Feed = (props) => {
   // } else {
   //   color = "#55a630";
   // }
-  console.log("move_statuses", props.move_statuses);
   return (
     <>
       <Styles>

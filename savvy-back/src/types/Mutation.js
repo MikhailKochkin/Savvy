@@ -151,6 +151,7 @@ const Mutation = mutationType({
         },
         ctx
       ) => {
+        console.log(name, email);
         const hashed_password = await bcrypt.hash(password, 10);
         const valid = await bcrypt.compare(password, hashed_password);
 
@@ -208,6 +209,7 @@ const Mutation = mutationType({
           });
         }
         if (
+          country == null ||
           country.toLowerCase() == "ru" ||
           country.toLowerCase() == "kz" ||
           country.toLowerCase() == "by" ||
@@ -246,6 +248,87 @@ const Mutation = mutationType({
             },
           });
         }
+
+        return { user, token };
+      },
+    });
+    t.field("botSignup", {
+      type: "AuthPayload",
+      args: {
+        name: stringArg(),
+        email: stringArg(),
+        password: stringArg(),
+      },
+      resolve: async (_, { name, email, password }, ctx) => {
+        const hashed_password = await bcrypt.hash(password, 10);
+        const valid = await bcrypt.compare(password, hashed_password);
+
+        const our_user = await ctx.prisma.user.findUnique({
+          where: { email: email.toLowerCase() },
+        });
+        if (our_user) {
+          return { user: { id: "exists" }, token: "exists" };
+        }
+
+        const user = await ctx.prisma.user.create({
+          data: {
+            name,
+            email: email.toLowerCase(),
+            permissions: { set: ["USER"] },
+            password: hashed_password,
+            isFamiliar: true,
+          },
+        });
+
+        const UserLevel = await ctx.prisma.userLevel.create({
+          data: {
+            user: {
+              connect: { id: user.id },
+            },
+            level: 1,
+          },
+        });
+
+        let token = jwt.sign({ userId: user.id }, process.env.APP_SECRET, {
+          expiresIn: 1000 * 60 * 60 * 24 * 365,
+        });
+        if (process.env.NODE_ENV === "production") {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            maxAge: 31557600000,
+          });
+        } else {
+          ctx.res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 31557600000,
+          });
+        }
+
+        const newEmailRus = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: email,
+          Subject: "Расскажу о возможностях BeSavvy",
+          HtmlBody: WelcomeEmail.WelcomeEmail(name, password, email),
+        });
+
+        // if (referal) {
+        //   const old_user = await ctx.prisma.user.findUnique({
+        //     where: { id: referal },
+        //   });
+
+        //   console.log("user.score + score", old_user.score, 100);
+
+        //   const updated_user = await ctx.prisma.user.update({
+        //     data: {
+        //       score: old_user.score + 100,
+        //     },
+        //     where: {
+        //       id: referal,
+        //     },
+        //   });
+        // }
 
         return { user, token };
       },
@@ -400,7 +483,7 @@ const Mutation = mutationType({
         let new_traffic_sources = [];
         if (user.traffic_sources === null) {
           new_traffic_sources = traffic_sources;
-        } else if (traffic_sources.visitsList.length > 0) {
+        } else if (traffic_sources && traffic_sources.visitsList.length > 0) {
           new_traffic_sources = {
             visitsList: traffic_sources.visitsList.concat(
               user.traffic_sources.visitsList
@@ -605,9 +688,14 @@ const Mutation = mutationType({
       args: {
         userId: stringArg(),
         text: stringArg(),
+        comment: stringArg(),
+        subject: stringArg(),
+        coursePageId: stringArg(),
+        link: stringArg(),
       },
       resolve: async (_, args, ctx) => {
         const userId = args.userId;
+        console.log("args", args);
 
         delete args.userId;
         const message = await ctx.prisma.message.create({
@@ -621,6 +709,8 @@ const Mutation = mutationType({
           },
         });
 
+        console.log(1);
+
         const user = await ctx.prisma.user.findUnique({
           where: { id: userId },
         });
@@ -631,9 +721,43 @@ const Mutation = mutationType({
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: user.email,
-          Subject: `${user.name}, BeSavvy Lawyer is here 👋🏻`,
+          Subject: `${user.name}, ${
+            args.subject ? args.subject : "информация от BeSavvy 👋🏻"
+          }`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
         });
+        console.log(2);
+
+        if (args.comment == "offer") {
+          console.log(3);
+
+          const sendNextEmail = async () => {
+            return client.sendEmail({
+              From: "Mikhail@besavvy.app",
+              To: user.email,
+              Subject: `До конца акции BeSavvy осталось 1 минута`,
+              HtmlBody: GenericEmail.GenericEmail(`
+      <p>Извиняюсь за беспокойство, но через 1 минуту заканчивается ваше спец предложение.</p>
+<p>Для вас действует скидка 30% на курс "" </p>
+<p>Посмотреть программу и купить курс можно <a href="${args.link}">по этой уникальной ссылке</a>.</p>
+<p>Не сердитесь, если информация об акции для вас не актуальна. Хорошего дня!</p>
+<p>С уважением,
+Михаил из BeSavvy.</p>
+    `),
+            });
+          };
+
+          // Delay the execution of the sendNextEmail function by 1 minute (60,000 milliseconds)
+          setTimeout(async () => {
+            try {
+              const SendNextEmail = await sendNextEmail();
+              // Handle success or other logic here
+            } catch (error) {
+              // Handle errors here
+              console.error("Error sending email:", error);
+            }
+          }, 60 * 1000); // 1 minute delay
+        }
         return message;
       },
     });

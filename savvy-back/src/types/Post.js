@@ -15,6 +15,8 @@ const Post = objectType({
     t.model.user();
     t.model.tags();
     t.model.coursePage();
+    t.model.lessonId();
+    t.model.leadin();
     t.model.createdAt();
     t.model.updatedAt();
   },

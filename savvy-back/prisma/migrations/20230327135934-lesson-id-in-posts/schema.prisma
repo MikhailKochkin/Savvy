@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -554,7 +554,6 @@ model Post {
   userId      String
   coursePageId String?
   lessonId    String?
-  leadin      String?
   user        User         @relation(fields: [userId], references: [id])
   coursePage CoursePage?   @relation(fields: [coursePageId], references: [id])
 }
@@ -892,16 +891,12 @@ model BotDialogue {
 }
 
 model Message {
-  id              String   @id @default(cuid())
-  text            String?
-  subject         String?
-  coursePageId    String?
-  link            String?
-  comment         String?  
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  userId          String?
-  user            User?     @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  text      String?  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
 }
 
 model UserLevel {

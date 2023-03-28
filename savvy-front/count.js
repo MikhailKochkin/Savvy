@@ -1,7 +1,48 @@
-let ratings = [10, 10, 10, 10, 10, 4, 4, 1, 10, 1, 3, 10];
+let ratings = [
+  {
+    rating: 5,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 4,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 7,
+  },
+  {
+    rating: 3,
+  },
+  {
+    rating: 9,
+  },
+  {
+    rating: 10,
+  },
+];
+
+function getObjectValues(arr) {
+  return arr.map((obj) => obj.rating);
+}
 
 totalCount = average = (
-  ratings.reduce((a, b) => a + b, 0) / ratings.length
+  getObjectValues(ratings).reduce((a, b) => a + b, 0) / ratings.length
 ).toFixed(2);
 
 const medianFunc = (values) => {
@@ -18,4 +59,9 @@ const medianFunc = (values) => {
   return (values[half - 1] + values[half]) / 2.0;
 };
 
-console.log("totalCount", totalCount, medianFunc(ratings), ratings.length);
+console.log(
+  "totalCount",
+  totalCount,
+  medianFunc(getObjectValues(ratings)),
+  getObjectValues(ratings).length
+);

@@ -81,6 +81,10 @@ const Message = objectType({
   definition(t) {
     t.model.id();
     t.model.text();
+    t.model.comment();
+    t.model.subject();
+    t.model.coursePageId();
+    t.model.link();
     t.model.userId();
     t.model.user();
     t.model.createdAt();

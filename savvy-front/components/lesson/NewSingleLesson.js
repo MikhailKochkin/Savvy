@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
@@ -13,6 +13,7 @@ import StoryEx from "./StoryEx";
 import { useUser } from "../User";
 import Offer from "./Offer";
 import Navigation from "./Navigation";
+import LoadingText from "../LoadingText";
 
 const NEW_SINGLE_LESSON_QUERY = gql`
   query NEW_SINGLE_LESSON_QUERY($id: String!) {
@@ -377,21 +378,27 @@ const LessonPart = styled.div`
 `;
 
 const NewSingleLesson = (props) => {
+  console.log("start");
+
   const [width, setWidth] = useState(0);
   const { t } = useTranslation("lesson");
+  console.log("start 2");
 
   const onResize = (width) => setWidth(width);
   const me = useUser();
+  console.log("start 3");
+
+  useEffect(() => {
+    props.passStep(0);
+  }, [0]);
+  console.log("start 4");
+
   const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
     variables: { id: props.id },
     fetchPolicy: "no-cache",
   });
-  if (loading)
-    return (
-      <Progress>
-        <CircularProgress />
-      </Progress>
-    );
+  console.log("loooong");
+  if (loading) return <LoadingText />;
 
   let lesson = data.lesson;
   let next = lesson.coursePage.lessons.find(
@@ -400,6 +407,10 @@ const NewSingleLesson = (props) => {
 
   let i_am_author = false;
   let i_am_student = false;
+
+  const passProgress = (val) => {
+    props.passProgress(val);
+  };
 
   if (
     me &&
@@ -414,6 +425,11 @@ const NewSingleLesson = (props) => {
   ) {
     i_am_student = true;
   }
+
+  const passStep = (num) => {
+    console.log("lesson", num);
+    if (props.passStep) props.passStep(num);
+  };
   return (
     <PleaseSignIn>
       {/* {!i_am_student &&
@@ -436,12 +452,14 @@ const NewSingleLesson = (props) => {
                 onResize={onResize}
               />
 
-              <Navigation
-                i_am_author={i_am_author}
-                lesson={lesson}
-                me={me}
-                width={width}
-              />
+              {!props.isBot && (
+                <Navigation
+                  i_am_author={i_am_author}
+                  lesson={lesson}
+                  me={me}
+                  width={width}
+                />
+              )}
               <LessonPart>
                 {/* <h1>
                   {t("lesson")} {lesson.number}. {lesson.name}
@@ -462,6 +480,7 @@ const NewSingleLesson = (props) => {
                     lesson={lesson}
                     next={next}
                     coursePageID={lesson.coursePage.id}
+                    passStep={passStep}
                   />
                 </CSSTransitionGroup>
               </LessonPart>

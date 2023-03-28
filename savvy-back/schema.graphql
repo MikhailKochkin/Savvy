@@ -1434,8 +1434,12 @@ enum Level {
 }
 
 type Message {
+  comment: String
+  coursePageId: String
   createdAt: DateTime!
   id: String!
+  link: String
+  subject: String
   text: String
   updatedAt: DateTime!
   user: User
@@ -1463,10 +1467,14 @@ input Messages {
 
 input MessageWhereInput {
   AND: [MessageWhereInput!]
+  comment: StringNullableFilter
+  coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
   id: StringFilter
+  link: StringNullableFilter
   NOT: [MessageWhereInput!]
   OR: [MessageWhereInput!]
+  subject: StringNullableFilter
   text: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
@@ -1531,6 +1539,7 @@ type Mutation {
   addToTeam(id: String): User
   addUserToCourse(coursePageId: String, email: String): User
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
+  botSignup(email: String, name: String, password: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
   createBotDialogue(journey: [String], source: String): BotDialogue
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
@@ -1600,7 +1609,7 @@ type Mutation {
   resetPassword(confirmPassword: String, password: String, resetToken: String): User
   sendBusinessClientEmail(communication_history: ClientMessages, id: String): BusinessClient
   sendEmailToStudent(comment: String, id: String, info: EmailInfo, reminders: [DateTime]): CourseVisit
-  sendMessage(text: String, userId: String): Message
+  sendMessage(comment: String, coursePageId: String, link: String, subject: String, text: String, userId: String): Message
   signin(email: String, password: String, traffic_sources: Visits): AuthPayload
   signout: SignOut
   signup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, referal: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
@@ -2070,6 +2079,8 @@ type Post {
   id: String!
   image: String
   language: String
+  leadin: String
+  lessonId: String
   likes: Int
   summary: String
   tags: [String!]!
@@ -2092,6 +2103,8 @@ input PostOrderByInput {
   id: SortOrder
   image: SortOrder
   language: SortOrder
+  leadin: SortOrder
+  lessonId: SortOrder
   likes: SortOrder
   summary: SortOrder
   tags: SortOrder
@@ -2109,6 +2122,8 @@ input PostWhereInput {
   id: StringFilter
   image: StringNullableFilter
   language: StringNullableFilter
+  leadin: StringNullableFilter
+  lessonId: StringNullableFilter
   likes: IntNullableFilter
   NOT: [PostWhereInput!]
   OR: [PostWhereInput!]

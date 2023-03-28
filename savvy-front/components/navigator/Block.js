@@ -5,10 +5,12 @@ import styled from "styled-components";
 import renderHTML from "react-render-html";
 import * as EmailValidator from "email-validator";
 import moment from "moment";
+import dynamic from "next/dynamic";
 
-import Post from "../blog/Post";
+import StudyBlock from "./StudyBlock";
 import AnswerOption from "./AnswerOption";
 import AnswerOptionWithFeedback from "./AnswerOptionWithFeedback";
+import { checkPropTypes } from "prop-types";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -272,13 +274,6 @@ const Options = styled.div`
   max-width: 80%;
 `;
 
-const Material = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-`;
-
 const Fieldset = styled.fieldset`
   display: flex;
   flex-direction: column;
@@ -509,14 +504,9 @@ const Block = (props) => {
     props.updateBotMap("", val);
   };
 
-  const hasReachedHalf = () => {
-    console.log("props, has read half of the post");
-    props.updateBotMap(null, "has read half of the post");
-  };
-
-  const hasReachedBottom = () => {
-    console.log("props, has read full postt");
-    props.updateBotMap(null, "has read full post");
+  const updatePostResult = (next, val) => {
+    // console.log("updatePostResult_Block", val);
+    props.updateBotMap(null, val);
   };
 
   const getTestData = (number, move, update, id) => {
@@ -532,6 +522,11 @@ const Block = (props) => {
       }
     });
     setHidden([...updated_arr]);
+  };
+
+  const getLessonProgress = (val) => {
+    props.updateBotMap(null, val);
+    // console.log("block", val);
   };
 
   return (
@@ -893,55 +888,14 @@ const Block = (props) => {
             )}
           </Options>
         </div>
-        <Material>
-          {props.type == "post" &&
-            ((props.post && props.post.id) || props.id) && (
-              <Post
-                id={props.id ? props.id : props.post.id}
-                hasReachedHalf={hasReachedHalf}
-                hasReachedBottom={hasReachedBottom}
-              />
-            )}
-        </Material>
         {props.type == "post" && (
-          <>
-            <div className="question_box">
-              <div className="question_text">
-                У меня по этой теме есть еще материалы.
-              </div>
-              <IconBlock>
-                <img className="icon" src="../../static/misha_new.webp" />
-                <div className="name">Михаил</div>
-              </IconBlock>
-            </div>
-            <div className="answer">
-              {props.type !== "post" && (
-                <IconBlock>
-                  <img className="icon" src="../../static/flash.svg" />
-                  <div className="name">Вы</div>
-                </IconBlock>
-              )}
-              <Options>
-                {options.map((o, index) => (
-                  <>
-                    <AnswerOption
-                      key={index}
-                      answer={o.answer}
-                      hidden={!props.hideElems ? false : hidden[index]}
-                      move={o.move}
-                      type={o.type}
-                      color={o.color}
-                      link={o.link}
-                      update={o.update}
-                      number={index}
-                      onAnswerSelected={getTestData}
-                      lastBlock={props.lastBlock}
-                    />
-                  </>
-                ))}
-              </Options>
-            </div>
-          </>
+          <StudyBlock
+            post={props.post}
+            id={props.id}
+            me={props.me}
+            updatePostResult={updatePostResult}
+            getLessonProgress={getLessonProgress}
+          />
         )}
       </TextBar>
       {feedback && (

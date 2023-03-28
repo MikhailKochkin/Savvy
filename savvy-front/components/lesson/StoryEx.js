@@ -446,6 +446,9 @@ const StoryEx = (props) => {
       return;
     }
   });
+  const passStep = (num) => {
+    props.passStep(num);
+  };
   return (
     <Container>
       <CSSTransitionGroup
@@ -470,6 +473,7 @@ const StoryEx = (props) => {
             lessonID={lesson.id}
             showArrow={showArrow}
             my_result={my_result}
+            passStep={passStep}
           />
         )}
       </CSSTransitionGroup>

@@ -69,13 +69,40 @@ const BotProgress = () => {
   };
 
   let grouped_sessions = groupByDay(sessions);
+  console.log("grouped_sessions", grouped_sessions);
 
-  // 3. count active sessions
+  function countObjects(arr) {
+    let totalCount = 0;
+    let journeyCount = 0;
 
-  // 4. display for active sessions: time, steps, feedback
+    arr.forEach((item) => {
+      totalCount += item.objects.length;
+
+      item.objects.forEach((obj) => {
+        if (obj.journey.length > 0) {
+          journeyCount++;
+        }
+      });
+    });
+
+    return {
+      totalCount,
+      journeyCount,
+    };
+  }
+
+  let res = countObjects(grouped_sessions);
 
   return (
     <Styles>
+      <h4>Numbers last 7 days</h4>
+      <li># sessions: {res.totalCount}</li>
+      <li># active sessions: {res.journeyCount} </li>
+      <li>
+        % active sessions:{" "}
+        {((res.journeyCount / res.totalCount) * 100).toFixed(2)}%{" "}
+      </li>
+      <br />
       {grouped_sessions.map((gs) => (
         <BotSession session={gs} />
       ))}
