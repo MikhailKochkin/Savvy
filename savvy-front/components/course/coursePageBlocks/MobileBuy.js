@@ -306,7 +306,11 @@ const MobileBuy = (props) => {
   const [isPromo, setIsPromo] = useState(false);
   const [promo, setPromo] = useState("");
 
-  const [price, setPrice] = useState(props.coursePage.price);
+  const [price, setPrice] = useState(
+    props.promocode == "bcd"
+      ? props.coursePage.discountPrice
+      : props.coursePage.price
+  );
   const toggleModal = (e) => setIsOpen(!isOpen);
 
   const addPromo = (val) => {

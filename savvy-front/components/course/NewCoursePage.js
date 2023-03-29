@@ -194,7 +194,11 @@ const NewCoursePage = (props) => {
                 (props.form == "lead" ? (
                   <MobileLeads me={me} coursePage={data.coursePage} />
                 ) : (
-                  <MobileBuy coursePage={data.coursePage} me={me} />
+                  <MobileBuy
+                    coursePage={data.coursePage}
+                    me={me}
+                    promocode={props.promocode}
+                  />
                 ))}
               {width < 880 && <MobileAction coursePage={data.coursePage} />}
               <Goal coursePage={data.coursePage} />
@@ -225,7 +229,7 @@ const NewCoursePage = (props) => {
               <ActionLeads me={me} coursePage={data.coursePage} />
             ) : (
               <Action
-                promocode={promocode}
+                promocode={props.promocode}
                 me={me}
                 coursePage={data.coursePage}
               />
