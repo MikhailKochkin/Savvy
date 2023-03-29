@@ -106,6 +106,15 @@ const Styles = styled.div`
     border-bottom: 1px solid #001f4e;
     font-size: 1.6rem;
   }
+  .flag {
+    color: #008489;
+    font-size: 1.8rem;
+    width: 100%;
+    margin: 3% 0;
+    padding: 3% 8%;
+    background-color: #f2fafb;
+    border-radius: 5px;
+  }
   .date {
     font-weight: bold;
     font-size: 1.6rem;
