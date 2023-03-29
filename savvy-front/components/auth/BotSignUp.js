@@ -309,7 +309,7 @@ const Signup = (props) => {
       setShow(true);
       setIsLoading(false);
     } else {
-      console.log("res", res);
+      // console.log("res", res);
       props.loadUser(false, res);
       setShow(true);
       setIsLoading(false);

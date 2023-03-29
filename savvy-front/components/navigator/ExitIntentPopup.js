@@ -86,7 +86,6 @@ const ExitIntentPopup = (props) => {
   }, []);
 
   const getLinkAction = (e) => {
-    e.preventDefault();
     props.getLinkAction(null, "click_to_TG");
   };
 

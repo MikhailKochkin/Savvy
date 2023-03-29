@@ -671,7 +671,7 @@ const Navigator = (props) => {
   );
 
   const updateBotMap = async (val, update, id) => {
-    console.log("update", update);
+    // console.log("update", update);
     let new_map = [...botMap];
     let new_block = new_map.find((dial) => dial.type == val);
     let arr = [...journey, new_block];

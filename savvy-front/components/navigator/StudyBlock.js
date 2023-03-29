@@ -44,7 +44,7 @@ const StudyBlock = (props) => {
   };
 
   const loadUser = (val, res) => {
-    console.log("loading", res);
+    // console.log("loading", res);
     if (res) {
       setOpen(true);
     }
