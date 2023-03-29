@@ -224,7 +224,11 @@ const NewCoursePage = (props) => {
             (props.form == "lead" ? (
               <ActionLeads me={me} coursePage={data.coursePage} />
             ) : (
-              <Action me={me} coursePage={data.coursePage} />
+              <Action
+                promocode={promocode}
+                me={me}
+                coursePage={data.coursePage}
+              />
             ))}
         </Money>
       </Container>

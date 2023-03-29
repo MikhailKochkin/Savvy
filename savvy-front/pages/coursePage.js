@@ -13,7 +13,13 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const CoursePagePage = (props) => {
-  return <NewCoursePage id={props.query.id} form={props.query.form} />;
+  return (
+    <NewCoursePage
+      id={props.query.id}
+      form={props.query.form}
+      promocode={props.query.down}
+    />
+  );
 };
 
 export default CoursePagePage;

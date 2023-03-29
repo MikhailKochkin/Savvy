@@ -349,14 +349,14 @@ const Post = (props) => {
 
       function handleScroll() {
         if (!hasReachedHalf && hasScrolledToPosition(0.5)) {
-          console.log("User has scrolled to the middle of the article");
+          // console.log("User has scrolled to the middle of the article");
           // You can add your custom code here to execute when the user scrolls to the middle of the article
           props.hasReachedHalf(true);
           setHasReachedHalf(true);
         }
 
         if (!hasReachedBottom && hasScrolledToPosition(1)) {
-          console.log("User has scrolled to the bottom of the article");
+          // console.log("User has scrolled to the bottom of the article");
           // You can add your custom code here to execute when the user scrolls to the bottom of the article
           props.hasReachedBottom(true);
           setHasReachedBottom(true);

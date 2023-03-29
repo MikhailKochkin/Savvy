@@ -156,13 +156,13 @@ const StoryEx = (props) => {
     } else if (task.type.toLowerCase() === "offer") {
       el = lesson.offers.find((t) => t.id === task.id);
       if (!el) return;
-
       item = (
         <BannerOffer
           key={el.id}
           id={el.id}
           offer={el}
           me={me}
+          coursePage={lesson.coursePage}
           coursePageId={lesson.coursePage.id}
           lessonId={lesson.id}
           user={el.user.id}

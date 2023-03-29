@@ -674,7 +674,6 @@ const Navigator = (props) => {
     let new_map = [...botMap];
     let new_block = new_map.find((dial) => dial.type == val);
     let arr = [...journey, new_block];
-    console.log("update", ...userDescription, update);
     setUserDescription([...userDescription, update]);
     if (new_block) setJourney(arr);
     // if (props.me) {

@@ -151,7 +151,6 @@ const Mutation = mutationType({
         },
         ctx
       ) => {
-        console.log(name, email);
         const hashed_password = await bcrypt.hash(password, 10);
         const valid = await bcrypt.compare(password, hashed_password);
 
@@ -236,8 +235,6 @@ const Mutation = mutationType({
           const old_user = await ctx.prisma.user.findUnique({
             where: { id: referal },
           });
-
-          console.log("user.score + score", old_user.score, 100);
 
           const updated_user = await ctx.prisma.user.update({
             data: {
@@ -381,7 +378,6 @@ const Mutation = mutationType({
               expiresIn: 1000 * 60 * 60 * 24 * 365,
             }
           );
-          console.log("our_user", our_user.id);
           let user = our_user;
           return { token, user };
         } else {
@@ -554,7 +550,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, { id }, ctx) => {
-        console.log("ctx.res.req.userId", ctx.res.req.userId);
         const user = await ctx.prisma.user.update({
           data: {
             myTeams: {
@@ -695,7 +690,6 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const userId = args.userId;
-        console.log("args", args);
 
         delete args.userId;
         const message = await ctx.prisma.message.create({
@@ -709,11 +703,13 @@ const Mutation = mutationType({
           },
         });
 
-        console.log(1);
-
         const user = await ctx.prisma.user.findUnique({
           where: { id: userId },
         });
+        const coursePage = await ctx.prisma.coursePage.findUnique({
+          where: { id: args.coursePageId },
+        });
+
         // const user = await ctx.prisma.user.findUnique(
         //   { where: { id: userId } },
         //   `{ id, user { id } }`
@@ -726,23 +722,19 @@ const Mutation = mutationType({
           }`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
         });
-        console.log(2);
 
         if (args.comment == "offer") {
-          console.log(3);
-
           const sendNextEmail = async () => {
             return client.sendEmail({
               From: "Mikhail@besavvy.app",
               To: user.email,
-              Subject: `До конца акции BeSavvy осталось 1 минута`,
+              Subject: `До конца акции BeSavvy осталось 3 часа!`,
               HtmlBody: GenericEmail.GenericEmail(`
-      <p>Извиняюсь за беспокойство, но через 1 минуту заканчивается ваше спец предложение.</p>
-<p>Для вас действует скидка 30% на курс "" </p>
-<p>Посмотреть программу и купить курс можно <a href="${args.link}">по этой уникальной ссылке</a>.</p>
-<p>Не сердитесь, если информация об акции для вас не актуальна. Хорошего дня!</p>
-<p>С уважением,
-Михаил из BeSavvy.</p>
+      <p>Извините, что беспокою, но через 3 часа заканчивается ваше спец предложение на курс "${coursePage.title}" .</p>
+      <p>Для вас действует специальная скидка.</p>
+      <p>Посмотреть программу, узнать точный размер скидки и воспользоваться ее можно <a href="${args.link}">по этой ссылке</a>.</p>
+      <p>Кстати по этой же ссылке можно продолжить проходить бесплатную часть курса.</p>
+      <p>Не сердитесь, если информация об акции для вас сейчас не актуальна. Хорошего дня!</p>
     `),
             });
           };
@@ -756,7 +748,7 @@ const Mutation = mutationType({
               // Handle errors here
               console.error("Error sending email:", error);
             }
-          }, 60 * 1000); // 1 minute delay
+          }, 21 * 60 * 60 * 1000); // 21 hours delay);
         }
         return message;
       },
@@ -3618,8 +3610,6 @@ const Mutation = mutationType({
         id: stringArg(),
       },
       resolve: async (_, { communication_history, comment, id }, ctx) => {
-        console.log("communication_history", communication_history);
-
         const bc = await ctx.prisma.businessClient.findUnique({
           where: { id: id },
         });
@@ -3879,13 +3869,7 @@ const Mutation = mutationType({
         const randomBytesPromiseified = promisify(randomBytes);
         const resetToken = (await randomBytesPromiseified(20)).toString("hex");
         const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
-        console.log(
-          "args.email.toLowerCase()",
-          args.email.toLowerCase(),
-          user,
-          resetToken,
-          resetTokenExpiry
-        );
+
         const res = await ctx.prisma.user.update({
           where: { email: args.email.toLowerCase() },
           data: { resetToken, resetTokenExpiry },

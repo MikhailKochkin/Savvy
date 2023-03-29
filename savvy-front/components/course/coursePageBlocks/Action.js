@@ -441,7 +441,11 @@ const Action = (props) => {
   const [installments, setInstallments] = useState(
     props.coursePage.installments
   );
-  const [price, setPrice] = useState(props.coursePage.price);
+  const [price, setPrice] = useState(
+    props.promocode == "bcd"
+      ? props.coursePage.discountPrice
+      : props.coursePage.price
+  );
   const [isPromo, setIsPromo] = useState(false);
   const { t } = useTranslation("coursePage");
   const router = useRouter();

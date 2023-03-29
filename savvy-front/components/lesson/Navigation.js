@@ -75,7 +75,6 @@ const Level = styled.div`
   align-items: center;
   justify-content: center;
   background: ${(props) => {
-    console.log("props.angle", props.angle);
     if (props.angle >= 360) {
       return `conic-gradient(#ffb703 0deg ${props.angle + "deg"}, #f2e8cf ${
         props.angle + "deg"
@@ -257,8 +256,9 @@ const Navigation = (props) => {
           )}
           <Team>
             {me.myTeams.length > 0 &&
-              me.myTeams[0].users.map((t) => (
+              me.myTeams[0].users.map((t, i) => (
                 <Level
+                  key={i + "level"}
                   angle={
                     lesson.structure &&
                     (filtered_results.find((lr) => lr.student.id == t.id)
@@ -268,7 +268,6 @@ const Navigation = (props) => {
                       (360 / lesson.structure.lessonItems.length)
                   }
                 >
-                  {console.log("results", results)}
                   <IconBlock>
                     {t.image ? (
                       <img className="icon" src={t.image} />

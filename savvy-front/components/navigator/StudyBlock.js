@@ -44,16 +44,14 @@ const StudyBlock = (props) => {
   };
 
   const loadUser = (val, res) => {
-    // console.log("loading", val, res);
+    console.log("loading", res);
     if (res) {
       setOpen(true);
     }
   };
 
   const passStep = (val) => {
-    // console.log("passStep_final", val);
     props.getLessonProgress(val);
-    // console.log("study_block", val);
   };
 
   const passUser = (val) => {};
@@ -74,7 +72,7 @@ const StudyBlock = (props) => {
       {!open && !props.me && leadIn && (
         <BotSignUp text={leadIn} passUser={passUser} loadUser={loadUser} />
       )}
-      {(open || props.me) && lessonId && (
+      {open && props.me && lessonId && (
         <DynamicNewSingleLesson
           id={lessonId}
           isBot={true}

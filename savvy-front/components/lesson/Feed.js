@@ -664,6 +664,7 @@ const Feed = (props) => {
             <>
               {props.components.slice(0, num + 2).map((c, i) => (
                 <Block
+                  key={i + "block"}
                   open={open}
                   show={i === num + 1 ? "final" : "no"}
                   className={i === num + 1 ? "final" : "no"}
@@ -727,6 +728,7 @@ const Feed = (props) => {
             <>
               {props.components.slice(0, num + 2).map((c, i) => (
                 <Block
+                  key={i + "block2"}
                   open={open}
                   show={i === num + 1 ? "final" : "no"}
                   className={i === num + 1 ? "final" : "no"}
@@ -896,7 +898,9 @@ const Feed = (props) => {
                   onChange={(e) => search(parseInt(e.target.value))}
                 >
                   {props.components.map((el, i) => (
-                    <option value={i - 1}>{i + 1}</option>
+                    <option key={i + "option3"} value={i - 1}>
+                      {i + 1}
+                    </option>
                   ))}
                 </select>
               </div>

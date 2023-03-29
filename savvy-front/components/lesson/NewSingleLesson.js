@@ -255,6 +255,8 @@ const NEW_SINGLE_LESSON_QUERY = gql`
       }
       coursePage {
         id
+        title
+        price
         authors {
           id
         }
@@ -378,26 +380,17 @@ const LessonPart = styled.div`
 `;
 
 const NewSingleLesson = (props) => {
-  console.log("start");
-
   const [width, setWidth] = useState(0);
   const { t } = useTranslation("lesson");
-  console.log("start 2");
-
   const onResize = (width) => setWidth(width);
   const me = useUser();
-  console.log("start 3");
-
   useEffect(() => {
-    props.passStep(0);
+    if (props.passStep) props.passStep(0);
   }, [0]);
-  console.log("start 4");
-
   const { loading, error, data } = useQuery(NEW_SINGLE_LESSON_QUERY, {
     variables: { id: props.id },
     fetchPolicy: "no-cache",
   });
-  console.log("loooong");
   if (loading) return <LoadingText />;
 
   let lesson = data.lesson;
@@ -408,9 +401,9 @@ const NewSingleLesson = (props) => {
   let i_am_author = false;
   let i_am_student = false;
 
-  const passProgress = (val) => {
-    props.passProgress(val);
-  };
+  // const passProgress = (val) => {
+  //   props.passProgress(val);
+  // };
 
   if (
     me &&
@@ -427,7 +420,6 @@ const NewSingleLesson = (props) => {
   }
 
   const passStep = (num) => {
-    console.log("lesson", num);
     if (props.passStep) props.passStep(num);
   };
   return (
