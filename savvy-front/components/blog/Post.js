@@ -311,8 +311,8 @@ const Post = (props) => {
   }
   useEffect(() => {
     if (post_data) {
-      props.getLessonId(post_data.post.lessonId);
-      props.getLeadIn(post_data.post.leadin);
+      if (props.getLessonId) props.getLessonId(post_data.post.lessonId);
+      if (props.getLeadIn) props.getLeadIn(post_data.post.leadin);
     }
   }, [post_data]);
   useEffect(() => {
@@ -348,14 +348,22 @@ const Post = (props) => {
       }
 
       function handleScroll() {
-        if (!hasReachedHalf && hasScrolledToPosition(0.5)) {
+        if (
+          !hasReachedHalf &&
+          hasScrolledToPosition(0.5) &&
+          props.hasReachedHalf
+        ) {
           // console.log("User has scrolled to the middle of the article");
           // You can add your custom code here to execute when the user scrolls to the middle of the article
           props.hasReachedHalf(true);
           setHasReachedHalf(true);
         }
 
-        if (!hasReachedBottom && hasScrolledToPosition(1)) {
+        if (
+          !hasReachedBottom &&
+          hasScrolledToPosition(1) &&
+          props.hasReachedBottom
+        ) {
           // console.log("User has scrolled to the bottom of the article");
           // You can add your custom code here to execute when the user scrolls to the bottom of the article
           props.hasReachedBottom(true);
