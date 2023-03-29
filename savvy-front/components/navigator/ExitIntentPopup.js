@@ -59,7 +59,7 @@ const SubscribeButton = styled.button`
   }
 `;
 
-const ExitIntentPopup = () => {
+const ExitIntentPopup = (props) => {
   const showExitIntentPopup = () => {
     const exitIntentPopup = document.getElementById("exitIntentPopup");
     exitIntentPopup.style.display = "block";
@@ -85,6 +85,11 @@ const ExitIntentPopup = () => {
     };
   }, []);
 
+  const getLinkAction = (e) => {
+    e.preventDefault();
+    props.getLinkAction(null, "click_to_TG");
+  };
+
   return (
     <PopupOverlay
       id="exitIntentPopup"
@@ -100,7 +105,7 @@ const ExitIntentPopup = () => {
           У нас в телеграме каждю неделю выходит дайджест карьерных материалов
           за неделю. Подпишитесь на нас, чтобы ничего не пропустить.
         </p>
-        <SubscribeButton>
+        <SubscribeButton onClick={(e) => getLinkAction(e)}>
           <a href="https://t.me/besavvylawyer" target="_blank">
             Подписаться
           </a>

@@ -51,7 +51,7 @@ const StudyBlock = (props) => {
   };
 
   const passStep = (val) => {
-    props.getLessonProgress(val);
+    props.getLessonProgress(val.toString());
   };
 
   const passUser = (val) => {};
@@ -72,7 +72,7 @@ const StudyBlock = (props) => {
       {!open && !props.me && leadIn && (
         <BotSignUp text={leadIn} passUser={passUser} loadUser={loadUser} />
       )}
-      {open && props.me && lessonId && (
+      {(open || props.me) && lessonId && (
         <DynamicNewSingleLesson
           id={lessonId}
           isBot={true}
