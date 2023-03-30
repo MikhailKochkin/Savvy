@@ -82,7 +82,6 @@ const TextBar = styled.div`
   font-size: 1.6rem;
   padding-bottom: 2%;
   ul {
-    list-style-type: none;
     padding-left: 0px;
   }
   .video {

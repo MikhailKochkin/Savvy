@@ -13,6 +13,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
+  width: 550px;
   @media (max-width: 800px) {
     width: 90%;
   }
@@ -105,7 +106,10 @@ const Front = (props) => {
               variant="contained"
               color="primary"
               className={classes.button}
-              onClick={(e) => props.getStart(true)}
+              onClick={(e) => {
+                if (props.passStep) props.passStep(0);
+                props.getStart(true);
+              }}
             >
               Начать
             </Button>

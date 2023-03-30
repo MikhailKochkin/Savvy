@@ -450,85 +450,77 @@ const Chat = (props) => {
         <Secret shiver={shiver}>
           <Messages isRevealed={isRevealed}>
             {!update &&
-              messages.messagesList
-                // slice(0, num).
-                .map((m, i) => {
-                  if (m.author === "author") {
-                    return (
-                      <>
-                        <Message
-                          id={"message" + i + id}
-                          key={i}
-                          time={i}
-                          className="author"
-                        >
-                          <div className="author_text">
-                            {renderHTML(m.text)}
+              messages.messagesList.slice(0, num).map((m, i) => {
+                if (m.author === "author") {
+                  return (
+                    <>
+                      <Message
+                        id={"message" + i + id}
+                        key={i}
+                        time={i}
+                        className="author"
+                      >
+                        <div className="author_text">{renderHTML(m.text)}</div>
+                        <IconBlock>
+                          {m.image && <img className="icon" src={m.image} />}
+                          {!m.image &&
+                            (author && author.image ? (
+                              <img className="icon" src={author.image} />
+                            ) : (
+                              <img
+                                className="icon"
+                                src="../../static/hipster.svg"
+                              />
+                            ))}
+                          <div className="name">
+                            {m.name && m.name.toLowerCase() !== "author"
+                              ? m.name
+                              : author && author.name
+                              ? author.name
+                              : "BeSavvy"}
                           </div>
-                          <IconBlock>
+                        </IconBlock>
+                      </Message>
+                      {m.reactions && m.reactions.length > 0 && (
+                        <Reaction
+                          reactions={m.reactions}
+                          me={me}
+                          author={author}
+                          initialQuestion={m.text}
+                        />
+                      )}
+                    </>
+                  );
+                } else {
+                  return (
+                    <>
+                      <Message
+                        id={"message" + i + id}
+                        key={i}
+                        time={i}
+                        className="student"
+                      >
+                        <IconBlock>
+                          <Icon className="icon2" background={m.author}>
                             {m.image && <img className="icon" src={m.image} />}
-                            {!m.image &&
-                              (author && author.image ? (
-                                <img className="icon" src={author.image} />
-                              ) : (
-                                <img
-                                  className="icon"
-                                  src="../../static/hipster.svg"
-                                />
-                              ))}
-                            <div className="name">
-                              {m.name && m.name.toLowerCase() !== "author"
-                                ? m.name
-                                : author && author.name
-                                ? author.name
-                                : "BeSavvy"}
-                            </div>
-                          </IconBlock>
-                        </Message>
-                        {m.reactions && m.reactions.length > 0 && (
-                          <Reaction
-                            reactions={m.reactions}
-                            me={me}
-                            author={author}
-                            initialQuestion={m.text}
-                          />
-                        )}
-                      </>
-                    );
-                  } else {
-                    return (
-                      <>
-                        <Message
-                          id={"message" + i + id}
-                          key={i}
-                          time={i}
-                          className="student"
-                        >
-                          <IconBlock>
-                            <Icon className="icon2" background={m.author}>
-                              {m.image && (
-                                <img className="icon" src={m.image} />
-                              )}
-                              {me && me.image ? (
-                                <img className="icon" src={me.image} />
-                              ) : me.surname ? (
-                                `${me.name[0]}${me.surname[0]}`
-                              ) : (
-                                `${me.name[0]}${me.name[1]}`
-                              )}
-                            </Icon>
-                            <div className="name">
-                              {m.name ? m.name : m.author}
-                            </div>
-                          </IconBlock>
-                          <div className="student_text">
-                            {renderHTML(m.text)}
+                            {me && me.image ? (
+                              <img className="icon" src={me.image} />
+                            ) : me.surname ? (
+                              `${me.name[0]}${me.surname[0]}`
+                            ) : (
+                              `${me.name[0]}${me.name[1]}`
+                            )}
+                          </Icon>
+                          <div className="name">
+                            {m.name ? m.name : m.author}
                           </div>
-                        </Message>
-                      </>
-                    );
-                  }
-                })}
+                        </IconBlock>
+                        <div className="student_text">{renderHTML(m.text)}</div>
+                      </Message>
+                    </>
+                  );
+                }
+              })}
           </Messages>
           <div id="open">
             <img src="static/lock.svg" />
@@ -552,83 +544,81 @@ const Chat = (props) => {
       )}
       {isRevealed && !update && (
         <Messages isRevealed={isRevealed}>
-          {messages.messagesList
-            // .slice(0, num)
-            .map((m, i) => {
-              if (m.author === "author") {
-                return (
-                  <>
-                    <Message
-                      id={"message" + i + id}
-                      key={i}
-                      time={i}
-                      className="author"
-                    >
-                      <div className="author_text">{renderHTML(m.text)}</div>
-                      <IconBlock>
-                        {m.image && <img className="icon" src={m.image} />}
-                        {!m.image &&
-                          (author && author.image ? (
-                            <img className="icon" src={author.image} />
-                          ) : (
-                            <img
-                              className="icon"
-                              src="../../static/hipster.svg"
-                            />
-                          ))}
-                        <div className="name">
-                          {m.name && m.name.toLowerCase() !== "author"
-                            ? m.name
-                            : author && author.name
-                            ? author.name
-                            : "BeSavvy"}
-                        </div>
-                      </IconBlock>
-                    </Message>
-                    {m.reactions && m.reactions.length > 0 && (
-                      <Reaction
-                        reactions={m.reactions}
-                        me={me}
-                        author={author}
-                        author_image={m.image}
-                        author_name={m.name}
-                        initialQuestion={m.text}
-                      />
-                    )}
-                  </>
-                );
-              } else {
-                return (
+          {messages.messagesList.slice(0, num).map((m, i) => {
+            if (m.author === "author") {
+              return (
+                <>
                   <Message
                     id={"message" + i + id}
                     key={i}
                     time={i}
-                    className="student"
+                    className="author"
                   >
+                    <div className="author_text">{renderHTML(m.text)}</div>
                     <IconBlock>
-                      <Icon className="icon2" background={m.author}>
-                        {m.image && <img className="icon" src={m.image} />}
-                        {!m.image &&
-                          (me && me.image ? (
-                            <img className="icon" src={me.image} />
-                          ) : me.surname ? (
-                            `${me.name[0]}${me.surname[0]}`
-                          ) : (
-                            `${me.name[0]}${me.name[1]}`
-                          ))}
-                      </Icon>
+                      {m.image && <img className="icon" src={m.image} />}
+                      {!m.image &&
+                        (author && author.image ? (
+                          <img className="icon" src={author.image} />
+                        ) : (
+                          <img
+                            className="icon"
+                            src="../../static/hipster.svg"
+                          />
+                        ))}
                       <div className="name">
-                        {m.name && m.name !== "student" ? m.name : me.name}
+                        {m.name && m.name.toLowerCase() !== "author"
+                          ? m.name
+                          : author && author.name
+                          ? author.name
+                          : "BeSavvy"}
                       </div>
                     </IconBlock>
-                    <div className="student_text">{renderHTML(m.text)}</div>
                   </Message>
-                );
-              }
-            })}
+                  {m.reactions && m.reactions.length > 0 && (
+                    <Reaction
+                      reactions={m.reactions}
+                      me={me}
+                      author={author}
+                      author_image={m.image}
+                      author_name={m.name}
+                      initialQuestion={m.text}
+                    />
+                  )}
+                </>
+              );
+            } else {
+              return (
+                <Message
+                  id={"message" + i + id}
+                  key={i}
+                  time={i}
+                  className="student"
+                >
+                  <IconBlock>
+                    <Icon className="icon2" background={m.author}>
+                      {m.image && <img className="icon" src={m.image} />}
+                      {!m.image &&
+                        (me && me.image ? (
+                          <img className="icon" src={me.image} />
+                        ) : me.surname ? (
+                          `${me.name[0]}${me.surname[0]}`
+                        ) : (
+                          `${me.name[0]}${me.name[1]}`
+                        ))}
+                    </Icon>
+                    <div className="name">
+                      {m.name && m.name !== "student" ? m.name : me.name}
+                    </div>
+                  </IconBlock>
+                  <div className="student_text">{renderHTML(m.text)}</div>
+                </Message>
+              );
+            }
+          })}
         </Messages>
       )}
-      {/* {showButton && !update && num < messages.messagesList.length && (
+      {showButton && !update && num < messages.messagesList.length && (
         <Next>
           <button
             onClick={(e) => {
@@ -641,7 +631,7 @@ const Chat = (props) => {
             Next
           </button>
         </Next>
-      )} */}
+      )}
       {update && (
         <UpdateChat
           id={id}

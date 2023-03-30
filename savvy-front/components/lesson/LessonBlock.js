@@ -623,6 +623,7 @@ const LessonBlock = (props) => {
                 id={data.id}
                 offer={data}
                 me={me}
+                coursePage={lesson.coursePage}
                 coursePageId={lesson.coursePage.id}
                 lessonId={lesson.id}
                 user={data.user.id}

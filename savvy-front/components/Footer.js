@@ -136,7 +136,7 @@ const Footer = () => {
           </div>
         )}
         <div className="block">
-          <div>{t("name")} © 2018 — 2022 </div>
+          <div>{t("name")} © 2018 — 2023 </div>
         </div>
         <div className="block">
           {router.locale == "ru" && (

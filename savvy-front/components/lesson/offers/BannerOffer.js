@@ -71,7 +71,7 @@ const CREATE_CLIENT = gql`
 `;
 
 const Styles = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 600px;
   background: #1c1e29;
   display: flex;
@@ -94,7 +94,7 @@ const BiggerBlock = styled.div`
   border-radius: 40px;
   @media (max-width: 800px) {
     width: 340px;
-    height: 440px;
+    height: 480px;
   }
 `;
 
@@ -268,7 +268,7 @@ const BannerOffer = (props) => {
   }, []);
 
   const fireMutation = () => {
-    if (!mutationFired) {
+    if (!mutationFired && props.story) {
       setMutationFired(true);
       console.log("fire");
       sendMessage({

@@ -57,10 +57,16 @@ const BotProgress = () => {
       }
     });
 
+    groups.sort((a, b) => {
+      const aDate = new Date(a.day);
+      const bDate = new Date(b.day);
+      return bDate - aDate;
+    });
+
     groups.forEach((group) => {
       group.objects.sort((a, b) => {
-        const aTimestamp = new Date(a.item);
-        const bTimestamp = new Date(b.item);
+        const aTimestamp = new Date(a.createdAt);
+        const bTimestamp = new Date(b.createdAt);
         return aTimestamp - bTimestamp;
       });
     });
@@ -69,7 +75,6 @@ const BotProgress = () => {
   };
 
   let grouped_sessions = groupByDay(sessions);
-  console.log("grouped_sessions", grouped_sessions);
 
   function countObjects(arr) {
     let totalCount = 0;

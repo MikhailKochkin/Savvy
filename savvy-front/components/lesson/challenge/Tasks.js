@@ -11,6 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
+  width: 100%;
   /* The side navigation menu */
   .sidenav {
     height: 100%; /* 100% Full-height */
@@ -197,9 +198,14 @@ const Tasks = (props) => {
     return;
   };
 
+  const getFinished = (val) => {
+    props.passStep("finish_challenge");
+  };
+
   const update = (data) => {
     if (!data[0]) {
       setWrong(wrong + 1);
+      props.passStep((activeStep + 1).toString());
       setTimeout(function () {
         setActiveStep(activeStep + 1);
       }, 1000);
@@ -208,6 +214,7 @@ const Tasks = (props) => {
       new_answers[activeStep] = true;
       setAnswers([...new_answers]);
       setRight(right + 1);
+      props.passStep((activeStep + 1).toString());
       setTimeout(function () {
         setActiveStep(activeStep + 1);
       }, 1000);
@@ -230,6 +237,7 @@ const Tasks = (props) => {
           lessonId={props.lesson.id}
           lesson={props.lesson}
           offer={offer}
+          getFinished={getFinished}
         />
       </>
     );

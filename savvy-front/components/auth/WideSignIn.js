@@ -33,7 +33,7 @@ const SIGNIN_MUTATION = gql`
 `;
 
 const Form = styled.form`
-  width: 33%;
+  width: 550px;
   font-size: 1.6rem;
   margin-bottom: 5%;
   @media (max-width: 800px) {

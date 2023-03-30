@@ -166,7 +166,7 @@ const StoryEx = (props) => {
           coursePageId={lesson.coursePage.id}
           lessonId={lesson.id}
           user={el.user.id}
-          story={false}
+          story={true}
           getResults={getResults}
         />
       );

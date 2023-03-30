@@ -124,7 +124,7 @@ const Styles = styled.div`
 `;
 
 const Container = styled.div`
-  width: 60%;
+  width: 570px
   display: flex;
   flex-direction: column;
   justify-content: center;

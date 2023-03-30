@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Post from "../blog/Post";
 import { useUser } from "../LoadingUser";
 import BotSignUp from "../auth/BotSignUp";
+import Challenge from "../lesson/challenge/Challenge";
 
 const Material = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const StudyBlock = (props) => {
 
   const [lessonId, setLessonId] = useState(undefined);
   const [leadIn, setLeadIn] = useState(undefined);
+  const [type, setType] = useState(undefined);
 
   const [open, setOpen] = useState(false);
 
@@ -33,9 +35,9 @@ const StudyBlock = (props) => {
     props.updatePostResult(null, "has read full post");
   };
 
-  const getLessonId = (val) => {
-    // console.log("val", val);
-    setLessonId(val);
+  const getLessonInfo = (id, lessons) => {
+    setLessonId(id);
+    setType(lessons.find((l) => l.id == id).type);
   };
 
   const getLeadIn = (val) => {
@@ -64,7 +66,7 @@ const StudyBlock = (props) => {
             id={props.id ? props.id : props.post.id}
             hasReachedHalf={hasReachedHalf}
             hasReachedBottom={hasReachedBottom}
-            getLessonId={getLessonId}
+            getLessonInfo={getLessonInfo}
             getLeadIn={getLeadIn}
           />
         )}
@@ -72,13 +74,18 @@ const StudyBlock = (props) => {
       {!open && !props.me && leadIn && (
         <BotSignUp text={leadIn} passUser={passUser} loadUser={loadUser} />
       )}
-      {(open || props.me) && lessonId && (
-        <DynamicNewSingleLesson
-          id={lessonId}
-          isBot={true}
-          passStep={passStep}
-        />
-      )}
+      {console.lo}
+      {(open || props.me) &&
+        lessonId &&
+        (type == "CHALLENGE" ? (
+          <Challenge id={lessonId} isBot={true} passStep={passStep} />
+        ) : (
+          <DynamicNewSingleLesson
+            id={lessonId}
+            isBot={true}
+            passStep={passStep}
+          />
+        ))}
     </div>
   );
 };

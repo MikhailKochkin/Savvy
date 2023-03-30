@@ -43,6 +43,10 @@ const POST_QUERY = gql`
       coursePage {
         id
         title
+        lessons {
+          id
+          type
+        }
         user {
           id
           name
@@ -320,7 +324,11 @@ const Post = (props) => {
   }
   useEffect(() => {
     if (post_data) {
-      if (props.getLessonId) props.getLessonId(post_data.post.lessonId);
+      if (props.getLessonInfo)
+        props.getLessonInfo(
+          post_data.post.lessonId,
+          post_data.post.coursePage.lessons
+        );
       if (props.getLeadIn) props.getLeadIn(post_data.post.leadin);
     }
   }, [post_data]);

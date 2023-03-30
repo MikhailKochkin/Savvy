@@ -100,6 +100,8 @@ const SINGLE_LESSON_QUERY = gql`
       # }
       coursePage {
         id
+        price
+        title
         authors {
           id
         }
@@ -140,11 +142,17 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 50vh;
+  width: 570px;
+  @media (max-width: 850px) {
+    width: 100%;
+  }
 `;
 
 const Box = styled.div`
   width: 50%;
   margin-top: 5%;
+  border: 1px green;
+  width: 100%;
   @media (max-width: 850px) {
     width: 100%;
   }
@@ -206,6 +214,10 @@ const Challenge = (props) => {
   };
   const me = useUser();
 
+  const passStep = (val) => {
+    if (props.passStep) props.passStep(val);
+  };
+
   return (
     <PleaseSignIn>
       <Query
@@ -257,13 +269,14 @@ const Challenge = (props) => {
                       handleHeight
                       onResize={onResize}
                     />
-                    {console.log("lesson", lesson)}
-                    <Navigation
-                      i_am_author={i_am_author}
-                      lesson={lesson}
-                      me={me}
-                      width={width}
-                    />
+                    {!props.isBot && (
+                      <Navigation
+                        i_am_author={i_am_author}
+                        lesson={lesson}
+                        me={me}
+                        width={width}
+                      />
+                    )}
                     <Box>
                       <CSSTransitionGroup
                         transitionName="example"
@@ -277,6 +290,7 @@ const Challenge = (props) => {
                             getStart={getStart}
                             completed={completed}
                             results={lesson.challengeResults}
+                            passStep={passStep}
                           />
                         )}
                         {me && start && (
@@ -286,6 +300,7 @@ const Challenge = (props) => {
                             me={me}
                             completed={completed}
                             results={lesson.challengeResults}
+                            passStep={passStep}
                           />
                         )}
                       </CSSTransitionGroup>

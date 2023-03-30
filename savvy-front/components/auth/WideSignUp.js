@@ -53,7 +53,7 @@ const SIGNUP_MUTATION = gql`
 `;
 
 const Form = styled.form`
-  min-width: 450px;
+  width: 550px;
   font-size: 1.6rem;
   overflow-y: scroll;
 

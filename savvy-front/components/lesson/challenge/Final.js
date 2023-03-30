@@ -81,6 +81,7 @@ const Final = (props) => {
               onClick={async (e) => {
                 e.preventDefault();
                 setShown(true);
+                if (props.getFinished) props.getFinished("finish_challenge");
                 createChallengeResult();
               }}
             >
@@ -93,10 +94,11 @@ const Final = (props) => {
               id={offer.id}
               offer={offer}
               me={me}
+              coursePage={lesson.coursePage}
               coursePageId={lesson.coursePage.id}
               lessonId={lesson.id}
               user={offer.user.id}
-              story={false}
+              story={true}
             />
           )}
           {show && (
