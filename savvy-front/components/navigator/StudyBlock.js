@@ -37,7 +37,8 @@ const StudyBlock = (props) => {
 
   const getLessonInfo = (id, lessons) => {
     setLessonId(id);
-    setType(lessons.find((l) => l.id == id).type);
+    let new_type = lessons.find((l) => l.id == id);
+    setType(new_type ? new_type.type : "STORY");
   };
 
   const getLeadIn = (val) => {

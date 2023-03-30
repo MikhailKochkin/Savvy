@@ -327,7 +327,7 @@ const Post = (props) => {
       if (props.getLessonInfo)
         props.getLessonInfo(
           post_data.post.lessonId,
-          post_data.post.coursePage.lessons
+          post_data.post.coursePage ? post_data.post.coursePage.lessons : []
         );
       if (props.getLeadIn) props.getLeadIn(post_data.post.leadin);
     }
