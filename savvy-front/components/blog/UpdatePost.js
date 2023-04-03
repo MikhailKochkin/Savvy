@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { POSTS_QUERY } from "./Blog";
 
 const Styles = styled.div`
-  width: 100%;
+  width: 540px;
   input,
   textarea {
     padding: 1.5% 2%;
@@ -122,12 +122,13 @@ const UpdatePost = (props) => {
         onChange={(e) => setTags(e.target.value)}
       />
       <Img src={image} alt="Upload Preview" />
-
+      <textarea value={text} onChange={(e) => setText(e.target.value)} />
       <DynamicLoadedEditor
         getEditorText={getText}
         previousText={text}
         value={text}
       />
+
       <Mutation
         mutation={UPDATE_POST_MUTATION}
         variables={{

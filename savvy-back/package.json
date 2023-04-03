@@ -36,6 +36,7 @@
     "jsonwebtoken": "8.3.0",
     "nexus": "^1.0.0",
     "nexus-plugin-prisma": "^0.25.0",
+    "node-cron": "^3.0.2",
     "nodemailer": "^4.6.8",
     "nodemon": "^1.19.1",
     "npm": "^6.14.11",

@@ -666,6 +666,7 @@ input CoursePageWhereInput {
   currency: StringNullableFilter
   description: StringFilter
   discountPrice: IntNullableFilter
+  emailReminders: EmailReminderListRelationFilter
   examQuestion: ExamQuestionWhereInput
   examQuestionId: StringNullableFilter
   goals: StringNullableListFilter
@@ -909,12 +910,119 @@ input ElementsList {
   elements: [Element]
 }
 
+input Email {
+  header: String
+  name: String
+  number: Int
+  text: String
+}
+
+type EmailCampaign {
+  content: String!
+  createdAt: DateTime!
+  emailReminders(after: EmailReminderWhereUniqueInput, before: EmailReminderWhereUniqueInput, first: Int, last: Int): [EmailReminder!]!
+  emails: Json
+  id: String!
+  name: String
+  updatedAt: DateTime!
+}
+
+input EmailCampaignOrderByInput {
+  content: SortOrder
+  createdAt: SortOrder
+  emails: SortOrder
+  id: SortOrder
+  name: SortOrder
+  updatedAt: SortOrder
+}
+
+input EmailCampaignWhereInput {
+  AND: [EmailCampaignWhereInput!]
+  content: StringFilter
+  createdAt: DateTimeFilter
+  emailReminders: EmailReminderListRelationFilter
+  emails: JsonNullableFilter
+  id: StringFilter
+  name: StringNullableFilter
+  NOT: [EmailCampaignWhereInput!]
+  OR: [EmailCampaignWhereInput!]
+  posts: PostListRelationFilter
+  updatedAt: DateTimeFilter
+}
+
+input EmailCampaignWhereUniqueInput {
+  id: String
+}
+
 input EmailInfo {
   completed_lessons_number: Int
   course_name: String
   lesResultsList: LesResultsList
   lessons_number: Int
   student_name: String
+}
+
+type EmailReminder {
+  coursePage: CoursePage
+  coursePageId: String
+  createdAt: DateTime!
+  emailCampaign: EmailCampaign
+  emailsSent: [String!]!
+  gap: Int
+  id: String!
+  link: String
+  sendAt: DateTime
+  updatedAt: DateTime!
+  user: User
+  userId: String
+}
+
+input EmailReminderListRelationFilter {
+  every: EmailReminderWhereInput
+  none: EmailReminderWhereInput
+  some: EmailReminderWhereInput
+}
+
+input EmailReminderOrderByInput {
+  coursePageId: SortOrder
+  createdAt: SortOrder
+  emailCampaignId: SortOrder
+  emailsSent: SortOrder
+  gap: SortOrder
+  id: SortOrder
+  link: SortOrder
+  sendAt: SortOrder
+  status: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
+}
+
+input EmailReminderWhereInput {
+  AND: [EmailReminderWhereInput!]
+  coursePage: CoursePageWhereInput
+  coursePageId: StringNullableFilter
+  createdAt: DateTimeFilter
+  emailCampaign: EmailCampaignWhereInput
+  emailCampaignId: StringNullableFilter
+  emailsSent: StringNullableListFilter
+  gap: IntNullableFilter
+  id: StringFilter
+  link: StringNullableFilter
+  NOT: [EmailReminderWhereInput!]
+  OR: [EmailReminderWhereInput!]
+  sendAt: DateTimeNullableFilter
+  status: IntNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereInput
+  userId: StringNullableFilter
+}
+
+input EmailReminderWhereUniqueInput {
+  id: String
+}
+
+input EmailsList {
+  emails: [Email]
 }
 
 input EnumCourseTypeNullableFilter {
@@ -1555,6 +1663,8 @@ type Mutation {
   createCourseVisit(coursePageId: String, studentId: String, visitsNumber: Int): CourseVisit
   createDocument(lessonId: String, title: String): Document
   createDocumentResult(answers: [String], documentId: String, drafts: [String], lessonId: String): DocumentResult
+  createEmailCampaign(content: String, emails: EmailsList, name: String): EmailCampaign
+  createEmailReminder(coursePageId: String, emailCampaignId: String, gap: Int, link: String, userId: String): EmailReminder
   createFeedback(lessonId: String, studentId: String, text: String): Feedback
   createForum(lessonId: String, text: String): Forum
   createLawrdle(active: Boolean, authorId: String, buttonText: String, coursePageId: String, link: String, story: String, tags: [String], word: String): Lawrdle
@@ -1591,6 +1701,7 @@ type Mutation {
   deleteClient(id: String): BusinessClient
   deleteConstruction(id: String): Construction
   deleteDocument(id: String): Document
+  deleteEmailCampaign(id: String): EmailCampaign
   deleteLesson(id: String): Lesson
   deleteNewTest(id: String): NewTest
   deleteNote(id: String): Note
@@ -1623,6 +1734,8 @@ type Mutation {
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, hint: String, id: String, name: String, type: String, variants: [String]): Construction
   updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, modules: Modules, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
+  updateEmailCampaign(content: String, emails: EmailsList, id: String, name: String): EmailCampaign
+  updateEmailReminder(emailsSent: [String], id: String): EmailReminder
   updateForum(id: String, text: String): Forum
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
@@ -2076,6 +2189,8 @@ input PointAWhereInput {
 type Post {
   coursePage: CoursePage
   createdAt: DateTime!
+  emailCampaign: EmailCampaign
+  emailCampaignId: String
   id: String!
   image: String
   language: String
@@ -2100,6 +2215,7 @@ input PostListRelationFilter {
 input PostOrderByInput {
   coursePageId: SortOrder
   createdAt: SortOrder
+  emailCampaignId: SortOrder
   id: SortOrder
   image: SortOrder
   language: SortOrder
@@ -2119,6 +2235,8 @@ input PostWhereInput {
   coursePage: CoursePageWhereInput
   coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
+  emailCampaign: EmailCampaignWhereInput
+  emailCampaignId: StringNullableFilter
   id: StringFilter
   image: StringNullableFilter
   language: StringNullableFilter
@@ -2403,6 +2521,10 @@ type Query {
   coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [CoursePageOrderByInput!], where: CoursePageWhereInput): [CoursePage!]!
   courseVisit(where: CourseVisitWhereUniqueInput!): CourseVisit
   courseVisits(after: CourseVisitWhereUniqueInput, before: CourseVisitWhereUniqueInput, first: Int, last: Int, orderBy: [CourseVisitOrderByInput!], where: CourseVisitWhereInput): [CourseVisit!]!
+  emailCampaign(where: EmailCampaignWhereUniqueInput!): EmailCampaign
+  emailCampaigns(after: EmailCampaignWhereUniqueInput, before: EmailCampaignWhereUniqueInput, first: Int, last: Int, orderBy: [EmailCampaignOrderByInput!], where: EmailCampaignWhereInput): [EmailCampaign!]!
+  emailReminder(where: EmailReminderWhereUniqueInput!): EmailReminder
+  emailReminders(after: EmailReminderWhereUniqueInput, before: EmailReminderWhereUniqueInput, first: Int, last: Int, orderBy: [EmailReminderOrderByInput!], where: EmailReminderWhereInput): [EmailReminder!]!
   feedbacks(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int, orderBy: [FeedbackOrderByInput!], where: FeedbackWhereInput): [Feedback!]!
   lawrdle(where: LawrdleWhereUniqueInput!): Lawrdle
   lawrdles(after: LawrdleWhereUniqueInput, before: LawrdleWhereUniqueInput, first: Int, last: Int, orderBy: [LawrdleOrderByInput!], where: LawrdleWhereInput): [Lawrdle!]!
@@ -3493,6 +3615,7 @@ input UserWhereInput {
   documentResults: DocumentResultListRelationFilter
   documents: DocumentListRelationFilter
   email: StringFilter
+  emailReminders: EmailReminderListRelationFilter
   examAnswers: ExamAnswerListRelationFilter
   examResults: ExamResultListRelationFilter
   exams: ExamListRelationFilter

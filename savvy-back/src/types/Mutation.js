@@ -678,6 +678,89 @@ const Mutation = mutationType({
         return updated_user;
       },
     });
+    t.field("createEmailReminder", {
+      type: "EmailReminder",
+      args: {
+        userId: stringArg(),
+        coursePageId: stringArg(),
+        emailCampaignId: stringArg(),
+        link: stringArg(),
+        gap: intArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const emailReminder = await ctx.prisma.emailReminder.create({
+          data: {
+            user: {
+              connect: {
+                id: args.userId,
+              },
+            },
+            coursePage: {
+              connect: {
+                id: args.coursePageId,
+              },
+            },
+            emailCampaign: {
+              connect: {
+                id: args.emailCampaignId,
+              },
+            },
+            link: args.link,
+            gap: args.gap,
+            sendAt: new Date("2023-04-31T09:29:35.723Z"),
+          },
+        });
+
+        return emailReminder;
+      },
+    });
+    t.field("updateEmailReminder", {
+      type: "EmailReminder",
+      args: {
+        id: stringArg(),
+        emailsSent: list(stringArg()),
+      },
+      resolve: async (_, args, ctx) => {
+        const emailReminder = await ctx.prisma.emailReminder.update({
+          where: {
+            id: args.id,
+          },
+          data: {
+            emailsSent: {
+              set: [...args.emailsSent],
+            },
+          },
+        });
+
+        const theEmailReminder = await ctx.prisma.emailReminder.findUnique({
+          where: { id: args.id },
+        });
+
+        const theEmailCampaign = await ctx.prisma.emailCampaign.findUnique({
+          where: { id: theEmailReminder.emailCampaignId },
+        });
+
+        const our_user = await ctx.prisma.user.findUnique({
+          where: { id: theEmailReminder.userId },
+        });
+
+        // console.log("args", args.emailsSent, args.emailsSent.length);
+        // console.log("our_user", our_user);
+
+        let our_email =
+          theEmailCampaign.emails.emails[args.emailsSent.length - 1];
+
+        const SendGenericEmail = await client.sendEmail({
+          From: "Mikhail@besavvy.app",
+          To: our_user.email,
+          Subject: `${our_user.name}, ${our_email.header}`,
+          HtmlBody: GenericEmail.GenericEmail(our_email.text),
+        });
+
+        return emailReminder;
+        // return null;
+      },
+    });
     t.field("sendMessage", {
       type: "Message",
       args: {
@@ -724,31 +807,51 @@ const Mutation = mutationType({
         });
 
         if (args.comment == "offer") {
-          const sendNextEmail = async () => {
-            return client.sendEmail({
-              From: "Mikhail@besavvy.app",
-              To: user.email,
-              Subject: `До конца акции BeSavvy осталось 3 часа!`,
-              HtmlBody: GenericEmail.GenericEmail(`
-      <p>Извините, что беспокою, но через 3 часа заканчивается ваше спец предложение на курс "${coursePage.title}" .</p>
-      <p>Для вас действует специальная скидка.</p>
-      <p>Посмотреть программу, узнать точный размер скидки и воспользоваться ее можно <a href="${args.link}">по этой ссылке</a>.</p>
-      <p>Кстати по этой же ссылке можно продолжить проходить бесплатную часть курса.</p>
-      <p>Не сердитесь, если информация об акции для вас сейчас не актуальна. Хорошего дня!</p>
-    `),
-            });
-          };
-
+          //       const sendNextEmail = async () => {
+          //         return client.sendEmail({
+          //           From: "Mikhail@besavvy.app",
+          //           To: user.email,
+          //           Subject: `До конца акции BeSavvy осталось 3 часа!`,
+          //           HtmlBody: GenericEmail.GenericEmail(`
+          // <p>Извините, что беспокою, но через 3 часа заканчивается ваше спец предложение на курс "${coursePage.title}" .</p>
+          // <p>Для вас действует специальная скидка.</p>
+          // <p>Посмотреть программу, узнать точный размер скидки и воспользоваться ее можно <a href="${args.link}">по этой ссылке</a>.</p>
+          // <p>Кстати по этой же ссылке можно продолжить проходить бесплатную часть курса.</p>
+          // <p>Не сердитесь, если информация об акции для вас сейчас не актуальна. Хорошего дня!</p>
+          // `),
+          //         });
+          //       };
+          // const emailReminder = await ctx.prisma.emailReminder.create({
+          //   data: {
+          //     user: {
+          //       connect: {
+          //         id: userId,
+          //       },
+          //     },
+          //     coursePage: {
+          //       connect: {
+          //         id: args.coursePageId,
+          //       },
+          //     },
+          //     emailCampaign: {
+          //       connect: {
+          //         id: args.emailCampaignId,
+          //       },
+          //     },
+          //     link: "https://www.besavvy.app/coursePage?id=ck587y4kp00lf07152t0tyywl&down=bcd",
+          //     sendAt: new Date("2023-03-31T09:29:35.723Z"),
+          //   },
+          // });
           // Delay the execution of the sendNextEmail function by 1 minute (60,000 milliseconds)
-          setTimeout(async () => {
-            try {
-              const SendNextEmail = await sendNextEmail();
-              // Handle success or other logic here
-            } catch (error) {
-              // Handle errors here
-              console.error("Error sending email:", error);
-            }
-          }, 21 * 60 * 60 * 1000); // 21 hours delay);
+          // setTimeout(async () => {
+          //   try {
+          //     const SendNextEmail = await sendNextEmail();
+          //     // Handle success or other logic here
+          //   } catch (error) {
+          //     // Handle errors here
+          //     console.error("Error sending email:", error);
+          //   }
+          // }, 21 * 60 * 60 * 1000); // 21 hours delay);
         }
         return message;
       },
@@ -3414,8 +3517,9 @@ const Mutation = mutationType({
               users[0].name,
               `<p>Это Миша, основатель BeSavvy.</p>
         <p>Рад приветствовать тебя среди участников курса "${courseVisits[0].coursePage.title}".</p>
-        <p>Главное, запомни, что ты занимаешься не в одиночку. Я всегда буду рад помочь тебе с любым учебным или техническим вопросом. Со мной можно связаться, написав в Discord или ответив на это письмо.</p>
-        <p>У тебя же есть ссылка на Discord?</p>
+        <p>Главное, запомни, что ты занимаешься не в одиночку. Я всегда буду рад помочь тебе с любым учебным или техническим вопросом. </p>
+        <p>Со мной можно связаться, написав в наше сообщество в ТГ или ответив на это письмо.</p>
+        <p><a href="https://t.me/besavvylawyer" target="_blank">Вот ссылка</a> на наше сообщество.</p>
         `,
               courseVisits[0].coursePage.title,
               courseVisits[0].coursePage.id
@@ -4065,6 +4169,54 @@ const Mutation = mutationType({
           return updatedBotDialogue;
         },
       });
+    t.field("createEmailCampaign", {
+      type: "EmailCampaign",
+      args: {
+        content: stringArg(),
+        name: stringArg(),
+        emails: arg({ type: "EmailsList" }),
+      },
+      resolve: async (_, args, ctx) => {
+        const emailCampaign = await ctx.prisma.emailCampaign.create({
+          data: {
+            ...args,
+          },
+        });
+        return emailCampaign;
+      },
+    });
+
+    t.field("deleteEmailCampaign", {
+      type: "EmailCampaign",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        return ctx.prisma.emailCampaign.delete({ where });
+      },
+    });
+
+    t.field("updateEmailCampaign", {
+      type: "EmailCampaign",
+      args: {
+        id: stringArg(),
+        content: stringArg(),
+        name: stringArg(),
+        emails: arg({ type: "EmailsList" }),
+      },
+      resolve: async (_, { id, content, emails, name }, ctx) => {
+        const updatedEmailCampaign = await ctx.prisma.emailCampaign.update({
+          where: { id },
+          data: {
+            content,
+            emails,
+            name,
+          },
+        });
+        return updatedEmailCampaign;
+      },
+    });
   },
 });
 

@@ -25,6 +25,24 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
+const CREATE_REMINDER_MUTATION = gql`
+  mutation CREATE_REMINDER_MUTATION(
+    $userId: String!
+    $coursePageId: String!
+    $link: String
+    $emailCampaignId: String
+  ) {
+    createEmailReminder(
+      userId: $userId
+      coursePageId: $coursePageId
+      link: $link
+      emailCampaignId: $emailCampaignId
+    ) {
+      id
+    }
+  }
+`;
+
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION(
     $email: String!
@@ -285,6 +303,9 @@ const Signup = (props) => {
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
   });
 
+  const [createEmailReminder, { error: error4, loading: loading4 }] =
+    useMutation(CREATE_REMINDER_MUTATION);
+  console.log("campaignId", props.campaignId);
   const [signin, { error: error3, loading: loading3 }] = useMutation(
     SIGNIN_MUTATION,
     {
@@ -308,10 +329,19 @@ const Signup = (props) => {
       setShow(true);
       setIsLoading(false);
     } else {
-      // console.log("res", res);
       props.loadUser(false, res);
       setShow(true);
       setIsLoading(false);
+      if (res && res.data && props.coursePageId && props.campaignId) {
+        createEmailReminder({
+          variables: {
+            userId: res.data.botSignup.user.id,
+            coursePageId: props.coursePageId,
+            link: "https://besavvy.app",
+            emailCampaignId: props.campaignId,
+          },
+        });
+      }
     }
   };
 
@@ -319,6 +349,17 @@ const Signup = (props) => {
     e.preventDefault();
     props.loadUser(true);
     const res2 = await signin();
+    console.log("res2", res2);
+    if (res2 && res2.data && props.coursePageId && props.campaignId) {
+      createEmailReminder({
+        variables: {
+          userId: res2.data.signin.user.id,
+          coursePageId: props.coursePageId,
+          link: "https://besavvy.app",
+          emailCampaignId: props.campaignId,
+        },
+      });
+    }
     props.loadUser(false, res2);
   };
 

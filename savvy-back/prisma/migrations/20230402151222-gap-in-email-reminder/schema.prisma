@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -925,7 +925,7 @@ model EmailReminder {
   sendAt          DateTime?
   status          Int?
   emailsSent      String[]
-  gap             Int?          @default(1)
+  gap             Int?          @default(0)
   emailCampaignId String?
   emailCampaign   EmailCampaign? @relation(fields: [emailCampaignId], references: [id])
   link            String?

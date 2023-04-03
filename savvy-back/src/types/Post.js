@@ -14,6 +14,8 @@ const Post = objectType({
     t.model.text();
     t.model.user();
     t.model.tags();
+    t.model.emailCampaign();
+    t.model.emailCampaignId();
     t.model.coursePage();
     t.model.lessonId();
     t.model.leadin();

@@ -55,6 +55,23 @@ const LessonStructure = inputObjectType({
   },
 });
 
+const Email = inputObjectType({
+  name: "Email",
+  definition(t) {
+    t.string("name");
+    t.string("header");
+    t.string("text");
+    t.int("number");
+  },
+});
+
+const EmailsList = inputObjectType({
+  name: "EmailsList",
+  definition(t) {
+    t.list.field("emails", { type: "Email" });
+  },
+});
+
 const Promocode = inputObjectType({
   name: "Promocode",
   definition(t) {
@@ -235,4 +252,6 @@ module.exports = {
   LessonInModule,
   Module,
   Modules,
+  EmailsList,
+  Email,
 };

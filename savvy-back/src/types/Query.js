@@ -17,6 +17,10 @@ const Query = queryType({
     t.crud.teams({ ordering: true, filtering: true });
     t.crud.certificate({ filtering: true });
     t.crud.certificates({ ordering: true, filtering: true });
+    t.crud.emailReminder({ filtering: true });
+    t.crud.emailReminders({ ordering: true, filtering: true });
+    t.crud.emailCampaigns({ ordering: true, filtering: true });
+    t.crud.emailCampaign({ ordering: true, filtering: true });
     t.crud.lawrdle({ filtering: true });
     t.crud.lawrdles({ ordering: true, filtering: true });
     t.crud.useful({ filtering: true });

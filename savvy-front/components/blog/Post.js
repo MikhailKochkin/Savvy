@@ -34,6 +34,7 @@ const POST_QUERY = gql`
       image
       lessonId
       leadin
+      emailCampaignId
       user {
         id
         name
@@ -75,17 +76,17 @@ const Styles = styled.div`
     box-shadow: "0 0 0 2px blue;";
   }
   h1 {
-    font-size: 3rem;
+    font-size: 3.4rem;
     margin: 0;
     margin-bottom: 30px;
     line-height: 1.2;
     color: #252f3f;
     @media (max-width: 800px) {
-      font-size: 2.6rem;
+      font-size: 3.2rem;
     }
   }
   h2 {
-    font-size: 2rem;
+    font-size: 2.6rem;
     margin: 0;
     margin-bottom: 30px;
     line-height: 1.2;
@@ -97,6 +98,24 @@ const Styles = styled.div`
     @media (max-width: 800px) {
       width: 100%;
       height: 300px;
+    }
+  }
+  .video_block {
+    margin: 35px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .short_video {
+      height: 489px;
+      width: 275px;
+      iframe {
+        width: 100%;
+        border: none;
+        height: 100%;
+        border-radius: 15px;
+      }
     }
   }
   a {
@@ -140,7 +159,7 @@ const ProgressBar = styled.div`
 `;
 
 const PostContainer = styled.div`
-  width: 100%;
+  width: ${(props) => (props.page ? "45%" : "100%")};
   /* margin-bottom: 50px; */
   button {
     margin: 50px 0;
@@ -327,9 +346,12 @@ const Post = (props) => {
       if (props.getLessonInfo)
         props.getLessonInfo(
           post_data.post.lessonId,
-          post_data.post.coursePage ? post_data.post.coursePage.lessons : []
+          post_data.post.coursePage ? post_data.post.coursePage.lessons : [],
+          post_data.post.coursePage ? post_data.post.coursePage.id : null
         );
       if (props.getLeadIn) props.getLeadIn(post_data.post.leadin);
+      if (props.getCampaignId)
+        props.getCampaignId(post_data.post.emailCampaignId);
     }
   }, [post_data]);
   useEffect(() => {
@@ -415,7 +437,7 @@ const Post = (props) => {
             <a>{t("back")}</a>
           </Link>
         </div> */}
-        <PostContainer ref={postContainerRef}>
+        <PostContainer ref={postContainerRef} page={props.page == "post"}>
           {props.me &&
             props.me.permissions &&
             props.me.permissions.includes("ADMIN") && (

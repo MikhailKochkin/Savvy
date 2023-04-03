@@ -1,6 +1,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
+import { useMutation, gql } from "@apollo/client";
 
 import Post from "../blog/Post";
 import { useUser } from "../LoadingUser";
@@ -14,6 +15,24 @@ const Material = styled.div`
   width: 100%;
 `;
 
+const CREATE_REMINDER_MUTATION = gql`
+  mutation CREATE_REMINDER_MUTATION(
+    $userId: String!
+    $coursePageId: String!
+    $link: String
+    $emailCampaignId: String
+  ) {
+    createEmailReminder(
+      userId: $userId
+      coursePageId: $coursePageId
+      link: $link
+      emailCampaignId: $emailCampaignId
+    ) {
+      id
+    }
+  }
+`;
+
 const DynamicNewSingleLesson = dynamic(import("../lesson/NewSingleLesson"), {
   ssr: false,
 });
@@ -24,6 +43,8 @@ const StudyBlock = (props) => {
   const [lessonId, setLessonId] = useState(undefined);
   const [leadIn, setLeadIn] = useState(undefined);
   const [type, setType] = useState(undefined);
+  const [coursePageId, setCoursePageId] = useState();
+  const [campaignId, setCampaignId] = useState();
 
   const [open, setOpen] = useState(false);
 
@@ -31,23 +52,25 @@ const StudyBlock = (props) => {
     props.updatePostResult(null, "has read half of the post");
   };
 
-  const hasReachedBottom = () => {
-    props.updatePostResult(null, "has read full post");
-  };
+  const [createEmailReminder, { error: error4, loading: loading4 }] =
+    useMutation(CREATE_REMINDER_MUTATION);
 
-  const getLessonInfo = (id, lessons) => {
+  const getLessonInfo = (id, lessons, coursePageId) => {
     setLessonId(id);
+    setCoursePageId(coursePageId);
     let new_type = lessons.find((l) => l.id == id);
     setType(new_type ? new_type.type : "STORY");
   };
 
+  const getCampaignId = (id) => {
+    setCampaignId(id);
+  };
+
   const getLeadIn = (val) => {
-    // console.log("val", val);
     setLeadIn(val);
   };
 
   const loadUser = (val, res) => {
-    // console.log("loading", res);
     if (res) {
       setOpen(true);
     }
@@ -57,8 +80,21 @@ const StudyBlock = (props) => {
     props.getLessonProgress(val.toString());
   };
 
-  const passUser = (val) => {};
+  const hasReachedBottom = () => {
+    if (props.me && campaignId) {
+      createEmailReminder({
+        variables: {
+          userId: props.me.id,
+          coursePageId: coursePageId,
+          link: "https://besavvy.app",
+          emailCampaignId: campaignId,
+        },
+      });
+    }
+    props.updatePostResult(null, "has read full post");
+  };
 
+  const passUser = (val) => {};
   return (
     <div>
       <Material>
@@ -69,13 +105,19 @@ const StudyBlock = (props) => {
             hasReachedBottom={hasReachedBottom}
             getLessonInfo={getLessonInfo}
             getLeadIn={getLeadIn}
+            getCampaignId={getCampaignId}
           />
         )}
       </Material>
       {!open && !props.me && leadIn && (
-        <BotSignUp text={leadIn} passUser={passUser} loadUser={loadUser} />
+        <BotSignUp
+          text={leadIn}
+          passUser={passUser}
+          loadUser={loadUser}
+          coursePageId={coursePageId}
+          campaignId={campaignId}
+        />
       )}
-      {console.lo}
       {(open || props.me) &&
         lessonId &&
         (type == "CHALLENGE" ? (

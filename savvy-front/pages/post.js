@@ -21,7 +21,7 @@ const Styles = styled.div`
   padding-bottom: 70px;
 `;
 const Container = styled.div`
-  width: 50%;
+  width: 100%;
   min-height: 60vh;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@ const PostPage = (props) => {
   return (
     <Styles>
       <Container>
-        <Post id={props.query.id} me={me} />
+        <Post id={props.query.id} me={me} page={"post"} />
         <Navigator level={"more_next_steps"} />
       </Container>
     </Styles>

@@ -16,4 +16,5 @@ module.exports = {
   ...require("./Stats"),
   ...require("./Certificate"),
   ...require("./Promotion"),
+  ...require("./Emails"),
 };

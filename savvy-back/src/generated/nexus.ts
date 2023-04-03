@@ -442,6 +442,7 @@ export interface NexusGenInputs {
     currency?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     description?: NexusGenInputs['StringFilter'] | null; // StringFilter
     discountPrice?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    emailReminders?: NexusGenInputs['EmailReminderListRelationFilter'] | null; // EmailReminderListRelationFilter
     examQuestion?: NexusGenInputs['ExamQuestionWhereInput'] | null; // ExamQuestionWhereInput
     examQuestionId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     goals?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
@@ -614,12 +615,85 @@ export interface NexusGenInputs {
   ElementsList: { // input type
     elements?: Array<NexusGenInputs['Element'] | null> | null; // [Element]
   }
+  Email: { // input type
+    header?: string | null; // String
+    name?: string | null; // String
+    number?: number | null; // Int
+    text?: string | null; // String
+  }
+  EmailCampaignOrderByInput: { // input type
+    content?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    emails?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  EmailCampaignWhereInput: { // input type
+    AND?: NexusGenInputs['EmailCampaignWhereInput'][] | null; // [EmailCampaignWhereInput!]
+    content?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    emailReminders?: NexusGenInputs['EmailReminderListRelationFilter'] | null; // EmailReminderListRelationFilter
+    emails?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    name?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['EmailCampaignWhereInput'][] | null; // [EmailCampaignWhereInput!]
+    OR?: NexusGenInputs['EmailCampaignWhereInput'][] | null; // [EmailCampaignWhereInput!]
+    posts?: NexusGenInputs['PostListRelationFilter'] | null; // PostListRelationFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+  }
+  EmailCampaignWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   EmailInfo: { // input type
     completed_lessons_number?: number | null; // Int
     course_name?: string | null; // String
     lesResultsList?: NexusGenInputs['LesResultsList'] | null; // LesResultsList
     lessons_number?: number | null; // Int
     student_name?: string | null; // String
+  }
+  EmailReminderListRelationFilter: { // input type
+    every?: NexusGenInputs['EmailReminderWhereInput'] | null; // EmailReminderWhereInput
+    none?: NexusGenInputs['EmailReminderWhereInput'] | null; // EmailReminderWhereInput
+    some?: NexusGenInputs['EmailReminderWhereInput'] | null; // EmailReminderWhereInput
+  }
+  EmailReminderOrderByInput: { // input type
+    coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    emailCampaignId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    emailsSent?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    gap?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    link?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    sendAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    status?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    userId?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  EmailReminderWhereInput: { // input type
+    AND?: NexusGenInputs['EmailReminderWhereInput'][] | null; // [EmailReminderWhereInput!]
+    coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
+    coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    emailCampaign?: NexusGenInputs['EmailCampaignWhereInput'] | null; // EmailCampaignWhereInput
+    emailCampaignId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    emailsSent?: NexusGenInputs['StringNullableListFilter'] | null; // StringNullableListFilter
+    gap?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    link?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+    NOT?: NexusGenInputs['EmailReminderWhereInput'][] | null; // [EmailReminderWhereInput!]
+    OR?: NexusGenInputs['EmailReminderWhereInput'][] | null; // [EmailReminderWhereInput!]
+    sendAt?: NexusGenInputs['DateTimeNullableFilter'] | null; // DateTimeNullableFilter
+    status?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+    userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
+  }
+  EmailReminderWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
+  EmailsList: { // input type
+    emails?: Array<NexusGenInputs['Email'] | null> | null; // [Email]
   }
   EnumCourseTypeNullableFilter: { // input type
     equals?: NexusGenEnums['CourseType'] | null; // CourseType
@@ -1365,6 +1439,7 @@ export interface NexusGenInputs {
   PostOrderByInput: { // input type
     coursePageId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    emailCampaignId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     image?: NexusGenEnums['SortOrder'] | null; // SortOrder
     language?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -1383,6 +1458,8 @@ export interface NexusGenInputs {
     coursePage?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
     coursePageId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    emailCampaign?: NexusGenInputs['EmailCampaignWhereInput'] | null; // EmailCampaignWhereInput
+    emailCampaignId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     image?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     language?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
@@ -2240,6 +2317,7 @@ export interface NexusGenInputs {
     documentResults?: NexusGenInputs['DocumentResultListRelationFilter'] | null; // DocumentResultListRelationFilter
     documents?: NexusGenInputs['DocumentListRelationFilter'] | null; // DocumentListRelationFilter
     email?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    emailReminders?: NexusGenInputs['EmailReminderListRelationFilter'] | null; // EmailReminderListRelationFilter
     examAnswers?: NexusGenInputs['ExamAnswerListRelationFilter'] | null; // ExamAnswerListRelationFilter
     examResults?: NexusGenInputs['ExamResultListRelationFilter'] | null; // ExamResultListRelationFilter
     exams?: NexusGenInputs['ExamListRelationFilter'] | null; // ExamListRelationFilter
@@ -2548,6 +2626,25 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
   }
+  EmailCampaign: { // root type
+    content: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    emails?: NexusGenScalars['Json'] | null; // Json
+    id: string; // String!
+    name?: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  EmailReminder: { // root type
+    coursePageId?: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    emailsSent: string[]; // [String!]!
+    gap?: number | null; // Int
+    id: string; // String!
+    link?: string | null; // String
+    sendAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userId?: string | null; // String
+  }
   Feedback: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -2695,6 +2792,7 @@ export interface NexusGenObjects {
   }
   Post: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    emailCampaignId?: string | null; // String
     id: string; // String!
     image?: string | null; // String
     language?: string | null; // String
@@ -3223,6 +3321,29 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
+  EmailCampaign: { // field return type
+    content: string; // String!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    emailReminders: NexusGenRootTypes['EmailReminder'][]; // [EmailReminder!]!
+    emails: NexusGenScalars['Json'] | null; // Json
+    id: string; // String!
+    name: string | null; // String
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
+  EmailReminder: { // field return type
+    coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
+    coursePageId: string | null; // String
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    emailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
+    emailsSent: string[]; // [String!]!
+    gap: number | null; // Int
+    id: string; // String!
+    link: string | null; // String
+    sendAt: NexusGenScalars['DateTime'] | null; // DateTime
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    user: NexusGenRootTypes['User'] | null; // User
+    userId: string | null; // String
+  }
   Feedback: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
@@ -3362,6 +3483,8 @@ export interface NexusGenFieldTypes {
     createCourseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     createDocument: NexusGenRootTypes['Document'] | null; // Document
     createDocumentResult: NexusGenRootTypes['DocumentResult'] | null; // DocumentResult
+    createEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
+    createEmailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
     createFeedback: NexusGenRootTypes['Feedback'] | null; // Feedback
     createForum: NexusGenRootTypes['Forum'] | null; // Forum
     createLawrdle: NexusGenRootTypes['Lawrdle'] | null; // Lawrdle
@@ -3398,6 +3521,7 @@ export interface NexusGenFieldTypes {
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     deleteDocument: NexusGenRootTypes['Document'] | null; // Document
+    deleteEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
     deleteLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     deleteNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     deleteNote: NexusGenRootTypes['Note'] | null; // Note
@@ -3430,6 +3554,8 @@ export interface NexusGenFieldTypes {
     updateConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     updateCoursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     updateCourseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
+    updateEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
+    updateEmailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
     updateForum: NexusGenRootTypes['Forum'] | null; // Forum
     updateLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
@@ -3528,6 +3654,8 @@ export interface NexusGenFieldTypes {
   Post: { // field return type
     coursePage: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    emailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
+    emailCampaignId: string | null; // String
     id: string; // String!
     image: string | null; // String
     language: string | null; // String
@@ -3617,6 +3745,10 @@ export interface NexusGenFieldTypes {
     coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     courseVisit: NexusGenRootTypes['CourseVisit'] | null; // CourseVisit
     courseVisits: NexusGenRootTypes['CourseVisit'][]; // [CourseVisit!]!
+    emailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
+    emailCampaigns: NexusGenRootTypes['EmailCampaign'][]; // [EmailCampaign!]!
+    emailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
+    emailReminders: NexusGenRootTypes['EmailReminder'][]; // [EmailReminder!]!
     feedbacks: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
     lawrdle: NexusGenRootTypes['Lawrdle'] | null; // Lawrdle
     lawrdles: NexusGenRootTypes['Lawrdle'][]; // [Lawrdle!]!
@@ -4160,6 +4292,29 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  EmailCampaign: { // field return type name
+    content: 'String'
+    createdAt: 'DateTime'
+    emailReminders: 'EmailReminder'
+    emails: 'Json'
+    id: 'String'
+    name: 'String'
+    updatedAt: 'DateTime'
+  }
+  EmailReminder: { // field return type name
+    coursePage: 'CoursePage'
+    coursePageId: 'String'
+    createdAt: 'DateTime'
+    emailCampaign: 'EmailCampaign'
+    emailsSent: 'String'
+    gap: 'Int'
+    id: 'String'
+    link: 'String'
+    sendAt: 'DateTime'
+    updatedAt: 'DateTime'
+    user: 'User'
+    userId: 'String'
+  }
   Feedback: { // field return type name
     createdAt: 'DateTime'
     id: 'String'
@@ -4299,6 +4454,8 @@ export interface NexusGenFieldTypeNames {
     createCourseVisit: 'CourseVisit'
     createDocument: 'Document'
     createDocumentResult: 'DocumentResult'
+    createEmailCampaign: 'EmailCampaign'
+    createEmailReminder: 'EmailReminder'
     createFeedback: 'Feedback'
     createForum: 'Forum'
     createLawrdle: 'Lawrdle'
@@ -4335,6 +4492,7 @@ export interface NexusGenFieldTypeNames {
     deleteClient: 'BusinessClient'
     deleteConstruction: 'Construction'
     deleteDocument: 'Document'
+    deleteEmailCampaign: 'EmailCampaign'
     deleteLesson: 'Lesson'
     deleteNewTest: 'NewTest'
     deleteNote: 'Note'
@@ -4367,6 +4525,8 @@ export interface NexusGenFieldTypeNames {
     updateConstruction: 'Construction'
     updateCoursePage: 'CoursePage'
     updateCourseVisit: 'CourseVisit'
+    updateEmailCampaign: 'EmailCampaign'
+    updateEmailReminder: 'EmailReminder'
     updateForum: 'Forum'
     updateLesson: 'Lesson'
     updateLessonResult: 'LessonResult'
@@ -4465,6 +4625,8 @@ export interface NexusGenFieldTypeNames {
   Post: { // field return type name
     coursePage: 'CoursePage'
     createdAt: 'DateTime'
+    emailCampaign: 'EmailCampaign'
+    emailCampaignId: 'String'
     id: 'String'
     image: 'String'
     language: 'String'
@@ -4554,6 +4716,10 @@ export interface NexusGenFieldTypeNames {
     coursePages: 'CoursePage'
     courseVisit: 'CourseVisit'
     courseVisits: 'CourseVisit'
+    emailCampaign: 'EmailCampaign'
+    emailCampaigns: 'EmailCampaign'
+    emailReminder: 'EmailReminder'
+    emailReminders: 'EmailReminder'
     feedbacks: 'Feedback'
     lawrdle: 'Lawrdle'
     lawrdles: 'Lawrdle'
@@ -4920,6 +5086,14 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
     }
   }
+  EmailCampaign: {
+    emailReminders: { // args
+      after?: NexusGenInputs['EmailReminderWhereUniqueInput'] | null; // EmailReminderWhereUniqueInput
+      before?: NexusGenInputs['EmailReminderWhereUniqueInput'] | null; // EmailReminderWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
   Forum: {
     rating: { // args
       after?: NexusGenInputs['RatingWhereUniqueInput'] | null; // RatingWhereUniqueInput
@@ -5200,6 +5374,18 @@ export interface NexusGenArgTypes {
       drafts?: Array<string | null> | null; // [String]
       lessonId?: string | null; // String
     }
+    createEmailCampaign: { // args
+      content?: string | null; // String
+      emails?: NexusGenInputs['EmailsList'] | null; // EmailsList
+      name?: string | null; // String
+    }
+    createEmailReminder: { // args
+      coursePageId?: string | null; // String
+      emailCampaignId?: string | null; // String
+      gap?: number | null; // Int
+      link?: string | null; // String
+      userId?: string | null; // String
+    }
     createFeedback: { // args
       lessonId?: string | null; // String
       studentId?: string | null; // String
@@ -5411,6 +5597,9 @@ export interface NexusGenArgTypes {
     deleteDocument: { // args
       id?: string | null; // String
     }
+    deleteEmailCampaign: { // args
+      id?: string | null; // String
+    }
     deleteLesson: { // args
       id?: string | null; // String
     }
@@ -5582,6 +5771,16 @@ export interface NexusGenArgTypes {
     updateCourseVisit: { // args
       id?: string | null; // String
       visitsNumber?: number | null; // Int
+    }
+    updateEmailCampaign: { // args
+      content?: string | null; // String
+      emails?: NexusGenInputs['EmailsList'] | null; // EmailsList
+      id?: string | null; // String
+      name?: string | null; // String
+    }
+    updateEmailReminder: { // args
+      emailsSent?: Array<string | null> | null; // [String]
+      id?: string | null; // String
     }
     updateForum: { // args
       id?: string | null; // String
@@ -5835,6 +6034,28 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['CourseVisitOrderByInput'][] | null; // [CourseVisitOrderByInput!]
       where?: NexusGenInputs['CourseVisitWhereInput'] | null; // CourseVisitWhereInput
+    }
+    emailCampaign: { // args
+      where: NexusGenInputs['EmailCampaignWhereUniqueInput']; // EmailCampaignWhereUniqueInput!
+    }
+    emailCampaigns: { // args
+      after?: NexusGenInputs['EmailCampaignWhereUniqueInput'] | null; // EmailCampaignWhereUniqueInput
+      before?: NexusGenInputs['EmailCampaignWhereUniqueInput'] | null; // EmailCampaignWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['EmailCampaignOrderByInput'][] | null; // [EmailCampaignOrderByInput!]
+      where?: NexusGenInputs['EmailCampaignWhereInput'] | null; // EmailCampaignWhereInput
+    }
+    emailReminder: { // args
+      where: NexusGenInputs['EmailReminderWhereUniqueInput']; // EmailReminderWhereUniqueInput!
+    }
+    emailReminders: { // args
+      after?: NexusGenInputs['EmailReminderWhereUniqueInput'] | null; // EmailReminderWhereUniqueInput
+      before?: NexusGenInputs['EmailReminderWhereUniqueInput'] | null; // EmailReminderWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['EmailReminderOrderByInput'][] | null; // [EmailReminderOrderByInput!]
+      where?: NexusGenInputs['EmailReminderWhereInput'] | null; // EmailReminderWhereInput
     }
     feedbacks: { // args
       after?: NexusGenInputs['FeedbackWhereUniqueInput'] | null; // FeedbackWhereUniqueInput

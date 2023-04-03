@@ -7,6 +7,7 @@ import KPI from "./KPI";
 import BotProgress from "./BotProgress";
 import ActiveStudents from "./ActiveStudents";
 import EmptyOrders from "./EmptyOrders";
+import SendEmailReminders from "./SendEmailReminders";
 
 const Styles = styled.div`
   display: flex;
@@ -119,6 +120,7 @@ const Progress = (props) => {
   return (
     <Styles>
       <Container>
+        <SendEmailReminders />
         <h3>Active students</h3>
         <ActiveStudents />
         <h3>Empty orders</h3>

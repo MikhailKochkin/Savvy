@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -555,11 +555,9 @@ model Post {
   userId      String
   coursePageId String?
   lessonId    String?
-  emailCampaignId String?
   leadin      String?
   user        User         @relation(fields: [userId], references: [id])
-  coursePage  CoursePage?   @relation(fields: [coursePageId], references: [id])
-  emailCampaign EmailCampaign?   @relation(fields: [emailCampaignId], references: [id])
+  coursePage CoursePage?   @relation(fields: [coursePageId], references: [id])
 }
 
 model TeamQuest {
@@ -917,32 +915,16 @@ model UserLevel {
 }
 
 model EmailReminder {
-  id              String      @id @default(cuid())
-  userId          String?
-  user            User?     @relation(fields: [userId], references: [id])
-  coursePageId    String?
-  coursePage      CoursePage? @relation(fields: [coursePageId], references: [id])
-  sendAt          DateTime?
-  status          Int?
-  emailsSent      String[]
-  gap             Int?          @default(1)
-  emailCampaignId String?
-  emailCampaign   EmailCampaign? @relation(fields: [emailCampaignId], references: [id])
-  link            String?
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-}
-
-
-model EmailCampaign {
-  id              String          @id @default(cuid())
-  name            String?
-  content         String
-  emails          Json?
-  emailReminders  EmailReminder[]
-  posts           Post[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id           String      @id @default(cuid())
+  userId       String?
+  user         User?     @relation(fields: [userId], references: [id])
+  coursePageId String?
+  coursePage   CoursePage? @relation(fields: [coursePageId], references: [id])
+  sendAt       DateTime?
+  emailsSent   String[]
+  link         String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model Exam {
