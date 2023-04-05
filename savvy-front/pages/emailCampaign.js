@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UpdateEmailCampaign from "../components/UpdateEmailCampaign";
 import CreateEmailCampaign from "../components/CreateEmailCampaign";
-
+import CreateEmailReminder from "../components/CreateEmailReminder";
 const EmailCampaign = (props) => {
   const [campaignId, setCampaignId] = useState("");
 
@@ -15,6 +15,7 @@ const EmailCampaign = (props) => {
 
   return (
     <div>
+      <CreateEmailReminder />
       <CreateEmailCampaign />
       <form onSubmit={handleSubmit}>
         <label htmlFor="campaignId">Campaign ID:</label>

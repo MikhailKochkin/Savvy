@@ -137,6 +137,7 @@ const BotSession = (props) => {
                     <li>{values.level}</li>
                     <li>{values.id}</li>
                     <li>{values.name}</li>
+                    {/* <li>{values.status}</li> */}
 
                     <div>{s.journey.join(", ")}</div>
                     <div>
@@ -188,6 +189,7 @@ const BotSession = (props) => {
                   <li>{values.level}</li>
                   <li>{values.id}</li>
                   <li>{values.name}</li>
+                  {/* <li>{values.status}</li> */}
 
                   <div>{s.journey.join(", ")}</div>
                   {/* <div>
@@ -235,6 +237,8 @@ const BotSession = (props) => {
                     <li>{values.level}</li>
                     <li>{values.id}</li>
                     <li>{values.name}</li>
+                    <li>{values.status}</li>
+
                     <div>
                       <b>Оценка:</b> {s.rating}
                     </div>

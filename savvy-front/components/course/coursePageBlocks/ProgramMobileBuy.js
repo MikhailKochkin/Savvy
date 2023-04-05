@@ -4,11 +4,13 @@ import { useMutation, gql } from "@apollo/client";
 import Modal from "styled-react-modal";
 import { useTranslation } from "next-i18next";
 import Router from "next/router";
+import tinkoff from "@tcb-web/create-credit";
 
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
+import { shopId, showcaseId } from "../../../config";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -98,6 +100,12 @@ const Styles = styled.div`
       border: 1px solid #6e6c6d;
     }
   }
+  .guarantee {
+    font-size: 1.4rem;
+    color: #4b5563;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 `;
 
 const ButtonBuy = styled.button`
@@ -111,6 +119,23 @@ const ButtonBuy = styled.button`
   outline: 0;
   cursor: pointer;
   font-size: 1.8rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #e3e4ec;
+  }
+`;
+
+const ButtonBuySmall = styled.button`
+  width: 90%;
+  height: 48px;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 2px solid #252f3f;
+  background: none;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.4rem;
   transition: ease-in 0.2s;
   &:hover {
     background-color: #e3e4ec;
@@ -142,13 +167,9 @@ const ButtonOpen = styled.a`
 
 const Info = styled.div`
   width: 90%;
-  .guarantee {
-    font-size: 1.3rem;
-    color: #4b5563;
-    text-align: center;
-  }
+
   .details {
-    margin-top: 25px;
+    margin-top: 10px;
     width: 100%;
     div {
       text-align: center;
@@ -253,14 +274,35 @@ const ProgramMobileBuy = (props) => {
   //   );
   const toggleModal = (e) => setIsOpen(!isOpen);
 
-  //   const addPromo = (val) => {
-  //     props.coursePage.promocode.promocodes.map((p) => {
-  //       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
-  //         setPrice(price * p.value);
-  //         setIsPromo(true);
-  //       }
-  //     });
-  //   };
+  const getInstallments = () => {
+    tinkoff.create({
+      shopId: shopId,
+      showcaseId: showcaseId,
+      items: [
+        {
+          name: props.program.title,
+          price: props.program.discountPrice
+            ? props.program.discountPrice
+            : props.program.price,
+          quantity: 1,
+        },
+      ],
+      sum: props.program.discountPrice
+        ? props.program.discountPrice
+        : props.program.price,
+      promoCode: "installment_0_0_9_9,8",
+    });
+    if (me) {
+      createOrder({
+        variables: {
+          coursePageId: coursePage.id,
+          price: parseInt(price),
+          userId: me.id,
+          comment: "Заявка на рассрочку",
+        },
+      });
+    }
+  };
 
   const [
     updateOrderAuto,
@@ -330,6 +372,8 @@ const ProgramMobileBuy = (props) => {
       >
         {t("start_open_lesson")}
       </ButtonOpen>
+      <div className="guarantee">{t("guarantee")}</div>
+
       <ButtonBuy
         id="mobile_coursePage_buy_button"
         onClick={async (e) => {
@@ -354,8 +398,17 @@ const ProgramMobileBuy = (props) => {
       >
         {loading_data ? `...` : t("buy")}
       </ButtonBuy>
+      <ButtonBuySmall
+        id="mobile_coursePage_buy_button"
+        onClick={(e) => getInstallments()}
+      >
+        Купить в рассрочку за{" "}
+        {parseInt(
+          (program.discountPrice ? program.discountPrice : program.price) / 9
+        )}{" "}
+        ₽ / мес
+      </ButtonBuySmall>
       <Info>
-        <div className="guarantee">{t("guarantee")}</div>
         <div className="details">
           {/* {installments && (
             <div className="">

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import moment from "moment";
 import renderHTML from "react-render-html";
+import dynamic from "next/dynamic";
 
 import { useUser } from "../User";
 import ProgramATF from "./coursePageBlocks/ProgramATF";
@@ -13,9 +14,7 @@ import ProgramSyllabus from "./coursePageBlocks/ProgramSyllabus";
 import SellingPoints from "./coursePageBlocks/SellingPoints";
 import ProgramTeachers from "./coursePageBlocks/ProgramTeachers";
 import Reviews from "./coursePageBlocks/Reviews";
-import ProgramAction from "./coursePageBlocks/ProgramAction";
 import MobileAction from "./coursePageBlocks/MobileAction";
-import ProgramMobileBuy from "./coursePageBlocks/ProgramMobileBuy";
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import ProgramBottomLine from "./coursePageBlocks/ProgramBottomLine";
@@ -125,6 +124,22 @@ const Money = styled.div`
   /* background: #1c1d1f; */
 `;
 
+const DynamicProgramAction = dynamic(
+  import("./coursePageBlocks/ProgramAction"),
+  {
+    loading: () => <p>...</p>,
+    ssr: false,
+  }
+);
+
+const DynamicProgramMobileBuy = dynamic(
+  import("./coursePageBlocks/ProgramMobileBuy"),
+  {
+    loading: () => <p>...</p>,
+    ssr: false,
+  }
+);
+
 const NewCoursePage = (props) => {
   const { loading, error, data } = useQuery(SINGLE_PROGRAM_QUERY, {
     variables: { id: props.id },
@@ -149,7 +164,7 @@ const NewCoursePage = (props) => {
           {data && !loading && (
             <>
               {width < 880 && (
-                <ProgramMobileBuy program={data.program} me={me} />
+                <DynamicProgramMobileBuy program={data.program} me={me} />
               )}
               {width < 880 && <MobileAction coursePage={data.program} />}
               <Goal coursePage={data.program} />
@@ -165,7 +180,7 @@ const NewCoursePage = (props) => {
         </Main>
         <Money>
           {!loading && data && width > 880 && (
-            <ProgramAction me={me} program={data.program} />
+            <DynamicProgramAction me={me} program={data.program} />
           )}
         </Money>
       </Container>

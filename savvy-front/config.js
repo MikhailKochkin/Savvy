@@ -2,6 +2,8 @@ export const endpoint = `http://localhost:4444/graphql`;
 export const prodEndpoint =
   `https://api.besavvy.app/graphql` || `https://api.besavvy.ru/graphql`;
 export const NEXTAUTH_URL = "http://localhost:7777";
+export const shopId = `e8ec52dc-846a-42e9-9394-8697300599e8`;
+export const showcaseId = `571229ce-512f-4741-a513-4b8180fb4446`;
 
 export const Unis = [
   { "Выберите вуз": "cjyimfz2e00lp07174jpder3m" },

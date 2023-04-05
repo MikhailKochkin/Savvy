@@ -13,7 +13,7 @@
     "deploy": "prisma deploy --env-file variables.env"
   },
   "dependencies": {
-    "@a2seven/yoo-checkout": "^1.1.2",
+    "@a2seven/yoo-checkout": "^1.1.4",
     "@nexus/schema": "^0.19.2",
     "@prisma/client": "^2.12.0",
     "apollo-server": "^2.19.1",
@@ -24,7 +24,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "6.0.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "generate-password": "^1.7.0",
     "graphql": "^15.4.0",
     "graphql-cli": "^4.1.0",
@@ -32,7 +32,7 @@
     "graphql-tools": "^5.0.0",
     "heroku": "^7.38.0",
     "heroku-cli": "^7.0.9",
-    "i": "^0.3.6",
+    "i": "^0.3.7",
     "jsonwebtoken": "8.3.0",
     "nexus": "^1.0.0",
     "nexus-plugin-prisma": "^0.25.0",

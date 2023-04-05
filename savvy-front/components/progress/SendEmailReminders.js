@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import gql from "graphql-tag";
+import moment from "moment";
 
 const GET_EMAIL_REMINDERS = gql`
   query {
@@ -64,22 +65,17 @@ const SendEmailReminders = () => {
 
     const daysDifference = calculateDaysDifference(today, lastUpdatedDate);
 
-    console.log(daysDifference, gap, daysDifference >= gap);
-    console.log(
-      emailsSent.length,
-      emailCampaign.emails.emails.length,
-      emailsSent.length < emailCampaign.emails.emails.length
-    );
-
-    if (emailsSent.length > 0 && daysDifference < 0.4) {
-      return;
-    }
+    // console.log("daysDifference", daysDifference, today, lastUpdatedDate);
+    // console.log("the gap", gap, gap - 0.25, daysDifference);
 
     if (
-      (daysDifference >= gap || emailsSent.length == 0) &&
+      (daysDifference >= gap - 0.25 || emailsSent.length == 0) &&
       emailsSent.length < emailCampaign.emails.emails.length
     ) {
       const emailToSend = emailCampaign.emails.emails[emailsSent.length];
+      // console.log("emailToSend", emailToSend);
+      // console.log("emailReminder", emailReminder);
+
       await updateEmailReminder({
         variables: {
           id: emailReminder.id,
@@ -101,6 +97,8 @@ const SendEmailReminders = () => {
     setShowReminders(!showReminders);
   };
 
+  moment.locale("ru");
+
   return (
     <div>
       <h2>Send Email Reminders</h2>
@@ -120,6 +118,7 @@ const SendEmailReminders = () => {
             (emailReminder) =>
               new Date(emailReminder.createdAt) >= getLastWeekDate()
           )
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Updated sorting function
           .map((emailReminder, index) => (
             <div key={index}>
               <h3>
@@ -131,8 +130,8 @@ const SendEmailReminders = () => {
                 {emailReminder.emailCampaign?.id}
               </p>
               <p>Course page: {emailReminder.coursePage.title}</p>
-              <p>Created at: {emailReminder.createdAt}</p>
-              <p>Emails sent: {emailReminder.sentEmails}</p>
+              <p>Created at: {moment(emailReminder.createdAt).format("LLL")}</p>
+              <p>Emails sent: {emailReminder.emailsSent}</p>
             </div>
           ))}
     </div>

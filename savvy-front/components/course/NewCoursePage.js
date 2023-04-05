@@ -3,6 +3,7 @@ import { useQuery, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
+import dynamic from "next/dynamic";
 
 import { useUser } from "../User";
 import ATF from "./coursePageBlocks/ATF";
@@ -11,13 +12,11 @@ import Syllabus from "./coursePageBlocks/Syllabus";
 import SellingPoints from "./coursePageBlocks/SellingPoints";
 import Teachers from "./coursePageBlocks/Teachers";
 import Reviews from "./coursePageBlocks/Reviews";
-import Action from "./coursePageBlocks/Action";
 import ActionLeads from "./coursePageBlocks/ActionLeads";
 import Prices from "./coursePageBlocks/Prices";
 
 import MobileAction from "./coursePageBlocks/MobileAction";
 import MobileLeads from "./coursePageBlocks/MobileLeads";
-import MobileBuy from "./coursePageBlocks/MobileBuy";
 
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
@@ -25,6 +24,16 @@ import BottomLine from "./coursePageBlocks/BottomLine";
 
 import moment from "moment";
 import renderHTML from "react-render-html";
+
+const DynamicAction = dynamic(import("./coursePageBlocks/Action"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
+
+const DynamicMobileBuy = dynamic(import("./coursePageBlocks/MobileBuy"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
 
 const SINGLE_COURSEPAGE_QUERY = gql`
   query SINGLE_COURSEPAGE_QUERY($id: String!) {
@@ -194,7 +203,7 @@ const NewCoursePage = (props) => {
                 (props.form == "lead" ? (
                   <MobileLeads me={me} coursePage={data.coursePage} />
                 ) : (
-                  <MobileBuy
+                  <DynamicMobileBuy
                     coursePage={data.coursePage}
                     me={me}
                     promocode={props.promocode}
@@ -228,7 +237,7 @@ const NewCoursePage = (props) => {
             (props.form == "lead" ? (
               <ActionLeads me={me} coursePage={data.coursePage} />
             ) : (
-              <Action
+              <DynamicAction
                 promocode={props.promocode}
                 me={me}
                 coursePage={data.coursePage}

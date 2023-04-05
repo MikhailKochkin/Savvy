@@ -11,6 +11,9 @@ import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
+import tinkoff from "@tcb-web/create-credit";
+
+import { shopId, showcaseId } from "../../../config";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -126,6 +129,7 @@ const Contact = styled.div`
   .guarantee {
     font-size: 1.3rem;
     color: #4b5563;
+    margin-bottom: 10px;
   }
   .open {
     line-height: 1.4;
@@ -332,6 +336,23 @@ const ButtonBuy = styled.button`
   }
 `;
 
+const ButtonBuySmall = styled.button`
+  width: 292px;
+  height: 48px;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 2px solid #252f3f;
+  background: none;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.4rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #e3e4ec;
+  }
+`;
+
 const OpenCourse = styled.button`
   width: 100%;
   width: 292px;
@@ -388,30 +409,21 @@ const StyledModal = Modal.styled`
 `;
 
 const Action = (props) => {
+  const { me, program } = props;
+
   const [isOpen, setIsOpen] = useState(false);
   const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
 
   const [isPromo, setIsPromo] = useState(false);
+  const [price, setPrice] = useState(
+    program.discountPrice ? program.discountPrice : program.price
+  );
   const { t } = useTranslation("coursePage");
   const router = useRouter();
 
   const toggleModal = (e) => setIsOpen(!isOpen);
   const changeState = (dataFromChild) => setAuth(dataFromChild);
-  //   const addPromo = (val) => {
-  //     props.coursePage.promocode.promocodes.map((p) => {
-  //       if (p.name.toLowerCase() == val.toLowerCase() && isPromo == false) {
-  //         setPrice(price * p.value);
-  //         setIsPromo(true);
-  //         setPromo(val);
-  //       }
-  //     });
-  //   };
-
-  //   const { asPath } = useRouter();
-
-  //   const [createBusinessClient, { data, loading, error }] =
-  //     useMutation(CREATE_CLIENT);
 
   const [
     createOrder,
@@ -432,8 +444,6 @@ const Action = (props) => {
       "me", // Query name
     ],
   });
-
-  const { me, program } = props;
 
   const first_course = [...program.coursePages].sort(
     (a, b) => a.numInCareerTrack - b.numInCareerTrack
@@ -460,6 +470,26 @@ const Action = (props) => {
     return five;
   };
 
+  const getInstallments = () => {
+    tinkoff.create({
+      shopId: shopId,
+      showcaseId: showcaseId,
+      items: [{ name: props.program.title, price: price, quantity: 1 }],
+      sum: price,
+      promoCode: "installment_0_0_9_9,8",
+    });
+    if (me) {
+      createOrder({
+        variables: {
+          coursePageId: first_course.id,
+          price: parseInt(price),
+          userId: me.id,
+          comment: "Заявка на рассрочку",
+        },
+      });
+    }
+  };
+
   const total_lessons_number = program.coursePages.reduce(function (acc, obj) {
     return acc + obj.lessons.length;
   }, 0);
@@ -467,21 +497,7 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Contact>
-          {!program.discountPrice && (
-            <div className="price">{program.price} ₽</div>
-          )}
-          {program.discountPrice && (
-            <div className="price">
-              <div>
-                {program.discountPrice}{" "}
-                <span className="discount">{program.price}</span> ₽
-              </div>
-              <div className="bubble">
-                -{100 - parseInt((program.discountPrice / program.price) * 100)}
-                %
-              </div>
-            </div>
-          )}
+          <div className="price">{price} ₽</div>
 
           <ButtonOpen
             id="coursePage_to_demolesson"
@@ -501,6 +517,7 @@ const Action = (props) => {
           >
             {t("start_open_lesson")}
           </ButtonOpen>
+          <div className="guarantee">{t("guarantee")}</div>
 
           <ButtonBuy
             id="coursePage_buy_button"
@@ -513,9 +530,7 @@ const Action = (props) => {
                 const res = await createOrder({
                   variables: {
                     coursePageId: first_course.id,
-                    price: program.discountPrice
-                      ? program.discountPrice
-                      : program.price,
+                    price: price,
                     userId: me.id,
                     promocode: promo,
                   },
@@ -526,7 +541,12 @@ const Action = (props) => {
           >
             {loading_data ? `...` : t("buy")}
           </ButtonBuy>
-          <div className="guarantee">{t("guarantee")}</div>
+          <ButtonBuySmall
+            id="coursePage_buy_button"
+            onClick={(e) => getInstallments()}
+          >
+            Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
+          </ButtonBuySmall>
           <div className="details">
             {/* {installments && (
               <div className="">
@@ -538,9 +558,9 @@ const Action = (props) => {
               ◼️ {total_lessons_number} {t("online_lessons")}
               {/* {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")} */}
             </div>
-            {program.price > 4000 && (
+            {/* {program.price > 4000 && (
               <div className="">◼️ {t("program_webinars")}</div>
-            )}
+            )} */}
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
@@ -619,3 +639,14 @@ const Action = (props) => {
 };
 
 export default Action;
+
+// {!program.discountPrice && <div className="price">{price} ₽</div>}
+//   <div className="price">
+//     <div>
+//       {program.discountPrice}{" "}
+//       <span className="discount">{price}</span> ₽
+//     </div>
+//     <div className="bubble">
+//       -{100 - parseInt((program.discountPrice / price) * 100)}%
+//     </div>
+//   </div>

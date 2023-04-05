@@ -11,6 +11,7 @@ import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import renderHTML from "react-render-html";
+import tinkoff from "@tcb-web/create-credit";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -551,6 +552,25 @@ const Action = (props) => {
     { data: order_data, loading: loading_data, error: error_data },
   ] = useMutation(CREATE_ORDER_MUTATION);
 
+  const getInstallments = () => {
+    tinkoff.create({
+      shopId: "e8ec52dc-846a-42e9-9394-8697300599e8",
+      showcaseId: "571229ce-512f-4741-a513-4b8180fb4446",
+      items: [{ name: props.coursePage.title, price: price, quantity: 1 }],
+      sum: price,
+    });
+    if (me) {
+      createOrder({
+        variables: {
+          coursePageId: coursePage.id,
+          price: parseInt(price),
+          userId: me.id,
+          comment: "Заявка на рассрочку",
+        },
+      });
+    }
+  };
+
   const d = props.data;
   const { me } = props;
 
@@ -745,101 +765,7 @@ const Action = (props) => {
                   </div>
                 </>
               )}
-              {step == "installments" && (
-                <>
-                  <form>
-                    <div className="names">
-                      <input
-                        className="data"
-                        id="name"
-                        placeholder="Имя"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                      <input
-                        className="data"
-                        id="surname"
-                        placeholder="Фамилия"
-                        onChange={(e) => setSurname(e.target.value)}
-                      />
-                    </div>
-                    <input
-                      id="tel"
-                      className="data"
-                      type="tel"
-                      placeholder="+7 (999) 999-99-99"
-                      onChange={(e) => setNumber(e.target.value)}
-                    />
-                    <input
-                      id="email"
-                      className="data"
-                      type="email"
-                      placeholder="Электронная почта"
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <button
-                      type="submit"
-                      id="english_application_button1"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        if (!EmailValidator.validate(email)) {
-                          alert("Неправильный имейл");
-                        } else if (number.length < 7) {
-                          alert("Неправильный номер мобильнного телефона");
-                        } else {
-                          if (props.data.price.course == "school") {
-                            ReactGA.event({
-                              category: "Litigation Apply Button Click",
-                              action: "Click",
-                            });
-                          } else if (props.data.price.course == "corp") {
-                            ReactGA.event({
-                              category: "Corp Apply Button Click",
-                              action: "Click",
-                            });
-                          }
-                          const res = await createBusinessClient({
-                            variables: {
-                              type: asPath ? asPath : "Unknown",
-                              email,
-                              name: name + " " + surname,
-                              number,
-                              communication_medium: props.data.price.course,
-                              comment: "Рассрочка",
-                            },
-                          });
-                          Router.push({
-                            pathname: "/hello",
-                            query: {
-                              name: name + " " + surname,
-                              email: email,
-                              number: number,
-                            },
-                          });
-                        }
-                      }}
-                    >
-                      {loading ? "Готовим..." : "Оставить заявку"}
-                    </button>
-                  </form>
-                  <div id="legal">
-                    Нажимая кнопку, принимаю условия{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=privacy"
-                      target="_blank"
-                    >
-                      политики
-                    </a>{" "}
-                    и{" "}
-                    <a
-                      href="https://besavvy.app/legal?name=offer"
-                      target="_blank"
-                    >
-                      оферты
-                    </a>
-                    .
-                  </div>
-                </>
-              )}
+
               {step == "buy" && (
                 <form>
                   <div id="explainer">

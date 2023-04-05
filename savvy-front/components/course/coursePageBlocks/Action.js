@@ -11,6 +11,8 @@ import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
+import tinkoff from "@tcb-web/create-credit";
+import { shopId, showcaseId } from "../../../config";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -105,7 +107,9 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-
+  .price_div {
+    margin-bottom: 10px;
+  }
   .choose {
     width: 292px;
     height: 42px;
@@ -116,7 +120,7 @@ const Container = styled.div`
     margin-bottom: 10px;
     outline: 0;
     cursor: pointer;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     transition: ease-in 0.2s;
     display: flex;
     flex-direction: row;
@@ -134,7 +138,7 @@ const Container = styled.div`
     outline: 0;
     border: none;
     cursor: pointer;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     transition: ease-in 0.2s;
     display: flex;
     flex-direction: row;
@@ -364,10 +368,27 @@ const ButtonBuy = styled.button`
   font-family: Montserrat;
   border: 2px solid #252f3f;
   background: none;
-  margin: 10px 0;
+  margin-bottom: 10px;
   outline: 0;
   cursor: pointer;
   font-size: 1.8rem;
+  transition: ease-in 0.2s;
+  &:hover {
+    background-color: #e3e4ec;
+  }
+`;
+
+const ButtonBuySmall = styled.button`
+  width: 292px;
+  height: 42px;
+  padding: 2%;
+  font-family: Montserrat;
+  border: 2px solid #252f3f;
+  background: none;
+  margin-bottom: 10px;
+  outline: 0;
+  cursor: pointer;
+  font-size: 1.4rem;
   transition: ease-in 0.2s;
   &:hover {
     background-color: #e3e4ec;
@@ -487,6 +508,26 @@ const Action = (props) => {
     ],
   });
 
+  const getInstallments = () => {
+    tinkoff.create({
+      shopId: shopId,
+      showcaseId: showcaseId,
+      items: [{ name: props.coursePage.title, price: price, quantity: 1 }],
+      sum: price,
+      promoCode: "installment_0_0_9_9,8",
+    });
+    if (me) {
+      createOrder({
+        variables: {
+          coursePageId: coursePage.id,
+          price: parseInt(price),
+          userId: me.id,
+          comment: "Заявка на рассрочку",
+        },
+      });
+    }
+  };
+
   const d = props.data;
   const { me, coursePage } = props;
   let my_orders = [];
@@ -583,7 +624,9 @@ const Action = (props) => {
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
-            <div className="">◼️ {price ? `${price} ₽` : t("free")}</div>
+            <div className="price_div">
+              ◼️ {price ? `${price} ₽` : t("free")}
+            </div>
 
             {/* {props.coursePage.promocode && (
               <div id="promo">
@@ -633,6 +676,17 @@ const Action = (props) => {
             )}
             {props.coursePage.courseType == "FORMONEY" && (
               <>
+                {props.coursePage.prices &&
+                  props.coursePage.prices.prices &&
+                  props.coursePage.prices.prices.length > 1 && (
+                    <div className="choose">
+                      <select onChange={(e) => setPrice(e.target.value)}>
+                        {props.coursePage.prices.prices.map((p) => (
+                          <option value={p.price}>{p.name} тариф</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 <ButtonBuy
                   id="coursePage_buy_button"
                   onClick={async (e) => {
@@ -659,17 +713,12 @@ const Action = (props) => {
                     (loading_data ? `...` : t("buy_installments"))}
                   {!installments && (loading_data ? `...` : t("buy"))}
                 </ButtonBuy>
-                {props.coursePage.prices &&
-                  props.coursePage.prices.prices &&
-                  props.coursePage.prices.prices.length > 1 && (
-                    <div className="choose">
-                      <select onChange={(e) => setPrice(e.target.value)}>
-                        {props.coursePage.prices.prices.map((p) => (
-                          <option value={p.price}>{p.name} тариф</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+                <ButtonBuySmall
+                  id="coursePage_buy_button"
+                  onClick={(e) => getInstallments()}
+                >
+                  Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
+                </ButtonBuySmall>
               </>
             )}
           </div>
