@@ -10,7 +10,6 @@ import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
 import { CURRENT_USER_QUERY } from "../../User";
-import { shopId, showcaseId } from "../../../config";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -147,7 +146,7 @@ const ButtonBuy = styled.button`
   font-family: Montserrat;
   border: 2px solid #252f3f;
   background: none;
-  margin-bottom: 10px;
+  margin: 10px 0;
   outline: 0;
   cursor: pointer;
   font-size: 1.8rem;
@@ -382,8 +381,8 @@ const MobileBuy = (props) => {
 
   const getInstallments = () => {
     tinkoff.create({
-      shopId: shopId,
-      showcaseId: showcaseId,
+      shopId: process.env.NEXT_PUBLIC_SHOP_ID,
+      showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
       items: [{ name: props.coursePage.title, price: price, quantity: 1 }],
       sum: price,
       promoCode: "installment_0_0_9_9,8",

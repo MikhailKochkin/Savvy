@@ -13,8 +13,6 @@ import { CURRENT_USER_QUERY } from "../../User";
 import { useTranslation } from "next-i18next";
 import tinkoff from "@tcb-web/create-credit";
 
-import { shopId, showcaseId } from "../../../config";
-
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
     $coursePageId: String!
@@ -472,8 +470,8 @@ const Action = (props) => {
 
   const getInstallments = () => {
     tinkoff.create({
-      shopId: shopId,
-      showcaseId: showcaseId,
+      shopId: process.env.NEXT_PUBLIC_SHOP_ID,
+      showcaseId: process.env.NEXT_PUBLIC_SHOWCASE_ID,
       items: [{ name: props.program.title, price: price, quantity: 1 }],
       sum: price,
       promoCode: "installment_0_0_9_9,8",
