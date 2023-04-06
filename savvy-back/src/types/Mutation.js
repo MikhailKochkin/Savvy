@@ -744,17 +744,15 @@ const Mutation = mutationType({
           where: { id: theEmailReminder.userId },
         });
 
-        // console.log("args", args.emailsSent, args.emailsSent.length);
-        // console.log("our_user", our_user);
-
         let our_email =
           theEmailCampaign.emails.emails[args.emailsSent.length - 1];
 
         const SendGenericEmail = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: our_user.email,
-          Subject: `${our_user.name}, ${our_email.header}`,
+          Subject: `${our_email.header}`,
           HtmlBody: GenericEmail.GenericEmail(our_email.text),
+          Tag: "funnel_email",
         });
 
         return emailReminder;
@@ -804,6 +802,7 @@ const Mutation = mutationType({
             args.subject ? args.subject : "информация от BeSavvy 👋🏻"
           }`,
           HtmlBody: GenericEmail.GenericEmail(args.text),
+          Tag: "communication_email",
         });
 
         if (args.comment == "offer") {
@@ -2545,6 +2544,7 @@ const Mutation = mutationType({
             From: "Mikhail@besavvy.app",
             To: author[0].email,
             Subject: "Новое сообщение на форуме",
+            Tag: "internal_info_email",
             HtmlBody: AuthorNotification(
               lesson[0].name,
               lesson[0].coursePage.title,
@@ -2673,6 +2673,7 @@ const Mutation = mutationType({
           From: "Mikhail@besavvy.app",
           To: student.email,
           Subject: "BeSavvy: ответили на ваш вопрос",
+          Tag: "lesson_info_email",
           HtmlBody: CommentEmail.CommentEmail(
             student.name,
             lesson.name,
@@ -3165,6 +3166,7 @@ const Mutation = mutationType({
           From: "Mikhail@besavvy.app",
           To: "Mi.Kochkin@ya.ru",
           Subject: "Новый клиент",
+          Tag: "internal_business_email",
           HtmlBody: newOrderEmail(
             user.name,
             user.surname,
@@ -3210,6 +3212,7 @@ const Mutation = mutationType({
           From: "Mikhail@besavvy.app",
           To: "Mikhail@besavvy.app",
           Subject: "Новый клиент",
+          Tag: "interenal_business_email",
           HtmlBody: newOrderEmail(
             user.name,
             user.surname,
@@ -3784,6 +3787,7 @@ const Mutation = mutationType({
           From: "Mikhail@besavvy.app",
           To: "Mikhail@besavvy.app",
           Subject: "Новая заявка на курс",
+          Tag: "internal_business_email",
           HtmlBody: makeANiceEmail(
             `Новая заявка на курс. Вот данные: ${args.name}, ${args.email}, ${args.number}`
           ),

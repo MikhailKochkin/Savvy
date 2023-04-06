@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import moment from "moment";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 const GET_EMAIL_REMINDERS = gql`
   query {
@@ -42,6 +44,8 @@ const SendEmailReminders = () => {
   const { data, loading, error } = useQuery(GET_EMAIL_REMINDERS);
   const [updateEmailReminder] = useMutation(UPDATE_EMAIL_REMINDER);
   const [showReminders, setShowReminders] = useState(false);
+  const [filter, setFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState(new Date());
 
   const getLastWeekDate = () => {
     const date = new Date();
@@ -74,7 +78,7 @@ const SendEmailReminders = () => {
     ) {
       const emailToSend = emailCampaign.emails.emails[emailsSent.length];
       // console.log("emailToSend", emailToSend);
-      // console.log("emailReminder", emailReminder);
+      // console.log("emailReminder", emailReminder.emailCampaign.name);
 
       await updateEmailReminder({
         variables: {
@@ -99,6 +103,34 @@ const SendEmailReminders = () => {
 
   moment.locale("ru");
 
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const filteredReminders = data
+    ? data.emailReminders.filter(
+        (emailReminder) =>
+          new Date(emailReminder.createdAt) >= getLastWeekDate() &&
+          (dateFilter === null ||
+            new Date(emailReminder.createdAt).toDateString() ===
+              dateFilter.toDateString()) &&
+          (emailReminder.coursePage.title
+            .toLowerCase()
+            .includes(filter.toLowerCase()) ||
+            emailReminder.emailCampaign?.name
+              .toLowerCase()
+              .includes(filter.toLowerCase()))
+      )
+    : [];
+
+  const handleDateFilterChange = (date) => {
+    setDateFilter(date);
+  };
+
+  const removeDateFilter = () => {
+    setDateFilter(null);
+  };
+
   return (
     <div>
       <h2>Send Email Reminders</h2>
@@ -110,15 +142,30 @@ const SendEmailReminders = () => {
       <button onClick={toggleRemindersList} disabled={loading}>
         {showReminders ? "Hide Reminders" : "Show Reminders"}
       </button>
-      {/* {console.log("data.emailReminders", data.emailReminders)} */}
+      <div>
+        <label htmlFor="filter">Filter by Title or Campaign:</label>
+        <input
+          type="text"
+          id="filter"
+          value={filter}
+          onChange={handleFilterChange}
+        />
+      </div>
+      <div>
+        <label htmlFor="dateFilter">Filter by Date:</label>
+        <DatePicker
+          id="dateFilter"
+          selected={dateFilter}
+          onChange={handleDateFilterChange}
+        />
+      </div>
+      <button onClick={removeDateFilter} disabled={loading}>
+        Remove Date Filter
+      </button>
+      <p>Total reminders: {filteredReminders.length}</p>
       {showReminders &&
-        data &&
-        data.emailReminders
-          .filter(
-            (emailReminder) =>
-              new Date(emailReminder.createdAt) >= getLastWeekDate()
-          )
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Updated sorting function
+        filteredReminders
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .map((emailReminder, index) => (
             <div key={index}>
               <h3>

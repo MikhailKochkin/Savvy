@@ -69,6 +69,12 @@ const Styles = styled.div`
   @media (max-width: 800px) {
     padding-top: 10px;
   }
+  .divider {
+    /* border: none; */
+    height: 2px;
+    /* background-color: #ccc; */
+    margin: 30px 0;
+  }
   img {
     display: block;
     width: 100%;
@@ -305,6 +311,11 @@ const Feedback = styled.div`
 const Data = styled.div``;
 
 const Post = (props) => {
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
   const [
     updatePost,
     { data: updated_data, loading: updated_loading, error: updated_error },

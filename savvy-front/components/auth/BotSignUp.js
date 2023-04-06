@@ -5,8 +5,9 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import Loading from "../Loading";
+import renderHTML from "react-render-html";
 
+import Loading from "../Loading";
 import { CURRENT_USER_QUERY } from "../User";
 import Error from "../ErrorMessage";
 
@@ -167,6 +168,15 @@ const TextBar = styled.div`
     p {
       margin: 0px 10px;
       margin-top: 10px;
+    }
+    ul {
+      list-style: filled circle;
+      margin-left: 20px;
+    }
+
+    li {
+      margin-left: 10px;
+      margin-bottom: 5px;
     }
     img {
       width: 100%;
@@ -367,7 +377,7 @@ const Signup = (props) => {
     <>
       <TextBar className="Test">
         <div className="question_box">
-          <div className="question_text">{text}</div>
+          <div className="question_text">{renderHTML(text)}</div>
           <IconBlock>
             <img className="icon" src="../../static/misha_new.webp" />
             <div className="name">Михаил</div>
