@@ -144,6 +144,17 @@ const Styles = styled.div`
     background-color: #f2fafb;
     border-radius: 5px;
   }
+  .article {
+    font-size: 1.6rem;
+    width: 100%;
+    margin: 1% 1%;
+    padding: 1% 4%;
+    border-left: 3px solid #0094c6;
+    /* line-height: 1.6; */
+    p {
+      margin: 10px 0;
+    }
+  }
   .date {
     font-weight: bold;
     font-size: 1.6rem;
