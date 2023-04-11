@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import dynamic from "next/dynamic";
+
+const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
 
 const Container = styled.div`
   display: flex;
@@ -193,6 +199,10 @@ const UpdateEmailCampaign = ({ campaignId }) => {
     });
   };
 
+  const myCallBack = (value, name, index) => {
+    handleTemplateTextChange(index, value);
+  };
+
   if (queryLoading) return <p>Loading...</p>;
   if (queryError) return <p>Error: {queryError.message}</p>;
 
@@ -240,11 +250,17 @@ const UpdateEmailCampaign = ({ campaignId }) => {
               <Label htmlFor={`template-${i}`}>Template {i + 1}:</Label>
               <br />
 
-              <Textarea
+              <DynamicLoadedEditor
+                id={`template-${i}`}
+                getEditorText={myCallBack}
+                value={emailTemplates[i]?.text || ""}
+              />
+
+              {/* <Textarea
                 id={`template-${i}`}
                 value={emailTemplates[i]?.text || ""}
                 onChange={(e) => handleTemplateTextChange(i, e.target.value)}
-              />
+              /> */}
             </div>
           ))}
           <Button type="submit" disabled={mutationLoading}>

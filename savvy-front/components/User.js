@@ -69,6 +69,12 @@ const CURRENT_USER_QUERY = gql`
       level {
         id
         level
+        # consumedContent
+        # myProgress
+        # learningStreak
+        # growthAreas {
+        #   id
+        # }
       }
       studentFeedback {
         id

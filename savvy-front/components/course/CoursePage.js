@@ -175,18 +175,6 @@ const CoursePage = (props) => {
             </CourseInfo>
             <LessonsData me={me} id={props.id} />
 
-            {/* {me && (
-              <Certificate
-                completed={(maxes.length / coursePage.lessons.length) * 100}
-                have_cert={have_cert}
-                studentId={me.id}
-                student={me}
-                coursePageId={coursePage.id}
-                coursePage={coursePage}
-                createdAt={have_cert ? cert.createdAt : null}
-                certId={have_cert ? cert.id : null}
-              />
-            )} */}
             {/* <Details>
               {data.coursePage.audience && (
                 <div className="info">

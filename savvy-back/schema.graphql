@@ -547,6 +547,16 @@ input ConstructionWhereUniqueInput {
   id: String
 }
 
+input ConsumedContent {
+  id: String
+  tags: [String]
+  type: String
+}
+
+input ConsumedContentList {
+  consumedContentList: [ConsumedContent]
+}
+
 type CoursePage {
   applications(after: ApplicationWhereUniqueInput, before: ApplicationWhereUniqueInput, first: Int, last: Int): [Application!]!
   audience: String
@@ -1224,6 +1234,48 @@ input ForumWhereInput {
   userId: StringNullableFilter
 }
 
+type GrowthArea {
+  createdAt: DateTime!
+  id: String!
+  marks: Json
+  maxProgress: Int
+  name: String!
+  updatedAt: DateTime!
+  userLevels(after: UserLevelWhereUniqueInput, before: UserLevelWhereUniqueInput, first: Int, last: Int): [UserLevel!]!
+}
+
+input GrowthAreaListRelationFilter {
+  every: GrowthAreaWhereInput
+  none: GrowthAreaWhereInput
+  some: GrowthAreaWhereInput
+}
+
+input GrowthAreaOrderByInput {
+  createdAt: SortOrder
+  id: SortOrder
+  marks: SortOrder
+  maxProgress: SortOrder
+  name: SortOrder
+  updatedAt: SortOrder
+}
+
+input GrowthAreaWhereInput {
+  AND: [GrowthAreaWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  marks: JsonNullableFilter
+  maxProgress: IntNullableFilter
+  name: StringFilter
+  NOT: [GrowthAreaWhereInput!]
+  OR: [GrowthAreaWhereInput!]
+  updatedAt: DateTimeFilter
+  userLevels: UserLevelListRelationFilter
+}
+
+input GrowthAreaWhereUniqueInput {
+  id: String
+}
+
 input IntFilter {
   equals: Int
   gt: Int
@@ -1541,6 +1593,16 @@ enum Level {
   STANDARD
 }
 
+input Mark {
+  level: Int
+  message: String
+  name: String
+}
+
+input MarksList {
+  marksList: [Mark]
+}
+
 type Message {
   comment: String
   coursePageId: String
@@ -1667,6 +1729,7 @@ type Mutation {
   createEmailReminder(coursePageId: String, emailCampaignId: String, gap: Int, link: String, userId: String): EmailReminder
   createFeedback(lessonId: String, studentId: String, text: String): Feedback
   createForum(lessonId: String, text: String): Forum
+  createGrowthArea(marks: MarksList, maxProgress: Int, name: String!): GrowthArea
   createLawrdle(active: Boolean, authorId: String, buttonText: String, coursePageId: String, link: String, story: String, tags: [String], word: String): Lawrdle
   createLesson(coursePageID: String, description: String, name: String, number: Int, text: String): Lesson
   createLessonResult(lessonID: String, visitsNumber: Int): LessonResult
@@ -1696,13 +1759,17 @@ type Mutation {
   createTextEditor(lessonId: String, name: String, text: String, totalMistakes: Int): TextEditor
   createTextEditorResult(attempts: Int, correct: String, guess: String, lessonId: String, result: Boolean, textEditorId: String, type: String, wrong: String): TextEditorResult
   createUseful(buttonText: String, header: String, image: String, link: String, name: String, tags: [String]): Useful
+  createUserLevel(consumedContent: ConsumedContentList, isProgressPublic: Boolean, level: Float, myProgress: MyProgressList): UserLevel
   deleteChat(id: String): Chat
   deleteClause(id: String): Clause
   deleteClient(id: String): BusinessClient
   deleteConstruction(id: String): Construction
   deleteDocument(id: String): Document
   deleteEmailCampaign(id: String): EmailCampaign
+  deleteEmailReminder(id: String): EmailReminder
+  deleteGrowthArea(id: String!): GrowthArea
   deleteLesson(id: String): Lesson
+  deleteLessonResult(id: String): LessonResult
   deleteNewTest(id: String): NewTest
   deleteNote(id: String): Note
   deleteOrder(id: String): Order
@@ -1712,6 +1779,7 @@ type Mutation {
   deleteShot(id: String): Shot
   deleteStatement(id: String): Statement
   deleteTextEditor(id: String): TextEditor
+  deleteUserLevel(id: String): UserLevel
   enrollOnCourse(coursePageId: String, id: String): User
   publishCourse(id: String, published: Boolean): CoursePage
   recordSession(id: String, traffic_sources: Visits): User
@@ -1737,6 +1805,7 @@ type Mutation {
   updateEmailCampaign(content: String, emails: EmailsList, id: String, name: String): EmailCampaign
   updateEmailReminder(emailsSent: [String], id: String): EmailReminder
   updateForum(id: String, text: String): Forum
+  updateGrowthArea(id: String!, marks: MarksList, maxProgress: Int, name: String): GrowthArea
   updateLesson(assignment: Boolean, audience: String, challenge_num: Int, change: String, description: String, hasSecret: Boolean, id: String, name: String, number: Int, open: Boolean, short_structure: LessonStructure, structure: LessonStructure, tariffs: String, text: String, totalPoints: Int, type: String): Lesson
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
@@ -1756,6 +1825,16 @@ type Mutation {
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
   updateUser(active: Boolean, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
+  updateUserLevel(consumedContent: ConsumedContentList, id: String, isProgressPublic: Boolean, learningStreak: [DateTime], level: Float, myProgress: MyProgressList): UserLevel
+}
+
+input MyProgress {
+  name: String
+  progress: Int
+}
+
+input MyProgressList {
+  progressList: [MyProgress]
 }
 
 input NestedBoolFilter {
@@ -2526,6 +2605,8 @@ type Query {
   emailReminder(where: EmailReminderWhereUniqueInput!): EmailReminder
   emailReminders(after: EmailReminderWhereUniqueInput, before: EmailReminderWhereUniqueInput, first: Int, last: Int, orderBy: [EmailReminderOrderByInput!], where: EmailReminderWhereInput): [EmailReminder!]!
   feedbacks(after: FeedbackWhereUniqueInput, before: FeedbackWhereUniqueInput, first: Int, last: Int, orderBy: [FeedbackOrderByInput!], where: FeedbackWhereInput): [Feedback!]!
+  growthArea(where: GrowthAreaWhereUniqueInput!): GrowthArea
+  growthAreas(after: GrowthAreaWhereUniqueInput, before: GrowthAreaWhereUniqueInput, first: Int, last: Int, orderBy: [GrowthAreaOrderByInput!], where: GrowthAreaWhereInput): [GrowthArea!]!
   lawrdle(where: LawrdleWhereUniqueInput!): Lawrdle
   lawrdles(after: LawrdleWhereUniqueInput, before: LawrdleWhereUniqueInput, first: Int, last: Int, orderBy: [LawrdleOrderByInput!], where: LawrdleWhereInput): [Lawrdle!]!
   lesson(where: LessonWhereUniqueInput!): Lesson
@@ -2558,6 +2639,8 @@ type Query {
   useful(where: UsefulWhereUniqueInput!): Useful
   usefuls(after: UsefulWhereUniqueInput, before: UsefulWhereUniqueInput, first: Int, last: Int, where: UsefulWhereInput): [Useful!]!
   user(where: UserWhereUniqueInput!): User
+  userLevel(where: UserLevelWhereUniqueInput!): UserLevel
+  userLevels(after: UserLevelWhereUniqueInput, before: UserLevelWhereUniqueInput, first: Int, last: Int, orderBy: [UserLevelOrderByInput!], where: UserLevelWhereInput): [UserLevel!]!
   users(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int, orderBy: [UserOrderByInput!], where: UserWhereInput): [User!]!
 }
 
@@ -3529,22 +3612,53 @@ input UserCoursePagesOrderByInput {
 }
 
 type UserLevel {
+  consumedContent: Json
   createdAt: DateTime!
+  growthAreas(after: GrowthAreaWhereUniqueInput, before: GrowthAreaWhereUniqueInput, first: Int, last: Int): [GrowthArea!]!
   id: String!
+  isProgressPublic: Boolean
+  learningStreak: [DateTime!]!
   level: Float
+  myProgress: Json
   updatedAt: DateTime!
   user: User
 }
 
+input UserLevelListRelationFilter {
+  every: UserLevelWhereInput
+  none: UserLevelWhereInput
+  some: UserLevelWhereInput
+}
+
+input UserLevelOrderByInput {
+  consumedContent: SortOrder
+  createdAt: SortOrder
+  id: SortOrder
+  isProgressPublic: SortOrder
+  learningStreak: SortOrder
+  level: SortOrder
+  myProgress: SortOrder
+  updatedAt: SortOrder
+}
+
 input UserLevelWhereInput {
   AND: [UserLevelWhereInput!]
+  consumedContent: JsonNullableFilter
   createdAt: DateTimeFilter
+  growthAreas: GrowthAreaListRelationFilter
   id: StringFilter
+  isProgressPublic: BoolNullableFilter
+  learningStreak: DateTimeNullableListFilter
   level: FloatNullableFilter
+  myProgress: JsonNullableFilter
   NOT: [UserLevelWhereInput!]
   OR: [UserLevelWhereInput!]
   updatedAt: DateTimeFilter
   user: UserWhereInput
+}
+
+input UserLevelWhereUniqueInput {
+  id: String
 }
 
 input UserListRelationFilter {

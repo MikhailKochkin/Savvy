@@ -402,7 +402,6 @@ const LessonsData = (props) => {
       full_modules.push(new_module);
     });
   }
-  console.log("full_modules", full_modules);
 
   return (
     <LessonsInfo>

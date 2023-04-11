@@ -371,6 +371,7 @@ const Post = (props) => {
           post_data.post.coursePage ? post_data.post.coursePage.lessons : [],
           post_data.post.coursePage ? post_data.post.coursePage.id : null
         );
+      if (props.getTags) props.getTags(post_data.post.tags);
       if (props.getLeadIn) props.getLeadIn(post_data.post.leadin);
       if (props.getCampaignId)
         props.getCampaignId(post_data.post.emailCampaignId);

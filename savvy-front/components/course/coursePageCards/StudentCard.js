@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import CreateCertificate from "../CreateCertificate";
 
 const Payment = styled.div`
   display: flex;
@@ -292,11 +293,15 @@ class StudentCard extends Component {
     // );
     // 2. See how many lessons the currents user has attended
     let status = 0;
-    lessonResults.map((res) => (res.progress > 4 ? status++ : status));
+    lessonResults.map((res) => (res.progress > 5 ? status++ : status));
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
     let ratio = (status * 100) / coursePage.lessons.length;
     let left = coursePage.lessons.length - status;
+
+    let my_certificate = me.certificates.find(
+      (certificate) => certificate.coursePage.id === coursePage.id
+    );
     return (
       <Payment>
         {/* <div className="news">
@@ -404,6 +409,19 @@ class StudentCard extends Component {
             )}
           </div>
         )} */}
+        {ratio > 85 && my_certificate && (
+          <button>
+            <a
+              href={`https://besavvy.app/certificate?id=${my_certificate.id}`}
+              target="_blank"
+            >
+              Open my certificate
+            </a>
+          </button>
+        )}
+        {ratio > 85 && !my_certificate && (
+          <CreateCertificate coursePageId={coursePage.id} studentId={me.id} />
+        )}
       </Payment>
     );
   }

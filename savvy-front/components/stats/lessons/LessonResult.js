@@ -51,7 +51,8 @@ const LessonResult = (props) => {
       <li>
         {r.student.name} {r.student.surname} – visits: {r.visitsNumber} –{" "}
         {r.progress} / {props.structure.lessonItems.length} – Score:{" "}
-        {props.lesson.forum &&
+        {props.lesson &&
+        props.lesson.forum &&
         props.lesson.forum.rating.filter((rat) => rat.user.id == r.student.id)
           .length > 0
           ? props.lesson.forum.rating.filter(

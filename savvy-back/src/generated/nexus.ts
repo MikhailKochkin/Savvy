@@ -373,6 +373,14 @@ export interface NexusGenInputs {
   ConstructionWhereUniqueInput: { // input type
     id?: string | null; // String
   }
+  ConsumedContent: { // input type
+    id?: string | null; // String
+    tags?: Array<string | null> | null; // [String]
+    type?: string | null; // String
+  }
+  ConsumedContentList: { // input type
+    consumedContentList?: Array<NexusGenInputs['ConsumedContent'] | null> | null; // [ConsumedContent]
+  }
   CoursePageListRelationFilter: { // input type
     every?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
     none?: NexusGenInputs['CoursePageWhereInput'] | null; // CoursePageWhereInput
@@ -851,6 +859,34 @@ export interface NexusGenInputs {
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
     userId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
   }
+  GrowthAreaListRelationFilter: { // input type
+    every?: NexusGenInputs['GrowthAreaWhereInput'] | null; // GrowthAreaWhereInput
+    none?: NexusGenInputs['GrowthAreaWhereInput'] | null; // GrowthAreaWhereInput
+    some?: NexusGenInputs['GrowthAreaWhereInput'] | null; // GrowthAreaWhereInput
+  }
+  GrowthAreaOrderByInput: { // input type
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    marks?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    maxProgress?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    name?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
+  GrowthAreaWhereInput: { // input type
+    AND?: NexusGenInputs['GrowthAreaWhereInput'][] | null; // [GrowthAreaWhereInput!]
+    createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    marks?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
+    maxProgress?: NexusGenInputs['IntNullableFilter'] | null; // IntNullableFilter
+    name?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    NOT?: NexusGenInputs['GrowthAreaWhereInput'][] | null; // [GrowthAreaWhereInput!]
+    OR?: NexusGenInputs['GrowthAreaWhereInput'][] | null; // [GrowthAreaWhereInput!]
+    updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    userLevels?: NexusGenInputs['UserLevelListRelationFilter'] | null; // UserLevelListRelationFilter
+  }
+  GrowthAreaWhereUniqueInput: { // input type
+    id?: string | null; // String
+  }
   IntFilter: { // input type
     equals?: number | null; // Int
     gt?: number | null; // Int
@@ -1061,6 +1097,14 @@ export interface NexusGenInputs {
     forumId?: string | null; // String
     id?: string | null; // String
   }
+  Mark: { // input type
+    level?: number | null; // Int
+    message?: string | null; // String
+    name?: string | null; // String
+  }
+  MarksList: { // input type
+    marksList?: Array<NexusGenInputs['Mark'] | null> | null; // [Mark]
+  }
   MessageElement: { // input type
     author?: string | null; // String
     image?: string | null; // String
@@ -1126,6 +1170,13 @@ export interface NexusGenInputs {
   }
   Modules: { // input type
     modules?: Array<NexusGenInputs['Module'] | null> | null; // [Module]
+  }
+  MyProgress: { // input type
+    name?: string | null; // String
+    progress?: number | null; // Int
+  }
+  MyProgressList: { // input type
+    progressList?: Array<NexusGenInputs['MyProgress'] | null> | null; // [MyProgress]
   }
   NestedBoolFilter: { // input type
     equals?: boolean | null; // Boolean
@@ -2241,15 +2292,38 @@ export interface NexusGenInputs {
   UserCoursePagesOrderByInput: { // input type
     title?: NexusGenEnums['SortOrder'] | null; // SortOrder
   }
+  UserLevelListRelationFilter: { // input type
+    every?: NexusGenInputs['UserLevelWhereInput'] | null; // UserLevelWhereInput
+    none?: NexusGenInputs['UserLevelWhereInput'] | null; // UserLevelWhereInput
+    some?: NexusGenInputs['UserLevelWhereInput'] | null; // UserLevelWhereInput
+  }
+  UserLevelOrderByInput: { // input type
+    consumedContent?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    id?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    isProgressPublic?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    learningStreak?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    level?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    myProgress?: NexusGenEnums['SortOrder'] | null; // SortOrder
+    updatedAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
+  }
   UserLevelWhereInput: { // input type
     AND?: NexusGenInputs['UserLevelWhereInput'][] | null; // [UserLevelWhereInput!]
+    consumedContent?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     createdAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
+    growthAreas?: NexusGenInputs['GrowthAreaListRelationFilter'] | null; // GrowthAreaListRelationFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
+    isProgressPublic?: NexusGenInputs['BoolNullableFilter'] | null; // BoolNullableFilter
+    learningStreak?: NexusGenInputs['DateTimeNullableListFilter'] | null; // DateTimeNullableListFilter
     level?: NexusGenInputs['FloatNullableFilter'] | null; // FloatNullableFilter
+    myProgress?: NexusGenInputs['JsonNullableFilter'] | null; // JsonNullableFilter
     NOT?: NexusGenInputs['UserLevelWhereInput'][] | null; // [UserLevelWhereInput!]
     OR?: NexusGenInputs['UserLevelWhereInput'][] | null; // [UserLevelWhereInput!]
     updatedAt?: NexusGenInputs['DateTimeFilter'] | null; // DateTimeFilter
     user?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
+  }
+  UserLevelWhereUniqueInput: { // input type
+    id?: string | null; // String
   }
   UserListRelationFilter: { // input type
     every?: NexusGenInputs['UserWhereInput'] | null; // UserWhereInput
@@ -2661,6 +2735,14 @@ export interface NexusGenObjects {
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     userId?: string | null; // String
   }
+  GrowthArea: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    marks?: NexusGenScalars['Json'] | null; // Json
+    maxProgress?: number | null; // Int
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+  }
   Lawrdle: { // root type
     active: boolean; // Boolean!
     authorId: string; // String!
@@ -3071,9 +3153,13 @@ export interface NexusGenObjects {
     work?: string | null; // String
   }
   UserLevel: { // root type
+    consumedContent?: NexusGenScalars['Json'] | null; // Json
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     id: string; // String!
+    isProgressPublic?: boolean | null; // Boolean
+    learningStreak: NexusGenScalars['DateTime'][]; // [DateTime!]!
     level?: number | null; // Float
+    myProgress?: NexusGenScalars['Json'] | null; // Json
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
   }
 }
@@ -3367,6 +3453,15 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
+  GrowthArea: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    id: string; // String!
+    marks: NexusGenScalars['Json'] | null; // Json
+    maxProgress: number | null; // Int
+    name: string; // String!
+    updatedAt: NexusGenScalars['DateTime']; // DateTime!
+    userLevels: NexusGenRootTypes['UserLevel'][]; // [UserLevel!]!
+  }
   Lawrdle: { // field return type
     active: boolean; // Boolean!
     author: NexusGenRootTypes['User']; // User!
@@ -3487,6 +3582,7 @@ export interface NexusGenFieldTypes {
     createEmailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
     createFeedback: NexusGenRootTypes['Feedback'] | null; // Feedback
     createForum: NexusGenRootTypes['Forum'] | null; // Forum
+    createGrowthArea: NexusGenRootTypes['GrowthArea'] | null; // GrowthArea
     createLawrdle: NexusGenRootTypes['Lawrdle'] | null; // Lawrdle
     createLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     createLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
@@ -3516,13 +3612,17 @@ export interface NexusGenFieldTypes {
     createTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     createTextEditorResult: NexusGenRootTypes['TextEditorResult'] | null; // TextEditorResult
     createUseful: NexusGenRootTypes['Useful'] | null; // Useful
+    createUserLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
     deleteChat: NexusGenRootTypes['Chat'] | null; // Chat
     deleteClause: NexusGenRootTypes['Clause'] | null; // Clause
     deleteClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
     deleteConstruction: NexusGenRootTypes['Construction'] | null; // Construction
     deleteDocument: NexusGenRootTypes['Document'] | null; // Document
     deleteEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
+    deleteEmailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
+    deleteGrowthArea: NexusGenRootTypes['GrowthArea'] | null; // GrowthArea
     deleteLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
+    deleteLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     deleteNewTest: NexusGenRootTypes['NewTest'] | null; // NewTest
     deleteNote: NexusGenRootTypes['Note'] | null; // Note
     deleteOrder: NexusGenRootTypes['Order'] | null; // Order
@@ -3532,6 +3632,7 @@ export interface NexusGenFieldTypes {
     deleteShot: NexusGenRootTypes['Shot'] | null; // Shot
     deleteStatement: NexusGenRootTypes['Statement'] | null; // Statement
     deleteTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
+    deleteUserLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
     enrollOnCourse: NexusGenRootTypes['User'] | null; // User
     publishCourse: NexusGenRootTypes['CoursePage'] | null; // CoursePage
     recordSession: NexusGenRootTypes['User'] | null; // User
@@ -3557,6 +3658,7 @@ export interface NexusGenFieldTypes {
     updateEmailCampaign: NexusGenRootTypes['EmailCampaign'] | null; // EmailCampaign
     updateEmailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
     updateForum: NexusGenRootTypes['Forum'] | null; // Forum
+    updateGrowthArea: NexusGenRootTypes['GrowthArea'] | null; // GrowthArea
     updateLesson: NexusGenRootTypes['Lesson'] | null; // Lesson
     updateLessonResult: NexusGenRootTypes['LessonResult'] | null; // LessonResult
     updateMiniStatement: NexusGenRootTypes['Statement'] | null; // Statement
@@ -3576,6 +3678,7 @@ export interface NexusGenFieldTypes {
     updateStatementChecked: NexusGenRootTypes['Statement'] | null; // Statement
     updateTextEditor: NexusGenRootTypes['TextEditor'] | null; // TextEditor
     updateUser: NexusGenRootTypes['User'] | null; // User
+    updateUserLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
   }
   NewTest: { // field return type
     answers: string[]; // [String!]!
@@ -3750,6 +3853,8 @@ export interface NexusGenFieldTypes {
     emailReminder: NexusGenRootTypes['EmailReminder'] | null; // EmailReminder
     emailReminders: NexusGenRootTypes['EmailReminder'][]; // [EmailReminder!]!
     feedbacks: NexusGenRootTypes['Feedback'][]; // [Feedback!]!
+    growthArea: NexusGenRootTypes['GrowthArea'] | null; // GrowthArea
+    growthAreas: NexusGenRootTypes['GrowthArea'][]; // [GrowthArea!]!
     lawrdle: NexusGenRootTypes['Lawrdle'] | null; // Lawrdle
     lawrdles: NexusGenRootTypes['Lawrdle'][]; // [Lawrdle!]!
     lesson: NexusGenRootTypes['Lesson'] | null; // Lesson
@@ -3782,6 +3887,8 @@ export interface NexusGenFieldTypes {
     useful: NexusGenRootTypes['Useful'] | null; // Useful
     usefuls: NexusGenRootTypes['Useful'][]; // [Useful!]!
     user: NexusGenRootTypes['User'] | null; // User
+    userLevel: NexusGenRootTypes['UserLevel'] | null; // UserLevel
+    userLevels: NexusGenRootTypes['UserLevel'][]; // [UserLevel!]!
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
   QuestResults: { // field return type
@@ -4051,9 +4158,14 @@ export interface NexusGenFieldTypes {
     work: string | null; // String
   }
   UserLevel: { // field return type
+    consumedContent: NexusGenScalars['Json'] | null; // Json
     createdAt: NexusGenScalars['DateTime']; // DateTime!
+    growthAreas: NexusGenRootTypes['GrowthArea'][]; // [GrowthArea!]!
     id: string; // String!
+    isProgressPublic: boolean | null; // Boolean
+    learningStreak: NexusGenScalars['DateTime'][]; // [DateTime!]!
     level: number | null; // Float
+    myProgress: NexusGenScalars['Json'] | null; // Json
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
     user: NexusGenRootTypes['User'] | null; // User
   }
@@ -4338,6 +4450,15 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  GrowthArea: { // field return type name
+    createdAt: 'DateTime'
+    id: 'String'
+    marks: 'Json'
+    maxProgress: 'Int'
+    name: 'String'
+    updatedAt: 'DateTime'
+    userLevels: 'UserLevel'
+  }
   Lawrdle: { // field return type name
     active: 'Boolean'
     author: 'User'
@@ -4458,6 +4579,7 @@ export interface NexusGenFieldTypeNames {
     createEmailReminder: 'EmailReminder'
     createFeedback: 'Feedback'
     createForum: 'Forum'
+    createGrowthArea: 'GrowthArea'
     createLawrdle: 'Lawrdle'
     createLesson: 'Lesson'
     createLessonResult: 'LessonResult'
@@ -4487,13 +4609,17 @@ export interface NexusGenFieldTypeNames {
     createTextEditor: 'TextEditor'
     createTextEditorResult: 'TextEditorResult'
     createUseful: 'Useful'
+    createUserLevel: 'UserLevel'
     deleteChat: 'Chat'
     deleteClause: 'Clause'
     deleteClient: 'BusinessClient'
     deleteConstruction: 'Construction'
     deleteDocument: 'Document'
     deleteEmailCampaign: 'EmailCampaign'
+    deleteEmailReminder: 'EmailReminder'
+    deleteGrowthArea: 'GrowthArea'
     deleteLesson: 'Lesson'
+    deleteLessonResult: 'LessonResult'
     deleteNewTest: 'NewTest'
     deleteNote: 'Note'
     deleteOrder: 'Order'
@@ -4503,6 +4629,7 @@ export interface NexusGenFieldTypeNames {
     deleteShot: 'Shot'
     deleteStatement: 'Statement'
     deleteTextEditor: 'TextEditor'
+    deleteUserLevel: 'UserLevel'
     enrollOnCourse: 'User'
     publishCourse: 'CoursePage'
     recordSession: 'User'
@@ -4528,6 +4655,7 @@ export interface NexusGenFieldTypeNames {
     updateEmailCampaign: 'EmailCampaign'
     updateEmailReminder: 'EmailReminder'
     updateForum: 'Forum'
+    updateGrowthArea: 'GrowthArea'
     updateLesson: 'Lesson'
     updateLessonResult: 'LessonResult'
     updateMiniStatement: 'Statement'
@@ -4547,6 +4675,7 @@ export interface NexusGenFieldTypeNames {
     updateStatementChecked: 'Statement'
     updateTextEditor: 'TextEditor'
     updateUser: 'User'
+    updateUserLevel: 'UserLevel'
   }
   NewTest: { // field return type name
     answers: 'String'
@@ -4721,6 +4850,8 @@ export interface NexusGenFieldTypeNames {
     emailReminder: 'EmailReminder'
     emailReminders: 'EmailReminder'
     feedbacks: 'Feedback'
+    growthArea: 'GrowthArea'
+    growthAreas: 'GrowthArea'
     lawrdle: 'Lawrdle'
     lawrdles: 'Lawrdle'
     lesson: 'Lesson'
@@ -4753,6 +4884,8 @@ export interface NexusGenFieldTypeNames {
     useful: 'Useful'
     usefuls: 'Useful'
     user: 'User'
+    userLevel: 'UserLevel'
+    userLevels: 'UserLevel'
     users: 'User'
   }
   QuestResults: { // field return type name
@@ -5022,9 +5155,14 @@ export interface NexusGenFieldTypeNames {
     work: 'String'
   }
   UserLevel: { // field return type name
+    consumedContent: 'Json'
     createdAt: 'DateTime'
+    growthAreas: 'GrowthArea'
     id: 'String'
+    isProgressPublic: 'Boolean'
+    learningStreak: 'DateTime'
     level: 'Float'
+    myProgress: 'Json'
     updatedAt: 'DateTime'
     user: 'User'
   }
@@ -5104,6 +5242,14 @@ export interface NexusGenArgTypes {
     statements: { // args
       after?: NexusGenInputs['StatementWhereUniqueInput'] | null; // StatementWhereUniqueInput
       before?: NexusGenInputs['StatementWhereUniqueInput'] | null; // StatementWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
+  GrowthArea: {
+    userLevels: { // args
+      after?: NexusGenInputs['UserLevelWhereUniqueInput'] | null; // UserLevelWhereUniqueInput
+      before?: NexusGenInputs['UserLevelWhereUniqueInput'] | null; // UserLevelWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }
@@ -5395,6 +5541,11 @@ export interface NexusGenArgTypes {
       lessonId?: string | null; // String
       text?: string | null; // String
     }
+    createGrowthArea: { // args
+      marks?: NexusGenInputs['MarksList'] | null; // MarksList
+      maxProgress?: number | null; // Int
+      name: string; // String!
+    }
     createLawrdle: { // args
       active?: boolean | null; // Boolean
       authorId?: string | null; // String
@@ -5582,6 +5733,12 @@ export interface NexusGenArgTypes {
       name?: string | null; // String
       tags?: Array<string | null> | null; // [String]
     }
+    createUserLevel: { // args
+      consumedContent?: NexusGenInputs['ConsumedContentList'] | null; // ConsumedContentList
+      isProgressPublic?: boolean | null; // Boolean
+      level?: number | null; // Float
+      myProgress?: NexusGenInputs['MyProgressList'] | null; // MyProgressList
+    }
     deleteChat: { // args
       id?: string | null; // String
     }
@@ -5600,7 +5757,16 @@ export interface NexusGenArgTypes {
     deleteEmailCampaign: { // args
       id?: string | null; // String
     }
+    deleteEmailReminder: { // args
+      id?: string | null; // String
+    }
+    deleteGrowthArea: { // args
+      id: string; // String!
+    }
     deleteLesson: { // args
+      id?: string | null; // String
+    }
+    deleteLessonResult: { // args
       id?: string | null; // String
     }
     deleteNewTest: { // args
@@ -5628,6 +5794,9 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
     }
     deleteTextEditor: { // args
+      id?: string | null; // String
+    }
+    deleteUserLevel: { // args
       id?: string | null; // String
     }
     enrollOnCourse: { // args
@@ -5786,6 +5955,12 @@ export interface NexusGenArgTypes {
       id?: string | null; // String
       text?: string | null; // String
     }
+    updateGrowthArea: { // args
+      id: string; // String!
+      marks?: NexusGenInputs['MarksList'] | null; // MarksList
+      maxProgress?: number | null; // Int
+      name?: string | null; // String
+    }
     updateLesson: { // args
       assignment?: boolean | null; // Boolean
       audience?: string | null; // String
@@ -5932,6 +6107,14 @@ export interface NexusGenArgTypes {
       tags?: Array<string | null> | null; // [String]
       work?: string | null; // String
     }
+    updateUserLevel: { // args
+      consumedContent?: NexusGenInputs['ConsumedContentList'] | null; // ConsumedContentList
+      id?: string | null; // String
+      isProgressPublic?: boolean | null; // Boolean
+      learningStreak?: Array<NexusGenScalars['DateTime'] | null> | null; // [DateTime]
+      level?: number | null; // Float
+      myProgress?: NexusGenInputs['MyProgressList'] | null; // MyProgressList
+    }
   }
   NewTest: {
     testResults: { // args
@@ -6064,6 +6247,17 @@ export interface NexusGenArgTypes {
       last?: number | null; // Int
       orderBy?: NexusGenInputs['FeedbackOrderByInput'][] | null; // [FeedbackOrderByInput!]
       where?: NexusGenInputs['FeedbackWhereInput'] | null; // FeedbackWhereInput
+    }
+    growthArea: { // args
+      where: NexusGenInputs['GrowthAreaWhereUniqueInput']; // GrowthAreaWhereUniqueInput!
+    }
+    growthAreas: { // args
+      after?: NexusGenInputs['GrowthAreaWhereUniqueInput'] | null; // GrowthAreaWhereUniqueInput
+      before?: NexusGenInputs['GrowthAreaWhereUniqueInput'] | null; // GrowthAreaWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['GrowthAreaOrderByInput'][] | null; // [GrowthAreaOrderByInput!]
+      where?: NexusGenInputs['GrowthAreaWhereInput'] | null; // GrowthAreaWhereInput
     }
     lawrdle: { // args
       where: NexusGenInputs['LawrdleWhereUniqueInput']; // LawrdleWhereUniqueInput!
@@ -6237,6 +6431,17 @@ export interface NexusGenArgTypes {
     user: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
     }
+    userLevel: { // args
+      where: NexusGenInputs['UserLevelWhereUniqueInput']; // UserLevelWhereUniqueInput!
+    }
+    userLevels: { // args
+      after?: NexusGenInputs['UserLevelWhereUniqueInput'] | null; // UserLevelWhereUniqueInput
+      before?: NexusGenInputs['UserLevelWhereUniqueInput'] | null; // UserLevelWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+      orderBy?: NexusGenInputs['UserLevelOrderByInput'][] | null; // [UserLevelOrderByInput!]
+      where?: NexusGenInputs['UserLevelWhereInput'] | null; // UserLevelWhereInput
+    }
     users: { // args
       after?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
       before?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
@@ -6396,6 +6601,14 @@ export interface NexusGenArgTypes {
     teams: { // args
       after?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
       before?: NexusGenInputs['TeamWhereUniqueInput'] | null; // TeamWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+  }
+  UserLevel: {
+    growthAreas: { // args
+      after?: NexusGenInputs['GrowthAreaWhereUniqueInput'] | null; // GrowthAreaWhereUniqueInput
+      before?: NexusGenInputs['GrowthAreaWhereUniqueInput'] | null; // GrowthAreaWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }

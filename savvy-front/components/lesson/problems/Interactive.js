@@ -344,7 +344,8 @@ class Interactive extends Component {
       <Styles>
         <div className="suggestion">
           <Button onClick={this.show}>
-            Start the problem
+            {/* Start the problem */}
+            Начать решать
             {/* {!this.state.display ? "Первый вопрос" : "Закрыть"} */}
           </Button>
         </div>

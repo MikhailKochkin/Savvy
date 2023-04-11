@@ -3,8 +3,14 @@ import { useMutation, gql } from "@apollo/client";
 import Router from "next/router";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+
+const CREATE_CERT_MUTATION = gql`
+  mutation CREATE_CERT_MUTATION($coursePageId: String!, $studentId: String!) {
+    createCertificate(coursePageId: $coursePageId, studentId: $studentId) {
+      id
+    }
+  }
+`;
 
 const Outer = styled.div`
   width: 100%;
@@ -103,59 +109,36 @@ const Data = styled.div`
   }
 `;
 
-Outer.displayName = "Outer";
-
-const Certificate = (props) => {
+const CreateCertificate = (props) => {
   const [createCertificate, { data, loading, error }] =
     useMutation(CREATE_CERT_MUTATION);
   const { t } = useTranslation("course");
 
-  const downloadPDF = async () => {
-    const certificate = document.getElementById("certificate");
-    const canvas = await html2canvas(certificate, {
-      scale: 3, // Increase scale for better quality (optional)
-    });
-    const imgData = canvas.toDataURL("image/png");
-
-    const pdf = new jsPDF("l", "mm", "a4");
-    const width = pdf.internal.pageSize.getWidth();
-    const height = pdf.internal.pageSize.getHeight();
-
-    pdf.addImage(imgData, "PNG", 0, 0, width, height);
-    pdf.save("certificate.pdf");
-  };
-
   moment.locale("ru");
 
   return (
-    <>
-      <button onClick={downloadPDF}>Download Certificate as PDF</button>
-      <Outer id="certificate">
-        <Inner>
-          <div className="bookmark"></div>
-          <h2>{t("certificate")}</h2>
-          <div>{t("certify")}</div>
-          <div className="name">
-            {props.student.name} {props.student.surname}
-          </div>
-          <div>{t("completed")}</div>
-          <div className="course">{props.coursePage.title}</div>
-          <Data>
-            <div className="left">
-              <div>ID: {props.certId}</div>
-              <div>
-                {t("date")} {moment(props.createdAt).format("DD.MM.YY")}
-              </div>
-            </div>
-            <div className="right">
-              <div>{t("mikhail")}</div>
-              <div>{t("lead_instructor")}</div>
-            </div>
-          </Data>
-        </Inner>
-      </Outer>
-    </>
+    <button
+      onClick={async (e) => {
+        e.preventDefault();
+        const res = await createCertificate({
+          variables: {
+            coursePageId: props.coursePageId,
+            studentId: props.studentId,
+          },
+        });
+        console.log("res", res);
+
+        Router.push({
+          pathname: "/certificate",
+          query: {
+            id: res.data.createCertificate.id,
+          },
+        });
+      }}
+    >
+      Get your certificate
+    </button>
   );
 };
 
-export default Certificate;
+export default CreateCertificate;

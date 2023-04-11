@@ -15,6 +15,24 @@ const Material = styled.div`
   width: 100%;
 `;
 
+const UPDATE_USER_LEVEL_MUTATION = gql`
+  mutation UPDATE_USER_LEVEL_MUTATION(
+    $id: String!
+    $consumedContent: ConsumedContentList
+    $learningStreak: [DateTime]
+  ) {
+    updateUserLevel(
+      id: $id
+      consumedContent: $consumedContent
+      learningStreak: $learningStreak
+    ) {
+      id
+      consumedContent
+      learningStreak
+    }
+  }
+`;
+
 const CREATE_REMINDER_MUTATION = gql`
   mutation CREATE_REMINDER_MUTATION(
     $userId: String!
@@ -38,13 +56,15 @@ const DynamicNewSingleLesson = dynamic(import("../lesson/NewSingleLesson"), {
 });
 
 const StudyBlock = (props) => {
-  const { user, loading } = useUser();
+  // const { user, loading } = useUser();
 
   const [lessonId, setLessonId] = useState(undefined);
   const [leadIn, setLeadIn] = useState(undefined);
   const [type, setType] = useState(undefined);
   const [coursePageId, setCoursePageId] = useState();
   const [campaignId, setCampaignId] = useState();
+  const [tags, setTags] = useState();
+  const [streakUpdated, setStreakUpdated] = useState(false);
 
   const [open, setOpen] = useState(false);
 
@@ -55,11 +75,31 @@ const StudyBlock = (props) => {
   const [createEmailReminder, { error: error4, loading: loading4 }] =
     useMutation(CREATE_REMINDER_MUTATION);
 
+  const [
+    updateUserLevel,
+    { error: updateUserLevelError, loading: updateUserLevelLoading },
+  ] = useMutation(UPDATE_USER_LEVEL_MUTATION);
+
   const getLessonInfo = (id, lessons, coursePageId) => {
     setLessonId(id);
     setCoursePageId(coursePageId);
     let new_type = lessons.find((l) => l.id == id);
     setType(new_type ? new_type.type : "STORY");
+  };
+
+  const hasTodayInStreak = (learningStreak) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return learningStreak.some((date) => {
+      const streakDate = new Date(date);
+      streakDate.setHours(0, 0, 0, 0);
+      return streakDate.getTime() === today.getTime();
+    });
+  };
+
+  const getTags = (tags) => {
+    setTags(tags);
   };
 
   const getCampaignId = (id) => {
@@ -81,15 +121,65 @@ const StudyBlock = (props) => {
   };
 
   const hasReachedBottom = () => {
+    if (props.me && !streakUpdated) {
+      // ...
+
+      const learningStreak = props.me.level?.learningStreak || [];
+      const hasToday = hasTodayInStreak(learningStreak);
+
+      if (!hasToday) {
+        const updatedLearningStreak = [
+          ...learningStreak,
+          new Date().toISOString(),
+        ];
+
+        updateUserLevel({
+          variables: {
+            id: props.me.level.id,
+            learningStreak: updatedLearningStreak,
+          },
+        });
+
+        // Set the flag to true, so the streak is not updated more than once
+        setStreakUpdated(true);
+      }
+    }
+
+    if (props.me) {
+      const consumedContentList =
+        props.me.level?.consumedContent?.consumedContentList || [];
+
+      const alreadyRead = consumedContentList.some(
+        (c) => c.id === (props.id || props.post.id)
+      );
+
+      if (!alreadyRead) {
+        const newId = props.id ? props.id : props.post.id;
+        const updatedConsumedContentList = [
+          ...consumedContentList,
+          { id: newId, type: "post", tags: tags },
+        ];
+
+        updateUserLevel({
+          variables: {
+            id: props.me.level.id,
+            consumedContent: {
+              consumedContentList: updatedConsumedContentList,
+            },
+          },
+        });
+      }
+    }
+
     if (props.me && campaignId) {
-      createEmailReminder({
-        variables: {
-          userId: props.me.id,
-          coursePageId: coursePageId,
-          link: "https://besavvy.app",
-          emailCampaignId: campaignId,
-        },
-      });
+      // createEmailReminder({
+      //   variables: {
+      //     userId: props.me.id,
+      //     coursePageId: coursePageId,
+      //     link: "https://besavvy.app",
+      //     emailCampaignId: campaignId,
+      //   },
+      // });
     }
     props.updatePostResult(null, "has read full post");
   };
@@ -106,6 +196,7 @@ const StudyBlock = (props) => {
             getLessonInfo={getLessonInfo}
             getLeadIn={getLeadIn}
             getCampaignId={getCampaignId}
+            getTags={getTags}
           />
         )}
       </Material>

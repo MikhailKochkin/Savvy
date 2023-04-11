@@ -114,7 +114,7 @@ const Styles = styled.div`
   margin: 30px 0;
   background: #fff;
   font-weight: 500;
-  padding: 2%;
+  padding: 15px;
   min-height: 50vh;
   width: ${(props) => props.width};
   .bar {
@@ -127,7 +127,7 @@ const Styles = styled.div`
     font-weight: 600;
   }
   @media (max-width: 800px) {
-    width: 100%;
+    width: 90%;
     .bar {
       width: 200px;
       height: 7px;

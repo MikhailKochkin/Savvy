@@ -85,7 +85,7 @@ const Styles = styled.div`
   }
   @media (max-width: 800px) {
     width: 100%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     .video {
       height: 356px;
       width: 200px;
@@ -212,7 +212,7 @@ const Message = styled.div`
       }
     }
     @media (max-width: 800px) {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
   }
 
@@ -231,7 +231,7 @@ const Message = styled.div`
     font-size: 1.6rem;
     margin-bottom: 20px;
     @media (max-width: 800px) {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
     }
   }
 `;

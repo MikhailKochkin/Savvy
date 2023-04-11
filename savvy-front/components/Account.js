@@ -8,6 +8,7 @@ import Link from "next/link";
 
 import { CURRENT_USER_QUERY } from "./User";
 import { Unis, Companies } from "../config";
+// import UserProgress from "./UserProgress";
 
 const UPDATE_USER_MUTATION = gql`
   mutation UPDATE_USER_MUTATION(
@@ -257,6 +258,8 @@ const Account = (props) => {
               <>
                 <div className="Title">{t("settings")}</div>
                 <Container>
+                  {/* <UserProgress me={me} /> */}
+
                   <input
                     className="second"
                     type="text"

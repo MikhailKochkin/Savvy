@@ -297,6 +297,8 @@ class StudentCard extends Component {
     // whether the student can complete the final task
     let ratio = (status * 100) / coursePage.lessons.length;
     let left = coursePage.lessons.length - status;
+
+    console.log("status", status, coursePage.lessons.length);
     return (
       <Payment>
         {/* <div className="news">
@@ -306,7 +308,7 @@ class StudentCard extends Component {
           <div>{coursePage.news}</div>
         </div> */}
         <div className="results">
-          <h2>Results</h2>
+          {/* <h2>Results</h2> */}
           <div className="bar">
             <Progress
               className="progress"

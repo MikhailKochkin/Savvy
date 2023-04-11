@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -916,18 +916,18 @@ model UserLevel {
   user                    User?
   consumedContent         Json?
   myProgress              Json?
-  learningStreak          DateTime[]
   growthAreas             GrowthArea[]
   isProgressPublic        Boolean? @default(false)
 }
 
 model GrowthArea {
-  id                      String          @id @default(cuid())
-  name                    String
-  maxProgress             Int?
-  marks                   Json?          
-  userLevels              UserLevel[]    
-  createdAt               DateTime @default(now())
+  id                String          @id @default(cuid())
+  name              String
+  maxProgress       Int?
+  marks             Json?          
+  userLevel         UserLevel    @relation(fields: [userLevelId], references: [id])
+  userLevelId       String
+    createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
 }
 

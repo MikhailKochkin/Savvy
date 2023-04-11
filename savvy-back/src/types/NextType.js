@@ -226,6 +226,53 @@ const LesResult = inputObjectType({
   },
 });
 
+const MyProgress = inputObjectType({
+  name: "MyProgress",
+  definition(t) {
+    t.string("name");
+    t.int("progress");
+  },
+});
+
+const MyProgressList = inputObjectType({
+  name: "MyProgressList",
+  definition(t) {
+    t.list.field("progressList", { type: "MyProgress" });
+  },
+});
+
+const ConsumedContent = inputObjectType({
+  name: "ConsumedContent",
+  definition(t) {
+    t.string("id");
+    t.string("type");
+    t.list.string("tags");
+  },
+});
+
+const ConsumedContentList = inputObjectType({
+  name: "ConsumedContentList",
+  definition(t) {
+    t.list.field("consumedContentList", { type: "ConsumedContent" });
+  },
+});
+
+const Mark = inputObjectType({
+  name: "Mark",
+  definition(t) {
+    t.string("name");
+    t.int("level");
+    t.string("message");
+  },
+});
+
+const MarksList = inputObjectType({
+  name: "MarksList",
+  definition(t) {
+    t.list.field("marksList", { type: "Mark" });
+  },
+});
+
 module.exports = {
   NextType,
   NextTrueType,
@@ -254,4 +301,10 @@ module.exports = {
   Modules,
   EmailsList,
   Email,
+  MyProgressList,
+  MyProgress,
+  ConsumedContentList,
+  ConsumedContent,
+  Mark,
+  MarksList,
 };

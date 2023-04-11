@@ -97,8 +97,25 @@ const UserLevel = objectType({
   definition(t) {
     t.model.id();
     t.model.level();
-    // t.model.userId();
     t.model.user();
+    t.model.learningStreak();
+    t.model.consumedContent();
+    t.model.myProgress();
+    t.model.growthAreas();
+    t.model.isProgressPublic();
+    t.model.createdAt();
+    t.model.updatedAt();
+  },
+});
+
+const GrowthArea = objectType({
+  name: "GrowthArea",
+  definition(t) {
+    t.model.id();
+    t.model.name();
+    t.model.maxProgress();
+    t.model.marks();
+    t.model.userLevels();
     t.model.createdAt();
     t.model.updatedAt();
   },
@@ -196,4 +213,5 @@ module.exports = {
   Visit,
   Team,
   BotDialogue,
+  GrowthArea,
 };

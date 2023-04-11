@@ -21,6 +21,21 @@ const GET_EMAIL_REMINDERS = gql`
         name
         surname
         email
+        lessonResults {
+          id
+          progress
+          visitsNumber
+          updatedAt
+          lesson {
+            id
+            number
+            name
+            coursePage {
+              id
+              title
+            }
+          }
+        }
       }
       emailCampaign {
         id
@@ -40,12 +55,31 @@ const UPDATE_EMAIL_REMINDER = gql`
   }
 `;
 
+// const REFRESH_EMAIL_REMINDER = gql`
+//   mutation REFRESH_EMAIL_REMINDER($id: String!) {
+//     refreshEmailReminder(id: $id) {
+//       id
+//     }
+//   }
+// `;
+
 const SendEmailReminders = () => {
   const { data, loading, error } = useQuery(GET_EMAIL_REMINDERS);
   const [updateEmailReminder] = useMutation(UPDATE_EMAIL_REMINDER);
+  // const [refreshEmailReminder] = useMutation(REFRESH_EMAIL_REMINDER);
+
   const [showReminders, setShowReminders] = useState(false);
   const [filter, setFilter] = useState("");
   const [dateFilter, setDateFilter] = useState(new Date());
+
+  // const updateEmails = async (id) => {
+  //   let emails = console.log("emails", emails);
+  //   await refreshEmailReminder({
+  //     variables: {
+  //       id: id,
+  //     },
+  //   });
+  // };
 
   const getLastWeekDate = () => {
     const date = new Date();
@@ -68,9 +102,19 @@ const SendEmailReminders = () => {
     const lastUpdatedDate = new Date(reminderUpdatedAt);
 
     const daysDifference = calculateDaysDifference(today, lastUpdatedDate);
-
+    let arr = [...emailsSent];
     // console.log("daysDifference", daysDifference, today, lastUpdatedDate);
     // console.log("the gap", gap, gap - 0.25, daysDifference);
+
+    // if (emailsSent.length > 0) {
+    //   arr.pop();
+    //   await updateEmailReminder({
+    //     variables: {
+    //       id: emailReminder.id,
+    //       emailsSent: arr,
+    //     },
+    //   });
+    // }
 
     if (
       (daysDifference >= gap - 0.25 || emailsSent.length == 0) &&
@@ -170,7 +214,8 @@ const SendEmailReminders = () => {
             <div key={index}>
               <h3>
                 {index + 1}. User: {emailReminder.user.name}{" "}
-                {emailReminder.user.surname} - {emailReminder.user.email}
+                {emailReminder.user.surname} - {emailReminder.user.email} –{" "}
+                {emailReminder.id}
               </h3>
               <p>
                 Email campaign: {emailReminder.emailCampaign?.name} /{" "}
@@ -179,6 +224,18 @@ const SendEmailReminders = () => {
               <p>Course page: {emailReminder.coursePage.title}</p>
               <p>Created at: {moment(emailReminder.createdAt).format("LLL")}</p>
               <p>Emails sent: {emailReminder.emailsSent}</p>
+              {/* <button onClick={(e) => updateEmails(emailReminder.id)}>
+                Refresh Email Statuses
+              </button> */}
+              <p>
+                Lesson results:{" "}
+                {emailReminder.user.lessonResults.map((lr) => (
+                  <li>
+                    {lr.lesson.name} – {lr.progress} – {lr.updatedAt} –
+                    {lr.lesson.coursePage.title}
+                  </li>
+                ))}
+              </p>
             </div>
           ))}
     </div>

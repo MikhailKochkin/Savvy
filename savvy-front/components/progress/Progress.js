@@ -8,6 +8,7 @@ import BotProgress from "./BotProgress";
 import ActiveStudents from "./ActiveStudents";
 import EmptyOrders from "./EmptyOrders";
 import SendEmailReminders from "./SendEmailReminders";
+import LessonsData from "./LessonsData";
 
 const Styles = styled.div`
   display: flex;
@@ -121,16 +122,16 @@ const Progress = (props) => {
     <Styles>
       <Container>
         <SendEmailReminders />
+        <LessonsData />
         <h3>Active students</h3>
         <ActiveStudents />
-        <h3>Empty orders</h3>
-        <EmptyOrders />
         <h3>Bot</h3>
         <BotProgress />
-
         <h3>KPI</h3>
         <button onClick={(e) => setOpen(!open)}>Open</button>
         {open && <KPI coursePages={coursePages} />}
+        <h3>Empty orders</h3>
+        <EmptyOrders />
         <h3>Courses rating</h3>
         <div>
           <ol>

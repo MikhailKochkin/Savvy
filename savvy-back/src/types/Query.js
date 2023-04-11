@@ -58,7 +58,10 @@ const Query = queryType({
     t.crud.challengeResults({ ordering: true, filtering: true });
     t.crud.botDialogue({ ordering: true, filtering: true });
     t.crud.botDialogues({ ordering: true, filtering: true });
-
+    t.crud.growthArea({ filtering: true });
+    t.crud.growthAreas({ ordering: true, filtering: true });
+    t.crud.userLevel({ filtering: true });
+    t.crud.userLevels({ ordering: true, filtering: true });
     t.field("me", {
       type: "User",
       resolve: async (_, _args, ctx) => {

@@ -161,13 +161,13 @@ const Container = styled.div`
     border: 1px solid #ccc;
   } */
 
-  button {
+  /* button {
     padding: 10px 20px;
-    /* background-color: #3498db; */
+    background-color: #3498db;
     color: white;
     border: none;
     cursor: pointer;
-  }
+  } */
 
   @media (max-width: 800px) {
     width: 95%;

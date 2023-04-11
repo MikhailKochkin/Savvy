@@ -1,9 +1,11 @@
 const {
   list,
   intArg,
+  floatArg,
   booleanArg,
   mutationType,
   stringArg,
+  nonNull,
   arg,
 } = require("@nexus/schema");
 const jwt = require("jsonwebtoken");
@@ -11,6 +13,7 @@ const bcrypt = require("bcryptjs");
 const postmark = require("postmark");
 const { promisify } = require("util");
 const { randomBytes } = require("crypto");
+const axios = require("axios");
 const { YooCheckout, IGetPaymentList } = require("@a2seven/yoo-checkout");
 const idempotenceKey = "02347fc4-a4f0-456db-807e-f0d11c2eс4a5";
 
@@ -36,6 +39,30 @@ const { argsToArgsConfig } = require("graphql/type/definition");
 const client = new postmark.ServerClient(process.env.MAIL_TOKEN);
 
 const qrcode = require("qrcode-terminal");
+
+async function getMessageOpens(serverToken, messageID) {
+  try {
+    const response = await axios.get(
+      `https://api.postmarkapp.com/messages/outbound/opens`,
+      {
+        headers: {
+          "X-Postmark-Server-Token": serverToken,
+          Accept: "application/json",
+        },
+        params: {
+          messageID: messageID,
+          count: 1, // Add the 'count' parameter
+          offset: 0,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching message opens:", error);
+  }
+}
+
 // const { exists } = require("fs");
 
 // const { Client } = require("whatsapp-web.js");
@@ -759,6 +786,82 @@ const Mutation = mutationType({
         // return null;
       },
     });
+    //   type: "EmailReminder",
+    //   args: {
+    //     id: stringArg(),
+    //   },
+    //   resolve: async (_, args, ctx) => {
+    //     const emailReminder = await ctx.prisma.emailReminder.findUnique({
+    //       where: { id: args.id },
+    //       include: { user: { select: { id: true, email: true } } },
+    //     });
+
+    //     const fetchSentEmails = async (email) => {
+    //       const url = "https://api.postmarkapp.com/messages/outbound";
+    //       const fromDate = new Date();
+    //       fromDate.setDate(fromDate.getDate() - 7);
+
+    //       try {
+    //         const response = await axios.get(url, {
+    //           params: {
+    //             recipient: email,
+    //             fromdate: fromDate.toISOString(),
+    //             count: 50,
+    //             offset: 0,
+    //           },
+    //           headers: {
+    //             "X-Postmark-Server-Token": process.env.MAIL_TOKEN,
+    //             "Content-Type": "application/json",
+    //           },
+    //         });
+
+    //         const sentEmails = response.data.Messages.map(async (message) => {
+    //           const opensData = await getMessageOpens(
+    //             process.env.MAIL_TOKEN,
+    //             message.MessageID
+    //           );
+    //           const opened = opensData.TotalCount > 0;
+
+    //           return {
+    //             id: message.MessageID,
+    //             subject: message.Subject,
+    //             status: message.Status,
+    //             receivedAt: message.ReceivedAt,
+    //             opened: opened,
+    //           };
+    //         });
+
+    //         return await Promise.all(sentEmails);
+    //       } catch (error) {
+    //         console.error("Error fetching sent emails:", error);
+    //         return [];
+    //       }
+    //     };
+
+    //     const sentEmails = await fetchSentEmails(emailReminder.user.email);
+    //     console.log("sentEmails", sentEmails);
+
+    //     const emailReminderWithSentEmails = {
+    //       ...emailReminder,
+    //       user: {
+    //         ...emailReminder.user,
+    //         sentEmails,
+    //       },
+    //     };
+
+    //     return emailReminderWithSentEmails;
+    //   },
+    // });
+    t.field("deleteEmailReminder", {
+      type: "EmailReminder",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        return ctx.prisma.emailReminder.delete({ where });
+      },
+    });
     t.field("sendMessage", {
       type: "Message",
       args: {
@@ -787,9 +890,9 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.findUnique({
           where: { id: userId },
         });
-        const coursePage = await ctx.prisma.coursePage.findUnique({
-          where: { id: args.coursePageId },
-        });
+        // const coursePage = await ctx.prisma.coursePage.findUnique({
+        //   where: { id: args.coursePageId },
+        // });
 
         // const user = await ctx.prisma.user.findUnique(
         //   { where: { id: userId } },
@@ -1272,6 +1375,16 @@ const Mutation = mutationType({
           },
         });
         return updatedLessonResult;
+      },
+    });
+    t.field("deleteLessonResult", {
+      type: "LessonResult",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const where = { id: args.id };
+        return ctx.prisma.lessonResult.delete({ where });
       },
     });
     t.field("updateCoursePage", {
@@ -4219,6 +4332,95 @@ const Mutation = mutationType({
           },
         });
         return updatedEmailCampaign;
+      },
+    });
+
+    t.field("createUserLevel", {
+      type: "UserLevel",
+      args: {
+        level: floatArg(),
+        consumedContent: arg({
+          type: "ConsumedContentList",
+        }),
+        myProgress: arg({
+          type: "MyProgressList",
+        }),
+        isProgressPublic: booleanArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.userLevel.create({ data: args });
+      },
+    });
+
+    t.field("deleteUserLevel", {
+      type: "UserLevel",
+      args: {
+        id: stringArg(),
+      },
+      resolve: async (_, { id }, ctx) => {
+        return ctx.prisma.userLevel.delete({ where: { id } });
+      },
+    });
+
+    t.field("updateUserLevel", {
+      type: "UserLevel",
+      args: {
+        id: stringArg(),
+        level: floatArg(),
+        consumedContent: arg({
+          type: "ConsumedContentList",
+        }),
+        myProgress: arg({
+          type: "MyProgressList",
+        }),
+        isProgressPublic: booleanArg(),
+        learningStreak: list(
+          arg({
+            type: "DateTime", // Make sure you have a DateTimeList type defined
+          })
+        ),
+      },
+      resolve: async (_, { id, ...args }, ctx) => {
+        return ctx.prisma.userLevel.update({ where: { id }, data: args });
+      },
+    });
+
+    t.field("createGrowthArea", {
+      type: "GrowthArea",
+      args: {
+        name: nonNull(stringArg()),
+        maxProgress: intArg(),
+        marks: arg({
+          type: "MarksList",
+        }),
+      },
+      resolve: async (_, args, ctx) => {
+        return ctx.prisma.growthArea.create({ data: args });
+      },
+    });
+
+    t.field("deleteGrowthArea", {
+      type: "GrowthArea",
+      args: {
+        id: nonNull(stringArg()),
+      },
+      resolve: async (_, { id }, ctx) => {
+        return ctx.prisma.growthArea.delete({ where: { id } });
+      },
+    });
+
+    t.field("updateGrowthArea", {
+      type: "GrowthArea",
+      args: {
+        id: nonNull(stringArg()),
+        name: stringArg(),
+        maxProgress: intArg(),
+        marks: arg({
+          type: "MarksList",
+        }),
+      },
+      resolve: async (_, { id, ...args }, ctx) => {
+        return ctx.prisma.growthArea.update({ where: { id }, data: args });
       },
     });
   },

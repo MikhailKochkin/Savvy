@@ -134,6 +134,7 @@ const DynamicLoadedEditor = dynamic(import("../editor/HoverEditor"), {
 const ActiveStudents = () => {
   const [email, setEmail] = useState();
   const [text, setText] = useState();
+  const [showStudents, setShowStudents] = useState(false);
 
   const { loading: loading, error: error, data: data } = useQuery(USERS_QUERY);
   const [updateActiveUser, { data: data3, loading: loading3, error: error3 }] =
@@ -157,64 +158,68 @@ const ActiveStudents = () => {
   return (
     <Styles>
       <div>
-        {students.map((s, i) => {
-          let results = s.lessonResults;
-          let courseVisits = s.courseVisits;
-          return (
-            <div className="student">
-              <div>
-                {i + 1}.{" "}
-                <b>
-                  {s.name} {s.surname}
-                </b>{" "}
-                – Последняя активность: {moment(s.updatedAt).format("LLL")}
-              </div>
-              <div>
-                {s.number && (
-                  <button>
-                    <a target="_blank" href={`https://t.me/${s.number}`}>
-                      Написать в Telegram
-                    </a>
+        <button onClick={(e) => setShowStudents(!showStudents)}>
+          {showStudents ? "Hide Active Students" : "Show Active Students"}
+        </button>
+        {showStudents &&
+          students.map((s, i) => {
+            let results = s.lessonResults;
+            let courseVisits = s.courseVisits;
+            return (
+              <div className="student">
+                <div>
+                  {i + 1}.{" "}
+                  <b>
+                    {s.name} {s.surname}
+                  </b>{" "}
+                  – Последняя активность: {moment(s.updatedAt).format("LLL")}
+                </div>
+                <div>
+                  {s.number && (
+                    <button>
+                      <a target="_blank" href={`https://t.me/${s.number}`}>
+                        Написать в Telegram
+                      </a>
+                    </button>
+                  )}
+                  {s.number && (
+                    <button>
+                      <a
+                        target="_blank"
+                        href={`https://wa.me/${s.number}?text=Добрый!`}
+                      >
+                        Написать в WhatsApp
+                      </a>
+                    </button>
+                  )}
+                  <Editor className="editor">
+                    <DynamicLoadedEditor
+                      getEditorText={myCallback}
+                      value={""}
+                      name="text"
+                    />
+                  </Editor>
+                  <button
+                    onClick={async (e) => {
+                      const res = await sendMessage({
+                        variables: {
+                          userId: s.id,
+                          text: text,
+                        },
+                      });
+                    }}
+                  >
+                    Send
                   </button>
-                )}
-                {s.number && (
-                  <button>
-                    <a
-                      target="_blank"
-                      href={`https://wa.me/${s.number}?text=Добрый!`}
-                    >
-                      Написать в WhatsApp
-                    </a>
-                  </button>
-                )}
-                <Editor className="editor">
-                  <DynamicLoadedEditor
-                    getEditorText={myCallback}
-                    value={""}
-                    name="text"
-                  />
-                </Editor>
-                <button
-                  onClick={async (e) => {
-                    const res = await sendMessage({
-                      variables: {
-                        userId: s.id,
-                        text: text,
-                      },
-                    });
-                  }}
-                >
-                  Send
-                </button>
+                </div>
+                <StudentData
+                  s={s}
+                  results={results}
+                  courseVisits={courseVisits}
+                />
               </div>
-              <StudentData
-                s={s}
-                results={results}
-                courseVisits={courseVisits}
-              />
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
       <div className="email">
         <input

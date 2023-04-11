@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const Styles = styled.div`
   display: flex;
@@ -121,6 +123,23 @@ const Data = styled.div`
   }
 `;
 
+Outer.displayName = "Outer";
+
+const downloadPDF = async () => {
+  const certificate = document.getElementById("certificate");
+  const canvas = await html2canvas(certificate, {
+    scale: 3, // Increase scale for better quality (optional)
+  });
+  const imgData = canvas.toDataURL("image/png");
+
+  const pdf = new jsPDF("l", "mm", "a4");
+  const width = pdf.internal.pageSize.getWidth();
+  const height = pdf.internal.pageSize.getHeight();
+
+  pdf.addImage(imgData, "PNG", 0, 0, width, height);
+  pdf.save("certificate.pdf");
+};
+
 const Certificate = (props) => {
   const { t } = useTranslation("course");
   moment.locale("ru");
@@ -128,7 +147,9 @@ const Certificate = (props) => {
   return (
     <Styles>
       <Container>
-        <Outer>
+        <button onClick={downloadPDF}>Download Certificate as PDF</button>
+
+        <Outer id="certificate">
           <Inner>
             <div className="bookmark"></div>
             <h2>{t("certificate")}</h2>

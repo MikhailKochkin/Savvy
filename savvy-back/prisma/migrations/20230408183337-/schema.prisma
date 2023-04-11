@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -916,7 +916,6 @@ model UserLevel {
   user                    User?
   consumedContent         Json?
   myProgress              Json?
-  learningStreak          DateTime[]
   growthAreas             GrowthArea[]
   isProgressPublic        Boolean? @default(false)
 }

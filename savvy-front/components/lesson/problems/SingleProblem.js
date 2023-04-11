@@ -117,9 +117,9 @@ const TextBar = styled.div`
     text-decoration: underline;
   }
   @media (max-width: 800px) {
-    width: 100%;
+    width: 90%;
     padding: 2%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     #text {
       width: 100%;
     }
@@ -128,6 +128,9 @@ const TextBar = styled.div`
 
 const ResponseArea = styled.div`
   width: 100%;
+  h2 {
+    line-height: 1.2;
+  }
 `;
 
 const Frame = styled.div`
@@ -321,7 +324,10 @@ const SingleProblem = (props) => {
             />
           )}
           <ResponseArea>
-            <h2>{t("write_answer")}</h2>
+            <h2>
+              {/* {t("write_answer")} */}
+              Запишите финальный ответ
+            </h2>
             <Frame story={story}>
               <DynamicHoverEditor
                 index={1}
