@@ -43,7 +43,7 @@
     "merge-descriptors": "^1.0.1",
     "moment": "^2.29.1",
     "next": "^10.2.3",
-    "next-auth": "^3.25.0",
+    "next-auth": "^4.22.0",
     "next-i18next": "^10.4.0",
     "next-optimized-images": "^2.6.2",
     "next-with-apollo": "^5.2.1",
