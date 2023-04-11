@@ -136,7 +136,7 @@ const CreateCertificate = (props) => {
         });
       }}
     >
-      Get your certificate
+      Получить мой сертификат
     </button>
   );
 };

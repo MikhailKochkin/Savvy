@@ -293,15 +293,21 @@ class StudentCard extends Component {
     // );
     // 2. See how many lessons the currents user has attended
     let status = 0;
-    lessonResults.map((res) => (res.progress > 5 ? status++ : status));
+    lessonResults.map((res) => (res.progress > 1 ? status++ : status));
     // 3. Generate the ratio which is used to determine
     // whether the student can complete the final task
-    let ratio = (status * 100) / coursePage.lessons.length;
-    let left = coursePage.lessons.length - status;
+    let ratio =
+      (status * 100) /
+      coursePage.lessons.filter((l) => l.type.toLowerCase() !== "hidden")
+        .length;
+    let left =
+      coursePage.lessons.filter((l) => l.type.toLowerCase() !== "hidden")
+        .length - status;
 
     let my_certificate = me.certificates.find(
       (certificate) => certificate.coursePage.id === coursePage.id
     );
+    console.log("coursePage", coursePage);
     return (
       <Payment>
         {/* <div className="news">
@@ -316,7 +322,13 @@ class StudentCard extends Component {
             <Progress
               className="progress"
               progress={
-                parseInt(100 * (status / coursePage.lessons.length)) + "%"
+                parseInt(
+                  100 *
+                    (status /
+                      coursePage.lessons.filter(
+                        (l) => l.type.toLowerCase() !== "hidden"
+                      ).length)
+                ) + "%"
               }
             ></Progress>
           </div>
@@ -324,7 +336,13 @@ class StudentCard extends Component {
             <Result
               className="result"
               progress={
-                parseInt(100 * (status / coursePage.lessons.length)) + "%"
+                parseInt(
+                  100 *
+                    (status /
+                      coursePage.lessons.filter(
+                        (l) => l.type.toLowerCase() !== "hidden"
+                      ).length)
+                ) + "%"
               }
             >
               {/* <div>1</div> */}
@@ -333,11 +351,24 @@ class StudentCard extends Component {
             <Full
               className="full"
               progress={
-                parseInt(100 - 100 * (status / coursePage.lessons.length)) + "%"
+                parseInt(
+                  100 -
+                    100 *
+                      (status /
+                        coursePage.lessons.filter(
+                          (l) => l.type.toLowerCase() !== "hidden"
+                        ).length)
+                ) + "%"
               }
             >
               {" "}
-              <div>{coursePage.lessons.length}</div>
+              <div>
+                {
+                  coursePage.lessons.filter(
+                    (l) => l.type.toLowerCase() !== "hidden"
+                  ).length
+                }
+              </div>
             </Full>
           </div>
           {/* {ratio < 33 && (
@@ -415,7 +446,7 @@ class StudentCard extends Component {
               href={`https://besavvy.app/certificate?id=${my_certificate.id}`}
               target="_blank"
             >
-              Open my certificate
+              Открыть мой сертификат
             </a>
           </button>
         )}
