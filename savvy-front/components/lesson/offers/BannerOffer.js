@@ -94,7 +94,7 @@ const BiggerBlock = styled.div`
   border-radius: 40px;
   @media (max-width: 800px) {
     width: 340px;
-    height: 480px;
+    height: 520px;
   }
 `;
 
@@ -157,6 +157,17 @@ const Inner = styled.div`
   }
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+`;
+
 const Button = styled.button`
   font-size: 1.6rem;
   background: #fcc417;
@@ -164,8 +175,9 @@ const Button = styled.button`
   color: #000000;
   box-sizing: border-box;
   border-radius: 10px;
-  width: 280px;
+  width: 220px;
   height: 45px;
+  /* margin-right: 20px; */
   cursor: pointer;
   font-family: Montserrat;
   outline: 0;
@@ -177,6 +189,9 @@ const Button = styled.button`
   }
   @media (max-width: 800px) {
     font-size: 1.4rem;
+    &#first {
+      margin-bottom: 10px;
+    }
   }
 `;
 
@@ -352,30 +367,35 @@ const BannerOffer = (props) => {
     return timer;
   };
 
-  const handleButtonClick = async () => {
-    if (offer.courseId) {
-      const res = await createOrder({
-        variables: {
-          coursePageId: offer.courseId,
-          price: offer.discountPrice,
-          userId: me.id,
-        },
-      });
-      location.href = res.data.createOrder.url;
-    } else {
-      let number = me.number || prompt("Please type your phone number: ");
+  const handleButtonClick1 = async () => {
+    // if (offer.courseId) {
+    const res = await createOrder({
+      variables: {
+        coursePageId: offer.courseId,
+        price: offer.discountPrice,
+        userId: me.id,
+      },
+    });
+    location.href = res.data.createOrder.url;
+  };
 
-      const res = await createBusinessClient({
-        variables: {
-          email: me.email,
-          name: me.name + " " + me.surname,
-          number: number,
-          coursePageId: coursePageId,
-        },
-      });
+  const handleButtonClick2 = async () => {
+    let number =
+      me.number ||
+      prompt(
+        "Пожалуйста, укажите свой номер телефона, чтобы мы закрепили за вами скидку: "
+      );
 
-      alert("Thank you! We will be in touch soon!");
-    }
+    const res = await createBusinessClient({
+      variables: {
+        email: me.email,
+        name: me.name + " " + me.surname,
+        number: number,
+        coursePageId: coursePageId,
+      },
+    });
+
+    alert("Спасибо, скоро пришлем больше информации о курсе.");
   };
 
   return (
@@ -386,11 +406,15 @@ const BannerOffer = (props) => {
             <div className="emoji">👋 💣 🔥</div>
             <div className="cta">{renderHTML(offer.header)}</div>
             <ul className="list">{renderHTML(offer.text)}</ul>
-            <div>
-              <Button onClick={handleButtonClick}>
-                {loading_data ? "..." : t("buy_at_discount")}
+            <Buttons>
+              <Button id="first" onClick={handleButtonClick1}>
+                {loading_data ? "..." : "Купить со скидкой"}
+                {/* t("buy_at_discount") */}
               </Button>
-            </div>
+              <Button onClick={handleButtonClick2}>
+                {loading ? "..." : "Заморозить скидку"}
+              </Button>
+            </Buttons>
             <TimeLeft>
               <div id="clock">
                 <div className="clock_start">{t("time_left")}</div>

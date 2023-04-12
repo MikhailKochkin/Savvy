@@ -207,7 +207,7 @@ const TextBar = styled.div`
   @media (max-width: 800px) {
     width: 100%;
     padding-left: 5px;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     .video {
       height: 356px;
       width: 200px;

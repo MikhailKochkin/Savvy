@@ -25,6 +25,7 @@ const Styles = styled.div`
   justify-content: center;
   align-items: center;
   padding-top: 100px;
+
   @media (max-width: 800px) {
     padding: 50px 0;
   }

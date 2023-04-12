@@ -243,6 +243,29 @@ const NoteStyles = styled.div`
   background: #fff;
   margin: 2% 0 0 0;
   filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
+  .video-container {
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  .video-fit {
+    width: 400px;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 800px) {
+    .video-container {
+    width: 350px;
+  }
+    .video-fit {
+      width: 350px
+      height: 100%;
+    }
+  }
   @media (max-width: 800px) {
     font-size: 1.6rem;
     width: 90%;

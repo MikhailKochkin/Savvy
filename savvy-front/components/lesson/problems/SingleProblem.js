@@ -323,66 +323,70 @@ const SingleProblem = (props) => {
               onFinish={onFinish}
             />
           )}
-          <ResponseArea>
-            <h2>
-              {/* {t("write_answer")} */}
-              Запишите финальный ответ
-            </h2>
-            <Frame story={story}>
-              <DynamicHoverEditor
-                index={1}
-                name="answer"
-                getEditorText={myCallback}
-                placeholder={`Write something`}
-              />
-            </Frame>
-            <Mutation
-              mutation={CREATE_PROBLEMRESULT_MUTATION}
-              variables={{
-                lessonId: props.lessonID,
-                answer: answer,
-                revealed: [],
-                problemID: props.problem.id,
-              }}
-            >
-              {(createProblemResult, { loading, error }) => (
-                <Buttons story={story} block={revealAnswer}>
-                  <StyledButton
-                    variant="contained"
-                    color="primary"
-                    onClick={async (e) => {
-                      // Stop the form from submitting
-                      e.preventDefault();
-                      // call the mutation
-                      if (answer !== "") {
-                        const res = await createProblemResult();
-                        props.getResults(3);
-                        setShowAnswerButton(true);
-                        setRevealAnswer(true);
-                      } else {
-                        console.log("No");
-                      }
-                    }}
-                  >
-                    {loading ? t("checking") : t("check")}
-                  </StyledButton>
-                  {showAnswerButton && (
-                    <Button2
-                      onClick={(e) => setShowAnswerText(!showAnswerText)}
-                    >
-                      {t("show_answer")}
-                    </Button2>
+          {teacherAnswer.length > 0 && (
+            <ResponseArea>
+              <h2>
+                {/* {t("write_answer")} */}
+                Запишите финальный ответ
+              </h2>
+              <Frame story={story}>
+                <DynamicHoverEditor
+                  index={1}
+                  name="answer"
+                  getEditorText={myCallback}
+                  placeholder={`Write something`}
+                />
+              </Frame>
+              <>
+                <Mutation
+                  mutation={CREATE_PROBLEMRESULT_MUTATION}
+                  variables={{
+                    lessonId: props.lessonID,
+                    answer: answer,
+                    revealed: [],
+                    problemID: props.problem.id,
+                  }}
+                >
+                  {(createProblemResult, { loading, error }) => (
+                    <Buttons story={story} block={revealAnswer}>
+                      <StyledButton
+                        variant="contained"
+                        color="primary"
+                        onClick={async (e) => {
+                          // Stop the form from submitting
+                          e.preventDefault();
+                          // call the mutation
+                          if (answer !== "") {
+                            const res = await createProblemResult();
+                            props.getResults(3);
+                            setShowAnswerButton(true);
+                            setRevealAnswer(true);
+                          } else {
+                            console.log("No");
+                          }
+                        }}
+                      >
+                        {loading ? t("checking") : t("check")}
+                      </StyledButton>
+                      {showAnswerButton && (
+                        <Button2
+                          onClick={(e) => setShowAnswerText(!showAnswerText)}
+                        >
+                          {t("show_answer")}
+                        </Button2>
+                      )}
+                    </Buttons>
                   )}
-                </Buttons>
-              )}
-            </Mutation>
-            {showAnswerText && (
-              <div>
-                <h2>{t("answer")}</h2>
-                {renderHTML(teacherAnswer)}
-              </div>
-            )}
-          </ResponseArea>
+                </Mutation>
+                {showAnswerText && (
+                  <div>
+                    <h2>{t("answer")}</h2>
+                    {renderHTML(teacherAnswer)}
+                  </div>
+                )}
+              </>
+            </ResponseArea>
+          )}
         </TextBar>
       )}
       {update && (

@@ -106,6 +106,30 @@ const Styles = styled.div`
       height: 300px;
     }
   }
+  .video-container {
+    width: 100%;
+    width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  .video-fit {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 800px) {
+    .video-container {
+    width: 350px;
+  }
+    .video-fit {
+      width: 350px
+      height: 100%;
+    }
+  }
   .video_block {
     margin: 35px 0;
     width: 100%;

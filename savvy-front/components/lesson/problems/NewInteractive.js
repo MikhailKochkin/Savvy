@@ -103,7 +103,7 @@ const NewInteractive = (props) => {
   return (
     <Styles>
       <div className="suggestion">
-        <Button onClick={(e) => setIsShown(true)}>Start the problem</Button>
+        <Button onClick={(e) => setIsShown(true)}>Начать решать</Button>
       </div>
       {isShown && (
         <Questions>
