@@ -172,14 +172,14 @@ const StudyBlock = (props) => {
     }
 
     if (props.me && campaignId) {
-      // createEmailReminder({
-      //   variables: {
-      //     userId: props.me.id,
-      //     coursePageId: coursePageId,
-      //     link: "https://besavvy.app",
-      //     emailCampaignId: campaignId,
-      //   },
-      // });
+      createEmailReminder({
+        variables: {
+          userId: props.me.id,
+          coursePageId: coursePageId,
+          link: "https://besavvy.app",
+          emailCampaignId: campaignId,
+        },
+      });
     }
     props.updatePostResult(null, "has read full post");
   };

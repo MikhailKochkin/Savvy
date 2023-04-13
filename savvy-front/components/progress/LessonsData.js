@@ -4,6 +4,12 @@ import LessonResults from "../stats/lessons/LessonResults";
 const LessonsData = () => {
   let lessons = [
     {
+      name: "Крупные сделки",
+      id: "clgdv3q4s85801fx0m49dex83",
+      coursePageId: "ck587y4kp00lf07152t0tyywl",
+      structure: { lessonItems: [1, 2, 3, 4, 5] },
+    },
+    {
       name: "Введение в юридический перевод",
       id: "ck6nftvl101d90757yflepopx",
       coursePageId: "ck6mc531p02z20748kwpqnt7z",
