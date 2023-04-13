@@ -40,7 +40,7 @@ const MobileAction = (props) => {
   const { t } = useTranslation("coursePage");
 
   const slide = () => {
-    var my_element = document.getElementById("header2");
+    var my_element = document.getElementById("buy_section");
     my_element.scrollIntoView({
       behavior: "smooth",
       block: "start",

@@ -113,6 +113,10 @@ const Styles = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    color: black;
+    select {
+      color: black;
+    }
     /* &:hover {
       background-color: #e3e4ec;
     } */
@@ -175,6 +179,7 @@ const ButtonBuySmall = styled.button`
   background: none;
   margin-bottom: 10px;
   outline: 0;
+  color: black;
   cursor: pointer;
   font-size: 1.4rem;
   transition: ease-in 0.2s;
