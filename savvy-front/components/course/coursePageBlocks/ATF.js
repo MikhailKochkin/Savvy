@@ -81,12 +81,10 @@ const Container = styled.div`
   }
 
   h1 {
-    font-size: 5.6rem;
+    font-size: 4.4rem;
     line-height: 1.2;
-    /* text-align: center; */
     font-weight: 800;
     margin: 0;
-    margin-bottom: 20px;
     color: #252f3f;
     span {
       background: #fce969;
@@ -102,7 +100,7 @@ const Container = styled.div`
     line-height: 1.4;
     margin-top: 10px;
     width: 75%;
-    font-weight: 400;
+    font-weight: 500;
     color: #4b5563;
     margin-bottom: 30px;
   }
@@ -119,6 +117,7 @@ const Container = styled.div`
     h2 {
       font-size: 2rem;
       width: 100%;
+      margin-bottom: 0px;
     }
   }
 `;
@@ -343,7 +342,7 @@ const ATF = (props) => {
                 : ""}
             </h2>
             {/* <div>Курс актуален на 1 августа 2022 года</div> */}
-            <NextMeeting>
+            {/* <NextMeeting>
               <div>
                 {t("next_cohort")}:{" "}
                 <span className="date">
@@ -353,7 +352,7 @@ const ATF = (props) => {
                     : moment(new Date()).format("LL")}
                 </span>
               </div>
-            </NextMeeting>
+            </NextMeeting> */}
 
             {/* <Buttons>
               <button id="atf_look_at_syllabus_button" onClick={(e) => slide()}>

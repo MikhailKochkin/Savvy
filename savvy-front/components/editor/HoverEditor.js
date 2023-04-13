@@ -35,6 +35,7 @@ import {
   BiVideoPlus,
   BiImageAdd,
   BiStrikethrough,
+  BiHeading,
 } from "react-icons/bi";
 import { css } from "emotion";
 import styled from "styled-components";
@@ -120,6 +121,9 @@ const serialize = (node) => {
       }
       if (styles.includes("delete")) {
         text = `<del>${text}</del>`;
+      }
+      if (styles.includes("header")) {
+        text = `<h2>${text}</h2>`;
       }
       if (styles.includes("insert")) {
         text = `<ins>${text}</ins>`;
@@ -374,6 +378,7 @@ const HoveringMenu = (props) => {
 
 const toggleFormat = (editor, format) => {
   const isActive = isFormatActive(editor, format);
+  console.log("format", format);
   Transforms.setNodes(
     editor,
     { [format]: isActive ? null : true },
@@ -517,6 +522,10 @@ const Leaf = ({ attributes, children, leaf }) => {
     children = <del>{children}</del>;
   }
 
+  if (leaf.header) {
+    children = <h2>{children}</h2>;
+  }
+
   if (leaf.insert) {
     children = <ins>{children}</ins>;
   }
@@ -578,6 +587,7 @@ const HoveringToolbar = () => {
           <FormatButton format="italic" icon={"italic"} />
           <FormatButton format="delete" icon={"strikethrough"} />
           <FormatButton format="insert" icon={"underline"} />
+          <FormatButton format="header" icon={"header"} />
           <FormatButton2 format="image" icon={"image"} />
           <VideoButton format="video" icon={"video"} />
           <LinkButton format="image" icon={"link"} />
@@ -601,6 +611,8 @@ const FormatButton = ({ format, icon }) => {
       <IconBlock>
         {icon == "bold" && <BiBold value={{ className: "react-icons" }} />}
         {icon == "italic" && <BiItalic value={{ className: "react-icons" }} />}
+        {icon == "header" && <BiHeading value={{ className: "react-icons" }} />}
+
         {icon == "strikethrough" && (
           <BiStrikethrough value={{ className: "react-icons" }} />
         )}

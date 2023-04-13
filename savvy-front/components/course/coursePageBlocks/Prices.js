@@ -188,7 +188,7 @@ const Prices = (props) => {
   return (
     <Styles>
       <Container>
-        <h2>Тарифы</h2>
+        <h2>Варианты участия</h2>
         <PriceBoxContainer>
           <PriceBox>
             <h3>{p[0].name}</h3>

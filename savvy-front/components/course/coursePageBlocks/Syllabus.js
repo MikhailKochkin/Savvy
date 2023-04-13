@@ -65,10 +65,10 @@ const CoursePage = (props) => {
               <h2>{t("what_u_will_learn")}</h2>
               {page === "lessons" && (
                 <>
-                  {/* <Total> {t("open_lessons")}</Total> */}
                   <Total>
                     {" "}
-                    {t("total_lessons")} {props.lessons.length}
+                    {t("total_lessons")}{" "}
+                    {props.lessons.filter((l) => l.type !== "HIDDEN").length}
                   </Total>
                   <Lessons>
                     {[...props.lessons]

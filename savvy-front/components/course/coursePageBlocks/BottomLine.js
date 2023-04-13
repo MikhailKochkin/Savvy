@@ -22,7 +22,7 @@ const SINGLE_COURSEPAGE_QUERY = gql`
 
 const Banner = styled.div`
   width: 100%;
-  min-height: 10vh;
+  min-height: 5vh;
   background-image: url("/static/pattern.svg");
   background-size: cover;
   color: #dfe1ec;

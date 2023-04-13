@@ -199,6 +199,18 @@ const NewCoursePage = (props) => {
           <ATF id={props.id} />
           {data && !loading && (
             <>
+              {width < 880 && <MobileAction coursePage={data.coursePage} />}
+              <Goal coursePage={data.coursePage} />
+              <Syllabus
+                id={props.id}
+                lessons={data.coursePage.lessons}
+                coursePageId={data.coursePage.id}
+              />
+              <SellingPoints coursePage={data.coursePage} />
+              {data.coursePage.prices &&
+                data.coursePage.prices.prices.length > 0 && (
+                  <Prices coursePage={data.coursePage} />
+                )}
               {width < 880 &&
                 (props.form == "lead" ? (
                   <MobileLeads me={me} coursePage={data.coursePage} />
@@ -209,24 +221,12 @@ const NewCoursePage = (props) => {
                     promocode={props.promocode}
                   />
                 ))}
-              {width < 880 && <MobileAction coursePage={data.coursePage} />}
-              <Goal coursePage={data.coursePage} />
-              <Syllabus
-                id={props.id}
-                lessons={data.coursePage.lessons}
-                coursePageId={data.coursePage.id}
-              />
               <Teachers coursePage={data.coursePage} />
-              <SellingPoints coursePage={data.coursePage} />
 
-              {data.coursePage.prices &&
-                data.coursePage.prices.prices.length > 0 && (
-                  <Prices coursePage={data.coursePage} />
-                )}
               {/* {prog && prog.reviews && prog.reviews.length > 0 && (
                 <Reviews data={prog} />
               )} */}
-              <QA />
+              {/* <QA /> */}
             </>
           )}
         </Main>

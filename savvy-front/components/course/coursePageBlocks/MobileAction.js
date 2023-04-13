@@ -82,7 +82,7 @@ const MobileAction = (props) => {
         }}
       >
         {props.coursePage.prices && props.coursePage.prices.prices.length > 0
-          ? "Оставить заявку"
+          ? "Записаться на курс"
           : t("start_open_lesson")}
       </ButtonOpen>
     </Styles>

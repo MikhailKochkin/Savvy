@@ -29,9 +29,9 @@ const Container = styled.div`
   align-items: flex-start;
   color: #313d48;
   h2 {
-    line-height: 1.4;
+    line-height: 1.2;
     font-weight: 700;
-    font-size: 2.8rem;
+    font-size: 2.4rem;
   }
   button {
     background: #327998;
@@ -49,16 +49,27 @@ const Container = styled.div`
     width: 90%;
     /* height: 150px; */
   }
-  #goal_examples {
+  #audience_id {
     width: 90%;
     /* height: 150px; */
-    font-size: 2rem;
+    font-size: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  #goal_examples {
+    width: 70%;
+    /* height: 150px; */
+    font-size: 1.6rem;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: space-between;
     justify-content: space-between;
     margin-bottom: 20px;
+    img {
+      width: 100%;
+    }
     div {
     }
     .audience {
@@ -151,34 +162,10 @@ const Goal = (props) => {
   return (
     <Styles>
       <Container>
-        <div id="goal_message">
-          <h2>
-            {/* {d.goal_header ? (
-              renderHTML(d.goal_header)
-            ) : ( */}
-            <>
-              {router.locale == "ru" ? (
-                <>Чему вы научитесь</>
-              ) : (
-                <>What you will learn</>
-              )}
-            </>
-            {/* )} */}
-          </h2>
-          {/* 
-          <button id="advantages_to_enroll" onClick={(e) => slide()}>
-            {t("get_started")}
-          </button> */}
-        </div>
+        <div id="goal_message"></div>
         <div id="goal_examples">
           {coursePage.goals.map((g) => (
-            <div className="example">
-              <div className="icon">
-                ☑️
-                {/* <Icon size={25} icon={graduationCap} /> */}
-              </div>
-              <div>{renderHTML(g)}</div>
-            </div>
+            <div>{renderHTML(g)}</div>
           ))}
         </div>
         <Blue>
@@ -186,16 +173,16 @@ const Goal = (props) => {
             {/* {d.goal_header ? (
               renderHTML(d.goal_header)
             ) : ( */}
-            <>
+            {/* <>
               {router.locale == "ru" ? (
                 <>Для кого этот курс?</>
               ) : (
                 <>Who is this course for?</>
               )}
-            </>
+            </> */}
             {/* )} */}
           </h2>
-          <div id="goal_examples">
+          <div id="audience_id">
             <div className="audience">
               {coursePage.audience && renderHTML(coursePage.audience)}
             </div>

@@ -69,8 +69,18 @@ const Styles = styled.div`
   /* position: fixed; */
   bottom: 0px;
   /* height: 100px; */
+  h2 {
+    line-height: 1.4;
+    font-weight: 700;
+    font-size: 2.8rem;
+  }
+  @media (max-width: 800px) {
+    h2 {
+      margin-bottom: 20px;
+    }
+  }
   .choose {
-    width: 100%;
+    width: 90%;
     height: 42px;
     padding: 2%;
     font-family: Montserrat;
@@ -157,7 +167,7 @@ const ButtonBuy = styled.button`
 `;
 
 const ButtonBuySmall = styled.button`
-  width: 100%;
+  width: 90%;
   height: 48px;
   padding: 2%;
   font-family: Montserrat;
@@ -408,68 +418,52 @@ const MobileBuy = (props) => {
 
   return (
     <Styles id="buy_section">
-      {props.coursePage.courseType == "FORMONEY" && (
-        <>
-          {/* {installments && (
-            <PriceBox>
-              <div>
-                {installments}{" "}
-                {getNoun(installments, "платёж", "платежа", "платежей")} по
-              </div>
-              {installments && (
-                <div className="price_small">
-                  {price} {coursePage.currency == "ruble" ? "₽" : "$"}{" "}
-                </div>
-              )}
-            </PriceBox>
-          )} */}
-          {/* {!installments && <div className="price">{price} ₽</div>} */}
-          {/* {!installments && !props.coursePage.discountPrice && (
-            <div className="price">
-              {price} {coursePage.currency == "ruble" ? "₽" : "$"}
-            </div>
-          )} */}
-          {/* {!installments && props.coursePage.discountPrice && (
-            <div className="price">
-              <div>
-                {props.coursePage.discountPrice}{" "}
-                <span className="discount">{price}</span>{" "}
-                {coursePage.currency == "ruble" ? "₽" : "$"}
-              </div>
-              <div className="bubble">
-                -
-                {100 - parseInt((props.coursePage.discountPrice / price) * 100)}
-                %
-              </div>
-            </div>
-          )} */}
-        </>
-      )}
+      <h2>Как присоединиться?</h2>
+      {props.coursePage.prices &&
+        props.coursePage.prices.prices &&
+        props.coursePage.prices.prices.length > 1 && (
+          <div className="choose">
+            <select onChange={(e) => setPrice(e.target.value)}>
+              {props.coursePage.prices.prices.map((p) => (
+                <option value={p.price}>{p.name} тариф</option>
+              ))}
+            </select>
+          </div>
+        )}
+      <ButtonOpen
+        id="mobile_coursePage_buy_button"
+        onClick={async (e) => {
+          e.preventDefault();
+          if (!me) {
+            alert(`Set up an account on BeSavvy`);
+            toggleModal();
+          } else {
+            const res = await createOrder({
+              variables: {
+                coursePageId: coursePage.id,
+                price: props.coursePage.discountPrice
+                  ? props.coursePage.discountPrice
+                  : price,
+                userId: me.id,
+                promocode: promo,
+              },
+            });
+            location.href = res.data.createOrder.url;
+          }
+        }}
+      >
+        {loading_data ? `...` : t("buy")}
+      </ButtonOpen>
+      <ButtonBuySmall
+        id="coursePage_buy_button"
+        onClick={(e) => getInstallments()}
+      >
+        Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
+      </ButtonBuySmall>
       {props.coursePage.courseType == "PUBLIC" && (
         <div className="price">{t("free")}</div>
       )}
-      {props.coursePage.courseType == "FORMONEY" && (
-        <>
-          <ButtonOpen
-            id="coursePage_to_demolesson"
-            // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-            // target="_blank"
 
-            onClick={(e) => {
-              e.preventDefault();
-              Router.push({
-                pathname: "/course",
-                query: {
-                  id: coursePage.id,
-                  // type: "story",
-                },
-              });
-            }}
-          >
-            {t("start_open_lesson")}
-          </ButtonOpen>
-        </>
-      )}
       {props.coursePage.courseType == "PUBLIC" && (
         <ButtonOpen
           id="coursePage_to_demolesson"
@@ -494,9 +488,9 @@ const MobileBuy = (props) => {
       )}
 
       <Info>
-        {props.coursePage.courseType !== "PUBLIC" && (
+        {/* {props.coursePage.courseType !== "PUBLIC" && (
           <div className="guarantee">{t("guarantee")}</div>
-        )}
+        )} */}
         <div className="details">
           <div className="">
             {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
@@ -512,48 +506,6 @@ const MobileBuy = (props) => {
             {coursePage.currency == "ruble" ? "₽" : "$"}
           </div>
         </div>
-        {props.coursePage.prices &&
-          props.coursePage.prices.prices &&
-          props.coursePage.prices.prices.length > 1 && (
-            <div className="choose">
-              <select onChange={(e) => setPrice(e.target.value)}>
-                {props.coursePage.prices.prices.map((p) => (
-                  <option value={p.price}>{p.name} тариф</option>
-                ))}
-              </select>
-            </div>
-          )}
-        <ButtonBuy
-          id="mobile_coursePage_buy_button"
-          onClick={async (e) => {
-            e.preventDefault();
-            if (!me) {
-              alert(`Set up an account on BeSavvy`);
-              toggleModal();
-            } else {
-              const res = await createOrder({
-                variables: {
-                  coursePageId: coursePage.id,
-                  price: props.coursePage.discountPrice
-                    ? props.coursePage.discountPrice
-                    : price,
-                  userId: me.id,
-                  promocode: promo,
-                },
-              });
-              location.href = res.data.createOrder.url;
-            }
-          }}
-        >
-          {installments && (loading_data ? `...` : t("buy_installments"))}
-          {!installments && (loading_data ? `...` : t("buy"))}
-        </ButtonBuy>
-        <ButtonBuySmall
-          id="coursePage_buy_button"
-          onClick={(e) => getInstallments()}
-        >
-          Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
-        </ButtonBuySmall>
 
         {props.coursePage.courseType !== "PUBLIC" && (
           <div className="open">

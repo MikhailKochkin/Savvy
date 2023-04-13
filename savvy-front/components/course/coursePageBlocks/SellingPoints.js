@@ -7,15 +7,44 @@ import { useTranslation } from "next-i18next";
 const Styles = styled.div`
   width: 100%;
   min-height: 100vh;
-  background: #f4f8fc;
+  /* background: #f4f8fc; */
   border-top: 1px solid #dce2e7;
   display: flex;
+  padding: 40px 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding-bottom: 50px;
+  .video-container {
+    width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+  .video-fit {
+    width: 600px;
+    height: 100%;
+    object-fit: cover;
+  }
   @media (max-width: 1040px) {
     padding: 30px 0;
+    .video-container {
+      width: 350px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    video {
+      max-width: 100%;
+      height: auto;
+    }
+    .video-fit {
+      width: 350px;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 `;
 
@@ -34,6 +63,11 @@ const Container = styled.div`
   }
   .text {
     width: 80%;
+  }
+  @media (max-width: 1040px) {
+    .text {
+      width: 100%;
+    }
   }
 `;
 
@@ -212,38 +246,14 @@ const SellingPoints = (props) => {
   return (
     <Styles>
       <Container>
-        <h2>{t("program_includes")}</h2>
-        <div className="text">
-          {props.coursePage.methods && renderHTML(props.coursePage.methods)}
-        </div>
-        <PointsBox>
-          {router.locale == "ru" &&
-            sps.map((s, i) => (
-              <Point>
-                <div className="number">{i + 1}</div>
-                <div className="info">
-                  <div className="header">{s.selling_point}</div>
-                  <div className="text">{s.selling_point_details}</div>
-                </div>
-              </Point>
-            ))}
-          {router.locale !== "ru" &&
-            sps_eng.map((s, i) => (
-              <Point>
-                <div className="number">{i + 1}</div>
-                <div className="info">
-                  <div className="header">{s.selling_point}</div>
-                  <div className="text">{s.selling_point_details}</div>
-                </div>
-              </Point>
-            ))}
-        </PointsBox>
         <Blue>
-          <h2>{t("results")}</h2>
           <div className="text">
             {props.coursePage.result && renderHTML(props.coursePage.result)}
           </div>
         </Blue>
+        <div className="text">
+          {props.coursePage.methods && renderHTML(props.coursePage.methods)}
+        </div>
       </Container>
     </Styles>
   );

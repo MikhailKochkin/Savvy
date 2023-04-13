@@ -712,7 +712,6 @@ const UpdateForm = (props) => {
       <Title>{t("course_landing_info")}</Title>
       <Fieldset>
         <Explainer>{t("course_header")}</Explainer>
-
         {header.map((g, i) => (
           <input
             index={i}
@@ -733,14 +732,16 @@ const UpdateForm = (props) => {
         </button> */}
         <Explainer>{t("course_subheader")}</Explainer>
         {subheader.map((g, i) => (
-          <input
-            index={i}
-            name="goal"
-            onChange={(e) =>
-              myCallbackSubheader(e.target.value, e.target.name, parseInt(i))
-            }
-            defaultValue={g}
-          />
+          <>
+            <Frame>
+              <DynamicLoadedEditor
+                index={i}
+                name="goal"
+                getEditorText={myCallbackSubheader}
+                value={g}
+              />
+            </Frame>
+          </>
         ))}
         {/* <button
           onClick={(e) => {
@@ -751,17 +752,22 @@ const UpdateForm = (props) => {
           +1
         </button> */}
         <Explainer>{t("course_goals")}</Explainer>
-
         {goals.map((g, i) => (
-          <Frame>
-            {i + 1}.
-            <DynamicLoadedEditor
-              index={i}
-              name="goal"
-              getEditorText={myCallbackGoal}
+          <>
+            <Frame>
+              {i + 1}.
+              <DynamicLoadedEditor
+                index={i}
+                name="goal"
+                getEditorText={myCallbackGoal}
+                value={g}
+              />
+            </Frame>
+            <textarea
               value={g}
+              onChange={(e) => myCallbackGoal(e.target.value, "goal", i)}
             />
-          </Frame>
+          </>
         ))}
         <Circles>
           <Circle>
@@ -826,6 +832,10 @@ const UpdateForm = (props) => {
             value={methods}
           />
         </Frame>
+        <textarea
+          value={methods}
+          onChange={(e) => setMethods(e.target.value)}
+        />
         <Explainer>{t("course_audience")}</Explainer>
         <Frame>
           <DynamicLoadedEditor
@@ -835,6 +845,10 @@ const UpdateForm = (props) => {
             value={audience}
           />
         </Frame>
+        <textarea
+          value={audience}
+          onChange={(e) => setAudience(e.target.value)}
+        />
         <Explainer>{t("course_result")}</Explainer>
         <Frame>
           <DynamicLoadedEditor
@@ -844,6 +858,7 @@ const UpdateForm = (props) => {
             value={result}
           />
         </Frame>
+        <textarea value={result} onChange={(e) => setResult(e.target.value)} />
         {/* <Link
           href={{
             pathname: "/coursePage",
