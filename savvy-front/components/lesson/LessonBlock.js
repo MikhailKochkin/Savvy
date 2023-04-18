@@ -468,6 +468,7 @@ const LessonBlock = (props) => {
                 clicks={data.link_clicks}
                 user={lesson.user.id}
                 note={data}
+                author={lesson.user}
                 id={data.id}
                 complexity={data.complexity}
                 lessonID={lesson.id}
@@ -628,6 +629,7 @@ const LessonBlock = (props) => {
                 lessonId={lesson.id}
                 user={data.user.id}
                 story={false}
+                updateMode={true}
                 getResults={getResults}
                 passUpdated={passUpdated}
                 getResult={getResult}

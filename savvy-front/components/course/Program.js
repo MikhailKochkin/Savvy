@@ -28,6 +28,7 @@ const SINGLE_PROGRAM_QUERY = gql`
       price
       discountPrice
       video
+      promotionId
       audience
       result
       tags

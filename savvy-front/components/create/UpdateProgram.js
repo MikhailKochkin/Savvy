@@ -12,6 +12,8 @@ const SINGLE_PROGRAM_QUERY = gql`
       image
       audience
       result
+      syllabus
+      months
       goals
       header
       price

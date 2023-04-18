@@ -37,30 +37,6 @@ const CREATE_ORDER_MUTATION = gql`
   }
 `;
 
-const CREATE_CLIENT = gql`
-  mutation createBusinessClient(
-    $email: String!
-    $name: String!
-    $number: String!
-    $type: String!
-    $communication_medium: String!
-    $comment: String!
-    $coursePageId: String
-  ) {
-    createBusinessClient(
-      email: $email
-      name: $name
-      number: $number
-      type: $type
-      communication_medium: $communication_medium
-      comment: $comment
-      coursePageId: $coursePageId
-    ) {
-      id
-    }
-  }
-`;
-
 const UPDATE_ORDER = gql`
   mutation UPDATE_ORDER($id: String!, $userId: String!) {
     updateOrderAuto(id: $id, userId: $userId) {
@@ -186,7 +162,7 @@ const Contact = styled.div`
     }
   }
   .details {
-    margin-top: 20px;
+    margin: 20px 0;
     width: 100%;
   }
   input {
@@ -274,23 +250,6 @@ const Contact = styled.div`
         }
       }
     }
-  }
-`;
-
-const PriceBox = styled.div`
-  width: 292px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-  .price_small {
-    font-weight: 600;
-    font-size: 3.2rem;
-    /* text-align: left; */
-  }
-  div {
-    margin-right: 10px;
   }
 `;
 
@@ -413,7 +372,6 @@ const Action = (props) => {
   const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
 
-  const [isPromo, setIsPromo] = useState(false);
   const [price, setPrice] = useState(
     program.discountPrice ? program.discountPrice : program.price
   );
@@ -452,22 +410,6 @@ const Action = (props) => {
     my_orders = me.orders.filter((o) => o.coursePage.id == first_course.id);
   }
 
-  const getNoun = (number, one, two, five) => {
-    let n = Math.abs(number);
-    n %= 100;
-    if (n >= 5 && n <= 20) {
-      return five;
-    }
-    n %= 10;
-    if (n === 1) {
-      return one;
-    }
-    if (n >= 2 && n <= 4) {
-      return two;
-    }
-    return five;
-  };
-
   const getInstallments = () => {
     tinkoff.create({
       shopId: process.env.NEXT_PUBLIC_SHOP_ID,
@@ -495,28 +437,32 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Contact>
-          <div className="price">{price} ₽</div>
-
           <ButtonOpen
             id="coursePage_to_demolesson"
-            // href={`https://besavvy.app/lesson?id=${demo_lesson.id}&type=story`}
-            // target="_blank"
-
             onClick={(e) => {
               e.preventDefault();
               Router.push({
-                pathname: "/course",
+                pathname: "/navigator",
                 query: {
-                  id: first_course.id,
-                  // type: "story",
+                  level: "post",
+                  id: program.promotionId,
+                  source: "programPage",
+                  name: program.title,
                 },
               });
             }}
           >
             {t("start_open_lesson")}
           </ButtonOpen>
-          <div className="guarantee">{t("guarantee")}</div>
-
+          <div className="details">
+            <div className="">
+              ◼️ {total_lessons_number} {t("online_lessons")}
+            </div>
+            <div className="">◼️ {t("access")}</div>
+            <div className="">◼️ {t("chat")}</div>
+            <div className="">◼️ {t("certificate")}</div>
+            <div className="">◼️ {price} ₽</div>
+          </div>
           <ButtonBuy
             id="coursePage_buy_button"
             onClick={async (e) => {
@@ -545,32 +491,6 @@ const Action = (props) => {
           >
             Купить в рассрочку за {parseInt(price / 9)} ₽ / мес
           </ButtonBuySmall>
-          <div className="details">
-            {/* {installments && (
-              <div className="">
-                ◼️ рассрочка на {installments - 1}{" "}
-                {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
-              </div>
-            )} */}
-            <div className="">
-              ◼️ {total_lessons_number} {t("online_lessons")}
-              {/* {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")} */}
-            </div>
-            {/* {program.price > 4000 && (
-              <div className="">◼️ {t("program_webinars")}</div>
-            )} */}
-            <div className="">◼️ {t("access")}</div>
-            <div className="">◼️ {t("chat")}</div>
-            <div className="">◼️ {t("certificate")}</div>
-            {/* {props.program.promocode && (
-              <div id="promo">
-                <input
-                  placeholder="Promocode"
-                  onChange={(e) => addPromo(e.target.value)}
-                />
-              </div>
-            )} */}
-          </div>
           <div className="open">
             <div className="">{t("after")}</div>
             <OpenCourse

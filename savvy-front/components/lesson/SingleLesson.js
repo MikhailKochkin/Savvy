@@ -61,6 +61,11 @@ const SINGLE_LESSON_QUERY = gql`
         type
         courseId
         price
+        program {
+          id
+          months
+          syllabus
+        }
         discountPrice
         user {
           id
@@ -77,6 +82,7 @@ const SINGLE_LESSON_QUERY = gql`
       }
       notes {
         id
+        type
         link_clicks
         complexity
         isSecret

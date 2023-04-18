@@ -421,7 +421,7 @@ const ProgressBarContainer = styled.div`
   left: 0;
   width: 100%;
   height: 65px;
-  z-index: 1000;
+  z-index: 100;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -434,6 +434,9 @@ const ProgressBarContainer = styled.div`
     align-items: center;
     justify-content: center;
     width: 50%;
+    .timeLeft {
+      min-width: 160px;
+    }
     .container {
       width: 500px;
       height: 14px;
@@ -698,7 +701,6 @@ const Feed = (props) => {
             myResult={num}
             lessonItemsLength={props.components.length}
           />
-          {console.log("num", num, props.components.length)}
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
@@ -985,7 +987,6 @@ const Feed = (props) => {
 
 const CustomProgressBar = ({ myResult, lessonItemsLength }) => {
   const progress = myResult ? (100 * (myResult + 1)) / lessonItemsLength : 0;
-  console.log("progress", progress, myResult + 1, lessonItemsLength);
   return (
     <ProgressBarContainer>
       <div className="box">
@@ -993,7 +994,9 @@ const CustomProgressBar = ({ myResult, lessonItemsLength }) => {
           <ProgressBar progress={progress + "%"} />
         </div>
         <div className="timeLeft">
-          Осталось {(lessonItemsLength - myResult - 1) * 2} мин.{" "}
+          {(lessonItemsLength - myResult - 1) * 2 > 0
+            ? `Осталось ${(lessonItemsLength - myResult - 1) * 2} мин.`
+            : "Урок завершен!"}
         </div>
       </div>
     </ProgressBarContainer>

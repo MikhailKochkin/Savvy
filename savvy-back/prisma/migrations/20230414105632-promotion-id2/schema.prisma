@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 model Application {
@@ -236,8 +236,6 @@ model Program {
   description       String
   image             String
   promotionId       String?
-  syllabus          Json?
-  months            Int?
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   price             Int?
@@ -262,7 +260,6 @@ model Program {
   promocode         Json?
   orders            Order[]
   coursePages       CoursePage[]
-  offers            Offer[]
 }
 
 model CourseVisit {
@@ -500,12 +497,11 @@ model Note {
   lessonID   String?  @default(cuid())
   updatedAt  DateTime @updatedAt
   createdAt  DateTime @default(now())
-  isSecret  Boolean?  @default(false)
+  isSecret  Boolean? @default(false)
   next       Json?
   userId     String?
   lessonId   String?
   chat       Boolean?
-  type       String?  @default("longread")
   complexity Int?     @default(1)
   lesson     Lesson?  @relation(fields: [lessonId], references: [id])
   user       User?    @relation(fields: [userId], references: [id])
@@ -523,8 +519,6 @@ model Offer {
   createdAt     DateTime @default(now())
   userId        String?
   lessonId      String?
-  programId     String?
-  program       Program? @relation(fields: [programId], references: [id])
   lesson        Lesson?  @relation(fields: [lessonId], references: [id])
   user          User?    @relation(fields: [userId], references: [id])
 }

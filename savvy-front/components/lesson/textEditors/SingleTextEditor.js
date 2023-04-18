@@ -57,7 +57,7 @@ const TextBar = styled.div`
   border-radius: 5px;
   @media (max-width: 800px) {
     width: 100%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
   img {
     display: block;

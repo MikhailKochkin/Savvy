@@ -117,6 +117,21 @@ const ClientMessages = inputObjectType({
   },
 });
 
+const ProgramModule = inputObjectType({
+  name: "ProgramModule",
+  definition(t) {
+    t.string("header");
+    t.list.string("topic");
+  },
+});
+
+const Syllabus = inputObjectType({
+  name: "Syllabus",
+  definition(t) {
+    t.list.field("modules", { type: "ProgramModule" });
+  },
+});
+
 const Price = inputObjectType({
   name: "Price",
   definition(t) {
@@ -307,4 +322,6 @@ module.exports = {
   ConsumedContent,
   Mark,
   MarksList,
+  Syllabus,
+  ProgramModule,
 };

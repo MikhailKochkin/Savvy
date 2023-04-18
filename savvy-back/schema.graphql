@@ -586,6 +586,7 @@ type CoursePage {
   price: Int
   prices: Json
   promocode: Json
+  promotionId: String
   published: Boolean
   result: String
   reviews: Json
@@ -637,6 +638,7 @@ input CoursePageOrderByInput {
   price: SortOrder
   prices: SortOrder
   promocode: SortOrder
+  promotionId: SortOrder
   published: SortOrder
   result: SortOrder
   reviews: SortOrder
@@ -703,6 +705,7 @@ input CoursePageWhereInput {
   prices: JsonNullableFilter
   programs: ProgramListRelationFilter
   promocode: JsonNullableFilter
+  promotionId: StringNullableFilter
   published: BoolNullableFilter
   result: StringNullableFilter
   reviews: JsonNullableFilter
@@ -1711,6 +1714,7 @@ type Mutation {
   advancedSignup(careerTrackID: String, company: String, country: String, email: String, isFamiliar: Boolean, name: String, number: String, password: String, status: Status, surname: String, traffic_sources: Visits, uniID: String): AuthPayload
   botSignup(email: String, name: String, password: String): AuthPayload
   checkAssignment(checked: Boolean, id: String): LessonResult
+  copyLesson(id: String!): Lesson
   createBotDialogue(journey: [String], source: String): BotDialogue
   createBusinessClient(comment: String, country: String, coursePageId: String, email: String, name: String, number: String, sales_cycle: SalesCycle, source: String, surname: String, type: String): User
   createCertificate(coursePageId: String, studentId: String): Certificate
@@ -1800,7 +1804,7 @@ type Mutation {
   updateClause(commentary: String, id: String, keywords: [String], number: Int, sample: String, text: String): Clause
   updateConfUser(id: String, name: String, surname: String): ConfUser
   updateConstruction(answer: [String], columnsNum: Int, complexity: Int, elements: ElementsList, hint: String, id: String, name: String, type: String, variants: [String]): Construction
-  updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, modules: Modules, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
+  updateCoursePage(audience: String, authors: String, currency: String, description: String, discountPrice: Int, goals: [String], header: [String], id: String, image: String, methods: String, modules: Modules, news: String, nextStart: DateTime, price: Int, prices: Prices, promocode: PromocodeList, promotionId: String, result: String, subheader: [String], tariffs: String, title: String, uptodateAt: DateTime, video: String): CoursePage
   updateCourseVisit(id: String, visitsNumber: Int): CourseVisit
   updateEmailCampaign(content: String, emails: EmailsList, id: String, name: String): EmailCampaign
   updateEmailReminder(emailsSent: [String], id: String): EmailReminder
@@ -1810,12 +1814,13 @@ type Mutation {
   updateLessonResult(id: String, progress: Int, visitsNumber: Int): LessonResult
   updateMiniStatement(comments: [String], id: String): Statement
   updateNewTest(answers: [String], comments: [String], complexity: Int, correct: [Boolean], id: String, ifRight: String, ifWrong: String, next: NextType, question: [String], type: String): NewTest
-  updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String): Note
+  updateNote(complexity: Int, id: String, isSecret: Boolean, link_clicks: Int, next: NextType, text: String, type: String): Note
+  updateOffer(courseId: String, discountPrice: Int, header: String, id: String, price: Int, text: String, type: String): Offer
   updateOrder(id: String, isPaid: Boolean): Order
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
   updateProblem(complexity: Int, id: String, isSecret: Boolean, text: String): Problem
-  updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, news: String, nextStart: DateTime, price: Int, result: String, subheader: [String], title: String, video: String): Program
+  updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
@@ -2032,6 +2037,7 @@ type Note {
   link_clicks: Int
   next: Json
   text: String!
+  type: String
   updatedAt: DateTime!
   user: User
   userId: String
@@ -2058,6 +2064,7 @@ input NoteWhereInput {
   NOT: [NoteWhereInput!]
   OR: [NoteWhereInput!]
   text: StringFilter
+  type: StringNullableFilter
   updatedAt: DateTimeFilter
   user: UserWhereInput
   userId: StringNullableFilter
@@ -2076,6 +2083,8 @@ type Offer {
   lesson: Lesson
   lessonId: String
   price: Int
+  program: Program
+  programId: String
   text: String!
   type: String
   updatedAt: DateTime!
@@ -2097,6 +2106,7 @@ input OfferOrderByInput {
   id: SortOrder
   lessonId: SortOrder
   price: SortOrder
+  programId: SortOrder
   text: SortOrder
   type: SortOrder
   updatedAt: SortOrder
@@ -2115,6 +2125,8 @@ input OfferWhereInput {
   NOT: [OfferWhereInput!]
   OR: [OfferWhereInput!]
   price: IntNullableFilter
+  program: ProgramWhereInput
+  programId: StringNullableFilter
   text: StringFilter
   type: StringNullableFilter
   updatedAt: DateTimeFilter
@@ -2488,15 +2500,19 @@ type Program {
   image: String!
   installments: Int
   methods: String
+  months: Int
   news: String
   nextStart: DateTime
+  offers(after: OfferWhereUniqueInput, before: OfferWhereUniqueInput, first: Int, last: Int): [Offer!]!
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   price: Int
   promocode: Json
+  promotionId: String
   published: Boolean
   result: String
   reviews: Json
   subheader: [String!]!
+  syllabus: Json
   tags: [String!]!
   tariffs: String
   title: String!
@@ -2509,6 +2525,11 @@ input ProgramListRelationFilter {
   every: ProgramWhereInput
   none: ProgramWhereInput
   some: ProgramWhereInput
+}
+
+input ProgramModule {
+  header: String
+  topic: [String]
 }
 
 input ProgramOrderByInput {
@@ -2524,14 +2545,17 @@ input ProgramOrderByInput {
   image: SortOrder
   installments: SortOrder
   methods: SortOrder
+  months: SortOrder
   news: SortOrder
   nextStart: SortOrder
   price: SortOrder
   promocode: SortOrder
+  promotionId: SortOrder
   published: SortOrder
   result: SortOrder
   reviews: SortOrder
   subheader: SortOrder
+  syllabus: SortOrder
   tags: SortOrder
   tariffs: SortOrder
   title: SortOrder
@@ -2555,17 +2579,21 @@ input ProgramWhereInput {
   image: StringFilter
   installments: IntNullableFilter
   methods: StringNullableFilter
+  months: IntNullableFilter
   news: StringNullableFilter
   nextStart: DateTimeNullableFilter
   NOT: [ProgramWhereInput!]
+  offers: OfferListRelationFilter
   OR: [ProgramWhereInput!]
   orders: OrderListRelationFilter
   price: IntNullableFilter
   promocode: JsonNullableFilter
+  promotionId: StringNullableFilter
   published: BoolNullableFilter
   result: StringNullableFilter
   reviews: JsonNullableFilter
   subheader: StringNullableListFilter
+  syllabus: JsonNullableFilter
   tags: StringNullableListFilter
   tariffs: StringNullableFilter
   title: StringFilter
@@ -3105,6 +3133,10 @@ input StringNullableFilter {
 
 input StringNullableListFilter {
   equals: [String!]
+}
+
+input Syllabus {
+  modules: [ProgramModule]
 }
 
 type Team {

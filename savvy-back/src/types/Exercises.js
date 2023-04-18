@@ -71,6 +71,7 @@ const Note = objectType({
     t.model.id();
     t.model.text();
     t.model.next();
+    t.model.type();
     t.model.link_clicks();
     t.model.isSecret();
     t.model.complexity();
@@ -98,6 +99,8 @@ const Offer = objectType({
     t.model.lessonId();
     t.model.lesson();
     t.model.user();
+    t.model.programId();
+    t.model.program();
     t.model.createdAt();
     t.model.updatedAt();
   },

@@ -8,6 +8,10 @@ const Program = objectType({
     t.model.description();
     t.model.image();
     t.model.orders();
+    t.model.syllabus();
+    t.model.months();
+    t.model.promotionId();
+    t.model.offers();
     t.model.news();
     t.model.coursePages();
     t.model.published();
@@ -43,6 +47,7 @@ const CoursePage = objectType({
     t.model.image();
     t.model.banner();
     t.model.modules();
+    t.model.promotionId();
     t.model.numInCareerTrack();
     t.model.weeks();
     t.model.subscription();

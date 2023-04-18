@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import styled from "styled-components";
+import dynamic from "next/dynamic";
+
+const DynamicLoadedEditor = dynamic(import("./editor/HoverEditor"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
 
 const CREATE_EMAIL_CAMPAIGN = gql`
   mutation CreateEmailCampaign(
@@ -118,6 +124,10 @@ const CreateEmailCampaign = () => {
     setEmailTemplates(newTemplates);
   };
 
+  const myCallBack = (value, name, index) => {
+    handleTemplateTextChange(index, value);
+  };
+
   const handleTemplateTextChange = (index, value) => {
     const newTemplates = [...emailTemplates];
     newTemplates[index] = {
@@ -189,10 +199,15 @@ const CreateEmailCampaign = () => {
               />
               <br />
               <Label htmlFor={`template-${i}`}>Template {i + 1}:</Label>
-              <Textarea
+              {/* <Textarea
                 id={`template-${i}`}
                 value={emailTemplates[i]?.text || ""}
                 onChange={(e) => handleTemplateTextChange(i, e.target.value)}
+              /> */}
+              <DynamicLoadedEditor
+                id={`template-${i}`}
+                getEditorText={myCallBack}
+                value={emailTemplates[i]?.text || ""}
               />
             </div>
           ))}

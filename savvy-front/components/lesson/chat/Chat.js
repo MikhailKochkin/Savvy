@@ -304,6 +304,7 @@ const Secret = styled.div`
     border-radius: 10px;
     top: 20px;
     left: 25%;
+    z-index: 300;
     img {
       width: 200px;
       margin: 20px 0;
@@ -354,6 +355,11 @@ const Secret = styled.div`
       padding: 5px;
       border-radius: 10px;
       cursor: pointer;
+    }
+  }
+  @media (max-width: 800px) {
+    #open {
+      left: 50px;
     }
   }
 `;
@@ -537,7 +543,7 @@ const Chat = (props) => {
                 }
               }}
             >
-              {t("open")}
+              {t("toOpen")}
             </div>
           </div>
         </Secret>

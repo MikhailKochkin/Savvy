@@ -1136,9 +1136,13 @@ const Mutation = mutationType({
         title: stringArg(),
         description: stringArg(),
         image: stringArg(),
+        promotionId: stringArg(),
         audience: stringArg(),
         result: stringArg(),
-
+        months: intArg(),
+        syllabus: arg({
+          type: "Syllabus",
+        }),
         price: intArg(),
         currency: stringArg(),
         news: stringArg(),
@@ -1162,6 +1166,7 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
+        console.log("args", args);
         delete updates.id;
         const header = args.header;
         const subheader = args.subheader;
@@ -1292,6 +1297,262 @@ const Mutation = mutationType({
         return Lesson;
       },
     });
+    t.field("copyLesson", {
+      type: "Lesson",
+      args: {
+        id: nonNull(stringArg()),
+      },
+      resolve: async (_, args, ctx) => {
+        const originalLessonId = args.id;
+        const userId = ctx.res.req.userId;
+
+        // Fetch the original lesson
+        const originalLesson = await ctx.prisma.lesson.findUnique({
+          where: { id: originalLessonId },
+          include: {
+            newTests: true,
+            notes: true,
+            problems: true,
+            quizes: true,
+            shots: true,
+            texteditors: true,
+            offers: true,
+            constructions: true,
+            chats: true,
+          },
+        });
+
+        if (!originalLesson) {
+          throw new Error("Lesson not found");
+        }
+
+        console.log("here");
+
+        // Create a new lesson by copying the original lesson
+        const newLesson = await ctx.prisma.lesson.create({
+          data: {
+            id: undefined,
+            createdAt: undefined,
+            updatedAt: undefined,
+            description: originalLesson.description,
+            type: "REGULAR",
+            name: originalLesson.name + " (Copy)",
+            text: originalLesson.text,
+            number: 0,
+            coursePage: { connect: { id: originalLesson.coursePageId } },
+            user: { connect: { id: userId } },
+          },
+          include: {
+            coursePage: true,
+            user: true,
+          },
+        });
+
+        // Copy related data
+        // await Promise.all(
+        //   originalLesson.newTests.map((test) =>
+        //     ctx.prisma.newTest.create({
+        //       data: {
+        //         ...test,
+        //         id: undefined,
+        //         lessonId: newLesson.id,
+        //       },
+        //     })
+        //   )
+        // );
+
+        await Promise.all(
+          originalLesson.notes.map((note) =>
+            ctx.prisma.note.create({
+              data: {
+                text: note.text,
+                id: undefined,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.newTests.map((newTest) =>
+            ctx.prisma.newTest.create({
+              data: {
+                answers: {
+                  set: [...newTest.answers],
+                },
+                comments: {
+                  set: [...newTest.comments],
+                },
+                correct: {
+                  set: [...newTest.correct],
+                },
+                question: {
+                  set: [...newTest.question],
+                },
+                lessonID: newLesson.id,
+                ifRight: newTest.ifRight,
+                ifWrong: newTest.ifWrong,
+                type: newTest.type,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.quizes.map((quiz) =>
+            ctx.prisma.quiz.create({
+              data: {
+                question: quiz.question,
+                answer: quiz.answer,
+                ifWrong: quiz.ifWrong,
+                ifRight: quiz.ifRight,
+                type: quiz.type,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.problems.map((problem) =>
+            ctx.prisma.problem.create({
+              data: {
+                text: problem.text,
+                lessonID: newLesson.id,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.texteditors.map((texteditor) =>
+            ctx.prisma.textEditor.create({
+              data: {
+                text: texteditor.text,
+                totalMistakes: texteditor.totalMistakes,
+                name: texteditor.name,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.chats.map((chat) =>
+            ctx.prisma.chat.create({
+              data: {
+                messages: chat.messages,
+                name: chat.name,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.chats.map((chat) =>
+            ctx.prisma.chat.create({
+              data: {
+                messages: chat.messages,
+                name: chat.name,
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.shots.map((shot) =>
+            ctx.prisma.shot.create({
+              data: {
+                title: shot.title,
+                parts: {
+                  set: [...shot.parts],
+                },
+                comments: {
+                  set: [...shot.comments],
+                },
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        await Promise.all(
+          originalLesson.constructions.map((construction) =>
+            ctx.prisma.construction.create({
+              data: {
+                type: construction.type,
+                name: construction.name,
+                text: construction.text,
+                hasText: construction.hasText,
+                columnsNum: construction.columnsNum,
+                elements: construction.elements,
+                variants: {
+                  set: [...construction.variants],
+                },
+                answer: {
+                  set: [...construction.answer],
+                },
+                user: {
+                  connect: { id: userId },
+                },
+                lesson: {
+                  connect: { id: newLesson.id },
+                },
+              },
+            })
+          )
+        );
+
+        // Repeat for problems, quizes, shots, texteditors, and offers
+
+        return newLesson;
+      },
+    });
+
     t.field("deleteLesson", {
       type: "Lesson",
       args: {
@@ -1395,6 +1656,7 @@ const Mutation = mutationType({
         description: stringArg(),
         audience: stringArg(),
         result: stringArg(),
+        promotionId: stringArg(),
         price: intArg(),
         prices: arg({
           type: "Prices",
@@ -1985,11 +2247,36 @@ const Mutation = mutationType({
         return Offer;
       },
     });
+
+    t.field("updateOffer", {
+      type: "Offer",
+      args: {
+        id: stringArg(),
+        header: stringArg(),
+        text: stringArg(),
+        type: stringArg(),
+        courseId: stringArg(),
+        price: intArg(),
+        discountPrice: intArg(),
+      },
+      resolve: async (_, args, ctx) => {
+        const { id, ...otherArgs } = args;
+        let updateData = { ...otherArgs };
+
+        const updatedOffer = await ctx.prisma.offer.update({
+          where: { id },
+          data: updateData,
+        });
+
+        return updatedOffer;
+      },
+    });
     t.field("updateNote", {
       type: "Note",
       args: {
         id: stringArg(),
         text: stringArg(),
+        type: stringArg(),
         link_clicks: intArg(),
         isSecret: booleanArg(),
         complexity: intArg(),
@@ -1999,6 +2286,7 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
+        console.log("args", args);
         delete updates.id;
         return ctx.prisma.note.update({
           data: updates,

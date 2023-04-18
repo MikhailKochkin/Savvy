@@ -1,46 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
-import dynamic from "next/dynamic";
-// import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import { useTranslation } from "next-i18next";
 
-const CREATE_OFFER_MUTATION = gql`
-  mutation CREATE_OFFER_MUTATION(
-    $text: String!
-    $header: String!
-    $type: String!
-    $courseId: String!
-    $price: Int!
-    $discountPrice: Int!
-    $lessonId: String!
-  ) {
-    createOffer(
-      text: $text
-      header: $header
-      type: $type
-      courseId: $courseId
-      price: $price
-      discountPrice: $discountPrice
-      lessonId: $lessonId
-    ) {
-      id
-      text
-      header
-      type
-      courseId
-      price
-      discountPrice
-      lessonId
-      user {
-        id
-      }
-    }
-  }
-`;
-
 const Container = styled.div`
-  width: 95%;
+  width: 45%;
   margin: 3% 0;
   input,
   textarea {
@@ -78,27 +42,63 @@ const ButtonTwo = styled.button`
   }
 `;
 
-const Editor = styled.div`
-  margin-top: 1%;
+const UPDATE_OFFER_MUTATION = gql`
+  mutation UPDATE_OFFER_MUTATION(
+    $id: String!
+    $text: String
+    $header: String
+    $type: String
+    $courseId: String
+    $price: Int
+    $discountPrice: Int
+  ) {
+    updateOffer(
+      id: $id
+      text: $text
+      header: $header
+      type: $type
+      courseId: $courseId
+      price: $price
+      discountPrice: $discountPrice
+    ) {
+      id
+      text
+      header
+      type
+      courseId
+      price
+      discountPrice
+      user {
+        id
+      }
+    }
+  }
 `;
 
-const CreateOffer = (props) => {
-  const [header, setHeader] = useState("");
-  const [text, setText] = useState("");
-  const [type, setType] = useState("course");
-  const [courseId, setCourseId] = useState("");
-  const [price, setPrice] = useState(0);
-  const [discountPrice, setDiscountPrice] = useState(0);
-  const [update, setUpdate] = useState(false);
+// [Add the styled components and other constants here]
+
+const UpdateOffer = (props) => {
+  const { offer } = props;
+
+  const [header, setHeader] = useState(offer.header);
+  const [text, setText] = useState(offer.text);
+  const [type, setType] = useState(offer.type);
+  const [courseId, setCourseId] = useState(offer.courseId);
+  const [price, setPrice] = useState(offer.price);
+  const [discountPrice, setDiscountPrice] = useState(offer.discountPrice);
 
   const { t } = useTranslation("lesson");
-  const [createOffer, { data, loading }] = useMutation(CREATE_OFFER_MUTATION);
+  const [updateOffer, { data, loading }] = useMutation(UPDATE_OFFER_MUTATION);
 
-  const switchUpdate = () => {
-    setUpdate(!update);
-  };
+  useEffect(() => {
+    setHeader(offer.header);
+    setText(offer.text);
+    setType(offer.type);
+    setCourseId(offer.courseId);
+    setPrice(offer.price);
+    setDiscountPrice(offer.discountPrice);
+  }, [offer]);
 
-  const { lessonId } = props;
   return (
     <Container>
       <div>Header</div>
@@ -147,12 +147,13 @@ const CreateOffer = (props) => {
         defaultValue={discountPrice}
         onChange={(e) => setDiscountPrice(parseInt(e.target.value))}
       />
+
       <ButtonTwo
         onClick={async (e) => {
           e.preventDefault();
-          const res = await createOffer({
+          const res = await updateOffer({
             variables: {
-              lessonId,
+              id: offer.id,
               header,
               text,
               type,
@@ -162,6 +163,8 @@ const CreateOffer = (props) => {
             },
           });
           props.getResult(res);
+          props.switchUpdate();
+          props.passUpdated();
         }}
       >
         {loading ? t("saving") : t("save")}
@@ -170,4 +173,4 @@ const CreateOffer = (props) => {
   );
 };
 
-export default CreateOffer;
+export default UpdateOffer;

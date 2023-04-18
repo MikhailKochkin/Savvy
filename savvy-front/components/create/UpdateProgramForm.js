@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
 import dynamic from "next/dynamic";
@@ -14,7 +14,8 @@ const UPDATE_PROGRAM_MUTATION = gql`
     $description: String
     $audience: String
     $result: String
-    # $tariffs: String
+    $syllabus: Syllabus
+    $months: Int
     $methods: String
     $nextStart: DateTime
     $price: Int
@@ -31,7 +32,8 @@ const UPDATE_PROGRAM_MUTATION = gql`
       description: $description
       audience: $audience
       result: $result
-      #   tariffs: $tariffs
+      syllabus: $syllabus
+      months: $months
       methods: $methods
       nextStart: $nextStart
       price: $price
@@ -45,6 +47,8 @@ const UPDATE_PROGRAM_MUTATION = gql`
       title
       description
       image
+      syllabus
+      months
     }
   }
 `;
@@ -241,6 +245,23 @@ const UpdateProgramForm = (props) => {
     props.coursePage.subheader.length > 0 ? props.coursePage.subheader : [""]
   );
   const [startDate, setStartDate] = useState(props.coursePage.nextStart);
+  const [topicHeader, setTopicHeader] = useState("");
+  const [topics, setTopics] = useState([]);
+  const [modules, setModules] = useState(
+    props.coursePage.syllabus ? props.coursePage.syllabus.modules : []
+  );
+  const [months, setMonths] = useState(props.coursePage.months);
+  const [editingModuleIndex, setEditingModuleIndex] = useState(null);
+
+  useEffect(() => {
+    if (editingModuleIndex !== null) {
+      const module = modules[editingModuleIndex];
+      console.log("Editing Module Index:", editingModuleIndex);
+      console.log("Selected Module:", module);
+      setTopicHeader(module.header);
+      setTopics(module.topic);
+    }
+  }, [editingModuleIndex, modules]);
 
   const [updateProgram, { data, loading }] = useMutation(
     UPDATE_PROGRAM_MUTATION
@@ -280,6 +301,21 @@ const UpdateProgramForm = (props) => {
     let new_g = [...subheader];
     new_g[i] = res;
     setSubheader([...new_g]);
+  };
+
+  const handleModuleUpdate = (index, updatedHeader, updatedTopics) => {
+    const updatedModules = [...modules];
+    updatedModules[index] = {
+      header: updatedHeader,
+      topic: updatedTopics,
+    };
+    setModules(updatedModules);
+    setEditingModuleIndex(null); // Reset the editingModuleIndex
+  };
+
+  const handleModuleRemove = (index) => {
+    const updatedModules = modules.filter((_, i) => i !== index);
+    setModules(updatedModules);
   };
 
   const myCallback = (dataFromChild, name) => {
@@ -330,6 +366,69 @@ const UpdateProgramForm = (props) => {
           defaultValue={price}
           onChange={(e) => setPrice(parseInt(e.target.value))}
         />
+        <Explainer>Header</Explainer>
+        <input
+          type="text"
+          id="header"
+          name="header"
+          placeholder="Header"
+          required
+          value={topicHeader}
+          onChange={(e) => setTopicHeader(e.target.value)}
+        />
+        <Explainer>Topics</Explainer>
+        <textarea
+          value={topics.join("\n")}
+          onChange={(e) => setTopics(e.target.value.split("\n"))}
+        />
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            if (editingModuleIndex !== null) {
+              handleModuleUpdate(editingModuleIndex, topicHeader, topics);
+            } else {
+              setModules([...modules, { header: topicHeader, topic: topics }]);
+            }
+            setTopicHeader("");
+            setTopics([]);
+          }}
+        >
+          {editingModuleIndex !== null ? "Update Module" : "Add Module"}
+        </Button>
+        <Explainer>Added Modules</Explainer>
+        <ul>
+          {modules.map((module, index) => (
+            <li key={index}>
+              {module.header}
+              <ul>
+                {module.topic.map((topic, i) => (
+                  <li key={i}>{topic}</li>
+                ))}
+              </ul>
+              <button
+                onClick={() => {
+                  setTopicHeader(module.header);
+                  setTopics(module.topic);
+                  setEditingModuleIndex(index);
+                }}
+              >
+                Edit
+              </button>
+              <button onClick={() => handleModuleRemove(index)}>Remove</button>
+            </li>
+          ))}
+        </ul>
+        <Explainer>Months</Explainer>
+        <input
+          className="second"
+          type="number"
+          id="months"
+          name="months"
+          placeholder="Months"
+          required
+          defaultValue={months}
+          onChange={(e) => setMonths(parseInt(e.target.value))}
+        />
         <Explainer>Дата старта курса / следующего вебинара автора</Explainer>
 
         <input
@@ -366,25 +465,18 @@ const UpdateProgramForm = (props) => {
             placeholder="Заголовок..."
           />
         ))}
-        {/* <button
-          onClick={(e) => {
-            setHeader([...header, ""]);
-            e.preventDefault();
-          }}
-        >
-          +1
-        </button> */}
         <Explainer>Подзаголовок лендинга</Explainer>
         {subheader.map((g, i) => (
-          <input
-            index={i}
-            name="goal"
-            onChange={(e) =>
-              myCallbackSubheader(e.target.value, e.target.name, parseInt(i))
-            }
-            defaultValue={g}
-            placeholder="Подзаголовок..."
-          />
+          <>
+            <Frame>
+              <DynamicLoadedEditor
+                index={i}
+                name="goal"
+                getEditorText={myCallbackSubheader}
+                value={g}
+              />
+            </Frame>
+          </>
         ))}
         {/* <button
           onClick={(e) => {
@@ -394,19 +486,22 @@ const UpdateProgramForm = (props) => {
         >
           +1
         </button> */}
-        <Explainer>Результаты студентов по итогам курса</Explainer>
+        <Explainer>Было / стало</Explainer>
 
         {goals.map((g, i) => (
-          <Frame>
-            {i + 1}.
-            <DynamicLoadedEditor
-              index={i}
-              name="goal"
-              getEditorText={myCallbackGoal}
-              value={g}
-              placeholder="Результат ..."
-            />
-          </Frame>
+          // <Frame>
+          //   <DynamicLoadedEditor
+          //     index={i}
+          //     name="goal"
+          //     getEditorText={myCallbackGoal}
+          //     value={g}
+          //     placeholder="Результат ..."
+          //   />
+          // </Frame>
+          <textarea
+            value={g}
+            onChange={(e) => myCallbackGoal(e.target.value, "goal", i)}
+          />
         ))}
         <Circles>
           <Circle>
@@ -473,7 +568,7 @@ const UpdateProgramForm = (props) => {
           В каком формате будет проходить обучение? Симуляторы, живые встречи,
           онлайн-встречи, практические задания и так далее.
         </Explainer>
-        <Frame>
+        {/* <Frame>
           <DynamicLoadedEditor
             index={1}
             name="methods"
@@ -481,12 +576,17 @@ const UpdateProgramForm = (props) => {
             value={methods}
             placeholder="Методики преподавания..."
           />
-        </Frame>
+        </Frame> */}
+        <textarea
+          value={methods}
+          onChange={(e) => setMethods(e.target.value)}
+        />
         <Explainer>
           Для кого этот курс? Опишите, чтобы ваши студенты смогли узнать себя.
         </Explainer>
+        <textarea value={result} onChange={(e) => setResult(e.target.value)} />
 
-        <Frame>
+        {/* <Frame>
           <DynamicLoadedEditor
             index={1}
             name="audience"
@@ -494,7 +594,7 @@ const UpdateProgramForm = (props) => {
             value={audience}
             placeholder="Для кого этот курс..."
           />
-        </Frame>
+        </Frame> */}
         {/* <Frame>
           <DynamicLoadedEditor
             index={1}
@@ -527,6 +627,8 @@ const UpdateProgramForm = (props) => {
                 goals,
                 price,
                 header,
+                syllabus: { modules: modules },
+                months,
                 nextStart: startDate,
                 subheader,
                 result,

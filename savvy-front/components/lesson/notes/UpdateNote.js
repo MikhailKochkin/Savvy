@@ -12,12 +12,14 @@ const UPDATE_NOTE_MUTATION = gql`
     $text: String
     $complexity: Int
     $isSecret: Boolean
+    $type: String
   ) {
     updateNote(
       id: $id
       text: $text
       complexity: $complexity
       isSecret: $isSecret
+      type: $type
     ) {
       id
       text
@@ -122,7 +124,7 @@ const UpdateNote = (props) => {
   const [text, setText] = useState(props.text);
   const [show, setShow] = useState(false);
   const [isSecret, setIsSecret] = useState(props.isSecret);
-
+  const [type, setType] = useState("longread");
   const [complexity, setComplexity] = useState(
     props.complexity ? props.complexity : 0
   );
@@ -151,8 +153,8 @@ const UpdateNote = (props) => {
   return (
     <>
       <Container>
-        <Complexity>
-          {/* <select
+        {/* <Complexity> */}
+        {/* <select
             value={complexity}
             onChange={(e) => setComplexity(parseInt(e.target.value))}
           >
@@ -163,13 +165,26 @@ const UpdateNote = (props) => {
             <option value={4}>4</option>
             <option value={5}>5</option>
           </select> */}
-          {/* <select
+        {/* <select
             defaultValue={isSecret}
             onChange={(e) => setIsSecret(e.target.value == "true")}
           >
             <option value={"true"}>Секретный</option>
             <option value={"false"}>Открытый</option>
           </select> */}
+        <select value={type} onChange={(e) => setType(e.target.value)}>
+          <option value={"longread"}>Выберите тип материала</option>
+          <option value={"longread"}>Лонгрид</option>
+          <option value={"email"}>Имейл</option>
+        </select>
+        {/* <select
+            defaultValue={isSecret}
+            onChange={(e) => setIsSecret(e.target.value == "true")}
+          >
+            <option value={"true"}>Секретный</option>
+            <option value={"false"}>Открытый</option>
+          </select>
+          npx prisma migrate up --experimentalz
         </Complexity>
         {/* <button>
           <a
@@ -194,6 +209,7 @@ const UpdateNote = (props) => {
             text,
             complexity,
             isSecret,
+            type,
           }}
           refetchQueries={() => [
             {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "./SingleLesson";
@@ -40,6 +40,14 @@ const UPDATE_LESSON_MUTATION = gql`
       hasSecret: $hasSecret
       totalPoints: $totalPoints
     ) {
+      id
+    }
+  }
+`;
+
+const COPY_LESSON_MUTATION = gql`
+  mutation CopyLesson($id: String!) {
+    copyLesson(id: $id) {
       id
     }
   }
@@ -242,25 +250,9 @@ const UpdateLesson = (props) => {
   const [description, setDescription] = useState(props.lesson.description);
   const [hasSecret, setHasSecret] = useState(props.lesson.hasSecret);
   const [totalPoints, setTotalPoints] = useState(props.lesson.totalPoints);
+  const [copyLesson, { data: copyData }] = useMutation(COPY_LESSON_MUTATION);
 
   const { t } = useTranslation("lesson");
-
-  // handleName = (e) => {
-  //   e.preventDefault();
-  //   const { name, value } = e.target;
-  //   this.setState({ [name]: value });
-  // };
-  // handleBoolean = (e) => {
-  //   e.preventDefault();
-  //   const { name, value } = e.target;
-  //   this.setState({ [name]: value === "true" });
-  // };
-  // handleNumber = (e) => {
-  //   e.preventDefault();
-  //   const { name, value } = e.target;
-  //   const val = Math.round(value);
-  //   this.setState({ [name]: val });
-  // };
 
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
@@ -288,6 +280,15 @@ const UpdateLesson = (props) => {
             />
           </div>
         </Row>
+        <button
+          onClick={async (e) => {
+            e.preventDefault();
+            const res = await copyLesson({ variables: { id: lessonID } });
+            // alert("New lesson ID:", res.data.copyLesson.id);
+          }}
+        >
+          Copy Lesson
+        </button>
         <Row>
           <div className="description">{t("number")}</div>
           <div className="input">

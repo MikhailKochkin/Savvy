@@ -269,70 +269,12 @@ const ATF = (props) => {
 
   const course = data.coursePage;
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     var countDownDate = new Date(d.start_eng).getTime(); // Get today's date and time
-  //     var now = new Date().getTime();
-
-  //     // Find the distance between now and the count down date
-  //     var distance = countDownDate - now;
-
-  //     // Time calculations for days, hours, minutes and seconds
-  //     var days_calculation = Math.floor(distance / (1000 * 60 * 60 * 24));
-  //     var hours_calculation = Math.floor(
-  //       (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-  //     );
-  //     var minutes_calculation = Math.floor(
-  //       (distance % (1000 * 60 * 60)) / (1000 * 60)
-  //     );
-  //     var seconds_calculation = Math.floor((distance % (1000 * 60)) / 1000);
-
-  //     // Display the result
-  //     setDays(days_calculation);
-  //     setHours(hours_calculation);
-  //     setMinutes(minutes_calculation);
-  //     setSeconds(seconds_calculation);
-  //   }, 1000);
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
-  const getEngNoun = (number, one, two) => {
-    let n = Math.abs(number);
-    if (n == 1) {
-      return one;
-    }
-    if (n > 1) {
-      return two;
-    }
-  };
-
-  const getNoun = (number, one, two, five) => {
-    let n = Math.abs(number);
-    n %= 100;
-    if (n >= 5 && n <= 20) {
-      return five;
-    }
-    n %= 10;
-    if (n === 1) {
-      return one;
-    }
-    if (n >= 2 && n <= 4) {
-      return two;
-    }
-    return five;
-  };
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
   return (
     <div id="ATF">
       <BImage>
-        {/* <Image src={`/static/${d.image}`} layout="fill" /> */}
         <InfoBlock>
           <Container>
-            {/* <div>
-              Рейтинг: ⭐️⭐️⭐️⭐️⭐️, число студентов:{" "}
-              {course.new_students.length}
-            </div> */}
             <h1>
               {course.header.length > 0 ? renderHTML(course.header[0]) : ""}
             </h1>
@@ -341,63 +283,6 @@ const ATF = (props) => {
                 ? renderHTML(course.subheader[0])
                 : ""}
             </h2>
-            {/* <div>Курс актуален на 1 августа 2022 года</div> */}
-            {/* <NextMeeting>
-              <div>
-                {t("next_cohort")}:{" "}
-                <span className="date">
-                  {" "}
-                  {course.nextStart
-                    ? moment(course.nextStart).format("LL")
-                    : moment(new Date()).format("LL")}
-                </span>
-              </div>
-            </NextMeeting> */}
-
-            {/* <Buttons>
-              <button id="atf_look_at_syllabus_button" onClick={(e) => slide()}>
-                {t("syllabus")}
-              </button>
-              <button id="atf_buy_button" onClick={(e) => slide2()}>
-                {t("enroll")}
-              </button>
-            </Buttons> */}
-            {/* <TimeLeft>
-              <div id="clock">
-                <div className="clock_section">
-                  <div className="clock_time">{days}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(days, "day", "days")
-                      : getNoun(days, "день", "дня", "дней")}
-                  </div>
-                </div>
-                <div className="clock_section">
-                  <div className="clock_time">{hours}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(days, "hour", "hours")
-                      : getNoun(hours, "час", "часа", "часов")}
-                  </div>
-                </div>
-                <div className="clock_section">
-                  <div className="clock_time">{minutes}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(minutes, "minute", "minutes")
-                      : getNoun(minutes, "минута", "минуты", "минут")}
-                  </div>
-                </div>
-                <div className="clock_section">
-                  <div className="clock_time">{seconds}</div>
-                  <div className="clock_name">
-                    {router.locale == "en"
-                      ? getEngNoun(seconds, "second", "seconds")
-                      : getNoun(seconds, "секунда", "секунды", "секунд")}
-                  </div>
-                </div>
-              </div>
-            </TimeLeft> */}
           </Container>
         </InfoBlock>
       </BImage>

@@ -4,6 +4,7 @@ import renderHTML from "react-render-html";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
+import moment from "moment";
 
 import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
@@ -151,7 +152,7 @@ const Container = styled.div`
   @media (max-width: 800px) {
     flex-direction: row;
     width: 100%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
   }
 `;
 
@@ -159,7 +160,7 @@ const Secret = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 540px;
+  max-width: 600px;
   position: relative;
 
   #open {
@@ -174,6 +175,7 @@ const Secret = styled.div`
     border-radius: 10px;
     top: 150px;
     left: 25%;
+    z-index: 300;
     img {
       width: 200px;
       margin: 20px 0;
@@ -227,15 +229,6 @@ const Secret = styled.div`
     }
   }
   /* justify-content: center; */
-`;
-const Screen = styled.div`
-  max-width: 720px;
-  box-shadow: 0px 0px 4px 3px rgba(202, 202, 202, 0.61);
-  -webkit-box-shadow: 0px 0px 4px 3px rgba(202, 202, 202, 0.61);
-  -moz-box-shadow: 0px 0px 4px 3px rgba(202, 202, 202, 0.61);
-  padding: 50px;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
 `;
 
 const NoteStyles = styled.div`
@@ -376,15 +369,91 @@ const Buttons = styled.div`
   flex-direction: row;
 `;
 
-const MiniButton = styled.div`
-  border: none;
-  background: none;
-  cursor: pointer;
-  margin: 1.5% 0;
-  &:hover {
-    text-decoration: underline;
+const EmailContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  @media (max-width: 800px) {
+    width: 95%;
   }
 `;
+
+const EmailForm = styled.div`
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+`;
+
+const Header = styled.div``;
+
+const EmailInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  border-bottom: 1px solid #a2a2a2;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  .image_column {
+    width: 10%;
+    .circle {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      color: #fff;
+      border-radius: 50%;
+      background: #485563; /* fallback for old browsers */
+      background: -webkit-linear-gradient(
+        to right,
+        #29323c,
+        #485563
+      ); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(
+        to right,
+        #29323c,
+        #485563
+      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+  }
+  .names_column {
+    width: 40%;
+    .sender_name {
+      font-size: 2rem;
+    }
+  }
+  .times_column {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    color: #a2a2a2;
+  }
+  @media (max-width: 800px) {
+    .image_column {
+      width: 15%;
+    }
+    .names_column {
+      width: 55%;
+      .sender_name {
+        font-size: 1.8rem;
+      }
+    }
+    .times_column {
+      width: 30%;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: flex-end;
+      color: #a2a2a2;
+    }
+  }
+`;
+const Body = styled.div``;
 
 const Note = (props) => {
   const [update, setUpdate] = useState(false);
@@ -393,7 +462,12 @@ const Note = (props) => {
   const [shiver, setShiver] = useState(false);
 
   const { t } = useTranslation("lesson");
+  moment.locale("ru");
+  function getFormattedToday() {
+    return moment().format("D MMMM YYYY [at] HH:mm");
+  }
 
+  const todaysDate = getFormattedToday();
   useEffect(() => {
     let el = document.getElementById("wide");
     if (el && props.story) {
@@ -437,6 +511,7 @@ const Note = (props) => {
     exam,
     story,
     me,
+    author,
     text,
     note,
     complexity,
@@ -477,51 +552,77 @@ const Note = (props) => {
           <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
         )}
       </Buttons>
-      {!update && (
-        <Container id={id} width={width}>
-          <div className="text">
-            {!update && (
-              <>
-                {isRevealed && (
-                  <NoteStyles story={story} isRevealed={isRevealed}>
-                    {/* <div className="header">Меню</div> */}
-                    {renderHTML(text)}
-                  </NoteStyles>
-                )}
-                {!isRevealed && (
-                  <Secret shiver={shiver}>
+      {!update &&
+        (note.type == "email" ? (
+          <EmailContainer>
+            <EmailForm>
+              <Header></Header>
+              <EmailInfo>
+                <div className="image_column">
+                  <div className="circle">
+                    {author.name[0]}
+                    {author.surname[0]}
+                  </div>
+                </div>
+                <div className="names_column">
+                  <div className="sender_name">
+                    {author.name} {author.surname}
+                  </div>
+                  <div>Re: Новый сотрудник</div>
+                  <div>
+                    To: {me.name} {me.surname}
+                  </div>
+                </div>
+                <div className="times_column">{todaysDate}</div>
+              </EmailInfo>
+              <Body>{renderHTML(text)}</Body>
+            </EmailForm>
+          </EmailContainer>
+        ) : (
+          <Container id={id} width={width}>
+            <div className="text">
+              {!update && (
+                <>
+                  {isRevealed && (
                     <NoteStyles story={story} isRevealed={isRevealed}>
                       {renderHTML(text)}
                     </NoteStyles>
-                    <div id="open">
-                      <img src="static/lock.svg" />
-                      <div
-                        id="button"
-                        onClick={(e) => {
-                          if (props.experience >= props.total) {
-                            setIsRevealed(true);
-                          } else {
-                            setShiver(true);
-                            setTimeout(() => {
-                              setShiver(false);
-                            }, 1000);
-                          }
-                        }}
-                      >
-                        {t("toOpen")}
+                  )}
+                  {!isRevealed && (
+                    <Secret shiver={shiver}>
+                      <NoteStyles story={story} isRevealed={isRevealed}>
+                        {renderHTML(text)}
+                      </NoteStyles>
+                      <div id="open">
+                        <img src="static/lock.svg" />
+                        <div
+                          id="button"
+                          onClick={(e) => {
+                            if (props.experience >= props.total) {
+                              setIsRevealed(true);
+                            } else {
+                              setShiver(true);
+                              setTimeout(() => {
+                                setShiver(false);
+                              }, 1000);
+                            }
+                          }}
+                        >
+                          {/* {t("toOpen")} */}
+                          Открыть
+                        </div>
                       </div>
-                    </div>
-                  </Secret>
-                )}
-              </>
-            )}
-            {getData && (
-              <div className="arrow_box" onClick={(e) => push()}>
-                <img className="arrow" src="../../static/down-arrow.svg" />
-              </div>
-            )}
-          </div>
-          {/* <div className="author">
+                    </Secret>
+                  )}
+                </>
+              )}
+              {getData && (
+                <div className="arrow_box" onClick={(e) => push()}>
+                  <img className="arrow" src="../../static/down-arrow.svg" />
+                </div>
+              )}
+            </div>
+            {/* <div className="author">
             <div className="author_info">
               {author && author.image != null ? (
                 <img className="icon" src={author.image} />
@@ -533,9 +634,9 @@ const Note = (props) => {
               </div>
             </div>
           </div> */}
-          {/* <NoteStyles>{renderHTML(text)}</NoteStyles> */}
-        </Container>
-      )}
+            {/* <NoteStyles>{renderHTML(text)}</NoteStyles> */}
+          </Container>
+        ))}
       {miniforum && <Chat me={me} miniforum={miniforum} />}
       {update && !story && !exam && (
         <UpdateNote

@@ -80,6 +80,7 @@ const Fieldset = styled.fieldset`
   border: none;
   display: flex;
   flex-direction: column;
+
   select {
     width: 30%;
     font-size: 1.6rem;
@@ -96,7 +97,7 @@ const Fieldset = styled.fieldset`
     font-family: Montserrat;
   }
   textarea {
-    height: 100px;
+    height: 300px;
     width: 100%;
     margin-bottom: 15px;
     border: 1px solid #e5e5e5;
@@ -722,14 +723,6 @@ const UpdateForm = (props) => {
             defaultValue={g}
           />
         ))}
-        {/* <button
-          onClick={(e) => {
-            setHeader([...header, ""]);
-            e.preventDefault();
-          }}
-        >
-          +1
-        </button> */}
         <Explainer>{t("course_subheader")}</Explainer>
         {subheader.map((g, i) => (
           <>
@@ -754,7 +747,7 @@ const UpdateForm = (props) => {
         <Explainer>{t("course_goals")}</Explainer>
         {goals.map((g, i) => (
           <>
-            <Frame>
+            {/* <Frame>
               {i + 1}.
               <DynamicLoadedEditor
                 index={i}
@@ -762,7 +755,7 @@ const UpdateForm = (props) => {
                 getEditorText={myCallbackGoal}
                 value={g}
               />
-            </Frame>
+            </Frame> */}
             <textarea
               value={g}
               onChange={(e) => myCallbackGoal(e.target.value, "goal", i)}
@@ -824,49 +817,41 @@ const UpdateForm = (props) => {
           />
         </Frame> */}
         <Explainer>{t("course_format")}</Explainer>
-        <Frame>
+        {/* <Frame>
           <DynamicLoadedEditor
             index={1}
             name="methods"
             getEditorText={myCallback}
             value={methods}
           />
-        </Frame>
+        </Frame> */}
         <textarea
           value={methods}
           onChange={(e) => setMethods(e.target.value)}
         />
         <Explainer>{t("course_audience")}</Explainer>
-        <Frame>
+        {/* <Frame>
           <DynamicLoadedEditor
             index={1}
             name="audience"
             getEditorText={myCallback}
             value={audience}
           />
-        </Frame>
+        </Frame> */}
         <textarea
           value={audience}
           onChange={(e) => setAudience(e.target.value)}
         />
         <Explainer>{t("course_result")}</Explainer>
-        <Frame>
+        {/* <Frame>
           <DynamicLoadedEditor
             index={1}
             name="result"
             getEditorText={myCallback}
             value={result}
           />
-        </Frame>
+        </Frame> */}
         <textarea value={result} onChange={(e) => setResult(e.target.value)} />
-        {/* <Link
-          href={{
-            pathname: "/coursePage",
-            query: { id: coursePage.id },
-          }}
-        >
-          <div className="open_landing">Открыть лендинг курса</div>
-        </Link> */}
       </Fieldset>
       <Buttons>
         <Button

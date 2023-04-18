@@ -47,6 +47,7 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         id
         link_clicks
         text
+        type
         isSecret
         complexity
         next
@@ -127,6 +128,11 @@ const NEW_SINGLE_LESSON_QUERY = gql`
         type
         courseId
         price
+        program {
+          id
+          months
+          syllabus
+        }
         discountPrice
         user {
           id

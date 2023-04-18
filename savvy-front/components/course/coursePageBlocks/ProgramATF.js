@@ -81,7 +81,7 @@ const Container = styled.div`
   }
 
   h1 {
-    font-size: 5.6rem;
+    font-size: 4.4rem;
     line-height: 1.2;
     /* text-align: center; */
     font-weight: 800;
@@ -328,13 +328,8 @@ const ATF = (props) => {
   return (
     <div id="ATF">
       <BImage>
-        {/* <Image src={`/static/${d.image}`} layout="fill" /> */}
         <InfoBlock>
           <Container>
-            {/* <div>
-              Рейтинг: ⭐️⭐️⭐️⭐️⭐️, число студентов:{" "}
-              {course.new_students.length}
-            </div> */}
             <h1>
               {course.header.length > 0 ? renderHTML(course.header[0]) : ""}
             </h1>
@@ -343,18 +338,6 @@ const ATF = (props) => {
                 ? renderHTML(course.subheader[0])
                 : ""}
             </h2>
-            {/* <div>Курс актуален на 1 августа 2022 года</div> */}
-            <NextMeeting>
-              <div>
-                {t("next_cohort")}:{" "}
-                <span className="date">
-                  {" "}
-                  {course.nextStart
-                    ? moment(course.nextStart).format("LL")
-                    : moment(new Date()).format("LL")}
-                </span>
-              </div>
-            </NextMeeting>
           </Container>
         </InfoBlock>
       </BImage>
