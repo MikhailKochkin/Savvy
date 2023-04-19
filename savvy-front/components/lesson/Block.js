@@ -39,6 +39,7 @@ const Block = (props) => {
     quizes,
     chats,
     notes,
+    offers,
     shots,
     problems,
     texteditors,
@@ -67,6 +68,7 @@ const Block = (props) => {
             {testPractices.length > 0 && (
               <option value="testPractice">{t("TestPractice")}</option>
             )}
+            {offers.length > 0 && <option value="offer">Offer</option>}
             {texteditors.length > 0 && (
               <option value="texteditor">{t("TextEditor")}</option>
             )}
@@ -133,6 +135,24 @@ const Block = (props) => {
                   <div>
                     {q.text} {q.id}
                   </div>
+                  <button
+                    name={q.__typename}
+                    value={q.id}
+                    onClick={(e) =>
+                      props.getOldResult(e.target.name, e.target.value, props.i)
+                    }
+                  >
+                    {t("add")}
+                  </button>
+                </div>
+              ))}
+            </Section>
+          )}
+          {task === "offer" && (
+            <Section>
+              {offers.map((q) => (
+                <div className="option">
+                  <div>{q.header}</div>
                   <button
                     name={q.__typename}
                     value={q.id}

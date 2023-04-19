@@ -208,6 +208,7 @@ const CreateEmailCampaign = () => {
                 id={`template-${i}`}
                 getEditorText={myCallBack}
                 value={emailTemplates[i]?.text || ""}
+                index={i}
               />
             </div>
           ))}

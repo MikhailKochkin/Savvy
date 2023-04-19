@@ -22,6 +22,8 @@ const BotSession = (props) => {
   const [open, setOpen] = useState(false);
   const [openActive, setOpenActive] = useState(false);
   const [openTotal, setOpenTotal] = useState(false);
+  const [utmSourceFilter, setUtmSourceFilter] = useState("");
+
   let parseURL = (url) => {
     const parsedURL = new URL(url, "https://besavvy.app"); // Adding a base URL to properly parse the input
     const searchParams = new URLSearchParams(parsedURL.search);
@@ -32,6 +34,7 @@ const BotSession = (props) => {
       id: searchParams.get("id"),
       name: decodeURIComponent(searchParams.get("name")),
       status: searchParams.get("status"),
+      utm_source: searchParams.get("utm_source"),
     };
 
     return values;
@@ -78,6 +81,17 @@ const BotSession = (props) => {
       );
     }
   };
+
+  const applyUtmSourceFilter = () => {
+    const filteredByUtmSourceSessions = filteredSessions.filter((s) => {
+      let values = parseURL(s.source);
+      return values.utm_source === utmSourceFilter;
+    });
+
+    // Replace the original sessions with the filtered ones
+    setFilteredSessions(filteredByUtmSourceSessions);
+  };
+
   moment.locale("ru");
 
   return (
@@ -156,6 +170,17 @@ const BotSession = (props) => {
               />
               <button onClick={filterByTag}>Filter by Tags</button>
             </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Введите utm_source"
+                value={utmSourceFilter}
+                onChange={(e) => setUtmSourceFilter(e.target.value)}
+              />
+              <button onClick={() => applyUtmSourceFilter()}>
+                Применить фильтр
+              </button>
+            </div>
             <div>Всего: {filteredSessions.length}</div>
             {filteredSessions.map((s, i) => {
               let values = parseURL(s.source);
@@ -189,7 +214,7 @@ const BotSession = (props) => {
                   <li>{values.level}</li>
                   <li>{values.id}</li>
                   <li>{values.name}</li>
-                  {/* <li>{values.status}</li> */}
+                  <li>{values.utm_source}</li>
 
                   <div>{s.journey.join(", ")}</div>
                   {/* <div>
@@ -238,6 +263,7 @@ const BotSession = (props) => {
                     <li>{values.id}</li>
                     <li>{values.name}</li>
                     <li>{values.status}</li>
+                    <li>{values.utm_source}</li>
 
                     <div>
                       <b>Оценка:</b> {s.rating}

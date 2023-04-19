@@ -820,6 +820,7 @@ const LessonBlock = (props) => {
               notes={lesson.notes}
               chats={lesson.chats}
               shots={lesson.shots}
+              offers={lesson.offers}
               problems={lesson.problems}
               texteditors={lesson.texteditors}
               constructions={lesson.constructions}

@@ -36,6 +36,7 @@ const Input = styled.input`
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 300px;
 `;
 
 const Textarea = styled.textarea`
@@ -253,6 +254,7 @@ const UpdateEmailCampaign = ({ campaignId }) => {
               <DynamicLoadedEditor
                 id={`template-${i}`}
                 getEditorText={myCallBack}
+                index={i}
                 value={emailTemplates[i]?.text || ""}
               />
 

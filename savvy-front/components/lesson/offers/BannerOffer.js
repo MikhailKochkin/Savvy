@@ -648,34 +648,43 @@ const BannerOffer = (props) => {
                 </div>
               </TextContainer>
             </Container>
-            <div
-              className="syllabus"
-              onClick={(e) => setRevealSyllabus(!revealSyllabus)}
-            >
-              <div className="img">
-                <img src="static/down-arrow2.svg" />
-              </div>
-              <div>Показать программу</div>
-            </div>
-            {revealSyllabus && (
-              <Syllabus>
-                {offer.program?.syllabus?.modules.map((m) => (
-                  <>
-                    <h3>{m.header}</h3>
-                    <div>
-                      {m.topic.map((t) => (
-                        <li>{t}</li>
-                      ))}
-                    </div>
-                  </>
-                ))}
-              </Syllabus>
+            {offer.program && (
+              <>
+                <div
+                  className="syllabus"
+                  onClick={(e) => setRevealSyllabus(!revealSyllabus)}
+                >
+                  <div className="img">
+                    <img src="static/down-arrow2.svg" />
+                  </div>
+                  <div>Показать программу</div>
+                </div>
+                {revealSyllabus && (
+                  <Syllabus>
+                    {offer.program?.syllabus?.modules.map((m) => (
+                      <>
+                        <h3>{m.header}</h3>
+                        <div>
+                          {m.topic.map((t) => (
+                            <li>{t}</li>
+                          ))}
+                        </div>
+                      </>
+                    ))}
+                  </Syllabus>
+                )}
+              </>
             )}
             <Prices>
               <PriceBox>
                 <div className="time">
-                  {offer.program.months}{" "}
-                  {getNoun(offer.program.months, "месяц", "месяца", "месяцев")}
+                  {offer?.program?.months}{" "}
+                  {getNoun(
+                    offer?.program?.months,
+                    "месяц",
+                    "месяца",
+                    "месяцев"
+                  )}
                 </div>
                 <div className="price">
                   {formatIntegerWithSpace(offer.price)} ₽

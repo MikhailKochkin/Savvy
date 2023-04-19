@@ -378,7 +378,6 @@ const HoveringMenu = (props) => {
 
 const toggleFormat = (editor, format) => {
   const isActive = isFormatActive(editor, format);
-  console.log("format", format);
   Transforms.setNodes(
     editor,
     { [format]: isActive ? null : true },

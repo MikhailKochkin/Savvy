@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 
 const GET_EMAIL_REMINDERS = gql`
   query {
-    emailReminders {
+    emailReminders(where: { createdAt: { gte: "2023-04-10T15:10:10.734Z" } }) {
       id
       emailsSent
       createdAt
@@ -224,9 +224,6 @@ const SendEmailReminders = () => {
               <p>Course page: {emailReminder.coursePage.title}</p>
               <p>Created at: {moment(emailReminder.createdAt).format("LLL")}</p>
               <p>Emails sent: {emailReminder.emailsSent}</p>
-              {/* <button onClick={(e) => updateEmails(emailReminder.id)}>
-                Refresh Email Statuses
-              </button> */}
               <p>
                 Lesson results:{" "}
                 {emailReminder.user.lessonResults.map((lr) => (
