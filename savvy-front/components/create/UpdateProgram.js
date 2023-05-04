@@ -12,6 +12,7 @@ const SINGLE_PROGRAM_QUERY = gql`
       image
       audience
       result
+      reviews
       syllabus
       months
       goals

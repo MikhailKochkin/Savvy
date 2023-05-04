@@ -1842,6 +1842,15 @@ export interface NexusGenInputs {
     name?: string | null; // String
     reaction?: string | null; // String
   }
+  Review: { // input type
+    image?: string | null; // String
+    name?: string | null; // String
+    source?: string | null; // String
+    text?: string | null; // String
+  }
+  ReviewsList: { // input type
+    reviews?: Array<NexusGenInputs['Review'] | null> | null; // [Review]
+  }
   SalesCycle: { // input type
     stages?: Array<NexusGenInputs['SalesStage'] | null> | null; // [SalesStage]
   }
@@ -6107,6 +6116,7 @@ export interface NexusGenArgTypes {
       price?: number | null; // Int
       promotionId?: string | null; // String
       result?: string | null; // String
+      reviews?: NexusGenInputs['ReviewsList'] | null; // ReviewsList
       subheader?: Array<string | null> | null; // [String]
       syllabus?: NexusGenInputs['Syllabus'] | null; // Syllabus
       title?: string | null; // String

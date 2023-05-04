@@ -21,7 +21,7 @@ const ButtonOpen = styled.a`
   width: 90%;
   /* width: 292px; */
   height: 48px;
-  padding: 2%;
+  padding: 5px;
   font-family: Montserrat;
   border: 2px solid #252f3f;
   background: none;

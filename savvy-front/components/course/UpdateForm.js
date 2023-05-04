@@ -744,7 +744,7 @@ const UpdateForm = (props) => {
         >
           +1
         </button> */}
-        <Explainer>{t("course_goals")}</Explainer>
+        <Explainer>Было / стало</Explainer>
         {goals.map((g, i) => (
           <>
             {/* <Frame>

@@ -124,12 +124,18 @@ const Styles = styled.div`
   .row {
     margin-bottom: 20px;
     width: 100%;
+    line-height: 1.6;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     div {
       font-size: 2rem;
       cursor: pointer;
+    }
+  }
+  @media (max-width: 1000px) {
+    .row {
+      width: 90%;
     }
   }
   .course_name {

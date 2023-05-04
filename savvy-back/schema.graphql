@@ -1820,7 +1820,7 @@ type Mutation {
   updateOrderAuto(id: String, userId: String): Order
   updatePost(id: String, image: String, likes: Int, summary: String, tags: [String], text: String, title: String): Post
   updateProblem(complexity: Int, id: String, isSecret: Boolean, text: String): Problem
-  updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
+  updateProgram(audience: String, authors: String, currency: String, description: String, goals: [String], header: [String], id: String, image: String, methods: String, months: Int, news: String, nextStart: DateTime, price: Int, promotionId: String, result: String, reviews: ReviewsList, subheader: [String], syllabus: Syllabus, title: String, video: String): Program
   updatePublished(id: String, published: Boolean): Lesson
   updateQuiz(answer: String, check: String, complexity: Int, id: String, ifRight: String, ifWrong: String, lessonId: String, next: NextType, question: String): Quiz
   updateRating(id: String, rating: Int): Rating
@@ -2870,6 +2870,17 @@ input Reaction {
   image: String
   name: String
   reaction: String
+}
+
+input Review {
+  image: String
+  name: String
+  source: String
+  text: String
+}
+
+input ReviewsList {
+  reviews: [Review]
 }
 
 input SalesCycle {

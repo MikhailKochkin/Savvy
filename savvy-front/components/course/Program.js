@@ -15,6 +15,8 @@ import SellingPoints from "./coursePageBlocks/SellingPoints";
 import ProgramTeachers from "./coursePageBlocks/ProgramTeachers";
 import Reviews from "./coursePageBlocks/Reviews";
 import MobileAction from "./coursePageBlocks/MobileAction";
+import ActionLeads from "./coursePageBlocks/ActionLeads";
+import ProgramMobileLeads from "./coursePageBlocks/ProgramMobileLeads";
 import Goal from "./coursePageBlocks/Goal";
 import QA from "./coursePageBlocks/QA";
 import ProgramBottomLine from "./coursePageBlocks/ProgramBottomLine";
@@ -32,6 +34,7 @@ const SINGLE_PROGRAM_QUERY = gql`
       audience
       result
       tags
+      months
       tariffs
       methods
       reviews
@@ -125,14 +128,10 @@ const Money = styled.div`
   /* background: #1c1d1f; */
 `;
 
-const DynamicProgramAction = dynamic(
-  import("./coursePageBlocks/ProgramAction"),
-  {
-    loading: () => <p>...</p>,
-    ssr: false,
-  }
-);
-
+const DynamicAction = dynamic(import("./coursePageBlocks/ProgramAction"), {
+  loading: () => <p>...</p>,
+  ssr: false,
+});
 const DynamicProgramMobileBuy = dynamic(
   import("./coursePageBlocks/ProgramMobileBuy"),
   {
@@ -154,7 +153,6 @@ const NewCoursePage = (props) => {
   if (loading) return <Loading />;
 
   router.locale == "ru" ? moment.locale("ru") : moment.locale("en");
-  // console.log("data.program", data.program);
   return (
     <Styles>
       <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
@@ -164,25 +162,49 @@ const NewCoursePage = (props) => {
           <ProgramATF id={props.id} />
           {data && !loading && (
             <>
-              {width < 880 && (
-                <DynamicProgramMobileBuy program={data.program} me={me} />
-              )}
+              {width < 880 &&
+                (props.form == "lead" ? (
+                  <ProgramMobileLeads
+                    me={me}
+                    coursePage={data.program.coursePages[0]}
+                    program={data.program}
+                  />
+                ) : (
+                  <DynamicProgramMobileBuy program={data.program} me={me} />
+                ))}
               {width < 880 && <MobileAction coursePage={data.program} />}
+
               <Goal coursePage={data.program} />
               <ProgramSyllabus id={props.id} program={data.program} />
-              <ProgramTeachers program={data.program} />
+              {data.program &&
+                data.program.reviews &&
+                data.program.reviews.reviews.length > 0 && (
+                  <Reviews data={data.program} />
+                )}
               <SellingPoints coursePage={data.program} />
-              {/* {prog && prog.reviews && prog.reviews.length > 0 && (
-                <Reviews data={prog} />
-              )} */}
-              <QA />
+              <ProgramTeachers program={data.program} />
+
+              {/* <QA /> */}
             </>
           )}
         </Main>
         <Money>
-          {!loading && data && width > 880 && (
-            <DynamicProgramAction me={me} program={data.program} />
-          )}
+          {!loading &&
+            data &&
+            width > 880 &&
+            (props.form == "lead" ? (
+              <ActionLeads
+                me={me}
+                coursePage={data.program.coursePages[0]}
+                program={data.program}
+              />
+            ) : (
+              <DynamicAction
+                promocode={props.promocode}
+                me={me}
+                program={data.program}
+              />
+            ))}
         </Money>
       </Container>
     </Styles>

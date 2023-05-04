@@ -455,9 +455,6 @@ const Action = (props) => {
   const [auth, setAuth] = useState("signin");
   const [promo, setPromo] = useState("");
 
-  const [installments, setInstallments] = useState(
-    props.coursePage.installments
-  );
   const [price, setPrice] = useState(
     props.promocode == "bcd"
       ? props.coursePage.discountPrice
@@ -632,9 +629,7 @@ const Action = (props) => {
                     }
                   }}
                 >
-                  {installments &&
-                    (loading_data ? `...` : t("buy_installments"))}
-                  {!installments && (loading_data ? `...` : t("buy"))}
+                  {loading_data ? `...` : t("buy")}
                 </ButtonBuy>
                 <ButtonBuySmall
                   id="coursePage_buy_button"

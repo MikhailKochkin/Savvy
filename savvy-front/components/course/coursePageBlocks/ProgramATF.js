@@ -82,7 +82,7 @@ const Container = styled.div`
 
   h1 {
     font-size: 4.4rem;
-    line-height: 1.2;
+    line-height: 1.4;
     /* text-align: center; */
     font-weight: 800;
     margin: 0;

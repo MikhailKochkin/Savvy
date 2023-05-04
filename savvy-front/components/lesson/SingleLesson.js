@@ -491,6 +491,7 @@ const SingleLesson = (props) => {
           if (loading) return <p>Loading...</p>;
           if (data === null) return <p>Нет урока</p>;
           const lesson = data.lesson;
+          console.log("lesson", lesson.structure);
           return (
             <>
               <AreYouEnrolled

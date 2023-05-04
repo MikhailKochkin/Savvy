@@ -176,27 +176,6 @@ const Row = styled.div`
   }
 `;
 
-// const Option = styled.div`
-//   margin-bottom: 1%;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   span {
-//     font-size: 2rem;
-//     flex-basis: 5%;
-//     /* background: yellow; */
-//   }
-//   input {
-//     flex-basis: 95%;
-//     border: 1px solid #e5e5e5;
-//     border-radius: 3.5px;
-//     padding: 1%;
-//     font-size: 1.6rem;
-//     outline: 0;
-//     font-family: Montserrat;
-//   }
-// `;
-
 const ButtonTwo = styled.button`
   border: none;
   background: #3f51b5;
@@ -244,24 +223,6 @@ const CreateCourse = (props) => {
     } else if (st === "result") {
       setResult(dataFromChild);
     }
-  };
-
-  const uploadFile = async (e) => {
-    setPending(true);
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "savvy-app");
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-    const file = await res.json();
-    setImage(file.secure_url);
-    setPending(false);
   };
 
   const { me } = props;
@@ -323,39 +284,12 @@ const CreateCourse = (props) => {
                     placeholder={t("TA")}
                   />
                 </Frame>
-
-                {/* <label for="file">
-                  <div className="upload">
-                    {!pending && "Загрузите картинку курса"}
-                    {pending && "Идет Loading..."}
-                  </div>
-                </label>
-                <input
-                  style={{ display: "none" }}
-                  className="second"
-                  type="file"
-                  id="file"
-                  name="file"
-                  placeholder="Загрузите логотип курса..."
-                  onChange={uploadFile}
-                />
-                {image && (
-                  <>
-                    <Img src={image} alt="Upload Preview" />
-                  </>
-                )} */}
                 <Buttons>
                   <ButtonTwo
                     onClick={async (e) => {
-                      // Stop the form from submitting
                       e.preventDefault();
                       const res2 = await createCoursePage();
                       setCourseId(res2.data.createCoursePage.id);
-                      // console.log(res2.data.createCoursePage.id);
-                      // Router.push({
-                      //   pathname: "/course",
-                      //   query: { id: res2.data.createCoursePage.id },
-                      // });
                     }}
                   >
                     {loading

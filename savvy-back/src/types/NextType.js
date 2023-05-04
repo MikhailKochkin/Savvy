@@ -288,6 +288,23 @@ const MarksList = inputObjectType({
   },
 });
 
+const Review = inputObjectType({
+  name: "Review",
+  definition(t) {
+    t.string("name");
+    t.string("text");
+    t.string("image");
+    t.string("source");
+  },
+});
+
+const ReviewsList = inputObjectType({
+  name: "ReviewsList",
+  definition(t) {
+    t.list.field("reviews", { type: "Review" });
+  },
+});
+
 module.exports = {
   NextType,
   NextTrueType,
@@ -324,4 +341,6 @@ module.exports = {
   MarksList,
   Syllabus,
   ProgramModule,
+  ReviewsList,
+  Review,
 };

@@ -9,7 +9,7 @@ export const getServerSideProps = async ({ locale }) => ({
 });
 
 const program = (props) => {
-  return <Program id={props.query.id} />;
+  return <Program id={props.query.id} form={props.query.form} />;
 };
 
 export default program;

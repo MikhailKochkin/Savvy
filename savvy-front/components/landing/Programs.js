@@ -174,7 +174,7 @@ const Programs = () => {
             <div id="want">😏 Я хочу ...</div>
             <Tags>
               <Option active={tag == "now"} onClick={(e) => move("now")}>
-                Учиться в потоке
+                Построить карьеру
               </Option>
               <Option
                 active={tag == "english"}

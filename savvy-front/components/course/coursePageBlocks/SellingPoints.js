@@ -54,6 +54,10 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  img {
+    width: 100%;
+    max-width: 100%;
+  }
   h2 {
     line-height: 1.4;
     font-weight: 700;

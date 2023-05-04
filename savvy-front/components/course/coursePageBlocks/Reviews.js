@@ -6,7 +6,7 @@ import renderHTML from "react-render-html";
 const Styles = styled.div`
   width: 100%;
   /* min-height: 100vh; */
-  background: #f7f7f7;
+  background: #f4f8fc;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -88,8 +88,9 @@ const Review = styled.div`
   .description {
     color: #687481;
     width: 100%;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     line-height: 1.5;
+    font-weight: 500;
   }
   .text {
     font-weight: 300;
@@ -124,27 +125,26 @@ const Review = styled.div`
 const Reviews = (props) => {
   const { t } = useTranslation("coursePage");
 
-  const d = props.data;
+  const reviews = props.data.reviews.reviews;
   return (
     <Styles>
       <Container>
         <h2>{t("reviews")}</h2>
         <ReviewsList>
-          {d.reviews.map((r, i) => (
+          {reviews.map((r, i) => (
             <Review key={i}>
-              {r.img && r.img.length > 0 && (
+              {r.image && r.image.length > 0 && (
                 <div className="author">
                   <div className="img_component">
-                    <img src={r.img} layout="fill" />
+                    <img src={r.image} layout="fill" />
                   </div>
                 </div>
               )}
               <div className="text">
                 <div className="name">
                   <div>{r.name}</div>
-                  <div>⭐️⭐️⭐️⭐️⭐️</div>
                 </div>
-                <div className="description">{renderHTML(r.info)}</div>
+                <div className="description">{renderHTML(r.text)}</div>
               </div>
             </Review>
           ))}

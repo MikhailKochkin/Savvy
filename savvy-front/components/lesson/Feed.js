@@ -697,10 +697,10 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
-          <CustomProgressBar
+          {/* <CustomProgressBar
             myResult={num}
             lessonItemsLength={props.components.length}
-          />
+          /> */}
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}

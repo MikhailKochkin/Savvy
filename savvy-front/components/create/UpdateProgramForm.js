@@ -15,6 +15,7 @@ const UPDATE_PROGRAM_MUTATION = gql`
     $audience: String
     $result: String
     $syllabus: Syllabus
+    $reviews: ReviewsList
     $months: Int
     $methods: String
     $nextStart: DateTime
@@ -33,6 +34,7 @@ const UPDATE_PROGRAM_MUTATION = gql`
       audience: $audience
       result: $result
       syllabus: $syllabus
+      reviews: $reviews
       months: $months
       methods: $methods
       nextStart: $nextStart
@@ -252,6 +254,9 @@ const UpdateProgramForm = (props) => {
   );
   const [months, setMonths] = useState(props.coursePage.months);
   const [editingModuleIndex, setEditingModuleIndex] = useState(null);
+  const [reviews, setReviews] = useState(
+    props.coursePage.reviews ? props.coursePage.reviews.reviews : []
+  );
 
   useEffect(() => {
     if (editingModuleIndex !== null) {
@@ -316,6 +321,21 @@ const UpdateProgramForm = (props) => {
   const handleModuleRemove = (index) => {
     const updatedModules = modules.filter((_, i) => i !== index);
     setModules(updatedModules);
+  };
+
+  const addReview = () => {
+    setReviews([...reviews, { name: "", text: "", source: "" }]);
+  };
+
+  const updateReview = (index, name, text, source, image) => {
+    const updatedReviews = [...reviews];
+    updatedReviews[index] = { name, text, source, image };
+    setReviews(updatedReviews);
+  };
+
+  const removeReview = (index) => {
+    const updatedReviews = reviews.filter((_, i) => i !== index);
+    setReviews(updatedReviews);
   };
 
   const myCallback = (dataFromChild, name) => {
@@ -581,10 +601,73 @@ const UpdateProgramForm = (props) => {
           value={methods}
           onChange={(e) => setMethods(e.target.value)}
         />
-        <Explainer>
-          Для кого этот курс? Опишите, чтобы ваши студенты смогли узнать себя.
-        </Explainer>
+        <Explainer>Для кого этот курс?</Explainer>
+
+        <textarea
+          value={audience}
+          onChange={(e) => setAudience(e.target.value)}
+        />
+        <Explainer>Каких результатов достигнут студенты?</Explainer>
         <textarea value={result} onChange={(e) => setResult(e.target.value)} />
+        <Explainer>Reviews</Explainer>
+        {reviews.map((review, index) => (
+          <div key={index}>
+            <input
+              value={review.name}
+              onChange={(e) =>
+                updateReview(
+                  index,
+                  e.target.value,
+                  review.text,
+                  review.source,
+                  review.image
+                )
+              }
+              placeholder="Reviewer Name"
+            />
+            <input
+              value={review.text}
+              onChange={(e) =>
+                updateReview(
+                  index,
+                  review.name,
+                  e.target.value,
+                  review.source,
+                  review.image
+                )
+              }
+              placeholder="Review Text"
+            />
+            <input
+              value={review.source}
+              onChange={(e) =>
+                updateReview(
+                  index,
+                  review.name,
+                  review.text,
+                  e.target.value,
+                  review.image
+                )
+              }
+              placeholder="Review Source"
+            />
+            <input
+              value={review.image}
+              onChange={(e) => {
+                updateReview(
+                  index,
+                  review.name,
+                  review.text,
+                  review.source,
+                  e.target.value
+                );
+              }}
+              placeholder="Image URL"
+            />
+            <button onClick={() => removeReview(index)}>Remove</button>
+          </div>
+        ))}
+        <Button onClick={addReview}>+ Add Review</Button>
 
         {/* <Frame>
           <DynamicLoadedEditor
@@ -636,6 +719,7 @@ const UpdateProgramForm = (props) => {
                 methods,
                 image,
                 video,
+                reviews: { reviews },
               },
             });
           }}

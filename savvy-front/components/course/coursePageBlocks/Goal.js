@@ -28,6 +28,12 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   color: #313d48;
+  img {
+    box-shadow: 0px 0px 15px 2px rgba(196, 196, 196, 0.75);
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(196, 196, 196, 0.75);
+    -moz-box-shadow: 0px 0px 15px 2px rgba(196, 196, 196, 0.75);
+    margin: 30px 0;
+  }
   h2 {
     line-height: 1.2;
     font-weight: 700;

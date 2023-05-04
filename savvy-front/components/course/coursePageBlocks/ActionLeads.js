@@ -309,11 +309,14 @@ const Fieldset = styled.fieldset`
 `;
 
 const Title = styled.div`
-  font-size: 2.2rem;
+  font-size: 2.6rem;
   margin-bottom: 15px;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.2;
   width: 100%;
+  span {
+    border-bottom: 4px solid #175ffe;
+  }
 `;
 
 const PhoneInput = styled.input`
@@ -430,7 +433,7 @@ const Action = (props) => {
   });
 
   const d = props.data;
-  const { me, coursePage } = props;
+  const { me, coursePage, program } = props;
   let my_orders = [];
   if (me) {
     my_orders = me.orders.filter((o) => o.coursePage.id == coursePage.id);
@@ -441,11 +444,20 @@ const Action = (props) => {
   let in_two_days = new Date();
   in_two_days.setDate(in_two_days.getDate() + 2);
 
+  let total_lessons_number = 0;
+  if (program) {
+    total_lessons_number = program.coursePages.reduce(function (acc, obj) {
+      return acc + obj.lessons.length;
+    }, 0);
+  }
+
   return (
     <Styles id="c2a">
       <Container>
         <Contact>
-          <Title>Скидка -20% до {moment(in_two_days).format("DD.MM")}</Title>
+          <Title>
+            Пробный месяц за <span>{program.price / program.months} ₽</span>
+          </Title>
           <Fieldset>
             <Group>
               <input
@@ -521,8 +533,13 @@ const Action = (props) => {
                 {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
               </div>
             )} */}
+            <div className="">◼️ Длительность: {program.months} месяцев</div>
             <div className="">
-              ◼️ {coursePage.lessons.filter((l) => l.type !== "HIDDEN").length}{" "}
+              ◼️{" "}
+              {program
+                ? total_lessons_number
+                : coursePage.lessons.filter((l) => l.type !== "HIDDEN")
+                    .length}{" "}
               {t("online_lessons")}
               {/* {getNoun(coursePage.lessons.length, "урок", "урока", "уроков")} */}
             </div>
@@ -530,6 +547,7 @@ const Action = (props) => {
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
+            <div className="">◼️ {program.price} ₽</div>
           </div>
         </Contact>
       </Container>

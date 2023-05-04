@@ -79,6 +79,7 @@ const TextBar = styled.div`
     display: block;
     max-width: 100%;
     max-height: 20em;
+    border-radius: 20px;
     @media (max-width: 750px) {
       width: 100%;
       height: auto;

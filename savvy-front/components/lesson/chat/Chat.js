@@ -9,6 +9,7 @@ import UpdateChat from "./UpdateChat";
 import DeleteChat from "./DeleteChat";
 import Reaction from "./Reaction";
 import ChangeForum from "../forum/ChangeForum";
+import Message from "./Message"; // Add this import at the top of the Chat component file
 
 const UPDATE_CHAT_MUTATION = gql`
   mutation UPDATE_CHAT_MUTATION($id: String!, $link_clicks: Int) {
@@ -18,12 +19,13 @@ const UPDATE_CHAT_MUTATION = gql`
   }
 `;
 const Styles = styled.div`
-  /* max-width: 650px;
-  min-width: 510px; */
+  /* padding: 70% 0; */
   width: 570px;
   margin: 20px 0;
   font-weight: 500;
   margin-bottom: 100px;
+  /* background: #000000;
+  min-height: 100vh; */
   img {
     display: block;
     width: 100%;
@@ -31,11 +33,6 @@ const Styles = styled.div`
     box-shadow: "0 0 0 2px blue;";
   }
   .video {
-    /* border: 1px solid #000000;
-    background: #000000;
-    border-radius: 10px;
-    overflow: hidden;
-    z-index: 1; */
     height: 489px;
     width: 275px;
     iframe {
@@ -127,161 +124,9 @@ const Next = styled.div`
   }
 `;
 
-const Message = styled.div`
-  display: flex;
-  transition: 0.2s ease-out;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-  /* animation: show 750ms 350ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards; */
-  /* animation: show 450ms 150ms forwards; */
-  /* animation: fadein 3000ms ease-in; */
-  // Prestate
-  /* opacity: 0; */
-  // remove transform for just a fade-in
-  /* transform: rotateX(90deg); */
-  /* transform-origin: bottom center; */
-  /* @keyframes show {
-    100% {
-      opacity: 1;
-      transform: none;
-    }
-  } */
-
-  animation-duration: 0.8s;
-  animation-name: animate-fade;
-  /* animation-delay: 0.5s; */
-  animation-fill-mode: both;
-
-  @keyframes animate-fade {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  p {
-    margin: 5px 0;
-  }
-  &.student {
-    justify-content: flex-start;
-    justify-content: stretch;
-  }
-  .author_text {
-    background: #f3f3f3;
-    color: black;
-    border-radius: 25px;
-    padding: 2% 5%;
-    display: flex;
-    min-width: 20%;
-    max-width: 70%;
-    font-size: 1.6rem;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    p {
-      margin: 10px 0;
-      &.button_box {
-        margin: 30px 0;
-        displlay: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      a.button {
-        border: none;
-        background: #0084ff;
-        color: #fff;
-        border-radius: 25px;
-        padding: 12px 20px;
-        cursor: pointer;
-        width: 100%;
-        margin: 10px 0;
-        transition: 0.3s;
-        &:hover {
-          background: #005fb8;
-        }
-        @media (max-width: 800px) {
-          display: block;
-          text-align: center;
-          padding: 12px 20px;
-          line-height: 1.2;
-        }
-      }
-    }
-    @media (max-width: 800px) {
-      font-size: 1.6rem;
-    }
-  }
-
-  .student_text {
-    min-width: 20%;
-    max-width: 70%;
-    border: 2px solid;
-    background: #2f80ed;
-    color: #fff;
-    outline: 0;
-    resize: none;
-    border-radius: 25px;
-    padding: 3% 4%;
-    line-height: 1.8;
-    font-family: Montserrat;
-    font-size: 1.6rem;
-    margin-bottom: 20px;
-    @media (max-width: 800px) {
-      font-size: 1.6rem;
-    }
-  }
-`;
-
 const Messages = styled.div`
   margin: 0 10px;
   filter: ${(props) => (props.isRevealed ? "blur(0px)" : "blur(4px)")};
-`;
-
-const IconBlock = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  width: 65px;
-  .icon {
-    margin: 5px;
-    border-radius: 50%;
-    height: 55px;
-    width: 55px;
-    object-fit: cover;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .name {
-    font-size: 1.2rem;
-    text-align: center;
-    color: #8f93a3;
-    max-width: 80px;
-    margin: 0 7px;
-  }
-`;
-
-const Icon = styled.div`
-  margin: 5px;
-  border-radius: 50%;
-  background: #2f80ed; /* fallback for old browsers */
-
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  height: 55px;
-  width: 55px;
-  object-fit: cover;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
 
 const Secret = styled.div`
@@ -412,14 +257,14 @@ const Chat = (props) => {
   }, []);
 
   const detectKeyDown = (e) => {
-    // if (e.key === "n") {
-    //   setNum((num) => num + 1);
-    // } else if (e.key === "b") {
-    //   setNum((num) => num - 1);
-    // } else if (e.key === "s") {
-    //   console.log("s");
-    //   setShowButton((showButton) => !showButton);
-    // }
+    if (e.key === "n") {
+      setNum((num) => num + 1);
+    } else if (e.key === "b") {
+      setNum((num) => num - 1);
+    } else if (e.key === "s") {
+      console.log("s");
+      setShowButton((showButton) => !showButton);
+    }
   };
 
   let width;
@@ -465,28 +310,11 @@ const Chat = (props) => {
                         key={i}
                         time={i}
                         className="author"
-                      >
-                        <div className="author_text">{renderHTML(m.text)}</div>
-                        <IconBlock>
-                          {m.image && <img className="icon" src={m.image} />}
-                          {!m.image &&
-                            (author && author.image ? (
-                              <img className="icon" src={author.image} />
-                            ) : (
-                              <img
-                                className="icon"
-                                src="../../static/hipster.svg"
-                              />
-                            ))}
-                          <div className="name">
-                            {m.name && m.name.toLowerCase() !== "author"
-                              ? m.name
-                              : author && author.name
-                              ? author.name
-                              : "BeSavvy"}
-                          </div>
-                        </IconBlock>
-                      </Message>
+                        shouldSlide={true}
+                        m={m}
+                        me={me}
+                        author={author}
+                      />
                       {m.reactions && m.reactions.length > 0 && (
                         <Reaction
                           reactions={m.reactions}
@@ -505,24 +333,11 @@ const Chat = (props) => {
                         key={i}
                         time={i}
                         className="student"
-                      >
-                        <IconBlock>
-                          <Icon className="icon2" background={m.author}>
-                            {m.image && <img className="icon" src={m.image} />}
-                            {me && me.image ? (
-                              <img className="icon" src={me.image} />
-                            ) : me.surname ? (
-                              `${me.name[0]}${me.surname[0]}`
-                            ) : (
-                              `${me.name[0]}${me.name[1]}`
-                            )}
-                          </Icon>
-                          <div className="name">
-                            {m.name ? m.name : m.author}
-                          </div>
-                        </IconBlock>
-                        <div className="student_text">{renderHTML(m.text)}</div>
-                      </Message>
+                        shouldSlide={true}
+                        m={m}
+                        me={me}
+                        author={author}
+                      />
                     </>
                   );
                 }
@@ -555,32 +370,15 @@ const Chat = (props) => {
               return (
                 <>
                   <Message
-                    id={"message" + i + id}
+                    id={"messagee" + i + id}
                     key={i}
                     time={i}
                     className="author"
-                  >
-                    <div className="author_text">{renderHTML(m.text)}</div>
-                    <IconBlock>
-                      {m.image && <img className="icon" src={m.image} />}
-                      {!m.image &&
-                        (author && author.image ? (
-                          <img className="icon" src={author.image} />
-                        ) : (
-                          <img
-                            className="icon"
-                            src="../../static/hipster.svg"
-                          />
-                        ))}
-                      <div className="name">
-                        {m.name && m.name.toLowerCase() !== "author"
-                          ? m.name
-                          : author && author.name
-                          ? author.name
-                          : "BeSavvy"}
-                      </div>
-                    </IconBlock>
-                  </Message>
+                    shouldSlide={true}
+                    m={m}
+                    me={me}
+                    author={author}
+                  />
                   {m.reactions && m.reactions.length > 0 && (
                     <Reaction
                       reactions={m.reactions}
@@ -600,25 +398,11 @@ const Chat = (props) => {
                   key={i}
                   time={i}
                   className="student"
-                >
-                  <IconBlock>
-                    <Icon className="icon2" background={m.author}>
-                      {m.image && <img className="icon" src={m.image} />}
-                      {!m.image &&
-                        (me && me.image ? (
-                          <img className="icon" src={me.image} />
-                        ) : me.surname ? (
-                          `${me.name[0]}${me.surname[0]}`
-                        ) : (
-                          `${me.name[0]}${me.name[1]}`
-                        ))}
-                    </Icon>
-                    <div className="name">
-                      {m.name && m.name !== "student" ? m.name : me.name}
-                    </div>
-                  </IconBlock>
-                  <div className="student_text">{renderHTML(m.text)}</div>
-                </Message>
+                  shouldSlide={true}
+                  m={m}
+                  me={me}
+                  author={author}
+                />
               );
             }
           })}
