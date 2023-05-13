@@ -282,8 +282,9 @@ const Mutation = mutationType({
         name: stringArg(),
         email: stringArg(),
         password: stringArg(),
+        number: stringArg(),
       },
-      resolve: async (_, { name, email, password }, ctx) => {
+      resolve: async (_, { name, email, password, number }, ctx) => {
         const hashed_password = await bcrypt.hash(password, 10);
         const valid = await bcrypt.compare(password, hashed_password);
 
@@ -297,6 +298,7 @@ const Mutation = mutationType({
         const user = await ctx.prisma.user.create({
           data: {
             name,
+            number,
             email: email.toLowerCase(),
             permissions: { set: ["USER"] },
             password: hashed_password,

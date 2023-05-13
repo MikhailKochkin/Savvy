@@ -16,8 +16,14 @@ const SIGNUP_MUTATION = gql`
     $email: String!
     $name: String!
     $password: String!
+    $number: String
   ) {
-    botSignup(email: $email, name: $name, password: $password) {
+    botSignup(
+      email: $email
+      name: $name
+      password: $password
+      number: $number
+    ) {
       token
       user {
         id
@@ -299,15 +305,29 @@ const Signup = (props) => {
   const [show, setShow] = useState(false);
   const [text, setText] = useState(props.text);
   const [password, setPassword] = useState("");
+  const [number, setNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation("auth");
   const classes = useStyles();
+
+  function validatePhoneNumber(phoneNumber) {
+    // Define the pattern for the phone number
+    // This pattern assumes the country code is +7, followed by a 10-digit phone number
+    const phonePattern = /^\+7\d{10}$/;
+
+    // Test the phone number against the pattern
+    const isValid = phonePattern.test(phoneNumber);
+
+    // Return the result
+    return isValid;
+  }
 
   const [signup, { error, loading }] = useMutation(SIGNUP_MUTATION, {
     variables: {
       name: name,
       email: email,
       password: uuidv4(),
+      number: number,
       // Other variables remain unchanged
     },
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
@@ -421,6 +441,15 @@ const Signup = (props) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               label="Электронная почта"
+            />
+            <input
+              className="number"
+              type="text"
+              name="number"
+              placeholder={t("number")}
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              label="Номер"
             />
             {show && (
               <input

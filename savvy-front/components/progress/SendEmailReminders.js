@@ -226,12 +226,15 @@ const SendEmailReminders = () => {
               <p>Emails sent: {emailReminder.emailsSent}</p>
               <p>
                 Lesson results:{" "}
-                {emailReminder.user.lessonResults.map((lr) => (
-                  <li>
-                    {lr.lesson.name} – {lr.progress} – {lr.updatedAt} –
-                    {lr.lesson.coursePage.title}
-                  </li>
-                ))}
+                {[...emailReminder.user.lessonResults]
+                  .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                  .slice(0, 10)
+                  .map((lr) => (
+                    <li>
+                      {lr.lesson.name} – {lr.progress} – {lr.updatedAt} –
+                      {lr.lesson.coursePage.title}
+                    </li>
+                  ))}
               </p>
             </div>
           ))}

@@ -257,14 +257,14 @@ const Chat = (props) => {
   }, []);
 
   const detectKeyDown = (e) => {
-    if (e.key === "n") {
-      setNum((num) => num + 1);
-    } else if (e.key === "b") {
-      setNum((num) => num - 1);
-    } else if (e.key === "s") {
-      console.log("s");
-      setShowButton((showButton) => !showButton);
-    }
+    // if (e.key === "n") {
+    //   setNum((num) => num + 1);
+    // } else if (e.key === "b") {
+    //   setNum((num) => num - 1);
+    // } else if (e.key === "s") {
+    //   console.log("s");
+    //   setShowButton((showButton) => !showButton);
+    // }
   };
 
   let width;

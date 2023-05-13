@@ -1,55 +1,61 @@
-import React from "react";
-import LessonResults from "../stats/lessons/LessonResults";
+import React, { useState } from "react";
+import { useQuery, useMutation, gql } from "@apollo/client";
+import moment from "moment";
+import Client from "./Client";
 
-const LessonsData = () => {
-  let lessons = [
-    {
-      name: "Крупные сделки",
-      id: "clgdv3q4s85801fx0m49dex83",
-      coursePageId: "ck587y4kp00lf07152t0tyywl",
-      structure: { lessonItems: [1, 2, 3, 4, 5] },
-    },
-    {
-      name: "Введение в юридический перевод",
-      id: "ck6nftvl101d90757yflepopx",
-      coursePageId: "ck6mc531p02z20748kwpqnt7z",
-      structure: { lessonItems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
-    },
-    {
-      name: "Компетенция арбитражных судов",
-      id: "cl657y8dc42041hylqjugrjc8",
-      coursePageId: "ckt9rmh4e51981hp97uwp6rft",
-      structure: {
-        lessonItems: [
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-        ],
-      },
-    },
-    {
-      name: "Due Diligence",
-      id: "cks068xc0143811gv9xxwjspvx",
-      coursePageId: "ckrza2r9a1377641guuzwhlgcb5",
-      structure: {
-        lessonItems: [
-          1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-        ],
-      },
-    },
-  ];
+const GET_EMAIL_CAMPAIGNS = gql`
+  query GetEmailCampaigns {
+    emailCampaigns {
+      id
+      name
+      emailReminders {
+        id
+        userId
+        createdAt
+        updatedAt
+        coursePageId
+        sendAt
+        emailsSent
+        user {
+          id
+          name
+          surname
+          email
+          number
+        }
+        gap
+        link
+      }
+    }
+  }
+`;
+
+const LessonsData = (props) => {
+  const { loading, error, data } = useQuery(GET_EMAIL_CAMPAIGNS);
+
+  const [activeCampaignId, setActiveCampaignId] = useState(null);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+
   return (
     <div>
-      <h3>Результаты открытых уроков</h3>
-      {lessons.map((les, i) => (
-        <>
-          <h4>
-            {i + 1}. {les.name}
-          </h4>
-          <LessonResults
-            id={les.id}
-            coursePageId={les.coursePageId}
-            structure={les.structure}
-          />
-        </>
+      <h3>Кампании</h3>
+      {data.emailCampaigns.map((campaign) => (
+        <div key={campaign.id}>
+          <h4>{campaign.name}</h4>
+          <button onClick={() => setActiveCampaignId(campaign.id)}>
+            {activeCampaignId === campaign.id
+              ? "Hide Reminders"
+              : "Show Reminders"}
+          </button>
+          {activeCampaignId === campaign.id &&
+            [...campaign.emailReminders]
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort reminders by creation date
+              .map((reminder, i) => (
+                <Client key={i} index={i} reminder={reminder} />
+              ))}
+        </div>
       ))}
     </div>
   );

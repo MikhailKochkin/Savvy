@@ -5476,6 +5476,7 @@ export interface NexusGenArgTypes {
     botSignup: { // args
       email?: string | null; // String
       name?: string | null; // String
+      number?: string | null; // String
       password?: string | null; // String
     }
     checkAssignment: { // args

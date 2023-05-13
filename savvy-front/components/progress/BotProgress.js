@@ -4,9 +4,13 @@ import moment from "moment";
 import { gql, useQuery } from "@apollo/client";
 import BotSession from "./BotSession";
 
+const now = new Date();
+now.setDate(now.getDate() - 30);
+const thirtyDaysAgo = now.toISOString();
+
 const BOT_SESSIONS_QUERY = gql`
   query BOT_SESSIONS_QUERY {
-    botDialogues(where: { updatedAt: { gte: "2023-03-03T00:10:10.734Z" } }) {
+    botDialogues(where: { updatedAt: { gte: "${thirtyDaysAgo}" } }) {
       id
       rating
       source
