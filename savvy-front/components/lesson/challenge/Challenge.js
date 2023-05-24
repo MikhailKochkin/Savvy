@@ -142,17 +142,16 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  width: 570px;
+  width: 100%;
   @media (max-width: 850px) {
     width: 100%;
   }
 `;
 
 const Box = styled.div`
-  width: 50%;
+  width: 570px;
   margin-top: 5%;
-  border: 1px green;
-  width: 100%;
+  /* width: 100%; */
   @media (max-width: 850px) {
     width: 100%;
   }

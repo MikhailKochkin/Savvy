@@ -88,7 +88,7 @@ const Final = (props) => {
               Завершить
             </Button>
           )}
-          {show && (
+          {show && offer && (
             <BannerOffer
               key={offer.id}
               id={offer.id}

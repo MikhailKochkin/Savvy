@@ -188,7 +188,7 @@ const Block = (props) => {
             <Section>
               {chats.map((n) => (
                 <div className="option">
-                  <div>{n.name}</div>
+                  <div>{n.messages.messagesList[0].text}</div>
                   <button
                     name={n.__typename}
                     value={n.id}

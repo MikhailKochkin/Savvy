@@ -11,7 +11,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   min-height: 50vh;
-  width: 100%;
+  width: 570px;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
   /* The side navigation menu */
   .sidenav {
     height: 100%; /* 100% Full-height */

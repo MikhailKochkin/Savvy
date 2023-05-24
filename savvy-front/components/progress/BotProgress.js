@@ -5,7 +5,7 @@ import { gql, useQuery } from "@apollo/client";
 import BotSession from "./BotSession";
 
 const now = new Date();
-now.setDate(now.getDate() - 30);
+now.setDate(now.getDate() - 10);
 const thirtyDaysAgo = now.toISOString();
 
 const BOT_SESSIONS_QUERY = gql`

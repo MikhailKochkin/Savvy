@@ -357,7 +357,7 @@ const Person = (props) => {
         </Name>
         <Tags className="div2">
           {" "}
-          {tags.map((t) => (
+          {tags.slice(0, 3).map((t) => (
             <Tag>{t}</Tag>
           ))}
           <Mutation

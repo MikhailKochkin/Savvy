@@ -676,27 +676,29 @@ const BannerOffer = (props) => {
               </>
             )}
             <Prices>
-              <PriceBox>
-                <div className="time">
-                  {offer?.program?.months}{" "}
-                  {getNoun(
-                    offer?.program?.months,
-                    "месяц",
-                    "месяца",
-                    "месяцев"
-                  )}
-                </div>
-                <div className="price">
-                  {formatIntegerWithSpace(offer.price)} ₽
-                </div>
-                <Buttons>
-                  <Button id="first" onClick={(e) => handleButtonClick2()}>
-                    {loading_data && purchaseType == "full"
-                      ? "Готовим оплату..."
-                      : "Открыть доступ"}
-                  </Button>
-                </Buttons>
-              </PriceBox>
+              {offer?.program && (
+                <PriceBox>
+                  <div className="time">
+                    {offer?.program?.months}{" "}
+                    {getNoun(
+                      offer?.program?.months,
+                      "месяц",
+                      "месяца",
+                      "месяцев"
+                    )}
+                  </div>
+                  <div className="price">
+                    {formatIntegerWithSpace(offer.price)} ₽
+                  </div>
+                  <Buttons>
+                    <Button id="first" onClick={(e) => handleButtonClick2()}>
+                      {loading_data && purchaseType == "full"
+                        ? "Готовим оплату..."
+                        : "Открыть доступ"}
+                    </Button>
+                  </Buttons>
+                </PriceBox>
+              )}
               <PriceBox className="popular">
                 <div className="popular-badge">
                   <span>Популярный</span>
@@ -705,13 +707,13 @@ const BannerOffer = (props) => {
                 <div className="discountPrice">
                   {formatIntegerWithSpace(offer.discountPrice)} ₽
                 </div>
-                <div className="comment">
+                {/* <div className="comment">
                   <u>
                     {formatIntegerWithSpace(parseInt(offer.discountPrice / 2))}{" "}
                     ₽
                   </u>{" "}
                   за следующий месяц, если пригласите друга
-                </div>
+                </div> */}
                 <Buttons>
                   <Button id="first" onClick={(e) => handleButtonClick1()}>
                     {loading_data && purchaseType == "part"
