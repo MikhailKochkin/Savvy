@@ -287,7 +287,7 @@ const Form = (props) => {
   let password = uuidv4();
 
   const d = props.data;
-  const { me, material, useful } = props;
+  const { me, useful } = props;
   return (
     <Contact>
       <div id="form_container">
@@ -369,7 +369,7 @@ const Form = (props) => {
                             isFamiliar: true,
                           },
                         });
-                        location.href = material.link;
+                        location.href = useful.link;
                       }
                     }}
                   >
@@ -383,7 +383,7 @@ const Form = (props) => {
             )}
             {step == "signin" && (
               <>
-                <Signin material={material} />
+                <Signin />
                 <Nav onClick={(e) => setStep("register")}>
                   Вернуться к регистрации
                 </Nav>
