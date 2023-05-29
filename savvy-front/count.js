@@ -1,39 +1,9 @@
 let ratings = [
   {
-    rating: 10,
+    rating: 2,
   },
   {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 9,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 9,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
+    rating: 8,
   },
   {
     rating: 8,
@@ -42,16 +12,7 @@ let ratings = [
     rating: 10,
   },
   {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
-  },
-  {
-    rating: 10,
+    rating: 7,
   },
   {
     rating: 10,
@@ -67,6 +28,18 @@ let ratings = [
   },
   {
     rating: 10,
+  },
+  {
+    rating: 6,
+  },
+  {
+    rating: 10,
+  },
+  {
+    rating: 8,
+  },
+  {
+    rating: 8,
   },
 ];
 

@@ -456,7 +456,8 @@ const Action = (props) => {
       <Container>
         <Contact>
           <Title>
-            Пробный месяц за <span>{program.price / program.months} ₽</span>
+            Пробный месяц за{" "}
+            <span>{program ? program.price / program.months : 6900} ₽</span>
           </Title>
           <Fieldset>
             <Group>
@@ -533,7 +534,10 @@ const Action = (props) => {
                 {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
               </div>
             )} */}
-            <div className="">◼️ Длительность: {program.months} месяцев</div>
+            <div className="">
+              ◼️ Длительность:{" "}
+              {program ? `${program.months} месяцев` : "3 месяца"}
+            </div>
             <div className="">
               ◼️{" "}
               {program
@@ -547,7 +551,9 @@ const Action = (props) => {
             <div className="">◼️ {t("access")}</div>
             <div className="">◼️ {t("chat")}</div>
             <div className="">◼️ {t("certificate")}</div>
-            <div className="">◼️ {program.price} ₽</div>
+            <div className="">
+              ◼️ {program ? program.price : coursePage.price} ₽
+            </div>
           </div>
         </Contact>
       </Container>
