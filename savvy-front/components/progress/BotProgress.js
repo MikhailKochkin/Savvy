@@ -10,7 +10,7 @@ const thirtyDaysAgo = now.toISOString();
 
 const BOT_SESSIONS_QUERY = gql`
   query BOT_SESSIONS_QUERY {
-    botDialogues(where: { updatedAt: { gte: "${thirtyDaysAgo}" } }) {
+    botDialogues(where: { updatedAt: { equals: "2023-05-10T00:00:00.637Z" } }) {
       id
       rating
       source

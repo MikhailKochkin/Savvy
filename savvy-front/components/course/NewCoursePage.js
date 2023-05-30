@@ -207,6 +207,11 @@ const NewCoursePage = (props) => {
                 lessons={data.coursePage.lessons}
                 coursePageId={data.coursePage.id}
               />
+              {data.coursePage &&
+                data.coursePage.reviews &&
+                data.coursePage.reviews.reviews.length > 0 && (
+                  <Reviews data={data.coursePage} />
+                )}
               <SellingPoints coursePage={data.coursePage} />
               {data.coursePage.prices &&
                 data.coursePage.prices.prices.length > 0 && (

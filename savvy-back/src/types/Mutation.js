@@ -1670,6 +1670,9 @@ const Mutation = mutationType({
         uptodateAt: arg({
           type: "DateTime",
         }),
+        reviews: arg({
+          type: "ReviewsList",
+        }),
         goals: list(stringArg()),
       },
       resolve: async (_, args, ctx) => {

@@ -6,7 +6,7 @@ import renderHTML from "react-render-html";
 const Styles = styled.div`
   width: 100%;
   /* min-height: 100vh; */
-  background: #f4f8fc;
+  background: #e8eff6;
   display: flex;
   flex-direction: column;
   justify-content: center;

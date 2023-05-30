@@ -9,7 +9,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #f4f8fc;
+  background: #e8eff6;
   padding: 50px 0;
 `;
 

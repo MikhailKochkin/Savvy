@@ -26,6 +26,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
     $subheader: [String]
     $image: String
     $video: String # $banner: String
+    $reviews: ReviewsList
   ) {
     updateCoursePage(
       id: $id
@@ -46,6 +47,7 @@ const UPDATE_COURSEPAGE_MUTATION = gql`
       subheader: $subheader
       image: $image
       video: $video #   banner: $banner
+      reviews: $reviews
     ) {
       id
       title
@@ -310,6 +312,9 @@ const UpdateForm = (props) => {
   const [subheader, setSubheader] = useState(
     props.coursePage.subheader.length > 0 ? props.coursePage.subheader : [""]
   );
+  const [reviews, setReviews] = useState(
+    props.coursePage.reviews ? props.coursePage.reviews.reviews : []
+  );
   const [startDate, setStartDate] = useState(props.coursePage.nextStart);
 
   const [updateCoursePage, { data, loading }] = useMutation(
@@ -336,6 +341,21 @@ const UpdateForm = (props) => {
     const file = await res.json();
     setImage(file.secure_url);
     setUpload(false);
+  };
+
+  const addReview = () => {
+    setReviews([...reviews, { name: "", text: "", source: "" }]);
+  };
+
+  const updateReview = (index, name, text, source, image) => {
+    const updatedReviews = [...reviews];
+    updatedReviews[index] = { name, text, source, image };
+    setReviews(updatedReviews);
+  };
+
+  const removeReview = (index) => {
+    const updatedReviews = reviews.filter((_, i) => i !== index);
+    setReviews(updatedReviews);
   };
 
   const myCallbackGoal = (res, name, i) => {
@@ -852,6 +872,65 @@ const UpdateForm = (props) => {
           />
         </Frame> */}
         <textarea value={result} onChange={(e) => setResult(e.target.value)} />
+        <Explainer>Reviews</Explainer>
+        {reviews.map((review, index) => (
+          <div key={index}>
+            <input
+              value={review.name}
+              onChange={(e) =>
+                updateReview(
+                  index,
+                  e.target.value,
+                  review.text,
+                  review.source,
+                  review.image
+                )
+              }
+              placeholder="Reviewer Name"
+            />
+            <input
+              value={review.text}
+              onChange={(e) =>
+                updateReview(
+                  index,
+                  review.name,
+                  e.target.value,
+                  review.source,
+                  review.image
+                )
+              }
+              placeholder="Review Text"
+            />
+            <input
+              value={review.source}
+              onChange={(e) =>
+                updateReview(
+                  index,
+                  review.name,
+                  review.text,
+                  e.target.value,
+                  review.image
+                )
+              }
+              placeholder="Review Source"
+            />
+            <input
+              value={review.image}
+              onChange={(e) => {
+                updateReview(
+                  index,
+                  review.name,
+                  review.text,
+                  review.source,
+                  e.target.value
+                );
+              }}
+              placeholder="Image URL"
+            />
+            <button onClick={() => removeReview(index)}>Remove</button>
+          </div>
+        ))}
+        <Button onClick={addReview}>+ Add Review</Button>
       </Fieldset>
       <Buttons>
         <Button
@@ -877,6 +956,7 @@ const UpdateForm = (props) => {
                 methods,
                 image,
                 video,
+                reviews: { reviews },
               },
             });
           }}

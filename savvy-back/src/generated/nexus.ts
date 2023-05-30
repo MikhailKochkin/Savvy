@@ -5991,6 +5991,7 @@ export interface NexusGenArgTypes {
       promocode?: NexusGenInputs['PromocodeList'] | null; // PromocodeList
       promotionId?: string | null; // String
       result?: string | null; // String
+      reviews?: NexusGenInputs['ReviewsList'] | null; // ReviewsList
       subheader?: Array<string | null> | null; // [String]
       tariffs?: string | null; // String
       title?: string | null; // String

@@ -5,7 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #f4f8fc;
+  background: #e8eff6;
 `;
 
 export const LessonStyles = styled.div`

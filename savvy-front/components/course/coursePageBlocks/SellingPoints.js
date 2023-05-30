@@ -59,14 +59,17 @@ const Container = styled.div`
     max-width: 100%;
   }
   h2 {
-    line-height: 1.4;
+    line-height: 1.3;
     font-weight: 700;
     font-size: 2.8rem;
-  }
-  h2 {
+    margin: 15px 0;
   }
   .text {
     width: 80%;
+    font-size: 1.6rem;
+    p {
+      margin: 5px 0;
+    }
   }
   @media (max-width: 1040px) {
     .text {
@@ -176,9 +179,10 @@ const Blue = styled.div`
   background-image: url("/static/pattern.svg");
   background-size: cover;
   color: #dee1ec;
-  padding: 10px 30px;
+  padding: 20px 30px;
   border-radius: 15px;
   width: 85%;
+  margin-bottom: 20px;
   @media (max-width: 800px) {
     width: 100%;
   }
