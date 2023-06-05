@@ -10,7 +10,7 @@ const thirtyDaysAgo = now.toISOString();
 
 const BOT_SESSIONS_QUERY = gql`
   query BOT_SESSIONS_QUERY {
-    botDialogues(where: { updatedAt: { equals: "2023-05-10T00:00:00.637Z" } }) {
+    botDialogues(where: { updatedAt: { gte: "2023-05-10T00:00:00.637Z" } }) {
       id
       rating
       source
@@ -41,6 +41,8 @@ const BotProgress = () => {
   if (data1) {
     sessions = data1.botDialogues;
   }
+
+  console.log("sessions", data1);
 
   const groupByDay = (array) => {
     const now = new Date();

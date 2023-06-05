@@ -25,6 +25,7 @@ const Phrase = styled.p`
   text-align: center;
   font-weight: 500;
   font-size: 1.6rem;
+  max-width: 450px;
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
@@ -44,16 +45,16 @@ const Loading = () => {
 
   useEffect(() => {
     const phrases = [
-      "🇨🇭 В Швейцарии, юристам запрещено рекламировать свои услуги, это нарушает правила этики и считается неприемлемым. Однако, это не мешает им быть одними из самых высокооплачиваемых юристов в мире.",
-      "🇯🇵 В Японии, процент судебных разбирательств, которые заканчиваются судебным принудительным решением, очень низок. Вместо этого, мирные переговоры и компромиссы широко используются в качестве альтернативного способа разрешения споров. Это позволяет экономить время и деньги для всех сторон.",
-      "🇺🇸 В США, юристы имеют право отказаться от представления клиента, если они не верят в правомерность его дела. Это позволяет им сохранить свою профессиональную репутацию и защитить своих клиентов от возможных проблем.",
-      "🇩🇪 В Германии, прямой контакт между клиентом и адвокатом во время судебного процесса недопустим. Все коммуникации должны проходить через суд. Это позволяет судебной системе более эффективно контролировать процесс и предотвращать возможные нарушения.",
-      "🇦🇺 В Австралии, более 65% всех юристов работают в частном секторе, а не в правительственных или государственных организациях. Это обеспечивает гибкость и возможность выбора для всех заинтересованных сторон.",
-      "🇮🇳 В Индии, законодательство о семейных отношениях имеет свои особенности. Например, браки между людьми из разных религиозных групп могут быть официально зарегистрированы только после специального разрешения правительства. Это связано с желанием сохранить баланс между разными религиозными группами в стране.",
-      "🇬🇧 В Великобритании, высшая квалификационная ступень для юриста - стать Queen's Counsel (QC), которая выдается только лучшим из лучших. Это является одной из самых престижных наград в юридической профессии в мире.",
-      "🇨🇳 В Китае, адвокаты имеют право отказаться от защиты клиента, если они не согласны с политическими или моральными взглядами клиента. Это может создавать сложности для тех, кто сталкивается с политически мотивированным преследованием.",
-      "🇧🇷 В Бразилии, юридическое образование не требует специализации в определенной области права. Это означает, что адвокаты могут представлять клиентов в самых разных областях, включая уголовное, гражданское и налоговое право.",
-      "🇨🇭 В Швейцарии, не все юристы могут представлять клиентов в суде. Чтобы иметь право на это, адвокат должен пройти специальные экзамены и получить лицензию. Это гарантирует высокое качество представления в суде.",
+      "🇯🇵 In Japan, it's not uncommon for employees to practice 'inemuri' – sleeping while on duty. This is viewed as a sign of diligence and commitment, showing that the worker is so dedicated that they have become exhausted.",
+      "🇩🇪 In Germany, there's a cultural norm known as 'Feierabend' which strictly separates work from leisure time. When the workday is over, it really is over. You're unlikely to receive work calls or emails outside of office hours.",
+      "🇪🇸 In Spain, the tradition of the 'siesta' - an afternoon nap - has shaped the workday schedule. While it is becoming less common in large cities, many businesses still close for a few hours in the afternoon and operate later into the evening.",
+      "🇲🇽 In Mexico, business relationships are based on personal relationships. This means that before business can be discussed, a personal relationship needs to be developed. This often takes place over meals, with business only being discussed once a rapport has been established.",
+      "🇸🇪 In Sweden, 'fika' is a crucial part of everyday life. It's a designated coffee break where colleagues gather for social interaction. It's considered so important that it's built into the work schedules.",
+      "🇫🇮 In Finland, it's common to take a 'forest break'. Many Finns take time out of their workday to connect with nature, go for a walk, and reset. It's seen as an important part of maintaining mental health and productivity.",
+      "🇨🇳 In China, it is not uncommon for the employees to live in dormitories provided by their employers, especially in manufacturing industries. This allows employees to save on living expenses and can also foster a sense of community among workers.",
+      "🇸🇬 In Singapore, it's customary to practice 'kiasu', a Hokkien term that translates to 'afraid to lose'. It's a reflection of the competitive culture, especially in the workplace, where people are driven to succeed and outperform others.",
+      "🇦🇺 In Australia, there's a strong emphasis on work-life balance. Employees often start and finish early (around 7 am to 3 pm), allowing them to enjoy their leisure time in the afternoon. It's also not uncommon to have a 'bring your dog to work day'.",
+      "🇮🇹 In Italy, most businesses operate on a 'riposo' schedule. This is a long break taken in the middle of the day, usually between 1 pm and 4 pm, allowing workers to rest and avoid the hottest part of the day. Similar to Spain's siesta, during riposo, many businesses will close their doors and then reopen later in the afternoon.",
     ];
     const randomIndex = Math.floor(Math.random() * phrases.length);
     setPhrase(phrases[randomIndex]);
@@ -62,7 +63,7 @@ const Loading = () => {
     <Frame>
       <Phrase>
         <p className="header">
-          <b>Знаете ли вы?</b>
+          <b>Do you know?</b>
         </p>
         <p> {phrase}</p>
       </Phrase>

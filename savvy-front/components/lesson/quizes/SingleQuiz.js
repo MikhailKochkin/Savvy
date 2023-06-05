@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import styled from "styled-components";
@@ -7,6 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
 
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
@@ -289,6 +290,23 @@ const Buttons = styled.div`
   flex-direction: row;
 `;
 
+const Circle = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 15px;
+  cursor: pointer;
+  transition: ease-in 0.4s;
+  &:hover {
+    border: 1px solid blue;
+  }
+`;
+
 const StyledButton = withStyles({
   root: {
     margin: "4% 0",
@@ -316,9 +334,27 @@ const SingleQuiz = (props) => {
   const [progress, setProgress] = useState("false");
   const [inputColor, setInputColor] = useState("#f3f3f3");
   const [isExperienced, setIsExperienced] = useState(false);
+  const [message, setMessage] = useState("");
+  const [recognition, setRecognition] = useState(null);
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
+
+  function guessAlphabet(str) {
+    // Removing <p> at the beginning of the string if it exists
+    if (str.startsWith("<p>")) {
+      str = str.slice(3);
+    }
+
+    // Limiting the check to the first 5 characters
+    for (let i = 0; i < Math.min(str.length, 5); i++) {
+      let code = str.charCodeAt(i);
+      if (code >= 65 && code <= 122) return "Latin";
+      if (code >= 1040 && code <= 1103) return "Cyrillic";
+    }
+
+    return "Unknown";
+  }
 
   const onAnswer = async (e) => {
     setProgress("true");
@@ -466,6 +502,39 @@ const SingleQuiz = (props) => {
     }
   };
 
+  const startListening = () => {
+    const newRecognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition ||
+      window.mozSpeechRecognition ||
+      window.msSpeechRecognition)();
+    newRecognition.lang =
+      guessAlphabet(props.question) == "Cyrillic" ? "ru-RU" : "en-US";
+    newRecognition.interimResults = false;
+    newRecognition.maxAlternatives = 1;
+
+    newRecognition.start();
+
+    newRecognition.onresult = function (event) {
+      setAnswer(event.results[0][0].transcript);
+    };
+
+    newRecognition.onspeechend = function () {
+      newRecognition.stop();
+    };
+
+    newRecognition.onerror = function (event) {
+      console.error("Error occurred in recognition: " + event.error);
+    };
+
+    setRecognition(newRecognition);
+  };
+
+  const stopListening = () => {
+    if (recognition) {
+      recognition.stop();
+    }
+  };
+
   const {
     me,
     user,
@@ -557,6 +626,7 @@ const SingleQuiz = (props) => {
                     type="text"
                     required
                     inputColor={inputColor}
+                    value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     placeholder="..."
                   />
@@ -581,7 +651,21 @@ const SingleQuiz = (props) => {
                   >
                     {t("check")}
                   </Button1>
+                  <Circle onClick={startListening}>
+                    <BiMicrophone
+                      className="icon"
+                      value={{ className: "react-icons" }}
+                    />
+                  </Circle>
+                  <Circle onClick={stopListening} disabled={!recognition}>
+                    <BiMicrophoneOff
+                      className="icon"
+                      value={{ className: "react-icons" }}
+                    />
+                  </Circle>
+                  {/* <button onClick={startListening}>Start listening</button> */}
                 </Group>
+
                 {correct === "true" && (
                   <div className="question_box">
                     <div className="question_text">

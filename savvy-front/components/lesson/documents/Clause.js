@@ -134,13 +134,13 @@ const Clause = (props) => {
         <>
           <div>
             {" "}
-            Section {index}. {renderHTML(commentary)}
+            Section {index}.<b>{renderHTML(commentary)}</b>
           </div>
           <Frame>
             <DynamicLoadedEditor getEditorText={myCallback} />
           </Frame>
           <Comments display={show}>
-            <p>Комментарии:</p>
+            <p>Comments:</p>
             <Progress display={progress}>
               <CircularProgress />
             </Progress>

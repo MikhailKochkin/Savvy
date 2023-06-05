@@ -3,10 +3,13 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import CreateClause from "./CreateClause";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
 
 const Styles = styled.div`
   margin-top: 5%;
   padding: 0% 0;
+  width: 100%;
+
   #title {
     font-size: 2rem;
     margin-bottom: 2%;
@@ -21,9 +24,11 @@ const Styles = styled.div`
 
 const CreateClauses = (props) => {
   const [clauses, setClauses] = useState(1);
+  const { t } = useTranslation("lesson");
+
   return (
     <Styles>
-      <div id="title">Условия документа:</div>
+      <div id="title">{t("doc_parts")}</div>
       <button classNmae="but" onClick={(e) => setClauses(clauses - 1)}>
         -1
       </button>

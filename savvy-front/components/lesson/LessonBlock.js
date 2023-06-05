@@ -43,6 +43,8 @@ import ChangeForum from "./forum/ChangeForum";
 import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import SingleLesson_Menu from "./SingleLesson_Menu";
 import CreateDocument from "./documents/CreateDocument";
+import Document from "./documents/Document";
+
 import renderHTML from "react-render-html";
 
 const ButtonTwo = styled.button`
@@ -153,6 +155,8 @@ const LessonBlock = (props) => {
     d = lesson.problems.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "forum" && !el.data) {
     d = lesson.forum;
+  } else if (el.type && el.type.toLowerCase() == "document" && !el.data) {
+    d = lesson.documents.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "construction" && !el.data) {
     d = lesson.constructions.find((n) => n.id == el.id);
   } else if (el.type && el.type.toLowerCase() == "shot" && !el.data) {
@@ -274,6 +278,16 @@ const LessonBlock = (props) => {
         "Chat",
         res.data.updateChat
       );
+    } else if (res.data.updateDocument) {
+      setIsAdded(true);
+      setType("Document");
+      setIdNum(res.data.updateDocument.id);
+      props.addToLesson(
+        res.data.updateDocument.id,
+        index,
+        "Document",
+        res.data.updateDocument
+      );
     } else if (res.data.createOffer) {
       setIsAdded(true);
       setType("Offer");
@@ -339,6 +353,15 @@ const LessonBlock = (props) => {
         index,
         "Problem",
         res.data.createProblem
+      );
+    } else if (res.data.createDocument) {
+      setType("Document");
+      setIdNum(res.data.createDocument.id);
+      props.addToLesson(
+        res.data.createDocument.id,
+        index,
+        "Document",
+        res.data.createDocument
       );
     } else if (res.data.updateProblem) {
       setType("Problem");
@@ -410,7 +433,6 @@ const LessonBlock = (props) => {
         </ButtonThree>
       )}
       {props.comment && <Box>{renderHTML(props.comment)}</Box>}
-      {type}
       <Styles
         id={props.id}
         isAdded={isAdded}
@@ -440,9 +462,13 @@ const LessonBlock = (props) => {
             <ButtonTwo onClick={(e) => addBlock("Construction")}>
               {t("Construction")}
             </ButtonTwo>
+            <ButtonTwo onClick={(e) => addBlock("Document")}>
+              {t("writing")}
+            </ButtonTwo>
             <ButtonTwo onClick={(e) => addBlock("Forum")}>
               {t("Forum")}
             </ButtonTwo>
+
             <ButtonTwo onClick={(e) => addBlock("addOld")}>
               {t("AddOld")}
             </ButtonTwo>
@@ -744,6 +770,35 @@ const LessonBlock = (props) => {
                     getResults={getResults}
                     getResult={getResult}
                     passUpdated={passUpdated}
+                  />
+                </>
+              )}
+          </>
+        )}
+        {type.toLowerCase() == "document" && (
+          <>
+            {!isSaved && d == null && (
+              <CreateDocument
+                lessonID={lesson.id}
+                getResult={getResult}
+                isSaved={isSaved}
+              />
+            )}
+            {console.log("d", d)}
+            {(isSaved || d != null) &&
+              data &&
+              data.__typename == "Document" && (
+                <>
+                  <Document
+                    key={data.id}
+                    id={data.id}
+                    clauses={data.clauses}
+                    complexity={data.complexity}
+                    title={data.title}
+                    me={me}
+                    documentID={data.id}
+                    user={lesson.user.id}
+                    lessonID={lesson.id}
                   />
                 </>
               )}

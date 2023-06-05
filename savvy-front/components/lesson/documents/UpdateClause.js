@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
 
 const UPDATE_CLAUSE_MUTATION = gql`
   mutation UPDATE_CLAUSE_MUTATION(
@@ -84,6 +85,8 @@ const UpdateClause = (props) => {
   const [sample, setSample] = useState(props.sample);
   const [number, setNumber] = useState(props.number);
   const [keywords, setKeywords] = useState(props.keywords);
+  const { t } = useTranslation("lesson");
+
   const myCallback = (dataFromChild, name) => {
     if (name === "sample") {
       setSample(dataFromChild);
@@ -132,12 +135,12 @@ const UpdateClause = (props) => {
                   onChange={(e) => setNumber(parseInt(e.target.value))}
                 />
               </div>
-              <div>
+              {/* <div>
                 <Input
                   defaultValue={[...keywords]}
                   onChange={(e) => setKeywords(e.target.value.split(", "))}
                 />
-              </div>
+              </div> */}
               <Button
                 className={classes.button}
                 variant="contained"
@@ -145,10 +148,10 @@ const UpdateClause = (props) => {
                 onClick={async (e) => {
                   e.preventDefault();
                   const res = await updateClause();
-                  alert("Изменили!");
+                  alert("Updated!");
                 }}
               >
-                Сохранить
+                {loading ? t("saving") : t("save")}
               </Button>
             </form>
           )}

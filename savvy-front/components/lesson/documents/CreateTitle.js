@@ -5,11 +5,13 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
 
 const CREATE_DOCUMENT_MUTATION = gql`
   mutation CREATE_DOCUMENT_MUTATION($title: String!, $lessonId: String!) {
     createDocument(title: $title, lessonId: $lessonId) {
       id
+      lessonId
       title
     }
   }
@@ -18,6 +20,7 @@ const CREATE_DOCUMENT_MUTATION = gql`
 const Styles = styled.div`
   margin-top: 5%;
   padding: 0% 0;
+  width: 100%;
   #title {
     font-size: 2rem;
     margin-bottom: 2%;
@@ -50,6 +53,8 @@ const useStyles = makeStyles({
 const CreateTitle = (props) => {
   const [value, setValue] = useState("");
   const classes = useStyles();
+  const { t } = useTranslation("lesson");
+
   return (
     <Mutation
       mutation={CREATE_DOCUMENT_MUTATION}
@@ -60,7 +65,7 @@ const CreateTitle = (props) => {
     >
       {(createDocument, { loading, error }) => (
         <Styles>
-          <div id="title">Запишите название нового документа</div>
+          <div id="title">{t("doc_name")}</div>
           <form>
             <Input
               value={value}
@@ -75,9 +80,10 @@ const CreateTitle = (props) => {
                 e.preventDefault();
                 const res = await createDocument();
                 props.getStep("clauses", res.data.createDocument.id);
+                props.getRes(res);
               }}
             >
-              Сохранить
+              {loading ? t("saving") : t("save")}
             </Button>
           </form>
         </Styles>

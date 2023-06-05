@@ -562,6 +562,7 @@ const LessonBuilder = (props) => {
           getTemplate={getTemplate}
           // change={lesson.change}
         />
+        {console.log("elements", elements)}
         <Analyzer elements={elements} lesson={lesson} />
         <BuilderPart id="builder_part">
           {[...elements].map((el, i) => {

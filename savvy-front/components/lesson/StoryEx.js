@@ -128,6 +128,7 @@ const StoryEx = (props) => {
       : null;
   let components = [];
   let move_statuses = [];
+  console.log("tasks", tasks);
   tasks.map((task) => {
     let el;
     let item;

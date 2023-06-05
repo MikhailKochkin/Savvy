@@ -442,7 +442,7 @@ const LessonsData = (props) => {
                 primary={format === "weeks"}
                 onClick={(e) => setFormat("weeks")}
               >
-                По неделям
+                {t("in_weeks")}
               </Button>
               {full_modules.length > 0 && (
                 <Button

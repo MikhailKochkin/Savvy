@@ -155,6 +155,11 @@ const ActiveStudents = () => {
 
   if (loading) return <p>Loading active users...</p>;
   moment.locale("ru");
+  // console.log(
+  //   "students",
+  //   students.filter((s) => s.tags.includes("Адвокатский_экзамен"))
+  // );
+
   return (
     <Styles>
       <div>

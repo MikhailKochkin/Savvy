@@ -8,6 +8,7 @@ import DeleteDocument from "../../delete/DeleteDocument";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import renderHTML from "react-render-html";
+import jsPDF from "jspdf";
 
 const CREATE_DOCUMENTRESULT_MUTATION = gql`
   mutation CREATE_DOCUMENTRESULT_MUTATION(
@@ -28,17 +29,18 @@ const CREATE_DOCUMENTRESULT_MUTATION = gql`
 `;
 
 const Styles = styled.div`
-  margin-top: 5%;
-  width: 50%;
+  margin: 80px 0;
+  width: ${(props) => (props.story ? "50%" : "100%")};
+  font-size: 1.6rem;
 `;
 
 const Header = styled.div`
-  font-size: 2rem;
+  font-size: 2.8rem;
   font-weight: bold;
 `;
 
 const Advice = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin: 1% 4%;
   background: #fdf3c8;
   border: 1px solid #c4c4c4;
@@ -108,9 +110,30 @@ const Document = (props) => {
     const resul = await setDrafts(drafts);
   };
   const { me, user, title, clauses, lessonID, documentID, story } = props;
-  const sorted_clauses = clauses.slice().sort((a, b) => a.number - b.number);
+  const sorted_clauses = clauses
+    ? clauses.slice().sort((a, b) => a.number - b.number)
+    : [];
+
+  // function createPdf() {
+  //   const doc = new jsPDF();
+
+  //   let htmlContent = "";
+  //   results.forEach((str) => {
+  //     htmlContent += `<p>${str}</p>`;
+  //   });
+
+  //   doc.html(htmlContent, {
+  //     callback: function (doc) {
+  //       doc.save("BeSavvy_assignment.pdf");
+  //     },
+  //     x: 10,
+  //     y: 10,
+  //   });
+  // }
+
+  console.log(props.story, "props.story");
   return (
-    <Styles>
+    <Styles story={props.story}>
       <Mutation
         mutation={CREATE_DOCUMENTRESULT_MUTATION}
         variables={{
@@ -164,6 +187,17 @@ const Document = (props) => {
               >
                 Save
               </StyledButton>
+              {/* <StyledButton
+                variant="contained"
+                color="primary"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  createPdf();
+                }}
+              >
+                Print
+              </StyledButton> */}
+
               {me && me.id === user ? (
                 <DeleteDocument
                   id={me.id}

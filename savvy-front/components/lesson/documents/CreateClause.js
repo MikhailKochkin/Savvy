@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "next-i18next";
 
 const CREATE_CLAUSE_MUTATION = gql`
   mutation CREATE_CLAUSE_MUTATION(
@@ -81,8 +82,8 @@ const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
 
 const CreateClause = (props) => {
   const [number, setNumber] = useState(props.index);
-  const [commentary, setCommentary] = useState("Комментарий по условию");
-  const [sample, setSample] = useState("Пример условия");
+  const [commentary, setCommentary] = useState("");
+  const [sample, setSample] = useState("");
   const [keywords, setKeywords] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const myCallback = (dataFromChild, name) => {
@@ -92,6 +93,8 @@ const CreateClause = (props) => {
       setCommentary(dataFromChild);
     }
   };
+  const { t } = useTranslation("lesson");
+
   const classes = useStyles();
   const { index, document } = props;
   return (
@@ -109,7 +112,7 @@ const CreateClause = (props) => {
         {(createClause, { loading, error }) => (
           <form disabled={disabled}>
             <Condition>
-              Условие
+              {t("doc_part")}
               <input
                 type="number"
                 value={number}
@@ -122,7 +125,7 @@ const CreateClause = (props) => {
                 value={commentary}
                 name="commentary"
                 getEditorText={myCallback}
-                placeholder={`<p>Часть ${index} документа...</p>`}
+                placeholder={`Description of part ${index}`}
               />
             </Frame>
             <Frame>
@@ -131,15 +134,15 @@ const CreateClause = (props) => {
                 value={sample}
                 name="sample"
                 getEditorText={myCallback}
-                placeholder={`<p>Часть ${index} документа...</p>`}
+                placeholder={`Sample of part ${index}`}
               />
             </Frame>
-            <div>
+            {/* <div>
               <Input
-                defaultValue="Ключевые слова"
+                defaultValue="Key words"
                 onChange={(e) => setKeywords(event.target.value.split(", "))}
               />
-            </div>
+            </div> */}
             <Button
               className={classes.button}
               variant="contained"
@@ -148,10 +151,10 @@ const CreateClause = (props) => {
                 e.preventDefault();
                 const res = await createClause();
                 setDisabled(true);
-                alert("Сохранили!");
+                alert("Saved!");
               }}
             >
-              Сохранить
+              {loading ? t("saving") : t("save")}
             </Button>
           </form>
         )}
