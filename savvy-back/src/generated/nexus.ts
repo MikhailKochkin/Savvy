@@ -4172,6 +4172,7 @@ export interface NexusGenFieldTypes {
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string | null; // String
     email: string; // String!
+    emailReminders: NexusGenRootTypes['EmailReminder'][]; // [EmailReminder!]!
     id: string; // String!
     image: string | null; // String
     lessonResults: NexusGenRootTypes['LessonResult'][]; // [LessonResult!]!
@@ -5179,6 +5180,7 @@ export interface NexusGenFieldTypeNames {
     createdAt: 'DateTime'
     description: 'String'
     email: 'String'
+    emailReminders: 'EmailReminder'
     id: 'String'
     image: 'String'
     lessonResults: 'LessonResult'
@@ -6170,6 +6172,7 @@ export interface NexusGenArgTypes {
     }
     updateUser: { // args
       active?: boolean | null; // Boolean
+      comment?: string | null; // String
       description?: string | null; // String
       email?: string | null; // String
       id?: string | null; // String
@@ -6610,6 +6613,12 @@ export interface NexusGenArgTypes {
     courseVisits: { // args
       after?: NexusGenInputs['CourseVisitWhereUniqueInput'] | null; // CourseVisitWhereUniqueInput
       before?: NexusGenInputs['CourseVisitWhereUniqueInput'] | null; // CourseVisitWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    emailReminders: { // args
+      after?: NexusGenInputs['EmailReminderWhereUniqueInput'] | null; // EmailReminderWhereUniqueInput
+      before?: NexusGenInputs['EmailReminderWhereUniqueInput'] | null; // EmailReminderWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }

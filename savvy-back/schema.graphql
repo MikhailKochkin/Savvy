@@ -1829,7 +1829,7 @@ type Mutation {
   updateStatement(comments: [String], id: String): Statement
   updateStatementChecked(answered: Boolean, id: String): Statement
   updateTextEditor(complexity: Int, id: String, name: String, text: String, totalMistakes: Int): TextEditor
-  updateUser(active: Boolean, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
+  updateUser(active: Boolean, comment: String, description: String, email: String, id: String, image: String, isFamiliar: Boolean, name: String, number: String, status: Status, surname: String, tags: [String], work: String): User
   updateUserLevel(consumedContent: ConsumedContentList, id: String, isProgressPublic: Boolean, learningStreak: [DateTime], level: Float, myProgress: MyProgressList): UserLevel
 }
 
@@ -3615,6 +3615,7 @@ type User {
   createdAt: DateTime!
   description: String
   email: String!
+  emailReminders(after: EmailReminderWhereUniqueInput, before: EmailReminderWhereUniqueInput, first: Int, last: Int): [EmailReminder!]!
   id: String!
   image: String
   lessonResults(after: LessonResultWhereUniqueInput, before: LessonResultWhereUniqueInput, first: Int, last: Int): [LessonResult!]!

@@ -642,6 +642,7 @@ const Mutation = mutationType({
         active: booleanArg(),
         description: stringArg(),
         work: stringArg(),
+        comment: stringArg(),
         status: arg({
           type: "Status", // name should match the name you provided
         }),

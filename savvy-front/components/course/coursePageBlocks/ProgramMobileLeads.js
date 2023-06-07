@@ -48,6 +48,12 @@ const Styles = styled.div`
   /* position: fixed; */
   bottom: 0px;
   /* height: 100px; */
+  .student {
+    line-height: 1.4;
+    text-align: center;
+    width: 80%;
+    margin-top: 10px;
+  }
   .price {
     font-weight: 600;
     font-size: 3.2rem;
@@ -380,11 +386,14 @@ const MobileBuy = (props) => {
   return (
     <Styles id="buy_section">
       <>
-        <Title>
-          {" "}
-          Пробный месяц за <br />{" "}
-          <span>{program.price / program.months} ₽</span>
-        </Title>
+        {program && program.id == "clgp3kppu0454eku9bs6nklf8" ? (
+          <Title>Пошаговый запуск карьеры юриста</Title>
+        ) : (
+          <Title>
+            Пробный месяц за{" "}
+            <span>{program ? program.price / program.months : 6900} ₽</span>
+          </Title>
+        )}
         <Fieldset>
           <Group>
             <input
@@ -449,6 +458,12 @@ const MobileBuy = (props) => {
           {loading ? "Готовим заявку..." : "Оставить заявку"}
         </ButtonOpen>
       </>
+      {program && program.id == "clgp3kppu0454eku9bs6nklf8" && (
+        <div className="student">
+          🔥 Оставьте заявку, и мы дадим вам испытание{" "}
+          <b>для получения скидки до 70%</b>
+        </div>
+      )}
 
       <Info>
         {/* {props.coursePage.courseType !== "PUBLIC" && (

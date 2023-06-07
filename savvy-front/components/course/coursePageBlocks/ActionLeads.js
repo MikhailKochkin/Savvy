@@ -159,6 +159,10 @@ const Contact = styled.div`
       margin-bottom: 15px;
     }
   }
+  .student {
+    line-height: 1.4;
+    text-align: center;
+  }
   .details {
     margin-top: 20px;
     width: 100%;
@@ -455,10 +459,14 @@ const Action = (props) => {
     <Styles id="c2a">
       <Container>
         <Contact>
-          <Title>
-            Пробный месяц за{" "}
-            <span>{program ? program.price / program.months : 6900} ₽</span>
-          </Title>
+          {program && program.id == "clgp3kppu0454eku9bs6nklf8" ? (
+            <Title>Пошаговый запуск карьеры юриста</Title>
+          ) : (
+            <Title>
+              Пробный месяц за{" "}
+              <span>{program ? program.price / program.months : 6900} ₽</span>
+            </Title>
+          )}
           <Fieldset>
             <Group>
               <input
@@ -526,6 +534,12 @@ const Action = (props) => {
           >
             {loading ? "Готовим заявку..." : "Оставить заявку"}
           </ButtonOpen>
+          {program && program.id == "clgp3kppu0454eku9bs6nklf8" && (
+            <div className="student">
+              🔥 Оставьте заявку, и мы дадим вам испытание{" "}
+              <b>для получения скидки до 70%</b>
+            </div>
+          )}
 
           <div className="details">
             {/* {installments && (
@@ -534,6 +548,7 @@ const Action = (props) => {
                 {getNoun(installments - 1, "месяц", "месяца", "месяцев")}
               </div>
             )} */}
+
             <div className="">
               ◼️ Длительность:{" "}
               {program ? `${program.months} месяцев` : "3 месяца"}
