@@ -42,8 +42,6 @@ const BotProgress = () => {
     sessions = data1.botDialogues;
   }
 
-  console.log("sessions", data1);
-
   const groupByDay = (array) => {
     const now = new Date();
     const groups = [];

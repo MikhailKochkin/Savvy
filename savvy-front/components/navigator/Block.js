@@ -368,6 +368,60 @@ const ButtonOpen = styled.div`
   }
 `;
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 6px;
+  margin-top: 15px;
+  margin-left: 10px;
+`;
+
+const MiniCell = styled.div`
+  border: 2px solid #d3d6da;
+  width: 42px;
+  height: 42px;
+  margin-right: 6px;
+  background: ${(props) => {
+    if (props.color == "green") {
+      return "#6AAA63";
+    } else if (props.color == "yellow") {
+      return "#CAB458";
+    } else if (props.color == "grey") {
+      return "#787C7E";
+    } else {
+      return "#fff";
+    }
+  }};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.6rem;
+  color: ${(props) => {
+    if (props.color == "green") {
+      return "#fff";
+    } else if (props.color == "yellow") {
+      return "#fff";
+    } else if (props.color == "grey") {
+      return "#fff";
+    } else {
+      return "#000000";
+    }
+  }};
+  font-weight: 700;
+  border-color: ${(props) => {
+    if (props.color == "green") {
+      return "#6AAA63";
+    } else if (props.color == "yellow") {
+      return "#CAB458";
+    } else if (props.color == "grey") {
+      return "#787C7E";
+    } else {
+      return "#d3d6da";
+    }
+  }};
+`;
+
 const Block = (props) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -539,6 +593,41 @@ const Block = (props) => {
               ? props.post.title
               : null}
             <b>{props.type == "post" && props.name ? props.name : null}</b>
+            {props.type == "lawrdle" && (
+              <>
+                <Row>
+                  <MiniCell color="green">Ю</MiniCell>
+                  <MiniCell>Р</MiniCell>
+                  <MiniCell>И</MiniCell>
+                  <MiniCell>С</MiniCell>
+                  <MiniCell>Т</MiniCell>
+                </Row>
+                <p className="close">
+                  Например, буква <b>Ю</b> есть в слове и находится в правильном
+                  месте.
+                </p>
+                <Row>
+                  <MiniCell>Я</MiniCell>
+                  <MiniCell>В</MiniCell>
+                  <MiniCell color="yellow">К</MiniCell>
+                  <MiniCell>А</MiniCell>
+                </Row>
+                <p>
+                  Буква <b>К</b> есть в слове, но стоит в неправильном месте.
+                </p>
+                <Row>
+                  <MiniCell>Э</MiniCell>
+                  <MiniCell>К</MiniCell>
+                  <MiniCell>И</MiniCell>
+                  <MiniCell color="grey">П</MiniCell>
+                  <MiniCell>А</MiniCell>
+                  <MiniCell>Ж</MiniCell>
+                </Row>
+                <p>
+                  Буква <b>П</b> отсутствует в слове на любом месте.
+                </p>
+              </>
+            )}
           </div>
           <IconBlock>
             <img className="icon" src="../../static/misha_new.webp" />
@@ -558,6 +647,7 @@ const Block = (props) => {
               props.type !== "usefuls" &&
               props.type !== "course" &&
               props.type !== "post" &&
+              props.type !== "lawrdle" &&
               options.map((o, index) => (
                 <>
                   <AnswerOption
@@ -887,15 +977,17 @@ const Block = (props) => {
             )}
           </Options>
         </div>
-        {props.type == "post" && (
-          <StudyBlock
-            post={props.post}
-            id={props.id}
-            me={props.me}
-            updatePostResult={updatePostResult}
-            getLessonProgress={getLessonProgress}
-          />
-        )}
+        {props.type == "post" ||
+          (props.type == "lawrdle" && (
+            <StudyBlock
+              post={props.post}
+              type={props.type}
+              id={props.id}
+              me={props.me}
+              updatePostResult={updatePostResult}
+              getLessonProgress={getLessonProgress}
+            />
+          ))}
       </TextBar>
       {feedback && (
         <>

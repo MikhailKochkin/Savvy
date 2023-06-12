@@ -336,6 +336,7 @@ const SingleQuiz = (props) => {
   const [isExperienced, setIsExperienced] = useState(false);
   const [message, setMessage] = useState("");
   const [recognition, setRecognition] = useState(null);
+  const [startSpeech, setStartSpeech] = useState(false);
 
   const { t } = useTranslation("lesson");
   const router = useRouter();
@@ -513,9 +514,10 @@ const SingleQuiz = (props) => {
     newRecognition.maxAlternatives = 1;
 
     newRecognition.start();
+    setStartSpeech(true);
 
     newRecognition.onresult = function (event) {
-      setAnswer(event.results[0][0].transcript);
+      setAnswer(answer + " " + event.results[0][0].transcript);
     };
 
     newRecognition.onspeechend = function () {
@@ -530,6 +532,8 @@ const SingleQuiz = (props) => {
   };
 
   const stopListening = () => {
+    setStartSpeech(false);
+
     if (recognition) {
       recognition.stop();
     }
@@ -631,6 +635,9 @@ const SingleQuiz = (props) => {
                     placeholder="..."
                   />
                 </div>
+                <Group>
+                  {startSpeech && <p>📣 {t("start_speaking")}..</p>}
+                </Group>
                 <Progress display={progress}>
                   <CircularProgress />
                 </Progress>

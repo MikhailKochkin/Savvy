@@ -76,6 +76,16 @@ const Link = styled.a`
   }
 `;
 
+const Label = styled.label`
+  font-size: 18px;
+  vertical-align: text-bottom;
+  color: #aaaaaa;
+  cursor: pointer;
+  input {
+    display: none;
+  }
+`;
+
 const ELEMENT_TAGS = {
   A: (el) => ({ type: "link", url: el.getAttribute("href") }),
   BLOCKQUOTE: () => ({ type: "quote" }),
@@ -405,6 +415,39 @@ const addImageElement = (editor) => {
   });
 };
 
+const uploadFile = async (e, editor) => {
+  const files = e.target.files;
+  const data = new FormData();
+  data.append("file", files[0]);
+  data.append("upload_preset", "savvy-app");
+  const res = await fetch(
+    "https://api.cloudinary.com/v1_1/mkpictureonlinebase/image/upload",
+    {
+      method: "POST",
+      body: data,
+    }
+  );
+  const file = await res.json();
+  let link = file.secure_url;
+
+  // editor.selection.anchor.path == [0, 0] &&
+  //   editor.selection.anchor.offset == 0 &&
+  //   editor.insertBreak();
+  editor.insertNode({
+    type: "image",
+    src: link,
+    children: [{ text: "" }],
+  });
+  editor.insertNode({
+    type: "paragraph",
+    children: [
+      {
+        text: "",
+      },
+    ],
+  });
+};
+
 const addVideoElement = (editor) => {
   let link = prompt("Video link: ");
 
@@ -587,7 +630,8 @@ const HoveringToolbar = () => {
           <FormatButton format="delete" icon={"strikethrough"} />
           <FormatButton format="insert" icon={"underline"} />
           <FormatButton format="header" icon={"header"} />
-          <FormatButton2 format="image" icon={"image"} />
+          {/* <FormatButton2 format="image" icon={"image"} /> */}
+          <ImageButton format="image" icon={"image"} />
           <VideoButton format="video" icon={"video"} />
           <LinkButton format="image" icon={"link"} />
         </Menu>
@@ -675,6 +719,21 @@ const VideoButton = ({ format, icon }) => {
         <BiVideoPlus value={{ className: "react-icons" }} />
       </IconBlock>
     </Button>
+  );
+};
+
+const ImageButton = ({ format, icon }) => {
+  const editor = useSlate();
+  return (
+    <Label>
+      <BiImageAdd value={{ className: "react-icons" }} />
+      <input
+        id="inputTag"
+        type="file"
+        class="custom-file-input"
+        onChange={(e) => uploadFile(e, editor)}
+      />
+    </Label>
   );
 };
 

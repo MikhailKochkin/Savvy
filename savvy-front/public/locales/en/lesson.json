@@ -115,5 +115,6 @@
   "time_left": "Time left",
   "hour_short": "h",
   "minute_short": "min",
-  "second_short": "sec"
+  "second_short": "sec",
+  "start_speaking": "Start speaking"
 }

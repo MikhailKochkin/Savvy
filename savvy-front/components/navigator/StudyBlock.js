@@ -7,12 +7,70 @@ import Post from "../blog/Post";
 import { useUser } from "../LoadingUser";
 import BotSignUp from "../auth/BotSignUp";
 import Challenge from "../lesson/challenge/Challenge";
+import Lawrdle from "../games/Lawrdle";
 
 const Material = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  @media (max-width: 800px) {
+    width: 100%;
+  }
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 6px;
+`;
+
+const MiniCell = styled.div`
+  border: 2px solid #d3d6da;
+  width: 42px;
+  height: 42px;
+  margin-right: 6px;
+  background: ${(props) => {
+    if (props.color == "green") {
+      return "#6AAA63";
+    } else if (props.color == "yellow") {
+      return "#CAB458";
+    } else if (props.color == "grey") {
+      return "#787C7E";
+    } else {
+      return "#fff";
+    }
+  }};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.6rem;
+  color: ${(props) => {
+    if (props.color == "green") {
+      return "#fff";
+    } else if (props.color == "yellow") {
+      return "#fff";
+    } else if (props.color == "grey") {
+      return "#fff";
+    } else {
+      return "#000000";
+    }
+  }};
+  font-weight: 700;
+  border-color: ${(props) => {
+    if (props.color == "green") {
+      return "#6AAA63";
+    } else if (props.color == "yellow") {
+      return "#CAB458";
+    } else if (props.color == "grey") {
+      return "#787C7E";
+    } else {
+      return "#d3d6da";
+    }
+  }};
 `;
 
 const UPDATE_USER_LEVEL_MUTATION = gql`
@@ -185,21 +243,34 @@ const StudyBlock = (props) => {
   };
 
   const passUser = (val) => {};
+  console.log("props", props.type);
   return (
     <div>
       <Material>
-        {((props.post && props.post.id) || props.id) && (
-          <Post
-            id={props.id ? props.id : props.post.id}
-            hasReachedHalf={hasReachedHalf}
-            hasReachedBottom={hasReachedBottom}
+        {props.type !== "lawrdle" &&
+          ((props.post && props.post.id) || props.id) && (
+            <Post
+              id={props.id ? props.id : props.post.id}
+              hasReachedHalf={hasReachedHalf}
+              hasReachedBottom={hasReachedBottom}
+              getLessonInfo={getLessonInfo}
+              getLeadIn={getLeadIn}
+              getCampaignId={getCampaignId}
+              getTags={getTags}
+            />
+          )}
+
+        {props.type == "lawrdle" && props.id && (
+          <Lawrdle
+            me={props.me}
+            id={props.id}
             getLessonInfo={getLessonInfo}
             getLeadIn={getLeadIn}
             getCampaignId={getCampaignId}
-            getTags={getTags}
           />
         )}
       </Material>
+      <div id="move_to_lesson"></div>
       {!open && !props.me && leadIn && (
         <BotSignUp
           text={leadIn}

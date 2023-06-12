@@ -1,10 +1,47 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import _ from "lodash";
+import { useQuery, useMutation, gql } from "@apollo/client";
+
 import renderHTML from "react-render-html";
 import CreateLawrdle from "./CreateLawrdle";
 import Lawrdles from "./Lawrdles";
 import Modal from "styled-react-modal";
+import Loading from "../Loading";
+
+const LAWRDLE_QUERY = gql`
+  query LAWRDLE_QUERY($id: String!) {
+    lawrdles(where: { id: { equals: $id } }) {
+      id
+      word
+      story
+      buttonText
+      link
+      leadin
+      emailCampaignId
+      lessonId
+      coursePage {
+        id
+        title
+        lessons {
+          id
+          type
+        }
+        user {
+          id
+          name
+          surname
+        }
+      }
+      author {
+        id
+        name
+        surname
+        image
+      }
+    }
+  }
+`;
 
 const Styles = styled.div`
   display: flex;
@@ -23,8 +60,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding-bottom: 50px;
+  margin-right: -150px;
   @media (max-width: 800px) {
     flex-direction: column;
+    margin-right: 0px;
   }
 `;
 
@@ -37,7 +76,7 @@ const Game = styled.div`
   padding-top: 30px;
   width: 70%;
   p {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     line-height: 1.4;
     margin: 5px 0;
   }
@@ -58,7 +97,7 @@ const Explainer = styled.div`
   .inside {
     padding: 20px 30px;
     p {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       line-height: 1.4;
     }
     img {
@@ -234,10 +273,11 @@ const Cell = styled.div`
 `;
 
 const Info = styled.div`
-  padding: 20px 30px;
+  width: 95%;
+  padding: 20px 0px;
   p {
-    font-size: 1.4rem;
-    line-height: 1.4;
+    font-size: 1.6rem;
+    /* line-height: 1.4; */
   }
   img {
     width: 50px;
@@ -266,7 +306,7 @@ const Info = styled.div`
   }
 
   .author_words {
-    background: #e8e8e8;
+    background: #f3f3f3;
     padding: 10px;
     border-radius: 15px;
     display: inline-block;
@@ -405,8 +445,37 @@ const dictionary = {
 };
 
 const Lawrdle = (props) => {
-  const { lawrdle } = props;
-  let the_word = lawrdle.word;
+  const { loading, error, data } = useQuery(LAWRDLE_QUERY, {
+    variables: { id: props.id },
+  });
+  useEffect(() => {
+    if (data) {
+      console.log("props.getLeadIn", props.getLeadIn);
+
+      if (props.getLessonInfo)
+        props.getLessonInfo(
+          data.lawrdles[0].lessonId,
+          data.lawrdles[0].coursePage
+            ? data.lawrdles[0].coursePage.lessons
+            : [],
+          data.lawrdles[0].coursePage ? data.lawrdles[0].coursePage.id : null
+        );
+      if (props.getTags) props.getTags(data.lawrdles[0].tags);
+      if (props.getLeadIn) props.getLeadIn(data.lawrdles[0].leadin);
+      if (props.getCampaignId)
+        props.getCampaignId(data.lawrdles[0].emailCampaignId);
+    }
+  }, [data && data.lawrdles]);
+  if (loading) return <Loading />;
+
+  const lawrdle = data.lawrdles[0];
+  console.log("lawrdle", lawrdle);
+  return <Wordle lawrdle={lawrdle} />;
+};
+
+const Wordle = (props) => {
+  const lawrdle = props.lawrdle;
+  let the_word = props.lawrdle.word;
   const [word, setWord] = useState(the_word.split(""));
   const [level, setLevel] = useState("start");
   const [activeRowNum, setActiveRowNum] = useState(0);
@@ -460,14 +529,14 @@ const Lawrdle = (props) => {
     }
   };
 
-  const slide = () => {
-    var my_element = document.getElementById("author_speaks");
-    my_element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  };
+  // const slide = () => {
+  //   var my_element = document.getElementById("author_speaks");
+  //   my_element.scrollIntoView({
+  //     behavior: "smooth",
+  //     block: "start",
+  //     inline: "nearest",
+  //   });
+  // };
 
   const onCheck = async (e) => {
     if (
@@ -561,11 +630,13 @@ const Lawrdle = (props) => {
       )
     ) {
       setLevel("finish");
+      slide();
       toggleModal();
     } else {
       if (activeRowNum == 5) {
         setLevel("finish");
         toggleModal();
+        slide();
         return;
       }
       setActiveRowNum(activeRowNum + 1);
@@ -593,62 +664,21 @@ const Lawrdle = (props) => {
       ].join(`\r\n`)
     );
   };
+
+  const slide = () => {
+    var my_element = document.getElementById("move_to_lesson");
+    my_element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+      inline: "nearest",
+    });
+  };
+
   return (
-    <>
+    <div>
       <Styles>
         <Container>
-          <Explainer>
-            <div className="inside">
-              <Header id="author_speaks">Lawrdle</Header>
-              <>
-                <p>
-                  Угадайте <b>слово, связанное с правом,</b> за шесть попыток.{" "}
-                </p>
-                <p>
-                  Каждая попытка должна быть правильным словом из{" "}
-                  {the_word.split("").length} букв.
-                </p>
-                <p>
-                  Нажмите кнопку Enter, чтобы отправить ответ. После каждой
-                  попытки цвет каждой ячейки будет меняться, чтобы показать,
-                  насколько близка была ваша попытка к загаданному слову.
-                </p>
-                <Row>
-                  <MiniCell color="green">Ю</MiniCell>
-                  <MiniCell>Р</MiniCell>
-                  <MiniCell>И</MiniCell>
-                  <MiniCell>С</MiniCell>
-                  <MiniCell>Т</MiniCell>
-                </Row>
-                <p className="close">
-                  Например, буква <b>Ю</b> есть в слове и находится в правильном
-                  месте.
-                </p>
-                <Row>
-                  <MiniCell>Я</MiniCell>
-                  <MiniCell>В</MiniCell>
-                  <MiniCell color="yellow">К</MiniCell>
-                  <MiniCell>А</MiniCell>
-                </Row>
-                <p>
-                  Буква <b>К</b> есть в слове, но стоит в неправильном месте.
-                </p>
-                <Row>
-                  <MiniCell>Э</MiniCell>
-                  <MiniCell>К</MiniCell>
-                  <MiniCell>И</MiniCell>
-                  <MiniCell color="grey">П</MiniCell>
-                  <MiniCell>А</MiniCell>
-                  <MiniCell>Ж</MiniCell>
-                </Row>
-                <p>
-                  Буква <b>П</b> отсутствует в слове на любом месте.
-                </p>
-              </>
-            </div>
-          </Explainer>
           <Game>
-            {/* <button onClick={(e) => share()}>Share</button> */}
             {level == "finish" && (
               <>
                 <p>Поделитесь результатом сегодняшней игры!</p>
@@ -927,17 +957,18 @@ const Lawrdle = (props) => {
           </Game>
         </Container>
       </Styles>
-      {props.me && props.me.permissions.includes("ADMIN") && (
+      {/* {props.me && props.me.permissions.includes("ADMIN") && (
         <>
           <CreateLawrdle />
           <Lawrdles />
         </>
-      )}
-      <StyledModal
+      )} */}
+      {/* <StyledModal
         isOpen={isOpen}
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}
-      >
+      > */}
+      {isOpen && (
         <Info>
           <p>
             🔥 Наше сегодняшнее слово:
@@ -946,22 +977,23 @@ const Lawrdle = (props) => {
           </p>
           <div className="author_words">{renderHTML(lawrdle.story)}</div>
           <br />
-          <div className="img_row">
+          {/* <div className="img_row">
             <div className="box">
               <img src={lawrdle.author.image} />
               <div>{lawrdle.author.name}</div>
             </div>
-          </div>
-          <div>
+          </div> */}
+          {/* <div>
             <ButtonTwo>
               <a id="lawrdle_to_course" href={lawrdle.link} target="_blank">
                 {lawrdle.buttonText}
               </a>
             </ButtonTwo>
-          </div>
+          </div> */}
         </Info>
-      </StyledModal>
-    </>
+      )}
+      {/* </StyledModal> */}
+    </div>
   );
 };
 

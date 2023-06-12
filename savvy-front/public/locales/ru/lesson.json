@@ -115,5 +115,6 @@
   "time_left": "До окончания",
   "hour_short": "ч",
   "minute_short": "мин",
-  "second_short": "сек"
+  "second_short": "сек",
+  "start_speaking": "Говорите"
 }

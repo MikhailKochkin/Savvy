@@ -956,6 +956,7 @@ input EmailCampaignWhereInput {
   emailReminders: EmailReminderListRelationFilter
   emails: JsonNullableFilter
   id: StringFilter
+  lawrdles: LawrdleListRelationFilter
   name: StringNullableFilter
   NOT: [EmailCampaignWhereInput!]
   OR: [EmailCampaignWhereInput!]
@@ -1320,8 +1321,14 @@ type Lawrdle {
   author: User!
   authorId: String!
   buttonText: String
+  coursePage: CoursePage
+  coursePageId: String
   createdAt: DateTime!
+  emailCampaign: EmailCampaign
+  emailCampaignId: String
   id: String!
+  leadin: String
+  lessonId: String
   link: String
   story: String!
   updatedAt: DateTime!
@@ -1340,7 +1347,10 @@ input LawrdleOrderByInput {
   buttonText: SortOrder
   coursePageId: SortOrder
   createdAt: SortOrder
+  emailCampaignId: SortOrder
   id: SortOrder
+  leadin: SortOrder
+  lessonId: SortOrder
   link: SortOrder
   pros: SortOrder
   story: SortOrder
@@ -1358,7 +1368,11 @@ input LawrdleWhereInput {
   coursePage: CoursePageWhereInput
   coursePageId: StringNullableFilter
   createdAt: DateTimeFilter
+  emailCampaign: EmailCampaignWhereInput
+  emailCampaignId: StringNullableFilter
   id: StringFilter
+  leadin: StringNullableFilter
+  lessonId: StringNullableFilter
   link: StringNullableFilter
   NOT: [LawrdleWhereInput!]
   OR: [LawrdleWhereInput!]

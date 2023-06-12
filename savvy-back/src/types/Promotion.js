@@ -11,6 +11,12 @@ const Lawrdle = objectType({
     t.model.authorId();
     t.model.author();
     t.model.active();
+    t.model.coursePage();
+    t.model.coursePageId();
+    t.model.emailCampaign();
+    t.model.emailCampaignId();
+    t.model.leadin();
+    t.model.lessonId();
     t.model.createdAt();
     t.model.updatedAt();
   },
