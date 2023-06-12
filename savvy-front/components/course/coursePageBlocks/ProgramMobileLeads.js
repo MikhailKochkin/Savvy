@@ -390,8 +390,7 @@ const MobileBuy = (props) => {
           <Title>Пошаговый запуск карьеры юриста</Title>
         ) : (
           <Title>
-            Пробный месяц за{" "}
-            <span>{program ? program.price / program.months : 6900} ₽</span>
+            Получите сегодня скидку <span>-20%</span>
           </Title>
         )}
         <Fieldset>
