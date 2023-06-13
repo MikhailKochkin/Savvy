@@ -581,7 +581,7 @@ const Block = (props) => {
     props.updateBotMap(null, val);
     // console.log("block", val);
   };
-
+  console.log("rops.type", props.type);
   return (
     <Styles>
       <TextBar className="Test">
@@ -977,17 +977,16 @@ const Block = (props) => {
             )}
           </Options>
         </div>
-        {props.type == "post" ||
-          (props.type == "lawrdle" && (
-            <StudyBlock
-              post={props.post}
-              type={props.type}
-              id={props.id}
-              me={props.me}
-              updatePostResult={updatePostResult}
-              getLessonProgress={getLessonProgress}
-            />
-          ))}
+        {(props.type == "post" || props.type == "lawrdle") && (
+          <StudyBlock
+            post={props.post}
+            type={props.type}
+            id={props.id}
+            me={props.me}
+            updatePostResult={updatePostResult}
+            getLessonProgress={getLessonProgress}
+          />
+        )}
       </TextBar>
       {feedback && (
         <>
