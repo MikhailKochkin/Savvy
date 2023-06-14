@@ -44,6 +44,7 @@ const User = objectType({
     t.model.co_coursePages({ ordering: { title: true } });
     t.model.company();
     t.model.lessonResults();
+    t.model.challengeResults();
   },
 });
 

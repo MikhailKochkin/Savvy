@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import StarRatings from "react-star-ratings";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 import Share from "./Share";
 import Block from "./Block";
@@ -129,6 +130,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 100px;
 
   .exit-intent-popup {
     display: none;
@@ -172,6 +174,8 @@ const Container = styled.div`
   @media (max-width: 800px) {
     width: 95%;
     font-size: 1.6rem;
+      margin-top: 40px;
+
   }
 `;
 
@@ -241,6 +245,8 @@ const Navigator = (props) => {
   // courses:
   // topics: law_school, corp, ip, litigation, other, foundation
   // level: english, exam, upskill, foundation
+  const { t } = useTranslation("navigator");
+
   const [botMap, setBotMap] = useState([
     {
       type: "introduction",
@@ -477,7 +483,7 @@ const Navigator = (props) => {
     },
     {
       type: "post",
-      question: "Загружаю материал: ",
+      question: t("downloaded_material"),
       id: props.id ? props.id : null,
       name: props.name ? props.name : null,
       options: [
@@ -617,6 +623,7 @@ const Navigator = (props) => {
       options: [],
     },
   ]);
+
   const [journey, setJourney] = useState([]);
   const [dialogueId, setDialogueId] = useState();
   const [course, setCourse] = useState();
@@ -795,7 +802,7 @@ const Navigator = (props) => {
 
   return (
     <Styles>
-      <Share />
+      {/* <Share /> */}
       <Container>
         {[...journey].map((b, i) => (
           <Block
@@ -823,8 +830,8 @@ const Navigator = (props) => {
           {journey.length > 1 && (
             <ButtonBack onClick={(e) => goBack()}>⬅ Назад</ButtonBack>
           )}
-          <div className="comment">Оцените полезность бота:</div>
-          <div className="stars">
+          {/* <div className="comment">Оцените полезность бота:</div> */}
+          {/* <div className="stars">
             <StarRatings
               starRatedColor={"rgb(255, 178, 3)"}
               starEmptyColor={"#DADADA"}
@@ -845,7 +852,7 @@ const Navigator = (props) => {
                 alert("Thanks!");
               }}
             />
-          </div>
+          </div> */}
           <ExitIntentPopup getLinkAction={getLinkAction} />
         </ButtonBox>
       </Container>

@@ -4181,6 +4181,7 @@ export interface NexusGenFieldTypes {
   User: { // field return type
     active: boolean | null; // Boolean
     certificates: NexusGenRootTypes['Certificate'][]; // [Certificate!]!
+    challengeResults: NexusGenRootTypes['ChallengeResult'][]; // [ChallengeResult!]!
     co_coursePages: NexusGenRootTypes['CoursePage'][]; // [CoursePage!]!
     comment: string | null; // String
     company: NexusGenRootTypes['Company'] | null; // Company
@@ -5195,6 +5196,7 @@ export interface NexusGenFieldTypeNames {
   User: { // field return type name
     active: 'Boolean'
     certificates: 'Certificate'
+    challengeResults: 'ChallengeResult'
     co_coursePages: 'CoursePage'
     comment: 'String'
     company: 'Company'
@@ -6617,6 +6619,12 @@ export interface NexusGenArgTypes {
     certificates: { // args
       after?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
       before?: NexusGenInputs['CertificateWhereUniqueInput'] | null; // CertificateWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
+    }
+    challengeResults: { // args
+      after?: NexusGenInputs['ChallengeResultWhereUniqueInput'] | null; // ChallengeResultWhereUniqueInput
+      before?: NexusGenInputs['ChallengeResultWhereUniqueInput'] | null; // ChallengeResultWhereUniqueInput
       first?: number | null; // Int
       last?: number | null; // Int
     }

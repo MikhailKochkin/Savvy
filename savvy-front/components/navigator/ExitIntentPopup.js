@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const PopupOverlay = styled.div`
   display: none;
@@ -60,6 +62,9 @@ const SubscribeButton = styled.button`
 `;
 
 const ExitIntentPopup = (props) => {
+  const { t } = useTranslation("navigator");
+  const router = useRouter();
+
   const showExitIntentPopup = () => {
     const exitIntentPopup = document.getElementById("exitIntentPopup");
     exitIntentPopup.style.display = "block";
@@ -99,14 +104,18 @@ const ExitIntentPopup = (props) => {
       }}
     >
       <PopupContent>
-        <h2>Подождите, не уходите!</h2>
-        <p>
-          У нас в телеграме каждю неделю выходит дайджест карьерных материалов
-          за неделю. Подпишитесь на нас, чтобы ничего не пропустить.
-        </p>
+        <h2>{t("wait")}</h2>
+        <p>{t("we_have")}</p>
         <SubscribeButton onClick={(e) => getLinkAction(e)}>
-          <a href="https://t.me/besavvylawyer" target="_blank">
-            Подписаться
+          <a
+            href={
+              router.locale == "ru"
+                ? "https://t.me/besavvylawyer"
+                : "https://www.instagram.com/besavvy_world/"
+            }
+            target="_blank"
+          >
+            {t("subscribe")}
           </a>
         </SubscribeButton>
       </PopupContent>

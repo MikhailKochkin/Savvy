@@ -6,11 +6,11 @@ import renderHTML from "react-render-html";
 import * as EmailValidator from "email-validator";
 import moment from "moment";
 import dynamic from "next/dynamic";
+import { useTranslation } from "next-i18next";
 
 import StudyBlock from "./StudyBlock";
 import AnswerOption from "./AnswerOption";
 import AnswerOptionWithFeedback from "./AnswerOptionWithFeedback";
-import { checkPropTypes } from "prop-types";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
@@ -300,14 +300,6 @@ const Fieldset = styled.fieldset`
   }
 `;
 
-const Title = styled.div`
-  font-size: 2.2rem;
-  margin-bottom: 15px;
-  font-weight: 700;
-  line-height: 1.3;
-  width: 100%;
-`;
-
 const PhoneInput = styled.input`
   width: 100%;
   background: none;
@@ -432,6 +424,7 @@ const Block = (props) => {
   const [feedback, setFeedback] = useState();
   const [materialsNumber, setMaterialsNumber] = useState(3);
   const [type, setType] = useState();
+  const { t } = useTranslation("navigator");
 
   const [hidden, setHidden] = useState(
     new Array(props.options.length).fill(false)
@@ -581,7 +574,6 @@ const Block = (props) => {
     props.updateBotMap(null, val);
     // console.log("block", val);
   };
-  console.log("rops.type", props.type);
   return (
     <Styles>
       <TextBar className="Test">
@@ -631,7 +623,7 @@ const Block = (props) => {
           </div>
           <IconBlock>
             <img className="icon" src="../../static/misha_new.webp" />
-            <div className="name">Михаил</div>
+            <div className="name">{t("mike")}</div>
           </IconBlock>
         </div>
         <div className="answer">
@@ -1042,7 +1034,7 @@ const Block = (props) => {
               </div>
               <IconBlock>
                 <img className="icon" src="../../static/misha_new.webp" />
-                <div className="name">Михаил</div>
+                <div className="name">{t("mike")}</div>
               </IconBlock>
             </div>
           </TextBar>

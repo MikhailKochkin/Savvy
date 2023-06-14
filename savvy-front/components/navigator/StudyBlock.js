@@ -2,6 +2,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import styled from "styled-components";
 import { useMutation, gql } from "@apollo/client";
+import { useTranslation } from "next-i18next";
 
 import Post from "../blog/Post";
 import { useUser } from "../LoadingUser";
@@ -125,6 +126,7 @@ const StudyBlock = (props) => {
   const [streakUpdated, setStreakUpdated] = useState(false);
 
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation("navigator");
 
   const hasReachedHalf = () => {
     props.updatePostResult(null, "has read half of the post");
@@ -243,7 +245,6 @@ const StudyBlock = (props) => {
   };
 
   const passUser = (val) => {};
-  console.log("props", props.type);
   return (
     <div>
       <Material>

@@ -86,7 +86,7 @@ const Group = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 70%;
+  width: 80%;
 
   input {
     width: 100%;
@@ -281,7 +281,7 @@ const IconBlock = styled.div`
 
 const useStyles = makeStyles({
   button: {
-    width: "70%",
+    width: "80%",
     marginBottom: "15px",
     fontSize: "1.7rem",
     fontFamily: "Montserrat",
@@ -335,7 +335,6 @@ const Signup = (props) => {
 
   const [createEmailReminder, { error: error4, loading: loading4 }] =
     useMutation(CREATE_REMINDER_MUTATION);
-  console.log("campaignId", props.campaignId);
   const [signin, { error: error3, loading: loading3 }] = useMutation(
     SIGNIN_MUTATION,
     {
@@ -379,7 +378,6 @@ const Signup = (props) => {
     e.preventDefault();
     props.loadUser(true);
     const res2 = await signin();
-    console.log("res2", res2);
     if (res2 && res2.data && props.coursePageId && props.campaignId) {
       createEmailReminder({
         variables: {
@@ -400,21 +398,17 @@ const Signup = (props) => {
           <div className="question_text">{renderHTML(text)}</div>
           <IconBlock>
             <img className="icon" src="../../static/misha_new.webp" />
-            <div className="name">Михаил</div>
+            <div className="name">{t("mike")}</div>
           </IconBlock>
         </div>
       </TextBar>
       {show ? (
         <TextBar className="Test">
           <div className="question_box">
-            <div className="question_text">
-              У вас уже есть аккаунт на сайте. Можете еще ввести пароль,
-              пожалуйста. Если забыли, его можно поменять, нажав на кнопку в
-              верхнем правом углу экрана.
-            </div>
+            <div className="question_text">{t("already_signed_up")}</div>
             <IconBlock>
               <img className="icon" src="../../static/misha_new.webp" />
-              <div className="name">Михаил</div>
+              <div className="name">{t("mike")}</div>
             </IconBlock>
           </div>
         </TextBar>
@@ -473,7 +467,7 @@ const Signup = (props) => {
             className={classes.button}
             onClick={(e) => signInUser(e)}
           >
-            {loading3 ? "Начинаем..." : "Начать путешествие"}
+            {loading3 ? t("opening") : t("open_simulator")}
           </Button>
         ) : (
           <Button
@@ -483,7 +477,7 @@ const Signup = (props) => {
             className={classes.button}
             onClick={(e) => handleSubmit(e)}
           >
-            {loading ? "Начинаем..." : "Начать путешествие"}
+            {loading ? t("opening") : t("open_simulator")}
           </Button>
         )}
       </Form>

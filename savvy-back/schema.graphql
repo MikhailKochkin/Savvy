@@ -3620,6 +3620,7 @@ input UsefulWhereUniqueInput {
 type User {
   active: Boolean
   certificates(after: CertificateWhereUniqueInput, before: CertificateWhereUniqueInput, first: Int, last: Int): [Certificate!]!
+  challengeResults(after: ChallengeResultWhereUniqueInput, before: ChallengeResultWhereUniqueInput, first: Int, last: Int): [ChallengeResult!]!
   co_coursePages(after: CoursePageWhereUniqueInput, before: CoursePageWhereUniqueInput, first: Int, last: Int, orderBy: [UserCo_coursePagesOrderByInput!]): [CoursePage!]!
   comment: String
   company: Company

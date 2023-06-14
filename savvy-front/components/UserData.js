@@ -135,6 +135,21 @@ const ClientData = (props) => {
   const [courseId, setCourseId] = useState("");
   const [tag, setTag] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 100;
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // Calculating the items to show based on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = clients.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculating total number of pages
+  const totalPages = Math.ceil(clients.length / itemsPerPage);
+
   //   const sort = (val) => {
   //     console.log("val", val);
   //     const new_clients = clients.filter((c) => c.tags.includes(val));
@@ -163,7 +178,9 @@ const ClientData = (props) => {
   //   };
 
   const search = (val) => {
-    let filtered_clients = clients.filter((c) => c.tags.includes(val));
+    let filtered_clients = clients.filter(
+      (c) => c.tags.includes(val) || c.tags.includes(val.toLowerCase())
+    );
     setClients(filtered_clients);
   };
 
@@ -203,6 +220,14 @@ const ClientData = (props) => {
     );
   };
 
+  const sortByOrders = () => {
+    let ordered_clients = [...props.initial_clients].filter(
+      (cl) => cl.orders.length > 0
+    );
+    console.log("ordered_clients", ordered_clients);
+    setClients([...ordered_clients]);
+  };
+
   //   let clients_in_range = clients.filter((cl) => {
   //     let client_date = new Date(cl.createdAt);
   //     let chosendate = new Date(startDate);
@@ -223,10 +248,23 @@ const ClientData = (props) => {
     setClients([...new_arr]);
   };
 
+  let MQL_clients = [...props.initial_clients].filter(
+    (cl) => cl.tags.includes("MQL") || cl.tags.includes("mql")
+  );
+  let IQL_clients = [...props.initial_clients].filter(
+    (cl) => cl.tags.includes("IQL") || cl.tags.includes("iql")
+  );
+  let SQL_clients = [...props.initial_clients].filter(
+    (cl) => cl.tags.includes("SQL") || cl.tags.includes("sql")
+  );
+
   return (
     <Styles>
       <div className="total">
         <div>Всего пользователей: {props.initial_clients.length}</div>
+        <div>IQL: {IQL_clients.length}</div>
+        <div>MQL: {MQL_clients.length}</div>
+        <div>SQL: {SQL_clients.length}</div>
         {/* <div>Заявок за выбранный период: {clients_in_range.length}</div> */}
         {/* <DatePicker
           selected={startDate}
@@ -246,6 +284,8 @@ const ClientData = (props) => {
         <button onClick={(e) => setClients(props.initial_clients)}>
           Показать всех пользователей
         </button>
+        <br />
+        <button onClick={(e) => sortByOrders()}>Показать с заказами</button>
         <div>
           <input onChange={(e) => setTag(e.target.value)} />
           <button onClick={(e) => search(tag)}>Искать по тегам</button> <br />
@@ -268,11 +308,22 @@ const ClientData = (props) => {
           <button onClick={(e) => search3(courseId)}>
             Искать по курсу (EmailReminder)
           </button>
+          {/* Page Buttons */}
+          <div className="pagination">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => handlePageChange(index + 1)}
+                disabled={currentPage === index + 1}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       {/* <CreateClient addClients={addClients} /> */}
-      {clients
-        .slice(0, 149)
+      {currentItems
         .filter((user) => user.email !== "mi.kochkin@ya.ru")
         .map((c, i) => (
           <UserCard
