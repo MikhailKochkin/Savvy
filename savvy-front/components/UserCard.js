@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
+import { emailTemplates } from "../letters.js";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -185,6 +186,29 @@ const UserCard = React.memo((props) => {
   const [showTraffic, setShowTraffic] = useState(false);
   const [show, setShow] = useState(false);
   const [showLessonResults, setShowLessonResults] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [editorValue, setEditorValue] = useState("");
+
+  const handleCategoryChange = (e) => {
+    const category = e.target.value;
+    setSelectedCategory(category);
+    if (category) {
+      setSubject(emailTemplates[category][0].subject);
+      setMessage("");
+    } else {
+      setSubject("");
+      setMessage("");
+    }
+  };
+
+  // Function to handle template change within a category
+  const handleTemplateChange = (e) => {
+    const templateIndex = e.target.value;
+    if (selectedCategory) {
+      setSubject(emailTemplates[selectedCategory][templateIndex].subject);
+      setMessage(emailTemplates[selectedCategory][templateIndex].message);
+    }
+  };
 
   function earliestObjectsByDate(objects) {
     let grouped = {};
@@ -369,9 +393,30 @@ const UserCard = React.memo((props) => {
           />
         </div>
         <h4>Имейл</h4>
-        <input onChange={(e) => setSubject(e.target.value)} />
+        <div>
+          <select onChange={handleCategoryChange}>
+            <option value="">Select a category</option>
+            {Object.keys(emailTemplates).map((category) => (
+              <option value={category}>{category}</option>
+            ))}
+          </select>
+          <br />
+
+          {selectedCategory && (
+            <select onChange={handleTemplateChange}>
+              <option value="">Select an email</option>
+              {emailTemplates[selectedCategory].map((template, index) => (
+                <option value={index}>{template.subject}</option>
+              ))}
+            </select>
+          )}
+        </div>
+        <input onChange={(e) => setSubject(e.target.value)} value={subject} />
+        <button onClick={(e) => setMessage("new text")}>Pass Message</button>
         <div className="editor">
           <DynamicLoadedEditor
+            // key={editorKey}
+            id={props.email}
             getEditorText={myCallback2}
             value={message}
             name="text"

@@ -136,7 +136,7 @@ const ClientData = (props) => {
   const [tag, setTag] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 100;
+  const itemsPerPage = 25;
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);

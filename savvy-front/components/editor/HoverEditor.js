@@ -169,6 +169,12 @@ const serialize = (node) => {
       return `<h2>${children}</h2>`;
     case "paragraph":
       return `<p>${children}</p>`;
+    case "numbered-list":
+      return `<ol>${children}</ol>`;
+    case "bulleted-list":
+      return `<ul>${children}</ul>`;
+    case "list-item":
+      return `<li>${children}</li>`;
     case "image":
       return `<img src=${escapeHtml(node.src)} alt="caption_goes_here"/>`;
     case "error":
@@ -239,6 +245,12 @@ const deserialize = (el) => {
       return jsx("element", { type: "quote" }, children);
     case "DIV":
       return jsx("element", { type: "div" }, children);
+    case "UL":
+      return jsx("element", { type: "bulleted-list" }, children);
+    case "OL":
+      return jsx("element", { type: "numbered-list" }, children);
+    case "LI":
+      return jsx("element", { type: "list-item" }, children);
     case "H2":
       return jsx(
         "element",
@@ -263,15 +275,31 @@ const deserialize = (el) => {
 };
 
 const HoveringMenu = (props) => {
-  let html;
-  props.value ? (html = props.value) : (html = `<p></p>`);
-  const document = new DOMParser().parseFromString(html, "text/html");
-  const initial = deserialize(document.body);
-  const [value, setValue] = useState(initial);
   const editor = useMemo(
     () => withLinks(withHistory(withReact(createEditor()))),
     []
   );
+
+  const [value, setValue] = useState(() => {
+    let html = props.value ? props.value : "<p></p>";
+    const document = new DOMParser().parseFromString(html, "text/html");
+    return deserialize(document.body);
+  });
+
+  const prevPropsValueRef = useRef();
+
+  useEffect(() => {
+    // Check if the props value has changed since the last render
+    if (prevPropsValueRef.current !== props.value) {
+      let html = props.value ? props.value : `<p></p>`;
+      const document = new DOMParser().parseFromString(html, "text/html");
+      const parsedValue = deserialize(document.body);
+      editor.children = parsedValue; // Directly set the editor's children
+    }
+
+    // Update the ref to the current props value for the next render
+    prevPropsValueRef.current = props.value;
+  }, [props.value]);
 
   // 4.1 Element renderer
 
@@ -282,6 +310,13 @@ const HoveringMenu = (props) => {
         return <CodeElement {...props} />;
       case "quote":
         return <QuoteElement {...props} />;
+      case "bulleted-list":
+        // return <ul {...attributes}>{children}</ul>;
+        return <ListElement {...props} />;
+      case "numbered-list":
+        return <OrderedListElement {...props} />;
+      case "list-item":
+        return <ListItem {...props} />;
       case "header":
         return <HeaderElement {...props} />;
       case "video":
@@ -318,34 +353,6 @@ const HoveringMenu = (props) => {
   const renderLeaf = useCallback((props) => {
     return <Leaf {...props} />;
   }, []);
-
-  // useEffect(() => {
-  //   const el = ref.current;
-  //   const { selection } = editor;
-
-  //   if (!el) {
-  //     return;
-  //   }
-
-  //   if (
-  //     !selection ||
-  //     !ReactEditor.isFocused(editor) ||
-  //     Range.isCollapsed(selection) ||
-  //     Editor.string(editor, selection) === ""
-  //   ) {
-  //     el.removeAttribute("style");
-  //     return;
-  //   }
-
-  //   const domSelection = window.getSelection();
-  //   const domRange = domSelection.getRangeAt(0);
-  //   const rect = domRange.getBoundingClientRect();
-  //   el.style.opacity = "1";
-  //   el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`;
-  //   el.style.left = `${
-  //     rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
-  //   }px`;
-  // });
 
   return (
     <Slate
@@ -761,6 +768,18 @@ const TableElement = (props) => {
 
 const FlagElement = (props) => {
   return <Flag {...props.attributes}>{props.children}</Flag>;
+};
+
+const ListElement = (props) => {
+  return <ul {...props.attributes}>{props.children}</ul>;
+};
+
+const OrderedListElement = (props) => {
+  return <ol {...props.attributes}>{props.children}</ol>;
+};
+
+const ListItem = (props) => {
+  return <li {...props.attributes}>{props.children}</li>;
 };
 
 const VideoElement = ({ attributes, children, element }) => {

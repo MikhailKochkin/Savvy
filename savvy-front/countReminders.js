@@ -1,364 +1,620 @@
-// function countUniqueEmails(data) {
-//   const uniqueEmails = new Set();
-//   for (const item of data) {
-//     if (item.user.email !== "mi.kochkin@ya.ru") {
-//       uniqueEmails.add(item.user.email);
-//     }
-//   }
-//   return uniqueEmails.size;
-// }
+function countUniqueEmails(data) {
+  const uniqueEmails = new Set();
+  for (const item of data) {
+    if (
+      item.user.email !== "mi.kochkin@ya.ru" ||
+      item.user.email !== "tionacorcoran@gmail.com"
+    ) {
+      uniqueEmails.add(item.user.email);
+    }
+  }
+  return uniqueEmails.size;
+}
 
-// // Example usage
-// const data = [
-//   {
-//     id: "cli83nn9f245551fxhqjh292cb",
-//     createdAt: "2023-05-29T00:16:39.555Z",
-//     emailCampaign: {
-//       name: "Адвокатский экзамен",
-//     },
-//     user: {
-//       name: "Elena",
-//       surname: null,
-//       number: null,
-//       email: "e.gurianova@ngs.ru",
-//     },
-//   },
-//   {
-//     id: "cli8yn7dm01031fwgci1q7ebx",
-//     createdAt: "2023-05-29T14:44:07.067Z",
-//     emailCampaign: {
-//       name: "Due Diligence in M&A",
-//     },
-//     user: {
-//       name: "Анна",
-//       surname: null,
-//       number: "89134657628",
-//       email: "alonnasw@gmail.com",
-//     },
-//   },
-//   {
-//     id: "cli980qqi168951fwgvtpesssj",
-//     createdAt: "2023-05-29T19:06:35.227Z",
-//     emailCampaign: {
-//       name: "Гражданское право. Фундамент карьеры",
-//     },
-//     user: {
-//       name: "Дмитрий",
-//       surname: "Щекин",
-//       number: "+79112507995",
-//       email: "home1207+besavvy@yandex.ru",
-//     },
-//   },
-//   {
-//     id: "clia9b507192581fw7ahq0dwzk",
-//     createdAt: "2023-05-30T12:30:26.072Z",
-//     emailCampaign: {
-//       name: "МЧП",
-//     },
-//     user: {
-//       name: "Михаил",
-//       surname: "Кочкин",
-//       number: null,
-//       email: "mi.kochkin@ya.ru",
-//     },
-//   },
-//   {
-//     id: "cliaackf8229561fw7c2fr1vaw",
-//     createdAt: "2023-05-30T12:59:32.325Z",
-//     emailCampaign: {
-//       name: "Due Diligence in M&A",
-//     },
-//     user: {
-//       name: "Михаил",
-//       surname: "Кочкин",
-//       number: null,
-//       email: "mi.kochkin@ya.ru",
-//     },
-//   },
-//   {
-//     id: "clibbosgp1095381fvydyz6v14s",
-//     createdAt: "2023-05-31T06:24:48.409Z",
-//     emailCampaign: {
-//       name: "70 новых слов из Legal English за 3 дня",
-//     },
-//     user: {
-//       name: "Luba",
-//       surname: "S",
-//       number: "+9035614954",
-//       email: "luba17@yandex.ru",
-//     },
-//   },
-//   {
-//     id: "clibgvbz61281051fvy9hw0dafi",
-//     createdAt: "2023-05-31T08:49:51.714Z",
-//     emailCampaign: {
-//       name: "70 новых слов из Legal English за 3 дня",
-//     },
-//     user: {
-//       name: "Шракп",
-//       surname: null,
-//       number: "+79188293374",
-//       email: "cagaraev.david@gmail.com",
-//     },
-//   },
-//   {
-//     id: "clibz749779411f2ynzks7yc8",
-//     createdAt: "2023-05-31T17:22:54.668Z",
-//     emailCampaign: {
-//       name: "МЧП",
-//     },
-//     user: {
-//       name: "Егор Кондратенко",
-//       surname: null,
-//       number: null,
-//       email: "egoekojber@gmail.com",
-//     },
-//   },
-//   {
-//     id: "clibzbb7b142691f2yjfojtpz3",
-//     createdAt: "2023-05-31T17:26:10.296Z",
-//     emailCampaign: {
-//       name: "МЧП",
-//     },
-//     user: {
-//       name: "Егор Кондратенко",
-//       surname: null,
-//       number: null,
-//       email: "egoekojber@gmail.com",
-//     },
-//   },
-//   {
-//     id: "clic4at2e210541f2ydik14pkc",
-//     createdAt: "2023-05-31T19:45:44.870Z",
-//     emailCampaign: {
-//       name: "Due Diligence in M&A",
-//     },
-//     user: {
-//       name: "Милана",
-//       surname: "Даова",
-//       number: "+79889232795",
-//       email: "milana.daova@mail.ru",
-//     },
-//   },
-//   {
-//     id: "clic4bvnp218961f2y1z2rrbw9",
-//     createdAt: "2023-05-31T19:46:34.885Z",
-//     emailCampaign: {
-//       name: "IP",
-//     },
-//     user: {
-//       name: "Милана",
-//       surname: "Даова",
-//       number: "+79889232795",
-//       email: "milana.daova@mail.ru",
-//     },
-//   },
-//   {
-//     id: "clid2m14x832841f2yl1gyu0a1",
-//     createdAt: "2023-06-01T11:46:15.489Z",
-//     emailCampaign: {
-//       name: "70 новых слов из Legal English за 3 дня",
-//     },
-//     user: {
-//       name: "Luba",
-//       surname: "S",
-//       number: "+9035614954",
-//       email: "luba17@yandex.ru",
-//     },
-//   },
-//   {
-//     id: "clid2ngha843971f2yrz04pdru",
-//     createdAt: "2023-06-01T11:47:22.030Z",
-//     emailCampaign: {
-//       name: "70 новых слов из Legal English за 3 дня",
-//     },
-//     user: {
-//       name: "Luba",
-//       surname: "S",
-//       number: "+9035614954",
-//       email: "luba17@yandex.ru",
-//     },
-//   },
-//   {
-//     id: "clidlzqzl395371ftgn94z7flh",
-//     createdAt: "2023-06-01T20:48:48.225Z",
-//     emailCampaign: {
-//       name: "70 новых слов из Legal English за 3 дня",
-//     },
-//     user: {
-//       name: "Яна",
-//       surname: "Никитина",
-//       number: "YanaNikitina22",
-//       email: "9nazebra@gmail.com",
-//     },
-//   },
-//   {
-//     id: "clie8v83y674861ftgnrxqrtn3",
-//     createdAt: "2023-06-02T07:29:08.303Z",
-//     emailCampaign: {
-//       name: "МЧП",
-//     },
-//     user: {
-//       name: "Илья",
-//       surname: "Фурса",
-//       number: "89511311879",
-//       email: "heavy.coin@mail.ru",
-//     },
-//   },
-//   {
-//     id: "clie9ro6h714111ftgd7c64hwe",
-//     createdAt: "2023-06-02T07:54:22.121Z",
-//     emailCampaign: {
-//       name: "МЧП",
-//     },
-//     user: {
-//       name: "Илья",
-//       surname: "Фурса",
-//       number: "89511311879",
-//       email: "heavy.coin@mail.ru",
-//     },
-//   },
-//   {
-//     id: "cliez0kq1152181fwsju74df6r",
-//     createdAt: "2023-06-02T19:41:07.945Z",
-//     emailCampaign: {
-//       name: "Гражданское право. Фундамент карьеры",
-//     },
-//     user: {
-//       name: "Милана",
-//       surname: "Даова",
-//       number: "+79889232795",
-//       email: "milana.daova@mail.ru",
-//     },
-//   },
-//   {
-//     id: "clifu1qi2428531fwsv4wi5fih",
-//     createdAt: "2023-06-03T10:09:50.186Z",
-//     emailCampaign: {
-//       name: "Due Diligence in M&A",
-//     },
-//     user: {
-//       name: "Вадим ",
-//       surname: "Магомедов",
-//       number: "+79640199684",
-//       email: "vadim_magomed@mail.ru",
-//     },
-//   },
-//   {
-//     id: "clig3szdk518121fws6x0lnpzl",
-//     createdAt: "2023-06-03T14:42:57.945Z",
-//     emailCampaign: {
-//       name: "IP",
-//     },
-//     user: {
-//       name: "Анастасия",
-//       surname: "Тойбахтина",
-//       number: "89081523633",
-//       email: "nastya.toibahtina@mail.ru",
-//     },
-//   },
-//   {
-//     id: "cliggw3v2108121f1fdh2mfb7m",
-//     createdAt: "2023-06-03T20:49:18.734Z",
-//     emailCampaign: {
-//       name: "Due Diligence in M&A",
-//     },
-//     user: {
-//       name: "Милана",
-//       surname: "Даова",
-//       number: "+79889232795",
-//       email: "milana.daova@mail.ru",
-//     },
-//   },
-//   {
-//     id: "cliglut0b157031f1funejz3pw",
-//     createdAt: "2023-06-03T23:08:16.091Z",
-//     emailCampaign: {
-//       name: "Компетенция арбитражных судов",
-//     },
-//     user: {
-//       name: "Рашид",
-//       surname: "Фаталиев",
-//       number: "89268841938",
-//       email: "bmid-place@bk.ru",
-//     },
-//   },
-// ];
-// const uniqueEmailCount = countUniqueEmails(data);
-// console.log(uniqueEmailCount); // Output: 18
-
+// Example usage
 const data = [
   {
-    id: "clij07ofa1025481f2cwe5fgrnl",
+    id: "clivq17ny41755au9ryrz52h4",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
     user: {
       id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
     },
   },
   {
-    id: "clij2mk6k1190871f2c14wyxiem",
+    id: "clivygg6e80191gsl7xoarg65",
+    emailCampaign: {
+      name: "Legal English Global",
+    },
     user: {
-      id: "ckrbvghs2307651gu9by2gsi8w",
+      id: "cl1xucnxe0009tqu9rqrqysw7",
+      email: "mike@besavvy.app",
     },
   },
   {
-    id: "clij32p7k1215631f2cf1ld1us0",
+    id: "cliw1onz8139751gslilpp44w1",
+    emailCampaign: {
+      name: "Speaking",
+    },
     user: {
-      id: "ckbqdsarq00im0780336odeho",
+      id: "clf0ravkd84191fxdmke1k2vu",
+      email: "luna200407@mail.ru",
     },
   },
   {
-    id: "clij913g948771f1i9nms6ljg",
-    user: {
-      id: "ckrbvghs2307651gu9by2gsi8w",
+    id: "clivrrr9o43985au9dbn1kqbb",
+    emailCampaign: {
+      name: "Global Tech Professional",
     },
-  },
-  {
-    id: "clijxixc9148591f1ih2evrb08",
-    user: {
-      id: "clhz1hkj7632841ftr1xcq72en",
-    },
-  },
-  {
-    id: "clikqzeho28111f3fga5l2z8x",
-    user: {
-      id: "clif5zrzv214971fwsj2gpaqap",
-    },
-  },
-  {
-    id: "clin3onc71242461fvb68mzcrbl",
     user: {
       id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
     },
   },
   {
-    id: "clin4sn471284121fvb39tkzo3t",
+    id: "clivzxczl86671gslebuxixmr",
+    emailCampaign: {
+      name: "Speaking",
+    },
     user: {
-      id: "clin4slkp1283621fvbkugjkvwg",
+      id: "clbnunmxy641211h0wti6iz9ij",
+      email: "karine-movsesyan.702014@yandex.ru",
     },
   },
   {
-    id: "clin4wfzo1300231fvbw8siuuo0",
+    id: "cliw81ehl191891gsl9rd0laku",
+    emailCampaign: {
+      name: "Speaking",
+    },
     user: {
-      id: "clin4slkp1283621fvbkugjkvwg",
+      id: "cl5sjpu70483041hzqtfuz4sdz",
+      email: "milana.daova@mail.ru",
     },
   },
   {
-    id: "clingqqr863181fxq3mli25iu",
+    id: "cliwaykfa230021gslcwxjdxva",
+    emailCampaign: {
+      name: "IP",
+    },
     user: {
-      id: "clingqpcu62911fxq6m8b31t9",
+      id: "cliwayisg229731gslo1kjrwl2",
+      email: "tigrulya2001@gmail.com",
     },
   },
   {
-    id: "clini2dui209891fxqyyk28epk",
+    id: "cliwbf7ng262741gsl7qjpvieh",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
     user: {
-      id: "ck01ft7ro00j80732f9sm1xbt",
+      id: "cliwayisg229731gslo1kjrwl2",
+      email: "tigrulya2001@gmail.com",
+    },
+  },
+  {
+    id: "cliwntsxx306901gslf0ow0e8v",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "clgwi8yzk154981ftk2syrftv2",
+      email: "tnn18@yandex.ru",
+    },
+  },
+  {
+    id: "clivv9sya28911gsl404hp2oq",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clivv9rbi28621gslkqozilup",
+      email: "kristianafiore@gmail.com",
+    },
+  },
+  {
+    id: "cliw10h0k127831gsl8ppw4m3o",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "clfk2nopc53571fux7kknq9gv",
+      email: "anatoliy.gubin.96@mail.ru",
+    },
+  },
+  {
+    id: "clivxwrp663771gslbdfy5wb1",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
+    user: {
+      id: "clivxwq9s63371gsl2pfr5ljd",
+      email: "tionacorcoran@hotmail.com",
+    },
+  },
+  {
+    id: "clisik8qa137141fxfw767zt7c",
+    emailCampaign: {
+      name: "Адвокатский экзамен",
+    },
+    user: {
+      id: "clguk1hhk323321f03kf81tka0",
+      email: "denis-frolov@mail.ru",
+    },
+  },
+  {
+    id: "cliu4kh270244e5u9x9azaql2",
+    emailCampaign: {
+      name: "IP",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "cliu4w3io561071fxmk86u85sb",
+    emailCampaign: {
+      name: "IP",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "cliu51bhn574891fxm32xdow2p",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "cliugaleq94451fyftpbn0snm",
+    emailCampaign: {
+      name: "Corporate",
+    },
+    user: {
+      id: "clfk2nopc53571fux7kknq9gv",
+      email: "anatoliy.gubin.96@mail.ru",
+    },
+  },
+  {
+    id: "cliuivl7e137091fyfs6uxufa3",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "cliuj1864160081fyfkcm3060s",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
+    user: {
+      id: "cl9euwh55344851hs457c4ijk5",
+      email: "tionacorcoran@gmail.com",
+    },
+  },
+  {
+    id: "cliuoijkj251801fyfr2m3ed8d",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cliumipgw221731fyfipdi2i2j",
+      email: "kurbanovmurad@inbox.ru",
+    },
+  },
+  {
+    id: "cliupo5uu316331fyfdtufnmpl",
+    emailCampaign: {
+      name: "Corporate",
+    },
+    user: {
+      id: "clfk2nopc53571fux7kknq9gv",
+      email: "anatoliy.gubin.96@mail.ru",
+    },
+  },
+  {
+    id: "cliupxbkg333291fyfm2wl7u8y",
+    emailCampaign: {
+      name: "Corporate",
+    },
+    user: {
+      id: "clfk2nopc53571fux7kknq9gv",
+      email: "anatoliy.gubin.96@mail.ru",
+    },
+  },
+  {
+    id: "clivbvnzr391301fyfdc0zszyb",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clivbvmg8391071fyf4rhwoc76",
+      email: "ibrayeva2003@mail.ru",
+    },
+  },
+  {
+    id: "clivdrsja429011fyfxkkzxk8d",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clivdrr5v428741fyfi4rsf0x8",
+      email: "mariaamoiseeva@mail.ru",
+    },
+  },
+  {
+    id: "clivfyz2e514471fyfwblph9l4",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "clivfyxq7514191fyfaqpc752u",
+      email: "lia_alekseeva@mail.ru",
+    },
+  },
+  {
+    id: "clivjxlb3586941fyfmut39kqh",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "clfk2nopc53571fux7kknq9gv",
+      email: "anatoliy.gubin.96@mail.ru",
+    },
+  },
+  {
+    id: "clivnxsct669621fyfkpyp5gax",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "clbjrv93f511601hvwvddbz7ax",
+      email: "dadzhiev.igor@gmail.com",
+    },
+  },
+  {
+    id: "clivnyvbj22015au9sojerram",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "cliwswecy364561gsll9cvtaoo",
+    emailCampaign: {
+      name: "Speaking",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "cliwvygij468671gslm9mvy12r",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cliwvyezc468391gslwpycv152",
+      email: "sofika.6@mail.ru",
+    },
+  },
+  {
+    id: "cliwvzx6k481431gsl2zadv93f",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "cliwvyezc468391gslwpycv152",
+      email: "sofika.6@mail.ru",
+    },
+  },
+  {
+    id: "cliwz0ky9538101gsllyo1krx3",
+    emailCampaign: {
+      name: "Legal English: чтение",
+    },
+    user: {
+      id: "cjqy9i57l000k0821rj0oo8l4",
+      email: "mi.kochkin@ya.ru",
+    },
+  },
+  {
+    id: "clix4vjlt631631gslupi1kcd7",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
+    user: {
+      id: "cl9euwh55344851hs457c4ijk5",
+      email: "tionacorcoran@gmail.com",
+    },
+  },
+  {
+    id: "clix64ujr645481gsl8g86yzwi",
+    emailCampaign: {
+      name: "Global Tech Professional",
+    },
+    user: {
+      id: "cl9euwh55344851hs457c4ijk5",
+      email: "tionacorcoran@gmail.com",
+    },
+  },
+  {
+    id: "cliys3xzd91761fqock2su0jj",
+    emailCampaign: {
+      name: "Legal English: чтение",
+    },
+    user: {
+      id: "cl5sjpu70483041hzqtfuz4sdz",
+      email: "milana.daova@mail.ru",
+    },
+  },
+  {
+    id: "clizodq1r183441fqon4fsy50i",
+    emailCampaign: {
+      name: "Гражданское право. Фундамент карьеры",
+    },
+    user: {
+      id: "clg5kuyy867101fz3rtr1eg0w",
+      email: "roman.tretyakov.97@mail.ru",
+    },
+  },
+  {
+    id: "clj1olxko06821fs85uw7go7y",
+    emailCampaign: {
+      name: "70 новых слов из Legal English за 3 дня",
+    },
+    user: {
+      id: "clj1olvzm06551fs8zur1adzz",
+      email: "volkovde.lex@gmail.com",
     },
   },
 ];
+const uniqueEmailCount = countUniqueEmails(data);
+console.log(uniqueEmailCount); // Output: 18
 
-const userIds = data.map((item) => item.user.id);
-const uniqueUserIds = new Set(userIds);
+// const data = [
+//   {
+//     id: "clivq17ny41755au9ryrz52h4",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "clivygg6e80191gsl7xoarg65",
+//     user: {
+//       id: "cl1xucnxe0009tqu9rqrqysw7",
+//     },
+//   },
+//   {
+//     id: "cliw1onz8139751gslilpp44w1",
+//     user: {
+//       id: "clf0ravkd84191fxdmke1k2vu",
+//     },
+//   },
+//   {
+//     id: "clivrrr9o43985au9dbn1kqbb",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "clivzxczl86671gslebuxixmr",
+//     user: {
+//       id: "clbnunmxy641211h0wti6iz9ij",
+//     },
+//   },
+//   {
+//     id: "cliw81ehl191891gsl9rd0laku",
+//     user: {
+//       id: "cl5sjpu70483041hzqtfuz4sdz",
+//     },
+//   },
+//   {
+//     id: "cliwaykfa230021gslcwxjdxva",
+//     user: {
+//       id: "cliwayisg229731gslo1kjrwl2",
+//     },
+//   },
+//   {
+//     id: "cliwbf7ng262741gsl7qjpvieh",
+//     user: {
+//       id: "cliwayisg229731gslo1kjrwl2",
+//     },
+//   },
+//   {
+//     id: "cliwntsxx306901gslf0ow0e8v",
+//     user: {
+//       id: "clgwi8yzk154981ftk2syrftv2",
+//     },
+//   },
+//   {
+//     id: "clivv9sya28911gsl404hp2oq",
+//     user: {
+//       id: "clivv9rbi28621gslkqozilup",
+//     },
+//   },
+//   {
+//     id: "cliw10h0k127831gsl8ppw4m3o",
+//     user: {
+//       id: "clfk2nopc53571fux7kknq9gv",
+//     },
+//   },
+//   {
+//     id: "clivxwrp663771gslbdfy5wb1",
+//     user: {
+//       id: "clivxwq9s63371gsl2pfr5ljd",
+//     },
+//   },
+//   {
+//     id: "clisik8qa137141fxfw767zt7c",
+//     user: {
+//       id: "clguk1hhk323321f03kf81tka0",
+//     },
+//   },
+//   {
+//     id: "cliu4kh270244e5u9x9azaql2",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "cliu4w3io561071fxmk86u85sb",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "cliu51bhn574891fxm32xdow2p",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "cliugaleq94451fyftpbn0snm",
+//     user: {
+//       id: "clfk2nopc53571fux7kknq9gv",
+//     },
+//   },
+//   {
+//     id: "cliuivl7e137091fyfs6uxufa3",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "cliuj1864160081fyfkcm3060s",
+//     user: {
+//       id: "cl9euwh55344851hs457c4ijk5",
+//     },
+//   },
+//   {
+//     id: "cliuoijkj251801fyfr2m3ed8d",
+//     user: {
+//       id: "cliumipgw221731fyfipdi2i2j",
+//     },
+//   },
+//   {
+//     id: "cliupo5uu316331fyfdtufnmpl",
+//     user: {
+//       id: "clfk2nopc53571fux7kknq9gv",
+//     },
+//   },
+//   {
+//     id: "cliupxbkg333291fyfm2wl7u8y",
+//     user: {
+//       id: "clfk2nopc53571fux7kknq9gv",
+//     },
+//   },
+//   {
+//     id: "clivbvnzr391301fyfdc0zszyb",
+//     user: {
+//       id: "clivbvmg8391071fyf4rhwoc76",
+//     },
+//   },
+//   {
+//     id: "clivdrsja429011fyfxkkzxk8d",
+//     user: {
+//       id: "clivdrr5v428741fyfi4rsf0x8",
+//     },
+//   },
+//   {
+//     id: "clivfyz2e514471fyfwblph9l4",
+//     user: {
+//       id: "clivfyxq7514191fyfaqpc752u",
+//     },
+//   },
+//   {
+//     id: "clivjxlb3586941fyfmut39kqh",
+//     user: {
+//       id: "clfk2nopc53571fux7kknq9gv",
+//     },
+//   },
+//   {
+//     id: "clivnxsct669621fyfkpyp5gax",
+//     user: {
+//       id: "clbjrv93f511601hvwvddbz7ax",
+//     },
+//   },
+//   {
+//     id: "clivnyvbj22015au9sojerram",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "cliwswecy364561gsll9cvtaoo",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "cliwvygij468671gslm9mvy12r",
+//     user: {
+//       id: "cliwvyezc468391gslwpycv152",
+//     },
+//   },
+//   {
+//     id: "cliwvzx6k481431gsl2zadv93f",
+//     user: {
+//       id: "cliwvyezc468391gslwpycv152",
+//     },
+//   },
+//   {
+//     id: "cliwz0ky9538101gsllyo1krx3",
+//     user: {
+//       id: "cjqy9i57l000k0821rj0oo8l4",
+//     },
+//   },
+//   {
+//     id: "clix4vjlt631631gslupi1kcd7",
+//     user: {
+//       id: "cl9euwh55344851hs457c4ijk5",
+//     },
+//   },
+//   {
+//     id: "clix64ujr645481gsl8g86yzwi",
+//     user: {
+//       id: "cl9euwh55344851hs457c4ijk5",
+//     },
+//   },
+//   {
+//     id: "cliys3xzd91761fqock2su0jj",
+//     user: {
+//       id: "cl5sjpu70483041hzqtfuz4sdz",
+//     },
+//   },
+//   {
+//     id: "clizodq1r183441fqon4fsy50i",
+//     user: {
+//       id: "clg5kuyy867101fz3rtr1eg0w",
+//     },
+//   },
+//   {
+//     id: "clj1olxko06821fs85uw7go7y",
+//     user: {
+//       id: "clj1olvzm06551fs8zur1adzz",
+//     },
+//   },
+// ];
 
-// The size property of the Set will give you the count of unique IDs.
-const uniqueIdCount = uniqueUserIds.size;
-console.log(uniqueIdCount);
+// const userIds = data.map((item) => item.user.id);
+// const uniqueUserIds = new Set(userIds);
+
+// // The size property of the Set will give you the count of unique IDs.
+// const uniqueIdCount = uniqueUserIds.size;
+// console.log(uniqueIdCount);
