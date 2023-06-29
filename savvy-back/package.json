@@ -1,0 +1,69 @@
+{
+  "name": "savvvy-backend",
+  "version": "1.0.0",
+  "description": "the backend of savvy",
+  "engines": {
+    "node": "15.5.1",
+    "npm": "7.3.0"
+  },
+  "scripts": {
+    "start": "nodemon -e js,graphql -x node src/index.js",
+    "dev": "nodemon -e js,graphql -x node --inspect src/index.js",
+    "test": "jest",
+    "deploy": "prisma deploy --env-file variables.env"
+  },
+  "dependencies": {
+    "@a2seven/yoo-checkout": "^1.1.4",
+    "@nexus/schema": "^0.19.2",
+    "@prisma/client": "^2.20.1",
+    "apollo-server": "^2.19.1",
+    "apollo-server-express": "^2.19.1",
+    "axios": "^1.3.5",
+    "babel-preset-env": "^1.7.0",
+    "bcryptjs": "2.4.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "6.0.0",
+    "express": "^4.18.2",
+    "generate-password": "^1.7.0",
+    "graphql": "^15.4.0",
+    "graphql-cli": "^4.1.0",
+    "graphql-scalars": "^1.7.0",
+    "graphql-tools": "^5.0.0",
+    "heroku": "^7.38.0",
+    "heroku-cli": "^7.0.9",
+    "i": "^0.3.7",
+    "jsonwebtoken": "8.3.0",
+    "nexus": "^1.0.0",
+    "nexus-plugin-prisma": "^0.30.0",
+    "nexus-prisma": "^0.32.0",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^4.6.8",
+    "nodemon": "^1.19.1",
+    "npm": "^6.14.11",
+    "npm-run-all": "^4.1.5",
+    "path": "^0.12.7",
+    "postmark": "^2.2.4",
+    "qrcode-terminal": "^0.12.0",
+    "ssl-root-cas": "^1.3.1",
+    "throng": "^4.0.0",
+    "util": "^0.10.4",
+    "whatsapp-web.js": "^1.16.4",
+    "yandex-checkout": "^1.0.13"
+  },
+  "license": "MIT",
+  "repository": {
+    "url": "mikhailkochkin.com"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "main": "index.js",
+  "author": "M.Kochkin",
+  "devDependencies": {
+    "prisma": "^2.20.1"
+  }
+}

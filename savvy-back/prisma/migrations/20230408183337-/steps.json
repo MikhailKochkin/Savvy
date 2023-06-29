@@ -1,0 +1,22 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "GrowthArea",
+      "field": "userLevels",
+      "type": "UserLevel",
+      "arity": "List"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "GrowthArea",
+      "field": "userLevel"
+    },
+    {
+      "tag": "DeleteField",
+      "model": "GrowthArea",
+      "field": "userLevelId"
+    }
+  ]
+}
