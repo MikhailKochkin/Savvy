@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-
 import { useMutation, gql } from "@apollo/client";
 import Button from "@material-ui/core/Button";
 import { htmlToText } from "html-to-text";

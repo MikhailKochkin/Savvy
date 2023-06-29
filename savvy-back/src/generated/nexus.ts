@@ -64,10 +64,13 @@ export interface NexusGenInputs {
   }
   BoolNullableListFilter: { // input type
     equals?: boolean[] | null; // [Boolean!]
+<<<<<<< HEAD
     has?: boolean | null; // Boolean
     hasEvery?: boolean[] | null; // [Boolean!]
     hasSome?: boolean[] | null; // [Boolean!]
     isEmpty?: boolean | null; // Boolean
+=======
+>>>>>>> origin/master
   }
   BotDialogueOrderByInput: { // input type
     createdAt?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -568,10 +571,13 @@ export interface NexusGenInputs {
   }
   DateTimeNullableListFilter: { // input type
     equals?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
+<<<<<<< HEAD
     has?: NexusGenScalars['DateTime'] | null; // DateTime
     hasEvery?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
     hasSome?: NexusGenScalars['DateTime'][] | null; // [DateTime!]
     isEmpty?: boolean | null; // Boolean
+=======
+>>>>>>> origin/master
   }
   DocumentListRelationFilter: { // input type
     every?: NexusGenInputs['DocumentWhereInput'] | null; // DocumentWhereInput
@@ -734,10 +740,13 @@ export interface NexusGenInputs {
   }
   EnumPermissionNullableListFilter: { // input type
     equals?: NexusGenEnums['Permission'][] | null; // [Permission!]
+<<<<<<< HEAD
     has?: NexusGenEnums['Permission'] | null; // Permission
     hasEvery?: NexusGenEnums['Permission'][] | null; // [Permission!]
     hasSome?: NexusGenEnums['Permission'][] | null; // [Permission!]
     isEmpty?: boolean | null; // Boolean
+=======
+>>>>>>> origin/master
   }
   ExamAnswerListRelationFilter: { // input type
     every?: NexusGenInputs['ExamAnswerWhereInput'] | null; // ExamAnswerWhereInput
@@ -928,10 +937,13 @@ export interface NexusGenInputs {
   }
   JsonNullableListFilter: { // input type
     equals?: NexusGenScalars['Json'][] | null; // [Json!]
+<<<<<<< HEAD
     has?: NexusGenScalars['Json'] | null; // Json
     hasEvery?: NexusGenScalars['Json'][] | null; // [Json!]
     hasSome?: NexusGenScalars['Json'][] | null; // [Json!]
     isEmpty?: boolean | null; // Boolean
+=======
+>>>>>>> origin/master
   }
   LawrdleListRelationFilter: { // input type
     every?: NexusGenInputs['LawrdleWhereInput'] | null; // LawrdleWhereInput
@@ -2048,10 +2060,13 @@ export interface NexusGenInputs {
   }
   StringNullableListFilter: { // input type
     equals?: string[] | null; // [String!]
+<<<<<<< HEAD
     has?: string | null; // String
     hasEvery?: string[] | null; // [String!]
     hasSome?: string[] | null; // [String!]
     isEmpty?: boolean | null; // Boolean
+=======
+>>>>>>> origin/master
   }
   Syllabus: { // input type
     modules?: Array<NexusGenInputs['ProgramModule'] | null> | null; // [ProgramModule]

@@ -7,7 +7,6 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import parse from 'html-react-parser';
 
-
 import Loading from "../Loading";
 import { CURRENT_USER_QUERY } from "../User";
 import Error from "../ErrorMessage";

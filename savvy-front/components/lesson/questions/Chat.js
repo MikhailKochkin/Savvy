@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import StarRatings from "react-star-ratings";
 import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";

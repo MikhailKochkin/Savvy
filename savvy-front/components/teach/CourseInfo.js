@@ -3,7 +3,11 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import StudentInfo from "./StudentInfo";
 
 const COURSE_QUERY = gql`

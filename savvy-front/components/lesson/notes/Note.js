@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";

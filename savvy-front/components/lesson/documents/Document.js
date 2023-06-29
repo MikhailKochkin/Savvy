@@ -7,7 +7,11 @@ import Clause from "./Clause";
 import DeleteDocument from "../../delete/DeleteDocument";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import jsPDF from "jspdf";
 
 const CREATE_DOCUMENTRESULT_MUTATION = gql`
@@ -206,7 +210,11 @@ const Document = (props) => {
                 />
               ) : null}
             </Buttons>
+<<<<<<< HEAD
             {reveal && <div>{clauses.map((cl) => parse(cl.sample))}</div>}
+=======
+            {reveal && <div>{clauses.map((cl) => renderHTML(cl.sample))}</div>}
+>>>>>>> origin/master
           </>
         )}
       </Mutation>

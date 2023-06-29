@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";

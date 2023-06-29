@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 
 const Button = styled.button`
   font-family: Montserrat;

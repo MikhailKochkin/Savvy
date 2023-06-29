@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import Link from "next/link";
+<<<<<<< HEAD
 import parse from 'html-react-parser';
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import moment from "moment";
@@ -155,7 +159,11 @@ const Program = (props) => {
         <img src={props.img} />
         <Title program={props.program}>{props.title}</Title>
         <div className="description">
+<<<<<<< HEAD
           {props.description && parse(props.description)}
+=======
+          {props.description && renderHTML(props.description)}
+>>>>>>> origin/master
         </div>
         <div className="term">{props.term}</div>
       </Up>

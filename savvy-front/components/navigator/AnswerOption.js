@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import { useQuery, useMutation, gql } from "@apollo/client";
 import Modal from "styled-react-modal";
 
@@ -149,7 +153,11 @@ const AnswerOption = (props) => {
             color={color}
           >
             {/* <a href={props.link} target="_blank"> */}
+<<<<<<< HEAD
             {props.answer && parse(props.answer)}
+=======
+            {props.answer && renderHTML(props.answer)}
+>>>>>>> origin/master
             {/* </a> */}
           </StyledButton>
         ) : props.type == "shuffle" ? (
@@ -160,7 +168,11 @@ const AnswerOption = (props) => {
             choose={choose}
             color={color}
           >
+<<<<<<< HEAD
             {props.answer && parse(props.answer)}
+=======
+            {props.answer && renderHTML(props.answer)}
+>>>>>>> origin/master
           </StyledButton>
         ) : props.type === "signup" ? (
           <StyledButton
@@ -171,7 +183,11 @@ const AnswerOption = (props) => {
             onClick={(e) => toggleModal(true)}
             color={color}
           >
+<<<<<<< HEAD
             {props.answer && parse(props.answer)}
+=======
+            {props.answer && renderHTML(props.answer)}
+>>>>>>> origin/master
           </StyledButton>
         ) : (
           <StyledButton
@@ -182,7 +198,11 @@ const AnswerOption = (props) => {
             onClick={(e) => change()}
             color={color}
           >
+<<<<<<< HEAD
             {props.answer && parse(props.answer)}
+=======
+            {props.answer && renderHTML(props.answer)}
+>>>>>>> origin/master
           </StyledButton>
         ))}
       <StyledModal

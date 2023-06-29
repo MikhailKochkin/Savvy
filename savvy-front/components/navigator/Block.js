@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import * as EmailValidator from "email-validator";
 import moment from "moment";
 import dynamic from "next/dynamic";
@@ -579,7 +583,11 @@ const Block = (props) => {
       <TextBar className="Test">
         <div className="question_box">
           <div className="question_text">
+<<<<<<< HEAD
             {question && parse(question)}
+=======
+            {question && renderHTML(question)}
+>>>>>>> origin/master
             {props.type == "course" && props.course && props.course.title}
             {props.type == "post" && props.post && props.post.title
               ? props.post.title
@@ -988,8 +996,13 @@ const Block = (props) => {
                 <div className="question_text">
                   {feedback &&
                     (Array.isArray(feedback)
+<<<<<<< HEAD
                       ? feedback.map((f) => parse(f))
                       : parse(feedback))}
+=======
+                      ? feedback.map((f) => renderHTML(f))
+                      : renderHTML(feedback))}
+>>>>>>> origin/master
                 </div>
                 {type == "discount" && (
                   <ButtonOpen

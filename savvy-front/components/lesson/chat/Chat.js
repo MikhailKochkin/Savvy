@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import { useTranslation } from "next-i18next";
 import { useMutation, gql } from "@apollo/client";
 import _ from "lodash";

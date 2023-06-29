@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
 
@@ -446,7 +450,11 @@ const LessonHeader = (props) => {
                 </Frame>
               ) : (
                 lesson.description &&
+<<<<<<< HEAD
                 parse(lesson.description.substring(0, 300))
+=======
+                renderHTML(lesson.description.substring(0, 300))
+>>>>>>> origin/master
               )}
             </div>
           </Text>

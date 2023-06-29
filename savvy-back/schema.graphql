@@ -56,10 +56,13 @@ input BoolNullableFilter {
 
 input BoolNullableListFilter {
   equals: [Boolean!]
+<<<<<<< HEAD
   has: Boolean
   hasEvery: [Boolean!]
   hasSome: [Boolean!]
   isEmpty: Boolean
+=======
+>>>>>>> origin/master
 }
 
 type BotDialogue {
@@ -829,10 +832,13 @@ input DateTimeNullableFilter {
 
 input DateTimeNullableListFilter {
   equals: [DateTime!]
+<<<<<<< HEAD
   has: DateTime
   hasEvery: [DateTime!]
   hasSome: [DateTime!]
   isEmpty: Boolean
+=======
+>>>>>>> origin/master
 }
 
 type Document {
@@ -1070,10 +1076,13 @@ input EnumPageViewFilter {
 
 input EnumPermissionNullableListFilter {
   equals: [Permission!]
+<<<<<<< HEAD
   has: Permission
   hasEvery: [Permission!]
   hasSome: [Permission!]
   isEmpty: Boolean
+=======
+>>>>>>> origin/master
 }
 
 input ExamAnswerListRelationFilter {
@@ -1317,7 +1326,11 @@ input IntNullableFilter {
 """
 The `JSON` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
+<<<<<<< HEAD
 scalar Json @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+=======
+scalar Json
+>>>>>>> origin/master
 
 input JsonNullableFilter {
   equals: Json
@@ -1326,10 +1339,13 @@ input JsonNullableFilter {
 
 input JsonNullableListFilter {
   equals: [Json!]
+<<<<<<< HEAD
   has: Json
   hasEvery: [Json!]
   hasSome: [Json!]
   isEmpty: Boolean
+=======
+>>>>>>> origin/master
 }
 
 type Lawrdle {
@@ -3174,10 +3190,13 @@ input StringNullableFilter {
 
 input StringNullableListFilter {
   equals: [String!]
+<<<<<<< HEAD
   has: String
   hasEvery: [String!]
   hasSome: [String!]
   isEmpty: Boolean
+=======
+>>>>>>> origin/master
 }
 
 input Syllabus {

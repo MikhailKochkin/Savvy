@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";

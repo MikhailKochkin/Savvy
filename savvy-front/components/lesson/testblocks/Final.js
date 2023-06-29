@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 
 const Styles = styled.div`
   font-size: 1.6rem;
@@ -30,11 +34,19 @@ const Final = (props) => {
       </p>
       {ratio < 0.8 ? (
         <div>
+<<<<<<< HEAD
           {props.failureText ? parse(props.failureText) : t("once_more")}
         </div>
       ) : (
         <div>
           {props.successText ? parse(props.successText) : t("great")}
+=======
+          {props.failureText ? renderHTML(props.failureText) : t("once_more")}
+        </div>
+      ) : (
+        <div>
+          {props.successText ? renderHTML(props.successText) : t("great")}
+>>>>>>> origin/master
         </div>
       )}
     </Styles>

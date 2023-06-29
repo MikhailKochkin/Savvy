@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";

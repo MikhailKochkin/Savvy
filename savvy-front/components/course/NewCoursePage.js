@@ -23,7 +23,11 @@ import QA from "./coursePageBlocks/QA";
 import BottomLine from "./coursePageBlocks/BottomLine";
 
 import moment from "moment";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 
 const DynamicAction = dynamic(import("./coursePageBlocks/Action"), {
   loading: () => <p>...</p>,

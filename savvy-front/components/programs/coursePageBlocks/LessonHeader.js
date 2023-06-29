@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import Link from "next/link";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 
 const UPDATE_PUBLISHED_MUTATION = gql`
   mutation UPDATE_PUBLISHED_MUTATION($id: String!, $published: Boolean) {
@@ -255,7 +259,11 @@ const LessonHeader = (props) => {
             </div>
             <div className="lesson_description">
               {lesson.description &&
+<<<<<<< HEAD
                 parse(lesson.description.substring(0, 300))}
+=======
+                renderHTML(lesson.description.substring(0, 300))}
+>>>>>>> origin/master
             </div>
           </Text>
         </div>

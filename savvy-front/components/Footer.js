@@ -3,7 +3,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import CookieConsent from "react-cookie-consent";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 
 const FooterStyles = styled.div`
   background-image: url("/static/pattern.svg");

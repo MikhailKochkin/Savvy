@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import { useRouter } from "next/router";
 import { useQuery, gql } from "@apollo/client";
 import moment from "moment";
@@ -276,11 +280,19 @@ const ATF = (props) => {
         <InfoBlock>
           <Container>
             <h1>
+<<<<<<< HEAD
               {course.header.length > 0 ? parse(course.header[0]) : ""}
             </h1>
             <h2 id="header2">
               {course.subheader.length > 0
                 ? parse(course.subheader[0])
+=======
+              {course.header.length > 0 ? renderHTML(course.header[0]) : ""}
+            </h1>
+            <h2 id="header2">
+              {course.subheader.length > 0
+                ? renderHTML(course.subheader[0])
+>>>>>>> origin/master
                 : ""}
             </h2>
           </Container>

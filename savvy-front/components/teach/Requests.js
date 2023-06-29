@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import StudentInfo2 from "./StudentInfo2";
+<<<<<<< HEAD
 
+=======
+import renderHTML from "react-render-html";
+>>>>>>> origin/master
 import dynamic from "next/dynamic";
 
 const SEND_MESSAGE_MUTATION = gql`
