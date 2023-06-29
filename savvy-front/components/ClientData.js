@@ -130,8 +130,24 @@ const Row = styled.div`
 const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
   const [startDate, setStartDate] = useState(new Date());
+  const [email, setEmail] = useState("");
+
   const [value, setValue] = useState(0); // integer state
   const [tag, setTag] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25;
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // Calculating the items to show based on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = clients.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Calculating total number of pages
+  const totalPages = Math.ceil(clients.length / itemsPerPage);
 
   const sort = (val) => {
     console.log("val", val);
@@ -162,6 +178,13 @@ const ClientData = (props) => {
 
   const search = (val) => {
     let filtered_clients = clients.filter((c) => c.tags.includes(val));
+    setClients(filtered_clients);
+  };
+
+  const search2 = (val) => {
+    let filtered_clients = props.initial_clients.filter(
+      (c) => c.email == val.toLowerCase()
+    );
     setClients(filtered_clients);
   };
 
@@ -208,9 +231,31 @@ const ClientData = (props) => {
           <input onChange={(e) => setTag(e.target.value)} />
           <button onClick={(e) => search(tag)}>Искакть по тегам</button>
         </div>
+        <div>
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            type="text"
+            name="email"
+            placeholder="..."
+          />
+          <button onClick={(e) => search2(email)}>Искать по почте</button>
+        </div>
+        {/* Page Buttons */}
+        <div className="pagination">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              disabled={currentPage === index + 1}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
       <CreateClient addClients={addClients} />
-      {clients.slice(0, 149).map((c, i) => (
+      {currentItems.map((c, i) => (
         <Client
           id={c.id}
           sort={sort}

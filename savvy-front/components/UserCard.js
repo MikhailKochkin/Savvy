@@ -5,9 +5,8 @@ import moment from "moment";
 import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
 import parse from 'html-react-parser';
-
 import { useTranslation } from "next-i18next";
-import { emailTemplates } from "../letters.js";
+import emailGroups from "../emailGroups";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -73,6 +72,24 @@ const Tag = styled.div`
   /* flex-direction: row;
   justify-content: center;
   align-items: center; */
+`;
+
+const Editor = styled.div`
+  display: ${(props) => {
+    return props.show ? "block" : "none";
+  }};
+  font-size: 1.6rem;
+  width: 95%;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  outline: 0;
+  padding: 0.5%;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  @media (max-width: 800px) {
+    width: 350px;
+  }
 `;
 
 const Row = styled.div`
@@ -187,28 +204,23 @@ const UserCard = memo((props) => {
   const [showTraffic, setShowTraffic] = useState(false);
   const [show, setShow] = useState(false);
   const [showLessonResults, setShowLessonResults] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [editorValue, setEditorValue] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedEmail, setSelectedEmail] = useState(null);
+  const [editorText, setEditorText] = useState(null);
 
-  const handleCategoryChange = (e) => {
-    const category = e.target.value;
-    setSelectedCategory(category);
-    if (category) {
-      setSubject(emailTemplates[category][0].subject);
-      setMessage("");
-    } else {
-      setSubject("");
-      setMessage("");
-    }
+  const handleGroupChange = (groupName) => {
+    const group = emailGroups.find((group) => group.name === groupName);
+    setSelectedGroup(group);
+    setSelectedEmail(null); // Reset selected email when group changes
   };
 
-  // Function to handle template change within a category
-  const handleTemplateChange = (e) => {
-    const templateIndex = e.target.value;
-    if (selectedCategory) {
-      setSubject(emailTemplates[selectedCategory][templateIndex].subject);
-      setMessage(emailTemplates[selectedCategory][templateIndex].message);
-    }
+  const handleEmailChange = (subject) => {
+    const email = selectedGroup?.emails.find(
+      (email) => email.subject === subject
+    );
+    setSelectedEmail(email);
+    setSubject(email.subject);
+    setMessage(email.text);
   };
 
   function earliestObjectsByDate(objects) {
@@ -274,11 +286,6 @@ const UserCard = memo((props) => {
     setMessage(dataFromChild);
   };
 
-  const updateAfterDelete = () => {
-    let el = document.getElementById(props.id);
-    el.style.display = "none";
-  };
-
   let number;
   if (props.number && props.number.startsWith("8")) {
     number = props.number.replace("8", "+7");
@@ -328,7 +335,7 @@ const UserCard = memo((props) => {
         <div>{number ? number : "Нет номера"}</div>
         <div>{props.email}</div>
         {tags &&
-          [...tags].slice(0, 10).map((t, i) => (
+          [...tags].map((t, i) => (
             <>
               <Tag
                 onClick={(e) => {
@@ -386,6 +393,7 @@ const UserCard = memo((props) => {
       </div>
       <div className="comment">
         <h4>Комментарий</h4>
+        {/* <div>{comment}</div> */}
         <div className="editor">
           <DynamicLoadedEditor
             getEditorText={myCallback}
@@ -394,35 +402,59 @@ const UserCard = memo((props) => {
           />
         </div>
         <h4>Имейл</h4>
-        <div>
-          <select onChange={handleCategoryChange}>
-            <option value="">Select a category</option>
-            {Object.keys(emailTemplates).map((category) => (
-              <option value={category}>{category}</option>
+        {/* Dropdown for email groups */}
+        <select onChange={(e) => handleGroupChange(e.target.value)}>
+          <option value="">Select email group</option>
+          {emailGroups.map((group) => (
+            <option key={group.name} value={group.name}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+        <br />
+
+        {/* Dropdown for emails */}
+        {selectedGroup && (
+          <select onChange={(e) => handleEmailChange(e.target.value)}>
+            <option value="">Select email</option>
+            {selectedGroup.emails.map((email) => (
+              <option key={email.subject} value={email.subject}>
+                {email.subject}
+              </option>
             ))}
           </select>
-          <br />
-
-          {selectedCategory && (
-            <select onChange={handleTemplateChange}>
-              <option value="">Select an email</option>
-              {emailTemplates[selectedCategory].map((template, index) => (
-                <option value={index}>{template.subject}</option>
-              ))}
-            </select>
-          )}
-        </div>
-        <input onChange={(e) => setSubject(e.target.value)} value={subject} />
-        <button onClick={(e) => setMessage("new text")}>Pass Message</button>
-        <div className="editor">
+        )}
+        <br />
+        {selectedEmail && (
+          <input
+            type="text"
+            onChange={(e) => setSubject(e.target.value)}
+            value={subject}
+          />
+        )}
+        <br />
+        {selectedGroup &&
+          selectedGroup.emails.map((s) => (
+            <Editor
+              show={
+                selectedEmail !== null && s.subject === selectedEmail.subject
+              }
+            >
+              <DynamicLoadedEditor
+                getEditorText={myCallback2}
+                value={s.text}
+                name="text"
+              />
+            </Editor>
+          ))}
+        {/* DynamicLoadedEditor with loaded text */}
+        {/* <div className="editor">
           <DynamicLoadedEditor
-            // key={editorKey}
-            id={props.email}
             getEditorText={myCallback2}
-            value={message}
+            value={editorText}
             name="text"
           />
-        </div>
+        </div> */}
         <button
           onClick={async (e) => {
             const res = await sendMessage({
@@ -430,7 +462,6 @@ const UserCard = memo((props) => {
                 userId: props.id,
                 text: message,
                 subject: subject,
-                // email: props.email,
                 comment: "funnel",
               },
             });
@@ -493,6 +524,19 @@ const UserCard = memo((props) => {
                 <b>{l.lesson.name}</b>
               </div>
               <li>{l.progress}</li>
+              <li>{l.createdAt}</li>
+            </div>
+          ))}
+        <h4>Результаты испытаний</h4>
+        {props.challengeResults.length > 0 &&
+          props.challengeResults.map((l) => (
+            <div>
+              <div>
+                {l.lesson.name} - {l.lesson.coursePage.title}
+              </div>
+              <li>
+                {l.correct} / {l.correct + l.wrong}
+              </li>
               <li>{l.createdAt}</li>
             </div>
           ))}

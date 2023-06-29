@@ -4,9 +4,9 @@ import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
-import parse from 'html-react-parser';
-
+import renderHTML from "react-render-html";
 import { useTranslation } from "next-i18next";
+import emailGroups from "../emailGroups";
 
 const UPDATE_CLIENT_MUTATION = gql`
   mutation UPDATE_CLIENT_MUTATION(
@@ -68,6 +68,24 @@ const Tag = styled.div`
   /* flex-direction: row;
   justify-content: center;
   align-items: center; */
+`;
+
+const Editor = styled.div`
+  display: ${(props) => {
+    return props.show ? "block" : "none";
+  }};
+  font-size: 1.6rem;
+  width: 95%;
+  border: 1px solid #c4c4c4;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  outline: 0;
+  padding: 0.5%;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  @media (max-width: 800px) {
+    width: 350px;
+  }
 `;
 
 const Row = styled.div`
@@ -195,15 +213,27 @@ const DeleteClient = (props) => {
 const Client = (props) => {
   const [comment, setComment] = useState(props.comment);
   const [message, setMessage] = useState("");
-
+  const [subject, setSubject] = useState("");
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [selectedEmail, setSelectedEmail] = useState(null);
+  const [editorText, setEditorText] = useState(null);
 
-  let text = `
-Хотел сказать, что, если будут вопросы по юр англу, можете всегда писать мне. Я помогу и подскажу)%0a %0a
+  const handleGroupChange = (groupName) => {
+    const group = emailGroups.find((group) => group.name === groupName);
+    setSelectedGroup(group);
+    setSelectedEmail(null); // Reset selected email when group changes
+  };
 
-Кстати мы сейчас делаем бесплатный мини-курс по contract drafting. Это будет наш первый курс полностью на английском языке.
-  `;
+  const handleEmailChange = (subject) => {
+    const email = selectedGroup?.emails.find(
+      (email) => email.subject === subject
+    );
+    setSelectedEmail(email);
+    setSubject(email.subject);
+    setMessage(email.text);
+  };
 
   moment.locale("ru");
 
@@ -271,7 +301,7 @@ const Client = (props) => {
   // number = number.replaceAll(" ", "");
   // let comment_for_wa = comment ? comment.replaceAll("</p>", "\n\n") : "";
   // comment_for_wa = comment_for_wa.replaceAll("<p>", "");
-  // console.log("comment_for_wa", parse(comment_for_wa));
+  // console.log("comment_for_wa", renderHTML(comment_for_wa));
   return (
     <Row id={props.id}>
       <div className="index">{props.index + 1}.</div>
@@ -397,17 +427,62 @@ const Client = (props) => {
           props.communication_history.messages &&
           props.communication_history.messages.map((m) => (
             <Message>
-              <div>{parse(m.message)}</div>
+              <div>{renderHTML(m.message)}</div>
               <div> {moment(m.date).format("DD-MM-YYYY HH:mm")}</div>
             </Message>
           ))}
-        <div className="editor">
+        {/* <div className="editor">
           <DynamicLoadedEditor
             getEditorText={myCallback2}
             value={message}
             name="text"
           />
-        </div>
+        </div> */}
+        {/* Dropdown for email groups */}
+        <select onChange={(e) => handleGroupChange(e.target.value)}>
+          <option value="">Select email group</option>
+          {emailGroups.map((group) => (
+            <option key={group.name} value={group.name}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+        <br />
+
+        {/* Dropdown for emails */}
+        {selectedGroup && (
+          <select onChange={(e) => handleEmailChange(e.target.value)}>
+            <option value="">Select email</option>
+            {selectedGroup.emails.map((email) => (
+              <option key={email.subject} value={email.subject}>
+                {email.subject}
+              </option>
+            ))}
+          </select>
+        )}
+        <br />
+        {selectedEmail && (
+          <input
+            type="text"
+            onChange={(e) => setSubject(e.target.value)}
+            value={subject}
+          />
+        )}
+        <br />
+        {selectedGroup &&
+          selectedGroup.emails.map((s) => (
+            <Editor
+              show={
+                selectedEmail !== null && s.subject === selectedEmail.subject
+              }
+            >
+              <DynamicLoadedEditor
+                getEditorText={myCallback2}
+                value={s.text}
+                name="text"
+              />
+            </Editor>
+          ))}
         <button
           onClick={async (e) => {
             e.preventDefault();
@@ -417,12 +492,14 @@ const Client = (props) => {
                   {
                     message: message,
                     date: new Date().toISOString(),
+                    subject: subject,
                   },
                 ]
               : [
                   {
                     message: message,
                     date: new Date().toISOString(),
+                    subject: subject,
                   },
                 ];
 

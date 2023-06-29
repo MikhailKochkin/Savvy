@@ -4,8 +4,6 @@ import styled from "styled-components";
 import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-// import CreateClient from "./CreateClient";
 import UserCard from "./UserCard";
 
 const Styles = styled.div`
@@ -129,11 +127,10 @@ const Row = styled.div`
 
 const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
-  const [startDate, setStartDate] = useState(new Date());
-  const [value, setValue] = useState(0); // integer state
   const [email, setEmail] = useState("");
   const [courseId, setCourseId] = useState("");
   const [tag, setTag] = useState("");
+  const [campaign, setCampaign] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
@@ -149,33 +146,6 @@ const ClientData = (props) => {
 
   // Calculating total number of pages
   const totalPages = Math.ceil(clients.length / itemsPerPage);
-
-  //   const sort = (val) => {
-  //     console.log("val", val);
-  //     const new_clients = clients.filter((c) => c.tags.includes(val));
-  //     setClients(new_clients);
-  //   };
-
-  //   const chooseDate = (d) => {
-  //     let clients_in_range = props.initial_clients.filter(
-  //       (cl) => new Date(cl.createdAt) < new Date(d)
-  //       // {
-  //       //   let client_date = new Date(cl.createdAt);
-  //       //   let chosendate = new Date(d);
-  //       //   let week_before_date = new Date(d);
-
-  //       //   week_before_date.setDate(chosendate.getDate() - 7);
-
-  //       //   if (
-  //       //     client_date.getTime() > week_before_date.getTime() &&
-  //       //     client_date.getTime() < chosendate.getTime()
-  //       //   ) {
-  //       //     return cl;
-  //       //   }
-  //       // }
-  //     );
-  //     setClients(clients_in_range);
-  //   };
 
   const search = (val) => {
     let filtered_clients = clients.filter(
@@ -206,9 +176,21 @@ const ClientData = (props) => {
       });
     }
     let filtered_clients = filterByCoursePage(props.initial_clients, val);
-    console.log("filtered_clients", filtered_clients);
 
     setClients(filtered_clients);
+  };
+
+  const search4 = (campaign) => {
+    let campaign_users = props.initial_clients.filter(
+      (user) =>
+        user.traffic_sources &&
+        user.traffic_sources.visitsList &&
+        user.traffic_sources.visitsList.some(
+          (visit) =>
+            visit && visit.utm_campaign && visit.utm_campaign === campaign
+        )
+    );
+    setClients(campaign_users);
   };
 
   const sortClientsByActivity = () => {
@@ -224,28 +206,7 @@ const ClientData = (props) => {
     let ordered_clients = [...props.initial_clients].filter(
       (cl) => cl.orders.length > 0
     );
-    console.log("ordered_clients", ordered_clients);
     setClients([...ordered_clients]);
-  };
-
-  //   let clients_in_range = clients.filter((cl) => {
-  //     let client_date = new Date(cl.createdAt);
-  //     let chosendate = new Date(startDate);
-  //     let week_before_date = new Date(startDate);
-
-  //     week_before_date.setDate(chosendate.getDate() - 7);
-
-  //     if (
-  //       client_date.getTime() > week_before_date.getTime() &&
-  //       client_date.getTime() < chosendate.getTime()
-  //     ) {
-  //       return cl;
-  //     }
-  //   });
-
-  const addClients = (data) => {
-    let new_arr = [data].concat(clients);
-    setClients([...new_arr]);
   };
 
   let MQL_clients = [...props.initial_clients].filter(
@@ -265,18 +226,6 @@ const ClientData = (props) => {
         <div>IQL: {IQL_clients.length}</div>
         <div>MQL: {MQL_clients.length}</div>
         <div>SQL: {SQL_clients.length}</div>
-        {/* <div>Заявок за выбранный период: {clients_in_range.length}</div> */}
-        {/* <DatePicker
-          selected={startDate}
-          dateFormat="dd/MM/yyyy"
-          onChange={(date) => {
-            setStartDate(date);
-            return chooseDate(date);
-          }}
-        /> */}
-        {/* <button onClick={(e) => setValue((value) => value + 1)}>
-          Обновить данные
-        </button> */}
         <button onClick={(e) => sortClientsByActivity()}>
           Сортировать по последней активности
         </button>
@@ -289,6 +238,11 @@ const ClientData = (props) => {
         <div>
           <input onChange={(e) => setTag(e.target.value)} />
           <button onClick={(e) => search(tag)}>Искать по тегам</button> <br />
+          <input onChange={(e) => setCampaign(e.target.value)} />
+          <button onClick={(e) => search4(campaign)}>
+            Искать по кампаниям
+          </button>{" "}
+          <br />
           <input
             onChange={(e) => setEmail(e.target.value)}
             value={email}
@@ -322,33 +276,30 @@ const ClientData = (props) => {
           </div>
         </div>
       </div>
-      {/* <CreateClient addClients={addClients} /> */}
       {currentItems
-        .filter((user) => user.email !== "mi.kochkin@ya.ru")
+        // .filter((user) => user.email !== "mi.kochkin@ya.ru")
         .map((c, i) => (
-          <UserCard
-            id={c.id}
-            //   sort={sort}
-            key={c.id}
-            index={i}
-            name={c.name}
-            surname={c.surname}
-            email={c.email}
-            comment={c.comment}
-            messages={c.messages}
-            orders={c.orders}
-            new_subjects={c.new_subjects}
-            traffic_sources={c.traffic_sources}
-            lessonResults={c.lessonResults}
-            //   communication_history={c.communication_history}
-            //   comment={c.comment}
-            tags={c.tags}
-            number={c.number}
-            createdAt={c.createdAt}
-            updatedAt={c.updatedAt}
-            //   url={c.type}
-            //   communication_medium={c.communication_medium}
-          />
+          <>
+            <UserCard
+              id={c.id}
+              key={c.id}
+              index={i}
+              name={c.name}
+              surname={c.surname}
+              email={c.email}
+              comment={c.comment}
+              messages={c.messages}
+              orders={c.orders}
+              new_subjects={c.new_subjects}
+              traffic_sources={c.traffic_sources}
+              lessonResults={c.lessonResults}
+              challengeResults={c.challengeResults}
+              tags={c.tags}
+              number={c.number}
+              createdAt={c.createdAt}
+              updatedAt={c.updatedAt}
+            />
+          </>
         ))}
     </Styles>
   );

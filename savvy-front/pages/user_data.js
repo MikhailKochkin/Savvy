@@ -13,6 +13,20 @@ const CLIENTS_QUERY = gql`
       email
       number
       tags
+      challengeResults {
+        id
+        wrong
+        correct
+        createdAt
+        lesson {
+          id
+          name
+          coursePage {
+            id
+            title
+          }
+        }
+      }
       emailReminders {
         id
         emailCampaign {

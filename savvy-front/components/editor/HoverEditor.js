@@ -275,41 +275,21 @@ const deserialize = (el) => {
 };
 
 const HoveringMenu = (props) => {
+  let html;
+  props.value ? (html = props.value) : (html = `<p></p>`);
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const initial = deserialize(document.body);
+  const [value, setValue] = useState(initial);
   const editor = useMemo(
     () => withLinks(withHistory(withReact(createEditor()))),
     []
   );
-
-  const [value, setValue] = useState(() => {
-    let html = props.value ? props.value : "<p></p>";
-    const document = new DOMParser().parseFromString(html, "text/html");
-    return deserialize(document.body);
-  });
-
-  const prevPropsValueRef = useRef();
-
-  useEffect(() => {
-    // Check if the props value has changed since the last render
-    if (prevPropsValueRef.current !== props.value) {
-      let html = props.value ? props.value : `<p></p>`;
-      const document = new DOMParser().parseFromString(html, "text/html");
-      const parsedValue = deserialize(document.body);
-      editor.children = parsedValue; // Directly set the editor's children
-    }
-
-    // Update the ref to the current props value for the next render
-    prevPropsValueRef.current = props.value;
-  }, [props.value]);
-
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {
-    // console.log(props.element, props.element.type);
     switch (props.element.type) {
       case "code":
         return <CodeElement {...props} />;
-      case "quote":
-        return <QuoteElement {...props} />;
       case "bulleted-list":
         // return <ul {...attributes}>{children}</ul>;
         return <ListElement {...props} />;
@@ -317,6 +297,9 @@ const HoveringMenu = (props) => {
         return <OrderedListElement {...props} />;
       case "list-item":
         return <ListItem {...props} />;
+      case "quote":
+      case "quote":
+        return <QuoteElement {...props} />;
       case "header":
         return <HeaderElement {...props} />;
       case "video":
@@ -359,7 +342,6 @@ const HoveringMenu = (props) => {
       editor={editor}
       value={value}
       onChange={(value) => {
-        // console.log("value", value);
         let arr = [];
         value.map((v) => arr.push(serialize(v)));
         setValue(value);
@@ -372,22 +354,6 @@ const HoveringMenu = (props) => {
         renderLeaf={renderLeaf}
         renderElement={renderElement}
         placeholder={props.placeholder}
-        // onDOMBeforeInput={(event) => {
-        //   event.preventDefault();
-        //   console.log(event.inputType);
-        //   // switch (event.inputType) {
-        //   //   case "bold":
-        //   //     return toggleFormat(editor, "bold");
-        //   //   case "italic":
-        //   //     return toggleFormat(editor, "italic");
-        //   //   // case "underline":
-        //   //   //   return toggleFormat(editor, "underline");
-        //   //   case "delete":
-        //   //     return toggleFormat(editor, "delete");
-        //   //   case "insert":
-        //   //     return toggleFormat(editor, "insert");
-        //   // }
-        // }}
       />
     </Slate>
   );
@@ -750,6 +716,18 @@ const HeaderElement = (props) => {
   return <h2 {...props.attributes}>{props.children}</h2>;
 };
 
+const ListElement = (props) => {
+  return <ul {...props.attributes}>{props.children}</ul>;
+};
+
+const OrderedListElement = (props) => {
+  return <ol {...props.attributes}>{props.children}</ol>;
+};
+
+const ListItem = (props) => {
+  return <li {...props.attributes}>{props.children}</li>;
+};
+
 const LinkElement = (props) => {
   return <Link {...props.attributes}>{props.children}</Link>;
 };
@@ -768,18 +746,6 @@ const TableElement = (props) => {
 
 const FlagElement = (props) => {
   return <Flag {...props.attributes}>{props.children}</Flag>;
-};
-
-const ListElement = (props) => {
-  return <ul {...props.attributes}>{props.children}</ul>;
-};
-
-const OrderedListElement = (props) => {
-  return <ol {...props.attributes}>{props.children}</ol>;
-};
-
-const ListItem = (props) => {
-  return <li {...props.attributes}>{props.children}</li>;
 };
 
 const VideoElement = ({ attributes, children, element }) => {

@@ -106,6 +106,7 @@ const ClientMessage = inputObjectType({
   name: "ClientMessage",
   definition(t) {
     t.string("message");
+    t.string("subject");
     t.string("date");
   },
 });

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Link from "next/link";
 import { useUser } from "../User";
-// import { withTranslation } from "../../i18n";
 
 const Styles = styled.div`
   width: 100%;

@@ -4122,7 +4122,10 @@ const Mutation = mutationType({
         const newEmail3 = await client.sendEmail({
           From: "Mikhail@besavvy.app",
           To: bc.email,
-          Subject: `Полезные материалы от BeSavvy Lawyer 🚀`,
+          Subject:
+            communication_history.messages[
+              communication_history.messages.length - 1
+            ].subject,
           HtmlBody: GenericEmail.GenericEmail(
             communication_history.messages[
               communication_history.messages.length - 1
