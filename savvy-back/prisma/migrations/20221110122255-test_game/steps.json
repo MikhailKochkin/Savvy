@@ -1,0 +1,26 @@
+{
+  "version": "0.3.14-fixed",
+  "steps": [
+    {
+      "tag": "CreateField",
+      "model": "TestPractice",
+      "field": "intro",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "TestPractice",
+      "field": "successText",
+      "type": "String",
+      "arity": "Optional"
+    },
+    {
+      "tag": "CreateField",
+      "model": "TestPractice",
+      "field": "failureText",
+      "type": "String",
+      "arity": "Optional"
+    }
+  ]
+}
