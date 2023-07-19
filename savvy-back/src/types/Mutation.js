@@ -65,8 +65,8 @@ async function getMessageOpens(serverToken, messageID) {
 
 // const { exists } = require("fs");
 
-// const { Client } = require("whatsapp-web.js");
-// const wa_client = new Client();
+const { Client } = require("whatsapp-web.js");
+const wa_client = new Client();
 
 // wa_client.on("qr", (qr) => {
 //   console.log(1);
@@ -910,54 +910,6 @@ const Mutation = mutationType({
           HtmlBody: GenericEmail.GenericEmail(args.text),
           Tag: "communication_email",
         });
-
-        if (args.comment == "offer") {
-          //       const sendNextEmail = async () => {
-          //         return client.sendEmail({
-          //           From: "Mikhail@besavvy.app",
-          //           To: user.email,
-          //           Subject: `До конца акции BeSavvy осталось 3 часа!`,
-          //           HtmlBody: GenericEmail.GenericEmail(`
-          // <p>Извините, что беспокою, но через 3 часа заканчивается ваше спец предложение на курс "${coursePage.title}" .</p>
-          // <p>Для вас действует специальная скидка.</p>
-          // <p>Посмотреть программу, узнать точный размер скидки и воспользоваться ее можно <a href="${args.link}">по этой ссылке</a>.</p>
-          // <p>Кстати по этой же ссылке можно продолжить проходить бесплатную часть курса.</p>
-          // <p>Не сердитесь, если информация об акции для вас сейчас не актуальна. Хорошего дня!</p>
-          // `),
-          //         });
-          //       };
-          // const emailReminder = await ctx.prisma.emailReminder.create({
-          //   data: {
-          //     user: {
-          //       connect: {
-          //         id: userId,
-          //       },
-          //     },
-          //     coursePage: {
-          //       connect: {
-          //         id: args.coursePageId,
-          //       },
-          //     },
-          //     emailCampaign: {
-          //       connect: {
-          //         id: args.emailCampaignId,
-          //       },
-          //     },
-          //     link: "https://www.besavvy.app/coursePage?id=ck587y4kp00lf07152t0tyywl&down=bcd",
-          //     sendAt: new Date("2023-03-31T09:29:35.723Z"),
-          //   },
-          // });
-          // Delay the execution of the sendNextEmail function by 1 minute (60,000 milliseconds)
-          // setTimeout(async () => {
-          //   try {
-          //     const SendNextEmail = await sendNextEmail();
-          //     // Handle success or other logic here
-          //   } catch (error) {
-          //     // Handle errors here
-          //     console.error("Error sending email:", error);
-          //   }
-          // }, 21 * 60 * 60 * 1000); // 21 hours delay);
-        }
         return message;
       },
     });
@@ -4079,17 +4031,60 @@ const Mutation = mutationType({
           number = my_client.number;
         }
 
-        // const number_details = await wa_client.getNumberId(number); // get mobile number details
+        const number_details = await wa_client.getNumberId(number); // get mobile number details
 
-        // if (number_details) {
-        //   const sendMessageData = await wa_client.sendMessage(
-        //     number_details._serialized,
-        //     comment
-        //   ); // send message
-        //   console.log(number, "Success");
-        // } else {
-        //   console.log(number, "Mobile number is not registered");
-        // }
+        if (number_details) {
+          const sendMessageData = await wa_client.sendMessage(
+            number_details._serialized,
+            comment
+          ); // send message
+          console.log(number, "Success");
+        } else {
+          console.log(number, "Mobile number is not registered");
+        }
+        const bclient = await ctx.prisma.businessClient.update({
+          where: { id },
+          data: {
+            comment,
+          },
+        });
+
+        return bclient;
+      },
+    });
+    t.field("textUser", {
+      type: "User",
+      args: {
+        comment: stringArg(),
+        id: stringArg(),
+      },
+      resolve: async (_, { comment, id }, ctx) => {
+        const my_client = await ctx.prisma.user.findUnique({
+          where: { id: id },
+        });
+
+        let number;
+        if (my_client.number.startsWith("8")) {
+          number = my_client.number.replace("8", "7");
+        } else if (my_client.number.startsWith("+7")) {
+          number = my_client.number.replace("+7", "7");
+        } else if (my_client.number.startsWith("9")) {
+          number = `7${my_client.number}`;
+        } else {
+          number = my_client.number;
+        }
+
+        const number_details = await wa_client.getNumberId(number); // get mobile number details
+
+        if (number_details) {
+          const sendMessageData = await wa_client.sendMessage(
+            number_details._serialized,
+            comment
+          ); // send message
+          console.log(number, "Success");
+        } else {
+          console.log(number, "Mobile number is not registered");
+        }
         // const bclient = await ctx.prisma.businessClient.update({
         //   where: { id },
         //   data: {
@@ -4097,7 +4092,7 @@ const Mutation = mutationType({
         //   },
         // });
 
-        return bclient;
+        return my_client;
       },
     });
     t.field("sendBusinessClientEmail", {

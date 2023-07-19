@@ -948,7 +948,6 @@ export interface NexusGenInputs {
     emailCampaignId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     id?: NexusGenEnums['SortOrder'] | null; // SortOrder
     leadin?: NexusGenEnums['SortOrder'] | null; // SortOrder
-    lessonId?: NexusGenEnums['SortOrder'] | null; // SortOrder
     link?: NexusGenEnums['SortOrder'] | null; // SortOrder
     pros?: NexusGenEnums['SortOrder'] | null; // SortOrder
     story?: NexusGenEnums['SortOrder'] | null; // SortOrder
@@ -969,7 +968,6 @@ export interface NexusGenInputs {
     emailCampaignId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     id?: NexusGenInputs['StringFilter'] | null; // StringFilter
     leadin?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
-    lessonId?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     link?: NexusGenInputs['StringNullableFilter'] | null; // StringNullableFilter
     NOT?: NexusGenInputs['LawrdleWhereInput'][] | null; // [LawrdleWhereInput!]
     OR?: NexusGenInputs['LawrdleWhereInput'][] | null; // [LawrdleWhereInput!]
@@ -2811,7 +2809,6 @@ export interface NexusGenObjects {
     emailCampaignId?: string | null; // String
     id: string; // String!
     leadin?: string | null; // String
-    lessonId?: string | null; // String
     link?: string | null; // String
     story: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3543,7 +3540,6 @@ export interface NexusGenFieldTypes {
     emailCampaignId: string | null; // String
     id: string; // String!
     leadin: string | null; // String
-    lessonId: string | null; // String
     link: string | null; // String
     story: string; // String!
     updatedAt: NexusGenScalars['DateTime']; // DateTime!
@@ -3722,6 +3718,7 @@ export interface NexusGenFieldTypes {
     signout: NexusGenRootTypes['SignOut'] | null; // SignOut
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     textBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
+    textUser: NexusGenRootTypes['User'] | null; // User
     updateActiveUser: NexusGenRootTypes['User'] | null; // User
     updateBotDialogue: NexusGenRootTypes['BotDialogue'] | null; // BotDialogue
     updateBusinessClient: NexusGenRootTypes['BusinessClient'] | null; // BusinessClient
@@ -4558,7 +4555,6 @@ export interface NexusGenFieldTypeNames {
     emailCampaignId: 'String'
     id: 'String'
     leadin: 'String'
-    lessonId: 'String'
     link: 'String'
     story: 'String'
     updatedAt: 'DateTime'
@@ -4737,6 +4733,7 @@ export interface NexusGenFieldTypeNames {
     signout: 'SignOut'
     signup: 'AuthPayload'
     textBusinessClient: 'BusinessClient'
+    textUser: 'User'
     updateActiveUser: 'User'
     updateBotDialogue: 'BotDialogue'
     updateBusinessClient: 'BusinessClient'
@@ -5970,6 +5967,10 @@ export interface NexusGenArgTypes {
       uniID?: string | null; // String
     }
     textBusinessClient: { // args
+      comment?: string | null; // String
+      id?: string | null; // String
+    }
+    textUser: { // args
       comment?: string | null; // String
       id?: string | null; // String
     }

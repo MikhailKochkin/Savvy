@@ -18,3 +18,4 @@ server.js
 .vscode
 .env
 .env.local
+.wwebjs_cache
