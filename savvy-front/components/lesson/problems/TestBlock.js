@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from "react";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import styled from "styled-components";
 import smoothscroll from "smoothscroll-polyfill";
 import { Mutation } from "@apollo/client/react/components";

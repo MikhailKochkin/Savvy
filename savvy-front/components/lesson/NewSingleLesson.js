@@ -11,7 +11,7 @@ import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
-import Offer from "./Offer";
+// import Offer from "./Offer";
 import Navigation from "./Navigation";
 import LoadingText from "../LoadingText";
 
@@ -459,28 +459,25 @@ const NewSingleLesson = (props) => {
                 />
               )}
               <LessonPart>
-                {/* <h1>
-                  {t("lesson")} {lesson.number}. {lesson.name}
-                </h1> */}
-                <CSSTransitionGroup transitionName="example">
-                  <StoryEx
-                    id={props.id}
-                    tasks={
-                      props.add == "offer"
-                        ? [
-                            ...lesson.structure.lessonItems,
-                            { id: 1, type: "offer" },
-                          ]
-                        : lesson.structure.lessonItems
-                    }
-                    me={me}
-                    size={props.size == "short" ? "short" : "long"}
-                    lesson={lesson}
-                    next={next}
-                    coursePageID={lesson.coursePage.id}
-                    passStep={passStep}
-                  />
-                </CSSTransitionGroup>
+                {/* <CSSTransitionGroup transitionName="example"> */}
+                <StoryEx
+                  id={props.id}
+                  tasks={
+                    props.add == "offer"
+                      ? [
+                          ...lesson.structure.lessonItems,
+                          { id: 1, type: "offer" },
+                        ]
+                      : lesson.structure.lessonItems
+                  }
+                  me={me}
+                  size={props.size == "short" ? "short" : "long"}
+                  lesson={lesson}
+                  next={next}
+                  coursePageID={lesson.coursePage.id}
+                  passStep={passStep}
+                />
+                {/* </CSSTransitionGroup> */}
               </LessonPart>
             </Container>{" "}
           </AreYouEnrolled>

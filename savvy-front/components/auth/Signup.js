@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import { getCookie } from "cookies-next";
+import * as EmailValidator from "email-validator";
 
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
@@ -250,8 +251,6 @@ const Signup = (props) => {
   // utm_medium => traffic_medium
   // utm_campaign => traffic_campaign
 
-  console.log("props final", props);
-
   return (
     <Mutation
       mutation={SIGNUP_MUTATION}
@@ -278,17 +277,16 @@ const Signup = (props) => {
           onSubmit={async (e) => {
             e.preventDefault();
             if (country == "") {
-              alert("Choose your country please");
-              return;
-            }
-            if (!isFamiliar) {
-              alert("Не забыли про согласие на обработку персональных данных?");
-              return;
-            } else if (status === "") {
-              alert("Укажите свой статус на сайте!");
+              alert(t("choose_country"));
               return;
             } else if (surname === "") {
-              alert("Укажите свою фамилию!");
+              alert(t("give_surname"));
+              return;
+            } else if (!EmailValidator.validate(email)) {
+              alert(t("give_email"));
+              return;
+            } else if (number === "" || number.length < 7) {
+              alert(t("give_number"));
               return;
             }
             const res = await signup();
@@ -331,13 +329,13 @@ const Signup = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               label="Электронная почта"
             />
-            <Select
+            {/* <Select
               defaultValue={"STUDENT"}
               onChange={(e) => setStatus(e.target.value)}
             >
               <option value={"STUDENT"}>{t("status_student")}</option>
               <option value={"AUTHOR"}>{t("status_author")}</option>
-            </Select>
+            </Select> */}
             <Select
               id="country"
               name="country"

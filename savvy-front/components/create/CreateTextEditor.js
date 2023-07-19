@@ -129,7 +129,7 @@ const CreateTextEditor = (props) => {
     setText(dataFromChild);
   };
 
-  const rus_placeholder = `<h2><div className="align-center" style="text-align:center"><p>Доверенность</p></div></h2><div className="align-right" style="text-align:right"><p>21 июня 2022</p><p>г. Москва</p></div><p><b>ООО АККИО</b> , юридическое лицо, созданное и осуществляющее свою деятельность в соответствии с законодательством Российской Федерации, зарегистрированное за основным государственным регистрационным номером (ОГРН)  ...</p>`;
+  const rus_placeholder = `<h2><div className="align-center" style="text-align:center"><p>Доверенность</p></div></h2><div className="align-right" style="text-align:right"><p>21 июня 2022</p><p>г. Москва</p></div><p><b>ООО АККИО</b> , <span className="editor_error" type="error" id="id" error_text="юридическое" error_data="юридическое">физическое</span> лицо, созданное и осуществляющее свою деятельность в соответствии с законодательством Российской Федерации, зарегистрированное за основным государственным регистрационным номером (<span className="editor_note" type="note" text="ОГРН — государственный регистрационный номер записи о создании юридического лица либо записи о первом представлении в соответствии с федеральным законом Российской Федерации «О государственной регистрации юридических лиц» сведений о юридическом лице, зарегистрированном до введения в действие указанного Закона.">ОГРН</span>)  ...</p>`;
   const eng_placeholder = `<h2><div className="align-center" style="text-align:center"><p>POWER OF ATTORNEY AUTHORIZATION LETTER</p></div></h2><div className="align-right" style="text-align:right"><p>Jennifer B. Campfield</p><p>3160 Ingram Road</p></div><p>...</p>`;
 
   const { lessonID } = props;
@@ -174,6 +174,10 @@ const CreateTextEditor = (props) => {
               определенному фрагменту текста. Задайте вопрос, ответ, а также
               комментарии на случай правильного и неправильного ответов.
             </p>
+            <p>
+              Если вы захотите внести правки, просто нажмите на текст,
+              выделенный цветом, и появится окно для редактирования.
+            </p>
           </>
         ) : (
           <>
@@ -212,6 +216,10 @@ const CreateTextEditor = (props) => {
               Allows you<span id="orange"> to ask a question</span> to a
               specific piece of text. Write a question, an answer, and comments
               for correct and incorrect answers.
+            </p>
+            <p>
+              If you want to make edits, just click on the highlighted text and
+              an edit box will appear.
             </p>
           </>
         )}

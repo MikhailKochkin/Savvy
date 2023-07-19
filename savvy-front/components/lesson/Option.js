@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 
 const Button = styled.button`
   font-family: Montserrat;
@@ -28,7 +23,7 @@ const Group = styled.div`
 `;
 
 const Box = styled.div`
-  display: ${props => (props.hide ? "none" : "flex")};
+  display: ${(props) => (props.hide ? "none" : "flex")};
   flex-direction: row;
   justify-content: space-between;
   border: 1px solid #edefed;
@@ -36,16 +31,16 @@ const Box = styled.div`
   padding: 1.5%;
   padding-bottom: 0;
   font-size: 1.5rem;
-  background: ${props => props.color || null};
+  background: ${(props) => props.color || null};
   margin-bottom: 2%;
 `;
 
 class Option extends Component {
   state = {
     hide: false,
-    color: null
+    color: null,
   };
-  push = e => {
+  push = (e) => {
     e.target.getAttribute("type") === "note" &&
       (e.target.name === "true"
         ? this.props.getData(true, { note: this.props.note.id })
@@ -64,7 +59,7 @@ class Option extends Component {
       : this.setState({ color: "rgba(253, 156, 125, 0.5);" });
   };
 
-  reset = e => {
+  reset = (e) => {
     e.target.getAttribute("type") === "note" &&
     this.state.color === "rgba(50, 172, 102, 0.05)"
       ? this.props.getData(true, { note: null })

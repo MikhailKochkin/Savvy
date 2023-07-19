@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import DeleteSingleShot from "../../delete/DeleteSingleShot";
 import UpdateShots from "./UpdateShots";
@@ -59,7 +59,7 @@ const Text = styled.div`
   } */
   @media (max-width: 800px) {
     img {
-      max-width: 95%;
+      max-width: 100%;
     }
   }
 `;
@@ -108,10 +108,10 @@ const SwitchButton = styled.div`
 `;
 
 const Styles = styled.div`
-  border: 1px solid #d4d4d4;
-  box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
-  margin: 30px 0;
-  background: #fff;
+  // border: 1px solid #d4d4d4;
+  // box-shadow: rgba(118, 143, 255, 0.1) 0px 16px 24px 0px;
+  // margin: 30px 0;
+  // background: #fff;
   font-weight: 500;
   padding: 15px;
   min-height: 50vh;
@@ -209,8 +209,8 @@ const Shots = (props) => {
 
       {!update && (
         <>
-          <Title>{title}</Title>
-          <div className="step">Step {num}</div>
+          {/* <Title>{title}</Title> */}
+          {/* <div className="step">Step {num}</div> */}
           <>
             {parts[num - 1] && (
               <Text>

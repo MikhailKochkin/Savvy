@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import StarRatings from "react-star-ratings";
 import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import { useTranslation } from "next-i18next";
+import parse from "html-react-parser";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
 import CreateStatement from "./CreateStatement";
@@ -327,11 +323,7 @@ const Forum = (props) => {
       </div>
       <div className="question">
         <div className="question_text">
-<<<<<<< HEAD
           {text.length > 7 ? parse(text) : t("forum_end")}
-=======
-          {text.length > 7 ? renderHTML(text) : t("forum_end")}
->>>>>>> origin/master
         </div>
         <IconBlock>
           <img className="icon" src="../../static/hipster.svg" />

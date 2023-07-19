@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
@@ -253,6 +253,12 @@ const UpdateLesson = (props) => {
   const [copyLesson, { data: copyData }] = useMutation(COPY_LESSON_MUTATION);
 
   const { t } = useTranslation("lesson");
+
+  useEffect(() => {
+    // Update lessonData whenever name or description changes
+
+    props.onUpdateLessonData({ name, description });
+  }, [name, description]);
 
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);

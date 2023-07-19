@@ -7,7 +7,7 @@ import Link from "next/link";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import AreYouEnrolled from "../../auth/AreYouEnrolled";
-import { CSSTransitionGroup } from "react-transition-group";
+// import { CSSTransitionGroup } from "react-transition-group";
 import Front from "./Front";
 import Tasks from "./Tasks";
 import PleaseSignIn from "../../auth/PleaseSignIn";
@@ -277,32 +277,32 @@ const Challenge = (props) => {
                       />
                     )}
                     <Box>
-                      <CSSTransitionGroup
+                      {/* <CSSTransitionGroup
                         transitionName="example"
                         transitionEnterTimeout={500}
                         transitionLeaveTimeout={300}
-                      >
-                        {!start && (
-                          <Front
-                            me={me}
-                            text={lesson.text}
-                            getStart={getStart}
-                            completed={completed}
-                            results={lesson.challengeResults}
-                            passStep={passStep}
-                          />
-                        )}
-                        {me && start && (
-                          <Tasks
-                            tasks={all}
-                            lesson={lesson}
-                            me={me}
-                            completed={completed}
-                            results={lesson.challengeResults}
-                            passStep={passStep}
-                          />
-                        )}
-                      </CSSTransitionGroup>
+                      > */}
+                      {!start && (
+                        <Front
+                          me={me}
+                          text={lesson.text}
+                          getStart={getStart}
+                          completed={completed}
+                          results={lesson.challengeResults}
+                          passStep={passStep}
+                        />
+                      )}
+                      {me && start && (
+                        <Tasks
+                          tasks={all}
+                          lesson={lesson}
+                          me={me}
+                          completed={completed}
+                          results={lesson.challengeResults}
+                          passStep={passStep}
+                        />
+                      )}
+                      {/* </CSSTransitionGroup> */}
                     </Box>
                   </Container>{" "}
                 </>

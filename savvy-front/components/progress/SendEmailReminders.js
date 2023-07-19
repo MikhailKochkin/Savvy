@@ -103,18 +103,7 @@ const SendEmailReminders = () => {
 
     const daysDifference = calculateDaysDifference(today, lastUpdatedDate);
     let arr = [...emailsSent];
-    // console.log("daysDifference", daysDifference, today, lastUpdatedDate);
-    // console.log("the gap", gap, gap - 0.25, daysDifference);
-
-    // if (emailsSent.length > 0) {
-    //   arr.pop();
-    //   await updateEmailReminder({
-    //     variables: {
-    //       id: emailReminder.id,
-    //       emailsSent: arr,
-    //     },
-    //   });
-    // }
+  
 
     if (
       (daysDifference >= gap - 0.25 || emailsSent.length == 0) &&

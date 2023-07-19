@@ -57,6 +57,8 @@ import {
   BiCommentDots,
 } from "react-icons/bi";
 import { FaQuoteLeft } from "react-icons/fa";
+// import Modal from "./Modal";
+import Modal from "styled-react-modal";
 
 // import { underline } from "react-icons-kit/fa/underline";
 // import { italic } from "react-icons-kit/fa/italic";
@@ -258,6 +260,53 @@ const Conceal = styled.div`
 
 const Error = styled.span`
   color: #e07a5f;
+`;
+
+const StyledModal = Modal.styled`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  max-width: 40%;
+  min-width: 400px;
+  padding: 2%;
+  textarea {
+    width: 80%;
+    height: 150px;
+    font-family: Montserrat;
+    margin: 15px 0;
+  }
+  button {
+        width: 80%;
+
+  }
+  .top_message {
+    padding-bottom: 2%;
+    border-bottom: 1px solid grey;
+    font-size: 2rem;
+    width: 100%;
+    text-align: center;
+  }
+  .bottom_message {
+    margin-top: 2%;
+  }
+  @media (max-width: 1300px) {
+    max-width: 70%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
+  @media (max-width: 800px) {
+    max-width: 90%;
+    min-width: 200px;
+    margin: 10px;
+    max-height: 100vh;
+    overflow-y: scroll;
+  }
 `;
 // 1. Serializer – slate to html
 
@@ -728,19 +777,22 @@ const withLinks = (editor) => {
   return editor;
 };
 
-const insertComment = (editor, data) => {
+const insertComment = (editor, data, setModalData, setModalOpen) => {
   if (editor.selection) {
     wrapComment(editor, data);
+    // Open the modal and set the initial modal data
+    setModalData(data);
+    setModalOpen(true);
   }
 };
 
-const wrapComment = (editor, data) => {
-  // if (isCommentActive(editor)) {
-  //   unwrapLink(editor);
-  // }
+const updateComment = (editor, modalData, setModalOpen, notePath) => {
+  Transforms.setNodes(editor, { note: modalData }, { at: notePath });
+  setModalOpen(false);
+};
 
+const wrapComment = (editor, data) => {
   const { selection } = editor;
-  // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
   const isCollapsed = selection && Range.isCollapsed(selection);
 
   const com = {
@@ -752,7 +804,6 @@ const wrapComment = (editor, data) => {
     Transforms.insertNodes(editor, com);
   } else {
     Transforms.wrapNodes(editor, com, { split: true });
-    // Collapse the selection to a single point. In ourr case the end point.
     Transforms.collapse(editor, { edge: "end" });
   }
 };
@@ -763,6 +814,14 @@ const insertError = (editor, data) => {
   }
 };
 
+const updateError = (editor, modalData, setModalOpen, notePath) => {
+  Transforms.setNodes(
+    editor,
+    { error_data: modalData, error_text: modalData },
+    { at: notePath }
+  );
+  setModalOpen(false);
+};
 const wrapError = (editor, data) => {
   const { selection } = editor;
   // A range is considered "collapsed" when the anchor point and focus point of the range are the same.
@@ -862,29 +921,31 @@ const App = (props) => {
   const document = new DOMParser().parseFromString(html, "text/html");
   const initial = deserialize(document.body);
   const [value, setValue] = useState(initial);
-  // const initialValue = [
-  //   {
-  //     type: "paragraph",
-  //     children: [{ text: "" }],
-  //   },
-  // ];
-  // const [value, setValue] = useState(initialValue);
-
-  // useEffect(() => {
-  //   let html;
-  //   console.log("props.value ", props.value);
-  //   props.value ? (html = props.value) : (html = `<p></p>`);
-  //   const document = new DOMParser().parseFromString(html, "text/html");
-  //   const initial = deserialize(document.body);
-  //   console.log("initial", initial);
-  //   setValue(initial);
-  // }, []);
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState("");
+  const [type, setType] = useState(null);
+  const [notePath, setNotePath] = useState(null);
   const editor = useMemo(
     () => withLinks(withEmbeds(withHistory(withReact(createEditor())))),
     []
   );
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleSubmitModal = (type) => {
+    console.log(1);
+    if (type == "note") {
+      updateComment(editor, modalData, setModalOpen, notePath);
+    } else if (type == "error") {
+      updateError(editor, modalData, setModalOpen, notePath);
+    }
+    handleCloseModal();
+  };
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {
@@ -935,11 +996,29 @@ const App = (props) => {
       case "article":
         return <ArticleElement {...props} />;
       case "note":
-        return <NoteElement {...props} />;
+        return (
+          <NoteElement
+            editor={editor}
+            setModalData={setModalData}
+            setModalOpen={setModalOpen}
+            setNotePath={setNotePath}
+            setType={setType}
+            {...props}
+          />
+        );
       case "conceal":
         return <ConcealElement {...props} />;
       case "error":
-        return <ErrorElement {...props} />;
+        return (
+          <ErrorElement
+            editor={editor}
+            setModalData={setModalData}
+            setModalOpen={setModalOpen}
+            setNotePath={setNotePath}
+            setType={setType}
+            {...props}
+          />
+        );
       default:
         return <DefaultElement {...props} />;
     }
@@ -952,211 +1031,243 @@ const App = (props) => {
   }, []);
 
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      onChange={(value) => {
-        setValue(value);
-        let arr = [];
-        value.map((v) => arr.push(serialize(v)));
-        props.getEditorText(arr.join(""));
-        // console.log("arr.join()", arr.join(""));
-      }}
-    >
-      <FormatToolBar>
-        <IconContext.Provider value={{ size: "18px" }}>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleMark(editor, "bold");
-            }}
-          >
-            <BiBold value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleMark(editor, "italic");
-            }}
-          >
-            <BiItalic value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleMark(editor, "underline");
-            }}
-          >
-            <BiUnderline value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleElement(editor, "header");
-            }}
-          >
-            <BiHeading value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              const url = window.prompt("Enter the URL of the link:");
-              if (!url) return;
-              insertLink(editor, url);
-            }}
-          >
-            <BiLinkAlt value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              CustomEditor.makeList(editor, "bulleted-list");
-            }}
-          >
-            <BiListUl value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              CustomEditor.makeList(editor, "numbered-list");
-            }}
-          >
-            <BiListOl value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleElement(editor, "center");
-            }}
-          >
-            <BiAlignMiddle value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleElement(editor, "right");
-            }}
-          >
-            <BiAlignRight value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <Label for="inputTag">
-            {/* Select Image */}
-            <BiImageAdd value={{ className: "react-icons" }} />
-            {/* </ButtonStyle>{" "} */}
-            <input
-              id="inputTag"
-              type="file"
-              class="custom-file-input"
-              onChange={(e) => uploadFile(e, editor)}
-              // onMouseDown={(event) => {
-              //   event.preventDefault();
-              //   CustomEditor.addImageElement(editor);
-              // }}
-            />
-          </Label>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              CustomEditor.addVideoElement(editor);
-            }}
-          >
-            <BiVideoPlus value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleElement(editor, "article");
-            }}
-          >
-            <FaQuoteLeft value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          <ButtonStyle
-            onMouseDown={(event) => {
-              event.preventDefault();
-              toggleElement(editor, "flag");
-            }}
-          >
-            <BiHighlight value={{ className: "react-icons" }} />
-          </ButtonStyle>
-          {props.problem && (
-            <>
-              <ButtonStyle
-                onMouseDown={(event) => {
-                  event.preventDefault();
-                  CustomEditor.conceal(editor, "editor");
-                }}
-              >
-                <BiCommentMinus value={{ className: "react-icons" }} />
-              </ButtonStyle>
-              <ButtonStyle
-                onMouseDown={(event) => {
-                  event.preventDefault();
-                  toggleElement(editor, "question");
-                }}
-              >
-                <BiCommentDots value={{ className: "react-icons" }} />
-              </ButtonStyle>
-            </>
-          )}
-          {props.complex && (
-            <>
-              <ButtonStyle
-                onMouseDown={(event) => {
-                  event.preventDefault();
-                  const data = window.prompt("Напишите комментарий:");
-                  if (!data) return;
-                  insertComment(editor, data);
-                }}
-              >
-                <BiCommentAdd value={{ className: "react-icons" }} />
-              </ButtonStyle>
-              <ButtonStyle
-                onMouseDown={(event) => {
-                  event.preventDefault();
-                  const data = window.prompt("Правильный вариант:");
-                  if (!data) return;
-                  insertError(editor, data);
-                }}
-              >
-                <BiCommentError value={{ className: "react-icons" }} />
-              </ButtonStyle>
-              <ButtonStyle
-                onMouseDown={(event) => {
-                  event.preventDefault();
-                  // CustomEditor.addQuiz(editor);
-                  let q = window.prompt("Вопрос: ");
-                  let a = window.prompt("Ответ: ");
-                  let ifr = window.prompt("Если правильно: ");
-                  let ifw = window.prompt("Если неправильно: ");
-                  insertQuiz(editor, q, a, ifr, ifw);
-                }}
-              >
-                <BiCommentCheck value={{ className: "react-icons" }} />
-              </ButtonStyle>
-            </>
-          )}
-        </IconContext.Provider>
-      </FormatToolBar>
-      <Editable
-        style={AppStyles}
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        placeholder="Write something..."
-        onKeyDown={(event) => {
-          // if (event.key === "`" && event.ctrlKey) {
-          //   event.preventDefault();
-          //   const [match] = Editor.nodes(editor, {
-          //     match: (n) => n.type === "code",
-          //   });
-          //   Transforms.setNodes(
-          //     editor,
-          //     { type: match ? "paragraph" : "code" },
-          //     { match: (n) => Editor.isBlock(editor, n) }
-          //   );
-          // }
+    <>
+      {/* <button onClick={handleOpenModal}>Open Modal</button> */}
+      {/* <div>{type}</div> */}
+      <StyledModal
+        isOpen={modalOpen}
+        onBackgroundClick={handleCloseModal}
+        onEscapeKeydown={handleCloseModal}
+      >
+        <div>
+          Element type: {type}.{" "}
+          {type == "note" && "Write a comment to the highlighted text"}
+          {type == "error" && "Write a correct version of the incorrect text"}
+        </div>
+        <textarea
+          type="text"
+          value={modalData}
+          onChange={(e) => setModalData(e.target.value)}
+        />
+        <button onClick={(e) => handleSubmitModal(type)}>Update</button>
+      </StyledModal>
+      {/* <Modal
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        onSubmit={() => handleSubmitModal(type)} // Use an arrow function here
+      >
+        <input
+          type="text"
+          value={modalData}
+          onChange={(e) => setModalData(e.target.value)}
+        />
+      </Modal> */}
+      <Slate
+        editor={editor}
+        value={value}
+        onChange={(value) => {
+          setValue(value);
+          let arr = [];
+          value.map((v) => arr.push(serialize(v)));
+          props.getEditorText(arr.join(""));
+          // console.log("arr.join()", arr.join(""));
         }}
-      />
-    </Slate>
+      >
+        <FormatToolBar>
+          <IconContext.Provider value={{ size: "18px" }}>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleMark(editor, "bold");
+              }}
+            >
+              <BiBold value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleMark(editor, "italic");
+              }}
+            >
+              <BiItalic value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleMark(editor, "underline");
+              }}
+            >
+              <BiUnderline value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleElement(editor, "header");
+              }}
+            >
+              <BiHeading value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                const url = window.prompt("Enter the URL of the link:");
+                if (!url) return;
+                insertLink(editor, url);
+              }}
+            >
+              <BiLinkAlt value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                CustomEditor.makeList(editor, "bulleted-list");
+              }}
+            >
+              <BiListUl value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                CustomEditor.makeList(editor, "numbered-list");
+              }}
+            >
+              <BiListOl value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleElement(editor, "center");
+              }}
+            >
+              <BiAlignMiddle value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleElement(editor, "right");
+              }}
+            >
+              <BiAlignRight value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <Label for="inputTag">
+              {/* Select Image */}
+              <BiImageAdd value={{ className: "react-icons" }} />
+              {/* </ButtonStyle>{" "} */}
+              <input
+                id="inputTag"
+                type="file"
+                class="custom-file-input"
+                onChange={(e) => uploadFile(e, editor)}
+                // onMouseDown={(event) => {
+                //   event.preventDefault();
+                //   CustomEditor.addImageElement(editor);
+                // }}
+              />
+            </Label>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                CustomEditor.addVideoElement(editor);
+              }}
+            >
+              <BiVideoPlus value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleElement(editor, "article");
+              }}
+            >
+              <FaQuoteLeft value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            <ButtonStyle
+              onMouseDown={(event) => {
+                event.preventDefault();
+                toggleElement(editor, "flag");
+              }}
+            >
+              <BiHighlight value={{ className: "react-icons" }} />
+            </ButtonStyle>
+            {props.problem && (
+              <>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    CustomEditor.conceal(editor, "editor");
+                  }}
+                >
+                  <BiCommentMinus value={{ className: "react-icons" }} />
+                </ButtonStyle>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    toggleElement(editor, "question");
+                  }}
+                >
+                  <BiCommentDots value={{ className: "react-icons" }} />
+                </ButtonStyle>
+              </>
+            )}
+            {props.complex && (
+              <>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    const data = window.prompt("Напишите комментарий:");
+                    if (!data) return;
+                    insertComment(editor, data, setModalData, setModalOpen);
+                  }}
+                >
+                  <BiCommentAdd value={{ className: "react-icons" }} />
+                </ButtonStyle>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    const data = window.prompt("Правильный вариант:");
+                    if (!data) return;
+                    insertError(editor, data);
+                  }}
+                >
+                  <BiCommentError value={{ className: "react-icons" }} />
+                </ButtonStyle>
+                <ButtonStyle
+                  onMouseDown={(event) => {
+                    event.preventDefault();
+                    // CustomEditor.addQuiz(editor);
+                    let q = window.prompt("Вопрос: ");
+                    let a = window.prompt("Ответ: ");
+                    let ifr = window.prompt("Если правильно: ");
+                    let ifw = window.prompt("Если неправильно: ");
+                    insertQuiz(editor, q, a, ifr, ifw);
+                  }}
+                >
+                  <BiCommentCheck value={{ className: "react-icons" }} />
+                </ButtonStyle>
+              </>
+            )}
+          </IconContext.Provider>
+        </FormatToolBar>
+        <Editable
+          style={AppStyles}
+          renderElement={renderElement}
+          renderLeaf={renderLeaf}
+          placeholder="Write something..."
+          onKeyDown={(event) => {
+            // if (event.key === "`" && event.ctrlKey) {
+            //   event.preventDefault();
+            //   const [match] = Editor.nodes(editor, {
+            //     match: (n) => n.type === "code",
+            //   });
+            //   Transforms.setNodes(
+            //     editor,
+            //     { type: match ? "paragraph" : "code" },
+            //     { match: (n) => Editor.isBlock(editor, n) }
+            //   );
+            // }
+          }}
+        />
+      </Slate>
+    </>
   );
 };
 
@@ -1219,12 +1330,54 @@ const LinkElement = (props) => {
   return <Link {...props.attributes}>{props.children}</Link>;
 };
 
-const NoteElement = (props) => {
-  return <Note {...props.attributes}>{props.children}</Note>;
+const NoteElement = ({
+  editor,
+  setModalData,
+  setModalOpen,
+  setNotePath,
+  setType,
+  ...props
+}) => {
+  return (
+    <Note
+      {...props.attributes}
+      onMouseDown={(event) => {
+        event.preventDefault(); // prevent Slate's default mouse down handling
+        setModalData(props.element.note);
+        setModalOpen(true);
+        const path = ReactEditor.findPath(editor, props.element);
+        setNotePath(path); // store the path
+        setType("note");
+      }}
+    >
+      {props.children}
+    </Note>
+  );
 };
 
-const ErrorElement = (props) => {
-  return <Error {...props.attributes}>{props.children}</Error>;
+const ErrorElement = ({
+  editor,
+  setModalData,
+  setModalOpen,
+  setNotePath,
+  setType,
+  ...props
+}) => {
+  return (
+    <Error
+      {...props.attributes}
+      onMouseDown={(event) => {
+        event.preventDefault(); // prevent Slate's default mouse down handling
+        setModalData(props.element.error_data);
+        setModalOpen(true);
+        const path = ReactEditor.findPath(editor, props.element);
+        setNotePath(path); // store the path
+        setType("error");
+      }}
+    >
+      {props.children}
+    </Error>
+  );
 };
 
 const QuizElement = (props) => {

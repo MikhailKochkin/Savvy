@@ -307,7 +307,6 @@ class StudentCard extends Component {
     let my_certificate = me.certificates.find(
       (certificate) => certificate.coursePage.id === coursePage.id
     );
-    console.log("coursePage", coursePage);
     return (
       <Payment>
         {/* <div className="news">

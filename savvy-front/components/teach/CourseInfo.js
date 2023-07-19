@@ -3,12 +3,8 @@ import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import StudentInfo from "./StudentInfo";
+import parse from "html-react-parser";
 
 const COURSE_QUERY = gql`
   query COURSE_QUERY($id: String!) {

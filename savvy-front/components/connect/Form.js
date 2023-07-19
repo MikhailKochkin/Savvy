@@ -174,7 +174,6 @@ const Form = (props) => {
             });
             console.log(2);
 
-            console.log(res.data.createCommunityMember.url);
             location.href = res.data.createCommunityMember.url;
           }}
         >

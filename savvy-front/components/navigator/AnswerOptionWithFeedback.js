@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
+import parse from "html-react-parser";
 
 const StyledButton = styled.div`
   display: inline-block;
@@ -88,11 +84,7 @@ const AnswerOptionWithFeedback = (props) => {
         onClick={(e) => change()}
         color={"green"}
       >
-<<<<<<< HEAD
         {props.answer && parse(props.answer)}
-=======
-        {props.answer && renderHTML(props.answer)}
->>>>>>> origin/master
       </StyledButtonGreen>
     ) : (
       <StyledButton
@@ -104,11 +96,7 @@ const AnswerOptionWithFeedback = (props) => {
         onClick={(e) => change()}
         color={color}
       >
-<<<<<<< HEAD
         {props.answer && parse(props.answer)}
-=======
-        {props.answer && renderHTML(props.answer)}
->>>>>>> origin/master
       </StyledButton>
     ))
   );

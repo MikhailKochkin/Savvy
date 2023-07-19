@@ -1,10 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
+import parse from "html-react-parser";
 
 const Payment = styled.div`
   display: flex;
@@ -93,11 +89,7 @@ const RegisterCard = (props) => {
               <div className="Title">
                 Урок {l.number}. {l.name}
               </div>
-<<<<<<< HEAD
               <div>{l.description ? parse(l.description) : null}</div>
-=======
-              <div>{l.description ? renderHTML(l.description) : null}</div>
->>>>>>> origin/master
             </Part1>
             {/* <Part2>
             <Button>Начать</Button>

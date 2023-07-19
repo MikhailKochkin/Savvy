@@ -1,12 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import { useTranslation } from "next-i18next";
+import parse from "html-react-parser";
 
 const Styles = styled.div`
   width: 100%;
@@ -260,19 +256,11 @@ const SellingPoints = (props) => {
       <Container>
         <Blue>
           <div className="text">
-<<<<<<< HEAD
             {props.coursePage.result && parse(props.coursePage.result)}
           </div>
         </Blue>
         <div className="text">
           {props.coursePage.methods && parse(props.coursePage.methods)}
-=======
-            {props.coursePage.result && renderHTML(props.coursePage.result)}
-          </div>
-        </Blue>
-        <div className="text">
-          {props.coursePage.methods && renderHTML(props.coursePage.methods)}
->>>>>>> origin/master
         </div>
       </Container>
     </Styles>

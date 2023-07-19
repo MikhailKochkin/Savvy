@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import _ from "lodash";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import { useTranslation } from "next-i18next";
 
@@ -468,7 +468,6 @@ const SingleTest = (props) => {
     }
 
     let comments_arr = [];
-    console.log("comments", comments);
 
     if (comments && comments.length > 0) {
       answerNums.map((num) => {

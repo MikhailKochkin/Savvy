@@ -17,6 +17,8 @@ import {
   useFocused,
   useSelected,
 } from "slate-react";
+import isEqual from "lodash/isEqual";
+
 import {
   Editor,
   Transforms,
@@ -284,6 +286,17 @@ const HoveringMenu = (props) => {
     () => withLinks(withHistory(withReact(createEditor()))),
     []
   );
+
+  useEffect(() => {
+    let html;
+    props.value ? (html = props.value) : (html = `<p></p>`);
+    const document = new DOMParser().parseFromString(html, "text/html");
+    const newContent = deserialize(document.body);
+    if (!isEqual(newContent, editor.children)) {
+      editor.children = newContent;
+    }
+  }, [props.value, editor]);
+
   // 4.1 Element renderer
 
   const renderElement = useCallback((props) => {

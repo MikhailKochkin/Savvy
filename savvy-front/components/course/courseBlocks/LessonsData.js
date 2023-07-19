@@ -461,10 +461,6 @@ const LessonsData = (props) => {
                   <div className="week_number">
                     Модуль {i + 1}. {m.name}
                   </div>
-                  {console.log(
-                    "sort",
-                    m.lessons.sort((a, b) => a.number - b.number)
-                  )}
                   <Lessons>
                     {m.lessons
                       .sort((a, b) => a.number - b.number)

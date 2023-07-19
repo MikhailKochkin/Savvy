@@ -261,8 +261,8 @@ const UpdateProgramForm = (props) => {
   useEffect(() => {
     if (editingModuleIndex !== null) {
       const module = modules[editingModuleIndex];
-      console.log("Editing Module Index:", editingModuleIndex);
-      console.log("Selected Module:", module);
+      // console.log("Editing Module Index:", editingModuleIndex);
+      // console.log("Selected Module:", module);
       setTopicHeader(module.header);
       setTopics(module.topic);
     }

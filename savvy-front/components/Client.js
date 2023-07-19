@@ -4,7 +4,7 @@ import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
-import renderHTML from "react-render-html";
+import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import emailGroups from "../emailGroups";
 
@@ -299,9 +299,9 @@ const Client = (props) => {
   };
   // number = number.replaceAll("-", "");
   // number = number.replaceAll(" ", "");
-  // let comment_for_wa = comment ? comment.replaceAll("</p>", "\n\n") : "";
+  let comment_for_wa = comment;
+  // ? comment.replaceAll("</p>", "\n\n") : "";
   // comment_for_wa = comment_for_wa.replaceAll("<p>", "");
-  // console.log("comment_for_wa", renderHTML(comment_for_wa));
   return (
     <Row id={props.id}>
       <div className="index">{props.index + 1}.</div>
@@ -394,7 +394,7 @@ const Client = (props) => {
             Написать в whatsApp
           </a>
         </button>
-        {/* <button
+        <button
           onClick={(e) => {
             e.preventDefault();
             textBusinessClient({
@@ -407,7 +407,7 @@ const Client = (props) => {
           }}
         >
           Написать в WA
-        </button> */}
+        </button>
         <DeleteClient
           updateAfterDelete={updateAfterDelete}
           clientId={props.id}
@@ -427,7 +427,7 @@ const Client = (props) => {
           props.communication_history.messages &&
           props.communication_history.messages.map((m) => (
             <Message>
-              <div>{renderHTML(m.message)}</div>
+              <div>{parse(m.message)}</div>
               <div> {moment(m.date).format("DD-MM-YYYY HH:mm")}</div>
             </Message>
           ))}

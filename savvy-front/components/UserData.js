@@ -5,6 +5,27 @@ import dynamic from "next/dynamic";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import UserCard from "./UserCard";
+import emailGroups from "../emailGroups";
+
+const SEND_MESSAGE_MUTATION = gql`
+  mutation SEND_MESSAGE_MUTATION(
+    $userId: String!
+    $text: String!
+    $subject: String
+  ) {
+    sendMessage(userId: $userId, text: $text, subject: $subject) {
+      id
+    }
+  }
+`;
+
+const UPDATE_USER_MUTATION = gql`
+  mutation UPDATE_USER_MUTATION($id: String!, $tags: [String]) {
+    updateUser(id: $id, tags: $tags) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   display: flex;
@@ -131,9 +152,21 @@ const ClientData = (props) => {
   const [courseId, setCourseId] = useState("");
   const [tag, setTag] = useState("");
   const [campaign, setCampaign] = useState("");
+  const [emailType, setEmailType] = useState("");
+  const [showTags, setShowTags] = useState(false);
+  const [number, setNumber] = useState("");
+  const [campaignName, setCampaignName] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
+
+  const [sendMessage, { data: data1, loading: loading1, error: error1 }] =
+    useMutation(SEND_MESSAGE_MUTATION);
+
+  const [updateUser, { data: data2, loading: loading2, error: error2 }] =
+    useMutation(UPDATE_USER_MUTATION);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -193,6 +226,49 @@ const ClientData = (props) => {
     setClients(campaign_users);
   };
 
+  const search5 = (val) => {
+    let filtered_clients = props.initial_clients.filter((c) =>
+      String(c.number).includes(String(val))
+    );
+    setClients(filtered_clients);
+  };
+
+  const search6 = (val) => {
+    let filtered_clients = props.initial_clients.filter((client) =>
+      client.emailReminders.some((reminder) =>
+        reminder.emailCampaign.name.includes(val)
+      )
+    );
+    setClients(filtered_clients);
+  };
+
+  const search7 = () => {
+    function filterByCoursePage(objects, startTime, endTime) {
+      return objects.filter((obj) => {
+        // check if obj, obj.emailReminders, obj.emailReminders[0] or obj.createdAt is not null or undefined
+        if (obj && obj.createdAt) {
+          // Parse obj.createdAt into a Date object
+          const createdAtDate = new Date(obj.createdAt);
+
+          // Check if createdAtDate is within the range of startTime and endTime
+          const isWithinDateRange =
+            createdAtDate >= new Date(startTime) &&
+            createdAtDate <= new Date(endTime);
+
+          return isWithinDateRange;
+        }
+        return false;
+      });
+    }
+
+    let filtered_clients = filterByCoursePage(
+      props.initial_clients,
+      startTime,
+      endTime
+    );
+    setClients(filtered_clients);
+  };
+
   const sortClientsByActivity = () => {
     setClients(
       [...clients].sort(
@@ -202,10 +278,103 @@ const ClientData = (props) => {
     );
   };
 
+  function findNewestItem(array) {
+    if (array.length === 0) {
+      return null;
+    }
+
+    return array.reduce((newest, item) => {
+      return new Date(newest.createdAt) > new Date(item.createdAt)
+        ? newest
+        : item;
+    });
+  }
+
+  function getNextEmailItem(object, subject) {
+    const { emails } = object;
+    for (let i = 0; i < emails.length; i++) {
+      if (emails[i].subject === subject) {
+        return emails[i + 1] || emails[0];
+      }
+    }
+    return emails[0];
+  }
+
+  // console.log("clients", clients);
+
+  function addTagToClient(coursePageId, tag) {
+    clients.forEach((client) => {
+      // Check if 'lessonResults' array contains a lesson with 'coursePage.id' equal to 'coursePageId'
+      const hasLesson = client.lessonResults.some(
+        (lessonResult) => lessonResult.lesson.coursePage.id === coursePageId
+      );
+
+      if (
+        hasLesson &&
+        !client.tags.includes("IQL") &&
+        !client.tags.includes("MQL") &&
+        !client.tags.includes("SQL")
+      ) {
+        // Add the new tag to the 'tags' array
+        const newTags = [...client.tags, tag];
+        // Update the client
+        updateUser({
+          variables: {
+            id: client.id,
+            tags: newTags,
+          },
+        });
+      }
+    });
+  }
+
+  function isNewestItemMoreThan48HoursOld(newestItem) {
+    if (newestItem === null) {
+      return true;
+    }
+
+    let createdAtDate = new Date(newestItem.createdAt);
+    let currentDate = new Date();
+
+    // Get the difference in milliseconds
+    let difference = currentDate - createdAtDate;
+
+    // Convert the difference from milliseconds to hours
+    let differenceInHours = difference / 1000 / 60 / 60;
+
+    return differenceInHours > 80;
+  }
+
+  const send = () => {
+    if (emailType == "") {
+      alert("Выберите тему писем");
+      return;
+    }
+    let num = 0;
+    clients.map((c) => {
+      let last_email = findNewestItem(c.messages);
+      let next_email = getNextEmailItem(
+        emailGroups.find((el) => el.name === emailType),
+        last_email?.subject
+      );
+      if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
+        num = num + 1;
+        const res = sendMessage({
+          variables: {
+            userId: c.id,
+            text: next_email.text,
+            subject: next_email.subject,
+          },
+        });
+      }
+    });
+    console.log("Число отправленных писем: ", num);
+  };
+
   const sortByOrders = () => {
-    let ordered_clients = [...props.initial_clients].filter(
-      (cl) => cl.orders.length > 0
-    );
+    let ordered_clients = [...props.initial_clients]
+      .filter((cl) => cl.orders.length > 0)
+      .sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1));
     setClients([...ordered_clients]);
   };
 
@@ -226,6 +395,21 @@ const ClientData = (props) => {
         <div>IQL: {IQL_clients.length}</div>
         <div>MQL: {MQL_clients.length}</div>
         <div>SQL: {SQL_clients.length}</div>
+        <button
+          onClick={(e) => addTagToClient("ck0pdit6900rt0704h6c5zmer", "IQL")}
+        >
+          Add tag to client
+        </button>
+        <button onClick={(e) => setShowTags(!showTags)}>Show Tags</button>
+        {showTags && (
+          <div>
+            <li>
+              По предметам: английский, corp, ГП, Школа, Арбитражный_процесс
+            </li>
+            <li>По активности: Active, Email_Inactive</li>
+            <li>По развитию: Talk, July_Week1</li>
+          </div>
+        )}
         <button onClick={(e) => sortClientsByActivity()}>
           Сортировать по последней активности
         </button>
@@ -238,9 +422,25 @@ const ClientData = (props) => {
         <div>
           <input onChange={(e) => setTag(e.target.value)} />
           <button onClick={(e) => search(tag)}>Искать по тегам</button> <br />
+          <input onChange={(e) => setStartTime(e.target.value)} />
+          <input onChange={(e) => setEndTime(e.target.value)} />
+          <button onClick={(e) => search7(startTime, endTime)}>
+            Искать до даты
+          </button>{" "}
+          <br />
+          <input onChange={(e) => setNumber(e.target.value)} />
+          <button onClick={(e) => search5(number)}>
+            Искать по номеру
+          </button>{" "}
+          <br />
+          <input onChange={(e) => setCampaignName(e.target.value)} />
+          <button onClick={(e) => search6(campaignName)}>
+            Искать по email кампании
+          </button>{" "}
+          <br />
           <input onChange={(e) => setCampaign(e.target.value)} />
           <button onClick={(e) => search4(campaign)}>
-            Искать по кампаниям
+            Искать по рекламным кампаниям
           </button>{" "}
           <br />
           <input
@@ -262,6 +462,17 @@ const ClientData = (props) => {
           <button onClick={(e) => search3(courseId)}>
             Искать по курсу (EmailReminder)
           </button>
+          <br />
+          <button onClick={(e) => send()}>Отправить имейлы</button>
+          <select
+            value={emailType}
+            onChange={(e) => setEmailType(e.target.value)}
+          >
+            {emailGroups.map((g) => (
+              <option value={g.name}>{g.name}</option>
+            ))}
+          </select>
+          <div>Всего: {clients.length}</div>
           {/* Page Buttons */}
           <div className="pagination">
             {Array.from({ length: totalPages }, (_, index) => (

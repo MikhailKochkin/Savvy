@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
+import parse from "html-react-parser";
 
 const StyledButton = styled.div`
   display: inline-block;
@@ -62,11 +58,7 @@ class AnswerOption extends Component {
         onClick={this.change}
         color={color}
       >
-<<<<<<< HEAD
         {this.props.answer && parse(this.props.answer)}
-=======
-        {this.props.answer && renderHTML(this.props.answer)}
->>>>>>> origin/master
       </StyledButton>
     );
   }

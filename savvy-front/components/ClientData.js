@@ -7,6 +7,29 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import CreateClient from "./CreateClient";
 import Client from "./Client";
+import emailGroups from "../emailGroups";
+
+const UPDATE_CLIENT_MUTATION = gql`
+  mutation UPDATE_CLIENT_MUTATION(
+    $id: String!
+    $communication_history: ClientMessages
+  ) {
+    sendBusinessClientEmail(
+      id: $id
+      communication_history: $communication_history
+    ) {
+      id
+    }
+  }
+`;
+
+const UPDATE_CLIENT_MUTATION2 = gql`
+  mutation UPDATE_CLIENT_MUTATION2($id: String!, $tags: [String]) {
+    updateBusinessClient(id: $id, tags: $tags) {
+      id
+    }
+  }
+`;
 
 const Styles = styled.div`
   display: flex;
@@ -131,7 +154,7 @@ const ClientData = (props) => {
   const [clients, setClients] = useState(props.initial_clients);
   const [startDate, setStartDate] = useState(new Date());
   const [email, setEmail] = useState("");
-
+  const [emailType, setEmailType] = useState("");
   const [value, setValue] = useState(0); // integer state
   const [tag, setTag] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -140,6 +163,36 @@ const ClientData = (props) => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+
+  const [sendBusinessClientEmail, { updated_data }] = useMutation(
+    UPDATE_CLIENT_MUTATION
+  );
+
+  const [updateBusinessClient, { updated_data2 }] = useMutation(
+    UPDATE_CLIENT_MUTATION2
+  );
+
+  function addTagToClient(coursePageId, tag) {
+    clients.forEach((client) => {
+      // Check if 'type' exists and contains the 'coursePageId'
+      if (
+        client.type &&
+        client.type.includes(coursePageId) &&
+        !client.tags.includes("Школа")
+      ) {
+        // Add the new tag to the 'tags' array
+        const newTags = [...client.tags, tag];
+        // console.log("client.type", client.type, newTags);
+        // Update the client
+        updateBusinessClient({
+          variables: {
+            id: client.id,
+            tags: newTags,
+          },
+        });
+      }
+    });
+  }
 
   // Calculating the items to show based on the current page
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -150,7 +203,6 @@ const ClientData = (props) => {
   const totalPages = Math.ceil(clients.length / itemsPerPage);
 
   const sort = (val) => {
-    console.log("val", val);
     const new_clients = clients.filter((c) => c.tags.includes(val));
     setClients(new_clients);
   };
@@ -208,6 +260,90 @@ const ClientData = (props) => {
     setClients([...new_arr]);
   };
 
+  function findNewestItem(array) {
+    if (array.length === 0) {
+      return null;
+    }
+
+    return array.reduce((newest, item) => {
+      return new Date(newest.createdAt) > new Date(item.createdAt)
+        ? newest
+        : item;
+    });
+  }
+
+  function getNextEmailItem(object, subject) {
+    const { emails } = object;
+    for (let i = 0; i < emails.length; i++) {
+      if (emails[i].subject === subject) {
+        return emails[i + 1] || emails[0];
+      }
+    }
+    return emails[0];
+  }
+
+  function isNewestItemMoreThan48HoursOld(newestItem) {
+    if (newestItem === null) {
+      return true;
+    }
+
+    let createdAtDate = new Date(newestItem.date);
+    let currentDate = new Date();
+
+    // Get the difference in milliseconds
+    let difference = currentDate - createdAtDate;
+
+    // Convert the difference from milliseconds to hours
+    let differenceInHours = difference / 1000 / 60 / 60;
+
+    return differenceInHours > 80;
+  }
+
+  const send = () => {
+    if (emailType == "") {
+      alert("Выберите тему писем");
+      return;
+    }
+    clients.map((c) => {
+      let last_email = findNewestItem(
+        c.communication_history && c.communication_history.messages
+          ? c.communication_history.messages
+          : []
+      );
+      let next_email = getNextEmailItem(
+        emailGroups.find((el) => el.name === emailType),
+        last_email?.subject
+      );
+
+      if (isNewestItemMoreThan48HoursOld(last_email) && next_email) {
+        let mess = c.communication_history
+          ? [
+              ...c.communication_history.messages,
+              {
+                message: next_email.text,
+                date: new Date().toISOString(),
+                subject: next_email.subject,
+              },
+            ]
+          : [
+              {
+                message: next_email.text,
+                date: new Date().toISOString(),
+                subject: next_email.subject,
+              },
+            ];
+        const res = sendBusinessClientEmail({
+          variables: {
+            id: c.id,
+            communication_history: {
+              messages: mess,
+            },
+          },
+        });
+      }
+    });
+  };
+
   return (
     <Styles>
       <div className="total">
@@ -227,9 +363,12 @@ const ClientData = (props) => {
         <button onClick={(e) => setClients(props.initial_clients)}>
           Показать всех клиентов
         </button>
+        <button onClick={(e) => addTagToClient("school", "Школа")}>
+          Add tag to client
+        </button>
         <div>
           <input onChange={(e) => setTag(e.target.value)} />
-          <button onClick={(e) => search(tag)}>Искакть по тегам</button>
+          <button onClick={(e) => search(tag)}>Искать по тегам</button>
         </div>
         <div>
           <input
@@ -241,6 +380,16 @@ const ClientData = (props) => {
           />
           <button onClick={(e) => search2(email)}>Искать по почте</button>
         </div>
+        <br />
+        <button onClick={(e) => send()}>Отправить имейлы</button>
+        <select
+          value={emailType}
+          onChange={(e) => setEmailType(e.target.value)}
+        >
+          {emailGroups.map((g) => (
+            <option value={g.name}>{g.name}</option>
+          ))}
+        </select>
         {/* Page Buttons */}
         <div className="pagination">
           {Array.from({ length: totalPages }, (_, index) => (

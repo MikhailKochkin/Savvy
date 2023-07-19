@@ -85,6 +85,22 @@ const Answers = styled.div`
   }
 `;
 
+const Generate = styled.div`
+  width: 100%;
+  margin: 20px 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #adb5bd;
+  width: 100%;
+  textarea {
+    width: 100%;
+    min-height: 170px;
+    margin-bottom: 20px;
+  }
+`;
+
 const Advice = styled.p`
   font-size: 1.5rem;
   margin: 1% 4%;
@@ -101,7 +117,7 @@ const AnswerOption = styled.div`
   textarea {
     border-radius: 5px;
     border: 1px solid #c4c4c4;
-    height: 60px;
+    min-height: 200px;
     width: 100%;
     font-family: Montserrat;
     padding: 1.5%;
@@ -160,7 +176,60 @@ const CreateQuiz = (props) => {
   const [ifRight, setIfRight] = useState("");
   const [ifWrong, setIfWrong] = useState("");
   const [type, setType] = useState("TEST");
+  const [input, setInput] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false); // new state for managing JSON data loading status
+  const [generating, setGenerating] = useState(false);
+
   const { t } = useTranslation("lesson");
+
+  const handleButtonClick = async (e) => {
+    e.preventDefault();
+    try {
+      setGenerating(true);
+
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `
+           Use this text to create an open question based on this information: ${input} to a student. The result must be a json in the following format:
+{"ifRight": "Some text for ifRight state","ifWrong": "Some text for ifWrong state","answer": "answer","question": "question text"}, where:
+ifRight – explainer text if the student gives the correct answer
+ifWrong – explainer text if the student gives the wrong answer
+answer – is a sample answer to which student answer will be compared
+question – the question to the student. It must be in HTML format
+Write the question as a case. Give a back story, make it engaging and interesting. Make comments and explainers detailed. The question must be straight and require a detailed answer (ideally it should be 1-2 sentences). 
+All text must be in Russian.`,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw (
+          data.error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+      setGenerating(false);
+
+      const generated_question = JSON.parse(data.result.content);
+      setIfRight(generated_question.ifRight);
+      setIfWrong(generated_question.ifWrong);
+      setQuestion(generated_question.question);
+      setAnswer(generated_question.answer);
+      setDataLoaded(true);
+    } catch (error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
 
   const { lessonID } = props;
   return (
@@ -184,66 +253,91 @@ const CreateQuiz = (props) => {
         awaitRefetchQueries={true}
       >
         {(createQuiz, { loading, error }) => (
-          <Form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              // document.getElementById("Message").style.display = "block";
-              const res = await createQuiz();
-              props.getResult(res);
-            }}
-          >
+          <Form>
             <fieldset>
-              <Answers>
-                <label for="types">{t("type")}</label>
-                <select
-                  name="types"
-                  id="types"
-                  defaultValue={type}
-                  onChange={(e) => setType(e.target.value)}
+              <Generate>
+                <textarea
+                  onChange={handleInputChange}
+                  placeholder="Enter the question context (no the answer or the question itself) data here"
+                />
+                <button onClick={handleButtonClick}>Generate question</button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setDataLoaded(true);
+                  }}
                 >
-                  <option value="TEST">Question</option>
-                  <option value="FORM">Form</option>
-                </select>
+                  Create yourself
+                </button>
+                {generating && (
+                  <div>Generating... It can take up to 30 seconds.</div>
+                )}
+              </Generate>
+              {dataLoaded && (
+                <Answers>
+                  <label for="types">{t("type")}</label>
+                  <select
+                    name="types"
+                    id="types"
+                    defaultValue={type}
+                    onChange={(e) => setType(e.target.value)}
+                  >
+                    <option value="TEST">Question</option>
+                    <option value="FORM">Form</option>
+                  </select>
 
-                <AnswerOption>
-                  <Comment>
-                    <DynamicLoadedEditor
-                      id="question"
-                      name="question"
-                      placeholder="Question"
-                      getEditorText={setQuestion}
-                    />
-                  </Comment>
-                  <textarea
-                    id="answer"
-                    name="answer"
-                    placeholder="Answer"
-                    defaultValue={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                  />
-                  <Comment id="ifRight">
-                    <DynamicLoadedEditor
+                  <AnswerOption>
+                    <Comment>
+                      <DynamicLoadedEditor
+                        id="question"
+                        name="question"
+                        placeholder="Question"
+                        value={question}
+                        getEditorText={setQuestion}
+                      />
+                    </Comment>
+                    <textarea
                       id="answer"
                       name="answer"
-                      placeholder="Explainer if the answer is right"
-                      getEditorText={setIfRight}
+                      placeholder="Answer"
+                      value={answer}
+                      // defaultValue={answer}
+                      onChange={(e) => setAnswer(e.target.value)}
                     />
-                  </Comment>
-                  <Comment id="ifWrong">
-                    <DynamicLoadedEditor
-                      id="answer"
-                      name="answer"
-                      placeholder="Explainer if the answer is wrong"
-                      getEditorText={setIfWrong}
-                    />
-                  </Comment>
-                </AnswerOption>
+                    <Comment id="ifRight">
+                      <DynamicLoadedEditor
+                        id="answer"
+                        name="answer"
+                        value={ifRight}
+                        placeholder="Explainer if the answer is right"
+                        getEditorText={setIfRight}
+                      />
+                    </Comment>
+                    <Comment id="ifWrong">
+                      <DynamicLoadedEditor
+                        id="answer"
+                        name="answer"
+                        value={ifWrong}
+                        placeholder="Explainer if the answer is wrong"
+                        getEditorText={setIfWrong}
+                      />
+                    </Comment>
+                  </AnswerOption>
 
-                <ButtonTwo type="submit">
-                  {loading ? t("saving") : t("save")}
-                </ButtonTwo>
-                {/* <Message id="Message">Вы создали новый вопрос!</Message> */}
-              </Answers>
+                  <ButtonTwo
+                    type="submit"
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      // document.getElementById("Message").style.display = "block";
+                      const res = await createQuiz();
+                      props.getResult(res);
+                    }}
+                  >
+                    {loading ? t("saving") : t("save")}
+                  </ButtonTwo>
+                  {/* <Message id="Message">Вы создали новый вопрос!</Message> */}
+                </Answers>
+              )}
             </fieldset>
           </Form>
         )}

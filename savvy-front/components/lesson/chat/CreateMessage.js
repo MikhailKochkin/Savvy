@@ -191,9 +191,13 @@ const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
 });
 
 const CreateMessage = (props) => {
-  const [author, setAuthor] = useState("author");
+  const { message } = props;
+
+  const [author, setAuthor] = useState(
+    message.author.toLowerCase() ? message.author.toLowerCase() : "author"
+  );
   const [name, setName] = useState();
-  const [text, setText] = useState("");
+  const [text, setText] = useState(message.text ? message.text : "");
   const [reactions, setReactions] = useState([]);
   const [image, setImage] = useState("");
 
@@ -213,6 +217,7 @@ const CreateMessage = (props) => {
 
   const updateAuthor = (val) => {
     setAuthor(val);
+    setName(val);
     props.updateAuthor(val, props.index);
   };
 
@@ -224,6 +229,7 @@ const CreateMessage = (props) => {
             <select
               value={author}
               index={props.index}
+              defaultValue={message.author.toLowerCase()}
               onChange={(e) => updateAuthor(e.target.value)}
             >
               <option value="author">👩🏼‍🏫</option>
@@ -236,7 +242,7 @@ const CreateMessage = (props) => {
                 setName(e.target.value);
                 props.updateName(e.target.value, props.index);
               }}
-              defaultValue={"author"}
+              value={author}
             />
           </div>
         </IconBlock>

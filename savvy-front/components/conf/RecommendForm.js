@@ -239,7 +239,6 @@ const Form = (props) => {
                       comment: "Kazakhstan_English",
                     },
                   });
-                  console.log("res", res, res.data.createBusinessClient.id);
                   setClientId(res.data.createBusinessClient.id);
                   // 2. Enroll new user / user
                   // const new_conf_user = await enrollOnCourse({

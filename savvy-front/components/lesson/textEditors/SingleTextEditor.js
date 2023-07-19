@@ -7,7 +7,7 @@ import { htmlToText } from "html-to-text";
 import { withStyles } from "@material-ui/core/styles";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import DeleteSingleTextEditor from "../../delete/DeleteSingleTextEditor";
 import UpdateTextEditor from "./UpdateTextEditor";
@@ -655,7 +655,9 @@ const SingleTextEditor = (props) => {
                     if (
                       e.target &&
                       (e.target.getAttribute("type") === "quiz" ||
-                        e.target.parentElement.getAttribute("type") === "quiz")
+                        (e.target.parentElement &&
+                          e.target.parentElement.getAttribute("type") ===
+                            "quiz"))
                     ) {
                       // 1.1 add styles to the text with a mistake
                       e.target.className = "edit";

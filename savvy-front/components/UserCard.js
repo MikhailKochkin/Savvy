@@ -4,9 +4,10 @@ import styled from "styled-components";
 import moment from "moment";
 import dynamic from "next/dynamic";
 import "react-datepicker/dist/react-datepicker.css";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 import { useTranslation } from "next-i18next";
 import emailGroups from "../emailGroups";
+import wa_messages from "../wa_messages";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION(
@@ -40,7 +41,7 @@ const UPDATE_USER_MUTATION2 = gql`
 
 const TEXT_CLIENT_MUTATION = gql`
   mutation TEXT_CLIENT_MUTATION($id: String!, $comment: String) {
-    textBusinessClient(id: $id, comment: $comment) {
+    textUser(id: $id, comment: $comment) {
       id
     }
   }
@@ -198,6 +199,8 @@ const Message = styled.div`
 const UserCard = memo((props) => {
   const [comment, setComment] = useState(props.comment);
   const [message, setMessage] = useState("");
+  const [wa_message, setWa_message] = useState("");
+
   const [subject, setSubject] = useState("");
   const [tags, setTags] = useState(props.tags);
   const [newTag, setNewTag] = useState();
@@ -206,6 +209,10 @@ const UserCard = memo((props) => {
   const [showLessonResults, setShowLessonResults] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [selectedEmail, setSelectedEmail] = useState(null);
+  const [selectedMessageGroup, setSelectedMessageGroup] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState(null);
+  const [messageSubject, setMessageSubject] = useState(null);
+
   const [editorText, setEditorText] = useState(null);
 
   const handleGroupChange = (groupName) => {
@@ -221,6 +228,21 @@ const UserCard = memo((props) => {
     setSelectedEmail(email);
     setSubject(email.subject);
     setMessage(email.text);
+  };
+
+  const handleMessageGroupChange = (groupName) => {
+    const group = wa_messages.find((group) => group.name === groupName);
+    setSelectedMessageGroup(group);
+    setSelectedMessage(null); // Reset selected email when group changes
+  };
+
+  const handleMessageChange = (subject) => {
+    const mes = selectedMessageGroup?.messages.find(
+      (message) => message.subject === subject
+    );
+    setWa_message(mes.text);
+    setMessageSubject(mes.subject);
+    setSelectedMessage(mes.text);
   };
 
   function earliestObjectsByDate(objects) {
@@ -248,11 +270,6 @@ const UserCard = memo((props) => {
     SEND_MESSAGE_MUTATION
   );
 
-  let text = `
-Хотел сказать, что, если будут вопросы по юр англу, можете всегда писать мне. Я помогу и подскажу)%0a %0a
-Кстати мы сейчас делаем бесплатный мини-курс по contract drafting. Это будет наш первый курс полностью на английском языке.
-  `;
-
   moment.locale("ru");
 
   var url = new URL("https://besavvy.app" + props.url);
@@ -268,8 +285,7 @@ const UserCard = memo((props) => {
 
   const [updateUser, { updated_data2 }] = useMutation(UPDATE_USER_MUTATION2);
 
-  const [textBusinessClient, { updated_data3 }] =
-    useMutation(TEXT_CLIENT_MUTATION);
+  const [textUser, { updated_data3 }] = useMutation(TEXT_CLIENT_MUTATION);
 
   const myCallback = (dataFromChild) => {
     setComment(dataFromChild);
@@ -284,6 +300,10 @@ const UserCard = memo((props) => {
 
   const myCallback2 = (dataFromChild) => {
     setMessage(dataFromChild);
+  };
+
+  const myCallback3 = (dataFromChild) => {
+    setWa_message(dataFromChild);
   };
 
   let number;
@@ -317,6 +337,19 @@ const UserCard = memo((props) => {
         id: props.id,
         tags: newTags.filter((nt) => nt !== val),
         comment: comment,
+      },
+    });
+  };
+
+  const wa_send = () => {
+    let comment_for_wa = wa_message
+      ? wa_message.replaceAll("</p>", "\n\n")
+      : "";
+    comment_for_wa = comment_for_wa.replaceAll("<p>", "");
+    textUser({
+      variables: {
+        id: props.id,
+        comment: comment_for_wa,
       },
     });
   };
@@ -401,6 +434,45 @@ const UserCard = memo((props) => {
             name="text"
           />
         </div>
+        <h4>Сообщение</h4>
+        {/* Dropdown for email groups */}
+        <select onChange={(e) => handleMessageGroupChange(e.target.value)}>
+          <option value="">Select message group</option>
+          {wa_messages.map((group) => (
+            <option key={group.name} value={group.name}>
+              {group.name}
+            </option>
+          ))}
+        </select>
+        <br />
+
+        {/* Dropdown for emails */}
+        {selectedMessageGroup && (
+          <select onChange={(e) => handleMessageChange(e.target.value)}>
+            <option value="">Select email</option>
+            {selectedMessageGroup.messages.map((mes) => (
+              <option key={mes.subject} value={mes.subject}>
+                {mes.subject}
+              </option>
+            ))}
+          </select>
+        )}
+        {selectedMessageGroup &&
+          selectedMessageGroup.messages.map((s) => {
+            return (
+              <Editor
+                show={selectedMessage !== null && s.subject === messageSubject}
+              >
+                <DynamicLoadedEditor
+                  getEditorText={myCallback3}
+                  value={s.text}
+                  name="text"
+                />
+              </Editor>
+            );
+          })}
+        <button onClick={(e) => wa_send()}>Send WA</button>
+        <br />
         <h4>Имейл</h4>
         {/* Dropdown for email groups */}
         <select onChange={(e) => handleGroupChange(e.target.value)}>

@@ -504,7 +504,7 @@ const Feed = (props) => {
   const classes = useStyles();
   const { t } = useTranslation("lesson");
   const getResults = (el) => {
-    console.log("res2", el);
+    // console.log("res2", el);
   };
   const move = async (e) => {
     if (props.components.length > num + 1) {

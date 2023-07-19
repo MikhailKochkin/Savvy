@@ -192,7 +192,6 @@ const Teams = (props) => {
       { query: CURRENT_USER_QUERY }, // DocumentNode object parsed with gql
     ],
   });
-  console.log("teams", teams);
   return (
     <Form>
       <Fieldset>

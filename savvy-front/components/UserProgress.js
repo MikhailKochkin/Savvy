@@ -199,7 +199,6 @@ const UserLevelProgress = ({ me }) => {
       },
     ],
   };
-  console.log("me.levels", me.level);
 
   let growthAreas = [
     {
@@ -219,8 +218,6 @@ const UserLevelProgress = ({ me }) => {
   const calculateProgress = (items) => {
     return items.length * 5;
   };
-
-  console.log("growthAreas", growthAreas);
 
   return (
     <Container className="user-level-progress">
@@ -252,7 +249,6 @@ const ProgressBar = ({ progress, maxProgress, marks }) => {
   return (
     <ProgressBarContainer>
       <ProgressBarInner percentage={percentage} />
-      {console.log("marks.marksList", marks.marksList)}
       {marks.marksList.map((mark, index) => (
         <ProgressMark
           key={index}

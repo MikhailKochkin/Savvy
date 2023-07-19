@@ -450,32 +450,32 @@ const StoryEx = (props) => {
   };
   return (
     <Container>
-      <CSSTransitionGroup
+      {/* <CSSTransitionGroup
         transitionName="fade"
         transitionEnterTimeout={500}
         transitionLeaveTimeout={10}
-      >
-        {me && (
-          <Feed
-            move_statuses={move_statuses}
-            components={components}
-            experience={experience}
-            total={total}
-            next={next}
-            number_of_tasks={tasks.length}
-            coursePageID={coursePageID}
-            me={me}
-            move={false}
-            hasSecret={lesson.hasSecret}
-            lesson_number={lesson.number}
-            lesson_name={lesson.name}
-            lessonID={lesson.id}
-            showArrow={showArrow}
-            my_result={my_result}
-            passStep={passStep}
-          />
-        )}
-      </CSSTransitionGroup>
+      > */}
+      {me && (
+        <Feed
+          move_statuses={move_statuses}
+          components={components}
+          experience={experience}
+          total={total}
+          next={next}
+          number_of_tasks={tasks.length}
+          coursePageID={coursePageID}
+          me={me}
+          move={false}
+          hasSecret={lesson.hasSecret}
+          lesson_number={lesson.number}
+          lesson_name={lesson.name}
+          lessonID={lesson.id}
+          showArrow={showArrow}
+          my_result={my_result}
+          passStep={passStep}
+        />
+      )}
+      {/* </CSSTransitionGroup> */}
     </Container>
   );
 };

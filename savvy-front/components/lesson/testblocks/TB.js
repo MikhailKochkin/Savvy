@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { useTranslation } from "next-i18next";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
+import parse from "html-react-parser";
 
 import Block from "./Block";
 
@@ -70,7 +66,6 @@ const TestPractice = (props) => {
   const passResult = (val) => {
     props.getResults(3);
   };
-  console.log("props", props);
   let filtered_tests = tests.filter((t) =>
     props.testPractice.tasks.includes(t.id)
   );
@@ -100,11 +95,7 @@ const TestPractice = (props) => {
           <h2>{t("practice")}</h2>
           <div>
             {props.testPractice.intro
-<<<<<<< HEAD
               ? parse(props.testPractice.intro)
-=======
-              ? renderHTML(props.testPractice.intro)
->>>>>>> origin/master
               : t("practice_explainer")}
           </div>
           <button onClick={(e) => setStart(true)}>{t("start")}</button>

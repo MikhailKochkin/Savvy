@@ -3,7 +3,7 @@ import CreateNewTest from "../create/CreateNewTest";
 import SingleTest from "./tests/SingleTest";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import Block from "./Block";
 
@@ -45,7 +45,6 @@ import SingleLesson_MobileMenu from "./SingleLesson_MobileMenu";
 import SingleLesson_Menu from "./SingleLesson_Menu";
 import CreateDocument from "./documents/CreateDocument";
 import Document from "./documents/Document";
-
 
 const ButtonTwo = styled.button`
   background: none;
@@ -92,8 +91,8 @@ const Menu = styled.div`
 const Box = styled.div`
   padding: 20px;
   border: ${(props) =>
-    props.isAdded ? "1px solid #adb5bd" : "1px dashed #dee2e6"};
-  border-bottom: none;
+    props.isAdded ? "2px solid #adb5bd" : "2px dashed #2274A5"};
+  // border-bottom: none;
   width: 60%;
   background: #f8f8f8;
   margin-top: 20px;
@@ -103,7 +102,7 @@ const Box = styled.div`
 const Styles = styled.div`
   padding: 20px;
   border: ${(props) =>
-    props.isAdded ? "1px solid #adb5bd" : "1px dashed #dee2e6"};
+    props.isAdded ? "2px solid #adb5bd" : "2px dashed #dee2e6"};
   width: ${(props) => (props.width ? "75vw" : "660px")};
   margin-bottom: 100px;
   margin-right: 10px;
@@ -131,7 +130,7 @@ const Buttons = styled.div`
 `;
 
 const LessonBlock = (props) => {
-  const { el, lesson, index, me, el_type, el_id, saved, template } = props;
+  const { el, lesson, index, me, el_type, el_id, saved, lessonData } = props;
   const [isSaved, setIsSaved] = useState(saved);
   const [isAdded, setIsAdded] = useState(saved);
   const [updated, setUpdated] = useState(false);
@@ -725,8 +724,11 @@ const LessonBlock = (props) => {
             {!isSaved && d == null && (
               <CreateChat
                 lessonID={lesson.id}
+                lessonData={lessonData}
                 getResult={getResult}
                 isSaved={isSaved}
+                me={me}
+                prompt={props.prompt}
               />
             )}
             {(isSaved || d != null) && data && data.__typename == "Chat" && (
@@ -784,7 +786,6 @@ const LessonBlock = (props) => {
                 isSaved={isSaved}
               />
             )}
-            {console.log("d", d)}
             {(isSaved || d != null) &&
               data &&
               data.__typename == "Document" && (

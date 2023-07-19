@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
+import * as EmailValidator from "email-validator";
 
 import { CURRENT_USER_QUERY } from "../User";
 import { Unis, Companies, Tracks } from "../../config";
@@ -264,18 +265,18 @@ const WideSignUp = (props) => {
           method="post"
           onSubmit={async (e) => {
             e.preventDefault();
+            ie.preventDefault();
             if (country == "") {
-              alert("Choose country");
-              return;
-            }
-            if (!isFamiliar) {
-              alert("Не забыли про согласие на обработку персональных данных?");
-              return;
-            } else if (status === "") {
-              alert("Укажите свой статус на сайте!");
+              alert(t("choose_country"));
               return;
             } else if (surname === "") {
-              alert("Укажите свою фамилию!");
+              alert(t("give_surname"));
+              return;
+            } else if (!EmailValidator.validate(email)) {
+              alert(t("give_email"));
+              return;
+            } else if (number === "" || number.length < 7) {
+              alert(t("give_number"));
               return;
             }
             await signup();
@@ -593,10 +594,7 @@ const WideSignUp = (props) => {
               onChange={(e) => setNumber(e.target.value)}
               label="Number"
             />
-            <Comment>
-              We need your phone number to send personalized feedback to your
-              WhatsApp
-            </Comment>
+            <Comment>{t("need_whatsapp")}</Comment>
             <Input
               className="password"
               type="password"
@@ -614,10 +612,7 @@ const WideSignUp = (props) => {
             >
               {loading ? t("signing_up") : t("button")}
             </Button>
-            <Comment>
-              By clicking Sign Up, I agree to the the Terms of Service and
-              Privacy Policy.
-            </Comment>
+            <Comment>{t("agree_terms")}</Comment>
             <Transit>
               {t("already_registered")}{" "}
               <span name="signin" onClick={move}>

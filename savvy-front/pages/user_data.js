@@ -46,6 +46,9 @@ const CLIENTS_QUERY = gql`
         lesson {
           id
           name
+          coursePage {
+            id
+          }
         }
       }
       new_subjects {
@@ -68,6 +71,7 @@ const CLIENTS_QUERY = gql`
       messages {
         id
         text
+        subject
         createdAt
       }
     }

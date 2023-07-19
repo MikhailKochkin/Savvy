@@ -718,14 +718,14 @@ const Feed = (props) => {
               </div>
             </div>
           )}
-          <div
+          {/* <div
             className="arrowmenu"
             onClick={(e) => {
               setOpen(!open);
             }}
           >
             <img className="arrow" src="../../static/burger_menu.svg" />
-          </div>
+          </div> */}
           {result ? (
             <>
               {props.components.slice(0, num + 2).map((c, i) => (

@@ -4,11 +4,6 @@ import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
 import gql from "graphql-tag";
 import dynamic from "next/dynamic";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import { useTranslation } from "next-i18next";
 
 // import { Message } from "../styles/Button";

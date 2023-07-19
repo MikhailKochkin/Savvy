@@ -2,12 +2,8 @@ import { useState } from "react";
 import { useQuery, useMutation, gql } from "@apollo/client";
 import styled from "styled-components";
 import StudentInfo2 from "./StudentInfo2";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import dynamic from "next/dynamic";
+import parse from "html-react-parser";
 
 const SEND_MESSAGE_MUTATION = gql`
   mutation SEND_MESSAGE_MUTATION($userId: String!, $text: String!) {

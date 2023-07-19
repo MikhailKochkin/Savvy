@@ -82,7 +82,6 @@ const ConfPage = (props) => {
   });
   if (loading) return <p>Loading...</p>;
 
-  console.log("data", data);
   let conf = data.coursePage;
   return (
     <>

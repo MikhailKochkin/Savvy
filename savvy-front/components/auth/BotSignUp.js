@@ -5,7 +5,8 @@ import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
+import * as EmailValidator from "email-validator";
 
 import Loading from "../Loading";
 import { CURRENT_USER_QUERY } from "../User";
@@ -352,7 +353,13 @@ const Signup = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     props.loadUser(true);
-    setIsLoading(true);
+    if (!EmailValidator.validate(email)) {
+      alert(t("give_email"));
+      return;
+    } else if (number === "" || number.length < 7) {
+      alert(t("give_number"));
+      return;
+    }
     const res = await signup();
     if (res.data.botSignup.token && res.data.botSignup.token == "exists") {
       setShow(true);
@@ -438,7 +445,7 @@ const Signup = (props) => {
             />
             <input
               className="number"
-              type="text"
+              type="tel"
               name="number"
               placeholder={t("number")}
               value={number}

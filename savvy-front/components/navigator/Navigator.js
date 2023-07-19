@@ -661,13 +661,13 @@ const Navigator = (props) => {
     useMutation(UPDATE_USER_MUTATION);
 
   useEffect(
-    (e) => {
+    () => {
       let index = botMap.findIndex((x) => x.type === props.level);
       let new_tags = props.tags ? props.tags.split("-") : [];
       if (new_tags.length > 0) {
         setUserDescription([...new_tags]);
       }
-      if (index == -1) {
+      if (index === -1) {
         setJourney([botMap[0]]);
       } else {
         setJourney([botMap[index]]);
@@ -684,30 +684,35 @@ const Navigator = (props) => {
       };
       getResult();
     },
-    [0]
+    // Run this hook only once when the component mounts, similar to componentDidMount
+    []
   );
 
   useEffect(
-    (e) => {
+    () => {
       if (props.me) {
-        setUserDescription([...userDescription, ...props.me.tags]);
+        // Make sure the props.me.tags is spread into an array, if it's not an array
+        setUserDescription([...props.me.tags]);
       }
     },
+    // Only re-run this hook when props.me changes, not userDescription
     [props.me]
   );
 
   const updateBotMap = async (val, update, id) => {
-    // console.log("update", update);
     let new_map = [...botMap];
+    let newUserDescription = [...userDescription, update];
     let new_block = new_map.find((dial) => dial.type == val);
     let arr = [...journey, new_block];
-    setUserDescription([...userDescription, update]);
+
+    setUserDescription(newUserDescription);
     if (new_block) setJourney(arr);
+    console.log("newUserDescription", newUserDescription);
     if (props.me) {
       updateUser({
         variables: {
           id: props.me.id,
-          tags: [...userDescription, update],
+          tags: newUserDescription,
         },
       });
     }
@@ -719,7 +724,7 @@ const Navigator = (props) => {
         variables: {
           id: dialogueId,
           rating: rating,
-          journey: [...userDescription, update],
+          journey: newUserDescription,
         },
       });
     }

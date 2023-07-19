@@ -71,6 +71,21 @@ const TestCreate = styled.div`
   }
 `;
 
+const Generate = styled.div`
+  width: 100%;
+  margin: 20px 0;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  textarea {
+    width: 100%;
+    min-height: 170px;
+    margin-bottom: 20px;
+  }
+`;
+
 const Answers = styled.div`
   display: flex;
   flex-direction: column;
@@ -222,6 +237,11 @@ const CreateNewTest = (props) => {
   const [correct, setCorrect] = useState([false, false]);
   const [question, setQuestion] = useState();
   const [type, setType] = useState("TEST");
+  const [generating, setGenerating] = useState(false);
+
+  const [input, setInput] = useState("");
+  const [dataLoaded, setDataLoaded] = useState(false); // new state for managing JSON data loading status
+
   const { t } = useTranslation("lesson");
 
   const handleArray = (val, i) => {
@@ -258,6 +278,60 @@ const CreateNewTest = (props) => {
     }
   };
 
+  const handleButtonClick = async (e) => {
+    try {
+      setGenerating(true);
+
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: `
+           Use this text to create a quiz: ${input}. The result should be a JSON in the following format:
+           {"ifRight": "Some text for ifRight state","ifWrong": "Some text for ifWrong state","answers": ["First answer", "Second answer"],"comments": ["First comment", "Second comment"],"correct": [true, false],"question": "Your question text"}, where:
+ifRight – explainer text if the student gives the correct answer
+ifWrong – explainer text if the student gives the wrong answer
+answers – answer options presented to the student. The number can be from 2 to 6.  Ideal number is 4. Every answer must be in HTML format
+comments – comments for every answer option. Every comment must be in HTML format
+correct – boolean values that show which answer is correct
+question – the question must be in HTML format
+Describe the question as a case. Give a back story, make it engaging and interesting. Make comments and explainers detailed.
+All text should be given in Russian.
+            `,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.status !== 200) {
+        throw (
+          data.error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
+      }
+      setGenerating(false);
+
+      const generated_quiz = JSON.parse(data.result.content);
+      setIfRight(generated_quiz.ifRight);
+      setIfWrong(generated_quiz.ifWrong);
+      setAnswers([...generated_quiz.answers]);
+      setComments([...generated_quiz.comments]);
+      setCorrect([...generated_quiz.correct]);
+      setQuestion(generated_quiz.question);
+      setNum(generated_quiz.answers.length);
+      setDataLoaded(true);
+    } catch (error) {
+      // Consider implementing your own error handling logic here
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInput(e.target.value);
+  };
+
   const { lessonID } = props;
   return (
     <TestCreate>
@@ -282,125 +356,154 @@ const CreateNewTest = (props) => {
       >
         {(createNewTest, { loading, error }) => (
           <div className="styles">
-            <label for="types">{t("type")}</label>
-            <br />
-            <select
-              name="types"
-              id="types"
-              defaultValue={type}
-              onChange={(e) => setType(e.target.value)}
-            >
-              <option value="TEST">Test</option>
-              <option value="FORM">Form</option>
-            </select>
-
-            <Comment>
-              <DynamicLoadedEditor
-                id="question"
-                name="question"
-                placeholder="Question"
-                getEditorText={setIf}
+            <Generate>
+              <textarea
+                onChange={handleInputChange}
+                placeholder="Enter the quiz context here. Not the question  or the answer. For example: A contract is an agreement giving rise to obligations which are enforced or recognised by law. In common law, there are 3 basic essentials to the creation of a contract: (i) agreement; (ii) contractual intention; and (iii) consideration."
               />
-            </Comment>
-            <Answers>
-              {_.times(num, (i) => {
-                let answer = `answer${i + 1}`;
-                let val = answers[i];
-                let val2 = comments[i];
-                return (
-                  <AnswerOption id={answer}>
-                    <div className="question">
-                      <DynamicLoadedEditor
-                        index={i + 1}
-                        name={i}
-                        placeholder={`Answer ${i + 1}`}
-                        value={val}
-                        getEditorText={myCallback}
-                      />
-                    </div>
-                    <select
-                      defaultValue={false}
-                      onChange={(e) => handleCorrect(e.target.value, i)}
-                    >
-                      <option value={true}>{t("correct")}</option>
-                      <option value={false}>{t("wrong")}</option>
-                    </select>
-                    <div className="comment">
-                      <DynamicLoadedEditor
-                        index={i + 1}
-                        name={i}
-                        value={val2}
-                        getEditorText={handleArray2}
-                        placeholder={`Explainer ${i + 1}`}
-                      />
-                    </div>
-                  </AnswerOption>
-                );
-              })}
-            </Answers>
-            <CustomSelect1>
+              <button onClick={handleButtonClick}>Generate Quiz</button>
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  setNum(num + 1);
-                  let old_answers = answers;
-                  let old_correct = correct;
-                  let old_comments = comments;
+                  setDataLoaded(true);
+                }}
+              >
+                Create yourself
+              </button>
 
-                  setAnswers([...old_answers, ""]);
-                  setCorrect([...old_correct, false]);
-                  setComments([...old_comments, ""]);
-                }}
-              >
-                +1
-              </button>
-            </CustomSelect1>
-            <CustomSelect1>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  setNum(num - 1);
-                  let old_answers = [...answers];
-                  let old_correct = [...correct];
-                  let old_comments = [...comments];
-                  setAnswers([...old_answers].pop());
-                  setCorrect([...old_correct].pop());
-                  setComments([...old_comments].pop());
-                }}
-              >
-                -1
-              </button>
-            </CustomSelect1>
-            <Comment id="ifWrong">
-              <DynamicLoadedEditor
-                id="ifWrong"
-                name="ifWrong"
-                placeholder={`Explanation`}
-                getEditorText={setIf}
-              />
-            </Comment>
-            <Comment id="ifRight">
-              <DynamicLoadedEditor
-                id="ifRight"
-                name="ifRight"
-                placeholder={`Link to the next block`}
-                getEditorText={setIf}
-              />
-            </Comment>
-            <ButtonTwo
-              onClick={async (e) => {
-                e.preventDefault();
-                const res = await setAnswers(answers.filter((an) => an !== ""));
-                let arr = correct;
-                arr.length = answers.filter((an) => an !== "").length;
-                const res2 = await setCorrect(arr);
-                const res3 = await createNewTest();
-                props.getResult(res3);
-              }}
-            >
-              {loading ? t("saving") : t("save")}
-            </ButtonTwo>
-            {/* <Message id="Message">!</Message> */}
+              {generating && (
+                <div>Generating... It can take up to 30 seconds.</div>
+              )}
+            </Generate>
+            {dataLoaded && (
+              <>
+                <label for="types">{t("type")}</label>
+                <br />
+                <select
+                  name="types"
+                  id="types"
+                  defaultValue={type}
+                  onChange={(e) => setType(e.target.value)}
+                >
+                  <option value="TEST">Test</option>
+                  <option value="FORM">Form</option>
+                </select>
+
+                <Comment>
+                  <DynamicLoadedEditor
+                    id="question"
+                    name="question"
+                    placeholder="Question"
+                    getEditorText={setIf}
+                    value={question}
+                  />
+                </Comment>
+                <Answers>
+                  {_.times(num, (i) => {
+                    let answer = `answer${i + 1}`;
+                    let val = answers[i];
+                    let val2 = comments[i];
+                    let val3 = correct[i];
+                    return (
+                      <AnswerOption id={answer}>
+                        <div className="question">
+                          <DynamicLoadedEditor
+                            index={i + 1}
+                            name={i}
+                            placeholder={`Answer ${i + 1}`}
+                            value={val}
+                            getEditorText={myCallback}
+                          />
+                        </div>
+                        <select
+                          defaultValue={false}
+                          value={val3}
+                          onChange={(e) => handleCorrect(e.target.value, i)}
+                        >
+                          <option value={true}>{t("correct")}</option>
+                          <option value={false}>{t("wrong")}</option>
+                        </select>
+                        <div className="comment">
+                          <DynamicLoadedEditor
+                            index={i + 1}
+                            name={i}
+                            value={val2}
+                            getEditorText={handleArray2}
+                            placeholder={`Explainer ${i + 1}`}
+                          />
+                        </div>
+                      </AnswerOption>
+                    );
+                  })}
+                </Answers>
+                <CustomSelect1>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setNum(num + 1);
+                      let old_answers = answers;
+                      let old_correct = correct;
+                      let old_comments = comments;
+
+                      setAnswers([...old_answers, ""]);
+                      setCorrect([...old_correct, false]);
+                      setComments([...old_comments, ""]);
+                    }}
+                  >
+                    +1
+                  </button>
+                </CustomSelect1>
+                <CustomSelect1>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setNum(num - 1);
+                      let old_answers = [...answers];
+                      let old_correct = [...correct];
+                      let old_comments = [...comments];
+                      setAnswers([...old_answers].pop());
+                      setCorrect([...old_correct].pop());
+                      setComments([...old_comments].pop());
+                    }}
+                  >
+                    -1
+                  </button>
+                </CustomSelect1>
+                <Comment id="ifWrong">
+                  <DynamicLoadedEditor
+                    id="ifWrong"
+                    name="ifWrong"
+                    value={ifWrong}
+                    placeholder={`Explanation`}
+                    getEditorText={setIf}
+                  />
+                </Comment>
+                <Comment id="ifRight">
+                  <DynamicLoadedEditor
+                    id="ifRight"
+                    name="ifRight"
+                    value={ifRight}
+                    placeholder={`Link to the next block`}
+                    getEditorText={setIf}
+                  />
+                </Comment>
+                <ButtonTwo
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    const res = await setAnswers(
+                      answers.filter((an) => an !== "")
+                    );
+                    let arr = correct;
+                    arr.length = answers.filter((an) => an !== "").length;
+                    const res2 = await setCorrect(arr);
+                    const res3 = await createNewTest();
+                    props.getResult(res3);
+                  }}
+                >
+                  {loading ? t("saving") : t("save")}
+                </ButtonTwo>
+              </>
+            )}
           </div>
         )}
       </Mutation>

@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import { useQuery, useMutation, gql } from "@apollo/client";
-import parse from 'html-react-parser';
-
+import parse from "html-react-parser";
 
 import CreateLawrdle from "./CreateLawrdle";
 import Lawrdles from "./Lawrdles";
@@ -451,8 +450,6 @@ const Lawrdle = (props) => {
   });
   useEffect(() => {
     if (data) {
-      console.log("props.getLeadIn", props.getLeadIn);
-
       if (props.getLessonInfo)
         props.getLessonInfo(
           data.lawrdles[0].lessonId,
@@ -470,7 +467,6 @@ const Lawrdle = (props) => {
   if (loading) return <Loading />;
 
   const lawrdle = data.lawrdles[0];
-  console.log("lawrdle", lawrdle);
   return <Wordle lawrdle={lawrdle} />;
 };
 
