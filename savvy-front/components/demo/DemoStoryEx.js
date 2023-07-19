@@ -1,6 +1,5 @@
 import DemoFeed from "./DemoFeed";
 import React, { useEffect, useState } from "react";
-import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -363,28 +362,22 @@ const StoryEx = (props) => {
   });
   return (
     <Container>
-      <CSSTransitionGroup
-        transitionName="fade"
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={10}
-      >
-        {me && (
-          <DemoFeed
-            components={components}
-            experience={experience}
-            total={total}
-            next={next}
-            number_of_tasks={tasks.length}
-            coursePageID={coursePageID}
-            me={me}
-            hasSecret={lesson.hasSecret}
-            lesson_number={lesson.number}
-            lesson_name={lesson.name}
-            lessonID={lesson.id}
-            my_result={my_result}
-          />
-        )}
-      </CSSTransitionGroup>
+      {me && (
+        <DemoFeed
+          components={components}
+          experience={experience}
+          total={total}
+          next={next}
+          number_of_tasks={tasks.length}
+          coursePageID={coursePageID}
+          me={me}
+          hasSecret={lesson.hasSecret}
+          lesson_number={lesson.number}
+          lesson_name={lesson.name}
+          lessonID={lesson.id}
+          my_result={my_result}
+        />
+      )}
     </Container>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Router from "next/router";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";

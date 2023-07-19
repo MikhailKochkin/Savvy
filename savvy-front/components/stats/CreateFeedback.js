@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import { GET_RESULTS } from "./LessonData";
 

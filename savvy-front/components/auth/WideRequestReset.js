@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 import Error from "../ErrorMessage";
 import { useTranslation } from "next-i18next";

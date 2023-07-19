@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import _ from "lodash";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import DeleteSingleConstructor from "../../delete/DeleteSingleConstructor";
 import UpdateConstruction from "./UpdateConstruction";

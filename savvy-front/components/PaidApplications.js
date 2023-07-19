@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Query } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 import AreYouAdmin from "./auth/AreYouAdmin";
 import ApplicationBox from "./teach/applications/ApplicationBox";

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
@@ -8,7 +8,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import DeleteSingleQuiz from "../../delete/DeleteSingleQuiz";
 import UpdateQuiz from "./UpdateQuiz";
@@ -604,9 +604,7 @@ const SingleQuiz = (props) => {
             <>
               <Question story={story}>
                 <div className="question_box">
-                  <div className="question_text">
-                    {parse(props.question)}
-                  </div>
+                  <div className="question_text">{parse(props.question)}</div>
                   <IconBlock>
                     {author && author.image != null ? (
                       <img className="icon" src={author.image} />
@@ -700,9 +698,7 @@ const SingleQuiz = (props) => {
                     <div className="question_text">
                       {props.type != "FORM" && "🔎  " + t("wrong") + "..."}
                       <br />
-                      {ifWrong &&
-                        ifWrong !== "<p></p>" &&
-                        parse(ifWrong)}{" "}
+                      {ifWrong && ifWrong !== "<p></p>" && parse(ifWrong)}{" "}
                       {hint !== null &&
                         hint !== 0 &&
                         props.type != "FORM" &&

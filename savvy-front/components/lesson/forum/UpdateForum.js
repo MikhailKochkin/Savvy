@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";

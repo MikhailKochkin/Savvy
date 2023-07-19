@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import Result from "./Result";

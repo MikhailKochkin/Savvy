@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import DeleteSingleProblem from "../../delete/DeleteSingleProblem";
 import Interactive from "./Interactive";

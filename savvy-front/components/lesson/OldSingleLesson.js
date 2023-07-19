@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import Link from "next/link";
 import Note from "./notes/Note";

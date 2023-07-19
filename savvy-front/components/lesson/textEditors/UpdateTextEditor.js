@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import Option from "../Option";

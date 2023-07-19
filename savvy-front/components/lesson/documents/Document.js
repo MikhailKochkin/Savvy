@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import PropTypes from "prop-types";
 import Clause from "./Clause";
 import DeleteDocument from "../../delete/DeleteDocument";

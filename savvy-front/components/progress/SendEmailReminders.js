@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
@@ -103,7 +103,6 @@ const SendEmailReminders = () => {
 
     const daysDifference = calculateDaysDifference(today, lastUpdatedDate);
     let arr = [...emailsSent];
-  
 
     if (
       (daysDifference >= gap - 0.25 || emailsSent.length == 0) &&

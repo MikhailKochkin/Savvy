@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Query } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import moment from "moment";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";

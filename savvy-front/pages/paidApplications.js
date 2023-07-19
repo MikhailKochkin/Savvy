@@ -1,6 +1,6 @@
 import PaidApplications from "../components/PaidApplications";
 import { Query } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const FOR_MONEY_COURSE_PAGES_QUERY = gql`
   query FOR_MONEY_COURSE_PAGES_QUERY($boolean: Boolean = true) {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { Mutation, Query } from "@apollo/client/react/components";
 import { useTranslation } from "next-i18next";
 

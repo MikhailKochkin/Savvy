@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import styled from "styled-components";
 import { ENROLL_COURSE_MUTATION } from "../../EnrollCoursePage";
 import { CURRENT_USER_QUERY } from "../../User";

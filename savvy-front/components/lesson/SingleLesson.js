@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";

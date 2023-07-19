@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import Router from "next/router";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";

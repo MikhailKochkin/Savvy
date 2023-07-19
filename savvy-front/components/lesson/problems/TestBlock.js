@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import smoothscroll from "smoothscroll-polyfill";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { useTranslation } from "next-i18next";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";

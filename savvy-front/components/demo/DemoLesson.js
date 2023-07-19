@@ -4,7 +4,6 @@ import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { CSSTransitionGroup } from "react-transition-group";
 import { useTranslation } from "next-i18next";
 import DemoStoryEx from "./DemoStoryEx";
 import { useUser } from "../User";
@@ -444,24 +443,19 @@ const NewSingleLesson = (props) => {
           <Head></Head>
           <LessonPart>
             {/* <h1>Demo lesson</h1> */}
-            <CSSTransitionGroup transitionName="example">
-              <DemoStoryEx
-                id={props.id}
-                tasks={
-                  props.add == "offer"
-                    ? [
-                        ...lesson.structure.lessonItems,
-                        { id: 1, type: "offer" },
-                      ]
-                    : lesson.structure.lessonItems
-                }
-                me={me}
-                size={props.size == "short" ? "short" : "long"}
-                lesson={lesson}
-                next={next}
-                coursePageID={lesson.coursePage.id}
-              />
-            </CSSTransitionGroup>
+            <DemoStoryEx
+              id={props.id}
+              tasks={
+                props.add == "offer"
+                  ? [...lesson.structure.lessonItems, { id: 1, type: "offer" }]
+                  : lesson.structure.lessonItems
+              }
+              me={me}
+              size={props.size == "short" ? "short" : "long"}
+              lesson={lesson}
+              next={next}
+              coursePageID={lesson.coursePage.id}
+            />
           </LessonPart>
         </Container>
       )}

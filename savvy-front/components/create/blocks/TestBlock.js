@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import parse from "html-react-parser";
 
 import { SINGLE_LESSON_QUERY } from "../../lesson/SingleLesson";

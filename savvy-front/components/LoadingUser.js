@@ -1,5 +1,5 @@
 import { React, useEffect } from "react";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { useQuery, useMutation } from "@apollo/client";
 import { getCookie } from "cookies-next";
 

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const Box = styled.div`
   border-bottom: 1px solid #edefed;

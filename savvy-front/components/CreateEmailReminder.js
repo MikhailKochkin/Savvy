@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import styled from "styled-components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 
 const CREATE_EMAIL_REMINDER_MUTATION = gql`
   mutation CREATE_EMAIL_REMINDER_MUTATION(

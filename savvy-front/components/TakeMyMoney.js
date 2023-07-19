@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
-import gql from "graphql-tag";
+import { gql } from "@apollo/client";
 import { CURRENT_USER_QUERY } from "./User";
 
 const CREATE_ORDER_MUTATION = gql`
