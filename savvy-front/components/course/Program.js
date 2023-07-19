@@ -4,11 +4,6 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import moment from "moment";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import dynamic from "next/dynamic";
 
 import { useUser } from "../User";

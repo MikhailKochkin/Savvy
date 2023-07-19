@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "styled-react-modal";
+import parse from "html-react-parser";
 
 const Box = styled.div`
   display: flex;
@@ -103,11 +104,7 @@ const DocumentModal = (props) => {
                 0 ? (
                 results
                   .filter((t) => t.document.id === document.id)
-<<<<<<< HEAD
                   .map((t) => t.drafts.map((par) => parse(par)))
-=======
-                  .map((t) => t.drafts.map((par) => renderHTML(par)))
->>>>>>> origin/master
               ) : (
                 <span>Не выполнен</span>
               )}

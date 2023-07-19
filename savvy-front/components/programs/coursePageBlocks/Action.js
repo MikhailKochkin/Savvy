@@ -10,12 +10,8 @@ import ReactGA from "react-ga";
 import Signup from "../../auth/Signup";
 import Signin from "../../auth/Signin";
 import RequestReset from "../../auth/RequestReset";
-<<<<<<< HEAD
-
-=======
-import renderHTML from "react-render-html";
->>>>>>> origin/master
 import tinkoff from "@tcb-web/create-credit";
+import parse from "html-react-parser";
 
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder(
