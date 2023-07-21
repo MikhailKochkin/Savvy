@@ -233,6 +233,11 @@ const ClientData = (props) => {
     setClients(filtered_clients);
   };
 
+  const searchWithPhones = (val) => {
+    let filtered_clients = props.initial_clients.filter((c) => c.number);
+    setClients(filtered_clients);
+  };
+
   const search6 = (val) => {
     let filtered_clients = props.initial_clients.filter((client) =>
       client.emailReminders.some((reminder) =>
@@ -318,6 +323,7 @@ const ClientData = (props) => {
         // Add the new tag to the 'tags' array
         const newTags = [...client.tags, tag];
         // Update the client
+        console.log("newTags", newTags);
         updateUser({
           variables: {
             id: client.id,
@@ -396,7 +402,7 @@ const ClientData = (props) => {
         <div>MQL: {MQL_clients.length}</div>
         <div>SQL: {SQL_clients.length}</div>
         <button
-          onClick={(e) => addTagToClient("ck0pdit6900rt0704h6c5zmer", "IQL")}
+          onClick={(e) => addTagToClient("cjtreu3md00fp0897ga13aktp", "IQL")}
         >
           Add tag to client
         </button>
@@ -416,6 +422,9 @@ const ClientData = (props) => {
         <br />
         <button onClick={(e) => setClients(props.initial_clients)}>
           Показать всех пользователей
+        </button>
+        <button onClick={(e) => searchWithPhones(clients)}>
+          Показать с номером
         </button>
         <br />
         <button onClick={(e) => sortByOrders()}>Показать с заказами</button>

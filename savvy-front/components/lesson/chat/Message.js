@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
 import styled from "styled-components";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 const IconBlock = styled.div`
   display: flex;
@@ -180,7 +180,9 @@ const Styles = styled.div`
   }
 
   .student_text {
-    width: 70%;
+    max-width: 70%;
+    min-width: 40%;
+
     border: 2px solid;
     background: #2f80ed;
     color: #fff;

@@ -230,7 +230,11 @@ const CreateMessage = (props) => {
               value={author}
               index={props.index}
               defaultValue={message.author.toLowerCase()}
-              onChange={(e) => updateAuthor(e.target.value)}
+              onChange={(e) => {
+                e.preventDefault();
+                updateAuthor(e.target.value);
+                setName(e.target.value);
+              }}
             >
               <option value="author">👩🏼‍🏫</option>
               <option value="student">👨🏻‍🎓</option>
@@ -242,7 +246,7 @@ const CreateMessage = (props) => {
                 setName(e.target.value);
                 props.updateName(e.target.value, props.index);
               }}
-              value={author}
+              value={name}
             />
           </div>
         </IconBlock>

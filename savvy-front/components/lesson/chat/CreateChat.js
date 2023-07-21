@@ -90,29 +90,7 @@ const CreateChat = (props) => {
   const [name, setName] = useState("Dialogue");
   const [generating, setGenerating] = useState(false);
 
-  const [messages, setMessages] = useState([
-    {
-      number: 0,
-      author: "Author",
-      text: "Hi, I'm Mike Kochkin, a cybersecurity expert with over a decade of experience in the field. Throughout my career, I've worked with various organizations, helping them secure their digital assets and protect against cyber threats.",
-      image: "",
-      reactions: [],
-    },
-    {
-      number: 1,
-      author: "Student",
-      text: "Nice to meet you, Mike. What are you going to teach me?",
-      image: "",
-      reactions: [],
-    },
-    {
-      number: 2,
-      author: "Author",
-      text: "Great to have you here! In this lesson, we will dive into the exciting world of Cybersecurity. You will learn about different types of cyber threats, common attack vectors, and effective defense mechanisms. Our goal is to equip you with the knowledge and skills to safeguard digital information and maintain secure online practices. By the end of this lesson, you'll have a strong foundation in cybersecurity principles and be better prepared to navigate the digital landscape with confidence.",
-      image: "",
-      reactions: [],
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [isGenerated, setIsGenerated] = useState(false);
   const [createChat, { data, loading, error }] =
     useMutation(CREATE_CHAT_MUTATION);
@@ -201,6 +179,7 @@ const CreateChat = (props) => {
       <br /> */}
       <div>Do you want to generate this block with AI?</div>
       <button onClick={(e) => onGenerate(e)}>Use AI</button>
+      <button onClick={(e) => setIsGenerated(true)}>Do it on your own</button>
       {generating && (
         <div>Generating the chat... It can take up to one minute.</div>
       )}

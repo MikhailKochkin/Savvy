@@ -346,6 +346,40 @@ const UserCard = memo((props) => {
       ? wa_message.replaceAll("</p>", "\n\n")
       : "";
     comment_for_wa = comment_for_wa.replaceAll("<p>", "");
+    let date = new Date();
+
+    let day = date.getDate(); // Get current date
+    let month = date.getMonth(); // Get current month
+    let year = date.getFullYear(); // Get current year
+
+    // Array of month names
+    let monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    let formattedDate = day + " " + monthNames[month] + " " + year; // Format the date
+
+    let wa_comment = `<p>WhatsApp Message, ${formattedDate}</p>`;
+    console.log("wa_comment", comment + wa_comment);
+    setComment(comment + wa_comment);
+    updateUser({
+      variables: {
+        id: props.id,
+        tags: [...tags, `wa_message${formattedDate}`],
+        comment: comment + wa_comment,
+      },
+    });
     textUser({
       variables: {
         id: props.id,

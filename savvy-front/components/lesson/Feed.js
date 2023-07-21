@@ -420,7 +420,7 @@ const ProgressBarContainer = styled.div`
   top: 0;
   left: 0;
   width: 100%;
-  height: 65px;
+  height: 45px;
   z-index: 100;
   display: flex;
   flex-direction: row;
@@ -697,10 +697,10 @@ const Feed = (props) => {
           className="second"
           angle={props.experience * (360 / props.total)}
         >
-          {/* <CustomProgressBar
+          <CustomProgressBar
             myResult={num}
             lessonItemsLength={props.components.length}
-          /> */}
+          />
           <Message visible={visible}>
             <div id="message_text">
               🚀 {t("level_up")} {complexity}
@@ -718,14 +718,14 @@ const Feed = (props) => {
               </div>
             </div>
           )}
-          {/* <div
+          <div
             className="arrowmenu"
             onClick={(e) => {
               setOpen(!open);
             }}
           >
             <img className="arrow" src="../../static/burger_menu.svg" />
-          </div> */}
+          </div>
           {result ? (
             <>
               {props.components.slice(0, num + 2).map((c, i) => (
