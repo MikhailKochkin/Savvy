@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 import { CREATE_LESSONRESULT_MUTATION } from "./LessonHeader";
 import { UPDATE_LESSONRESULT_MUTATION } from "./LessonHeader";
@@ -562,6 +563,7 @@ const Feed = (props) => {
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
   const classes = useStyles();
+
   const { t } = useTranslation("lesson");
 
   const move = async (e) => {
@@ -987,6 +989,9 @@ const Feed = (props) => {
 
 const CustomProgressBar = ({ myResult, lessonItemsLength }) => {
   const progress = myResult ? (100 * (myResult + 1)) / lessonItemsLength : 0;
+  const router = useRouter();
+  const { t } = useTranslation("lesson");
+
   return (
     <ProgressBarContainer>
       <div className="box">
@@ -995,8 +1000,10 @@ const CustomProgressBar = ({ myResult, lessonItemsLength }) => {
         </div>
         <div className="timeLeft">
           {(lessonItemsLength - myResult - 1) * 2 > 0
-            ? `Осталось ${(lessonItemsLength - myResult - 1) * 2} мин.`
-            : "Урок завершен!"}
+            ? router.locale == "ru"
+              ? `Осталось ${(lessonItemsLength - myResult - 1) * 2} мин.`
+              : `${(lessonItemsLength - myResult - 1) * 2} mins left`
+            : t("lesson_is_done")}
         </div>
       </div>
     </ProgressBarContainer>

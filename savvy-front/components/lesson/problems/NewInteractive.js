@@ -77,6 +77,8 @@ const Button = styled.div`
 const NewInteractive = (props) => {
   const [isShown, setIsShown] = useState(false);
   const [componentList, setComponentList] = useState([]);
+  const { t } = useTranslation("lesson");
+
   const { problem, lesson, me, author } = props;
 
   useEffect(() => {
@@ -103,7 +105,7 @@ const NewInteractive = (props) => {
   return (
     <Styles>
       <div className="suggestion">
-        <Button onClick={(e) => setIsShown(true)}>Начать решать</Button>
+        <Button onClick={(e) => setIsShown(true)}>{t("start_the_case")}</Button>
       </div>
       {isShown && (
         <Questions>

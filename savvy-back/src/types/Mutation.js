@@ -68,17 +68,17 @@ async function getMessageOpens(serverToken, messageID) {
 const { Client } = require("whatsapp-web.js");
 const wa_client = new Client();
 
-// wa_client.on("qr", (qr) => {
-//   console.log(1);
-//   qrcode.generate(qr, { small: true });
-//   console.log(2);
-// });
+wa_client.on("qr", (qr) => {
+  console.log(1);
+  qrcode.generate(qr, { small: true });
+  console.log(2);
+});
 
-// wa_client.on("ready", () => {
-//   console.log("Client is ready!");
-// });
+wa_client.on("ready", () => {
+  console.log("Client is ready!");
+});
 
-// wa_client.initialize();
+wa_client.initialize();
 
 // console.log(12);
 
@@ -2229,7 +2229,7 @@ const Mutation = mutationType({
       },
       resolve: async (_, args, ctx) => {
         const updates = { ...args };
-        console.log("args", args);
+        // console.log("args", args);
         delete updates.id;
         return ctx.prisma.note.update({
           data: updates,

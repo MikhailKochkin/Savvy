@@ -182,7 +182,6 @@ const Styles = styled.div`
   .student_text {
     max-width: 70%;
     min-width: 40%;
-
     border: 2px solid;
     background: #2f80ed;
     color: #fff;

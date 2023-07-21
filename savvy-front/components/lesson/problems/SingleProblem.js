@@ -327,8 +327,8 @@ const SingleProblem = (props) => {
           {teacherAnswer.length > 0 && (
             <ResponseArea>
               <h2>
-                {/* {t("write_answer")} */}
-                Запишите финальный ответ
+                {t("write_answer")}
+                {/* Запишите финальный ответ */}
               </h2>
               <Frame story={story}>
                 <DynamicHoverEditor

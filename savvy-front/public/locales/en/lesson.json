@@ -116,5 +116,9 @@
   "hour_short": "h",
   "minute_short": "min",
   "second_short": "sec",
-  "start_speaking": "Start speaking"
+  "start_speaking": "Start speaking",
+  "start_the_case": "Start case",
+  "lesson_is_done": "Lesson is finished!",
+  "min": "min",
+  "left": "left"
 }

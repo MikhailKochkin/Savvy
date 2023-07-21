@@ -116,5 +116,9 @@
   "hour_short": "ч",
   "minute_short": "мин",
   "second_short": "сек",
-  "start_speaking": "Говорите"
+  "start_speaking": "Говорите",
+  "start_the_case": "Начать решать",
+  "lesson_is_done": "Урок завершен!",
+  "min": "мин",
+  "left": "Осталось"
 }
