@@ -4,8 +4,8 @@ import { Query } from "@apollo/client/react/components";
 import styled from "styled-components";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import AreYouEnrolled from "../../auth/AreYouEnrolled";
 // import { CSSTransitionGroup } from "react-transition-group";
 import Front from "./Front";
@@ -16,20 +16,20 @@ import Reload from "../Reload";
 import Loading from "../../Loading";
 import Navigation from "../Navigation";
 
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-    marginBottom: "2%",
-    fontSize: "1.4rem",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "100%",
+//     marginBottom: "2%",
+//     fontSize: "1.4rem",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const SINGLE_LESSON_QUERY = gql`
   query SINGLE_LESSON_QUERY($id: String!) {

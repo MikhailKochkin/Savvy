@@ -4,8 +4,8 @@ import { gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 
 const CREATE_FORUM_MUTATION = gql`
   mutation createForum($lessonId: String!, $text: String) {
@@ -43,25 +43,25 @@ const DynamicLoadedEditor = dynamic(import("../../editor/Editor"), {
   ssr: false,
 });
 
-const useStyles = makeStyles({
-  button: {
-    width: "20%",
-    marginBottom: "2%",
-    fontSize: "1.4rem",
-    textTransform: "none",
-    fontFamily: "Montserrat",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "20%",
+//     marginBottom: "2%",
+//     fontSize: "1.4rem",
+//     textTransform: "none",
+//     fontFamily: "Montserrat",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const CreateForum = (props) => {
   const [text, setText] = useState("");
-  const classes = useStyles();
+  // const classes = useStyles();
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
@@ -92,11 +92,10 @@ const CreateForum = (props) => {
               placeholder="Описание"
               onChange={(e) => setText(e.target.value)}
             />
-            <Button
+            <button
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.button}
               onClick={async (e) => {
                 e.preventDefault();
                 const res = await createForum();
@@ -106,7 +105,7 @@ const CreateForum = (props) => {
               }}
             >
               {loading ? "Создаю" : "Создать"}
-            </Button>
+            </button>
           </Form>
         )}
       </Mutation>

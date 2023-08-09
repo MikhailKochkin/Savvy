@@ -1,16 +1,36 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 
-import { withStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import { withStyles } from "@material-ui/core/styles";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import UpdateClause from "./UpdateClause";
 import parse from "html-react-parser";
 
 const Styles = styled.div`
   margin-top: 2%;
   width: ${(props) => (props.story ? "90%" : "100%")};
+`;
+
+const BlueButton = styled.button`
+  width: 180px;
+  background: #3b5bb3;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
 `;
 
 const Frame = styled.div`
@@ -60,14 +80,14 @@ const Progress = styled.div`
   margin: 2% 0 2% 0;
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "1% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "1% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -143,7 +163,8 @@ const Clause = (props) => {
           <Comments display={show}>
             <p>Comments:</p>
             <Progress display={progress}>
-              <CircularProgress />
+              {/* <CircularProgress /> */}
+              Loading...
             </Progress>
             {comments &&
               (comments > 0.65 ? (
@@ -234,14 +255,12 @@ const Clause = (props) => {
           <Buttons>
             {/* {<StyledButton onClick={checkAnswer}>Проверить</StyledButton>} */}
             {props.me.id === props.userID && (
-              <StyledButton onClick={(e) => setType("update")}>
-                Change
-              </StyledButton>
+              <button onClick={(e) => setType("update")}>Change</button>
             )}
             {index !== total ? (
-              <StyledButton onClick={(e) => getNumber(index + 1)}>
+              <BlueButton onClick={(e) => getNumber(index + 1)}>
                 Next
-              </StyledButton>
+              </BlueButton>
             ) : (
               <div>The end</div>
             )}
@@ -257,7 +276,7 @@ const Clause = (props) => {
             commentary={commentary}
             keywords={keywords}
           />
-          {<StyledButton onClick={(e) => setType("test")}>Update</StyledButton>}
+          {<button onClick={(e) => setType("test")}>Update</button>}
         </>
       )}
     </Styles>

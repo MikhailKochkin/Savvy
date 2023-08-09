@@ -56,7 +56,6 @@ import { jsx } from "slate-hyperscript";
 // import { ic_announcement } from "react-icons-kit/md/ic_announcement";
 import { Button, IconBlock, Menu, Portal } from "./components";
 import { Range } from "slate";
-import { blue } from "@material-ui/core/colors";
 
 const AppStyles = {
   color: "rgb(17, 17, 17)",

@@ -4,8 +4,8 @@ import parse from "html-react-parser";
 
 import dynamic from "next/dynamic";
 import { useMutation, gql } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 
 import UpdateNewConstructor from "./UpdateNewConstructor";
@@ -50,6 +50,25 @@ const Styles = styled.div`
   }
 `;
 
+const BlueButton = styled.button`
+  width: 180px;
+  background: #3b5bb3;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
 const ButtonTwo = styled.button`
   border: none;
   background: #3f51b5;
@@ -160,15 +179,15 @@ const Variants = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "4% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-    width: "50%",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "4% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//     width: "50%",
+//   },
+// })(Button);
 
 const NewConstructor = (props) => {
   const { construction, me, lessonID, story } = props;
@@ -265,9 +284,9 @@ const NewConstructor = (props) => {
   return (
     <>
       {story !== true && (
-        <StyledButton onClick={(e) => setUpdate(!update)}>
+        <BlueButton onClick={(e) => setUpdate(!update)}>
           {!update ? t("update") : t("back")}
-        </StyledButton>
+        </BlueButton>
       )}
       <Styles>
         {!update && (

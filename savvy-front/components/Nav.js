@@ -306,9 +306,7 @@ const Nav = (props) => {
             <StyledHeader>
               <CourseMenu>
                 <Link href="/">
-                  <div className="logo">
-                    <img src="static/long_logo.svg" />
-                  </div>
+                  <div className="logo">BeSavvy Lawyer</div>
                 </Link>
               </CourseMenu>
               <UserData>
@@ -410,7 +408,8 @@ const Nav = (props) => {
               <Span onClick={(e) => openNav()}>
                 {/* <div>BeSavvy</div> */}
                 <div className="mini_logo">
-                  <img src="static/long_logo.svg" />
+                  BeSavvy Lawyer
+                  {/* <img src="static/long_logo.svg" /> */}
                 </div>
               </Span>
               <div className="logo">

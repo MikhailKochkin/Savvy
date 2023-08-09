@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
 
 const Block = styled.div`
@@ -67,9 +66,7 @@ const Loading = () => {
         </p>
         <p> {phrase}</p>
       </Phrase>
-      <Block>
-        <CircularProgress />
-      </Block>
+      <Block>...</Block>
     </Frame>
   );
 };

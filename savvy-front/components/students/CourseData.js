@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import Loading from "../Loading";
 import { useLazyQuery, gql } from "@apollo/client";
@@ -189,14 +189,14 @@ const Box = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "1% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "1% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const CourseData = (props) => {
   const [show, setShow] = useState(false);
@@ -227,7 +227,7 @@ const CourseData = (props) => {
             {new_arr ? new_arr.length : 0} / {course.lessons.length}
           </div>
         </Square>
-        <StyledButton
+        <button
           onClick={(e) => {
             // getData({
             //   variables: { lessonId: lesson.id, userId: student.id },
@@ -237,7 +237,7 @@ const CourseData = (props) => {
         >
           {/* {show ? "Скрыть" : "Подробнее"} */}
           {show ? "Close" : "Open"}
-        </StyledButton>
+        </button>
       </Data>
 
       {show &&

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import Loading from "../Loading";
 import { useLazyQuery, gql, useMutation } from "@apollo/client";
@@ -190,14 +190,14 @@ const Box = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "1% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "1% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const LessonData = (props) => {
   const [show, setShow] = useState(false);
@@ -214,7 +214,7 @@ const LessonData = (props) => {
           {index + 1}. {lesson.name}{" "}
           <b>{lesson.assignment ? " 🔥 Практическое задание" : ""}</b>
         </Name>
-        <StyledButton
+        <button
           onClick={(e) => {
             getData({
               variables: { lessonId: lesson.id, userId: student.id },
@@ -224,18 +224,17 @@ const LessonData = (props) => {
         >
           {/* {show ? "Скрыть" : "Подробнее"} */}
           {show ? "Close" : "Open"}
-        </StyledButton>
+        </button>
         {res.length > 0 && (
-          <StyledButton
+          <button
             onClick={(e) => {
               checkAssignment({
                 variables: { id: res[0].id, checked: true },
               });
             }}
           >
-            {/* {res[0].checked ? "✅ Проверено" : "Проверить"} */}
             {res[0].checked ? "✅ Checked" : "Check"}
-          </StyledButton>
+          </button>
         )}
       </Data>
       {res.length > 0 && res[0].lesson.structure ? (

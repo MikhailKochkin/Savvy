@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTranslation } from "next-i18next";
 import DemoStoryEx from "./DemoStoryEx";
 import { useUser } from "../User";
@@ -423,7 +423,8 @@ const NewSingleLesson = (props) => {
   if (loading)
     return (
       <Progress>
-        <CircularProgress />
+        Loading...
+        {/* <CircularProgress /> */}
       </Progress>
     );
 

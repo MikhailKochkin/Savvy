@@ -2,7 +2,7 @@ import DemoFeed from "./DemoFeed";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Note from "../lesson/notes/Note";
 // import Offer from "../lesson/Offer";
@@ -102,12 +102,7 @@ const StoryEx = (props) => {
     }
   }, [me]);
   if (stats_error) return <p>{stats_error}</p>;
-  if (stats_loading)
-    return (
-      <Progress>
-        <CircularProgress />
-      </Progress>
-    );
+  if (stats_loading) return <Progress>Loading...</Progress>;
 
   let my_result =
     stats_data && stats_data.lessonResults.length > 0

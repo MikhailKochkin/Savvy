@@ -3,8 +3,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 
 const CREATE_DOCUMENT_MUTATION = gql`
@@ -41,18 +41,18 @@ const Input = styled.input`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    // width: "40%",
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     // width: "40%",
+//     margin: "4% 0",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// });
 
 const CreateTitle = (props) => {
   const [value, setValue] = useState("");
-  const classes = useStyles();
+  // const classes = useStyles();
   const { t } = useTranslation("lesson");
 
   return (
@@ -72,8 +72,7 @@ const CreateTitle = (props) => {
               onChange={(e) => setValue(event.target.value)}
             />
             <br />
-            <Button
-              className={classes.button}
+            <button
               variant="contained"
               color="primary"
               onClick={async (e) => {
@@ -84,7 +83,7 @@ const CreateTitle = (props) => {
               }}
             >
               {loading ? t("saving") : t("save")}
-            </Button>
+            </button>
           </form>
         </Styles>
       )}

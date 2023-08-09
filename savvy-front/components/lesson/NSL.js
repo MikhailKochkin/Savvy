@@ -4,11 +4,11 @@ import Link from "next/link";
 import styled from "styled-components";
 import PleaseSignIn from "../auth/PleaseSignIn";
 import AreYouEnrolled from "../auth/AreYouEnrolled";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import MobileStepper from "@material-ui/core/MobileStepper";
-import Button from "@material-ui/core/Button";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+// import { makeStyles, useTheme } from "@material-ui/core/styles";
+// import MobileStepper from "@material-ui/core/MobileStepper";
+// import Button from "@material-ui/core/Button";
+// import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+// import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import { CSSTransitionGroup } from "react-transition-group";
 import StoryEx from "./StoryEx";
 import { useUser } from "../User";
@@ -229,7 +229,7 @@ const NSL = (props) => {
   const [width, setWidth] = useState(0);
   const onResize = (width) => setWidth(width);
 
-  const classes = useStyles();
+  // const classes = useStyles();
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const [task, setTask] = useState("");
@@ -319,7 +319,7 @@ const NSL = (props) => {
                   />
                 </CSSTransitionGroup>
               </LessonPart>
-              <MobileStepper
+              {/* <MobileStepper
                 variant="progress"
                 steps={lesson.structure.length}
                 position="static"
@@ -366,7 +366,7 @@ const NSL = (props) => {
                     Назад
                   </Button>
                 }
-              />
+              /> */}
               {me && <Panel level={me.level.level} change={lesson.change} />}
             </Container>{" "}
           </AreYouEnrolled>

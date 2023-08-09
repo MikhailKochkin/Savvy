@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 
@@ -143,7 +143,7 @@ const MenuColumn = styled.div`
   justify-content: flex-start;
   align-items: center;
   @media (max-width: 800px) {
-  width: ${(props) => (props.open ? "100vw" : "0px")};
+    width: ${(props) => (props.open ? "100vw" : "0px")};
   }
   .container {
     width: 80%;
@@ -153,7 +153,6 @@ const MenuColumn = styled.div`
       text-align: center;
       font-weight: 500;
       font-size: 1.8rem;
-
     }
     .lesson_name {
       text-align: center;
@@ -173,39 +172,39 @@ const MenuColumn = styled.div`
       font-weight: 600;
       margin-top: 50px;
       line-height: 1.3;
-      }
-      .go_to_chat {
-        width: 70%;
-        font-weight: 500;
-        line-height: 1.3;
-              margin-top: 10px;
+    }
+    .go_to_chat {
+      width: 70%;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-top: 10px;
 
-        font-size: 1.6rem;
-      }
-      button {
-        border: 1px solid #c2c2c2;
-        border-radius: 12px;
-        padding: 3% 4%;
-        cursor: pointer;
-        margin-top: 10px;
-          background: none;
-          outline: 0;
-          font-family: Montserrat;
-          font-size: 1.6rem;
-          font-weight: 500;
-          -moz-appearance: none;
-          -webkit-appearance: none;
-          appearance: none;
-          text-indent: 0.01px;
-          text-align-last: center;
-          text-align: center;
-          text-overflow: "";
-                  transition: 0.5s;
+      font-size: 1.6rem;
+    }
+    button {
+      border: 1px solid #c2c2c2;
+      border-radius: 12px;
+      padding: 3% 4%;
+      cursor: pointer;
+      margin-top: 10px;
+      background: none;
+      outline: 0;
+      font-family: Montserrat;
+      font-size: 1.6rem;
+      font-weight: 500;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      text-indent: 0.01px;
+      text-align-last: center;
+      text-align: center;
+      text-overflow: "";
+      transition: 0.5s;
 
-          &:hover {
-          border: 1px solid #1a2980;
-        }
+      &:hover {
+        border: 1px solid #1a2980;
       }
+    }
     .nav {
       display: flex;
       flex-direction: row;
@@ -221,7 +220,7 @@ const MenuColumn = styled.div`
       }
       #button_square {
         margin-top: 10px;
-         margin-left: 20px;
+        margin-left: 20px;
         border: 1px solid #c2c2c2;
         color: #c2c2c2;
         width: 45px;
@@ -250,8 +249,7 @@ const MenuColumn = styled.div`
           appearance: none;
           text-indent: 0.01px;
           text-align-last: center;
-          text-align: center
-          text-overflow: "";
+          text-align: center;
           cursor: pointer;
           /* &:hover {
             color: #1a2980;
@@ -264,7 +262,6 @@ const MenuColumn = styled.div`
           }
         }
       }
-      
     }
   }
 `;
@@ -457,38 +454,6 @@ const Message = styled.div`
     }
   }
 `;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 450,
-    [theme.breakpoints.down("sm")]: {
-      width: 315,
-    },
-    transform: "rotate(90deg)",
-    background: "white",
-    margin: "2% 0",
-  },
-  progress: {
-    width: "100%",
-  },
-  button: {
-    padding: "2%",
-    width: "100%",
-    fontSize: "1.4rem",
-    fontFamily: "Montserrat",
-    textTransform: "none",
-    textDecoration: "none",
-  },
-  textSizeSmall: {
-    fontSize: "1.7rem",
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.5rem",
-    },
-    textTransform: "none",
-    fontFamily: "Montserrat",
-  },
-}));
-
 const Feed = (props) => {
   const [open, setOpen] = useState(false);
   const [num, setNum] = useState(
@@ -501,7 +466,7 @@ const Feed = (props) => {
   );
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
-  const classes = useStyles();
+  // const classes = useStyles();
   const { t } = useTranslation("lesson");
   const getResults = (el) => {
     // console.log("res2", el);

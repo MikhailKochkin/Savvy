@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import { useTranslation } from "next-i18next";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import Error from "../ErrorMessage";
 import { CURRENT_USER_QUERY } from "../User";
 
@@ -215,26 +215,26 @@ const Title = styled.div`
   text-align: center;
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-    marginBottom: "2%",
-    fontSize: "1.7rem",
-    fontFamily: "Montserrat",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "100%",
+//     marginBottom: "2%",
+//     fontSize: "1.7rem",
+//     fontFamily: "Montserrat",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const Signin = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const classes = useStyles();
+  // const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
   const { t } = useTranslation("auth");
 
@@ -282,7 +282,6 @@ const Signin = (props) => {
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.button}
             >
               {loading ? "..." : "Войти"}
             </button>

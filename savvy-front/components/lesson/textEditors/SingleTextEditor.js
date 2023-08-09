@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useMutation, gql } from "@apollo/client";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import { htmlToText } from "html-to-text";
-import { withStyles } from "@material-ui/core/styles";
+// import { withStyles } from "@material-ui/core/styles";
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
@@ -319,14 +319,34 @@ const WindowColumn = styled.div`
   top: 35%;
 `;
 
-const StyledButton = withStyles({
-  root: {
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-    maxHeight: "40px",
-  },
-})(Button);
+const BlueButton = styled.button`
+  width: 180px;
+  background: #3b5bb3;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
+
+// const StyledButton = withStyles({
+//   root: {
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//     maxHeight: "40px",
+//   },
+// })(Button);
 
 const SingleTextEditor = (props) => {
   // const [text, setText] = useState(props.textEditor.text);
@@ -548,9 +568,9 @@ const SingleTextEditor = (props) => {
         (me.id === textEditor.user.id || me.permissions.includes("ADMIN")) &&
         !story && (
           <>
-            <StyledButton onClick={(e) => setUpdate(!update)}>
+            <button onClick={(e) => setUpdate(!update)}>
               {update ? t("back") : t("update")}
-            </StyledButton>
+            </button>
             <DeleteSingleTextEditor
               id={props.textEditor.id}
               lessonID={props.lessonID}
@@ -692,13 +712,9 @@ const SingleTextEditor = (props) => {
               </EditText>
             </TextBar>
             <Buttons>
-              <StyledButton
-                onClick={onShow}
-                variant="contained"
-                color="primary"
-              >
-                {mistakesShown ? "Hide mistakes" : "Show mistakes"}
-              </StyledButton>
+              <BlueButton onClick={onShow} variant="contained" color="primary">
+                {mistakesShown ? "Hide" : "Show"}
+              </BlueButton>
             </Buttons>
           </div>
         )}

@@ -3,7 +3,7 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 import dynamic from "next/dynamic";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -40,30 +40,30 @@ const UPDATE_PROBLEM_MUTATION = gql`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "30%",
-    margin: "2% 0",
-    fontSize: "1.4rem",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  formControl: {
-    width: "70%",
-    fontSize: "2.4rem",
-    padding: "1% 0",
-  },
-  label: {
-    fontSize: "1.5rem",
-    fontFamily: "Montserrat",
-    marginBottom: "1%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "30%",
+//     margin: "2% 0",
+//     fontSize: "1.4rem",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   formControl: {
+//     width: "70%",
+//     fontSize: "2.4rem",
+//     padding: "1% 0",
+//   },
+//   label: {
+//     fontSize: "1.5rem",
+//     fontFamily: "Montserrat",
+//     marginBottom: "1%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const Styles = styled.div`
   display: flex;

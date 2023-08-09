@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import CourseData from "./CourseData";
 
@@ -135,14 +135,14 @@ const StyledCV = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "1% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "1% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const Person = (props) => {
   const [secret, setSecret] = useState(true);
@@ -172,10 +172,10 @@ const Person = (props) => {
           <div className="email">{student.email}</div>
         </Name>
         <ButtonBox>
-          <StyledButton className="div3" onClick={(e) => setSecret(!secret)}>
+          <button className="div3" onClick={(e) => setSecret(!secret)}>
             {/* {secret ? "Открыть" : "Закрыть"} */}
             {secret ? "Open" : "Close"}
-          </StyledButton>
+          </button>
         </ButtonBox>
       </Header>
       <Open secret={secret}>

@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { BiMicrophone, BiMicrophoneOff } from "react-icons/bi";
@@ -308,14 +308,14 @@ const Circle = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "4% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "4% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const Block = styled.div`
   display: ${(props) => (props.display === "true" ? "block" : "none")};
@@ -588,9 +588,9 @@ const SingleQuiz = (props) => {
         <Styles width={width}>
           <Buttons>
             {!exam && !story && (
-              <StyledButton onClick={(e) => setUpdate(!update)}>
+              <button onClick={(e) => setUpdate(!update)}>
                 {!update ? t("update") : t("back")}
-              </StyledButton>
+              </button>
             )}
             {me && !props.exam && !props.story ? (
               <DeleteSingleQuiz
@@ -638,7 +638,8 @@ const SingleQuiz = (props) => {
                   {startSpeech && <p>📣 {t("start_speaking")}..</p>}
                 </Group>
                 <Progress display={progress}>
-                  <CircularProgress />
+                  {/* <CircularProgress /> */}
+                  Loading...
                 </Progress>
                 <Group progress={progress} correct={correct}>
                   <Button1

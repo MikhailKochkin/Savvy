@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
 import dynamic from "next/dynamic";
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
 import { useQuery, useMutation, gql } from "@apollo/client";
-import parse from 'html-react-parser';
+import parse from "html-react-parser";
 
 import Interactive from "./Interactive";
 
@@ -196,18 +196,18 @@ const Button2 = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    borderRadius: "10px",
-    fontFamily: "Montserrat",
-    fontWeight: "600",
-    textTransform: "none",
-    padding: "10px",
-    width: "170px",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "4% 0",
+//     fontSize: "1.6rem",
+//     borderRadius: "10px",
+//     fontFamily: "Montserrat",
+//     fontWeight: "600",
+//     textTransform: "none",
+//     padding: "10px",
+//     width: "170px",
+//   },
+// })(Button);
 
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -273,7 +273,7 @@ const TeamQuest = (props) => {
               />
             </Frame>
             <Buttons story={story} block={revealAnswer}>
-              <StyledButton
+              <button
                 variant="contained"
                 color="primary"
                 onClick={async (e) => {
@@ -297,7 +297,7 @@ const TeamQuest = (props) => {
                 }}
               >
                 {loading ? t("checking") : t("check")}
-              </StyledButton>
+              </button>
               {showAnswerButton && (
                 <Button2 onClick={(e) => setShowAnswerText(!showAnswerText)}>
                   {t("show_answer")}

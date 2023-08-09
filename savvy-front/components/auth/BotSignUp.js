@@ -3,8 +3,6 @@ import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 import { useTranslation } from "next-i18next";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
 import parse from "html-react-parser";
 import * as EmailValidator from "email-validator";
 
@@ -280,25 +278,25 @@ const IconBlock = styled.div`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "80%",
-    marginBottom: "15px",
-    fontSize: "1.7rem",
-    fontFamily: "Montserrat",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-    width: "100%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-  formControl: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "80%",
+//     marginBottom: "15px",
+//     fontSize: "1.7rem",
+//     fontFamily: "Montserrat",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//     width: "100%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+//   formControl: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const Signup = (props) => {
   const [name, setName] = useState("");
@@ -309,7 +307,7 @@ const Signup = (props) => {
   const [number, setNumber] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation("auth");
-  const classes = useStyles();
+  // // const classes = useStyles();
 
   function validatePhoneNumber(phoneNumber) {
     // Define the pattern for the phone number
@@ -467,25 +465,23 @@ const Signup = (props) => {
         )}
         {isLoading && <Loading />}
         {show ? (
-          <Button
+          <button
             type="submit"
             variant="contained"
             color="primary"
-            className={classes.button}
             onClick={(e) => signInUser(e)}
           >
             {loading3 ? t("opening") : t("open_simulator")}
-          </Button>
+          </button>
         ) : (
-          <Button
+          <button
             type="submit"
             variant="contained"
             color="primary"
-            className={classes.button}
             onClick={(e) => handleSubmit(e)}
           >
             {loading ? t("opening") : t("open_simulator")}
-          </Button>
+          </button>
         )}
       </Form>
     </>

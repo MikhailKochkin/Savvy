@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import _ from "lodash";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import parse from "html-react-parser";
 
 import { useTranslation } from "next-i18next";
@@ -15,15 +15,15 @@ import DeleteSingleTest from "../../delete/DeleteSingleTest";
 import { CURRENT_USER_QUERY } from "../../User";
 import Chat from "../questions/Chat";
 
-const StyledButton = withStyles({
-  root: {
-    width: "15%",
-    height: "45px",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     width: "15%",
+//     height: "45px",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const IconBlock = styled.div`
   display: flex;
@@ -516,9 +516,9 @@ const SingleTest = (props) => {
   return (
     <Styles width={width}>
       {!exam && story !== true && (
-        <StyledButton onClick={(e) => setUpdate(!update)}>
+        <button onClick={(e) => setUpdate(!update)}>
           {!update ? t("update") : t("back")}
-        </StyledButton>
+        </button>
       )}
       {me && !story && !exam && (
         <DeleteSingleTest

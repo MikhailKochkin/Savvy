@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import Result from "./Result";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
 
 import { SINGLE_LESSON_QUERY } from "./Challenge";
@@ -28,6 +28,26 @@ const CREATE_CHALLENGERESULT_MUTATION = gql`
   }
 `;
 
+const BlueButton = styled.button`
+  width: 180px;
+  background: #3b5bb3;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
+
 const Styles = styled.div`
   display: flex;
   flex-direction: column;
@@ -35,25 +55,25 @@ const Styles = styled.div`
   justify-content: center;
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "35%",
-    margin: "2% 0",
-    fontSize: "1.4rem",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "35%",
+//     margin: "2% 0",
+//     fontSize: "1.4rem",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const Final = (props) => {
   const [show, setShown] = useState(false);
   const { time, right, wrong, lesson, lessonId, offer, me } = props;
-  const classes = useStyles();
+  // const classes = useStyles();
   return (
     <Mutation
       mutation={CREATE_CHALLENGERESULT_MUTATION}
@@ -73,11 +93,10 @@ const Final = (props) => {
       {(createChallengeResult, { loading, error }) => (
         <Styles>
           {!show && (
-            <Button
+            <BlueButton
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.button}
               onClick={async (e) => {
                 e.preventDefault();
                 setShown(true);
@@ -86,7 +105,7 @@ const Final = (props) => {
               }}
             >
               Завершить
-            </Button>
+            </BlueButton>
           )}
           {show && offer && (
             <BannerOffer

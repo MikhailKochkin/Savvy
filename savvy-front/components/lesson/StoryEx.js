@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 import styled from "styled-components";
 import { useQuery, gql, useLazyQuery } from "@apollo/client";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 
 import Note from "./notes/Note";
 import BannerOffer from "./offers/BannerOffer";
@@ -117,7 +117,8 @@ const StoryEx = (props) => {
   if (stats_loading)
     return (
       <Progress>
-        <CircularProgress />
+        Loading...
+        {/* <CircularProgress /> */}
       </Progress>
     );
   let my_result =

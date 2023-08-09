@@ -2,10 +2,10 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useMutation, useLazyQuery, gql } from "@apollo/client";
 import { Mutation } from "@apollo/client/react/components";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import dynamic from "next/dynamic";
 
-import { withStyles } from "@material-ui/core/styles";
+// import { withStyles } from "@material-ui/core/styles";
 import moment from "moment";
 import LessonData from "./LessonData";
 import Journey from "./Journey";
@@ -222,14 +222,14 @@ const Editor = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "1% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "1% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const Person = (props) => {
   const [secret, setSecret] = useState(true);
@@ -397,10 +397,9 @@ const Person = (props) => {
           </div>
         </Square>
         <ButtonBox>
-          <StyledButton className="div4" onClick={(e) => setSecret(!secret)}>
-            {/* {secret ? "Открыть" : "Закрыть"} */}
+          <button className="div4" onClick={(e) => setSecret(!secret)}>
             {secret ? "Open" : "Close"}
-          </StyledButton>
+          </button>
         </ButtonBox>
         <RegDate
           className="div5"

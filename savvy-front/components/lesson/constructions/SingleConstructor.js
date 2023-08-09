@@ -4,8 +4,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
 
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
@@ -137,15 +137,15 @@ const Number_Input = styled.input`
   margin-bottom: 10px;
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "4% 0",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-    width: "50%",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "4% 0",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//     width: "50%",
+//   },
+// })(Button);
 
 const SingleConstructor = (props) => {
   const [variants, setVariants] = useState([]);
@@ -278,9 +278,9 @@ const SingleConstructor = (props) => {
   return (
     <>
       {me.id === construction.user.id && !story && (
-        <StyledButton onClick={(e) => setUpdate(!update)}>
+        <button onClick={(e) => setUpdate(!update)}>
           {!update ? t("update") : t("back")}
-        </StyledButton>
+        </button>
       )}
       {!update && (
         <Styles id={construction.id} story={story}>
@@ -343,7 +343,7 @@ const SingleConstructor = (props) => {
             >
               {(createConstructionResult, { loading, error }) => (
                 <Buttons blocked={answered}>
-                  <StyledButton
+                  <button
                     variant="contained"
                     color="primary"
                     onClick={async (e) => {
@@ -353,15 +353,15 @@ const SingleConstructor = (props) => {
                     }}
                   >
                     {t("check")}
-                  </StyledButton>
+                  </button>
                 </Buttons>
               )}
             </Mutation>
             {answerState === "wrong" ? (
               <>
-                <StyledButton onClick={(e) => setAnswerReveal(!answerReveal)}>
+                <button onClick={(e) => setAnswerReveal(!answerReveal)}>
                   {answerReveal ? t("back") : t("show")}
-                </StyledButton>
+                </button>
               </>
             ) : null}
             {me && me.id === construction.user.id && !story ? (

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
 
 const Block = styled.div`
@@ -58,11 +57,7 @@ const Loading = () => {
     const randomIndex = Math.floor(Math.random() * phrases.length);
     setPhrase(phrases[randomIndex]);
   }, []);
-  return (
-    <Block>
-      <CircularProgress />
-    </Block>
-  );
+  return <Block>{/* <CircularProgress /> */}...</Block>;
 };
 
 export default Loading;

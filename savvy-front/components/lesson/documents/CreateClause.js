@@ -4,8 +4,8 @@ import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 
 const CREATE_CLAUSE_MUTATION = gql`
@@ -66,14 +66,14 @@ const Input = styled.input`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    // width: "40%",
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     // width: "40%",
+//     margin: "4% 0",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// });
 
 const DynamicLoadedEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -95,7 +95,7 @@ const CreateClause = (props) => {
   };
   const { t } = useTranslation("lesson");
 
-  const classes = useStyles();
+  // const classes = useStyles();
   const { index, document } = props;
   return (
     <Styles>
@@ -143,8 +143,7 @@ const CreateClause = (props) => {
                 onChange={(e) => setKeywords(event.target.value.split(", "))}
               />
             </div> */}
-            <Button
-              className={classes.button}
+            <button
               variant="contained"
               color="primary"
               onClick={async (e) => {
@@ -155,7 +154,7 @@ const CreateClause = (props) => {
               }}
             >
               {loading ? t("saving") : t("save")}
-            </Button>
+            </button>
           </form>
         )}
       </Mutation>

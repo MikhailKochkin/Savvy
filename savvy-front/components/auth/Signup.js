@@ -3,10 +3,10 @@ import { Mutation } from "@apollo/client/react/components";
 import styled from "styled-components";
 import { gql } from "@apollo/client";
 import Router from "next/router";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core/styles";
+// // import Button from "@material-ui/core/Button";
+// import TextField from "@material-ui/core/TextField";
+// import MenuItem from "@material-ui/core/MenuItem";
+// // import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import { getCookie } from "cookies-next";
 import * as EmailValidator from "email-validator";
@@ -199,25 +199,44 @@ const Transit = styled.div`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-    marginBottom: "2%",
-    fontSize: "1.7rem",
-    fontFamily: "Montserrat",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-    width: "100%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-  formControl: {
-    fontSize: "1.5rem",
-  },
-});
+const BlueButton = styled.button`
+  width: 100%;
+  background: #3b5bb3;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
+
+// const useStyles = makeStyles({
+//   button: {
+//     width: "100%",
+//     marginBottom: "2%",
+//     fontSize: "1.7rem",
+//     fontFamily: "Montserrat",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//     width: "100%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+//   formControl: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const Signup = (props) => {
   const [name, setName] = useState("");
@@ -236,7 +255,7 @@ const Signup = (props) => {
 
   const { t } = useTranslation("auth");
 
-  const classes = useStyles();
+  // // const classes = useStyles();
 
   const move = (e) => {
     const name = e.target.getAttribute("name");
@@ -631,14 +650,9 @@ const Signup = (props) => {
               onChange={(e) => setPassword(e.target.value)}
               label="Пароль"
             />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-            >
+            <BlueButton type="submit" variant="contained" color="primary">
               {loading ? t("signing_up") : t("button")}
-            </Button>
+            </BlueButton>
             <Comment>{t("agree_terms")}</Comment>
             <Transit>
               {t("already_registered")}{" "}

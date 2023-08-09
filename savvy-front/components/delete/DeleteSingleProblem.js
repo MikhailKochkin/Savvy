@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import { useTranslation } from "next-i18next";
 
@@ -14,14 +14,14 @@ const DELETE_PROBLEM_MUTATION = gql`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    fontSize: "1.6rem",
-    textTransform: "none",
-    width: "140px",
-    height: "45px",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//     width: "140px",
+//     height: "45px",
+//   },
+// });
 
 const DeleteSingleProblem = (props) => {
   const { t } = useTranslation("lesson");
@@ -45,7 +45,7 @@ const DeleteSingleProblem = (props) => {
   //   });
   // };
   const { lessonId, id } = props;
-  const classes = useStyles();
+  // const classes = useStyles();
   return (
     <Mutation
       mutation={DELETE_PROBLEM_MUTATION}
@@ -59,8 +59,7 @@ const DeleteSingleProblem = (props) => {
       ]}
     >
       {(deleteProblem, { loading, error }) => (
-        <Button
-          className={classes.button}
+        <button
           color="secondary"
           onClick={() => {
             if (confirm("Are you sure")) {
@@ -71,7 +70,7 @@ const DeleteSingleProblem = (props) => {
           }}
         >
           {loading ? t("deleting") : t("delete")}
-        </Button>
+        </button>
       )}
     </Mutation>
   );

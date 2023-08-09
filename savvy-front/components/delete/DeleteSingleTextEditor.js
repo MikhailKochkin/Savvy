@@ -1,8 +1,8 @@
 import React from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
 import { useTranslation } from "next-i18next";
 
@@ -14,16 +14,16 @@ const DELETE_TEXTEDITOR_MUTATION = gql`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    fontSize: "1.6rem",
-    textTransform: "none",
-    maxHeight: "40px",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//     maxHeight: "40px",
+//   },
+// });
 
 const DeleteSingleTextEditor = (props) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const { t } = useTranslation("lesson");
 
   const { lessonID, id } = props;
@@ -39,8 +39,7 @@ const DeleteSingleTextEditor = (props) => {
       ]}
     >
       {(deleteTextEditor, { loading, error }) => (
-        <Button
-          className={classes.button}
+        <button
           color="secondary"
           onClick={() => {
             if (confirm("Are you sure")) {
@@ -51,7 +50,7 @@ const DeleteSingleTextEditor = (props) => {
           }}
         >
           {loading ? t("deleting") : t("delete")}
-        </Button>
+        </button>
       )}
     </Mutation>
   );

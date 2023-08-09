@@ -4,8 +4,8 @@ import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import dynamic from "next/dynamic";
 import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import parse from "html-react-parser";
 
@@ -134,6 +134,26 @@ const ResponseArea = styled.div`
   }
 `;
 
+const BlueButton = styled.button`
+  width: 180px;
+  background: #3b5bb3;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
+
 const Frame = styled.div`
   border: 1px solid #c4c4c4;
   border-radius: 10px;
@@ -189,19 +209,19 @@ const Button2 = styled.div`
   }
 `;
 
-const StyledButton = withStyles({
-  root: {
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    borderRadius: "10px",
-    fontFamily: "Montserrat",
-    fontWeight: "600",
-    textTransform: "none",
-    padding: "10px",
-    width: "140px",
-    height: "45px",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     margin: "4% 0",
+//     fontSize: "1.6rem",
+//     borderRadius: "10px",
+//     fontFamily: "Montserrat",
+//     fontWeight: "600",
+//     textTransform: "none",
+//     padding: "10px",
+//     width: "140px",
+//     height: "45px",
+//   },
+// })(Button);
 
 const DynamicHoverEditor = dynamic(import("../../editor/HoverEditor"), {
   loading: () => <p>...</p>,
@@ -300,9 +320,9 @@ const SingleProblem = (props) => {
     <>
       <Buttons>
         {me && !story && (
-          <StyledButton onClick={(e) => setUpdate(!update)}>
+          <button onClick={(e) => setUpdate(!update)}>
             {!update ? t("update") : t("back")}
-          </StyledButton>
+          </button>
         )}
         {me && !story ? (
           <DeleteSingleProblem id={problem.id} lessonId={props.lessonID} />
@@ -361,7 +381,7 @@ const SingleProblem = (props) => {
                 >
                   {(createProblemResult, { loading, error }) => (
                     <Buttons story={story} block={revealAnswer}>
-                      <StyledButton
+                      <BlueButton
                         variant="contained"
                         color="primary"
                         onClick={async (e) => {
@@ -379,7 +399,7 @@ const SingleProblem = (props) => {
                         }}
                       >
                         {loading ? t("checking") : t("check")}
-                      </StyledButton>
+                      </BlueButton>
                       {showAnswerButton && (
                         <Button2
                           onClick={(e) => setShowAnswerText(!showAnswerText)}

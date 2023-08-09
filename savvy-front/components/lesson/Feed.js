@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
@@ -525,36 +525,36 @@ const Message = styled.div`
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 450,
-    [theme.breakpoints.down("sm")]: {
-      width: 315,
-    },
-    transform: "rotate(90deg)",
-    background: "white",
-    margin: "2% 0",
-  },
-  progress: {
-    width: "100%",
-  },
-  button: {
-    padding: "2%",
-    width: "100%",
-    fontSize: "1.4rem",
-    fontFamily: "Montserrat",
-    textTransform: "none",
-    textDecoration: "none",
-  },
-  textSizeSmall: {
-    fontSize: "1.7rem",
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.5rem",
-    },
-    textTransform: "none",
-    fontFamily: "Montserrat",
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     width: 450,
+//     [theme.breakpoints.down("sm")]: {
+//       width: 315,
+//     },
+//     transform: "rotate(90deg)",
+//     background: "white",
+//     margin: "2% 0",
+//   },
+//   progress: {
+//     width: "100%",
+//   },
+//   button: {
+//     padding: "2%",
+//     width: "100%",
+//     fontSize: "1.4rem",
+//     fontFamily: "Montserrat",
+//     textTransform: "none",
+//     textDecoration: "none",
+//   },
+//   textSizeSmall: {
+//     fontSize: "1.7rem",
+//     [theme.breakpoints.down("sm")]: {
+//       fontSize: "1.5rem",
+//     },
+//     textTransform: "none",
+//     fontFamily: "Montserrat",
+//   },
+// }));
 
 const Feed = (props) => {
   const { me, coursePageId, coursePage, lesson_structure } = props;
@@ -596,7 +596,7 @@ const Feed = (props) => {
   const [open, setOpen] = useState(false);
   const [complexity, setComplexity] = useState(1);
   const [visible, setVisible] = useState(false);
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const { t } = useTranslation("lesson");
 
@@ -921,14 +921,13 @@ const Feed = (props) => {
                               }}
                             >
                               <a>
-                                <Button
-                                  className={classes.button}
+                                <button
                                   onClick={() => {
                                     createLessonResult();
                                   }}
                                 >
                                   Следующий урок
-                                </Button>
+                                </button>
                               </a>
                             </Link>
                           );
@@ -962,14 +961,13 @@ const Feed = (props) => {
                               }}
                             >
                               <a>
-                                <Button
-                                  className={classes.button}
+                                <button
                                   onClick={() => {
                                     updateLessonResult();
                                   }}
                                 >
                                   Следующий урок
-                                </Button>
+                                </button>
                               </a>
                             </Link>
                           );

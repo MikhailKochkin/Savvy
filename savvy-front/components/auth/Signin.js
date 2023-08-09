@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
 import { useTranslation } from "next-i18next";
-import { makeStyles } from "@material-ui/core/styles";
+// // import Button from "@material-ui/core/Button";
+// // import { makeStyles } from "@material-ui/core/styles";
 import { getCookie } from "cookies-next";
 
 import Error from "../ErrorMessage";
@@ -99,26 +99,45 @@ const Transit = styled.div`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "100%",
-    marginBottom: "2%",
-    fontSize: "1.7rem",
-    fontFamily: "Montserrat",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+const BlueButton = styled.button`
+  width: 100%;
+  background: #3b5bb3;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid #3b5bb3;
+  font-family: Montserrat;
+  outline: 0;
+  padding: 10px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #283d78;
+    background: #283d78;
+  }
+`;
+
+// const useStyles = makeStyles({
+//   button: {
+//     width: "100%",
+//     marginBottom: "2%",
+//     fontSize: "1.7rem",
+//     fontFamily: "Montserrat",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const Signin = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const classes = useStyles();
+  // // const classes = useStyles();
   const change = (e) => props.getData(e.target.getAttribute("name"));
   const { t } = useTranslation("auth");
   let visits = [
@@ -170,14 +189,9 @@ const Signin = (props) => {
               placeholder={t("password")}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.button}
-            >
+            <BlueButton type="submit" variant="contained" color="primary">
               {loading ? t("entering") : t("enter")}
-            </Button>
+            </BlueButton>
             <Transit>
               <div>
                 <span name="reset" onClick={change}>

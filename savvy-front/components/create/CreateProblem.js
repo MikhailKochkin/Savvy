@@ -9,8 +9,8 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { SINGLE_LESSON_QUERY } from "../lesson/SingleLesson";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import CanvasProblemBuilder from "./CanvasProblemBuilder";
 
 const Styles = styled.div`
@@ -44,30 +44,30 @@ const ButtonTwo = styled.button`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "250px",
-    margin: "2% 0",
-    fontSize: "1.4rem",
-    textTransform: "none",
-  },
-  root: {
-    marginBottom: "4%",
-  },
-  formControl: {
-    width: "70%",
-    fontSize: "2.4rem",
-    padding: "1% 0",
-  },
-  label: {
-    fontSize: "1.5rem",
-    fontFamily: "Montserrat",
-    marginBottom: "1%",
-  },
-  labelRoot: {
-    fontSize: "1.5rem",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "250px",
+//     margin: "2% 0",
+//     fontSize: "1.4rem",
+//     textTransform: "none",
+//   },
+//   root: {
+//     marginBottom: "4%",
+//   },
+//   formControl: {
+//     width: "70%",
+//     fontSize: "2.4rem",
+//     padding: "1% 0",
+//   },
+//   label: {
+//     fontSize: "1.5rem",
+//     fontFamily: "Montserrat",
+//     marginBottom: "1%",
+//   },
+//   labelRoot: {
+//     fontSize: "1.5rem",
+//   },
+// });
 
 const CREATE_PROBLEM_MUTATION = gql`
   mutation CREATE_PROBLEM_MUTATION(
@@ -99,7 +99,7 @@ const CreateProblem = (props) => {
 
   const { t } = useTranslation("lesson");
 
-  const classes = useStyles();
+  // const classes = useStyles();
   const myCallback = (dataFromChild) => {
     setText(dataFromChild);
   };
@@ -159,7 +159,6 @@ const CreateProblem = (props) => {
               type="submit"
               variant="contained"
               color="primary"
-              className={classes.button}
               onClick={async (e) => {
                 e.preventDefault();
                 const res = await createProblem();

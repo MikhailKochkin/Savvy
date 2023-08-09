@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Mutation } from "@apollo/client/react/components";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import { gql } from "@apollo/client";
 
 const Box = styled.div`
@@ -18,19 +18,19 @@ const Box = styled.div`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    width: "40%",
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-  miniButton: {
-    margin: "2% 0",
-    fontSize: "1.4rem",
-    textTransform: "none",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     width: "40%",
+//     margin: "4% 0",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+//   miniButton: {
+//     margin: "2% 0",
+//     fontSize: "1.4rem",
+//     textTransform: "none",
+//   },
+// });
 
 const Input = styled.input`
   width: 50%;
@@ -71,7 +71,7 @@ const CreateExam = (props) => {
   const [nodeType, setNodeType] = useState("");
   const [name, setName] = useState("");
   const [question, setQuestion] = useState("");
-  const classes = useStyles();
+  // const classes = useStyles();
   const { lesson } = props;
   return (
     <>
@@ -87,15 +87,14 @@ const CreateExam = (props) => {
         <Box key={q.id} color={(nodeID === q.id).toString()}>
           <div className="question">{q.question}</div>
           <div className="answer">{q.answer}</div>
-          <Button
+          <button
             variant="outlined"
             size="medium"
-            className={classes.miniButton}
             color="primary"
             onClick={(e) => (setNodeID(q.id), setNodeType("quiz"))}
           >
             Выбрать
-          </Button>
+          </button>
         </Box>
       ))}
       <div>
@@ -114,7 +113,6 @@ const CreateExam = (props) => {
       >
         {(createExam, { loading, error }) => (
           <Button
-            className={classes.button}
             variant="contained"
             color="primary"
             onClick={async (e) => {

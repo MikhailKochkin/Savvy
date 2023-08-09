@@ -1,8 +1,8 @@
 import React from "react";
 import { Mutation } from "@apollo/client/react/components";
 import { gql } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 
 import { SINGLE_LESSON_QUERY } from "../SingleLesson";
@@ -15,19 +15,19 @@ const DELETE_CHAT_MUTATION = gql`
   }
 `;
 
-const useStyles = makeStyles({
-  button: {
-    margin: "4% 0",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-});
+// const useStyles = makeStyles({
+//   button: {
+//     margin: "4% 0",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// });
 
 const DeleteChat = (props) => {
   const { lessonId, chatId } = props;
   const { t } = useTranslation("lesson");
 
-  const classes = useStyles();
+  // const classes = useStyles();
   return (
     <Mutation
       mutation={DELETE_CHAT_MUTATION}
@@ -40,8 +40,7 @@ const DeleteChat = (props) => {
       ]}
     >
       {(deleteNote, { loading, error }) => (
-        <Button
-          className={classes.button}
+        <button
           color="secondary"
           onClick={() => {
             if (confirm("Sure?")) {
@@ -52,7 +51,7 @@ const DeleteChat = (props) => {
           }}
         >
           {loading ? t("deleting") : t("delete")}
-        </Button>
+        </button>
       )}
     </Mutation>
   );

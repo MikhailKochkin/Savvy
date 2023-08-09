@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useQuery, gql } from "@apollo/client";
 import ReactResizeDetector from "react-resize-detector";
 import Link from "next/link";
-import CircularProgress from "@material-ui/core/CircularProgress";
 // import { arrowLeft } from "react-icons-kit/fa/arrowLeft";
 import { CSSTransitionGroup } from "react-transition-group";
 import { useTranslation } from "next-i18next";

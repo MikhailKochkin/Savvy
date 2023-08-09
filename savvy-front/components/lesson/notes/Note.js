@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
+// import Button from "@material-ui/core/Button";
+// import { withStyles } from "@material-ui/core/styles";
 import { useTranslation } from "next-i18next";
 import moment from "moment";
 import parse from "html-react-parser";
@@ -10,15 +10,15 @@ import UpdateNote from "./UpdateNote";
 import DeleteNote from "../../delete/DeleteNote";
 import Chat from "../questions/Chat";
 
-const StyledButton = withStyles({
-  root: {
-    width: "140px",
-    height: "45px",
-    marginRight: "2%",
-    fontSize: "1.6rem",
-    textTransform: "none",
-  },
-})(Button);
+// const StyledButton = withStyles({
+//   root: {
+//     width: "140px",
+//     height: "45px",
+//     marginRight: "2%",
+//     fontSize: "1.6rem",
+//     textTransform: "none",
+//   },
+// })(Button);
 
 const Body = styled.div``;
 
@@ -556,9 +556,9 @@ const Note = (props) => {
     <>
       <Buttons>
         {!exam && !story && (
-          <StyledButton onClick={(e) => setUpdate(!update)}>
+          <button onClick={(e) => setUpdate(!update)}>
             {!update ? t("update") : t("back")}
-          </StyledButton>
+          </button>
         )}
         {me && !props.story && !props.exam && (
           <DeleteNote me={me.id} noteID={id} lessonID={lessonID} />
